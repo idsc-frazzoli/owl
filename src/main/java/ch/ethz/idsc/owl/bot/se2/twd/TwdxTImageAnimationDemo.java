@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** the obstacle region in the demo is the outside of a rotating letter 'a' */
-// TODO the display of the lidar is incorrect
 public class TwdxTImageAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
@@ -40,13 +39,13 @@ public class TwdxTImageAnimationDemo implements DemoInterface {
           48, RealScalar.of(10), twdxTEntity::getStateTimeNow, trq);
       owlyAnimationFrame.addBackground(renderInterface);
     }
+    owlyAnimationFrame.setObstacleQuery(trq);
+    owlyAnimationFrame.addBackground((RenderInterface) region);
     {
       RenderInterface renderInterface = new LidarEmulator( //
           LidarEmulator.DEFAULT, () -> twdxTEntity.getStateTimeNow(), trq);
       owlyAnimationFrame.addBackground(renderInterface);
     }
-    owlyAnimationFrame.setObstacleQuery(trq);
-    owlyAnimationFrame.addBackground((RenderInterface) region);
     owlyAnimationFrame.configCoordinateOffset(200, 400);
     return owlyAnimationFrame;
   }

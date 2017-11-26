@@ -33,9 +33,9 @@ public class GlcNodeTest extends TestCase {
     Scalar cost1 = RealScalar.of(1);
     Scalar cost2 = RealScalar.of(1);
     Scalar heuristic1 = RealScalar.of(0);
-    Scalar heuristic2 = RealScalar.of(0);
+    // Scalar heuristic2 = RealScalar.of(0);
     GlcNode test1 = GlcNode.of(null, state1, cost1, heuristic1);
-    GlcNode test2 = GlcNode.of(null, state1, cost1, heuristic1);
+    // GlcNode test2 = GlcNode.of(null, state1, cost1, heuristic1);
     assertTrue(state1.equals(state1));
     assertTrue(state1.equals(state2));
     // reflexiv
@@ -45,7 +45,7 @@ public class GlcNodeTest extends TestCase {
     // Symetrie check
     // assertTrue(test1.equals(test2));
     // assertTrue(test2.equals(test1));
-    test2.setMinCostToGoal(heuristic2);
+    // test2.setMinCostToGoal(heuristic2);
     // Nodes are identically except heuristic
     // assertTrue(test1.equals(test2));
     // Cost is different ==> different node
@@ -75,13 +75,13 @@ public class GlcNodeTest extends TestCase {
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     List<GlcNode> nodeList = new ArrayList<>(trajectoryPlanner.getDomainMap().values());
     assertTrue(nodeList.get(0).isRoot());
-    nodeList.get(0).makeRoot(); // no error
+    // nodeList.get(0).makeRoot(); // no error
     assertTrue(nodeList.get(0).isRoot());
     Expand.maxSteps(trajectoryPlanner, 1);
     nodeList = new ArrayList<>(trajectoryPlanner.getDomainMap().values());
     GlcNode test = nodeList.get(nodeList.size() - 1);
     assertFalse(test.isRoot());
-    test.makeRoot();
-    assertTrue(test.isRoot());
+    // test.makeRoot();
+    // assertTrue(test.isRoot());
   }
 }

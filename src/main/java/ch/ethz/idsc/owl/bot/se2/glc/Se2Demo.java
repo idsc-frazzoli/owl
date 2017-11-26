@@ -41,7 +41,7 @@ enum Se2Demo {
   ;
   // TODO JAN this demo has 'misses', why !?
   public static void main(String[] args) {
-    Tensor eta = Tensors.vector(3, 3, 50 / Math.PI);
+    Tensor eta = Tensors.of(RealScalar.of(6), RealScalar.of(6), Degree.of(15).reciprocal());
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 6), 5);
     System.out.println("scale=" + eta);
