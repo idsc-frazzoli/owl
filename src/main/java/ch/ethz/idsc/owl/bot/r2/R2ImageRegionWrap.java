@@ -4,8 +4,6 @@ package ch.ethz.idsc.owl.bot.r2;
 import java.util.Set;
 
 import ch.ethz.idsc.owl.glc.core.CostFunction;
-import ch.ethz.idsc.owl.img.FloodFill2D;
-import ch.ethz.idsc.owl.img.ImageCostFunction;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;

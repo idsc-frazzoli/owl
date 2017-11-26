@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.img;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.sca.Decrement;
 
 /** computes manhatten distance by flood fill */
-public class FloodFill2D {
+/* package */ class FloodFill2D {
   ;
   public static Tensor of(Set<Tensor> seeds, Scalar ttl, Tensor tensor) {
     FloodFill2D floodFill = new FloodFill2D(seeds, ttl, tensor);

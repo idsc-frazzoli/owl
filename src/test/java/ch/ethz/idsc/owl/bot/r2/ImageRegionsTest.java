@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.img;
+package ch.ethz.idsc.owl.bot.r2;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;

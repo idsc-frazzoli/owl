@@ -1,10 +1,9 @@
 // code by jph
-package ch.ethz.idsc.owl.img;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.io.IOException;
 import java.util.Set;
 
-import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.tensor.RealScalar;
