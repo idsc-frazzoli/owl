@@ -6,11 +6,9 @@ import ch.ethz.idsc.tensor.Scalar;
 
 /** TimeKeeper is also used in owly3d */
 public class TimeKeeper {
-  private final long tic = System.nanoTime();
+  private final Stopwatch stopwatch = Stopwatch.started();
 
   public Scalar now() {
-    long toc = System.nanoTime();
-    double delta = (toc - tic) * 1e-9;
-    return RealScalar.of(delta);
+    return RealScalar.of(stopwatch.display_seconds());
   }
 }

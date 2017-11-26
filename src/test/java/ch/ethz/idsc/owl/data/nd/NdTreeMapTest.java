@@ -117,4 +117,13 @@ public class NdTreeMapTest extends TestCase {
       // ---
     }
   }
+
+  public void testFail2() {
+    try {
+      new NdTreeMap<>(Tensors.vector(-2, 10), Tensors.vector(8, 9), 10, 10);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
