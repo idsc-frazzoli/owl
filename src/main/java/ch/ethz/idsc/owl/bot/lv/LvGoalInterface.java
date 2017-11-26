@@ -17,12 +17,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
-public class LvGoalInterface extends SimpleTrajectoryRegionQuery implements GoalInterface {
+/** the distance used in the ellipsoid is Euclidean.
+ * perhaps more suitable for the state space model would be a logarithmic distance */
+/* package */ class LvGoalInterface extends SimpleTrajectoryRegionQuery implements GoalInterface {
   public static GoalInterface create(Tensor center, Tensor radius) {
     return new LvGoalInterface(new EllipsoidRegion(center, radius));
   }
 
-  // TODO euclidean distance used in ellipsoid should be replaced by logarithmic distance
   public LvGoalInterface(EllipsoidRegion ellipsoidRegion) {
     super(new TimeInvariantRegion(ellipsoidRegion));
     GlobalAssert.that(VectorQ.ofLength(ellipsoidRegion.center(), 2));

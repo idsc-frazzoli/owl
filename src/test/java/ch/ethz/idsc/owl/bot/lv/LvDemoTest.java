@@ -3,13 +3,10 @@ package ch.ethz.idsc.owl.bot.lv;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.OwlyFrame;
-import ch.ethz.idsc.owl.gui.ani.OwlyGui;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -23,14 +20,11 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Log;
+import junit.framework.TestCase;
 
-/** the coordinates represent the population of predators and prey.
- * the domain coordinates are computed from the log of the state coordinates */
-/* package */ enum LvRepresentComparison {
-  ;
-  static void launch(TensorUnaryOperator represent) {
+public class LvDemoTest extends TestCase {
+  public void testSimple() {
     Tensor eta = Tensors.vector(10, 10);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 30), 4);
@@ -42,17 +36,12 @@ import ch.ethz.idsc.tensor.sca.Log;
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta, stateIntegrator, controls, EmptyTrajectoryRegionQuery.INSTANCE, goalInterface);
     // ---
-    trajectoryPlanner.represent = StateTimeTensorFunction.state(represent);
-    trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, .5), RealScalar.ZERO));
-    Expand.maxSteps(trajectoryPlanner, 4000);
-    OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
-    owlyFrame.addBackground(RegionRenders.create(ellipsoidRegion));
-    owlyFrame.configCoordinateOffset(100, 300);
-    owlyFrame.jFrame.setBounds(100, 100, 500, 500);
-  }
-
-  public static void main(String[] args) {
-    launch(Log::of);
-    launch(t -> t);
+    trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);
+    trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
+    int steps = Expand.maxSteps(trajectoryPlanner, 2000);
+    if (steps < 1800) {
+      System.out.println("lv steps=" + steps);
+      assertTrue(false);
+    }
   }
 }
