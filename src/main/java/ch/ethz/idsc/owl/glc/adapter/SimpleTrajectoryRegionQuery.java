@@ -36,7 +36,7 @@ public class SimpleTrajectoryRegionQuery extends StandardTrajectoryRegionQuery i
    * for GUI as only 1 State is allowed in 1 Raster (for sparsity)
    * 
    * @return Collection<StateTime> the members of the sparse raster */
-  @Override
+  @Override // from StateTimeCollector
   public Collection<StateTime> getMembers() {
     return ((SparseStateTimeRegionMembers) getStateTimeRegionCallback()).getMembers();
   }
