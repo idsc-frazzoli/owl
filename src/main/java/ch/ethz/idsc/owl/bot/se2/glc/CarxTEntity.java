@@ -36,6 +36,7 @@ class CarxTEntity extends CarEntity {
 
   @Override
   protected Tensor eta() {
-    return super.eta().copy().append(RealScalar.of(4));
+    Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
+    return super.eta().copy().append(dt.reciprocal());
   }
 }

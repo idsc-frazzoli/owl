@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 
-// TODO decide on purpose of HudRender, for now, do nothing
+// LONGTERM decide on purpose of HudRender, for now, do nothing
 class HudRender implements RenderInterface {
   private static final Color SHADING = new Color(0, 0, 0, 64);
   // ---
