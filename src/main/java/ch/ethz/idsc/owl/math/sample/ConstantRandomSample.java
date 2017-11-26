@@ -7,7 +7,7 @@ public class ConstantRandomSample implements RandomSampleInterface {
   private final Tensor tensor;
 
   public ConstantRandomSample(Tensor sample) {
-    tensor = sample.unmodifiable();
+    tensor = sample.copy().unmodifiable();
   }
 
   @Override

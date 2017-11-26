@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.math.state;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
@@ -56,23 +55,5 @@ public class FixedStateIntegrator implements StateIntegrator {
    * time step and the trajectory size */
   public Scalar getTimeStepTrajectory() {
     return timeStep.multiply(RealScalar.of(trajectorySize));
-  }
-
-  /** function can be used for ray-tracing until an obstacle is intersected
-   * or the end of the trajectory is reached.
-   * 
-   * @param stateTime
-   * @param flow
-   * @param trajectoryRegionQuery
-   * @return */
-  public Optional<StateTime> firstMember(StateTime stateTime, Flow flow, TrajectoryRegionQuery trajectoryRegionQuery) {
-    for (int count = 0; count < trajectorySize; ++count) {
-      stateTime = new StateTime( //
-          integrator.step(flow, stateTime.state(), timeStep), //
-          stateTime.time().add(timeStep));
-      if (trajectoryRegionQuery.isMember(stateTime))
-        return Optional.of(stateTime);
-    }
-    return Optional.empty();
   }
 }

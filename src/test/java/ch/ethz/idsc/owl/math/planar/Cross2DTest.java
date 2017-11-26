@@ -28,4 +28,13 @@ public class Cross2DTest extends TestCase {
       // ---
     }
   }
+
+  public void testFail2() {
+    try {
+      Cross2D.of(Tensors.vector(1, 2, 3));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

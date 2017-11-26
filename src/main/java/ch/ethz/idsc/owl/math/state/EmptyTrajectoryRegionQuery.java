@@ -10,17 +10,13 @@ import java.util.Optional;
 public enum EmptyTrajectoryRegionQuery implements TrajectoryRegionQuery {
   INSTANCE;
   // ---
-  @Override
+  @Override // from TrajectoryRegionQuery
   public Optional<StateTime> firstMember(List<StateTime> trajectory) {
     return Optional.empty();
   }
 
-  // @Override
-  // public boolean isDisjoint(List<StateTime> trajectory) {
-  // return true;
-  // }
   @Override // from TrajectoryRegionQuery
-  public final boolean isMember(StateTime stateTime) {
+  public boolean isMember(StateTime stateTime) {
     return false;
   }
 }

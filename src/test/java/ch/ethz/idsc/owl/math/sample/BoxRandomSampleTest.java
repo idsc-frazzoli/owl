@@ -29,4 +29,13 @@ public class BoxRandomSampleTest extends TestCase {
     Tensor rand = RandomSample.of(rsi);
     assertEquals(Dimensions.of(rand), Arrays.asList(3));
   }
+
+  public void testFail() {
+    try {
+      new BoxRandomSample(Tensors.vector(1, 2), Tensors.vector(1, 2, 3));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
