@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;

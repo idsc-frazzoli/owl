@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import ch.ethz.idsc.owl.bot.rn.R2xTPolygonStateTimeRegion;
+import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
+import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.bot.util.ExamplePolygons;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -25,7 +25,7 @@ public class Se2xTPolygonDemo implements DemoInterface {
     BijectionFamily shift = new SimpleTranslationFamily( //
         scalar -> Tensors.of(Sin.FUNCTION.apply(scalar.multiply(RealScalar.of(0.2))), RealScalar.ZERO));
     Region<StateTime> region = new R2xTPolygonStateTimeRegion( //
-        ExamplePolygons.CORNER_TOP_LEFT, shift, () -> carxTEntity.getStateTimeNow().time());
+        R2ExamplePolygons.CORNER_TOP_LEFT, shift, () -> carxTEntity.getStateTimeNow().time());
     carxTEntity.obstacleQuery = new SimpleTrajectoryRegionQuery(region);
     owlyAnimationFrame.setObstacleQuery(carxTEntity.obstacleQuery);
     // owlyAnimationFrame.addRegionRender(imageRegion);

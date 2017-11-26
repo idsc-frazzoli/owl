@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.rn;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.Dimension;
 import java.awt.Font;

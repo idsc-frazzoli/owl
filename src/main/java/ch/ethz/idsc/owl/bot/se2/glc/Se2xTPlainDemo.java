@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import ch.ethz.idsc.owl.bot.rn.R2ImageRegionWrap;
-import ch.ethz.idsc.owl.bot.rn.R2ImageRegions;
+import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
+import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;

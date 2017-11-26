@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.twd;
 
-import ch.ethz.idsc.owl.bot.rn.R2NoiseRegion;
+import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;

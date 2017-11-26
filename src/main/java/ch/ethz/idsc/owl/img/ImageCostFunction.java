@@ -22,7 +22,6 @@ import ch.ethz.idsc.tensor.sca.Floor;
 /** current implementation uses 2d image to store costs
  * a given trajectory is mapped to the pixels and costs are
  * weighted according to the traverse time */
-// TODO indicate clearly which classes flip along y-axis!
 public class ImageCostFunction implements CostFunction {
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
   // ---

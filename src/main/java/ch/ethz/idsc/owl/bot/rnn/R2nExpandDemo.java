@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.rnn;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.rn.R2Flows;
+import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;

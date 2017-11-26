@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Mod;
 
-public enum PsuWrap implements CoordinateWrap {
+/* package */ enum PsuWrap implements CoordinateWrap {
   INSTANCE;
   // ---
   private static Mod MOD = Mod.function(Math.PI * 2);

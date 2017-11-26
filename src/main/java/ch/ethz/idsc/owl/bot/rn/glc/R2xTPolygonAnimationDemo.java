@@ -3,9 +3,9 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 
 import java.util.Arrays;
 
-import ch.ethz.idsc.owl.bot.rn.R2xTPolygonStateTimeRegion;
+import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
+import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.bot.util.ExamplePolygons;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
@@ -36,7 +36,7 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
             Sin.FUNCTION.apply(scalar.multiply(RealScalar.of(0.1))).multiply(RealScalar.of(2.0)), //
             scalar.multiply(RealScalar.of(0.15))));
     Region<StateTime> region1 = new R2xTPolygonStateTimeRegion( //
-        ExamplePolygons.CORNER_CENTERED, rigid1, () -> abstractEntity.getStateTimeNow().time());
+        R2ExamplePolygons.CORNER_CENTERED, rigid1, () -> abstractEntity.getStateTimeNow().time());
     // ---
     BijectionFamily rigid2 = new Se2Family( //
         R2xTEllipsoidsAnimationDemo.wrap1DTensor(SimplexContinuousNoise.FUNCTION, Tensors.vector(5, 9, 4), 0.1, 2.0));

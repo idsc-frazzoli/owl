@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import ch.ethz.idsc.owl.bot.rn.R2Flows;
+import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinTimeGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;

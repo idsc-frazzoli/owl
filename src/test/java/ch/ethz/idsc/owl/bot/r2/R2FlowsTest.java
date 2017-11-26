@@ -1,8 +1,9 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.rn;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.bot.rn.RnControls;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

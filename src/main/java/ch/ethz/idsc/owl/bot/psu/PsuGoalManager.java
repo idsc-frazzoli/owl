@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public class PsuGoalManager implements Region<Tensor>, CostFunction {
+/* package */ class PsuGoalManager implements Region<Tensor>, CostFunction {
   public static GoalInterface of(CoordinateWrap coordinateWrap, Tensor center, Tensor radius) {
     PsuGoalManager psuGoalManager = new PsuGoalManager(coordinateWrap, center, radius);
     return new GoalAdapter( //

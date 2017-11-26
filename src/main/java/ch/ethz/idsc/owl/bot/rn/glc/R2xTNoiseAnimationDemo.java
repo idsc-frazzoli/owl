@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.glc;
 
-import ch.ethz.idsc.owl.bot.rn.R2xTNoiseStateTimeRegion;
+import ch.ethz.idsc.owl.bot.r2.R2xTNoiseStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.ani.OwlyAnimationFrame;
@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO the visualization of the demo is poor
+// LONGTERM the visualization of the demo is poor
 public class R2xTNoiseAnimationDemo implements DemoInterface {
   @Override
   public void start() {
