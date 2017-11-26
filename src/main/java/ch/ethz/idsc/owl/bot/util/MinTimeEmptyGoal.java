@@ -1,9 +1,10 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.adapter;
+package ch.ethz.idsc.owl.bot.util;
 
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -16,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * The implementation is useful to explore/search space uniformly.
  * 
  * cost are increments in time */
-public enum EmptyGoalInterface implements GoalInterface {
+public enum MinTimeEmptyGoal implements GoalInterface {
   INSTANCE;
   // ---
   @Override // from CostIncrementFunction
