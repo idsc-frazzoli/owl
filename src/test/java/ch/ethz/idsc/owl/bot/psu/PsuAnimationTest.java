@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.psu;
 
-import ch.ethz.idsc.owl.gui.ani.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
+import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.VectorFields;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSample;

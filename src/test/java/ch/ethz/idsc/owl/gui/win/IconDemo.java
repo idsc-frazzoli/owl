@@ -1,4 +1,4 @@
-package ch.ethz.idsc.owl.gui;
+package ch.ethz.idsc.owl.gui.win;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.tensor.DoubleScalar;

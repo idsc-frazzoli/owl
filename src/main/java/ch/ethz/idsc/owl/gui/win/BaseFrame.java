@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui;
+package ch.ethz.idsc.owl.gui.win;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,8 +16,6 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
-import ch.ethz.idsc.owl.gui.ani.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.gui.ani.OwlyFrame;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** base class for {@link OwlyFrame} and {@link OwlyAnimationFrame} */

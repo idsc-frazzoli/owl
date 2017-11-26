@@ -6,8 +6,8 @@ import java.awt.geom.Path2D;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.gui.GeometricLayer;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.planar.EllipsePoints;
 import ch.ethz.idsc.owl.math.region.Region;

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.img;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,7 +9,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 /** creates an image with unicode characters drawn inside */
-public class CharImage {
+/* package */ class CharImage {
   public static CharImage fillBlack(Dimension dimension) {
     return new CharImage(dimension, Color.BLACK, Color.WHITE);
   }

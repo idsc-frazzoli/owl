@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.data;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -10,7 +10,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
-import ch.ethz.idsc.owl.img.CharImage;
 
 enum CharImageDemo {
   ;

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui;
+package ch.ethz.idsc.owl.gui.win;
 
 import java.awt.geom.Point2D;
 
