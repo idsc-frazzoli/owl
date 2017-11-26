@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -31,7 +32,7 @@ public class TrajectoryRender implements RenderInterface {
 
   public static RenderInterface of(TrajectoryPlanner trajectoryPlanner) {
     TrajectoryRender trajectoryRender = new TrajectoryRender();
-    Optional<GlcNode> optional = trajectoryPlanner.getFinalGoalNode();
+    Optional<GlcNode> optional = GlcNodes.getFinalGoalNode(trajectoryPlanner);
     if (optional.isPresent()) {
       final GlcNode node = optional.get();
       // draw detailed trajectory from root to goal/furthestgo

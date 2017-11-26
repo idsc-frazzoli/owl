@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
-import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -18,8 +17,6 @@ public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
   protected final StateIntegrator stateIntegrator;
   private /* not final */ TrajectoryRegionQuery obstacleQuery;
   private /* not final */ GoalInterface goalInterface;
-  protected transient Stopwatch integratorWatch = Stopwatch.stopped();
-  protected transient Stopwatch processCWatch = Stopwatch.stopped();
 
   protected AbstractTrajectoryPlanner( //
       Tensor eta, //
@@ -58,13 +55,5 @@ public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
 
   protected final boolean isInsideGoal(List<StateTime> trajectory) {
     return goalInterface.firstMember(trajectory).isPresent();
-  }
-
-  public void printTimes() {
-    System.out.println("Times for " + getClass().getSimpleName());
-    System.out.println("Integrator took: " + integratorWatch.display_seconds());
-    System.out.println("processing C took: " + processCWatch.display_seconds());
-    integratorWatch = Stopwatch.stopped();
-    processCWatch = Stopwatch.stopped();
   }
 }

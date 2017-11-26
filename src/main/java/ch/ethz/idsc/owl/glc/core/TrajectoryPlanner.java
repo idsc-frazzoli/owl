@@ -15,11 +15,9 @@ import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.adapter.HeuristicQ;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.StateTimeCollector;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Floor;
@@ -162,43 +160,4 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   public final Map<Tensor, GlcNode> getDomainMap() {
     return Collections.unmodifiableMap(domainMap);
   }
-
-  public String infoString() {
-    StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("nodes:" + domainMap().values().size() + ", ");
-    {
-      TrajectoryRegionQuery trajectoryRegionQuery = getObstacleQuery();
-      if (trajectoryRegionQuery instanceof StateTimeCollector) {
-        Collection<StateTime> collection = ((StateTimeCollector) trajectoryRegionQuery).getMembers();
-        stringBuilder.append("obstacles:" + collection.size() + ", ");
-      }
-    }
-    stringBuilder.append("replacements:" + replaceCount());
-    return stringBuilder.toString();
-  }
-
-  /** @return the node, to which the trajectory should lead:
-   * The Furthest, the best or the top of the Queue */
-  public Optional<GlcNode> getFinalGoalNode() {
-    if ((getGoalInterface() instanceof TrajectoryGoalMarker)) {
-      Optional<GlcNode> furthest = getFurthestGoalNode();
-      if (furthest.isPresent())
-        return furthest;
-      // if TrajectoryGoalMarker is used, the heuristic will not be "good enough for guidance"
-      return getBest();
-    }
-    return HeuristicQ.of(getGoalInterface()) //
-        ? getBestOrElsePeek() //
-        : getBest();
-  }
-
-  /** @param stateTime to be checked if corresponds to an existing Node in tree
-   * @return the Optional Node if it exist, if not empty */
-  public Optional<GlcNode> existsInTree(StateTime stateTime) {
-    throw new RuntimeException();
-  }
-
-  /** @return Returns the Node, which belongs to the furthest StateTime in the GoalRegion,
-   * Furthest is determined by the merit of the Node at the end of its trajectory */
-  protected abstract Optional<GlcNode> getFurthestGoalNode();
 }

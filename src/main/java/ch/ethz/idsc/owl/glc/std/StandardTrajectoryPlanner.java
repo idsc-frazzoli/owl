@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.AbstractTrajectoryPlanner;
@@ -43,7 +42,6 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
 
   @Override // from ExpandInterface
   public void expand(final GlcNode node) {
-    integratorWatch.start();
     Map<GlcNode, List<StateTime>> connectors = controlsIntegrator.inParallel(node);
     // ---
     DomainQueueMap domainQueueMap = new DomainQueueMap(); // holds candidates for insertion
@@ -57,10 +55,7 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
       } else
         domainQueueMap.insert(domainKey, next); // node is considered without comparison to any former node
     }
-    integratorWatch.stop();
-    processCWatch.start();
     processCandidates(node, connectors, domainQueueMap);
-    processCWatch.stop();
   }
 
   private void processCandidates( //
@@ -107,19 +102,5 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
         domainQueue.remove();
       }
     }
-  }
-
-  @Override
-  protected Optional<GlcNode> getFurthestGoalNode() {
-    // TODO JONAS operation is not defined for standard planner, but some demos (deltaxt...) use it !!!
-    // throw new UnsupportedOperationException();
-    return Optional.empty();
-  }
-
-  @Override
-  public String infoString() {
-    StringBuilder stringBuilder = new StringBuilder(super.infoString() + ", ");
-    stringBuilder.append("default...");
-    return stringBuilder.toString();
   }
 }

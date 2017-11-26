@@ -25,6 +25,7 @@ import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.TimeKeeper;
 import ch.ethz.idsc.owl.data.tree.Nodes;
+import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -176,7 +177,7 @@ public class OwlyAnimationFrame extends TimerFrame {
     @Override
     public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
       etaRender.setEta(trajectoryPlanner.getEta());
-      Optional<GlcNode> optional = trajectoryPlanner.getFinalGoalNode();
+      Optional<GlcNode> optional = GlcNodes.getFinalGoalNode(trajectoryPlanner);
       // test without heuristic
       if (optional.isPresent()) {
         List<TrajectorySample> trajectory = new ArrayList<>();
