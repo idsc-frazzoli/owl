@@ -54,7 +54,7 @@ public enum DebugUtils {
    * 
    * @param trajectoryPlanner */
   public static final void heuristicConsistencyCheck(TrajectoryPlanner trajectoryPlanner) {
-    Optional<GlcNode> finalNode = trajectoryPlanner.getFinalGoalNode();
+    Optional<GlcNode> finalNode = GlcNodes.getFinalGoalNode(trajectoryPlanner);
     if (!finalNode.isPresent()) {
       System.out.println("No Final GoalNode, therefore no ConsistencyCheck");
       return;

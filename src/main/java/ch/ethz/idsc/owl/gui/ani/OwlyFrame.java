@@ -122,7 +122,7 @@ public class OwlyFrame extends BaseFrame {
       try {
         geometricComponent.setRenderInterfaces( //
             RenderElements.create(backup.get(index)));
-        jStatusLabel.setText(backup.get(index).infoString());
+        // jStatusLabel.setText(backup.get(index).infoString());
         geometricComponent.jComponent.repaint();
       } catch (Exception exception) {
         exception.printStackTrace();
