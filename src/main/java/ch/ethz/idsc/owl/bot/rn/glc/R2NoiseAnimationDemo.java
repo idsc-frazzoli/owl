@@ -14,17 +14,17 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class R2NoiseAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.set(new R2Entity(Tensors.vector(0.2, 0.2)));
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.2));
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     owlyAnimationFrame.setObstacleQuery(trajectoryRegionQuery);
     owlyAnimationFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new R2NoiseAnimationDemo().start();
+    new R2NoiseAnimationDemo().start().jFrame.setVisible(true);
   }
 }

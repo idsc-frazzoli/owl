@@ -34,7 +34,7 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
 
   @SuppressWarnings("unused")
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     AbstractEntity abstractEntity = new R2xTEntity(Tensors.vector(1.2, 2), RealScalar.of(0.6));
     owlyAnimationFrame.set(abstractEntity);
@@ -62,10 +62,10 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
     owlyAnimationFrame.addBackground((RenderInterface) region3);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new R2xTEllipsoidsAnimationDemo().start();
+    new R2xTEllipsoidsAnimationDemo().start().jFrame.setVisible(true);
   }
 }

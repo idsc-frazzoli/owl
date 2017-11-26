@@ -33,7 +33,10 @@ class RnnGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterfac
 
   @Override
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    Scalar sum = trajectory.stream().map(StateTime::state).map(continuousNoise).reduce(Scalar::add).get();
+    Scalar sum = trajectory.stream() //
+        .map(StateTime::state) //
+        .map(continuousNoise) //
+        .reduce(Scalar::add).get();
     sum = sum.add(RealScalar.of(trajectory.size()));
     GlobalAssert.that(Sign.isPositiveOrZero(sum));
     return sum;

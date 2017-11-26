@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class DeltaAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     // ---
     Scalar amp = RealScalar.of(-.05);
@@ -30,11 +30,11 @@ public class DeltaAnimationDemo implements DemoInterface {
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradient);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, imageRegion, RealScalar.of(0.5)));
-    owlyAnimationFrame.jFrame.setVisible(true);
     owlyAnimationFrame.configCoordinateOffset(50, 600);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) throws Exception {
-    new DeltaAnimationDemo().start();
+    new DeltaAnimationDemo().start().jFrame.setVisible(true);
   }
 }

@@ -14,25 +14,21 @@ import ch.ethz.idsc.tensor.Tensors;
  * which gives an incentive to stay clear of obstacles */
 public class R2ImageAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
-    try {
-      R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-      // ---
-      OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-      R2Entity r2Entity = new R2Entity(Tensors.vector(7, 6));
-      r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
-      owlyAnimationFrame.set(r2Entity);
-      ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-      owlyAnimationFrame.setObstacleQuery(SimpleTrajectoryRegionQuery.timeInvariant(imageRegion));
-      owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
-      owlyAnimationFrame.configCoordinateOffset(50, 700);
-      owlyAnimationFrame.jFrame.setVisible(true);
-    } catch (Exception exception) {
-      exception.printStackTrace();
-    }
+  public OwlyAnimationFrame start() {
+    R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
+    // ---
+    OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
+    R2Entity r2Entity = new R2Entity(Tensors.vector(7, 6));
+    r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
+    owlyAnimationFrame.set(r2Entity);
+    ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
+    owlyAnimationFrame.setObstacleQuery(SimpleTrajectoryRegionQuery.timeInvariant(imageRegion));
+    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new R2ImageAnimationDemo().start();
+    new R2ImageAnimationDemo().start().jFrame.setVisible(true);
   }
 }

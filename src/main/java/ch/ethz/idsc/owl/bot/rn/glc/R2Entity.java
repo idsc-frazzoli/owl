@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -31,6 +30,9 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
  * 
  * the implementation chooses certain values */
 /* package */ class R2Entity extends AbstractCircularEntity {
+  public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
+      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
+  // ---
   /** extra cost functions, for instance to prevent cutting corners */
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
   protected final R2Flows r2Config = new R2Flows(RealScalar.ONE);
@@ -64,8 +66,6 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal) {
     Tensor partitionScale = eta();
-    StateIntegrator stateIntegrator = //
-        FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
     final Tensor center = goal.extract(0, 2);
     Collection<Flow> controls = createControls();
     Scalar goalRadius = RealScalar.of(Math.sqrt(2.0)).divide(partitionScale.Get(0));
@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
         RnMinTimeGoalManager.create(center, goalRadius, controls), //
         extraCosts);
     return new StandardTrajectoryPlanner( //
-        partitionScale, stateIntegrator, controls, obstacleQuery, goalInterface);
+        partitionScale, FIXEDSTATEINTEGRATOR, controls, obstacleQuery, goalInterface);
   }
 
   Collection<Flow> createControls() {

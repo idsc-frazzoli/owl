@@ -57,7 +57,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     super(new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
     controls = twdConfig.getFlows(4);
     Tensor eta = eta();
-    System.out.println("ETA = " + eta);
     goalRadius_xy = SQRT2.divide(eta.Get(0));
     goalRadius_theta = SQRT2.divide(eta.Get(2));
   }

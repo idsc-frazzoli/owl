@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class Rice2dxTGearDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.of(-.5);
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
@@ -56,10 +56,10 @@ public class Rice2dxTGearDemo implements DemoInterface {
     owlyAnimationFrame.addBackground((RenderInterface) cog2);
     // ---
     owlyAnimationFrame.configCoordinateOffset(350, 350);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Rice2dxTGearDemo().start();
+    new Rice2dxTGearDemo().start().jFrame.setVisible(true);
   }
 }

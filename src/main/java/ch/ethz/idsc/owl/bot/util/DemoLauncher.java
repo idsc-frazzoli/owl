@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.bot.util;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
+import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import lcm.util.ClassDiscovery;
 import lcm.util.ClassPaths;
 import lcm.util.ClassVisitor;
@@ -31,8 +32,8 @@ public enum DemoLauncher {
     }
   };
 
-  public static void main(String[] args) {
-    List<Class<?>> demos = new LinkedList<>();
+  public static List<Class<?>> detect() {
+    List<Class<?>> demos = new ArrayList<>();
     ClassVisitor classVisitor = new ClassVisitor() {
       @Override
       public void classFound(String jarfile, Class<?> cls) {
@@ -42,8 +43,13 @@ public enum DemoLauncher {
       }
     };
     ClassDiscovery.execute(ClassPaths.getDefault(), classVisitor);
-    // ---
     Collections.sort(demos, CLASSNAMECOMPARATOR);
+    return demos;
+  }
+
+  public static void main(String[] args) {
+    List<Class<?>> demos = detect();
+    // ---
     JFrame jFrame = new JFrame();
     jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     JPanel jComponent = new JPanel(new BorderLayout());
@@ -54,7 +60,8 @@ public enum DemoLauncher {
         jButton.addActionListener(event -> {
           try {
             DemoInterface demoInterface = (DemoInterface) cls.newInstance();
-            demoInterface.start();
+            BaseFrame baseFrame = demoInterface.start();
+            baseFrame.jFrame.setVisible(true);
           } catch (Exception exception) {
             exception.printStackTrace();
           }

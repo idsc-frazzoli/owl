@@ -15,17 +15,17 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class TwdNoiseDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.set(TwdEntity.createDuckie(new StateTime(Tensors.vector(0, 0, 0), RealScalar.ZERO)));
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.1));
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     owlyAnimationFrame.setObstacleQuery(trajectoryRegionQuery);
     owlyAnimationFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new TwdNoiseDemo().start();
+    new TwdNoiseDemo().start().jFrame.setVisible(true);
   }
 }

@@ -11,9 +11,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** 
- * 
- */
 /* package */ class R2xTEntity extends R2Entity {
   private final Scalar delay;
 
@@ -46,7 +43,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   protected Tensor eta() {
-    return Tensors.vector(8, 8, 4);
+    Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
+    return super.eta().copy().append(dt.reciprocal());
   }
 
   @Override

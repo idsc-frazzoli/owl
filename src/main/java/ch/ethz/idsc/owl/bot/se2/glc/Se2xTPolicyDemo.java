@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class Se2xTPolicyDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._2181;
@@ -38,10 +38,10 @@ public class Se2xTPolicyDemo implements DemoInterface {
     // ---
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Se2xTPolicyDemo().start();
+    new Se2xTPolicyDemo().start().jFrame.setVisible(true);
   }
 }
