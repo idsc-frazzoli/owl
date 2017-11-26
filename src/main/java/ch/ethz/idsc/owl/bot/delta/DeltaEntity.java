@@ -1,13 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.delta.glc;
+package ch.ethz.idsc.owl.bot.delta;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.delta.DeltaControls;
-import ch.ethz.idsc.owl.bot.delta.DeltaFlows;
-import ch.ethz.idsc.owl.bot.delta.DeltaMinTimeGoalManager;
-import ch.ethz.idsc.owl.bot.delta.DeltaStateSpaceModel;
-import ch.ethz.idsc.owl.bot.delta.ImageGradient;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;

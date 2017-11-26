@@ -1,12 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.delta.glc;
+package ch.ethz.idsc.owl.bot.delta;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.delta.DeltaFlows;
-import ch.ethz.idsc.owl.bot.delta.DeltaMinTimeGoalManager;
-import ch.ethz.idsc.owl.bot.delta.DeltaStateSpaceModel;
-import ch.ethz.idsc.owl.bot.delta.ImageGradient;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -37,7 +33,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 /** simple animation of small boat driving upstream, or downstream in a river delta
  * 
  * records to animated gif */
-enum DeltaExpandDemo {
+/* package */ enum DeltaExpandDemo {
   ;
   public static void main(String[] args) throws Exception {
     Scalar amp = RealScalar.of(0.5); // -.25 .5

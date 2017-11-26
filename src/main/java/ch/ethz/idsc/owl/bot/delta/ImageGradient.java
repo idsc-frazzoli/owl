@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** rotated gradient of potential function */
-public class ImageGradient implements Serializable {
+/* package */ class ImageGradient implements Serializable {
   /** @param image
    * @param range
    * @param amp

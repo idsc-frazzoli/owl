@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 // x == [d v a w]
-class IpGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+/* package */ class IpGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   public IpGoalManager(Tensor center, Tensor radius) {
     super(new TimeInvariantRegion(new BoundedBoxRegion(center, radius)));
   }

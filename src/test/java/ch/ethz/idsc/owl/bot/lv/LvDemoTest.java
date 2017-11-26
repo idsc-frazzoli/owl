@@ -39,7 +39,7 @@ public class LvDemoTest extends TestCase {
     trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
     int steps = Expand.maxSteps(trajectoryPlanner, 2000);
-    if (steps < 1800) {
+    if (1800 < steps) {
       System.out.println("lv steps=" + steps);
       assertTrue(false);
     }

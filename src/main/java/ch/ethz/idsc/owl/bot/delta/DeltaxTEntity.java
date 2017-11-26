@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.delta.glc;
+package ch.ethz.idsc.owl.bot.delta;
 
-import ch.ethz.idsc.owl.bot.delta.ImageGradient;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
