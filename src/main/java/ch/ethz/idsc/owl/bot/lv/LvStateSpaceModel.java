@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /** Lotka-Volterra
  * 
  * https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations */
-public class LvStateSpaceModel implements StateSpaceModel {
+/* package */ class LvStateSpaceModel implements StateSpaceModel {
   /** see documentation of public constructor */
   public static StateSpaceModel of(Number f0, Number f1) {
     return new LvStateSpaceModel(RealScalar.of(f0), RealScalar.of(f1));
@@ -45,7 +45,6 @@ public class LvStateSpaceModel implements StateSpaceModel {
 
   @Override
   public Scalar getLipschitz() {
-    // LONGTERM
-    return null;
+    throw new RuntimeException();
   }
 }

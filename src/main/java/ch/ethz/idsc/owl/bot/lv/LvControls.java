@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
-public enum LvControls {
+/* package */ enum LvControls {
   ;
   public static Collection<Flow> create(StateSpaceModel stateSpaceModel, int num) {
     List<Flow> list = new ArrayList<>();

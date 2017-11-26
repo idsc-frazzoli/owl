@@ -146,8 +146,12 @@ public final class GeometricComponent {
     }
   }
 
+  /** function only clears render interfaces in the foreground.
+   * the background is unchanged
+   * 
+   * @param collection */
   public void setRenderInterfaces(Collection<RenderInterface> collection) {
-    renderInterfaces.clear(); // TODO background
+    renderInterfaces.clear();
     renderInterfaces.addAll(collection);
   }
 

@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Log;
 
 /** the coordinates represent the population of predators and prey.
  * the domain coordinates are computed from the log of the state coordinates */
-enum LvDemo {
+/* package */ enum LvDemo {
   ;
   public static void main(String[] args) {
     Tensor eta = Tensors.vector(10, 10);
@@ -43,7 +43,8 @@ enum LvDemo {
     // ---
     trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, 0.1), RealScalar.ZERO));
-    Expand.maxSteps(trajectoryPlanner, 4000);
+    int steps = Expand.maxSteps(trajectoryPlanner, 4000);
+    System.out.println(steps);
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     owlyFrame.addBackground(RegionRenders.create(ellipsoidRegion));
   }
