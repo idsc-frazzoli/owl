@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.bot.rn.R2Flows;
+import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
+import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
-import ch.ethz.idsc.owl.bot.util.ExamplePolygons;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
@@ -44,7 +44,7 @@ enum R2PolygonDemo {
     Collection<Flow> controls = r2Config.getFlows(20);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 5), DoubleScalar.of(0.2));
     GoalInterface goalInterface = new RnMinDistSphericalGoalManager(sphericalRegion);
-    Region<Tensor> region = new PolygonRegion(ExamplePolygons.BULKY_TOP_LEFT);
+    Region<Tensor> region = new PolygonRegion(R2ExamplePolygons.BULKY_TOP_LEFT);
     TrajectoryRegionQuery obstacleQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //

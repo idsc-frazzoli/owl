@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.rice;
 import java.util.Arrays;
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.rn.R2xTEllipsoidStateTimeRegion;
-import ch.ethz.idsc.owl.bot.rn.R2xTPolygonStateTimeRegion;
+import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
+import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.rn.glc.R2xTEllipsoidsAnimationDemo;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;

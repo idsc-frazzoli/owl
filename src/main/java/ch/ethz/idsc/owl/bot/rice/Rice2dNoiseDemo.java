@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.rice;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.rn.R2NoiseRegion;
+import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.ani.OwlyAnimationFrame;

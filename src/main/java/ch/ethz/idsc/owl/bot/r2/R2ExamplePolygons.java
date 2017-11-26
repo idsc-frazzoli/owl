@@ -1,10 +1,10 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.util;
+package ch.ethz.idsc.owl.bot.r2;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public enum ExamplePolygons {
+public enum R2ExamplePolygons {
   ;
   public static final Tensor CORNER_TOP_LEFT = Tensors.matrix(new Number[][] { //
       { 3, 0 }, //
