@@ -14,9 +14,9 @@ import ch.ethz.idsc.tensor.Tensor;
 /** planner is shared between
  * {@link StandardTrajectoryPlanner} and {@link AbstractAnyTrajectoryPlanner} */
 public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
-  protected final StateIntegrator stateIntegrator;
-  private /* not final */ TrajectoryRegionQuery obstacleQuery;
-  private /* not final */ GoalInterface goalInterface;
+  private final StateIntegrator stateIntegrator;
+  private final TrajectoryRegionQuery obstacleQuery;
+  private final GoalInterface goalInterface;
 
   protected AbstractTrajectoryPlanner( //
       Tensor eta, //
@@ -43,14 +43,6 @@ public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
   @Override
   public final GoalInterface getGoalInterface() {
     return goalInterface;
-  }
-
-  protected final void setGoalInterface(GoalInterface goalInterface) {
-    this.goalInterface = goalInterface;
-  }
-
-  protected final void setObstacleQuery(TrajectoryRegionQuery obstacleQuery) {
-    this.obstacleQuery = obstacleQuery;
   }
 
   protected final boolean isInsideGoal(List<StateTime> trajectory) {
