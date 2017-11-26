@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class TwdImageDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._0F5C_2182;
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     TrajectoryRegionQuery obstacleQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
@@ -39,10 +39,10 @@ public class TwdImageDemo implements DemoInterface {
       owlyAnimationFrame.addBackground(renderInterface);
     }
     owlyAnimationFrame.configCoordinateOffset(50, 700);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new TwdImageDemo().start();
+    new TwdImageDemo().start().jFrame.setVisible(true);
   }
 }

@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class PsuAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.set(new PsuEntity());
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
@@ -27,11 +27,10 @@ public class PsuAnimationDemo implements DemoInterface {
     vectorFieldRender.uv_pairs = //
         VectorFields.of(PsuStateSpaceModel.INSTANCE, points, PsuEntity.FALLBACK_CONTROL, RealScalar.of(0.1));
     owlyAnimationFrame.addBackground(vectorFieldRender);
-    // ---
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new PsuAnimationDemo().start();
+    new PsuAnimationDemo().start().jFrame.setVisible(true);
   }
 }

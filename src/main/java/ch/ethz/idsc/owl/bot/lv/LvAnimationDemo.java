@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class LvAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     StateSpaceModel stateSpaceModel = LvStateSpaceModel.of(1, 2);
     Collection<Flow> controls = LvControls.create(stateSpaceModel, 2);
@@ -34,10 +34,10 @@ public class LvAnimationDemo implements DemoInterface {
         VectorFields.of(stateSpaceModel, points, LvEntity.FALLBACK_CONTROL, RealScalar.of(0.04));
     owlyAnimationFrame.addBackground(vectorFieldRender);
     // ---
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new LvAnimationDemo().start();
+    new LvAnimationDemo().start().jFrame.setVisible(true);
   }
 }

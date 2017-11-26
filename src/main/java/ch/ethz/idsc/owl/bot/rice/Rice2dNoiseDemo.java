@@ -16,17 +16,17 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class Rice2dNoiseDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.ZERO;
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
     owlyAnimationFrame.set(new Rice2dEntity(mu, Tensors.vector(0, 0, 0, 0), controls));
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.5));
     owlyAnimationFrame.setObstacleQuery(SimpleTrajectoryRegionQuery.timeInvariant(region));
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Rice2dNoiseDemo().start();
+    new Rice2dNoiseDemo().start().jFrame.setVisible(true);
   }
 }

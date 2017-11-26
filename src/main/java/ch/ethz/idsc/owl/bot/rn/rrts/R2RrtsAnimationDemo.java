@@ -7,15 +7,15 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class R2RrtsAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     R2RrtsEntity r2RrtsEntity = new R2RrtsEntity(Tensors.vector(0, 0));
     r2RrtsEntity.obstacleQuery = StaticHelper.noise1();
     owlyAnimationFrame.set(r2RrtsEntity);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new R2RrtsAnimationDemo().start();
+    new R2RrtsAnimationDemo().start().jFrame.setVisible(true);
   }
 }

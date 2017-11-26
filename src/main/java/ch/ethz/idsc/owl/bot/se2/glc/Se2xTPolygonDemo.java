@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 public class Se2xTPolygonDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     CarxTEntity carxTEntity = new CarxTEntity(new StateTime(Tensors.vector(6.75, 5.4, 1 + Math.PI), RealScalar.ZERO));
     owlyAnimationFrame.set(carxTEntity);
@@ -33,10 +33,10 @@ public class Se2xTPolygonDemo implements DemoInterface {
     // ---
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Se2xTPolygonDemo().start();
+    new Se2xTPolygonDemo().start().jFrame.setVisible(true);
   }
 }

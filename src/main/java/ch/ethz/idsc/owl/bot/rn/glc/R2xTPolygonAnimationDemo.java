@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 public class R2xTPolygonAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     AbstractEntity abstractEntity = new R2xTEntity(Tensors.vector(1.2, 2.2), RealScalar.of(1.5));
     owlyAnimationFrame.set(abstractEntity);
@@ -47,10 +47,10 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
         RegionUnion.wrap(Arrays.asList(region1, region2))));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new R2xTPolygonAnimationDemo().start();
+    new R2xTPolygonAnimationDemo().start().jFrame.setVisible(true);
   }
 }

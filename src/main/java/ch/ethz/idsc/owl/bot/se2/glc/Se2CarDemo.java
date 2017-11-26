@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import java.io.IOException;
-
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
@@ -19,18 +17,14 @@ public abstract class Se2CarDemo implements DemoInterface {
     return SimpleTrajectoryRegionQuery.timeInvariant(se2PointsVsRegion);
   }
 
-  abstract void configure(OwlyAnimationFrame owlyAnimationFrame) throws IOException;
+  abstract void configure(OwlyAnimationFrame owlyAnimationFrame);
 
   @Override
-  public final void start() {
-    try {
-      OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-      configure(owlyAnimationFrame);
-      owlyAnimationFrame.configCoordinateOffset(50, 700);
-      owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
-      owlyAnimationFrame.jFrame.setVisible(true);
-    } catch (Exception exception) {
-      exception.printStackTrace();
-    }
+  public final OwlyAnimationFrame start() {
+    OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
+    configure(owlyAnimationFrame);
+    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
+    return owlyAnimationFrame;
   }
 }

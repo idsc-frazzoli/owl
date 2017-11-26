@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class Se2xTEllipsoidsDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     CarxTEntity carxTEntity = new CarxTEntity(new StateTime(Tensors.vector(0, 0, 1), RealScalar.ZERO));
     owlyAnimationFrame.set(carxTEntity);
@@ -56,10 +56,10 @@ public class Se2xTEllipsoidsDemo implements DemoInterface {
     // ---
     owlyAnimationFrame.configCoordinateOffset(350, 350);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Se2xTEllipsoidsDemo().start();
+    new Se2xTEllipsoidsDemo().start().jFrame.setVisible(true);
   }
 }

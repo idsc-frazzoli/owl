@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class Rice1dNoiseDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.ZERO;
     Collection<Flow> controls = Rice2Controls.create1d(mu, 15);
@@ -36,11 +36,10 @@ public class Rice1dNoiseDemo implements DemoInterface {
     vectorFieldRender.uv_pairs = //
         VectorFields.of(Rice2StateSpaceModel.of(mu), points, Rice1dEntity.FALLBACK_CONTROL, RealScalar.of(0.2));
     owlyAnimationFrame.addBackground(vectorFieldRender);
-    // ---
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Rice1dNoiseDemo().start();
+    new Rice1dNoiseDemo().start().jFrame.setVisible(true);
   }
 }

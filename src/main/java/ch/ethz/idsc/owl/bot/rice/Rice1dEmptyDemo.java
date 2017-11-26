@@ -13,16 +13,16 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class Rice1dEmptyDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.ZERO;
     Collection<Flow> controls = Rice2Controls.create1d(mu, 15);
     owlyAnimationFrame.set(new Rice1dEntity(mu, Tensors.vector(0, 0), controls));
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Rice1dEmptyDemo().start();
+    new Rice1dEmptyDemo().start().jFrame.setVisible(true);
   }
 }

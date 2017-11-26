@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.Tensors;
 // TODO the display of the lidar is incorrect
 public class TwdxTImageAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1.2), RealScalar.of(.5));
     TwdxTEntity twdxTEntity = new TwdxTEntity(twdConfig, new StateTime(Tensors.vector(-1, -1, 1.0), RealScalar.ZERO));
@@ -48,10 +48,10 @@ public class TwdxTImageAnimationDemo implements DemoInterface {
     owlyAnimationFrame.setObstacleQuery(trq);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     owlyAnimationFrame.configCoordinateOffset(200, 400);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new TwdxTImageAnimationDemo().start();
+    new TwdxTImageAnimationDemo().start().jFrame.setVisible(true);
   }
 }

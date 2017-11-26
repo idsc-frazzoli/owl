@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /** the obstacle region in the demo is the outside of a rotating letter 'a' */
 public class R2xTImageAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     AbstractEntity abstractEntity = new R2xTEntity(Tensors.vector(1.5, 2), RealScalar.of(1.5));
     owlyAnimationFrame.set(abstractEntity);
@@ -33,10 +33,10 @@ public class R2xTImageAnimationDemo implements DemoInterface {
     owlyAnimationFrame.setObstacleQuery(new SimpleTrajectoryRegionQuery(region));
     owlyAnimationFrame.addBackground((RenderInterface) region);
     owlyAnimationFrame.configCoordinateOffset(200, 400);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new R2xTImageAnimationDemo().start();
+    new R2xTImageAnimationDemo().start().jFrame.setVisible(true);
   }
 }

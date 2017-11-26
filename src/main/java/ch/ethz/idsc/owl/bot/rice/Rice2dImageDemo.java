@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class Rice2dImageDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.of(-0.5);
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
@@ -31,10 +31,10 @@ public class Rice2dImageDemo implements DemoInterface {
     owlyAnimationFrame.setObstacleQuery(obstacleQuery);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.configCoordinateOffset(50, 700);
-    owlyAnimationFrame.jFrame.setVisible(true);
+    return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Rice2dImageDemo().start();
+    new Rice2dImageDemo().start().jFrame.setVisible(true);
   }
 }

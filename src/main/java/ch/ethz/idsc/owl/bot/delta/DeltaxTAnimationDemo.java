@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class DeltaxTAnimationDemo implements DemoInterface {
   @Override
-  public void start() {
+  public OwlyAnimationFrame start() {
     Tensor image = ResourceData.of("/io/delta_uxy.png");
     Tensor range = Tensors.vector(12.6, 9.1).unmodifiable(); // overall size of map
     Scalar amp = RealScalar.of(-.05); // direction and strength of river flow
@@ -64,8 +64,8 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     owlyAnimationFrame.addBackground((RenderInterface) region3);
     owlyAnimationFrame.addBackground((RenderInterface) region4);
     owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, imageRegion, RealScalar.of(0.5)));
-    owlyAnimationFrame.jFrame.setVisible(true);
     owlyAnimationFrame.configCoordinateOffset(50, 600);
+    return owlyAnimationFrame;
   }
 
   private static Region<StateTime> create(Scalar radius, Tensor pos, Flow flow, Supplier<Scalar> supplier) {
@@ -77,6 +77,6 @@ public class DeltaxTAnimationDemo implements DemoInterface {
   }
 
   public static void main(String[] args) throws Exception {
-    new DeltaxTAnimationDemo().start();
+    new DeltaxTAnimationDemo().start().jFrame.setVisible(true);
   }
 }
