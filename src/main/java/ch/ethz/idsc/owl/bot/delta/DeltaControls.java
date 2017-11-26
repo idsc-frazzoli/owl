@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public enum DeltaControls {
+/* package */ enum DeltaControls {
   ;
   /** @param controls
    * @return */

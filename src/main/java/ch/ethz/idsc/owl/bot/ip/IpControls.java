@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Partition;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
-enum IpControls {
+/* package */ enum IpControls {
   ;
   /** @param stateSpaceModel
    * @param amplitude maximum absolute radial acceleration of pendulum

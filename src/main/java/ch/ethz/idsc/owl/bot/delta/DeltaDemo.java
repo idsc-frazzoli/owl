@@ -1,12 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.delta.glc;
+package ch.ethz.idsc.owl.bot.delta;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.delta.DeltaFlows;
-import ch.ethz.idsc.owl.bot.delta.DeltaMinTimeGoalManager;
-import ch.ethz.idsc.owl.bot.delta.DeltaStateSpaceModel;
-import ch.ethz.idsc.owl.bot.delta.ImageGradient;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
@@ -34,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** simple animation of small boat driving upstream, or downstream in a river delta */
-enum DeltaDemo {
+/* package */ enum DeltaDemo {
   ;
   public static void main(String[] args) throws Exception {
     // for 0.5 (in direction of river):

@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
 /** inverted pendulum */
-class IpDemo {
+/* package */ class IpDemo {
   public static void main(String[] args) {
     Tensor eta = Tensors.vector(10, 10, 10, 10);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //

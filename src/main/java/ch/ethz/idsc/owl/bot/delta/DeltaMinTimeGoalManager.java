@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
 /** heuristic adds max speed of available control to max norm of image gradient */
-public class DeltaMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+/* package */ class DeltaMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   public static GoalInterface create(Tensor center, Scalar radius, Scalar maxMove) {
     return new DeltaMinTimeGoalManager(new SphericalRegion(center, radius), maxMove);
   }

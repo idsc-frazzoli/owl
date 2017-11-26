@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** an upper bound of the speed of an entity in the river delta is
  * imageGradient.maxNormGradient() + |u_max| */
-public class DeltaStateSpaceModel implements StateSpaceModel {
+/* package */ class DeltaStateSpaceModel implements StateSpaceModel {
   private final ImageGradient imageGradient;
 
   /** @param imageGradient

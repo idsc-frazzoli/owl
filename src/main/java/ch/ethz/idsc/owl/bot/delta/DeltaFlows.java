@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 
-public class DeltaFlows implements FlowsInterface {
+/* package */ class DeltaFlows implements FlowsInterface {
   private final StateSpaceModel stateSpaceModel;
   private final Scalar amp;
 

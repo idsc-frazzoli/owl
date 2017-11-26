@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * from Analysis and Synthesis of Single-Input Single-Output Control Systems, 3rd edition
  * p.13, p.53 */
-class IpStateSpaceModel implements StateSpaceModel {
+/* package */ class IpStateSpaceModel implements StateSpaceModel {
   private final Scalar M;
   private final Scalar m;
   private final Scalar l;

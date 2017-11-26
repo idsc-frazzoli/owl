@@ -1,5 +1,5 @@
 // code by jph and jl
-package ch.ethz.idsc.owl.bot.delta.glc;
+package ch.ethz.idsc.owl.bot.delta;
 
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public enum DeltaHelper {
+/* package */ enum DeltaHelper {
   ;
   // ---
   public static VectorFieldRender vectorFieldRender(StateSpaceModel stateSpaceModel, Tensor range, Region<Tensor> region, Scalar factor) {
