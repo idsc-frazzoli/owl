@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -30,6 +31,20 @@ public class Se2AxisYProjectTest extends TestCase {
 
   public void testEx4() {
     Scalar t = Se2AxisYProject.of(Tensors.vector(2, 0, 0.0), Tensors.vector(10, 3));
+    assertTrue(Chop._12.close(t, RealScalar.of(5)));
+  }
+
+  public void testEps1() {
+    Tensor u = Tensors.vector(2, 0, Double.MIN_VALUE);
+    Scalar t = Se2AxisYProject.of(u, Tensors.vector(10, 3));
+    assertFalse(Scalars.isZero(u.Get(2)));
+    assertTrue(Chop._12.close(t, RealScalar.of(5)));
+  }
+
+  public void testEps2() {
+    Tensor u = Tensors.vector(2, 0, -Double.MIN_VALUE);
+    Scalar t = Se2AxisYProject.of(u, Tensors.vector(10, 3));
+    assertFalse(Scalars.isZero(u.Get(2)));
     assertTrue(Chop._12.close(t, RealScalar.of(5)));
   }
 

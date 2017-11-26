@@ -22,7 +22,7 @@ public class Se2ForwardAction implements TensorUnaryOperator {
     sa = Sin.FUNCTION.apply(angle);
   }
 
-  @Override
+  @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     Scalar qx = tensor.Get(0);
     Scalar qy = tensor.Get(1);

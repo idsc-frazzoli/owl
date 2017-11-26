@@ -82,7 +82,7 @@ public abstract class AbstractEntity implements RenderInterface, AnimationInterf
     return Lists.getLast(relevant).stateTime().state();
   }
 
-  // TODO JAN design preliminary
+  // TODO design preliminary
   public StateTimeTensorFunction represent_entity = StateTime::state;
 
   /** the return index does not refer to node in the trajectory closest to the entity

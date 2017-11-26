@@ -223,7 +223,7 @@ public class OwlyAnimationFrame extends TimerFrame {
   };
 
   public void set(AnimationInterface animationInterface) {
-    GlobalAssert.that(animationInterfaces.isEmpty()); // TODO JAN this logic is messy
+    GlobalAssert.that(animationInterfaces.isEmpty()); // TODO this logic is messy
     if (Objects.isNull(controllable))
       controllable = animationInterface;
     add(animationInterface);
