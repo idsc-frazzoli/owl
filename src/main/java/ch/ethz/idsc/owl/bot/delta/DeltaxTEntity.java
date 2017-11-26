@@ -5,8 +5,8 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaxTEntity extends DeltaEntity {
@@ -23,6 +23,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   protected Tensor eta() {
-    return Tensors.vector(5, 5, 4); // TODO JAN correlate time scale to integrator step
+    Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
+    return super.eta().copy().append(dt.reciprocal());
   }
 }

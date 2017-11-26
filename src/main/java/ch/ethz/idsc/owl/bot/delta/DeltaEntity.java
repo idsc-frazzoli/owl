@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -28,6 +27,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaEntity extends AbstractCircularEntity {
   public static final Tensor FALLBACK_CONTROL = Tensors.vectorDouble(0, 0).unmodifiable();
+  public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = FixedStateIntegrator.create( //
+      RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 5), 4);
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(2);
   // ---
@@ -64,8 +65,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal) {
     Tensor eta = eta();
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 5), 4);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradient);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, U_NORM).getFlows(U_SIZE);
     Scalar u_norm = DeltaControls.maxSpeed(controls);
@@ -74,7 +73,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     GoalInterface goalInterface = DeltaMinTimeGoalManager.create( //
         goal.extract(0, 2), RealScalar.of(.3), maxMove);
     return new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, obstacleQuery, goalInterface);
+        eta, FIXEDSTATEINTEGRATOR, controls, obstacleQuery, goalInterface);
   }
 
   protected Tensor eta() {

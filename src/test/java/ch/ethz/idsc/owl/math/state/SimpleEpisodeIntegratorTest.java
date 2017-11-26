@@ -119,9 +119,9 @@ public class SimpleEpisodeIntegratorTest extends TestCase {
       Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
       List<StateTime> list = aei.move(flow, p);
       assertEquals(list.size(), 1);
-      Tensor cmp = x.add(u.multiply(p));
-      System.out.println(list.get(0).toInfoString());
-      System.out.println(cmp);
+      // Tensor cmp = x.add(u.multiply(p));
+      // System.out.println(list.get(0).toInfoString());
+      // System.out.println(cmp);
       // assertEquals(list.get(0).state(), cmp);
       assertEquals(list.get(0).time(), t.add(p));
     }

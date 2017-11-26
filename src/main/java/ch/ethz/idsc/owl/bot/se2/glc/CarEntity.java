@@ -19,11 +19,9 @@ import ch.ethz.idsc.owl.gui.ani.PlannerType;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,14 +32,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
 class CarEntity extends Se2Entity {
-  private static final Tensor PARTITIONSCALE = Tensors.vector(5, 5, 50 / Math.PI).unmodifiable(); // 50/pi == 15.9155
+  private static final Tensor PARTITIONSCALE = Tensors.of( //
+      RealScalar.of(5), RealScalar.of(5), Degree.of(10).reciprocal()).unmodifiable();
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   private static final Scalar SHIFT_PENALTY = RealScalar.of(0.4);
-  /** the time difference between two successive nodes in the planner tree
-   * is 4/10 */
-  // TODO use 10/4 in last entry of partition scale
-  public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
-      FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
   // ---
   private static final Tensor SHAPE = Tensors.matrixDouble( //
       new double[][] { //
