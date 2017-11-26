@@ -26,6 +26,7 @@ import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarEmulator;
+import ch.ethz.idsc.subare.core.td.SarsaType;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -90,7 +91,7 @@ public class Se2xTLetterDemo implements DemoInterface {
     }
     {
       CarPolicyEntity twdPolicyEntity = new CarPolicyEntity( //
-          Tensors.vector(5.600, 8.667, -1.571), ray);
+          Tensors.vector(5.600, 8.667, -1.571), SarsaType.qlearning, ray);
       owlyAnimationFrame.add(twdPolicyEntity);
     }
     // ---
