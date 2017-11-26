@@ -1,0 +1,20 @@
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# eclipse
+.settings/
+.project
+.classpath
+testall.sh
+gendocs.sh
+
+# data dumping
+export/
+
