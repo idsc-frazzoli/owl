@@ -10,8 +10,8 @@ public class InvertedRegion implements Region<Tensor> {
     this.region = region;
   }
 
-  @Override
-  public boolean isMember(Tensor tensor) {
+  @Override // from Region
+  public final boolean isMember(Tensor tensor) {
     return !region.isMember(tensor);
   }
 }
