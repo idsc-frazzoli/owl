@@ -49,4 +49,14 @@ public class StopwatchTest extends TestCase {
     stopwatch.resetToZero();
     assertTrue(0 == stopwatch.display_nanoSeconds());
   }
+
+  public void testResetFail() {
+    Stopwatch stopwatch = Stopwatch.started();
+    try {
+      stopwatch.resetToZero();
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

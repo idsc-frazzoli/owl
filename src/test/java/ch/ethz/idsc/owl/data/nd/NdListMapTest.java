@@ -29,6 +29,11 @@ public class NdListMapTest extends TestCase {
     assertTrue(res.contains("p1"));
     assertTrue(res.contains("p2"));
     assertEquals(res.size(), 2);
+    assertEquals(m1.size(), 4);
+    assertFalse(m1.isEmpty());
+    m1.clear();
+    assertEquals(m1.size(), 0);
+    assertTrue(m1.isEmpty());
   }
 
   private static Scalar addDistances(NdCluster<String> cluster, Tensor center, NdCenterInterface d) {
