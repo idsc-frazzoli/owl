@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui.ani;
+package ch.ethz.idsc.owl.gui.win;
 
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 

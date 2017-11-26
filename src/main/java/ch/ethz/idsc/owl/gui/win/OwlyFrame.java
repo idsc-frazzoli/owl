@@ -1,5 +1,5 @@
 // code by jph and jl
-package ch.ethz.idsc.owl.gui.ani;
+package ch.ethz.idsc.owl.gui.win;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -17,7 +17,6 @@ import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.BaseFrame;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.RenderElements;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;

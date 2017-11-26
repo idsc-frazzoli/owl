@@ -3,8 +3,8 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import ch.ethz.idsc.owl.bot.rn.RnNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
-import ch.ethz.idsc.owl.gui.ani.OwlyFrame;
-import ch.ethz.idsc.owl.gui.ani.OwlyGui;
+import ch.ethz.idsc.owl.gui.win.OwlyFrame;
+import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;

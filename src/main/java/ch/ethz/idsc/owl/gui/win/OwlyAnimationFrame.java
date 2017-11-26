@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui.ani;
+package ch.ethz.idsc.owl.gui.win;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -31,7 +31,10 @@ import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.TimerFrame;
+import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
+import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.EtaRender;
 import ch.ethz.idsc.owl.gui.ren.GoalRender;
 import ch.ethz.idsc.owl.gui.ren.GridRender;

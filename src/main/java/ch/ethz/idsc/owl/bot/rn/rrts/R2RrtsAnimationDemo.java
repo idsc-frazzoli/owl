@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.gui.ani.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.tensor.Tensors;
 
 public class R2RrtsAnimationDemo implements DemoInterface {
