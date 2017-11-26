@@ -147,10 +147,6 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
     return queue;
   }
 
-  protected final Map<Tensor, GlcNode> domainMap() {
-    return domainMap;
-  }
-
   /** @return unmodifiable view on queue for display and tests */
   public final Collection<GlcNode> getQueue() {
     return Collections.unmodifiableCollection(queue);

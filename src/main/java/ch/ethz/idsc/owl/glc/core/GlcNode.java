@@ -40,15 +40,4 @@ public interface GlcNode extends StateCostNode {
    * 
    * @return the depth of this node */
   int depth();
-
-  /** function is only called by motion planners.
-   * data structures that rely on the sorting by merit
-   * may become invalid once the merit is set to a new value */
-  void setMinCostToGoal(Scalar minCostToGoal);
-
-  /** @return the difference in depth (numbers of ancestors till root) to the current root */
-  int depthDifferenceToRoot();
-
-  /** makes this Node root, by cutting connections to its parents */
-  void makeRoot();
 }

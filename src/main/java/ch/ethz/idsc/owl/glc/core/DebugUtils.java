@@ -19,7 +19,7 @@ public enum DebugUtils {
   public static final void nodeAmountCompare(TrajectoryPlanner trajectoryPlanner) {
     nodeAmountCompare( //
         Nodes.rootFrom(trajectoryPlanner.getBestOrElsePeek().get()), //
-        trajectoryPlanner.domainMap().size());
+        trajectoryPlanner.getDomainMap().size());
   }
 
   // ---

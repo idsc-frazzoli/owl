@@ -14,14 +14,12 @@ public interface StateSpaceModel extends Serializable {
   /** flow is function f in
    * (d_t x) |_t == f(x(t), u(t))
    * 
-   * @param x
-   * @param u
+   * @param x state coordinate in state space
+   * @param u vector of control
    * @return */
   Tensor f(Tensor x, Tensor u);
 
-  /** | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
-   * TODO description need quantifiers: for all / there is ?
-   * 
-   * @return L */
+  /** @return L that satisfies | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
+   * for any x_1, x_2 and u */
   Scalar getLipschitz();
 }
