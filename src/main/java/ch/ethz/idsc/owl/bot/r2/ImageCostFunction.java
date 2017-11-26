@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.img;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
 /** current implementation uses 2d image to store costs
  * a given trajectory is mapped to the pixels and costs are
  * weighted according to the traverse time */
-public class ImageCostFunction implements CostFunction {
+/* package */ class ImageCostFunction implements CostFunction {
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
   // ---
   private final Tensor image;

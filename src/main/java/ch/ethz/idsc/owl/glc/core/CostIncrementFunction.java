@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.glc.core;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.img.ImageCostFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;

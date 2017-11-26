@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.img;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.io.File;
 
