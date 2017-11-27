@@ -16,8 +16,8 @@ public enum Se2AxisYProject {
     Scalar be = x.Get(2);
     Scalar px = p.Get(0);
     Scalar py = p.Get(1);
-    if (Scalars.isZero(be))
-      return px.divide(vx);
-    return ArcTan.of(vx.subtract(py.multiply(be)), px.multiply(be)).divide(be);
+    return Scalars.isZero(be) //
+        ? px.divide(vx)
+        : ArcTan.of(vx.subtract(py.multiply(be)), px.multiply(be)).divide(be);
   }
 }

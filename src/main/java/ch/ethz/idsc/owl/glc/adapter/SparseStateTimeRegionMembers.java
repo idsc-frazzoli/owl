@@ -16,14 +16,14 @@ public class SparseStateTimeRegionMembers implements StateTimeRegionCallback, St
   /** magic constants of scale are not universal but are suitable for most examples */
   private final RasterMap<StateTime> rasterMap = new LinearRasterMap<>(Tensors.vector(10, 10));
 
-  @Override
+  @Override // from StateTimeRegionCallback
   public void notify_isMember(StateTime stateTime) {
     Tensor x = stateTime.state();
     if (1 < x.length())
       rasterMap.put(x.extract(0, 2), stateTime);
   }
 
-  @Override
+  @Override // from StateTimeCollector
   public Collection<StateTime> getMembers() {
     return Collections.unmodifiableCollection(rasterMap.values());
   }

@@ -48,11 +48,11 @@ public enum Se2Utils {
   /** maps a vector x from the Lie-algebra se2 to a vector of the group SE2
    * 
    * @param x == {vx, vy, beta}
-   * @return vector in SE2 with coordinates of exp x */
+   * @return element g in SE2 as vector with coordinates of g == exp x */
   public static Tensor integrate_g0(Tensor x) {
     Scalar be = x.Get(2);
     if (Scalars.isZero(be))
-      return x.extract(0, 2).append(RealScalar.ZERO);
+      return x.copy();
     Scalar vx = x.Get(0);
     Scalar vy = x.Get(1);
     Scalar cd = Cos.FUNCTION.apply(be).subtract(RealScalar.ONE);
