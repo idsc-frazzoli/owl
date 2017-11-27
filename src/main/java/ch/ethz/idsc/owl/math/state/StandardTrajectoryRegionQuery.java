@@ -27,7 +27,10 @@ public abstract class StandardTrajectoryRegionQuery extends AbstractTrajectoryRe
 
   @Override // from TrajectoryRegionQuery
   public final boolean isMember(StateTime stateTime) {
-    return region.isMember(stateTime);
+    boolean isMember = region.isMember(stateTime);
+    if (isMember)
+      stateTimeRegionCallback.notify_isMember(stateTime);
+    return isMember;
   }
 
   public StateTimeRegionCallback getStateTimeRegionCallback() {

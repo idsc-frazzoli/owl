@@ -59,12 +59,12 @@ public enum RegionRenders {
       return new PolygonRegionRender((PolygonRegion) region);
     if (region instanceof RnPointcloudRegion)
       return new RnPointcloudRegionRender((RnPointcloudRegion) region);
-    return null;
+    throw new RuntimeException();
   }
 
   public static RenderInterface create(TrajectoryRegionQuery trajectoryRegionQuery) {
     if (trajectoryRegionQuery instanceof StateTimeCollector)
       return new StateTimeCollectorRender((StateTimeCollector) trajectoryRegionQuery);
-    return null;
+    throw new RuntimeException();
   }
 }

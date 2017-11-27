@@ -12,11 +12,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JToggleButton;
@@ -57,7 +57,7 @@ public class OwlyAnimationFrame extends TimerFrame {
   private final TrajectoryRender trajectoryRender = new TrajectoryRender();
   private final GoalRender goalRender = new GoalRender(null);
   private final TreeRender treeRender = new TreeRender(null);
-  private final List<AnimationInterface> animationInterfaces = new LinkedList<>();
+  private final List<AnimationInterface> animationInterfaces = new CopyOnWriteArrayList<>();
   /** reference to the entity that is controlled by the user */
   private AnimationInterface controllable = null;
   /** the obstacle query is set in {@link #setObstacleQuery(TrajectoryRegionQuery)}
@@ -223,7 +223,7 @@ public class OwlyAnimationFrame extends TimerFrame {
   };
 
   public void set(AnimationInterface animationInterface) {
-    GlobalAssert.that(animationInterfaces.isEmpty()); // TODO JAN this logic is messy
+    GlobalAssert.that(animationInterfaces.isEmpty()); // TODO this logic is messy
     if (Objects.isNull(controllable))
       controllable = animationInterface;
     add(animationInterface);

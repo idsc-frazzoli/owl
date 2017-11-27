@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.Deque;
@@ -34,32 +35,38 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Ordering;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
-import ch.ethz.idsc.tensor.sca.Chop;
 
 public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
+  private static final Color[] COLORS = new Color[] { //
+      new Color(255, 192, 192), //
+      new Color(192, 255, 192), //
+      new Color(192, 192, 255) };
+  /** modified in constructor */
   private final Tensor SHAPE = CirclePoints.of(5).multiply(RealScalar.of(.1));
   // ---
   private final Tensor start;
+  private final SarsaType sarsaType;
   DiscreteQsa qsa;
   Policy policy;
   private LidarEmulator lidarEmulator;
   private final CarDiscreteModel carDiscreteModel;
   LearningRate learningRate = DefaultLearningRate.of(2, 0.51);
+  private int collisionCount = 0;
 
   /** @param start
    * @param raytraceQuery */
-  public CarPolicyEntity(Tensor start, TrajectoryRegionQuery raytraceQuery) {
+  public CarPolicyEntity(Tensor start, SarsaType sarsaType, TrajectoryRegionQuery raytraceQuery) {
     this.start = start;
+    this.sarsaType = sarsaType;
     CarDiscreteModel carDiscreteModel = new CarDiscreteModel(5);
     qsa = DiscreteQsa.build(carDiscreteModel);
     policy = EGreedyPolicy.bestEquiprobable(carDiscreteModel, qsa, RealScalar.of(0.2));
     this.carDiscreteModel = carDiscreteModel;
     // ---
     lidarEmulator = new LidarEmulator( //
-        Subdivide.of(Degree.of(+90), Degree.of(-90), carDiscreteModel.resolution - 1), //
+        Subdivide.of(Degree.of(+45), Degree.of(-45), carDiscreteModel.resolution - 1), //
         this::getStateTimeNow, raytraceQuery);
     SHAPE.set(Tensors.vector(.2, 0), 0);
     reset(RealScalar.ZERO);
@@ -71,7 +78,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     prev_reward = null;
     if (!episodeLog.isEmpty()) {
       // System.out.println("learn " + episodeLog.size());
-      SarsaType.qlearning.supply(carDiscreteModel, qsa, learningRate);
+      sarsaType.supply(carDiscreteModel, qsa, learningRate);
       Sarsa sarsa = new OriginalSarsa(carDiscreteModel, qsa, learningRate);
       int nstep = 50;
       Deque<StepInterface> deque = new LinkedList<>(episodeLog.subList(Math.max(1, episodeLog.size() - nstep), episodeLog.size()));
@@ -88,14 +95,15 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
 
   private final List<StepInterface> episodeLog = new LinkedList<>();
   private Tensor prev_state;
-  private Tensor prev_action;
+  private Tensor prev_action; // {1, 0, al}
   private Scalar prev_reward;
 
   @Override // from AnimationInterface
   public final void integrate(Scalar now) {
     // implementation does not require that current position is perfectly located on trajectory
     StateTime stateTime = getStateTimeNow();
-    Tensor state = represent(stateTime); // may be augmented state time, and/or observation etc.
+    Tensor pair = represent(stateTime); // may be augmented state time, and/or observation etc.
+    Tensor state = pair.get(0);
     if (Objects.nonNull(prev_state) && !carDiscreteModel.isTerminal(prev_state)) {
       // <- compute reward based on prev_state,
       prev_reward = reward(prev_state, prev_action, state);
@@ -106,8 +114,11 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     PolicyWrap policyWrap = new PolicyWrap(policy);
     Tensor actions = carDiscreteModel.actions(state);
     prev_action = policyWrap.next(state, actions);
+    prev_action.set(s -> s.pmul(pair.Get(1)), 1);
+    // System.out.println(prev_action);
     episodeIntegrator.move(prev_action, now);
     if (carDiscreteModel.isTerminal(prev_state)) {
+      ++collisionCount;
       reset(now);
     }
   }
@@ -115,9 +126,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
   @Override
   public Tensor represent(StateTime stateTime) {
     Tensor range = lidarEmulator.detectRange(stateTime);
-    if (Chop.NONE.allZero(range))
-      return CarDiscreteModel.COLLISION;
-    return Tensors.vectorInt(Ordering.DECREASING.of(range));
+    return CarDiscreteModel.represent(range);
   }
 
   @Override // from RewardInterface
@@ -134,11 +143,13 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    graphics.setColor(COLORS[sarsaType.ordinal()]);
     super.render(geometricLayer, graphics);
     {
       StateTime stateTime = getStateTimeNow();
       Point2D p = geometricLayer.toPoint2D(stateTime.state());
-      graphics.drawString(":-)", (int) p.getX(), (int) p.getY());
+      graphics.setColor(Color.GRAY);
+      graphics.drawString("  " + collisionCount, (int) p.getX(), (int) p.getY());
     }
     {
       lidarEmulator.render(geometricLayer, graphics);

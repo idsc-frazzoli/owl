@@ -39,11 +39,11 @@ import ch.ethz.idsc.tensor.alg.Array;
 /** (x,y,theta) */
 enum Se2Demo {
   ;
-  // TODO JAN this demo has 'misses', why !?
+  // TODO this demo has 'misses', why !?
   public static void main(String[] args) {
     Tensor eta = Tensors.of(RealScalar.of(6), RealScalar.of(6), Degree.of(15).reciprocal());
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 6), 5);
+        Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
     System.out.println("scale=" + eta);
     CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, Degree.of(35));
     Collection<Flow> controls = carFlows.getFlows(10);

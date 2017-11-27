@@ -18,6 +18,8 @@ public abstract class PolicyEntity implements AnimationInterface, RenderInterfac
   protected EpisodeIntegrator episodeIntegrator;
   public TrajectoryRegionQuery obstacleQuery = null;
 
+  /** @param stateTime
+   * @return state of discrete model */
   public abstract Tensor represent(StateTime stateTime);
 
   public final StateTime getStateTimeNow() {
@@ -34,11 +36,7 @@ public abstract class PolicyEntity implements AnimationInterface, RenderInterfac
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();
-      Color color = obstacleQuery_isDisjoint(stateTime) //
-          ? new Color(64, 64, 64, 128)
-          : new Color(255, 64, 64, 128);
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(stateTime.state()));
-      graphics.setColor(color);
       graphics.fill(geometricLayer.toPath2D(shape()));
       geometricLayer.popMatrix();
     }
