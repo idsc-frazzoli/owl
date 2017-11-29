@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,8 +18,11 @@ public enum Se2AxisYProject {
     Scalar be = x.Get(2);
     Scalar px = p.Get(0);
     Scalar py = p.Get(1);
-    return Scalars.isZero(be) //
-        ? px.divide(vx)
-        : ArcTan.of(vx.subtract(py.multiply(be)), px.multiply(be)).divide(be);
+    if (Scalars.isZero(be)) { // prevent division by 0 after arc tan
+      if (Scalars.isZero(vx)) // prevent division by 0 of px
+        return Scalars.isZero(px) ? RealScalar.ZERO : DoubleScalar.POSITIVE_INFINITY; // map to extremes
+      return px.divide(vx);
+    }
+    return ArcTan.of(vx.subtract(py.multiply(be)), px.multiply(be)).divide(be);
   }
 }

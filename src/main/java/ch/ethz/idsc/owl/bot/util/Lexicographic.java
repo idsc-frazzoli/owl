@@ -7,7 +7,9 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 
-/** returns -1 if t1 < t2 */
+/** comparator for vectors
+ * 
+ * returns -1 if t1 < t2 */
 public enum Lexicographic implements Comparator<Tensor> {
   COMPARATOR;
   // ---
