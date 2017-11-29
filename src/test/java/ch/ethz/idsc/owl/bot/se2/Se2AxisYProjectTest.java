@@ -5,6 +5,7 @@ import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.sample.CircleRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -46,6 +47,18 @@ public class Se2AxisYProjectTest extends TestCase {
     Scalar t = Se2AxisYProject.of(u, Tensors.vector(10, 3));
     assertFalse(Scalars.isZero(u.Get(2)));
     assertTrue(Chop._12.close(t, RealScalar.of(5)));
+  }
+
+  public void testZeroSpeedNonZeroPos() {
+    Tensor u = Tensors.vector(0, 0, 0);
+    Scalar t = Se2AxisYProject.of(u, Tensors.vector(10, 3));
+    assertEquals(t, DoubleScalar.POSITIVE_INFINITY);
+  }
+
+  public void testZeroSpeedZeroPos() {
+    Tensor u = Tensors.vector(0, 0, 0);
+    Scalar t = Se2AxisYProject.of(u, Tensors.vector(0, 3));
+    assertEquals(t, RealScalar.ZERO);
   }
 
   public void testCheck() {
