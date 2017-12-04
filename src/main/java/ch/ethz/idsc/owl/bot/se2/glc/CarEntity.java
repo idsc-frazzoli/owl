@@ -3,8 +3,6 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.se2.CarFlows;
-import ch.ethz.idsc.owl.bot.se2.CarStandardFlows;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;

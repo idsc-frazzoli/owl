@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2;
+package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.Collection;
 
