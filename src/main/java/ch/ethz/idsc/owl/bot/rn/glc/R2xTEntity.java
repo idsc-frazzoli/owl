@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.Tensors;
   Collection<Flow> createControls() {
     /** 36 corresponds to 10[Degree] resolution */
     Collection<Flow> collection = super.createControls();
-    collection.add(r2Config.stayPut()); // <- does not go well with min-dist cost function
+    collection.add(r2Flows.stayPut()); // <- does not go well with min-dist cost function
     return collection;
   }
 }
