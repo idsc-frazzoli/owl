@@ -57,12 +57,6 @@ import ch.ethz.idsc.tensor.Tensor;
     return costFromRoot;
   }
 
-  /* at the moment both functions
-   * protected_insertChild, and protected_removeChild
-   * are used to _temporarily_ alter the tree structure
-   * when undoing the connectivity change the original
-   * content is required, therefore content is not deleted.
-   * instead use makeRoot() for instance. */
   @Override // from AbstractNode
   protected boolean protected_insertChild(GlcNode child) {
     boolean inserted = !children.containsKey(child.flow());
@@ -72,7 +66,7 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from AbstractNode
-  protected final boolean protected_removeChild(GlcNode child) {
+  protected boolean protected_removeChild(GlcNode child) {
     boolean removed = children.containsKey(child.flow());
     children.remove(child.flow());
     return removed;

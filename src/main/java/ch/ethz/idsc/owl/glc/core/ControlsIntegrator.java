@@ -60,7 +60,6 @@ public class ControlsIntegrator implements Serializable {
   /** parallel trajectory integration is used by {@link StandardTrajectoryPlanner}
    * 
    * @param node from which to expand
-   * @param costFunction
    * @return */
   public Map<GlcNode, List<StateTime>> inParallel(GlcNode node) {
     // parallel results in speedup of ~25% (rice2demo)
@@ -72,7 +71,6 @@ public class ControlsIntegrator implements Serializable {
   }
 
   /** @param node from which to expand
-   * @param costFunction
    * @return */
   Map<GlcNode, List<StateTime>> inSequence(GlcNode node) { // function is not used
     return controls.stream() //
