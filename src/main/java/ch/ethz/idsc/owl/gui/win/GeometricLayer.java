@@ -19,6 +19,8 @@ public class GeometricLayer {
   private final Deque<AffineFrame2D> deque = new ArrayDeque<>();
   private final Tensor mouseSe2State;
 
+  /** @param model2pixel matrix that becomes first element on matrix stack
+   * @param mouseSe2State */
   public GeometricLayer(Tensor model2pixel, Tensor mouseSe2State) {
     deque.push(new AffineFrame2D(model2pixel));
     this.mouseSe2State = mouseSe2State;
