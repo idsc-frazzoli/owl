@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.delta;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** rotated gradient of potential function */
-/* package */ class ImageGradient implements Serializable {
+public class ImageGradient implements Serializable {
   /** @param image
    * @param range
    * @param amp
@@ -47,6 +47,8 @@ import ch.ethz.idsc.tensor.sca.N;
   private final Tensor scale;
   private final Interpolation interpolation;
   private final Scalar maxNormGradient;
+  // ---
+  public final Tensor field_copy; // TODO testing only
 
   /** @param image with rank 2. For instance, Dimensions.of(image) == [179, 128]
    * @param range with length() == 2
@@ -65,6 +67,8 @@ import ch.ethz.idsc.tensor.sca.N;
     field = N.DOUBLE.of(field);
     interpolation = function.apply(field);
     maxNormGradient = field.flatten(1).map(Norm._2::ofVector).reduce(Max::of).get();
+    // ---
+    field_copy = field.copy();
   }
 
   /** @param vector of length 2

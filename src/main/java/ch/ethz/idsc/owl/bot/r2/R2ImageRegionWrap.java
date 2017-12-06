@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class R2ImageRegionWrap {
+  public static final int TTL = 15;
+  // ---
   private final ImageRegion imageRegion;
   private final CostFunction costFunction;
 
@@ -17,9 +19,8 @@ public class R2ImageRegionWrap {
     imageRegion = new ImageRegion(tensor, range, false);
     // ---
     Set<Tensor> seeds = FloodFill2D.seeds(tensor);
-    final int ttl = 15; // magic const
-    Tensor cost = FloodFill2D.of(seeds, RealScalar.of(ttl), tensor);
-    costFunction = new ImageCostFunction(cost.divide(DoubleScalar.of(ttl)), range, RealScalar.ZERO);
+    Tensor cost = FloodFill2D.of(seeds, RealScalar.of(TTL), tensor);
+    costFunction = new ImageCostFunction(cost.divide(DoubleScalar.of(TTL)), range, RealScalar.ZERO);
   }
 
   public ImageRegion imageRegion() {
