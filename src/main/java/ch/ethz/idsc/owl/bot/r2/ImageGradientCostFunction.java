@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
     Tensor p = tensor.extract(0, 2); // xy
     Tensor v = imageGradient.rotate(p);
     Tensor u = AngleVector.of(tensor.Get(2)); // orientation
-    return VectorAngle.of(u, v); // LONGTERM perhaps this can be simplified
+    return VectorAngle.of(u, v).orElse(RealScalar.ZERO); // LONGTERM perhaps this can be simplified
   }
 
   @Override // from CostFunction
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
     Tensor cost = Tensor.of(trajectory.stream() //
         .map(StateTime::state) //
         .map(this::pointcost));
-    return cost.dot(dts).Get();
+    return cost.dot(dts).Get(); // .multiply(RealScalar.of(20.0));
   }
 
   @Override // from CostFunction

@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Stopwatch;
@@ -39,10 +38,7 @@ enum FloodFill2DDemo {
     System.out.println("export image " + Dimensions.of(tensor));
     Export.of(UserHome.Pictures("image.png"), tensor);
     Stopwatch stopwatch = Stopwatch.started();
-    Set<Tensor> seeds = FloodFill2D.seeds(tensor);
-    System.out.println("seeds        " + stopwatch.display_seconds());
-    stopwatch = Stopwatch.started();
-    Tensor cost_raw = FloodFill2D.of(seeds, ttl, tensor);
+    Tensor cost_raw = FloodFill2D.of(ttl, tensor);
     System.out.println("floodfill    " + stopwatch.display_seconds());
     System.out.println("export cost  " + Dimensions.of(cost_raw));
     Export.of(UserHome.Pictures("image_cost_raw.png"), cost_raw);

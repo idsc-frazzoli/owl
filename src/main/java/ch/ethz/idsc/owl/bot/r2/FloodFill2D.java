@@ -16,13 +16,21 @@ import ch.ethz.idsc.tensor.sca.Decrement;
 /** computes manhatten distance by flood fill */
 /* package */ class FloodFill2D {
   ;
-  /** @param seeds
+  /** @param ttl
+   * @param tensor
+   * @param seeds
+   * @return distance in exact precision */
+  public static Tensor of(Scalar ttl, Tensor tensor, Set<Tensor> seeds) {
+    return new FloodFill2D(ttl, tensor, seeds).array;
+  }
+
+  /** seeds are generated from given tensor using {@link #seeds(Tensor)}
+   * 
    * @param ttl
    * @param tensor
    * @return distance in exact precision */
-  public static Tensor of(Set<Tensor> seeds, Scalar ttl, Tensor tensor) {
-    FloodFill2D floodFill = new FloodFill2D(seeds, ttl, tensor);
-    return floodFill.array;
+  public static Tensor of(Scalar ttl, Tensor tensor) {
+    return of(ttl, tensor, seeds(tensor));
   }
 
   // ---
@@ -30,12 +38,13 @@ import ch.ethz.idsc.tensor.sca.Decrement;
   private static final Tensor DXN = Tensors.vector(-1, 0);
   private static final Tensor DYP = Tensors.vector(0, +1);
   private static final Tensor DYN = Tensors.vector(0, -1);
+  // ----
   private final List<Integer> dimensions;
   private final Tensor array;
   private final Tensor tensor;
   private Set<Tensor> next;
 
-  private FloodFill2D(Set<Tensor> prev, Scalar ttl, Tensor tensor) {
+  private FloodFill2D(Scalar ttl, Tensor tensor, Set<Tensor> prev) {
     dimensions = Dimensions.of(tensor);
     array = Array.zeros(dimensions);
     this.tensor = tensor;
