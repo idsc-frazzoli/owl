@@ -30,17 +30,17 @@ public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
     this.goalInterface = goalInterface;
   }
 
-  @Override
+  @Override // from TrajectoryPlanner
   public final StateIntegrator getStateIntegrator() {
     return stateIntegrator;
   }
 
-  @Override
+  @Override // from TrajectoryPlanner
   public final TrajectoryRegionQuery getObstacleQuery() {
     return obstacleQuery;
   }
 
-  @Override
+  @Override // from TrajectoryPlanner
   public final GoalInterface getGoalInterface() {
     return goalInterface;
   }

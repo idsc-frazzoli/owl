@@ -42,6 +42,7 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta, stateIntegrator, controls, EmptyTrajectoryRegionQuery.INSTANCE, goalInterface);
+    assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     int iters = Expand.maxSteps(trajectoryPlanner, 200);
     System.out.println("iterations " + iters);
