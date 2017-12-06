@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -58,5 +59,6 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     }
     Tensor eta2 = trajectoryPlanner.getEta();
     assertEquals(eta, eta2);
+    DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
   }
 }
