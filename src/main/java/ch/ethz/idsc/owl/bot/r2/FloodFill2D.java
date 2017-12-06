@@ -16,6 +16,10 @@ import ch.ethz.idsc.tensor.sca.Decrement;
 /** computes manhatten distance by flood fill */
 /* package */ class FloodFill2D {
   ;
+  /** @param seeds
+   * @param ttl
+   * @param tensor
+   * @return distance in exact precision */
   public static Tensor of(Set<Tensor> seeds, Scalar ttl, Tensor tensor) {
     FloodFill2D floodFill = new FloodFill2D(seeds, ttl, tensor);
     return floodFill.array;
@@ -71,6 +75,9 @@ import ch.ethz.idsc.tensor.sca.Decrement;
     }
   }
 
+  /** @param tensor of rank 2
+   * @return set of coordinates in of zeros in given tensor that have at least
+   * one neighbor in obstacle space */
   public static Set<Tensor> seeds(Tensor tensor) {
     Set<Tensor> set = new HashSet<>();
     List<Integer> list = Dimensions.of(tensor);

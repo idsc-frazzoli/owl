@@ -1,6 +1,7 @@
 // code by jph and jl
 package ch.ethz.idsc.owl.bot.delta;
 
+import ch.ethz.idsc.owl.bot.r2.ImageGradient;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

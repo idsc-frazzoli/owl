@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.r2;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -19,6 +20,7 @@ public class FloodFill2DTest extends TestCase {
     Tensor manh = FloodFill2D.of(seeds.stream().collect(Collectors.toSet()), ttl, tensor);
     String s = "{{0, 0, 1, 0, 0, 0}, {0, 1, 2, 1, 0, 0}, {1, 2, 3, 2, 1, 0}, {0, 1, 2, 2, 1, 0}, {0, 1, 2, 3, 2, 1}}";
     assertEquals(manh, Tensors.fromString(s));
+    assertTrue(ExactScalarQ.all(manh));
   }
 
   public void testObstacles() {
@@ -29,6 +31,7 @@ public class FloodFill2DTest extends TestCase {
     Tensor manh = FloodFill2D.of(seeds.stream().collect(Collectors.toSet()), ttl, tensor);
     String s = "{{6, 7, 8, 7, 6, 5}, {5, 0, 9, 8, 7, 6}, {4, 0, 10, 9, 8, 7}, {3, 0, 9, 9, 8, 7}, {2, 0, 9, 10, 9, 8}}";
     assertEquals(manh, Tensors.fromString(s));
+    assertTrue(ExactScalarQ.all(manh));
   }
 
   public void testSeeds() {
@@ -49,6 +52,7 @@ public class FloodFill2DTest extends TestCase {
     Tensor manh = FloodFill2D.of(seeds, ttl, tensor);
     String s = "{{1, 1, 2, 3, 3}, {2, 2, 3, 0, 0}, {3, 2, 2, 3, 0}, {0, 3, 2, 2, 3}}";
     assertEquals(manh, Tensors.fromString(s));
+    assertTrue(ExactScalarQ.all(manh));
     // System.out.println(Pretty.of(manh));
     // System.out.println(manh);
   }
