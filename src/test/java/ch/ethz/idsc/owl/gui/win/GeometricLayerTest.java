@@ -42,4 +42,7 @@ public class GeometricLayerTest extends TestCase {
       // ---
     }
   }
+
+  public void testMore() {
+  }
 }
