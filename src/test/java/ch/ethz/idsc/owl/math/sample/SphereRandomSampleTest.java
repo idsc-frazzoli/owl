@@ -13,7 +13,7 @@ public class SphereRandomSampleTest extends TestCase {
   public void testSimple() {
     Tensor center = Tensors.vector(10, 20, 30, 40);
     Scalar radius = RealScalar.of(2);
-    RandomSampleInterface rsi = new SphereRandomSample(center, radius);
+    RandomSampleInterface rsi = SphereRandomSample.of(center, radius);
     Tensor vector = rsi.randomSample().subtract(center);
     assertTrue(Scalars.lessEquals(Norm._2.ofVector(vector), radius));
   }

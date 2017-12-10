@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.qty.Units;
 import ch.ethz.idsc.tensor.sca.Round;
 import junit.framework.TestCase;
 
-public class TwdConfigTest extends TestCase {
+public class TwdDuckieFlowsTest extends TestCase {
   public void testMaxSpeed() {
     TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(3), RealScalar.of(0.567));
     Collection<Flow> controls = twdConfig.getFlows(8);

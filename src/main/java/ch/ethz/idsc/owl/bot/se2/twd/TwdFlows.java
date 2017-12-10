@@ -11,22 +11,22 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.N;
 
 public abstract class TwdFlows implements FlowsInterface {
-  private final Scalar maxSpeed;
+  private final Scalar maxSpeedHalf;
   private final Scalar halfWidth;
 
   /** @param maxSpeed [m*s^-1]
    * @param halfWidth [m*rad^-1] */
   public TwdFlows(Scalar maxSpeed, Scalar halfWidth) {
-    this.maxSpeed = maxSpeed;
+    maxSpeedHalf = maxSpeed.divide(RealScalar.of(2));
     this.halfWidth = halfWidth;
   }
 
-  /** @param speedL
-   * @param speedR
+  /** @param speedL in the interval [-1, 1] without unit
+   * @param speedR in the interval [-1, 1] without unit
    * @return */
   protected final Flow singleton(Scalar speedL, Scalar speedR) {
-    Scalar speed = speedL.add(speedR).multiply(maxSpeed).divide(RealScalar.of(2));
-    Scalar rate = speedL.subtract(speedR).multiply(maxSpeed).divide(RealScalar.of(2)).divide(halfWidth);
+    Scalar speed = speedL.add(speedR).multiply(maxSpeedHalf);
+    Scalar rate = speedR.subtract(speedL).multiply(maxSpeedHalf).divide(halfWidth);
     return StateSpaceModels.createFlow(Se2StateSpaceModel.INSTANCE, //
         N.DOUBLE.of(Tensors.of(speed, RealScalar.ZERO, rate)));
   }

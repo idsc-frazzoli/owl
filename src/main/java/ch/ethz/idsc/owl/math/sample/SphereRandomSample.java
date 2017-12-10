@@ -13,20 +13,31 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
+/** random samples from the interior of a n-dimensional sphere */
 public class SphereRandomSample implements RandomSampleInterface {
   private static final Distribution UNIFORM = UniformDistribution.of(-1, 1);
+
+  /** @param center
+   * @param radius
+   * @return */
+  public static RandomSampleInterface of(Tensor center, Scalar radius) {
+    GlobalAssert.that(VectorQ.of(center));
+    GlobalAssert.that(Sign.isPositiveOrZero(radius));
+    if (Scalars.isZero(radius))
+      return new ConstantRandomSample(center);
+    return new SphereRandomSample(center, radius);
+  }
+
   // ---
   private final Tensor center;
   private final Scalar radius;
 
-  public SphereRandomSample(Tensor center, Scalar radius) {
-    GlobalAssert.that(VectorQ.of(center));
-    GlobalAssert.that(Sign.isPositiveOrZero(radius));
+  private SphereRandomSample(Tensor center, Scalar radius) {
     this.center = center;
     this.radius = radius;
   }
 
-  @Override
+  @Override // from RandomSampleInterface
   public Tensor randomSample() {
     while (true) {
       Tensor vector = RandomVariate.of(UNIFORM, center.length());
