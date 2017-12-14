@@ -8,6 +8,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
+/** Se2ForwardAction is a substitute for the operation:
+ * SE2 matrix dot point */
 public class Se2ForwardAction implements TensorUnaryOperator {
   private final Scalar px;
   private final Scalar py;

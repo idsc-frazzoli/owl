@@ -39,11 +39,11 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     Tensor range = Tensors.vector(12.6, 9.1).unmodifiable(); // overall size of map
     Scalar amp = RealScalar.of(-.05); // direction and strength of river flow
     // ---
-    ImageGradient imageGradient_fast = ImageGradient.linear(image, range, amp);
+    ImageGradient imageGradient_fast = ImageGradient.nearest(image, range, amp);
     AbstractEntity abstractEntity = new DeltaxTEntity(imageGradient_fast, Tensors.vector(10, 3.5));
     Supplier<Scalar> supplier = () -> abstractEntity.getStateTimeNow().time();
     // ---
-    ImageGradient imageGradient_slow = ImageGradient.nearest(image, range, amp);
+    ImageGradient imageGradient_slow = ImageGradient.linear(image, range, amp);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradient_slow);
     Flow flow = StateSpaceModels.createFlow(stateSpaceModel, DeltaEntity.FALLBACK_CONTROL);
     Region<StateTime> region1 = create(RealScalar.of(0.4), Tensors.vector(2, 1.5), flow, supplier);
