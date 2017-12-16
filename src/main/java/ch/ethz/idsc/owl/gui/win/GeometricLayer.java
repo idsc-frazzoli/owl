@@ -42,7 +42,9 @@ public class GeometricLayer {
     deque.push(deque.peek().dot(matrix));
   }
 
-  /** inspired by opengl */
+  /** inspired by opengl
+   * 
+   * @throws Exception if deque of matrices is empty */
   public void popMatrix() {
     deque.pop();
   }
