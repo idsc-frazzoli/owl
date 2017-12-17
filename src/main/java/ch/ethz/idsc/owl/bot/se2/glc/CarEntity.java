@@ -29,13 +29,14 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
-class CarEntity extends Se2Entity {
-  private static final Tensor PARTITIONSCALE = Tensors.of( //
+public class CarEntity extends Se2Entity {
+  static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(5), RealScalar.of(5), Degree.of(10).reciprocal()).unmodifiable();
+  static final CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, Degree.of(45));
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   private static final Scalar SHIFT_PENALTY = RealScalar.of(0.4);
   // ---
-  private static final Tensor SHAPE = Tensors.matrixDouble( //
+  static final Tensor SHAPE = Tensors.matrixDouble( //
       new double[][] { //
           { .2, +.07 }, //
           { .25, +.0 }, //
@@ -47,26 +48,29 @@ class CarEntity extends Se2Entity {
   static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
 
   public static CarEntity createDefault(StateTime stateTime) {
-    return new CarEntity(stateTime);
+    return new CarEntity(stateTime, PARTITIONSCALE, carFlows, SHAPE);
   }
 
   // ---
   private final Collection<Flow> controls;
   private final Tensor goalRadius;
+  private final Tensor partitionScale;
+  private final Tensor shape;
 
   /** extra cost functions, for instance
    * 1) to penalize switching gears
    * 2) to prevent cutting corners
    * 
    * @param stateTime initial position */
-  CarEntity(StateTime stateTime) {
+  public CarEntity(StateTime stateTime, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
     super(new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
-    CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, Degree.of(45));
-    controls = carFlows.getFlows(6);
+    controls = carFlows.getFlows(9);
     final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
     final Scalar goalRadius_theta = SQRT2.divide(PARTITIONSCALE.Get(2));
     goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta);
     extraCosts.add(new Se2ShiftCostFunction(SHIFT_PENALTY));
+    this.partitionScale = partitionScale;
+    this.shape = shape.copy().unmodifiable();
   }
 
   @Override
@@ -98,11 +102,11 @@ class CarEntity extends Se2Entity {
 
   @Override
   protected Tensor eta() {
-    return PARTITIONSCALE;
+    return partitionScale;
   }
 
   @Override
   protected Tensor shape() {
-    return SHAPE;
+    return shape;
   }
 }

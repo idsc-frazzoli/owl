@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.win;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
@@ -18,12 +19,12 @@ import ch.ethz.idsc.tensor.sca.Round;
 public class MotionPlanWorker {
   private static final int MAX_STEPS = 5000;
   // ---
-  private TrajectoryPlannerCallback trajectoryPlannerCallback;
+  private List<TrajectoryPlannerCallback> trajectoryPlannerCallbacks = new LinkedList<>();
   private Thread thread;
   private volatile boolean isRelevant = true;
 
-  public MotionPlanWorker(TrajectoryPlannerCallback trajectoryPlannerCallback) {
-    this.trajectoryPlannerCallback = trajectoryPlannerCallback;
+  public void addCallback(TrajectoryPlannerCallback trajectoryPlannerCallback) {
+    trajectoryPlannerCallbacks.add(trajectoryPlannerCallback);
   }
 
   /** the planner motion plans from the last {@link StateTime} in head
@@ -41,7 +42,8 @@ public class MotionPlanWorker {
         if (isRelevant) {
           Scalar duration = RealScalar.of(stopwatch.display_seconds());
           System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
-          trajectoryPlannerCallback.expandResult(head, trajectoryPlanner);
+          for (TrajectoryPlannerCallback trajectoryPlannerCallback : trajectoryPlannerCallbacks)
+            trajectoryPlannerCallback.expandResult(head, trajectoryPlanner);
         }
       }
     });
