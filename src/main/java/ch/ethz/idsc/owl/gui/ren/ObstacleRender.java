@@ -30,7 +30,6 @@ public class ObstacleRender implements RenderInterface {
     if (Objects.isNull(collection))
       return;
     // ---
-    // fillRect is 4x faster than drawRect
     graphics.setColor(COLOR);
     for (StateTime stateTime : collection) {
       Point2D point2d = geometricLayer.toPoint2D(stateTime.state());

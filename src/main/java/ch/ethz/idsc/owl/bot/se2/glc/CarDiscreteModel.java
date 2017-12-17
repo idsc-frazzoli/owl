@@ -3,8 +3,6 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.se2.CarFlows;
-import ch.ethz.idsc.owl.bot.se2.CarForwardFlows;
 import ch.ethz.idsc.owl.bot.util.Lexicographic;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.subare.core.DiscreteModel;

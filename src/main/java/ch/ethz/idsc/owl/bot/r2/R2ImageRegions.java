@@ -93,7 +93,7 @@ public enum R2ImageRegions {
   public static final R2ImageRegionWrap _GTOB = //
       new R2ImageRegionWrap(inside_gtob_charImage(), Tensors.vector(12, 12));
 
-  public static Tensor inside_gtob_charImage() {
+  private static Tensor inside_gtob_charImage() {
     CharImage charImage = CharImage.fillWhite(new Dimension(640, 640));
     charImage.setFont(new Font(Font.DIALOG, Font.BOLD, 400));
     charImage.draw('G', new Point(0, 310));

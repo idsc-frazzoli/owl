@@ -24,7 +24,7 @@ public class BoxRandomSample implements RandomSampleInterface {
       distributions.add(UniformDistribution.of(min.Get(index), max.Get(index)));
   }
 
-  @Override
+  @Override // from RandomSampleInterface
   public Tensor randomSample() {
     return Tensor.of(distributions.stream().map(RandomVariate::of));
   }

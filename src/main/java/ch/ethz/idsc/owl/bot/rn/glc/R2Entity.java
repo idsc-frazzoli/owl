@@ -32,10 +32,11 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 /* package */ class R2Entity extends AbstractCircularEntity {
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
+  private static final Tensor FALLBACK_CONTROL = Tensors.vectorDouble(0, 0).unmodifiable();
   // ---
   /** extra cost functions, for instance to prevent cutting corners */
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
-  protected final R2Flows r2Config = new R2Flows(RealScalar.ONE);
+  protected final R2Flows r2Flows = new R2Flows(RealScalar.ONE);
 
   /** @param state initial position of entity */
   public R2Entity(Tensor state) {
@@ -52,7 +53,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override
   protected final Tensor fallbackControl() {
-    return Tensors.vectorDouble(0, 0).unmodifiable();
+    return FALLBACK_CONTROL;
   }
 
   @Override
@@ -79,7 +80,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   Collection<Flow> createControls() {
     /** 36 corresponds to 10[Degree] resolution */
-    return r2Config.getFlows(36);
+    return r2Flows.getFlows(36);
   }
 
   protected Tensor eta() {

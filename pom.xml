@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>tensor</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.5</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
@@ -57,7 +57,7 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>subare-java-mvn-repo</id>
+			<id>subare-mvn-repo</id>
 			<url>https://raw.github.com/idsc-frazzoli/subare/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>

@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.bot.se2.glc.CarFlows;
 import ch.ethz.idsc.owl.bot.se2.twd.TwdDuckieFlows;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;

@@ -40,8 +40,7 @@ public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements
   private final SphericalRegion sphericalRegion;
   private final Scalar maxSpeed;
 
-  /** @param sphericalRegion */
-  public RnMinTimeGoalManager(SphericalRegion sphericalRegion, Collection<Flow> controls) {
+  private RnMinTimeGoalManager(SphericalRegion sphericalRegion, Collection<Flow> controls) {
     super(new TimeInvariantRegion(sphericalRegion));
     this.sphericalRegion = sphericalRegion;
     maxSpeed = RnControls.maxSpeed(controls);

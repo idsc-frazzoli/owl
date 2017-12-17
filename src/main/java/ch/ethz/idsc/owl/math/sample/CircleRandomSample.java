@@ -30,7 +30,7 @@ public class CircleRandomSample implements RandomSampleInterface {
     this.radius = radius;
   }
 
-  @Override
+  @Override // from RandomSampleInterface
   public Tensor randomSample() {
     Scalar theta = RandomVariate.of(THETA);
     Scalar residue = Sqrt.FUNCTION.apply(RandomVariate.of(UniformDistribution.unit()));

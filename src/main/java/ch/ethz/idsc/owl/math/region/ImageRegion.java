@@ -43,7 +43,7 @@ public class ImageRegion implements Region<Tensor> {
     this.outside = outside;
   }
 
-  @Override
+  @Override // from Region
   public boolean isMember(Tensor tensor) {
     if (tensor.length() != 2)
       tensor = tensor.extract(0, 2);
