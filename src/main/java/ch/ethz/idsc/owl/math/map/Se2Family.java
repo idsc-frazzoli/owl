@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
+import ch.ethz.idsc.owl.math.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.RotationMatrix;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
