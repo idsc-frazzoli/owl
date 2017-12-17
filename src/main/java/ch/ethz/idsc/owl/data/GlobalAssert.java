@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.data;
 
 // placement of class not final
+@DontModify
 public enum GlobalAssert {
   ;
   /** throws an exception if valid == false

@@ -150,7 +150,10 @@ public class OwlyAnimationFrame extends TimerFrame {
               case STANDARD: {
                 TrajectoryPlanner trajectoryPlanner = //
                     abstractEntity.createTrajectoryPlanner(obstacleQuery, goal);
-                mpw = new MotionPlanWorker(trajectoryPlannerCallback);
+                mpw = new MotionPlanWorker();
+                mpw.addCallback(trajectoryPlannerCallback);
+                if (Objects.nonNull(trajectoryPlannerCallbackExtra))
+                  mpw.addCallback(trajectoryPlannerCallbackExtra);
                 mpw.start(head, trajectoryPlanner);
                 break;
               }
@@ -176,6 +179,7 @@ public class OwlyAnimationFrame extends TimerFrame {
     });
   }
 
+  public TrajectoryPlannerCallback trajectoryPlannerCallbackExtra = null;
   public final TrajectoryPlannerCallback trajectoryPlannerCallback = new TrajectoryPlannerCallback() {
     @Override
     public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
