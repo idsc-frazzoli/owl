@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * that means, the functionality does not apply to all examples universally. */
 class CarxTEntity extends CarEntity {
   CarxTEntity(StateTime stateTime) {
-    super(stateTime, PARTITIONSCALE, carFlows, SHAPE); // initial position
+    super(stateTime, PARTITIONSCALE, CARFLOWS, SHAPE); // initial position
     represent_entity = StateTime::joined;
   }
 

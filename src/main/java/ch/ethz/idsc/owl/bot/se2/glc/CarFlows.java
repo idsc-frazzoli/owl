@@ -17,6 +17,6 @@ public abstract class CarFlows implements FlowsInterface {
    * @return flow with u == {speed[m*s^-1], 0.0, (rate*speed)[rad*s^-1]} */
   public static Flow singleton(Scalar speed, Tensor rate) {
     return StateSpaceModels.createFlow(Se2StateSpaceModel.INSTANCE, //
-        N.DOUBLE.of(Tensors.of(speed, RealScalar.ZERO, rate.multiply(speed))));
+        N.DOUBLE.of(Tensors.of(speed, RealScalar.ZERO, rate.Get().multiply(speed))));
   }
 }
