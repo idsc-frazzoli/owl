@@ -24,7 +24,7 @@ public class BaseFrame {
   // ---
   public final JFrame jFrame = new JFrame();
   private final JPanel jPanel = new JPanel(new BorderLayout());
-  protected final JToolBar jToolBar = new JToolBar();
+  public final JToolBar jToolBar = new JToolBar();
   public final GeometricComponent geometricComponent = new GeometricComponent();
   protected final JLabel jStatusLabel = new JLabel();
 
@@ -41,7 +41,7 @@ public class BaseFrame {
           try {
             BufferedImage bufferedImage = offscreen();
             ImageIO.write(bufferedImage, IMAGE_FORMAT, UserHome.Pictures( //
-                String.format("owly_%d.%s", System.currentTimeMillis(), IMAGE_FORMAT)));
+                String.format("owl_%d.%s", System.currentTimeMillis(), IMAGE_FORMAT)));
           } catch (Exception exception) {
             exception.printStackTrace();
           }

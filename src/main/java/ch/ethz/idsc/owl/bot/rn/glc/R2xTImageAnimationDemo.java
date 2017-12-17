@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+//import ch.ethz.idsc.owl.gui.ren.CurveRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.RigidFamily;
 import ch.ethz.idsc.owl.math.map.Se2Family;
@@ -32,6 +33,7 @@ public class R2xTImageAnimationDemo implements DemoInterface {
     // ---
     owlyAnimationFrame.setObstacleQuery(new SimpleTrajectoryRegionQuery(region));
     owlyAnimationFrame.addBackground((RenderInterface) region);
+    // owlyAnimationFrame.addBackground(new CurveRender());
     owlyAnimationFrame.configCoordinateOffset(200, 400);
     return owlyAnimationFrame;
   }

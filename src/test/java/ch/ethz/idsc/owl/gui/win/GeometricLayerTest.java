@@ -6,6 +6,7 @@ import java.util.Deque;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
 
@@ -43,6 +44,14 @@ public class GeometricLayerTest extends TestCase {
     }
   }
 
-  public void testMore() {
+  public void testFail() {
+    GeometricLayer geometricLayer = new GeometricLayer(IdentityMatrix.of(3), Array.zeros(3));
+    geometricLayer.popMatrix();
+    try {
+      geometricLayer.popMatrix();
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

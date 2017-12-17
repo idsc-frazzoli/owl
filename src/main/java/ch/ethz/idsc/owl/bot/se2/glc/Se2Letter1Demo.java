@@ -13,11 +13,11 @@ import ch.ethz.idsc.tensor.Tensors;
 public class Se2Letter1Demo extends Se2CarDemo {
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    CarEntity se2Entity = CarEntity.createDefault(new StateTime(Tensors.vector(10, 5, 1), RealScalar.ZERO));
+    CarEntity carEntity = CarEntity.createDefault(new StateTime(Tensors.vector(10, 5, 1), RealScalar.ZERO));
     ImageRegion imageRegion = R2ImageRegions.inside_0f5c();
     TrajectoryRegionQuery trq = createCarQuery(imageRegion);
-    se2Entity.obstacleQuery = trq;
-    owlyAnimationFrame.set(se2Entity);
+    carEntity.obstacleQuery = trq;
+    owlyAnimationFrame.set(carEntity);
     owlyAnimationFrame.setObstacleQuery(trq);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
   }
