@@ -1,6 +1,7 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2;
+package ch.ethz.idsc.owl.bot.se2.glc;
 
+import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;

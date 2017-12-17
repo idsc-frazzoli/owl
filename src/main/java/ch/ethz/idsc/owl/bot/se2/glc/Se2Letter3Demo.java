@@ -21,6 +21,7 @@ public class Se2Letter3Demo extends Se2CarDemo {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     CarEntity se2Entity = CarEntity.createDefault(new StateTime(Tensors.vector(6, 6, 1), RealScalar.ZERO));
     se2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
+    // se2Entity.extraCosts.add(r2ImageRegionWrap.gradientCostFunction());
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     TrajectoryRegionQuery trq = createCarQuery(imageRegion);
     se2Entity.obstacleQuery = trq;

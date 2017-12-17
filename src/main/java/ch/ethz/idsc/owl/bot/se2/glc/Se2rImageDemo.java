@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
-import ch.ethz.idsc.owl.bot.se2.CarFlows;
-import ch.ethz.idsc.owl.bot.se2.CarStandardFlows;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;

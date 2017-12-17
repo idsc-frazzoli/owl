@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.delta;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
+import ch.ethz.idsc.owl.bot.r2.ImageGradient;
 import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;

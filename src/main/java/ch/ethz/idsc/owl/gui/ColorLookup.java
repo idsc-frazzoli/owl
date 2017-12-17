@@ -27,6 +27,11 @@ public class ColorLookup {
 
   private final Color[] colors = new Color[RESOLUTION + 1];
 
+  private ColorLookup() {
+  }
+
+  /** @param value in unit interval [0, 1]
+   * @return */
   public Color get(double value) {
     int rnd = (int) (value * RESOLUTION); // value == 1.0 maps to RESOLUTION
     return colors[rnd];

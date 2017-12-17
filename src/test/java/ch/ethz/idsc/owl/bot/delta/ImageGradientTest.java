@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.delta;
 
 import java.util.Arrays;
 
+import ch.ethz.idsc.owl.bot.r2.ImageGradient;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

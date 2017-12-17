@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.delta;
 
+import ch.ethz.idsc.owl.bot.r2.ImageGradient;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
