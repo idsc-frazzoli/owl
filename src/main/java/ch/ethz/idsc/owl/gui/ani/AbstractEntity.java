@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.gui.ani;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
@@ -45,18 +46,30 @@ public abstract class AbstractEntity implements RenderInterface, AnimationInterf
     // implementation does not require that current position is perfectly located on trajectory
     Tensor u = fallbackControl(); // default control
     if (Objects.nonNull(trajectory)) {
-      int index = trajectory_skip + indexOfPassedTrajectorySample(trajectory.subList(trajectory_skip, trajectory.size()));
+      final int argmin = indexOfPassedTrajectorySample(trajectory.subList(trajectory_skip, trajectory.size()));
+      GlobalAssert.that(argmin != ArgMin.NOINDEX);
+      int index = trajectory_skip + argmin;
       trajectory_skip = index;
-      GlobalAssert.that(index != ArgMin.NOINDEX);
       ++index; // <- next node has flow control
       if (index < trajectory.size()) {
-        GlobalAssert.that(trajectory.get(index).getFlow().isPresent());
-        u = trajectory.get(index).getFlow().get().getU();
+        Optional<Tensor> optional = customControl(trajectory.subList(index, trajectory.size()));
+        if (optional.isPresent())
+          u = optional.get();
+        else {
+          GlobalAssert.that(trajectory.get(index).getFlow().isPresent());
+          u = trajectory.get(index).getFlow().get().getU();
+        }
       } else {
         trajectory = resetAction(trajectory);
       }
     }
     episodeIntegrator.move(u, now);
+  }
+
+  /** @param trailAhead
+   * @return */
+  protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
+    return Optional.empty();
   }
 
   /** @param delay

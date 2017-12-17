@@ -17,7 +17,7 @@ public class Se2Bijection implements RigidBijection {
     this.xya = xya;
   }
 
-  @Override
+  @Override // from Bijection
   public TensorUnaryOperator forward() {
     return new Se2ForwardAction(xya);
     // Tensor matrix = RotationMatrix.of(xya.Get(2));
@@ -25,14 +25,14 @@ public class Se2Bijection implements RigidBijection {
     // return tensor -> matrix.dot(tensor).add(offset);
   }
 
-  @Override
+  @Override // from Bijection
   public TensorUnaryOperator inverse() {
     Tensor matrix = RotationMatrix.of(xya.Get(2).negate());
     Tensor offset = xya.extract(0, 2);
     return tensor -> matrix.dot(tensor.subtract(offset));
   }
 
-  @Override
+  @Override // from RigidBijection
   public Tensor forward_se2() {
     Scalar angle = xya.Get(2);
     Scalar cos = Cos.FUNCTION.apply(angle);

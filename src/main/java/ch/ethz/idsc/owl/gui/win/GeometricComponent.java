@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 public final class GeometricComponent {
   private static final double WHEEL_ANGLE = Math.PI / 10;
   private static final int BUTTON_DRAG = 3;
+  // TODO magic const nonono!
   private static final Tensor MODEL2PIXEL_INITIAL = Tensors.matrix(new Number[][] { //
       { 60, 0, 300 }, //
       { 0, -60, 300 }, //
@@ -178,6 +179,14 @@ public final class GeometricComponent {
 
   public void reset_model2pixel() {
     model2pixel = MODEL2PIXEL_INITIAL.copy();
+  }
+
+  public void setModel2Pixel(Tensor model2pixel) {
+    this.model2pixel = model2pixel.copy();
+  }
+
+  public Tensor getModel2Pixel() {
+    return model2pixel.copy();
   }
 
   void render(Graphics2D graphics, Dimension dimension) {
