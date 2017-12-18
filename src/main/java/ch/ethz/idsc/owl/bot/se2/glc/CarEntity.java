@@ -30,12 +30,10 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.opt.Interpolation;
-import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** several magic constants are hard-coded in the implementation.
@@ -43,7 +41,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 public class CarEntity extends Se2Entity {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(5), RealScalar.of(5), Degree.of(10).reciprocal()).unmodifiable();
-  static final Scalar SPEED = RealScalar.ONE;
+  static final Scalar SPEED = RealScalar.of(1.0);
+  static final Scalar LOOKAHEAD = RealScalar.of(0.5);
+  /** the pure pursuit controller is permitted a slightly higher turning rate "rad/m"
+   * than the planner, to overcome small imprecisions when following the trajectory */
+  static final Clip CLIP_TURNING_RATE = Clip.function(Degree.of(-50), Degree.of(+50));
   static final CarFlows CARFLOWS = new CarStandardFlows(SPEED, Degree.of(45));
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   private static final Scalar SHIFT_PENALTY = RealScalar.of(0.4);
@@ -129,34 +131,22 @@ public class CarEntity extends Se2Entity {
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state) //
-        .map(t -> t.extract(0, 2)) //
+        .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
-    Optional<Tensor> optional = interpolate(beacons, RealScalar.of(.5)); // TODO magic const
+    Optional<Tensor> optional = PurePursuitUtil.beacon(beacons, LOOKAHEAD);
     if (optional.isPresent()) { //
       Tensor lookAhead = optional.get(); // {x, y}
-      Scalar angle = ArcTan.of(lookAhead.Get(0), lookAhead.Get(1));
-      Flow flow = CarFlows.singleton(SPEED, angle.multiply(RealScalar.of(2)));
-      return Optional.of(flow.getU());
-    }
-    System.err.println("flow fail");
-    return Optional.empty();
-  }
-
-  public static Optional<Tensor> interpolate(Tensor beacons, Scalar distance) {
-    for (int count = 1; count < beacons.length(); ++count) {
-      Tensor prev = beacons.get(count - 1);
-      Tensor next = beacons.get(count - 0);
-      Scalar lo = Norm._2.of(prev);
-      Scalar hi = Norm._2.of(next);
-      if (Scalars.lessEquals(lo, distance) && Scalars.lessEquals(distance, hi)) {
-        Clip clip = Clip.function(lo, hi);
-        if (clip.isInside(distance)) {
-          Scalar lambda = clip.rescale(distance);
-          Interpolation interpolation = LinearInterpolation.of(Tensors.of(prev, next));
-          return Optional.of(interpolation.get(Tensors.of(lambda)));
-        }
+      Scalar x = lookAhead.Get(0);
+      if (Scalars.nonZero(x)) {
+        Scalar angle = ArcTan.of(x, lookAhead.Get(1));
+        // in the formula below, 2 is not a magic constant
+        // but has an exact geometric interpretation
+        Scalar rate = Sin.FUNCTION.apply(angle.multiply(RealScalar.of(2))).divide(x);
+        if (CLIP_TURNING_RATE.isInside(rate))
+          return Optional.of(CarFlows.singleton(SPEED, rate).getU());
       }
     }
+    System.err.println("flow fail");
     return Optional.empty();
   }
 }

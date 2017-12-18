@@ -5,6 +5,9 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.map.Se2Integrator;
+import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -24,5 +27,21 @@ public class CarFlowsTest extends TestCase {
     Tensor r = RungeKutta45Integrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
     assertTrue(Chop._10.close(r, //
         Tensors.fromString("{1.9786265584792444[m], 3.5241205617280174[m], -1}")));
+  }
+
+  public void testRadius() {
+    Scalar speed = Quantity.of(1.423, "m*s^-1");
+    Scalar rate = (Scalar) Quantity.of(2.384, "rad*m^-1").map(UnitSystem.SI());
+    Flow flow = CarFlows.singleton(speed, rate);
+    Tensor u = flow.getU();
+    Tensor origin = Tensors.fromString("{0[m],0[m],0}");
+    // System.out.println(u);
+    Scalar half_turn = DoubleScalar.of(Math.PI).divide(u.Get(2));
+    // System.out.println(half_turn);
+    Tensor res = Se2Integrator.INSTANCE.spin(origin, u.multiply(half_turn));
+    res = res.map(Chop._12);
+    // System.out.println(res);
+    Scalar radius = res.Get(1).divide(RealScalar.of(2));
+    assertTrue(Chop._12.close(radius.reciprocal(), rate));
   }
 }
