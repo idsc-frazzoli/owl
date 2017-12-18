@@ -4,7 +4,7 @@
 
 The repository contains Java 8 implementations of motion planners and their variants.
 
-Version `0.0.1`
+Version `0.0.2`
 
 The code in the `owl` repository operates a heavy and fast robot that may endanger living creatures.
 We follow best practices and coding standards to protect from avoidable errors.
@@ -102,7 +102,7 @@ Modify the `pom` file of your project to specify `repository` and `dependency` o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
       </dependency>
     </dependencies>
 
