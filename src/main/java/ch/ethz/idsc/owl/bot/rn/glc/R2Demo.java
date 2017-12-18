@@ -46,6 +46,7 @@ enum R2Demo {
     return simple(SimpleTrajectoryRegionQuery.timeInvariant(new R2Bubbles()));
   }
 
+  @SuppressWarnings("unused")
   private static TrajectoryPlanner simple(TrajectoryRegionQuery obstacleQuery) {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
@@ -62,7 +63,7 @@ enum R2Demo {
         eta, stateIntegrator, controls, obstacleQuery, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     int iters = Expand.maxSteps(trajectoryPlanner, 200);
-    System.out.println("iterations " + iters);
+    // System.out.println("iterations " + iters);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       GlcNode goalNode = optional.get(); // <- throws exception if

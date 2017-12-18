@@ -31,7 +31,6 @@ public class FixedStateIntegratorTest extends TestCase {
     FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
         FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, dt, 4);
     Scalar r = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
-    // System.out.println(r);
     assertEquals(r, dt.multiply(RealScalar.of(4)));
   }
 
