@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 public enum PurePursuit {
@@ -42,7 +43,26 @@ public enum PurePursuit {
    * @param distance
    * @return rate
    * @see CarFlows */
-  public static Optional<Scalar> turningRate(Tensor tensor, Scalar distance) {
+  public static Optional<Scalar> turningRatePositiveX(Tensor tensor, Scalar distance) {
+    Optional<Tensor> optional = beacon(tensor, distance);
+    if (optional.isPresent()) { //
+      Tensor lookAhead = optional.get(); // {x, y}
+      Scalar x = lookAhead.Get(0);
+      if (Sign.isPositive(x)) {
+        Scalar angle = ArcTan.of(x, lookAhead.Get(1));
+        // in the formula below, 2 is not a magic constant
+        // but has an exact geometric interpretation
+        return Optional.of(Sin.FUNCTION.apply(angle.multiply(RealScalar.of(2))).divide(x));
+      }
+    }
+    return Optional.empty();
+  }
+
+  /** @param tensor
+   * @param distance
+   * @return rate
+   * @see CarFlows */
+  /* package */ static Optional<Scalar> turningRate(Tensor tensor, Scalar distance) {
     Optional<Tensor> optional = beacon(tensor, distance);
     if (optional.isPresent()) { //
       Tensor lookAhead = optional.get(); // {x, y}

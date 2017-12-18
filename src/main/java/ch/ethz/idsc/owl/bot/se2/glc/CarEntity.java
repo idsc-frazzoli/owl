@@ -131,13 +131,13 @@ public class CarEntity extends Se2Entity {
         .map(StateTime::state) //
         .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
-    Optional<Scalar> optional = PurePursuit.turningRate(beacons, LOOKAHEAD);
+    Optional<Scalar> optional = PurePursuit.turningRatePositiveX(beacons, LOOKAHEAD);
     if (optional.isPresent()) { //
       Scalar rate = optional.get();
       if (CLIP_TURNING_RATE.isInside(rate))
         return Optional.of(CarFlows.singleton(SPEED, rate).getU());
     }
-    System.err.println("flow fail");
+    System.out.println("no pursuit");
     return Optional.empty();
   }
 }

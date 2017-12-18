@@ -30,6 +30,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 import junit.framework.TestCase;
 
 public class StandardTrajectoryPlannerTest extends TestCase {
+  @SuppressWarnings("unused")
   public void testSimple() {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
@@ -46,14 +47,13 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     int iters = Expand.maxSteps(trajectoryPlanner, 200);
-    System.out.println("iterations " + iters);
+    // System.out.println("iterations " + iters);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       GlcNode goalNode = optional.get(); // <- throws exception if
       Scalar cost = goalNode.costFromRoot();
       Scalar lowerBound = Ramp.of(Norm._2.ofVector(stateGoal.subtract(stateRoot)).subtract(radius));
       // System.out.println("has best");
-      // goalInterface.
       if (Scalars.lessThan(cost, lowerBound))
         throw TensorRuntimeException.of(cost, lowerBound);
     }
