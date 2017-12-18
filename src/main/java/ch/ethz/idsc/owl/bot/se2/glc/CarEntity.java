@@ -26,14 +26,11 @@ import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Clip;
-import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** several magic constants are hard-coded in the implementation.
@@ -126,6 +123,7 @@ public class CarEntity extends Se2Entity {
 
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
+    // TODO controller is not able to execute backwards motion
     Tensor state = getStateTimeNow().state();
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
     Tensor beacons = Tensor.of(trailAhead.stream() //
@@ -133,18 +131,11 @@ public class CarEntity extends Se2Entity {
         .map(StateTime::state) //
         .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
-    Optional<Tensor> optional = PurePursuitUtil.beacon(beacons, LOOKAHEAD);
+    Optional<Scalar> optional = PurePursuit.turningRate(beacons, LOOKAHEAD);
     if (optional.isPresent()) { //
-      Tensor lookAhead = optional.get(); // {x, y}
-      Scalar x = lookAhead.Get(0);
-      if (Scalars.nonZero(x)) {
-        Scalar angle = ArcTan.of(x, lookAhead.Get(1));
-        // in the formula below, 2 is not a magic constant
-        // but has an exact geometric interpretation
-        Scalar rate = Sin.FUNCTION.apply(angle.multiply(RealScalar.of(2))).divide(x);
-        if (CLIP_TURNING_RATE.isInside(rate))
-          return Optional.of(CarFlows.singleton(SPEED, rate).getU());
-      }
+      Scalar rate = optional.get();
+      if (CLIP_TURNING_RATE.isInside(rate))
+        return Optional.of(CarFlows.singleton(SPEED, rate).getU());
     }
     System.err.println("flow fail");
     return Optional.empty();
