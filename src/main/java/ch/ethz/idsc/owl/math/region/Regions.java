@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
-/** design stolen from java.util.Collections */
+/** class design stolen from java.util.Collections */
 public enum Regions {
   ;
   private static class EmptyRegion<T> implements Region<T> {

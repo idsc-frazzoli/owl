@@ -19,6 +19,9 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
+/** Important: implementation is not thread safe !
+ * 
+ * Query in single thread only. */
 public class NdTreeMap<V> implements NdMap<V> {
   private static final Scalar HALF = RationalScalar.of(1, 2);
   // ---
@@ -52,8 +55,8 @@ public class NdTreeMap<V> implements NdMap<V> {
       throw TensorRuntimeException.of(lbounds, ubounds);
     if (!IntStream.range(0, lbounds.length()).allMatch(index -> Scalars.lessEquals(lbounds.Get(index), ubounds.Get(index))))
       throw TensorRuntimeException.of(lbounds, ubounds);
-    global_lBounds = lbounds;
-    global_uBounds = ubounds;
+    global_lBounds = lbounds.copy().unmodifiable();
+    global_uBounds = ubounds.copy().unmodifiable();
     this.maxDensity = maxDensity;
     this.maxDepth = maxDepth;
     clear();

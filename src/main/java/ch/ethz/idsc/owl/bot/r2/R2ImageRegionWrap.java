@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class R2ImageRegionWrap {
-  public static final int TTL = 15;
+  public static final int TTL = 15; // TODO magic const!
   // ---
   private final ImageRegion imageRegion;
   private final CostFunction costFunction;
