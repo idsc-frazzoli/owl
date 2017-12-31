@@ -21,8 +21,7 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /** demo shows the use of a cost image that is added to the distance cost
  * which gives an incentive to stay clear of obstacles */
-// TODO this demo shows that NdTree has issues!
-public class R2Image2AnimationDemo implements DemoInterface {
+public class R2NdTreeAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     Tensor tensor = ResourceData.of("/io/track0_100.png").get(Tensor.ALL, Tensor.ALL, 0);
@@ -43,13 +42,8 @@ public class R2Image2AnimationDemo implements DemoInterface {
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     R2Entity r2Entity = new R2Entity(Tensors.vector(0, 0));
-    // r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.set(r2Entity);
-    // ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-    owlyAnimationFrame.setObstacleQuery(
-        // EmptyTrajectoryRegionQuery.INSTANCE) //
-        SimpleTrajectoryRegionQuery.timeInvariant(region) //
-    );
+    owlyAnimationFrame.setObstacleQuery(SimpleTrajectoryRegionQuery.timeInvariant(region));
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     // owlyAnimationFrame.addBackground(RegionRenders.create(region));
     owlyAnimationFrame.configCoordinateOffset(50, 700);
@@ -57,6 +51,6 @@ public class R2Image2AnimationDemo implements DemoInterface {
   }
 
   public static void main(String[] args) {
-    new R2Image2AnimationDemo().start().jFrame.setVisible(true);
+    new R2NdTreeAnimationDemo().start().jFrame.setVisible(true);
   }
 }
