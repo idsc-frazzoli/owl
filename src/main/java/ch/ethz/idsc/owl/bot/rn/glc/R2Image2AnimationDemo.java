@@ -51,7 +51,7 @@ public class R2Image2AnimationDemo implements DemoInterface {
         SimpleTrajectoryRegionQuery.timeInvariant(region) //
     );
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
-    owlyAnimationFrame.addBackground(RegionRenders.create(region));
+    // owlyAnimationFrame.addBackground(RegionRenders.create(region));
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     return owlyAnimationFrame;
   }
