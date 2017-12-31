@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import junit.framework.TestCase;
@@ -33,14 +34,33 @@ public class PurePursuitTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{.2,0},{1,0}}");
     Optional<Tensor> optional = PurePursuit.beacon(tensor, RealScalar.of(1.5));
     assertFalse(optional.isPresent());
-    assertFalse(PurePursuit.turningRate(tensor, RealScalar.of(1.5)).isPresent());
+    assertFalse(PurePursuit.turningRatePositiveX(tensor, RealScalar.of(1.5)).isPresent());
+  }
+
+  public void testEquals() {
+    Tensor tensor = Tensors.fromString("{{1,0},{1,0}}");
+    {
+      Optional<Tensor> optional = PurePursuit.beacon(tensor, RealScalar.ONE);
+      assertTrue(optional.isPresent());
+      assertEquals(optional.get(), UnitVector.of(2, 0));
+    }
+    Optional<Scalar> optional = PurePursuit.turningRatePositiveX(tensor, RealScalar.of(1));
+    assertTrue(optional.isPresent());
+    assertEquals(optional.get(), RealScalar.ZERO);
+  }
+
+  public void testEmpty() {
+    Tensor tensor = Tensors.empty();
+    Optional<Tensor> optional = PurePursuit.beacon(tensor, RealScalar.of(1.5));
+    assertFalse(optional.isPresent());
+    assertFalse(PurePursuit.turningRatePositiveX(tensor, RealScalar.of(1.5)).isPresent());
   }
 
   public void testDirectionFail() {
     Tensor tensor = Tensors.fromString("{{1,1},{0.3,0.2}}");
     Optional<Tensor> optional = PurePursuit.beacon(tensor, RealScalar.ONE);
     assertFalse(optional.isPresent());
-    assertFalse(PurePursuit.turningRate(tensor, RealScalar.ONE).isPresent());
+    assertFalse(PurePursuit.turningRatePositiveX(tensor, RealScalar.ONE).isPresent());
   }
 
   public void testRatioForward() {
@@ -51,7 +71,7 @@ public class PurePursuitTest extends TestCase {
       Tensor normal = Normalize.of(dir);
       assertTrue(Chop._12.close(normal, Normalize.of(Tensors.vector(1, 0))));
     }
-    Optional<Scalar> optional = PurePursuit.turningRate(tensor, RealScalar.of(0.5));
+    Optional<Scalar> optional = PurePursuit.turningRatePositiveX(tensor, RealScalar.of(0.5));
     Scalar rate = optional.get();
     assertTrue(Scalars.isZero(rate));
   }
@@ -87,9 +107,8 @@ public class PurePursuitTest extends TestCase {
       Tensor normal = Normalize.of(dir);
       assertTrue(Chop._12.close(normal, Normalize.of(Tensors.vector(-1, -1))));
     }
-    Optional<Scalar> optional = PurePursuit.turningRate(tensor, RealScalar.of(0.5));
-    Scalar rate = optional.get();
-    assertTrue(Scalars.lessThan(rate, RealScalar.of(-2.5)));
+    Optional<Scalar> optional = PurePursuit.turningRatePositiveX(tensor, RealScalar.of(0.5));
+    assertFalse(optional.isPresent());
   }
 
   public void testRatioBackLeft() {
@@ -100,9 +119,8 @@ public class PurePursuitTest extends TestCase {
       Tensor normal = Normalize.of(dir);
       assertTrue(Chop._12.close(normal, Normalize.of(Tensors.vector(-1, 1))));
     }
-    Optional<Scalar> optional = PurePursuit.turningRate(tensor, RealScalar.of(0.5));
-    Scalar rate = optional.get();
-    assertTrue(Scalars.lessThan(RealScalar.of(+2.5), rate));
+    Optional<Scalar> optional = PurePursuit.turningRatePositiveX(tensor, RealScalar.of(0.5));
+    assertFalse(optional.isPresent());
   }
 
   public void testRatioXZero() {
@@ -113,7 +131,7 @@ public class PurePursuitTest extends TestCase {
       Tensor normal = Normalize.of(dir);
       assertTrue(Chop._12.close(normal, Normalize.of(Tensors.vector(0, 1))));
     }
-    Optional<Scalar> optional = PurePursuit.turningRate(tensor, RealScalar.of(0.5));
+    Optional<Scalar> optional = PurePursuit.turningRatePositiveX(tensor, RealScalar.of(0.5));
     assertFalse(optional.isPresent());
   }
 
@@ -129,8 +147,7 @@ public class PurePursuitTest extends TestCase {
       // Tensor normal = Normalize.of(dir);
       // assertTrue(Chop._12.close(normal, Normalize.of(Tensors.vector(0, 1))));
     }
-    Optional<Scalar> optional = PurePursuit.turningRate(tensor, distance);
-    // System.out.println(optional.get());
-    assertTrue(optional.isPresent());
+    Optional<Scalar> optional = PurePursuit.turningRatePositiveX(tensor, distance);
+    assertFalse(optional.isPresent());
   }
 }
