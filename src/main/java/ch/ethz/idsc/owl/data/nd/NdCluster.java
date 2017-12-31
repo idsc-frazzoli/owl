@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Clip;
 
 public class NdCluster<V> implements Serializable {
   private final NdCenterInterface ndCenter;
@@ -54,12 +53,10 @@ public class NdCluster<V> implements Serializable {
     }
   }
 
-  /* package */ boolean isViable(Tensor lBounds, Tensor uBounds) {
+  /* package */ boolean isViable(NdBounds ndBounds) {
     if (queue.size() < limit)
       return true;
-    // ---
-    Tensor test = Tensors.vector( //
-        i -> Clip.function(lBounds.Get(i), uBounds.Get(i)).apply(center.Get(i)), center.length());
+    Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
     return Scalars.lessThan(ndCenter.ofVector(test), queue.peek().distance());
   }
 
