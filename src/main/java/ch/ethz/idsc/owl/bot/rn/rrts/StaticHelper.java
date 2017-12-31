@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
   ;
   public static TransitionRegionQuery polygon1() {
     return new SampledTransitionRegionQuery(SimpleTrajectoryRegionQuery.timeInvariant( //
-        new PolygonRegion(Tensors.matrix(new Number[][] { //
+        PolygonRegion.of(Tensors.matrix(new Number[][] { //
             { 3, 1 }, //
             { 4, 1 }, //
             { 4, 6 }, //
