@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 
 import java.util.List;
 
+import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.rn.RnPointcloudRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -24,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.N;
 public class R2NdTreeAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
-    Tensor tensor = ResourceData.of("/io/track0_100.png").get(Tensor.ALL, Tensor.ALL, 0);
+    Tensor tensor = ImageRegions.grayscale(ResourceData.of("/io/track0_100.png"));
     Tensor range = Tensors.vector(10, 10);
     ImageRegion imageRegion = new ImageRegion(tensor, range, false);
     Tensor inverse = N.DOUBLE.of(imageRegion.scale().map(Scalar::reciprocal));
