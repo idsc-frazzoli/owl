@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.region.Region;
 
-public abstract class StandardTrajectoryRegionQuery extends AbstractTrajectoryRegionQuery {
+public abstract class StandardTrajectoryRegionQuery implements TrajectoryRegionQuery {
   private final Region<StateTime> region;
   private final StateTimeRegionCallback stateTimeRegionCallback;
 
