@@ -38,6 +38,6 @@ public class SimpleTrajectoryRegionQuery extends StandardTrajectoryRegionQuery i
    * @return Collection<StateTime> the members of the sparse raster */
   @Override // from StateTimeCollector
   public Collection<StateTime> getMembers() {
-    return ((SparseStateTimeRegionMembers) getStateTimeRegionCallback()).getMembers();
+    return ((StateTimeCollector) getStateTimeRegionCallback()).getMembers();
   }
 }

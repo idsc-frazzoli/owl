@@ -20,7 +20,7 @@ public class RnNodeCollection implements RrtsNodeCollection {
   private final NdMap<RrtsNode> ndMap;
 
   public RnNodeCollection(Tensor lbounds, Tensor ubounds) {
-    ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20);
+    ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20); // magic const
   }
 
   @Override

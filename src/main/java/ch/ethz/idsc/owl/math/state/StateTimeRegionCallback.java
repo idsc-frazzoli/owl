@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
-import java.io.Serializable;
-
-// EXPERIMENTAL API not finalized
-public interface StateTimeRegionCallback extends Serializable {
+public interface StateTimeRegionCallback extends StateTimeCollector {
+  /** function is called to indicate member ship of given stateTime in region
+   * 
+   * @param stateTime */
   void notify_isMember(StateTime stateTime);
 }

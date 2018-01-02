@@ -16,7 +16,10 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 
 public class RnPointcloudRegion implements Region<Tensor> {
-  /** @param points
+  /** Example:
+   * The points of a point cloud in the 2-dimensional plane are encoded as a N x 2 matrix.
+   * 
+   * @param points, matrix with dimensions N x D
    * @param radius
    * @return */
   public static Region<Tensor> of(Tensor points, Scalar radius) {
@@ -28,6 +31,8 @@ public class RnPointcloudRegion implements Region<Tensor> {
   private final Scalar radius;
   private final NdMap<Void> ndMap;
 
+  /** @param points non-empty
+   * @param radius */
   private RnPointcloudRegion(Tensor points, Scalar radius) {
     this.points = points.unmodifiable();
     this.radius = radius;
@@ -37,7 +42,7 @@ public class RnPointcloudRegion implements Region<Tensor> {
     // System.out.println("---");
     // System.out.println(lbounds);
     // System.out.println(ubounds);
-    ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20);
+    ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20); // magic const
     for (Tensor point : points)
       ndMap.add(point, null);
   }
