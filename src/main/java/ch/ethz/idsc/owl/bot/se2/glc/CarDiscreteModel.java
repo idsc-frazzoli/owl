@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Rationalize;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class CarDiscreteModel implements DiscreteModel, TerminalInterface {
   public static final Tensor COLLISION = Tensors.vector(0).unmodifiable();
@@ -37,9 +38,10 @@ import ch.ethz.idsc.tensor.sca.Rationalize;
     states.append(COLLISION);
     CarFlows carFlows = new CarForwardFlows(RealScalar.of(1), RealScalar.of(2));
     Collection<Flow> collection = carFlows.getFlows(6);
+    ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(100);
     actions = Tensor.of(collection.stream() //
         .map(Flow::getU) //
-        .map(u -> Rationalize.of(u, 100)) //
+        .map(u -> u.map(suo)) //
     ).unmodifiable();
     this.resolution = resolution;
   }
