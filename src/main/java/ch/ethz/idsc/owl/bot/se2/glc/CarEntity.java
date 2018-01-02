@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +18,12 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.PlannerType;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
+import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -28,6 +32,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -121,6 +126,8 @@ public class CarEntity extends Se2Entity {
     return shape;
   }
 
+  private Optional<Tensor> _lookahead = Optional.empty();
+
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
     // TODO controller is not able to execute backwards motion
@@ -131,13 +138,32 @@ public class CarEntity extends Se2Entity {
         .map(StateTime::state) //
         .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
-    Optional<Scalar> optional = PurePursuit.turningRatePositiveX(beacons, LOOKAHEAD);
-    if (optional.isPresent()) { //
-      Scalar rate = optional.get();
-      if (CLIP_TURNING_RATE.isInside(rate))
-        return Optional.of(CarFlows.singleton(SPEED, rate).getU());
+    _lookahead = PurePursuit.beacon(beacons, LOOKAHEAD);
+    if (_lookahead.isPresent()) {
+      Tensor lookahead = _lookahead.get();
+      Optional<Scalar> optional = PurePursuit.turningRatePositiveX(lookahead);
+      if (optional.isPresent()) {
+        Scalar rate = optional.get();
+        if (CLIP_TURNING_RATE.isInside(rate))
+          return Optional.of(CarFlows.singleton(SPEED, rate).getU());
+      }
     }
-    System.out.println("no pursuit");
+    _lookahead = Optional.empty(); // indicate that no custom control applies
     return Optional.empty();
+  }
+
+  @Override
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    super.render(geometricLayer, graphics);
+    // ---
+    Optional<Tensor> optional = _lookahead;
+    if (optional.isPresent()) {
+      StateTime stateTime = getStateTimeNow();
+      Tensor matrix = Se2Utils.toSE2Matrix(stateTime.state());
+      geometricLayer.pushMatrix(matrix);
+      graphics.setColor(Color.RED);
+      graphics.draw(geometricLayer.toVector(Array.zeros(2), optional.get()));
+      geometricLayer.popMatrix();
+    }
   }
 }

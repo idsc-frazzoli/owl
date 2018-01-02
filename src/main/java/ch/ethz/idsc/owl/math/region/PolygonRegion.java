@@ -7,10 +7,16 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /** check if input tensor is inside a polygon */
 public class PolygonRegion implements Region<Tensor> {
+  /** @param polygon is mapped to numeric precision */
+  public static Region<Tensor> of(Tensor polygon) {
+    // TODO depending on complexity of given polygon, prepend AABB check
+    return new PolygonRegion(polygon);
+  }
+  // ---
+
   private final Tensor polygon;
 
-  /** @param polygon is mapped to numeric precision */
-  public PolygonRegion(Tensor polygon) {
+  private PolygonRegion(Tensor polygon) {
     this.polygon = N.DOUBLE.of(polygon);
   }
 

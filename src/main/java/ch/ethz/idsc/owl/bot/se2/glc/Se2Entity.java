@@ -53,7 +53,7 @@ public abstract class Se2Entity extends AbstractEntity {
   protected abstract Tensor shape();
 
   @Override
-  public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();
       Color color = obstacleQuery_isDisjoint(stateTime) //

@@ -1,4 +1,5 @@
 // code by jph
+// adapted from PNPOLY - Point Inclusion in Polygon Test W. Randolph Franklin (WRF)
 package ch.ethz.idsc.owl.math.planar;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -7,10 +8,10 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public enum Polygons {
   ;
-  /** @param polygon in the 2d-plane
+  /** @param polygon in the 2-dimensional plane
    * @param point of which only the first two coordinates will be considered
-   * @return true, if point is inside polygon, otherwise false */
-  // code adapted from PNPOLY - Point Inclusion in Polygon Test W. Randolph Franklin (WRF)
+   * @return true, if point is inside polygon, otherwise false
+   * @throws Exception if the first two entries of point are not of type {@link Scalar} */
   public static boolean isInside(Tensor polygon, Tensor point) {
     final Scalar tx = point.Get(0);
     final Scalar ty = point.Get(1);

@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -19,9 +18,9 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
+/** the query {@link NdTreeMap#buildCluster(NdCenterInterface, int)}
+ * can be used in parallel. */
 public class NdTreeMap<V> implements NdMap<V> {
-  private static final Scalar HALF = RationalScalar.of(1, 2);
-  // ---
   private final int maxDensity;
   private final int maxDepth;
   private int size;
@@ -30,8 +29,6 @@ public class NdTreeMap<V> implements NdMap<V> {
   // ---
   // reused during adding as well as searching:
   private Node root; // non final because of clear()
-  private Tensor lBounds;
-  private Tensor uBounds;
 
   /** lbounds and ubounds are vectors of identical length
    * for instance if the points to be added are in the unit square then
@@ -52,8 +49,8 @@ public class NdTreeMap<V> implements NdMap<V> {
       throw TensorRuntimeException.of(lbounds, ubounds);
     if (!IntStream.range(0, lbounds.length()).allMatch(index -> Scalars.lessEquals(lbounds.Get(index), ubounds.Get(index))))
       throw TensorRuntimeException.of(lbounds, ubounds);
-    global_lBounds = lbounds;
-    global_uBounds = ubounds;
+    global_lBounds = lbounds.unmodifiable();
+    global_uBounds = ubounds.unmodifiable();
     this.maxDensity = maxDensity;
     this.maxDepth = maxDepth;
     clear();
@@ -68,9 +65,8 @@ public class NdTreeMap<V> implements NdMap<V> {
     add(new NdPair<V>(location, value));
   }
 
-  private void add(NdPair<V> ndEntry) {
-    resetBounds();
-    root.add(ndEntry);
+  private synchronized void add(NdPair<V> ndEntry) {
+    root.add(ndEntry, new NdBounds(global_lBounds, global_uBounds));
     ++size;
   }
 
@@ -81,14 +77,13 @@ public class NdTreeMap<V> implements NdMap<V> {
 
   @Override
   public NdCluster<V> buildCluster(NdCenterInterface ndCenter, int limit) {
-    resetBounds();
     NdCluster<V> cluster = new NdCluster<V>(ndCenter, limit);
-    root.addToCluster(cluster);
+    root.addToCluster(cluster, new NdBounds(global_lBounds, global_uBounds));
     return cluster;
   }
 
   @Override
-  public void clear() {
+  public synchronized void clear() {
     root = null;
     size = 0;
     root = new Node(maxDepth);
@@ -114,11 +109,6 @@ public class NdTreeMap<V> implements NdMap<V> {
     return RealScalar.of(node.queue.size());
   }
 
-  private void resetBounds() {
-    lBounds = global_lBounds.copy();
-    uBounds = global_uBounds.copy();
-  }
-
   private class Node implements Serializable {
     private final int depth;
     private Node lChild;
@@ -135,29 +125,25 @@ public class NdTreeMap<V> implements NdMap<V> {
     }
 
     private int dimension() {
-      return depth % lBounds.length();
+      return depth % global_lBounds.length();
     }
 
-    private Scalar median(int index) {
-      return lBounds.Get(index).add(uBounds.Get(index)).multiply(HALF);
-    }
-
-    private void add(final NdPair<V> ndEntry) {
+    private void add(final NdPair<V> ndEntry, NdBounds ndBounds) {
       if (internal()) {
         Tensor location = ndEntry.location;
         int dimension = dimension();
-        Scalar median = median(dimension);
+        Scalar median = ndBounds.median(dimension);
         if (Scalars.lessThan(location.Get(dimension), median)) {
-          uBounds.set(median, dimension);
+          ndBounds.uBounds.set(median, dimension);
           if (Objects.isNull(lChild))
             lChild = new Node(depth - 1);
-          lChild.add(ndEntry);
+          lChild.add(ndEntry, ndBounds);
           return;
         }
-        lBounds.set(median, dimension);
+        ndBounds.lBounds.set(median, dimension);
         if (Objects.isNull(rChild))
           rChild = new Node(depth - 1);
-        rChild.add(ndEntry);
+        rChild.add(ndEntry, ndBounds);
       } else //
       if (queue.size() < maxDensity)
         queue.add(ndEntry);
@@ -169,7 +155,7 @@ public class NdTreeMap<V> implements NdMap<V> {
       // at the lowest depth we grow the queue indefinitely, instead.
       else {
         int dimension = dimension();
-        Scalar median = median(dimension);
+        Scalar median = ndBounds.median(dimension);
         for (NdPair<V> entry : queue)
           if (Scalars.lessThan(entry.location.Get(dimension), median)) {
             if (Objects.isNull(lChild))
@@ -181,41 +167,41 @@ public class NdTreeMap<V> implements NdMap<V> {
             rChild.queue.add(entry);
           }
         queue = null;
-        add(ndEntry);
+        add(ndEntry, ndBounds);
       }
     }
 
-    private void addToCluster(NdCluster<V> cluster) {
+    private void addToCluster(NdCluster<V> cluster, NdBounds ndBounds) {
       if (internal()) {
         final int dimension = dimension();
-        Scalar median = median(dimension);
+        Scalar median = ndBounds.median(dimension);
         boolean lFirst = Scalars.lessThan(cluster.center.Get(dimension), median);
-        addChildToCluster(cluster, median, lFirst);
-        addChildToCluster(cluster, median, !lFirst);
+        addChildToCluster(cluster, ndBounds, median, lFirst);
+        addChildToCluster(cluster, ndBounds, median, !lFirst);
       } else
         queue.forEach(cluster::consider);
     }
 
-    private void addChildToCluster(NdCluster<V> cluster, Scalar median, boolean left) {
+    private void addChildToCluster(NdCluster<V> cluster, NdBounds ndBounds, Scalar median, boolean left) {
       final int dimension = dimension();
       if (left) {
         if (Objects.isNull(lChild))
           return;
         // ---
-        Scalar copy = uBounds.Get(dimension);
-        uBounds.set(median, dimension);
-        if (cluster.isViable(lBounds, uBounds))
-          lChild.addToCluster(cluster);
-        uBounds.set(copy, dimension);
+        Scalar copy = ndBounds.uBounds.Get(dimension);
+        ndBounds.uBounds.set(median, dimension);
+        if (cluster.isViable(ndBounds))
+          lChild.addToCluster(cluster, ndBounds);
+        ndBounds.uBounds.set(copy, dimension);
       } else {
         if (Objects.isNull(rChild))
           return;
         // ---
-        Scalar copy = lBounds.Get(dimension);
-        lBounds.set(median, dimension);
-        if (cluster.isViable(lBounds, uBounds))
-          rChild.addToCluster(cluster);
-        lBounds.set(copy, dimension);
+        Scalar copy = ndBounds.lBounds.Get(dimension);
+        ndBounds.lBounds.set(median, dimension);
+        if (cluster.isViable(ndBounds))
+          rChild.addToCluster(cluster, ndBounds);
+        ndBounds.lBounds.set(copy, dimension);
       }
     }
   }

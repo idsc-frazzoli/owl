@@ -5,6 +5,7 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import junit.framework.TestCase;
 
 public class RnPointcloudRegionTest extends TestCase {
@@ -35,5 +36,14 @@ public class RnPointcloudRegionTest extends TestCase {
     assertTrue(rn.isMember(Tensors.vector(7, 1)));
     assertTrue(rn.isMember(Tensors.vector(7, 2)));
     assertFalse(rn.isMember(Tensors.vector(8, 2)));
+  }
+
+  public void testNonMatrix() {
+    try {
+      RnPointcloudRegion.of(LieAlgebras.sl3(), RealScalar.of(1.0));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

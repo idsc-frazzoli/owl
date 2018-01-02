@@ -62,6 +62,7 @@ public final class GeometricComponent {
   private final List<RenderInterface> renderInterfaces = new CopyOnWriteArrayList<>();
   private long lastRepaint = System.nanoTime();
   private int mouseWheel = 0;
+  private boolean isZoomable = true;
 
   public GeometricComponent() {
     reset_model2pixel();
@@ -71,7 +72,8 @@ public final class GeometricComponent {
       final int mask = MouseWheelEvent.CTRL_DOWN_MASK; // 128 = 2^7
       if ((mods & mask) == 0) { // ctrl pressed?
         mouseWheel += delta;
-      } else {
+      } else //
+      if (isZoomable) {
         Scalar factor = Power.of(RealScalar.of(2), delta);
         Tensor scale = DiagonalMatrix.of(Tensors.of(factor, factor, RealScalar.ONE));
         Tensor shift = Tensors.vector(event.getX(), event.getY());
@@ -146,6 +148,13 @@ public final class GeometricComponent {
       };
       jComponent.addMouseListener(mouseListener);
     }
+  }
+
+  /** determines if mouse wheel + ctrl change magnification
+   * 
+   * @param isZoomable */
+  public void setZoomable(boolean isZoomable) {
+    this.isZoomable = isZoomable;
   }
 
   /** function only clears render interfaces in the foreground.

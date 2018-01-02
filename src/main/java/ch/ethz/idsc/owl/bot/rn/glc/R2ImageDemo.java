@@ -39,7 +39,8 @@ enum R2ImageDemo {
   ;
   public static void main(String[] args) throws Exception {
     Tensor partitionScale = Tensors.vector(6, 6);
-    ImageRegion imageRegion = ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(10, 10), false);
+    ImageRegion imageRegion = //
+        ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(10, 10), false);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 8), 4);
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(23);
@@ -59,6 +60,11 @@ enum R2ImageDemo {
       StateTimeTrajectories.print(trajectory);
     }
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
+    owlyFrame.geometricComponent.setZoomable(false);
+    // Tensor tensor = owlyFrame.geometricComponent.getModel2Pixel();
+    // System.out.println(Pretty.of(tensor));
+    Tensor model2pixel = Tensors.fromString("{{60, 0, 200}, {0, -60, 650}, {0, 0, 1}}");
+    owlyFrame.geometricComponent.setModel2Pixel(model2pixel);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
     owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
   }

@@ -24,7 +24,8 @@ import ch.ethz.idsc.tensor.Tensors;
 enum R2ImageDemo {
   ;
   public static void main(String[] args) throws Exception {
-    ImageRegion imageRegion = ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
+    ImageRegion imageRegion = //
+        ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
     RnTransitionSpace rnss = new RnTransitionSpace();
     RrtsNodeCollection nc = new RnNodeCollection(imageRegion.origin(), imageRegion.range());
     TransitionRegionQuery trq = new SampledTransitionRegionQuery( //
