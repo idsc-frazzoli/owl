@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class So2Region extends ImplicitFunctionRegion {
+  private static final Scalar TWO = RealScalar.of(2);
+  // ---
   private final Scalar center;
   private final Scalar radius;
   private final Mod mod;
@@ -21,7 +23,7 @@ public class So2Region extends ImplicitFunctionRegion {
     GlobalAssert.that(Sign.isPositiveOrZero(radius));
     this.center = center;
     this.radius = radius;
-    mod = Mod.function(half_circumference.multiply(RealScalar.of(2)), half_circumference.negate());
+    mod = Mod.function(half_circumference.multiply(TWO), half_circumference.negate());
   }
 
   @Override // from TensorScalarFunction
