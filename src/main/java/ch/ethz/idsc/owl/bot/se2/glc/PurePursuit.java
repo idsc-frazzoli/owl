@@ -20,6 +20,20 @@ public enum PurePursuit {
   ;
   private static final Scalar TWO = RealScalar.of(2);
 
+  /** all-in-one function
+   * 
+   * @param tensor of beacons
+   * @param distance
+   * @return rate with interpretation rad*m^-1, or empty if the first coordinate
+   * of the look ahead beacon is non-positive
+   * @see CarFlows */
+  public static Optional<Scalar> turningRatePositiveX(Tensor tensor, Scalar distance) {
+    Optional<Tensor> optional = beacon(tensor, distance);
+    return optional.isPresent() //
+        ? turningRatePositiveX(optional.get())
+        : Optional.empty();
+  }
+
   /** @param tensor of points on trail ahead
    * @param distance look ahead
    * @return beacon location on segment of trails that is the result
@@ -44,22 +58,16 @@ public enum PurePursuit {
     return Optional.empty();
   }
 
-  /** @param tensor
-   * @param distance
+  /** @param lookAhead {x, y}
    * @return rate with interpretation rad*m^-1, or empty if the first coordinate
-   * of the look ahead beacon is non-positive
-   * @see CarFlows */
-  public static Optional<Scalar> turningRatePositiveX(Tensor tensor, Scalar distance) {
-    Optional<Tensor> optional = beacon(tensor, distance);
-    if (optional.isPresent()) { //
-      Tensor lookAhead = optional.get(); // {x, y}
-      Scalar x = lookAhead.Get(0);
-      if (Sign.isPositive(x)) {
-        Scalar angle = ArcTan.of(x, lookAhead.Get(1));
-        // in the formula below, 2 is not a magic constant
-        // but has an exact geometric interpretation
-        return Optional.of(Sin.FUNCTION.apply(angle.multiply(TWO)).divide(x));
-      }
+   * of the look ahead beacon is non-positive */
+  public static Optional<Scalar> turningRatePositiveX(Tensor lookAhead) {
+    Scalar x = lookAhead.Get(0);
+    if (Sign.isPositive(x)) {
+      Scalar angle = ArcTan.of(x, lookAhead.Get(1));
+      // in the formula below, 2 is not a magic constant
+      // but has an exact geometric interpretation
+      return Optional.of(Sin.FUNCTION.apply(angle.multiply(TWO)).divide(x));
     }
     return Optional.empty();
   }
