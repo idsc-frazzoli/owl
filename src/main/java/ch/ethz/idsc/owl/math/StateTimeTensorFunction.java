@@ -17,9 +17,4 @@ public interface StateTimeTensorFunction extends Function<StateTime, Tensor>, Se
   static StateTimeTensorFunction state(TensorUnaryOperator tensorUnaryOperator) {
     return stateTime -> tensorUnaryOperator.apply(stateTime.state());
   }
-
-  /** @return */
-  static StateTimeTensorFunction withTime() {
-    return StateTime::joined;
-  }
 }
