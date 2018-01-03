@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
@@ -24,6 +25,7 @@ import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -126,7 +128,7 @@ public class CarEntity extends Se2Entity {
     return shape;
   }
 
-  private Optional<Tensor> _lookahead = Optional.empty();
+  private PurePursuit purePursuit = null;
 
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
@@ -138,17 +140,15 @@ public class CarEntity extends Se2Entity {
         .map(StateTime::state) //
         .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
-    _lookahead = PurePursuit.beacon(beacons, LOOKAHEAD);
-    if (_lookahead.isPresent()) {
-      Tensor lookahead = _lookahead.get();
-      Optional<Scalar> optional = PurePursuit.turningRatePositiveX(lookahead);
-      if (optional.isPresent()) {
-        Scalar rate = optional.get();
-        if (CLIP_TURNING_RATE.isInside(rate))
-          return Optional.of(CarFlows.singleton(SPEED, rate).getU());
+    PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, LOOKAHEAD);
+    if (_purePursuit.ratio().isPresent()) {
+      Scalar ratio = _purePursuit.ratio().get();
+      if (CLIP_TURNING_RATE.isInside(ratio)) {
+        purePursuit = _purePursuit;
+        return Optional.of(CarFlows.singleton(SPEED, ratio).getU());
       }
     }
-    _lookahead = Optional.empty(); // indicate that no custom control applies
+    purePursuit = null;
     return Optional.empty();
   }
 
@@ -156,13 +156,13 @@ public class CarEntity extends Se2Entity {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
     // ---
-    Optional<Tensor> optional = _lookahead;
-    if (optional.isPresent()) {
+    PurePursuit _purePursuit = purePursuit;
+    if (Objects.nonNull(_purePursuit) && _purePursuit.lookAhead().isPresent()) {
       StateTime stateTime = getStateTimeNow();
       Tensor matrix = Se2Utils.toSE2Matrix(stateTime.state());
       geometricLayer.pushMatrix(matrix);
       graphics.setColor(Color.RED);
-      graphics.draw(geometricLayer.toVector(Array.zeros(2), optional.get()));
+      graphics.draw(geometricLayer.toVector(Array.zeros(2), _purePursuit.lookAhead().get()));
       geometricLayer.popMatrix();
     }
   }
