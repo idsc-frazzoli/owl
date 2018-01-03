@@ -1,11 +1,10 @@
 // code by edo
-// code adapted by jph
+// adapted by jph
 package ch.ethz.idsc.owl.math;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class Deadzone implements ScalarUnaryOperator {
@@ -18,22 +17,14 @@ public class Deadzone implements ScalarUnaryOperator {
   }
 
   // ---
-  private final Scalar min;
-  private final Scalar max;
+  private final Clip clip;
 
   private Deadzone(Scalar min, Scalar max) {
-    if (Scalars.lessThan(max, min))
-      throw TensorRuntimeException.of(min, max);
-    this.min = min;
-    this.max = max;
+    clip = Clip.function(min, max);
   }
 
   @Override // from ScalarUnaryOperator
   public Scalar apply(Scalar scalar) {
-    if (Scalars.lessThan(scalar, min))
-      return scalar.subtract(min);
-    if (Scalars.lessThan(max, scalar))
-      return scalar.subtract(max);
-    return RealScalar.ZERO;
+    return scalar.subtract(clip.apply(scalar));
   }
 }
