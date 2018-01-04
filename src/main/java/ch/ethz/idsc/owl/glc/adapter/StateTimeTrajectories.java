@@ -3,11 +3,11 @@ package ch.ethz.idsc.owl.glc.adapter;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** utility functions that operate on List<StateTime> */
@@ -24,7 +24,8 @@ public enum StateTimeTrajectories {
 
   private static Scalar timeIncrement(StateTime stateTime, List<StateTime> trajectory) {
     Scalar dt = Lists.getLast(trajectory).time().subtract(stateTime.time());
-    GlobalAssert.that(Sign.isPositiveOrZero(dt));
+    if (Sign.isNegative(dt))
+      throw TensorRuntimeException.of(dt);
     return dt;
   }
 

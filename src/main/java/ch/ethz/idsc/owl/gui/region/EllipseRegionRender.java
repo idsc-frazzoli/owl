@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.planar.EllipsePoints;
@@ -13,6 +12,8 @@ import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** visualize planar ellipse */
 public class EllipseRegionRender implements RenderInterface {
@@ -35,7 +36,8 @@ public class EllipseRegionRender implements RenderInterface {
   private final Tensor polygon;
 
   private EllipseRegionRender(Tensor center, Scalar radiusX, Scalar radiusY) {
-    GlobalAssert.that(center.length() == 2);
+    if (!VectorQ.ofLength(center, 2))
+      throw TensorRuntimeException.of(center);
     polygon = Tensor.of(EllipsePoints.of(RESOLUTION, radiusX, radiusY) //
         .stream().map(row -> row.add(center)));
   }

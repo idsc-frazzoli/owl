@@ -32,11 +32,11 @@ import ch.ethz.idsc.tensor.sca.Floor;
   private final Scalar outside;
   private final int max_y;
 
-  /** @param image has to be a matrix
+  /** @param image as a matrix
    * @param range effective size of image in coordinate space
    * @param outside point member status */
   public ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
-    GlobalAssert.that(MatrixQ.of(image));
+    MatrixQ.elseThrow(image);
     GlobalAssert.that(VectorQ.ofLength(range, 2));
     this.image = image;
     dimensions = Dimensions.of(image);
