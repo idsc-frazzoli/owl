@@ -31,7 +31,7 @@ public class ImageRegion implements Region<Tensor> {
    * @param range effective size of image in coordinate space
    * @param outside point member status */
   public ImageRegion(Tensor image, Tensor range, boolean outside) {
-    GlobalAssert.that(MatrixQ.of(image));
+    MatrixQ.elseThrow(image);
     GlobalAssert.that(VectorQ.ofLength(range, 2));
     this.image = image;
     List<Integer> dimensions = Dimensions.of(image);
