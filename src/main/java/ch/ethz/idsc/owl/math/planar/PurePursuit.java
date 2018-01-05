@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 public class PurePursuit {
-  ;
   private static final Scalar TWO = RealScalar.of(2);
 
   public static PurePursuit fromTrajectory(Tensor tensor, Scalar distance) {

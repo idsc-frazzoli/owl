@@ -20,7 +20,7 @@ public class RegionIntersection<T> implements Region<T> {
    * @param collection collection of Regions
    * @return the intersection of the given regions */
   public static <T> Region<T> wrap(Collection<Region<T>> collection) {
-    return new RegionIntersection<T>(collection);
+    return new RegionIntersection<>(collection);
   }
 
   // ---

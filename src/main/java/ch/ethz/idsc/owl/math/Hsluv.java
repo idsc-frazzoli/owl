@@ -38,7 +38,7 @@ public enum Hsluv {
   private static double epsilon = 0.0088564516;
 
   private static List<double[]> getBounds(double L) {
-    List<double[]> result = new ArrayList<double[]>();
+    List<double[]> result = new ArrayList<>();
     double sub1 = Math.pow(L + 16, 3) / 1560896;
     double sub2 = sub1 > epsilon ? sub1 : L / kappa;
     for (int c = 0; c < 3; ++c) {

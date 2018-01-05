@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.sca.Decrement;
 
 /** computes manhatten distance by flood fill */
 /* package */ class FloodFill2D {
-  ;
   /** @param ttl
    * @param tensor
    * @param seeds

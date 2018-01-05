@@ -42,8 +42,7 @@ public class LvDemoTest extends TestCase {
       int steps = Expand.maxSteps(trajectoryPlanner, 10000);
       if (steps < 9800)
         return;
-      else
-        System.out.println("lv steps=" + steps);
+      System.out.println("lv steps=" + steps);
     }
     assertTrue(false);
   }
