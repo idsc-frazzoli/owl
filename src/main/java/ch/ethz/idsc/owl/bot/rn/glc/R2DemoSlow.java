@@ -71,21 +71,21 @@ enum R2DemoSlow {
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta, stateIntegrator, controls, obstacleQuery, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
-    AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400);
-    OwlyFrame owlyFrame = OwlyGui.start();
-    owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
-    for (int i = 0; i < 20; i++) {
-      Optional<GlcNode> optional = trajectoryPlanner.getBest();
-      if (optional.isPresent())
-        break;
-      // int iters =
-      Expand.maxSteps(trajectoryPlanner, 1);
-      owlyFrame.setGlc(trajectoryPlanner);
-      gsw.append(owlyFrame.offscreen());
+    try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400)) {
+      OwlyFrame owlyFrame = OwlyGui.start();
+      owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+      for (int i = 0; i < 20; i++) {
+        Optional<GlcNode> optional = trajectoryPlanner.getBest();
+        if (optional.isPresent())
+          break;
+        // int iters =
+        Expand.maxSteps(trajectoryPlanner, 1);
+        owlyFrame.setGlc(trajectoryPlanner);
+        gsw.append(owlyFrame.offscreen());
+      }
+      for (int i = 0; i < 4; i++)
+        gsw.append(owlyFrame.offscreen());
     }
-    for (int i = 0; i < 4; i++)
-      gsw.append(owlyFrame.offscreen());
-    gsw.close();
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       GlcNode goalNode = optional.get(); // <- throws exception if

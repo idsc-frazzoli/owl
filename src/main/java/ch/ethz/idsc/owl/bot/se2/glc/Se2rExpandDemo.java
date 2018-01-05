@@ -55,17 +55,17 @@ enum Se2rExpandDemo {
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(169, 71);
     owlyFrame.jFrame.setBounds(100, 100, 300, 200);
-    AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("se2r.gif"), 250);
-    while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
-      Expand.maxSteps(trajectoryPlanner, 1);
-      owlyFrame.setGlc(trajectoryPlanner);
-      gsw.append(owlyFrame.offscreen());
-      Thread.sleep(10);
+    try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("se2r.gif"), 250)) {
+      while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
+        Expand.maxSteps(trajectoryPlanner, 1);
+        owlyFrame.setGlc(trajectoryPlanner);
+        gsw.append(owlyFrame.offscreen());
+        Thread.sleep(10);
+      }
+      int repeatLast = 6;
+      while (0 < repeatLast--)
+        gsw.append(owlyFrame.offscreen());
     }
-    int repeatLast = 6;
-    while (0 < repeatLast--)
-      gsw.append(owlyFrame.offscreen());
-    gsw.close();
     System.out.println("created gif");
   }
 }

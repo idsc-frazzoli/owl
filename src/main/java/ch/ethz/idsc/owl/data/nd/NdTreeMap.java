@@ -62,7 +62,7 @@ public class NdTreeMap<V> implements NdMap<V> {
   public void add(Tensor location, V value) {
     if (!VectorQ.ofLength(location, global_lBounds.length()))
       throw TensorRuntimeException.of(location);
-    add(new NdPair<V>(location, value));
+    add(new NdPair<>(location, value));
   }
 
   private synchronized void add(NdPair<V> ndEntry) {
@@ -77,7 +77,7 @@ public class NdTreeMap<V> implements NdMap<V> {
 
   @Override
   public NdCluster<V> buildCluster(NdCenterInterface ndCenter, int limit) {
-    NdCluster<V> cluster = new NdCluster<V>(ndCenter, limit);
+    NdCluster<V> cluster = new NdCluster<>(ndCenter, limit);
     root.addToCluster(cluster, new NdBounds(global_lBounds, global_uBounds));
     return cluster;
   }
