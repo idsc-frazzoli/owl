@@ -26,7 +26,7 @@ public class ImageRegionRender implements RenderInterface {
         -scale.Get(1).reciprocal().number().doubleValue(), 1);
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor model2pixel = geometricLayer.getMatrix();
     Tensor translate = IdentityMatrix.of(3);

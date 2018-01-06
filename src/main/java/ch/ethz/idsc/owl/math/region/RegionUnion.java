@@ -20,7 +20,7 @@ public class RegionUnion<T> implements Region<T> {
    * @param collection collection of Regions
    * @return the combined Regions */
   public static <T> Region<T> wrap(Collection<Region<T>> collection) {
-    return new RegionUnion<T>(collection);
+    return new RegionUnion<>(collection);
   }
 
   // ---

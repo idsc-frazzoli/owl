@@ -16,15 +16,15 @@ enum ExportAnimation {
     String name = "MODIY FILENAME LOCALLY BUT DO NOT COMMIT THIS CODE";
     name = "...";
     File directory = UserHome.Pictures(name);
-    AnimationWriter animationWriter = AnimationWriter.of(UserHome.Pictures(name + ".gif"), 100);
-    List<File> list = Stream.of(directory.listFiles()) //
-        .filter(File::isFile) //
-        .sorted() //
-        .collect(Collectors.toList());
-    for (File file : list) {
-      System.out.println(file);
-      animationWriter.append(ImageIO.read(file));
+    try (AnimationWriter animationWriter = AnimationWriter.of(UserHome.Pictures(name + ".gif"), 100)) {
+      List<File> list = Stream.of(directory.listFiles()) //
+          .filter(File::isFile) //
+          .sorted() //
+          .collect(Collectors.toList());
+      for (File file : list) {
+        System.out.println(file);
+        animationWriter.append(ImageIO.read(file));
+      }
     }
-    animationWriter.close();
   }
 }

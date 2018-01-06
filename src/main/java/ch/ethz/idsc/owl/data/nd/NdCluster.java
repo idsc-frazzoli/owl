@@ -38,7 +38,7 @@ public class NdCluster<V> implements Serializable {
     this.ndCenter = ndCenter;
     this.center = ndCenter.center();
     this.limit = limit;
-    queue = new PriorityQueue<NdEntry<V>>(NdEntryComparators.DECREASING);
+    queue = new PriorityQueue<>(NdEntryComparators.DECREASING);
   }
 
   /* package */ void consider(NdPair<V> ndPair) {

@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.math.planar.Cross2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -55,7 +54,7 @@ public class ImageGradient implements Serializable {
    * @param amp factor */
   private ImageGradient(Tensor _image, Tensor range, Scalar amp, Function<Tensor, Interpolation> function) {
     Tensor image = _displayOrientation(_image);
-    GlobalAssert.that(MatrixQ.of(image));
+    MatrixQ.elseThrow(image);
     List<Integer> dims = Dimensions.of(image);
     scale = Tensors.vector(dims).pmul(range.map(Scalar::reciprocal));
     Tensor diffx = Differences.of(image);

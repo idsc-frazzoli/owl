@@ -16,7 +16,7 @@ public final class SimpleTranslationFamily extends TranslationFamily {
     this.function = function;
   }
 
-  @Override // from AbstractTranslationFamily
+  @Override // from TranslationFamily
   public Tensor function_apply(Scalar scalar) {
     return function.apply(scalar);
   }

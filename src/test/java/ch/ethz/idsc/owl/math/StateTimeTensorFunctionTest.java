@@ -9,7 +9,8 @@ import junit.framework.TestCase;
 
 public class StateTimeTensorFunctionTest extends TestCase {
   public void testWithTime() {
-    Tensor key = StateTimeTensorFunction.withTime().apply(new StateTime(Tensors.vector(1, 2), RealScalar.of(3)));
+    StateTimeTensorFunction sttf = StateTime::joined;
+    Tensor key = sttf.apply(new StateTime(Tensors.vector(1, 2), RealScalar.of(3)));
     assertEquals(key, Tensors.vector(1, 2, 3));
   }
 
