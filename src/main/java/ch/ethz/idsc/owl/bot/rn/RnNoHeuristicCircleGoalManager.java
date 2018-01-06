@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -15,6 +14,7 @@ import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -28,7 +28,8 @@ public class RnNoHeuristicCircleGoalManager extends SimpleTrajectoryRegionQuery 
    * @param radius positive */
   public RnNoHeuristicCircleGoalManager(Tensor center, Scalar radius) {
     super(new TimeInvariantRegion(new SphericalRegion(center, radius)));
-    GlobalAssert.that(Sign.isPositive(radius));
+    if (Sign.isNegativeOrZero(radius))
+      throw TensorRuntimeException.of(radius);
   }
 
   @Override

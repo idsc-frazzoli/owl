@@ -1,11 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.math.sample;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -21,8 +21,9 @@ public class SphereRandomSample implements RandomSampleInterface {
    * @param radius
    * @return */
   public static RandomSampleInterface of(Tensor center, Scalar radius) {
-    GlobalAssert.that(VectorQ.of(center));
-    GlobalAssert.that(Sign.isPositiveOrZero(radius));
+    VectorQ.elseThrow(center);
+    if (Sign.isNegative(radius))
+      throw TensorRuntimeException.of(radius);
     if (Scalars.isZero(radius))
       return new ConstantRandomSample(center);
     return new SphereRandomSample(center, radius);

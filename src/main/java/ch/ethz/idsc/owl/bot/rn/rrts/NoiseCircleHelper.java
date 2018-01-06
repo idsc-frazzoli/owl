@@ -27,7 +27,6 @@ import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Norm;
 
 class NoiseCircleHelper {
-  ;
   private final StateTime tail;
   RrtsNode root;
   TransitionRegionQuery obstacleQuery;

@@ -12,6 +12,6 @@ public enum VectorFields {
   public static Tensor of(StateSpaceModel stateSpaceModel, Tensor points, Tensor fallback_u, Scalar factor) {
     TensorUnaryOperator tensorUnaryOperator = //
         x -> Tensors.of(x, x.add(stateSpaceModel.f(x, fallback_u).multiply(factor)));
-    return Tensors.vector(index -> tensorUnaryOperator.apply(points.get(index)), points.length());
+    return Tensor.of(points.stream().map(tensorUnaryOperator));
   }
 }

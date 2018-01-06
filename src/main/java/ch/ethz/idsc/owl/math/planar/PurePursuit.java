@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2.glc;
+package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
 
@@ -16,29 +16,32 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
 
-public enum PurePursuit {
-  ;
+public class PurePursuit {
   private static final Scalar TWO = RealScalar.of(2);
 
-  /** all-in-one function
-   * 
-   * @param tensor of beacons
-   * @param distance
-   * @return rate with interpretation rad*m^-1, or empty if the first coordinate
-   * of the look ahead beacon is non-positive
-   * @see CarFlows */
-  public static Optional<Scalar> turningRatePositiveX(Tensor tensor, Scalar distance) {
-    Optional<Tensor> optional = beacon(tensor, distance);
-    return optional.isPresent() //
-        ? turningRatePositiveX(optional.get())
-        : Optional.empty();
+  public static PurePursuit fromTrajectory(Tensor tensor, Scalar distance) {
+    return new PurePursuit(tensor, distance);
+  }
+
+  private final Optional<Tensor> lookAhead;
+  private final Optional<Scalar> ratio;
+
+  private PurePursuit(Tensor tensor, Scalar distance) {
+    lookAhead = beacon(tensor, distance);
+    ratio = lookAhead.isPresent() ? ratioPositiveX(lookAhead.get()) : Optional.empty();
+  }
+
+  public Optional<Tensor> lookAhead() {
+    return lookAhead;
+  }
+
+  public Optional<Scalar> ratio() {
+    return ratio;
   }
 
   /** @param tensor of points on trail ahead
-   * @param distance look ahead
-   * @return beacon location on segment of trails that is the result
-   * of linear interpolation at given distance from origin */
-  public static Optional<Tensor> beacon(Tensor tensor, Scalar distance) {
+   * @param distance look ahead */
+  private static Optional<Tensor> beacon(Tensor tensor, Scalar distance) {
     if (1 < tensor.length()) { // tensor is required to contain at least two entries
       Tensor prev = tensor.get(0);
       Scalar lo = Norm._2.of(prev);
@@ -61,9 +64,9 @@ public enum PurePursuit {
   /** @param lookAhead {x, y}
    * @return rate with interpretation rad*m^-1, or empty if the first coordinate
    * of the look ahead beacon is non-positive */
-  public static Optional<Scalar> turningRatePositiveX(Tensor lookAhead) {
+  private static Optional<Scalar> ratioPositiveX(Tensor lookAhead) {
     Scalar x = lookAhead.Get(0);
-    if (Sign.isPositive(x)) {
+    if (Sign.isPositive(x) && 2 <= lookAhead.length()) {
       Scalar angle = ArcTan.of(x, lookAhead.Get(1));
       // in the formula below, 2 is not a magic constant
       // but has an exact geometric interpretation
