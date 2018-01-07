@@ -35,8 +35,8 @@ public class RnPointcloudRegion implements Region<Tensor> {
     this.points = points.unmodifiable();
     this.radius = radius;
     ndMap = new NdTreeMap<>( //
-        points.stream().reduce(Entrywise.min()).get(), // 
-        points.stream().reduce(Entrywise.max()).get(), // 
+        points.stream().reduce(Entrywise.min()).get(), //
+        points.stream().reduce(Entrywise.max()).get(), //
         5, 20); // magic const
     for (Tensor point : points)
       ndMap.add(point, null);
