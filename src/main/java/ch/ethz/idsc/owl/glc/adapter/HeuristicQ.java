@@ -14,8 +14,7 @@ public enum HeuristicQ {
    * @param heuristicFunction to inspect
    * @return true if a non-trivial heuristic is implemented, false if not */
   public static boolean of(HeuristicFunction heuristicFunction) {
-    if (Objects.isNull(heuristicFunction))
-      throw new NullPointerException();
+    Objects.requireNonNull(heuristicFunction);
     try {
       // if this throws no exception, x was not used and the result is a constant => no heuristic
       heuristicFunction.minCostToGoal(null);

@@ -19,4 +19,5 @@ import java.lang.annotation.Target;
 @Retention(CLASS)
 @Target({ TYPE, METHOD, CONSTRUCTOR })
 public @interface DontModify {
+  // ---
 }
