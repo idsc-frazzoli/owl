@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
+import java.util.Optional;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.AbstractTrajectoryPlanner;
@@ -47,10 +47,10 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
     DomainQueueMap domainQueueMap = new DomainQueueMap(); // holds candidates for insertion
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
       final Tensor domainKey = convertToKey(next.stateTime());
-      final GlcNode former = getNode(domainKey);
-      if (Objects.nonNull(former)) {
+      final Optional<GlcNode> former = getNode(domainKey);
+      if (former.isPresent()) {
         // is already some node present from previous exploration ?
-        if (Scalars.lessThan(next.merit(), former.merit())) // new node is potentially better than previous one
+        if (Scalars.lessThan(next.merit(), former.get().merit())) // new node is potentially better than previous one
           domainQueueMap.insert(domainKey, next);
       } else
         domainQueueMap.insert(domainKey, next); // node is considered without comparison to any former node
@@ -65,8 +65,9 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
       final DomainQueue domainQueue = entry.getValue();
       while (!domainQueue.isEmpty()) {
         final GlcNode next = domainQueue.element();
-        final GlcNode formerLabel = getNode(domainKey);
-        if (Objects.nonNull(formerLabel)) {
+        final Optional<GlcNode> optional = getNode(domainKey);
+        if (optional.isPresent()) {
+          GlcNode formerLabel = optional.get();
           if (Scalars.lessThan(next.merit(), formerLabel.merit())) {
             if (!getObstacleQuery().firstMember(connectors.get(next)).isPresent()) { // no collision
               /** removal from queue is unsure; needs to be checked with theory. */
