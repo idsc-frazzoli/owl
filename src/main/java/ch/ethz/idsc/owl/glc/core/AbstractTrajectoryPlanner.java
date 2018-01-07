@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.glc.core;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -24,9 +23,8 @@ public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
       TrajectoryRegionQuery obstacleQuery, //
       GoalInterface goalInterface) {
     super(eta);
-    GlobalAssert.that(Objects.nonNull(obstacleQuery));
     this.stateIntegrator = stateIntegrator;
-    this.obstacleQuery = obstacleQuery;
+    this.obstacleQuery = Objects.requireNonNull(obstacleQuery);
     this.goalInterface = goalInterface;
   }
 
