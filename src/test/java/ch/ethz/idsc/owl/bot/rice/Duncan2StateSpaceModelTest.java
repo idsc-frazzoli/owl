@@ -24,9 +24,6 @@ public class Duncan2StateSpaceModelTest extends TestCase {
     assertEquals(x_fxu, Tensors.fromString("{15[m], 4[m*s^-1]}"));
   }
 
-  public void testLipschitz() {
-  }
-
   public void testFail() {
     try {
       new Duncan2StateSpaceModel(Quantity.of(-1.0, "s^-1"));

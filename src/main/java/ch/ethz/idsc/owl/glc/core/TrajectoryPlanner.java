@@ -85,14 +85,15 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   }
 
   /** @param domain_key
-   * @return node in domain or null if domain has not been assigned a node yet */
-  protected final GlcNode getNode(Tensor domain_key) {
-    return domainMap.get(domain_key);
+   * @return node in domain or Optional.empty() if domain has not been assigned a node yet */
+  protected final Optional<GlcNode> getNode(Tensor domain_key) {
+    return Optional.ofNullable(domainMap.get(domain_key));
   }
 
   @Override // from ExpandInterface
   public final Optional<GlcNode> pollNext() {
-    return Optional.ofNullable(queue.poll()); // Queue#poll() returns the head of queue, or null if queue is empty
+    // Queue#poll() returns the head of queue, or null if queue is empty
+    return Optional.ofNullable(queue.poll());
   }
 
   /** method is invoked to notify planner that the

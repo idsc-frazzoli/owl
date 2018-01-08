@@ -30,7 +30,6 @@ import ch.ethz.idsc.subare.core.util.DefaultLearningRate;
 import ch.ethz.idsc.subare.core.util.DiscreteQsa;
 import ch.ethz.idsc.subare.core.util.EGreedyPolicy;
 import ch.ethz.idsc.subare.core.util.PolicyWrap;
-import ch.ethz.idsc.subare.util.GlobalAssert;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -107,7 +106,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     if (Objects.nonNull(prev_state) && !carDiscreteModel.isTerminal(prev_state)) {
       // <- compute reward based on prev_state,
       prev_reward = reward(prev_state, prev_action, state);
-      GlobalAssert.that(Objects.nonNull(prev_reward));
+      // GlobalAssert.that(Objects.nonNull(prev_reward));
       episodeLog.add(new StepAdapter(prev_state, prev_action, prev_reward, state));
     }
     prev_state = state;

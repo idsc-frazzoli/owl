@@ -12,8 +12,8 @@ import junit.framework.TestCase;
 
 public class DomainQueueTest extends TestCase {
   public void testQueue() {
-    DomainQueue dq = new DomainQueue();
-    dq.add(GlcNode.of(null, null, RealScalar.of(1), RealScalar.ZERO));
+    GlcNode first = GlcNode.of(null, null, RealScalar.of(1), RealScalar.ZERO);
+    DomainQueue dq = DomainQueue.singleton(first);
     dq.add(GlcNode.of(null, null, RealScalar.of(0), RealScalar.ZERO));
     dq.add(GlcNode.of(null, null, RealScalar.of(9), RealScalar.ZERO));
     GlcNode n1 = dq.poll();

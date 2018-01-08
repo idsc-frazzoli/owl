@@ -4,6 +4,8 @@ package ch.ethz.idsc.owl.math.map;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -31,5 +33,12 @@ public class So2FamilyTest extends TestCase {
       Tensor fwd = bijectionFamily.inverse(scalar).apply(point);
       assertTrue(Chop._12.close(bijectionFamily.forward(scalar).apply(fwd), point));
     }
+  }
+
+  public void testForwardSe2() {
+    RigidFamily rigidFamily = new So2Family(s -> s);
+    Tensor matrix = rigidFamily.forward_se2(RealScalar.ONE);
+    assertTrue(OrthogonalMatrixQ.of(matrix));
+    assertEquals(matrix, Se2Utils.toSE2Matrix(Tensors.vector(0, 0, 1)));
   }
 }
