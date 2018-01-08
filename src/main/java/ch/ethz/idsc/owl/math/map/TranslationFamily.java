@@ -23,8 +23,8 @@ public abstract class TranslationFamily implements RigidFamily {
 
   @Override // from RigidFamily
   public final Tensor forward_se2(Scalar scalar) {
-    Tensor offset = function_apply(scalar);
     Tensor matrix = IdentityMatrix.of(3);
+    Tensor offset = function_apply(scalar);
     matrix.set(offset.Get(0), 0, 2);
     matrix.set(offset.Get(1), 1, 2);
     return matrix;

@@ -11,9 +11,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.red.Max;
-import ch.ethz.idsc.tensor.red.Min;
+import ch.ethz.idsc.tensor.red.Entrywise;
 
 public class RnPointcloudRegion implements Region<Tensor> {
   /** Example:
@@ -36,13 +34,10 @@ public class RnPointcloudRegion implements Region<Tensor> {
   private RnPointcloudRegion(Tensor points, Scalar radius) {
     this.points = points.unmodifiable();
     this.radius = radius;
-    Tensor pt = Transpose.of(points);
-    Tensor lbounds = Tensors.vector(i -> pt.get(i).stream().reduce(Min::of).get(), pt.length());
-    Tensor ubounds = Tensors.vector(i -> pt.get(i).stream().reduce(Max::of).get(), pt.length());
-    // System.out.println("---");
-    // System.out.println(lbounds);
-    // System.out.println(ubounds);
-    ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20); // magic const
+    ndMap = new NdTreeMap<>( //
+        points.stream().reduce(Entrywise.min()).get(), //
+        points.stream().reduce(Entrywise.max()).get(), //
+        5, 20); // magic const
     for (Tensor point : points)
       ndMap.add(point, null);
   }

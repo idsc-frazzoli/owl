@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** the term "family" conveys the meaning that the rigid transformation
  * depends on a single parameter, for instance time */
-public class Se2Family implements RigidFamily {
+public final class Se2Family implements RigidFamily {
   /** @param center
    * @param rotation
    * @return */
@@ -37,11 +37,11 @@ public class Se2Family implements RigidFamily {
 
   @Override // from BijectionFamily
   public TensorUnaryOperator inverse(Scalar scalar) {
-    return new Se2Bijection(function.apply(scalar)).inverse();
+    return new Se2InverseAction(function.apply(scalar));
   }
 
   @Override // from RigidFamily
   public Tensor forward_se2(Scalar scalar) {
-    return new Se2Bijection(function.apply(scalar)).forward_se2();
+    return Se2Utils.toSE2Matrix(function.apply(scalar));
   }
 }
