@@ -20,15 +20,14 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** the query {@link NdTreeMap#buildCluster(NdCenterInterface, int)}
  * can be used in parallel. */
-public class NdTreeMap<V> implements NdMap<V> {
-  // TODO implement serializable
+public class NdTreeMap<V> implements NdMap<V>, Serializable {
   private final int maxDensity;
   private final int maxDepth;
-  private int size;
   private final Tensor global_lBounds;
   private final Tensor global_uBounds;
   // ---
   // reused during adding as well as searching:
+  private int size;
   private Node root; // non final because of clear()
 
   /** lbounds and ubounds are vectors of identical length
@@ -66,8 +65,8 @@ public class NdTreeMap<V> implements NdMap<V> {
     add(new NdPair<>(location, value));
   }
 
-  private synchronized void add(NdPair<V> ndEntry) {
-    root.add(ndEntry, new NdBounds(global_lBounds, global_uBounds));
+  private synchronized void add(NdPair<V> ndPair) {
+    root.add(ndPair, new NdBounds(global_lBounds, global_uBounds));
     ++size;
   }
 
@@ -121,7 +120,7 @@ public class NdTreeMap<V> implements NdMap<V> {
       this.depth = depth;
     }
 
-    private boolean internal() {
+    private boolean isInternal() {
       return Objects.isNull(queue);
     }
 
@@ -129,28 +128,28 @@ public class NdTreeMap<V> implements NdMap<V> {
       return depth % global_lBounds.length();
     }
 
-    private void add(final NdPair<V> ndEntry, NdBounds ndBounds) {
-      if (internal()) {
-        Tensor location = ndEntry.location;
+    private void add(final NdPair<V> ndPair, NdBounds ndBounds) {
+      if (isInternal()) {
+        Tensor location = ndPair.location;
         int dimension = dimension();
         Scalar median = ndBounds.median(dimension);
         if (Scalars.lessThan(location.Get(dimension), median)) {
           ndBounds.uBounds.set(median, dimension);
           if (Objects.isNull(lChild))
             lChild = new Node(depth - 1);
-          lChild.add(ndEntry, ndBounds);
+          lChild.add(ndPair, ndBounds);
           return;
         }
         ndBounds.lBounds.set(median, dimension);
         if (Objects.isNull(rChild))
           rChild = new Node(depth - 1);
-        rChild.add(ndEntry, ndBounds);
+        rChild.add(ndPair, ndBounds);
       } else //
       if (queue.size() < maxDensity)
-        queue.add(ndEntry);
+        queue.add(ndPair);
       else //
       if (depth == 1)
-        queue.add(ndEntry);
+        queue.add(ndPair);
       // the original code removed a node from the queue: return queue.poll();
       // in our opinion this behavior is undesired.
       // at the lowest depth we grow the queue indefinitely, instead.
@@ -168,12 +167,12 @@ public class NdTreeMap<V> implements NdMap<V> {
             rChild.queue.add(entry);
           }
         queue = null;
-        add(ndEntry, ndBounds);
+        add(ndPair, ndBounds);
       }
     }
 
     private void addToCluster(NdCluster<V> cluster, NdBounds ndBounds) {
-      if (internal()) {
+      if (isInternal()) {
         final int dimension = dimension();
         Scalar median = ndBounds.median(dimension);
         boolean lFirst = Scalars.lessThan(cluster.center.Get(dimension), median);
