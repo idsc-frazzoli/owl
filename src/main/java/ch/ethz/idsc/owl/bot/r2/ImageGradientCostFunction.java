@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
@@ -14,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 
-/* package */ class ImageGradientCostFunction implements CostFunction {
+/* package */ class ImageGradientCostFunction implements CostFunction, Serializable {
   private final ImageGradient imageGradient;
 
   public ImageGradientCostFunction(ImageGradient imageGradient) {

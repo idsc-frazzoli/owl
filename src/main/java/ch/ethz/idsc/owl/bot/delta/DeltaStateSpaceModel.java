@@ -1,6 +1,8 @@
 // code by jph and jl
 package ch.ethz.idsc.owl.bot.delta;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.bot.r2.ImageGradient;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
@@ -8,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** an upper bound of the speed of an entity in the river delta is
  * imageGradient.maxNormGradient() + |u_max| */
-/* package */ class DeltaStateSpaceModel implements StateSpaceModel {
+/* package */ class DeltaStateSpaceModel implements StateSpaceModel, Serializable {
   private final ImageGradient imageGradient;
 
   /** @param imageGradient

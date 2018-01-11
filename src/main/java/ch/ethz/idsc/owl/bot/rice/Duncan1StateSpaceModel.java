@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rice;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -12,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * The state x (typically velocity) is bounded by "u_max / lambda"
  * where u_max is the maximum control (typically acceleration). */
-public class Duncan1StateSpaceModel implements StateSpaceModel {
+public class Duncan1StateSpaceModel implements StateSpaceModel, Serializable {
   private final Scalar lambda;
 
   /** @param lambda non-negative friction coefficient typically with unit [s^-1] */

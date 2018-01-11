@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
@@ -11,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.N;
 
-public abstract class CarFlows implements FlowsInterface {
+public abstract class CarFlows implements FlowsInterface, Serializable {
   /** the turning radius of the flow is the reciprocal of the given rate
    * 
    * @param speed, positive for forward, and negative for backward, unit [m/s]

@@ -1,9 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Tensor;
 
-public class InvertedRegion implements Region<Tensor> {
+public class InvertedRegion implements Region<Tensor>, Serializable {
   private final Region<Tensor> region;
 
   public InvertedRegion(Region<Tensor> region) {

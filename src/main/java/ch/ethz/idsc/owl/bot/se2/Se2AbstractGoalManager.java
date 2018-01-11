@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
@@ -19,7 +21,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * 
  * class defines circle region for (x,y) component and periodic intervals in angular component */
 @DontModify
-public abstract class Se2AbstractGoalManager implements Region<Tensor>, CostFunction {
+public abstract class Se2AbstractGoalManager implements Region<Tensor>, CostFunction, Serializable {
   private final SphericalRegion sphericalRegion;
   private final So2Region so2Region;
   protected final Tensor center; // TODO variable no good

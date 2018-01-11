@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -11,7 +12,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 /** region is open
  * coordinates on the boundary are inside
  * same convention as {@link ImplicitFunctionRegion} */
-public class BoundedBoxRegion implements Region<Tensor> {
+public class BoundedBoxRegion implements Region<Tensor>, Serializable {
   /** @param center
    * @param radius for each coordinate
    * @return */

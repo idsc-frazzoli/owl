@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.psu;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/* package */ class PsuGoalManager implements Region<Tensor>, CostFunction {
+/* package */ class PsuGoalManager implements Region<Tensor>, CostFunction, Serializable {
   public static GoalInterface of(CoordinateWrap coordinateWrap, Tensor center, Tensor radius) {
     PsuGoalManager psuGoalManager = new PsuGoalManager(coordinateWrap, center, radius);
     return new GoalAdapter( //

@@ -1,11 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** StateTimeRegion that depends on time */
-public final class TimeDependentRegion implements Region<StateTime> {
+public final class TimeDependentRegion implements Region<StateTime>, Serializable {
   private final Region<Tensor> region;
 
   /** @param region */
