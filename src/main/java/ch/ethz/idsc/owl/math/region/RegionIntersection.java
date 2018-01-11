@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 
@@ -9,7 +10,7 @@ import java.util.Collection;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/RegionIntersection.html">RegionIntersection</a> */
-public class RegionIntersection<T> implements Region<T> {
+public class RegionIntersection<T> implements Region<T>, Serializable {
   /** combines a collection of {@link Region}s into one Region.
    * Membership is defined as membership in all of the regions in the collection.
    * The input collection is not copied but used by reference.

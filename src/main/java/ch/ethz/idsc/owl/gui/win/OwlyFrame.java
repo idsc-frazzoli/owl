@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.gui.win;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -128,11 +127,10 @@ public class OwlyFrame extends BaseFrame {
       }
   }
 
-  @SuppressWarnings("unchecked")
   public void setRrts(RrtsNode root, TransitionRegionQuery transitionRegionQuery) {
     try {
       Collection<RrtsNode> nodes = Nodes.ofSubtree(root);
-      Collection<RrtsNode> collection = (Collection<RrtsNode>) Serialization.copy((Serializable) nodes);
+      Collection<RrtsNode> collection = Serialization.copy(nodes);
       geometricComponent.setRenderInterfaces( //
           RenderElements.create(collection, Serialization.copy(transitionRegionQuery)));
       geometricComponent.jComponent.repaint();

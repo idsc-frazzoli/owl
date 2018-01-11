@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.adapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** combines multiple cost functions
  * 
  * @see GoalAdapter */
-public class MultiCostGoalAdapter implements GoalInterface {
+public final class MultiCostGoalAdapter implements GoalInterface, Serializable {
   /** @param goalInterface
    * @param collection
    * @return */
@@ -46,7 +47,7 @@ public class MultiCostGoalAdapter implements GoalInterface {
   }
 
   @Override // from TrajectoryRegionQuery
-  public final boolean isMember(StateTime stateTime) {
+  public boolean isMember(StateTime stateTime) {
     return trajectoryRegionQuery.isMember(stateTime);
   }
 

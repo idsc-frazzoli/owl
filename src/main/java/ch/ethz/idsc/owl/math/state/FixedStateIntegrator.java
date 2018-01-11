@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** trajectory integration with fixed step size over given time period */
-public class FixedStateIntegrator implements StateIntegrator {
+public class FixedStateIntegrator implements StateIntegrator, Serializable {
   /** @param integrator
    * @param timeStep
    * @param trajectorySize

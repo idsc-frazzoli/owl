@@ -1,11 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** open region consisting of all states with a negative coordinate at a given index */
-public class NegativeHalfspaceRegion implements Region<Tensor> {
+public class NegativeHalfspaceRegion implements Region<Tensor>, Serializable {
   private final int index;
 
   /** @param index of state coordinate that when negative is inside the region */

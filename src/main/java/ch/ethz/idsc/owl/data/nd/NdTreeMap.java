@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 /** the query {@link NdTreeMap#buildCluster(NdCenterInterface, int)}
  * can be used in parallel. */
 public class NdTreeMap<V> implements NdMap<V> {
+  // TODO implement serializable
   private final int maxDensity;
   private final int maxDepth;
   private int size;

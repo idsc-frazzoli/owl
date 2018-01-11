@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.io.Serializable;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** check if input tensor is inside a polygon */
-public class R2xTPolygonStateTimeRegion implements Region<StateTime>, RenderInterface {
+public class R2xTPolygonStateTimeRegion implements Region<StateTime>, RenderInterface, Serializable {
   private final Tensor polygon;
   private final BijectionFamily bijectionFamily;
   private final Supplier<Scalar> supplier;

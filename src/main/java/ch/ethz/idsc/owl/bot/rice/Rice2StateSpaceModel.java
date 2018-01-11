@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rice;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -17,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * When the use of units is required use {@link Duncan2StateSpaceModel}.
  * 
  * implementation for n-dimensional position and velocity */
-public class Rice2StateSpaceModel implements StateSpaceModel {
+public class Rice2StateSpaceModel implements StateSpaceModel, Serializable {
   public static StateSpaceModel of(Scalar mu) {
     return new Rice2StateSpaceModel(Exp.of(mu));
   }

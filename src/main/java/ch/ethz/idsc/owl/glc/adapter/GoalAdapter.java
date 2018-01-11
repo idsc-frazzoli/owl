@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.adapter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** class bundles the capabilities of a given
  * cost function and trajectory region query */
-public class GoalAdapter implements GoalInterface {
+public final class GoalAdapter implements GoalInterface, Serializable {
   private final TrajectoryRegionQuery trajectoryRegionQuery;
   private final CostFunction costFunction;
 
@@ -30,7 +31,7 @@ public class GoalAdapter implements GoalInterface {
   }
 
   @Override // from TrajectoryRegionQuery
-  public final boolean isMember(StateTime stateTime) {
+  public boolean isMember(StateTime stateTime) {
     return trajectoryRegionQuery.isMember(stateTime);
   }
 

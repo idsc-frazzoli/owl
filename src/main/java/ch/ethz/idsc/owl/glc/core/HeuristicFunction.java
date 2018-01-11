@@ -1,13 +1,11 @@
 // code by bapaden and jph
 package ch.ethz.idsc.owl.glc.core;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public interface HeuristicFunction extends Serializable {
+public interface HeuristicFunction {
   /** if a lower bound of the cost to goal is unknown,
    * the function should return {@link RealScalar#ZERO}.
    * 

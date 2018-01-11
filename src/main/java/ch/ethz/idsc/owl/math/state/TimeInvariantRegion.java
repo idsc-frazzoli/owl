@@ -1,13 +1,15 @@
 // code by bapaden and jph
 package ch.ethz.idsc.owl.math.state;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** StateTimeRegion, which is independent of time.
  * membership is determined in state space regardless of time.
  * membership is extended indefinitely along the time-axis */
-public final class TimeInvariantRegion implements Region<StateTime> {
+public final class TimeInvariantRegion implements Region<StateTime>, Serializable {
   private final Region<Tensor> region;
 
   public TimeInvariantRegion(Region<Tensor> region) {

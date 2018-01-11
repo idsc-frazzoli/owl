@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
@@ -22,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 /** minimizes driving time (=distance, since unit speed)
  * 
  * {@link Se2WrapGoalManagerExt} works with {@link Se2Wrap} as well as with {@link IdentityWrap} */
-public class Se2WrapGoalManagerExt implements Region<Tensor>, CostFunction {
+public class Se2WrapGoalManagerExt implements Region<Tensor>, CostFunction, Serializable {
   private final CoordinateWrap coordinateWrap;
   private final Se2AbstractGoalManager goalManager;
 

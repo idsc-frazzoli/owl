@@ -1,10 +1,12 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class Se2Bijection implements RigidBijection {
+public class Se2Bijection implements RigidBijection, Serializable {
   private final Tensor xya;
 
   /** @param xya == {px, py, angle} as member of Lie group SE2 */

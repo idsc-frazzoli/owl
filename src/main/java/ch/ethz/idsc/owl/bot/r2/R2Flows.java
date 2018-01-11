@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public class R2Flows implements FlowsInterface {
+public class R2Flows implements FlowsInterface, Serializable {
   private final Scalar speed;
 
   public R2Flows(Scalar speed) {

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.noise.ContinuousNoise;
 import ch.ethz.idsc.owl.math.noise.ContinuousNoiseUtils;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
@@ -14,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * https://de.wikipedia.org/wiki/Simplex_Noise
  * 
  * membership in the region for coordinates (x,y,t) that evaluate the noise function above a given threshold */
-public class R2xTNoiseStateTimeRegion implements Region<StateTime> {
+public class R2xTNoiseStateTimeRegion implements Region<StateTime>, Serializable {
   private static final ContinuousNoise CONTINUOUS_NOISE = //
       ContinuousNoiseUtils.wrap3D(SimplexContinuousNoise.FUNCTION);
   // ---

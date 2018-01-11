@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.ip;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * from Analysis and Synthesis of Single-Input Single-Output Control Systems, 3rd edition
  * p.13, p.53 */
-/* package */ class IpStateSpaceModel implements StateSpaceModel {
+/* package */ class IpStateSpaceModel implements StateSpaceModel, Serializable {
   private final Scalar M;
   private final Scalar m;
   private final Scalar l;

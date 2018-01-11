@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
@@ -16,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
 
 /** only the first two coordinates are tested for membership
  * a location is available if the grayscale value of the pixel equals 0 */
-public class ImageRegion implements Region<Tensor> {
+public class ImageRegion implements Region<Tensor>, Serializable {
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
   // ---
   private final Tensor image;
