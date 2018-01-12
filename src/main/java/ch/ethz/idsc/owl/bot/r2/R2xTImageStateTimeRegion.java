@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -21,7 +22,7 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** for images only rigid transformations are allowed */
-public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterface {
+public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterface, Serializable {
   private final ImageRegion imageRegion;
   private final BufferedImage bufferedImage;
   private final RigidFamily rigidFamily;

@@ -1,13 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.math.flow;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** integrator of time-invariant differential constraint */
-public interface Integrator extends Serializable {
+public interface Integrator {
   /** @param flow
    * @param x
    * @param h

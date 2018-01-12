@@ -1,14 +1,12 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** the term "family" conveys the meaning that the bijection
  * depends on a single parameter, for instance time */
-public interface BijectionFamily extends Serializable {
+public interface BijectionFamily {
   /** for rendering
    * 
    * @param scalar

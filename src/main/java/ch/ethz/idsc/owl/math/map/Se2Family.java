@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.RotationMatrix;
@@ -10,7 +12,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** the term "family" conveys the meaning that the rigid transformation
  * depends on a single parameter, for instance time */
-public final class Se2Family implements RigidFamily {
+public final class Se2Family implements RigidFamily, Serializable {
   /** @param center
    * @param rotation
    * @return */

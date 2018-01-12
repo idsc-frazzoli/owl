@@ -1,6 +1,7 @@
 // code by jl
 package ch.ethz.idsc.owl.bot.se2;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** cost function that penalizes the switching between forwards and backwards driving */
 // DO NOT MODIFY THIS CLASS SINCE THE FUNCTIONALITY IS USED IN MANY DEMOS
 @DontModify
-public final class Se2ShiftCostFunction implements CostFunction {
+public final class Se2ShiftCostFunction implements CostFunction, Serializable {
   private final Scalar shiftPenalty;
 
   public Se2ShiftCostFunction(Scalar shiftPenalty) {

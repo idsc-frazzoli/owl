@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
@@ -8,7 +10,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** the term "family" conveys the meaning that the translation
  * depends on a single parameter, for instance time */
-public abstract class TranslationFamily implements RigidFamily {
+public abstract class TranslationFamily implements RigidFamily, Serializable {
   @Override // from BijectionFamily
   public final TensorUnaryOperator forward(Scalar scalar) {
     Tensor offset = function_apply(scalar);

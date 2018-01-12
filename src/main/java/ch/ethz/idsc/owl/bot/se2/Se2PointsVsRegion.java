@@ -1,12 +1,14 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** used in se2 animation demo to check if footprint of vehicle intersects with obstacle region */
-public class Se2PointsVsRegion implements Region<Tensor> {
+public class Se2PointsVsRegion implements Region<Tensor>, Serializable {
   private final Tensor points;
   private final Region<Tensor> region;
 

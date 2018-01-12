@@ -1,12 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.region.Region;
 
-public abstract class StandardTrajectoryRegionQuery implements TrajectoryRegionQuery {
+public abstract class StandardTrajectoryRegionQuery implements TrajectoryRegionQuery, Serializable {
   private final Region<StateTime> region;
   private final StateTimeRegionCallback stateTimeRegionCallback;
 

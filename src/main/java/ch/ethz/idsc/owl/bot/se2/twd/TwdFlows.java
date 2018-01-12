@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.twd;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
@@ -10,7 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.N;
 
-public abstract class TwdFlows implements FlowsInterface {
+public abstract class TwdFlows implements FlowsInterface, Serializable {
   private final Scalar maxSpeedHalf;
   private final Scalar halfWidth;
 

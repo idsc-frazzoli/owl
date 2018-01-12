@@ -18,7 +18,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 // TODO consistency check
-public class RnFlowTrajectory {
+public enum RnFlowTrajectory {
+  ;
   public static Flow between(StateTime orig, StateTime dest) {
     StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE; // Rn
     Tensor direction = dest.state().subtract(orig.state());
