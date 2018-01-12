@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -10,7 +12,7 @@ import ch.ethz.idsc.tensor.red.Norm;
  * input matrix b,
  * output matrix c, and
  * transmission matrix d */
-class LinearStateSpaceModel implements StateSpaceModel {
+class LinearStateSpaceModel implements StateSpaceModel, Serializable {
   private final Tensor a;
   private final Tensor b;
   private final Tensor c;

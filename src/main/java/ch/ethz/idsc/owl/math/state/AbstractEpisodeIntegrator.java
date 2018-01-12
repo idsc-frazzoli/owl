@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
@@ -11,7 +12,7 @@ import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-abstract class AbstractEpisodeIntegrator implements EpisodeIntegrator {
+abstract class AbstractEpisodeIntegrator implements EpisodeIntegrator, Serializable {
   private final StateSpaceModel stateSpaceModel;
   /* package */ final Integrator integrator;
   private StateTime stateTime;

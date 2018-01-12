@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rice;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -13,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** Single Integrator with friction
  * 
  * implementation for n-dimensional velocity */
-public class Duncan2StateSpaceModel implements StateSpaceModel {
+public class Duncan2StateSpaceModel implements StateSpaceModel, Serializable {
   private final Scalar lambda;
 
   /** @param lambda non-negative friction coefficient typically with unit [s^-1] */

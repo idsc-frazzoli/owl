@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,7 +12,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** identifies (x,y,theta) === (x,y,theta + 2 pi n) for all n */
-public class Se2Wrap implements CoordinateWrap {
+public class Se2Wrap implements CoordinateWrap, Serializable {
   private static final int INDEX_ANGLE = 2;
   private static final Mod MOD = Mod.function(Math.PI * 2);
   private static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);

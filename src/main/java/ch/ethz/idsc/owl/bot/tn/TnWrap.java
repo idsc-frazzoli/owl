@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.tn;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Mod;
 
-class TnWrap implements CoordinateWrap {
+class TnWrap implements CoordinateWrap, Serializable {
   private static final Scalar NEGATIVE_HALF = RationalScalar.of(-1, 2);
   // ---
   private final Tensor extension;

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.owl.data.nd.NdCluster;
 import ch.ethz.idsc.owl.data.nd.NdMap;
@@ -13,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Entrywise;
 
-public class RnPointcloudRegion implements Region<Tensor> {
+public class RnPointcloudRegion implements Region<Tensor>, Serializable {
   /** Example:
    * The points of a point cloud in the 2-dimensional plane are encoded as a N x 2 matrix.
    * 

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.tn;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
@@ -22,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 /** goal region is spherical
  * 
  * objective is minimum path length */
-class TnGoalManager implements Region<Tensor>, CostFunction {
+class TnGoalManager implements Region<Tensor>, CostFunction, Serializable {
   private final CoordinateWrap tnWarp;
   private final Tensor center;
   private final Scalar radius;

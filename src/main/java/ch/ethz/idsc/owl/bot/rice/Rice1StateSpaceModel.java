@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rice;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -15,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>Rice1StateSpaceModel is a single Integrator with friction.
  * Rice1StateSpaceModel is unit less.
  * The implementation for n-dimensional velocity */
-public class Rice1StateSpaceModel implements StateSpaceModel {
+public class Rice1StateSpaceModel implements StateSpaceModel, Serializable {
   public static StateSpaceModel of(Scalar mu) {
     return new Rice1StateSpaceModel(Exp.of(mu));
   }

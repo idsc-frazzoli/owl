@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Flatten;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Tally;
@@ -48,7 +49,7 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
-  public void testClear() {
+  public void testClear() throws Exception {
     NdMap<String> ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
     ndMap.add(Tensors.vector(1, 1), "d1");
     ndMap.add(Tensors.vector(1, 0), "d2");
@@ -58,10 +59,16 @@ public class NdTreeMapTest extends TestCase {
       NdCluster<String> cluster = ndMap.buildCluster(ndCenter, 5);
       assertEquals(cluster.size(), 3);
     }
+    NdMap<String> ndMap2 = Serialization.copy(ndMap);
     {
       ndMap.clear();
       NdCluster<String> cluster = ndMap.buildCluster(ndCenter, 5);
       assertEquals(cluster.size(), 0);
+    }
+    ndMap.clear();
+    {
+      NdCluster<String> cluster = ndMap2.buildCluster(ndCenter, 5);
+      assertEquals(cluster.size(), 3);
     }
   }
 

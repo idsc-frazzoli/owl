@@ -1,12 +1,11 @@
 // code by bapaden and jph
 package ch.ethz.idsc.owl.math.state;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 /** performs trajectory containment query */
-public interface TrajectoryRegionQuery extends Serializable {
+public interface TrajectoryRegionQuery {
   /** @param trajectory
    * @return first {@link StateTime} along trajectory that lies inside this region,
    * or Optional.empty() if no state-time in trajectory is member of region */

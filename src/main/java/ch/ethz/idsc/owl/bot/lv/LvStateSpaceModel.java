@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.lv;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /** Lotka-Volterra
  * 
  * https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations */
-/* package */ class LvStateSpaceModel implements StateSpaceModel {
+/* package */ class LvStateSpaceModel implements StateSpaceModel, Serializable {
   /** see documentation of public constructor */
   public static StateSpaceModel of(Number f0, Number f1) {
     return new LvStateSpaceModel(RealScalar.of(f0), RealScalar.of(f1));
