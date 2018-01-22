@@ -72,7 +72,7 @@ public class ControlsIntegrator implements Serializable {
 
   /** @param node from which to expand
    * @return */
-  Map<GlcNode, List<StateTime>> inSequence(GlcNode node) { // function is not used
+  public Map<GlcNode, List<StateTime>> inSequence(GlcNode node) { // function is not used
     return controls.stream() //
         .map(flow -> new FlowTrajectory(flow, stateIntegrator.trajectory(node.stateTime(), flow))) //
         .collect(Collectors.toMap( //

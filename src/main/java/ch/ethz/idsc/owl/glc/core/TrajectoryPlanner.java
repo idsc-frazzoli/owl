@@ -52,11 +52,11 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
    * Examples: identity, mod, log, ... */
   public StateTimeTensorFunction represent = StateTime::state;
 
-  /** Floor(eta * state) == Floor(state / domain_size)
+  /** Floor(eta .* represent(state))
    * 
    * @param stateTime
    * @return */
-  protected Tensor convertToKey(StateTime stateTime) {
+  protected final Tensor convertToKey(StateTime stateTime) {
     return eta.pmul(represent.apply(stateTime)).map(Floor.FUNCTION);
   }
 
@@ -68,7 +68,7 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   }
 
   /** @param domain_key
-   * @param node
+   * @param node non-null
    * @return true if node replaces a existing entry in the domain map,
    * false if the domain map did not have a pre-existing mapping from given domain_key */
   protected final boolean insert(Tensor domain_key, GlcNode node) {

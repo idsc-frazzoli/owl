@@ -60,7 +60,7 @@ enum R2ImageDemo {
       StateTimeTrajectories.print(trajectory);
     }
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
-    owlyFrame.geometricComponent.setZoomable(false);
+    // owlyFrame.geometricComponent.setZoomable(false);
     // Tensor tensor = owlyFrame.geometricComponent.getModel2Pixel();
     // System.out.println(Pretty.of(tensor));
     Tensor model2pixel = Tensors.fromString("{{60, 0, 200}, {0, -60, 650}, {0, 0, 1}}");

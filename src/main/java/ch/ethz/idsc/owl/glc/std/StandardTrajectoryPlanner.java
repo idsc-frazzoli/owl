@@ -17,8 +17,12 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
+import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** transcription of the c++ implementation by bapaden
  * 
@@ -28,6 +32,10 @@ import ch.ethz.idsc.tensor.Tensor;
  * <li>nodes that get replaced in a domain, are also removed from the queue
  * </ul> */
 public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
+  /** minimum threshold of improvement by a candidate */
+  // TODO probably should be relative to order of magnitude of merit
+  private static final Scalar MERIT_EPS = DoubleScalar.of(1E-6);
+  // ---
   private final ControlsIntegrator controlsIntegrator;
 
   public StandardTrajectoryPlanner( //
@@ -48,9 +56,12 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
       final Tensor domainKey = convertToKey(next.stateTime());
       final Optional<GlcNode> former = getNode(domainKey);
-      if (former.isPresent()) {
-        // is already some node present from previous exploration ?
-        if (Scalars.lessThan(next.merit(), former.get().merit())) // new node is potentially better than previous one
+      if (former.isPresent()) { // is already some node present from previous exploration ?
+        GlcNode formerLabel = former.get();
+        Scalar delta = formerLabel.merit().subtract(next.merit());
+        boolean passed = Scalars.lessThan(MERIT_EPS, delta);
+        passed |= ExactScalarQ.of(delta) && Sign.isPositive(delta);
+        if (passed) // new node is potentially better than previous one
           domainQueueMap.insert(domainKey, next);
       } else
         domainQueueMap.insert(domainKey, next); // node is considered without comparison to any former node
@@ -74,7 +85,7 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
               /** removal from queue is unsure; needs to be checked with theory. */
               boolean removed = queue().remove(formerLabel);
               if (!removed) {
-                System.err.println("miss: " + domainKey + " " + formerLabel.stateTime().toInfoString());
+                System.err.println("miss: " + domainKey + "\n " + formerLabel.stateTime().toInfoString());
                 // GlobalAssert.that(removed);
               }
               formerLabel.parent().removeEdgeTo(formerLabel);

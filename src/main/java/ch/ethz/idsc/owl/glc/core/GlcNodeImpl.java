@@ -9,6 +9,7 @@ import java.util.Map;
 import ch.ethz.idsc.owl.data.tree.AbstractNode;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -34,7 +35,8 @@ import ch.ethz.idsc.tensor.Tensor;
   /** @param flow that got us to this Node from the parent, or null when this Node is the root
    * @param stateTime
    * @param costFromRoot
-   * @param minCostToGoal */
+   * @param minCostToGoal non-negative, provided by {@link HeuristicFunction},
+   * or {@link RealScalar#ZERO} */
   GlcNodeImpl(Flow flow, StateTime stateTime, Scalar costFromRoot, Scalar minCostToGoal) {
     this.flow = flow;
     this.stateTime = stateTime;
