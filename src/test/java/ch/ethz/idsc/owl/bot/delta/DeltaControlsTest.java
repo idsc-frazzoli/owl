@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.delta;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.r2.ImageGradient;
+import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -16,13 +16,13 @@ import junit.framework.TestCase;
 
 public class DeltaControlsTest extends TestCase {
   public void testSimple() {
-    ImageGradient imageGradient = ImageGradient.linear( //
+    ImageGradientInterpolation imageGradientInterpolation = ImageGradientInterpolation.linear( //
         ResourceData.of("/io/delta_uxy.png"), Tensors.vector(10, 10), RealScalar.of(.1));
-    Scalar maxNormGradient = imageGradient.maxNormGradient();
+    Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();
     // System.out.println(maxNormGradient);
     assertTrue(Sign.isPositive(maxNormGradient));
     Scalar amp = RealScalar.of(2);
-    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradient);
+    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, amp).getFlows(20);
     Scalar max = DeltaControls.maxSpeed(controls);
     assertTrue(Chop._12.close(max, amp));

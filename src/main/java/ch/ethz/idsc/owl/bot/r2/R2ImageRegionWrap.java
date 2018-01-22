@@ -36,8 +36,9 @@ public class R2ImageRegionWrap {
 
   public CostFunction gradientCostFunction() {
     if (Objects.isNull(gradientCostFunction)) {
-      ImageGradient imageGradient = ImageGradient.linear(cost, range, DoubleScalar.of(1.0));
-      gradientCostFunction = new ImageGradientCostFunction(imageGradient);
+      ImageGradientInterpolation imageGradientInterpolation = //
+          ImageGradientInterpolation.linear(cost, range, DoubleScalar.of(1.0));
+      gradientCostFunction = new ImageGradientCostFunction(imageGradientInterpolation);
     }
     return gradientCostFunction;
   }

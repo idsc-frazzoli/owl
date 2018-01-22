@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * data structure is used during planner expansion but not for storage of nodes */
 /* package */ class DomainQueueMap implements Iterable<Entry<Tensor, DomainQueue>> {
   /** map from domain keys to queues of nodes */
-  private final Map<Tensor, DomainQueue> map = new HashMap<>();
+  final Map<Tensor, DomainQueue> map = new HashMap<>();
 
   /** add given glcNode to domain queue at the location determined by domain_key.
    * a new domain queue is allocated if no other nodes were inserted there prior.

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.delta;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-import ch.ethz.idsc.owl.bot.r2.ImageGradient;
+import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -39,12 +39,14 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     Tensor range = Tensors.vector(12.6, 9.1).unmodifiable(); // overall size of map
     Scalar amp = RealScalar.of(-.05); // direction and strength of river flow
     // ---
-    ImageGradient imageGradient_fast = ImageGradient.nearest(image, range, amp);
-    AbstractEntity abstractEntity = new DeltaxTEntity(imageGradient_fast, Tensors.vector(10, 3.5));
+    ImageGradientInterpolation imageGradientInterpolation_fast = //
+        ImageGradientInterpolation.nearest(image, range, amp);
+    AbstractEntity abstractEntity = new DeltaxTEntity(imageGradientInterpolation_fast, Tensors.vector(10, 3.5));
     Supplier<Scalar> supplier = () -> abstractEntity.getStateTimeNow().time();
     // ---
-    ImageGradient imageGradient_slow = ImageGradient.linear(image, range, amp);
-    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradient_slow);
+    ImageGradientInterpolation imageGradientInterpolation_slow = //
+        ImageGradientInterpolation.linear(image, range, amp);
+    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation_slow);
     Flow flow = StateSpaceModels.createFlow(stateSpaceModel, DeltaEntity.FALLBACK_CONTROL);
     Region<StateTime> region1 = create(RealScalar.of(0.4), Tensors.vector(2, 1.5), flow, supplier);
     Region<StateTime> region2 = create(RealScalar.of(0.5), Tensors.vector(6, 6), flow, supplier);
