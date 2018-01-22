@@ -119,10 +119,6 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
     return Optional.ofNullable(best.isEmpty() ? null : best.firstKey());
   }
 
-  protected final void setBestNull() {
-    best.clear();
-  }
-
   /** @return best node known to be in goal, or top node in queue, or null,
    * in this order depending on existence */
   public final Optional<GlcNode> getBestOrElsePeek() {

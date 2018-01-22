@@ -55,7 +55,7 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
     DomainQueueMap domainQueueMap = new DomainQueueMap(); // holds candidates for insertion
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
       final Tensor domainKey = convertToKey(next.stateTime());
-      final Optional<GlcNode> former = getNode(domainKey);
+      Optional<GlcNode> former = getNode(domainKey);
       if (former.isPresent()) { // is already some node present from previous exploration ?
         GlcNode formerLabel = former.get();
         Scalar delta = formerLabel.merit().subtract(next.merit());
@@ -73,46 +73,26 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
       GlcNode node, Map<GlcNode, List<StateTime>> connectors, DomainQueueMap domainQueueMap) {
     for (Entry<Tensor, DomainQueue> entry : domainQueueMap) {
       final Tensor domainKey = entry.getKey();
-      final DomainQueue domainQueue = entry.getValue();
-      while (!domainQueue.isEmpty()) {
-        final GlcNode next = domainQueue.element(); // retrieves, but does not remove, the head of this queue
+      for (GlcNode next : entry.getValue()) { // iterate over the candidates in DomainQueue
         final List<StateTime> trajectory = connectors.get(next);
-        final Optional<GlcNode> former = getNode(domainKey);
-        if (former.isPresent()) {
-          GlcNode formerLabel = former.get();
-          if (Scalars.lessThan(next.merit(), formerLabel.merit())) {
-            if (!getObstacleQuery().firstMember(trajectory).isPresent()) { // no collision
-              /** removal from queue is unsure; needs to be checked with theory. */
-              boolean removed = queue().remove(formerLabel);
-              if (!removed) {
-                System.err.println("miss: " + domainKey + "\n " + formerLabel.stateTime().toInfoString());
-                // GlobalAssert.that(removed);
-              }
-              formerLabel.parent().removeEdgeTo(formerLabel);
-              node.insertEdgeTo(next);
-              boolean replaced = insert(domainKey, next);
-              GlobalAssert.that(replaced);
-              domainQueue.remove();
-              if (isInsideGoal(trajectory))
-                offerDestination(next, trajectory);
-              // Same principle as in B. Paden's implementation, leaving while loop after first relabel
-              break; // leaves the while loop, but not the for loop
-            }
+        Optional<GlcNode> former = getNode(domainKey);
+        if (!getObstacleQuery().firstMember(trajectory).isPresent()) {
+          boolean isPresent = former.isPresent();
+          if (isPresent) { // is already some node present from previous exploration ?
+            GlcNode formerLabel = former.get();
+            boolean removed = queue().remove(formerLabel);
+            if (!removed) // resolved by introduction of MERIT_EPS
+              System.err.println("miss: " + domainKey + "\n " + formerLabel.stateTime().toInfoString());
+            formerLabel.parent().removeEdgeTo(formerLabel);
           }
-        } else { // no formerLabel, so definitely adding a Node
-          if (!getObstacleQuery().firstMember(trajectory).isPresent()) {
-            // removing the nextCandidate from bucket of this domain
-            // adding next to tree and DomainMap
-            node.insertEdgeTo(next);
-            insert(domainKey, next);
-            domainQueue.remove();
-            // GOAL check
-            if (isInsideGoal(trajectory))
-              offerDestination(next, trajectory);
-            break;
-          }
+          node.insertEdgeTo(next);
+          boolean replaced = insert(domainKey, next);
+          GlobalAssert.that(replaced || !isPresent);
+          if (isInsideGoal(trajectory)) // GOAL check
+            offerDestination(next, trajectory);
+          // Same principle as in B. Paden's implementation, leaving while loop after first relabel
+          break; // leaves the inner for loop, but not the outer for loop
         }
-        domainQueue.remove();
       }
     }
   }
