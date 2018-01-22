@@ -101,12 +101,9 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
    * 
    * {@link AbstractAnyTrajectoryPlanner} overrides this method
    * 
-   * access to method is 'synchronized' to make modification of
-   * data structure thread safe.
-   * 
    * @param node
    * @param connector */
-  protected synchronized void offerDestination(GlcNode node, List<StateTime> connector) {
+  protected final void offerDestination(GlcNode node, List<StateTime> connector) {
     best.put(node, connector);
     if (1 < best.size()) {
       best.remove(best.lastKey());

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.delta;
 
-import ch.ethz.idsc.owl.bot.r2.ImageGradient;
+import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
@@ -22,7 +22,7 @@ public class DeltaAnimationDemo implements DemoInterface {
     // ---
     Scalar amp = RealScalar.of(-.05);
     Tensor range = Tensors.vector(12.6, 9.1).unmodifiable();
-    ImageGradient imageGradient = ImageGradient.nearest(ResourceData.of("/io/delta_uxy.png"), range, amp);
+    ImageGradientInterpolation imageGradient = ImageGradientInterpolation.nearest(ResourceData.of("/io/delta_uxy.png"), range, amp);
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
     TrajectoryRegionQuery obstacleQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
