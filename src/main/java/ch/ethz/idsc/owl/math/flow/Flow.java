@@ -6,7 +6,9 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** time invariant differential constraint */
+/** time invariant differential constraint
+ * 
+ * serializable */
 public interface Flow extends Serializable {
   /** @param x
    * @return tangent of flow evaluated at x */

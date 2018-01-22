@@ -37,9 +37,12 @@ public enum Se2Utils {
    * 
    * @param g = {px, py, angle}
    * @return matrix with dimensions 3x3
+   * <pre>
    * [+Ca -Sa px]
    * [+Sa +Ca py]
-   * [0 0 1] */
+   * [0 0 1]
+   * </pre>
+   * @throws Exception if parameter g is not a vector of length 3 */
   public static Tensor toSE2Matrix(Tensor xya) {
     Scalar angle = xya.Get(2);
     Scalar cos = Cos.FUNCTION.apply(angle);
