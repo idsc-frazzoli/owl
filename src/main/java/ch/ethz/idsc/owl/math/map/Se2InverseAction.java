@@ -9,7 +9,9 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 /** Se2InverseAction is a substitute for the operation:
- * Inverse[SE2 matrix] dot point */
+ * Inverse[SE2 matrix] dot point
+ * 
+ * @see Se2ForwardAction */
 /* package */ class Se2InverseAction implements TensorUnaryOperator {
   private final Scalar px;
   private final Scalar py;

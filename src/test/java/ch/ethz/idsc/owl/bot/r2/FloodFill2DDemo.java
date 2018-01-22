@@ -38,7 +38,7 @@ enum FloodFill2DDemo {
     System.out.println("export image " + Dimensions.of(tensor));
     Export.of(UserHome.Pictures("image.png"), tensor);
     Stopwatch stopwatch = Stopwatch.started();
-    Tensor cost_raw = FloodFill2D.of(ttl, tensor);
+    Tensor cost_raw = FloodFill2D.of(tensor, ttl);
     System.out.println("floodfill    " + stopwatch.display_seconds());
     System.out.println("export cost  " + Dimensions.of(cost_raw));
     Export.of(UserHome.Pictures("image_cost_raw.png"), cost_raw);

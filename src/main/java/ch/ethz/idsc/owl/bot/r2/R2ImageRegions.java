@@ -72,12 +72,12 @@ public enum R2ImageRegions {
 
   /***************************************************/
   public static final R2ImageRegionWrap _2180 = //
-      new R2ImageRegionWrap(inside_2180().image(), Tensors.vector(10, 7));
+      new R2ImageRegionWrap(inside_2180().image(), Tensors.vector(10, 7), 15);
   public static final R2ImageRegionWrap _2181 = //
-      new R2ImageRegionWrap(inside_2181().image(), Tensors.vector(10, 7));
+      new R2ImageRegionWrap(inside_2181().image(), Tensors.vector(10, 7), 15);
   /***************************************************/
   public static final R2ImageRegionWrap _0F5C_2182 = //
-      new R2ImageRegionWrap(inside_0f5c_2182_charImage(), Tensors.vector(20, 10));
+      new R2ImageRegionWrap(inside_0f5c_2182_charImage(), Tensors.vector(20, 10), 15);
 
   private static Tensor inside_0f5c_2182_charImage() {
     CharImage charImage = CharImage.fillWhite(new Dimension(320, 640));
@@ -91,7 +91,7 @@ public enum R2ImageRegions {
 
   /***************************************************/
   public static final R2ImageRegionWrap _GTOB = //
-      new R2ImageRegionWrap(inside_gtob_charImage(), Tensors.vector(12, 12));
+      new R2ImageRegionWrap(inside_gtob_charImage(), Tensors.vector(12, 12), 15);
 
   private static Tensor inside_gtob_charImage() {
     CharImage charImage = CharImage.fillWhite(new Dimension(640, 640));
