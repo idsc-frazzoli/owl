@@ -38,7 +38,7 @@ public enum Trajectories {
 
   /** @param glcNode
    * @param trajectory
-   * @return vector with {dt_0, dt_1, ... } */
+   * @return vector with {dt_0, dt_1, ... } all entries non-negative */
   public static Tensor deltaTimes(GlcNode glcNode, List<StateTime> trajectory) {
     Tensor dts = Tensors.empty();
     Scalar prev = glcNode.stateTime().time();

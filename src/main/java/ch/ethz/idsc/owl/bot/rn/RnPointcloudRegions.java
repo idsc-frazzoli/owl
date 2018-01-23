@@ -1,11 +1,13 @@
-// code by jph
-package ch.ethz.idsc.owl.bot.rn.glc;
+// code by jph and jl
+package ch.ethz.idsc.owl.bot.rn;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.rn.RnPointcloudRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
+import ch.ethz.idsc.owl.math.sample.RandomSample;
+import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,8 +15,23 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.sca.N;
 
-public enum RnPointclouds {
+public enum RnPointcloudRegions {
   ;
+  /** @param num number of points
+   * @param width of area, in which they are created
+   * @param offset of area, in which they are created
+   * @param radius of each obstacle
+   * @return region with random points as obstacles */
+  public static Region<Tensor> createRandomRegion(int num, Tensor offset, Tensor width, Scalar radius) {
+    RandomSampleInterface randomSampleInterface = new BoxRandomSample(offset, offset.add(width));
+    return RnPointcloudRegion.of(RandomSample.of(randomSampleInterface, num), radius);
+  }
+
+  /** extrusion of non-zero pixels in given image by fixed radius
+   * 
+   * @param imageRegion
+   * @param radius
+   * @return */
   public static Region<Tensor> from(ImageRegion imageRegion, Scalar radius) {
     Tensor points = from(imageRegion);
     System.out.println(Dimensions.of(points));

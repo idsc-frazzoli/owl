@@ -20,7 +20,7 @@ public class R2ImageRegionWrap {
   public R2ImageRegionWrap(Tensor image, Tensor range, int ttl) {
     imageRegion = new ImageRegion(image, range, false);
     Tensor cost = FloodFill2D.of(image, RealScalar.of(ttl));
-    costFunction = new ImageCostFunction(cost.divide(DoubleScalar.of(ttl)), range, RealScalar.ZERO);
+    costFunction = ImageCostFunction.of(cost.divide(DoubleScalar.of(ttl)), range, RealScalar.ZERO);
   }
 
   public ImageRegion imageRegion() {

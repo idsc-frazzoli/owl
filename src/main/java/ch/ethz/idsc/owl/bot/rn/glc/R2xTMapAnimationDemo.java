@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.rn.glc;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
+import ch.ethz.idsc.owl.bot.rn.RnPointcloudRegions;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
@@ -24,7 +25,7 @@ public class R2xTMapAnimationDemo implements DemoInterface {
     ImageRegion imageRegion = null;
     imageRegion = ImageRegions.loadFromRepository( //
         "/map/dubendorf/hangar/20180122.png", Tensors.vector(10, 10), false);
-    Region<Tensor> region = RnPointclouds.from(imageRegion, RealScalar.of(0.15));
+    Region<Tensor> region = RnPointcloudRegions.from(imageRegion, RealScalar.of(0.15));
     // ---
     owlyAnimationFrame.setObstacleQuery(SimpleTrajectoryRegionQuery.timeInvariant(region));
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
