@@ -25,6 +25,12 @@ public class ImageRegionsTest extends TestCase {
     assertEquals(Dimensions.of(ir.image()), Arrays.asList(640, 640));
   }
 
+  public void testGrayscale() {
+    Tensor image = Tensors.fromString("{{0,1},{0,0}}");
+    Tensor output = ImageRegions.grayscale(image);
+    assertEquals(image, output);
+  }
+
   public void testFail() {
     try {
       ImageRegions.loadFromRepository( //

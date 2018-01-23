@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
-import ch.ethz.idsc.owl.math.TensorScalarFunction;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** region {x | f(x) <= 0} defined by the overriding implicit function f
