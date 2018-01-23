@@ -16,20 +16,20 @@ import ch.ethz.idsc.tensor.sca.Decrement;
 /** computes manhatten distance by flood fill */
 /* package */ class FloodFill2D {
   /** @param ttl
-   * @param tensor
+   * @param image
    * @param seeds
    * @return distance in exact precision */
-  public static Tensor of(Scalar ttl, Tensor tensor, Set<Tensor> seeds) {
-    return new FloodFill2D(ttl, tensor, seeds).array;
+  public static Tensor of(Tensor image, Scalar ttl, Set<Tensor> seeds) {
+    return new FloodFill2D(ttl, image, seeds).array;
   }
 
   /** seeds are generated from given tensor using {@link #seeds(Tensor)}
    * 
    * @param ttl
-   * @param tensor
+   * @param image
    * @return distance in exact precision */
-  public static Tensor of(Scalar ttl, Tensor tensor) {
-    return of(ttl, tensor, seeds(tensor));
+  public static Tensor of(Tensor image, Scalar ttl) {
+    return of(image, ttl, seeds(image));
   }
 
   // ---
@@ -40,13 +40,13 @@ import ch.ethz.idsc.tensor.sca.Decrement;
   // ----
   private final List<Integer> dimensions;
   private final Tensor array;
-  private final Tensor tensor;
+  private final Tensor image;
   private Set<Tensor> next;
 
-  private FloodFill2D(Scalar ttl, Tensor tensor, Set<Tensor> prev) {
-    dimensions = Dimensions.of(tensor);
+  private FloodFill2D(Scalar ttl, Tensor image, Set<Tensor> prev) {
+    dimensions = Dimensions.of(image);
     array = Array.zeros(dimensions);
-    this.tensor = tensor;
+    this.image = image;
     {
       next = new HashSet<>();
       for (Tensor seed : prev)
@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.Decrement;
       int c1 = point.Get(1).number().intValue();
       if (0 <= c1 && c1 < dimensions.get(1) && //
           Scalars.isZero(array.Get(c0, c1)) && //
-          Scalars.isZero(tensor.Get(c0, c1))) {
+          Scalars.isZero(image.Get(c0, c1))) {
         array.set(ttl, c0, c1);
         next.add(point);
       }

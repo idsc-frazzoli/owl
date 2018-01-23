@@ -2,10 +2,11 @@
 package ch.ethz.idsc.owl.glc.core;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -45,15 +46,16 @@ import ch.ethz.idsc.owl.math.state.StateTime;
  * the implementation can be carried out in parallel. */
 public class ControlsIntegrator implements Serializable {
   private final StateIntegrator stateIntegrator;
-  private final Collection<Flow> controls;
+  private final Supplier<Stream<Flow>> supplier;
   private final CostFunction costFunction;
 
   /** @param stateIntegrator
-   * @param controls
+   * @param supplier of stream of control {@link Flow}s
    * @param costFunction */
-  public ControlsIntegrator(StateIntegrator stateIntegrator, Collection<Flow> controls, CostFunction costFunction) {
+  public ControlsIntegrator( //
+      StateIntegrator stateIntegrator, Supplier<Stream<Flow>> supplier, CostFunction costFunction) {
     this.stateIntegrator = stateIntegrator;
-    this.controls = controls;
+    this.supplier = supplier;
     this.costFunction = costFunction;
   }
 
@@ -61,19 +63,8 @@ public class ControlsIntegrator implements Serializable {
    * 
    * @param node from which to expand
    * @return */
-  public Map<GlcNode, List<StateTime>> inParallel(GlcNode node) {
-    // parallel results in speedup of ~25% (rice2demo)
-    return controls.stream().parallel() //
-        .map(flow -> new FlowTrajectory(flow, stateIntegrator.trajectory(node.stateTime(), flow))) //
-        .collect(Collectors.toMap( //
-            flowTrajectory -> flowTrajectory.createGlcNode(node, costFunction), //
-            FlowTrajectory::trajectory));
-  }
-
-  /** @param node from which to expand
-   * @return */
-  Map<GlcNode, List<StateTime>> inSequence(GlcNode node) { // function is not used
-    return controls.stream() //
+  public Map<GlcNode, List<StateTime>> from(GlcNode node) {
+    return supplier.get() // parallel stream results in speedup of ~25% (rice2demo)
         .map(flow -> new FlowTrajectory(flow, stateIntegrator.trajectory(node.stateTime(), flow))) //
         .collect(Collectors.toMap( //
             flowTrajectory -> flowTrajectory.createGlcNode(node, costFunction), //

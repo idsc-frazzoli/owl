@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
@@ -22,8 +23,16 @@ import ch.ethz.idsc.tensor.sca.Floor;
 /** current implementation uses 2d image to store costs
  * a given trajectory is mapped to the pixels and costs are
  * weighted according to the traverse time */
-/* package */ class ImageCostFunction implements CostFunction {
+/* package */ class ImageCostFunction implements CostFunction, Serializable {
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
+
+  /** @param image as a matrix
+   * @param range effective size of image in coordinate space
+   * @param outside point member status */
+  public static CostFunction of(Tensor image, Tensor range, Scalar outside) {
+    return new ImageCostFunction(image, range, outside);
+  }
+
   // ---
   private final Tensor image;
   private final List<Integer> dimensions;
@@ -32,10 +41,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
   private final Scalar outside;
   private final int max_y;
 
-  /** @param image as a matrix
-   * @param range effective size of image in coordinate space
-   * @param outside point member status */
-  public ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
+  private ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
     MatrixQ.elseThrow(image);
     GlobalAssert.that(VectorQ.ofLength(range, 2));
     this.image = image;
@@ -46,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
     this.outside = outside;
   }
 
-  private Scalar pointcost(Tensor tensor) {
+  /* package */ Scalar pointcost(Tensor tensor) {
     if (tensor.length() != 2)
       tensor = tensor.extract(0, 2);
     Tensor pixel = Floor.of(tensor.pmul(scale));
@@ -60,12 +66,12 @@ import ch.ethz.idsc.tensor.sca.Floor;
     return outside;
   }
 
-  @Override
+  @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
     return RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     Tensor dts = Trajectories.deltaTimes(glcNode, trajectory);
     Tensor cost = Tensor.of(trajectory.stream() //

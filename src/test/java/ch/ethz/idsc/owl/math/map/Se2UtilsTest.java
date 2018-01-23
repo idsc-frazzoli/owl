@@ -39,7 +39,7 @@ public class Se2UtilsTest extends TestCase {
 
   public void testSome() {
     Tensor u = Tensors.vector(1.2, 0, 0.75);
-    Tensor m = Se2Utils.toSE2Matrix(Se2Utils.integrate_g0(u)); // TODO make more efficient
+    Tensor m = Se2Utils.toSE2Matrix(Se2Utils.integrate_g0(u));
     Tensor p = Tensors.vector(-2, 3);
     Tensor v = m.dot(p.copy().append(RealScalar.ONE));
     Tensor r = Se2Integrator.INSTANCE.spin(Se2Utils.integrate_g0(u), p.append(RealScalar.ZERO));

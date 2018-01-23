@@ -30,7 +30,7 @@ public final class Se2ShiftCostFunction implements CostFunction, Serializable {
     Flow ante = glcNode.flow(); // == null if glcNode is root
     return Objects.nonNull(ante) && Sign.isNegative(ante.getU().Get(0).multiply(flow.getU().Get(0))) //
         ? shiftPenalty
-        : RealScalar.ZERO;
+        : shiftPenalty.zero();
   }
 
   @Override // from HeuristicFunction

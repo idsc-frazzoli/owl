@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.delta;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.r2.ImageGradient;
+import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -38,14 +38,14 @@ import ch.ethz.idsc.tensor.sca.Chop;
   /** resolution of radial controls */
   private static final int U_SIZE = 15;
   /***************************************************/
-  private final ImageGradient imageGradient;
+  private final ImageGradientInterpolation imageGradientInterpolation;
 
-  public DeltaEntity(ImageGradient imageGradient, Tensor state) {
+  public DeltaEntity(ImageGradientInterpolation imageGradientInterpolation, Tensor state) {
     super(new SimpleEpisodeIntegrator( //
-        new DeltaStateSpaceModel(imageGradient), //
+        new DeltaStateSpaceModel(imageGradientInterpolation), //
         EulerIntegrator.INSTANCE, //
         new StateTime(state, RealScalar.ZERO)));
-    this.imageGradient = imageGradient;
+    this.imageGradientInterpolation = imageGradientInterpolation;
   }
 
   @Override
@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal) {
     Tensor eta = eta();
-    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradient);
+    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, U_NORM).getFlows(U_SIZE);
     Scalar u_norm = DeltaControls.maxSpeed(controls);
     GlobalAssert.that(Chop._10.close(u_norm, U_NORM));

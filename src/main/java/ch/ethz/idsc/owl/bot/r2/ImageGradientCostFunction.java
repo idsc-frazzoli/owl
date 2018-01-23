@@ -16,17 +16,17 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 
 /* package */ class ImageGradientCostFunction implements CostFunction, Serializable {
-  private final ImageGradient imageGradient;
+  private final ImageGradientInterpolation imageGradientInterpolation;
 
-  public ImageGradientCostFunction(ImageGradient imageGradient) {
-    this.imageGradient = imageGradient;
+  public ImageGradientCostFunction(ImageGradientInterpolation imageGradientInterpolation) {
+    this.imageGradientInterpolation = imageGradientInterpolation;
   }
 
   /** @param tensor with entries {px, py, alpha}
    * @return */
   private Scalar pointcost(Tensor tensor) {
     Tensor p = tensor.extract(0, 2); // xy
-    Tensor v = imageGradient.rotate(p);
+    Tensor v = imageGradientInterpolation.get(p);
     Tensor u = AngleVector.of(tensor.Get(2)); // orientation
     return VectorAngle.of(u, v).orElse(RealScalar.ZERO); // LONGTERM perhaps this can be simplified
   }

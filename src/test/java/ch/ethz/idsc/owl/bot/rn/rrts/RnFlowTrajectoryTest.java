@@ -7,6 +7,8 @@ import java.util.List;
 import ch.ethz.idsc.owl.bot.rn.RnNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.data.tree.Nodes;
+import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
@@ -17,7 +19,9 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class RnFlowTrajectoryTest extends TestCase {
@@ -55,5 +59,13 @@ public class RnFlowTrajectoryTest extends TestCase {
     @SuppressWarnings("unused")
     List<TrajectorySample> traj = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
     // Trajectories.print(traj);
+  }
+
+  public void testBetween() {
+    StateTime orig = new StateTime(Tensors.fromString("{4[m],5[m]}"), Quantity.of(3, "s"));
+    StateTime dest = new StateTime(Tensors.fromString("{10[m],13[m]}"), Quantity.of(5, "s"));
+    Flow flow = RnFlowTrajectory.between(orig, dest);
+    Tensor u = flow.getU();
+    assertEquals(u, Tensors.fromString("{3[m*s^-1], 4[m*s^-1]}"));
   }
 }

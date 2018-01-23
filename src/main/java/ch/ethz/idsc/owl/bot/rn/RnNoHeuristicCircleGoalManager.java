@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -27,9 +26,7 @@ public class RnNoHeuristicCircleGoalManager extends SimpleTrajectoryRegionQuery 
    * @param center vector with length == n
    * @param radius positive */
   public RnNoHeuristicCircleGoalManager(Tensor center, Scalar radius) {
-    super(new TimeInvariantRegion(new SphericalRegion(center, radius)));
-    if (Sign.isNegativeOrZero(radius))
-      throw TensorRuntimeException.of(radius);
+    super(new TimeInvariantRegion(new SphericalRegion(center, Sign.requirePositive(radius))));
   }
 
   @Override

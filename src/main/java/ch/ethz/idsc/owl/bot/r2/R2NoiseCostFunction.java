@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
@@ -16,11 +17,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
-/** the cost increment may be zero
- * therefore, min cost to goal also is zero
+/** cost function with unit time
  * 
- * typically superimposed on min dist cost function */
-public class R2NoiseCostFunction implements CostFunction {
+ * the cost increment may be zero therefore, min cost to goal also is zero */
+public class R2NoiseCostFunction implements CostFunction, Serializable {
   private static final ContinuousNoise CONTINUOUS_NOISE = //
       ContinuousNoiseUtils.wrap2D(SimplexContinuousNoise.FUNCTION);
   // ---
@@ -30,21 +30,19 @@ public class R2NoiseCostFunction implements CostFunction {
     this.treshold = treshold;
   }
 
-  @Override // from HeuristicFunction
-  public Scalar minCostToGoal(Tensor tensor) {
-    return RealScalar.ZERO;
-  }
-
   @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    Tensor cost = Tensor.of(trajectory.stream().map(StateTime::state).map(this::pointCost));
     Tensor dts = Trajectories.deltaTimes(glcNode, trajectory);
+    Tensor cost = Tensor.of(trajectory.stream() //
+        .map(StateTime::state) //
+        .map(CONTINUOUS_NOISE) //
+        .map(scalar -> scalar.subtract(treshold)) //
+        .map(Ramp.FUNCTION));
     return cost.dot(dts).Get();
   }
 
-  /** @param tensor vector with at least 2 entries
-   * @return value in the interval [0, 2] */
-  private Scalar pointCost(Tensor tensor) {
-    return Ramp.of(CONTINUOUS_NOISE.apply(tensor).subtract(treshold));
+  @Override // from HeuristicFunction
+  public Scalar minCostToGoal(Tensor tensor) {
+    return RealScalar.ZERO;
   }
 }

@@ -12,6 +12,8 @@ public enum CogPoints {
    * the orientation of the points is counter-clockwise.
    * 
    * @param n
+   * @param s_hi
+   * @param s_lo
    * @return 2 * n x 2 matrix */
   public static Tensor of(int n, Scalar s_hi, Scalar s_lo) {
     int n4 = n * 4;

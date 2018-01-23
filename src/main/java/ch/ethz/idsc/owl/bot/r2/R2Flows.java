@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -23,9 +22,7 @@ public class R2Flows implements FlowsInterface, Serializable {
   private final Scalar speed;
 
   public R2Flows(Scalar speed) {
-    if (Sign.isNegativeOrZero(speed))
-      throw TensorRuntimeException.of(speed);
-    this.speed = speed;
+    this.speed = Sign.requirePositive(speed);
   }
 
   @Override

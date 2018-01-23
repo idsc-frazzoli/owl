@@ -5,7 +5,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -22,11 +21,9 @@ public class SphereRandomSample implements RandomSampleInterface {
    * @return */
   public static RandomSampleInterface of(Tensor center, Scalar radius) {
     VectorQ.elseThrow(center);
-    if (Sign.isNegative(radius))
-      throw TensorRuntimeException.of(radius);
     if (Scalars.isZero(radius))
       return new ConstantRandomSample(center);
-    return new SphereRandomSample(center, radius);
+    return new SphereRandomSample(center, Sign.requirePositiveOrZero(radius));
   }
 
   // ---

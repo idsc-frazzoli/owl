@@ -11,8 +11,8 @@ We follow best practices and coding standards to protect from avoidable errors.
 
 List of algorithms:
 
-* GLC
-* RRT*
+* [GLC](src/main/java/ch/ethz/idsc/owl/glc/std/StandardTrajectoryPlanner.java)
+* [RRT*](src/main/java/ch/ethz/idsc/owl/rrts/core/DefaultRrts.java)
 
 The references are
 
@@ -83,9 +83,9 @@ R^2
 
 ![r2](https://cloud.githubusercontent.com/assets/4012178/26045794/16bd0a54-394c-11e7-9d11-19558bc3be88.png)
 
-## Include in your project
+## Integration
 
-Modify the `pom` file of your project to specify `repository` and `dependency` of the tensor library:
+Specify `repository` and `dependency` of the owl library in the `pom.xml` file of your maven project:
 
     <repositories>
       <repository>
@@ -113,4 +113,4 @@ The library is used in the projects:
 * `owly3d`
 * `matsim`
 
-The repository has over `280` unit tests.
+The repository has over `310` unit tests.
