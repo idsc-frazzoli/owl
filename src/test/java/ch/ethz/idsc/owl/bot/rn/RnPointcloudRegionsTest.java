@@ -7,9 +7,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class RnPointcloudsTest extends TestCase {
+public class RnPointcloudRegionsTest extends TestCase {
   public void testSimple2D() {
-    Region<Tensor> region = RnPointclouds.createRandomRegion(1, Tensors.vector(10, 10), Tensors.vector(1, 1), RealScalar.of(1.5));
+    Region<Tensor> region = RnPointcloudRegions.createRandomRegion(1, Tensors.vector(10, 10), Tensors.vector(1, 1), RealScalar.of(1.5));
     assertTrue(region.isMember(Tensors.vector(10.5, 10.5)));
     assertTrue(region.isMember(Tensors.vector(10, 10)));
     assertFalse(region.isMember(Tensors.vector(8, 8)));

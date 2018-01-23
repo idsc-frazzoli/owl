@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 
 public class ImageGradientCostFunctionTest extends TestCase {
   public void testSimple() {
-    // TODO
+    // TODO not used yet
+    // new ImageGradientCostFunction(imageGradientInterpolation);
   }
 }
