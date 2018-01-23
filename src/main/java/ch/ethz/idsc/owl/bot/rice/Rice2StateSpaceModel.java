@@ -7,7 +7,6 @@ import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.sca.Exp;
@@ -29,9 +28,7 @@ public class Rice2StateSpaceModel implements StateSpaceModel, Serializable {
 
   /** @param lambda strictly positive friction coefficient */
   private Rice2StateSpaceModel(Scalar lambda) {
-    if (Sign.isNegativeOrZero(lambda))
-      throw TensorRuntimeException.of(lambda);
-    this.lambda = lambda;
+    this.lambda = Sign.requirePositive(lambda);
   }
 
   @Override // from StateSpaceModel

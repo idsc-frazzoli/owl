@@ -17,18 +17,8 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-// TODO consistency check
 public enum RnFlowTrajectory {
   ;
-  public static Flow between(StateTime orig, StateTime dest) {
-    StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE; // Rn
-    Tensor direction = dest.state().subtract(orig.state());
-    Scalar delta = dest.time().subtract(orig.time());
-    Tensor u = direction.divide(delta);
-    // System.out.println(Norm._2.of(u));
-    return StateSpaceModels.createFlow(stateSpaceModel, u);
-  }
-
   /** implementation produces shortcuts at corners.
    * the flow of the segment bridging a corner may be of smaller magnitude than
    * the flows along a single segment.
@@ -58,5 +48,15 @@ public enum RnFlowTrajectory {
       ofs = dt.subtract(rem);
     }
     return trajectory;
+  }
+
+  /** @param orig
+   * @param dest
+   * @return */
+  /* package */ static Flow between(StateTime orig, StateTime dest) {
+    StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE; // R^n
+    Tensor direction = dest.state().subtract(orig.state());
+    Scalar delta = dest.time().subtract(orig.time());
+    return StateSpaceModels.createFlow(stateSpaceModel, direction.divide(delta));
   }
 }

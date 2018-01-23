@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.math.region;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -31,10 +30,8 @@ public class SphericalRegion extends ImplicitFunctionRegion {
    * @param radius non-negative */
   public SphericalRegion(Tensor center, Scalar radius) {
     VectorQ.elseThrow(center);
-    if (Sign.isNegative(radius))
-      throw TensorRuntimeException.of(radius);
     this.center = center.copy();
-    this.radius = radius;
+    this.radius = Sign.requirePositiveOrZero(radius);
   }
 
   @Override // from TensorScalarFunction

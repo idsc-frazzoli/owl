@@ -6,11 +6,11 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Stopwatch;
+import ch.ethz.idsc.owl.math.ImageGradient;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.Export;
@@ -38,7 +38,7 @@ enum FloodFill2DDemo {
     System.out.println("export image " + Dimensions.of(tensor));
     Export.of(UserHome.Pictures("image.png"), tensor);
     Stopwatch stopwatch = Stopwatch.started();
-    Tensor cost_raw = FloodFill2D.of(ttl, tensor);
+    Tensor cost_raw = FloodFill2D.of(tensor, ttl);
     System.out.println("floodfill    " + stopwatch.display_seconds());
     System.out.println("export cost  " + Dimensions.of(cost_raw));
     Export.of(UserHome.Pictures("image_cost_raw.png"), cost_raw);
@@ -48,12 +48,10 @@ enum FloodFill2DDemo {
     // MeanFilter.of(cost_raw, 2);
     // System.out.println("mean filter " + stopwatch.display_seconds());
     // ---
-    Tensor range = Tensors.vector(Dimensions.of(cost));
-    ImageGradient imageGradient = //
-        ImageGradient.linear(cost, range, DoubleScalar.of(1.0));
-    System.out.println("field: " + Dimensions.of(imageGradient.field_copy));
-    Tensor dx = imageGradient.field_copy.get(Tensor.ALL, Tensor.ALL, 0);
-    Tensor dy = imageGradient.field_copy.get(Tensor.ALL, Tensor.ALL, 1);
+    Tensor field_copy = ImageGradient.rotated(cost).multiply(DoubleScalar.of(1.0));
+    System.out.println("field: " + Dimensions.of(field_copy));
+    Tensor dx = field_copy.get(Tensor.ALL, Tensor.ALL, 0);
+    Tensor dy = field_copy.get(Tensor.ALL, Tensor.ALL, 1);
     dx = dx.map(GRAYSCALE);
     dy = dy.map(GRAYSCALE);
     List<Integer> dims = Dimensions.of(dx);

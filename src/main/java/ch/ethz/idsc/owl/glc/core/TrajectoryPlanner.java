@@ -52,11 +52,11 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
    * Examples: identity, mod, log, ... */
   public StateTimeTensorFunction represent = StateTime::state;
 
-  /** Floor(eta * state) == Floor(state / domain_size)
+  /** Floor(eta .* represent(state))
    * 
    * @param stateTime
    * @return */
-  protected Tensor convertToKey(StateTime stateTime) {
+  protected final Tensor convertToKey(StateTime stateTime) {
     return eta.pmul(represent.apply(stateTime)).map(Floor.FUNCTION);
   }
 
@@ -68,7 +68,7 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   }
 
   /** @param domain_key
-   * @param node
+   * @param node non-null
    * @return true if node replaces a existing entry in the domain map,
    * false if the domain map did not have a pre-existing mapping from given domain_key */
   protected final boolean insert(Tensor domain_key, GlcNode node) {
@@ -101,12 +101,9 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
    * 
    * {@link AbstractAnyTrajectoryPlanner} overrides this method
    * 
-   * access to method is 'synchronized' to make modification of
-   * data structure thread safe.
-   * 
    * @param node
    * @param connector */
-  protected synchronized void offerDestination(GlcNode node, List<StateTime> connector) {
+  protected final void offerDestination(GlcNode node, List<StateTime> connector) {
     best.put(node, connector);
     if (1 < best.size()) {
       best.remove(best.lastKey());
@@ -117,10 +114,6 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   @Override // from ExpandInterface
   public final Optional<GlcNode> getBest() {
     return Optional.ofNullable(best.isEmpty() ? null : best.firstKey());
-  }
-
-  protected final void setBestNull() {
-    best.clear();
   }
 
   /** @return best node known to be in goal, or top node in queue, or null,

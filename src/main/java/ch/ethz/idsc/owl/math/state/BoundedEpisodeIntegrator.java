@@ -8,7 +8,6 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -22,9 +21,7 @@ public class BoundedEpisodeIntegrator extends AbstractEpisodeIntegrator {
    * @param maxStep in time that given integrator applies */
   public BoundedEpisodeIntegrator(StateSpaceModel stateSpaceModel, Integrator integrator, StateTime stateTime, Scalar maxStep) {
     super(stateSpaceModel, integrator, stateTime);
-    if (Sign.isNegativeOrZero(maxStep))
-      throw TensorRuntimeException.of(maxStep);
-    this.maxStep = maxStep;
+    this.maxStep = Sign.requirePositive(maxStep);
   }
 
   @Override // from AbstractEpisodeIntegrator

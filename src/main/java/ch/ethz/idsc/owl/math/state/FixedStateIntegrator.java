@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** trajectory integration with fixed step size over given time period */
@@ -31,10 +30,8 @@ public class FixedStateIntegrator implements StateIntegrator, Serializable {
    * @param timeStep non-negative period of one step
    * @param trajectorySize number of steps */
   private FixedStateIntegrator(Integrator integrator, Scalar timeStep, int trajectorySize) {
-    if (Sign.isNegativeOrZero(timeStep))
-      throw TensorRuntimeException.of(timeStep);
     this.integrator = integrator;
-    this.timeStep = timeStep;
+    this.timeStep = Sign.requirePositive(timeStep);
     this.trajectorySize = trajectorySize;
   }
 

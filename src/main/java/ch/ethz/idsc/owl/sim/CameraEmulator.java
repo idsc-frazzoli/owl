@@ -21,7 +21,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-// TODO frame rate should be handled outside this class!
+// TODO several issues: 
+// 1) frame rate should be handled outside this class!
+// 2) localPoints = Tensors.empty(); // make unmodifiable
+// 3) exposure should not happen inside drawing
 public class CameraEmulator implements RenderInterface {
   private static final Color CLEAR_COLOR = new Color(192, 255, 192);
   // ---
@@ -88,7 +91,7 @@ public class CameraEmulator implements RenderInterface {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    BufferedImage bufferedImage = exposure(supplier.get()); // TODO exposure should not happen inside drawing
+    BufferedImage bufferedImage = exposure(supplier.get());
     int SCREEN = resolution * 2;
     int OFFSET = 20;
     graphics.setColor(Color.GREEN);

@@ -37,7 +37,6 @@ import ch.ethz.idsc.tensor.alg.Array;
 /** (x,y,theta) */
 enum Se2Demo {
   ;
-  // TODO this demo has 'misses', why !?
   public static void main(String[] args) {
     Tensor eta = Tensors.of(RealScalar.of(6), RealScalar.of(6), Degree.of(15).reciprocal());
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //

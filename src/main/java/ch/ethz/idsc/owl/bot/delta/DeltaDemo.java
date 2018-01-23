@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.delta;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.r2.ImageGradient;
+import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -46,9 +46,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
     Tensor range = Tensors.vector(9, 6.5);
-    ImageGradient imageGradient = ImageGradient.linear(ResourceData.of("/io/delta_uxy.png"), range, amp);
+    ImageGradientInterpolation imageGradientInterpolation = //
+        ImageGradientInterpolation.linear(ResourceData.of("/io/delta_uxy.png"), range, amp);
     Scalar maxInput = RealScalar.ONE;
-    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradient);
+    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, maxInput).getFlows(25);
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     Region<Tensor> region = new ImageRegion(obstacleImage, range, true);
