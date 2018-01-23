@@ -7,9 +7,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /* package */ class NdBounds {
-  // TODO v048
-  private static final Scalar HALF = RationalScalar.of(1, 2);
-  // ---
   public final Tensor lBounds;
   public final Tensor uBounds;
 
@@ -19,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
   }
 
   public Scalar median(int index) {
-    return lBounds.Get(index).add(uBounds.Get(index)).multiply(HALF);
+    return lBounds.Get(index).add(uBounds.Get(index)).multiply(RationalScalar.HALF);
   }
 
   public Clip clip(int index) {

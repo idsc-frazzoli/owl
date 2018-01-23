@@ -12,12 +12,10 @@ import ch.ethz.idsc.tensor.Tensor;
 public enum MidpointIntegrator implements Integrator {
   INSTANCE;
   // ---
-  private static final Scalar HALF = RationalScalar.of(1, 2);
-
   @Override // from Integrator
   public Tensor step(Flow flow, Tensor x, Scalar h) {
     Tensor k1 = flow.at(x).multiply(h);
-    Tensor k2 = flow.at(x.add(k1.multiply(HALF))).multiply(h);
+    Tensor k2 = flow.at(x.add(k1.multiply(RationalScalar.HALF))).multiply(h);
     return x.add(k2);
   }
 }

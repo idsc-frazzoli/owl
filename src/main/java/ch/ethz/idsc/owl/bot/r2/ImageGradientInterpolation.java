@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
 
@@ -21,7 +22,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** rotated gradient of potential function */
-public class ImageGradientInterpolation implements Interpolation {
+public class ImageGradientInterpolation implements Interpolation, Serializable {
   /** @param image
    * @param range
    * @param amp
