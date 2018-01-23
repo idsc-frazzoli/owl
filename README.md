@@ -11,8 +11,8 @@ We follow best practices and coding standards to protect from avoidable errors.
 
 List of algorithms:
 
-* GLC
-* RRT*
+* [GLC](src/main/java/ch/ethz/idsc/owl/glc/std/StandardTrajectoryPlanner.java)
+* [RRT*](src/main/java/ch/ethz/idsc/owl/rrts/core/DefaultRrts.java)
 
 The references are
 
@@ -113,4 +113,4 @@ The library is used in the projects:
 * `owly3d`
 * `matsim`
 
-The repository has over `290` unit tests.
+The repository has over `300` unit tests.

@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /* package */ class NdBounds {
+  // TODO v048
   private static final Scalar HALF = RationalScalar.of(1, 2);
   // ---
   public final Tensor lBounds;
