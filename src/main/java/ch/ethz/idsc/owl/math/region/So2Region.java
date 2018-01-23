@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.math.region;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -20,10 +19,8 @@ public class So2Region extends ImplicitFunctionRegion {
   }
 
   public So2Region(Scalar center, Scalar radius, Scalar half_circumference) {
-    if (Sign.isNegative(radius))
-      throw TensorRuntimeException.of(radius);
     this.center = center;
-    this.radius = radius;
+    this.radius = Sign.requirePositiveOrZero(radius);
     mod = Mod.function(half_circumference.multiply(TWO), half_circumference.negate());
   }
 

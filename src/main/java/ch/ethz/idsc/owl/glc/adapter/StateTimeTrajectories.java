@@ -7,7 +7,6 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** utility functions that operate on List<StateTime> */
@@ -24,9 +23,7 @@ public enum StateTimeTrajectories {
 
   private static Scalar timeIncrement(StateTime stateTime, List<StateTime> trajectory) {
     Scalar dt = Lists.getLast(trajectory).time().subtract(stateTime.time());
-    if (Sign.isNegative(dt))
-      throw TensorRuntimeException.of(dt);
-    return dt;
+    return Sign.requirePositiveOrZero(dt);
   }
 
   public static void print(List<StateTime> list) {
