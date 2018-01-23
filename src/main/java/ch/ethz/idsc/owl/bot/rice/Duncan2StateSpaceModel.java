@@ -7,7 +7,6 @@ import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -20,9 +19,7 @@ public class Duncan2StateSpaceModel implements StateSpaceModel, Serializable {
 
   /** @param lambda non-negative friction coefficient typically with unit [s^-1] */
   public Duncan2StateSpaceModel(Scalar lambda) {
-    if (Sign.isNegative(lambda))
-      throw TensorRuntimeException.of(lambda);
-    this.lambda = lambda;
+    this.lambda = Sign.requirePositiveOrZero(lambda);
   }
 
   @Override // from StateSpaceModel
