@@ -45,7 +45,7 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.2, 2), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl(episodeIntegrator);
+    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
     AbstractEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(0.6));
     owlyAnimationFrame.set(abstractEntity);
     // ---

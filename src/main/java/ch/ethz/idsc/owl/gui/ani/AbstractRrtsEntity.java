@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class AbstractRrtsEntity extends AbstractEntity {
   public AbstractRrtsEntity(EpisodeIntegrator episodeIntegrator) {
-    super(null); // FIXME
+    super(null, null); // FIXME
     // super(episodeIntegrator);
   }
 

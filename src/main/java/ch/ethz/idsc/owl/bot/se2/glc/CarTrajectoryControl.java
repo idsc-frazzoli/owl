@@ -4,14 +4,11 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
-import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;
-import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -34,10 +31,8 @@ public class CarTrajectoryControl extends AbstractTrajectoryControl {
   private final Scalar LOOKAHEAD = RealScalar.of(0.5);
   private final Scalar SPEED = RealScalar.of(1.0);
 
-  public CarTrajectoryControl(StateTime stateTime) {
-    super( //
-        new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime), //
-        StateTime::state);
+  public CarTrajectoryControl() {
+    super(StateTime::state);
   }
 
   @Override
@@ -54,9 +49,9 @@ public class CarTrajectoryControl extends AbstractTrajectoryControl {
   private PurePursuit purePursuit = null;
 
   @Override // from AbstractEntity
-  protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
+  protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
     // TODO controller is not able to execute backwards motion
-    Tensor state = getStateTimeNow().state();
+    Tensor state = tail.state();
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //

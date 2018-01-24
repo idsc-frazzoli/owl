@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.rn.glc;
 
 import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;
-import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,8 +12,8 @@ public class R2xTTrajectoryControl extends AbstractTrajectoryControl {
   // TODO not sure what is a good approach here:
   private static final Tensor WEIGHT = Tensors.vector(1.0, 1.0, 0.2);
 
-  public R2xTTrajectoryControl(EpisodeIntegrator episodeIntegrator) {
-    super(episodeIntegrator, StateTime::joined);
+  public R2xTTrajectoryControl() {
+    super(StateTime::joined);
   }
 
   @Override

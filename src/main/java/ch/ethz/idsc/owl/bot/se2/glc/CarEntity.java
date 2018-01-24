@@ -21,7 +21,6 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -59,10 +58,7 @@ public class CarEntity extends Se2Entity {
   static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
 
   public static CarEntity createDefault(StateTime stateTime) {
-    TrajectoryControl trajectoryControl = //
-        new CarTrajectoryControl(stateTime);
-    // new new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
-    return new CarEntity(trajectoryControl, PARTITIONSCALE, CARFLOWS, SHAPE);
+    return new CarEntity(stateTime, PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
   // ---
@@ -76,8 +72,8 @@ public class CarEntity extends Se2Entity {
    * 2) to prevent cutting corners
    * 
    * @param stateTime initial position */
-  public CarEntity(TrajectoryControl trajectoryControl, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
-    super(trajectoryControl);
+  public CarEntity(StateTime stateTime, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
+    super(stateTime, new CarTrajectoryControl());
     // new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
     controls = carFlows.getFlows(9);
     final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
@@ -123,28 +119,27 @@ public class CarEntity extends Se2Entity {
 
   private PurePursuit purePursuit = null;
 
-//  @Override // from AbstractEntity
-//  protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
-//    // TODO controller is not able to execute backwards motion
-//    Tensor state = getStateTimeNow().state();
-//    TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
-//    Tensor beacons = Tensor.of(trailAhead.stream() //
-//        .map(TrajectorySample::stateTime) //
-//        .map(StateTime::state) //
-//        .map(tensor -> tensor.extract(0, 2)) //
-//        .map(tensorUnaryOperator));
-//    PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, LOOKAHEAD);
-//    if (_purePursuit.ratio().isPresent()) {
-//      Scalar ratio = _purePursuit.ratio().get();
-//      if (CLIP_TURNING_RATE.isInside(ratio)) {
-//        purePursuit = _purePursuit;
-//        return Optional.of(CarFlows.singleton(SPEED, ratio).getU());
-//      }
-//    }
-//    purePursuit = null;
-//    return Optional.empty();
-//  }
-
+  // @Override // from AbstractEntity
+  // protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
+  // // TODO controller is not able to execute backwards motion
+  // Tensor state = getStateTimeNow().state();
+  // TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
+  // Tensor beacons = Tensor.of(trailAhead.stream() //
+  // .map(TrajectorySample::stateTime) //
+  // .map(StateTime::state) //
+  // .map(tensor -> tensor.extract(0, 2)) //
+  // .map(tensorUnaryOperator));
+  // PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, LOOKAHEAD);
+  // if (_purePursuit.ratio().isPresent()) {
+  // Scalar ratio = _purePursuit.ratio().get();
+  // if (CLIP_TURNING_RATE.isInside(ratio)) {
+  // purePursuit = _purePursuit;
+  // return Optional.of(CarFlows.singleton(SPEED, ratio).getU());
+  // }
+  // }
+  // purePursuit = null;
+  // return Optional.empty();
+  // }
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);

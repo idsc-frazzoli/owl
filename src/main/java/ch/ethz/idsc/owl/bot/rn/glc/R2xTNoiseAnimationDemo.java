@@ -24,8 +24,8 @@ public class R2xTNoiseAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(0.2, 0.2), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl(episodeIntegrator);
-    owlyAnimationFrame.set(new R2xTEntity(trajectoryControl, RealScalar.of(0.4)));
+    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
+    owlyAnimationFrame.set(new R2xTEntity(trajectoryControl, RealScalar.of(0.4))); // FIXME
     Region<StateTime> region = new R2xTNoiseStateTimeRegion(RealScalar.of(0.5));
     owlyAnimationFrame.setObstacleQuery(new SimpleTrajectoryRegionQuery(region));
     return owlyAnimationFrame;

@@ -26,8 +26,8 @@ public class R2NoiseAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(0.2, 0.2), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl(episodeIntegrator);
-    R2Entity r2Entity = new R2Entity(trajectoryControl);
+    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
+    R2Entity r2Entity = new R2Entity(episodeIntegrator, trajectoryControl);
     owlyAnimationFrame.set(r2Entity);
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.2));
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);

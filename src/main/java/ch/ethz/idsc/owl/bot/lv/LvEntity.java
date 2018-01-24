@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
@@ -26,8 +27,8 @@ import ch.ethz.idsc.tensor.Tensors;
   private final Collection<Flow> controls;
 
   /** @param state initial position of entity */
-  public LvEntity(TrajectoryControl trajectoryControl, Collection<Flow> controls) {
-    super(trajectoryControl);
+  public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
+    super(episodeIntegrator, trajectoryControl);
     this.controls = controls;
   }
 

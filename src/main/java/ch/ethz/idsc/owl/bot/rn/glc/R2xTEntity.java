@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
   private final Scalar delay;
 
   public R2xTEntity(TrajectoryControl trajectoryControl, Scalar delay) {
-    super(trajectoryControl);
+    super(null, trajectoryControl); // FIXME
     // represent_entity = StateTime::joined;
     this.delay = delay;
   }

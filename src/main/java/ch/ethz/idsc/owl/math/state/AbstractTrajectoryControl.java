@@ -19,14 +19,11 @@ import ch.ethz.idsc.tensor.red.ArgMin;
  */
 public abstract class AbstractTrajectoryControl implements TrajectoryControl {
   // TODO long term, don't require ep int here
-  private final EpisodeIntegrator episodeIntegrator;
   private final StateTimeTensorFunction represent_entity;
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
 
-  public AbstractTrajectoryControl( //
-      EpisodeIntegrator episodeIntegrator, StateTimeTensorFunction represent_entity) {
-    this.episodeIntegrator = episodeIntegrator;
+  public AbstractTrajectoryControl(StateTimeTensorFunction represent_entity) {
     this.represent_entity = represent_entity;
   }
 
@@ -36,17 +33,18 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
     trajectory_skip = 0;
   }
 
-  public final synchronized Tensor control(Scalar now) {
+  @Override
+  public final synchronized Tensor control(StateTime tail, Scalar now) {
     // implementation does not require that current position is perfectly located on trajectory
     Tensor u = fallbackControl(); // default control
     if (Objects.nonNull(trajectory)) {
-      final int argmin = indexOfPassedTrajectorySample(trajectory.subList(trajectory_skip, trajectory.size()));
+      final int argmin = indexOfPassedTrajectorySample(tail, trajectory.subList(trajectory_skip, trajectory.size()));
       GlobalAssert.that(argmin != ArgMin.NOINDEX);
       int index = trajectory_skip + argmin;
       trajectory_skip = index;
       ++index; // <- next node has flow control
       if (index < trajectory.size()) {
-        Optional<Tensor> optional = customControl(trajectory.subList(index, trajectory.size()));
+        Optional<Tensor> optional = customControl(tail, trajectory.subList(index, trajectory.size()));
         if (optional.isPresent())
           u = optional.get();
         else {
@@ -60,13 +58,6 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
     return u;
   }
 
-  // TODO remove synchronized
-  @Override
-  public final synchronized void integrate(Scalar now) {
-    Tensor u = control(now);
-    episodeIntegrator.move(u, now);
-  }
-
   protected abstract Tensor fallbackControl();
 
   /** the return index does not refer to node in the trajectory closest to the entity
@@ -75,8 +66,8 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
    * 
    * @param trajectory
    * @return index of node that has been traversed most recently by entity */
-  public final int indexOfPassedTrajectorySample(List<TrajectorySample> trajectory) {
-    final Tensor y = represent_entity.apply(getStateTimeNow());
+  public final int indexOfPassedTrajectorySample(StateTime tail, List<TrajectorySample> trajectory) {
+    final Tensor y = represent_entity.apply(tail);
     Tensor dist = Tensor.of(trajectory.stream() //
         .map(TrajectorySample::stateTime) //
         .map(represent_entity) //
@@ -94,20 +85,15 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
    * @return trajectory until delay[s] in the future of entity,
    * or current position if entity does not have a trajectory */
   @Override
-  public final synchronized List<TrajectorySample> getFutureTrajectoryUntil(Scalar delay) {
+  public final synchronized List<TrajectorySample> getFutureTrajectoryUntil(StateTime tail, Scalar delay) {
     if (Objects.isNull(trajectory)) // agent does not have a trajectory
-      return Collections.singletonList(TrajectorySample.head(getStateTimeNow()));
-    int index = trajectory_skip + indexOfPassedTrajectorySample(trajectory.subList(trajectory_skip, trajectory.size()));
+      return Collections.singletonList(TrajectorySample.head(tail));
+    int index = trajectory_skip + indexOfPassedTrajectorySample(tail, trajectory.subList(trajectory_skip, trajectory.size()));
     // <- no update of trajectory_skip here
     Scalar threshold = trajectory.get(index).stateTime().time().add(delay);
     return trajectory.stream().skip(index) //
         .filter(trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), threshold)) //
         .collect(Collectors.toList());
-  }
-
-  @Override
-  public final StateTime getStateTimeNow() {
-    return episodeIntegrator.tail();
   }
 
   /** @param x from trajectory
@@ -122,7 +108,7 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
 
   /** @param trailAhead
    * @return */
-  protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
+  protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
     return Optional.empty();
   }
 }

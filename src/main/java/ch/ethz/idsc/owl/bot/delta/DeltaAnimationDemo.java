@@ -37,8 +37,8 @@ public class DeltaAnimationDemo implements DemoInterface {
         new DeltaStateSpaceModel(imageGradientInterpolation), //
         EulerIntegrator.INSTANCE, //
         stateTime);
-    AbstractTrajectoryControl abstractTrajectoryControl = new DeltaTrajectoryControl(episodeIntegrator);
-    owlyAnimationFrame.set(new DeltaEntity(abstractTrajectoryControl, imageGradientInterpolation));
+    AbstractTrajectoryControl abstractTrajectoryControl = new DeltaTrajectoryControl();
+    owlyAnimationFrame.set(new DeltaEntity(episodeIntegrator, abstractTrajectoryControl, imageGradientInterpolation));
     owlyAnimationFrame.setObstacleQuery(obstacleQuery);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));

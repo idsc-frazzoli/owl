@@ -31,8 +31,8 @@ public class R2xTImageAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.5, 2), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl(episodeIntegrator);
-    AbstractEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(1.5));
+    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
+    AbstractEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(1.5)); // FIXME
     owlyAnimationFrame.set(abstractEntity);
     // ---
     RigidFamily rigidFamily = Se2Family.rotationAround( //

@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -36,8 +37,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
   /***************************************************/
   private final ImageGradientInterpolation imageGradientInterpolation;
 
-  public DeltaEntity(TrajectoryControl trajectoryControl, ImageGradientInterpolation imageGradientInterpolation) {
-    super(trajectoryControl);
+  public DeltaEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, ImageGradientInterpolation imageGradientInterpolation) {
+    super(episodeIntegrator, trajectoryControl);
     this.imageGradientInterpolation = imageGradientInterpolation;
   }
 

@@ -8,8 +8,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Last;
 
 public abstract class TemporalTrajectoryControl extends AbstractTrajectoryControl {
-  public TemporalTrajectoryControl(EpisodeIntegrator episodeIntegrator) {
-    super(episodeIntegrator, StateTime::joined);
+  public TemporalTrajectoryControl() {
+    super(StateTime::joined);
   }
 
   @Override
