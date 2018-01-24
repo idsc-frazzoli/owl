@@ -7,7 +7,12 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -27,7 +32,13 @@ public class DeltaAnimationDemo implements DemoInterface {
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
     TrajectoryRegionQuery obstacleQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
-    owlyAnimationFrame.set(new DeltaEntity(imageGradientInterpolation, Tensors.vector(10, 3.5)));
+    StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
+        new DeltaStateSpaceModel(imageGradientInterpolation), //
+        EulerIntegrator.INSTANCE, //
+        stateTime);
+    AbstractTrajectoryControl abstractTrajectoryControl = new DeltaTrajectoryControl(episodeIntegrator);
+    owlyAnimationFrame.set(new DeltaEntity(abstractTrajectoryControl, imageGradientInterpolation));
     owlyAnimationFrame.setObstacleQuery(obstacleQuery);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));

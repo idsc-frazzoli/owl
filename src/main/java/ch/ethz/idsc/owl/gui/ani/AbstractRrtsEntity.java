@@ -9,7 +9,8 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class AbstractRrtsEntity extends AbstractEntity {
   public AbstractRrtsEntity(EpisodeIntegrator episodeIntegrator) {
-    super(episodeIntegrator);
+    super(null); // FIXME
+    // super(episodeIntegrator);
   }
 
   public abstract void startPlanner( //

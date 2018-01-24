@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
     RandomSampleInterface sampler = new BoxRandomSample(Tensors.vector(0, 0), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream().filter(p -> !region.isMember(p)));
     vectorFieldRender.uv_pairs = //
-        VectorFields.of(stateSpaceModel, points, DeltaEntity.FALLBACK_CONTROL, factor);
+        VectorFields.of(stateSpaceModel, points, DeltaTrajectoryControl.FALLBACK_CONTROL, factor);
     return vectorFieldRender;
   }
 }

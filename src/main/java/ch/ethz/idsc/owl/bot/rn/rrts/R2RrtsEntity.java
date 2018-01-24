@@ -25,7 +25,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 // TODO the redundancy in R2****Entity shows that re-factoring is needed!
 public class R2RrtsEntity extends AbstractRrtsEntity {
@@ -49,16 +48,15 @@ public class R2RrtsEntity extends AbstractRrtsEntity {
     return PlannerType.RRTS;
   }
 
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y);
-  }
-
-  @Override
-  protected Tensor fallbackControl() {
-    return FALLBACK_CONTROL;
-  }
-
+  // @Override
+  // protected Scalar distance(Tensor x, Tensor y) {
+  // return Norm2Squared.between(x, y);
+  // }
+  //
+  // @Override
+  // protected Tensor fallbackControl() {
+  // return FALLBACK_CONTROL;
+  // }
   @Override
   public Scalar delayHint() {
     return DELAY_HINT;

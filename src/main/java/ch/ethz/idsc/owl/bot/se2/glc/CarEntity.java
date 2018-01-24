@@ -8,10 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;
-import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -25,8 +23,8 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
-import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -66,7 +64,10 @@ public class CarEntity extends Se2Entity {
   static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
 
   public static CarEntity createDefault(StateTime stateTime) {
-    return new CarEntity(stateTime, PARTITIONSCALE, CARFLOWS, SHAPE);
+    TrajectoryControl trajectoryControl = //
+        new CarTrajectoryControl(stateTime);
+    // new new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
+    return new CarEntity(trajectoryControl, PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
   // ---
@@ -80,8 +81,9 @@ public class CarEntity extends Se2Entity {
    * 2) to prevent cutting corners
    * 
    * @param stateTime initial position */
-  public CarEntity(StateTime stateTime, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
-    super(new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
+  public CarEntity(TrajectoryControl trajectoryControl, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
+    super(trajectoryControl);
+    // new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
     controls = carFlows.getFlows(9);
     final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
     final Scalar goalRadius_theta = SQRT2.divide(PARTITIONSCALE.Get(2));
@@ -91,11 +93,10 @@ public class CarEntity extends Se2Entity {
     this.shape = shape.copy().unmodifiable();
   }
 
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    return SE2WRAP.distance(x, y);
-  }
-
+  // @Override
+  // protected Scalar distance(Tensor x, Tensor y) {
+  // return SE2WRAP.distance(x, y);
+  // }
   @Override
   public Scalar delayHint() {
     return RealScalar.of(1.5);

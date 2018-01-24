@@ -14,9 +14,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
-import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
-import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -25,7 +23,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.lie.AngleVector;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class Rice2dEntity extends AbstractCircularEntity {
   private static final Tensor SHAPE = Tensors.matrixDouble( //
@@ -37,21 +34,21 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   /** @param state initial position of entity */
   public Rice2dEntity(Scalar mu, Tensor state, Collection<Flow> controls) {
-    super(new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, //
-        new StateTime(state, RealScalar.ZERO)));
+    super(null); // FIXME
+    // super(new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, //
+    // new StateTime(state, RealScalar.ZERO)));
     this.controls = controls;
   }
 
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y);
-  }
-
-  @Override
-  protected Tensor fallbackControl() {
-    return Tensors.vector(0, 0).unmodifiable();
-  }
-
+  // @Override
+  // protected Scalar distance(Tensor x, Tensor y) {
+  // return Norm2Squared.between(x, y);
+  // }
+  //
+  // @Override
+  // protected Tensor fallbackControl() {
+  // return Tensors.vector(0, 0).unmodifiable();
+  // }
   @Override
   public final Scalar delayHint() {
     return delayHint;

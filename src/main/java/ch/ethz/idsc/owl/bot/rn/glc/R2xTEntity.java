@@ -6,27 +6,18 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class R2xTEntity extends R2Entity {
   private final Scalar delay;
 
-  public R2xTEntity(Tensor state, Scalar delay) {
-    super(state);
-    represent_entity = StateTime::joined;
+  public R2xTEntity(TrajectoryControl trajectoryControl, Scalar delay) {
+    super(trajectoryControl);
+    // represent_entity = StateTime::joined;
     this.delay = delay;
-  }
-
-  // TODO not sure what is a good approach here:
-  private static final Tensor WEIGHT = Tensors.vector(1.0, 1.0, 0.2);
-
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    Tensor d = x.subtract(y);
-    return d.pmul(WEIGHT).dot(d).Get();
   }
 
   @Override
