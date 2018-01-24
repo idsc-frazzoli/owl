@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.rn.RnNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
@@ -10,6 +11,7 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.math.state.TrajectorySampleMap;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -37,9 +39,13 @@ public class RnFlowTrajectoryTest extends TestCase {
     // ---
     List<RrtsNode> sequence = Arrays.asList(root, n1);
     Scalar t0 = RealScalar.ZERO;
-    @SuppressWarnings("unused")
-    List<TrajectorySample> traj = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
-    // Trajectories.print(traj);
+    List<TrajectorySample> trajectory = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
+    TrajectorySampleMap trajectorySampleMap = TrajectorySampleMap.create(trajectory);
+    assertFalse(trajectorySampleMap.getControl(RealScalar.of(-0.1)).isPresent());
+    assertTrue(trajectorySampleMap.getControl(RealScalar.of(0.0)).isPresent());
+    assertEquals(trajectorySampleMap.getControl(RealScalar.of(0.0)).get(), Tensors.vector(1, 0));
+    assertTrue(trajectorySampleMap.isValid(RealScalar.ZERO));
+    assertFalse(trajectorySampleMap.isValid(RealScalar.of(10)));
   }
 
   public void testDual() {
@@ -56,9 +62,15 @@ public class RnFlowTrajectoryTest extends TestCase {
     List<RrtsNode> sequence = Nodes.listFromRoot(n2);
     assertEquals(sequence, Arrays.asList(root, n1, n2));
     Scalar t0 = RealScalar.ZERO;
-    @SuppressWarnings("unused")
-    List<TrajectorySample> traj = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
-    // Trajectories.print(traj);
+    List<TrajectorySample> trajectory = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
+    TrajectorySampleMap trajectorySampleMap = TrajectorySampleMap.create(trajectory);
+    assertTrue(trajectorySampleMap.isValid(RealScalar.ZERO));
+    assertFalse(trajectorySampleMap.isValid(RealScalar.of(10)));
+    {
+      Optional<Tensor> optional = trajectorySampleMap.getControl(RealScalar.of(1.5));
+      assertTrue(optional.isPresent());
+    }
+    // Trajectories.print(trajectory);
   }
 
   public void testBetween() {

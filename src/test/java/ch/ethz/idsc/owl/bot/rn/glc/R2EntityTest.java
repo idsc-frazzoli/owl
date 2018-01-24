@@ -4,15 +4,22 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
+import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import junit.framework.TestCase;
 
 public class R2EntityTest extends TestCase {
@@ -64,9 +71,14 @@ public class R2EntityTest extends TestCase {
 
   public void testTail() {
     Tensor state = Tensors.vector(0.7, 0);
-    // AbstractEntity abstractEntity = new R2Entity(state);
-    // StateTime st = abstractEntity.getStateTimeNow();
-    // assertEquals(st.state(), state);
-    // assertEquals(st.time(), RealScalar.ZERO); // <- specific value == 0 is not strictly required
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
+        SingleIntegratorStateSpaceModel.INSTANCE, //
+        EulerIntegrator.INSTANCE, //
+        new StateTime(state, RealScalar.ZERO));
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(2));
+    AbstractEntity abstractEntity = new R2Entity(episodeIntegrator, trajectoryControl);
+    StateTime st = abstractEntity.getStateTimeNow();
+    assertEquals(st.state(), state);
+    assertEquals(st.time(), RealScalar.ZERO); // <- specific value == 0 is not strictly required
   }
 }

@@ -23,21 +23,21 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import junit.framework.TestCase;
 
-// TODO update
 public class LvAnimationTest extends TestCase {
   public void testSimple() {
+    Tensor fallback_u = Array.zeros(1);
     StateSpaceModel stateSpaceModel = LvStateSpaceModel.of(1, 2);
     Collection<Flow> controls = LvControls.create(stateSpaceModel, 2);
-    Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
-    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, INTEGRATOR, //
+    Integrator integrator = RungeKutta45Integrator.INSTANCE;
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, integrator, //
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(1));
-    // new LvEntity(stateSpaceModel, Tensors.vector(2, 0.3), controls);
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(fallback_u);
+    new LvEntity(episodeIntegrator, trajectoryControl, controls);
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
     RandomSampleInterface sampler = new BoxRandomSample(Tensors.vector(0, 0), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream());
     vectorFieldRender.uv_pairs = //
-        VectorFields.of(stateSpaceModel, points, Array.zeros(1), RealScalar.of(0.04));
+        VectorFields.of(stateSpaceModel, points, fallback_u, RealScalar.of(0.04));
   }
 }

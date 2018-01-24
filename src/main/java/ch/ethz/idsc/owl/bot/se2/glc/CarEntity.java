@@ -21,6 +21,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -58,7 +59,7 @@ public class CarEntity extends Se2Entity {
   static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
 
   public static CarEntity createDefault(StateTime stateTime) {
-    return new CarEntity(stateTime, PARTITIONSCALE, CARFLOWS, SHAPE);
+    return new CarEntity(stateTime, new CarTrajectoryControl(), PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
   // ---
@@ -72,8 +73,8 @@ public class CarEntity extends Se2Entity {
    * 2) to prevent cutting corners
    * 
    * @param stateTime initial position */
-  public CarEntity(StateTime stateTime, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
-    super(stateTime, new CarTrajectoryControl());
+  public CarEntity(StateTime stateTime, TrajectoryControl trajectoryControl, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
+    super(stateTime, trajectoryControl);
     // new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
     controls = carFlows.getFlows(9);
     final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
