@@ -1,78 +1,33 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.ani;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.math.state.EntityControl;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** entity executes flows along a given trajectory */
+/** universal entity subject to
+ * 1) trajectory based control, {@link TrajectoryEntity}
+ * 2) manual control e.g. via joystick
+ * 3) passive motion */
 public abstract class AbstractEntity implements RenderInterface, AnimationInterface {
   private final EpisodeIntegrator episodeIntegrator;
-  private final TrajectoryControl trajectoryControl;
-  private List<TrajectorySample> trajectory = null;
+  private final EntityControl entityControl;
 
-  public AbstractEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
+  protected AbstractEntity(EpisodeIntegrator episodeIntegrator, EntityControl entityControl) {
     this.episodeIntegrator = episodeIntegrator;
-    this.trajectoryControl = trajectoryControl;
-  }
-
-  public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
-    this.trajectory = trajectory;
-    trajectoryControl.setTrajectory(trajectory);
+    this.entityControl = entityControl;
   }
 
   @Override
   public final synchronized void integrate(Scalar now) {
-    Tensor u = trajectoryControl.control(episodeIntegrator.tail(), now);
+    Tensor u = entityControl.control(getStateTimeNow(), now);
     episodeIntegrator.move(u, now);
   }
 
-  /** @param trailAhead
-   * @return */
-  protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
-    return Optional.empty();
-  }
-
-  // /** @param delay
-  // * @return trajectory until delay[s] in the future of entity,
-  // * or current position if entity does not have a trajectory */
-  public final synchronized List<TrajectorySample> getFutureTrajectoryUntil(Scalar delay) {
-    return trajectoryControl.getFutureTrajectoryUntil(getStateTimeNow(), delay);
-  }
-
-  /** @param delay
-   * @return estimated location of agent after given delay */
-  public final Tensor getEstimatedLocationAt(Scalar delay) {
-    if (Objects.isNull(trajectory))
-      return getStateTimeNow().state();
-    List<TrajectorySample> relevant = trajectoryControl.getFutureTrajectoryUntil(getStateTimeNow(), delay);
-    return Lists.getLast(relevant).stateTime().state();
-  }
-
-  public StateTime getStateTimeNow() {
+  public final StateTime getStateTimeNow() {
     return episodeIntegrator.tail();
   }
-
-  public abstract PlannerType getPlannerType();
-
-  // /** @return control vector to feed the episodeIntegrator in case no planned trajectory is available */
-  // protected abstract Tensor fallbackControl();
-  /** @return delay between now and the future point in time from when to divert to a new trajectory */
-  public abstract Scalar delayHint();
-
-  /** @param obstacleQuery
-   * @param goal for instance {px, py, angle}
-   * @return */
-  public abstract TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal);
 }

@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -46,7 +46,7 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.2, 2), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new R2TrajectoryControl();
-    AbstractEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(0.6));
+    TrajectoryEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(0.6));
     owlyAnimationFrame.set(abstractEntity);
     // ---
     BijectionFamily shiftx = new SimpleTranslationFamily( //
