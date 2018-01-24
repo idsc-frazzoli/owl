@@ -13,9 +13,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.ArgMin;
 
-/**
- * 
- */
+/** trajectory control for a time-invariant state-space */
 public abstract class StateTrajectoryControl extends AbstractTrajectoryControl {
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
@@ -54,7 +52,7 @@ public abstract class StateTrajectoryControl extends AbstractTrajectoryControl {
   @Override
   public final synchronized List<TrajectorySample> getFutureTrajectoryUntil(StateTime tail, Scalar delay) {
     if (Objects.isNull(trajectory)) // agent does not have a trajectory
-      return Collections.singletonList(TrajectorySample.head(tail));
+      return Collections.singletonList(TrajectorySample.head(tail)); // delay is not added
     int index = trajectory_skip + indexOfPassedTrajectorySample(tail, trajectory.subList(trajectory_skip, trajectory.size()));
     // <- no update of trajectory_skip here
     Scalar threshold = trajectory.get(index).stateTime().time().add(delay);
@@ -70,6 +68,8 @@ public abstract class StateTrajectoryControl extends AbstractTrajectoryControl {
    * @return */
   protected abstract Scalar distance(Tensor x, Tensor y);
 
+  /** @param trajectory
+   * @return */
   protected List<TrajectorySample> resetAction(List<TrajectorySample> trajectory) {
     System.err.println("out of trajectory");
     return null;

@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class TemporalTrajectoryControl extends AbstractTrajectoryControl {
@@ -18,21 +20,29 @@ public class TemporalTrajectoryControl extends AbstractTrajectoryControl {
   }
 
   @Override
-  public final synchronized void setTrajectory(List<TrajectorySample> trajectory) {
+  public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
-    trajectorySampleMap = new TrajectorySampleMap(trajectory);
+    trajectorySampleMap = Objects.isNull(trajectory) ? null : TrajectorySampleMap.create(trajectory);
   }
 
   @Override
-  protected final synchronized Optional<Tensor> protected_control(StateTime tail, Scalar now) {
-    if (Objects.nonNull(trajectory))
-      return trajectorySampleMap.getControl(now);
+  protected synchronized Optional<Tensor> protected_control(StateTime tail, Scalar now) {
+    if (Objects.nonNull(trajectory)) {
+      if (trajectorySampleMap.isValid(now))
+        return trajectorySampleMap.getControl(now);
+      System.err.println("out of trajectory");
+      setTrajectory(null);
+    }
     return Optional.empty();
   }
 
   @Override
   public List<TrajectorySample> getFutureTrajectoryUntil(StateTime tail, Scalar delay) {
-    // TODO
-    return Collections.singletonList(TrajectorySample.head(tail));
+    Scalar tail_delay = tail.time().add(delay);
+    if (Objects.isNull(trajectory))
+      return Collections.singletonList(TrajectorySample.head(new StateTime(tail.state(), tail_delay)));
+    return trajectory.stream() //
+        .filter(trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), tail_delay)) //
+        .collect(Collectors.toList());
   }
 }
