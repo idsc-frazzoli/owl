@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /* package */ class DeltaxTEntity extends DeltaEntity {
   public DeltaxTEntity(TrajectoryControl trajectoryControl, ImageGradientInterpolation imageGradientInterpolation) {
     // super(imageGradientInterpolation, state);
-    super(trajectoryControl, imageGradientInterpolation); // FIXME
+    super(null, trajectoryControl, imageGradientInterpolation); // FIXME
   }
 
   @Override

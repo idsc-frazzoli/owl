@@ -31,8 +31,8 @@ public class LvAnimationDemo implements DemoInterface {
     Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, INTEGRATOR, //
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
-    LvTrajectoryControl lvTrajectoryControl = new LvTrajectoryControl(episodeIntegrator);
-    owlyAnimationFrame.set(new LvEntity(lvTrajectoryControl, controls));
+    LvTrajectoryControl lvTrajectoryControl = new LvTrajectoryControl();
+    owlyAnimationFrame.set(new LvEntity(episodeIntegrator, lvTrajectoryControl, controls));
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
     // ---
     Tensor range = Tensors.vector(6, 5);

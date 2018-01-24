@@ -28,8 +28,8 @@ public class PsuAnimationDemo implements DemoInterface {
         PsuStateSpaceModel.INSTANCE, //
         INTEGRATOR, //
         new StateTime(Tensors.vector(0, 0), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new PsuTrajectoryControl(episodeIntegrator);
-    owlyAnimationFrame.set(new PsuEntity(trajectoryControl));
+    TrajectoryControl trajectoryControl = new PsuTrajectoryControl();
+    owlyAnimationFrame.set(new PsuEntity(episodeIntegrator, trajectoryControl));
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
     // ---
     Tensor range = Tensors.vector(Math.PI, 3);

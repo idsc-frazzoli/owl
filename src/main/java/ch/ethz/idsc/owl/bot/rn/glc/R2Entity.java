@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -41,8 +42,8 @@ import ch.ethz.idsc.tensor.red.Norm;
   protected final R2Flows r2Flows = new R2Flows(RealScalar.ONE);
 
   /** @param state initial position of entity */
-  public R2Entity(TrajectoryControl trajectoryControl) {
-    super(trajectoryControl);
+  public R2Entity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
+    super(episodeIntegrator, trajectoryControl);
   }
 
   @Override

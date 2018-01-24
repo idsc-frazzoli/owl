@@ -8,6 +8,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -17,10 +18,12 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** entity executes flows along a given trajectory */
 public abstract class AbstractEntity implements RenderInterface, AnimationInterface {
+  private final EpisodeIntegrator episodeIntegrator;
   private final TrajectoryControl trajectoryControl;
   private List<TrajectorySample> trajectory = null;
 
-  public AbstractEntity(TrajectoryControl trajectoryControl) {
+  public AbstractEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
+    this.episodeIntegrator = episodeIntegrator;
     this.trajectoryControl = trajectoryControl;
   }
 
@@ -31,7 +34,8 @@ public abstract class AbstractEntity implements RenderInterface, AnimationInterf
 
   @Override
   public final synchronized void integrate(Scalar now) {
-    trajectoryControl.integrate(now);
+    Tensor u = trajectoryControl.control(episodeIntegrator.tail(), now);
+    episodeIntegrator.move(u, now);
   }
 
   /** @param trailAhead
@@ -44,7 +48,7 @@ public abstract class AbstractEntity implements RenderInterface, AnimationInterf
   // * @return trajectory until delay[s] in the future of entity,
   // * or current position if entity does not have a trajectory */
   public final synchronized List<TrajectorySample> getFutureTrajectoryUntil(Scalar delay) {
-    return trajectoryControl.getFutureTrajectoryUntil(delay);
+    return trajectoryControl.getFutureTrajectoryUntil(getStateTimeNow(), delay);
   }
 
   /** @param delay
@@ -52,12 +56,12 @@ public abstract class AbstractEntity implements RenderInterface, AnimationInterf
   public final Tensor getEstimatedLocationAt(Scalar delay) {
     if (Objects.isNull(trajectory))
       return getStateTimeNow().state();
-    List<TrajectorySample> relevant = trajectoryControl.getFutureTrajectoryUntil(delay);
+    List<TrajectorySample> relevant = trajectoryControl.getFutureTrajectoryUntil(getStateTimeNow(), delay);
     return Lists.getLast(relevant).stateTime().state();
   }
 
   public StateTime getStateTimeNow() {
-    return trajectoryControl.getStateTimeNow();
+    return episodeIntegrator.tail();
   }
 
   public abstract PlannerType getPlannerType();

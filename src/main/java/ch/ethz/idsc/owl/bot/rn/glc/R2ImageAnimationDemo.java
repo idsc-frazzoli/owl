@@ -29,8 +29,8 @@ public class R2ImageAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(7, 6), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl(episodeIntegrator);
-    R2Entity r2Entity = new R2Entity(trajectoryControl);
+    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
+    R2Entity r2Entity = new R2Entity(episodeIntegrator, trajectoryControl);
     r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.set(r2Entity);
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();

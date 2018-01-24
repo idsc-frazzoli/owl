@@ -8,12 +8,13 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class AbstractCircularEntity extends AbstractEntity {
-  public AbstractCircularEntity(TrajectoryControl trajectoryControl) {
-    super(trajectoryControl);
+  public AbstractCircularEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
+    super(episodeIntegrator, trajectoryControl);
   }
 
   @Override

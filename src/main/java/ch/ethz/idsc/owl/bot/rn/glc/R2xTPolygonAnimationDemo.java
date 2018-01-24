@@ -36,7 +36,8 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.2, 2.2), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl(episodeIntegrator);
+    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
+    // FIXME
     AbstractEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(1.5));
     owlyAnimationFrame.set(abstractEntity);
     // ---

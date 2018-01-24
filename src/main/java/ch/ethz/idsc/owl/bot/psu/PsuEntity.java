@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
@@ -28,8 +29,8 @@ import ch.ethz.idsc.tensor.Tensors;
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.ONE;
 
-  public PsuEntity(TrajectoryControl trajectoryControl) {
-    super(trajectoryControl);
+  public PsuEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
+    super(episodeIntegrator, trajectoryControl);
   }
 
   @Override

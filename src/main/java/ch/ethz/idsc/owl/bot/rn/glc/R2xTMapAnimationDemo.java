@@ -29,8 +29,8 @@ public class R2xTMapAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(4.5, 5), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl(episodeIntegrator);
-    AbstractEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(1.5));
+    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
+    AbstractEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(1.5)); // FIXME
     owlyAnimationFrame.set(abstractEntity);
     // ---
     ImageRegion imageRegion = null;

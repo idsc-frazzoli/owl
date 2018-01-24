@@ -4,13 +4,12 @@ package ch.ethz.idsc.owl.math.state;
 import java.util.List;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 
 public interface TrajectoryControl {
-  void integrate(Scalar now);
+  Tensor control(StateTime tail, Scalar now);
 
-  StateTime getStateTimeNow();
-
-  List<TrajectorySample> getFutureTrajectoryUntil(Scalar delay);
+  List<TrajectorySample> getFutureTrajectoryUntil(StateTime tail, Scalar delay);
 
   void setTrajectory(List<TrajectorySample> trajectory);
 }

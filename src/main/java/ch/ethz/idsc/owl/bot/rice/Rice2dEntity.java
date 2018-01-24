@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
 
   /** @param state initial position of entity */
   public Rice2dEntity(Scalar mu, Tensor state, Collection<Flow> controls) {
-    super(null); // FIXME
+    super(null, null); // FIXME
     // super(new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, //
     // new StateTime(state, RealScalar.ZERO)));
     this.controls = controls;
