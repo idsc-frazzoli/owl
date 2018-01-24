@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.owl.bot.delta;
 
 import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;

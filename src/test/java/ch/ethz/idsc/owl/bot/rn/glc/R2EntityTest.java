@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;

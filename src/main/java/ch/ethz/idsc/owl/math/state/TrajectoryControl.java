@@ -11,4 +11,6 @@ public interface TrajectoryControl {
   StateTime getStateTimeNow();
 
   List<TrajectorySample> getFutureTrajectoryUntil(Scalar delay);
+
+  void setTrajectory(List<TrajectorySample> trajectory);
 }

@@ -15,7 +15,7 @@ class CarxTEntity extends CarEntity {
   CarxTEntity(StateTime stateTime) {
     super(null, null, null, null); // FIXME
     // super(stateTime, PARTITIONSCALE, CARFLOWS, SHAPE); // initial position
-    represent_entity = StateTime::joined;
+//    represent_entity = StateTime::joined;
   }
 
   // @Override
