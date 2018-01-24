@@ -9,9 +9,9 @@ import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
-import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.SpacialTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -37,7 +37,7 @@ public class DeltaAnimationDemo implements DemoInterface {
         new DeltaStateSpaceModel(imageGradientInterpolation), //
         EulerIntegrator.INSTANCE, //
         stateTime);
-    AbstractTrajectoryControl abstractTrajectoryControl = new DeltaTrajectoryControl();
+    SpacialTrajectoryControl abstractTrajectoryControl = new DeltaTrajectoryControl();
     owlyAnimationFrame.set(new DeltaEntity(episodeIntegrator, abstractTrajectoryControl, imageGradientInterpolation));
     owlyAnimationFrame.setObstacleQuery(obstacleQuery);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);

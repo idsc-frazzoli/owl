@@ -1,29 +1,27 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.glc;
 
-import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;
+import java.util.List;
+
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
-public class R2xTTrajectoryControl extends AbstractTrajectoryControl {
-  private static final Tensor FALLBACK_CONTROL = Tensors.vectorDouble(0, 0).unmodifiable();
+public class R2xTTrajectoryControl extends TemporalTrajectoryControl {
   // TODO not sure what is a good approach here:
   private static final Tensor WEIGHT = Tensors.vector(1.0, 1.0, 0.2);
 
   public R2xTTrajectoryControl() {
-    super(StateTime::joined);
+    super(Array.zeros(2));
   }
 
   @Override
-  protected Tensor fallbackControl() {
-    return FALLBACK_CONTROL;
-  }
-
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    Tensor d = x.subtract(y);
-    return d.pmul(WEIGHT).dot(d).Get();
+  public List<TrajectorySample> getFutureTrajectoryUntil(StateTime tail, Scalar delay) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
