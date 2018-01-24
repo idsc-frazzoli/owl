@@ -18,10 +18,6 @@ class CarxTEntity extends CarEntity {
     // represent_entity = StateTime::joined;
   }
 
-  // @Override
-  // protected Scalar distance(Tensor x, Tensor y) {
-  // return SE2WRAP.distance(x.extract(0, 3), y.extract(0, 3));
-  // }
   @Override
   public Scalar delayHint() {
     return RealScalar.of(2.0);

@@ -21,7 +21,6 @@ import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -45,8 +44,7 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.2, 2), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
-    TrajectoryEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(0.6));
+    TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(0.6));
     owlyAnimationFrame.set(abstractEntity);
     // ---
     BijectionFamily shiftx = new SimpleTranslationFamily( //

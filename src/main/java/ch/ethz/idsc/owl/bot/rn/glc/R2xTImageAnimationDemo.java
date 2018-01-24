@@ -18,7 +18,6 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -31,8 +30,7 @@ public class R2xTImageAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.5, 2), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
-    TrajectoryEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(1.5)); // FIXME
+    TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(1.5));
     owlyAnimationFrame.set(abstractEntity);
     // ---
     RigidFamily rigidFamily = Se2Family.rotationAround( //

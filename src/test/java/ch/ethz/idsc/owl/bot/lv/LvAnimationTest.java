@@ -13,8 +13,10 @@ import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -29,7 +31,7 @@ public class LvAnimationTest extends TestCase {
     Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, INTEGRATOR, //
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
-    LvTrajectoryControl lvTrajectoryControl = new LvTrajectoryControl();
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(1));
     // new LvEntity(stateSpaceModel, Tensors.vector(2, 0.3), controls);
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();

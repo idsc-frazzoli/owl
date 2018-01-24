@@ -10,9 +10,10 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 
+/** maps time to control */
 public class TrajectorySampleMap {
   private final NavigableMap<Scalar, TrajectorySample> navigableMap;
 
@@ -24,11 +25,10 @@ public class TrajectorySampleMap {
         TreeMap::new));
   }
 
-  public Optional<Flow> getFlowAt(Scalar now) {
-    Entry<Scalar, TrajectorySample> entry = navigableMap.floorEntry(now);
+  public Optional<Tensor> getControl(Scalar now) {
+    Entry<Scalar, TrajectorySample> entry = navigableMap.higherEntry(now);
     if (Objects.isNull(entry))
       return Optional.empty();
-    // FIXME there should be an upper bound!
-    return entry.getValue().getFlow();
+    return entry.getValue().getControl();
   }
 }

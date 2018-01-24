@@ -8,8 +8,8 @@ import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
-import ch.ethz.idsc.owl.math.state.SpacialTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.StateTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 
 /** pure pursuit */
 // TODO rename class to reflect
-public class CarTrajectoryControl extends SpacialTrajectoryControl {
+public class CarTrajectoryControl extends StateTrajectoryControl {
   /** (vx, vy, omega) */
   // private static final Tensor FALLBACK_CONTROL = ;
   private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));

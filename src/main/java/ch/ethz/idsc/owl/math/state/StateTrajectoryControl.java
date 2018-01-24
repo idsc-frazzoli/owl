@@ -16,12 +16,12 @@ import ch.ethz.idsc.tensor.red.ArgMin;
 /**
  * 
  */
-public abstract class SpacialTrajectoryControl extends AbstractTrajectoryControl {
+public abstract class StateTrajectoryControl extends AbstractTrajectoryControl {
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
 
-  public SpacialTrajectoryControl(Tensor fallback_control) {
-    super(fallback_control);
+  protected StateTrajectoryControl(Tensor fallback) {
+    super(fallback);
   }
 
   @Override
@@ -51,9 +51,6 @@ public abstract class SpacialTrajectoryControl extends AbstractTrajectoryControl
     return Optional.empty();
   }
 
-  /** @param delay
-   * @return trajectory until delay[s] in the future of entity,
-   * or current position if entity does not have a trajectory */
   @Override
   public final synchronized List<TrajectorySample> getFutureTrajectoryUntil(StateTime tail, Scalar delay) {
     if (Objects.isNull(trajectory)) // agent does not have a trajectory
@@ -66,7 +63,9 @@ public abstract class SpacialTrajectoryControl extends AbstractTrajectoryControl
         .collect(Collectors.toList());
   }
 
-  /** @param x from trajectory
+  /** override function if necessary
+   * 
+   * @param x from trajectory
    * @param y present state of entity
    * @return */
   protected abstract Scalar distance(Tensor x, Tensor y);
@@ -76,7 +75,9 @@ public abstract class SpacialTrajectoryControl extends AbstractTrajectoryControl
     return null;
   }
 
-  /** @param trailAhead
+  /** override function if necessary
+   * 
+   * @param trailAhead
    * @return */
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
     return Optional.empty();

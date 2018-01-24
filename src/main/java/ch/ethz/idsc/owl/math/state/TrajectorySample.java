@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.tensor.Tensor;
 
 /** container class that bundles information to follow a trajectory */
 public class TrajectorySample implements Serializable {
@@ -32,12 +33,16 @@ public class TrajectorySample implements Serializable {
    * may not have a flow associated
    * (since there may not be history for the sample)
    * 
-   * We return an optional type to make the application layer
-   * aware of the possibility that flow may be null.
+   * We return type {@link Optional} to make the application
+   * layer aware of the possibility that flow may not be present.
    * 
    * @return Optional.ofNullable(flow) */
   public Optional<Flow> getFlow() {
     return Optional.ofNullable(flow);
+  }
+
+  public Optional<Tensor> getControl() {
+    return Optional.ofNullable(Objects.isNull(flow) ? null : flow.getU());
   }
 
   public String toInfoString() {
