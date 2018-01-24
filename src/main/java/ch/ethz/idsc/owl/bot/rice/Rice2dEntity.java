@@ -14,7 +14,10 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
+import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -33,22 +36,13 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
   public Scalar delayHint = RealScalar.ONE;
 
   /** @param state initial position of entity */
-  public Rice2dEntity(Scalar mu, Tensor state, Collection<Flow> controls) {
-    super(null, null); // FIXME
-    // super(new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, //
-    // new StateTime(state, RealScalar.ZERO)));
+  public Rice2dEntity(Scalar mu, Tensor state, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
+    super( //
+        new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
+        trajectoryControl);
     this.controls = controls;
   }
 
-  // @Override
-  // protected Scalar distance(Tensor x, Tensor y) {
-  // return Norm2Squared.between(x, y);
-  // }
-  //
-  // @Override
-  // protected Tensor fallbackControl() {
-  // return Tensors.vector(0, 0).unmodifiable();
-  // }
   @Override
   public final Scalar delayHint() {
     return delayHint;

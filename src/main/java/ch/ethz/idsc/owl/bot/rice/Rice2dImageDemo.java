@@ -12,10 +12,13 @@ import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
 public class Rice2dImageDemo implements DemoInterface {
   @Override
@@ -26,7 +29,8 @@ public class Rice2dImageDemo implements DemoInterface {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     TrajectoryRegionQuery obstacleQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
-    owlyAnimationFrame.set(new Rice2dEntity(mu, Tensors.vector(7, 6, 0, 0), controls));
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(2));
+    owlyAnimationFrame.set(new Rice2dEntity(mu, Tensors.vector(7, 6, 0, 0), trajectoryControl, controls));
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
     owlyAnimationFrame.setObstacleQuery(obstacleQuery);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));

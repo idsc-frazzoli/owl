@@ -11,19 +11,24 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.TrajectoryTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
+import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
+import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -42,9 +47,12 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     // ---
     ImageGradientInterpolation imageGradientInterpolation_fast = //
         ImageGradientInterpolation.nearest(image, range, amp);
-    // TrajectoryControl trajectoryControl = new DeltaxT
-    // Tensors.vector(10, 3.5)
-    TrajectoryEntity abstractEntity = new DeltaxTEntity(null, imageGradientInterpolation_fast);
+    TrajectoryControl trajectoryControl = new TemporalTrajectoryControl(Array.zeros(2));
+    StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
+        new DeltaStateSpaceModel(imageGradientInterpolation_fast), EulerIntegrator.INSTANCE, stateTime);
+    AbstractEntity abstractEntity = //
+        new DeltaxTEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation_fast);
     Supplier<Scalar> supplier = () -> abstractEntity.getStateTimeNow().time();
     // ---
     ImageGradientInterpolation imageGradientInterpolation_slow = //

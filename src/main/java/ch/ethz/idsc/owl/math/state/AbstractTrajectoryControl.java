@@ -15,9 +15,6 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
     this.fallback = N.DOUBLE.of(fallback).unmodifiable();
   }
 
-  // protected final Tensor fallbackControl() {
-  // return fallback;
-  // }
   @Override
   public final Tensor control(StateTime tail, Scalar now) {
     Optional<Tensor> optional = protected_control(tail, now);

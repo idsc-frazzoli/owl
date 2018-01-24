@@ -16,8 +16,10 @@ import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -32,8 +34,8 @@ public class LvAnimationDemo implements DemoInterface {
     Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, INTEGRATOR, //
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
-    LvTrajectoryControl lvTrajectoryControl = new LvTrajectoryControl();
-    owlyAnimationFrame.set(new LvEntity(episodeIntegrator, lvTrajectoryControl, controls));
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(1));
+    owlyAnimationFrame.set(new LvEntity(episodeIntegrator, trajectoryControl, controls));
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
     // ---
     Tensor range = Tensors.vector(6, 5);
