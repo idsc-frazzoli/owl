@@ -22,7 +22,7 @@ public class DeltaAnimationTest extends TestCase {
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
     SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
-    new DeltaEntity(imageGradientInterpolation, Tensors.vector(10, 3.5));
+    // new DeltaEntity(imageGradientInterpolation, new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO));
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     RegionRenders.create(imageRegion);
     DeltaHelper.vectorFieldRender(stateSpaceModel, range, imageRegion, RealScalar.of(0.5));

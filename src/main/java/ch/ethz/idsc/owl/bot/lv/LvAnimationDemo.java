@@ -9,13 +9,21 @@ import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.VectorFields;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.flow.Integrator;
+import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
 public class LvAnimationDemo implements DemoInterface {
   @Override
@@ -23,7 +31,11 @@ public class LvAnimationDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     StateSpaceModel stateSpaceModel = LvStateSpaceModel.of(1, 2);
     Collection<Flow> controls = LvControls.create(stateSpaceModel, 2);
-    owlyAnimationFrame.set(new LvEntity(stateSpaceModel, Tensors.vector(2, 0.3), controls));
+    Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, INTEGRATOR, //
+        new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(1));
+    owlyAnimationFrame.set(new LvEntity(episodeIntegrator, trajectoryControl, controls));
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
     // ---
     Tensor range = Tensors.vector(6, 5);
@@ -31,7 +43,7 @@ public class LvAnimationDemo implements DemoInterface {
     RandomSampleInterface sampler = new BoxRandomSample(Tensors.vector(0, 0), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream());
     vectorFieldRender.uv_pairs = //
-        VectorFields.of(stateSpaceModel, points, LvEntity.FALLBACK_CONTROL, RealScalar.of(0.04));
+        VectorFields.of(stateSpaceModel, points, Array.zeros(1), RealScalar.of(0.04));
     owlyAnimationFrame.addBackground(vectorFieldRender);
     // ---
     return owlyAnimationFrame;

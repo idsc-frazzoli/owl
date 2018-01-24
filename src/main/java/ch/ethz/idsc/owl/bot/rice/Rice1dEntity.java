@@ -14,36 +14,25 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class Rice1dEntity extends AbstractCircularEntity {
-  public static final Tensor FALLBACK_CONTROL = Tensors.vectorDouble(0).unmodifiable();
-  // ---
   private static final Integrator INTEGRATOR = RungeKutta4Integrator.INSTANCE;
   // ---
   private final Collection<Flow> controls;
 
   /** @param state initial position of entity */
-  public Rice1dEntity(Scalar mu, Tensor state, Collection<Flow> controls) {
-    super(new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, //
-        new StateTime(state, RealScalar.ZERO)));
+  public Rice1dEntity(Scalar mu, Tensor state, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
+    super( //
+        new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
+        trajectoryControl);
     this.controls = controls;
-  }
-
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y);
-  }
-
-  @Override
-  protected final Tensor fallbackControl() {
-    return FALLBACK_CONTROL;
   }
 
   @Override

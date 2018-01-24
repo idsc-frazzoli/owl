@@ -8,14 +8,18 @@ import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.map.Se2Family;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.owl.math.planar.CogPoints;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,7 +31,11 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    AbstractEntity abstractEntity = new R2xTEntity(Tensors.vector(1.2, 2.2), RealScalar.of(1.5));
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
+        SingleIntegratorStateSpaceModel.INSTANCE, //
+        EulerIntegrator.INSTANCE, //
+        new StateTime(Tensors.vector(1.2, 2.2), RealScalar.ZERO));
+    TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(1.5));
     owlyAnimationFrame.set(abstractEntity);
     // ---
     BijectionFamily rigid1 = new Se2Family( //

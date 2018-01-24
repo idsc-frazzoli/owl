@@ -19,12 +19,15 @@ import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.owl.math.planar.CogPoints;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
+import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class Rice2dxTParts1Demo implements DemoInterface {
@@ -33,7 +36,8 @@ public class Rice2dxTParts1Demo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.of(-.5);
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
-    Rice2dEntity abstractEntity = new Rice2dEntity(mu, Tensors.vector(2, 2, 0, 0), controls);
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(2));
+    Rice2dEntity abstractEntity = new Rice2dEntity(mu, Tensors.vector(2, 2, 0, 0), trajectoryControl, controls);
     abstractEntity.delayHint = RealScalar.of(1.6);
     owlyAnimationFrame.set(abstractEntity);
     // ---
