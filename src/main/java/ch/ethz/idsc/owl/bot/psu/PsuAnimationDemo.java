@@ -23,10 +23,9 @@ public class PsuAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
+    Integrator integrator = RungeKutta45Integrator.INSTANCE;
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
-        PsuStateSpaceModel.INSTANCE, //
-        INTEGRATOR, //
+        PsuStateSpaceModel.INSTANCE, integrator, //
         new StateTime(Tensors.vector(0, 0), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new PsuTrajectoryControl();
     owlyAnimationFrame.set(new PsuEntity(episodeIntegrator, trajectoryControl));
