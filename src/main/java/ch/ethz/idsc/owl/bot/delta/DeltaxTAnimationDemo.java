@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.TrajectoryTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
@@ -43,7 +43,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
         ImageGradientInterpolation.nearest(image, range, amp);
     // TrajectoryControl trajectoryControl = new DeltaxT
     // Tensors.vector(10, 3.5)
-    AbstractEntity abstractEntity = new DeltaxTEntity(null, imageGradientInterpolation_fast);
+    TrajectoryEntity abstractEntity = new DeltaxTEntity(null, imageGradientInterpolation_fast);
     Supplier<Scalar> supplier = () -> abstractEntity.getStateTimeNow().time();
     // ---
     ImageGradientInterpolation imageGradientInterpolation_slow = //

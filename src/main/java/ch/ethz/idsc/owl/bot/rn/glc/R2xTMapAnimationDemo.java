@@ -6,7 +6,7 @@ import ch.ethz.idsc.owl.bot.rn.RnPointcloudRegions;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -30,7 +30,7 @@ public class R2xTMapAnimationDemo implements DemoInterface {
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(4.5, 5), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new R2TrajectoryControl();
-    AbstractEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(1.5)); // FIXME
+    TrajectoryEntity abstractEntity = new R2xTEntity(trajectoryControl, RealScalar.of(1.5)); // FIXME
     owlyAnimationFrame.set(abstractEntity);
     // ---
     ImageRegion imageRegion = null;

@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class AbstractCircularEntity extends AbstractEntity {
+public abstract class AbstractCircularEntity extends TrajectoryEntity {
   public AbstractCircularEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
   }
