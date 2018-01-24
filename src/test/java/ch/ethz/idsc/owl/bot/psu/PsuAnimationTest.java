@@ -18,6 +18,6 @@ public class PsuAnimationTest extends TestCase {
     RandomSampleInterface sampler = new BoxRandomSample(range.negate(), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream());
     vectorFieldRender.uv_pairs = //
-        VectorFields.of(PsuStateSpaceModel.INSTANCE, points, PsuEntity.FALLBACK_CONTROL, RealScalar.of(0.1));
+        VectorFields.of(PsuStateSpaceModel.INSTANCE, points, PsuTrajectoryControl.FALLBACK_CONTROL, RealScalar.of(0.1));
   }
 }

@@ -6,10 +6,15 @@ import ch.ethz.idsc.owl.bot.rn.RnPointcloudRegions;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -19,7 +24,11 @@ public class R2xTMapAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    AbstractEntity abstractEntity = new R2xTEntity(Tensors.vector(4.5, 5), RealScalar.of(1.5));
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
+        SingleIntegratorStateSpaceModel.INSTANCE, //
+        EulerIntegrator.INSTANCE, //
+        new StateTime(Tensors.vector(4.5, 5), RealScalar.ZERO));
+    TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(1.5));
     owlyAnimationFrame.set(abstractEntity);
     // ---
     ImageRegion imageRegion = null;

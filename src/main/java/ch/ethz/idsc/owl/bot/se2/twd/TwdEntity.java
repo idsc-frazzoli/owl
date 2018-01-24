@@ -3,10 +3,8 @@ package ch.ethz.idsc.owl.bot.se2.twd;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2LateralAcceleration;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
-import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2Entity;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
@@ -17,7 +15,6 @@ import ch.ethz.idsc.owl.gui.ani.PlannerType;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -54,18 +51,18 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   /** @param twdConfig
    * @param stateTime initial position */
   protected TwdEntity(TwdFlows twdConfig, StateTime stateTime) {
-    super(new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
+    super(null, null);
+    // super(new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
     controls = twdConfig.getFlows(4);
     Tensor eta = eta();
     goalRadius_xy = SQRT2.divide(eta.Get(0));
     goalRadius_theta = SQRT2.divide(eta.Get(2));
   }
 
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    return SE2WRAP.distance(x, y);
-  }
-
+  // @Override
+  // protected Scalar distance(Tensor x, Tensor y) {
+  // return SE2WRAP.distance(x, y);
+  // }
   @Override
   public Scalar delayHint() {
     return RealScalar.ONE;

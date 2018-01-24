@@ -31,9 +31,9 @@ import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
 import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.EtaRender;
 import ch.ethz.idsc.owl.gui.ren.GoalRender;
@@ -91,7 +91,7 @@ public class OwlyAnimationFrame extends TimerFrame {
         public void actionPerformed(ActionEvent event) {
           boolean selected = jToggleButtonRecord.isSelected();
           if (selected) {
-            AbstractEntity abstractEntity = (AbstractEntity) controllable;
+            TrajectoryEntity abstractEntity = (TrajectoryEntity) controllable;
             File directory = UserHome.Pictures(abstractEntity.getClass().getSimpleName() + "_" + System.currentTimeMillis());
             directory.mkdir();
             GlobalAssert.that(directory.isDirectory());
@@ -141,8 +141,8 @@ public class OwlyAnimationFrame extends TimerFrame {
               mpw.flagShutdown();
               mpw = null;
             }
-            if (controllable instanceof AbstractEntity) {
-              AbstractEntity abstractEntity = (AbstractEntity) controllable;
+            if (controllable instanceof TrajectoryEntity) {
+              TrajectoryEntity abstractEntity = (TrajectoryEntity) controllable;
               final Tensor goal = geometricComponent.getMouseSe2State();
               final List<TrajectorySample> head = //
                   abstractEntity.getFutureTrajectoryUntil(abstractEntity.delayHint());
@@ -168,9 +168,9 @@ public class OwlyAnimationFrame extends TimerFrame {
             }
           } else { // ctrl pressed
             System.out.println(geometricComponent.getMouseSe2State());
-            if (controllable instanceof AbstractEntity) {
+            if (controllable instanceof TrajectoryEntity) {
               @SuppressWarnings("unused")
-              AbstractEntity abstractEntity = (AbstractEntity) controllable;
+              TrajectoryEntity abstractEntity = (TrajectoryEntity) controllable;
               // abstractEntity.resetStateTo(owlyComponent.getMouseGoal());
             }
           }
@@ -188,8 +188,8 @@ public class OwlyAnimationFrame extends TimerFrame {
       // test without heuristic
       if (optional.isPresent()) {
         List<TrajectorySample> trajectory = new ArrayList<>();
-        if (controllable instanceof AbstractEntity) {
-          AbstractEntity abstractEntity = (AbstractEntity) controllable;
+        if (controllable instanceof TrajectoryEntity) {
+          TrajectoryEntity abstractEntity = (TrajectoryEntity) controllable;
           List<TrajectorySample> tail = //
               GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
           // Optional<GlcNode> temp = trajectoryPlanner.getBestOrElsePeek();
@@ -212,8 +212,8 @@ public class OwlyAnimationFrame extends TimerFrame {
     @Override
     public void expandResult(List<TrajectorySample> head, RrtsPlanner rrtsPlanner, List<TrajectorySample> tail) {
       List<TrajectorySample> trajectory = new ArrayList<>();
-      if (controllable instanceof AbstractEntity) {
-        AbstractEntity abstractEntity = (AbstractEntity) controllable;
+      if (controllable instanceof TrajectoryEntity) {
+        TrajectoryEntity abstractEntity = (TrajectoryEntity) controllable;
         trajectory = Trajectories.glue(head, tail);
         abstractEntity.setTrajectory(trajectory);
       }

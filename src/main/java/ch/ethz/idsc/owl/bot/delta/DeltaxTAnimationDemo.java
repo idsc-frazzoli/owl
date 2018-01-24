@@ -15,21 +15,27 @@ import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
+import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class DeltaxTAnimationDemo implements DemoInterface {
@@ -41,13 +47,18 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     // ---
     ImageGradientInterpolation imageGradientInterpolation_fast = //
         ImageGradientInterpolation.nearest(image, range, amp);
-    AbstractEntity abstractEntity = new DeltaxTEntity(imageGradientInterpolation_fast, Tensors.vector(10, 3.5));
+    TrajectoryControl trajectoryControl = new TemporalTrajectoryControl(Array.zeros(2));
+    StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
+        new DeltaStateSpaceModel(imageGradientInterpolation_fast), EulerIntegrator.INSTANCE, stateTime);
+    AbstractEntity abstractEntity = //
+        new DeltaxTEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation_fast);
     Supplier<Scalar> supplier = () -> abstractEntity.getStateTimeNow().time();
     // ---
     ImageGradientInterpolation imageGradientInterpolation_slow = //
         ImageGradientInterpolation.linear(image, range, amp);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation_slow);
-    Flow flow = StateSpaceModels.createFlow(stateSpaceModel, DeltaEntity.FALLBACK_CONTROL);
+    Flow flow = StateSpaceModels.createFlow(stateSpaceModel, Array.zeros(2));
     Region<StateTime> region1 = create(RealScalar.of(0.4), Tensors.vector(2, 1.5), flow, supplier);
     Region<StateTime> region2 = create(RealScalar.of(0.5), Tensors.vector(6, 6), flow, supplier);
     Region<StateTime> region3 = create(RealScalar.of(0.3), Tensors.vector(2, 7), flow, supplier);

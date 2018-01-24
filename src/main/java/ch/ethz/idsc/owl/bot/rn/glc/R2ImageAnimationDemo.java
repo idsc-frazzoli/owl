@@ -7,7 +7,14 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** demo shows the use of a cost image that is added to the distance cost
@@ -18,7 +25,12 @@ public class R2ImageAnimationDemo implements DemoInterface {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    R2Entity r2Entity = new R2Entity(Tensors.vector(7, 6));
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
+        SingleIntegratorStateSpaceModel.INSTANCE, //
+        EulerIntegrator.INSTANCE, //
+        new StateTime(Tensors.vector(7, 6), RealScalar.ZERO));
+    TrajectoryControl trajectoryControl = new R2TrajectoryControl();
+    R2Entity r2Entity = new R2Entity(episodeIntegrator, trajectoryControl);
     r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.set(r2Entity);
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();

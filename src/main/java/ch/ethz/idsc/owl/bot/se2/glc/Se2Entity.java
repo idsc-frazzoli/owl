@@ -10,24 +10,22 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
+import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.sca.N;
 
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
-public abstract class Se2Entity extends AbstractEntity {
-  private static final Tensor FALLBACK_CONTROL = N.DOUBLE.of(Array.zeros(3)).unmodifiable();
-  // ---
+public abstract class Se2Entity extends TrajectoryEntity {
   /** the time difference between two successive nodes in the planner tree is 4/10 */
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = // node interval == 2/5
       FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
@@ -35,13 +33,10 @@ public abstract class Se2Entity extends AbstractEntity {
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
   public TrajectoryRegionQuery obstacleQuery = null;
 
-  protected Se2Entity(EpisodeIntegrator episodeIntegrator) {
-    super(episodeIntegrator);
-  }
-
-  @Override
-  protected final Tensor fallbackControl() {
-    return FALLBACK_CONTROL;
+  protected Se2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
+    super( //
+        new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime), //
+        trajectoryControl);
   }
 
   private boolean obstacleQuery_isDisjoint(StateTime stateTime) {
