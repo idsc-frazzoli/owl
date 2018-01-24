@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.lv;
 
-import ch.ethz.idsc.owl.math.flow.Integrator;
-import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;

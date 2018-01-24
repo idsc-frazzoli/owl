@@ -41,7 +41,9 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     // ---
     ImageGradientInterpolation imageGradientInterpolation_fast = //
         ImageGradientInterpolation.nearest(image, range, amp);
-    AbstractEntity abstractEntity = new DeltaxTEntity(imageGradientInterpolation_fast, Tensors.vector(10, 3.5));
+    // TrajectoryControl trajectoryControl = new DeltaxT
+    // Tensors.vector(10, 3.5)
+    AbstractEntity abstractEntity = new DeltaxTEntity(null, imageGradientInterpolation_fast);
     Supplier<Scalar> supplier = () -> abstractEntity.getStateTimeNow().time();
     // ---
     ImageGradientInterpolation imageGradientInterpolation_slow = //

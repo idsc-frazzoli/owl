@@ -5,15 +5,16 @@ import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaxTEntity extends DeltaEntity {
-  public DeltaxTEntity(ImageGradientInterpolation imageGradientInterpolation, Tensor state) {
+  public DeltaxTEntity(TrajectoryControl trajectoryControl, ImageGradientInterpolation imageGradientInterpolation) {
     // super(imageGradientInterpolation, state);
-    super(null, null); // FIXME
+    super(trajectoryControl, imageGradientInterpolation); // FIXME
   }
 
   @Override

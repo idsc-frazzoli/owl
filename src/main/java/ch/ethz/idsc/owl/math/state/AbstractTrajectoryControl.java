@@ -30,6 +30,7 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
     this.represent_entity = represent_entity;
   }
 
+  @Override
   public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
     trajectory_skip = 0;
@@ -75,11 +76,11 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
    * @param trajectory
    * @return index of node that has been traversed most recently by entity */
   public final int indexOfPassedTrajectorySample(List<TrajectorySample> trajectory) {
-    final Tensor x = represent_entity.apply(getStateTimeNow());
+    final Tensor y = represent_entity.apply(getStateTimeNow());
     Tensor dist = Tensor.of(trajectory.stream() //
         .map(TrajectorySample::stateTime) //
         .map(represent_entity) //
-        .map(state -> distance(state, x)));
+        .map(state -> distance(state, y)));
     int argmin = ArgMin.of(dist);
     // the below 'correction' does not help in tracking
     // instead one could try blending flows depending on distance
@@ -92,6 +93,7 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
   /** @param delay
    * @return trajectory until delay[s] in the future of entity,
    * or current position if entity does not have a trajectory */
+  @Override
   public final synchronized List<TrajectorySample> getFutureTrajectoryUntil(Scalar delay) {
     if (Objects.isNull(trajectory)) // agent does not have a trajectory
       return Collections.singletonList(TrajectorySample.head(getStateTimeNow()));
@@ -108,6 +110,9 @@ public abstract class AbstractTrajectoryControl implements TrajectoryControl {
     return episodeIntegrator.tail();
   }
 
+  /** @param x from trajectory
+   * @param y present state of entity
+   * @return */
   protected abstract Scalar distance(Tensor x, Tensor y);
 
   protected List<TrajectorySample> resetAction(List<TrajectorySample> trajectory) {
