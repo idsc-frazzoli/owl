@@ -10,24 +10,20 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
-import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaEntity extends AbstractCircularEntity {
-  public static final Tensor FALLBACK_CONTROL = Tensors.vectorDouble(0, 0).unmodifiable();
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = FixedStateIntegrator.create( //
       RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 5), 4);
   /** preserve 1[s] of the former trajectory */
@@ -40,22 +36,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
   /***************************************************/
   private final ImageGradientInterpolation imageGradientInterpolation;
 
-  public DeltaEntity(ImageGradientInterpolation imageGradientInterpolation, Tensor state) {
-    super(new SimpleEpisodeIntegrator( //
-        new DeltaStateSpaceModel(imageGradientInterpolation), //
-        EulerIntegrator.INSTANCE, //
-        new StateTime(state, RealScalar.ZERO)));
+  public DeltaEntity(TrajectoryControl trajectoryControl, ImageGradientInterpolation imageGradientInterpolation) {
+    super(trajectoryControl);
     this.imageGradientInterpolation = imageGradientInterpolation;
-  }
-
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y);
-  }
-
-  @Override
-  protected final Tensor fallbackControl() {
-    return FALLBACK_CONTROL;
   }
 
   @Override
