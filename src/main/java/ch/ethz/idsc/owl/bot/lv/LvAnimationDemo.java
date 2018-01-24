@@ -21,6 +21,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
 public class LvAnimationDemo implements DemoInterface {
   @Override
@@ -40,7 +41,7 @@ public class LvAnimationDemo implements DemoInterface {
     RandomSampleInterface sampler = new BoxRandomSample(Tensors.vector(0, 0), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream());
     vectorFieldRender.uv_pairs = //
-        VectorFields.of(stateSpaceModel, points, LvTrajectoryControl.FALLBACK_CONTROL, RealScalar.of(0.04));
+        VectorFields.of(stateSpaceModel, points, Array.zeros(1), RealScalar.of(0.04));
     owlyAnimationFrame.addBackground(vectorFieldRender);
     // ---
     return owlyAnimationFrame;

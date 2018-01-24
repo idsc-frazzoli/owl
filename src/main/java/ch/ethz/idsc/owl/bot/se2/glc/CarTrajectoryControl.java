@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
-import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;
+import ch.ethz.idsc.owl.math.state.SpacialTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -18,13 +18,12 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clip;
-import ch.ethz.idsc.tensor.sca.N;
 
 /** pure pursuit */
 // TODO rename class to reflect
-public class CarTrajectoryControl extends AbstractTrajectoryControl {
+public class CarTrajectoryControl extends SpacialTrajectoryControl {
   /** (vx, vy, omega) */
-  private static final Tensor FALLBACK_CONTROL = N.DOUBLE.of(Array.zeros(3)).unmodifiable();
+  // private static final Tensor FALLBACK_CONTROL = ;
   private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
   // ---
   private final Clip CLIP_TURNING_RATE = Clip.function(Degree.of(-50), Degree.of(+50));
@@ -32,12 +31,7 @@ public class CarTrajectoryControl extends AbstractTrajectoryControl {
   private final Scalar SPEED = RealScalar.of(1.0);
 
   public CarTrajectoryControl() {
-    super(StateTime::state);
-  }
-
-  @Override
-  protected final Tensor fallbackControl() {
-    return FALLBACK_CONTROL;
+    super(Array.zeros(3));
   }
 
   @Override

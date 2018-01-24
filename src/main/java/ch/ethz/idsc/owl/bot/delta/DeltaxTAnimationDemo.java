@@ -30,6 +30,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class DeltaxTAnimationDemo implements DemoInterface {
@@ -49,7 +50,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     ImageGradientInterpolation imageGradientInterpolation_slow = //
         ImageGradientInterpolation.linear(image, range, amp);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation_slow);
-    Flow flow = StateSpaceModels.createFlow(stateSpaceModel, DeltaTrajectoryControl.FALLBACK_CONTROL);
+    Flow flow = StateSpaceModels.createFlow(stateSpaceModel, Array.zeros(2));
     Region<StateTime> region1 = create(RealScalar.of(0.4), Tensors.vector(2, 1.5), flow, supplier);
     Region<StateTime> region2 = create(RealScalar.of(0.5), Tensors.vector(6, 6), flow, supplier);
     Region<StateTime> region3 = create(RealScalar.of(0.3), Tensors.vector(2, 7), flow, supplier);

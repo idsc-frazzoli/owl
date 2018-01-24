@@ -4,33 +4,26 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.math.state.AbstractTrajectoryControl;
+import ch.ethz.idsc.owl.math.state.SpacialTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-public class R2TrajectoryControl extends AbstractTrajectoryControl {
-  private static final Tensor FALLBACK_CONTROL = Tensors.vectorDouble(0, 0).unmodifiable();
-
+public class R2TrajectoryControl extends SpacialTrajectoryControl {
   public R2TrajectoryControl() {
-    super(StateTime::state);
+    super(Array.zeros(2));
   }
 
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y);
-  }
-
-  @Override
-  protected final Tensor fallbackControl() {
-    return FALLBACK_CONTROL;
   }
 
   @Override

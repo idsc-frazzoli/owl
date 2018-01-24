@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
 /* package */ enum DeltaHelper {
   ;
@@ -20,7 +21,7 @@ import ch.ethz.idsc.tensor.Tensors;
     RandomSampleInterface sampler = new BoxRandomSample(Tensors.vector(0, 0), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream().filter(p -> !region.isMember(p)));
     vectorFieldRender.uv_pairs = //
-        VectorFields.of(stateSpaceModel, points, DeltaTrajectoryControl.FALLBACK_CONTROL, factor);
+        VectorFields.of(stateSpaceModel, points, Array.zeros(2), factor);
     return vectorFieldRender;
   }
 }
