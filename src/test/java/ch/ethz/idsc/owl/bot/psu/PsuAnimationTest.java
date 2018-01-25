@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import junit.framework.TestCase;
 
 public class PsuAnimationTest extends TestCase {
@@ -18,6 +19,6 @@ public class PsuAnimationTest extends TestCase {
     RandomSampleInterface sampler = new BoxRandomSample(range.negate(), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream());
     vectorFieldRender.uv_pairs = //
-        VectorFields.of(PsuStateSpaceModel.INSTANCE, points, PsuTrajectoryControl.FALLBACK_CONTROL, RealScalar.of(0.1));
+        VectorFields.of(PsuStateSpaceModel.INSTANCE, points, Array.zeros(1), RealScalar.of(0.1));
   }
 }

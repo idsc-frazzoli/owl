@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
@@ -20,6 +21,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
 /* package */ class LvEntity extends AbstractCircularEntity {
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
@@ -29,6 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
   /** @param state initial position of entity */
   public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
     super(episodeIntegrator, trajectoryControl);
+    add(new FallbackControl(Array.zeros(1)));
     this.controls = controls;
   }
 

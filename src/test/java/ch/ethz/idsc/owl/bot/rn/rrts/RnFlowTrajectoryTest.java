@@ -25,7 +25,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -79,10 +78,10 @@ public class RnFlowTrajectoryTest extends TestCase {
     }
     // Trajectories.print(trajectory);
     {
-      TrajectoryControl tc = new TemporalTrajectoryControl(Array.zeros(2));
+      TrajectoryControl tc = TemporalTrajectoryControl.INSTANCE;
       tc.setTrajectory(null);
       tc.setTrajectory(trajectory);
-      Tensor u = tc.control(new StateTime(Tensors.vector(1, 2), RealScalar.of(1.2)), RealScalar.of(2));
+      Tensor u = tc.control(new StateTime(Tensors.vector(1, 2), RealScalar.of(1.2)), RealScalar.of(2)).get();
       assertTrue(Chop._10.close(Norm._2.of(u), RealScalar.ONE));
       List<TrajectorySample> list = tc.getFutureTrajectoryUntil(new StateTime(Tensors.vector(1, 2), RealScalar.of(1.1)), RealScalar.of(1));
       assertEquals(list.size(), 11);

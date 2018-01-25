@@ -11,13 +11,11 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class TemporalTrajectoryControl extends AbstractTrajectoryControl {
+public enum TemporalTrajectoryControl implements TrajectoryControl {
+  INSTANCE;
+  // ---
   private List<TrajectorySample> trajectory = null;
   private TrajectorySampleMap trajectorySampleMap;
-
-  public TemporalTrajectoryControl(Tensor fallback) {
-    super(fallback);
-  }
 
   @Override
   public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
@@ -26,7 +24,7 @@ public class TemporalTrajectoryControl extends AbstractTrajectoryControl {
   }
 
   @Override
-  protected synchronized Optional<Tensor> protected_control(StateTime tail, Scalar now) {
+  public synchronized Optional<Tensor> control(StateTime tail, Scalar now) {
     if (Objects.nonNull(trajectory)) {
       if (trajectorySampleMap.isValid(now))
         return trajectorySampleMap.getControl(now);

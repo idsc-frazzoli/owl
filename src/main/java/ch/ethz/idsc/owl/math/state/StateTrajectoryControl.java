@@ -14,14 +14,13 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.ArgMin;
 
 /** trajectory control for a time-invariant state-space */
-public abstract class StateTrajectoryControl extends AbstractTrajectoryControl {
+public abstract class StateTrajectoryControl implements TrajectoryControl {
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
 
-  protected StateTrajectoryControl(Tensor fallback) {
-    super(fallback);
-  }
-
+  // protected StateTrajectoryControl(Tensor fallback) {
+  // super(fallback);
+  // }
   @Override
   public final synchronized void setTrajectory(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
@@ -29,7 +28,7 @@ public abstract class StateTrajectoryControl extends AbstractTrajectoryControl {
   }
 
   @Override
-  public final synchronized Optional<Tensor> protected_control(StateTime tail, Scalar now) {
+  public final synchronized Optional<Tensor> control(StateTime tail, Scalar now) {
     // implementation does not require that current position is perfectly located on trajectory
     if (Objects.nonNull(trajectory)) {
       final int argmin = indexOfPassedTrajectorySample(tail, trajectory.subList(trajectory_skip, trajectory.size()));

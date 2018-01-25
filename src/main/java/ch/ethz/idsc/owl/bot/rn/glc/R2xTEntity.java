@@ -11,13 +11,13 @@ import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Array;
 
 /* package */ class R2xTEntity extends R2Entity {
   private final Scalar delay;
 
   public R2xTEntity(EpisodeIntegrator episodeIntegrator, Scalar delay) {
-    super(episodeIntegrator, new TemporalTrajectoryControl(Array.zeros(2)));
+    super(episodeIntegrator, TemporalTrajectoryControl.INSTANCE);
+    // add(new FallbackControl(Array.zeros(2)));
     this.delay = delay;
   }
 

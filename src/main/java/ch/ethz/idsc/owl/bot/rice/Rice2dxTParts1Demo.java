@@ -27,7 +27,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class Rice2dxTParts1Demo implements DemoInterface {
@@ -36,7 +35,7 @@ public class Rice2dxTParts1Demo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.of(-.5);
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
-    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(2));
+    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     Rice2dEntity abstractEntity = new Rice2dEntity(mu, Tensors.vector(2, 2, 0, 0), trajectoryControl, controls);
     abstractEntity.delayHint = RealScalar.of(1.6);
     owlyAnimationFrame.set(abstractEntity);
