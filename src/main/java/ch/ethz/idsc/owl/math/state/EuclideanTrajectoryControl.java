@@ -6,8 +6,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 public class EuclideanTrajectoryControl extends StateTrajectoryControl {
-  public EuclideanTrajectoryControl(Tensor fallback) {
-    super(fallback);
+  public static final TrajectoryControl INSTANCE = new EuclideanTrajectoryControl();
+
+  private EuclideanTrajectoryControl() {
   }
 
   @Override // from StateTrajectoryControl

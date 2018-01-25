@@ -10,13 +10,13 @@ import junit.framework.TestCase;
 
 public class TemporalTrajectoryControlTest extends TestCase {
   public void testFallback() {
-    TrajectoryControl tc = new TemporalTrajectoryControl(Tensors.vector(1, 2));
-    Tensor control = tc.control(new StateTime(Tensors.vector(3, 4), RealScalar.of(2)), RealScalar.of(3));
+    EntityControl tc = new FallbackControl(Tensors.vector(1, 2));
+    Tensor control = tc.control(new StateTime(Tensors.vector(3, 4), RealScalar.of(2)), RealScalar.of(3)).get();
     assertEquals(control, Tensors.vector(1, 2));
   }
 
   public void testFutureTrajectoryUntil() {
-    TrajectoryControl tc = new TemporalTrajectoryControl(Tensors.vector(1, 2));
+    TrajectoryControl tc = TemporalTrajectoryControl.INSTANCE;
     List<TrajectorySample> trajectory = //
         tc.getFutureTrajectoryUntil(new StateTime(Tensors.vector(3, 4), RealScalar.of(2)), RealScalar.of(3));
     assertEquals(trajectory.size(), 1);
@@ -24,7 +24,7 @@ public class TemporalTrajectoryControlTest extends TestCase {
   }
 
   public void testSetTrajectoryNull() {
-    TrajectoryControl tc = new TemporalTrajectoryControl(Tensors.vector(1, 2));
+    TrajectoryControl tc = TemporalTrajectoryControl.INSTANCE;
     tc.setTrajectory(null);
   }
 }

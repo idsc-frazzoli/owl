@@ -19,7 +19,6 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import junit.framework.TestCase;
 
 public class R2EntityTest extends TestCase {
@@ -75,7 +74,7 @@ public class R2EntityTest extends TestCase {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(state, RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(2));
+    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     AbstractEntity abstractEntity = new R2Entity(episodeIntegrator, trajectoryControl);
     StateTime st = abstractEntity.getStateTimeNow();
     assertEquals(st.state(), state);

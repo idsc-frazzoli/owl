@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clip;
 
@@ -30,10 +29,9 @@ public class CarTrajectoryControl extends StateTrajectoryControl {
   private final Scalar LOOKAHEAD = RealScalar.of(0.5);
   private final Scalar SPEED = RealScalar.of(1.0);
 
-  public CarTrajectoryControl() {
-    super(Array.zeros(3));
-  }
-
+  // public CarTrajectoryControl() {
+  // super(Array.zeros(3));
+  // }
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
     return SE2WRAP.distance(x, y);

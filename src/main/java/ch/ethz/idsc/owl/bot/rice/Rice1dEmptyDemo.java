@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 
 public class Rice1dEmptyDemo implements DemoInterface {
   @Override
@@ -20,7 +19,7 @@ public class Rice1dEmptyDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.ZERO;
     Collection<Flow> controls = Rice2Controls.create1d(mu, 15);
-    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(1));
+    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     owlyAnimationFrame.set(new Rice1dEntity(mu, Tensors.vector(0, 0), trajectoryControl, controls));
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
     return owlyAnimationFrame;
