@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public class SeriesContainer {
   private final Tensor points;
   public Color color;
+  private String name = "";
   private boolean joined;
 
   public SeriesContainer(Tensor points, Color color) {
@@ -25,5 +26,13 @@ public class SeriesContainer {
 
   public boolean isJoined() {
     return joined;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 }
