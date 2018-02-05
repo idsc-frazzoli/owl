@@ -43,4 +43,9 @@ public enum TemporalTrajectoryControl implements TrajectoryControl {
         .filter(trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), tail_delay)) //
         .collect(Collectors.toList());
   }
+
+  @Override
+  public ProviderRank getProviderRank() {
+    return ProviderRank.AUTONOMOUS;
+  }
 }

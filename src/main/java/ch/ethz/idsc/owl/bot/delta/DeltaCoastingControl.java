@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.math.state.EntityControl;
+import ch.ethz.idsc.owl.math.state.ProviderRank;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -27,5 +28,10 @@ public class DeltaCoastingControl implements EntityControl {
     if (Scalars.lessThan(u_norm, norm))
       u = u.multiply(u_norm).divide(norm);
     return Optional.of(u.negate());
+  }
+
+  @Override
+  public ProviderRank getProviderRank() {
+    return ProviderRank.FALLBACK;
   }
 }
