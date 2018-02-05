@@ -1,12 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.ani;
 
-import java.util.LinkedList;
 import java.util.Optional;
-import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.EntityControl;
+import ch.ethz.idsc.owl.math.state.EntityControlComparator;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
@@ -18,7 +19,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * 3) passive motion */
 public abstract class AbstractEntity implements RenderInterface, AnimationInterface {
   private final EpisodeIntegrator episodeIntegrator;
-  private final Queue<EntityControl> entityControls = new LinkedList<>();
+  private final Set<EntityControl> entityControls = //
+      new ConcurrentSkipListSet<>(EntityControlComparator.INSTANCE);
 
   protected AbstractEntity(EpisodeIntegrator episodeIntegrator) {
     this.episodeIntegrator = episodeIntegrator;
@@ -37,7 +39,7 @@ public abstract class AbstractEntity implements RenderInterface, AnimationInterf
         return;
       }
     }
-    throw new RuntimeException("control");
+    throw new RuntimeException("control missing");
   }
 
   public final StateTime getStateTimeNow() {

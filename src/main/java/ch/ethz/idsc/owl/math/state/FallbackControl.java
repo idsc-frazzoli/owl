@@ -19,4 +19,9 @@ public class FallbackControl implements EntityControl {
   public Optional<Tensor> control(StateTime tail, Scalar now) {
     return Optional.of(fallback);
   }
+
+  @Override
+  public ProviderRank getProviderRank() {
+    return ProviderRank.FALLBACK;
+  }
 }

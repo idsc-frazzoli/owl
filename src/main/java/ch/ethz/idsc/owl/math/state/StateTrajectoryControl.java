@@ -18,9 +18,6 @@ public abstract class StateTrajectoryControl implements TrajectoryControl {
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
 
-  // protected StateTrajectoryControl(Tensor fallback) {
-  // super(fallback);
-  // }
   @Override
   public final synchronized void setTrajectory(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
@@ -101,5 +98,10 @@ public abstract class StateTrajectoryControl implements TrajectoryControl {
     // if (Scalars.lessThan(dist.Get(argmin - 1), dist.Get(argmin + 1)))
     // --argmin;
     return argmin;
+  }
+
+  @Override
+  public final ProviderRank getProviderRank() {
+    return ProviderRank.AUTONOMOUS;
   }
 }
