@@ -86,14 +86,14 @@ public class PurePursuitTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{.2,0},{1,1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(1.0));
     Clip clip = Clip.function(1.2, 1.5);
-    clip.isInsideElseThrow(purePursuit.ratio().get());
+    clip.requireInside(purePursuit.ratio().get());
   }
 
   public void testRatioForwardRightPositiveX() {
     Tensor tensor = Tensors.fromString("{{.2,0},{1,-1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(1.0));
     Clip clip = Clip.function(-1.5, -1.2);
-    clip.isInsideElseThrow(purePursuit.ratio().get());
+    clip.requireInside(purePursuit.ratio().get());
   }
 
   public void testRatioBackRight() {
