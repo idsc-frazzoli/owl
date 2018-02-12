@@ -37,7 +37,7 @@ public class SimplexContinuousNoiseTest extends TestCase {
     for (int index = 0; index < 1000; ++index) {
       double vx = RandomVariate.of(distribution).number().doubleValue();
       double number = SimplexContinuousNoise.FUNCTION.at(vx);
-      clip.isInsideElseThrow(RealScalar.of(number));
+      clip.requireInside(RealScalar.of(number));
     }
   }
 
@@ -49,7 +49,7 @@ public class SimplexContinuousNoiseTest extends TestCase {
       double vy = RandomVariate.of(distribution).number().doubleValue();
       double vz = RandomVariate.of(distribution).number().doubleValue();
       double number = SimplexContinuousNoise.FUNCTION.at(vx, vy, vz);
-      clip.isInsideElseThrow(RealScalar.of(number));
+      clip.requireInside(RealScalar.of(number));
     }
   }
 
@@ -62,7 +62,7 @@ public class SimplexContinuousNoiseTest extends TestCase {
       double vz = RandomVariate.of(distribution).number().doubleValue();
       double va = RandomVariate.of(distribution).number().doubleValue();
       double number = SimplexContinuousNoise.at(vx, vy, vz, va);
-      clip.isInsideElseThrow(RealScalar.of(number));
+      clip.requireInside(RealScalar.of(number));
     }
   }
 }

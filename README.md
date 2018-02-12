@@ -1,10 +1,8 @@
-# ch.ethz.idsc.owl
-
-<a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
+# ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
 The repository contains Java 8 implementations of motion planners and their variants.
 
-Version `0.0.2`
+Version `0.0.3`
 
 The code in the `owl` repository operates a heavy and fast robot that may endanger living creatures.
 We follow best practices and coding standards to protect from avoidable errors.
@@ -102,7 +100,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
       </dependency>
     </dependencies>
 
