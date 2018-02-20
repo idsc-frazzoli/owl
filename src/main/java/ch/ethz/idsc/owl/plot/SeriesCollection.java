@@ -21,7 +21,7 @@ public class SeriesCollection implements Iterable<SeriesContainer> {
   }
 
   public SeriesContainer add(Tensor points) {
-    Color color = ColorLists._97.get(list.size());
+    Color color = ColorDataLists._97.get(list.size());
     SeriesContainer seriesContainer = new SeriesContainer(points, color);
     list.add(seriesContainer);
     return seriesContainer;

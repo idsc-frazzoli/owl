@@ -14,19 +14,19 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.sca.Decrement;
 
 /** computes manhatten distance by flood fill */
-/* package */ class FloodFill2D {
-  /** @param ttl
-   * @param image
+public class FloodFill2D {
+  /** @param image
+   * @param ttl
    * @param seeds
    * @return distance in exact precision */
   public static Tensor of(Tensor image, Scalar ttl, Set<Tensor> seeds) {
-    return new FloodFill2D(ttl, image, seeds).array;
+    return new FloodFill2D(image, ttl, seeds).array;
   }
 
   /** seeds are generated from given tensor using {@link #seeds(Tensor)}
    * 
-   * @param ttl
    * @param image
+   * @param ttl
    * @return distance in exact precision */
   public static Tensor of(Tensor image, Scalar ttl) {
     return of(image, ttl, seeds(image));
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.Decrement;
   private final Tensor image;
   private Set<Tensor> next;
 
-  private FloodFill2D(Scalar ttl, Tensor image, Set<Tensor> prev) {
+  private FloodFill2D(Tensor image, Scalar ttl, Set<Tensor> prev) {
     dimensions = Dimensions.of(image);
     array = Array.zeros(dimensions);
     this.image = image;
