@@ -51,14 +51,13 @@ public class ListPlot {
     graphics.setColor(Color.WHITE);
     graphics.fillRect(0, 0, dimension.width, dimension.height);
     graphics.setColor(Color.DARK_GRAY);
-    graphics.drawRect(MARGIN_EAST, view.height + MARGIN_TOP, view.width, 0);
-    graphics.drawRect(MARGIN_EAST, MARGIN_TOP, 0, view.height);
     // ---
     ClipExpand ce_rx = new ClipExpand(Clip.function(plotRange.Get(0, 0), plotRange.Get(0, 1)), 10);
     ClipExpand ce_ry = new ClipExpand(Clip.function(plotRange.Get(1, 0), plotRange.Get(1, 1)), 10);
     // ---
     Clip rx = ce_rx.clip;
     Clip ry = ce_ry.clip;
+    // ---
     // TODO division by zero
     Tensor point2res = DiagonalMatrix.of(rx.width().reciprocal(), ry.width().reciprocal(), RealScalar.ONE);
     point2res.set(rx.min().negate().divide(rx.width()), 0, 2);
@@ -72,6 +71,14 @@ public class ListPlot {
     GeometricLayer geometricLayer = new GeometricLayer(model2pixel, Tensors.vector(1, 2, 3));
     geometricLayer.pushMatrix(point2res);
     // ---
+    graphics.drawRect(MARGIN_EAST, MARGIN_TOP, 0, view.height);
+    int y_xaxis;
+    {
+      Point2D ppx = geometricLayer.toPoint2D(Tensors.of(RealScalar.ZERO, RealScalar.ZERO));
+      y_xaxis = ry.isInside(RealScalar.ZERO) ? (int) ppx.getY() : view.height + MARGIN_TOP;
+    }
+    graphics.drawRect(MARGIN_EAST, y_xaxis, view.width, 0); // draw x-axis
+    // ---
     GraphicsUtil.setQualityHigh(graphics);
     {
       graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, 11));
@@ -80,13 +87,13 @@ public class ListPlot {
         Scalar px = _px.Get();
         Point2D ppx = geometricLayer.toPoint2D(Tensors.of(px, RealScalar.ZERO));
         int pix = (int) ppx.getX();
-        graphics.drawRect(pix, view.height + MARGIN_TOP - DOT - 1, 0, DOT);
+        graphics.drawRect(pix, y_xaxis - DOT - 1, 0, DOT);
         String string = px.toString();
         int width = fontMetrics.stringWidth(string);
-        int ofs = pix - width / 2;
-        ofs = Math.max(MARGIN_EAST, ofs);
-        ofs = Math.min(ofs, MARGIN_EAST + view.width - width + 1);
-        graphics.drawString(string, ofs, view.height + MARGIN_TOP + 10);
+        int ofs_x = pix - width / 2;
+        ofs_x = Math.max(MARGIN_EAST, ofs_x);
+        ofs_x = Math.min(ofs_x, MARGIN_EAST + view.width - width + 1);
+        graphics.drawString(string, ofs_x, y_xaxis + 10);
       }
       for (Tensor _py : ce_ry.linspace) {
         Scalar py = _py.Get();

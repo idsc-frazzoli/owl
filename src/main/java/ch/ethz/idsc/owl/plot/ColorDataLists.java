@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-public enum ColorLists {
+public enum ColorDataLists {
   /** mathematica default */
   _97, //
   ;
   private final List<Color> list;
 
-  private ColorLists() {
+  private ColorDataLists() {
     String string = "/colorlist/" + name().substring(1) + ".csv";
     list = ResourceData.of(string).stream().map(ColorFormat::toColor).collect(Collectors.toList());
   }
