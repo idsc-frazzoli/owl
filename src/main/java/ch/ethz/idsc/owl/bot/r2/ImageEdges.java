@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.sca.Increment;
 
 public enum ImageEdges {
   ;
@@ -20,10 +19,10 @@ public enum ImageEdges {
   /** @param image with entries 0, or 255
    * @param ttl less than 256
    * @return */
-  public static Tensor extrusion(Tensor image, Scalar ttl) {
+  public static Tensor extrusion(Tensor image, final int ttl) {
     if (!image.flatten(-1).map(Scalar.class::cast).allMatch(ImageEdges::isBlackOrWhite))
       throw TensorRuntimeException.of(image);
-    Scalar factor = MAX.divide(Increment.ONE.apply(ttl));
+    Scalar factor = MAX.divide(RealScalar.of(ttl + 1));
     return FloodFill2D.of(image, ttl).multiply(factor).add(image);
   }
 }
