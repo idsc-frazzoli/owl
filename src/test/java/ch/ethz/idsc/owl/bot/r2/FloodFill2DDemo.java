@@ -33,7 +33,7 @@ enum FloodFill2DDemo {
 
   public static void main(String[] args) throws IOException {
     final Tensor tensor = R2ImageRegions._0F5C_2182.imageRegion().image();
-    Scalar ttl = RealScalar.of(30);
+    int ttl = 30;
     // ---
     System.out.println("export image " + Dimensions.of(tensor));
     Export.of(UserHome.Pictures("image.png"), tensor);

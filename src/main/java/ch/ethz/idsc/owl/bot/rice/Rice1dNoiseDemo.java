@@ -28,7 +28,7 @@ public class Rice1dNoiseDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.ZERO;
     Collection<Flow> controls = Rice2Controls.create1d(mu, 15);
-    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(1));
+    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     owlyAnimationFrame.set(new Rice1dEntity(mu, Tensors.vector(0, 0), trajectoryControl, controls));
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.5));
     owlyAnimationFrame.setObstacleQuery(SimpleTrajectoryRegionQuery.timeInvariant(region));

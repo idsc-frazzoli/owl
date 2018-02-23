@@ -42,7 +42,7 @@ public enum ImageRegions {
    * @param image
    * @return matrix with entries from the range {0, 1, ..., 255}
    * @throws Exception if input does not represent an image */
-  /* package */ static Tensor grayscale(Tensor image) {
+  public static Tensor grayscale(Tensor image) {
     Optional<Integer> optional = TensorRank.ofArray(image);
     switch (optional.get()) {
     case 2:

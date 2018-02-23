@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
+import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -24,6 +25,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 
@@ -40,6 +42,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
     super( //
         new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);
+    add(new FallbackControl(Array.zeros(2)));
     this.controls = controls;
   }
 

@@ -1,10 +1,8 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-The repository contains Java 8 implementations of motion planners and their variants.
+Library for motion planning in Java, version `0.0.4`
 
-Version `0.0.3`
-
-The code in the `owl` repository operates a heavy and fast robot that may endanger living creatures.
+The code in the repository operates a heavy and fast robot that may endanger living creatures.
 We follow best practices and coding standards to protect from avoidable errors.
 
 List of algorithms:
@@ -111,4 +109,4 @@ The library is used in the projects:
 * `owly3d`
 * `matsim`
 
-The repository has over `310` unit tests.
+The repository has over `330` unit tests.

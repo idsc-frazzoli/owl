@@ -39,6 +39,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
   public DeltaEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, ImageGradientInterpolation imageGradientInterpolation) {
     super(episodeIntegrator, trajectoryControl);
+    add(new DeltaCoastingControl(imageGradientInterpolation, U_NORM));
     this.imageGradientInterpolation = imageGradientInterpolation;
   }
 

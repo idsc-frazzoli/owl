@@ -18,15 +18,15 @@ import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
 public class PsuAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
+    Integrator integrator = RungeKutta45Integrator.INSTANCE;
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
-        PsuStateSpaceModel.INSTANCE, //
-        INTEGRATOR, //
+        PsuStateSpaceModel.INSTANCE, integrator, //
         new StateTime(Tensors.vector(0, 0), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new PsuTrajectoryControl();
     owlyAnimationFrame.set(new PsuEntity(episodeIntegrator, trajectoryControl));
@@ -37,7 +37,7 @@ public class PsuAnimationDemo implements DemoInterface {
     RandomSampleInterface sampler = new BoxRandomSample(range.negate(), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream());
     vectorFieldRender.uv_pairs = //
-        VectorFields.of(PsuStateSpaceModel.INSTANCE, points, PsuTrajectoryControl.FALLBACK_CONTROL, RealScalar.of(0.1));
+        VectorFields.of(PsuStateSpaceModel.INSTANCE, points, Array.zeros(1), RealScalar.of(0.1));
     owlyAnimationFrame.addBackground(vectorFieldRender);
     return owlyAnimationFrame;
   }
