@@ -34,7 +34,7 @@ public class LvAnimationDemo implements DemoInterface {
     Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, INTEGRATOR, //
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(1));
+    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     owlyAnimationFrame.set(new LvEntity(episodeIntegrator, trajectoryControl, controls));
     owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
     // ---

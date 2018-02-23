@@ -19,7 +19,8 @@ public abstract class TrajectoryEntity extends AbstractEntity {
   private List<TrajectorySample> trajectory = null;
 
   public TrajectoryEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
-    super(episodeIntegrator, trajectoryControl);
+    super(episodeIntegrator);
+    add(trajectoryControl);
     this.trajectoryControl = trajectoryControl;
   }
 

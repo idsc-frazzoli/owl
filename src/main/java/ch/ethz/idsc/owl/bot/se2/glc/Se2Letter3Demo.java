@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
 public class Se2Letter3Demo extends Se2CarDemo {
-  @Override
+  @Override // from Se2CarDemo
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     CarEntity carEntity = CarEntity.createDefault(new StateTime(Tensors.vector(6, 6, 1), RealScalar.ZERO));

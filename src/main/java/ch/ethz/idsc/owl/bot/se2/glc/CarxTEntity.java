@@ -9,13 +9,12 @@ import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Array;
 
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
 class CarxTEntity extends CarEntity {
   CarxTEntity(StateTime stateTime) {
-    super(stateTime, new TemporalTrajectoryControl(Array.zeros(3)), PARTITIONSCALE, CARFLOWS, SHAPE);
+    super(stateTime, TemporalTrajectoryControl.INSTANCE, PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
   @Override

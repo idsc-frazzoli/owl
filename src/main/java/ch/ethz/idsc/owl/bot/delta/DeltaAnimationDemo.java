@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class DeltaAnimationDemo implements DemoInterface {
@@ -37,7 +36,7 @@ public class DeltaAnimationDemo implements DemoInterface {
     StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         new DeltaStateSpaceModel(imageGradientInterpolation), EulerIntegrator.INSTANCE, stateTime);
-    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl(Array.zeros(2));
+    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     owlyAnimationFrame.set(new DeltaEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation));
     owlyAnimationFrame.setObstacleQuery(obstacleQuery);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);

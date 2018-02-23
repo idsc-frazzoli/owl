@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
+import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -21,6 +22,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
 /* package */ class Rice1dEntity extends AbstractCircularEntity {
   private static final Integrator INTEGRATOR = RungeKutta4Integrator.INSTANCE;
@@ -32,6 +34,7 @@ import ch.ethz.idsc.tensor.Tensors;
     super( //
         new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);
+    add(new FallbackControl(Array.zeros(1)));
     this.controls = controls;
   }
 

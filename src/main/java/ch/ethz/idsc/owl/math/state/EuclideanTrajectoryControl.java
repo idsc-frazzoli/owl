@@ -6,11 +6,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 public class EuclideanTrajectoryControl extends StateTrajectoryControl {
-  public EuclideanTrajectoryControl(Tensor fallback) {
-    super(fallback);
+  public static final TrajectoryControl INSTANCE = new EuclideanTrajectoryControl();
+
+  private EuclideanTrajectoryControl() {
   }
 
-  @Override
+  @Override // from StateTrajectoryControl
   protected final Scalar distance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y);
   }
