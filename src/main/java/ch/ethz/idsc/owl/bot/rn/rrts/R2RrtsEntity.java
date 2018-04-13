@@ -80,7 +80,7 @@ public class R2RrtsEntity extends AbstractRrtsEntity {
     nch.plan(350);
     if (nch.trajectory != null) {
       System.out.println("found!");
-      trajectoryPlannerCallback.expandResult(head, nch.rrtsPlanner, nch.trajectory);
+      trajectoryPlannerCallback.expandResult(head, nch.getRrtsPlanner(), nch.trajectory);
     }
   }
 }

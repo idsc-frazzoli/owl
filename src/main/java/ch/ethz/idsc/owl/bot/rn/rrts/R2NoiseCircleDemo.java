@@ -16,6 +16,6 @@ enum R2NoiseCircleDemo {
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(122, 300);
     owlyFrame.jFrame.setBounds(100, 100, 500, 500);
-    owlyFrame.setRrts(nch.root, nch.obstacleQuery);
+    owlyFrame.setRrts(nch.getRoot(), nch.getObstacleQuery());
   }
 }
