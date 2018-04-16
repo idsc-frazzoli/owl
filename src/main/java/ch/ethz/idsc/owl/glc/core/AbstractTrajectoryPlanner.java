@@ -4,27 +4,27 @@ package ch.ethz.idsc.owl.glc.core;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** planner is shared between
  * {@link StandardTrajectoryPlanner} and {@link AbstractAnyTrajectoryPlanner} */
 public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
-  private final TrajectoryRegionQuery obstacleQuery;
+  private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
 
   protected AbstractTrajectoryPlanner( //
       Tensor eta, //
       StateIntegrator stateIntegrator, //
-      TrajectoryRegionQuery obstacleQuery, //
+      PlannerConstraint plannerConstraint, //
       GoalInterface goalInterface) {
     super(eta);
     this.stateIntegrator = stateIntegrator;
-    this.obstacleQuery = Objects.requireNonNull(obstacleQuery);
+    this.plannerConstraint = Objects.requireNonNull(plannerConstraint);
     this.goalInterface = goalInterface;
   }
 
@@ -34,8 +34,8 @@ public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
   }
 
   @Override // from TrajectoryPlanner
-  public final TrajectoryRegionQuery getObstacleQuery() {
-    return obstacleQuery;
+  public final PlannerConstraint getPlannerConstraint() {
+    return plannerConstraint;
   }
 
   @Override // from TrajectoryPlanner

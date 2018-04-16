@@ -7,6 +7,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -20,7 +21,7 @@ public enum RenderElements {
     list.add(new EtaRender(trajectoryPlanner.getEta()));
     list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
     {
-      TrajectoryRegionQuery trq = trajectoryPlanner.getObstacleQuery();
+      PlannerConstraint trq = trajectoryPlanner.getPlannerConstraint();
       if (trq instanceof StateTimeCollector)
         list.add(new ObstacleRender(((StateTimeCollector) trq).getMembers()));
     }
