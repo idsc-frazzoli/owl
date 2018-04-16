@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.adapter;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +14,8 @@ import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
-public class SampledTransitionRegionQuery implements TransitionRegionQuery, StateTimeCollector {
+public class SampledTransitionRegionQuery implements //
+    TransitionRegionQuery, StateTimeCollector, Serializable {
   private final TrajectoryRegionQuery trajectoryRegionQuery;
   private final Scalar dt;
 

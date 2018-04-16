@@ -37,13 +37,23 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
   // ---
   private transient final ControlsIntegrator controlsIntegrator;
 
+  // TODO deprecated
   public StandardTrajectoryPlanner( //
       Tensor eta, //
       StateIntegrator stateIntegrator, //
       Collection<Flow> controls, //
       TrajectoryRegionQuery obstacleQuery, //
       GoalInterface goalInterface) {
-    super(eta, stateIntegrator, obstacleQuery, goalInterface);
+    this(eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
+  }
+
+  public StandardTrajectoryPlanner( //
+      Tensor eta, //
+      StateIntegrator stateIntegrator, //
+      Collection<Flow> controls, //
+      PlannerConstraint plannerConstraint, //
+      GoalInterface goalInterface) {
+    super(eta, stateIntegrator, plannerConstraint, goalInterface);
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
         () -> controls.stream().parallel(), //
@@ -77,7 +87,7 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
       GlcNode node, Map<GlcNode, List<StateTime>> connectors, Tensor domainKey, DomainQueue domainQueue) {
     for (GlcNode next : domainQueue) { // iterate over the candidates in DomainQueue
       final List<StateTime> trajectory = connectors.get(next);
-      if (!getObstacleQuery().firstMember(trajectory).isPresent()) {
+      if (getPlannerConstraint().isSatisfied(node, trajectory, next.flow())) {
         Optional<GlcNode> former = getNode(domainKey);
         boolean isPresent = former.isPresent();
         synchronized (this) {

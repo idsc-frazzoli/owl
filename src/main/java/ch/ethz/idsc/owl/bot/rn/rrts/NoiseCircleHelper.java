@@ -28,13 +28,13 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 class NoiseCircleHelper {
   private final StateTime tail;
-  RrtsNode root;
-  TransitionRegionQuery obstacleQuery;
+  private final RrtsNode root;
+  private final TransitionRegionQuery obstacleQuery;
+  private final RrtsPlanner rrtsPlanner;
+  private final RnTransitionSpace rnts;
   List<TrajectorySample> trajectory = null;
-  RrtsPlanner rrtsPlanner;
-  RnTransitionSpace rnts;
 
-  public NoiseCircleHelper(TransitionRegionQuery obstacleQuery, StateTime tail, Tensor goal) {
+  NoiseCircleHelper(TransitionRegionQuery obstacleQuery, StateTime tail, Tensor goal) {
     this.tail = tail;
     Tensor orig = tail.state();
     Scalar radius = Norm._2.between(goal, orig).multiply(RealScalar.of(0.5)).add(RealScalar.ONE);
@@ -54,7 +54,7 @@ class NoiseCircleHelper {
     rrtsPlanner = new RrtsPlanner(rrts, spaceSampler, goalSampler);
   }
 
-  public void plan(int steps) {
+  void plan(int steps) {
     Expand.steps(rrtsPlanner, steps);
     // System.out.println("found " + rrtsPlanner.getBest().isPresent());
     // System.out.println("iterations =" + iters);
@@ -67,5 +67,17 @@ class NoiseCircleHelper {
       // magic const
       trajectory = RnFlowTrajectory.createTrajectory(rnts, sequence, tail.time(), RealScalar.of(0.1));
     }
+  }
+
+  RrtsNode getRoot() {
+    return root;
+  }
+
+  TransitionRegionQuery getObstacleQuery() {
+    return obstacleQuery;
+  }
+
+  RrtsPlanner getRrtsPlanner() {
+    return rrtsPlanner;
   }
 }
