@@ -15,10 +15,10 @@ import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Floor;
 
@@ -132,7 +132,7 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   public abstract StateIntegrator getStateIntegrator();
 
   /** @return obstacle query for the purpose of inspection, i.e. no alteration should be made */
-  public abstract TrajectoryRegionQuery getObstacleQuery();
+  public abstract PlannerConstraint getPlannerConstraint();
 
   /** @return goal query for the purpose of inspection, i.e. no alteration should be made */
   public abstract GoalInterface getGoalInterface();
