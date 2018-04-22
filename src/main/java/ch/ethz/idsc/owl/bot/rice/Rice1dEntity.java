@@ -6,6 +6,7 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
@@ -50,6 +51,6 @@ import ch.ethz.idsc.tensor.alg.Array;
         FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
     GoalInterface goalInterface = Rice1GoalManager.create(goal.extract(0, 2), Tensors.vector(0.2, 0.3));
     return new StandardTrajectoryPlanner( //
-        partitionScale, stateIntegrator, controls, obstacleQuery, goalInterface);
+        partitionScale, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
   }
 }
