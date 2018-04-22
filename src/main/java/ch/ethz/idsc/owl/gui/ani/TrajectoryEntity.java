@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** entity executes flows along a given trajectory */
 public abstract class TrajectoryEntity extends AbstractEntity {
   private final TrajectoryControl trajectoryControl;
-  private List<TrajectorySample> trajectory = null;
+  protected List<TrajectorySample> trajectory = null;
 
   public TrajectoryEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator);
