@@ -11,13 +11,13 @@ import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
-import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.alg.Array;
         psuWrap, Tensors.vector(Math.PI * 0.7, .5), RealScalar.of(0.3));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyTrajectoryRegionQuery.INSTANCE, goalInterface);
+        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(psuWrap::represent);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.alg.Array;
         psuWrap, Tensors.vector(Math.PI, 2), RealScalar.of(0.3));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyTrajectoryRegionQuery.INSTANCE, goalInterface);
+        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(psuWrap::represent);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));

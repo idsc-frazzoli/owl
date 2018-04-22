@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -62,7 +63,8 @@ import ch.ethz.idsc.tensor.alg.Array;
         RnMinTimeGoalManager.create(center, goalRadius, controls), //
         extraCosts);
     return new StandardTrajectoryPlanner( //
-        partitionScale, FIXEDSTATEINTEGRATOR, controls, obstacleQuery, goalInterface);
+        partitionScale, FIXEDSTATEINTEGRATOR, controls, //
+        new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
   }
 
   Collection<Flow> createControls() {

@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -59,7 +60,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     GoalInterface goalInterface = DeltaMinTimeGoalManager.create( //
         goal.extract(0, 2), RealScalar.of(.3), maxMove);
     return new StandardTrajectoryPlanner( //
-        eta, FIXEDSTATEINTEGRATOR, controls, obstacleQuery, goalInterface);
+        eta, FIXEDSTATEINTEGRATOR, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
   }
 
   protected Tensor eta() {
