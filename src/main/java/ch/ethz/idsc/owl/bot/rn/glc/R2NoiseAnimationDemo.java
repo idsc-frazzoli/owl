@@ -5,6 +5,7 @@ import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -31,7 +32,7 @@ public class R2NoiseAnimationDemo implements DemoInterface {
     owlyAnimationFrame.set(r2Entity);
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.2));
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
-    owlyAnimationFrame.setObstacleQuery(trajectoryRegionQuery);
+    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(trajectoryRegionQuery));
     owlyAnimationFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
     return owlyAnimationFrame;
   }

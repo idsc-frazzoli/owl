@@ -5,6 +5,8 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.r2.R2xTImageStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.RigidFamily;
@@ -39,7 +41,8 @@ public class TwdxTImageAnimationDemo implements DemoInterface {
           48, RealScalar.of(10), twdxTEntity::getStateTimeNow, trq);
       owlyAnimationFrame.addBackground(renderInterface);
     }
-    owlyAnimationFrame.setObstacleQuery(trq);
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
+    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     {
       RenderInterface renderInterface = new LidarEmulator( //

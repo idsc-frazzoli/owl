@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -21,7 +21,7 @@ public class MousePlanner extends MouseAdapter {
   // ---
   AnimationInterface controllable;
   GeometricComponent geometricComponent;
-  TrajectoryRegionQuery obstacleQuery;
+  PlannerConstraint plannerConstraint;
   TrajectoryPlannerCallback trajectoryPlannerCallback;
 
   @Override
@@ -42,7 +42,7 @@ public class MousePlanner extends MouseAdapter {
           switch (abstractEntity.getPlannerType()) {
           case STANDARD: {
             TrajectoryPlanner trajectoryPlanner = //
-                abstractEntity.createTrajectoryPlanner(obstacleQuery, goal);
+                abstractEntity.createTrajectoryPlanner(plannerConstraint, goal);
             mpw = new MotionPlanWorker();
             mpw.addCallback(trajectoryPlannerCallback);
             mpw.start(head, trajectoryPlanner);

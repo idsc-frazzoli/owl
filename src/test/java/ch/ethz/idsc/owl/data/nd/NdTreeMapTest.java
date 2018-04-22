@@ -93,10 +93,10 @@ public class NdTreeMapTest extends TestCase {
     final int n = 10;
     NdTreeMap<String> ndTreeMap = //
         new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), n, 26);
-    for (int c = 0; c < 400; ++c)
+    for (int c = 0; c < 800; ++c)
       ndTreeMap.add(RandomVariate.of(UniformDistribution.unit(), 2), "s" + c);
     Tensor flatten = Flatten.of(ndTreeMap.binSize());
-    assertEquals(Total.of(flatten), RealScalar.of(400));
+    assertEquals(Total.of(flatten), RealScalar.of(800));
     NavigableMap<Tensor, Long> map = Tally.sorted(flatten);
     Tensor last = map.lastKey();
     assertEquals(last, RealScalar.of(n));
