@@ -18,6 +18,7 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.TimeKeeper;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
@@ -42,7 +43,7 @@ public class OwlyAnimationFrame extends TimerFrame {
   private final List<AnimationInterface> animationInterfaces = new CopyOnWriteArrayList<>();
   /** reference to the entity that is controlled by the user */
   private AnimationInterface controllable = null;
-  /** the obstacle query is set in {@link #setObstacleQuery(TrajectoryRegionQuery)}
+  /** the obstacle query is set in {@link #setPlannerConstraint(TrajectoryRegionQuery)}
    * it is intentionally set to null here lest the application forget */
   MousePlanner mousePlanner = new MousePlanner();
   public final DefTrPlCall trajectoryPlannerCallback = new DefTrPlCall();
@@ -128,9 +129,9 @@ public class OwlyAnimationFrame extends TimerFrame {
   /** modifies the obstacle region in between mouse-clicks
    * (so far only relevant for the standard planner)
    * 
-   * @param obstacleQuery */
-  public void setObstacleQuery(TrajectoryRegionQuery obstacleQuery) {
-    mousePlanner.obstacleQuery = obstacleQuery;
+   * @param plannerConstraint */
+  public void setPlannerConstraint(PlannerConstraint plannerConstraint) {
+    mousePlanner.plannerConstraint = plannerConstraint;
   }
 
   /** @param renderInterface */

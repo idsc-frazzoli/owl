@@ -10,14 +10,13 @@ import ch.ethz.idsc.owl.bot.se2.glc.Se2Entity;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.ani.PlannerType;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -75,14 +74,14 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal) {
-    this.obstacleQuery = obstacleQuery;
+  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+    this.plannerConstraint = plannerConstraint;
     Tensor radiusVector = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         Se2MinTimeGoalManager.create(goal, radiusVector, controls), //
         extraCosts);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta(), FIXEDSTATEINTEGRATOR, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
+        eta(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
     return trajectoryPlanner;
   }

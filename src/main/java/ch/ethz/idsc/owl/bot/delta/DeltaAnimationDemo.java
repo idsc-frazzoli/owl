@@ -5,6 +5,8 @@ import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -14,7 +16,6 @@ import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,13 +33,13 @@ public class DeltaAnimationDemo implements DemoInterface {
         ImageGradientInterpolation.nearest(ResourceData.of("/io/delta_uxy.png"), range, amp);
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
-    TrajectoryRegionQuery obstacleQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
+    PlannerConstraint obstacleQuery = new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(imageRegion));
     StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         new DeltaStateSpaceModel(imageGradientInterpolation), EulerIntegrator.INSTANCE, stateTime);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     owlyAnimationFrame.set(new DeltaEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation));
-    owlyAnimationFrame.setObstacleQuery(obstacleQuery);
+    owlyAnimationFrame.setPlannerConstraint(obstacleQuery);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, imageRegion, RealScalar.of(0.5)));

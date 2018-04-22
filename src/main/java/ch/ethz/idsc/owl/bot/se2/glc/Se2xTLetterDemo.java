@@ -13,6 +13,8 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
@@ -64,9 +66,10 @@ public class Se2xTLetterDemo implements DemoInterface {
     // )));
     // TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
     // );
-    carxTEntity.obstacleQuery = trq;
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
+    carxTEntity.plannerConstraint = plannerConstraint;
     // abstractEntity.raytraceQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
-    owlyAnimationFrame.setObstacleQuery(trq);
+    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     // owlyAnimationFrame.addBackground((RenderInterface) region2);

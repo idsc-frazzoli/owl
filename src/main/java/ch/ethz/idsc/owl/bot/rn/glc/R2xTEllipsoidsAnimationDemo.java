@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -66,7 +67,7 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
     Region<StateTime> region3 = new R2xTEllipsoidStateTimeRegion( //
         Tensors.vector(0.6, 0.6), noise, () -> abstractEntity.getStateTimeNow().time());
     Region<StateTime> union = RegionUnion.wrap(Arrays.asList(region1, region2, region3));
-    owlyAnimationFrame.setObstacleQuery(new SimpleTrajectoryRegionQuery(union));
+    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(union)));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
     owlyAnimationFrame.addBackground((RenderInterface) region3);

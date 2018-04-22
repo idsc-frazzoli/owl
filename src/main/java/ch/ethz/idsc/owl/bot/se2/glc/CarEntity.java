@@ -12,8 +12,8 @@ import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.ani.PlannerType;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.Degree;
@@ -23,7 +23,6 @@ import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -97,14 +96,14 @@ public class CarEntity extends Se2Entity {
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal) {
+  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     if (!VectorQ.ofLength(goal, 3))
       throw TensorRuntimeException.of(goal);
-    this.obstacleQuery = obstacleQuery;
+    this.plannerConstraint = plannerConstraint;
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         Se2MinTimeGoalManager.create(goal, goalRadius, controls), extraCosts);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta(), FIXEDSTATEINTEGRATOR, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
+        eta(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
     return trajectoryPlanner;
   }

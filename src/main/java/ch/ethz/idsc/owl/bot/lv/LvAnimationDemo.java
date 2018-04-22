@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.lv;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
+import ch.ethz.idsc.owl.glc.std.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -14,7 +15,6 @@ import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -36,7 +36,7 @@ public class LvAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     owlyAnimationFrame.set(new LvEntity(episodeIntegrator, trajectoryControl, controls));
-    owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
+    owlyAnimationFrame.setPlannerConstraint(EmptyPlannerConstraint.INSTANCE);
     // ---
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.psu;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
+import ch.ethz.idsc.owl.glc.std.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.VectorFields;
@@ -10,7 +11,6 @@ import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -30,7 +30,7 @@ public class PsuAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(0, 0), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new PsuTrajectoryControl();
     owlyAnimationFrame.set(new PsuEntity(episodeIntegrator, trajectoryControl));
-    owlyAnimationFrame.setObstacleQuery(EmptyTrajectoryRegionQuery.INSTANCE);
+    owlyAnimationFrame.setPlannerConstraint(EmptyPlannerConstraint.INSTANCE);
     // ---
     Tensor range = Tensors.vector(Math.PI, 3);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();

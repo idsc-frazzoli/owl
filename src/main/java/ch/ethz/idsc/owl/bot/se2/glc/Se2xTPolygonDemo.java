@@ -6,6 +6,7 @@ import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
@@ -26,8 +27,8 @@ public class Se2xTPolygonDemo implements DemoInterface {
         scalar -> Tensors.of(Sin.FUNCTION.apply(scalar.multiply(RealScalar.of(0.2))), RealScalar.ZERO));
     Region<StateTime> region = new R2xTPolygonStateTimeRegion( //
         R2ExamplePolygons.CORNER_TOP_LEFT, shift, () -> carxTEntity.getStateTimeNow().time());
-    carxTEntity.obstacleQuery = new SimpleTrajectoryRegionQuery(region);
-    owlyAnimationFrame.setObstacleQuery(carxTEntity.obstacleQuery);
+    carxTEntity.plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(region));
+    owlyAnimationFrame.setPlannerConstraint(carxTEntity.plannerConstraint);
     // owlyAnimationFrame.addRegionRender(imageRegion);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     // ---

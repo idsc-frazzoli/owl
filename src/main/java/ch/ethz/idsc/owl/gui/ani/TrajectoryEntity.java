@@ -6,9 +6,9 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -52,8 +52,8 @@ public abstract class TrajectoryEntity extends AbstractEntity {
   /** @return delay between now and the future point in time from when to divert to a new trajectory */
   public abstract Scalar delayHint();
 
-  /** @param obstacleQuery
+  /** @param plannerConstraint
    * @param goal for instance {px, py, angle}
    * @return */
-  public abstract TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal);
+  public abstract TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal);
 }
