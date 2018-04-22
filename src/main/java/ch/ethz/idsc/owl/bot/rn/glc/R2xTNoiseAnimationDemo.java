@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import ch.ethz.idsc.owl.bot.r2.R2xTNoiseStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -25,7 +26,7 @@ public class R2xTNoiseAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(0.2, 0.2), RealScalar.ZERO));
     owlyAnimationFrame.set(new R2xTEntity(episodeIntegrator, RealScalar.of(0.4)));
     Region<StateTime> region = new R2xTNoiseStateTimeRegion(RealScalar.of(0.5));
-    owlyAnimationFrame.setObstacleQuery(new SimpleTrajectoryRegionQuery(region));
+    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(region)));
     return owlyAnimationFrame;
   }
 

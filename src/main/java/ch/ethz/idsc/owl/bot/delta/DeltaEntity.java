@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -15,7 +16,6 @@ import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal) {
+  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Tensor eta = eta();
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, U_NORM).getFlows(U_SIZE);
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     GoalInterface goalInterface = DeltaMinTimeGoalManager.create( //
         goal.extract(0, 2), RealScalar.of(.3), maxMove);
     return new StandardTrajectoryPlanner( //
-        eta, FIXEDSTATEINTEGRATOR, controls, obstacleQuery, goalInterface);
+        eta, FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 
   protected Tensor eta() {

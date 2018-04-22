@@ -21,9 +21,10 @@ public enum RenderElements {
     list.add(new EtaRender(trajectoryPlanner.getEta()));
     list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
     {
-      PlannerConstraint trq = trajectoryPlanner.getPlannerConstraint();
-      if (trq instanceof StateTimeCollector)
-        list.add(new ObstacleRender(((StateTimeCollector) trq).getMembers()));
+      PlannerConstraint plannerConstraint = trajectoryPlanner.getPlannerConstraint();
+      // TODO always false
+      if (plannerConstraint instanceof StateTimeCollector)
+        list.add(new ObstacleRender(((StateTimeCollector) plannerConstraint).getMembers()));
     }
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
     list.add(new TreeRender(trajectoryPlanner.getDomainMap().values()));

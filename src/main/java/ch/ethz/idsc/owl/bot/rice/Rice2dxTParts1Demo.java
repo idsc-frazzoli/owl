@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.bot.rn.glc.R2xTEllipsoidsAnimationDemo;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -56,7 +57,7 @@ public class Rice2dxTParts1Demo implements DemoInterface {
     TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList(region1, region2, region3)));
     // abstractEntity.obstacleQuery = trq;
-    owlyAnimationFrame.setObstacleQuery(trq);
+    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(trq));
     // owlyAnimationFrame.addRegionRender(imageRegion);
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);

@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.Scalar;
@@ -36,16 +35,6 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
   private static final Scalar MERIT_EPS = DoubleScalar.of(1E-6);
   // ---
   private transient final ControlsIntegrator controlsIntegrator;
-
-  // TODO deprecated
-  public StandardTrajectoryPlanner( //
-      Tensor eta, //
-      StateIntegrator stateIntegrator, //
-      Collection<Flow> controls, //
-      TrajectoryRegionQuery obstacleQuery, //
-      GoalInterface goalInterface) {
-    this(eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
-  }
 
   public StandardTrajectoryPlanner( //
       Tensor eta, //

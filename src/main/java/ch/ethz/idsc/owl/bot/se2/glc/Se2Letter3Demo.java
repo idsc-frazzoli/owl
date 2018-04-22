@@ -5,6 +5,8 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -23,11 +25,11 @@ public class Se2Letter3Demo extends Se2CarDemo {
     carEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     // se2Entity.extraCosts.add(r2ImageRegionWrap.gradientCostFunction());
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-    TrajectoryRegionQuery trq = createCarQuery(imageRegion);
-    carEntity.obstacleQuery = trq;
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(createCarQuery(imageRegion));
+    carEntity.plannerConstraint = plannerConstraint;
     TrajectoryRegionQuery ray = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     owlyAnimationFrame.set(carEntity);
-    owlyAnimationFrame.setObstacleQuery(trq);
+    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     {
       RenderInterface renderInterface = new CameraEmulator( //
