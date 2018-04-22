@@ -7,6 +7,8 @@ import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -28,8 +30,9 @@ public class Se2xTPlainDemo
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     Se2PointsVsRegion se2PointsVsRegion = Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), imageRegion);
     TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeInvariant(se2PointsVsRegion);
-    carxTEntity.obstacleQuery = trq;
-    owlyAnimationFrame.setObstacleQuery(trq);
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
+    carxTEntity.plannerConstraint = plannerConstraint;
+    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     // ---
     owlyAnimationFrame.configCoordinateOffset(50, 700);

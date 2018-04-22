@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.owl.math.Degree;
@@ -67,7 +68,7 @@ enum Se2WrapDemo {
     TrajectoryRegionQuery obstacleQuery = obstacleQuery();
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, obstacleQuery, se2GoalManager.getGoalInterface());
+        eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), se2GoalManager.getGoalInterface());
     trajectoryPlanner.represent = StateTimeTensorFunction.state(coordinateWrap::represent);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0, 0), RealScalar.ZERO));

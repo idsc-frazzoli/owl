@@ -11,13 +11,13 @@ import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -43,7 +43,7 @@ enum T2Demo {
     // Heuristic heuristic = new ZeroHeuristic(); // rnGoal
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyTrajectoryRegionQuery.INSTANCE, rnGoal.getGoalInterface());
+        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, rnGoal.getGoalInterface());
     trajectoryPlanner.represent = StateTimeTensorFunction.state(coordinateWrap::represent);
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
     Expand.maxSteps(trajectoryPlanner, 1400);

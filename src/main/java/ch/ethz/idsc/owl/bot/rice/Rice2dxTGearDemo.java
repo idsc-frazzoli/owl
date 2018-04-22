@@ -7,6 +7,7 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -53,7 +54,7 @@ public class Rice2dxTGearDemo implements DemoInterface {
     TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList(cog0, cog1, cog2)));
     // ---
-    owlyAnimationFrame.setObstacleQuery(trq);
+    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(trq));
     owlyAnimationFrame.addBackground((RenderInterface) cog0);
     owlyAnimationFrame.addBackground((RenderInterface) cog1);
     owlyAnimationFrame.addBackground((RenderInterface) cog2);

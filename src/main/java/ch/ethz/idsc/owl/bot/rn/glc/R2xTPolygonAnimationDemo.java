@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
 import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -51,8 +52,8 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
     Tensor polygon = CogPoints.of(4, RealScalar.of(1.5), RealScalar.of(0.5));
     Region<StateTime> region2 = new R2xTPolygonStateTimeRegion( //
         polygon, rigid2, () -> abstractEntity.getStateTimeNow().time());
-    owlyAnimationFrame.setObstacleQuery(new SimpleTrajectoryRegionQuery( //
-        RegionUnion.wrap(Arrays.asList(region1, region2))));
+    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery( //
+        RegionUnion.wrap(Arrays.asList(region1, region2)))));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
     return owlyAnimationFrame;

@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -69,7 +70,7 @@ enum R2DemoSlow {
     GoalInterface goalInterface = new RnMinDistSphericalGoalManager(sphericalRegion);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, obstacleQuery, goalInterface);
+        eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400)) {
       OwlyFrame owlyFrame = OwlyGui.start();

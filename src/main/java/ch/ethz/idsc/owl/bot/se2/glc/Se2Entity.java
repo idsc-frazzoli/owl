@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
@@ -20,7 +22,6 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -33,7 +34,7 @@ public abstract class Se2Entity extends TrajectoryEntity {
       FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
   // ---
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
-  public TrajectoryRegionQuery obstacleQuery = null;
+  public PlannerConstraint plannerConstraint = null;
 
   protected Se2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
     super( //
@@ -43,7 +44,8 @@ public abstract class Se2Entity extends TrajectoryEntity {
   }
 
   private boolean obstacleQuery_isDisjoint(StateTime stateTime) {
-    return Objects.isNull(obstacleQuery) || !obstacleQuery.isMember(stateTime);
+    // TODO
+    return Objects.isNull(plannerConstraint) || !plannerConstraint.isSatisfied(null, Arrays.asList(stateTime), null);
   }
 
   protected abstract Tensor eta();

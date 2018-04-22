@@ -6,6 +6,8 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -21,8 +23,9 @@ public class Se2PolicyImageDemo implements DemoInterface {
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     // ---
     TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
     // abstractEntity.raytraceQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
-    owlyAnimationFrame.setObstacleQuery(trq);
+    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(RegionRenders.create(trq));
     // ---

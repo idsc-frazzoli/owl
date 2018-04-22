@@ -10,6 +10,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.gui.ani.PlannerType;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
@@ -18,7 +19,6 @@ import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -52,7 +52,7 @@ public class R2RrtsEntity extends AbstractRrtsEntity {
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(TrajectoryRegionQuery obstacleQuery, Tensor goal) {
+  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     throw new RuntimeException(); // TODO API not finalized
   }
 

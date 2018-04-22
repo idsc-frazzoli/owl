@@ -43,10 +43,19 @@ public class NdTreeMapTest extends TestCase {
       Tensor center = Tensors.vector(1.1, 0.9);
       NdCenterInterface distancer = NdCenterInterface.euclidean(center);
       NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 2);
+      assertEquals(cluster.size(), 2);
       List<String> list = Arrays.asList("d1", "d4");
       for (NdEntry<String> point : cluster.collection())
         assertTrue(list.contains(point.value()));
     }
+  }
+
+  public void testEmpty() throws Exception {
+    NdMap<String> ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
+    assertTrue(ndMap.isEmpty());
+    NdCenterInterface distancer = NdCenterInterface.euclidean(Tensors.vector(0, 0));
+    NdCluster<String> cluster = ndMap.buildCluster(distancer, 2);
+    assertEquals(cluster.size(), 0);
   }
 
   public void testClear() throws Exception {
@@ -84,10 +93,10 @@ public class NdTreeMapTest extends TestCase {
     final int n = 10;
     NdTreeMap<String> ndTreeMap = //
         new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), n, 26);
-    for (int c = 0; c < 400; ++c)
+    for (int c = 0; c < 800; ++c)
       ndTreeMap.add(RandomVariate.of(UniformDistribution.unit(), 2), "s" + c);
     Tensor flatten = Flatten.of(ndTreeMap.binSize());
-    assertEquals(Total.of(flatten), RealScalar.of(400));
+    assertEquals(Total.of(flatten), RealScalar.of(800));
     NavigableMap<Tensor, Long> map = Tally.sorted(flatten);
     Tensor last = map.lastKey();
     assertEquals(last, RealScalar.of(n));

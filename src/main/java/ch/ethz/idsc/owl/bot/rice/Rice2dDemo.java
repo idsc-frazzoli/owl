@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -53,7 +54,7 @@ enum Rice2dDemo {
             )));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, obstacleQuery, goalInterface);
+        eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0.1, 0, 0), RealScalar.ZERO));
     Stopwatch stopwatch = Stopwatch.started();

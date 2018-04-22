@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.Degree;
@@ -49,7 +50,7 @@ enum Se2rExpandDemo {
         )));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, obstacleQuery, goalInterface);
+        eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(3), RealScalar.ZERO));
     OwlyFrame owlyFrame = OwlyGui.start();
