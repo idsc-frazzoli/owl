@@ -8,6 +8,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
@@ -15,6 +16,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
+import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.state.FallbackControl;
@@ -22,6 +24,7 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -45,7 +48,7 @@ public abstract class Se2Entity extends TrajectoryEntity {
 
   private boolean obstacleQuery_isDisjoint(StateTime stateTime) {
     // TODO
-    return Objects.isNull(plannerConstraint) || !plannerConstraint.isSatisfied(null, Arrays.asList(stateTime), null);
+    return Objects.isNull(plannerConstraint) || plannerConstraint.isSatisfied(null, Arrays.asList(stateTime), null);
   }
 
   protected abstract Tensor eta();
@@ -54,6 +57,14 @@ public abstract class Se2Entity extends TrajectoryEntity {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    {
+      List<TrajectorySample> _trajectory = trajectory;
+      if (Objects.nonNull(_trajectory)) {
+        TrajectoryRender trajectoryRender = new TrajectoryRender();
+        trajectoryRender.setTrajectory(_trajectory);
+        trajectoryRender.render(geometricLayer, graphics);
+      }
+    }
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();
       Color color = obstacleQuery_isDisjoint(stateTime) //
