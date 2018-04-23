@@ -1,7 +1,6 @@
 // code by jph and jl
 package ch.ethz.idsc.owl.gui.win;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -18,8 +17,6 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.RenderElements;
-import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
-import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -141,18 +138,5 @@ public class OwlyFrame extends BaseFrame {
 
   public void addBackground(RenderInterface renderInterface) {
     geometricComponent.addRenderInterfaceBackground(renderInterface);
-  }
-
-  public void addTrajectory(List<TrajectorySample> trajectory) {
-    TrajectoryRender trajectoryRenderer = new TrajectoryRender();
-    trajectoryRenderer.setTrajectory(trajectory);
-    geometricComponent.addRenderInterfaceBackground(trajectoryRenderer);
-  }
-
-  public void addTrajectory(List<TrajectorySample> trajectory, Color color) {
-    TrajectoryRender trajectoryRenderer = new TrajectoryRender();
-    trajectoryRenderer.setColor(color);
-    trajectoryRenderer.setTrajectory(trajectory);
-    geometricComponent.addRenderInterfaceBackground(trajectoryRenderer);
   }
 }

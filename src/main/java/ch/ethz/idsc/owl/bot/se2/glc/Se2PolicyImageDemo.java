@@ -31,12 +31,12 @@ public class Se2PolicyImageDemo implements DemoInterface {
     // ---
     {
       CarPolicyEntity twdPolicyEntity = //
-          new CarPolicyEntity(Tensors.vector(2.383, 2.567, 1.571), SarsaType.qlearning, trq);
+          new CarPolicyEntity(Tensors.vector(2.383, 2.567, 1.571), SarsaType.QLEARNING, trq);
       owlyAnimationFrame.add(twdPolicyEntity);
     }
     {
       CarPolicyEntity twdPolicyEntity = //
-          new CarPolicyEntity(Tensors.vector(1.3, 2.8, 1.57), SarsaType.expected, trq);
+          new CarPolicyEntity(Tensors.vector(1.3, 2.8, 1.57), SarsaType.EXPECTED, trq);
       owlyAnimationFrame.add(twdPolicyEntity);
     }
     // ---
