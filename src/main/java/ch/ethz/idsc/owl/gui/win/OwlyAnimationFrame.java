@@ -25,7 +25,6 @@ import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.EtaRender;
 import ch.ethz.idsc.owl.gui.ren.GoalRender;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
-import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -37,7 +36,6 @@ public class OwlyAnimationFrame extends TimerFrame {
   private static final int MARGIN = 100; // 170;
   // ---
   private final EtaRender etaRender = new EtaRender(Tensors.empty());
-  private final TrajectoryRender trajectoryRender = new TrajectoryRender();
   private final GoalRender goalRender = new GoalRender(null);
   private final TreeRender treeRender = new TreeRender(null);
   private final List<AnimationInterface> animationInterfaces = new CopyOnWriteArrayList<>();
@@ -52,7 +50,6 @@ public class OwlyAnimationFrame extends TimerFrame {
   public OwlyAnimationFrame() {
     geometricComponent.addRenderInterface(GridRender.INSTANCE);
     geometricComponent.addRenderInterface(etaRender);
-    geometricComponent.addRenderInterface(trajectoryRender);
     geometricComponent.addRenderInterface(goalRender);
     geometricComponent.addRenderInterface(treeRender);
     { // periodic task for integration
