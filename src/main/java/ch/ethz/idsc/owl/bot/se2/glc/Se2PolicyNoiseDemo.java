@@ -30,9 +30,9 @@ public class Se2PolicyNoiseDemo implements DemoInterface {
     owlyAnimationFrame.addBackground(RegionRenders.create(trq));
     // ---
     Tensor start = Tensors.vector(2.000, 3.317, 0.942).unmodifiable();
-    owlyAnimationFrame.add(new CarPolicyEntity(start, SarsaType.qlearning, trq));
-    owlyAnimationFrame.add(new CarPolicyEntity(start, SarsaType.expected, trq));
-    owlyAnimationFrame.add(new CarPolicyEntity(start, SarsaType.original, trq));
+    owlyAnimationFrame.add(new CarPolicyEntity(start, SarsaType.QLEARNING, trq));
+    owlyAnimationFrame.add(new CarPolicyEntity(start, SarsaType.EXPECTED, trq));
+    owlyAnimationFrame.add(new CarPolicyEntity(start, SarsaType.ORIGINAL, trq));
     // ---
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     owlyAnimationFrame.jFrame.setBounds(100, 50, 1200, 800);
