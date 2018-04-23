@@ -8,7 +8,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
@@ -24,7 +23,6 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -57,14 +55,7 @@ public abstract class Se2Entity extends TrajectoryEntity {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    {
-      List<TrajectorySample> _trajectory = trajectory;
-      if (Objects.nonNull(_trajectory)) {
-        TrajectoryRender trajectoryRender = new TrajectoryRender();
-        trajectoryRender.setTrajectory(_trajectory);
-        trajectoryRender.render(geometricLayer, graphics);
-      }
-    }
+    TrajectoryRender.of(trajectory, geometricLayer, graphics);
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();
       Color color = obstacleQuery_isDisjoint(stateTime) //
