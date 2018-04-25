@@ -28,6 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.lie.AngleVector;
+import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class Rice2dEntity extends AbstractCircularEntity {
   private static final Tensor SHAPE = Tensors.matrixDouble( //
@@ -44,6 +45,11 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
         trajectoryControl);
     add(new FallbackControl(Array.zeros(2)));
     this.controls = controls;
+  }
+  
+  @Override
+  public Scalar distance(Tensor x, Tensor y) {
+    return Norm2Squared.between(x, y); // non-negative
   }
 
   @Override

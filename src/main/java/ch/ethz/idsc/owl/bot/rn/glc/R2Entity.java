@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /** omni-directional movement with constant speed
  * 
@@ -41,6 +42,11 @@ import ch.ethz.idsc.tensor.alg.Array;
   public R2Entity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
     add(new FallbackControl(Array.zeros(2)));
+  }
+  
+  @Override
+  public Scalar distance(Tensor x, Tensor y) {
+    return Norm2Squared.between(x, y); // non-negative
   }
 
   @Override
