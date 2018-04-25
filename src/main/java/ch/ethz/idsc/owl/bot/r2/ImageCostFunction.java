@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
   private final Scalar outside;
   private final int max_y;
 
-  private ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
+  public ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
     MatrixQ.elseThrow(image);
     GlobalAssert.that(VectorQ.ofLength(range, 2));
     this.image = image;

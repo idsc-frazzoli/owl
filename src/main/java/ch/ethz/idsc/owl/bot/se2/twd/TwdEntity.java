@@ -59,10 +59,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     goalRadius_theta = SQRT2.divide(eta.Get(2));
   }
 
-  // @Override
-  // protected Scalar distance(Tensor x, Tensor y) {
-  // return SE2WRAP.distance(x, y);
-  // }
+  @Override
+  public Scalar distance(Tensor x, Tensor y) {
+    return SE2WRAP.distance(x, y); // non-negative
+  }
+  
   @Override
   public Scalar delayHint() {
     return RealScalar.ONE;

@@ -89,6 +89,11 @@ public class CarEntity extends Se2Entity {
   public Scalar delayHint() {
     return RealScalar.of(1.5);
   }
+  
+  @Override
+  public Scalar distance(Tensor x, Tensor y) {
+    return SE2WRAP.distance(x, y); // non-negative
+  }
 
   @Override
   public PlannerType getPlannerType() {
