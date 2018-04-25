@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Flatten;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Tally;
@@ -47,6 +48,29 @@ public class NdTreeMapTest extends TestCase {
       List<String> list = Arrays.asList("d1", "d4");
       for (NdEntry<String> point : cluster.collection())
         assertTrue(list.contains(point.value()));
+    }
+  }
+
+  public void testParallel() throws InterruptedException {
+    NdMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 13, 10);
+    Distribution distribution = UniformDistribution.unit();
+    for (int count = 0; count < 1000; ++count) {
+      ndTreeMap.add(RandomVariate.of(distribution, 2), null);
+    }
+    for (int count = 0; count < 20; ++count) {
+      final int ficount = count;
+      new Thread(new Runnable() {
+        @Override
+        public void run() {
+          // System.out.println("beg " + ficount);
+          Tensor center = RandomVariate.of(distribution, 2);
+          NdCenterInterface distancer = NdCenterInterface.euclidean(center);
+          NdCluster<Void> cluster = ndTreeMap.buildCluster(distancer, 100);
+          assertEquals(cluster.size(), 100);
+          // System.out.println("end " + ficount);
+        }
+      }).start();
+      Thread.sleep(3);
     }
   }
 
