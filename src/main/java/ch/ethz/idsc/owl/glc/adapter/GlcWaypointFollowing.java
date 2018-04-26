@@ -18,10 +18,13 @@ public class GlcWaypointFollowing extends WaypointFollowing {
 
   /** @param waypoints
    * @param entity
-   * @param trajectoryPlannerCallback
-   * @param obstacleQuery non-null */
+   * @param plannerConstraint
+   * @param trajectoryPlannerCallback */
   public GlcWaypointFollowing( //
-      Tensor waypoints, TrajectoryEntity entity, PlannerConstraint plannerConstraint, TrajectoryPlannerCallback trajectoryPlannerCallback) {
+      Tensor waypoints, //
+      TrajectoryEntity entity, //
+      PlannerConstraint plannerConstraint, //
+      TrajectoryPlannerCallback trajectoryPlannerCallback) {
     super(waypoints, entity, plannerConstraint);
     this.trajectoryPlannerCallback = trajectoryPlannerCallback;
   }

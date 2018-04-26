@@ -33,7 +33,8 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
 
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    CarEntity se2Entity = CarEntity.createDefault(new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO));
+    final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
+    CarEntity se2Entity = new GokartEntity(initial);
     // ---
     final Scalar scale = DoubleScalar.of(7.5); // meter_to_pixel
     Tensor tensor = ImageRegions.grayscale(ResourceData.of("/map/dubendorf/hangar/20180423obstacles.png"));
