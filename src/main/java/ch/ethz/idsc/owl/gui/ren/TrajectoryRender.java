@@ -7,14 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -29,23 +25,22 @@ public class TrajectoryRender implements RenderInterface {
   private static final Scalar U_SCALE = RealScalar.of(0.33);
   private static final Color COLOR_GROUND = new Color(255, 255, 255, 128);
   private static final Color COLOR_NODES = new Color(255, 0, 0, 96);
+  private static final Color COLOR_TRAJECTORY = new Color(0, 192, 0, 192);
 
-  public static RenderInterface of(TrajectoryPlanner trajectoryPlanner) {
-    TrajectoryRender trajectoryRender = new TrajectoryRender();
-    Optional<GlcNode> optional = GlcNodes.getFinalGoalNode(trajectoryPlanner);
-    if (optional.isPresent()) {
-      final GlcNode node = optional.get();
-      // draw detailed trajectory from root to goal/furthestgo
-      List<TrajectorySample> trajectory = //
-          GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), node);
-      trajectoryRender.setTrajectory(trajectory);
-    }
-    return trajectoryRender;
+  /** @param trajectory may be null
+   * @param geometricLayer
+   * @param graphics */
+  public static void of(List<TrajectorySample> trajectory, GeometricLayer geometricLayer, Graphics2D graphics) {
+    if (Objects.nonNull(trajectory))
+      new TrajectoryRender(trajectory).render(geometricLayer, graphics);
   }
 
   // ---
-  private List<TrajectorySample> trajectory = new ArrayList<>();
-  private Color trajectoryColor = new Color(0, 192, 0, 192);
+  private List<TrajectorySample> trajectory;
+
+  private TrajectoryRender(List<TrajectorySample> trajectory) {
+    this.trajectory = trajectory;
+  }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -72,7 +67,7 @@ public class TrajectoryRender implements RenderInterface {
         graphics.setColor(COLOR_GROUND);
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(2.0f));
-        graphics.setColor(trajectoryColor);
+        graphics.setColor(COLOR_TRAJECTORY);
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke());
       }
@@ -84,13 +79,5 @@ public class TrajectoryRender implements RenderInterface {
         graphics.draw(new Rectangle2D.Double(point2d.getX() - 1, point2d.getY() - 1, 2, 2));
       });
     }
-  }
-
-  public void setTrajectory(List<TrajectorySample> trajectory) {
-    this.trajectory = trajectory;
-  }
-
-  public void setColor(Color trajectoryColor) {
-    this.trajectoryColor = trajectoryColor;
   }
 }

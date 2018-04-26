@@ -7,6 +7,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
@@ -24,6 +25,7 @@ public abstract class AbstractCircularEntity extends TrajectoryEntity {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    TrajectoryRender.of(trajectory, geometricLayer, graphics);
     { // indicate current position
       Tensor state = getStateTimeNow().state();
       Point2D point = geometricLayer.toPoint2D(state);

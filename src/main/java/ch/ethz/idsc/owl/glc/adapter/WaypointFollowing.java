@@ -58,12 +58,14 @@ public abstract class WaypointFollowing {
           if (Scalars.lessThan(dist, distThreshold) || init) { // if close enough to current waypoint switch to next
             i = (i + 1) % waypoints.length();
             goal = waypoints.get(i);
-            // skip waypoint if covered by obstacle
-            if (plannerConstraint.isSatisfied(null, Arrays.asList(new StateTime(goal, RealScalar.ZERO)), null)) {
+            // skip waypoint if covered by obstacle FIXME will not work if other constraints added
+            if (!plannerConstraint.isSatisfied(null, Arrays.asList(new StateTime(goal, RealScalar.ZERO)), null)) {
+              System.out.print("skipping\n");
               i = (i + 1) % waypoints.length();
               goal = waypoints.get(i);
             }
             head = trajEntity.getFutureTrajectoryUntil(trajEntity.delayHint());
+            System.out.print("plan to goal \n");
             planToGoal(head, goal);
             init = false;
           } else {
