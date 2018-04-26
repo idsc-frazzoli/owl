@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
 import ch.ethz.idsc.owl.gui.win.MotionPlanWorker;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class GlcWaypointFollowing extends WaypointFollowing {
@@ -22,10 +23,11 @@ public class GlcWaypointFollowing extends WaypointFollowing {
    * @param trajectoryPlannerCallback */
   public GlcWaypointFollowing( //
       Tensor waypoints, //
+      Scalar replanningRate, //
       TrajectoryEntity entity, //
       PlannerConstraint plannerConstraint, //
       TrajectoryPlannerCallback trajectoryPlannerCallback) {
-    super(waypoints, entity, plannerConstraint);
+    super(waypoints, replanningRate, entity, plannerConstraint);
     this.trajectoryPlannerCallback = trajectoryPlannerCallback;
   }
 
@@ -35,7 +37,7 @@ public class GlcWaypointFollowing extends WaypointFollowing {
       mpw.flagShutdown();
       mpw = null;
     }
-    TrajectoryPlanner trajectoryPlanner = trajEntity.createTrajectoryPlanner(plannerConstraint, goal);
+    TrajectoryPlanner trajectoryPlanner = entity.createTrajectoryPlanner(plannerConstraint, goal);
     mpw = new MotionPlanWorker();
     mpw.addCallback(trajectoryPlannerCallback);
     mpw.start(head, trajectoryPlanner);
