@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   public Scalar distance(Tensor x, Tensor y) {
     return SE2WRAP.distance(x, y); // non-negative
   }
-  
+
   @Override
   public Scalar delayHint() {
     return RealScalar.ONE;

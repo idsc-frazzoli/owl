@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     super(episodeIntegrator, trajectoryControl);
     add(new FallbackControl(Array.zeros(1)));
   }
-  
+
   @Override
   public Scalar distance(Tensor x, Tensor y) {
     return PsuWrap.INSTANCE.distance(x, y); // non-negative
