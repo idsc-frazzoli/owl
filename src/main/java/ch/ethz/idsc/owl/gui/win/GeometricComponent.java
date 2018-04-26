@@ -26,9 +26,11 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.sca.ArcTan;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
 
@@ -191,7 +193,11 @@ public final class GeometricComponent {
   }
 
   public void setModel2Pixel(Tensor model2pixel) {
-    this.model2pixel = model2pixel.copy();
+    Scalar det = Det.of(model2pixel);
+    if (Chop._08.allZero(det))
+      System.err.println("model2pixel must not be singular");
+    else
+      this.model2pixel = model2pixel.copy();
   }
 
   public Tensor getModel2Pixel() {

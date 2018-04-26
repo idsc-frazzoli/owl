@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     super(episodeIntegrator, trajectoryControl);
     add(new FallbackControl(Array.zeros(2)));
   }
-  
+
   @Override
   public Scalar distance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y); // non-negative

@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     add(new DeltaCoastingControl(imageGradientInterpolation, U_NORM));
     this.imageGradientInterpolation = imageGradientInterpolation;
   }
-  
+
   @Override
   public Scalar distance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y); // non-negative

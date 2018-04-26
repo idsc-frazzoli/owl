@@ -9,17 +9,19 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 
-public class ArrowHeadRender implements RenderInterface {
-  private static final Tensor SHAPE = Tensors.matrixDouble( //
-      new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).unmodifiable();
-  // ---
-  private Tensor frames;
-  private Color color;
+/** draws a given shape at frames */
+public class Se2WaypointRender implements RenderInterface {
+  private final Tensor frames;
+  private final Tensor shape;
+  private final Color color;
 
-  public ArrowHeadRender(Tensor points, Color color) {
-    this.frames = Objects.requireNonNull(points);
+  /** @param frames with dimensions n x 3 where each row corresponds to {x, y, angle}
+   * @param shape with dimensions m x 2
+   * @param color */
+  public Se2WaypointRender(Tensor frames, Tensor shape, Color color) {
+    this.frames = Objects.requireNonNull(frames);
+    this.shape = shape;
     this.color = color;
   }
 
@@ -28,7 +30,7 @@ public class ArrowHeadRender implements RenderInterface {
     graphics.setColor(color);
     for (Tensor xya : frames) { // draw frame as arrow
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
-      graphics.fill(geometricLayer.toPath2D(SHAPE));
+      graphics.fill(geometricLayer.toPath2D(shape));
       geometricLayer.popMatrix();
     }
   }
