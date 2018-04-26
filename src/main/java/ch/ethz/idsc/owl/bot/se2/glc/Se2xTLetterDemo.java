@@ -94,7 +94,7 @@ public class Se2xTLetterDemo implements DemoInterface {
     }
     {
       CarPolicyEntity twdPolicyEntity = new CarPolicyEntity( //
-          Tensors.vector(5.600, 8.667, -1.571), SarsaType.qlearning, ray);
+          Tensors.vector(5.600, 8.667, -1.571), SarsaType.QLEARNING, ray);
       owlyAnimationFrame.add(twdPolicyEntity);
     }
     // ---

@@ -28,7 +28,6 @@ public enum RenderElements {
     }
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
     list.add(new TreeRender(trajectoryPlanner.getDomainMap().values()));
-    list.add(TrajectoryRender.of(trajectoryPlanner));
     {
       TrajectoryRegionQuery trq = trajectoryPlanner.getGoalInterface();
       if (trq instanceof StateTimeCollector)
