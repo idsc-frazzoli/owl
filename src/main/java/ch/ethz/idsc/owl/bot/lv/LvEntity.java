@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class LvEntity extends AbstractCircularEntity {
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
@@ -33,6 +34,11 @@ import ch.ethz.idsc.tensor.alg.Array;
     super(episodeIntegrator, trajectoryControl);
     add(new FallbackControl(Array.zeros(1)));
     this.controls = controls;
+  }
+
+  @Override
+  public Scalar distance(Tensor x, Tensor y) {
+    return Norm2Squared.between(x, y); // non-negative
   }
 
   @Override

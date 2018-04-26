@@ -52,6 +52,11 @@ public abstract class TrajectoryEntity extends AbstractEntity {
   /** @return delay between now and the future point in time from when to divert to a new trajectory */
   public abstract Scalar delayHint();
 
+  /** @param x
+   * @param y
+   * @return non-negative number */
+  public abstract Scalar distance(Tensor x, Tensor y);
+
   /** @param plannerConstraint
    * @param goal for instance {px, py, angle}
    * @return */

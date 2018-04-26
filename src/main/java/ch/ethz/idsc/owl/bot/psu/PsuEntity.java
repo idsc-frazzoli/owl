@@ -37,6 +37,11 @@ import ch.ethz.idsc.tensor.alg.Array;
   }
 
   @Override
+  public Scalar distance(Tensor x, Tensor y) {
+    return PsuWrap.INSTANCE.distance(x, y); // non-negative
+  }
+
+  @Override
   public Scalar delayHint() {
     return DELAY_HINT;
   }

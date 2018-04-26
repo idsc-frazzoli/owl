@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
@@ -41,6 +42,11 @@ import ch.ethz.idsc.tensor.sca.Chop;
     super(episodeIntegrator, trajectoryControl);
     add(new DeltaCoastingControl(imageGradientInterpolation, U_NORM));
     this.imageGradientInterpolation = imageGradientInterpolation;
+  }
+
+  @Override
+  public Scalar distance(Tensor x, Tensor y) {
+    return Norm2Squared.between(x, y); // non-negative
   }
 
   @Override
