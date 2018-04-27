@@ -13,8 +13,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.Round;
 
 public class MotionPlanWorker {
   private static final int MAX_STEPS = 5000;
@@ -41,7 +39,7 @@ public class MotionPlanWorker {
         Expand.maxSteps(trajectoryPlanner, MAX_STEPS, () -> isRelevant);
         if (isRelevant) {
           Scalar duration = RealScalar.of(stopwatch.display_seconds());
-          System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
+          // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
           for (TrajectoryPlannerCallback trajectoryPlannerCallback : trajectoryPlannerCallbacks)
             trajectoryPlannerCallback.expandResult(head, trajectoryPlanner);
         }
