@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -50,7 +51,9 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     ImageRegion region = new ImageRegion(tensor, range, false);
     // ---
     Tensor waypointsT = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
-    R2ImageRegionWrap waypointsRegionWrap = R2ImageRegions.fromWaypoints(waypointsT, 6.0f, range);
+    R2ImageRegionWrap waypointsRegionWrap = //
+        R2ImageRegions.fromWaypoints(waypointsT, 6.0f, //
+            new Dimension(range.Get(0).number().intValue(), range.Get(1).number().intValue()), range);
     se2Entity.extraCosts.add(waypointsRegionWrap.costFunction());
     // ---
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, waypointsRegionWrap.imageRegion()));

@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.gui.win;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -35,6 +36,7 @@ import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
 
 public final class GeometricComponent {
+  private static final Font DEFAULT_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
   private static final double WHEEL_ANGLE = Math.PI / 10;
   private static final int BUTTON_DRAG = 3;
   // TODO magic const nonono!
@@ -52,6 +54,7 @@ public final class GeometricComponent {
       { // display frame rate only when rendering in component
         long period = System.nanoTime() - lastRepaint;
         lastRepaint = System.nanoTime();
+        graphics.setFont(DEFAULT_FONT);
         graphics.setColor(Color.LIGHT_GRAY);
         graphics.drawString(String.format("%4.1f Hz", 1.0e9 / period), 0, 10);
       }

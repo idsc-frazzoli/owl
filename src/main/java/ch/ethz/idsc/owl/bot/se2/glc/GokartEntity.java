@@ -1,7 +1,12 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.util.Optional;
+import java.util.Random;
+
 import ch.ethz.idsc.owl.math.Degree;
+import ch.ethz.idsc.owl.math.state.EntityControl;
+import ch.ethz.idsc.owl.math.state.ProviderRank;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,8 +21,34 @@ class GokartEntity extends CarEntity {
   static final Scalar SPEED = RealScalar.of(2.5);
   static final CarFlows CARFLOWS = new CarForwardFlows(SPEED, Degree.of(15));
   static final Tensor SHAPE = ResourceData.of("/demo/gokart/footprint.csv");
+  // ---
+  /** simulation of occasional feedback from localization algorithm */
+  private final EntityControl localizationFeedback = new EntityControl() {
+    private final Random random = new Random();
+    private boolean trigger = false;
+
+    @Override
+    public ProviderRank getProviderRank() {
+      return ProviderRank.GODMODE;
+    }
+
+    @Override
+    public Optional<Tensor> control(StateTime tail, Scalar now) {
+      Optional<Tensor> optional = Optional.empty();
+      if (trigger) {
+        optional = Optional.of(Tensors.vector( //
+            random.nextGaussian(), // shift x
+            random.nextGaussian(), // shift y
+            random.nextGaussian())); // shift angle
+      }
+      trigger = 0 == random.nextInt(20); // TODO use now to alter position every 1[s] for instance
+      return optional;
+    }
+  };
 
   public GokartEntity(StateTime stateTime) {
     super(stateTime, new CarTrajectoryControl(), PARTITIONSCALE, CARFLOWS, SHAPE);
+    // ---
+    add(localizationFeedback);
   }
 }
