@@ -49,10 +49,6 @@ public abstract class WaypointFollowing {
     this.horizonDistance = horizonDistance;
   }
 
-  public final void flagShutdown() {
-    timer.cancel();
-  }
-
   /** start planning through waypoints */
   public final void startNonBlocking() {
     goal = waypoints.get(i);
@@ -73,7 +69,11 @@ public abstract class WaypointFollowing {
       }
     };
     timer = new Timer("PlanningTimer");
-    timer.scheduleAtFixedRate(timerTask, 10, 1000 / replanningRate.number().intValue());
+    timer.schedule(timerTask, 10, 1000 / replanningRate.number().intValue());
+  }
+
+  public final void flagShutdown() {
+    timer.cancel();
   }
 
   /** starts planning towards a goal
