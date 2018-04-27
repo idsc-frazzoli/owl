@@ -58,7 +58,7 @@ public class NdTreeMapTest extends TestCase {
       ndTreeMap.add(RandomVariate.of(distribution, 2), null);
     }
     for (int count = 0; count < 20; ++count) {
-      final int ficount = count;
+      // final int ficount = count;
       new Thread(new Runnable() {
         @Override
         public void run() {

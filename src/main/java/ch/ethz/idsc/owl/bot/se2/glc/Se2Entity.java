@@ -17,6 +17,7 @@ import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.map.Se2Integrator;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -30,7 +31,8 @@ import ch.ethz.idsc.tensor.alg.Array;
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
 public abstract class Se2Entity extends TrajectoryEntity {
-  /** the time difference between two successive nodes in the planner tree is 4/10 */
+  /** fixed state integrator is used for planning
+   * the time difference between two successive nodes in the planner tree is 4/10 */
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = // node interval == 2/5
       FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
   // ---
@@ -39,7 +41,9 @@ public abstract class Se2Entity extends TrajectoryEntity {
 
   protected Se2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
     super( //
-        new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime), //
+        new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, //
+            Se2Integrator.INSTANCE, // for simulation we allow slip to the sides
+            stateTime), //
         trajectoryControl);
     add(new FallbackControl(Array.zeros(3)));
   }
