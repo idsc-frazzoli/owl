@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.io.Primitives;
 public class R2Bubbles extends ImplicitFunctionRegion {
   @Override
   public Scalar apply(Tensor tensor) {
-    final double[] data = Primitives.toArrayDouble(tensor);
+    final double[] data = Primitives.toDoubleArray(tensor);
     double x = data[0];
     double y = data[1];
     double x2 = x * x;
