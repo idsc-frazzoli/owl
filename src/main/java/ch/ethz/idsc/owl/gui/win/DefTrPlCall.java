@@ -14,12 +14,13 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
-import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
+import ch.ethz.idsc.owl.gui.ani.GlcTrajectoryPlannerCallback;
+import ch.ethz.idsc.owl.gui.ani.RrtsTrajectoryPlannerCallback;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
 
-public class DefTrPlCall implements TrajectoryPlannerCallback {
+public class DefTrPlCall implements GlcTrajectoryPlannerCallback, RrtsTrajectoryPlannerCallback {
   AnimationInterface controllable;
 
   @Override

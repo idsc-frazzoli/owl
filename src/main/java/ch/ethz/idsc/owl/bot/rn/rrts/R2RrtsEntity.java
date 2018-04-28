@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.gui.ani.PlannerType;
-import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
+import ch.ethz.idsc.owl.gui.ani.RrtsTrajectoryPlannerCallback;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -80,7 +80,7 @@ public class R2RrtsEntity extends AbstractRrtsEntity {
 
   @Override
   public void startPlanner( //
-      TrajectoryPlannerCallback trajectoryPlannerCallback, List<TrajectorySample> head, Tensor goal) {
+      RrtsTrajectoryPlannerCallback trajectoryPlannerCallback, List<TrajectorySample> head, Tensor goal) {
     StateTime tail = Lists.getLast(head).stateTime();
     NoiseCircleHelper nch = new NoiseCircleHelper(obstacleQuery, tail, goal.extract(0, 2));
     nch.plan(350);

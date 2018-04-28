@@ -11,8 +11,9 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
+import ch.ethz.idsc.owl.gui.ani.GlcTrajectoryPlannerCallback;
+import ch.ethz.idsc.owl.gui.ani.RrtsTrajectoryPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
-import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -22,7 +23,8 @@ public class MousePlanner extends MouseAdapter {
   AnimationInterface controllable;
   GeometricComponent geometricComponent;
   PlannerConstraint plannerConstraint;
-  TrajectoryPlannerCallback trajectoryPlannerCallback;
+  GlcTrajectoryPlannerCallback trajectoryPlannerCallback;
+  RrtsTrajectoryPlannerCallback rrtsTrajectoryPlannerCallback;
 
   @Override
   public void mouseClicked(MouseEvent mouseEvent) {
@@ -50,7 +52,7 @@ public class MousePlanner extends MouseAdapter {
           }
           case RRTS: {
             AbstractRrtsEntity abstractRrtsEntity = (AbstractRrtsEntity) abstractEntity;
-            abstractRrtsEntity.startPlanner(trajectoryPlannerCallback, head, goal);
+            abstractRrtsEntity.startPlanner(rrtsTrajectoryPlannerCallback, head, goal);
             break;
           }
           default:
