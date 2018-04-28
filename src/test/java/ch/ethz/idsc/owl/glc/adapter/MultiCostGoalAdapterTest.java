@@ -38,4 +38,26 @@ public class MultiCostGoalAdapterTest extends TestCase {
     Scalar minCostToGoal = mcga.minCostToGoal(Tensors.vector(0, 5, 0));
     assertEquals(minCostToGoal, RealScalar.of(9).divide(speed));
   }
+
+  public void testMembers() {
+    Scalar speed = RealScalar.of(2);
+    CarFlows carFlows = new CarForwardFlows(speed, RealScalar.ONE);
+    Collection<Flow> controls = carFlows.getFlows(9);
+    GoalInterface goalInterface = //
+        Se2MinTimeGoalManager.create(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2), controls);
+    CostFunction costFunction = new Se2ShiftCostFunction(RealScalar.of(3));
+    GoalInterface mcga = MultiCostGoalAdapter.of(goalInterface, Arrays.asList(costFunction));
+    assertTrue(mcga.isMember(new StateTime(Tensors.vector(10, 5, 1), RealScalar.ZERO)));
+    assertFalse(mcga.isMember(new StateTime(Tensors.vector(10, 5, 3.1), RealScalar.ZERO)));
+  }
+
+  public void testTrivial() {
+    Scalar speed = RealScalar.of(2);
+    CarFlows carFlows = new CarForwardFlows(speed, RealScalar.ONE);
+    Collection<Flow> controls = carFlows.getFlows(9);
+    GoalInterface goalInterface = //
+        Se2MinTimeGoalManager.create(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2), controls);
+    GoalInterface mcga = MultiCostGoalAdapter.of(goalInterface, Arrays.asList());
+    assertTrue(mcga == goalInterface);
+  }
 }

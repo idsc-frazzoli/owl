@@ -29,9 +29,9 @@ public abstract class TrajectoryEntity extends AbstractEntity {
     trajectoryControl.setTrajectory(trajectory);
   }
 
-  // /** @param delay
-  // * @return trajectory until delay[s] in the future of entity,
-  // * or current position if entity does not have a trajectory */
+  /** @param delay
+   * @return trajectory until delay[s] in the future of entity,
+   * or current position if entity does not have a trajectory */
   public final synchronized List<TrajectorySample> getFutureTrajectoryUntil(Scalar delay) {
     return trajectoryControl.getFutureTrajectoryUntil(getStateTimeNow(), delay);
   }

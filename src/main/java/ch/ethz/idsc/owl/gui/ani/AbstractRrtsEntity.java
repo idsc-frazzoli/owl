@@ -14,5 +14,5 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity {
   }
 
   public abstract void startPlanner( //
-      TrajectoryPlannerCallback trajectoryPlannerCallback, List<TrajectorySample> head, Tensor goal);
+      RrtsPlannerCallback rrtsPlannerCallback, List<TrajectorySample> head, Tensor goal);
 }

@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.psu;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.glc.std.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.VectorFields;
