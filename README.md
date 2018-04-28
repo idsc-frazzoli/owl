@@ -1,9 +1,20 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.0.4`
+Library for motion planning in Java, version `0.0.5`
 
 The code in the repository operates a heavy and fast robot that may endanger living creatures.
 We follow best practices and coding standards to protect from avoidable errors.
+
+<table>
+<tr>
+<td>
+
+![usecase_gokart](https://user-images.githubusercontent.com/4012178/35968269-a92a3b46-0cc3-11e8-8d5e-1276762cdc36.png)
+
+Autonomous Gokart
+
+</tr>
+</table>
 
 List of algorithms:
 
@@ -98,15 +109,10 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.5</version>
       </dependency>
     </dependencies>
 
-## References
+## Contributors
 
-The library is used in the projects:
-* `retina`
-* `owly3d`
-* `matsim`
-
-The repository has over `330` unit tests.
+Jan Hakenberg, Jonas Londschien, Yannik Nager

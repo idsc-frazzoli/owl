@@ -44,7 +44,7 @@ public class OwlyAnimationFrame extends TimerFrame {
   /** the obstacle query is set in {@link #setPlannerConstraint(TrajectoryRegionQuery)}
    * it is intentionally set to null here lest the application forget */
   MousePlanner mousePlanner = new MousePlanner();
-  public final DefTrPlCall trajectoryPlannerCallback = new DefTrPlCall();
+  public final DefaultTrajectoryPlannerCallback trajectoryPlannerCallback = new DefaultTrajectoryPlannerCallback();
   private final JToggleButton jToggleButtonRecord = new JToggleButton("record");
 
   public OwlyAnimationFrame() {
@@ -110,7 +110,8 @@ public class OwlyAnimationFrame extends TimerFrame {
     }
     // ---
     mousePlanner.geometricComponent = geometricComponent; // FIXME cyclic dependency !?!?!
-    mousePlanner.trajectoryPlannerCallback = trajectoryPlannerCallback;
+    mousePlanner.glcPlannerCallback = trajectoryPlannerCallback;
+    mousePlanner.rrtsPlannerCallback = trajectoryPlannerCallback;
     geometricComponent.jComponent.addMouseListener(mousePlanner);
   }
 

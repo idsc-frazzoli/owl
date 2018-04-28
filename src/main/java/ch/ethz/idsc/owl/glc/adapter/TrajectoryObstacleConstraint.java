@@ -1,10 +1,11 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.adapter;
 
 import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;

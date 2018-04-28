@@ -1,5 +1,5 @@
 // code by ynager
-package ch.ethz.idsc.owl.glc.adapter;
+package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.Arrays;
 import java.util.List;
