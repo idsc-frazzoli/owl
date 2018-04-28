@@ -3,9 +3,9 @@ package ch.ethz.idsc.owl.bot.psu;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;

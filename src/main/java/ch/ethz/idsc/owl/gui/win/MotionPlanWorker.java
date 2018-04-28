@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.TrajectoryPlannerCallback;
+import ch.ethz.idsc.owl.gui.ani.GlcTrajectoryPlannerCallback;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -17,11 +17,11 @@ import ch.ethz.idsc.tensor.Scalar;
 public class MotionPlanWorker {
   private static final int MAX_STEPS = 5000;
   // ---
-  private List<TrajectoryPlannerCallback> trajectoryPlannerCallbacks = new LinkedList<>();
+  private List<GlcTrajectoryPlannerCallback> trajectoryPlannerCallbacks = new LinkedList<>();
   private Thread thread;
   private volatile boolean isRelevant = true;
 
-  public void addCallback(TrajectoryPlannerCallback trajectoryPlannerCallback) {
+  public void addCallback(GlcTrajectoryPlannerCallback trajectoryPlannerCallback) {
     trajectoryPlannerCallbacks.add(trajectoryPlannerCallback);
   }
 
@@ -40,7 +40,7 @@ public class MotionPlanWorker {
         if (isRelevant) {
           Scalar duration = RealScalar.of(stopwatch.display_seconds());
           // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
-          for (TrajectoryPlannerCallback trajectoryPlannerCallback : trajectoryPlannerCallbacks)
+          for (GlcTrajectoryPlannerCallback trajectoryPlannerCallback : trajectoryPlannerCallbacks)
             trajectoryPlannerCallback.expandResult(head, trajectoryPlanner);
         }
       }
