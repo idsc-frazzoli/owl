@@ -8,6 +8,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.bot.r2.R2Bubbles;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
@@ -37,8 +38,13 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
+/** functionality is used in tests */
+@DontModify
 enum R2Demo {
   ;
+  static final StateIntegrator STATE_INTEGRATOR = //
+      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
+
   static TrajectoryPlanner simpleEmpty() {
     return simple(EmptyTrajectoryRegionQuery.INSTANCE);
   }
@@ -47,23 +53,22 @@ enum R2Demo {
     return simple(SimpleTrajectoryRegionQuery.timeInvariant(new R2Bubbles()));
   }
 
-  @SuppressWarnings("unused")
   private static TrajectoryPlanner simple(TrajectoryRegionQuery obstacleQuery) {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
     final Scalar radius = DoubleScalar.of(0.25);
     // ---
     Tensor eta = Tensors.vector(8, 8);
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(36);
     SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistSphericalGoalManager(sphericalRegion);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
+        eta, STATE_INTEGRATOR, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
-    int iters = Expand.maxSteps(trajectoryPlanner, 200);
+    // int iters =
+    Expand.maxSteps(trajectoryPlanner, 200);
     // System.out.println("iterations " + iters);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {

@@ -1,4 +1,4 @@
-// code by ynager and jph
+// code by ynager
 package ch.ethz.idsc.owl.glc.std;
 
 import java.util.List;
@@ -14,6 +14,6 @@ public interface PlannerConstraint {
    * @param glcNode from which trajectory starts
    * @param trajectory
    * @param flow along which trajectory was computed
-   * @return true if planner may create a new node */
+   * @return true if planner may create a new node at the last {@link StateTime} in given trajectory */
   boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow);
 }
