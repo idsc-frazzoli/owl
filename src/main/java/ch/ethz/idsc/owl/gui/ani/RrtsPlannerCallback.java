@@ -10,6 +10,6 @@ import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
  * 
  */
 // API not finalized
-public interface RrtsTrajectoryPlannerCallback {
+public interface RrtsPlannerCallback {
   void expandResult(List<TrajectorySample> head, RrtsPlanner rrtsPlanner, List<TrajectorySample> tail);
 }
