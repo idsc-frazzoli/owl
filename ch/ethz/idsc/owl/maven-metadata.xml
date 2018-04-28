@@ -3,10 +3,10 @@
   <groupId>ch.ethz.idsc</groupId>
   <artifactId>owl</artifactId>
   <versioning>
-    <release>0.0.4</release>
+    <release>0.0.5</release>
     <versions>
-      <version>0.0.4</version>
+      <version>0.0.5</version>
     </versions>
-    <lastUpdated>20180223071538</lastUpdated>
+    <lastUpdated>20180428080654</lastUpdated>
   </versioning>
 </metadata>
