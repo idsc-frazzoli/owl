@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.Trajectories;
+import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -36,7 +36,7 @@ public class TrajectoriesTest extends TestCase {
     List<StateTime> trajectory = new ArrayList<>();
     trajectory.add(new StateTime(Tensors.vector(0, 5), RealScalar.of(3)));
     trajectory.add(new StateTime(Tensors.vector(5, 5), RealScalar.of(4)));
-    Tensor dts = Trajectories.deltaTimes(glcNode, trajectory);
+    Tensor dts = StateTimeTrajectories.deltaTimes(glcNode, trajectory);
     assertEquals(dts, Tensors.vector(2, 1));
   }
 }

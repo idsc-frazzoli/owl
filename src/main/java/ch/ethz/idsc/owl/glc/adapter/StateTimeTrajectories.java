@@ -7,6 +7,8 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** utility functions that operate on List<StateTime> */
@@ -26,6 +28,21 @@ public enum StateTimeTrajectories {
     return Sign.requirePositiveOrZero(dt);
   }
 
+  /** @param glcNode
+   * @param trajectory
+   * @return vector with {dt_0, dt_1, ... } all entries non-negative */
+  public static Tensor deltaTimes(GlcNode glcNode, List<StateTime> trajectory) {
+    Tensor dts = Tensors.empty();
+    Scalar prev = glcNode.stateTime().time();
+    for (StateTime stateTime : trajectory) {
+      Scalar next = stateTime.time();
+      dts.append(next.subtract(prev));
+      prev = next;
+    }
+    return dts;
+  }
+
+  /** @param list */
   public static void print(List<StateTime> list) {
     System.out.println("Trajectory (" + list.size() + ")");
     for (StateTime stateTime : list)
