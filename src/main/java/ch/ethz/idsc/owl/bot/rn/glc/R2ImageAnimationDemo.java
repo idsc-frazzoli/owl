@@ -7,6 +7,8 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -35,7 +37,8 @@ public class R2ImageAnimationDemo implements DemoInterface {
     r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.set(r2Entity);
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(imageRegion)));
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(imageRegion));
+    MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     return owlyAnimationFrame;

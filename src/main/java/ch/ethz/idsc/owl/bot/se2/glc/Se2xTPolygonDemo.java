@@ -7,7 +7,9 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.region.Region;
@@ -27,8 +29,9 @@ public class Se2xTPolygonDemo implements DemoInterface {
         scalar -> Tensors.of(Sin.FUNCTION.apply(scalar.multiply(RealScalar.of(0.2))), RealScalar.ZERO));
     Region<StateTime> region = new R2xTPolygonStateTimeRegion( //
         R2ExamplePolygons.CORNER_TOP_LEFT, shift, () -> carxTEntity.getStateTimeNow().time());
-    carxTEntity.plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(region));
-    owlyAnimationFrame.setPlannerConstraint(carxTEntity.plannerConstraint);
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(region));
+    carxTEntity.plannerConstraint = plannerConstraint;
+    MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
     // owlyAnimationFrame.addRegionRender(imageRegion);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     // ---

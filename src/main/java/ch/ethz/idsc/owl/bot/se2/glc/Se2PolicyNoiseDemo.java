@@ -5,8 +5,6 @@ import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -25,8 +23,6 @@ public class Se2PolicyNoiseDemo implements DemoInterface {
     Region<Tensor> region = new R2NoiseRegion(threshold);
     // ---
     TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeInvariant(region);
-    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(trq));
     // ---
     Tensor start = Tensors.vector(2.000, 3.317, 0.942).unmodifiable();

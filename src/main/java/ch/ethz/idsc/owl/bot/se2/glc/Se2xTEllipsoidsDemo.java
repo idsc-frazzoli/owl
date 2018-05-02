@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
@@ -43,7 +44,7 @@ public class Se2xTEllipsoidsDemo implements DemoInterface {
         RegionUnion.wrap(Arrays.asList(region1, region2)));
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
     carxTEntity.plannerConstraint = plannerConstraint;
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
+    MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
     {

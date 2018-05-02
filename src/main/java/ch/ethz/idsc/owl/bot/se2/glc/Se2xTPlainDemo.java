@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -32,7 +33,7 @@ public class Se2xTPlainDemo
     TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeInvariant(se2PointsVsRegion);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
     carxTEntity.plannerConstraint = plannerConstraint;
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
+    MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     // ---
     owlyAnimationFrame.configCoordinateOffset(50, 700);

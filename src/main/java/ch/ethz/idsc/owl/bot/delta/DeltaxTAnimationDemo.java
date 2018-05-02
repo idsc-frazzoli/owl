@@ -12,8 +12,12 @@ import ch.ethz.idsc.owl.bot.util.TrajectoryTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
+import ch.ethz.idsc.owl.glc.std.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.AbstractEntity;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
@@ -52,7 +56,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         new DeltaStateSpaceModel(imageGradientInterpolation_fast), EulerIntegrator.INSTANCE, stateTime);
-    AbstractEntity abstractEntity = //
+    TrajectoryEntity abstractEntity = //
         new DeltaxTEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation_fast);
     Supplier<Scalar> supplier = () -> abstractEntity.getStateTimeNow().time();
     // ---
@@ -72,7 +76,9 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.set(abstractEntity);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
+    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(abstractEntity);
+    MouseGoal.supply(owlyAnimationFrame.geometricComponent, //
+        new SimpleGoalConsumer(abstractEntity, plannerConstraint, glcPlannerCallback));
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);

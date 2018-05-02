@@ -7,7 +7,9 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -37,7 +39,8 @@ public class R2xTMapAnimationDemo implements DemoInterface {
         "/map/dubendorf/hangar/20180122.png", Tensors.vector(10, 10), false);
     Region<Tensor> region = RnPointcloudRegions.from(imageRegion, RealScalar.of(0.15));
     // ---
-    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(region)));
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(region));
+    MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.configCoordinateOffset(100, 800);
     return owlyAnimationFrame;

@@ -6,6 +6,7 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -21,11 +22,11 @@ public class Se2Letter2Demo extends Se2CarDemo {
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(createCarQuery(imageRegion));
     carEntity.plannerConstraint = plannerConstraint;
     owlyAnimationFrame.set(carEntity);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
+    MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
   }
 
   public static void main(String[] args) {
-    new Se2Letter2Demo().start();
+    new Se2Letter2Demo().start().jFrame.setVisible(true);
   }
 }

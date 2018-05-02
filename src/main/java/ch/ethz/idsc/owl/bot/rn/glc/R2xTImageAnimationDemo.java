@@ -6,8 +6,10 @@ import ch.ethz.idsc.owl.bot.r2.R2xTImageStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 //import ch.ethz.idsc.owl.gui.ren.CurveRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -40,7 +42,8 @@ public class R2xTImageAnimationDemo implements DemoInterface {
     Region<StateTime> region = new R2xTImageStateTimeRegion( //
         imageRegion, rigidFamily, () -> abstractEntity.getStateTimeNow().time());
     // ---
-    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(region)));
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(region));
+    MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     // owlyAnimationFrame.addBackground(new CurveRender());
     owlyAnimationFrame.configCoordinateOffset(200, 400);

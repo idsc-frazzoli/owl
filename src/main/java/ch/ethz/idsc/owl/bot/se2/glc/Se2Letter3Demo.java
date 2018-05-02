@@ -7,7 +7,11 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
+import ch.ethz.idsc.owl.glc.std.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -29,8 +33,10 @@ public class Se2Letter3Demo extends Se2CarDemo {
     carEntity.plannerConstraint = plannerConstraint;
     TrajectoryRegionQuery ray = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     owlyAnimationFrame.set(carEntity);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(carEntity);
+    MouseGoal.supply(owlyAnimationFrame.geometricComponent, //
+        new SimpleGoalConsumer(carEntity, plannerConstraint, glcPlannerCallback));
     {
       RenderInterface renderInterface = new CameraEmulator( //
           48, RealScalar.of(10), carEntity::getStateTimeNow, ray);
