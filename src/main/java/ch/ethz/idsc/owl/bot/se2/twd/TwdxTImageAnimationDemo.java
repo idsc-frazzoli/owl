@@ -22,8 +22,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** the obstacle region in the demo is the outside of a rotating letter 'a' */
-// TODO DEMO DOES NOT WORK
-class TwdxTImageAnimationDemo implements DemoInterface {
+public class TwdxTImageAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();

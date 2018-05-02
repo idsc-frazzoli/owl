@@ -18,7 +18,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.TimeKeeper;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
@@ -110,11 +109,6 @@ public class OwlyAnimationFrame extends TimerFrame {
     if (Objects.isNull(controllable))
       controllable = animationInterface;
     add(animationInterface);
-  }
-
-  @Deprecated
-  public void setPlannerConstraint(PlannerConstraint plannerConstraint) {
-    System.err.println("API requires update. see Se2Letter3Demo");
   }
 
   /** @param renderInterface */
