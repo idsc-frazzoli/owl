@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -18,7 +19,8 @@ import ch.ethz.idsc.owl.sim.LidarEmulator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class TwdImageDemo implements DemoInterface {
+// TODO DEMO DOES NOT WORK
+class TwdImageDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._0F5C_2182;
@@ -29,7 +31,8 @@ public class TwdImageDemo implements DemoInterface {
     twdEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.set(twdEntity);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(obstacleQuery);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
+    twdEntity.plannerConstraint = plannerConstraint;
+    MouseGoal.simple(owlyAnimationFrame, twdEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     {
       RenderInterface renderInterface = new CameraEmulator( //

@@ -3,7 +3,12 @@ package ch.ethz.idsc.owl.bot.psu;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
+import ch.ethz.idsc.owl.glc.std.SimpleGoalConsumer;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.VectorFields;
 import ch.ethz.idsc.owl.math.flow.Integrator;
@@ -29,8 +34,11 @@ public class PsuAnimationDemo implements DemoInterface {
         PsuStateSpaceModel.INSTANCE, integrator, //
         new StateTime(Tensors.vector(0, 0), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new PsuTrajectoryControl();
-    owlyAnimationFrame.set(new PsuEntity(episodeIntegrator, trajectoryControl));
-    owlyAnimationFrame.setPlannerConstraint(EmptyPlannerConstraint.INSTANCE);
+    TrajectoryEntity trajectoryEntity = new PsuEntity(episodeIntegrator, trajectoryControl);
+    owlyAnimationFrame.set(trajectoryEntity);
+    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(trajectoryEntity);
+    MouseGoal.supply(owlyAnimationFrame.geometricComponent, //
+        new SimpleGoalConsumer(trajectoryEntity, EmptyPlannerConstraint.INSTANCE, glcPlannerCallback));
     // ---
     Tensor range = Tensors.vector(Math.PI, 3);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();

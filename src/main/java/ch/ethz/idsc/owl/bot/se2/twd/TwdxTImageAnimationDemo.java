@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.RigidFamily;
 import ch.ethz.idsc.owl.math.map.Se2Family;
@@ -21,7 +22,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** the obstacle region in the demo is the outside of a rotating letter 'a' */
-public class TwdxTImageAnimationDemo implements DemoInterface {
+// TODO DEMO DOES NOT WORK
+class TwdxTImageAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
@@ -42,7 +44,7 @@ public class TwdxTImageAnimationDemo implements DemoInterface {
       owlyAnimationFrame.addBackground(renderInterface);
     }
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
+    MouseGoal.simple(owlyAnimationFrame, twdxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     {
       RenderInterface renderInterface = new LidarEmulator( //

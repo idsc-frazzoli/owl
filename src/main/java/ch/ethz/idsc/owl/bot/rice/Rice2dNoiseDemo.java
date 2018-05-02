@@ -7,6 +7,9 @@ import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.Region;
@@ -24,9 +27,12 @@ public class Rice2dNoiseDemo implements DemoInterface {
     Scalar mu = RealScalar.ZERO;
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
-    owlyAnimationFrame.set(new Rice2dEntity(mu, Tensors.vector(0, 0, 0, 0), trajectoryControl, controls));
+    TrajectoryEntity trajectoryEntity = //
+        new Rice2dEntity(mu, Tensors.vector(0, 0, 0, 0), trajectoryControl, controls);
+    owlyAnimationFrame.set(trajectoryEntity);
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.5));
-    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(region)));
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(region));
+    MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
     return owlyAnimationFrame;
   }
 

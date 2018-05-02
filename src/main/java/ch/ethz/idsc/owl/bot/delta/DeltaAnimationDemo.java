@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -33,13 +34,14 @@ public class DeltaAnimationDemo implements DemoInterface {
         ImageGradientInterpolation.nearest(ResourceData.of("/io/delta_uxy.png"), range, amp);
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
-    PlannerConstraint obstacleQuery = new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(imageRegion));
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(imageRegion));
     StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         new DeltaStateSpaceModel(imageGradientInterpolation), EulerIntegrator.INSTANCE, stateTime);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
-    owlyAnimationFrame.set(new DeltaEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation));
-    owlyAnimationFrame.setPlannerConstraint(obstacleQuery);
+    DeltaEntity deltaEntity = new DeltaEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation);
+    MouseGoal.simple(owlyAnimationFrame, deltaEntity, plannerConstraint);
+    owlyAnimationFrame.set(deltaEntity);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, imageRegion, RealScalar.of(0.5)));

@@ -12,7 +12,9 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.Se2WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -61,7 +63,6 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     se2Entity.plannerConstraint = plannerConstraint;
     // ---
     owlyAnimationFrame.set(se2Entity);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
     // owlyAnimationFrame.addBackground(RegionRenders.create(waypointsRegionWrap.imageRegion()));
     owlyAnimationFrame.addBackground(RegionRenders.create(region)); // TODO rendering of both regions / union
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
@@ -69,8 +70,9 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     // ---
     RenderInterface renderInterface = new Se2WaypointRender(waypointsT, ARROWHEAD, new Color(64, 192, 64, 64));
     owlyAnimationFrame.addBackground(renderInterface);
+    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(se2Entity);
     GlcWaypointFollowing wpf = new GlcWaypointFollowing(waypointsT, RealScalar.of(2), //
-        se2Entity, plannerConstraint, owlyAnimationFrame.trajectoryPlannerCallback);
+        se2Entity, plannerConstraint, glcPlannerCallback);
     wpf.setHorizonDistance(RealScalar.of(5));
     wpf.startNonBlocking();
     //

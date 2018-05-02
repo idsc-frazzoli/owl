@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
@@ -20,8 +22,9 @@ public class Rice2dEmptyDemo implements DemoInterface {
     Scalar mu = RealScalar.ZERO;
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
-    owlyAnimationFrame.set(new Rice2dEntity(mu, Tensors.vector(0, 0, 0, 0), trajectoryControl, controls));
-    owlyAnimationFrame.setPlannerConstraint(EmptyPlannerConstraint.INSTANCE);
+    TrajectoryEntity trajectoryEntity = new Rice2dEntity(mu, Tensors.vector(0, 0, 0, 0), trajectoryControl, controls);
+    owlyAnimationFrame.set(trajectoryEntity);
+    MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyPlannerConstraint.INSTANCE);
     return owlyAnimationFrame;
   }
 

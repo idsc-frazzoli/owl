@@ -27,7 +27,6 @@ import ch.ethz.idsc.owl.gui.ren.GoalRender;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -41,10 +40,6 @@ public class OwlyAnimationFrame extends TimerFrame {
   private final List<AnimationInterface> animationInterfaces = new CopyOnWriteArrayList<>();
   /** reference to the entity that is controlled by the user */
   private AnimationInterface controllable = null;
-  /** the obstacle query is set in {@link #setPlannerConstraint(TrajectoryRegionQuery)}
-   * it is intentionally set to null here lest the application forget */
-  MousePlanner mousePlanner = new MousePlanner();
-  public final DefaultTrajectoryPlannerCallback trajectoryPlannerCallback = new DefaultTrajectoryPlannerCallback();
   private final JToggleButton jToggleButtonRecord = new JToggleButton("record");
 
   public OwlyAnimationFrame() {
@@ -108,28 +103,18 @@ public class OwlyAnimationFrame extends TimerFrame {
       });
       jToolBar.add(jToggleButtonRecord);
     }
-    // ---
-    mousePlanner.geometricComponent = geometricComponent; // FIXME cyclic dependency !?!?!
-    mousePlanner.glcPlannerCallback = trajectoryPlannerCallback;
-    mousePlanner.rrtsPlannerCallback = trajectoryPlannerCallback;
-    geometricComponent.jComponent.addMouseListener(mousePlanner);
   }
 
   public void set(AnimationInterface animationInterface) {
     GlobalAssert.that(animationInterfaces.isEmpty()); // TODO this logic is messy
-    mousePlanner.controllable = animationInterface;
-    trajectoryPlannerCallback.controllable = animationInterface;
     if (Objects.isNull(controllable))
       controllable = animationInterface;
     add(animationInterface);
   }
 
-  /** modifies the obstacle region in between mouse-clicks
-   * (so far only relevant for the standard planner)
-   * 
-   * @param plannerConstraint */
+  @Deprecated
   public void setPlannerConstraint(PlannerConstraint plannerConstraint) {
-    mousePlanner.plannerConstraint = plannerConstraint;
+    System.err.println("API requires update. see Se2Letter3Demo");
   }
 
   /** @param renderInterface */

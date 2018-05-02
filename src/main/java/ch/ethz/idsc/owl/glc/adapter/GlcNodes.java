@@ -30,6 +30,9 @@ public enum GlcNodes {
         .map(GlcNode::stateTime).collect(Collectors.toList());
   }
 
+  /** @param trajectoryPlanner
+   * @return */
+  // TODO not clear why this function exists
   public static Optional<GlcNode> getFinalGoalNode(TrajectoryPlanner trajectoryPlanner) {
     return HeuristicQ.of(trajectoryPlanner.getGoalInterface()) //
         ? trajectoryPlanner.getBestOrElsePeek() //
