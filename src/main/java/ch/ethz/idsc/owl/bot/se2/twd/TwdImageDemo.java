@@ -19,8 +19,7 @@ import ch.ethz.idsc.owl.sim.LidarEmulator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO DEMO DOES NOT WORK
-class TwdImageDemo implements DemoInterface {
+public class TwdImageDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._0F5C_2182;

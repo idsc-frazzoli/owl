@@ -16,8 +16,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO DEMO DOES NOT WORK
-class TwdNoiseDemo implements DemoInterface {
+public class TwdNoiseDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
