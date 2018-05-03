@@ -12,10 +12,7 @@ import ch.ethz.idsc.owl.bot.util.TrajectoryTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
-import ch.ethz.idsc.owl.glc.std.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -76,9 +73,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.set(abstractEntity);
-    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(abstractEntity);
-    MouseGoal.supply(owlyAnimationFrame.geometricComponent, //
-        new SimpleGoalConsumer(abstractEntity, plannerConstraint, glcPlannerCallback));
+    MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);

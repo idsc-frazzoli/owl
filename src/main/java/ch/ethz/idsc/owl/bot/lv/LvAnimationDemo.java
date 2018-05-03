@@ -5,9 +5,6 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
-import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
-import ch.ethz.idsc.owl.glc.std.SimpleGoalConsumer;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -42,9 +39,7 @@ public class LvAnimationDemo implements DemoInterface {
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     TrajectoryEntity trajectoryEntity = new LvEntity(episodeIntegrator, trajectoryControl, controls);
     owlyAnimationFrame.set(trajectoryEntity);
-    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(trajectoryEntity);
-    MouseGoal.supply(owlyAnimationFrame.geometricComponent, //
-        new SimpleGoalConsumer(trajectoryEntity, EmptyPlannerConstraint.INSTANCE, glcPlannerCallback));
+    MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyPlannerConstraint.INSTANCE);
     // ---
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
