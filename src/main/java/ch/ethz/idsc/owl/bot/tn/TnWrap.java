@@ -28,7 +28,7 @@ class TnWrap implements CoordinateWrap, Serializable {
     }
   }
 
-  @Override
+  @Override // from CoordinateWrap
   public Tensor represent(Tensor x) {
     return Tensors.vector(i -> Mod.function(extension.Get(i)).apply(x.Get(i)), x.length());
   }

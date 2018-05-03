@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.math.CoordinateWrap;
+import ch.ethz.idsc.owl.math.TensorMetric;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -24,12 +24,13 @@ import ch.ethz.idsc.tensor.sca.Ramp;
  * 
  * {@link Se2WrapGoalManagerExt} works with {@link Se2Wrap} as well as with {@link IdentityWrap} */
 public class Se2WrapGoalManagerExt implements Region<Tensor>, CostFunction, Serializable {
-  private final CoordinateWrap coordinateWrap;
+  private final TensorMetric tensorMetric;
   private final Se2AbstractGoalManager goalManager;
 
-  /** @param coordinateWrap */
-  public Se2WrapGoalManagerExt(CoordinateWrap coordinateWrap, Se2AbstractGoalManager goalManager) {
-    this.coordinateWrap = coordinateWrap;
+  /** @param tensorMetric
+   * @param goalManager */
+  public Se2WrapGoalManagerExt(TensorMetric tensorMetric, Se2AbstractGoalManager goalManager) {
+    this.tensorMetric = tensorMetric;
     this.goalManager = goalManager;
   }
 
@@ -40,14 +41,14 @@ public class Se2WrapGoalManagerExt implements Region<Tensor>, CostFunction, Seri
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    return Ramp.of(coordinateWrap.distance(x, goalManager.center).subtract(goalManager.radiusSpace()));
+    return Ramp.of(tensorMetric.distance(x, goalManager.center).subtract(goalManager.radiusSpace()));
   }
 
   @Override // from Region
   public boolean isMember(Tensor x) {
     return Scalars.isZero(Ramp.of( //
-        coordinateWrap.distance(x, goalManager.center).subtract( //
-            coordinateWrap.distance(Tensors.vector(0, 0, 0), goalManager.radiusVector))));
+        tensorMetric.distance(x, goalManager.center).subtract( //
+            tensorMetric.distance(Tensors.vector(0, 0, 0), goalManager.radiusVector))));
   }
 
   public GoalInterface getGoalInterface() {

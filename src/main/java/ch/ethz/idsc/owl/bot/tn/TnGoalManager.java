@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.math.CoordinateWrap;
+import ch.ethz.idsc.owl.math.TensorMetric;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -24,12 +24,12 @@ import ch.ethz.idsc.tensor.sca.Ramp;
  * 
  * objective is minimum path length */
 class TnGoalManager implements Region<Tensor>, CostFunction, Serializable {
-  private final CoordinateWrap tnWarp;
+  private final TensorMetric tensorMetric;
   private final Tensor center;
   private final Scalar radius;
 
-  public TnGoalManager(CoordinateWrap tnWarp, Tensor center, Scalar radius) {
-    this.tnWarp = tnWarp;
+  public TnGoalManager(TensorMetric tensorMetric, Tensor center, Scalar radius) {
+    this.tensorMetric = tensorMetric;
     this.center = center;
     this.radius = radius;
   }
@@ -42,7 +42,7 @@ class TnGoalManager implements Region<Tensor>, CostFunction, Serializable {
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    return Ramp.of(tnWarp.distance(x, center).subtract(radius));
+    return Ramp.of(tensorMetric.distance(x, center).subtract(radius));
   }
 
   @Override // from Region
