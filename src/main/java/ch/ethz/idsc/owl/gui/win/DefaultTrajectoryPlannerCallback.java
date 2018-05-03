@@ -20,9 +20,10 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
 
+@Deprecated
 public class DefaultTrajectoryPlannerCallback implements //
     GlcPlannerCallback, RrtsPlannerCallback {
-  AnimationInterface controllable;
+  public AnimationInterface controllable;
 
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
@@ -42,6 +43,8 @@ public class DefaultTrajectoryPlannerCallback implements //
         // Trajectories.print(tail);
         trajectory = Trajectories.glue(head, tail);
         abstractEntity.setTrajectory(trajectory);
+      } else {
+        System.err.println("controllable not set");
       }
       // trajectoryRender.setTrajectory(trajectory);
     } else {

@@ -8,7 +8,9 @@ import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
@@ -54,7 +56,8 @@ public class Rice2dxTGearDemo implements DemoInterface {
     TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList(cog0, cog1, cog2)));
     // ---
-    owlyAnimationFrame.setPlannerConstraint(new TrajectoryObstacleConstraint(trq));
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
+    MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) cog0);
     owlyAnimationFrame.addBackground((RenderInterface) cog1);
     owlyAnimationFrame.addBackground((RenderInterface) cog2);

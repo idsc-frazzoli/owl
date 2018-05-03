@@ -8,11 +8,13 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.owl.bot.r2.ImageEdges;
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
+import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.Se2WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -38,13 +40,14 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
-    CarEntity se2Entity = new GokartEntity(initial);
+    GokartEntity gokartEntity = new GokartEntity(initial);
     // ---
     final Scalar scale = DoubleScalar.of(7.5); // meter_to_pixel
     Tensor tensor = ImageRegions.grayscale(ResourceData.of("/map/dubendorf/hangar/20180423obstacles.png"));
     tensor = ImageEdges.extrusion(tensor, 6); // == 0.73 * 7.5 == 5.475
     Tensor range = Tensors.vector(Dimensions.of(tensor)).divide(scale);
-    ImageRegion region = new ImageRegion(tensor, range, false);
+    ImageRegion imageRegion = new ImageRegion(tensor, range, false);
+    Region<Tensor> region = Se2PointsVsRegions.line(gokartEntity.coords_X(), imageRegion);
     // ---
     Tensor waypointsT = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     // R2ImageRegionWrap waypointsRegionWrap = //
@@ -56,21 +59,20 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion
     // waypointsRegionWrap.imageRegion()
     ));
-    PlannerConstraint plannerConstraint = //
-        new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(union));
-    se2Entity.plannerConstraint = plannerConstraint;
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
+    gokartEntity.plannerConstraint = plannerConstraint;
     // ---
-    owlyAnimationFrame.set(se2Entity);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
+    owlyAnimationFrame.set(gokartEntity);
     // owlyAnimationFrame.addBackground(RegionRenders.create(waypointsRegionWrap.imageRegion()));
-    owlyAnimationFrame.addBackground(RegionRenders.create(region)); // TODO rendering of both regions / union
+    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion)); // TODO rendering of both regions / union
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
     owlyAnimationFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);
     // ---
     RenderInterface renderInterface = new Se2WaypointRender(waypointsT, ARROWHEAD, new Color(64, 192, 64, 64));
     owlyAnimationFrame.addBackground(renderInterface);
+    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(gokartEntity);
     GlcWaypointFollowing wpf = new GlcWaypointFollowing(waypointsT, RealScalar.of(2), //
-        se2Entity, plannerConstraint, owlyAnimationFrame.trajectoryPlannerCallback);
+        gokartEntity, plannerConstraint, glcPlannerCallback);
     wpf.setHorizonDistance(RealScalar.of(5));
     wpf.startNonBlocking();
     //

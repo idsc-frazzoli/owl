@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -29,7 +30,8 @@ public class TwdImageDemo implements DemoInterface {
     twdEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.set(twdEntity);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(obstacleQuery);
-    owlyAnimationFrame.setPlannerConstraint(plannerConstraint);
+    twdEntity.plannerConstraint = plannerConstraint;
+    MouseGoal.simple(owlyAnimationFrame, twdEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     {
       RenderInterface renderInterface = new CameraEmulator( //

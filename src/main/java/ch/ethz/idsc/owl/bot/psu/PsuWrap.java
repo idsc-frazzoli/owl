@@ -14,12 +14,12 @@ import ch.ethz.idsc.tensor.sca.Mod;
   private static Mod MOD = Mod.function(Math.PI * 2);
   private static Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
 
-  @Override
+  @Override // from CoordinateWrap
   public Tensor represent(Tensor x) {
     return Tensors.of(MOD.apply(x.Get(0)), x.Get(1));
   }
 
-  @Override
+  @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
     Tensor d = p.subtract(q);
     d.set(MOD_DISTANCE, 0);
