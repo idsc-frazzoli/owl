@@ -125,27 +125,6 @@ public class CarEntity extends Se2Entity {
 
   private PurePursuit purePursuit = null;
 
-  // @Override // from AbstractEntity
-  // protected Optional<Tensor> customControl(List<TrajectorySample> trailAhead) {
-  // // TODO controller is not able to execute backwards motion
-  // Tensor state = getStateTimeNow().state();
-  // TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
-  // Tensor beacons = Tensor.of(trailAhead.stream() //
-  // .map(TrajectorySample::stateTime) //
-  // .map(StateTime::state) //
-  // .map(tensor -> tensor.extract(0, 2)) //
-  // .map(tensorUnaryOperator));
-  // PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, LOOKAHEAD);
-  // if (_purePursuit.ratio().isPresent()) {
-  // Scalar ratio = _purePursuit.ratio().get();
-  // if (CLIP_TURNING_RATE.isInside(ratio)) {
-  // purePursuit = _purePursuit;
-  // return Optional.of(CarFlows.singleton(SPEED, ratio).getU());
-  // }
-  // }
-  // purePursuit = null;
-  // return Optional.empty();
-  // }
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);

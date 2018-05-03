@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** two wheel drive entity with state space augmented with time */
 /* package */ class TwdxTEntity extends TwdEntity {
   public TwdxTEntity(TwdDuckieFlows twdConfig, StateTime stateTime) {
-    super(stateTime, new TwdTrajectoryControl(), twdConfig); // TODO choice of traj ctrl was not thorough
+    super(stateTime, new TwdTrajectoryControl(), twdConfig); // LONGTERM choice of traj ctrl was not thorough
   }
 
   @Override

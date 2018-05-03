@@ -22,7 +22,7 @@ public enum RenderElements {
     list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
     {
       PlannerConstraint plannerConstraint = trajectoryPlanner.getPlannerConstraint();
-      // TODO always false
+      // TODO way to render StateTimeCollector
       if (plannerConstraint instanceof StateTimeCollector)
         list.add(new ObstacleRender(((StateTimeCollector) plannerConstraint).getMembers()));
     }
