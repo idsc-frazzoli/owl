@@ -5,8 +5,7 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
@@ -36,7 +35,7 @@ public class Rice1dNoiseDemo implements DemoInterface {
     TrajectoryEntity trajectoryEntity = new Rice1dEntity(mu, Tensors.vector(0, 0), trajectoryControl, controls);
     owlyAnimationFrame.set(trajectoryEntity);
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.5));
-    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(region));
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
     // ---
     Tensor range = Tensors.vector(6, 1);

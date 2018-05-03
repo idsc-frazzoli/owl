@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+/** demo visualizes the detected obstacles */
 public class R2NoiseAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {

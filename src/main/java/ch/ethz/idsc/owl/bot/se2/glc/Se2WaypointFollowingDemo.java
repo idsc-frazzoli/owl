@@ -9,8 +9,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.owl.bot.r2.ImageEdges;
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -58,8 +57,7 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion
     // waypointsRegionWrap.imageRegion()
     ));
-    PlannerConstraint plannerConstraint = //
-        new TrajectoryObstacleConstraint(SimpleTrajectoryRegionQuery.timeInvariant(union));
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
     se2Entity.plannerConstraint = plannerConstraint;
     // ---
     owlyAnimationFrame.set(se2Entity);
