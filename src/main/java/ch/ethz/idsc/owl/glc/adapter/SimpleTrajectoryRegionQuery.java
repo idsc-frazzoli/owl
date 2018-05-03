@@ -29,6 +29,7 @@ public class SimpleTrajectoryRegionQuery extends StandardTrajectoryRegionQuery i
 
   /** @param region that is queried with StateTime */
   public SimpleTrajectoryRegionQuery(Region<StateTime> region) {
+    // FIXME SparseStateTimeRegionMembers is not a good default option
     super(region, new SparseStateTimeRegionMembers());
   }
 

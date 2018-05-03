@@ -12,10 +12,12 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 
 /** test if api is sufficient to model gokart */
-class GokartEntity extends CarEntity {
+/* package */ class GokartEntity extends CarEntity {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal()).unmodifiable();
   static final Scalar SPEED = RealScalar.of(2.5);
@@ -50,5 +52,11 @@ class GokartEntity extends CarEntity {
     super(stateTime, new CarTrajectoryControl(), PARTITIONSCALE, CARFLOWS, SHAPE);
     // ---
     add(localizationFeedback);
+  }
+
+  public Tensor coords_X() {
+    ScalarSummaryStatistics scalarSummaryStatistics = //
+        SHAPE.stream().map(tensor -> tensor.Get(0)).collect(ScalarSummaryStatistics.collector());
+    return Subdivide.of(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax(), 3);
   }
 }

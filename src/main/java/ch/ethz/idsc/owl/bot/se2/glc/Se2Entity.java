@@ -8,7 +8,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
@@ -37,6 +36,8 @@ public abstract class Se2Entity extends TrajectoryEntity {
       FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
   // ---
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
+  /** application layer is required to assign plannerConstraint non-null
+   * TODO API design problem */
   public PlannerConstraint plannerConstraint = null;
 
   protected Se2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
@@ -49,8 +50,7 @@ public abstract class Se2Entity extends TrajectoryEntity {
   }
 
   private boolean obstacleQuery_isDisjoint(StateTime stateTime) {
-    // TODO
-    return Objects.isNull(plannerConstraint) || plannerConstraint.isSatisfied(null, Arrays.asList(stateTime), null);
+    return plannerConstraint.isSatisfied(null, Arrays.asList(stateTime), null);
   }
 
   protected abstract Tensor eta();

@@ -10,12 +10,12 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
@@ -27,7 +27,6 @@ import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -44,17 +43,16 @@ enum Rice2dDemo {
     Collection<Flow> controls = Rice2Controls.create2d(RealScalar.of(-.5), 1, 15);
     EllipsoidRegion ellipsoidRegion = new EllipsoidRegion(Tensors.vector(3, 3, -1, 0), Tensors.vector(0.5, 0.5, 0.4, 0.4));
     GoalInterface goalInterface = new Rice2GoalManager(ellipsoidRegion);
-    TrajectoryRegionQuery obstacleQuery = //
-        SimpleTrajectoryRegionQuery.timeInvariant( //
-            RegionUnion.wrap(Arrays.asList( //
-                new HyperplaneRegion(Tensors.vector(1, +0, 0, 0), RealScalar.ZERO), //
-                new HyperplaneRegion(Tensors.vector(0, +1, 0, 0), RealScalar.ZERO), //
-                new HyperplaneRegion(Tensors.vector(0, -1, 0, 0), RealScalar.of(3.2)), //
-                new HyperplaneRegion(Tensors.vector(0, +0, 0, 1), RealScalar.ZERO) //
-            )));
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant( //
+        RegionUnion.wrap(Arrays.asList( //
+            new HyperplaneRegion(Tensors.vector(1, +0, 0, 0), RealScalar.ZERO), //
+            new HyperplaneRegion(Tensors.vector(0, +1, 0, 0), RealScalar.ZERO), //
+            new HyperplaneRegion(Tensors.vector(0, -1, 0, 0), RealScalar.of(3.2)), //
+            new HyperplaneRegion(Tensors.vector(0, +0, 0, 1), RealScalar.ZERO) //
+        )));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
+        eta, stateIntegrator, controls, plannerConstraint, goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0.1, 0, 0), RealScalar.ZERO));
     Stopwatch stopwatch = Stopwatch.started();

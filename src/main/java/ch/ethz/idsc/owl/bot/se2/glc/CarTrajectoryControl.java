@@ -22,16 +22,12 @@ import ch.ethz.idsc.tensor.sca.Clip;
 // TODO rename class to reflect
 public class CarTrajectoryControl extends StateTrajectoryControl {
   /** (vx, vy, omega) */
-  // private static final Tensor FALLBACK_CONTROL = ;
   private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
   // ---
   private final Clip CLIP_TURNING_RATE = Clip.function(Degree.of(-50), Degree.of(+50));
   private final Scalar LOOKAHEAD = RealScalar.of(0.5);
   private final Scalar SPEED = RealScalar.of(1.0);
 
-  // public CarTrajectoryControl() {
-  // super(Array.zeros(3));
-  // }
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
     return SE2WRAP.distance(x, y);

@@ -15,9 +15,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 public class MotionPlanWorker {
-  private static final int MAX_STEPS = 5000;
+  private static final int MAX_STEPS = 5000; // FIXME magic const
   // ---
-  private List<GlcPlannerCallback> glcPlannerCallbacks = new LinkedList<>();
+  private final List<GlcPlannerCallback> glcPlannerCallbacks = new LinkedList<>();
   private Thread thread;
   private volatile boolean isRelevant = true;
 

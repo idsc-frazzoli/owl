@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
 /** current implementation uses 2d image to store costs
  * a given trajectory is mapped to the pixels and costs are
  * weighted according to the traverse time */
-/* package */ class ImageCostFunction implements CostFunction, Serializable {
+public class ImageCostFunction implements CostFunction, Serializable {
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
 
   /** @param image as a matrix
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
   private final Scalar outside;
   private final int max_y;
 
-  public ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
+  private ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
     MatrixQ.elseThrow(image);
     GlobalAssert.that(VectorQ.ofLength(range, 2));
     this.image = image;

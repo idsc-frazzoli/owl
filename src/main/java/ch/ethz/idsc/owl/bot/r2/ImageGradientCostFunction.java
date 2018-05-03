@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 
-/* package */ class ImageGradientCostFunction implements CostFunction, Serializable {
+public class ImageGradientCostFunction implements CostFunction, Serializable {
   private final ImageGradientInterpolation imageGradientInterpolation;
 
   public ImageGradientCostFunction(ImageGradientInterpolation imageGradientInterpolation) {
@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
     Tensor cost = Tensor.of(trajectory.stream() //
         .map(StateTime::state) //
         .map(this::pointcost));
-    return cost.dot(dts).Get(); // .multiply(RealScalar.of(20.0));
+    return cost.dot(dts).Get();
   }
 
   @Override // from CostFunction

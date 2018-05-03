@@ -43,7 +43,7 @@ public class Se2Wrap implements CoordinateWrap, Serializable {
     return r;
   }
 
-  @Override // from CoordinateWrap
+  @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
     Tensor d = p.subtract(q);
     d.set(MOD_DISTANCE, INDEX_ANGLE);

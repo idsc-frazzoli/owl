@@ -1,6 +1,6 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.0.5`
+Library for motion planning in Java, version `0.0.6`
 
 The code in the repository operates a heavy and fast robot that may endanger living creatures.
 We follow best practices and coding standards to protect from avoidable errors.
@@ -109,7 +109,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.0.5</version>
+        <version>0.0.6</version>
       </dependency>
     </dependencies>
 

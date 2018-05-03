@@ -17,6 +17,7 @@ import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,13 +35,14 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   public static TwdEntity createDuckie(StateTime stateTime) {
     TwdEntity twdEntity = new TwdEntity( //
-        new TwdDuckieFlows(RealScalar.ONE, RealScalar.ONE), stateTime);
+        stateTime, new TwdTrajectoryControl(), new TwdDuckieFlows(RealScalar.ONE, RealScalar.ONE));
     twdEntity.extraCosts.add(Se2LateralAcceleration.COSTFUNCTION);
     return twdEntity;
   }
 
   public static TwdEntity createJ2B2(StateTime stateTime) {
-    return new TwdEntity(new TwdForwardFlows(RealScalar.ONE, RealScalar.ONE), stateTime);
+    return new TwdEntity( //
+        stateTime, new TwdTrajectoryControl(), new TwdForwardFlows(RealScalar.ONE, RealScalar.ONE));
   }
 
   // ---
@@ -50,9 +52,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   /** @param twdConfig
    * @param stateTime initial position */
-  protected TwdEntity(TwdFlows twdConfig, StateTime stateTime) {
-    super(null, null);
-    // super(new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
+  protected TwdEntity(StateTime stateTime, TrajectoryControl trajectoryControl, TwdFlows twdConfig) {
+    super(stateTime, trajectoryControl);
     controls = twdConfig.getFlows(4);
     Tensor eta = eta();
     goalRadius_xy = SQRT2.divide(eta.Get(0));
