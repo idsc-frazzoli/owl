@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.gui.ani.PolicyEntity;
@@ -17,7 +18,7 @@ import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.owl.sim.LidarEmulator;
+import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.subare.core.LearningRate;
 import ch.ethz.idsc.subare.core.Policy;
 import ch.ethz.idsc.subare.core.RewardInterface;
@@ -49,10 +50,12 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
   private final SarsaType sarsaType;
   DiscreteQsa qsa;
   Policy policy;
+  private final LidarRaytracer LidarRaytracer;
   private LidarEmulator lidarEmulator;
   private final CarDiscreteModel carDiscreteModel;
   LearningRate learningRate = DefaultLearningRate.of(2, 0.51);
   private int collisionCount = 0;
+  private final TrajectoryRegionQuery raytraceQuery;
 
   /** @param start
    * @param raytraceQuery */
@@ -63,10 +66,12 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     qsa = DiscreteQsa.build(carDiscreteModel);
     policy = EGreedyPolicy.bestEquiprobable(carDiscreteModel, qsa, RealScalar.of(0.2));
     this.carDiscreteModel = carDiscreteModel;
+    this.raytraceQuery = raytraceQuery;
     // ---
-    lidarEmulator = new LidarEmulator( //
-        Subdivide.of(Degree.of(+45), Degree.of(-45), carDiscreteModel.resolution - 1), //
-        this::getStateTimeNow, raytraceQuery);
+    LidarRaytracer = new LidarRaytracer( //
+        Subdivide.of(Degree.of(+50), Degree.of(-50), carDiscreteModel.resolution - 1), //
+        Subdivide.of(0, 5, 23));
+    lidarEmulator = new LidarEmulator(LidarRaytracer, this::getStateTimeNow, raytraceQuery);
     SHAPE.set(Tensors.vector(.2, 0), 0);
     reset(RealScalar.ZERO);
   }
@@ -124,7 +129,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
 
   @Override
   public Tensor represent(StateTime stateTime) {
-    Tensor range = lidarEmulator.detectRange(stateTime);
+    Tensor range = LidarRaytracer.scan(stateTime, raytraceQuery);
     return CarDiscreteModel.represent(range);
   }
 
