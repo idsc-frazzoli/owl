@@ -44,8 +44,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
     this.imageGradientInterpolation = imageGradientInterpolation;
   }
 
-  @Override
-  public Scalar distance(Tensor x, Tensor y) {
+  @Override // from TensorMetric
+  public final Scalar distance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y); // non-negative
   }
 

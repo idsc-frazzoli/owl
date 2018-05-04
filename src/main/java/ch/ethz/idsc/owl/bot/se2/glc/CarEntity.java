@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.PlannerType;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
@@ -90,14 +89,9 @@ public class CarEntity extends Se2Entity {
     return RealScalar.of(1.5);
   }
 
-  @Override
-  public Scalar distance(Tensor x, Tensor y) {
+  @Override // from TensorMetric
+  public final Scalar distance(Tensor x, Tensor y) {
     return SE2WRAP.distance(x, y); // non-negative
-  }
-
-  @Override
-  public PlannerType getPlannerType() {
-    return PlannerType.STANDARD;
   }
 
   @Override
