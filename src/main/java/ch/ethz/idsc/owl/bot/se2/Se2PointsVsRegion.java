@@ -7,7 +7,6 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.MatrixQ;
 
 /** used in se2 animation demo to check if footprint of vehicle intersects with obstacle region */
 public class Se2PointsVsRegion implements Region<Tensor>, Serializable {
@@ -17,7 +16,6 @@ public class Se2PointsVsRegion implements Region<Tensor>, Serializable {
   /** @param points n x 2
    * @param region */
   public Se2PointsVsRegion(Tensor points, Region<Tensor> region) {
-    MatrixQ.elseThrow(points);
     this.points = points;
     this.region = Objects.requireNonNull(region);
   }

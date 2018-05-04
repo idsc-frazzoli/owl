@@ -36,8 +36,8 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     this.controls = controls;
   }
 
-  @Override
-  public Scalar distance(Tensor x, Tensor y) {
+  @Override // from TensorMetric
+  public final Scalar distance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y); // non-negative
   }
 

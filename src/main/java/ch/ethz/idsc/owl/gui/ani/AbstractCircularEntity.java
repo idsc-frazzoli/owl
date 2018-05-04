@@ -19,11 +19,6 @@ public abstract class AbstractCircularEntity extends TrajectoryEntity {
   }
 
   @Override
-  public final PlannerType getPlannerType() {
-    return PlannerType.STANDARD;
-  }
-
-  @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     TrajectoryRender.of(trajectory, geometricLayer, graphics);
     { // indicate current position
