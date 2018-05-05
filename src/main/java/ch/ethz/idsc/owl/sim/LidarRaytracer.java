@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.sim;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
 
 // TODO implementation can be made more efficient
-public class LidarRaytracer {
+public class LidarRaytracer implements Serializable {
   private final Tensor directions;
   private final Scalar max_range;
   private final List<Tensor> localRays;
