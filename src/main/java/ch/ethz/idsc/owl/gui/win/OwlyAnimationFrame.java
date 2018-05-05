@@ -21,31 +21,19 @@ import ch.ethz.idsc.owl.data.TimeKeeper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
-import ch.ethz.idsc.owl.gui.ren.EtaRender;
-import ch.ethz.idsc.owl.gui.ren.GoalRender;
-import ch.ethz.idsc.owl.gui.ren.GridRender;
-import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensors;
 
 public class OwlyAnimationFrame extends TimerFrame {
   private static final Dimension RECORDING = new Dimension(400, 400);
   private static final int MARGIN = 100; // 170;
   // ---
-  private final EtaRender etaRender = new EtaRender(Tensors.empty());
-  private final GoalRender goalRender = new GoalRender(null);
-  private final TreeRender treeRender = new TreeRender(null);
   private final List<AnimationInterface> animationInterfaces = new CopyOnWriteArrayList<>();
   /** reference to the entity that is controlled by the user */
   private AnimationInterface controllable = null;
   private final JToggleButton jToggleButtonRecord = new JToggleButton("record");
 
   public OwlyAnimationFrame() {
-    geometricComponent.addRenderInterface(GridRender.INSTANCE);
-    geometricComponent.addRenderInterface(etaRender);
-    geometricComponent.addRenderInterface(goalRender);
-    geometricComponent.addRenderInterface(treeRender);
     { // periodic task for integration
       final TimerTask timerTask = new TimerTask() {
         TimeKeeper timeKeeper = new TimeKeeper();

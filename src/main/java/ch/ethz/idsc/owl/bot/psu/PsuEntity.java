@@ -1,14 +1,20 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.psu;
 
+import java.awt.Graphics2D;
 import java.util.Collection;
+import java.util.List;
 
+import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
+import ch.ethz.idsc.owl.gui.ren.TreeRender;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
@@ -18,6 +24,7 @@ import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -25,11 +32,13 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
-/* package */ class PsuEntity extends AbstractCircularEntity {
+/* package */ class PsuEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   // ---
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.ONE;
+  // ---
+  private Collection<? extends StateCostNode> collection;
 
   public PsuEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
@@ -60,5 +69,17 @@ import ch.ethz.idsc.tensor.alg.Array;
         eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(psuWrap::represent);
     return trajectoryPlanner;
+  }
+
+  @Override
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    super.render(geometricLayer, graphics);
+    // ---
+    new TreeRender(collection).render(geometricLayer, graphics);
+  }
+
+  @Override // from GlcPlannerCallback
+  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    collection = trajectoryPlanner.getDomainMap().values();
   }
 }

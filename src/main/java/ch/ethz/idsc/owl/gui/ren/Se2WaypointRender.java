@@ -25,7 +25,7 @@ public class Se2WaypointRender implements RenderInterface {
     this.color = color;
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     graphics.setColor(color);
     for (Tensor xya : frames) { // draw frame as arrow
