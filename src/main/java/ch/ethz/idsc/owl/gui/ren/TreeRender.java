@@ -57,7 +57,7 @@ public class TreeRender implements RenderInterface {
       path2D.closePath();
       graphics.draw(path2D);
     }
-    if (count <= NODE_BOUND) // don't draw tree beyond certain node count
+    if (count <= NODE_BOUND || true) // don't draw tree beyond certain node count
       for (StateCostNode node : _collection) {
         double val = node.costFromRoot().number().doubleValue();
         if (!Double.isFinite(val))

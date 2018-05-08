@@ -8,12 +8,10 @@ import java.awt.geom.Point2D;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /**  */
 public class GeometricLayer {
@@ -26,11 +24,10 @@ public class GeometricLayer {
   private final Tensor mouseSe2State;
 
   /** @param model2pixel matrix that becomes first element on matrix stack
-   * @param mouseSe2State */
+   * @param mouseSe2State typically a vector of length 3 */
   public GeometricLayer(Tensor model2pixel, Tensor mouseSe2State) {
     deque.push(new AffineFrame2D(model2pixel));
     this.mouseSe2State = mouseSe2State;
-    GlobalAssert.that(VectorQ.ofLength(mouseSe2State, 3));
   }
 
   /** only the first 2 entries of x are taken into account

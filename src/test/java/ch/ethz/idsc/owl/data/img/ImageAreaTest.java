@@ -2,11 +2,17 @@
 package ch.ethz.idsc.owl.data.img;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
@@ -28,6 +34,21 @@ public class ImageAreaTest extends TestCase {
       ImageArea.fromImage(null, Color.BLACK, 2);
     } catch (Exception exception) {
       // ---
+    }
+  }
+
+  public void testBlackWhite() throws IOException {
+    BufferedImage bufferedImage = image("/map/dubendorf/hangar/20180423obstacles.png");
+    Stopwatch stopwatch = Stopwatch.started();
+    Area area = ImageArea.fromImage(bufferedImage);
+    System.out.println(stopwatch.display_seconds());
+    Rectangle rectangle = area.getBounds();
+    System.out.println(rectangle);
+  }
+
+  private static BufferedImage image(String string) throws IOException {
+    try (InputStream inputStream = ImageAreaTest.class.getResourceAsStream(string)) { // auto closeable
+      return ImageIO.read(inputStream);
     }
   }
 }
