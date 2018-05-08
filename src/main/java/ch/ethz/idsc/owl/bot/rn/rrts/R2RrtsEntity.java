@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
-import ch.ethz.idsc.owl.gui.ani.PlannerType;
 import ch.ethz.idsc.owl.gui.ani.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -40,11 +39,6 @@ public class R2RrtsEntity extends AbstractRrtsEntity {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(state, RealScalar.ZERO)));
-  }
-
-  @Override
-  public PlannerType getPlannerType() {
-    return PlannerType.RRTS;
   }
 
   @Override

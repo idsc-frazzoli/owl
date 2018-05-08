@@ -7,6 +7,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.math.TensorMetric;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -14,7 +15,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** entity executes flows along a given trajectory */
-public abstract class TrajectoryEntity extends AbstractEntity {
+public abstract class TrajectoryEntity extends AbstractEntity implements TensorMetric {
   private final TrajectoryControl trajectoryControl;
   protected List<TrajectorySample> trajectory = null;
 
@@ -45,17 +46,8 @@ public abstract class TrajectoryEntity extends AbstractEntity {
     return Lists.getLast(relevant).stateTime().state();
   }
 
-  public abstract PlannerType getPlannerType();
-
-  // /** @return control vector to feed the episodeIntegrator in case no planned trajectory is available */
-  // protected abstract Tensor fallbackControl();
   /** @return delay between now and the future point in time from when to divert to a new trajectory */
   public abstract Scalar delayHint();
-
-  /** @param x
-   * @param y
-   * @return non-negative number */
-  public abstract Scalar distance(Tensor x, Tensor y);
 
   /** @param plannerConstraint
    * @param goal for instance {px, py, angle}
