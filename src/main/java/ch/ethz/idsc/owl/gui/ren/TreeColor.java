@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.gui.ren;
 import ch.ethz.idsc.owl.gui.ColorLookup;
 
 /** helper class to adapt the node and edge colors of a tree
- * to the dimension of the statespace */
+ * to the dimension of the state space */
 enum TreeColor {
   LO(0.5, 0.300), //
   HI(0.2, 0.075), //

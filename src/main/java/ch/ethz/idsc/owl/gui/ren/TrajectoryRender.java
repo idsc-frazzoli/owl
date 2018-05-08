@@ -36,9 +36,9 @@ public class TrajectoryRender implements RenderInterface {
   }
 
   // ---
-  private List<TrajectorySample> trajectory;
+  private final List<TrajectorySample> trajectory;
 
-  private TrajectoryRender(List<TrajectorySample> trajectory) {
+  public TrajectoryRender(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
   }
 

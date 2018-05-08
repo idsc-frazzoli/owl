@@ -36,6 +36,8 @@ public class SimpleGoalConsumer implements GoalConsumer {
         trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal);
     mpw = new MotionPlanWorker();
     mpw.addCallback(glcPlannerCallback);
+    if (trajectoryEntity instanceof GlcPlannerCallback)
+      mpw.addCallback((GlcPlannerCallback) trajectoryEntity);
     mpw.start(head, trajectoryPlanner);
   }
 }

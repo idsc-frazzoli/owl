@@ -7,7 +7,6 @@ import java.awt.event.MouseWheelEvent;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.gui.ani.AnimationInterface;
 import ch.ethz.idsc.owl.gui.ani.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
@@ -37,15 +36,15 @@ class MousePlanner extends MouseAdapter {
           final Tensor goal = geometricComponent.getMouseSe2State();
           final List<TrajectorySample> head = //
               abstractEntity.getFutureTrajectoryUntil(abstractEntity.delayHint());
-          switch (abstractEntity.getPlannerType()) {
-          case RRTS: {
-            AbstractRrtsEntity abstractRrtsEntity = (AbstractRrtsEntity) abstractEntity;
-            abstractRrtsEntity.startPlanner(rrtsPlannerCallback, head, goal);
-            break;
-          }
-          default:
-            throw new RuntimeException();
-          }
+          // switch (abstractEntity.getPlannerType()) {
+          // case RRTS: {
+          // AbstractRrtsEntity abstractRrtsEntity = (AbstractRrtsEntity) abstractEntity;
+          // abstractRrtsEntity.startPlanner(rrtsPlannerCallback, head, goal);
+          // break;
+          // }
+          // default:
+          // throw new RuntimeException();
+          // }
         }
       }
     }

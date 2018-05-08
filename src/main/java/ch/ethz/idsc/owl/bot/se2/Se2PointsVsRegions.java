@@ -12,11 +12,13 @@ import ch.ethz.idsc.tensor.alg.Transpose;
  * for obstacle check */
 public enum Se2PointsVsRegions {
   ;
-  /** @param x_coords vector {x1, x2, ..., xN}
+  /** the given x_coords are interpreted as the points {{x1, 0}, {x2, 0}, ..., {xN, 0}}
+   * 
+   * @param x_coords vector {x1, x2, ..., xN}
    * @param region
    * @return instance of Se2PointsVsRegion */
   public static Region<Tensor> line(Tensor x_coords, Region<Tensor> region) {
-    return new Se2PointsVsRegion( //
-        Transpose.of(Tensors.of(x_coords, Array.zeros(x_coords.length()))), region);
+    Tensor points = Transpose.of(Tensors.of(x_coords, Array.zeros(x_coords.length())));
+    return new Se2PointsVsRegion(points, region);
   }
 }

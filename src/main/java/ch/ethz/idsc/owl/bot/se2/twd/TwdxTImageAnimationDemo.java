@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.twd;
 
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.r2.R2xTImageStateTimeRegion;
+import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
@@ -17,12 +18,15 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
-import ch.ethz.idsc.owl.sim.LidarEmulator;
+import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 
 /** the obstacle region in the demo is the outside of a rotating letter 'a' */
 public class TwdxTImageAnimationDemo implements DemoInterface {
+  static final LidarRaytracer LIDAR_RAYTRACER = new LidarRaytracer(Subdivide.of(-1.2, 1.2, 32), Subdivide.of(0, 4, 25));
+
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
@@ -43,11 +47,12 @@ public class TwdxTImageAnimationDemo implements DemoInterface {
       owlyAnimationFrame.addBackground(renderInterface);
     }
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
+    twdxTEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, twdxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     {
       RenderInterface renderInterface = new LidarEmulator( //
-          LidarEmulator.DEFAULT, () -> twdxTEntity.getStateTimeNow(), trq);
+          LIDAR_RAYTRACER, () -> twdxTEntity.getStateTimeNow(), trq);
       owlyAnimationFrame.addBackground(renderInterface);
     }
     owlyAnimationFrame.configCoordinateOffset(200, 400);

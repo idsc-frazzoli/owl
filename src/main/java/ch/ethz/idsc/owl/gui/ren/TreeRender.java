@@ -35,7 +35,7 @@ public class TreeRender implements RenderInterface {
     setCollection(collection);
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Collection<? extends StateCostNode> _collection = collection;
     if (Objects.isNull(_collection) || _collection.isEmpty())
