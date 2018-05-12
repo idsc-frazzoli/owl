@@ -10,9 +10,10 @@ import junit.framework.TestCase;
 
 public class So2RegionTest extends TestCase {
   public void testSimple() {
-    ImplicitFunctionRegion<Tensor> ifr = new So2Region(RealScalar.ONE, RealScalar.ONE);
+    So2Region ifr = new So2Region(RealScalar.ONE, RealScalar.ONE);
     assertEquals(ifr.signedDistance(RealScalar.of(2)), RealScalar.ZERO);
     assertEquals(ifr.signedDistance(RealScalar.of(1)), RealScalar.of(-1));
+    assertEquals(ifr.distance(RealScalar.of(1)), RealScalar.ZERO);
     assertEquals(ifr.signedDistance(RealScalar.of(0)), RealScalar.ZERO);
     assertEquals(ifr.signedDistance(RealScalar.of(-1)), RealScalar.of(1));
     assertEquals(ifr.signedDistance(RealScalar.of(-2)), RealScalar.of(2));
