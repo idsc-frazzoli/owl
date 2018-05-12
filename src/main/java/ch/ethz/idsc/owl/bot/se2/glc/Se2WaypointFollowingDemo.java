@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 /** demo to simulate dubendorf hangar */
 public class Se2WaypointFollowingDemo extends Se2CarDemo {
   private static final Tensor ARROWHEAD = Tensors.matrixDouble( //
-      new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(3));
+      new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(2));
   private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { { 7.5, 0, 0 }, { 0, -7.5, 640 }, { 0, 0, 1 } });
   private static final Tensor VIRTUAL = Tensors.fromString("{{38, 39}, {42, 47}, {51, 52}, {46, 43}}");
 
@@ -45,7 +45,7 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     GokartEntity gokartEntity = new GokartEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 6));
+        return new ConeRegion(goal, RealScalar.of(Math.PI / 8));
       }
     };
     // ---
