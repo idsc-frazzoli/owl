@@ -27,10 +27,10 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
     throw new RuntimeException();
   }
 
-  public static Se2ComboRegion cone(Tensor goal, Scalar semi) {
+  public static Se2ComboRegion cone(Tensor goal, Scalar semi, Scalar radius) {
     return new Se2ComboRegion( //
         new ConeRegion(goal, semi), //
-        new So2Region(goal.Get(2), semi));
+        new So2Region(goal.Get(2), radius));
   }
   // ---
 

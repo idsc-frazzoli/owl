@@ -45,7 +45,7 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     GokartEntity gokartEntity = new GokartEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 4));
+        return new ConeRegion(goal, RealScalar.of(Math.PI / 6));
       }
     };
     // ---
