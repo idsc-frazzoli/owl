@@ -1,9 +1,12 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class EllipsoidRegionTest extends TestCase {
@@ -39,13 +42,18 @@ public class EllipsoidRegionTest extends TestCase {
   }
 
   public void testInfty() {
-    ImplicitFunctionRegion ifr = new EllipsoidRegion(Tensors.vector(5, 10), Tensors.vector(1 / 0.0, 2));
-    assertEquals(ifr.apply(Tensors.vector(1000, 8)), RealScalar.ZERO);
+    ImplicitFunctionRegion<Tensor> ifr = new EllipsoidRegion(Tensors.vector(5, 10), Tensors.vector(1 / 0.0, 2));
+    assertEquals(ifr.signedDistance(Tensors.vector(1000, 8)), RealScalar.ZERO);
   }
 
   public void test1D() {
-    ImplicitFunctionRegion ifr = new EllipsoidRegion(Tensors.vector(10), Tensors.vector(2));
-    assertEquals(ifr.apply(Tensors.vector(8)), RealScalar.ZERO);
+    ImplicitFunctionRegion<Tensor> ifr = new EllipsoidRegion(Tensors.vector(10), Tensors.vector(2));
+    assertEquals(ifr.signedDistance(Tensors.vector(8)), RealScalar.ZERO);
+  }
+
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    ImplicitFunctionRegion<Tensor> ifr = new EllipsoidRegion(Tensors.vector(10), Tensors.vector(2));
+    Serialization.copy(ifr);
   }
 
   public void testLengthFail() {

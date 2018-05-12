@@ -1,11 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
 
-public class HyperplaneRegion extends ImplicitFunctionRegion {
+public class HyperplaneRegion extends ImplicitFunctionRegion<Tensor> implements Serializable {
   private final Tensor normal; // orthogonal to hyperplane pointing outside
   private final Scalar distanceFromZero;
 
@@ -23,8 +25,8 @@ public class HyperplaneRegion extends ImplicitFunctionRegion {
     this.distanceFromZero = distanceFromZero;
   }
 
-  @Override
-  public Scalar apply(Tensor x) {
+  @Override // from SignedDistanceFunction<Tensor>
+  public Scalar signedDistance(Tensor x) {
     return distanceFromZero.add(x.dot(normal));
   }
 }

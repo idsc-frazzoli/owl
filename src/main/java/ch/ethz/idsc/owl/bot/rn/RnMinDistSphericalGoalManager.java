@@ -55,6 +55,6 @@ public class RnMinDistSphericalGoalManager extends SimpleTrajectoryRegionQuery i
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
     // max(0, ||x - center|| - radius)
-    return Ramp.of(sphericalRegion.apply(x));
+    return Ramp.of(sphericalRegion.signedDistance(x));
   }
 }

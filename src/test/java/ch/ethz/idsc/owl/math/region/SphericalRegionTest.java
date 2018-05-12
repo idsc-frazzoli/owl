@@ -22,7 +22,7 @@ public class SphericalRegionTest extends TestCase {
 
   public void testDistance() {
     SphericalRegion region = new SphericalRegion(Tensors.vector(1, 1), RealScalar.ZERO);
-    assertEquals(region.apply(Tensors.vector(11, 1)), RealScalar.of(10));
+    assertEquals(region.signedDistance(Tensors.vector(11, 1)), RealScalar.of(10));
   }
 
   public void testCenter() {

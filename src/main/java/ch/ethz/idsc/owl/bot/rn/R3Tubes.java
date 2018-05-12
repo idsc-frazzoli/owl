@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.region.ImplicitFunctionRegion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,7 +12,7 @@ import ch.ethz.idsc.tensor.io.Primitives;
 /** example functions for use with RnImplicitObstacle
  *
  * positive return value (including zero) means inside obstacle region */
-class R3Tubes extends ImplicitFunctionRegion {
+class R3Tubes extends ImplicitFunctionRegion<Tensor> implements Serializable {
   /** 3-dimensional tube network
    * the challenge is to find the path through narrow passages along the diagonal
    *
@@ -21,8 +23,8 @@ class R3Tubes extends ImplicitFunctionRegion {
    *
    * motivated by
    * https://reference.wolfram.com/language/ref/ContourPlot3D.html */
-  @Override
-  public Scalar apply(Tensor tensor) {
+  @Override // from SignedDistanceFunction<Tensor>
+  public Scalar signedDistance(Tensor tensor) {
     final double[] data = Primitives.toDoubleArray(tensor);
     double x = data[0];
     double y = data[1];
