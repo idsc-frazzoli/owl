@@ -1,0 +1,61 @@
+// code by jph
+package ch.ethz.idsc.owl.bot.se2;
+
+import java.io.Serializable;
+
+import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.region.So2Region;
+import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+
+/** suggested base class for se2 goal managers.
+ * all implemented methods in this layer are final.
+ * 
+ * class defines circle region for (x,y) component and periodic intervals in angular component */
+public class Se2ComboRegion implements Region<Tensor>, Serializable {
+  /** @param goal {px, py, angle}
+   * @param radiusVector {dist_radius, dist_radius, dist_angle}
+   * @throws Exception if first two entries are different */
+  public static Se2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
+    if (radiusVector.Get(0).equals(radiusVector.Get(1)))
+      return new Se2ComboRegion( //
+          new SphericalRegion(goal.extract(0, 2), radiusVector.Get(0)), //
+          new So2Region(goal.Get(2), radiusVector.Get(2)));
+    throw new RuntimeException();
+  }
+
+  public static Se2ComboRegion cone(Tensor goal, Scalar semi) {
+    return new Se2ComboRegion( //
+        new ConeRegion(goal, semi), //
+        new So2Region(goal.Get(2), semi));
+  }
+  // ---
+
+  private final RegionWithDistance<Tensor> regionWithDistance;
+  private final So2Region so2Region;
+
+  public Se2ComboRegion(RegionWithDistance<Tensor> regionWithDistance, So2Region so2Region) {
+    this.regionWithDistance = regionWithDistance;
+    this.so2Region = so2Region;
+  }
+
+  /** @param xya == {px, py, angle}
+   * @return distance of {px, py} from spherical region */
+  protected final Scalar d_xy(Tensor xya) {
+    return regionWithDistance.distance(xya.extract(0, 2));
+  }
+
+  /** @param xya == {px, py, angle}
+   * @return distance of angle from so2region */
+  protected final Scalar d_angle(Tensor xya) {
+    return so2Region.distance(xya.get(2));
+  }
+
+  @Override // from Region
+  public final boolean isMember(Tensor xya) {
+    return regionWithDistance.isMember(xya.extract(0, 2)) && so2Region.isMember(xya.get(2));
+  }
+}

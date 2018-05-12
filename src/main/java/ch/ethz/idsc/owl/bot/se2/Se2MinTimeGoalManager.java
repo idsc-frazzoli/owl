@@ -5,12 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.DontModify;
+import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
+import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.So2Region;
+import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,34 +23,13 @@ import ch.ethz.idsc.tensor.red.Max;
  * The cost does not account for curvature. */
 // DO NOT MODIFY THIS CLASS SINCE THE FUNCTIONALITY IS USED IN MANY DEMOS
 @DontModify
-public final class Se2MinTimeGoalManager extends Se2AbstractGoalManager {
-  /** the use of {@link #create(Tensor, Tensor, Collection)}
-   * is preferred over the constructor
-   * 
-   * @param goal {px, py, angle}
-   * @param radiusVector {dist_radius, dist_radius, dist_angle}
-   * @param controls */
-  public static GoalInterface create(Tensor goal, Tensor radiusVector, Collection<Flow> controls) {
-    return new Se2MinTimeGoalManager(goal, radiusVector, controls).getGoalInterface();
-  }
-
-  public static GoalInterface create(RegionWithDistance<Tensor> regionWithDistance, Scalar angle, Scalar angle_tolerance, Collection<Flow> controls) {
-    So2Region so2Region = new So2Region(angle, angle_tolerance);
-    return new Se2MinTimeGoalManager(regionWithDistance, so2Region, controls).getGoalInterface();
-  }
-  // ---
-
+public final class Se2MinTimeGoalManager implements Region<Tensor>, CostFunction {
+  private final Se2ComboRegion se2ComboRegion;
   private final Scalar maxSpeed;
   private final Scalar maxTurning;
 
-  public Se2MinTimeGoalManager(Tensor goal, Tensor radiusVector, Collection<Flow> controls) {
-    super(goal, radiusVector);
-    maxSpeed = Se2Controls.maxSpeed(controls);
-    maxTurning = Se2Controls.maxTurning(controls);
-  }
-
-  private Se2MinTimeGoalManager(RegionWithDistance<Tensor> regionWithDistance, So2Region so2Region, Collection<Flow> controls) {
-    super(regionWithDistance, so2Region);
+  public Se2MinTimeGoalManager(Se2ComboRegion se2ComboRegion, Collection<Flow> controls) {
+    this.se2ComboRegion = se2ComboRegion;
     maxSpeed = Se2Controls.maxSpeed(controls);
     maxTurning = Se2Controls.maxTurning(controls);
   }
@@ -60,7 +41,19 @@ public final class Se2MinTimeGoalManager extends Se2AbstractGoalManager {
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
-    // units: d_ax [m] / maxSpeed [m/s] -> time [s]
-    return Max.of(d_xy(tensor).divide(maxSpeed), d_angle(tensor).divide(maxTurning));
+    // units: d_xy [m] / maxSpeed [m/s] -> time [s]
+    // units: d_an [rad] / maxTurning [rad/s] -> time [s]
+    return Max.of( //
+        se2ComboRegion.d_xy(tensor).divide(maxSpeed), //
+        se2ComboRegion.d_angle(tensor).divide(maxTurning));
+  }
+
+  @Override
+  public boolean isMember(Tensor xya) {
+    return se2ComboRegion.isMember(xya);
+  }
+
+  public final GoalInterface getGoalInterface() {
+    return new GoalAdapter(StandardTrajectoryRegionQuery.timeInvariant(this), this);
   }
 }
