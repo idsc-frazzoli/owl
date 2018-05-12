@@ -13,35 +13,23 @@ import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
 public class Se2MinTimeGoalManagerTest extends TestCase {
-  public void testSimple() {
-    CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, RealScalar.ONE);
-    Collection<Flow> controls = carFlows.getFlows(3);
-    new Se2MinTimeGoalManager(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 3), controls);
-    try {
-      new Se2MinTimeGoalManager(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3), controls);
-      assertTrue(false);
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
   public void testIsMember() {
     CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(3);
-    Se2AbstractGoalManager se2AbstractGoalManager = //
-        new Se2MinTimeGoalManager(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1), controls);
-    assertEquals(se2AbstractGoalManager.radiusSpace(), RealScalar.ONE);
-    assertTrue(se2AbstractGoalManager.isMember(Tensors.vector(1, 2, 3)));
-    assertFalse(se2AbstractGoalManager.isMember(Tensors.vector(-1, 2, 3)));
-    assertFalse(se2AbstractGoalManager.isMember(Tensors.vector(1, 2, 3.2)));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
+    assertTrue(goalInterface.isMember(new StateTime(Tensors.vector(1, 2, 3), RealScalar.of(3))));
+    assertFalse(goalInterface.isMember(new StateTime(Tensors.vector(-1, 2, 3), RealScalar.of(3))));
+    assertFalse(goalInterface.isMember(new StateTime(Tensors.vector(1, 2, 3.2), RealScalar.of(3))));
   }
 
   public void testGoalAdapter() {
     CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(3);
-    Se2AbstractGoalManager se2AbstractGoalManager = //
-        new Se2MinTimeGoalManager(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1), controls);
-    GoalInterface goalInterface = se2AbstractGoalManager.getGoalInterface();
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     assertTrue(goalInterface.isMember(new StateTime(Tensors.vector(1, 2, 3), RealScalar.ZERO)));
     assertFalse(goalInterface.isMember(new StateTime(Tensors.vector(-1, 2, 3), RealScalar.ZERO)));
     assertFalse(goalInterface.isMember(new StateTime(Tensors.vector(1, 2, 3.2), RealScalar.ZERO)));

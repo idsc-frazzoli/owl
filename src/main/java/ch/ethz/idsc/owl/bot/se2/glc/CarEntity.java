@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.Collection;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
@@ -21,6 +22,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
@@ -107,10 +109,11 @@ public class CarEntity extends Se2Entity {
     if (!VectorQ.ofLength(goal, 3))
       throw TensorRuntimeException.of(goal);
     this.plannerConstraint = plannerConstraint;
-    GoalInterface goalInterface = MultiCostGoalAdapter.of(Se2MinTimeGoalManager.create( //
+    Se2ComboRegion se2ComboRegion = new Se2ComboRegion( //
         getGoalRegionWithDistance(goal), // euclidean
-        goal.Get(2), goalRadius.Get(2), // so2
-        controls), extraCosts);
+        new So2Region(goal.Get(2), goalRadius.Get(2)));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    GoalInterface goalInterface = MultiCostGoalAdapter.of(se2MinTimeGoalManager.getGoalInterface(), extraCosts);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);

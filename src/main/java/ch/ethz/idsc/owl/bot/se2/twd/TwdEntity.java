@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.twd;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2LateralAcceleration;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
@@ -73,8 +74,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     this.plannerConstraint = plannerConstraint;
     Tensor radiusVector = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta);
+    Se2ComboRegion se2ComboRegion = //
+        Se2ComboRegion.spherical(goal, radiusVector);
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager( //
+        se2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
-        Se2MinTimeGoalManager.create(goal, radiusVector, controls), //
+        se2MinTimeGoalManager.getGoalInterface(), //
         extraCosts);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);

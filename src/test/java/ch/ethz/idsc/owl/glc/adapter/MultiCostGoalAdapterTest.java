@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;
 import ch.ethz.idsc.owl.bot.se2.glc.CarFlows;
@@ -23,8 +24,9 @@ public class MultiCostGoalAdapterTest extends TestCase {
     Scalar speed = RealScalar.of(2);
     CarFlows carFlows = new CarForwardFlows(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
-    GoalInterface goalInterface = //
-        Se2MinTimeGoalManager.create(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2), controls);
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     CostFunction costFunction = new Se2ShiftCostFunction(RealScalar.of(3));
     GoalInterface mcga = MultiCostGoalAdapter.of(goalInterface, Arrays.asList(costFunction));
     {
@@ -43,8 +45,9 @@ public class MultiCostGoalAdapterTest extends TestCase {
     Scalar speed = RealScalar.of(2);
     CarFlows carFlows = new CarForwardFlows(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
-    GoalInterface goalInterface = //
-        Se2MinTimeGoalManager.create(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2), controls);
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     CostFunction costFunction = new Se2ShiftCostFunction(RealScalar.of(3));
     GoalInterface mcga = MultiCostGoalAdapter.of(goalInterface, Arrays.asList(costFunction));
     assertTrue(mcga.isMember(new StateTime(Tensors.vector(10, 5, 1), RealScalar.ZERO)));
@@ -55,8 +58,10 @@ public class MultiCostGoalAdapterTest extends TestCase {
     Scalar speed = RealScalar.of(2);
     CarFlows carFlows = new CarForwardFlows(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
-    GoalInterface goalInterface = //
-        Se2MinTimeGoalManager.create(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2), controls);
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
+    Se2MinTimeGoalManager goalInterface2 = //
+        new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    GoalInterface goalInterface = goalInterface2.getGoalInterface();
     GoalInterface mcga = MultiCostGoalAdapter.of(goalInterface, Arrays.asList());
     assertTrue(mcga == goalInterface);
   }
