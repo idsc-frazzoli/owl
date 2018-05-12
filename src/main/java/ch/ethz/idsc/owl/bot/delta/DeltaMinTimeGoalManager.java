@@ -39,6 +39,6 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    return Ramp.of(sphericalRegion.apply(x).divide(maxSpeed)); // unit [m] / [m/s] simplifies to [s]
+    return Ramp.of(sphericalRegion.signedDistance(x).divide(maxSpeed)); // unit [m] / [m/s] simplifies to [s]
   }
 }

@@ -54,6 +54,6 @@ public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
     // max(0, ||x - center|| - radius) / maxSpeed
-    return Ramp.of(sphericalRegion.apply(x).divide(maxSpeed));
+    return Ramp.of(sphericalRegion.signedDistance(x).divide(maxSpeed));
   }
 }

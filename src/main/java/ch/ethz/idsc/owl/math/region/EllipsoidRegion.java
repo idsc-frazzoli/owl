@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * Notice: evaluate(...) does not correspond to Euclidean distance
  * 
  * @see SphericalRegion */
-public class EllipsoidRegion extends ImplicitFunctionRegion {
+public class EllipsoidRegion extends ImplicitFunctionRegion<Tensor> implements Serializable {
   private final Tensor center;
   private final Tensor radius;
   private final Tensor invert;
@@ -42,8 +44,8 @@ public class EllipsoidRegion extends ImplicitFunctionRegion {
     invert = radius.map(Scalar::reciprocal);
   }
 
-  @Override // from ImplicitFunction
-  public Scalar apply(Tensor tensor) {
+  @Override // from SignedDistanceFunction<Tensor>
+  public Scalar signedDistance(Tensor tensor) {
     return Norm2Squared.ofVector(tensor.subtract(center).pmul(invert)).subtract(RealScalar.ONE);
   }
 

@@ -1,13 +1,15 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public class So2Region extends ImplicitFunctionRegion {
+public class So2Region extends ImplicitFunctionRegion<Tensor> implements Serializable {
   private static final Scalar TWO = RealScalar.of(2);
   // ---
   private final Scalar center;
@@ -24,8 +26,8 @@ public class So2Region extends ImplicitFunctionRegion {
     mod = Mod.function(half_circumference.multiply(TWO), half_circumference.negate());
   }
 
-  @Override // from TensorScalarFunction
-  public Scalar apply(Tensor x) {
+  @Override // from SignedDistanceFunction<Tensor>
+  public Scalar signedDistance(Tensor x) {
     return mod.apply(x.Get().subtract(center)).abs().subtract(radius);
   }
 

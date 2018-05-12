@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.region.ImplicitFunctionRegion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -14,9 +16,9 @@ import ch.ethz.idsc.tensor.io.Primitives;
  * extent = 2
  * root = ( -2.0, -2.0 )
  * goal = ( 2.0, 2.0 ) */
-public class R2Bubbles extends ImplicitFunctionRegion {
-  @Override
-  public Scalar apply(Tensor tensor) {
+public class R2Bubbles extends ImplicitFunctionRegion<Tensor> implements Serializable {
+  @Override // from SignedDistanceFunction<Tensor>
+  public Scalar signedDistance(Tensor tensor) {
     final double[] data = Primitives.toDoubleArray(tensor);
     double x = data[0];
     double y = data[1];
