@@ -16,8 +16,8 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
 
 public enum ConeRegionRender {
   ;
-  private static final Color NEAR = new Color(0, 0, 255, 64);
-  private static final Color FAR = new Color(255, 255, 255, 0);
+  private static final Color NEAR = new Color(255, 0, 0, 64);
+  private static final Color FAR = new Color(255, 255, 0, 64);
 
   public static void draw(GeometricLayer geometricLayer, Graphics2D graphics, ConeRegion coneRegion) {
     geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(coneRegion.apex()));

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.util;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.bot.rn.RnPointcloudRegion;
@@ -12,6 +13,10 @@ import ch.ethz.idsc.owl.gui.region.EllipseRegionRender;
 import ch.ethz.idsc.owl.gui.region.ImageRegionRender;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
 import ch.ethz.idsc.owl.gui.region.StateTimeCollectorRender;
+import ch.ethz.idsc.owl.gui.ren.ConeRegionRender;
+import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -66,5 +71,12 @@ public enum RegionRenders {
     if (trajectoryRegionQuery instanceof StateTimeCollector)
       return new StateTimeCollectorRender((StateTimeCollector) trajectoryRegionQuery);
     throw new RuntimeException();
+  }
+
+  public static void draw(GeometricLayer geometricLayer, Graphics2D graphics, Region<Tensor> region) {
+    if (region instanceof ConeRegion)
+      ConeRegionRender.draw(geometricLayer, graphics, (ConeRegion) region);
+    if (region instanceof SphericalRegion)
+      SphericalRegionRender.draw(geometricLayer, graphics, (SphericalRegion) region);
   }
 }

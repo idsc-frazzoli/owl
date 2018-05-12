@@ -10,19 +10,17 @@ import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
+import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ren.ConeRegionRender;
-import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -138,13 +136,7 @@ public class CarEntity extends Se2Entity {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    {
-      RegionWithDistance<Tensor> _goalRegion = goalRegion;
-      if (_goalRegion instanceof ConeRegion)
-        ConeRegionRender.draw(geometricLayer, graphics, (ConeRegion) _goalRegion);
-      if (_goalRegion instanceof SphericalRegion)
-        SphericalRegionRender.draw(geometricLayer, graphics, (SphericalRegion) _goalRegion);
-    }
+    RegionRenders.draw(geometricLayer, graphics, goalRegion);
     // ---
     super.render(geometricLayer, graphics);
     // ---
