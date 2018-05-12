@@ -17,10 +17,12 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.Se2WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -40,7 +42,12 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
-    GokartEntity gokartEntity = new GokartEntity(initial);
+    GokartEntity gokartEntity = new GokartEntity(initial) {
+      @Override
+      public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
+        return new ConeRegion(goal, RealScalar.of(Math.PI / 4));
+      }
+    };
     // ---
     final Scalar scale = DoubleScalar.of(7.5); // meter_to_pixel
     Tensor tensor = ImageRegions.grayscale(ResourceData.of("/map/dubendorf/hangar/20180423obstacles.png"));

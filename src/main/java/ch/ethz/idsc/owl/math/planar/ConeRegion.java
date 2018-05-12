@@ -41,7 +41,7 @@ public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
     return Scalars.lessThan(angle, semi);
   }
 
-  @Override  // from DistanceFunction<Tensor>
+  @Override // from DistanceFunction<Tensor>
   public Scalar distance(Tensor tensor) {
     Tensor local = inverse.apply(tensor);
     Scalar angle = ArcTan.of(local.Get(0), local.Get(1)).abs(); // non-negative

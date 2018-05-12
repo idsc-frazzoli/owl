@@ -20,6 +20,8 @@ import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -63,7 +65,7 @@ public class CarEntity extends Se2Entity {
 
   // ---
   private final Collection<Flow> controls;
-  private final Tensor goalRadius;
+  public final Tensor goalRadius;
   private final Tensor partitionScale;
   private final Tensor shape;
 
@@ -78,7 +80,7 @@ public class CarEntity extends Se2Entity {
     controls = carFlows.getFlows(9);
     final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
     final Scalar goalRadius_theta = SQRT2.divide(PARTITIONSCALE.Get(2));
-    goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta);
+    goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta).unmodifiable();
     extraCosts.add(new Se2ShiftCostFunction(SHIFT_PENALTY));
     this.partitionScale = partitionScale;
     this.shape = shape.copy().unmodifiable();
@@ -94,13 +96,21 @@ public class CarEntity extends Se2Entity {
     return SE2WRAP.distance(x, y); // non-negative
   }
 
+  /** @param goal
+   * @return */
+  public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
+    return new SphericalRegion(goal.extract(0, 2), goalRadius.Get(0));
+  }
+
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     if (!VectorQ.ofLength(goal, 3))
       throw TensorRuntimeException.of(goal);
     this.plannerConstraint = plannerConstraint;
-    GoalInterface goalInterface = MultiCostGoalAdapter.of( //
-        Se2MinTimeGoalManager.create(goal, goalRadius, controls), extraCosts);
+    GoalInterface goalInterface = MultiCostGoalAdapter.of(Se2MinTimeGoalManager.create( //
+        getGoalRegionWithDistance(goal), // euclidean
+        goal.Get(2), goalRadius.Get(2), // so2
+        controls), extraCosts);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);

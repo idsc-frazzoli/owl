@@ -9,11 +9,12 @@ import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
-import ch.ethz.idsc.tensor.sca.Ramp;
 
 /** min time cost function with decent heuristic
  * 
@@ -30,6 +31,11 @@ public final class Se2MinTimeGoalManager extends Se2AbstractGoalManager {
   public static GoalInterface create(Tensor goal, Tensor radiusVector, Collection<Flow> controls) {
     return new Se2MinTimeGoalManager(goal, radiusVector, controls).getGoalInterface();
   }
+
+  public static GoalInterface create(RegionWithDistance<Tensor> regionWithDistance, Scalar angle, Scalar angle_tolerance, Collection<Flow> controls) {
+    So2Region so2Region = new So2Region(angle, angle_tolerance);
+    return new Se2MinTimeGoalManager(regionWithDistance, so2Region, controls).getGoalInterface();
+  }
   // ---
 
   private final Scalar maxSpeed;
@@ -37,6 +43,12 @@ public final class Se2MinTimeGoalManager extends Se2AbstractGoalManager {
 
   public Se2MinTimeGoalManager(Tensor goal, Tensor radiusVector, Collection<Flow> controls) {
     super(goal, radiusVector);
+    maxSpeed = Se2Controls.maxSpeed(controls);
+    maxTurning = Se2Controls.maxTurning(controls);
+  }
+
+  private Se2MinTimeGoalManager(RegionWithDistance<Tensor> regionWithDistance, So2Region so2Region, Collection<Flow> controls) {
+    super(regionWithDistance, so2Region);
     maxSpeed = Se2Controls.maxSpeed(controls);
     maxTurning = Se2Controls.maxTurning(controls);
   }
@@ -49,6 +61,6 @@ public final class Se2MinTimeGoalManager extends Se2AbstractGoalManager {
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
     // units: d_ax [m] / maxSpeed [m/s] -> time [s]
-    return Ramp.of(Max.of(d_xy(tensor).divide(maxSpeed), d_angle(tensor).divide(maxTurning)));
+    return Max.of(d_xy(tensor).divide(maxSpeed), d_angle(tensor).divide(maxTurning));
   }
 }
