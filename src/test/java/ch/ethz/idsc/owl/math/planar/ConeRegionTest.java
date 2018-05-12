@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.ArcTan;
@@ -61,6 +62,14 @@ public class ConeRegionTest extends TestCase {
     for (Tensor tensor : RandomVariate.of(NormalDistribution.standard(), 100, 2)) {
       assertTrue(coneRegion.isMember(tensor));
       assertEquals(coneRegion.isMember(tensor), Scalars.isZero(coneRegion.distance(tensor)));
+    }
+  }
+
+  public void testNegativeBug() {
+    for (Tensor _radius : Subdivide.of(0.1, 3 * Math.PI, 10)) {
+      ConeRegion coneRegion = new ConeRegion(Tensors.vector(0, 0, 6 * Math.PI), _radius.Get());
+      for (Tensor tensor : RandomVariate.of(NormalDistribution.standard(), 50, 2))
+        Sign.requirePositiveOrZero(coneRegion.distance(tensor));
     }
   }
 

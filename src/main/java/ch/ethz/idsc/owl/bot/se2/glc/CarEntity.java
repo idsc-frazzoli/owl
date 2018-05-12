@@ -15,11 +15,14 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.gui.ren.ConeRegionRender;
+import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -98,6 +101,8 @@ public class CarEntity extends Se2Entity {
     return SE2WRAP.distance(x, y); // non-negative
   }
 
+  private RegionWithDistance<Tensor> goalRegion = null;
+
   /** @param goal
    * @return */
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
@@ -109,9 +114,8 @@ public class CarEntity extends Se2Entity {
     if (!VectorQ.ofLength(goal, 3))
       throw TensorRuntimeException.of(goal);
     this.plannerConstraint = plannerConstraint;
-    Se2ComboRegion se2ComboRegion = new Se2ComboRegion( //
-        getGoalRegionWithDistance(goal), // euclidean
-        new So2Region(goal.Get(2), goalRadius.Get(2)));
+    goalRegion = getGoalRegionWithDistance(goal);
+    Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, new So2Region(goal.Get(2), goalRadius.Get(2)));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(se2MinTimeGoalManager.getGoalInterface(), extraCosts);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
@@ -134,6 +138,14 @@ public class CarEntity extends Se2Entity {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    {
+      RegionWithDistance<Tensor> _goalRegion = goalRegion;
+      if (_goalRegion instanceof ConeRegion)
+        ConeRegionRender.draw(geometricLayer, graphics, (ConeRegion) _goalRegion);
+      if (_goalRegion instanceof SphericalRegion)
+        SphericalRegionRender.draw(geometricLayer, graphics, (SphericalRegion) _goalRegion);
+    }
+    // ---
     super.render(geometricLayer, graphics);
     // ---
     PurePursuit _purePursuit = purePursuit;
