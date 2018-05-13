@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
-import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -45,7 +45,7 @@ enum R2SphereDemo {
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(20);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 0), DoubleScalar.of(0.5));
-    GoalInterface goalInterface = new RnMinDistSphericalGoalManager(sphericalRegion);
+    GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     Region<Tensor> region1 = new EllipsoidRegion(Tensors.vector(3, 3), Tensors.vector(2, 2));
     Region<Tensor> region2 = new EllipsoidRegion(Tensors.vector(2.5, 0), Tensors.vector(2, 1.5));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant( //

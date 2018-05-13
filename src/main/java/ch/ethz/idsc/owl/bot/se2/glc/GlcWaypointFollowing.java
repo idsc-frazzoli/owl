@@ -15,31 +15,31 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public class GlcWaypointFollowing extends WaypointFollowing {
   protected final GlcPlannerCallback glcPlannerCallback;
-  private MotionPlanWorker mpw = null;
+  private MotionPlanWorker motionPlanWorker = null;
+  private final PlannerConstraint plannerConstraint;
 
   /** @param waypoints
+   * @param replanningRate
    * @param entity
    * @param plannerConstraint
    * @param glcPlannerCallback */
   public GlcWaypointFollowing( //
-      Tensor waypoints, //
-      Scalar replanningRate, //
-      TrajectoryEntity entity, //
-      PlannerConstraint plannerConstraint, //
-      GlcPlannerCallback glcPlannerCallback) {
-    super(waypoints, replanningRate, entity, plannerConstraint);
+      Tensor waypoints, Scalar replanningRate, TrajectoryEntity entity, //
+      PlannerConstraint plannerConstraint, GlcPlannerCallback glcPlannerCallback) {
+    super(waypoints, replanningRate, entity);
     this.glcPlannerCallback = glcPlannerCallback;
+    this.plannerConstraint = plannerConstraint;
   }
 
   @Override
   protected void planToGoal(List<TrajectorySample> head, Tensor goal) {
-    if (Objects.nonNull(mpw)) {
-      mpw.flagShutdown();
-      mpw = null;
+    if (Objects.nonNull(motionPlanWorker)) {
+      motionPlanWorker.flagShutdown();
+      motionPlanWorker = null;
     }
     TrajectoryPlanner trajectoryPlanner = entity.createTrajectoryPlanner(plannerConstraint, goal);
-    mpw = new MotionPlanWorker();
-    mpw.addCallback(glcPlannerCallback);
-    mpw.start(head, trajectoryPlanner);
+    motionPlanWorker = new MotionPlanWorker();
+    motionPlanWorker.addCallback(glcPlannerCallback);
+    motionPlanWorker.start(head, trajectoryPlanner);
   }
 }

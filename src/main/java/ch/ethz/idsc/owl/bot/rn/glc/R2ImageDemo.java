@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
-import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -45,7 +45,7 @@ enum R2ImageDemo {
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(23);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 10), DoubleScalar.of(0.2));
-    GoalInterface goalInterface = new RnMinDistSphericalGoalManager(sphericalRegion);
+    GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //

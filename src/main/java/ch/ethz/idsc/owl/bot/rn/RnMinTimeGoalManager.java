@@ -10,12 +10,13 @@ import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Ramp;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** objective is minimum time.
  * 
@@ -29,21 +30,22 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   /** creates a spherical region in R^n with given center and radius.
    * 
-   * @param center vector with length == n
-   * @param radius positive
+   * @param regionWithDistance
    * @param controls */
-  public static GoalInterface create(Tensor center, Scalar radius, Collection<Flow> controls) {
-    return new RnMinTimeGoalManager(new SphericalRegion(center, radius), controls);
+  public static GoalInterface create(RegionWithDistance<Tensor> regionWithDistance, Collection<Flow> controls) {
+    return new RnMinTimeGoalManager(regionWithDistance, RnControls.maxSpeed(controls));
   }
-  // ---
 
-  private final SphericalRegion sphericalRegion;
+  // ---
+  private final RegionWithDistance<Tensor> regionWithDistance;
   private final Scalar maxSpeed;
 
-  private RnMinTimeGoalManager(SphericalRegion sphericalRegion, Collection<Flow> controls) {
-    super(new TimeInvariantRegion(sphericalRegion));
-    this.sphericalRegion = sphericalRegion;
-    maxSpeed = RnControls.maxSpeed(controls);
+  /** @param regionWithDistance
+   * @param maxSpeed positive */
+  public RnMinTimeGoalManager(RegionWithDistance<Tensor> regionWithDistance, Scalar maxSpeed) {
+    super(new TimeInvariantRegion(regionWithDistance));
+    this.regionWithDistance = regionWithDistance;
+    this.maxSpeed = Sign.requirePositive(maxSpeed);
   }
 
   @Override // from CostIncrementFunction
@@ -54,6 +56,6 @@ public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
     // max(0, ||x - center|| - radius) / maxSpeed
-    return Ramp.of(sphericalRegion.apply(x).divide(maxSpeed));
+    return regionWithDistance.distance(x).divide(maxSpeed);
   }
 }

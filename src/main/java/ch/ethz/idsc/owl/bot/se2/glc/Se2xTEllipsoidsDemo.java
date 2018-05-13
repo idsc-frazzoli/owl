@@ -8,8 +8,8 @@ import ch.ethz.idsc.owl.bot.rn.glc.R2xTEllipsoidsAnimationDemo;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
+import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
@@ -44,8 +45,8 @@ public class Se2xTEllipsoidsDemo implements DemoInterface {
     BijectionFamily noise2 = new SimpleTranslationFamily(stf2);
     Region<StateTime> region2 = new R2xTEllipsoidStateTimeRegion( //
         Tensors.vector(0.8, 0.6), noise2, () -> carxTEntity.getStateTimeNow().time());
-    TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
-        RegionUnion.wrap(Arrays.asList(region1, region2)));
+    TrajectoryRegionQuery trq = new StandardTrajectoryRegionQuery( //
+        RegionUnion.wrap(Arrays.asList(region1, region2)), VoidStateTimeRegionMembers.INSTANCE);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
     carxTEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);

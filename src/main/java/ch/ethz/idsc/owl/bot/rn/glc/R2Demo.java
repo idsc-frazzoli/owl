@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Bubbles;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
-import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
@@ -62,7 +62,7 @@ enum R2Demo {
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(36);
     SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
-    GoalInterface goalInterface = new RnMinDistSphericalGoalManager(sphericalRegion);
+    GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta, STATE_INTEGRATOR, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);

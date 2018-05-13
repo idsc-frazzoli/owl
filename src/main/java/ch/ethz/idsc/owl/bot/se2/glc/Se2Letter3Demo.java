@@ -13,13 +13,16 @@ import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.Degree;
+import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
@@ -30,7 +33,16 @@ public class Se2Letter3Demo extends Se2CarDemo {
   @Override // from Se2CarDemo
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    CarEntity carEntity = CarEntity.createDefault(new StateTime(Tensors.vector(6, 6, 1), RealScalar.ZERO));
+    StateTime stateTime = new StateTime(Tensors.vector(6, 6, 1), RealScalar.ZERO);
+    CarEntity carEntity = new CarEntity( //
+        stateTime, //
+        new PurePursuitControl(CarEntity.LOOKAHEAD, CarEntity.MAX_TURNING_RATE), //
+        CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
+      @Override
+      public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
+        return new ConeRegion(goal, RealScalar.of(Math.PI / 6));
+      }
+    };
     carEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     // se2Entity.extraCosts.add(r2ImageRegionWrap.gradientCostFunction());
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();

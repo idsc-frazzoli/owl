@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
+import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -43,9 +44,11 @@ enum Se2rImageDemo {
         Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 6), 5);
     CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, Degree.of(45));
     Collection<Flow> controls = carFlows.getFlows(6);
-    GoalInterface goalInterface = Se2MinTimeGoalManager.create( //
-        Tensors.vector(4.0, 5.6, 0), //
-        Tensors.vector(0.1, 0.1, 0.17), controls);
+    Se2ComboRegion se2ComboRegion = //
+        Se2ComboRegion.spherical(Tensors.vector(4.0, 5.6, 0), Tensors.vector(0.1, 0.1, 0.17));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager( //
+        se2ComboRegion, controls);
+    GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //

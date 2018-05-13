@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -9,7 +11,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 /** axis-aligned region of infinity extension in the direction of other axes */
-public class FreeBoundedIntervalRegion extends ImplicitFunctionRegion {
+public class FreeBoundedIntervalRegion extends ImplicitFunctionRegion<Tensor> implements Serializable {
   private static final Scalar HALF = RationalScalar.of(1, 2);
   // ---
   private final int index;
@@ -24,8 +26,8 @@ public class FreeBoundedIntervalRegion extends ImplicitFunctionRegion {
     center = hi.add(lo).multiply(HALF);
   }
 
-  @Override
-  public Scalar apply(Tensor x) {
+  @Override // from SignedDistanceFunction<Tensor>
+  public Scalar signedDistance(Tensor x) {
     return semiwidth.subtract(Abs.FUNCTION.apply(x.Get(index).subtract(center)));
   }
 }

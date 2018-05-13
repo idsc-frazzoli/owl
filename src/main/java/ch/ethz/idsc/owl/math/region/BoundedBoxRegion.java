@@ -10,8 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /** region is open
- * coordinates on the boundary are inside
- * same convention as {@link ImplicitFunctionRegion} */
+ * coordinates on the boundary are inside */
 public class BoundedBoxRegion implements Region<Tensor>, Serializable {
   /** @param center
    * @param radius for each coordinate

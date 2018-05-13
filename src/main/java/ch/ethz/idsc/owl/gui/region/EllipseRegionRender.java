@@ -42,7 +42,7 @@ public class EllipseRegionRender implements RenderInterface {
         .stream().map(row -> row.add(center)));
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Path2D path2D = geometricLayer.toPath2D(polygon);
     graphics.setColor(RegionRenders.COLOR);

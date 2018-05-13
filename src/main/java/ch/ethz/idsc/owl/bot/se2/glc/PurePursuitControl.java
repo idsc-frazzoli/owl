@@ -5,40 +5,42 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
-import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.StateTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clip;
 
-/** pure pursuit */
-// TODO rename class to reflect
-public class CarTrajectoryControl extends StateTrajectoryControl {
+/** pure pursuit control */
+public class PurePursuitControl extends StateTrajectoryControl {
   /** (vx, vy, omega) */
   private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
   // ---
-  private final Clip CLIP_TURNING_RATE = Clip.function(Degree.of(-50), Degree.of(+50));
-  private final Scalar LOOKAHEAD = RealScalar.of(0.5);
-  private final Scalar SPEED = RealScalar.of(1.0);
+  private final Clip clip;
+  private final Scalar lookAhead;
+
+  public PurePursuitControl(Scalar lookAhead, Scalar maxTurningRate) {
+    this.lookAhead = lookAhead;
+    this.clip = Clip.function(maxTurningRate.negate(), maxTurningRate);
+  }
 
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
     return SE2WRAP.distance(x, y);
   }
 
-  // TODO for visualization
-  private PurePursuit purePursuit = null;
+  PurePursuit purePursuit = null;
 
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
     // TODO controller is not able to execute backwards motion
+    Tensor u = trailAhead.get(0).getFlow().get().getU();
+    Scalar speed = u.Get(0);
     Tensor state = tail.state();
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
     Tensor beacons = Tensor.of(trailAhead.stream() //
@@ -46,12 +48,12 @@ public class CarTrajectoryControl extends StateTrajectoryControl {
         .map(StateTime::state) //
         .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
-    PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, LOOKAHEAD);
+    PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, lookAhead);
     if (_purePursuit.ratio().isPresent()) {
       Scalar ratio = _purePursuit.ratio().get();
-      if (CLIP_TURNING_RATE.isInside(ratio)) {
+      if (clip.isInside(ratio)) {
         purePursuit = _purePursuit;
-        return Optional.of(CarFlows.singleton(SPEED, ratio).getU());
+        return Optional.of(CarFlows.singleton(speed, ratio).getU());
       }
     }
     purePursuit = null;
