@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.ani.TrajectoryListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -20,7 +21,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class TrajectoryRender implements RenderInterface {
+public class TrajectoryRender implements RenderInterface, TrajectoryListener {
   private static final Color COLOR_FLOW = new Color(64, 64, 64, 128);
   private static final Scalar U_SCALE = RealScalar.of(0.33);
   private static final Color COLOR_GROUND = new Color(255, 255, 255, 128);
@@ -36,7 +37,7 @@ public class TrajectoryRender implements RenderInterface {
   }
 
   // ---
-  private final List<TrajectorySample> trajectory;
+  private List<TrajectorySample> trajectory;
 
   public TrajectoryRender(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
@@ -79,5 +80,10 @@ public class TrajectoryRender implements RenderInterface {
         graphics.draw(new Rectangle2D.Double(point2d.getX() - 1, point2d.getY() - 1, 2, 2));
       });
     }
+  }
+
+  @Override
+  public void setTrajectory(List<TrajectorySample> trajectory) {
+    this.trajectory = trajectory;
   }
 }

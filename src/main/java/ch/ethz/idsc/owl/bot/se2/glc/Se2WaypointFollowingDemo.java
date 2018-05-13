@@ -45,7 +45,7 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     GokartEntity gokartEntity = new GokartEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 8));
+        return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
       }
     };
     // ---
@@ -57,21 +57,13 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     Region<Tensor> region = Se2PointsVsRegions.line(gokartEntity.coords_X(), imageRegion);
     // ---
     Tensor waypointsT = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
-    // R2ImageRegionWrap waypointsRegionWrap = //
-    // R2ImageRegions.fromWaypoints(waypointsT, 6.0f, //
-    // new Dimension(range.Get(0).number().intValue(), range.Get(1).number().intValue()), range);
-    // se2Entity.extraCosts.add(waypointsRegionWrap.costFunction());
-    // ---
     Region<Tensor> polygonRegion = PolygonRegion.of(VIRTUAL);
-    Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion
-    // waypointsRegionWrap.imageRegion()
-    ));
+    Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
     gokartEntity.plannerConstraint = plannerConstraint;
     // ---
     owlyAnimationFrame.set(gokartEntity);
-    // owlyAnimationFrame.addBackground(RegionRenders.create(waypointsRegionWrap.imageRegion()));
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion)); // TODO rendering of both regions / union
+    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
     owlyAnimationFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);
     // ---
@@ -82,7 +74,7 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
         gokartEntity, plannerConstraint, glcPlannerCallback);
     wpf.setHorizonDistance(RealScalar.of(5));
     wpf.startNonBlocking();
-    //
+    // ---
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent e) {

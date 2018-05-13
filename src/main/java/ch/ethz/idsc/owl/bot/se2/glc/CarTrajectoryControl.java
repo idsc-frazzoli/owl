@@ -19,14 +19,25 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /** pure pursuit */
-// TODO rename class to reflect
+// TODO rename class to reflect pure pursuit
 public class CarTrajectoryControl extends StateTrajectoryControl {
   /** (vx, vy, omega) */
   private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
+
+  public static CarTrajectoryControl createDefault() {
+    return new CarTrajectoryControl(RealScalar.of(1.0), RealScalar.of(0.5), Degree.of(+50));
+  }
+
   // ---
-  private final Clip CLIP_TURNING_RATE = Clip.function(Degree.of(-50), Degree.of(+50));
-  private final Scalar LOOKAHEAD = RealScalar.of(0.5);
-  private final Scalar SPEED = RealScalar.of(1.0);
+  private final Clip clip;
+  private final Scalar lookAhead;
+  private final Scalar speed;
+
+  public CarTrajectoryControl(Scalar speed, Scalar lookAhead, Scalar maxTurningRate) {
+    this.speed = speed;
+    this.lookAhead = lookAhead;
+    this.clip = Clip.function(maxTurningRate.negate(), maxTurningRate);
+  }
 
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
@@ -46,12 +57,12 @@ public class CarTrajectoryControl extends StateTrajectoryControl {
         .map(StateTime::state) //
         .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
-    PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, LOOKAHEAD);
+    PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, lookAhead);
     if (_purePursuit.ratio().isPresent()) {
       Scalar ratio = _purePursuit.ratio().get();
-      if (CLIP_TURNING_RATE.isInside(ratio)) {
+      if (clip.isInside(ratio)) {
         purePursuit = _purePursuit;
-        return Optional.of(CarFlows.singleton(SPEED, ratio).getU());
+        return Optional.of(CarFlows.singleton(speed, ratio).getU());
       }
     }
     purePursuit = null;

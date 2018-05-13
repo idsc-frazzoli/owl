@@ -21,7 +21,10 @@ import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal()).unmodifiable();
   static final Scalar SPEED = RealScalar.of(2.5);
-  static final CarFlows CARFLOWS = new CarForwardFlows(SPEED, Degree.of(15));
+  static final Scalar LOOKAHEAD = RealScalar.of(3.0);
+  static final Scalar MAX_TURNING_PLAN = Degree.of(15);
+  static final Scalar MAX_TURNING_RATE = Degree.of(23);
+  static final CarFlows CARFLOWS = new CarForwardFlows(SPEED, MAX_TURNING_PLAN);
   static final Tensor SHAPE = ResourceData.of("/demo/gokart/footprint.csv");
   // ---
   /** simulation of occasional feedback from localization algorithm */
@@ -49,7 +52,9 @@ import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
   };
 
   public GokartEntity(StateTime stateTime) {
-    super(stateTime, new CarTrajectoryControl(), PARTITIONSCALE, CARFLOWS, SHAPE);
+    super(stateTime, //
+        new CarTrajectoryControl(SPEED, LOOKAHEAD, MAX_TURNING_RATE), //
+        PARTITIONSCALE, CARFLOWS, SHAPE);
     // ---
     add(localizationFeedback);
   }
