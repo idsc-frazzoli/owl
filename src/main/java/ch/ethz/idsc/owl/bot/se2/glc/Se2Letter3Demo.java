@@ -36,7 +36,7 @@ public class Se2Letter3Demo extends Se2CarDemo {
     StateTime stateTime = new StateTime(Tensors.vector(6, 6, 1), RealScalar.ZERO);
     CarEntity carEntity = new CarEntity( //
         stateTime, //
-        CarTrajectoryControl.createDefault(), //
+        new PurePursuitControl(CarEntity.LOOKAHEAD, CarEntity.MAX_TURNING_RATE), //
         CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {

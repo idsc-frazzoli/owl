@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.ArrayQ;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import junit.framework.TestCase;
 
+// TODO tensor v053
 public class DegreeTest extends TestCase {
   public void testSimple() {
     assertEquals(Degree.of(360), DoubleScalar.of(Math.PI * 2));
