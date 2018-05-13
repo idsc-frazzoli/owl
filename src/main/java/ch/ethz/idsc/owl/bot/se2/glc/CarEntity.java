@@ -34,7 +34,6 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** several magic constants are hard-coded in the implementation.
@@ -43,11 +42,12 @@ public class CarEntity extends Se2Entity {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(5), RealScalar.of(5), Degree.of(10).reciprocal()).unmodifiable();
   static final Scalar SPEED = RealScalar.of(1.0);
+  static final Scalar MAX_TURNING_PLAN = Degree.of(45);
   static final Scalar LOOKAHEAD = RealScalar.of(0.5);
   /** the pure pursuit controller is permitted a slightly higher turning rate "rad/m"
    * than the planner, to overcome small imprecisions when following the trajectory */
-  static final Clip CLIP_TURNING_RATE = Clip.function(Degree.of(-50), Degree.of(+50));
-  static final CarFlows CARFLOWS = new CarStandardFlows(SPEED, Degree.of(45));
+  static final Scalar MAX_TURNING_RATE = Degree.of(50);
+  static final CarFlows CARFLOWS = new CarStandardFlows(SPEED, MAX_TURNING_PLAN);
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   private static final Scalar SHIFT_PENALTY = RealScalar.of(0.4);
   // ---
@@ -64,7 +64,7 @@ public class CarEntity extends Se2Entity {
 
   public static CarEntity createDefault(StateTime stateTime) {
     return new CarEntity(stateTime, //
-        new CarTrajectoryControl(RealScalar.ONE, RealScalar.of(0.5), Degree.of(50)), //
+        new PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
         PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
@@ -73,6 +73,7 @@ public class CarEntity extends Se2Entity {
   public final Tensor goalRadius;
   private final Tensor partitionScale;
   private final Tensor shape;
+  protected final TrajectoryControl trajectoryControl; // TODO design is despicable
 
   /** extra cost functions, for instance
    * 1) to penalize switching gears
@@ -81,6 +82,7 @@ public class CarEntity extends Se2Entity {
    * @param stateTime initial position */
   public CarEntity(StateTime stateTime, TrajectoryControl trajectoryControl, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
     super(stateTime, trajectoryControl);
+    this.trajectoryControl = trajectoryControl;
     // new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
     controls = carFlows.getFlows(9);
     final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
@@ -134,22 +136,23 @@ public class CarEntity extends Se2Entity {
     return shape;
   }
 
-  private PurePursuit purePursuit = null;
-
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     RegionRenders.draw(geometricLayer, graphics, goalRegion);
     // ---
     super.render(geometricLayer, graphics);
     // ---
-    PurePursuit _purePursuit = purePursuit;
-    if (Objects.nonNull(_purePursuit) && _purePursuit.lookAhead().isPresent()) {
-      StateTime stateTime = getStateTimeNow();
-      Tensor matrix = Se2Utils.toSE2Matrix(stateTime.state());
-      geometricLayer.pushMatrix(matrix);
-      graphics.setColor(Color.RED);
-      graphics.draw(geometricLayer.toVector(Array.zeros(2), _purePursuit.lookAhead().get()));
-      geometricLayer.popMatrix();
+    if (trajectoryControl instanceof PurePursuitControl) {
+      PurePursuitControl purePursuitControl = (PurePursuitControl) trajectoryControl;
+      PurePursuit _purePursuit = purePursuitControl.purePursuit;
+      if (Objects.nonNull(_purePursuit) && _purePursuit.lookAhead().isPresent()) {
+        StateTime stateTime = getStateTimeNow();
+        Tensor matrix = Se2Utils.toSE2Matrix(stateTime.state());
+        geometricLayer.pushMatrix(matrix);
+        graphics.setColor(Color.RED);
+        graphics.draw(geometricLayer.toVector(Array.zeros(2), _purePursuit.lookAhead().get()));
+        geometricLayer.popMatrix();
+      }
     }
   }
 }

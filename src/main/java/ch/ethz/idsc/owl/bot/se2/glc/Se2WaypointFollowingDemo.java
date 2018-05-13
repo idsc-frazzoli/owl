@@ -56,7 +56,7 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     ImageRegion imageRegion = new ImageRegion(tensor, range, false);
     Region<Tensor> region = Se2PointsVsRegions.line(gokartEntity.coords_X(), imageRegion);
     // ---
-    Tensor waypointsT = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
+    Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     Region<Tensor> polygonRegion = PolygonRegion.of(VIRTUAL);
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
@@ -67,10 +67,10 @@ public class Se2WaypointFollowingDemo extends Se2CarDemo {
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
     owlyAnimationFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);
     // ---
-    RenderInterface renderInterface = new Se2WaypointRender(waypointsT, ARROWHEAD, new Color(64, 192, 64, 64));
+    RenderInterface renderInterface = new Se2WaypointRender(waypoints, ARROWHEAD, new Color(64, 192, 64, 64));
     owlyAnimationFrame.addBackground(renderInterface);
     GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(gokartEntity);
-    GlcWaypointFollowing wpf = new GlcWaypointFollowing(waypointsT, RealScalar.of(2), //
+    GlcWaypointFollowing wpf = new GlcWaypointFollowing(waypoints, RealScalar.of(2), //
         gokartEntity, plannerConstraint, glcPlannerCallback);
     wpf.setHorizonDistance(RealScalar.of(5));
     wpf.startNonBlocking();

@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 
   public GokartEntity(StateTime stateTime) {
     super(stateTime, //
-        new CarTrajectoryControl(SPEED, LOOKAHEAD, MAX_TURNING_RATE), //
+        new PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
         PARTITIONSCALE, CARFLOWS, SHAPE);
     // ---
     add(localizationFeedback);

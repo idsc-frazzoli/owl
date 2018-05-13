@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.qty.UnitSystem;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Degree.html">Degree</a> */
+// TODO tensor v053
 public enum Degree {
   ;
   private static final Unit DEGREE = Unit.of("deg");
