@@ -12,7 +12,8 @@ import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
-import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
+import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -26,7 +27,10 @@ import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
+import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -36,6 +40,7 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** demo to simulate dubendorf hangar */
+// TODO this demo requires
 public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
   private static final Tensor ARROWHEAD = Tensors.matrixDouble( //
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(2));
@@ -44,7 +49,8 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
 
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
+    // {50.800, 55.733, -0.314}
+    final StateTime initial = new StateTime(Tensors.vector(35.733, 38.267, 1.885), RealScalar.of(0.0));
     GokartxTEntity gokartEntity = new GokartxTEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
@@ -52,10 +58,24 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
       }
     };
     // ---
+    Tensor ext = Tensors.vector(0.7, 0.7).unmodifiable(); // TODO magic const
     BijectionFamily oscillation = new SimpleTranslationFamily(s -> Tensors.vector( //
-        Math.sin(s.number().doubleValue() * .5) * 6.0 + 44, 44.0));
+        Math.sin(s.number().doubleValue() * -.4) * 6.0 + 44, //
+        Math.cos(s.number().doubleValue() * -.4) * 6.0 + 44.0));
+    Tensor dim1 = Tensors.vector(2., 2.);
     Region<StateTime> region1 = new R2xTEllipsoidStateTimeRegion( //
-        Tensors.vector(2., 2.), oscillation, () -> gokartEntity.getStateTimeNow().time());
+        dim1, oscillation, () -> gokartEntity.getStateTimeNow().time());
+    Region<StateTime> region1d = new R2xTEllipsoidStateTimeRegion( //
+        dim1.subtract(ext), oscillation, () -> gokartEntity.getStateTimeNow().time());
+    // ---
+    BijectionFamily oscillation2 = new SimpleTranslationFamily(s -> Tensors.vector( //
+        Math.sin((s.number().doubleValue() - 1) * -.3) * 5.0 + 48, //
+        Math.cos((s.number().doubleValue() - 1) * -.3) * 5.0 + 50.0));
+    Tensor dim = Tensors.vector(2.5, 2.5);
+    Region<StateTime> region2 = new R2xTEllipsoidStateTimeRegion( //
+        dim, oscillation2, () -> gokartEntity.getStateTimeNow().time());
+    Region<StateTime> region2d = new R2xTEllipsoidStateTimeRegion( //
+        dim.subtract(ext), oscillation2, () -> gokartEntity.getStateTimeNow().time());
     // ---
     final Scalar scale = DoubleScalar.of(7.5); // meter_to_pixel
     Tensor tensor = ImageRegions.grayscale(ResourceData.of("/map/dubendorf/hangar/20180423obstacles.png"));
@@ -67,13 +87,19 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     Region<Tensor> polygonRegion = PolygonRegion.of(VIRTUAL);
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion));
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
+    TrajectoryRegionQuery trajectoryRegionQuery = new StandardTrajectoryRegionQuery( //
+        RegionUnion.wrap(Arrays.asList( //
+            new TimeInvariantRegion(union), // <- expects se2 states
+            region1, region2 //
+        )), VoidStateTimeRegionMembers.INSTANCE);
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     gokartEntity.plannerConstraint = plannerConstraint;
     // ---
     owlyAnimationFrame.set(gokartEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
-    owlyAnimationFrame.addBackground((RenderInterface) region1);
+    owlyAnimationFrame.addBackground((RenderInterface) region1d);
+    owlyAnimationFrame.addBackground((RenderInterface) region2d);
     owlyAnimationFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);
     // ---
     RenderInterface renderInterface = new Se2WaypointRender(waypoints, ARROWHEAD, new Color(64, 192, 64, 64));
