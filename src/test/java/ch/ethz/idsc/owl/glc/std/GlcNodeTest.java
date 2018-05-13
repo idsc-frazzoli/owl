@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
-import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -66,7 +66,7 @@ public class GlcNodeTest extends TestCase {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(36);
-    GoalInterface rnGoal = RnMinDistSphericalGoalManager.create(stateGoal, radius);
+    GoalInterface rnGoal = RnMinDistGoalManager.sperical(stateGoal, radius);
     PlannerConstraint plannerConstraint = EmptyPlannerConstraint.INSTANCE;
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //

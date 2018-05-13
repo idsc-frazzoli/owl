@@ -48,10 +48,10 @@ public class Se2xTLetterDemo implements DemoInterface {
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     carxTEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     // ---
-    BijectionFamily noise1 = new SimpleTranslationFamily(s -> Tensors.vector( //
+    BijectionFamily oscillation = new SimpleTranslationFamily(s -> Tensors.vector( //
         Math.sin(s.number().doubleValue() * .12) * 3.0 + 3.6, 4.0));
     Region<StateTime> region1 = new R2xTEllipsoidStateTimeRegion( //
-        Tensors.vector(0.4, 0.5), noise1, () -> carxTEntity.getStateTimeNow().time());
+        Tensors.vector(0.4, 0.5), oscillation, () -> carxTEntity.getStateTimeNow().time());
     // ---
     BijectionFamily rigid3 = new Se2Family(s -> Tensors.vector(8.0, 5.8, s.number().doubleValue() * 0.5));
     Tensor polygon = CogPoints.of(3, RealScalar.of(1.0), RealScalar.of(0.3));

@@ -9,7 +9,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.r2.R2NoiseCostFunction;
 import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
-import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -55,7 +55,7 @@ enum R2NoiseDemo {
     final Scalar radius = DoubleScalar.of(0.2);
     SphericalRegion sphericalRegion = new SphericalRegion(center, radius);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
-        new RnMinDistSphericalGoalManager(sphericalRegion), //
+        new RnMinDistGoalManager(sphericalRegion), //
         Arrays.asList(new R2NoiseCostFunction(threshold.subtract(RealScalar.of(0.3)))));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     // ---
