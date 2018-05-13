@@ -12,9 +12,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 
 /** test if api is sufficient to model gokart */
 /* package */ class GokartEntity extends CarEntity {
@@ -57,11 +55,5 @@ import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
         PARTITIONSCALE, CARFLOWS, SHAPE);
     // ---
     add(localizationFeedback);
-  }
-
-  public Tensor coords_X() {
-    ScalarSummaryStatistics scalarSummaryStatistics = //
-        SHAPE.stream().map(tensor -> tensor.Get(0)).collect(ScalarSummaryStatistics.collector());
-    return Subdivide.of(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax(), 3);
   }
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
-import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
@@ -43,7 +43,7 @@ enum R2PolygonDemo {
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(20);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 5), DoubleScalar.of(0.2));
-    GoalInterface goalInterface = new RnMinDistSphericalGoalManager(sphericalRegion);
+    GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     Region<Tensor> region = PolygonRegion.of(R2ExamplePolygons.BULKY_TOP_LEFT);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     // ---

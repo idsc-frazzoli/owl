@@ -9,8 +9,8 @@ import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.TrajectoryTranslationFamily;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
@@ -27,6 +27,7 @@ import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
@@ -68,8 +69,9 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     // ---
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png");
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
-    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery( //
-        RegionUnion.wrap(Arrays.asList(new TimeInvariantRegion(imageRegion), region1, region2, region3, region4))));
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new StandardTrajectoryRegionQuery( //
+        RegionUnion.wrap(Arrays.asList(new TimeInvariantRegion(imageRegion), region1, region2, region3, region4)), //
+        VoidStateTimeRegionMembers.INSTANCE));
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.set(abstractEntity);

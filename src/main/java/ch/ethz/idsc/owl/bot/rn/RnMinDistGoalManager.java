@@ -3,19 +3,19 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Ramp;
 
 /** objective is minimum path length.
  * path length is measured in Euclidean distance using Norm._2::ofVector.
@@ -26,25 +26,24 @@ import ch.ethz.idsc.tensor.sca.Ramp;
  * the cost == distance traveled evaluates to 0.
  * 
  * @see SphericalRegion */
-@DontModify
-public class RnMinDistSphericalGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+public class RnMinDistGoalManager extends StandardTrajectoryRegionQuery implements GoalInterface {
   /** creates a spherical region in R^n with given center and radius.
    * min distance to goal is measured in Euclidean distance.
    * the distance is independent from the max speed.
    * 
    * @param center vector with length == n
    * @param radius positive */
-  public static GoalInterface create(Tensor center, Scalar radius) {
-    return new RnMinDistSphericalGoalManager(new SphericalRegion(center, radius));
+  public static GoalInterface sperical(Tensor center, Scalar radius) {
+    return new RnMinDistGoalManager(new SphericalRegion(center, radius));
   }
   // ---
 
-  private final SphericalRegion sphericalRegion;
+  private final RegionWithDistance<Tensor> regionWithDistance;
 
-  /** @param sphericalRegion */
-  public RnMinDistSphericalGoalManager(SphericalRegion sphericalRegion) {
-    super(new TimeInvariantRegion(sphericalRegion));
-    this.sphericalRegion = sphericalRegion;
+  /** @param regionWithDistance */
+  public RnMinDistGoalManager(RegionWithDistance<Tensor> regionWithDistance) {
+    super(new TimeInvariantRegion(regionWithDistance), VoidStateTimeRegionMembers.INSTANCE);
+    this.regionWithDistance = regionWithDistance;
   }
 
   @Override // from CostIncrementFunction
@@ -54,7 +53,6 @@ public class RnMinDistSphericalGoalManager extends SimpleTrajectoryRegionQuery i
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    // max(0, ||x - center|| - radius)
-    return Ramp.of(sphericalRegion.signedDistance(x));
+    return regionWithDistance.distance(x);
   }
 }

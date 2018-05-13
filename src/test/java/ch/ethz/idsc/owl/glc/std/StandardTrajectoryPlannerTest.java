@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
-import ch.ethz.idsc.owl.bot.rn.RnMinDistSphericalGoalManager;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -40,7 +40,7 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(36);
-    GoalInterface goalInterface = RnMinDistSphericalGoalManager.create(stateGoal, radius);
+    GoalInterface goalInterface = RnMinDistGoalManager.sperical(stateGoal, radius);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);

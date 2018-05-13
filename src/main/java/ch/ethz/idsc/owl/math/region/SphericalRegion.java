@@ -46,6 +46,7 @@ public class SphericalRegion extends ImplicitFunctionRegion<Tensor> implements /
 
   @Override // from DistanceFunction<Tensor>
   public Scalar distance(Tensor element) {
+    // max(0, ||x - center|| - radius)
     return Ramp.FUNCTION.apply(signedDistance(element));
   }
 

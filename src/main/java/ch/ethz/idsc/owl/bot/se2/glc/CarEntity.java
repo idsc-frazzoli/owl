@@ -33,7 +33,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** several magic constants are hard-coded in the implementation.
@@ -154,5 +156,11 @@ public class CarEntity extends Se2Entity {
         geometricLayer.popMatrix();
       }
     }
+  }
+
+  public Tensor coords_X() {
+    ScalarSummaryStatistics scalarSummaryStatistics = //
+        shape.stream().map(tensor -> tensor.Get(0)).collect(ScalarSummaryStatistics.collector());
+    return Subdivide.of(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax(), 2);
   }
 }
