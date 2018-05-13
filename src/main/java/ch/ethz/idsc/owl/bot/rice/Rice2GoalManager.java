@@ -3,12 +3,13 @@ package ch.ethz.idsc.owl.bot.rice;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
+import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
+import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
@@ -17,7 +18,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
-public class Rice2GoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+public class Rice2GoalManager extends StandardTrajectoryRegionQuery implements GoalInterface {
   public static GoalInterface create(Tensor center, Tensor radius) {
     return new Rice2GoalManager(new EllipsoidRegion(center, radius));
   }
@@ -26,8 +27,9 @@ public class Rice2GoalManager extends SimpleTrajectoryRegionQuery implements Goa
   private final Tensor center;
   private final Scalar radius;
 
+  // TODO implementation assumes max speed == 1
   public Rice2GoalManager(EllipsoidRegion ellipsoidRegion) {
-    super(new TimeInvariantRegion(ellipsoidRegion));
+    super(new TimeInvariantRegion(ellipsoidRegion), VoidStateTimeRegionMembers.INSTANCE);
     center = ellipsoidRegion.center();
     Tensor radius = ellipsoidRegion.radius();
     if (!radius.Get(0).equals(radius.Get(1)))
