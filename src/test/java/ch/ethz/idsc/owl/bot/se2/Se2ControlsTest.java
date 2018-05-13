@@ -63,7 +63,7 @@ public class Se2ControlsTest extends TestCase {
     assertEquals(Units.of(maxTurning), Unit.of("rad*s^-1"));
     assertEquals(maxTurning, Quantity.of(6, "rad*s^-1"));
     So2Region so2Region = new So2Region(Quantity.of(2, "rad"), Quantity.of(1, "rad"), Quantity.of(Math.PI, "rad"));
-    Scalar duration = so2Region.apply(Quantity.of(4, "rad")).divide(maxTurning);
+    Scalar duration = so2Region.signedDistance(Quantity.of(4, "rad")).divide(maxTurning);
     assertEquals(Units.of(duration), Unit.of("s"));
   }
 }

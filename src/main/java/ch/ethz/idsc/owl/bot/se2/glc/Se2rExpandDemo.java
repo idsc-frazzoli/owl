@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
+import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -39,9 +40,11 @@ enum Se2rExpandDemo {
     CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, Degree.of(45));
     Collection<Flow> controls = carFlows.getFlows(6);
     // place holder for parameter class
-    GoalInterface goalInterface = Se2MinTimeGoalManager.create( //
-        Tensors.vector(-1, -1, Math.PI * 2), //
-        Tensors.vector(0.1, 0.1, 0.17), controls);
+    Se2ComboRegion se2ComboRegion = //
+        Se2ComboRegion.spherical(Tensors.vector(-1, -1, Math.PI * 2), Tensors.vector(0.1, 0.1, 0.17));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager( //
+        se2ComboRegion, controls);
+    GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant( //
         RegionUnion.wrap(Arrays.asList( //
             new HyperplaneRegion(Tensors.vector(0, -1, 0), RealScalar.of(1.5)), //
