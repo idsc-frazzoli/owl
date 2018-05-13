@@ -8,9 +8,12 @@ import ch.ethz.idsc.owl.glc.adapter.HeuristicQ;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -30,7 +33,9 @@ public class DeltaMinTimeGoalManagerTest extends TestCase {
     Scalar maxMove = DeltaControls.maxSpeed(controls).add(imageGradientInterpolation.maxNormGradient());
     // System.out.println(maxMove);
     assertTrue(Chop._10.close(maxMove, stateSpaceModel.getLipschitz().add(amp)));
-    GoalInterface dmtgm = DeltaMinTimeGoalManager.create(Tensors.vector(1, 1), RealScalar.ONE, maxMove);
+    RegionWithDistance<Tensor> regionWithDistance = //
+        new SphericalRegion(Tensors.vector(1, 1), RealScalar.ONE);
+    GoalInterface dmtgm = new DeltaMinTimeGoalManager(regionWithDistance, maxMove);
     assertTrue(HeuristicQ.of(dmtgm));
   }
 }

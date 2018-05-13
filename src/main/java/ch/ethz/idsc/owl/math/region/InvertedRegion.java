@@ -3,17 +3,15 @@ package ch.ethz.idsc.owl.math.region;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.Tensor;
+public class InvertedRegion<T> implements Region<T>, Serializable {
+  private final Region<T> region;
 
-public class InvertedRegion implements Region<Tensor>, Serializable {
-  private final Region<Tensor> region;
-
-  public InvertedRegion(Region<Tensor> region) {
+  public InvertedRegion(Region<T> region) {
     this.region = region;
   }
 
   @Override // from Region
-  public final boolean isMember(Tensor tensor) {
+  public final boolean isMember(T tensor) {
     return !region.isMember(tensor);
   }
 }
