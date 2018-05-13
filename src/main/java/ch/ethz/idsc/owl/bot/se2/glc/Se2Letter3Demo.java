@@ -35,7 +35,9 @@ public class Se2Letter3Demo extends Se2CarDemo {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     StateTime stateTime = new StateTime(Tensors.vector(6, 6, 1), RealScalar.ZERO);
     CarEntity carEntity = new CarEntity( //
-        stateTime, new CarTrajectoryControl(), CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
+        stateTime, //
+        CarTrajectoryControl.createDefault(), //
+        CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
         return new ConeRegion(goal, RealScalar.of(Math.PI / 6));

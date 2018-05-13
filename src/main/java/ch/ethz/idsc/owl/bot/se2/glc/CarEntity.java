@@ -63,7 +63,9 @@ public class CarEntity extends Se2Entity {
   static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
 
   public static CarEntity createDefault(StateTime stateTime) {
-    return new CarEntity(stateTime, new CarTrajectoryControl(), PARTITIONSCALE, CARFLOWS, SHAPE);
+    return new CarEntity(stateTime, //
+        new CarTrajectoryControl(RealScalar.ONE, RealScalar.of(0.5), Degree.of(50)), //
+        PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
   // ---
