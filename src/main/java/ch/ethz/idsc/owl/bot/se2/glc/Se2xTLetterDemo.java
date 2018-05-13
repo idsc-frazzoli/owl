@@ -12,8 +12,8 @@ import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -24,6 +24,7 @@ import ch.ethz.idsc.owl.math.planar.CogPoints;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
+import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -59,18 +60,18 @@ public class Se2xTLetterDemo implements DemoInterface {
         polygon, rigid3, () -> carxTEntity.getStateTimeNow().time());
     // ---
     Region<Tensor> se2PointsVsRegion = Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), imageRegion);
-    TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
+    TrajectoryRegionQuery trajectoryRegionQuery = new StandardTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList( //
             new TimeInvariantRegion(se2PointsVsRegion), // <- expects se2 states
             region1, cog0 //
-        )));
+        )), VoidStateTimeRegionMembers.INSTANCE);
     // Se2PointsVsRegion se2PointsVsRegion = Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), RegionUnion.wrap(Arrays.asList( //
     // new TimeInvariantRegion(imageRegion), // <- expects se2 states
     // region1, cog0 //
     // )));
     // TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
     // );
-    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     carxTEntity.plannerConstraint = plannerConstraint;
     // abstractEntity.raytraceQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
@@ -79,13 +80,13 @@ public class Se2xTLetterDemo implements DemoInterface {
     // owlyAnimationFrame.addBackground((RenderInterface) region2);
     owlyAnimationFrame.addBackground((RenderInterface) cog0);
     // ---
-    final TrajectoryRegionQuery ray = new SimpleTrajectoryRegionQuery( //
+    final TrajectoryRegionQuery ray = new StandardTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList( //
             new TimeInvariantRegion(imageRegion), //
             region1,
             // region2,
             cog0 //
-        )));
+        )), VoidStateTimeRegionMembers.INSTANCE);
     {
       RenderInterface renderInterface = new CameraEmulator( //
           48, RealScalar.of(10), carxTEntity::getStateTimeNow, ray);
