@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.Optional;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.state.EntityControl;
 import ch.ethz.idsc.owl.math.state.ProviderRank;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -13,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.qty.Degree;
 
 /** test if api is sufficient to model gokart */
 /* package */ class GokartEntity extends CarEntity {

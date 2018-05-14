@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.qty.Degree;
 import junit.framework.TestCase;
 
 public class RotationUtilsTest extends TestCase {

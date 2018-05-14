@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.math.region;
 import java.io.Serializable;
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,14 +31,12 @@ public class ImageRegion implements Region<Tensor>, Serializable {
    * @param range effective size of image in coordinate space
    * @param outside point member status */
   public ImageRegion(Tensor image, Tensor range, boolean outside) {
-    MatrixQ.elseThrow(image);
-    GlobalAssert.that(VectorQ.ofLength(range, 2));
-    this.image = image;
+    this.image = MatrixQ.require(image);
     List<Integer> dimensions = Dimensions.of(image);
     dim0 = dimensions.get(0);
     dim1 = dimensions.get(1);
     max_y = dim0 - 1;
-    this.range = range;
+    this.range = VectorQ.requireLength(range, 2);
     scale = Tensors.vector(dim1, dim0).pmul(range.map(Scalar::reciprocal));
     this.outside = outside;
   }

@@ -20,7 +20,7 @@ public class SphereRandomSample implements RandomSampleInterface {
    * @param radius
    * @return */
   public static RandomSampleInterface of(Tensor center, Scalar radius) {
-    VectorQ.elseThrow(center);
+    VectorQ.require(center);
     if (Scalars.isZero(radius))
       return new ConstantRandomSample(center);
     return new SphereRandomSample(center, Sign.requirePositiveOrZero(radius));
