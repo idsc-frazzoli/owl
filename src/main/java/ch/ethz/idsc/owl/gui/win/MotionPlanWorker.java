@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 
 public class MotionPlanWorker {
   // FIXME magic const
@@ -39,7 +38,8 @@ public class MotionPlanWorker {
         trajectoryPlanner.insertRoot(root);
         Expand.maxSteps(trajectoryPlanner, MAX_STEPS, () -> isRelevant);
         if (isRelevant) {
-          Scalar duration = RealScalar.of(stopwatch.display_seconds());
+          // Scalar duration =
+          RealScalar.of(stopwatch.display_seconds());
           // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
             glcPlannerCallback.expandResult(head, trajectoryPlanner);

@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
-import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.Floor;
 
 /** only the first two coordinates are tested for membership
@@ -28,7 +27,7 @@ public class ImageRegion implements Region<Tensor>, Serializable {
   private final int max_y;
 
   /** @param image has to be a matrix
-   * @param range effective size of image in coordinate space
+   * @param range effective size of image in coordinate space, vector of length 2
    * @param outside point member status */
   public ImageRegion(Tensor image, Tensor range, boolean outside) {
     this.image = MatrixQ.require(image);
@@ -36,7 +35,7 @@ public class ImageRegion implements Region<Tensor>, Serializable {
     dim0 = dimensions.get(0);
     dim1 = dimensions.get(1);
     max_y = dim0 - 1;
-    this.range = VectorQ.requireLength(range, 2);
+    this.range = range;
     scale = Tensors.vector(dim1, dim0).pmul(range.map(Scalar::reciprocal));
     this.outside = outside;
   }
