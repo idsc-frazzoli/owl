@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -18,13 +19,11 @@ import ch.ethz.idsc.tensor.Tensor;
 public class Se2ComboRegion implements Region<Tensor>, Serializable {
   /** @param goal {px, py, angle}
    * @param radiusVector {dist_radius, dist_radius, dist_angle}
-   * @throws Exception if first two entries are different */
+   * @throws Exception if first two entries of radiusVector are different */
   public static Se2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
-    if (radiusVector.Get(0).equals(radiusVector.Get(1)))
-      return new Se2ComboRegion( //
-          new SphericalRegion(goal.extract(0, 2), radiusVector.Get(0)), //
-          new So2Region(goal.Get(2), radiusVector.Get(2)));
-    throw new RuntimeException();
+    return new Se2ComboRegion( //
+        new SphericalRegion(goal.extract(0, 2), RadiusXY.requireSame(radiusVector)), //
+        new So2Region(goal.Get(2), radiusVector.Get(2)));
   }
 
   public static Se2ComboRegion cone(Tensor goal, Scalar semi, Scalar radius) {
