@@ -8,7 +8,6 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.glc.CarFlows;
 import ch.ethz.idsc.owl.bot.se2.glc.CarStandardFlows;
-import ch.ethz.idsc.owl.math.Degree;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -16,6 +15,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.qty.Units;

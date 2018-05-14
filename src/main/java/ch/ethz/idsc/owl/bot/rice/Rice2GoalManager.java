@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.rice;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
-import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -29,7 +28,7 @@ public class Rice2GoalManager extends StandardTrajectoryRegionQuery implements G
 
   // TODO implementation assumes max speed == 1
   public Rice2GoalManager(EllipsoidRegion ellipsoidRegion) {
-    super(new TimeInvariantRegion(ellipsoidRegion), VoidStateTimeRegionMembers.INSTANCE);
+    super(new TimeInvariantRegion(ellipsoidRegion));
     center = ellipsoidRegion.center();
     Tensor radius = ellipsoidRegion.radius();
     if (!radius.Get(0).equals(radius.Get(1)))

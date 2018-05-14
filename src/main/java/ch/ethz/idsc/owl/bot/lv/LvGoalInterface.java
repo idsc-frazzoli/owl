@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** the distance used in the ellipsoid is Euclidean.
@@ -26,8 +25,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
   public LvGoalInterface(EllipsoidRegion ellipsoidRegion) {
     super(new TimeInvariantRegion(ellipsoidRegion));
-    if (!VectorQ.ofLength(ellipsoidRegion.center(), 2))
-      throw TensorRuntimeException.of(ellipsoidRegion.center());
+    VectorQ.requireLength(ellipsoidRegion.center(), 2);
   }
 
   @Override

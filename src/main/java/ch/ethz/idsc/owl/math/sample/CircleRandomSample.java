@@ -2,7 +2,6 @@
 // formula adapted from users "sigfpe" and "finnw" on stack-overflow
 package ch.ethz.idsc.owl.math.sample;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -24,10 +23,8 @@ public class CircleRandomSample implements RandomSampleInterface {
   private final Scalar radius;
 
   public CircleRandomSample(Tensor center, Scalar radius) {
-    GlobalAssert.that(VectorQ.ofLength(center, 2));
-    GlobalAssert.that(Sign.isPositiveOrZero(radius));
-    this.center = center;
-    this.radius = radius;
+    this.center = VectorQ.requireLength(center, 2);
+    this.radius = Sign.requirePositiveOrZero(radius);
   }
 
   @Override // from RandomSampleInterface
