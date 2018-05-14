@@ -15,15 +15,13 @@ public enum RegionConstraints {
    * @return planner constraint that threats members in the region as obstacles */
   public static PlannerConstraint timeInvariant(Region<Tensor> region) {
     return new TrajectoryObstacleConstraint( //
-        new StandardTrajectoryRegionQuery( //
-            new TimeInvariantRegion(region), VoidStateTimeRegionMembers.INSTANCE));
+        new StandardTrajectoryRegionQuery(new TimeInvariantRegion(region)));
   }
 
   /** @param region that is queried with tensor = StateTime::joined
    * @return planner constraint that threats members in the region as obstacles */
   public static PlannerConstraint timeDependent(Region<Tensor> region) {
     return new TrajectoryObstacleConstraint( //
-        new StandardTrajectoryRegionQuery( //
-            new TimeDependentRegion(region), VoidStateTimeRegionMembers.INSTANCE));
+        new StandardTrajectoryRegionQuery(new TimeDependentRegion(region)));
   }
 }

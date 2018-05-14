@@ -31,9 +31,8 @@ public class Se2Wrap implements CoordinateWrap, Serializable {
    * @param scale weighs the differences in (x, y, theta).
    * the parameter scale is only used to compute distance, but not representation */
   public Se2Wrap(Tensor scale) {
-    VectorQ.elseThrow(scale);
     GlobalAssert.that(INDEX_ANGLE < scale.length());
-    this.scale = scale;
+    this.scale = VectorQ.require(scale);
   }
 
   @Override // from CoordinateWrap

@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** visualize planar ellipse */
@@ -36,8 +35,7 @@ public class EllipseRegionRender implements RenderInterface {
   private final Tensor polygon;
 
   private EllipseRegionRender(Tensor center, Scalar radiusX, Scalar radiusY) {
-    if (!VectorQ.ofLength(center, 2))
-      throw TensorRuntimeException.of(center);
+    VectorQ.requireLength(center, 2);
     polygon = Tensor.of(EllipsePoints.of(RESOLUTION, radiusX, radiusY) //
         .stream().map(row -> row.add(center)));
   }

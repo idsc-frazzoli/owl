@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -64,7 +63,7 @@ public class Se2xTLetterDemo implements DemoInterface {
         RegionUnion.wrap(Arrays.asList( //
             new TimeInvariantRegion(se2PointsVsRegion), // <- expects se2 states
             region1, cog0 //
-        )), VoidStateTimeRegionMembers.INSTANCE);
+        )));
     // Se2PointsVsRegion se2PointsVsRegion = Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), RegionUnion.wrap(Arrays.asList( //
     // new TimeInvariantRegion(imageRegion), // <- expects se2 states
     // region1, cog0 //
@@ -86,7 +85,7 @@ public class Se2xTLetterDemo implements DemoInterface {
             region1,
             // region2,
             cog0 //
-        )), VoidStateTimeRegionMembers.INSTANCE);
+        )));
     {
       RenderInterface renderInterface = new CameraEmulator( //
           48, RealScalar.of(10), carxTEntity::getStateTimeNow, ray);

@@ -10,7 +10,6 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.TrajectoryTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
@@ -70,8 +69,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png");
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new StandardTrajectoryRegionQuery( //
-        RegionUnion.wrap(Arrays.asList(new TimeInvariantRegion(imageRegion), region1, region2, region3, region4)), //
-        VoidStateTimeRegionMembers.INSTANCE));
+        RegionUnion.wrap(Arrays.asList(new TimeInvariantRegion(imageRegion), region1, region2, region3, region4))));
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.set(abstractEntity);

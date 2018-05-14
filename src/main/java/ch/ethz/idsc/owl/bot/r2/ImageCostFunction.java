@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.r2;
 import java.io.Serializable;
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -42,12 +41,10 @@ public class ImageCostFunction implements CostFunction, Serializable {
   private final int max_y;
 
   private ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
-    MatrixQ.elseThrow(image);
-    GlobalAssert.that(VectorQ.ofLength(range, 2));
-    this.image = image;
+    this.image = MatrixQ.require(image);
     dimensions = Dimensions.of(image);
     max_y = dimensions.get(0) - 1;
-    this.range = range;
+    this.range = VectorQ.requireLength(range, 2);
     scale = Tensors.vector(dimensions.get(1), dimensions.get(0)).pmul(range.map(Scalar::reciprocal));
     this.outside = outside;
   }
