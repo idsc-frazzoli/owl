@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.rn;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -42,7 +41,7 @@ public class RnMinDistGoalManager extends StandardTrajectoryRegionQuery implemen
 
   /** @param regionWithDistance */
   public RnMinDistGoalManager(RegionWithDistance<Tensor> regionWithDistance) {
-    super(new TimeInvariantRegion(regionWithDistance), VoidStateTimeRegionMembers.INSTANCE);
+    super(new TimeInvariantRegion(regionWithDistance));
     this.regionWithDistance = regionWithDistance;
   }
 

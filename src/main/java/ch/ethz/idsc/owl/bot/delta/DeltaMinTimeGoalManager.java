@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.delta;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
-import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -25,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   /** @param regionWithDistance
    * @param maxSpeed positive */
   public DeltaMinTimeGoalManager(RegionWithDistance<Tensor> regionWithDistance, Scalar maxSpeed) {
-    super(new TimeInvariantRegion(regionWithDistance), VoidStateTimeRegionMembers.INSTANCE);
+    super(new TimeInvariantRegion(regionWithDistance));
     this.regionWithDistance = regionWithDistance;
     this.maxSpeed = Sign.requirePositive(maxSpeed);
   }

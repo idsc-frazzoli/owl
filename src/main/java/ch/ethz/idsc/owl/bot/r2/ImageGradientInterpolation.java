@@ -51,7 +51,7 @@ public class ImageGradientInterpolation implements Interpolation, Serializable {
    * @param amp factor */
   private ImageGradientInterpolation(Tensor _image, Tensor range, Scalar amp, Function<Tensor, Interpolation> function) {
     Tensor image = _displayOrientation(_image);
-    MatrixQ.elseThrow(image);
+    MatrixQ.require(image);
     List<Integer> dims = Dimensions.of(image);
     scale = Tensors.vector(dims).pmul(range.map(Scalar::reciprocal));
     Tensor field = N.DOUBLE.of(ImageGradient.rotated(image)).multiply(amp);

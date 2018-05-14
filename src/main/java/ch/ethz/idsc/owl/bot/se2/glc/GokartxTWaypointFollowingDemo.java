@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -91,7 +90,7 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
         RegionUnion.wrap(Arrays.asList( //
             new TimeInvariantRegion(union), // <- expects se2 states
             region1, region2 //
-        )), VoidStateTimeRegionMembers.INSTANCE);
+        )));
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     gokartEntity.plannerConstraint = plannerConstraint;
     // ---

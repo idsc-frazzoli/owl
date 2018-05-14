@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.VoidStateTimeRegionMembers;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -46,7 +45,7 @@ public class Se2xTEllipsoidsDemo implements DemoInterface {
     Region<StateTime> region2 = new R2xTEllipsoidStateTimeRegion( //
         Tensors.vector(0.8, 0.6), noise2, () -> carxTEntity.getStateTimeNow().time());
     TrajectoryRegionQuery trq = new StandardTrajectoryRegionQuery( //
-        RegionUnion.wrap(Arrays.asList(region1, region2)), VoidStateTimeRegionMembers.INSTANCE);
+        RegionUnion.wrap(Arrays.asList(region1, region2)));
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
     carxTEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
