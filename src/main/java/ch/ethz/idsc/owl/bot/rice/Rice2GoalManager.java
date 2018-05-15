@@ -6,6 +6,7 @@ import java.util.List;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
@@ -13,7 +14,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
@@ -30,10 +30,7 @@ public class Rice2GoalManager extends StandardTrajectoryRegionQuery implements G
   public Rice2GoalManager(EllipsoidRegion ellipsoidRegion) {
     super(new TimeInvariantRegion(ellipsoidRegion));
     center = ellipsoidRegion.center();
-    Tensor radius = ellipsoidRegion.radius();
-    if (!radius.Get(0).equals(radius.Get(1)))
-      throw TensorRuntimeException.of(radius); // x-y radius have to be equal
-    this.radius = radius.Get(0);
+    this.radius = RadiusXY.requireSame(ellipsoidRegion.radius()); // x-y radius have to be equal
   }
 
   @Override

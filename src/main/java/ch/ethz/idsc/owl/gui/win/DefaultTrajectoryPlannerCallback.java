@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.gui.win;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
@@ -29,7 +28,8 @@ class DefaultTrajectoryPlannerCallback implements RrtsPlannerCallback {
     // trajectoryRender.setTrajectory(trajectory);
     if (rrtsPlanner.getBest().isPresent()) {
       RrtsNode root = Nodes.rootFrom(rrtsPlanner.getBest().get());
-      Collection<RrtsNode> collection = Nodes.ofSubtree(root);
+      // Collection<RrtsNode> collection =
+      Nodes.ofSubtree(root);
       // treeRender.setCollection(collection);
     }
   }

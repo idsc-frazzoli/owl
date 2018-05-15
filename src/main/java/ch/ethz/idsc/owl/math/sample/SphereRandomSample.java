@@ -16,14 +16,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public class SphereRandomSample implements RandomSampleInterface {
   private static final Distribution UNIFORM = UniformDistribution.of(-1, 1);
 
-  /** @param center
-   * @param radius
+  /** @param center vector
+   * @param radius non-negative
    * @return */
   public static RandomSampleInterface of(Tensor center, Scalar radius) {
     VectorQ.require(center);
-    if (Scalars.isZero(radius))
-      return new ConstantRandomSample(center);
-    return new SphereRandomSample(center, Sign.requirePositiveOrZero(radius));
+    return Scalars.isZero(radius) //
+        ? new ConstantRandomSample(center)
+        : new SphereRandomSample(center, radius);
   }
 
   // ---
@@ -32,7 +32,7 @@ public class SphereRandomSample implements RandomSampleInterface {
 
   private SphereRandomSample(Tensor center, Scalar radius) {
     this.center = center;
-    this.radius = radius;
+    this.radius = Sign.requirePositiveOrZero(radius);
   }
 
   @Override // from RandomSampleInterface

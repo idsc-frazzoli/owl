@@ -22,6 +22,8 @@ public class CircleRandomSample implements RandomSampleInterface {
   private final Tensor center;
   private final Scalar radius;
 
+  /** @param center vector of length 2
+   * @param radius non-negative */
   public CircleRandomSample(Tensor center, Scalar radius) {
     this.center = VectorQ.requireLength(center, 2);
     this.radius = Sign.requirePositiveOrZero(radius);
