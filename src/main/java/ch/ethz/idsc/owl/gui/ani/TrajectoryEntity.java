@@ -11,13 +11,14 @@ import ch.ethz.idsc.owl.math.TensorMetric;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** entity executes flows along a given trajectory */
 public abstract class TrajectoryEntity extends AbstractEntity implements TensorMetric {
   private final TrajectoryControl trajectoryControl;
-  protected List<TrajectorySample> trajectory = null;
+  protected TrajectoryWrap trajectoryWrap = null;
 
   public TrajectoryEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator);
@@ -26,7 +27,7 @@ public abstract class TrajectoryEntity extends AbstractEntity implements TensorM
   }
 
   public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
-    this.trajectory = trajectory;
+    this.trajectoryWrap = TrajectoryWrap.of(trajectory);
     trajectoryControl.setTrajectory(trajectory);
   }
 
@@ -40,7 +41,7 @@ public abstract class TrajectoryEntity extends AbstractEntity implements TensorM
   /** @param delay
    * @return estimated location of agent after given delay */
   public final Tensor getEstimatedLocationAt(Scalar delay) {
-    if (Objects.isNull(trajectory))
+    if (Objects.isNull(trajectoryWrap))
       return getStateTimeNow().state();
     List<TrajectorySample> relevant = trajectoryControl.getFutureTrajectoryUntil(getStateTimeNow(), delay);
     return Lists.getLast(relevant).stateTime().state();

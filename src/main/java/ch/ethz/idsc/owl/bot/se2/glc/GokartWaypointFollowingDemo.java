@@ -62,7 +62,7 @@ public class GokartWaypointFollowingDemo extends Se2CarDemo {
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
     gokartEntity.plannerConstraint = plannerConstraint;
     // ---
-    owlyAnimationFrame.set(gokartEntity);
+    owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
     owlyAnimationFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);

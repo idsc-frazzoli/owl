@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.Optional;
 import java.util.Random;
 
+import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.state.EntityControl;
 import ch.ethz.idsc.owl.math.state.ProviderRank;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -22,7 +23,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
   static final Scalar LOOKAHEAD = RealScalar.of(3.0);
   static final Scalar MAX_TURNING_PLAN = Degree.of(15);
   static final Scalar MAX_TURNING_RATE = Degree.of(23);
-  static final CarFlows CARFLOWS = new CarForwardFlows(SPEED, MAX_TURNING_PLAN);
+  static final FlowsInterface CARFLOWS = CarFlows.forward(SPEED, MAX_TURNING_PLAN);
   static final Tensor SHAPE = ResourceData.of("/demo/gokart/footprint.csv");
   // ---
   /** simulation of occasional feedback from localization algorithm */

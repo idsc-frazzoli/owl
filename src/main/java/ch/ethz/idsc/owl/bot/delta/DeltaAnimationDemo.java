@@ -40,7 +40,7 @@ public class DeltaAnimationDemo implements DemoInterface {
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     DeltaEntity deltaEntity = new DeltaEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation);
     MouseGoal.simple(owlyAnimationFrame, deltaEntity, plannerConstraint);
-    owlyAnimationFrame.set(deltaEntity);
+    owlyAnimationFrame.add(deltaEntity);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, imageRegion, RealScalar.of(0.5)));

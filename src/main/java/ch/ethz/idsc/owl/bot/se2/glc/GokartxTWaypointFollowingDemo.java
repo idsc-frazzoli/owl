@@ -26,7 +26,7 @@ import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -86,7 +86,7 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     Region<Tensor> polygonRegion = PolygonRegion.of(VIRTUAL);
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion));
-    TrajectoryRegionQuery trajectoryRegionQuery = new StandardTrajectoryRegionQuery( //
+    TrajectoryRegionQuery trajectoryRegionQuery = new SimpleTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList( //
             new TimeInvariantRegion(union), // <- expects se2 states
             region1, region2 //
@@ -94,7 +94,7 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     gokartEntity.plannerConstraint = plannerConstraint;
     // ---
-    owlyAnimationFrame.set(gokartEntity);
+    owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
     owlyAnimationFrame.addBackground((RenderInterface) region1d);

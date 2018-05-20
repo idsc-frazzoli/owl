@@ -6,8 +6,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
 import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
@@ -25,12 +24,15 @@ import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 public class R2xTPolygonAnimationDemo implements DemoInterface {
+  private static final Scalar DELAY = RealScalar.of(1.5);
+
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
@@ -38,8 +40,8 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.2, 2.2), RealScalar.ZERO));
-    TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(1.5));
-    owlyAnimationFrame.set(abstractEntity);
+    TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, DELAY);
+    owlyAnimationFrame.add(abstractEntity);
     // ---
     BijectionFamily rigid1 = new Se2Family( //
         scalar -> Tensors.of( //
@@ -54,8 +56,8 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
     Tensor polygon = CogPoints.of(4, RealScalar.of(1.5), RealScalar.of(0.5));
     Region<StateTime> region2 = new R2xTPolygonStateTimeRegion( //
         polygon, rigid2, () -> abstractEntity.getStateTimeNow().time());
-    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery( //
-        RegionUnion.wrap(Arrays.asList(region1, region2))));
+    PlannerConstraint plannerConstraint = //
+        RegionConstraints.stateTime(RegionUnion.wrap(Arrays.asList(region1, region2)));
     MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);

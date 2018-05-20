@@ -1,13 +1,14 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.N;
 
-public class FallbackControl implements EntityControl {
+public class FallbackControl implements EntityControl, Serializable {
   private final Tensor fallback;
 
   /** @param fallback control */

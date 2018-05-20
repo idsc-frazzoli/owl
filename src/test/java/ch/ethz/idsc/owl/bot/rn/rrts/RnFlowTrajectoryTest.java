@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.math.state.TrajectorySampleMap;
+import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -44,13 +44,13 @@ public class RnFlowTrajectoryTest extends TestCase {
     List<RrtsNode> sequence = Arrays.asList(root, n1);
     Scalar t0 = RealScalar.ZERO;
     List<TrajectorySample> trajectory = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
-    TrajectorySampleMap trajectorySampleMap = TrajectorySampleMap.create(trajectory);
-    assertFalse(trajectorySampleMap.getControl(RealScalar.of(-0.1)).isPresent());
-    assertTrue(trajectorySampleMap.getControl(RealScalar.of(0.0)).isPresent());
-    assertFalse(trajectorySampleMap.getControl(RealScalar.of(10.1)).isPresent());
-    assertEquals(trajectorySampleMap.getControl(RealScalar.of(0.0)).get(), Tensors.vector(1, 0));
-    assertTrue(trajectorySampleMap.isValid(RealScalar.ZERO));
-    assertFalse(trajectorySampleMap.isValid(RealScalar.of(10)));
+    TrajectoryWrap trajectorySampleMap = TrajectoryWrap.of(trajectory);
+    assertFalse(trajectorySampleMap.findControl(RealScalar.of(-0.1)).isPresent());
+    assertTrue(trajectorySampleMap.findControl(RealScalar.of(0.0)).isPresent());
+    assertFalse(trajectorySampleMap.findControl(RealScalar.of(10.1)).isPresent());
+    assertEquals(trajectorySampleMap.findControl(RealScalar.of(0.0)).get(), Tensors.vector(1, 0));
+    assertTrue(trajectorySampleMap.hasRemaining(RealScalar.ZERO));
+    assertFalse(trajectorySampleMap.hasRemaining(RealScalar.of(10)));
   }
 
   public void testDual() {
@@ -69,11 +69,11 @@ public class RnFlowTrajectoryTest extends TestCase {
     Scalar t0 = RealScalar.ZERO;
     List<TrajectorySample> trajectory = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
     assertEquals(trajectory.size(), 13);
-    TrajectorySampleMap trajectorySampleMap = TrajectorySampleMap.create(trajectory);
-    assertTrue(trajectorySampleMap.isValid(RealScalar.ZERO));
-    assertFalse(trajectorySampleMap.isValid(RealScalar.of(10)));
+    TrajectoryWrap trajectorySampleMap = TrajectoryWrap.of(trajectory);
+    assertTrue(trajectorySampleMap.hasRemaining(RealScalar.ZERO));
+    assertFalse(trajectorySampleMap.hasRemaining(RealScalar.of(10)));
     {
-      Optional<Tensor> optional = trajectorySampleMap.getControl(RealScalar.of(1.5));
+      Optional<Tensor> optional = trajectorySampleMap.findControl(RealScalar.of(1.5));
       assertTrue(optional.isPresent());
     }
     // Trajectories.print(trajectory);

@@ -33,7 +33,7 @@ public class Rice1dNoiseDemo implements DemoInterface {
     Collection<Flow> controls = Rice2Controls.create1d(mu, 15);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     TrajectoryEntity trajectoryEntity = new Rice1dEntity(mu, Tensors.vector(0, 0), trajectoryControl, controls);
-    owlyAnimationFrame.set(trajectoryEntity);
+    owlyAnimationFrame.add(trajectoryEntity);
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.5));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);

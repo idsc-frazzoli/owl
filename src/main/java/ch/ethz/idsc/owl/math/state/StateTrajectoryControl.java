@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
+import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.ArgMin;
 
@@ -53,7 +53,7 @@ public abstract class StateTrajectoryControl implements TrajectoryControl {
     // <- no update of trajectory_skip here
     Scalar threshold = trajectory.get(index).stateTime().time().add(delay);
     return trajectory.stream().skip(index) //
-        .filter(trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), threshold)) //
+        .filter(Trajectories.untilTime(threshold)) //
         .collect(Collectors.toList());
   }
 

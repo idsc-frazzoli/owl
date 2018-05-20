@@ -23,7 +23,7 @@ public class Se2xTPlainDemo
   public void start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     CarxTEntity carxTEntity = new CarxTEntity(new StateTime(Tensors.vector(6.75, 5.4, 1 + Math.PI), RealScalar.ZERO));
-    owlyAnimationFrame.set(carxTEntity);
+    owlyAnimationFrame.add(carxTEntity);
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     carxTEntity.extraCosts.add(r2ImageRegionWrap.costFunction());

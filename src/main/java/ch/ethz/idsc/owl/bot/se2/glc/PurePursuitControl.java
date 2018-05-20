@@ -53,7 +53,7 @@ public class PurePursuitControl extends StateTrajectoryControl {
       Scalar ratio = _purePursuit.ratio().get();
       if (clip.isInside(ratio)) {
         purePursuit = _purePursuit;
-        return Optional.of(CarFlows.singleton(speed, ratio).getU());
+        return Optional.of(CarHelper.singleton(speed, ratio).getU());
       }
     }
     purePursuit = null;

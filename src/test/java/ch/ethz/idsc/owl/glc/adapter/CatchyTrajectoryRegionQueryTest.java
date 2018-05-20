@@ -14,10 +14,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class SimpleTrajectoryRegionQueryTest extends TestCase {
+public class CatchyTrajectoryRegionQueryTest extends TestCase {
   public void testSimple() {
     Region<Tensor> region = new EllipsoidRegion(Tensors.vector(1, 2), Tensors.vector(3, 4));
-    TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeDependent(region);
+    TrajectoryRegionQuery trq = CatchyTrajectoryRegionQuery.timeDependent(region);
     StateTime stateTime = new StateTime(Tensors.vector(1), RealScalar.ZERO);
     Optional<StateTime> optional = trq.firstMember(Collections.singletonList(stateTime));
     assertTrue(optional.isPresent());
@@ -26,7 +26,7 @@ public class SimpleTrajectoryRegionQueryTest extends TestCase {
 
   public void testMembers1d() {
     Region<Tensor> region = new EllipsoidRegion(Tensors.vector(1, 2), Tensors.vector(3, 4));
-    TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeDependent(region);
+    TrajectoryRegionQuery trq = CatchyTrajectoryRegionQuery.timeDependent(region);
     StateTimeCollector stc = (StateTimeCollector) trq;
     assertTrue(stc.getMembers().isEmpty());
     StateTime stateTime = new StateTime(Tensors.vector(1), RealScalar.ZERO);
@@ -38,7 +38,7 @@ public class SimpleTrajectoryRegionQueryTest extends TestCase {
 
   public void testMembers2d() {
     Region<Tensor> region = new EllipsoidRegion(Tensors.vector(1, 2, 3), Tensors.vector(3, 4, 8));
-    TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeDependent(region);
+    TrajectoryRegionQuery trq = CatchyTrajectoryRegionQuery.timeDependent(region);
     StateTimeCollector stc = (StateTimeCollector) trq;
     assertTrue(stc.getMembers().isEmpty());
     StateTime stateTime = new StateTime(Tensors.vector(1, 2), RealScalar.ZERO);

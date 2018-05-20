@@ -11,7 +11,7 @@ public class R2RrtsAnimationDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     R2RrtsEntity r2RrtsEntity = new R2RrtsEntity(Tensors.vector(0, 0));
     r2RrtsEntity.obstacleQuery = StaticHelper.noise1();
-    owlyAnimationFrame.set(r2RrtsEntity);
+    owlyAnimationFrame.add(r2RrtsEntity);
     return owlyAnimationFrame;
   }
 

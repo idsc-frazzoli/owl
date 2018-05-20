@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ enum StaticHelper {
   ;
   public static TransitionRegionQuery polygon1() {
-    return new SampledTransitionRegionQuery(SimpleTrajectoryRegionQuery.timeInvariant( //
+    return new SampledTransitionRegionQuery(CatchyTrajectoryRegionQuery.timeInvariant( //
         PolygonRegion.of(Tensors.matrix(new Number[][] { //
             { 3, 1 }, //
             { 4, 1 }, //
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   public static TransitionRegionQuery noise1() {
-    return new SampledTransitionRegionQuery(SimpleTrajectoryRegionQuery.timeInvariant( //
+    return new SampledTransitionRegionQuery(CatchyTrajectoryRegionQuery.timeInvariant( //
         new R2NoiseRegion(RealScalar.of(0.4))), RealScalar.of(0.1));
   }
 }

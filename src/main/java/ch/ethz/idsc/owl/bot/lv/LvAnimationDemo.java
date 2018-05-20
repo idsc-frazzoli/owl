@@ -38,7 +38,7 @@ public class LvAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     TrajectoryEntity trajectoryEntity = new LvEntity(episodeIntegrator, trajectoryControl, controls);
-    owlyAnimationFrame.set(trajectoryEntity);
+    owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyPlannerConstraint.INSTANCE);
     // ---
     Tensor range = Tensors.vector(6, 5);

@@ -18,9 +18,8 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
  * 2*u^2 where d_theta(t) = u(t)
  * 
  * in the implementation below we simply use the formula u^2 */
-// TODO document definition of lateral and longitudinal
 public enum Se2LateralAcceleration implements CostFunction {
-  COSTFUNCTION;
+  INSTANCE;
   // ---
   /** Curvature is changed angle over distance covered */
   @Override // from CostIncrementFunction

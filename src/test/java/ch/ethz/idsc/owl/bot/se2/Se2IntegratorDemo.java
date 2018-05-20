@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
-import ch.ethz.idsc.owl.bot.se2.glc.CarFlows;
+import ch.ethz.idsc.owl.bot.se2.glc.CarHelper;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
@@ -20,7 +20,7 @@ enum Se2IntegratorDemo {
    * runge4_ 0.108451661
    * runge45 0.37093125200000004 */
   public static void main(String[] args) {
-    Flow flow = CarFlows.singleton(RealScalar.ONE, RealScalar.ONE);
+    Flow flow = CarHelper.singleton(RealScalar.ONE, RealScalar.ONE);
     Stopwatch s1 = Stopwatch.stopped();
     Stopwatch s4 = Stopwatch.stopped();
     Stopwatch s2 = Stopwatch.stopped();

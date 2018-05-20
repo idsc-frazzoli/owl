@@ -5,7 +5,7 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.rn.RnNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -28,7 +28,7 @@ enum R2InsideCharDemo {
     RnTransitionSpace rnss = new RnTransitionSpace();
     RrtsNodeCollection nc = new RnNodeCollection(imageRegion.origin(), imageRegion.range());
     TransitionRegionQuery trq = new SampledTransitionRegionQuery( //
-        SimpleTrajectoryRegionQuery.timeInvariant(imageRegion), RealScalar.of(0.1));
+        CatchyTrajectoryRegionQuery.timeInvariant(imageRegion), RealScalar.of(0.1));
     // ---
     Rrts rrts = new DefaultRrts(rnss, nc, trq, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(start, 5).get();
