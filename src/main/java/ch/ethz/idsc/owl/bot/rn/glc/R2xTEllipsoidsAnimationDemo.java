@@ -33,6 +33,8 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
+  private static final Scalar DELAY = RealScalar.of(1.2);
+
   public static ScalarTensorFunction wrap1DTensor(NativeContinuousNoise nativeContinuousNoise, Tensor offset, double period, double amplitude) {
     return scalar -> Tensor.of(offset.stream().map(Scalar.class::cast)
         .map(value -> RealScalar.of(amplitude * nativeContinuousNoise.at(scalar.number().doubleValue() * period, value.number().doubleValue()))));
@@ -46,7 +48,7 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.2, 2), RealScalar.ZERO));
-    TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(0.6));
+    TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, DELAY);
     owlyAnimationFrame.add(abstractEntity);
     // ---
     BijectionFamily shiftx = new SimpleTranslationFamily( //
