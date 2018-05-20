@@ -31,7 +31,7 @@ public class TwdImageDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     TwdEntity twdEntity = TwdEntity.createJ2B2(new StateTime(Tensors.vector(7, 5, 0), RealScalar.ZERO));
     twdEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
-    owlyAnimationFrame.set(twdEntity);
+    owlyAnimationFrame.add(twdEntity);
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     twdEntity.plannerConstraint = plannerConstraint;

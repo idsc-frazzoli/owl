@@ -34,7 +34,7 @@ public class Se2xTEllipsoidsDemo implements DemoInterface {
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     CarxTEntity carxTEntity = new CarxTEntity(new StateTime(Tensors.vector(0, 0, 1), RealScalar.ZERO));
-    owlyAnimationFrame.set(carxTEntity);
+    owlyAnimationFrame.add(carxTEntity);
     // ---
     ScalarTensorFunction stf1 = R2xTEllipsoidsAnimationDemo.wrap1DTensor(SimplexContinuousNoise.FUNCTION, Tensors.vector(0, 2), 0.05, 2.3);
     BijectionFamily noise1 = new SimpleTranslationFamily(stf1);

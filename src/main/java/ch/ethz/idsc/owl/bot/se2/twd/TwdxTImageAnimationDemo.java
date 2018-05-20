@@ -32,7 +32,7 @@ public class TwdxTImageAnimationDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1.2), RealScalar.of(.5));
     TwdxTEntity twdxTEntity = new TwdxTEntity(twdConfig, new StateTime(Tensors.vector(-1, -1, 1.0), RealScalar.ZERO));
-    owlyAnimationFrame.set(twdxTEntity);
+    owlyAnimationFrame.add(twdxTEntity);
     // ---
     RigidFamily rigidFamily = Se2Family.rotationAround( //
         Tensors.vectorDouble(1.5, 2), time -> time.multiply(RealScalar.of(0.1)));

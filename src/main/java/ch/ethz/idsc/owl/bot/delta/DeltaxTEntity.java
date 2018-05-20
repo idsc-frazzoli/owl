@@ -1,15 +1,25 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.delta;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
+import java.util.Objects;
+import java.util.Optional;
+
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.math.state.TrajectorySampleMap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaxTEntity extends DeltaEntity {
@@ -28,5 +38,24 @@ import ch.ethz.idsc.tensor.Tensor;
   protected Tensor eta() {
     Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
     return super.eta().copy().append(dt.reciprocal());
+  }
+
+  @Override
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    super.render(geometricLayer, graphics);
+    // ---
+    if (Objects.nonNull(trajectory)) {
+      StateTime stateTime = getStateTimeNow();
+      Scalar now = stateTime.time();
+      // TODO not efficient
+      TrajectorySampleMap trajectorySampleMap = TrajectorySampleMap.create(trajectory);
+      Optional<TrajectorySample> optional = trajectorySampleMap.getTrajectorySample(now);
+      if (optional.isPresent()) {
+        TrajectorySample trajectorySample = optional.get();
+        Path2D path2d = geometricLayer.toPath2D(Tensors.of(stateTime.state(), trajectorySample.stateTime().state()));
+        graphics.setColor(Color.PINK);
+        graphics.draw(path2d);
+      }
+    }
   }
 }

@@ -49,7 +49,7 @@ public class Se2Letter3Demo extends Se2CarDemo {
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     carEntity.plannerConstraint = plannerConstraint;
     TrajectoryRegionQuery ray = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
-    owlyAnimationFrame.set(carEntity);
+    owlyAnimationFrame.add(carEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(carEntity);
     MouseGoal.supply(owlyAnimationFrame.geometricComponent, //

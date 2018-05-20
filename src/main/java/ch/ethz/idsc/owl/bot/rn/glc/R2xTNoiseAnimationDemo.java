@@ -27,7 +27,7 @@ public class R2xTNoiseAnimationDemo implements DemoInterface {
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(0.2, 0.2), RealScalar.ZERO));
     TrajectoryEntity trajectoryEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(0.4));
-    owlyAnimationFrame.set(trajectoryEntity);
+    owlyAnimationFrame.add(trajectoryEntity);
     Region<StateTime> region = new R2xTNoiseStateTimeRegion(RealScalar.of(0.5));
     PlannerConstraint plannerConstraint = RegionConstraints.stateTime(region);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);

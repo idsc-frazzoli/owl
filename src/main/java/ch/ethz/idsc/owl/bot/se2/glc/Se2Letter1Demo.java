@@ -18,7 +18,7 @@ public class Se2Letter1Demo extends Se2CarDemo {
     ImageRegion imageRegion = R2ImageRegions.inside_0f5c();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     carEntity.plannerConstraint = plannerConstraint;
-    owlyAnimationFrame.set(carEntity);
+    owlyAnimationFrame.add(carEntity);
     MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
   }

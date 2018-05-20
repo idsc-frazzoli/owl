@@ -72,7 +72,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
         RegionUnion.wrap(Arrays.asList(new TimeInvariantRegion(imageRegion), region1, region2, region3, region4))));
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    owlyAnimationFrame.set(abstractEntity);
+    owlyAnimationFrame.add(abstractEntity);
     MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground((RenderInterface) region1);

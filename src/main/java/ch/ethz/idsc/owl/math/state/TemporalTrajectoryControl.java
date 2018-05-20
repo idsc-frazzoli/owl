@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** generic controller to execute time dependent trajectories */
 public enum TemporalTrajectoryControl implements TrajectoryControl {
   INSTANCE;
   // ---

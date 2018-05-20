@@ -33,7 +33,7 @@ public class PsuAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(0, 0), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new PsuTrajectoryControl();
     TrajectoryEntity trajectoryEntity = new PsuEntity(episodeIntegrator, trajectoryControl);
-    owlyAnimationFrame.set(trajectoryEntity);
+    owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyPlannerConstraint.INSTANCE);
     // ---
     Tensor range = Tensors.vector(Math.PI, 3);

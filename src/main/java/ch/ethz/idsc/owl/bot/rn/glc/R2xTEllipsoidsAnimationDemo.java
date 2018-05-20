@@ -47,7 +47,7 @@ public class R2xTEllipsoidsAnimationDemo implements DemoInterface {
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.2, 2), RealScalar.ZERO));
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(0.6));
-    owlyAnimationFrame.set(abstractEntity);
+    owlyAnimationFrame.add(abstractEntity);
     // ---
     BijectionFamily shiftx = new SimpleTranslationFamily( //
         scalar -> Tensors.of(Sin.FUNCTION.apply(scalar.multiply(RealScalar.of(0.2))), RealScalar.ZERO));
