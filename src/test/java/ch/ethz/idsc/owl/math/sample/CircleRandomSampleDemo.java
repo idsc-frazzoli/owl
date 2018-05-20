@@ -7,6 +7,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Put;
 
+/** demo exports random samples from a circle that for visualization in Mathematica:
+ * A = << "samples.txt"; ListPlot[A, AspectRatio -> 1] */
 enum CircleRandomSampleDemo {
   ;
   public static void main(String[] args) throws Exception {
