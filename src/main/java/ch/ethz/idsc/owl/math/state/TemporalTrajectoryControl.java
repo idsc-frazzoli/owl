@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -12,10 +13,17 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** generic controller to execute time dependent trajectories */
-public enum TemporalTrajectoryControl implements TrajectoryControl {
-  INSTANCE;
+public class TemporalTrajectoryControl implements TrajectoryControl, Serializable {
+  /** @return */
+  public static TrajectoryControl createInstance() {
+    return new TemporalTrajectoryControl();
+  }
+
   // ---
   private TrajectoryWrap trajectoryWrap = null;
+
+  private TemporalTrajectoryControl() {
+  }
 
   @Override
   public synchronized void setTrajectory(List<TrajectorySample> trajectory) {

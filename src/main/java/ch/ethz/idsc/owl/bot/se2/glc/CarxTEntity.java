@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * that means, the functionality does not apply to all examples universally. */
 class CarxTEntity extends CarEntity {
   CarxTEntity(StateTime stateTime) {
-    super(stateTime, TemporalTrajectoryControl.INSTANCE, PARTITIONSCALE, CARFLOWS, SHAPE);
+    super(stateTime, TemporalTrajectoryControl.createInstance(), PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
   @Override
