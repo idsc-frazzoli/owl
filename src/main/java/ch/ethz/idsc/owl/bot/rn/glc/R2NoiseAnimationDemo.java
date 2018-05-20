@@ -32,7 +32,7 @@ public class R2NoiseAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(0.2, 0.2), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new R2TrajectoryControl();
     R2Entity r2Entity = new R2Entity(episodeIntegrator, trajectoryControl);
-    owlyAnimationFrame.set(r2Entity);
+    owlyAnimationFrame.add(r2Entity);
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.2));
     TrajectoryRegionQuery trajectoryRegionQuery = CatchyTrajectoryRegionQuery.timeInvariant(region);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);

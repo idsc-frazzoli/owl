@@ -29,8 +29,6 @@ public class OwlyAnimationFrame extends TimerFrame {
   private static final int MARGIN = 100; // 170;
   // ---
   private final List<AnimationInterface> animationInterfaces = new CopyOnWriteArrayList<>();
-  /** reference to the entity that is controlled by the user */
-  private AnimationInterface controllable = null;
   private final JToggleButton jToggleButtonRecord = new JToggleButton("record");
 
   public OwlyAnimationFrame() {
@@ -54,7 +52,7 @@ public class OwlyAnimationFrame extends TimerFrame {
         public void actionPerformed(ActionEvent event) {
           boolean selected = jToggleButtonRecord.isSelected();
           if (selected) {
-            TrajectoryEntity abstractEntity = (TrajectoryEntity) controllable;
+            TrajectoryEntity abstractEntity = (TrajectoryEntity) animationInterfaces.get(0); // TODO
             File directory = UserHome.Pictures(abstractEntity.getClass().getSimpleName() + "_" + System.currentTimeMillis());
             directory.mkdir();
             GlobalAssert.that(directory.isDirectory());
@@ -90,13 +88,6 @@ public class OwlyAnimationFrame extends TimerFrame {
       });
       jToolBar.add(jToggleButtonRecord);
     }
-  }
-
-  public void set(AnimationInterface animationInterface) {
-    GlobalAssert.that(animationInterfaces.isEmpty()); // TODO this logic is messy
-    if (Objects.isNull(controllable))
-      controllable = animationInterface;
-    add(animationInterface);
   }
 
   /** @param renderInterface */

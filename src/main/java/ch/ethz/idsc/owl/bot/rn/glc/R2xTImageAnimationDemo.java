@@ -33,7 +33,7 @@ public class R2xTImageAnimationDemo implements DemoInterface {
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.5, 2), RealScalar.ZERO));
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(1.5));
-    owlyAnimationFrame.set(abstractEntity);
+    owlyAnimationFrame.add(abstractEntity);
     // ---
     RigidFamily rigidFamily = Se2Family.rotationAround( //
         Tensors.vectorDouble(1.5, 2), time -> time.multiply(RealScalar.of(0.1)));

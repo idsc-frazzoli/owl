@@ -21,7 +21,6 @@ public class TrajectorySampleMap {
   }
   // ---
 
-  // check if only control are needed, in that case map can only store Optional<Tensor>
   private final NavigableMap<Scalar, TrajectorySample> navigableMap;
 
   /** @param trajectory non-empty */
@@ -44,5 +43,12 @@ public class TrajectorySampleMap {
    * @return true, if given now is strictly less than time of last trajectory sample */
   public boolean isValid(Scalar now) {
     return Scalars.lessThan(now, navigableMap.lastKey());
+  }
+
+  /** @param now
+   * @return control to reach trajectory sample registered at time strictly greater than given now */
+  public Optional<TrajectorySample> getTrajectorySample(Scalar now) {
+    Entry<Scalar, TrajectorySample> entry = navigableMap.higherEntry(now);
+    return Optional.ofNullable(entry == null ? null : entry.getValue());
   }
 }

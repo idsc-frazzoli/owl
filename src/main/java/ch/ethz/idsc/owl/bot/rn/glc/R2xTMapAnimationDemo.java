@@ -31,7 +31,7 @@ public class R2xTMapAnimationDemo implements DemoInterface {
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(4.5, 5), RealScalar.ZERO));
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(1.5));
-    owlyAnimationFrame.set(abstractEntity);
+    owlyAnimationFrame.add(abstractEntity);
     // ---
     ImageRegion imageRegion = null;
     imageRegion = ImageRegions.loadFromRepository( //

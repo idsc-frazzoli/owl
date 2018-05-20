@@ -34,7 +34,7 @@ public class R2ImageAnimationDemo implements DemoInterface {
     TrajectoryControl trajectoryControl = new R2TrajectoryControl();
     R2Entity r2Entity = new R2Entity(episodeIntegrator, trajectoryControl);
     r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
-    owlyAnimationFrame.set(r2Entity);
+    owlyAnimationFrame.add(r2Entity);
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);

@@ -38,7 +38,7 @@ public class R2xTPolygonAnimationDemo implements DemoInterface {
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(1.2, 2.2), RealScalar.ZERO));
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(1.5));
-    owlyAnimationFrame.set(abstractEntity);
+    owlyAnimationFrame.add(abstractEntity);
     // ---
     BijectionFamily rigid1 = new Se2Family( //
         scalar -> Tensors.of( //

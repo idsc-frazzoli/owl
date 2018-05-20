@@ -24,7 +24,7 @@ public class Rice1dEmptyDemo implements DemoInterface {
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     TrajectoryEntity trajectoryEntity = //
         new Rice1dEntity(mu, Tensors.vector(0, 0), trajectoryControl, controls);
-    owlyAnimationFrame.set(trajectoryEntity);
+    owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyPlannerConstraint.INSTANCE);
     return owlyAnimationFrame;
   }
