@@ -35,6 +35,7 @@ public class MotionPlanWorker {
       public void run() {
         Stopwatch stopwatch = Stopwatch.started();
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
+        System.out.println("root " + root.toInfoString());
         trajectoryPlanner.insertRoot(root);
         Expand.maxSteps(trajectoryPlanner, MAX_STEPS, () -> isRelevant);
         if (isRelevant) {

@@ -16,10 +16,11 @@ import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.math.state.TrajectorySampleMap;
+import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Round;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaxTEntity extends DeltaEntity {
@@ -48,14 +49,19 @@ import ch.ethz.idsc.tensor.Tensors;
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
       // TODO not efficient
-      TrajectorySampleMap trajectorySampleMap = TrajectorySampleMap.create(trajectory);
-      Optional<TrajectorySample> optional = trajectorySampleMap.getTrajectorySample(now);
+      TrajectoryWrap trajectoryWrap = TrajectoryWrap.of(trajectory);
+      Optional<TrajectorySample> optional = trajectoryWrap.findTrajectorySample(now);
       if (optional.isPresent()) {
         TrajectorySample trajectorySample = optional.get();
         Path2D path2d = geometricLayer.toPath2D(Tensors.of(stateTime.state(), trajectorySample.stateTime().state()));
         graphics.setColor(Color.PINK);
         graphics.draw(path2d);
       }
+    }
+    {
+      StateTime stateTime = getStateTimeNow();
+      graphics.setColor(Color.GRAY);
+      graphics.drawString("" + stateTime.time().map(Round._3), 0, 12 * 2);
     }
   }
 }
