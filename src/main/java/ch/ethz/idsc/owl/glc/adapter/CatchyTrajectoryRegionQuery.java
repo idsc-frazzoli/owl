@@ -1,12 +1,10 @@
 // code by bapaden and jph
 package ch.ethz.idsc.owl.glc.adapter;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
 import ch.ethz.idsc.owl.math.state.StateTimeRegionCallback;
@@ -15,44 +13,32 @@ import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** default wrapper for obstacle and goal queries
- * implementation is abundantly used throughout the repository */
-public class SimpleTrajectoryRegionQuery implements TrajectoryRegionQuery, StateTimeCollector, Serializable {
+/** wrapper for obstacle and goal queries */
+public class CatchyTrajectoryRegionQuery extends SimpleTrajectoryRegionQuery implements StateTimeCollector {
   /** @param region that is queried with tensor = StateTime::state
    * @return */
   public static TrajectoryRegionQuery timeInvariant(Region<Tensor> region) {
-    return new SimpleTrajectoryRegionQuery(new TimeInvariantRegion(region));
+    return new CatchyTrajectoryRegionQuery(new TimeInvariantRegion(region));
   }
 
   /** @param region that is queried with tensor = StateTime::joined
    * @return */
   public static TrajectoryRegionQuery timeDependent(Region<Tensor> region) {
-    return new SimpleTrajectoryRegionQuery(new TimeDependentRegion(region));
+    return new CatchyTrajectoryRegionQuery(new TimeDependentRegion(region));
   }
 
   /** @param region that is queried with StateTime */
-  public SimpleTrajectoryRegionQuery(Region<StateTime> region) {
+  public CatchyTrajectoryRegionQuery(Region<StateTime> region) {
+    super(region);
     // FIXME SparseStateTimeRegionMembers is not a good default option
-    this.region = region;
     this.stateTimeRegionCallback = new SparseStateTimeRegionMembers();
   }
 
-  private final Region<StateTime> region;
   private final StateTimeRegionCallback stateTimeRegionCallback;
 
-  public SimpleTrajectoryRegionQuery(Region<StateTime> region, StateTimeRegionCallback stateTimeRegionCallback) {
-    this.region = region;
+  public CatchyTrajectoryRegionQuery(Region<StateTime> region, StateTimeRegionCallback stateTimeRegionCallback) {
+    super(region);
     this.stateTimeRegionCallback = stateTimeRegionCallback;
-  }
-
-  @Override // from TrajectoryRegionQuery
-  public final Optional<StateTime> firstMember(List<StateTime> trajectory) {
-    for (StateTime stateTime : trajectory)
-      if (region.isMember(stateTime)) {
-        stateTimeRegionCallback.notify_isMember(stateTime);
-        return Optional.of(stateTime);
-      }
-    return Optional.empty();
   }
 
   @Override // from TrajectoryRegionQuery

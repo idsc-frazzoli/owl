@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -51,6 +51,6 @@ class TnGoalManager implements Region<Tensor>, CostFunction, Serializable {
   }
 
   public GoalInterface getGoalInterface() {
-    return new GoalAdapter(SimpleTrajectoryRegionQuery.timeInvariant(this), this);
+    return new GoalAdapter(CatchyTrajectoryRegionQuery.timeInvariant(this), this);
   }
 }

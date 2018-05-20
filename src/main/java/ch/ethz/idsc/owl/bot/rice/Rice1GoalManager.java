@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.rice;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
-public class Rice1GoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+public class Rice1GoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
   public static GoalInterface create(Tensor center, Tensor radius) {
     return new Rice1GoalManager(new EllipsoidRegion(center, radius));
   }

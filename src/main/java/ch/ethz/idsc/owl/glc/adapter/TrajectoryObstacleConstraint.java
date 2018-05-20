@@ -20,7 +20,7 @@ public class TrajectoryObstacleConstraint implements PlannerConstraint, Serializ
     this.trajectoryRegionQuery = trajectoryRegionQuery;
   }
 
-  @Override
+  @Override // from PlannerConstraint
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     return !trajectoryRegionQuery.firstMember(trajectory).isPresent();
   }

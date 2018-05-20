@@ -3,8 +3,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 
 import ch.ethz.idsc.owl.bot.r2.R2xTNoiseStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -30,7 +29,7 @@ public class R2xTNoiseAnimationDemo implements DemoInterface {
     TrajectoryEntity trajectoryEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(0.4));
     owlyAnimationFrame.set(trajectoryEntity);
     Region<StateTime> region = new R2xTNoiseStateTimeRegion(RealScalar.of(0.5));
-    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(region));
+    PlannerConstraint plannerConstraint = RegionConstraints.stateTime(region);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
     return owlyAnimationFrame;
   }
