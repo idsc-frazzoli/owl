@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.glc.CarFlows;
-import ch.ethz.idsc.owl.bot.se2.glc.CarStandardFlows;
+import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 public class Se2MinTimeGoalManagerTest extends TestCase {
   public void testIsMember() {
-    CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, RealScalar.ONE);
+    FlowsInterface carFlows = CarFlows.standard(RealScalar.ONE, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(3);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
@@ -27,7 +27,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   }
 
   public void testGoalAdapter() {
-    CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, RealScalar.ONE);
+    FlowsInterface carFlows = CarFlows.standard(RealScalar.ONE, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(3);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
@@ -38,7 +38,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    CarFlows carFlows = new CarStandardFlows(RealScalar.ONE, RealScalar.ONE);
+    FlowsInterface carFlows = CarFlows.standard(RealScalar.ONE, RealScalar.ONE);
     Serialization.copy(carFlows);
     Collection<Flow> controls = carFlows.getFlows(3);
     Serialization.copy(controls);

@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   public static TwdEntity createDuckie(StateTime stateTime) {
     TwdEntity twdEntity = new TwdEntity( //
         stateTime, new TwdTrajectoryControl(), new TwdDuckieFlows(RealScalar.ONE, RealScalar.ONE));
-    twdEntity.extraCosts.add(Se2LateralAcceleration.COSTFUNCTION);
+    twdEntity.extraCosts.add(Se2LateralAcceleration.INSTANCE);
     return twdEntity;
   }
 

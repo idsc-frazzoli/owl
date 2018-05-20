@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.map.Se2Integrator;
@@ -20,7 +21,7 @@ public class CarFlowsTest extends TestCase {
   public void testUnits() {
     Scalar speed = Quantity.of(2, "m*s^-1");
     Scalar rate_max = (Scalar) Quantity.of(1, "rad*m^-1").map(UnitSystem.SI());
-    CarFlows carFlows = new CarStandardFlows(speed, rate_max);
+    FlowsInterface carFlows = CarFlows.standard(speed, rate_max);
     Collection<Flow> collection = carFlows.getFlows(8);
     Flow flow = collection.iterator().next();
     Tensor x = Tensors.fromString("{1[m],2[m],3[rad]}").map(UnitSystem.SI());
@@ -32,7 +33,7 @@ public class CarFlowsTest extends TestCase {
   public void testRadius() {
     Scalar speed = Quantity.of(1.423, "m*s^-1");
     Scalar rate = (Scalar) Quantity.of(2.384, "rad*m^-1").map(UnitSystem.SI());
-    Flow flow = CarFlows.singleton(speed, rate);
+    Flow flow = CarHelper.singleton(speed, rate);
     Tensor u = flow.getU();
     Tensor origin = Tensors.fromString("{0[m],0[m],0}");
     // System.out.println(u);

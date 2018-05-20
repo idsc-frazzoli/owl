@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 
 public class HeuristicQTest extends TestCase {
   public void testSimple() {
-    assertFalse(HeuristicQ.of(Se2LateralAcceleration.COSTFUNCTION));
+    assertFalse(HeuristicQ.of(Se2LateralAcceleration.INSTANCE));
   }
 
   public void testFail() {
