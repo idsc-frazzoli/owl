@@ -20,7 +20,13 @@ public class SphereRandomSample implements RandomSampleInterface {
    * @param radius non-negative
    * @return */
   public static RandomSampleInterface of(Tensor center, Scalar radius) {
-    VectorQ.require(center);
+    switch (center.length()) {
+    case 1:
+      Distribution distribution = UniformDistribution.of(center.Get(0).subtract(radius), center.Get(0).add(radius));
+      return UniformRandomSample.of(distribution, 1);
+    case 2:
+      return new CircleRandomSample(center, radius);
+    }
     return Scalars.isZero(radius) //
         ? new ConstantRandomSample(center)
         : new SphereRandomSample(center, radius);
@@ -31,7 +37,7 @@ public class SphereRandomSample implements RandomSampleInterface {
   private final Scalar radius;
 
   private SphereRandomSample(Tensor center, Scalar radius) {
-    this.center = center;
+    this.center = VectorQ.require(center);
     this.radius = Sign.requirePositiveOrZero(radius);
   }
 
