@@ -1,6 +1,7 @@
 // code by jl
 package ch.ethz.idsc.owl.bot.se2;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,7 +24,7 @@ import ch.ethz.idsc.tensor.red.Max;
  * The cost does not account for curvature. */
 // DO NOT MODIFY THIS CLASS SINCE THE FUNCTIONALITY IS USED IN MANY DEMOS
 @DontModify
-public final class Se2MinTimeGoalManager implements Region<Tensor>, CostFunction {
+public final class Se2MinTimeGoalManager implements Region<Tensor>, CostFunction, Serializable {
   private final Se2ComboRegion se2ComboRegion;
   private final Scalar maxSpeed;
   private final Scalar maxTurning;
@@ -54,6 +55,6 @@ public final class Se2MinTimeGoalManager implements Region<Tensor>, CostFunction
   }
 
   public final GoalInterface getGoalInterface() {
-    return new GoalAdapter(StandardTrajectoryRegionQuery.timeInvariant(this), this);
+    return new GoalAdapter(SimpleTrajectoryRegionQuery.timeInvariant(this), this);
   }
 }

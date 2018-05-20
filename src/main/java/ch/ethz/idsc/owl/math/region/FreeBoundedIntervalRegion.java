@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
 /** axis-aligned region of infinity extension in the direction of other axes */
 public class FreeBoundedIntervalRegion extends ImplicitFunctionRegion<Tensor> implements Serializable {
-  private static final Scalar HALF = RationalScalar.of(1, 2);
+  private static final Scalar HALF = RationalScalar.HALF;
   // ---
   private final int index;
   private final Scalar semiwidth;

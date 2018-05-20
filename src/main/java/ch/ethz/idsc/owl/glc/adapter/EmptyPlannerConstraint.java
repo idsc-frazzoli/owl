@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 public enum EmptyPlannerConstraint implements PlannerConstraint {
   INSTANCE;
   // ---
-  @Override
+  @Override // from PlannerConstraint
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     return true;
   }

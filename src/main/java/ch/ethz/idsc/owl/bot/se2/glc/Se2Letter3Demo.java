@@ -6,16 +6,13 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
-import ch.ethz.idsc.owl.glc.std.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
@@ -48,12 +45,10 @@ public class Se2Letter3Demo extends Se2CarDemo {
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     carEntity.plannerConstraint = plannerConstraint;
-    TrajectoryRegionQuery ray = StandardTrajectoryRegionQuery.timeInvariant(imageRegion);
-    owlyAnimationFrame.set(carEntity);
+    TrajectoryRegionQuery ray = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
+    owlyAnimationFrame.add(carEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
-    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(carEntity);
-    MouseGoal.supply(owlyAnimationFrame.geometricComponent, //
-        new SimpleGoalConsumer(carEntity, plannerConstraint, glcPlannerCallback));
+    MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     {
       RenderInterface renderInterface = new CameraEmulator( //
           48, RealScalar.of(10), carEntity::getStateTimeNow, ray);

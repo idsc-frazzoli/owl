@@ -4,10 +4,13 @@ package ch.ethz.idsc.owl.glc.adapter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 
 public enum Trajectories {
   ;
@@ -36,5 +39,11 @@ public enum Trajectories {
     System.out.println("Trajectory (" + list.size() + ")");
     for (TrajectorySample sample : list)
       System.out.println(sample.toInfoString());
+  }
+
+  /** @param time
+   * @return predicate for {@link TrajectorySample} before or at given time */
+  public static Predicate<TrajectorySample> untilTime(Scalar time) {
+    return trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), time);
   }
 }

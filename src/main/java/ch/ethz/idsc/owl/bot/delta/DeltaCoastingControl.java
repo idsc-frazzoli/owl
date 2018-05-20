@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.delta;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
@@ -12,7 +13,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public class DeltaCoastingControl implements EntityControl {
+public class DeltaCoastingControl implements EntityControl, Serializable {
   private final ImageGradientInterpolation imageGradientInterpolation;
   private final Scalar u_norm;
 

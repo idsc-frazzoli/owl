@@ -10,9 +10,9 @@ import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -49,11 +49,11 @@ enum R2DemoSlow {
   }
 
   static TrajectoryPlanner simpleR2Bubbles() throws Exception {
-    return simple(SimpleTrajectoryRegionQuery.timeInvariant(new R2Bubbles()));
+    return simple(CatchyTrajectoryRegionQuery.timeInvariant(new R2Bubbles()));
   }
 
   static TrajectoryPlanner simpleR2Circle() throws Exception {
-    return simple(SimpleTrajectoryRegionQuery.timeInvariant( //
+    return simple(CatchyTrajectoryRegionQuery.timeInvariant( //
         new EllipsoidRegion(Tensors.vector(-1, 0), Tensors.vector(2, 2))));
   }
 

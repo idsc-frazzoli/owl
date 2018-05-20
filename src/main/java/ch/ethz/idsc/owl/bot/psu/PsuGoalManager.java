@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.psu;
 import java.io.Serializable;
 import java.util.List;
 
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   public static GoalInterface of(TensorMetric coordinateWrap, Tensor center, Tensor radius) {
     PsuGoalManager psuGoalManager = new PsuGoalManager(coordinateWrap, center, radius);
     return new GoalAdapter( //
-        SimpleTrajectoryRegionQuery.timeInvariant(psuGoalManager), //
+        CatchyTrajectoryRegionQuery.timeInvariant(psuGoalManager), //
         psuGoalManager);
   }
 

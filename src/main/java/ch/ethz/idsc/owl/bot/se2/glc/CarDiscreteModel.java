@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.bot.util.Lexicographic;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.subare.core.DiscreteModel;
@@ -36,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       }
     }
     states.append(COLLISION);
-    CarFlows carFlows = new CarForwardFlows(RealScalar.of(1), RealScalar.of(2));
+    FlowsInterface carFlows = CarFlows.forward(RealScalar.of(1), RealScalar.of(2));
     Collection<Flow> collection = carFlows.getFlows(6);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(100);
     actions = Tensor.of(collection.stream() //

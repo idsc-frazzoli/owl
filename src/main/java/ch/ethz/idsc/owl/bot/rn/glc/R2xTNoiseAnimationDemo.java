@@ -3,8 +3,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 
 import ch.ethz.idsc.owl.bot.r2.R2xTNoiseStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -16,10 +15,13 @@ import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
 
 // LONGTERM the visualization of the demo is poor
 public class R2xTNoiseAnimationDemo implements DemoInterface {
+  private static final Scalar DELAY = RealScalar.of(0.5);
+
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
@@ -27,10 +29,10 @@ public class R2xTNoiseAnimationDemo implements DemoInterface {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(Tensors.vector(0.2, 0.2), RealScalar.ZERO));
-    TrajectoryEntity trajectoryEntity = new R2xTEntity(episodeIntegrator, RealScalar.of(0.4));
-    owlyAnimationFrame.set(trajectoryEntity);
+    TrajectoryEntity trajectoryEntity = new R2xTEntity(episodeIntegrator, DELAY);
+    owlyAnimationFrame.add(trajectoryEntity);
     Region<StateTime> region = new R2xTNoiseStateTimeRegion(RealScalar.of(0.5));
-    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery(region));
+    PlannerConstraint plannerConstraint = RegionConstraints.stateTime(region);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
     return owlyAnimationFrame;
   }

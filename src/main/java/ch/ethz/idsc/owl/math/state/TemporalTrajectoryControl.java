@@ -7,27 +7,26 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** generic controller to execute time dependent trajectories */
 public enum TemporalTrajectoryControl implements TrajectoryControl {
   INSTANCE;
   // ---
-  private List<TrajectorySample> trajectory = null;
-  private TrajectorySampleMap trajectorySampleMap;
+  private TrajectoryWrap trajectoryWrap = null;
 
   @Override
   public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
-    this.trajectory = trajectory;
-    trajectorySampleMap = Objects.isNull(trajectory) ? null : TrajectorySampleMap.create(trajectory);
+    trajectoryWrap = Objects.isNull(trajectory) ? null : TrajectoryWrap.of(trajectory);
   }
 
   @Override
   public synchronized Optional<Tensor> control(StateTime tail, Scalar now) {
-    if (Objects.nonNull(trajectory)) {
-      if (trajectorySampleMap.isValid(now))
-        return trajectorySampleMap.getControl(now);
+    if (Objects.nonNull(trajectoryWrap)) {
+      if (trajectoryWrap.hasRemaining(now))
+        return trajectoryWrap.findControl(now);
       System.err.println("out of trajectory");
       setTrajectory(null);
     }
@@ -36,11 +35,13 @@ public enum TemporalTrajectoryControl implements TrajectoryControl {
 
   @Override
   public List<TrajectorySample> getFutureTrajectoryUntil(StateTime tail, Scalar delay) {
-    Scalar tail_delay = tail.time().add(delay);
-    if (Objects.isNull(trajectory))
-      return Collections.singletonList(TrajectorySample.head(new StateTime(tail.state(), tail_delay)));
-    return trajectory.stream() //
-        .filter(trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), tail_delay)) //
+    Scalar tail_delayed = tail.time().add(delay);
+    if (Objects.isNull(trajectoryWrap)) {
+      StateTime stateTime = new StateTime(tail.state(), tail_delayed);
+      return Collections.singletonList(TrajectorySample.head(stateTime));
+    }
+    return trajectoryWrap.trajectory().stream() //
+        .filter(Trajectories.untilTime(tail_delayed)) //
         .collect(Collectors.toList());
   }
 

@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** heuristic adds max speed of available control to max norm of image gradient */
-/* package */ class DeltaMinTimeGoalManager extends StandardTrajectoryRegionQuery implements GoalInterface {
+/* package */ class DeltaMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   private final RegionWithDistance<Tensor> regionWithDistance;
   /** unit of maxSpeed is velocity, e.g. [m/s] */
   private final Scalar maxSpeed;

@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
-import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
-public class Rice2GoalManager extends StandardTrajectoryRegionQuery implements GoalInterface {
+public class Rice2GoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   public static GoalInterface create(Tensor center, Tensor radius) {
     return new Rice2GoalManager(new EllipsoidRegion(center, radius));
   }

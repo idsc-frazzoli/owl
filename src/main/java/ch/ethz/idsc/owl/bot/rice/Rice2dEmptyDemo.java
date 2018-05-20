@@ -23,7 +23,7 @@ public class Rice2dEmptyDemo implements DemoInterface {
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     TrajectoryEntity trajectoryEntity = new Rice2dEntity(mu, Tensors.vector(0, 0, 0, 0), trajectoryControl, controls);
-    owlyAnimationFrame.set(trajectoryEntity);
+    owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyPlannerConstraint.INSTANCE);
     return owlyAnimationFrame;
   }

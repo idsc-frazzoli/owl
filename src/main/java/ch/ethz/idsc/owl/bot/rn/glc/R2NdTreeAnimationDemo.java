@@ -37,7 +37,7 @@ public class R2NdTreeAnimationDemo implements DemoInterface {
         new StateTime(Tensors.vector(0, 0), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new R2TrajectoryControl();
     R2Entity r2Entity = new R2Entity(episodeIntegrator, trajectoryControl);
-    owlyAnimationFrame.set(r2Entity);
+    owlyAnimationFrame.add(r2Entity);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));

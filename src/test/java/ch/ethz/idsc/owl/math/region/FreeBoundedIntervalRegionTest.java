@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -20,7 +20,7 @@ public class FreeBoundedIntervalRegionTest extends TestCase {
 
   public void testTrajectoryMember() {
     FreeBoundedIntervalRegion bir = new FreeBoundedIntervalRegion(0, RealScalar.of(10), RealScalar.of(20));
-    TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeInvariant(bir);
+    TrajectoryRegionQuery trq = CatchyTrajectoryRegionQuery.timeInvariant(bir);
     assertFalse(trq.isMember(new StateTime(Tensors.vector(15), RealScalar.ZERO)));
     assertTrue(trq.isMember(new StateTime(Tensors.vector(5), RealScalar.ZERO)));
   }

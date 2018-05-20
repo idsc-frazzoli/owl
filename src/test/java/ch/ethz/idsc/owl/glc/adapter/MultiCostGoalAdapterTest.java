@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;
 import ch.ethz.idsc.owl.bot.se2.glc.CarFlows;
-import ch.ethz.idsc.owl.bot.se2.glc.CarForwardFlows;
+import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 public class MultiCostGoalAdapterTest extends TestCase {
   public void testSimple() {
     Scalar speed = RealScalar.of(2);
-    CarFlows carFlows = new CarForwardFlows(speed, RealScalar.ONE);
+    FlowsInterface carFlows = CarFlows.forward(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
@@ -43,7 +43,7 @@ public class MultiCostGoalAdapterTest extends TestCase {
 
   public void testMembers() {
     Scalar speed = RealScalar.of(2);
-    CarFlows carFlows = new CarForwardFlows(speed, RealScalar.ONE);
+    FlowsInterface carFlows = CarFlows.forward(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
@@ -56,7 +56,7 @@ public class MultiCostGoalAdapterTest extends TestCase {
 
   public void testTrivial() {
     Scalar speed = RealScalar.of(2);
-    CarFlows carFlows = new CarForwardFlows(speed, RealScalar.ONE);
+    FlowsInterface carFlows = CarFlows.forward(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager goalInterface2 = //

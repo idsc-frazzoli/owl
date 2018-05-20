@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
+import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -47,7 +48,7 @@ public class CarEntity extends Se2Entity {
   /** the pure pursuit controller is permitted a slightly higher turning rate "rad/m"
    * than the planner, to overcome small imprecisions when following the trajectory */
   static final Scalar MAX_TURNING_RATE = Degree.of(50);
-  static final CarFlows CARFLOWS = new CarStandardFlows(SPEED, MAX_TURNING_PLAN);
+  static final FlowsInterface CARFLOWS = CarFlows.standard(SPEED, MAX_TURNING_PLAN);
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   private static final Scalar SHIFT_PENALTY = RealScalar.of(0.4);
   // ---
@@ -80,7 +81,7 @@ public class CarEntity extends Se2Entity {
    * 2) to prevent cutting corners
    * 
    * @param stateTime initial position */
-  public CarEntity(StateTime stateTime, TrajectoryControl trajectoryControl, Tensor partitionScale, CarFlows carFlows, Tensor shape) {
+  public CarEntity(StateTime stateTime, TrajectoryControl trajectoryControl, Tensor partitionScale, FlowsInterface carFlows, Tensor shape) {
     super(stateTime, trajectoryControl);
     this.trajectoryControl = trajectoryControl;
     // new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));

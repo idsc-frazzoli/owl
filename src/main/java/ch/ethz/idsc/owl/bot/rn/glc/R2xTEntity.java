@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
   public R2xTEntity(EpisodeIntegrator episodeIntegrator, Scalar delay) {
     super(episodeIntegrator, TemporalTrajectoryControl.INSTANCE);
-    // add(new FallbackControl(Array.zeros(2)));
     this.delay = delay;
   }
 
