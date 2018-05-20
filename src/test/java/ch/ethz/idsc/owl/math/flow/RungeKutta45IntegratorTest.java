@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 
 public class RungeKutta45IntegratorTest extends TestCase {
   public void testNonTrivial() {
-    Tensor u = Tensors.of(RationalScalar.of(1, 2));
+    Tensor u = Tensors.of(RationalScalar.HALF);
     Tensor x = Tensors.vector(1, 2);
     Scalar h = RationalScalar.of(1, 3);
     Flow flow = StateSpaceModels.createFlow(PsuStateSpaceModel.INSTANCE, u);
@@ -27,7 +27,7 @@ public class RungeKutta45IntegratorTest extends TestCase {
   }
 
   public void testReference() {
-    Tensor u = Tensors.of(RationalScalar.of(1, 2));
+    Tensor u = Tensors.of(RationalScalar.HALF);
     Tensor x = Tensors.vector(1, 2);
     Scalar h = RationalScalar.of(1, 3);
     Flow flow = StateSpaceModels.createFlow(PsuStateSpaceModel.INSTANCE, u);

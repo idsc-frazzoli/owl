@@ -39,7 +39,7 @@ enum Rice2dDemo {
   public static void main(String[] args) {
     Tensor eta = Tensors.vector(3, 3, 6, 6);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        MidpointIntegrator.INSTANCE, RationalScalar.of(1, 2), 5);
+        MidpointIntegrator.INSTANCE, RationalScalar.HALF, 5);
     Collection<Flow> controls = Rice2Controls.create2d(RealScalar.of(-.5), 1, 15);
     EllipsoidRegion ellipsoidRegion = new EllipsoidRegion(Tensors.vector(3, 3, -1, 0), Tensors.vector(0.5, 0.5, 0.4, 0.4));
     GoalInterface goalInterface = new Rice2GoalManager(ellipsoidRegion);
