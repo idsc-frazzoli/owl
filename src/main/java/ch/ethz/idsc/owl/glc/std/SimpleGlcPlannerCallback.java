@@ -22,7 +22,6 @@ public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
-    // GlcNodes.getFinalGoalNode(trajectoryPlanner);
     if (optional.isPresent()) {
       List<TrajectorySample> tail = //
           GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());

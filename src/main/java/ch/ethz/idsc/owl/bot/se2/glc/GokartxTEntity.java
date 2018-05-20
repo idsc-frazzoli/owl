@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.math.StateTimeCoordinateWrap;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.math.state.TrajectorySampleMap;
+import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -53,8 +53,8 @@ class GokartxTEntity extends CarEntity {
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
       // TODO not efficient
-      TrajectorySampleMap trajectorySampleMap = TrajectorySampleMap.create(trajectory);
-      Optional<TrajectorySample> optional = trajectorySampleMap.getTrajectorySample(now);
+      TrajectoryWrap trajectorySampleMap = TrajectoryWrap.of(trajectory);
+      Optional<TrajectorySample> optional = trajectorySampleMap.findTrajectorySample(now);
       if (optional.isPresent()) {
         TrajectorySample trajectorySample = optional.get();
         Path2D path2d = geometricLayer.toPath2D(Tensors.of(stateTime.state(), trajectorySample.stateTime().state()));

@@ -53,9 +53,9 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         new DeltaStateSpaceModel(imageGradientInterpolation_fast), EulerIntegrator.INSTANCE, stateTime);
-    TrajectoryEntity abstractEntity = //
+    TrajectoryEntity trajectoryEntity = //
         new DeltaxTEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation_fast);
-    Supplier<Scalar> supplier = () -> abstractEntity.getStateTimeNow().time();
+    Supplier<Scalar> supplier = () -> trajectoryEntity.getStateTimeNow().time();
     // ---
     ImageGradientInterpolation imageGradientInterpolation_slow = //
         ImageGradientInterpolation.linear(image, range, amp);
@@ -72,8 +72,8 @@ public class DeltaxTAnimationDemo implements DemoInterface {
         RegionUnion.wrap(Arrays.asList(new TimeInvariantRegion(imageRegion), region1, region2, region3, region4))));
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    owlyAnimationFrame.add(abstractEntity);
-    MouseGoal.simple(owlyAnimationFrame, abstractEntity, plannerConstraint);
+    owlyAnimationFrame.add(trajectoryEntity);
+    MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);

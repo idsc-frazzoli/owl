@@ -16,11 +16,11 @@ public enum MouseGoal {
   ;
   public static void simple(OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint) {
     GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(trajectoryEntity);
-    MouseGoal.supply(owlyAnimationFrame.geometricComponent, //
+    supply(owlyAnimationFrame.geometricComponent, //
         new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, glcPlannerCallback));
   }
 
-  public static void supply(GeometricComponent geometricComponent, GoalConsumer goalConsumer) {
+  private static void supply(GeometricComponent geometricComponent, GoalConsumer goalConsumer) {
     MouseAdapter mouseAdapter = new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent mouseEvent) {
