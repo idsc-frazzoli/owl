@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
@@ -48,7 +48,7 @@ public class Se2Letter3Demo extends Se2CarDemo {
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     carEntity.plannerConstraint = plannerConstraint;
-    TrajectoryRegionQuery ray = StandardTrajectoryRegionQuery.timeInvariant(imageRegion);
+    TrajectoryRegionQuery ray = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     owlyAnimationFrame.set(carEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(carEntity);

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.DontModify;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>The goal region underlying the target area as well as the heuristic is
  * {@link SphericalRegion}. */
 @DontModify
-public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+public class RnMinTimeGoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
   /** creates a spherical region in R^n with given center and radius.
    * 
    * @param regionWithDistance

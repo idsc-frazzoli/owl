@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -22,7 +22,7 @@ public class Se2PolicyNoiseDemo implements DemoInterface {
     final Scalar threshold = RealScalar.of(0.6);
     Region<Tensor> region = new R2NoiseRegion(threshold);
     // ---
-    TrajectoryRegionQuery trq = SimpleTrajectoryRegionQuery.timeInvariant(region);
+    TrajectoryRegionQuery trq = CatchyTrajectoryRegionQuery.timeInvariant(region);
     owlyAnimationFrame.addBackground(RegionRenders.create(trq));
     // ---
     Tensor start = Tensors.vector(2.000, 3.317, 0.942).unmodifiable();

@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
-import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
@@ -32,7 +32,7 @@ public class TwdImageDemo implements DemoInterface {
     TwdEntity twdEntity = TwdEntity.createJ2B2(new StateTime(Tensors.vector(7, 5, 0), RealScalar.ZERO));
     twdEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.set(twdEntity);
-    TrajectoryRegionQuery trajectoryRegionQuery = StandardTrajectoryRegionQuery.timeInvariant(imageRegion);
+    TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     twdEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, twdEntity, plannerConstraint);

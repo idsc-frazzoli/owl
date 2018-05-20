@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
-import ch.ethz.idsc.owl.math.state.StandardTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.red.Norm;
  * the cost == distance traveled evaluates to 0.
  * 
  * @see SphericalRegion */
-public class RnMinDistGoalManager extends StandardTrajectoryRegionQuery implements GoalInterface {
+public class RnMinDistGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   /** creates a spherical region in R^n with given center and radius.
    * min distance to goal is measured in Euclidean distance.
    * the distance is independent from the max speed.

@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.lv;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.glc.adapter.SimpleTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** the distance used in the ellipsoid is Euclidean.
  * perhaps more suitable for the state space model would be a logarithmic distance */
-/* package */ class LvGoalInterface extends SimpleTrajectoryRegionQuery implements GoalInterface {
+/* package */ class LvGoalInterface extends CatchyTrajectoryRegionQuery implements GoalInterface {
   public static GoalInterface create(Tensor center, Tensor radius) {
     return new LvGoalInterface(new EllipsoidRegion(center, radius));
   }
