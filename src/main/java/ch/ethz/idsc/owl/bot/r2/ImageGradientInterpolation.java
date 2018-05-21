@@ -77,6 +77,16 @@ public class ImageGradientInterpolation implements Interpolation, Serializable {
     throw TensorRuntimeException.of(index);
   }
 
+  @Override // from Interpolation
+  public Tensor at(Scalar index) {
+    throw TensorRuntimeException.of(index);
+  }
+
+  @Override // from Interpolation
+  public Scalar At(Scalar index) {
+    throw TensorRuntimeException.of(index);
+  }
+
   /** @return max(||gradient||) */
   public Scalar maxNormGradient() {
     return maxNormGradient;
