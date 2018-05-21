@@ -130,10 +130,10 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   /** @return state integrator for the state space to generate trajectories from given controls */
   public abstract StateIntegrator getStateIntegrator();
 
-  /** @return obstacle query for the purpose of inspection, i.e. no alteration should be made */
+  /** @return obstacle query for the purpose of inspection */
   public abstract PlannerConstraint getPlannerConstraint();
 
-  /** @return goal query for the purpose of inspection, i.e. no alteration should be made */
+  /** @return goal query for the purpose of inspection */
   public abstract GoalInterface getGoalInterface();
 
   protected final Collection<GlcNode> queue() {

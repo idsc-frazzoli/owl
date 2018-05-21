@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.bot.r2.R2Bubbles;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.data.DontModify;
-import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
@@ -45,7 +45,7 @@ enum R2Demo {
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
 
   static TrajectoryPlanner simpleEmpty() {
-    return simple(EmptyPlannerConstraint.INSTANCE);
+    return simple(EmptyObstacleConstraint.INSTANCE);
   }
 
   static TrajectoryPlanner simpleR2Bubbles() {

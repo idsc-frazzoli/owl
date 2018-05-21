@@ -8,10 +8,11 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Stopwatch;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
+import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -43,13 +44,13 @@ enum Rice2dDemo {
     Collection<Flow> controls = Rice2Controls.create2d(RealScalar.of(-.5), 1, 15);
     EllipsoidRegion ellipsoidRegion = new EllipsoidRegion(Tensors.vector(3, 3, -1, 0), Tensors.vector(0.5, 0.5, 0.4, 0.4));
     GoalInterface goalInterface = new Rice2GoalManager(ellipsoidRegion);
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant( //
-        RegionUnion.wrap(Arrays.asList( //
+    PlannerConstraint plannerConstraint = //
+        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(RegionUnion.wrap(Arrays.asList( //
             new HyperplaneRegion(Tensors.vector(1, +0, 0, 0), RealScalar.ZERO), //
             new HyperplaneRegion(Tensors.vector(0, +1, 0, 0), RealScalar.ZERO), //
             new HyperplaneRegion(Tensors.vector(0, -1, 0, 0), RealScalar.of(3.2)), //
             new HyperplaneRegion(Tensors.vector(0, +0, 0, 1), RealScalar.ZERO) //
-        )));
+        ))));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta, stateIntegrator, controls, plannerConstraint, goalInterface);

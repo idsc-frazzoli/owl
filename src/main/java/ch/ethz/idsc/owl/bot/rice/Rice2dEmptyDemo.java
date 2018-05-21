@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.rice;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -24,7 +24,7 @@ public class Rice2dEmptyDemo implements DemoInterface {
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     TrajectoryEntity trajectoryEntity = new Rice2dEntity(mu, Tensors.vector(0, 0, 0, 0), trajectoryControl, controls);
     owlyAnimationFrame.add(trajectoryEntity);
-    MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyPlannerConstraint.INSTANCE);
+    MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyObstacleConstraint.INSTANCE);
     return owlyAnimationFrame;
   }
 

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.alg.Array;
         psuWrap, Tensors.vector(Math.PI * 0.7, .5), RealScalar.of(0.3));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
+        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(psuWrap::represent);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.alg.Array;
         psuWrap, Tensors.vector(Math.PI, 2), RealScalar.of(0.3));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
+        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(psuWrap::represent);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));

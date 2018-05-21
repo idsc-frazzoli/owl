@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.sca.Log;
     GoalInterface goalInterface = new LvGoalInterface(ellipsoidRegion);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
+        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     // ---
     trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, 0.1), RealScalar.ZERO));
