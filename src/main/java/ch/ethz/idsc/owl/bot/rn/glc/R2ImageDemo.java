@@ -10,10 +10,11 @@ import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Stopwatch;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
+import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -46,7 +47,8 @@ enum R2ImageDemo {
     Collection<Flow> controls = r2Config.getFlows(23);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 10), DoubleScalar.of(0.2));
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
+    PlannerConstraint plannerConstraint = //
+        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(imageRegion));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         partitionScale, stateIntegrator, controls, plannerConstraint, goalInterface);

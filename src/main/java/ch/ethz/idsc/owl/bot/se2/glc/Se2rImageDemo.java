@@ -11,10 +11,11 @@ import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
+import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -50,7 +51,8 @@ enum Se2rImageDemo {
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager( //
         se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
+    PlannerConstraint plannerConstraint = //
+        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(imageRegion));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         partitionScale, stateIntegrator, controls, plannerConstraint, goalInterface);

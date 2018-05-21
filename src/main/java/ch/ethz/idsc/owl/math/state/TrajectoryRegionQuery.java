@@ -6,7 +6,10 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.region.Region;
 
-/** performs trajectory containment query */
+/** performs trajectory containment query
+ * 
+ * the query is used to check containment of a trajectory in a goal region
+ * as well as in an obstacle region */
 public interface TrajectoryRegionQuery extends Region<StateTime> {
   /** @param trajectory
    * @return first {@link StateTime} along trajectory that lies inside this region,

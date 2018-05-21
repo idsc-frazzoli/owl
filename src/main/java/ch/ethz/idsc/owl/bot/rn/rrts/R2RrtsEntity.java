@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-// TODO the redundancy in R2****Entity shows that re-factoring is needed!
+// LONGTERM the redundancy in R2****Entity shows that re-factoring is needed!
 public class R2RrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(0.5);
@@ -53,7 +53,7 @@ public class R2RrtsEntity extends AbstractRrtsEntity {
 
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    throw new RuntimeException(); // TODO API not finalized
+    throw new RuntimeException(); // LONGTERM API not finalized
   }
 
   @Override

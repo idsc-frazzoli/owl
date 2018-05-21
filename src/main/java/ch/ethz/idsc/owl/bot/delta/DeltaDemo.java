@@ -5,9 +5,10 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
-import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
+import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
@@ -53,7 +54,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, maxInput).getFlows(25);
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     Region<Tensor> region = new ImageRegion(obstacleImage, range, true);
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
+    PlannerConstraint plannerConstraint = //
+        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
     Scalar maxMove = stateSpaceModel.getLipschitz().add(maxInput);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(0.3));
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(sphericalRegion, maxMove);

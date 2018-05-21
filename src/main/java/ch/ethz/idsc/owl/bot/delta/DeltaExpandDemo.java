@@ -6,8 +6,9 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
-import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
+import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
@@ -54,7 +55,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Scalar maxMove = stateSpaceModel.getLipschitz().add(maxInput);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(.3));
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(sphericalRegion, maxMove);
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
+    PlannerConstraint plannerConstraint = //
+        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta, stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(8.8, 0.5), RealScalar.ZERO));
