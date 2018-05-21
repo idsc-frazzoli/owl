@@ -13,9 +13,12 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ abstract class Se2CarDemo implements DemoInterface {
   private static final Tensor PROBE_X = Tensors.vector(0.2, 0.1, 0, -0.1);
 
+  static Region<Tensor> line(Region<Tensor> region) {
+    return Se2PointsVsRegions.line(PROBE_X, region);
+  }
+
   static PlannerConstraint createConstraint(Region<Tensor> region) {
-    return RegionConstraints.timeInvariant( //
-        Se2PointsVsRegions.line(PROBE_X, region));
+    return RegionConstraints.timeInvariant(line(region));
   }
 
   abstract void configure(OwlyAnimationFrame owlyAnimationFrame);

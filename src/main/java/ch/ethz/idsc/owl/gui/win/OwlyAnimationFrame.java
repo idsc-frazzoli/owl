@@ -2,9 +2,9 @@
 package ch.ethz.idsc.owl.gui.win;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
@@ -58,21 +58,23 @@ public class OwlyAnimationFrame extends TimerFrame {
             GlobalAssert.that(directory.isDirectory());
             timerTask = new TimerTask() {
               int count = 0;
-              Point point = null;
+              Point2D point = null;
 
               @Override
               public void run() {
                 BufferedImage offscreen = offscreen();
                 StateTime stateTime = abstractEntity.getStateTimeNow();
-                Point now = geometricComponent.toPixel(stateTime.state());
+                GeometricLayer geometricLayer = GeometricLayer.of(geometricComponent.getModel2Pixel());
+                Point2D now = geometricLayer.toPoint2D(stateTime.state());
+                // Point now = geometricComponent.toPixel();
                 if (Objects.isNull(point) || MARGIN < PointUtil.inftyNorm(point, now))
                   point = now;
                 Dimension dimension = RECORDING;
                 BufferedImage bufferedImage = //
                     new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
                 bufferedImage.getGraphics().drawImage(offscreen, //
-                    dimension.width / 2 - point.x, //
-                    dimension.height / 2 - point.y, null);
+                    (int) (dimension.width / 2 - point.getX()), //
+                    (int) (dimension.height / 2 - point.getY()), null);
                 try {
                   ImageIO.write(bufferedImage, IMAGE_FORMAT, new File(directory, //
                       String.format("owly_%05d.%s", count++, IMAGE_FORMAT)));

@@ -24,4 +24,8 @@ public class TrajectoryObstacleConstraint implements PlannerConstraint, Serializ
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     return !trajectoryRegionQuery.firstMember(trajectory).isPresent();
   }
+
+  public TrajectoryRegionQuery getTrajectoryRegionQuery() {
+    return trajectoryRegionQuery;
+  }
 }

@@ -30,7 +30,7 @@ public class SimpleTrajectoryRegionQuery implements TrajectoryRegionQuery, Seria
     return trajectory.stream().filter(this::isMember).findFirst();
   }
 
-  @Override // from TrajectoryRegionQuery
+  @Override // from Region
   public boolean isMember(StateTime stateTime) {
     return region.isMember(stateTime);
   }

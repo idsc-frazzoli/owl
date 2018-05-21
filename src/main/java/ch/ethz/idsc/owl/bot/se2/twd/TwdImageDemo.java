@@ -34,7 +34,6 @@ public class TwdImageDemo implements DemoInterface {
     owlyAnimationFrame.add(twdEntity);
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
-    twdEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, twdEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     {

@@ -38,10 +38,13 @@ import ch.ethz.idsc.tensor.Tensor;
     );
   }
 
+  /** @param matrix with dimensions 3 x 3
+   * @return combined transformation of this and given matrix */
   public AffineFrame2D dot(Tensor matrix) {
     return new AffineFrame2D(tensor.dot(matrix));
   }
 
+  /** @return 3 x 3 matrix that represents this transformation */
   public Tensor tensor_copy() {
     return tensor.copy();
   }

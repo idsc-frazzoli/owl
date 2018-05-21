@@ -49,7 +49,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     // ---
     ImageGradientInterpolation imageGradientInterpolation_fast = //
         ImageGradientInterpolation.nearest(image, range, amp);
-    TrajectoryControl trajectoryControl = TemporalTrajectoryControl.INSTANCE;
+    TrajectoryControl trajectoryControl = TemporalTrajectoryControl.createInstance();
     StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         new DeltaStateSpaceModel(imageGradientInterpolation_fast), EulerIntegrator.INSTANCE, stateTime);

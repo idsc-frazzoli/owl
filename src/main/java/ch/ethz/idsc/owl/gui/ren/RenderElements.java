@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
+import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -22,9 +23,12 @@ public enum RenderElements {
     list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
     {
       PlannerConstraint plannerConstraint = trajectoryPlanner.getPlannerConstraint();
-      // TODO way to render StateTimeCollector
-      if (plannerConstraint instanceof StateTimeCollector)
-        list.add(new ObstacleRender(((StateTimeCollector) plannerConstraint).getMembers()));
+      if (plannerConstraint instanceof TrajectoryObstacleConstraint) {
+        TrajectoryRegionQuery trajectoryRegionQuery = //
+            ((TrajectoryObstacleConstraint) plannerConstraint).getTrajectoryRegionQuery();
+        if (trajectoryRegionQuery instanceof StateTimeCollector)
+          list.add(new ObstacleRender(((StateTimeCollector) trajectoryRegionQuery).getMembers()));
+      }
     }
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
     list.add(new TreeRender(trajectoryPlanner.getDomainMap().values()));

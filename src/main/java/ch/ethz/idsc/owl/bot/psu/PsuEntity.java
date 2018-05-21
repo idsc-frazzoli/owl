@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
-import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.alg.Array;
         psuWrap, psuWrap.represent(goal.extract(0, 2)), RealScalar.of(0.2));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
+        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     trajectoryPlanner.represent = StateTimeTensorFunction.state(psuWrap::represent);
     return trajectoryPlanner;
   }

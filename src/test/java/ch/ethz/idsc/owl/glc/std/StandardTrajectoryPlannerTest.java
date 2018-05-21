@@ -7,7 +7,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
-import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -43,7 +43,7 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     GoalInterface goalInterface = RnMinDistGoalManager.sperical(stateGoal, radius);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, goalInterface);
+        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     int iters = Expand.maxSteps(trajectoryPlanner, 200);

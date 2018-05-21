@@ -72,7 +72,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    this.plannerConstraint = plannerConstraint;
     Tensor radiusVector = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta);
     Se2ComboRegion se2ComboRegion = //
         Se2ComboRegion.spherical(goal, radiusVector);

@@ -29,18 +29,6 @@ public class OwlyFrame extends BaseFrame {
 
   public OwlyFrame() {
     {
-      JButton jButton = new JButton("Reset View");
-      jButton.setToolTipText("Resets the Crop and Zoom of the Window");
-      jButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-          geometricComponent.reset_model2pixel();
-          repaint(replayIndex);
-        }
-      });
-      jToolBar.add(jButton);
-    }
-    {
       JToggleButton jToggleButton = new JToggleButton("Replay");
       jToggleButton.setToolTipText("stops LiveFeed and goes to Replaymode");
       jToggleButton.addActionListener(new ActionListener() {

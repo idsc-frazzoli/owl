@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
-import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
@@ -43,7 +43,7 @@ enum T2Demo {
     // Heuristic heuristic = new ZeroHeuristic(); // rnGoal
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyPlannerConstraint.INSTANCE, rnGoal.getGoalInterface());
+        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, rnGoal.getGoalInterface());
     trajectoryPlanner.represent = StateTimeTensorFunction.state(coordinateWrap::represent);
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
     Expand.maxSteps(trajectoryPlanner, 1400);

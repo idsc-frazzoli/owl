@@ -60,7 +60,6 @@ public class GokartWaypointFollowingDemo extends Se2CarDemo {
     Region<Tensor> polygonRegion = PolygonRegion.of(VIRTUAL);
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
-    gokartEntity.plannerConstraint = plannerConstraint;
     // ---
     owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));

@@ -25,7 +25,6 @@ public class TwdNoiseDemo implements DemoInterface {
     Region<Tensor> region = new R2NoiseRegion(RealScalar.of(0.1));
     TrajectoryRegionQuery trajectoryRegionQuery = CatchyTrajectoryRegionQuery.timeInvariant(region);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
-    twdEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, twdEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
     return owlyAnimationFrame;

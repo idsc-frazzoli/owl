@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * that means, the functionality does not apply to all examples universally. */
 class GokartxTEntity extends CarEntity {
   GokartxTEntity(StateTime stateTime) {
-    super(stateTime, TemporalTrajectoryControl.INSTANCE, GokartEntity.PARTITIONSCALE, GokartEntity.CARFLOWS, GokartEntity.SHAPE);
+    super(stateTime, TemporalTrajectoryControl.createInstance(), GokartEntity.PARTITIONSCALE, GokartEntity.CARFLOWS, GokartEntity.SHAPE);
   }
 
   @Override

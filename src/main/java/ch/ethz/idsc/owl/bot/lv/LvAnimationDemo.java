@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.lv;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.glc.adapter.EmptyPlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -39,7 +39,7 @@ public class LvAnimationDemo implements DemoInterface {
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     TrajectoryEntity trajectoryEntity = new LvEntity(episodeIntegrator, trajectoryControl, controls);
     owlyAnimationFrame.add(trajectoryEntity);
-    MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyPlannerConstraint.INSTANCE);
+    MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyObstacleConstraint.INSTANCE);
     // ---
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
