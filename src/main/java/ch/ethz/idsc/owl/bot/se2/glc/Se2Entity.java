@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -13,7 +12,6 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -37,9 +35,6 @@ public abstract class Se2Entity extends TrajectoryEntity {
       FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
   // ---
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
-  /** application layer is required to assign plannerConstraint non-null
-   * TODO API design problem */
-  public PlannerConstraint plannerConstraint = null;
 
   protected Se2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
     super( //
@@ -48,10 +43,6 @@ public abstract class Se2Entity extends TrajectoryEntity {
             stateTime), //
         trajectoryControl);
     add(new FallbackControl(Array.zeros(3)));
-  }
-
-  private boolean obstacleQuery_isDisjoint(StateTime stateTime) {
-    return plannerConstraint.isSatisfied(null, Arrays.asList(stateTime), null);
   }
 
   protected abstract Tensor eta();
@@ -64,9 +55,7 @@ public abstract class Se2Entity extends TrajectoryEntity {
       TrajectoryRender.of(trajectoryWrap.trajectory(), geometricLayer, graphics);
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();
-      Color color = obstacleQuery_isDisjoint(stateTime) //
-          ? new Color(64, 64, 64, 128)
-          : new Color(255, 64, 64, 128);
+      Color color = new Color(64, 64, 64, 128);
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(stateTime.state()));
       graphics.setColor(color);
       graphics.fill(geometricLayer.toPath2D(shape()));
@@ -77,16 +66,6 @@ public abstract class Se2Entity extends TrajectoryEntity {
       Point2D point = geometricLayer.toPoint2D(state);
       graphics.setColor(new Color(255, 128, 64, 192));
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
-    }
-    { // draw mouse
-      Color color = new Color(0, 128, 255, 192);
-      StateTime stateTime = new StateTime(geometricLayer.getMouseSe2State(), getStateTimeNow().time());
-      if (!obstacleQuery_isDisjoint(stateTime))
-        color = new Color(255, 96, 96, 128);
-      geometricLayer.pushMatrix(geometricLayer.getMouseSe2Matrix());
-      graphics.setColor(color);
-      graphics.fill(geometricLayer.toPath2D(shape()));
-      geometricLayer.popMatrix();
     }
   }
 }

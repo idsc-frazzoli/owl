@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
@@ -44,7 +45,6 @@ public class Se2Letter3Demo extends Se2CarDemo {
     // se2Entity.extraCosts.add(r2ImageRegionWrap.gradientCostFunction());
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
-    carEntity.plannerConstraint = plannerConstraint;
     TrajectoryRegionQuery ray = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     owlyAnimationFrame.add(carEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
@@ -57,6 +57,12 @@ public class Se2Letter3Demo extends Se2CarDemo {
     {
       RenderInterface renderInterface = new LidarEmulator( //
           LIDAR_RAYTRACER, carEntity::getStateTimeNow, ray);
+      owlyAnimationFrame.addBackground(renderInterface);
+    }
+    {
+      RenderInterface renderInterface = new MouseShapeRender( //
+          SimpleTrajectoryRegionQuery.timeInvariant(line(imageRegion)), //
+          CarEntity.SHAPE, () -> carEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }
   }
