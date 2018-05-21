@@ -22,6 +22,7 @@ public class PurePursuit {
   public static PurePursuit fromTrajectory(Tensor tensor, Scalar distance) {
     return new PurePursuit(tensor, distance);
   }
+  // ---
 
   private final Optional<Tensor> lookAhead;
   private final Optional<Scalar> ratio;
@@ -52,7 +53,7 @@ public class PurePursuit {
           Clip clip = Clip.function(lo, hi); // lo <= distance <= hi
           Scalar lambda = clip.rescale(distance);
           Interpolation interpolation = LinearInterpolation.of(Tensors.of(prev, next));
-          return Optional.of(interpolation.get(Tensors.of(lambda)));
+          return Optional.of(interpolation.at(lambda));
         }
         prev = next;
         lo = hi;
