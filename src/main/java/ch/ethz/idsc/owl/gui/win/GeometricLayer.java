@@ -27,7 +27,7 @@ public class GeometricLayer {
    * @param mouseSe2State typically a vector of length 3 */
   public GeometricLayer(Tensor model2pixel, Tensor mouseSe2State) {
     deque.push(new AffineFrame2D(model2pixel));
-    this.mouseSe2State = mouseSe2State;
+    this.mouseSe2State = mouseSe2State.unmodifiable();
   }
 
   /** only the first 2 entries of x are taken into account
@@ -77,7 +77,7 @@ public class GeometricLayer {
     return path2d;
   }
 
-  /** @return {x, y, alpha} */
+  /** @return {x, y, alpha} unmodifiable */
   public Tensor getMouseSe2State() {
     return mouseSe2State;
   }

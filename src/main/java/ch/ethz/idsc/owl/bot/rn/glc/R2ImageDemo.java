@@ -60,11 +60,8 @@ enum R2ImageDemo {
       StateTimeTrajectories.print(trajectory);
     }
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
-    // owlyFrame.geometricComponent.setZoomable(false);
-    // Tensor tensor = owlyFrame.geometricComponent.getModel2Pixel();
-    // System.out.println(Pretty.of(tensor));
-    Tensor model2pixel = Tensors.fromString("{{60, 0, 200}, {0, -60, 650}, {0, 0, 1}}");
-    owlyFrame.geometricComponent.setModel2Pixel(model2pixel);
+    owlyFrame.geometricComponent.setZoomable(false);
+    owlyFrame.configCoordinateOffset(200, 650);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
     owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
   }

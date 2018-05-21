@@ -39,7 +39,7 @@ public final class GeometricComponent {
   private static final Font DEFAULT_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
   private static final double WHEEL_ANGLE = Math.PI / 10;
   private static final int BUTTON_DRAG = 3;
-  // TODO magic const nonono!
+  /** initial model to pixel matrix */
   private static final Tensor MODEL2PIXEL_INITIAL = Tensors.matrix(new Number[][] { //
       { 60, 0, 300 }, //
       { 0, -60, 300 }, //
@@ -61,7 +61,7 @@ public final class GeometricComponent {
     }
   };
   // 3x3 affine matrix that maps model to pixel coordinates
-  private Tensor model2pixel;
+  private Tensor model2pixel = MODEL2PIXEL_INITIAL.copy();
   private Tensor mouseLocation = Array.zeros(2);
   private final List<RenderInterface> renderBackground = new CopyOnWriteArrayList<>();
   private final List<RenderInterface> renderInterfaces = new CopyOnWriteArrayList<>();
@@ -70,7 +70,6 @@ public final class GeometricComponent {
   private boolean isZoomable = true;
 
   public GeometricComponent() {
-    reset_model2pixel();
     jComponent.addMouseWheelListener(event -> {
       final int delta = -event.getWheelRotation(); // either 1 or -1
       final int mods = event.getModifiersEx();
@@ -176,8 +175,8 @@ public final class GeometricComponent {
   }
 
   /** @return {px, py, angle} in model space */
-  public Tensor getMouseSe2State() {
-    return createLayer().getMouseSe2State(); // API design is not ideal
+  Tensor getMouseSe2State() {
+    return mouseLocation.copy().append(RealScalar.of(mouseWheel * WHEEL_ANGLE));
   }
 
   public void addRenderInterfaceBackground(RenderInterface renderInterface) {
@@ -185,18 +184,10 @@ public final class GeometricComponent {
   }
 
   /***************************************************/
-  /** @param vector */
-  void setOffset(Tensor vector) {
-    model2pixel.set(vector.Get(0), 0, 2);
-    model2pixel.set(vector.Get(1), 1, 2);
-  }
-
-  public void reset_model2pixel() {
-    model2pixel = MODEL2PIXEL_INITIAL.copy();
-  }
-
+  /** @param model2pixel with dimensions 3 x 3 */
   public void setModel2Pixel(Tensor model2pixel) {
     Scalar det = Det.of(model2pixel);
+    System.out.println(det);
     if (Chop._08.allZero(det))
       System.err.println("model2pixel must not be singular");
     else
@@ -205,6 +196,12 @@ public final class GeometricComponent {
 
   public Tensor getModel2Pixel() {
     return model2pixel.copy();
+  }
+
+  /** @param vector of length at least 2 */
+  void setOffset(Tensor vector) {
+    model2pixel.set(vector.Get(0), 0, 2);
+    model2pixel.set(vector.Get(1), 1, 2);
   }
 
   void render(Graphics2D graphics, Dimension dimension) {
@@ -217,22 +214,14 @@ public final class GeometricComponent {
 
   /***************************************************/
   private GeometricLayer createLayer() {
-    return new GeometricLayer( //
-        model2pixel, //
-        mouseLocation.copy().append(RealScalar.of(mouseWheel * WHEEL_ANGLE)));
+    return new GeometricLayer(model2pixel, getMouseSe2State());
   }
 
   /** transforms point in pixel space to coordinates of model space
-   * inverse of function model2Point2D(...)
    * 
    * @param point
    * @return tensor of length 2 */
   private Tensor toModel(Point point) {
     return LinearSolve.of(model2pixel, Tensors.vector(point.x, point.y, 1)).extract(0, 2);
-  }
-
-  public Point toPixel(Tensor model) {
-    Tensor vector = model2pixel.dot(model.extract(0, 2).append(RealScalar.ONE));
-    return new Point(vector.Get(0).number().intValue(), vector.Get(1).number().intValue());
   }
 }
