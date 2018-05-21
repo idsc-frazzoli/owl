@@ -71,7 +71,6 @@ public class Se2xTLetterDemo implements DemoInterface {
     // TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
     // );
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
-    carxTEntity.plannerConstraint = plannerConstraint;
     // abstractEntity.raytraceQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));

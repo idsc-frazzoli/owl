@@ -30,7 +30,6 @@ public class Se2xTPlainDemo
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     Region<Tensor> se2PointsVsRegion = Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), imageRegion);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(se2PointsVsRegion);
-    carxTEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     // ---

@@ -29,7 +29,6 @@ public class Se2xTPolygonDemo implements DemoInterface {
     Region<StateTime> region = new R2xTPolygonStateTimeRegion( //
         R2ExamplePolygons.CORNER_TOP_LEFT, shift, () -> carxTEntity.getStateTimeNow().time());
     PlannerConstraint plannerConstraint = RegionConstraints.stateTime(region);
-    carxTEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
     // owlyAnimationFrame.addRegionRender(imageRegion);
     owlyAnimationFrame.addBackground((RenderInterface) region);
