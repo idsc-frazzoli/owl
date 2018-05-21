@@ -31,7 +31,7 @@ public class DeltaAnimationDemo implements DemoInterface {
     Tensor range = Tensors.vector(12.6, 9.1).unmodifiable();
     ImageGradientInterpolation imageGradientInterpolation = //
         ImageGradientInterpolation.nearest(ResourceData.of("/io/delta_uxy.png"), range, amp);
-    Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
+    Tensor obstacleImage = ResourceData.of("/io/delta_free.png");
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
     StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
