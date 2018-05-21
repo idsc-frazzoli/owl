@@ -47,7 +47,6 @@ public class TwdxTImageAnimationDemo implements DemoInterface {
       owlyAnimationFrame.addBackground(renderInterface);
     }
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
-    twdxTEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, twdxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region);
     {

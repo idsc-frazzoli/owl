@@ -47,7 +47,6 @@ public class Se2xTEllipsoidsDemo implements DemoInterface {
     TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList(region1, region2)));
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trq);
-    carxTEntity.plannerConstraint = plannerConstraint;
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
