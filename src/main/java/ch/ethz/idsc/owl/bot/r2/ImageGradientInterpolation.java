@@ -8,7 +8,6 @@ import java.util.function.Function;
 import ch.ethz.idsc.owl.math.ImageGradient;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
@@ -21,8 +20,10 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
-/** rotated gradient of potential function */
-public class ImageGradientInterpolation implements Interpolation, Serializable {
+/** rotated gradient of potential function 
+ * 
+ * implementation does not extends */
+public class ImageGradientInterpolation implements Serializable {
   /** @param image
    * @param range
    * @param amp
@@ -61,30 +62,14 @@ public class ImageGradientInterpolation implements Interpolation, Serializable {
 
   /** @param vector of length 2
    * @return potentially unmodifiable */
-  @Override // from Interpolation
   public Tensor get(Tensor vector) {
     Tensor index = vector.pmul(scale);
     try {
       return interpolation.get(index);
     } catch (Exception exception) {
-      // ---
+      // index is out of bounds
     }
     return ZEROS;
-  }
-
-  @Override // from Interpolation
-  public Scalar Get(Tensor index) {
-    throw TensorRuntimeException.of(index);
-  }
-
-  @Override // from Interpolation
-  public Tensor at(Scalar index) {
-    throw TensorRuntimeException.of(index);
-  }
-
-  @Override // from Interpolation
-  public Scalar At(Scalar index) {
-    throw TensorRuntimeException.of(index);
   }
 
   /** @return max(||gradient||) */
