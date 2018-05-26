@@ -20,6 +20,8 @@ public class TrajectorySample implements Serializable {
   private final StateTime stateTime;
   private final Flow flow;
 
+  /** @param stateTime
+   * @param flow may be null */
   public TrajectorySample(StateTime stateTime, Flow flow) {
     this.stateTime = stateTime;
     this.flow = flow;
