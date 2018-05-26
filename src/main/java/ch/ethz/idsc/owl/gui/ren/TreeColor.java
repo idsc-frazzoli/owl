@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.gui.ren;
 
 import ch.ethz.idsc.owl.gui.ColorLookup;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 
 /** helper class to adapt the node and edge colors of a tree
  * to the dimension of the state space */
@@ -15,8 +16,8 @@ enum TreeColor {
   }
 
   // ---
-  public final ColorLookup nodeColor;
-  public final ColorLookup edgeColor;
+  public final ColorDataIndexed nodeColor;
+  public final ColorDataIndexed edgeColor;
 
   private TreeColor(int node_alpha, int edge_alpha) {
     nodeColor = ColorLookup.hsluv_lightness(0.50).deriveWithAlpha(node_alpha);
