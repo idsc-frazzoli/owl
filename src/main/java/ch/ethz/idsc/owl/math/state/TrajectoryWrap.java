@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.Interpolation;
+import ch.ethz.idsc.tensor.opt.LinearInterpolation;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 /** wrapper around trajectory for fast search and control query */
 public class TrajectoryWrap {
@@ -42,6 +46,23 @@ public class TrajectoryWrap {
   public Optional<TrajectorySample> findTrajectorySample(Scalar now) {
     Entry<Scalar, TrajectorySample> entry = navigableMap.higherEntry(now);
     return Optional.ofNullable(entry == null ? null : entry.getValue());
+  }
+
+  // TODO define corner cases, document function and put to use
+  /** @param now
+   * @return empty if now is outside of time defined by trajectory */
+  public Optional<TrajectorySample> interpolationAt(Scalar now) {
+    // FIXME implementation throws exception in many cases
+    Entry<Scalar, TrajectorySample> lo = navigableMap.floorEntry(now);
+    Entry<Scalar, TrajectorySample> hi = navigableMap.higherEntry(now);
+    Clip clip = Clip.function(lo.getKey(), hi.getKey());
+    Scalar index = clip.rescale(now);
+    Interpolation interpolation = LinearInterpolation.of(Tensors.of( //
+        lo.getValue().stateTime().state(), //
+        hi.getValue().stateTime().state()));
+    return Optional.of(new TrajectorySample( //
+        new StateTime(interpolation.at(index), now), //
+        hi.getValue().getFlow().orElse(null)));
   }
 
   /** @param now

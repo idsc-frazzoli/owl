@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 public class ColorLookupTest extends TestCase {
   public void testSimple() {
-    ColorLookup colorLookup = ColorLookup.hsluv_lightness(.5, .3);
+    ColorLookup colorLookup = ColorLookup.hsluv_lightness(.5).deriveWithAlpha(76);
     colorLookup.get(0.0);
     colorLookup.get(0.5);
     colorLookup.get(1.0);
