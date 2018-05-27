@@ -42,10 +42,11 @@ public abstract class PolicyEntity implements AnimationInterface, RenderInterfac
     }
     { // draw mouse
       Color color = new Color(0, 128, 255, 192);
-      StateTime stateTime = new StateTime(geometricLayer.getMouseSe2State(), getStateTimeNow().time());
+      Tensor xya = geometricLayer.getMouseSe2State();
+      StateTime stateTime = new StateTime(xya, getStateTimeNow().time());
       if (!obstacleQuery_isDisjoint(stateTime))
         color = new Color(255, 96, 96, 128);
-      geometricLayer.pushMatrix(geometricLayer.getMouseSe2Matrix());
+      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
       graphics.setColor(color);
       graphics.fill(geometricLayer.toPath2D(shape()));
       geometricLayer.popMatrix();
