@@ -8,12 +8,15 @@ import java.awt.geom.Point2D;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
-/**  */
+/**
+ * 
+ */
+@DontModify
 public class GeometricLayer {
   public static GeometricLayer of(Tensor model2pixel) {
     return new GeometricLayer(model2pixel, Array.zeros(3));
@@ -66,7 +69,7 @@ public class GeometricLayer {
    * @return path that is not closed */
   public Path2D toPath2D(Tensor polygon) {
     Path2D path2d = new Path2D.Double();
-    if (!Tensors.isEmpty(polygon)) {
+    if (Tensors.nonEmpty(polygon)) {
       Point2D point2d = toPoint2D(polygon.get(0));
       path2d.moveTo(point2d.getX(), point2d.getY());
     }
@@ -79,11 +82,7 @@ public class GeometricLayer {
 
   /** @return {x, y, alpha} unmodifiable */
   public Tensor getMouseSe2State() {
+    // TODO function is deprecated in the long run
     return mouseSe2State;
-  }
-
-  /** @return affine matrix that combines mouse location and mouse wheel rotation */
-  public Tensor getMouseSe2Matrix() {
-    return Se2Utils.toSE2Matrix(getMouseSe2State());
   }
 }

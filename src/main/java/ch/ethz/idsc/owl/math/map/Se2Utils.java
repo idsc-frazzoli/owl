@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 public enum Se2Utils {
   ;
-  // ---
   /** maps a vector x from the Lie-algebra se2 to a vector of the Lie-group SE2
    * 
    * @param x == {vx, vy, beta}
@@ -50,6 +49,21 @@ public enum Se2Utils {
     return Tensors.matrix(new Tensor[][] { //
         { cos, sin.negate(), xya.Get(0) }, //
         { sin, cos /*----*/, xya.Get(1) }, //
+        { RealScalar.ZERO, RealScalar.ZERO, RealScalar.ONE }, //
+    });
+  }
+
+  /** @param vector of the form {px, py}
+   * @return
+   * <pre>
+   * [1 0 px]
+   * [0 1 py]
+   * [0 0 1]
+   * </pre> */
+  public static Tensor toSE2Translation(Tensor xy) {
+    return Tensors.matrix(new Tensor[][] { //
+        { RealScalar.ONE, RealScalar.ZERO, xy.Get(0) }, //
+        { RealScalar.ZERO, RealScalar.ONE, xy.Get(1) }, //
         { RealScalar.ZERO, RealScalar.ZERO, RealScalar.ONE }, //
     });
   }
