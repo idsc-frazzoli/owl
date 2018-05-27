@@ -15,7 +15,7 @@ public class SimpleGoalConsumer implements GoalConsumer {
   private final TrajectoryEntity trajectoryEntity;
   private final PlannerConstraint plannerConstraint;
   private final GlcPlannerCallback glcPlannerCallback;
-  private MotionPlanWorker mpw = null;
+  private MotionPlanWorker motionPlanWorker = null;
 
   public SimpleGoalConsumer(TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, GlcPlannerCallback glcPlannerCallback) {
     this.trajectoryEntity = trajectoryEntity;
@@ -26,18 +26,18 @@ public class SimpleGoalConsumer implements GoalConsumer {
   @Override
   public void accept(Tensor goal) {
     // System.out.println("goal: " + goal);
-    if (Objects.nonNull(mpw)) {
-      mpw.flagShutdown();
-      mpw = null;
+    if (Objects.nonNull(motionPlanWorker)) {
+      motionPlanWorker.flagShutdown();
+      motionPlanWorker = null;
     }
     final List<TrajectorySample> head = //
         trajectoryEntity.getFutureTrajectoryUntil(trajectoryEntity.delayHint());
     TrajectoryPlanner trajectoryPlanner = //
         trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal);
-    mpw = new MotionPlanWorker();
-    mpw.addCallback(glcPlannerCallback);
+    motionPlanWorker = new MotionPlanWorker();
+    motionPlanWorker.addCallback(glcPlannerCallback);
     if (trajectoryEntity instanceof GlcPlannerCallback)
-      mpw.addCallback((GlcPlannerCallback) trajectoryEntity);
-    mpw.start(head, trajectoryPlanner);
+      motionPlanWorker.addCallback((GlcPlannerCallback) trajectoryEntity);
+    motionPlanWorker.start(head, trajectoryPlanner);
   }
 }

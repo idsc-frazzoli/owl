@@ -6,7 +6,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.Stopwatch;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -18,7 +18,6 @@ public class MotionPlanWorker {
   public static int MAX_STEPS = 5000;
   // ---
   private final List<GlcPlannerCallback> glcPlannerCallbacks = new LinkedList<>();
-  private Thread thread;
   private volatile boolean isRelevant = true;
 
   public void addCallback(GlcPlannerCallback glcPlannerCallback) {
@@ -30,16 +29,26 @@ public class MotionPlanWorker {
    * @param head non-empty trajectory
    * @param trajectoryPlanner */
   public void start(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    thread = new Thread(new Runnable() {
-      @Override
+    Thread thread = new Thread(new Runnable() {
+      @Override // from Runnable
       public void run() {
         Stopwatch stopwatch = Stopwatch.started();
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
         // System.out.println("root " + root.toInfoString());
         trajectoryPlanner.insertRoot(root);
-        Expand.maxSteps(trajectoryPlanner, MAX_STEPS, () -> isRelevant);
+        GlcExpand.maxSteps(trajectoryPlanner, MAX_STEPS, () -> isRelevant);
         if (isRelevant) {
-          // Scalar duration =
+          // Optional<GlcNode> best = trajectoryPlanner.getBest();
+          // if (best.isPresent()) {
+          // System.out.println("has best");
+          // System.out.println("cost =" + best.get().costFromRoot());
+          // Collection<GlcNode> queue = trajectoryPlanner.getQueue();
+          // Iterator<GlcNode> iterator = queue.iterator();
+          // if (iterator.hasNext()) {
+          // GlcNode next = iterator.next();
+          // System.out.println("merit=" + next.merit());
+          // }
+          // }
           RealScalar.of(stopwatch.display_seconds());
           // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)

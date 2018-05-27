@@ -63,13 +63,13 @@ public class TreeRender implements RenderInterface {
         if (!Double.isFinite(val))
           throw new RuntimeException("cost from root " + val);
         final double interp = (val - min) / (max - min);
-        graphics.setColor(treeColor.nodeColor.get(interp));
+        graphics.setColor(treeColor.nodeColor.rescaled(interp));
         final Point2D p1 = geometricLayer.toPoint2D(node.state());
         graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));
         StateCostNode parent = node.parent();
         if (Objects.nonNull(parent)) {
           Point2D p2 = geometricLayer.toPoint2D(parent.state());
-          graphics.setColor(treeColor.edgeColor.get(interp));
+          graphics.setColor(treeColor.edgeColor.rescaled(interp));
           Shape shape = new Line2D.Double(p1.getX(), p1.getY(), p2.getX(), p2.getY());
           graphics.draw(shape);
         }

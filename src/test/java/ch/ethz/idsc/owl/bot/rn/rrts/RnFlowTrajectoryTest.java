@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.rn.RnNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
@@ -45,12 +44,16 @@ public class RnFlowTrajectoryTest extends TestCase {
     Scalar t0 = RealScalar.ZERO;
     List<TrajectorySample> trajectory = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
     TrajectoryWrap trajectorySampleMap = TrajectoryWrap.of(trajectory);
-    assertFalse(trajectorySampleMap.findControl(RealScalar.of(-0.1)).isPresent());
-    assertTrue(trajectorySampleMap.findControl(RealScalar.of(0.0)).isPresent());
-    assertFalse(trajectorySampleMap.findControl(RealScalar.of(10.1)).isPresent());
-    assertEquals(trajectorySampleMap.findControl(RealScalar.of(0.0)).get(), Tensors.vector(1, 0));
-    assertTrue(trajectorySampleMap.hasRemaining(RealScalar.ZERO));
-    assertFalse(trajectorySampleMap.hasRemaining(RealScalar.of(10)));
+    // assertFalse(trajectorySampleMap.findControl(RealScalar.of(-0.1)).isPresent());
+    trajectorySampleMap.getControl(RealScalar.of(0.0));
+    // assertTrue();
+    // assertFalse(trajectorySampleMap.findControl(RealScalar.of(10.1)).isPresent());
+    assertEquals(trajectorySampleMap.getControl(RealScalar.of(0.0)), Tensors.vector(1, 0));
+    assertTrue(trajectorySampleMap.isRelevant(RealScalar.of(-1000)));
+    assertFalse(trajectorySampleMap.isRelevant(RealScalar.of(1000)));
+    assertTrue(trajectorySampleMap.isDefined(RealScalar.ZERO));
+    assertFalse(trajectorySampleMap.isDefined(RealScalar.of(-1000)));
+    assertFalse(trajectorySampleMap.isDefined(RealScalar.of(10)));
   }
 
   public void testDual() {
@@ -70,11 +73,11 @@ public class RnFlowTrajectoryTest extends TestCase {
     List<TrajectorySample> trajectory = RnFlowTrajectory.createTrajectory(rnts, sequence, t0, RealScalar.of(.2));
     assertEquals(trajectory.size(), 13);
     TrajectoryWrap trajectorySampleMap = TrajectoryWrap.of(trajectory);
-    assertTrue(trajectorySampleMap.hasRemaining(RealScalar.ZERO));
-    assertFalse(trajectorySampleMap.hasRemaining(RealScalar.of(10)));
+    assertTrue(trajectorySampleMap.isDefined(RealScalar.ZERO));
+    assertFalse(trajectorySampleMap.isDefined(RealScalar.of(10)));
     {
-      Optional<Tensor> optional = trajectorySampleMap.findControl(RealScalar.of(1.5));
-      assertTrue(optional.isPresent());
+      Tensor vector = trajectorySampleMap.getControl(RealScalar.of(1.5));
+      assertTrue(Chop._14.close(Norm._2.ofVector(vector), RealScalar.ONE));
     }
     // Trajectories.print(trajectory);
     {

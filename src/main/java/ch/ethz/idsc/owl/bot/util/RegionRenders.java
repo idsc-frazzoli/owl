@@ -55,7 +55,7 @@ public enum RegionRenders {
    * or null if drawing capability is not available for the region */
   public static RenderInterface create(Region<Tensor> region) {
     if (region instanceof ImageRegion)
-      return new ImageRegionRender((ImageRegion) region);
+      return ImageRegionRender.create((ImageRegion) region);
     if (region instanceof EllipsoidRegion)
       return EllipseRegionRender.of((EllipsoidRegion) region);
     if (region instanceof SphericalRegion)
