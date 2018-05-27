@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -46,5 +47,12 @@ public class Se2UtilsTest extends TestCase {
     assertEquals(r.extract(0, 2), v.extract(0, 2));
     Se2ForwardAction se2ForwardAction = new Se2ForwardAction(Se2Utils.integrate_g0(u));
     assertEquals(se2ForwardAction.apply(p), v.extract(0, 2));
+  }
+
+  public void testTranslations() {
+    Tensor xya = Tensors.vector(1, 2, 0);
+    Tensor translate = Se2Utils.toSE2Translation(xya.extract(0, 2));
+    assertEquals(Se2Utils.toSE2Matrix(xya), translate);
+    assertTrue(ExactScalarQ.all(translate));
   }
 }

@@ -14,6 +14,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
+import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -72,7 +73,8 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
     {
-      geometricLayer.pushMatrix(geometricLayer.getMouseSe2Matrix());
+      Tensor xya = geometricLayer.getMouseSe2State();
+      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
       graphics.setColor(new Color(0, 128, 255, 192));
       graphics.fill(geometricLayer.toPath2D(SHAPE));
       geometricLayer.popMatrix();

@@ -26,16 +26,17 @@ public class CatchyTrajectoryRegionQuery extends SimpleTrajectoryRegionQuery imp
   public static TrajectoryRegionQuery timeDependent(Region<Tensor> region) {
     return new CatchyTrajectoryRegionQuery(new TimeDependentRegion(region));
   }
-
-  /** @param region that is queried with StateTime */
-  public CatchyTrajectoryRegionQuery(Region<StateTime> region) {
-    super(region);
-    // FIXME SparseStateTimeRegionMembers is not a good default option
-    this.stateTimeRegionCallback = new SparseStateTimeRegionMembers();
-  }
+  // ---
 
   private final StateTimeRegionCallback stateTimeRegionCallback;
 
+  /** @param region */
+  public CatchyTrajectoryRegionQuery(Region<StateTime> region) {
+    this(region, new SparseStateTimeRegionMembers());
+  }
+
+  /** @param region
+   * @param stateTimeRegionCallback */
   public CatchyTrajectoryRegionQuery(Region<StateTime> region, StateTimeRegionCallback stateTimeRegionCallback) {
     super(region);
     this.stateTimeRegionCallback = stateTimeRegionCallback;

@@ -32,12 +32,12 @@ public class TemporalTrajectoryControl implements TrajectoryControl, Serializabl
 
   @Override
   public synchronized Optional<Tensor> control(StateTime tail, Scalar now) {
-    if (Objects.nonNull(trajectoryWrap)) {
-      if (trajectoryWrap.hasRemaining(now))
-        return trajectoryWrap.findControl(now);
-      System.err.println("out of trajectory");
-      setTrajectory(null);
-    }
+    if (Objects.nonNull(trajectoryWrap))
+      if (trajectoryWrap.isRelevant(now)) { // control values now or upcoming
+        if (trajectoryWrap.isDefined(now)) // control values now
+          return Optional.of(trajectoryWrap.getControl(now));
+      } else // control values are in the past
+        setTrajectory(null); // trajectory is not relevant anymore
     return Optional.empty();
   }
 

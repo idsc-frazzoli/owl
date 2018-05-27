@@ -1,16 +1,17 @@
 // code by jph
 package ch.ethz.idsc.owl.gui;
 
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import junit.framework.TestCase;
 
 public class ColorLookupTest extends TestCase {
   public void testSimple() {
-    ColorLookup colorLookup = ColorLookup.hsluv_lightness(.5, .3);
-    colorLookup.get(0.0);
-    colorLookup.get(0.5);
-    colorLookup.get(1.0);
-    assertTrue(colorLookup.get(0.0).equals(colorLookup.get(1.0)));
-    assertFalse(colorLookup.get(0.0).equals(colorLookup.get(0.8)));
-    assertTrue(colorLookup.get(0.2).equals(colorLookup.get(0.2)));
+    ColorDataIndexed colorDataIndexed = ColorLookup.hsluv_lightness(.5).deriveWithAlpha(76);
+    colorDataIndexed.rescaled(0.0);
+    colorDataIndexed.rescaled(0.5);
+    colorDataIndexed.rescaled(1.0);
+    assertTrue(colorDataIndexed.rescaled(0.0).equals(colorDataIndexed.rescaled(1.0)));
+    assertFalse(colorDataIndexed.rescaled(0.0).equals(colorDataIndexed.rescaled(0.8)));
+    assertTrue(colorDataIndexed.rescaled(0.2).equals(colorDataIndexed.rescaled(0.2)));
   }
 }

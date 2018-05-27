@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** the term "family" conveys the meaning that the translation
@@ -25,11 +24,7 @@ public abstract class TranslationFamily implements RigidFamily, Serializable {
 
   @Override // from RigidFamily
   public final Tensor forward_se2(Scalar scalar) {
-    Tensor matrix = IdentityMatrix.of(3);
-    Tensor offset = function_apply(scalar);
-    matrix.set(offset.Get(0), 0, 2);
-    matrix.set(offset.Get(1), 1, 2);
-    return matrix;
+    return Se2Utils.toSE2Translation(function_apply(scalar));
   }
 
   /** @param scalar
