@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       RealScalar.of(6), RealScalar.of(6), Degree.of(10).reciprocal()).unmodifiable();
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   // triangle
-  private static final Tensor SHAPE = Tensors.matrixDouble( //
+  static final Tensor SHAPE = Tensors.matrixDouble( //
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).unmodifiable();
   private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vectorDouble(1, 1, 2));
 
