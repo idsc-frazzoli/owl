@@ -36,6 +36,7 @@ Simulation
 * Motion planning algorithms: [GLC](src/main/java/ch/ethz/idsc/owl/glc/std/StandardTrajectoryPlanner.java), and [RRT*](src/main/java/ch/ethz/idsc/owl/rrts/core/DefaultRrts.java)
 * integrators: Euler, Midpoint, Runge-Kutta 4-5th order, exact integrator for the group SE2
 * state-space models: car-like, two-wheel-drive, pendulum-swing-up, Lotka-Volterra, etc.
+* efficient heuristic for goal regions: sphere, conic section
 * visualizations and animations, see [video](https://www.youtube.com/watch?v=lPQW3GqQqSY)
 
 ## Examples
