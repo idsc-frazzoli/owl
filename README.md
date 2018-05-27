@@ -1,46 +1,42 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.0.9`
+Library for motion planning in Java, version `0.1.0`
 
-The code in the repository operates a heavy and fast robot that may endanger living creatures.
-We follow best practices and coding standards to protect from avoidable errors.
+The library was developed with the following objectives in mind
+* suitable for use in safety-critical real-time systems
+* trajectory planning for an autonomous vehicle
+* implementation of theoretical concepts with high level of abstraction
+* simulation and visualization
 
 <table>
 <tr>
 <td>
 
+![usecase_motionplan](https://user-images.githubusercontent.com/4012178/35968244-96577dee-0cc3-11e8-80a1-b38691e863af.png)
+
+Simulation
+
+<td>
+
 ![usecase_gokart](https://user-images.githubusercontent.com/4012178/35968269-a92a3b46-0cc3-11e8-8d5e-1276762cdc36.png)
 
-Autonomous Gokart
+[Trajectory pursuit](https://www.youtube.com/watch?v=XgmS8CP6gqw)
+
+<td>
+
+![planning_obstacles](https://user-images.githubusercontent.com/4012178/40268689-2af06cd4-5b72-11e8-95cf-d94edfdc3dd1.png)
+
+[Static obstacles](https://www.youtube.com/watch?v=xLZeKFeAokM)
 
 </tr>
 </table>
 
-List of algorithms:
+## Features
 
-* [GLC](src/main/java/ch/ethz/idsc/owl/glc/std/StandardTrajectoryPlanner.java)
-* [RRT*](src/main/java/ch/ethz/idsc/owl/rrts/core/DefaultRrts.java)
-
-The references are
-
-* *A Generalized Label Correcting Method for Optimal Kinodynamic Motion Planning*
-by Brian Paden and Emilio Frazzoli, 
-[arXiv:1607.06966](https://arxiv.org/abs/1607.06966)
-* *Sampling-based algorithms for optimal motion planning*
-by Sertac Karaman and Emilio Frazzoli,
-[IJRR11](http://ares.lids.mit.edu/papers/Karaman.Frazzoli.IJRR11.pdf)
-
-The following integrators are available:
-
-* Euler, Midpoint
-* Runge-Kutta 4th order, and 5th order
-* exact integrator for the group SE2
-
-The `owl` repository implements visualizations in 2D as showcased below.
-See also a [video](https://www.youtube.com/watch?v=lPQW3GqQqSY).
-
-The separate repository [owly3d](https://github.com/idsc-frazzoli/owly3d) implements animations and visualizations in 3D.
-
+* Motion planning algorithms: [GLC](src/main/java/ch/ethz/idsc/owl/glc/std/StandardTrajectoryPlanner.java), and [RRT*](src/main/java/ch/ethz/idsc/owl/rrts/core/DefaultRrts.java)
+* integrators: Euler, Midpoint, Runge-Kutta 4-5th order, exact integrator for the group SE2
+* state-space models: car-like, two-wheel-drive, pendulum-swing-up, Lotka-Volterra, etc.
+* visualizations and animations, see [video](https://www.youtube.com/watch?v=lPQW3GqQqSY)
 
 ## Examples
 
@@ -109,10 +105,21 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.0.9</version>
+        <version>0.1.0</version>
       </dependency>
     </dependencies>
 
 ## Contributors
 
 Jan Hakenberg, Jonas Londschien, Yannik Nager
+
+> The code in the repository operates a heavy and fast robot that may endanger living creatures. We follow best practices and coding standards to protect from avoidable errors.
+
+## References
+
+* *A Generalized Label Correcting Method for Optimal Kinodynamic Motion Planning*
+by Brian Paden and Emilio Frazzoli, 
+[arXiv:1607.06966](https://arxiv.org/abs/1607.06966)
+* *Sampling-based algorithms for optimal motion planning*
+by Sertac Karaman and Emilio Frazzoli,
+[IJRR11](http://ares.lids.mit.edu/papers/Karaman.Frazzoli.IJRR11.pdf)
