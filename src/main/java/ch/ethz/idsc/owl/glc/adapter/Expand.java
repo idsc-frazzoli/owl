@@ -14,16 +14,12 @@ import ch.ethz.idsc.tensor.Scalar;
 /** class contains static functions that operate on instances of {@link ExpandInterface}
  * 
  * The expansion of the following planners can be controlled using the functions:
- * <ul>
- * <li>{@link StandardTrajectoryPlanner},
- * <li>{@link SimpleAnyTrajectoryPlanner},
- * <li>{@link OptimalAnyTrajectoryPlanner}
- * </ul> */
+ * {@link StandardTrajectoryPlanner} */
 public enum Expand {
   ;
   /** @param expandInterface
    * @param expandLimit
-   * @return number times function {@link ExpandInterface#expand(GlcNode)} was invoked */
+   * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
   public static int maxSteps(ExpandInterface<?> expandInterface, int expandLimit) {
     return maxSteps(expandInterface, expandLimit, () -> true);
   }
@@ -33,7 +29,7 @@ public enum Expand {
    * @param expandInterface
    * @param expandLimit
    * @param isContinued
-   * @return number times function {@link ExpandInterface#expand(GlcNode)} was invoked */
+   * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
   public static <T extends StateCostNode> int maxSteps(ExpandInterface<T> expandInterface, int expandLimit, Supplier<Boolean> isContinued) {
     int expandCount = 0;
     while (expandCount < expandLimit) {
@@ -42,7 +38,6 @@ public enum Expand {
         System.out.println("*** Queue is empty -- No Goal was found ***");
         break;
       }
-      // System.out.println("expand "+next.get().stateTime().toInfoString());
       expandInterface.expand(next.get());
       ++expandCount;
       if (expandInterface.getBest().isPresent()) // found node in goal region
@@ -50,16 +45,14 @@ public enum Expand {
       if (!isContinued.get())
         break;
     }
-    // no printout here, since expand limit can deliberately set to a low number for animation
-    // see Se2rExpandDemo
     return expandCount;
   }
 
   /** expands until the time of the running algorithm exceeds the maxTime or a goal was found
    * 
    * @param expandInterface
-   * @param timeLimit of expandfunction in [s]
-   * @return number times function {@link ExpandInterface#expand(GlcNode)} was invoked */
+   * @param timeLimit of expand function in [s]
+   * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
   public static <T extends StateCostNode> int maxTime(ExpandInterface<T> expandInterface, Scalar timeLimit) {
     System.out.println("*** EXPANDING ***");
     Stopwatch stopwatch = Stopwatch.started();
@@ -93,7 +86,7 @@ public enum Expand {
    * 
    * @param expandInterface
    * @param expandLimit
-   * @return number times function {@link ExpandInterface#expand(GlcNode)} was invoked */
+   * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
   public static <T extends StateCostNode> int steps(ExpandInterface<T> expandInterface, int expandLimit) {
     int expandCount = 0;
     while (expandCount < expandLimit) {
@@ -105,8 +98,6 @@ public enum Expand {
       expandInterface.expand(next.get());
       ++expandCount;
     }
-    // no printout here, since expand limit can deliberately set to a low number for animation
-    // see Se2rExpandDemo
     return expandCount;
   }
 }
