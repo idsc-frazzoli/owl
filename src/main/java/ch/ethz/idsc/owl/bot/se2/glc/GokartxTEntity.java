@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Objects;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
@@ -51,9 +50,8 @@ class GokartxTEntity extends CarEntity {
     if (Objects.nonNull(trajectoryWrap)) { // TODO code redundant to AbstractCircularEntity
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
-      Optional<TrajectorySample> optional = trajectoryWrap.findTrajectorySample(now);
-      if (optional.isPresent()) {
-        TrajectorySample trajectorySample = optional.get();
+      if (trajectoryWrap.isDefined(now)) {
+        TrajectorySample trajectorySample = trajectoryWrap.getSample(now);
         Path2D path2d = geometricLayer.toPath2D(Tensors.of(stateTime.state(), trajectorySample.stateTime().state()));
         graphics.setColor(Color.PINK);
         graphics.draw(path2d);
