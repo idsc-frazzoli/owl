@@ -2,10 +2,8 @@
 package ch.ethz.idsc.owl.math.state;
 
 import java.util.Collections;
-import java.util.Optional;
 
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
@@ -14,20 +12,25 @@ public class TrajectoryWrapTest extends TestCase {
     StateTime stateTime = new StateTime(Tensors.vector(1, 2, 3), RealScalar.of(4));
     TrajectorySample trajectorySample = new TrajectorySample(stateTime, null);
     TrajectoryWrap trajectoryWrap = TrajectoryWrap.of(Collections.singletonList(trajectorySample));
-    assertTrue(trajectoryWrap.hasRemaining(RealScalar.of(3)));
-    assertFalse(trajectoryWrap.hasRemaining(RealScalar.of(4)));
-    {
-      Optional<Tensor> optional = trajectoryWrap.findControl(RealScalar.of(3));
-      assertFalse(optional.isPresent());
+    assertTrue(trajectoryWrap.isRelevant(RealScalar.of(3)));
+    assertFalse(trajectoryWrap.isDefined(RealScalar.of(4)));
+    try {
+      trajectoryWrap.getControl(RealScalar.of(3));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
     }
-    {
-      Optional<TrajectorySample> optional = trajectoryWrap.findTrajectorySample(RealScalar.of(3));
-      assertTrue(optional.isPresent());
-      assertEquals(optional.get().stateTime(), stateTime);
+    try {
+      trajectoryWrap.getSample(RealScalar.of(3));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
     }
-    {
-      Optional<TrajectorySample> optional = trajectoryWrap.findTrajectorySample(RealScalar.of(4));
-      assertFalse(optional.isPresent());
+    try {
+      trajectoryWrap.getSample(RealScalar.of(4));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
     }
   }
 }

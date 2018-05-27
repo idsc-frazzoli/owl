@@ -8,7 +8,6 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Objects;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -45,9 +44,8 @@ public abstract class AbstractCircularEntity extends TrajectoryEntity {
     if (Objects.nonNull(trajectoryWrap)) {
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
-      Optional<TrajectorySample> optional = trajectoryWrap.findTrajectorySample(now);
-      if (optional.isPresent()) {
-        TrajectorySample trajectorySample = optional.get();
+      if (trajectoryWrap.isDefined(now)) {
+        TrajectorySample trajectorySample = trajectoryWrap.getSample(now);
         Path2D path2d = geometricLayer.toPath2D(Tensors.of(stateTime.state(), trajectorySample.stateTime().state()));
         graphics.setColor(Color.PINK);
         graphics.draw(path2d);
