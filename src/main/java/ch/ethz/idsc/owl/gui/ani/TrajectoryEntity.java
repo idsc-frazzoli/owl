@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.Tensor;
 public abstract class TrajectoryEntity extends AbstractEntity implements TensorMetric {
   private final TrajectoryControl trajectoryControl;
   protected TrajectoryWrap trajectoryWrap = null;
+  // TODO the alternative "traj Alt" is not permanent!
+  protected TrajectoryWrap trajectoryWrapAlt = null;
 
   public TrajectoryEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator);
@@ -27,8 +29,12 @@ public abstract class TrajectoryEntity extends AbstractEntity implements TensorM
   }
 
   public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
-    this.trajectoryWrap = TrajectoryWrap.of(trajectory);
+    trajectoryWrap = TrajectoryWrap.of(trajectory);
     trajectoryControl.setTrajectory(trajectory);
+  }
+
+  public synchronized void setTrajectoryAlt(List<TrajectorySample> trajectory) {
+    trajectoryWrapAlt = TrajectoryWrap.of(trajectory);
   }
 
   /** @param delay

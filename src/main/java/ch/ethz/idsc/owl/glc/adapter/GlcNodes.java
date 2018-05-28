@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalars;
 
 public enum GlcNodes {
   ;
@@ -37,5 +38,15 @@ public enum GlcNodes {
     return HeuristicQ.of(trajectoryPlanner.getGoalInterface()) //
         ? trajectoryPlanner.getBestOrElsePeek() //
         : trajectoryPlanner.getBest();
+  }
+
+  // TODO location of function here is debatable
+  public static boolean isOptimal(TrajectoryPlanner trajectoryPlanner) {
+    Optional<GlcNode> best = trajectoryPlanner.getBest();
+    return best.isPresent() //
+        && Scalars.lessEquals( //
+            best.get().costFromRoot(), //
+            // in the current implementation the best node is guaranteed in queue
+            trajectoryPlanner.getQueue().iterator().next().merit());
   }
 }

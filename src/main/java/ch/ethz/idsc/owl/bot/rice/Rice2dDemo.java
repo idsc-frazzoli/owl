@@ -81,7 +81,9 @@ enum Rice2dDemo {
       List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, glcNode);
       owlyFrame.addBackground(new TrajectoryRender(samples));
     }
-    int further = GlcExpand.maxSteps(trajectoryPlanner, 1000, () -> true);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.maxSteps(1000);
+    int further = glcExpand.getExpandCount();
     System.out.println(further);
     optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {

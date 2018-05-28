@@ -36,19 +36,17 @@ public class MotionPlanWorker {
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
         // System.out.println("root " + root.toInfoString());
         trajectoryPlanner.insertRoot(root);
-        GlcExpand.maxSteps(trajectoryPlanner, MAX_STEPS, () -> isRelevant);
+        GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+        glcExpand.setContinued(() -> isRelevant);
+        glcExpand.firstGoal(MAX_STEPS);
         if (isRelevant) {
-          // Optional<GlcNode> best = trajectoryPlanner.getBest();
-          // if (best.isPresent()) {
-          // System.out.println("has best");
-          // System.out.println("cost =" + best.get().costFromRoot());
-          // Collection<GlcNode> queue = trajectoryPlanner.getQueue();
-          // Iterator<GlcNode> iterator = queue.iterator();
-          // if (iterator.hasNext()) {
-          // GlcNode next = iterator.next();
-          // System.out.println("merit=" + next.merit());
-          // }
-          // }
+          RealScalar.of(stopwatch.display_seconds());
+          // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
+          for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
+            glcPlannerCallback.expandResult(head, trajectoryPlanner);
+        }
+        glcExpand.maxSteps(MAX_STEPS);
+        if (isRelevant) {
           RealScalar.of(stopwatch.display_seconds());
           // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
