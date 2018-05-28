@@ -45,18 +45,19 @@ public class Se2Letter3Demo extends Se2CarDemo {
     // se2Entity.extraCosts.add(r2ImageRegionWrap.gradientCostFunction());
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
-    TrajectoryRegionQuery ray = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
+    TrajectoryRegionQuery trajectoryRegionQuery = //
+        SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     owlyAnimationFrame.add(carEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     {
       RenderInterface renderInterface = new CameraEmulator( //
-          48, RealScalar.of(10), carEntity::getStateTimeNow, ray);
+          48, RealScalar.of(10), carEntity::getStateTimeNow, trajectoryRegionQuery);
       owlyAnimationFrame.addBackground(renderInterface);
     }
     {
       RenderInterface renderInterface = new LidarEmulator( //
-          LIDAR_RAYTRACER, carEntity::getStateTimeNow, ray);
+          LIDAR_RAYTRACER, carEntity::getStateTimeNow, trajectoryRegionQuery);
       owlyAnimationFrame.addBackground(renderInterface);
     }
     {
