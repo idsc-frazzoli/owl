@@ -13,24 +13,16 @@ import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.mapping.ShadowMap;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.Cos;
-import ch.ethz.idsc.tensor.sca.Sin;
-
-
 
 public final class SimpleShadowConstraint implements PlannerConstraint, Serializable {
   private final ShadowMap shadowMap;
-  private final Scalar gamma;
-  private final Scalar reactionTime;
+  private final float mu;
+  private final float reactionTime;
   private final Area initArea;
-  
 
-  public SimpleShadowConstraint(ShadowMap shadowMap, Scalar gamma, Scalar reactionTime) {
+  public SimpleShadowConstraint(ShadowMap shadowMap, float mu, float reactionTime) {
     this.shadowMap = shadowMap;
-    this.gamma = gamma;
+    this.mu = mu;
     this.reactionTime = reactionTime;
     this.initArea = new Area(shadowMap.getInitMap());
   }
@@ -38,24 +30,21 @@ public final class SimpleShadowConstraint implements PlannerConstraint, Serializ
   @Override // from CostIncrementFunction
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     //
-    long startTime = System.nanoTime();
-    // get time at root
     StateTime childStateTime = trajectory.get(trajectory.size() - 1);
     double posX = childStateTime.state().Get(0).number().doubleValue();
     double posY = childStateTime.state().Get(1).number().doubleValue();
-    Scalar vel = flow.getU().Get(0);
-    Scalar tStop = vel.multiply(vel).multiply(gamma);
-    Scalar dStop = vel.multiply(tStop).divide(RealScalar.of(2)).add(vel.multiply(reactionTime));
-    // simulate shadowmap from node to child
-    Area simShadowArea = new Area(initArea);
+    float vel = flow.getU().Get(0).number().floatValue();
+    float dStop = vel * vel / (2 * 9.81f * mu);
+    float tStop = 2 * dStop / vel + reactionTime;
+    dStop += vel * reactionTime;
     // simulate shadow map during braking
-    shadowMap.updateMap(simShadowArea, childStateTime, tStop.number().floatValue());
+    Area simShadowArea = new Area(initArea);
+    shadowMap.updateMap(simShadowArea, childStateTime, tStop);
     // calculate braking path
-    Scalar angle = childStateTime.state().Get(2);
-    double deltaX = Cos.of(angle).multiply(dStop).number().doubleValue();
-    double deltaY = Sin.of(angle).multiply(dStop).number().doubleValue();
+    float angle = childStateTime.state().Get(2).number().floatValue();
+    double deltaX = Math.cos(angle) * dStop;
+    double deltaY = Math.sin(angle) * dStop;
     Line2D brakingLine = new Line2D.Double(posX, posY, posX + deltaX, posY + deltaY);
-    // System.out.print("x1: " + posX +" x2: "+ x2 + " y1: "+ posY + " y2: " + y2 + "\n");
     Stroke stroke = new BasicStroke(0.001f, BasicStroke.CAP_ROUND, BasicStroke.CAP_BUTT);
     Area brakingLineArea = new Area(stroke.createStrokedShape(brakingLine));
     simShadowArea.intersect(brakingLineArea);
