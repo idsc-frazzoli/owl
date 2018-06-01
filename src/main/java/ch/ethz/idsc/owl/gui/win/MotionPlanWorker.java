@@ -43,14 +43,14 @@ public class MotionPlanWorker {
           RealScalar.of(stopwatch.display_seconds());
           // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
-            glcPlannerCallback.expandResult(head, trajectoryPlanner);
+            glcPlannerCallback.first(head, trajectoryPlanner);
         }
         glcExpand.maxSteps(MAX_STEPS);
         if (isRelevant) {
           RealScalar.of(stopwatch.display_seconds());
           // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
-            glcPlannerCallback.expandResult(head, trajectoryPlanner);
+            glcPlannerCallback.optimal(head, trajectoryPlanner);
         }
       }
     });

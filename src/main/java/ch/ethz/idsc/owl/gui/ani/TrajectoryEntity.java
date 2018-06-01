@@ -18,9 +18,9 @@ import ch.ethz.idsc.tensor.Tensor;
 /** entity executes flows along a given trajectory */
 public abstract class TrajectoryEntity extends AbstractEntity implements TensorMetric {
   private final TrajectoryControl trajectoryControl;
-  protected TrajectoryWrap trajectoryWrap = null;
+  protected TrajectoryWrap trajectoryWrapOpt = null;
   // TODO the alternative "traj Alt" is not permanent!
-  protected TrajectoryWrap trajectoryWrapAlt = null;
+  protected TrajectoryWrap trajectoryWrap1st = null;
 
   public TrajectoryEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator);
@@ -28,13 +28,13 @@ public abstract class TrajectoryEntity extends AbstractEntity implements TensorM
     this.trajectoryControl = trajectoryControl;
   }
 
-  public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
-    trajectoryWrap = TrajectoryWrap.of(trajectory);
+  public synchronized void setTrajectoryOpt(List<TrajectorySample> trajectory) {
+    trajectoryWrapOpt = TrajectoryWrap.of(trajectory);
     trajectoryControl.setTrajectory(trajectory);
   }
 
-  public synchronized void setTrajectoryAlt(List<TrajectorySample> trajectory) {
-    trajectoryWrapAlt = TrajectoryWrap.of(trajectory);
+  public synchronized void setTrajectory1st(List<TrajectorySample> trajectory) {
+    trajectoryWrap1st = TrajectoryWrap.of(trajectory);
   }
 
   /** @param delay
@@ -47,7 +47,7 @@ public abstract class TrajectoryEntity extends AbstractEntity implements TensorM
   /** @param delay
    * @return estimated location of agent after given delay */
   public final Tensor getEstimatedLocationAt(Scalar delay) {
-    if (Objects.isNull(trajectoryWrap))
+    if (Objects.isNull(trajectoryWrapOpt))
       return getStateTimeNow().state();
     List<TrajectorySample> relevant = trajectoryControl.getFutureTrajectoryUntil(getStateTimeNow(), delay);
     return Lists.getLast(relevant).stateTime().state();

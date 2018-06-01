@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class Se2Letter3Demo extends Se2CarDemo {
-  static final LidarRaytracer LIDAR_RAYTRACER = //
+  private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-90), Degree.of(90), 32), Subdivide.of(0, 5, 30));
 
   @Override // from Se2CarDemo

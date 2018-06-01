@@ -31,6 +31,7 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
   /** @param trajectory may be null
    * @param geometricLayer
    * @param graphics */
+  @Deprecated
   public static void of(List<TrajectorySample> trajectory, GeometricLayer geometricLayer, Graphics2D graphics) {
     if (Objects.nonNull(trajectory))
       new TrajectoryRender(trajectory).render(geometricLayer, graphics);
@@ -38,6 +39,7 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
 
   // ---
   private List<TrajectorySample> trajectory;
+  private Color color = COLOR_TRAJECTORY;
 
   public TrajectoryRender(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
@@ -68,7 +70,7 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
         graphics.setColor(COLOR_GROUND);
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(2.0f));
-        graphics.setColor(COLOR_TRAJECTORY);
+        graphics.setColor(color);
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke());
       }
@@ -85,5 +87,9 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
   @Override
   public void setTrajectory(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
+  }
+
+  public void setColor(Color color) {
+    this.color = color;
   }
 }
