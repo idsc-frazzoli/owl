@@ -79,7 +79,12 @@ import ch.ethz.idsc.tensor.alg.Array;
   }
 
   @Override // from GlcPlannerCallback
-  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void optimal(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
     collection = trajectoryPlanner.getDomainMap().values();
+  }
+
+  @Override
+  public void first(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    // ---
   }
 }

@@ -23,7 +23,7 @@ class DefaultTrajectoryPlannerCallback implements RrtsPlannerCallback {
     if (controllable instanceof TrajectoryEntity) {
       TrajectoryEntity abstractEntity = (TrajectoryEntity) controllable;
       trajectory = Trajectories.glue(head, tail);
-      abstractEntity.setTrajectory(trajectory);
+      abstractEntity.setTrajectoryOpt(trajectory);
     }
     // trajectoryRender.setTrajectory(trajectory);
     if (rrtsPlanner.getBest().isPresent()) {
