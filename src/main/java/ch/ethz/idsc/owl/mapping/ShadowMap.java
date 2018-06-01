@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
@@ -83,17 +84,18 @@ public class ShadowMap implements RenderInterface {
   /* TODO: Stoke should have cap and join as BasicStroke.CAP_ROUND, this
    * / however reduces performance */
   protected void dilate(Area area, float radius) {
-    Stroke stroke = new BasicStroke(radius * 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
-    Shape strokeShape = stroke.createStrokedShape(area);
-    Area strokeArea = new Area(strokeShape);
-    area.add(strokeArea);
+    makeStroke(area, radius, Area::add);
   }
 
   protected void erode(Area area, float radius) {
+    makeStroke(area, radius, Area::subtract);
+  }
+  
+  private void makeStroke(Area area, float radius, BiConsumer<Area, Area> function) {
     Stroke stroke = new BasicStroke(radius * 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
     Shape strokeShape = stroke.createStrokedShape(area);
     Area strokeArea = new Area(strokeShape);
-    area.subtract(strokeArea);
+    function.accept(area, strokeArea);
   }
 
   public final void startNonBlocking(int updateRate) {
