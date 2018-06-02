@@ -18,49 +18,35 @@ public class GlcExpand {
     this.trajectoryPlanner = trajectoryPlanner;
   }
 
+  /** @return number of expand operations */
+  public int getExpandCount() {
+    return expandCount;
+  }
+
   public void setContinued(Supplier<Boolean> isContinued) {
     this.isContinued = isContinued;
   }
 
-  public void firstGoal(int expandLimit) {
-    // int phase2Count = 0;
-    // Scalar costHi = null;
-    while (expandCount < expandLimit) {
+  /** @param limit */
+  public void findAny(int limit) {
+    expand(limit, () -> trajectoryPlanner.getBest().isPresent());
+  }
+
+  /** @param limit */
+  public void untilOptimal(int limit) {
+    expand(limit, () -> GlcNodes.isOptimal(trajectoryPlanner));
+  }
+
+  private void expand(int limit, Supplier<Boolean> isFinished) {
+    while (0 <= --limit && !isFinished.get() && isContinued.get()) {
       Optional<GlcNode> next = trajectoryPlanner.pollNext();
-      if (!next.isPresent()) { // queue is empty
+      if (next.isPresent()) {
+        trajectoryPlanner.expand(next.get());
+        ++expandCount;
+      } else { // queue is empty
         System.out.println("*** Queue is empty -- No Goal was found ***");
         break;
       }
-      trajectoryPlanner.expand(next.get());
-      ++expandCount;
-      // ---
-      if (trajectoryPlanner.getBest().isPresent()) // found node in goal region
-        break;
-      if (!isContinued.get())
-        break;
     }
-  }
-
-  public void maxSteps(int expandLimit) {
-    // int phase2Count = 0;
-    // Scalar costHi = null;
-    while (expandCount < expandLimit) {
-      Optional<GlcNode> next = trajectoryPlanner.pollNext();
-      if (!next.isPresent()) { // queue is empty
-        System.out.println("*** Queue is empty -- No Goal was found ***");
-        break;
-      }
-      trajectoryPlanner.expand(next.get());
-      ++expandCount;
-      // ---
-      if (GlcNodes.isOptimal(trajectoryPlanner))
-        break;
-      if (!isContinued.get())
-        break;
-    }
-  }
-
-  public int getExpandCount() {
-    return expandCount;
   }
 }

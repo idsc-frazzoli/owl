@@ -34,21 +34,19 @@ public class MotionPlanWorker {
       public void run() {
         Stopwatch stopwatch = Stopwatch.started();
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
-        // System.out.println("root " + root.toInfoString());
         trajectoryPlanner.insertRoot(root);
         GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
         glcExpand.setContinued(() -> isRelevant);
-        glcExpand.firstGoal(MAX_STEPS);
+        // ---
+        glcExpand.findAny(MAX_STEPS);
         if (isRelevant) {
           RealScalar.of(stopwatch.display_seconds());
-          // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
             glcPlannerCallback.first(head, trajectoryPlanner);
         }
-        glcExpand.maxSteps(MAX_STEPS);
+        glcExpand.untilOptimal(MAX_STEPS);
         if (isRelevant) {
           RealScalar.of(stopwatch.display_seconds());
-          // System.out.println("planning: " + Quantity.of((Scalar) duration.map(Round._3), "s"));
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
             glcPlannerCallback.optimal(head, trajectoryPlanner);
         }
