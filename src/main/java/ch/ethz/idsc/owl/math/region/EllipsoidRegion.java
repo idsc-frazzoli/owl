@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -33,13 +34,11 @@ public class EllipsoidRegion extends ImplicitFunctionRegion<Tensor> implements S
    * if a component of radius is DoubleScalar.POSITIVE_INFINITY, this corresponds to a cylinder
    * @see SphericalRegion */
   public EllipsoidRegion(Tensor center, Tensor radius) {
-    if (center.length() != radius.length())
-      throw TensorRuntimeException.of(center, radius);
     // assert that radius are strictly positive
     if (radius.stream().map(Scalar.class::cast).anyMatch(Sign::isNegativeOrZero))
       throw TensorRuntimeException.of(radius);
     // ---
-    this.center = center.copy();
+    this.center = VectorQ.requireLength(center, radius.length()).copy();
     this.radius = radius.copy();
     invert = radius.map(Scalar::reciprocal);
   }

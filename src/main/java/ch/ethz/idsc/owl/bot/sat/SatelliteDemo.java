@@ -1,10 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.rice;
+package ch.ethz.idsc.owl.bot.sat;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
-import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
@@ -13,32 +11,33 @@ import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class Rice2dImageDemo implements DemoInterface {
-  @Override
+public class SatelliteDemo implements DemoInterface {
+  @Override // from DemoInterface
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    Scalar mu = RealScalar.of(-0.5);
-    Collection<Flow> controls = Rice2Controls.create2d(mu, 1).getFlows(15);
-    R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
+    Collection<Flow> controls = SatelliteControls.create2d(15);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
-    TrajectoryEntity trajectoryEntity = new Rice2dEntity(mu, Tensors.vector(7, 6, 0, 0), trajectoryControl, controls);
+    TrajectoryEntity trajectoryEntity = //
+        new SatelliteEntity(Tensors.vector(2, 0, 0, 1), trajectoryControl, controls);
     owlyAnimationFrame.add(trajectoryEntity);
+    Region<Tensor> region = new EllipsoidRegion( //
+        Tensors.vector(0, 0, 0, 0), //
+        Tensors.vector(0.5, 0.5, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
+    // PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
-    owlyAnimationFrame.configCoordinateOffset(50, 700);
+    owlyAnimationFrame.addBackground(RegionRenders.create(region));
     return owlyAnimationFrame;
   }
 
   public static void main(String[] args) {
-    new Rice2dImageDemo().start().jFrame.setVisible(true);
+    new SatelliteDemo().start().jFrame.setVisible(true);
   }
 }
