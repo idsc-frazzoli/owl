@@ -14,6 +14,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class GlcWaypointFollowing extends WaypointFollowing {
+  private static final int MAX_STEPS = 5000; // magic const
+  // ---
   protected final GlcPlannerCallback glcPlannerCallback;
   private MotionPlanWorker motionPlanWorker = null;
   private final PlannerConstraint plannerConstraint;
@@ -38,7 +40,7 @@ public class GlcWaypointFollowing extends WaypointFollowing {
       motionPlanWorker = null;
     }
     TrajectoryPlanner trajectoryPlanner = entity.createTrajectoryPlanner(plannerConstraint, goal);
-    motionPlanWorker = new MotionPlanWorker();
+    motionPlanWorker = new MotionPlanWorker(MAX_STEPS);
     motionPlanWorker.addCallback(glcPlannerCallback);
     motionPlanWorker.start(head, trajectoryPlanner);
   }

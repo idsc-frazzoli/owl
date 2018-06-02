@@ -27,12 +27,17 @@ public class GlcExpand {
     this.isContinued = isContinued;
   }
 
-  /** @param limit */
+  /** iterates until expansion creates a first node goal region
+   * 
+   * @param limit */
   public void findAny(int limit) {
     expand(limit, () -> trajectoryPlanner.getBest().isPresent());
   }
 
-  /** @param limit */
+  /** iterates until expansion creates a node in the goal region
+   * that is optimal with respect to the merits of all remaining nodes in the queue
+   * 
+   * @param limit */
   public void untilOptimal(int limit) {
     expand(limit, () -> GlcNodes.isOptimal(trajectoryPlanner));
   }

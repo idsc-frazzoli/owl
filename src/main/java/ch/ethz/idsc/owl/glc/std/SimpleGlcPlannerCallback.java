@@ -20,18 +20,13 @@ public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
   }
 
   @Override // from GlcPlannerCallback
-  public void first(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
-    List<TrajectorySample> tail = //
-        GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
-    trajectoryEntity.setTrajectory1st(Trajectories.glue(head, tail));
-  }
-
-  @Override // from GlcPlannerCallback
-  public void optimal(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    Optional<GlcNode> optional = trajectoryPlanner.getBest();
-    List<TrajectorySample> tail = //
-        GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
-    trajectoryEntity.setTrajectoryOpt(Trajectories.glue(head, tail));
+    if (optional.isPresent()) {
+      List<TrajectorySample> tail = //
+          GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
+      // trajectoryEntity.setTrajectory1st(Trajectories.glue(head, tail));
+      trajectoryEntity.setTrajectory(Trajectories.glue(head, tail));
+    }
   }
 }

@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** entity executes flows along a given trajectory */
-public abstract class TrajectoryEntity extends AbstractEntity implements TensorMetric {
+public abstract class TrajectoryEntity extends AbstractEntity implements TrajectoryListener, TensorMetric {
   private final TrajectoryControl trajectoryControl;
   protected TrajectoryWrap trajectoryWrapOpt = null;
   // TODO the alternative "traj Alt" is not permanent!
@@ -28,15 +28,15 @@ public abstract class TrajectoryEntity extends AbstractEntity implements TensorM
     this.trajectoryControl = trajectoryControl;
   }
 
-  public synchronized void setTrajectoryOpt(List<TrajectorySample> trajectory) {
+  @Override
+  public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
     trajectoryWrapOpt = TrajectoryWrap.of(trajectory);
     trajectoryControl.setTrajectory(trajectory);
   }
 
-  public synchronized void setTrajectory1st(List<TrajectorySample> trajectory) {
-    trajectoryWrap1st = TrajectoryWrap.of(trajectory);
-  }
-
+  // public synchronized void setTrajectory1st(List<TrajectorySample> trajectory) {
+  // trajectoryWrap1st = TrajectoryWrap.of(trajectory);
+  // }
   /** @param delay
    * @return trajectory until delay[s] in the future of entity,
    * or current position if entity does not have a trajectory */

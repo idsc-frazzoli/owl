@@ -14,11 +14,13 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 
 public class MotionPlanWorker {
-  // FIXME magic const
-  public static int MAX_STEPS = 5000;
-  // ---
   private final List<GlcPlannerCallback> glcPlannerCallbacks = new LinkedList<>();
   private volatile boolean isRelevant = true;
+  private final int maxSteps;
+
+  public MotionPlanWorker(int maxSteps) {
+    this.maxSteps = maxSteps;
+  }
 
   public void addCallback(GlcPlannerCallback glcPlannerCallback) {
     glcPlannerCallbacks.add(glcPlannerCallback);
@@ -38,17 +40,11 @@ public class MotionPlanWorker {
         GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
         glcExpand.setContinued(() -> isRelevant);
         // ---
-        glcExpand.findAny(MAX_STEPS);
+        glcExpand.untilOptimal(maxSteps);
         if (isRelevant) {
           RealScalar.of(stopwatch.display_seconds());
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
-            glcPlannerCallback.first(head, trajectoryPlanner);
-        }
-        glcExpand.untilOptimal(MAX_STEPS);
-        if (isRelevant) {
-          RealScalar.of(stopwatch.display_seconds());
-          for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
-            glcPlannerCallback.optimal(head, trajectoryPlanner);
+            glcPlannerCallback.expandResult(head, trajectoryPlanner);
         }
       }
     });
