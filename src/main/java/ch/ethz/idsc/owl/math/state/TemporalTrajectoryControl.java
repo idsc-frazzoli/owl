@@ -26,7 +26,7 @@ public class TemporalTrajectoryControl implements TrajectoryControl, Serializabl
   }
 
   @Override
-  public synchronized void setTrajectory(List<TrajectorySample> trajectory) {
+  public synchronized void trajectory(List<TrajectorySample> trajectory) {
     trajectoryWrap = Objects.isNull(trajectory) ? null : TrajectoryWrap.of(trajectory);
   }
 
@@ -37,7 +37,7 @@ public class TemporalTrajectoryControl implements TrajectoryControl, Serializabl
         if (trajectoryWrap.isDefined(now)) // control values now
           return Optional.of(trajectoryWrap.getControl(now));
       } else // control values are in the past
-        setTrajectory(null); // trajectory is not relevant anymore
+        trajectory(null); // trajectory is not relevant anymore
     return Optional.empty();
   }
 

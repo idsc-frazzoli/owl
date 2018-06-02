@@ -43,6 +43,7 @@ public class ShadowMap implements RenderInterface {
   private Timer increaserTimer;
   private final float vMax;
   private final float rMin;
+
   public ShadowMap(LidarEmulator lidar, ImageRegion imageRegion, Supplier<StateTime> stateTimeSupplier, float vMax, float rMin) {
     this.lidar = lidar;
     this.stateTimeSupplier = stateTimeSupplier;
@@ -90,8 +91,8 @@ public class ShadowMap implements RenderInterface {
   protected void erode(Area area, float radius) {
     makeStroke(area, radius, Area::subtract);
   }
-  
-  private void makeStroke(Area area, float radius, BiConsumer<Area, Area> function) {
+
+  private static void makeStroke(Area area, float radius, BiConsumer<Area, Area> function) {
     Stroke stroke = new BasicStroke(radius * 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
     Shape strokeShape = stroke.createStrokedShape(area);
     Area strokeArea = new Area(strokeShape);
@@ -125,7 +126,7 @@ public class ShadowMap implements RenderInterface {
   public final Area getCurrentMap() {
     return shadowArea;
   }
-  
+
   public final Area getInitMap() {
     return initArea;
   }

@@ -26,8 +26,8 @@ public abstract class AbstractCircularEntity extends TrajectoryEntity {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (Objects.nonNull(trajectoryWrapOpt)) {
-      TrajectoryRender trajectoryRender = new TrajectoryRender(trajectoryWrapOpt.trajectory());
+    if (Objects.nonNull(trajectoryWrap)) {
+      TrajectoryRender trajectoryRender = new TrajectoryRender(trajectoryWrap.trajectory());
       trajectoryRender.render(geometricLayer, graphics);
     }
     { // indicate current position
@@ -43,11 +43,11 @@ public abstract class AbstractCircularEntity extends TrajectoryEntity {
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
     }
     // ---
-    if (Objects.nonNull(trajectoryWrapOpt)) {
+    if (Objects.nonNull(trajectoryWrap)) {
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
-      if (trajectoryWrapOpt.isDefined(now)) {
-        TrajectorySample trajectorySample = trajectoryWrapOpt.getSample(now);
+      if (trajectoryWrap.isDefined(now)) {
+        TrajectorySample trajectorySample = trajectoryWrap.getSample(now);
         Path2D path2d = geometricLayer.toPath2D(Tensors.of(stateTime.state(), trajectorySample.stateTime().state()));
         graphics.setColor(Color.PINK);
         graphics.draw(path2d);
