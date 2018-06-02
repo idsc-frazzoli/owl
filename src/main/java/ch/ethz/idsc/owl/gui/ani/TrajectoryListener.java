@@ -6,5 +6,6 @@ import java.util.List;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 
 public interface TrajectoryListener {
-  void setTrajectory(List<TrajectorySample> trajectory);
+  /** @param trajectory */
+  void trajectory(List<TrajectorySample> trajectory);
 }

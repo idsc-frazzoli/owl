@@ -47,11 +47,11 @@ class GokartxTEntity extends CarEntity {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
     // ---
-    if (Objects.nonNull(trajectoryWrapOpt)) { // TODO code redundant to AbstractCircularEntity
+    if (Objects.nonNull(trajectoryWrap)) { // TODO code redundant to AbstractCircularEntity
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
-      if (trajectoryWrapOpt.isDefined(now)) {
-        TrajectorySample trajectorySample = trajectoryWrapOpt.getSample(now);
+      if (trajectoryWrap.isDefined(now)) {
+        TrajectorySample trajectorySample = trajectoryWrap.getSample(now);
         Path2D path2d = geometricLayer.toPath2D(Tensors.of(stateTime.state(), trajectorySample.stateTime().state()));
         graphics.setColor(Color.PINK);
         graphics.draw(path2d);

@@ -19,7 +19,7 @@ public abstract class StateTrajectoryControl implements TrajectoryControl {
   private int trajectory_skip = 0;
 
   @Override
-  public final synchronized void setTrajectory(List<TrajectorySample> trajectory) {
+  public final synchronized void trajectory(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
     trajectory_skip = 0;
   }

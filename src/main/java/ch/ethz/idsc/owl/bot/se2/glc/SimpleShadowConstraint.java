@@ -51,7 +51,7 @@ public final class SimpleShadowConstraint implements PlannerConstraint, Serializ
         .anyMatch(local -> isMember(simShadowArea, forward.apply(local)));
   }
 
-  private boolean isMember(Area area, Tensor state) {
+  private static boolean isMember(Area area, Tensor state) {
     return area.contains(state.Get(0).number().doubleValue(), state.Get(1).number().doubleValue());
   }
 }

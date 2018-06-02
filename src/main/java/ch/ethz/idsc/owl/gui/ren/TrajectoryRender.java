@@ -74,7 +74,7 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
   }
 
   @Override
-  public void setTrajectory(List<TrajectorySample> trajectory) {
+  public void trajectory(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
   }
 
