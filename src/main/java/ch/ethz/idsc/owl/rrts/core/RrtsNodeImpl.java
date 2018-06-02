@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.core;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.owl.data.tree.SetNode;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -13,7 +11,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * Sertac Karaman and Emilio Frazzoli, 2011:
  * Sampling-based algorithms for optimal motion planning
  * Algorithm 6, p.855 */
-/* package */ class RrtsNodeImpl extends SetNode<RrtsNode> implements RrtsNode, Serializable {
+/* package */ class RrtsNodeImpl extends SetNode<RrtsNode> implements RrtsNode {
   private final Tensor state;
   private Scalar costFromRoot;
 

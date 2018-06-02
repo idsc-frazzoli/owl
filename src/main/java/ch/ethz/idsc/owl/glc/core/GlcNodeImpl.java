@@ -1,7 +1,6 @@
 // code by bapaden, jph and jl
 package ch.ethz.idsc.owl.glc.core;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * immutable except for children, parent, and depth which are only modified in
  * {@link GlcNodeImpl#addChild(GlcNodeImpl)} */
-/* package */ class GlcNodeImpl extends AbstractNode<GlcNode> implements GlcNode, Serializable {
+/* package */ class GlcNodeImpl extends AbstractNode<GlcNode> implements GlcNode {
   private final Map<Flow, GlcNode> children = new HashMap<>();
   /** flow is null for root node
    * not final, as changed when central node are made root */

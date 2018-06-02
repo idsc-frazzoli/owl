@@ -50,19 +50,18 @@ public class TreeRender implements RenderInterface {
     final double min = dss.getMin();
     final double max = dss.getMax();
     long count = dss.getCount();
-    // System.out.println(count);
     if (Objects.nonNull(polygon)) {
       graphics.setColor(CONVEXHULL);
       Path2D path2D = geometricLayer.toPath2D(polygon);
       path2D.closePath();
       graphics.draw(path2D);
     }
+    double inverse = 1 / (max - min);
+    // System.out.println("count=" + count + ", inverse=" + inverse);
     if (count <= NODE_BOUND) // don't draw tree beyond certain node count
       for (StateCostNode node : _collection) {
-        double val = node.costFromRoot().number().doubleValue();
-        if (!Double.isFinite(val))
-          throw new RuntimeException("cost from root " + val);
-        final double interp = (val - min) / (max - min);
+        double value = node.costFromRoot().number().doubleValue();
+        final double interp = (value - min) * inverse;
         graphics.setColor(treeColor.nodeColor.rescaled(interp));
         final Point2D p1 = geometricLayer.toPoint2D(node.state());
         graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));

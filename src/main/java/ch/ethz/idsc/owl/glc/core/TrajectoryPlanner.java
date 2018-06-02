@@ -106,8 +106,6 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
     best.put(node, connector);
     if (1 < best.size())
       best.remove(best.lastKey());
-    if (best.size() != 1)
-      System.err.println("size == " + best.size());
   }
 
   @Override // from ExpandInterface
