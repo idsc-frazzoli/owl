@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.twd;
 
+import java.awt.Graphics2D;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
@@ -8,13 +9,18 @@ import ch.ethz.idsc.owl.bot.se2.Se2LateralAcceleration;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2Entity;
+import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.region.So2Region;
+import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -70,11 +76,19 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return RealScalar.ONE;
   }
 
+  private RegionWithDistance<Tensor> goalRegion = null;
+
+  /** @param goal
+   * @return */
+  public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
+    return new SphericalRegion(goal.extract(0, 2), goalRadius_xy);
+  }
+
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    Tensor radiusVector = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta);
+    goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = //
-        Se2ComboRegion.spherical(goal, radiusVector);
+        new Se2ComboRegion(goalRegion, new So2Region(goal.Get(2), goalRadius_theta));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager( //
         se2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
@@ -94,5 +108,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   @Override
   protected Tensor shape() {
     return SHAPE;
+  }
+
+  @Override
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    RegionRenders.draw(geometricLayer, graphics, goalRegion);
+    // ---
+    super.render(geometricLayer, graphics);
   }
 }
