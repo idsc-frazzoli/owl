@@ -1,6 +1,7 @@
 // code by bapaden, jph and jl
 package ch.ethz.idsc.owl.glc.core;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * immutable except for children, parent, and depth which are only modified in
  * {@link GlcNodeImpl#addChild(GlcNodeImpl)} */
-/* package */ class GlcNodeImpl extends AbstractNode<GlcNode> implements GlcNode {
+/* package */ class GlcNodeImpl extends AbstractNode<GlcNode> implements GlcNode, Serializable {
   private final Map<Flow, GlcNode> children = new HashMap<>();
   /** flow is null for root node
    * not final, as changed when central node are made root */
@@ -29,8 +30,6 @@ import ch.ethz.idsc.tensor.Tensor;
   private final Scalar costFromRoot;
   /** merit == costFromRoot + "Heuristic.minCostToGoal" */
   private final Scalar merit;
-  /** depth == 0 for root node, otherwise depth > 0 */
-  private int depth = 0;
 
   /** @param flow that got us to this Node from the parent, or null when this Node is the root
    * @param stateTime
@@ -63,7 +62,6 @@ import ch.ethz.idsc.tensor.Tensor;
   protected boolean protected_insertChild(GlcNode child) {
     boolean inserted = !children.containsKey(child.flow());
     children.put(child.flow(), child);
-    ((GlcNodeImpl) child).depth = depth + 1;
     return inserted;
   }
 
@@ -88,10 +86,5 @@ import ch.ethz.idsc.tensor.Tensor;
   @Override // from GlcNode
   public Scalar merit() {
     return merit;
-  }
-
-  @Override // from GlcNode
-  public int depth() {
-    return depth;
   }
 }

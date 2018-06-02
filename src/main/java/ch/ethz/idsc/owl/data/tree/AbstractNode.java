@@ -1,10 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.data.tree;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class AbstractNode<T extends Node> implements Node, Serializable {
+public abstract class AbstractNode<T extends Node> implements Node {
   /** parent is null for root node */
   private T parent = null;
 

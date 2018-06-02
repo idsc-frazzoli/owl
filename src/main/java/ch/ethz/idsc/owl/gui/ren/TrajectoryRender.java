@@ -8,7 +8,6 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -27,16 +26,6 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
   private static final Color COLOR_GROUND = new Color(255, 255, 255, 128);
   private static final Color COLOR_NODES = new Color(255, 0, 0, 96);
   private static final Color COLOR_TRAJECTORY = new Color(0, 192, 0, 192);
-
-  /** @param trajectory may be null
-   * @param geometricLayer
-   * @param graphics */
-  @Deprecated
-  public static void of(List<TrajectorySample> trajectory, GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (Objects.nonNull(trajectory))
-      new TrajectoryRender(trajectory).render(geometricLayer, graphics);
-  }
-
   // ---
   private List<TrajectorySample> trajectory;
   private Color color = COLOR_TRAJECTORY;
