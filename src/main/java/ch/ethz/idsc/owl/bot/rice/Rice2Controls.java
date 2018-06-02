@@ -51,7 +51,7 @@ public class Rice2Controls implements FlowsInterface, Serializable {
     this.seg = seg;
   }
 
-  @Override
+  @Override // from FlowsInterface
   public Collection<Flow> getFlows(int resolution) {
     Collection<Flow> collection = new HashSet<>();
     collection.add(StateSpaceModels.createFlow(stateSpaceModel, Array.zeros(2)));

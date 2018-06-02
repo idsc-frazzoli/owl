@@ -35,7 +35,7 @@ public class TwdDuckieFlows extends TwdFlows {
     super(maxSpeed, halfWidth);
   }
 
-  @Override
+  @Override // from FlowsInterface
   public Collection<Flow> getFlows(int resolution) {
     List<Flow> list = new ArrayList<>();
     Tensor range = Subdivide.of(-1, 1, resolution).extract(0, resolution); // [-1, ..., 1)

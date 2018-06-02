@@ -46,7 +46,7 @@ public class CarFlows implements FlowsInterface, Serializable {
     this.rate_max = rate_max;
   }
 
-  @Override
+  @Override // from FlowsInterface
   public Collection<Flow> getFlows(int resolution) {
     if (resolution % 2 == 1)
       ++resolution;
