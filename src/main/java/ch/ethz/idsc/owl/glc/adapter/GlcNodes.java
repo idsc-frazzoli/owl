@@ -28,7 +28,8 @@ public enum GlcNodes {
    * @throws Exception if node is null */
   public static List<StateTime> getPathFromRootTo(GlcNode node) {
     return Nodes.listFromRoot(node).stream() //
-        .map(GlcNode::stateTime).collect(Collectors.toList());
+        .map(GlcNode::stateTime) //
+        .collect(Collectors.toList());
   }
 
   /** @param trajectoryPlanner

@@ -9,7 +9,6 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
@@ -68,10 +67,11 @@ enum Rice2dDemo {
   public static void main(String[] args) {
     TrajectoryPlanner trajectoryPlanner = createInstance();
     Stopwatch stopwatch = Stopwatch.started();
-    int iters = Expand.maxSteps(trajectoryPlanner, 1000);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(1000);
     // 550 1.6898229210000002 without parallel integration of trajectories
     // 555 1.149214356 with parallel integration of trajectories
-    System.out.println(iters + " " + stopwatch.display_seconds());
+    System.out.println(glcExpand.getExpandCount() + " " + stopwatch.display_seconds());
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     if (optional.isPresent()) {
@@ -81,10 +81,8 @@ enum Rice2dDemo {
       List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, glcNode);
       owlyFrame.addBackground(new TrajectoryRender(samples));
     }
-    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-    glcExpand.maxSteps(1000);
-    int further = glcExpand.getExpandCount();
-    System.out.println(further);
+    glcExpand.untilOptimal(1000);
+    System.out.println("ExpandCount=" + glcExpand.getExpandCount());
     optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       GlcNode glcNode = optional.get();

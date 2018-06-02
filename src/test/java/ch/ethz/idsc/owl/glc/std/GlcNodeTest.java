@@ -8,7 +8,7 @@ import java.util.List;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -76,7 +76,8 @@ public class GlcNodeTest extends TestCase {
     assertTrue(nodeList.get(0).isRoot());
     // nodeList.get(0).makeRoot(); // no error
     assertTrue(nodeList.get(0).isRoot());
-    Expand.maxSteps(trajectoryPlanner, 1);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(1);
     nodeList = new ArrayList<>(trajectoryPlanner.getDomainMap().values());
     GlcNode test = nodeList.get(nodeList.size() - 1);
     assertFalse(test.isRoot());

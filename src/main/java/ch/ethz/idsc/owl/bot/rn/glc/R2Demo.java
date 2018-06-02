@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
@@ -66,9 +66,8 @@ enum R2Demo {
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         eta, STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
-    // int iters =
-    Expand.maxSteps(trajectoryPlanner, 200);
-    // System.out.println("iterations " + iters);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(200);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       GlcNode goalNode = optional.get(); // <- throws exception if

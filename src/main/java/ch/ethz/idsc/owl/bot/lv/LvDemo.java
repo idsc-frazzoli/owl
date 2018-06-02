@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -49,8 +49,9 @@ import ch.ethz.idsc.tensor.sca.Log;
     // ---
     trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, 0.1), RealScalar.ZERO));
-    int steps = Expand.maxSteps(trajectoryPlanner, 5000);
-    System.out.println(steps);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(5000);
+    System.out.println("ExpandCount=" + glcExpand.getExpandCount());
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     owlyFrame.addBackground(RegionRenders.create(ellipsoidRegion));
     Optional<GlcNode> goalNode = trajectoryPlanner.getBest();

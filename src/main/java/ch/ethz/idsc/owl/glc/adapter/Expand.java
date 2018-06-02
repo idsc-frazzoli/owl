@@ -17,14 +17,9 @@ import ch.ethz.idsc.tensor.Scalar;
  * {@link StandardTrajectoryPlanner} */
 public enum Expand {
   ;
-  /** @param expandInterface
-   * @param expandLimit
-   * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
-  public static int maxSteps(ExpandInterface<?> expandInterface, int expandLimit) {
-    return maxSteps(expandInterface, expandLimit, () -> true);
-  }
-
-  /** planner aborts if isContinued supplies false
+  /** Hint: for planning with GLC use {@link GlcExpand}
+   * 
+   * expand aborts if isContinued supplies false
    * 
    * @param expandInterface
    * @param expandLimit
@@ -32,18 +27,17 @@ public enum Expand {
    * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
   public static <T extends StateCostNode> int maxSteps(ExpandInterface<T> expandInterface, int expandLimit, Supplier<Boolean> isContinued) {
     int expandCount = 0;
-    while (expandCount < expandLimit) {
+    while (0 <= --expandLimit //
+        && !expandInterface.getBest().isPresent() //
+        && isContinued.get()) {
       Optional<T> next = expandInterface.pollNext();
-      if (!next.isPresent()) { // queue is empty
+      if (next.isPresent()) { // queue is empty
+        expandInterface.expand(next.get());
+        ++expandCount;
+      } else {
         System.out.println("*** Queue is empty -- No Goal was found ***");
         break;
       }
-      expandInterface.expand(next.get());
-      ++expandCount;
-      if (expandInterface.getBest().isPresent()) // found node in goal region
-        break;
-      if (!isContinued.get())
-        break;
     }
     return expandCount;
   }

@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
@@ -62,8 +62,9 @@ enum Se2rImageDemo {
     owlyFrame.configCoordinateOffset(100, 550);
     owlyFrame.jFrame.setBounds(100, 100, 700, 700);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
-      Expand.maxSteps(trajectoryPlanner, 1000);
+      glcExpand.findAny(1000);
       owlyFrame.setGlc(trajectoryPlanner);
       Thread.sleep(10);
     }
