@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -71,13 +71,13 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     owlyFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.1)));
     // ---
     owlyFrame.jFrame.setBounds(100, 100, 620, 475);
-    int steps = 0;
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
-      steps += Expand.maxSteps(trajectoryPlanner, 30);
+      glcExpand.findAny(30);
       owlyFrame.setGlc(trajectoryPlanner);
       Thread.sleep(1);
       DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
     }
-    System.out.println("#expand = " + steps);
+    System.out.println("#expand = " + glcExpand.getExpandCount());
   }
 }

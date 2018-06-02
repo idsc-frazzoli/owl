@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -68,8 +68,9 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     owlyFrame.configCoordinateOffset(33, 416);
     owlyFrame.jFrame.setBounds(100, 100, 620, 475);
     try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("delta_s.gif"), 250)) {
+      GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
       while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
-        Expand.maxSteps(trajectoryPlanner, 40);
+        glcExpand.findAny(40);
         owlyFrame.setGlc(trajectoryPlanner);
         gsw.append(owlyFrame.offscreen());
         Thread.sleep(1);

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.lv;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -39,10 +39,11 @@ public class LvDemoTest extends TestCase {
       // ---
       trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);
       trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
-      int steps = Expand.maxSteps(trajectoryPlanner, 10000);
-      if (steps < 9800)
+      GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+      glcExpand.findAny(10000);
+      if (glcExpand.getExpandCount() < 9800)
         return;
-      System.out.println("lv steps=" + steps);
+      System.out.println("lv steps=" + glcExpand.getExpandCount());
     }
     assertTrue(false);
   }

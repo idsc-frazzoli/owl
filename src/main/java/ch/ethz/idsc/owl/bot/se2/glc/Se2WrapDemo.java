@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.IdentityWrap;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
@@ -78,8 +78,8 @@ enum Se2WrapDemo {
 
   private static void demo(CoordinateWrap coordinateWrap) {
     TrajectoryPlanner trajectoryPlanner = createPlanner(coordinateWrap);
-    int iters = Expand.maxSteps(trajectoryPlanner, 4000);
-    System.out.println(iters);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(4000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

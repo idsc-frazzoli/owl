@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
     this.amp = amp;
   }
 
-  @Override
+  @Override // from FlowsInterface
   public Collection<Flow> getFlows(int resolution) {
     Collection<Flow> collection = new ArrayList<>();
     for (Tensor u : CirclePoints.of(resolution))

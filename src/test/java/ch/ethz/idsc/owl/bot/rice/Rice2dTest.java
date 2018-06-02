@@ -5,7 +5,6 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Stopwatch;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
@@ -21,9 +20,10 @@ public class Rice2dTest extends TestCase {
   public void testExpand() throws InterruptedException {
     TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
     Stopwatch stopwatch = Stopwatch.started();
-    int iters = Expand.maxSteps(trajectoryPlanner, 1000); // 153 0.368319228
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(1000); // 153 0.368319228
     assertTrue(stopwatch.display_seconds() < 1.5);
-    assertTrue(iters < 500);
+    assertTrue(glcExpand.getExpandCount() < 500);
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     GlcNodes.getPathFromRootTo(glcNode);
@@ -37,9 +37,10 @@ public class Rice2dTest extends TestCase {
   public void testGlcExpand() throws InterruptedException {
     TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
     Stopwatch stopwatch = Stopwatch.started();
-    int iters = GlcExpand.maxSteps(trajectoryPlanner, 1000, () -> true); // 220 0.283809941
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.untilOptimal(1000); // 220 0.283809941
     assertTrue(stopwatch.display_seconds() < 1.5);
-    assertTrue(iters < 500);
+    assertTrue(glcExpand.getExpandCount() < 500);
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     GlcNodes.getPathFromRootTo(glcNode);
