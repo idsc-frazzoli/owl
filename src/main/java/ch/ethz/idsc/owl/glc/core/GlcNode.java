@@ -34,7 +34,4 @@ public interface GlcNode extends StateCostNode {
 
   /** @return cost from root plus min cost to goal */
   Scalar merit();
-
-  /** @return depth of node, i.e. the number of ancestors until the root */
-  int depth();
 }

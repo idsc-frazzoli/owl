@@ -19,14 +19,14 @@ public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
     this.trajectoryEntity = trajectoryEntity;
   }
 
-  @Override
+  @Override // from GlcPlannerCallback
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<TrajectorySample> tail = //
           GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
+      // trajectoryEntity.setTrajectory1st(Trajectories.glue(head, tail));
       trajectoryEntity.setTrajectory(Trajectories.glue(head, tail));
-    } else
-      System.err.println("NO TRAJECTORY BETWEEN ROOT TO GOAL");
+    }
   }
 }

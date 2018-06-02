@@ -124,12 +124,12 @@ public class CarEntity extends Se2Entity {
     return trajectoryPlanner;
   }
 
-  @Override
+  @Override // from Se2Entity
   protected Tensor eta() {
     return partitionScale;
   }
 
-  @Override
+  @Override // from Se2Entity
   protected Tensor shape() {
     return shape;
   }

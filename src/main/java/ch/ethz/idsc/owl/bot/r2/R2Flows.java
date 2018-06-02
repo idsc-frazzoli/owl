@@ -25,7 +25,7 @@ public class R2Flows implements FlowsInterface, Serializable {
     this.speed = Sign.requirePositive(speed);
   }
 
-  @Override
+  @Override // from FlowsInterface
   public Collection<Flow> getFlows(int resolution) {
     GlobalAssert.that(2 < resolution); // otherwise does not cover plane
     StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE;

@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.rn.RnPointcloudRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
@@ -50,8 +50,9 @@ enum R2PointsDemo {
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         partitionScale, stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(-0.5, -0.5), RealScalar.ZERO));
-    int iters = Expand.maxSteps(trajectoryPlanner, 1000);
-    System.out.println(iters);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(1000);
+    System.out.println("ExpandCount=" + glcExpand.getExpandCount());
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

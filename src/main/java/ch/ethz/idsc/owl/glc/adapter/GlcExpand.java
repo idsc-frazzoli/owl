@@ -6,47 +6,52 @@ import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 
 /** following the observation by ynager the expansion has to continue
  * until merit of queue node is no less than cost of node in goal */
-public enum GlcExpand {
-  ;
-  public static int maxSteps(TrajectoryPlanner trajectoryPlanner, int expandLimit, Supplier<Boolean> isContinued) {
-    int expandCount = 0;
-    // int phase2Count = 0;
-    // Scalar costHi = null;
-    while (expandCount < expandLimit) {
+public class GlcExpand {
+  private final TrajectoryPlanner trajectoryPlanner;
+  private Supplier<Boolean> isContinued = () -> true;
+  private int expandCount = 0;
+
+  public GlcExpand(TrajectoryPlanner trajectoryPlanner) {
+    this.trajectoryPlanner = trajectoryPlanner;
+  }
+
+  /** @return number of expand operations */
+  public int getExpandCount() {
+    return expandCount;
+  }
+
+  public void setContinued(Supplier<Boolean> isContinued) {
+    this.isContinued = isContinued;
+  }
+
+  /** iterates until expansion creates a first node goal region
+   * 
+   * @param limit */
+  public void findAny(int limit) {
+    expand(limit, () -> trajectoryPlanner.getBest().isPresent());
+  }
+
+  /** iterates until expansion creates a node in the goal region
+   * that is optimal with respect to the merits of all remaining nodes in the queue
+   * 
+   * @param limit */
+  public void untilOptimal(int limit) {
+    expand(limit, () -> GlcNodes.isOptimal(trajectoryPlanner));
+  }
+
+  private void expand(int limit, Supplier<Boolean> isFinished) {
+    while (0 <= --limit && !isFinished.get() && isContinued.get()) {
       Optional<GlcNode> next = trajectoryPlanner.pollNext();
-      if (!next.isPresent()) { // queue is empty
+      if (next.isPresent()) {
+        trajectoryPlanner.expand(next.get());
+        ++expandCount;
+      } else { // queue is empty
         System.out.println("*** Queue is empty -- No Goal was found ***");
         break;
       }
-      trajectoryPlanner.expand(next.get());
-      ++expandCount;
-      // ---
-      Optional<GlcNode> best = trajectoryPlanner.getBest();
-      if (best.isPresent()) { // found node in goal region
-        // if (Objects.isNull(costHi)) {
-        // costHi = best.get().costFromRoot();
-        // System.out.println("costHi =" + costHi);
-        // }
-        // in the current implementation the best node is always in queue
-        Scalar merit = trajectoryPlanner.getQueue().iterator().next().merit();
-        Scalar costLo = best.get().costFromRoot();
-        if (Scalars.lessEquals(costLo, merit)) {
-          // System.out.println("costLo =" + costLo);
-          // System.out.println("phase2Count=" + phase2Count + "/" + expandCount);
-          break;
-        }
-        // if (phase2Count == 0)
-        // System.out.println("merit = " + merit);
-        // ++phase2Count;
-      }
-      if (!isContinued.get())
-        break;
     }
-    return expandCount;
   }
 }

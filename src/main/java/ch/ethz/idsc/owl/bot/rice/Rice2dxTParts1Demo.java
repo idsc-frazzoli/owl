@@ -37,7 +37,7 @@ public class Rice2dxTParts1Demo implements DemoInterface {
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.of(-.5);
-    Collection<Flow> controls = Rice2Controls.create2d(mu, 1, 15);
+    Collection<Flow> controls = Rice2Controls.create2d(mu, 1).getFlows(15);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
     Rice2dEntity abstractEntity = new Rice2dEntity(mu, Tensors.vector(2, 2, 0, 0), trajectoryControl, controls);
     abstractEntity.delayHint = RealScalar.of(1.6);

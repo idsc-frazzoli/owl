@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
@@ -54,9 +54,10 @@ enum Rice1dDemo {
         eta, stateIntegrator, controls, plannerConstraint, goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
-    int iters = Expand.maxSteps(trajectoryPlanner, 1000);
-    if (900 < iters)
-      System.out.println("close to upper bound: " + iters);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(1000);
+    if (900 < glcExpand.getExpandCount())
+      System.out.println("close to upper bound: " + glcExpand.getExpandCount());
     return trajectoryPlanner;
   }
 

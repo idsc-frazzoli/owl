@@ -29,8 +29,6 @@ import ch.ethz.idsc.tensor.Tensor;
   private final Scalar costFromRoot;
   /** merit == costFromRoot + "Heuristic.minCostToGoal" */
   private final Scalar merit;
-  /** depth == 0 for root node, otherwise depth > 0 */
-  private int depth = 0;
 
   /** @param flow that got us to this Node from the parent, or null when this Node is the root
    * @param stateTime
@@ -63,7 +61,6 @@ import ch.ethz.idsc.tensor.Tensor;
   protected boolean protected_insertChild(GlcNode child) {
     boolean inserted = !children.containsKey(child.flow());
     children.put(child.flow(), child);
-    ((GlcNodeImpl) child).depth = depth + 1;
     return inserted;
   }
 
@@ -88,10 +85,5 @@ import ch.ethz.idsc.tensor.Tensor;
   @Override // from GlcNode
   public Scalar merit() {
     return merit;
-  }
-
-  @Override // from GlcNode
-  public int depth() {
-    return depth;
   }
 }

@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -30,7 +30,6 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 import junit.framework.TestCase;
 
 public class StandardTrajectoryPlannerTest extends TestCase {
-  @SuppressWarnings("unused")
   public void testSimple() {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
@@ -46,8 +45,8 @@ public class StandardTrajectoryPlannerTest extends TestCase {
         eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
-    int iters = Expand.maxSteps(trajectoryPlanner, 200);
-    // System.out.println("iterations " + iters);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(200);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       GlcNode goalNode = optional.get(); // <- throws exception if

@@ -12,6 +12,8 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class SimpleGoalConsumer implements GoalConsumer {
+  private static final int MAX_STEPS = 5000; // magic const
+  // ---
   private final TrajectoryEntity trajectoryEntity;
   private final PlannerConstraint plannerConstraint;
   private final GlcPlannerCallback glcPlannerCallback;
@@ -34,7 +36,7 @@ public class SimpleGoalConsumer implements GoalConsumer {
         trajectoryEntity.getFutureTrajectoryUntil(trajectoryEntity.delayHint());
     TrajectoryPlanner trajectoryPlanner = //
         trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal);
-    motionPlanWorker = new MotionPlanWorker();
+    motionPlanWorker = new MotionPlanWorker(MAX_STEPS);
     motionPlanWorker.addCallback(glcPlannerCallback);
     if (trajectoryEntity instanceof GlcPlannerCallback)
       motionPlanWorker.addCallback((GlcPlannerCallback) trajectoryEntity);

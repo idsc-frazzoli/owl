@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     new TreeRender(collection).render(geometricLayer, graphics);
   }
 
-  @Override // from GlcPlannerCallback
+  @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
     collection = trajectoryPlanner.getDomainMap().values();
   }

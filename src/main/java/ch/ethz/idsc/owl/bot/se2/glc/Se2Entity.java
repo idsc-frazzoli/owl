@@ -51,8 +51,16 @@ public abstract class Se2Entity extends TrajectoryEntity {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (Objects.nonNull(trajectoryWrap))
-      TrajectoryRender.of(trajectoryWrap.trajectory(), geometricLayer, graphics);
+    if (Objects.nonNull(trajectoryWrapOpt)) {
+      TrajectoryRender trajectoryRender = new TrajectoryRender(trajectoryWrapOpt.trajectory());
+      trajectoryRender.setColor(Color.GREEN);
+      trajectoryRender.render(geometricLayer, graphics);
+    }
+    if (Objects.nonNull(trajectoryWrap1st)) {
+      TrajectoryRender trajectoryRender = new TrajectoryRender(trajectoryWrap1st.trajectory());
+      trajectoryRender.setColor(new Color(128, 128, 128, 128));
+      trajectoryRender.render(geometricLayer, graphics);
+    }
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();
       Color color = new Color(64, 64, 64, 128);
