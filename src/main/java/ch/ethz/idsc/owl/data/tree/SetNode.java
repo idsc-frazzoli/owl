@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SetNode<T extends Node> extends AbstractNode<T> {
+public abstract class SetNode<T extends Node> extends AbstractNode<T> {
   private final Set<T> next = new HashSet<>();
 
   @Override // from Node
