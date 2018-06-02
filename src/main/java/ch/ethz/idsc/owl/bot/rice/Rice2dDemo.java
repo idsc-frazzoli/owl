@@ -47,7 +47,7 @@ enum Rice2dDemo {
 
   public static TrajectoryPlanner createInstance() {
     Tensor eta = Tensors.vector(3, 3, 6, 6);
-    Collection<Flow> controls = Rice2Controls.create2d(RealScalar.of(-.5), 1, 15);
+    Collection<Flow> controls = Rice2Controls.create2d(RealScalar.of(-.5), 1).getFlows(15);
     GoalInterface goalInterface = new Rice2GoalManager(ELLIPSOID_REGION);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(RegionUnion.wrap(Arrays.asList( //
