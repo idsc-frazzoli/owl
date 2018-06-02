@@ -70,4 +70,9 @@ public class LidarEmulator implements RenderInterface {
     }
     geometricLayer.popMatrix();
   }
+  
+  public Tensor getPolygon(StateTime stateTime) {
+    final Tensor scan = lidarRaytracer.scan(stateTime, raytraceQuery);
+    return lidarRaytracer.toPoints(scan);
+  }
 }
