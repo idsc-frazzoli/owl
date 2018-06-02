@@ -25,6 +25,6 @@ public class TemporalTrajectoryControlTest extends TestCase {
 
   public void testSetTrajectoryNull() {
     TrajectoryControl trajectoryControl = TemporalTrajectoryControl.createInstance();
-    trajectoryControl.setTrajectory(null);
+    trajectoryControl.trajectory(null);
   }
 }
