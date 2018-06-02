@@ -26,7 +26,7 @@ public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
       List<TrajectorySample> tail = //
           GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
       // trajectoryEntity.setTrajectory1st(Trajectories.glue(head, tail));
-      trajectoryEntity.setTrajectory(Trajectories.glue(head, tail));
+      trajectoryEntity.trajectory(Trajectories.glue(head, tail));
     }
   }
 }

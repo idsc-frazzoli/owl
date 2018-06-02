@@ -82,8 +82,8 @@ public class RnFlowTrajectoryTest extends TestCase {
     // Trajectories.print(trajectory);
     {
       TrajectoryControl tc = TemporalTrajectoryControl.createInstance();
-      tc.setTrajectory(null);
-      tc.setTrajectory(trajectory);
+      tc.trajectory(null);
+      tc.trajectory(trajectory);
       Tensor u = tc.control(new StateTime(Tensors.vector(1, 2), RealScalar.of(1.2)), RealScalar.of(2)).get();
       assertTrue(Chop._10.close(Norm._2.of(u), RealScalar.ONE));
       List<TrajectorySample> list = tc.getFutureTrajectoryUntil(new StateTime(Tensors.vector(1, 2), RealScalar.of(1.1)), RealScalar.of(1));
