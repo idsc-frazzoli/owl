@@ -27,7 +27,8 @@ public abstract class AbstractCircularEntity extends TrajectoryEntity {
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (Objects.nonNull(trajectoryWrap)) {
-      TrajectoryRender trajectoryRender = new TrajectoryRender(trajectoryWrap.trajectory());
+      TrajectoryRender trajectoryRender = new TrajectoryRender();
+      trajectoryRender.trajectory(trajectoryWrap.trajectory());
       trajectoryRender.render(geometricLayer, graphics);
     }
     { // indicate current position

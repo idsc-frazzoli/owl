@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 
 public class TrajectoryRenderTest extends TestCase {
   public void testNull() {
-    new TrajectoryRender(null);
+    TrajectoryRender trajectoryRender = new TrajectoryRender();
+    trajectoryRender.trajectory(null);
+    trajectoryRender.render(null, null);
   }
 }
