@@ -104,7 +104,7 @@ public class ShadowMap implements RenderInterface {
   }
 
   public final Area getInitMap() {
-    return new Area(initArea);
+    return (Area) initArea.clone();
   }
 
   public void setColor(Color color) {

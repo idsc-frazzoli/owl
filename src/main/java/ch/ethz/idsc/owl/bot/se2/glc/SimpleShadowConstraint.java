@@ -29,7 +29,7 @@ public final class SimpleShadowConstraint implements PlannerConstraint, Serializ
     this.shadowMap = shadowMap;
     this.a = a;
     this.reactionTime = reactionTime;
-    this.initArea = new Area(shadowMap.getInitMap());
+    this.initArea = shadowMap.getInitMap();
   }
 
   @Override // from CostIncrementFunction
@@ -39,7 +39,7 @@ public final class SimpleShadowConstraint implements PlannerConstraint, Serializ
     float tStop = vel / a + reactionTime + reactionTime;
     float dStop = tStop * vel / 2;
     // simulate shadow map during braking
-    Area simShadowArea = new Area(initArea);
+    Area simShadowArea = (Area) initArea.clone();
     StateTime childStateTime = trajectory.get(trajectory.size() - 1);
     shadowMap.updateMap(simShadowArea, childStateTime, tStop);
     //  ---
