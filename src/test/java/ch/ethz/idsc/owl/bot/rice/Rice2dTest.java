@@ -28,7 +28,9 @@ public class Rice2dTest extends TestCase {
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     GlcNodes.getPathFromRootTo(glcNode);
     List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(Rice2dDemo.STATE_INTEGRATOR, glcNode);
-    owlyFrame.addBackground(new TrajectoryRender(samples));
+    TrajectoryRender trajectoryRender = new TrajectoryRender();
+    trajectoryRender.trajectory(samples);
+    owlyFrame.addBackground(trajectoryRender);
     owlyFrame.addBackground(RegionRenders.create(Rice2dDemo.ELLIPSOID_REGION));
     Thread.sleep(120);
     owlyFrame.jFrame.setVisible(false);
@@ -45,7 +47,9 @@ public class Rice2dTest extends TestCase {
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     GlcNodes.getPathFromRootTo(glcNode);
     List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(Rice2dDemo.STATE_INTEGRATOR, glcNode);
-    owlyFrame.addBackground(new TrajectoryRender(samples));
+    TrajectoryRender trajectoryRender = new TrajectoryRender();
+    trajectoryRender.trajectory(samples);
+    owlyFrame.addBackground(trajectoryRender);
     owlyFrame.addBackground(RegionRenders.create(Rice2dDemo.ELLIPSOID_REGION));
     Thread.sleep(120);
     owlyFrame.jFrame.setVisible(false);

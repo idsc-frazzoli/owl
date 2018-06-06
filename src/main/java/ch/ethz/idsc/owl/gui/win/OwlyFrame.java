@@ -90,9 +90,8 @@ public class OwlyFrame extends BaseFrame {
     try {
       backup.add(Serialization.copy(trajectoryPlanner));
       jSlider.setMaximum(backup.size() - 1);
-    } catch (Exception e) {
-      // ---
-      e.printStackTrace();
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
     if (!replay) { // live feed
       replayIndex = backup.size() - 1;

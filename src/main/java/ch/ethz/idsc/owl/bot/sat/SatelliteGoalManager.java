@@ -20,15 +20,10 @@ public class SatelliteGoalManager extends SimpleTrajectoryRegionQuery implements
     return new SatelliteGoalManager(new EllipsoidRegion(center, radius));
   }
   // ---
-  // private final Tensor center;
-  // private final Scalar radius;
 
   // TODO implementation assumes max speed == 1
   public SatelliteGoalManager(EllipsoidRegion ellipsoidRegion) {
     super(new TimeInvariantRegion(ellipsoidRegion));
-    // center = ellipsoidRegion.center();
-    // this.radius =
-    // RadiusXY.requireSame(ellipsoidRegion.radius()); // x-y radius have to be equal
   }
 
   @Override // from CostIncrementFunction

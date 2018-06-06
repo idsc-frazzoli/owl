@@ -2,18 +2,13 @@
 package ch.ethz.idsc.owl.bot.lv;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
-import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -24,7 +19,6 @@ import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -54,12 +48,5 @@ import ch.ethz.idsc.tensor.sca.Log;
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     owlyFrame.addBackground(RegionRenders.create(ellipsoidRegion));
-    Optional<GlcNode> goalNode = trajectoryPlanner.getBest();
-    if (goalNode.isPresent()) {
-      List<TrajectorySample> trajectory = //
-          GlcTrajectories.detailedTrajectoryTo(stateIntegrator, goalNode.get());
-      owlyFrame.addBackground(new TrajectoryRender(trajectory));
-    } else
-      System.out.println("no trajectory found");
   }
 }

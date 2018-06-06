@@ -41,6 +41,13 @@ public class GeometricLayer {
     return deque.peek().toPoint2D(x);
   }
 
+  /** @param px
+   * @param py
+   * @return */
+  public Point2D toPoint2D(double px, double py) {
+    return deque.peek().toPoint2D(px, py);
+  }
+
   /** inspired by opengl
    * 
    * @param matrix 3x3 */
@@ -55,6 +62,7 @@ public class GeometricLayer {
     deque.pop();
   }
 
+  /** @return current model2pixel matrix */
   public Tensor getMatrix() {
     return deque.peek().tensor_copy();
   }

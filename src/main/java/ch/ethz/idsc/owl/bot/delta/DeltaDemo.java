@@ -6,7 +6,6 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -76,7 +75,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       glcExpand.findAny(30);
       owlyFrame.setGlc(trajectoryPlanner);
       Thread.sleep(1);
-      DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
     }
     System.out.println("#expand = " + glcExpand.getExpandCount());
   }
