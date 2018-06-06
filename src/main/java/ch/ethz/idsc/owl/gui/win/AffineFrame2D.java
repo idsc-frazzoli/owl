@@ -5,6 +5,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 
 /** @see AffineTransform */
 /* package */ class AffineFrame2D {
@@ -33,11 +34,6 @@ import ch.ethz.idsc.tensor.Tensor;
     return toPoint2D( //
         point.Get(0).number().doubleValue(), //
         point.Get(1).number().doubleValue());
-    // double px = point.Get(0).number().doubleValue();
-    // double py = point.Get(1).number().doubleValue();
-    // return new Point2D.Double( //
-    // m00 * px + m01 * py + m02, //
-    // m10 * px + m11 * py + m12);
   }
 
   /** @param px
@@ -45,6 +41,23 @@ import ch.ethz.idsc.tensor.Tensor;
    * @return */
   public Point2D toPoint2D(double px, double py) {
     return new Point2D.Double( //
+        m00 * px + m01 * py + m02, //
+        m10 * px + m11 * py + m12);
+  }
+
+  /** @param point
+   * @return vector of length 2 */
+  public Tensor toVector(Tensor point) {
+    return toVector( //
+        point.Get(0).number().doubleValue(), //
+        point.Get(1).number().doubleValue());
+  }
+
+  /** @param px
+   * @param py
+   * @return vector of length 2 */
+  public Tensor toVector(double px, double py) {
+    return Tensors.vectorDouble( //
         m00 * px + m01 * py + m02, //
         m10 * px + m11 * py + m12);
   }
