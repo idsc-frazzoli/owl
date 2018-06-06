@@ -35,6 +35,9 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
   private static final Scalar MERIT_EPS = DoubleScalar.of(1E-6);
   // ---
   private transient final ControlsIntegrator controlsIntegrator;
+  // ---
+  private final RelabelDecisionInterface relabelDecision //
+      = new SimpleGlcRelabelDecision(MERIT_EPS);
 
   public StandardTrajectoryPlanner( //
       Tensor eta, //
@@ -58,11 +61,7 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
       final Tensor domainKey = convertToKey(next.stateTime());
       Optional<GlcNode> former = getNode(domainKey);
       if (former.isPresent()) { // is already some node present from previous exploration ?
-        GlcNode formerLabel = former.get();
-        Scalar delta = formerLabel.merit().subtract(next.merit());
-        boolean passed = Scalars.lessThan(MERIT_EPS, delta);
-        passed |= ExactScalarQ.of(delta) && Sign.isPositive(delta);
-        if (passed) // new node is potentially better than previous one
+        if (relabelDecision.doRelabel(next, former.get())) // new node is potentially better than previous one
           domainQueueMap.insert(domainKey, next);
       } else
         domainQueueMap.insert(domainKey, next); // node is considered without comparison to any former node
