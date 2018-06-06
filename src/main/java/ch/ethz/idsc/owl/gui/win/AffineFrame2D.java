@@ -30,12 +30,23 @@ import ch.ethz.idsc.tensor.Tensor;
   /** @param point of which the first 2 entries are interpreted as x, and y
    * @return */
   public Point2D toPoint2D(Tensor point) {
-    double px = point.Get(0).number().doubleValue();
-    double py = point.Get(1).number().doubleValue();
+    return toPoint2D( //
+        point.Get(0).number().doubleValue(), //
+        point.Get(1).number().doubleValue());
+    // double px = point.Get(0).number().doubleValue();
+    // double py = point.Get(1).number().doubleValue();
+    // return new Point2D.Double( //
+    // m00 * px + m01 * py + m02, //
+    // m10 * px + m11 * py + m12);
+  }
+
+  /** @param px
+   * @param py
+   * @return */
+  public Point2D toPoint2D(double px, double py) {
     return new Point2D.Double( //
         m00 * px + m01 * py + m02, //
-        m10 * px + m11 * py + m12 //
-    );
+        m10 * px + m11 * py + m12);
   }
 
   /** @param matrix with dimensions 3 x 3

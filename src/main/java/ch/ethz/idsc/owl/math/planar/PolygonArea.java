@@ -17,14 +17,9 @@ public enum PolygonArea implements TensorScalarFunction {
   @Override
   public Scalar apply(Tensor polygon) {
     int last = polygon.length() - 1;
-    Scalar sum = det(polygon.get(last), polygon.get(0));
+    Scalar sum = StaticHelper.det(polygon.get(last), polygon.get(0));
     for (int index = 0; index < last; ++index)
-      sum = sum.add(det(polygon.get(index), polygon.get(index + 1)));
+      sum = sum.add(StaticHelper.det(polygon.get(index), polygon.get(index + 1)));
     return sum.multiply(RationalScalar.HALF);
-  }
-
-  // helper function
-  private static Scalar det(Tensor p, Tensor q) {
-    return Cross2D.of(p).dot(q).Get();
   }
 }
