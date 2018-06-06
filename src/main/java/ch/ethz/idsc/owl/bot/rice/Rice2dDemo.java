@@ -79,7 +79,9 @@ enum Rice2dDemo {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(glcNode);
       StateTimeTrajectories.print(trajectory);
       List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, glcNode);
-      owlyFrame.addBackground(new TrajectoryRender(samples));
+      TrajectoryRender trajectoryRender = new TrajectoryRender();
+      trajectoryRender.trajectory(samples);
+      owlyFrame.addBackground(trajectoryRender);
     }
     glcExpand.untilOptimal(1000);
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());
@@ -89,7 +91,9 @@ enum Rice2dDemo {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(glcNode);
       StateTimeTrajectories.print(trajectory);
       List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, glcNode);
-      owlyFrame.addBackground(new TrajectoryRender(samples));
+      TrajectoryRender trajectoryRender = new TrajectoryRender();
+      trajectoryRender.trajectory(samples);
+      owlyFrame.addBackground(trajectoryRender);
     }
     owlyFrame.addBackground(RegionRenders.create(ELLIPSOID_REGION));
   }

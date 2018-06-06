@@ -19,7 +19,7 @@ public class PolygonRegion implements Region<Tensor>, Serializable {
   private final Tensor polygon;
 
   private PolygonRegion(Tensor polygon) {
-    this.polygon = N.DOUBLE.of(polygon);
+    this.polygon = N.DOUBLE.of(polygon); // TODO do not N by default
   }
 
   @Override // from Region

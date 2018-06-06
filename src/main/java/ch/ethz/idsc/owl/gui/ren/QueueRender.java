@@ -1,4 +1,4 @@
-// code by jph
+// code by jl
 package ch.ethz.idsc.owl.gui.ren;
 
 import java.awt.Color;
@@ -14,7 +14,11 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class QueueRender implements RenderInterface {
-  private Collection<GlcNode> collection;
+  private static final int LIMIT = 5000;
+  private static final int OFS = 3;
+  private static final int SIZE = 8;
+  // ---
+  private final Collection<GlcNode> collection;
 
   public QueueRender(Collection<GlcNode> collection) {
     this.collection = collection;
@@ -23,11 +27,12 @@ public class QueueRender implements RenderInterface {
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     graphics.setColor(new Color(0, 192, 192, 128));
-    for (GlcNode node : collection) {
-      Tensor x = node.stateTime().state();
-      Point2D p = geometricLayer.toPoint2D(x);
-      Shape shape = new Ellipse2D.Double(p.getX() - 3, p.getY() - 3, 8, 8);
-      graphics.fill(shape);
-    }
+    if (collection.size() < LIMIT)
+      for (GlcNode node : collection) {
+        Tensor x = node.stateTime().state();
+        Point2D p = geometricLayer.toPoint2D(x);
+        Shape shape = new Ellipse2D.Double(p.getX() - OFS, p.getY() - OFS, SIZE, SIZE);
+        graphics.fill(shape);
+      }
   }
 }

@@ -24,6 +24,15 @@ public class PolygonsTest extends TestCase {
     assertFalse(Polygons.isInside(polygon, Tensors.vector(1, 1.1)));
   }
 
+  public void testInsideEmpty() {
+    Tensor polygon = Tensors.empty();
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(.5, .5)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(.9, .9)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(.1, .1)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(.1, -.1)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(1, 1.1)));
+  }
+
   public void testSome() {
     Tensor asd = Tensors.vector(2, 3, 4, 5);
     asd.set(RealScalar.of(8), 1);

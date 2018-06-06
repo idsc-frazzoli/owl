@@ -8,6 +8,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -30,14 +31,12 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
   private List<TrajectorySample> trajectory;
   private Color color = COLOR_TRAJECTORY;
 
-  public TrajectoryRender(List<TrajectorySample> trajectory) {
-    this.trajectory = trajectory;
-  }
-
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    List<TrajectorySample> list = trajectory;
+    if (Objects.isNull(list))
+      return;
     { // draw detailed trajectory from root to goal/furthestgo
-      final List<TrajectorySample> list = trajectory;
       { // draw control vectors u along trajectory
         graphics.setColor(COLOR_FLOW);
         for (TrajectorySample trajectorySample : list) {
@@ -66,7 +65,7 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
     }
     { // draw boxes at nodes in path from root to goal
       graphics.setColor(COLOR_NODES);
-      trajectory.stream().map(TrajectorySample::stateTime).map(StateTime::state).forEach(state -> {
+      list.stream().map(TrajectorySample::stateTime).map(StateTime::state).forEach(state -> {
         Point2D point2d = geometricLayer.toPoint2D(state);
         graphics.draw(new Rectangle2D.Double(point2d.getX() - 1, point2d.getY() - 1, 2, 2));
       });
