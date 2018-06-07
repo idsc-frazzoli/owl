@@ -16,6 +16,8 @@ import java.util.TreeMap;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.std.RelabelDecisionInterface;
+import ch.ethz.idsc.owl.glc.std.SimpleGlcRelabelDecision;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -50,6 +52,9 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
    * 
    * Examples: identity, mod, log, ... */
   public StateTimeTensorFunction represent = StateTime::state;
+  /** decides if new node is better than existing node */
+  public RelabelDecisionInterface relabelDecision //
+      = SimpleGlcRelabelDecision.INSTANCE;
 
   /** Floor(eta .* represent(state))
    * 

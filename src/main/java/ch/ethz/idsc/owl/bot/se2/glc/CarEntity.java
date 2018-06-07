@@ -70,7 +70,7 @@ public class CarEntity extends Se2Entity {
   }
 
   // ---
-  private final Collection<Flow> controls;
+  protected final Collection<Flow> controls;
   public final Tensor goalRadius;
   private final Tensor partitionScale;
   private final Tensor shape;
@@ -104,7 +104,7 @@ public class CarEntity extends Se2Entity {
     return SE2WRAP.distance(x, y); // non-negative
   }
 
-  private RegionWithDistance<Tensor> goalRegion = null;
+  protected RegionWithDistance<Tensor> goalRegion = null;
 
   /** @param goal
    * @return */
