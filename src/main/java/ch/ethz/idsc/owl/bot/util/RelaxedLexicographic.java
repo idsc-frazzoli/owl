@@ -20,15 +20,15 @@ public class RelaxedLexicographic {
     this.slack = slack;
   }
 
-  public int compare(Tensor oldCost, Tensor newCost) {
+  public int compare(Tensor newCost, Tensor oldCost) {
     if (oldCost.length() != newCost.length() || oldCost.length() != slack.length())
       throw TensorRuntimeException.of(oldCost, newCost, slack);
     for (int index = 0; index < oldCost.length(); ++index) {
       int cmp;
       if (Scalars.isZero(oldCost.Get(index))) {
-        cmp = Scalars.compare(oldCost.Get(index), newCost.Get(index));
+        cmp = Scalars.compare(newCost.Get(index), oldCost.Get(index));
       } else {
-        Scalar diffRatio = (oldCost.Get(index).subtract(newCost.Get(index))).divide(newCost.Get(index));
+        Scalar diffRatio = (newCost.Get(index).subtract(oldCost.Get(index))).divide(oldCost.Get(index));
         cmp = Scalars.lessEquals(diffRatio.abs(), slack.Get(index)) //
             ? 0
             : Sign.of(diffRatio).number().intValue();
