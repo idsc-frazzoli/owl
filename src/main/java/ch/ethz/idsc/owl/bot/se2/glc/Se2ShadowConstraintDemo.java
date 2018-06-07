@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.mapping.ShadowMap;
+import ch.ethz.idsc.owl.mapping.ShadowMapSimulator;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -66,8 +66,8 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
         LIDAR_RAYTRACER, carEntity::getStateTimeNow, ray);
     owlyAnimationFrame.addBackground(lidarEmulator);
     // Shadow Map
-    ShadowMap shadowMapPed = //
-        new ShadowMap(lidarEmulator, imageRegion, carEntity::getStateTimeNow, PED_VELOCITY, PED_RADIUS);
+    ShadowMapSimulator shadowMapPed = //
+        new ShadowMapSimulator(lidarEmulator, imageRegion, carEntity::getStateTimeNow, PED_VELOCITY, PED_RADIUS);
     shadowMapPed.setColor(PED_COLOR);
     owlyAnimationFrame.addBackground(shadowMapPed);
     shadowMapPed.startNonBlocking(10);
