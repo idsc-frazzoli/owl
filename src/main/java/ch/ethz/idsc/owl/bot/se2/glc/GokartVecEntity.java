@@ -1,3 +1,4 @@
+// code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-public class GokartVecEntity extends GokartEntity {
+/* package */ class GokartVecEntity extends GokartEntity {
   public GokartVecEntity(StateTime stateTime) {
     super(stateTime);
   }
