@@ -23,7 +23,7 @@ public enum GlcNodes {
    * @return */
   public static GlcNode createRoot(StateTime stateTime, HeuristicFunction heuristicFunction) {
     Scalar minCost = heuristicFunction.minCostToGoal(stateTime.state());
-    Scalar rootCost = (minCost instanceof VectorScalar) ? //
+    Scalar rootCost = minCost instanceof VectorScalar ? // TODO implementation
         VectorScalar.of(Array.zeros(((VectorScalar) minCost).vector().length())) : RealScalar.ZERO;
     return GlcNode.of(null, stateTime, rootCost, minCost);
   }

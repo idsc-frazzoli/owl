@@ -1,3 +1,4 @@
+// code by ynager
 package ch.ethz.idsc.owl.glc.adapter;
 
 import java.io.Serializable;
@@ -16,13 +17,11 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 
 public class VectorCostGoalAdapter implements GoalInterface, Serializable {
+  private final List<CostFunction> costFunctions;
   private final TrajectoryRegionQuery trajectoryRegionQuery;
-  List<CostFunction> costFunctions;
 
-  //  ---
   public VectorCostGoalAdapter( //
       List<CostFunction> costFunctions, //
       Se2ComboRegion se2ComboRegion, //
@@ -33,20 +32,14 @@ public class VectorCostGoalAdapter implements GoalInterface, Serializable {
 
   @Override
   public Scalar minCostToGoal(Tensor x) {
-    Tensor minCosts = Tensors.empty();
-    for (CostFunction cost : costFunctions) {
-      minCosts.append(cost.minCostToGoal(x));
-    }
-    return VectorScalar.of(minCosts);
+    return VectorScalar.of(costFunctions.stream() //
+        .map(costFunction -> costFunction.minCostToGoal(x)));
   }
 
   @Override
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    Tensor costIncrements = Tensors.empty();
-    for (CostFunction cost : costFunctions) {
-      costIncrements.append(cost.costIncrement(glcNode, trajectory, flow));
-    }
-    return VectorScalar.of(costIncrements);
+    return VectorScalar.of(costFunctions.stream() //
+        .map(costFunction -> costFunction.costIncrement(glcNode, trajectory, flow)));
   }
 
   @Override // from TrajectoryRegionQuery

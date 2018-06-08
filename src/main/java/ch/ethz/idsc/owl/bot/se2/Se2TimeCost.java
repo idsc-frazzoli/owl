@@ -1,3 +1,4 @@
+// code by ynager
 package ch.ethz.idsc.owl.bot.se2;
 
 import java.io.Serializable;
@@ -14,15 +15,16 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
 
 public class Se2TimeCost implements CostFunction, Serializable {
-  public static final Se2TimeCost of(Se2ComboRegion se2ComboRegion, Collection<Flow> controls) {
+  public static CostFunction of(Se2ComboRegion se2ComboRegion, Collection<Flow> controls) {
     return new Se2TimeCost(se2ComboRegion, controls);
   }
+  // ---
 
+  private final Se2ComboRegion se2ComboRegion;
   private final Scalar maxSpeed;
   private final Scalar maxTurning;
-  Se2ComboRegion se2ComboRegion;
 
-  public Se2TimeCost(Se2ComboRegion se2ComboRegion, Collection<Flow> controls) {
+  private Se2TimeCost(Se2ComboRegion se2ComboRegion, Collection<Flow> controls) {
     this.se2ComboRegion = se2ComboRegion;
     this.maxSpeed = Se2Controls.maxSpeed(controls);
     this.maxTurning = Se2Controls.maxTurning(controls);

@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.owl.bot.util.Lexicographic;
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ChopInterface;
 import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
@@ -23,6 +23,7 @@ import ch.ethz.idsc.tensor.sca.NInterface;
 /** immutable
  * 
  * string expression is of the form [1, 2, 3] to prevent confusion with standard vectors */
+// API not finalized: should VectorScalar allow entries with other VectorScalar's?
 public class VectorScalar extends AbstractScalar implements //
     ChopInterface, ExactScalarQInterface, NInterface, Comparable<Scalar>, Serializable {
   /** @param vector
@@ -34,8 +35,14 @@ public class VectorScalar extends AbstractScalar implements //
     return new VectorScalar(vector.copy());
   }
 
+  /** @param numbers
+   * @return */
   public static Scalar of(Number... numbers) {
-    return VectorScalar.of(Tensor.of(Stream.of(numbers).map(RealScalar::of)));
+    return new VectorScalar(Tensors.vector(numbers));
+  }
+
+  public static Scalar of(Stream<Scalar> stream) {
+    return new VectorScalar(Tensor.of(stream));
   }
 
   // ---
