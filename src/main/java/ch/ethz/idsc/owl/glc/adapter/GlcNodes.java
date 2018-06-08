@@ -9,12 +9,9 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.alg.Array;
 
 public enum GlcNodes {
   ;
@@ -23,9 +20,7 @@ public enum GlcNodes {
    * @return */
   public static GlcNode createRoot(StateTime stateTime, HeuristicFunction heuristicFunction) {
     Scalar minCost = heuristicFunction.minCostToGoal(stateTime.state());
-    Scalar rootCost = (minCost instanceof VectorScalar) ? //
-        VectorScalar.of(Array.zeros(((VectorScalar) minCost).vector().length())) : RealScalar.ZERO;
-    return GlcNode.of(null, stateTime, rootCost, minCost);
+    return GlcNode.of(null, stateTime, minCost.zero(), minCost);
   }
 
   /** coarse path of {@link StateTime}s of nodes from root to given node
