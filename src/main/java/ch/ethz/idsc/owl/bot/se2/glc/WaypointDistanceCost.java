@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -29,9 +30,9 @@ public class WaypointDistanceCost implements CostFunction, Serializable {
   }
   // ---
 
-  private final Scalar outside = RealScalar.ONE;
-  private final Tensor scale;
+  private final int offPathCost = 1;
   private final int max_y;
+  private final Tensor scale;
   public final Tensor image;
 
   private WaypointDistanceCost(Tensor waypoints, Tensor range, float pathWidth) {
@@ -40,23 +41,18 @@ public class WaypointDistanceCost implements CostFunction, Serializable {
     float scaleX = scale.Get(1).number().floatValue();
     float scaleY = scale.Get(0).number().floatValue();
     // ---
-    BufferedImage buffImage = new BufferedImage(600, 600, BufferedImage.TYPE_BYTE_GRAY);
+    BufferedImage buffImage = new BufferedImage(DIMENSIONS.get(0), DIMENSIONS.get(1), BufferedImage.TYPE_BYTE_GRAY);
     Graphics2D graphics = (Graphics2D) buffImage.getGraphics();
-    graphics.setColor(new Color(1, 1, 1));
+    graphics.setColor(new Color(offPathCost, offPathCost, offPathCost));
     graphics.fillRect(0, 0, DIMENSIONS.get(0), DIMENSIONS.get(1));
     graphics.setColor(new Color(0, 0, 0));
     graphics.setStroke(new BasicStroke(pathWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-    // ---
-    float x0 = waypoints.get(waypoints.length() - 1).Get(0).number().floatValue() * scaleX;
-    float y0 = waypoints.get(waypoints.length() - 1).Get(1).number().floatValue() * scaleY;
-    for (int i = 0; i < waypoints.length(); i++) {
-      float x1 = waypoints.get(i).Get(0).number().floatValue() * scaleX;
-      float y1 = waypoints.get(i).Get(1).number().floatValue() * scaleY;
-      Line2D line = new Line2D.Float(x0, max_y - y0, x1, max_y - y1);
-      graphics.draw(line);
-      x0 = x1;
-      y0 = y1;
-    }
+    Tensor model2pixel = Tensors.matrix(new Number[][] { //
+        { scaleX, 0, 0 }, { 0, -scaleY, max_y }, { 0, 0, 1 } });
+    GeometricLayer geometricLayer = GeometricLayer.of(model2pixel);
+    Path2D path = geometricLayer.toPath2D(waypoints);
+    path.closePath();
+    graphics.draw(path);
     image = ImageFormat.from(buffImage);
   }
 
@@ -81,6 +77,6 @@ public class WaypointDistanceCost implements CostFunction, Serializable {
       if (0 <= piy && piy < DIMENSIONS.get(0))
         return image.Get(piy, pix);
     }
-    return outside;
+    return RealScalar.of(offPathCost);
   }
 }
