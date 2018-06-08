@@ -1,4 +1,4 @@
-// code by bapaden, jph, and jl
+// code by bapaden, jph, jl, and ynager
 package ch.ethz.idsc.owl.glc.std;
 
 import java.util.Collection;
@@ -25,10 +25,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * <li>nodes that get replaced in a domain, are also removed from the queue
  * </ul> */
 public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
-  /** minimum threshold of improvement by a candidate */
-  // ---
   private transient final ControlsIntegrator controlsIntegrator;
-  // ---
 
   public StandardTrajectoryPlanner( //
       Tensor eta, //

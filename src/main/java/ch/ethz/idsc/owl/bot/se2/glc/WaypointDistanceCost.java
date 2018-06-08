@@ -1,3 +1,4 @@
+// code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.BasicStroke;
@@ -5,6 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,18 +21,20 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.sca.Floor;
 
-public class WaypointDistanceCost implements CostFunction {
-  public static final WaypointDistanceCost of(Tensor waypoints, Tensor range, float pathWidth) {
+public class WaypointDistanceCost implements CostFunction, Serializable {
+  private static final List<Integer> DIMENSIONS = Arrays.asList(640, 640); // TODO magic const
+
+  public static CostFunction of(Tensor waypoints, Tensor range, float pathWidth) {
     return new WaypointDistanceCost(waypoints, range, pathWidth);
   }
+  // ---
 
-  private static final List<Integer> DIMENSIONS = Arrays.asList(640, 640);
   private final Scalar outside = RealScalar.ONE;
   private final Tensor scale;
   private final int max_y;
   public final Tensor image;
 
-  public WaypointDistanceCost(Tensor waypoints, Tensor range, float pathWidth) {
+  private WaypointDistanceCost(Tensor waypoints, Tensor range, float pathWidth) {
     max_y = DIMENSIONS.get(0) - 1;
     scale = Tensors.vector(DIMENSIONS.get(1), DIMENSIONS.get(0)).pmul(range.map(Scalar::reciprocal));
     float scaleX = scale.Get(1).number().floatValue();
@@ -66,7 +70,7 @@ public class WaypointDistanceCost implements CostFunction {
     return pointcost(trajectory.get(trajectory.size() - 1).state());
   }
 
-  public Scalar pointcost(Tensor tensor) {
+  /* package */ Scalar pointcost(Tensor tensor) {
     if (tensor.length() != 2)
       tensor = tensor.extract(0, 2);
     Tensor pixel = Floor.of(tensor.pmul(scale));
