@@ -14,12 +14,7 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.ExactScalarQ;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 /** transcription of the c++ implementation by bapaden
  * 
@@ -31,13 +26,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * </ul> */
 public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
   /** minimum threshold of improvement by a candidate */
-  // TODO probably should be relative to order of magnitude of merit
-  private static final Scalar MERIT_EPS = DoubleScalar.of(1E-6);
   // ---
   private transient final ControlsIntegrator controlsIntegrator;
   // ---
-  private final RelabelDecisionInterface relabelDecision //
-      = new SimpleGlcRelabelDecision(MERIT_EPS);
 
   public StandardTrajectoryPlanner( //
       Tensor eta, //
@@ -61,8 +52,8 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
       final Tensor domainKey = convertToKey(next.stateTime());
       Optional<GlcNode> former = getNode(domainKey);
       if (former.isPresent()) { // is already some node present from previous exploration ?
-        if (relabelDecision.doRelabel(next, former.get())) // new node is potentially better than previous one
-          domainQueueMap.insert(domainKey, next);
+        if (relabelDecision.doRelabel(next, former.get()))
+          domainQueueMap.insert(domainKey, next); // new node is potentially better than previous one
       } else
         domainQueueMap.insert(domainKey, next); // node is considered without comparison to any former node
     }
