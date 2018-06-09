@@ -14,13 +14,18 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ChopInterface;
 import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.NInterface;
 
-/** immutable
+/** immutable as required by {@link Scalar} interface
+ * 
+ * multiplication of two {@link VectorScalar}s throws an exception.
+ * 
+ * multiplication with {@link Quantity} is not commutative
  * 
  * string expression is of the form [1, 2, 3] to prevent confusion with standard vectors */
 // API not finalized: should VectorScalar allow entries with other VectorScalar's?
@@ -52,13 +57,15 @@ public class VectorScalar extends AbstractScalar implements //
     this.vector = vector;
   }
 
-  /** @return copy of content vector */
+  /** @return unmodifiable content vector */
   public Tensor vector() {
-    return vector.copy();
+    return vector.unmodifiable();
   }
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
+    if (scalar instanceof VectorScalar)
+      throw TensorRuntimeException.of(this, scalar);
     return new VectorScalar(vector.multiply(scalar));
   }
 
@@ -136,7 +143,8 @@ public class VectorScalar extends AbstractScalar implements //
   @Override // from Scalar
   public boolean equals(Object object) {
     if (object instanceof VectorScalar) {
-      return ((VectorScalar) object).vector.equals(vector);
+      VectorScalar vectorScalar = (VectorScalar) object;
+      return vector.equals(vectorScalar.vector);
     }
     return false;
   }
