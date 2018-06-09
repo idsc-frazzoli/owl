@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * 
  * however, this requires to flip the y coordinate when extracting coordinates */
 // API class name may not be ideal
-public class FlipYTensorInterp<T> implements Serializable {
+public class FlipYXTensorInterp<T> implements Serializable {
   private final Tensor image;
   private final int dim1;
   private final float scaleX;
@@ -25,7 +25,7 @@ public class FlipYTensorInterp<T> implements Serializable {
   private final int max_y;
   private final ScalarMapper<T> scalarMapper;
 
-  public FlipYTensorInterp(Tensor image, Tensor range, ScalarMapper<T> function, T outside) {
+  public FlipYXTensorInterp(Tensor image, Tensor range, ScalarMapper<T> function, T outside) {
     this.image = image;
     List<Integer> dimensions = Dimensions.of(image);
     dim1 = dimensions.get(1);
