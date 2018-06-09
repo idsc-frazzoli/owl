@@ -23,7 +23,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.PolygonRegion;
+import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -45,7 +45,7 @@ enum R2PolygonDemo {
     Collection<Flow> controls = r2Config.getFlows(20);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 5), DoubleScalar.of(0.2));
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
-    Region<Tensor> region = PolygonRegion.of(R2ExamplePolygons.BULKY_TOP_LEFT);
+    Region<Tensor> region = PolygonRegions.numeric(R2ExamplePolygons.BULKY_TOP_LEFT);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
     // ---

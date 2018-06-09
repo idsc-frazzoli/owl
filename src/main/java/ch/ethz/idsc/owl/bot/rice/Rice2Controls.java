@@ -11,7 +11,6 @@ import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -27,7 +26,7 @@ public class Rice2Controls implements FlowsInterface, Serializable {
   public static Collection<Flow> create1d(Scalar mu, int num) {
     StateSpaceModel stateSpaceModel = Rice2StateSpaceModel.of(mu);
     List<Flow> list = new ArrayList<>();
-    for (Tensor u : Subdivide.of(DoubleScalar.of(-1), DoubleScalar.of(1), num))
+    for (Tensor u : Subdivide.of(-1.0, 1.0, num))
       list.add(StateSpaceModels.createFlow(stateSpaceModel, Tensors.of(u)));
     return list;
   }
@@ -41,8 +40,8 @@ public class Rice2Controls implements FlowsInterface, Serializable {
   public static FlowsInterface create2d(Scalar mu, int seg) {
     return new Rice2Controls(mu, seg);
   }
-  // ---
 
+  // ---
   private final StateSpaceModel stateSpaceModel;
   private final int seg;
 
