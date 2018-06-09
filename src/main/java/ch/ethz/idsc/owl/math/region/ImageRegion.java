@@ -20,7 +20,7 @@ public class ImageRegion implements Region<Tensor>, Serializable {
   private final Tensor image;
   private final Tensor range;
   private final Tensor scale;
-  private final FlipYTensorInterp<Boolean> flipYTensorInterp;
+  private final FlipYXTensorInterp<Boolean> flipYXTensorInterp;
 
   /** @param image has to be a matrix
    * @param range effective size of image in coordinate space, vector of length 2
@@ -32,12 +32,12 @@ public class ImageRegion implements Region<Tensor>, Serializable {
     int dim1 = dimensions.get(1);
     this.range = range;
     scale = Tensors.vector(dim1, dim0).pmul(range.map(Scalar::reciprocal));
-    flipYTensorInterp = new FlipYTensorInterp<>(image, range, Scalars::nonZero, outside);
+    flipYXTensorInterp = new FlipYXTensorInterp<>(image, range, Scalars::nonZero, outside);
   }
 
   @Override // from Region
   public boolean isMember(Tensor tensor) {
-    return flipYTensorInterp.at(tensor);
+    return flipYXTensorInterp.at(tensor);
   }
 
   public Tensor image() {

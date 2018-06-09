@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.FlipYTensorInterp;
+import ch.ethz.idsc.owl.math.region.FlipYXTensorInterp;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -25,7 +25,7 @@ public class ImageCostFunction implements CostFunction, Serializable {
   // ---
   private final Tensor image;
   private final Tensor range;
-  /* package for testing */ final FlipYTensorInterp<Scalar> flipYTensorInterp;
+  /* package for testing */ final FlipYXTensorInterp<Scalar> flipYXTensorInterp;
 
   /** @param image as a matrix
    * @param range effective size of image in coordinate space
@@ -33,7 +33,7 @@ public class ImageCostFunction implements CostFunction, Serializable {
   public ImageCostFunction(Tensor image, Tensor range, Scalar outside) {
     this.image = MatrixQ.require(image);
     this.range = VectorQ.requireLength(range, 2);
-    flipYTensorInterp = new FlipYTensorInterp<>(image, range, value -> value, outside);
+    flipYXTensorInterp = new FlipYXTensorInterp<>(image, range, value -> value, outside);
   }
 
   @Override // from HeuristicFunction
@@ -46,7 +46,7 @@ public class ImageCostFunction implements CostFunction, Serializable {
     Tensor dts = StateTimeTrajectories.deltaTimes(glcNode, trajectory);
     Tensor cost = Tensor.of(trajectory.stream() //
         .map(StateTime::state) //
-        .map(flipYTensorInterp::at));
+        .map(flipYXTensorInterp::at));
     return cost.dot(dts).Get();
   }
 

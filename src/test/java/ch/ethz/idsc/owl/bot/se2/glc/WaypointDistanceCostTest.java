@@ -14,8 +14,8 @@ public class WaypointDistanceCostTest extends TestCase {
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     WaypointDistanceCost wdc = new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, Arrays.asList(640, 640));
     for (int i = 0; i < waypoints.length(); i++) {
-      assertEquals(wdc.pointcost(waypoints.get(i)), RealScalar.ZERO);
+      assertEquals(wdc.flipYXTensorInterp.at(waypoints.get(i)), RealScalar.ZERO);
     }
-    assertEquals(wdc.pointcost(Tensors.vector(10, 10)), RealScalar.ONE);
+    assertEquals(wdc.flipYXTensorInterp.at(Tensors.vector(10, 10)), RealScalar.ONE);
   }
 }
