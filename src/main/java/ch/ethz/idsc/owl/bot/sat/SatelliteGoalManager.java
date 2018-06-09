@@ -21,7 +21,6 @@ public class SatelliteGoalManager extends SimpleTrajectoryRegionQuery implements
   }
   // ---
 
-  // TODO implementation assumes max speed == 1
   public SatelliteGoalManager(EllipsoidRegion ellipsoidRegion) {
     super(new TimeInvariantRegion(ellipsoidRegion));
   }

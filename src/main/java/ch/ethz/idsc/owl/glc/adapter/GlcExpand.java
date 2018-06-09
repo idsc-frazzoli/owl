@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.tensor.Scalars;
 
 /** following the observation by ynager the expansion has to continue
  * until merit of queue node is no less than cost of node in goal */
@@ -39,7 +40,7 @@ public class GlcExpand {
    * 
    * @param limit */
   public void untilOptimal(int limit) {
-    expand(limit, () -> GlcNodes.isOptimal(trajectoryPlanner));
+    expand(limit, this::isOptimal);
   }
 
   private void expand(int limit, Supplier<Boolean> isFinished) {
@@ -53,5 +54,15 @@ public class GlcExpand {
         break;
       }
     }
+  }
+
+  /** @return true if no node in queue can achieve a lower cost than best node in goal region */
+  public boolean isOptimal() {
+    Optional<GlcNode> best = trajectoryPlanner.getBest();
+    return best.isPresent() //
+        && Scalars.lessEquals( //
+            best.get().costFromRoot(), //
+            // in the current implementation the best node is guaranteed in queue
+            trajectoryPlanner.getQueue().iterator().next().merit());
   }
 }

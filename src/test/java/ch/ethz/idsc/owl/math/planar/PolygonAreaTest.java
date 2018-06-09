@@ -26,18 +26,22 @@ public class PolygonAreaTest extends TestCase {
   }
 
   public void testAreaEmpty() {
-    {
-      Tensor poly = Tensors.fromString("{{1,1},{2,1}}");
-      Scalar area = PolygonArea.FUNCTION.apply(poly);
-      assertEquals(area, RealScalar.ZERO);
-      assertTrue(ExactScalarQ.of(area));
-    }
-    {
-      Tensor poly = Tensors.fromString("{{1,1}}");
-      Scalar area = PolygonArea.FUNCTION.apply(poly);
-      assertEquals(area, RealScalar.ZERO);
-      assertTrue(ExactScalarQ.of(area));
-    }
+    Scalar area = PolygonArea.FUNCTION.apply(Tensors.empty());
+    assertEquals(area, RealScalar.ZERO);
+  }
+
+  public void testAreaLine() {
+    Tensor poly = Tensors.fromString("{{1,1},{2,1}}");
+    Scalar area = PolygonArea.FUNCTION.apply(poly);
+    assertEquals(area, RealScalar.ZERO);
+    assertTrue(ExactScalarQ.of(area));
+  }
+
+  public void testAreaPoint() {
+    Tensor poly = Tensors.fromString("{{1,1}}");
+    Scalar area = PolygonArea.FUNCTION.apply(poly);
+    assertEquals(area, RealScalar.ZERO);
+    assertTrue(ExactScalarQ.of(area));
   }
 
   public void testAreaTriangleUnit() {
@@ -66,6 +70,15 @@ public class PolygonAreaTest extends TestCase {
       Scalar area = PolygonArea.FUNCTION.apply(poly);
       assertEquals(area, Scalars.fromString("0[m^2]"));
       assertTrue(ExactScalarQ.of(area));
+    }
+  }
+
+  public void testFailScalar() {
+    try {
+      PolygonArea.FUNCTION.apply(RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
     }
   }
 }

@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.math.region.PolygonRegion;
+import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
   ;
   public static TransitionRegionQuery polygon1() {
     return new SampledTransitionRegionQuery(CatchyTrajectoryRegionQuery.timeInvariant( //
-        PolygonRegion.of(Tensors.matrix(new Number[][] { //
+        PolygonRegions.numeric(Tensors.matrix(new Number[][] { //
             { 3, 1 }, //
             { 4, 1 }, //
             { 4, 6 }, //
