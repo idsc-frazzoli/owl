@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,16 +16,16 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * 
  * however, this requires to flip the y coordinate when extracting coordinates */
 // API class name may not be ideal
-public class FlipYTensorInterp<T> {
+public class FlipYTensorInterp<T> implements Serializable {
   private final Tensor image;
   private final int dim1;
   private final float scaleX;
   private final float scaleY;
   private final T outside;
   private final int max_y;
-  private final Function<Scalar, T> function;
+  private final ScalarMapper<T> scalarMapper;
 
-  public FlipYTensorInterp(Tensor image, Tensor range, Function<Scalar, T> function, T outside) {
+  public FlipYTensorInterp(Tensor image, Tensor range, ScalarMapper<T> function, T outside) {
     this.image = image;
     List<Integer> dimensions = Dimensions.of(image);
     dim1 = dimensions.get(1);
@@ -35,23 +35,20 @@ public class FlipYTensorInterp<T> {
     scaleX = scale.Get(0).number().floatValue();
     scaleY = scale.Get(1).number().floatValue();
     this.outside = outside;
-    this.function = function;
+    this.scalarMapper = function;
   }
 
   /** @param vector of length at least 2
-   * @return */
+   * @return
+   * @throws Exception if vector has insufficient length */
   public T at(Tensor vector) {
     float fix = vector.Get(0).number().floatValue();
-    if (0 <= fix) {
-      float fiy = vector.Get(1).number().floatValue();
-      if (0 <= fiy) {
-        int pix = (int) (fix * scaleX);
-        if (pix < dim1) {
-          int piy = max_y - (int) (fiy * scaleY);
-          if (0 <= piy)
-            return function.apply(image.Get(piy, pix));
-        }
-      }
+    float fiy = vector.Get(1).number().floatValue();
+    if (0 <= fix && 0 <= fiy) {
+      int pix = (int) (fix * scaleX);
+      int piy = max_y - (int) (fiy * scaleY);
+      if (0 <= piy && pix < dim1)
+        return scalarMapper.apply(image.Get(piy, pix));
     }
     return outside;
   }
