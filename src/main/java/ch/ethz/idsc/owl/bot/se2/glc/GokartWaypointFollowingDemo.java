@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.gui.ren.Se2WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
-import ch.ethz.idsc.owl.math.region.PolygonRegion;
+import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -58,7 +58,7 @@ public class GokartWaypointFollowingDemo extends Se2CarDemo {
     Region<Tensor> region = Se2PointsVsRegions.line(gokartEntity.coords_X(), imageRegion);
     // ---
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
-    Region<Tensor> polygonRegion = PolygonRegion.of(VIRTUAL);
+    Region<Tensor> polygonRegion = PolygonRegions.numeric(VIRTUAL);
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(region, polygonRegion));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
     // ---
