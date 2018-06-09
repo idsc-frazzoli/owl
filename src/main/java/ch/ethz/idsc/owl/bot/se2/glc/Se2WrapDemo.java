@@ -22,7 +22,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.PolygonRegion;
+import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -44,14 +44,14 @@ enum Se2WrapDemo {
   ;
   static TrajectoryRegionQuery obstacleQuery() {
     return CatchyTrajectoryRegionQuery.timeInvariant(RegionUnion.wrap(Arrays.asList( //
-        PolygonRegion.of(Tensors.matrixDouble(new double[][] { //
+        PolygonRegions.numeric(Tensors.matrixDouble(new double[][] { //
             { 0.633, -0.333 }, { 1.733, 0.517 }, { 1.617, 2.317 }, { 0.483, 3.317 }, //
             { -1.250, 3.167 }, { -1.383, 4.483 }, { 6.350, 4.400 }, { 6.250, -0.950 } //
         })), //
-        PolygonRegion.of(Tensors.matrixDouble(new double[][] { //
+        PolygonRegions.numeric(Tensors.matrixDouble(new double[][] { //
             { -0.717, 3.583 }, { -2.100, 1.517 }, { -3.167, 0.033 }, { -5.750, 0.017 }, { -5.517, 5.117 } //
         })), //
-        PolygonRegion.of(Tensors.matrixDouble(new double[][] { //
+        PolygonRegions.numeric(Tensors.matrixDouble(new double[][] { //
             { -6.933, 0.300 }, { -4.700, 0.250 }, { -4.617, -2.950 }, { 0.433, -3.217 }, //
             { 1.050, -0.300 }, { 1.867, -0.417 }, { 2.150, -5.300 }, { -6.900, -4.900 } //
         })) //

@@ -6,7 +6,6 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
-import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -53,7 +52,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     owlyFrame.jFrame.setBounds(100, 100, 600, 600);
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-    while (!GlcNodes.isOptimal(trajectoryPlanner) && owlyFrame.jFrame.isVisible()) {
+    while (!glcExpand.isOptimal() && owlyFrame.jFrame.isVisible()) {
       glcExpand.findAny(50);
       owlyFrame.setGlc(trajectoryPlanner);
       Thread.sleep(1);

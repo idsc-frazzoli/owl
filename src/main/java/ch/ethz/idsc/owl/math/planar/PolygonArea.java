@@ -3,8 +3,10 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 
 /** polygon not necessarily convex
@@ -16,6 +18,8 @@ public enum PolygonArea implements TensorScalarFunction {
   // ---
   @Override
   public Scalar apply(Tensor polygon) {
+    if (Tensors.isEmpty(polygon))
+      return RealScalar.ZERO;
     int last = polygon.length() - 1;
     Scalar sum = StaticHelper.det(polygon.get(last), polygon.get(0));
     for (int index = 0; index < last; ++index)
