@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.Arrays;
 
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,6 +25,7 @@ enum WaypointDistanceCostDemo {
         graphics.drawImage(ImageFormat.of(wdc.image().multiply(RealScalar.of(100.))), 0, 0, null);
       }
     };
+    frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     frame.setSize(700, 700);
     frame.setLocation(100, 100);
     frame.setVisible(true);
