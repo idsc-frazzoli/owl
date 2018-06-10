@@ -17,9 +17,13 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ChopInterface;
+import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
+import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.NInterface;
+import ch.ethz.idsc.tensor.sca.Real;
 
 /** immutable as required by {@link Scalar} interface
  * 
@@ -30,7 +34,7 @@ import ch.ethz.idsc.tensor.sca.NInterface;
  * string expression is of the form [1, 2, 3] to prevent confusion with standard vectors */
 // API not finalized: should VectorScalar allow entries with other VectorScalar's?
 public class VectorScalar extends AbstractScalar implements //
-    ChopInterface, ExactScalarQInterface, NInterface, Comparable<Scalar>, Serializable {
+    ChopInterface, ComplexEmbedding, ExactScalarQInterface, NInterface, Comparable<Scalar>, Serializable {
   /** @param vector
    * @return
    * @throws Exception if input is not a vector, or contains entries of type {@link VectorScalar} */
@@ -110,6 +114,26 @@ public class VectorScalar extends AbstractScalar implements //
     return new VectorScalar(chop.of(vector));
   }
 
+  @Override // from ComplexEmbedding
+  public Scalar conjugate() {
+    return new VectorScalar(Conjugate.of(vector));
+  }
+
+  @Override // from ComplexEmbedding
+  public Scalar real() {
+    return new VectorScalar(Real.of(vector));
+  }
+
+  @Override // from ComplexEmbedding
+  public Scalar imag() {
+    return new VectorScalar(Imag.of(vector));
+  }
+
+  @Override // from ExactScalarQInterface
+  public boolean isExactScalar() {
+    return ExactScalarQ.all(vector);
+  }
+
   @Override // from NInterface
   public Scalar n() {
     return new VectorScalar(N.DOUBLE.of(vector));
@@ -118,11 +142,6 @@ public class VectorScalar extends AbstractScalar implements //
   @Override // from NInterface
   public Scalar n(MathContext mathContext) {
     return new VectorScalar(N.in(mathContext.getPrecision()).of(vector));
-  }
-
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return ExactScalarQ.all(vector);
   }
 
   /***************************************************/

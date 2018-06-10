@@ -13,6 +13,9 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Conjugate;
+import ch.ethz.idsc.tensor.sca.Imag;
+import ch.ethz.idsc.tensor.sca.Real;
 import junit.framework.TestCase;
 
 public class VectorScalarTest extends TestCase {
@@ -36,6 +39,13 @@ public class VectorScalarTest extends TestCase {
     Scalar v1 = VectorScalar.of(Tensors.vector(1, 6, 1));
     Scalar v2 = VectorScalar.of(Tensors.vector(1, 5, 10));
     assertEquals(Scalars.compare(v1, v2), Integer.compare(1, 0));
+  }
+
+  public void testComplex() {
+    Scalar a = VectorScalar.of(Tensors.fromString("{1+3*I,2-4*I}"));
+    assertEquals(Real.of(a), VectorScalar.of(1, +2));
+    assertEquals(Imag.of(a), VectorScalar.of(3, -4));
+    assertEquals(Conjugate.of(a), VectorScalar.of(Tensors.fromString("{1-3*I,2+4*I}")));
   }
 
   public void testMultiply() {
