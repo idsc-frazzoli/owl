@@ -21,7 +21,7 @@ public class AffineFrame2DTest extends TestCase {
     Tensor m1 = Se2Utils.toSE2Matrix(Tensors.vector(1, 2, 3));
     AffineFrame2D af2 = new AffineFrame2D(m1);
     Tensor v = Tensors.vector(-.3, -.4, 1);
-    Point2D p = af2.toPoint2D(v);
+    Point2D p = af2.toPoint2D(v.Get(0).number().doubleValue(), v.Get(1).number().doubleValue());
     Tensor q = m1.dot(v);
     assertEquals(p.getX(), q.Get(0).number().doubleValue());
     assertEquals(p.getY(), q.Get(1).number().doubleValue());
