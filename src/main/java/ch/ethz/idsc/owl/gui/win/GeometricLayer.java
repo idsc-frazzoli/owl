@@ -35,10 +35,12 @@ public class GeometricLayer {
 
   /** only the first 2 entries of x are taken into account
    * 
-   * @param x = {px, py, ...}
+   * @param vector of the form {px, py, ...}
    * @return */
-  public Point2D toPoint2D(Tensor x) {
-    return deque.peek().toPoint2D(x);
+  public Point2D toPoint2D(Tensor vector) {
+    return deque.peek().toPoint2D( //
+        vector.Get(0).number().doubleValue(), //
+        vector.Get(1).number().doubleValue());
   }
 
   /** @param px
@@ -46,6 +48,21 @@ public class GeometricLayer {
    * @return */
   public Point2D toPoint2D(double px, double py) {
     return deque.peek().toPoint2D(px, py);
+  }
+
+  /** @param vector of the form {px, py, ...}
+   * @return vector of length 2 */
+  public Tensor toVector(Tensor vector) {
+    return deque.peek().toVector( //
+        vector.Get(0).number().doubleValue(), //
+        vector.Get(1).number().doubleValue());
+  }
+
+  /** @param px
+   * @param py
+   * @return vector of length 2 */
+  public Tensor toVector(double px, double py) {
+    return deque.peek().toVector(px, py);
   }
 
   /** inspired by opengl

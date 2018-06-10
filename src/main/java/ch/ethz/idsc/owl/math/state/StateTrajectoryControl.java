@@ -67,7 +67,7 @@ public abstract class StateTrajectoryControl implements TrajectoryControl {
   /** @param trajectory
    * @return */
   protected List<TrajectorySample> resetAction(List<TrajectorySample> trajectory) {
-    System.err.println("out of trajectory");
+    // System.err.println("out of trajectory");
     return null;
   }
 

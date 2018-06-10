@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 
 public final class GeometricComponent {
   private static final Font DEFAULT_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
-  private static final double WHEEL_ANGLE = Math.PI / 10;
+  private static final double WHEEL_ANGLE = Math.PI / 12;
   private static final int BUTTON_DRAG = 3;
   /** initial model to pixel matrix */
   private static final Tensor MODEL2PIXEL_INITIAL = Tensors.matrix(new Number[][] { //

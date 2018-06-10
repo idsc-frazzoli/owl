@@ -44,6 +44,18 @@ public class GeometricLayerTest extends TestCase {
     }
   }
 
+  public void testVector() {
+    Tensor model2pixel = Tensors.fromString("{{1,2,3},{2,-1,7},{0,0,1}}");
+    Tensor mouseSe2State = Tensors.vector(9, 7, 2);
+    GeometricLayer geometricLayer = new GeometricLayer(model2pixel, mouseSe2State);
+    Tensor vector = Tensors.vector(9, 20, 1);
+    Tensor v1 = geometricLayer.toVector(vector);
+    Tensor v2 = geometricLayer.toVector(9, 20);
+    Tensor expected = model2pixel.dot(vector).extract(0, 2);
+    assertEquals(expected, v1);
+    assertEquals(expected, v2);
+  }
+
   public void testFail() {
     GeometricLayer geometricLayer = new GeometricLayer(IdentityMatrix.of(3), Array.zeros(3));
     geometricLayer.popMatrix();

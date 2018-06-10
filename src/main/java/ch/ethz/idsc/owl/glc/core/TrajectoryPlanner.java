@@ -1,4 +1,4 @@
-// code by bapaden, jph, and jl
+// code by bapaden, jph, jl, ynager
 package ch.ethz.idsc.owl.glc.core;
 
 import java.io.Serializable;
@@ -53,8 +53,8 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
    * Examples: identity, mod, log, ... */
   public StateTimeTensorFunction represent = StateTime::state;
   /** decides if new node is better than existing node */
-  public RelabelDecisionInterface<GlcNode> relabelDecision //
-      = SimpleGlcRelabelDecision.INSTANCE;
+  public RelabelDecisionInterface<GlcNode> relabelDecision = //
+      SimpleGlcRelabelDecision.INSTANCE;
 
   /** Floor(eta .* represent(state))
    * 
