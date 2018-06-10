@@ -1,8 +1,8 @@
 // code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -17,7 +17,7 @@ enum WaypointDistanceCostDemo {
   ;
   public static void main(String[] args) {
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
-    WaypointDistanceCost wdc = new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, Arrays.asList(440, 640));
+    WaypointDistanceCost wdc = new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(440, 640));
     JFrame frame = new JFrame() {
       @Override
       public void paint(Graphics graphics) {

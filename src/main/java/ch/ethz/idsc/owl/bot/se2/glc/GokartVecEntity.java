@@ -1,8 +1,8 @@
 // code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
@@ -36,8 +36,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     // TODO: add costs / slack from within demo
     List<CostFunction> costs = new ArrayList<>();
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
-    // TODO: magic constants
-    costs.add(new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, Arrays.asList(640, 640)));
+    // magic constants specific for track
+    costs.add(new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640)));
     costs.add(Se2TimeCost.of(se2ComboRegion, controls));
     // ---
     GoalInterface goalInterface = //
