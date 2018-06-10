@@ -14,6 +14,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 
 public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
   private final TrajectoryEntity trajectoryEntity;
+  private boolean showCost = false;
 
   public SimpleGlcPlannerCallback(TrajectoryEntity trajectoryEntity) {
     this.trajectoryEntity = trajectoryEntity;
@@ -23,11 +24,15 @@ public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
-      System.out.println("Cost to Goal: " + optional.get().costFromRoot());
+      if (showCost)
+        System.out.println("Cost to Goal: " + optional.get().costFromRoot());
       List<TrajectorySample> tail = //
           GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
-      // trajectoryEntity.setTrajectory1st(Trajectories.glue(head, tail));
       trajectoryEntity.trajectory(Trajectories.glue(head, tail));
     }
+  }
+
+  public void showCost() {
+    showCost = true;
   }
 }

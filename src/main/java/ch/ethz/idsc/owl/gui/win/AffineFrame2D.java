@@ -28,14 +28,6 @@ import ch.ethz.idsc.tensor.Tensors;
     m12 = tensor.Get(1, 2).number().doubleValue();
   }
 
-  /** @param point of which the first 2 entries are interpreted as x, and y
-   * @return */
-  public Point2D toPoint2D(Tensor point) {
-    return toPoint2D( //
-        point.Get(0).number().doubleValue(), //
-        point.Get(1).number().doubleValue());
-  }
-
   /** @param px
    * @param py
    * @return */
@@ -43,14 +35,6 @@ import ch.ethz.idsc.tensor.Tensors;
     return new Point2D.Double( //
         m00 * px + m01 * py + m02, //
         m10 * px + m11 * py + m12);
-  }
-
-  /** @param point
-   * @return vector of length 2 */
-  public Tensor toVector(Tensor point) {
-    return toVector( //
-        point.Get(0).number().doubleValue(), //
-        point.Get(1).number().doubleValue());
   }
 
   /** @param px

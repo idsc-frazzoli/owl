@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /** comparator for vectors
  * 
+ * anti-symmetric bifunction: when the input parameters are swapped, the return value flips sign
+ * 
  * returns -1 if t1 < t2 */
 public enum Lexicographic implements Comparator<Tensor> {
   COMPARATOR;
@@ -17,11 +19,9 @@ public enum Lexicographic implements Comparator<Tensor> {
   public int compare(Tensor t1, Tensor t2) {
     if (t1.length() != t2.length())
       throw TensorRuntimeException.of(t1, t2);
-    for (int index = 0; index < t1.length(); ++index) {
-      int cmp = Scalars.compare(t1.Get(index), t2.Get(index));
-      if (cmp != 0)
-        return cmp;
-    }
-    return 0;
+    int cmp = 0;
+    for (int index = 0; index < t1.length() && cmp == 0; ++index)
+      cmp = Scalars.compare(t1.Get(index), t2.Get(index));
+    return cmp;
   }
 }
