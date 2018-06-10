@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
@@ -34,16 +35,16 @@ public class WaypointDistanceCost implements CostFunction, Serializable {
    * @param range vector of length 2 with entries in model space
    * @param pathWidth in pixels
    * @param resolution {width, height} */
-  public WaypointDistanceCost(Tensor waypoints, Tensor range, float pathWidth, List<Integer> resolution) {
-    max_y = resolution.get(0) - 1;
-    scale = Tensors.vector(resolution.get(1), resolution.get(0)).pmul(range.map(Scalar::reciprocal));
+  public WaypointDistanceCost(Tensor waypoints, Tensor range, float pathWidth, Dimension resolution) {
+    max_y = resolution.height - 1; // TODO check: jan changed this from width to height
+    scale = Tensors.vector(resolution.height, resolution.width).pmul(range.map(Scalar::reciprocal));
     float scaleX = scale.Get(1).number().floatValue();
     float scaleY = scale.Get(0).number().floatValue();
     // ---
-    bufferedImage = new BufferedImage(resolution.get(0), resolution.get(1), BufferedImage.TYPE_BYTE_GRAY);
+    bufferedImage = new BufferedImage(resolution.width, resolution.height, BufferedImage.TYPE_BYTE_GRAY);
     Graphics2D graphics = bufferedImage.createGraphics();
     graphics.setColor(new Color(OFF_PATH_COST, OFF_PATH_COST, OFF_PATH_COST));
-    graphics.fillRect(0, 0, resolution.get(0), resolution.get(1));
+    graphics.fillRect(0, 0, resolution.width, resolution.height);
     graphics.setColor(new Color(0, 0, 0));
     graphics.setStroke(new BasicStroke(pathWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
     Tensor model2pixel = Tensors.matrix(new Number[][] { //
@@ -52,6 +53,7 @@ public class WaypointDistanceCost implements CostFunction, Serializable {
     Path2D path = geometricLayer.toPath2D(waypoints);
     path.closePath();
     graphics.draw(path);
+    // ---
     image = ImageFormat.from(bufferedImage);
     flipYXTensorInterp = new FlipYXTensorInterp<>(image, range, value -> value, RealScalar.of(OFF_PATH_COST));
   }
