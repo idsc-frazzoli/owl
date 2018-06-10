@@ -14,10 +14,12 @@ import ch.ethz.idsc.tensor.Tensors;
   // TODO these values are specific for small car
   private static final Tensor PROBE_X = Tensors.vector(0.2, 0.1, 0, -0.1);
 
+  // TODO invalid for gokart demos
   static Region<Tensor> line(Region<Tensor> region) {
     return Se2PointsVsRegions.line(PROBE_X, region);
   }
 
+  // TODO invalid for gokart demos
   static PlannerConstraint createConstraint(Region<Tensor> region) {
     return RegionConstraints.timeInvariant(line(region));
   }

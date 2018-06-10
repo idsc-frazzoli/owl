@@ -68,7 +68,7 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
     Region<StateTime> region2d = new R2xTEllipsoidStateTimeRegion( //
         dim.subtract(ext), oscillation2, () -> gokartEntity.getStateTimeNow().time());
     // ---
-    HangarMap hangarMap = new HangarMap("20180423obstacles", gokartEntity);
+    HelperHangarMap hangarMap = new HelperHangarMap("/map/dubendorf/hangar/20180423obstacles.png", gokartEntity);
     // ---
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     Region<Tensor> polygonRegion = PolygonRegions.numeric(VIRTUAL);
