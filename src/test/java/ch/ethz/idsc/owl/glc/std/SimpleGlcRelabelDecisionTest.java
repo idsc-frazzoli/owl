@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.std;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import junit.framework.TestCase;
 
 public class SimpleGlcRelabelDecisionTest extends TestCase {
@@ -19,5 +21,13 @@ public class SimpleGlcRelabelDecisionTest extends TestCase {
     check(false, true, false);
     check(false, false, true);
     check(false, false, false);
+  }
+
+  public void testStatic() {
+    assertTrue(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(1), RealScalar.of(2), DoubleScalar.of(2)));
+    assertFalse(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(3), RealScalar.of(2), DoubleScalar.of(2)));
+    assertFalse(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(2)));
+    assertTrue(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(.5)));
+    assertFalse(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(2.1), RealScalar.of(2), DoubleScalar.of(.5)));
   }
 }

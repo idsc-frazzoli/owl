@@ -16,8 +16,15 @@ public enum SimpleGlcRelabelDecision implements RelabelDecisionInterface<GlcNode
 
   @Override // from RelabelDecisionInterface
   public boolean doRelabel(GlcNode newNode, GlcNode formerNode) {
-    Scalar delta = formerNode.merit().subtract(newNode.merit());
-    boolean passed = Scalars.lessThan(MERIT_EPS, delta);
-    return passed || ExactScalarQ.of(delta) && Sign.isPositive(delta);
+    return doRelabel(newNode.merit(), formerNode.merit(), MERIT_EPS);
+  }
+
+  /** @param newMerit
+   * @param formerMerit
+   * @param slack
+   * @return */
+  static boolean doRelabel(Scalar newMerit, Scalar formerMerit, Scalar slack) {
+    Scalar delta = formerMerit.subtract(newMerit);
+    return Scalars.lessThan(slack, delta) || ExactScalarQ.of(delta) && Sign.isPositive(delta);
   }
 }
