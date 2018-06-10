@@ -41,7 +41,7 @@ public class GokartWaypoint0Demo extends GokartDemo {
       }
     };
     // ---
-    HangarMap hangarMap = new HangarMap("20180423obstacles", gokartEntity);
+    HelperHangarMap hangarMap = new HelperHangarMap("/map/dubendorf/hangar/20180423obstacles.png", gokartEntity);
     // ---
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     Region<Tensor> polygonRegion = PolygonRegions.numeric(VIRTUAL);
@@ -51,7 +51,7 @@ public class GokartWaypoint0Demo extends GokartDemo {
     owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(hangarMap.imageRegion));
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
-    owlyAnimationFrame.geometricComponent.setModel2Pixel(HangarMap.MODEL2PIXEL);
+    owlyAnimationFrame.geometricComponent.setModel2Pixel(HelperHangarMap.MODEL2PIXEL);
     // ---
     RenderInterface renderInterface = new Se2WaypointRender(waypoints, ARROWHEAD, new Color(64, 192, 64, 64));
     owlyAnimationFrame.addBackground(renderInterface);

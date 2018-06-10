@@ -22,7 +22,9 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-/* package */ class GokartVecEntity extends GokartEntity {
+public class GokartVecEntity extends GokartEntity {
+  public float radius = 10;
+
   public GokartVecEntity(StateTime stateTime) {
     super(stateTime);
   }
@@ -37,7 +39,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     List<CostFunction> costs = new ArrayList<>();
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     // magic constants specific for track
-    costs.add(new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640)));
+    costs.add(new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), radius, new Dimension(640, 640)));
     costs.add(Se2TimeCost.of(se2ComboRegion, controls));
     // ---
     GoalInterface goalInterface = //

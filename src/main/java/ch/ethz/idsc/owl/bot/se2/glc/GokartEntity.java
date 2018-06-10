@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 /** test if api is sufficient to model gokart */
-/* package */ class GokartEntity extends CarEntity {
+public class GokartEntity extends CarEntity {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal()).unmodifiable();
   static final Scalar SPEED = RealScalar.of(2.5);
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
   static final Scalar MAX_TURNING_PLAN = Degree.of(15);
   static final Scalar MAX_TURNING_RATE = Degree.of(23);
   static final FlowsInterface CARFLOWS = CarFlows.forward(SPEED, MAX_TURNING_PLAN);
-  static final Tensor SHAPE = ResourceData.of("/demo/gokart/footprint.csv");
+  public static final Tensor SHAPE = ResourceData.of("/demo/gokart/footprint.csv");
   // ---
   /** simulation of occasional feedback from localization algorithm */
   private final EntityControl localizationFeedback = new EntityControl() {

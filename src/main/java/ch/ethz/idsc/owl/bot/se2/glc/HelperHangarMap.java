@@ -13,15 +13,15 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-class HangarMap {
+public class HelperHangarMap {
   static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { { 7.5, 0, 0 }, { 0, -7.5, 640 }, { 0, 0, 1 } });
   // ---
   public final ImageRegion imageRegion;
   public final Region<Tensor> region;
 
-  public HangarMap(String string, CarEntity gokartEntity) {
+  public HelperHangarMap(String string, CarEntity gokartEntity) {
     final Scalar scale = DoubleScalar.of(7.5); // meter_to_pixel
-    Tensor tensor = ImageRegions.grayscale(ResourceData.of("/map/dubendorf/hangar/" + string + ".png"));
+    Tensor tensor = ImageRegions.grayscale(ResourceData.of(string));
     tensor = ImageEdges.extrusion(tensor, 6); // == 0.73 * 7.5 == 5.475
     Tensor range = Tensors.vector(Dimensions.of(tensor)).divide(scale);
     imageRegion = new ImageRegion(tensor, range, false);

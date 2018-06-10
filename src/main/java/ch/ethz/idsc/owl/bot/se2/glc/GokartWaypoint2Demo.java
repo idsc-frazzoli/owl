@@ -37,7 +37,7 @@ public class GokartWaypoint2Demo extends Se2CarDemo {
       }
     };
     // ---
-    HangarMap hangarMap = new HangarMap("20180603", gokartEntity);
+    HelperHangarMap hangarMap = new HelperHangarMap("/map/dubendorf/hangar/20180603.png", gokartEntity);
     // ---
     Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(hangarMap.region);
