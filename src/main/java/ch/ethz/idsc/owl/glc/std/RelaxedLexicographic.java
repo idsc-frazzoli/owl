@@ -1,22 +1,26 @@
 // code by ynager
-package ch.ethz.idsc.owl.bot.util;
+package ch.ethz.idsc.owl.glc.std;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** Lexicographical comparator with slack for VectorScalars */
-public class RelaxedLexicographic implements Serializable {
+/** Lexicographical comparator with slack for {@link VectorScalar}s
+ * 
+ * the bifunction is not anti-symmetric */
+/* package */ class RelaxedLexicographic implements Serializable {
   private final Tensor slack;
 
   public RelaxedLexicographic(Tensor slack) {
     this.slack = slack;
   }
 
+  // TODO function name causes confusion with Comparable interface
   public int compare(Tensor newCost, Tensor oldCost) {
     if (oldCost.length() != newCost.length() || oldCost.length() != slack.length())
       throw TensorRuntimeException.of(oldCost, newCost, slack);
