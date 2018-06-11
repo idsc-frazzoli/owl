@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.List;
 
+import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -65,7 +66,7 @@ public class WaypointDistanceCost implements CostFunction, Serializable {
 
   @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    return flipYXTensorInterp.at(glcNode.state());
+    return flipYXTensorInterp.at(Lists.getLast(trajectory).state());
   }
 
   public Tensor image() {
