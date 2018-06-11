@@ -2,11 +2,18 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
+import ch.ethz.idsc.owl.bot.se2.Se2TimeCost;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
+import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -15,6 +22,7 @@ import ch.ethz.idsc.owl.gui.ren.Se2WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -29,16 +37,23 @@ public class GokartWaypoint1Demo extends GokartDemo {
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
+    
+    Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180610waypoints.csv");
+    CostFunction waypointCost = new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640));
+
+    
     GokartEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
         return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
       }
+      @Override
+      public Optional<CostFunction> getPrimaryCost() {
+        return Optional.of(waypointCost);
+      }
     };
     // ---
     HelperHangarMap hangarMap = new HelperHangarMap("/map/dubendorf/hangar/20180423obstacles.png", gokartEntity);
-    // ---
-    Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(hangarMap.region);
     // ---
     owlyAnimationFrame.add(gokartEntity);
@@ -50,7 +65,7 @@ public class GokartWaypoint1Demo extends GokartDemo {
     GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(gokartEntity);
     GlcWaypointFollowing wpf = new GlcWaypointFollowing(waypoints, RealScalar.of(2), //
         gokartEntity, plannerConstraint, glcPlannerCallback);
-    wpf.setHorizonDistance(RealScalar.of(7));
+    wpf.setHorizonDistance(RealScalar.of(8));
     wpf.startNonBlocking();
     // ---
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {

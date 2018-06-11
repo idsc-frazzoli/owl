@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2TimeCost;
@@ -23,8 +24,6 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class GokartVecEntity extends GokartEntity {
-  public float radius = 10;
-
   public GokartVecEntity(StateTime stateTime) {
     super(stateTime);
   }
@@ -37,9 +36,7 @@ public class GokartVecEntity extends GokartEntity {
     // costs with higher priority come first
     // TODO: add costs / slack from within demo
     List<CostFunction> costs = new ArrayList<>();
-    Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
-    // magic constants specific for track
-    costs.add(new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), radius, new Dimension(640, 640)));
+    getPrimaryCost().map(costs::add);
     costs.add(Se2TimeCost.of(se2ComboRegion, controls));
     // ---
     GoalInterface goalInterface = //
@@ -52,5 +49,9 @@ public class GokartVecEntity extends GokartEntity {
     trajectoryPlanner.relabelDecision = new LexicographicGlcRelabelDecision(slack);
     // ---
     return trajectoryPlanner;
+  }
+
+  public Optional<CostFunction> getPrimaryCost() {
+    return Optional.empty();
   }
 }
