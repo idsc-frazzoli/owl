@@ -2,11 +2,14 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
+import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -26,6 +29,8 @@ public class GokartWaypoint2Demo extends Se2CarDemo {
   private static final Tensor ARROWHEAD = Tensors.matrixDouble( //
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(2));
   private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { { 7.5, 0, 0 }, { 0, -7.5, 640 }, { 0, 0, 1 } });
+  Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
+  CostFunction waypointCost = new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640));
 
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
@@ -35,11 +40,14 @@ public class GokartWaypoint2Demo extends Se2CarDemo {
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
         return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
       }
+
+      @Override
+      public Optional<CostFunction> getPrimaryCost() {
+        return Optional.of(waypointCost);
+      }
     };
     // ---
-    HelperHangarMap hangarMap = new HelperHangarMap("/map/dubendorf/hangar/20180603.png", gokartEntity);
-    // ---
-    Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
+    HelperHangarMap hangarMap = new HelperHangarMap("/dubilab/localization/20180603.png", gokartEntity);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(hangarMap.region);
     // ---
     owlyAnimationFrame.add(gokartEntity);
