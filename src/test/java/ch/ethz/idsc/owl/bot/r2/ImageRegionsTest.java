@@ -21,7 +21,7 @@ public class ImageRegionsTest extends TestCase {
 
   public void testDubendorf() {
     ImageRegion ir = ImageRegions.loadFromRepository( //
-        "/map/dubendorf/hangar/20180122.png", Tensors.vector(10, 10), false);
+        "/dubilab/localization/20180122.png", Tensors.vector(10, 10), false);
     assertEquals(Dimensions.of(ir.image()), Arrays.asList(640, 640));
   }
 

@@ -24,7 +24,7 @@ public class GokartEntity extends CarEntity {
   static final Scalar MAX_TURNING_PLAN = Degree.of(15);
   static final Scalar MAX_TURNING_RATE = Degree.of(23);
   static final FlowsInterface CARFLOWS = CarFlows.forward(SPEED, MAX_TURNING_PLAN);
-  public static final Tensor SHAPE = ResourceData.of("/demo/gokart/footprint.csv");
+  public static final Tensor SHAPE = ResourceData.of("/gokart/footprint/20171201.csv");
   // ---
   /** simulation of occasional feedback from localization algorithm */
   private final EntityControl localizationFeedback = new EntityControl() {
