@@ -38,7 +38,7 @@ public class ImageAreaTest extends TestCase {
   }
 
   public void testBlackWhite() throws IOException {
-    BufferedImage bufferedImage = image("/map/dubendorf/hangar/20180423obstacles.png");
+    BufferedImage bufferedImage = image("/dubilab/obstacles/20180423.png");
     Stopwatch stopwatch = Stopwatch.started();
     Area area = ImageArea.fromImage(bufferedImage);
     System.out.println(stopwatch.display_seconds());
