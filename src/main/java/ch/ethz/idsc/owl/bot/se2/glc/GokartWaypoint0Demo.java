@@ -41,9 +41,9 @@ public class GokartWaypoint0Demo extends GokartDemo {
       }
     };
     // ---
-    HelperHangarMap hangarMap = new HelperHangarMap("/map/dubendorf/hangar/20180423obstacles.png", gokartEntity);
+    HelperHangarMap hangarMap = new HelperHangarMap("/dubilab/obstacles/20180423.png", gokartEntity);
     // ---
-    Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
+    Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180425.csv");
     Region<Tensor> polygonRegion = PolygonRegions.numeric(VIRTUAL);
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(hangarMap.region, polygonRegion));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);
