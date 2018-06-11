@@ -27,7 +27,7 @@ public class Se2PointsVsRegionsTest extends TestCase {
   }
 
   public void testFootprint() {
-    Tensor SHAPE = ResourceData.of("/demo/gokart/footprint.csv");
+    Tensor SHAPE = ResourceData.of("/gokart/footprint/20171201.csv");
     ScalarSummaryStatistics scalarSummaryStatistics = //
         SHAPE.stream().map(tensor -> tensor.Get(0)).collect(ScalarSummaryStatistics.collector());
     Tensor x_coords = Subdivide.of(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax(), 3);
