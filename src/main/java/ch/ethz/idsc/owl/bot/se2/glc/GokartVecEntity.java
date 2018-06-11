@@ -1,7 +1,6 @@
 // code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +18,7 @@ import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class GokartVecEntity extends GokartEntity {
   public GokartVecEntity(StateTime stateTime) {
