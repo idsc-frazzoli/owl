@@ -27,11 +27,17 @@ import ch.ethz.idsc.tensor.sca.Real;
 
 /** immutable as required by {@link Scalar} interface
  * 
- * multiplication of two {@link VectorScalar}s throws an exception.
+ * <p>multiplication of two {@link VectorScalar}s throws an exception.
+ * Careful: multiplication with {@link Quantity} is not commutative !
  * 
- * multiplication with {@link Quantity} is not commutative
+ * <p>Comparable<Scalar> is defined only between two instances of {@link VectorScalar}.
+ * The lexicographical ordering is applied to the tensors.
+ * For instance: [1, 2, 0] < [1, 1, 3]
  * 
- * string expression is of the form [1, 2, 3] to prevent confusion with standard vectors */
+ * <p>The string expression of a {@link VectorScalar} is of the form [1, 2, 3]
+ * to prevent confusion with standard vectors that are formatted as {1, 2, 3}.
+ * 
+ * <p>Hint: a {@link VectorScalar} may also have zero entries */
 // API not finalized: should VectorScalar allow entries with other VectorScalar's?
 public class VectorScalar extends AbstractScalar implements //
     ChopInterface, ComplexEmbedding, ExactScalarQInterface, NInterface, Comparable<Scalar>, Serializable {
@@ -161,11 +167,7 @@ public class VectorScalar extends AbstractScalar implements //
 
   @Override // from Scalar
   public boolean equals(Object object) {
-    if (object instanceof VectorScalar) {
-      VectorScalar vectorScalar = (VectorScalar) object;
-      return vector.equals(vectorScalar.vector);
-    }
-    return false;
+    return object instanceof VectorScalar && vector.equals(((VectorScalar) object).vector);
   }
 
   private static final Collector<CharSequence, ?, String> EMBRACE = Collectors.joining(", ", "[", "]");
