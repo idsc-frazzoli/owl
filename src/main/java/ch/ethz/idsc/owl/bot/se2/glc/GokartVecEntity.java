@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.LexicographicGlcRelabelDecision;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
@@ -39,8 +38,8 @@ public class GokartVecEntity extends GokartEntity {
     GoalInterface goalInterface = //
         new VectorCostGoalAdapter(costs, se2ComboRegion, controls);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
-    trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
+        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+    // trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
     //  ---
     Tensor slack = Array.zeros(costs.size()); // slack equal to zero for now
     trajectoryPlanner.relabelDecision = new LexicographicGlcRelabelDecision(slack);

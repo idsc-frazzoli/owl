@@ -1,12 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.twd;
 
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 
 /** two wheel drive entity with state space augmented with time */
 /* package */ class TwdxTEntity extends TwdEntity {
@@ -20,15 +19,8 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    TrajectoryPlanner trajectoryPlanner = super.createTrajectoryPlanner(plannerConstraint, goal);
-    trajectoryPlanner.represent = StateTime::joined;
-    return trajectoryPlanner;
-  }
-
-  @Override
-  protected Tensor eta() {
+  protected StateTimeRaster stateTimeRaster() {
     Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
-    return super.eta().copy().append(dt.reciprocal());
+    return new EtaRaster(PARTITIONSCALE.copy().append(dt.reciprocal()), StateTime::joined);
   }
 }

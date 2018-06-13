@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     TrajectoryPlanner trajectoryPlanner = super.createTrajectoryPlanner(plannerConstraint, goal);
-    trajectoryPlanner.represent = StateTime::joined;
+    // trajectoryPlanner.represent = StateTime::joined;
     return trajectoryPlanner;
   }
 

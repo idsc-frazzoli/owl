@@ -11,12 +11,14 @@ import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -57,12 +59,12 @@ enum Se2Demo {
             new HyperplaneRegion(Tensors.vector(0, +1, 0), RealScalar.of(2.0)) //
         )));
     // ---
+    CoordinateWrap coordinateWrap = new Se2Wrap(Tensors.vector(1, 1, 1));
+    StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(coordinateWrap::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, plannerConstraint, goalInterface);
+        stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(3), RealScalar.ZERO));
-    CoordinateWrap coordinateWrap = new Se2Wrap(Tensors.vector(1, 1, 1));
-    trajectoryPlanner.represent = StateTimeTensorFunction.state(coordinateWrap::represent);
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(2000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
