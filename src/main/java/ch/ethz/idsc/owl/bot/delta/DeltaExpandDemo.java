@@ -7,9 +7,11 @@ import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -57,8 +59,9 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(sphericalRegion, maxMove);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
+    StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, plannerConstraint, goalInterface);
+        stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(8.8, 0.5), RealScalar.ZERO));
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();

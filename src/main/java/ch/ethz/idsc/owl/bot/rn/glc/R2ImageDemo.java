@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
@@ -51,7 +52,7 @@ enum R2ImageDemo {
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(imageRegion));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        partitionScale, stateIntegrator, controls, plannerConstraint, goalInterface);
+        EtaRaster.state(partitionScale), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
     Stopwatch stopwatch = Stopwatch.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);

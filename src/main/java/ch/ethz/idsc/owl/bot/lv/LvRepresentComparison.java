@@ -5,8 +5,10 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
@@ -39,10 +41,10 @@ import ch.ethz.idsc.tensor.sca.Log;
     EllipsoidRegion ellipsoidRegion = new EllipsoidRegion(Tensors.vector(2, 1), Tensors.vector(0.1, 0.1));
     GoalInterface goalInterface = new LvGoalInterface(ellipsoidRegion);
     // ---
+    StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
+        stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     // ---
-    trajectoryPlanner.represent = StateTimeTensorFunction.state(represent);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, .5), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(4000);

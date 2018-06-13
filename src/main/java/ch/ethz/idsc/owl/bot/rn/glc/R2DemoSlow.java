@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
@@ -70,7 +71,7 @@ enum R2DemoSlow {
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
+        EtaRaster.state(eta), stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400)) {

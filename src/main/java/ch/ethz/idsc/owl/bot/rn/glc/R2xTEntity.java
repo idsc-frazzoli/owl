@@ -3,6 +3,8 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -28,14 +30,13 @@ import ch.ethz.idsc.tensor.Tensor;
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     TrajectoryPlanner trajectoryPlanner = super.createTrajectoryPlanner(plannerConstraint, goal);
-    trajectoryPlanner.represent = StateTime::joined;
     return trajectoryPlanner;
   }
 
   @Override
-  protected Tensor eta() {
+  protected StateTimeRaster stateTimeRaster() {
     Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
-    return super.eta().copy().append(dt.reciprocal());
+    return new EtaRaster(super.eta().copy().append(dt.reciprocal()), StateTime::joined);
   }
 
   @Override

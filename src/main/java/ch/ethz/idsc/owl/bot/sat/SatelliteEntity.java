@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
@@ -67,7 +68,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     GoalInterface goalInterface = SatelliteGoalManager.create( //
         center, Tensors.vector(0.5, 0.5, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     return new StandardTrajectoryPlanner( //
-        partitionScale, stateIntegrator, controls, plannerConstraint, goalInterface);
+        EtaRaster.state(partitionScale), stateIntegrator, controls, plannerConstraint, goalInterface);
   }
 
   @Override

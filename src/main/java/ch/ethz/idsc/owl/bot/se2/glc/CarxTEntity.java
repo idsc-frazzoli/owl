@@ -1,14 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.StateTimeCoordinateWrap;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
@@ -23,15 +22,8 @@ class CarxTEntity extends CarEntity {
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    TrajectoryPlanner trajectoryPlanner = super.createTrajectoryPlanner(plannerConstraint, goal);
-    trajectoryPlanner.represent = new StateTimeCoordinateWrap(SE2WRAP);
-    return trajectoryPlanner;
-  }
-
-  @Override
-  protected Tensor eta() {
+  protected StateTimeRaster stateTimeRaster() {
     Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
-    return super.eta().copy().append(dt.reciprocal());
+    return new EtaRaster(partitionScale.copy().append(dt.reciprocal()), new StateTimeCoordinateWrap(SE2WRAP));
   }
 }

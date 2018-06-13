@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -65,8 +67,9 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
         FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
     Tensor center = Join.of(goal.extract(0, 2), AngleVector.of(goal.Get(2)).multiply(RealScalar.of(0.8)));
     GoalInterface goalInterface = Rice2GoalManager.create(center, Tensors.vector(0.5, 0.5, 0.4, 0.4));
+    StateTimeRaster stateTimeRaster = EtaRaster.state(partitionScale);
     return new StandardTrajectoryPlanner( //
-        partitionScale, stateIntegrator, controls, plannerConstraint, goalInterface);
+        stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface);
   }
 
   @Override

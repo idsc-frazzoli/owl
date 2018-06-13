@@ -7,7 +7,9 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.GlobalAssert;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -77,8 +79,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar maxMove = stateSpaceModel.getLipschitz().add(u_norm);
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(goalRegion, maxMove);
+    StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     return new StandardTrajectoryPlanner( //
-        eta, FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster, FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 
   protected Tensor eta() {

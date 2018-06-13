@@ -10,8 +10,10 @@ import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2Entity;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -31,7 +33,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class TwdEntity extends Se2Entity {
-  private static final Tensor PARTITIONSCALE = Tensors.of( //
+  static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(6), RealScalar.of(6), Degree.of(10).reciprocal()).unmodifiable();
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   // triangle
@@ -61,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   protected TwdEntity(StateTime stateTime, TrajectoryControl trajectoryControl, TwdFlows twdConfig) {
     super(stateTime, trajectoryControl);
     controls = twdConfig.getFlows(4);
-    Tensor eta = eta();
+    Tensor eta = PARTITIONSCALE;
     goalRadius_xy = SQRT2.divide(eta.Get(0));
     goalRadius_theta = SQRT2.divide(eta.Get(2));
   }
@@ -95,14 +97,14 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         se2MinTimeGoalManager.getGoalInterface(), //
         extraCosts);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
-    trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
+        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+    // trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
     return trajectoryPlanner;
   }
 
   @Override
-  protected Tensor eta() {
-    return PARTITIONSCALE;
+  protected StateTimeRaster stateTimeRaster() {
+    return new EtaRaster(PARTITIONSCALE, StateTimeTensorFunction.state(SE2WRAP::represent));
   }
 
   @Override
