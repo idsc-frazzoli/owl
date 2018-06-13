@@ -15,9 +15,8 @@ import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.std.RelabelDecisionInterface;
-import ch.ethz.idsc.owl.glc.std.SimpleGlcRelabelDecision;
+import ch.ethz.idsc.owl.glc.std.RelabelDecision;
+import ch.ethz.idsc.owl.glc.std.SimpleRelabelDecision;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
@@ -39,8 +38,8 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   }
 
   /** decides if new node is better than existing node */
-  public RelabelDecisionInterface<GlcNode> relabelDecision = //
-      SimpleGlcRelabelDecision.INSTANCE;
+  public RelabelDecision relabelDecision = //
+      SimpleRelabelDecision.INSTANCE;
 
   /** @param stateTime */
   public final void insertRoot(StateTime stateTime) {
@@ -110,9 +109,6 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
 
   /** @return state integrator for the state space to generate trajectories from given controls */
   public abstract StateIntegrator getStateIntegrator();
-
-  /** @return obstacle query for the purpose of inspection */
-  public abstract PlannerConstraint getPlannerConstraint();
 
   /** @return goal query for the purpose of inspection */
   public abstract GoalInterface getGoalInterface();

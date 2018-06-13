@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public enum SimpleGlcRelabelDecision implements RelabelDecisionInterface<GlcNode> {
+public enum SimpleRelabelDecision implements RelabelDecision {
   INSTANCE;
   /** minimum threshold of improvement by a candidate */
   // TODO probably should be relative to order of magnitude of merit

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
-import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -26,15 +26,6 @@ public enum RenderElements {
     // TODO
     // list.add(new EtaRender(trajectoryPlanner.getEta()));
     // list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
-    {
-      PlannerConstraint plannerConstraint = trajectoryPlanner.getPlannerConstraint();
-      if (plannerConstraint instanceof TrajectoryObstacleConstraint) {
-        TrajectoryRegionQuery trajectoryRegionQuery = //
-            ((TrajectoryObstacleConstraint) plannerConstraint).getTrajectoryRegionQuery();
-        if (trajectoryRegionQuery instanceof StateTimeCollector)
-          list.add(new ObstacleRender(((StateTimeCollector) trajectoryRegionQuery).getMembers()));
-      }
-    }
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
     list.add(new TreeRender(trajectoryPlanner.getDomainMap().values()));
     {
@@ -57,6 +48,24 @@ public enum RenderElements {
     list.add(new HudRender(trajectoryPlanner));
     return list;
   }
+
+  public static RenderInterface create(StateTimeRaster stateTimeRaster) {
+    if (stateTimeRaster instanceof EtaRaster) {
+      EtaRaster etaRaster = (EtaRaster) stateTimeRaster;
+      return new EtaRender(etaRaster.eta());
+    }
+    return null;
+  }
+  //
+  // public static RenderInterface create(PlannerConstraint plannerConstraint) {
+  // if (plannerConstraint instanceof TrajectoryObstacleConstraint) {
+  // TrajectoryRegionQuery trajectoryRegionQuery = //
+  // ((TrajectoryObstacleConstraint) plannerConstraint).getTrajectoryRegionQuery();
+  // if (trajectoryRegionQuery instanceof StateTimeCollector)
+  // return new ObstacleRender(((StateTimeCollector) trajectoryRegionQuery).getMembers());
+  // }
+  // return null;
+  // }
 
   public static Collection<RenderInterface> create( //
       Collection<? extends StateCostNode> collection, TransitionRegionQuery transitionRegionQuery) {

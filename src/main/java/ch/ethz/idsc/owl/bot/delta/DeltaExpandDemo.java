@@ -67,6 +67,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.addBackground(RegionRenders.create(region));
     owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    // owlyFrame.addBackground(RenderElements.create(plannerConstraint));
     owlyFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.05)));
     owlyFrame.configCoordinateOffset(33, 416);
     owlyFrame.jFrame.setBounds(100, 100, 620, 475);

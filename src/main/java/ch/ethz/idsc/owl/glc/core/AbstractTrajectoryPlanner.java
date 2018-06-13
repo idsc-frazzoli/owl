@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
  * {@link StandardTrajectoryPlanner} and {@link AbstractAnyTrajectoryPlanner} */
 public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
-  private final PlannerConstraint plannerConstraint;
+  protected final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
 
   protected AbstractTrajectoryPlanner( //
@@ -30,11 +30,6 @@ public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
   @Override // from TrajectoryPlanner
   public final StateIntegrator getStateIntegrator() {
     return stateIntegrator;
-  }
-
-  @Override // from TrajectoryPlanner
-  public final PlannerConstraint getPlannerConstraint() {
-    return plannerConstraint;
   }
 
   @Override // from TrajectoryPlanner

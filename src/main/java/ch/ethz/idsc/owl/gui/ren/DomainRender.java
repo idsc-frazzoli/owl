@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-class DomainRender implements RenderInterface {
+public class DomainRender implements RenderInterface {
   private static final Color INTERIOR = new Color(192, 192, 192, 64);
   private static final Color BOUNDARY = Color.WHITE;
   public static final TensorUnaryOperator EXTRACT2 = tensor -> tensor.extract(0, 2);
@@ -23,7 +23,7 @@ class DomainRender implements RenderInterface {
   private final Tensor eta_invert;
   private final Tensor ratios;
 
-  DomainRender(Map<Tensor, GlcNode> map, Tensor eta) {
+  public DomainRender(Map<Tensor, GlcNode> map, Tensor eta) {
     this.map = map;
     eta_invert = eta.extract(0, 2).map(Scalar::reciprocal);
     int lo = 0;
