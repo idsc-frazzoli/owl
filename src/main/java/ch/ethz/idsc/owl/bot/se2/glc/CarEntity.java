@@ -121,10 +121,8 @@ public class CarEntity extends Se2Entity {
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(se2MinTimeGoalManager.getGoalInterface(), extraCosts);
     // StateTimeRasterization stateTimeRasterization = new EtaRasterization(eta(), StateTimeTensorFunction.state(SE2WRAP::represent));
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    return new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
-    // trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
-    return trajectoryPlanner;
   }
 
   @Override // from Se2Entity

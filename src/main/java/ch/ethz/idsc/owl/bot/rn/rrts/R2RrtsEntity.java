@@ -52,7 +52,7 @@ public class R2RrtsEntity extends AbstractRrtsEntity {
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     throw new RuntimeException(); // LONGTERM API not finalized
   }
 

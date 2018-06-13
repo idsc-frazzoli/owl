@@ -1,14 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.std;
 
-import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.MotionPlanWorker;
-import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class SimpleGoalConsumer implements GoalConsumer {
@@ -32,14 +29,12 @@ public class SimpleGoalConsumer implements GoalConsumer {
       motionPlanWorker.flagShutdown();
       motionPlanWorker = null;
     }
-    final List<TrajectorySample> head = //
-        trajectoryEntity.getFutureTrajectoryUntil(trajectoryEntity.delayHint());
-    TrajectoryPlanner trajectoryPlanner = //
-        trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal);
     motionPlanWorker = new MotionPlanWorker(MAX_STEPS);
     motionPlanWorker.addCallback(glcPlannerCallback);
     if (trajectoryEntity instanceof GlcPlannerCallback)
       motionPlanWorker.addCallback((GlcPlannerCallback) trajectoryEntity);
-    motionPlanWorker.start(head, trajectoryPlanner);
+    motionPlanWorker.start( //
+        trajectoryEntity.getFutureTrajectoryUntil(trajectoryEntity.delayHint()), //
+        trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal));
   }
 }
