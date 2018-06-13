@@ -30,14 +30,14 @@ public class Se2TimeCost implements CostFunction, Serializable {
     this.maxTurning = Se2Controls.maxTurning(controls);
   }
 
-  @Override
+  @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
     return Max.of( //
         se2ComboRegion.d_xy(x).divide(maxSpeed), //
         se2ComboRegion.d_angle(x).divide(maxTurning));
   }
 
-  @Override
+  @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     return StateTimeTrajectories.timeIncrement(glcNode, trajectory);
   }

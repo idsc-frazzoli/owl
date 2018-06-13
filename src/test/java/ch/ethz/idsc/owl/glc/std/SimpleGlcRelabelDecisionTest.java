@@ -24,10 +24,10 @@ public class SimpleGlcRelabelDecisionTest extends TestCase {
   }
 
   public void testStatic() {
-    assertTrue(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(1), RealScalar.of(2), DoubleScalar.of(2)));
-    assertFalse(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(3), RealScalar.of(2), DoubleScalar.of(2)));
-    assertFalse(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(2)));
-    assertTrue(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(.5)));
-    assertFalse(SimpleGlcRelabelDecision.doRelabel(RealScalar.of(2.1), RealScalar.of(2), DoubleScalar.of(.5)));
+    assertTrue(SimpleRelabelDecision.doRelabel(RealScalar.of(1), RealScalar.of(2), DoubleScalar.of(2)));
+    assertFalse(SimpleRelabelDecision.doRelabel(RealScalar.of(3), RealScalar.of(2), DoubleScalar.of(2)));
+    assertFalse(SimpleRelabelDecision.doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(2)));
+    assertTrue(SimpleRelabelDecision.doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(.5)));
+    assertFalse(SimpleRelabelDecision.doRelabel(RealScalar.of(2.1), RealScalar.of(2), DoubleScalar.of(.5)));
   }
 }

@@ -5,10 +5,10 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class LexicographicGlcRelabelDecision implements RelabelDecisionInterface<GlcNode> {
+public class LexicographicRelabelDecision implements RelabelDecision {
   private final RelaxedLexicographic relaxedLexicographic;
 
-  public LexicographicGlcRelabelDecision(Tensor slack) {
+  public LexicographicRelabelDecision(Tensor slack) {
     relaxedLexicographic = new RelaxedLexicographic(slack);
   }
 

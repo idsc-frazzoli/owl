@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.JButton;
 import javax.swing.JSlider;
@@ -124,6 +125,7 @@ public class OwlyFrame extends BaseFrame {
   }
 
   public void addBackground(RenderInterface renderInterface) {
-    geometricComponent.addRenderInterfaceBackground(renderInterface);
+    if (Objects.nonNull(renderInterface))
+      geometricComponent.addRenderInterfaceBackground(renderInterface);
   }
 }

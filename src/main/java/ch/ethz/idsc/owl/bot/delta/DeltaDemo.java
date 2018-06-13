@@ -14,6 +14,7 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.gui.ren.RenderElements;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -69,6 +70,9 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     owlyFrame.configCoordinateOffset(33, 416);
     owlyFrame.addBackground(RegionRenders.create(region));
     owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    owlyFrame.addBackground(RenderElements.create(stateTimeRaster));
+    // owlyFrame.addBackground(RenderElements.create(plannerConstraint));
+    // owlyFrame.addBackground(new DomainRender(trajectoryPlanner.getDomainMap(), eta));
     // ---
     owlyFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.1)));
     // ---

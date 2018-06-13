@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.LexicographicGlcRelabelDecision;
+import ch.ethz.idsc.owl.glc.std.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -25,7 +25,7 @@ public class GokartVecEntity extends GokartEntity {
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, new So2Region(goal.Get(2), goalRadius.Get(2)));
     //  ---
@@ -35,14 +35,12 @@ public class GokartVecEntity extends GokartEntity {
     getPrimaryCost().map(costs::add);
     costs.add(Se2TimeCost.of(se2ComboRegion, controls));
     // ---
-    GoalInterface goalInterface = //
-        new VectorCostGoalAdapter(costs, se2ComboRegion, controls);
+    GoalInterface goalInterface = new VectorCostGoalAdapter(costs, se2ComboRegion, controls);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
-    // trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
     //  ---
     Tensor slack = Array.zeros(costs.size()); // slack equal to zero for now
-    trajectoryPlanner.relabelDecision = new LexicographicGlcRelabelDecision(slack);
+    trajectoryPlanner.relabelDecision = new LexicographicRelabelDecision(slack);
     // ---
     return trajectoryPlanner;
   }

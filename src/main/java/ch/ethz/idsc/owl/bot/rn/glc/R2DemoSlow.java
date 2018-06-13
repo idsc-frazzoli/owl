@@ -19,6 +19,7 @@ import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
@@ -70,13 +71,15 @@ enum R2DemoSlow {
     SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     // ---
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(obstacleQuery);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        EtaRaster.state(eta), stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
+        EtaRaster.state(eta), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+      // owlyFrame.addBackground(RenderElements.create(plannerConstraint));
       for (int i = 0; i < 20; i++) {
         Optional<GlcNode> optional = trajectoryPlanner.getBest();
         if (optional.isPresent())
