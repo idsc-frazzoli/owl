@@ -5,15 +5,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Round;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
@@ -23,16 +22,9 @@ import ch.ethz.idsc.tensor.sca.Round;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    TrajectoryPlanner trajectoryPlanner = super.createTrajectoryPlanner(plannerConstraint, goal);
-    // trajectoryPlanner.represent = StateTime::joined;
-    return trajectoryPlanner;
-  }
-
-  @Override
-  protected Tensor eta() {
-    Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
-    return super.eta().copy().append(dt.reciprocal());
+  protected StateTimeRaster stateTimeRaster() {
+    Scalar dt = FIXED_STATE_INTEGRATOR.getTimeStepTrajectory();
+    return EtaRaster.joined(PARTITION_SCALE.copy().append(dt.reciprocal()));
   }
 
   @Override
