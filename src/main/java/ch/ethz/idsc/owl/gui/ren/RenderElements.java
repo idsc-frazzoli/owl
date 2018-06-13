@@ -23,8 +23,9 @@ public enum RenderElements {
   public static Collection<RenderInterface> create(TrajectoryPlanner trajectoryPlanner) {
     List<RenderInterface> list = new LinkedList<>();
     list.add(GridRender.INSTANCE);
-    list.add(new EtaRender(trajectoryPlanner.getEta()));
-    list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
+    // TODO
+    // list.add(new EtaRender(trajectoryPlanner.getEta()));
+    // list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
     {
       PlannerConstraint plannerConstraint = trajectoryPlanner.getPlannerConstraint();
       if (plannerConstraint instanceof TrajectoryObstacleConstraint) {

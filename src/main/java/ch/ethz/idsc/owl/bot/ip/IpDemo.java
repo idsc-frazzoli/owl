@@ -6,11 +6,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -51,8 +53,9 @@ import ch.ethz.idsc.tensor.alg.Array;
     ));
     PlannerConstraint plannerConstraint = RegionConstraints.timeDependent(region);
     // ---
+    StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, plannerConstraint, ipGoalManager);
+        stateTimeRaster, stateIntegrator, controls, plannerConstraint, ipGoalManager);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(4), RealScalar.ZERO));
     // new ExpandGlcFrame(trajectoryPlanner);

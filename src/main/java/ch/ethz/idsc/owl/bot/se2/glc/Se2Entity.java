@@ -12,6 +12,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -45,7 +46,7 @@ public abstract class Se2Entity extends TrajectoryEntity {
     add(new FallbackControl(Array.zeros(3)));
   }
 
-  protected abstract Tensor eta();
+  protected abstract StateTimeRaster stateTimeRaster();
 
   protected abstract Tensor shape();
 

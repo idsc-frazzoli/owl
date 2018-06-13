@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
@@ -64,7 +65,7 @@ enum R2Demo {
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
+        EtaRaster.state(eta), STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(200);

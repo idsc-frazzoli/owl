@@ -18,15 +18,13 @@ import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.RelabelDecisionInterface;
 import ch.ethz.idsc.owl.glc.std.SimpleGlcRelabelDecision;
-import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Floor;
 
 /** base class for generalized label correction implementation */
 public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Serializable {
-  private final Tensor eta;
+  protected final StateTimeRaster stateTimeRaster;
   // ---
   private final Queue<GlcNode> queue = new PriorityQueue<>(NodeMeritComparator.INSTANCE);
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
@@ -36,38 +34,18 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   protected final NavigableMap<GlcNode, List<StateTime>> best = new TreeMap<>(NodeMeritComparator.INSTANCE);
   private int replaceCount = 0;
 
-  /* package */ TrajectoryPlanner(Tensor eta) {
-    this.eta = eta.copy().unmodifiable();
+  /* package */ TrajectoryPlanner(StateTimeRaster stateTimeRaster) {
+    this.stateTimeRaster = stateTimeRaster;
   }
 
-  /** @return eta as unmodifiable tensor */
-  public final Tensor getEta() {
-    return eta;
-  }
-
-  /** mapping from state time to domain coordinates
-   * 
-   * <p>The default value drops time information and only considers
-   * {@link StateTime#state()}.
-   * 
-   * Examples: identity, mod, log, ... */
-  public StateTimeTensorFunction represent = StateTime::state;
   /** decides if new node is better than existing node */
   public RelabelDecisionInterface<GlcNode> relabelDecision = //
       SimpleGlcRelabelDecision.INSTANCE;
 
-  /** Floor(eta .* represent(state))
-   * 
-   * @param stateTime
-   * @return */
-  protected final Tensor convertToKey(StateTime stateTime) {
-    return eta.pmul(represent.apply(stateTime)).map(Floor.FUNCTION);
-  }
-
   /** @param stateTime */
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(queue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
-    boolean replaced = insert(convertToKey(stateTime), GlcNodes.createRoot(stateTime, getGoalInterface()));
+    boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, getGoalInterface()));
     GlobalAssert.that(!replaced); // root insertion should not replace any other node
   }
 

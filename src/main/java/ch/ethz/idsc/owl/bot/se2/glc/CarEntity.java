@@ -12,8 +12,10 @@ import ch.ethz.idsc.owl.bot.se2.Se2ShiftCostFunction;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -72,7 +74,7 @@ public class CarEntity extends Se2Entity {
   // ---
   protected final Collection<Flow> controls;
   public final Tensor goalRadius;
-  private final Tensor partitionScale;
+  final Tensor partitionScale;
   private final Tensor shape;
   protected final TrajectoryControl trajectoryControl; // TODO design is despicable
 
@@ -90,7 +92,7 @@ public class CarEntity extends Se2Entity {
     final Scalar goalRadius_theta = SQRT2.divide(PARTITIONSCALE.Get(2));
     goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta).unmodifiable();
     extraCosts.add(new Se2ShiftCostFunction(SHIFT_PENALTY));
-    this.partitionScale = partitionScale;
+    this.partitionScale = partitionScale.unmodifiable();
     this.shape = shape.copy().unmodifiable();
   }
 
@@ -118,15 +120,16 @@ public class CarEntity extends Se2Entity {
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, new So2Region(goal.Get(2), goalRadius.Get(2)));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(se2MinTimeGoalManager.getGoalInterface(), extraCosts);
+    // StateTimeRasterization stateTimeRasterization = new EtaRasterization(eta(), StateTimeTensorFunction.state(SE2WRAP::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
-    trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
+        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+    // trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
     return trajectoryPlanner;
   }
 
   @Override // from Se2Entity
-  protected Tensor eta() {
-    return partitionScale;
+  protected StateTimeRaster stateTimeRaster() {
+    return new EtaRaster(partitionScale, StateTimeTensorFunction.state(SE2WRAP::represent));
   }
 
   @Override // from Se2Entity

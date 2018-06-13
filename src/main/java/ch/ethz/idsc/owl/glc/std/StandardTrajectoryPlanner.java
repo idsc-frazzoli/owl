@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.DomainQueue;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -28,12 +29,12 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
   private transient final ControlsIntegrator controlsIntegrator;
 
   public StandardTrajectoryPlanner( //
-      Tensor eta, //
+      StateTimeRaster stateTimeRaster, //
       StateIntegrator stateIntegrator, //
       Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, //
       GoalInterface goalInterface) {
-    super(eta, stateIntegrator, plannerConstraint, goalInterface);
+    super(stateTimeRaster, stateIntegrator, plannerConstraint, goalInterface);
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
         () -> controls.stream().parallel(), //
@@ -46,7 +47,7 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
     // ---
     DomainQueueMap domainQueueMap = new DomainQueueMap(); // holds candidates for insertion
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
-      final Tensor domainKey = convertToKey(next.stateTime());
+      final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       Optional<GlcNode> former = getNode(domainKey);
       if (former.isPresent()) { // is already some node present from previous exploration ?
         if (relabelDecision.doRelabel(next, former.get()))

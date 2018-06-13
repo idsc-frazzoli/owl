@@ -8,9 +8,11 @@ import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -41,8 +43,9 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     Collection<Flow> controls = r2Config.getFlows(36);
     GoalInterface goalInterface = RnMinDistGoalManager.sperical(stateGoal, radius);
     // ---
+    StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
+        stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
@@ -56,8 +59,8 @@ public class StandardTrajectoryPlannerTest extends TestCase {
       if (Scalars.lessThan(cost, lowerBound))
         throw TensorRuntimeException.of(cost, lowerBound);
     }
-    Tensor eta2 = trajectoryPlanner.getEta();
-    assertEquals(eta, eta2);
+    // Tensor eta2 = trajectoryPlanner.getEta();
+    // assertEquals(eta, eta2);
     DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
   }
 }
