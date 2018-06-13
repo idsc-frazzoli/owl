@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
@@ -39,9 +38,8 @@ public class GlcWaypointFollowing extends WaypointFollowing {
       motionPlanWorker.flagShutdown();
       motionPlanWorker = null;
     }
-    TrajectoryPlanner trajectoryPlanner = entity.createTrajectoryPlanner(plannerConstraint, goal);
     motionPlanWorker = new MotionPlanWorker(MAX_STEPS);
     motionPlanWorker.addCallback(glcPlannerCallback);
-    motionPlanWorker.start(head, trajectoryPlanner);
+    motionPlanWorker.start(head, entity.createTrajectoryPlanner(plannerConstraint, goal));
   }
 }
