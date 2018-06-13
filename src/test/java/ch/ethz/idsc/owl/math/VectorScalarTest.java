@@ -80,6 +80,14 @@ public class VectorScalarTest extends TestCase {
     assertEquals(a.toString(), "[1, -1, 2]");
   }
 
+  public void testEmpty() {
+    Scalar e1 = VectorScalar.of();
+    Scalar e2 = VectorScalar.of(Tensors.empty());
+    Scalar e3 = VectorScalar.of(Tensors.empty().stream().map(Scalar.class::cast));
+    assertEquals(e1, e2);
+    assertEquals(e1, e3);
+  }
+
   public void testSerializable() throws ClassNotFoundException, IOException {
     Scalar a = VectorScalar.of(1, 2, 3);
     Scalar b = Serialization.copy(a);

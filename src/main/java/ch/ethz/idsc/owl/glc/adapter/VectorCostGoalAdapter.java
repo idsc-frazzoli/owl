@@ -24,19 +24,19 @@ public class VectorCostGoalAdapter implements GoalInterface, Serializable {
 
   public VectorCostGoalAdapter( //
       List<CostFunction> costFunctions, //
-      Se2ComboRegion se2ComboRegion, //
-      Collection<Flow> controls) {
+      Se2ComboRegion se2ComboRegion, // TODO with the current design, Region<Tensor> region would be sufficient
+      Collection<Flow> controls) { // TODO controls are not needed
     this.costFunctions = costFunctions;
     this.trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(se2ComboRegion);
   }
 
-  @Override
+  @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
     return VectorScalar.of(costFunctions.stream() //
         .map(costFunction -> costFunction.minCostToGoal(x)));
   }
 
-  @Override
+  @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     return VectorScalar.of(costFunctions.stream() //
         .map(costFunction -> costFunction.costIncrement(glcNode, trajectory, flow)));

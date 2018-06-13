@@ -42,4 +42,8 @@ public class EtaRaster implements StateTimeRaster, Serializable {
   public Tensor convertToKey(StateTime stateTime) {
     return eta.pmul(represent.apply(stateTime)).map(Floor.FUNCTION);
   }
+
+  public Tensor eta() {
+    return eta.unmodifiable();
+  }
 }
