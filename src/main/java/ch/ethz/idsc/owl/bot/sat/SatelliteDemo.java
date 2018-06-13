@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -43,7 +44,7 @@ import ch.ethz.idsc.tensor.Tensors;
         Tensors.vector(2, -2, 0, 0), Tensors.vector(0.5, 0.5, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     GoalInterface goalInterface = new SatelliteGoalManager(goalRegion);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, plannerConstraint, goalInterface);
+        EtaRaster.state(eta), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(start, RealScalar.ZERO));
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();

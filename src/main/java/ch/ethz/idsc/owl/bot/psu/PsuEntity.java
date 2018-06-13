@@ -7,7 +7,9 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -65,10 +67,9 @@ import ch.ethz.idsc.tensor.alg.Array;
     GoalInterface goalInterface = PsuGoalManager.of( //
         psuWrap, psuWrap.represent(goal.extract(0, 2)), RealScalar.of(0.2));
     // ---
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        eta, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
-    trajectoryPlanner.represent = StateTimeTensorFunction.state(psuWrap::represent);
-    return trajectoryPlanner;
+    StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(psuWrap::represent));
+    return new StandardTrajectoryPlanner( //
+        stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
   }
 
   @Override

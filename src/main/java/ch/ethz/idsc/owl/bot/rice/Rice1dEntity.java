@@ -3,7 +3,9 @@ package ch.ethz.idsc.owl.bot.rice;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -55,7 +57,8 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     StateIntegrator stateIntegrator = //
         FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
     GoalInterface goalInterface = Rice1GoalManager.create(goal.extract(0, 2), Tensors.vector(0.2, 0.3));
+    StateTimeRaster stateTimeRaster = EtaRaster.state(partitionScale);
     return new StandardTrajectoryPlanner( //
-        partitionScale, stateIntegrator, controls, plannerConstraint, goalInterface);
+        stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface);
   }
 }

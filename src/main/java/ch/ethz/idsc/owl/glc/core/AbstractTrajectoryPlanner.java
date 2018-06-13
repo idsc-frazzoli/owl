@@ -8,7 +8,6 @@ import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.Tensor;
 
 /** planner is shared between
  * {@link StandardTrajectoryPlanner} and {@link AbstractAnyTrajectoryPlanner} */
@@ -18,11 +17,11 @@ public abstract class AbstractTrajectoryPlanner extends TrajectoryPlanner {
   private final GoalInterface goalInterface;
 
   protected AbstractTrajectoryPlanner( //
-      Tensor eta, //
+      StateTimeRaster stateTimeRaster, //
       StateIntegrator stateIntegrator, //
       PlannerConstraint plannerConstraint, //
       GoalInterface goalInterface) {
-    super(eta);
+    super(stateTimeRaster);
     this.stateIntegrator = stateIntegrator;
     this.plannerConstraint = Objects.requireNonNull(plannerConstraint);
     this.goalInterface = goalInterface;

@@ -8,9 +8,11 @@ import java.util.LinkedList;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -73,20 +75,24 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    Tensor partitionScale = eta();
+    // Tensor partitionScale = etaTensor();
     Collection<Flow> controls = createControls(); // TODO design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         RnMinTimeGoalManager.create(goalRegion, controls), //
         extraCosts);
     return new StandardTrajectoryPlanner( //
-        partitionScale, FIXEDSTATEINTEGRATOR, controls, //
+        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, //
         plannerConstraint, goalInterface);
   }
 
   Collection<Flow> createControls() {
     /** 36 corresponds to 10[Degree] resolution */
     return r2Flows.getFlows(36);
+  }
+
+  protected StateTimeRaster stateTimeRaster() {
+    return EtaRaster.state(eta());
   }
 
   protected Tensor eta() {
