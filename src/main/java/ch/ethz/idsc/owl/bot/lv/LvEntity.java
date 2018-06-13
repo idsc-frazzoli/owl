@@ -16,7 +16,6 @@ import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
-import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -27,7 +26,10 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class LvEntity extends AbstractCircularEntity {
+  private static final Tensor PARTITION_SCALE = Tensors.vector(8, 8).unmodifiable();
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
+  private static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = //
+      FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
   // ---
   private final Collection<Flow> controls;
 
@@ -49,13 +51,10 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    Tensor partitionScale = Tensors.vector(8, 8);
-    StateIntegrator stateIntegrator = //
-        FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
+  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     GoalInterface goalInterface = LvGoalInterface.create(goal.extract(0, 2), Tensors.vector(0.2, 0.2));
-    StateTimeRaster stateTimeRaster = EtaRaster.state(partitionScale);
+    StateTimeRaster stateTimeRaster = EtaRaster.state(PARTITION_SCALE);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface);
+        stateTimeRaster, FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 }

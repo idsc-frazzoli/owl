@@ -38,6 +38,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
  * 
  * the implementation chooses certain values */
 /* package */ class R2Entity extends AbstractCircularEntity {
+  protected static final Tensor PARTITION_SCALE = Tensors.vector(8, 8).unmodifiable();
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
   // ---
@@ -68,14 +69,13 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /** @param goal
    * @return */
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-    Tensor partitionScale = eta();
+    Tensor partitionScale = PARTITION_SCALE;
     Scalar goalRadius = RealScalar.of(Math.sqrt(2.0)).divide(partitionScale.Get(0));
     return new SphericalRegion(goal.extract(0, 2), goalRadius);
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    // Tensor partitionScale = etaTensor();
+  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Collection<Flow> controls = createControls(); // TODO design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
@@ -92,11 +92,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   protected StateTimeRaster stateTimeRaster() {
-    return EtaRaster.state(eta());
-  }
-
-  protected Tensor eta() {
-    return Tensors.vector(8, 8);
+    return EtaRaster.state(PARTITION_SCALE);
   }
 
   @Override

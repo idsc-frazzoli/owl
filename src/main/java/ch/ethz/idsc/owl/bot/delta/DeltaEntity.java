@@ -33,7 +33,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaEntity extends AbstractCircularEntity {
-  public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = FixedStateIntegrator.create( //
+  protected static final Tensor PARTITION_SCALE = Tensors.vector(5, 5).unmodifiable();
+  protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = FixedStateIntegrator.create( //
       RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 5), 4);
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(2);
@@ -70,8 +71,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    Tensor eta = eta();
+  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, U_NORM).getFlows(U_SIZE);
     Scalar u_norm = DeltaControls.maxSpeed(controls);
@@ -79,13 +79,12 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar maxMove = stateSpaceModel.getLipschitz().add(u_norm);
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(goalRegion, maxMove);
-    StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster, FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 
-  protected Tensor eta() {
-    return Tensors.vector(5, 5).unmodifiable();
+  protected StateTimeRaster stateTimeRaster() {
+    return EtaRaster.state(PARTITION_SCALE);
   }
 
   @Override

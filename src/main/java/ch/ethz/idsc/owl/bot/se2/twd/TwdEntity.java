@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = //
         new Se2ComboRegion(goalRegion, new So2Region(goal.Get(2), goalRadius_theta));
@@ -96,10 +96,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         se2MinTimeGoalManager.getGoalInterface(), //
         extraCosts);
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    return new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
-    // trajectoryPlanner.represent = StateTimeTensorFunction.state(SE2WRAP::represent);
-    return trajectoryPlanner;
   }
 
   @Override
