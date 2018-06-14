@@ -36,7 +36,7 @@ public enum GlcNodes {
    * @return */
   // TODO not clear why this function exists
   public static Optional<GlcNode> getFinalGoalNode(TrajectoryPlanner trajectoryPlanner) {
-    return HeuristicQ.of(trajectoryPlanner.getGoalInterface()) //
+    return HeuristicQ.of(trajectoryPlanner.getHeuristicFunction()) //
         ? trajectoryPlanner.getBestOrElsePeek() //
         : trajectoryPlanner.getBest();
   }

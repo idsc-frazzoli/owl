@@ -40,7 +40,7 @@ public class GokartVecEntity extends GokartEntity {
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     //  ---
     Tensor slack = Array.zeros(costs.size()); // slack equal to zero for now
-    trajectoryPlanner.relabelDecision = new LexicographicRelabelDecision(slack);
+    ((StandardTrajectoryPlanner) trajectoryPlanner).relabelDecision = new LexicographicRelabelDecision(slack);
     // ---
     return trajectoryPlanner;
   }

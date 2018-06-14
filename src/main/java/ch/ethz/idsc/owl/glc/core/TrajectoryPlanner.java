@@ -15,8 +15,6 @@ import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
-import ch.ethz.idsc.owl.glc.std.RelabelDecision;
-import ch.ethz.idsc.owl.glc.std.SimpleRelabelDecision;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,6 +22,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** base class for generalized label correction implementation */
 public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Serializable {
   protected final StateTimeRaster stateTimeRaster;
+  private final HeuristicFunction heuristicFunction;
   // ---
   private final Queue<GlcNode> queue = new PriorityQueue<>(NodeMeritComparator.INSTANCE);
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
@@ -33,18 +32,15 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   protected final NavigableMap<GlcNode, List<StateTime>> best = new TreeMap<>(NodeMeritComparator.INSTANCE);
   private int replaceCount = 0;
 
-  /* package */ TrajectoryPlanner(StateTimeRaster stateTimeRaster) {
+  protected TrajectoryPlanner(StateTimeRaster stateTimeRaster, HeuristicFunction heuristicFunction) {
     this.stateTimeRaster = stateTimeRaster;
+    this.heuristicFunction = heuristicFunction;
   }
-
-  /** decides if new node is better than existing node */
-  public RelabelDecision relabelDecision = //
-      SimpleRelabelDecision.INSTANCE;
 
   /** @param stateTime */
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(queue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
-    boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, getGoalInterface()));
+    boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
     GlobalAssert.that(!replaced); // root insertion should not replace any other node
   }
 
@@ -111,7 +107,9 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   public abstract StateIntegrator getStateIntegrator();
 
   /** @return goal query for the purpose of inspection */
-  public abstract GoalInterface getGoalInterface();
+  public final HeuristicFunction getHeuristicFunction() {
+    return heuristicFunction;
+  }
 
   protected final Collection<GlcNode> queue() {
     return queue;
