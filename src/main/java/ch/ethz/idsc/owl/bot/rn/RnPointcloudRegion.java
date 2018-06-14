@@ -7,13 +7,13 @@ import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.owl.data.nd.NdCluster;
 import ch.ethz.idsc.owl.data.nd.NdMap;
 import ch.ethz.idsc.owl.data.nd.NdTreeMap;
+import ch.ethz.idsc.owl.math.MinMax;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.Regions;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Entrywise;
 
 public class RnPointcloudRegion implements Region<Tensor>, Serializable {
   /** Example:
@@ -36,10 +36,8 @@ public class RnPointcloudRegion implements Region<Tensor>, Serializable {
   private RnPointcloudRegion(Tensor points, Scalar radius) {
     this.points = points.unmodifiable();
     this.radius = radius;
-    ndMap = new NdTreeMap<>( //
-        points.stream().reduce(Entrywise.min()).get(), //
-        points.stream().reduce(Entrywise.max()).get(), //
-        5, 20); // magic const
+    MinMax minMax = MinMax.of(points);
+    ndMap = new NdTreeMap<>(minMax.min(), minMax.max(), 5, 20); // magic const
     for (Tensor point : points)
       ndMap.add(point, null);
   }

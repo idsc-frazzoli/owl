@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Floor;
 
-// TODO intermediate implementation
 /** mapping from state time to domain coordinates
  * 
  * <p>The default value drops time information and only considers
