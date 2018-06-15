@@ -9,15 +9,15 @@ import ch.ethz.idsc.tensor.red.Max;
 
 public enum Se2Controls {
   ;
-  /** @param controls
-   * @return m/s */
-  public static Scalar maxSpeed(Collection<Flow> controls) {
-    return controls.stream().map(Flow::getU).map(u -> u.Get(0).abs()).reduce(Max::of).get();
+  /** @param flows
+   * @return max speed with unit "m*s^-1" */
+  public static Scalar maxSpeed(Collection<Flow> flows) {
+    return flows.stream().map(Flow::getU).map(u -> u.Get(0).abs()).reduce(Max::of).get();
   }
 
-  /** @param controls
-   * @return rad/s */
-  public static Scalar maxTurning(Collection<Flow> controls) {
-    return controls.stream().map(Flow::getU).map(u -> u.Get(2).abs()).reduce(Max::of).get();
+  /** @param flows
+   * @return max rate per meter driven in unit "rad*s^-1" */
+  public static Scalar maxTurning(Collection<Flow> flows) {
+    return flows.stream().map(Flow::getU).map(u -> u.Get(2).abs()).reduce(Max::of).get();
   }
 }

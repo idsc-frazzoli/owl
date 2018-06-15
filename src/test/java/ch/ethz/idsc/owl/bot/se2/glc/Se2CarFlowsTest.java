@@ -17,11 +17,11 @@ import ch.ethz.idsc.tensor.qty.UnitSystem;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class CarFlowsTest extends TestCase {
+public class Se2CarFlowsTest extends TestCase {
   public void testUnits() {
     Scalar speed = Quantity.of(2, "m*s^-1");
     Scalar rate_max = (Scalar) Quantity.of(1, "rad*m^-1").map(UnitSystem.SI());
-    FlowsInterface carFlows = CarFlows.standard(speed, rate_max);
+    FlowsInterface carFlows = Se2CarFlows.standard(speed, rate_max);
     Collection<Flow> collection = carFlows.getFlows(8);
     Flow flow = collection.iterator().next();
     Tensor x = Tensors.fromString("{1[m],2[m],3[rad]}").map(UnitSystem.SI());

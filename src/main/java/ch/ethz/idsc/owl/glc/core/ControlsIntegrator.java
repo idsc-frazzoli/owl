@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.glc.core;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,9 +55,9 @@ public class ControlsIntegrator implements Serializable {
    * @param costFunction */
   public ControlsIntegrator( //
       StateIntegrator stateIntegrator, Supplier<Stream<Flow>> supplier, CostFunction costFunction) {
-    this.stateIntegrator = stateIntegrator;
+    this.stateIntegrator = Objects.requireNonNull(stateIntegrator);
     this.supplier = supplier;
-    this.costFunction = costFunction;
+    this.costFunction = Objects.requireNonNull(costFunction);
   }
 
   /** parallel trajectory integration is used by {@link StandardTrajectoryPlanner}

@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       }
     }
     states.append(COLLISION);
-    FlowsInterface carFlows = CarFlows.forward(RealScalar.of(1), RealScalar.of(2));
+    FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.of(1), RealScalar.of(2));
     Collection<Flow> collection = carFlows.getFlows(6);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(100);
     actions = Tensor.of(collection.stream() //

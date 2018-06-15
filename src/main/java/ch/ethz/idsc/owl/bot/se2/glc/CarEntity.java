@@ -50,7 +50,7 @@ public class CarEntity extends Se2Entity {
   /** the pure pursuit controller is permitted a slightly higher turning rate "rad/m"
    * than the planner, to overcome small imprecisions when following the trajectory */
   static final Scalar MAX_TURNING_RATE = Degree.of(50);
-  static final FlowsInterface CARFLOWS = CarFlows.standard(SPEED, MAX_TURNING_PLAN);
+  static final FlowsInterface CARFLOWS = Se2CarFlows.standard(SPEED, MAX_TURNING_PLAN);
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   private static final Scalar SHIFT_PENALTY = RealScalar.of(0.4);
   // ---
@@ -120,7 +120,6 @@ public class CarEntity extends Se2Entity {
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, new So2Region(goal.Get(2), goalRadius.Get(2)));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(se2MinTimeGoalManager.getGoalInterface(), extraCosts);
-    // StateTimeRasterization stateTimeRasterization = new EtaRasterization(eta(), StateTimeTensorFunction.state(SE2WRAP::represent));
     return new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
   }

@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.Scalar;
 
   @Override
   protected StateTimeRaster stateTimeRaster() {
-    Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
-    return new EtaRaster(PARTITIONSCALE.copy().append(dt.reciprocal()), StateTime::joined);
+    return EtaRaster.timeDependent(PARTITIONSCALE, FIXEDSTATEINTEGRATOR.getTimeStepTrajectory(), StateTime::joined);
   }
 }

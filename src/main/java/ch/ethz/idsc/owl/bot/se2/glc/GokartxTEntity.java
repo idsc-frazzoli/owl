@@ -31,8 +31,9 @@ class GokartxTEntity extends CarEntity {
 
   @Override
   protected StateTimeRaster stateTimeRaster() {
-    Scalar dt = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
-    return new EtaRaster(partitionScale.copy().append(dt.reciprocal()), new StateTimeCoordinateWrap(SE2WRAP));
+    return EtaRaster.timeDependent( //
+        partitionScale, FIXEDSTATEINTEGRATOR.getTimeStepTrajectory(), //
+        new StateTimeCoordinateWrap(SE2WRAP));
   }
 
   @Override
