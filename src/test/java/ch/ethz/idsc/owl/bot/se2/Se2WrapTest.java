@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -56,6 +57,15 @@ public class Se2WrapTest extends TestCase {
   public void testFail() {
     try {
       new Se2Wrap(Tensors.vector(1, 2));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testFailMatrix() {
+    try {
+      new Se2Wrap(IdentityMatrix.of(3));
       assertTrue(false);
     } catch (Exception exception) {
       // ---

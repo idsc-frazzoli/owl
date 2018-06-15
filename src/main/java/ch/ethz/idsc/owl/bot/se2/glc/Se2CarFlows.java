@@ -15,33 +15,33 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
-public class CarFlows implements FlowsInterface, Serializable {
+public class Se2CarFlows implements FlowsInterface, Serializable {
   /** @param speed with unit [m*s^-1]
    * @param rate_max with unit [rad*m^-1], i.e. the amount of rotation [rad] performed per distance [m^-1]
    * @return */
   public static FlowsInterface standard(Scalar speed, Scalar rate_max) {
-    return new CarFlows(Tensors.of(speed, speed.negate()), rate_max);
+    return new Se2CarFlows(Tensors.of(speed, speed.negate()), rate_max);
   }
 
   /** @param speed with unit [m*s^-1]
    * @param rate_max with unit [rad*m^-1], i.e. the amount of rotation [rad] performed per distance [m^-1]
    * @return */
   public static FlowsInterface forward(Scalar speed, Scalar rate_max) {
-    return new CarFlows(Tensors.of(speed), rate_max);
+    return new Se2CarFlows(Tensors.of(speed), rate_max);
   }
 
   /** @param speeds vector with unit [m*s^-1]
    * @param rate_max with unit [rad*m^-1], i.e. the amount of rotation [rad] performed per distance [m^-1]
    * @return */
   public static FlowsInterface of(Tensor speeds, Scalar rate_max) {
-    return new CarFlows(speeds, rate_max);
+    return new Se2CarFlows(speeds, rate_max);
   }
   // ---
 
   private final Tensor speeds;
   private final Scalar rate_max;
 
-  private CarFlows(Tensor speeds, Scalar rate_max) {
+  private Se2CarFlows(Tensor speeds, Scalar rate_max) {
     this.speeds = VectorQ.require(speeds);
     this.rate_max = rate_max;
   }

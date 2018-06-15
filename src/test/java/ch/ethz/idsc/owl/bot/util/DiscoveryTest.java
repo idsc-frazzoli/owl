@@ -22,6 +22,6 @@ public class DiscoveryTest extends TestCase {
     };
     ClassDiscovery.execute(ClassPaths.getDefault(), classVisitor);
     // System.out.println(regions.size());
-    assertTrue(30 < regions.size());
+    assertTrue(40 < regions.size());
   }
 }
