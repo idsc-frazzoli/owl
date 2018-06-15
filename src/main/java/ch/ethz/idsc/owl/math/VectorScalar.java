@@ -34,6 +34,10 @@ import ch.ethz.idsc.tensor.sca.Real;
  * The lexicographical ordering is applied to the tensors.
  * For instance: [1, 2, 0] < [1, 1, 3]
  * 
+ * <p>The sign of a {@link VectorScalar} is not defined. For instance,
+ * to check that all entries are non-negative use
+ * Scalars.lessEquals(vectorScalar.zero(), vectorScalar);
+ * 
  * <p>The string expression of a {@link VectorScalar} is of the form [1, 2, 3]
  * to prevent confusion with standard vectors that are formatted as {1, 2, 3}.
  * 

@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
-import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 
@@ -28,13 +27,13 @@ public enum RenderElements {
     // list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
     list.add(new TreeRender(trajectoryPlanner.getDomainMap().values()));
-    {
-      TrajectoryRegionQuery trq = trajectoryPlanner.getGoalInterface();
-      if (trq instanceof StateTimeCollector)
-        list.add(new GoalRender(((StateTimeCollector) trq).getMembers()));
-      if (trq instanceof StateTimeCollector)
-        list.add(new GoalRender(((StateTimeCollector) trq).getMembers()));
-    }
+    // {
+    // TrajectoryRegionQuery trq = trajectoryPlanner.getHeuristicFunction();
+    // if (trq instanceof StateTimeCollector)
+    // list.add(new GoalRender(((StateTimeCollector) trq).getMembers()));
+    // if (trq instanceof StateTimeCollector)
+    // list.add(new GoalRender(((StateTimeCollector) trq).getMembers()));
+    // }
     {
       Optional<GlcNode> goalNode = trajectoryPlanner.getBest();
       if (goalNode.isPresent()) {

@@ -3,10 +3,12 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.Objects;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import ch.ethz.idsc.owl.bot.r2.ImageCostFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -16,8 +18,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 enum WaypointDistanceCostDemo {
   ;
   public static void main(String[] args) {
-    Tensor waypoints = ResourceData.of("/demo/dubendorf/hangar/20180425waypoints.csv");
-    WaypointDistanceCost wdc = new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(440, 640));
+    Tensor waypoints = Objects.requireNonNull(ResourceData.of("/dubilab/waypoints/20180425.csv"));
+    ImageCostFunction wdc = WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(440, 640));
     JFrame frame = new JFrame() {
       @Override
       public void paint(Graphics graphics) {

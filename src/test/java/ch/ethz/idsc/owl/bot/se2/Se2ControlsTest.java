@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.se2.glc.CarFlows;
 import ch.ethz.idsc.owl.bot.se2.glc.CarHelper;
+import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 
 public class Se2ControlsTest extends TestCase {
   public void testSimple() {
-    FlowsInterface carFlows = CarFlows.standard(RealScalar.ONE, Degree.of(45));
+    FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, Degree.of(45));
     Collection<Flow> controls = carFlows.getFlows(6);
     Scalar maxSpeed = Se2Controls.maxSpeed(controls);
     assertTrue(Chop._13.close(maxSpeed, RealScalar.ONE));

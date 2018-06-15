@@ -4,14 +4,15 @@ package ch.ethz.idsc.owl.glc.std;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.glc.core.AbstractTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.DomainQueue;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -25,8 +26,14 @@ import ch.ethz.idsc.tensor.Tensor;
  * <li>parallel processing of queues
  * <li>nodes that get replaced in a domain, are also removed from the queue
  * </ul> */
-public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
+public class StandardTrajectoryPlanner extends TrajectoryPlanner {
+  private final StateIntegrator stateIntegrator;
+  private final PlannerConstraint plannerConstraint;
+  private final GoalInterface goalInterface;
   private transient final ControlsIntegrator controlsIntegrator;
+  /** decides if new node is better than existing node
+   * TODO API design not final */
+  public RelabelDecision relabelDecision = SimpleRelabelDecision.INSTANCE;
 
   public StandardTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, //
@@ -34,7 +41,10 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
       Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, //
       GoalInterface goalInterface) {
-    super(stateTimeRaster, stateIntegrator, plannerConstraint, goalInterface);
+    super(stateTimeRaster, goalInterface);
+    this.stateIntegrator = stateIntegrator;
+    this.plannerConstraint = Objects.requireNonNull(plannerConstraint);
+    this.goalInterface = goalInterface;
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
         () -> controls.stream().parallel(), //
@@ -77,11 +87,16 @@ public class StandardTrajectoryPlanner extends AbstractTrajectoryPlanner {
           }
           node.insertEdgeTo(next);
           insert(domainKey, next); // replaces former node if present
-          if (isInsideGoal(trajectory)) // GOAL check
+          if (goalInterface.firstMember(trajectory).isPresent()) // GOAL check
             offerDestination(next, trajectory);
         }
         break; // as in B. Paden's implementation: leaving loop after first relabel
       }
     }
+  }
+
+  @Override // from TrajectoryPlanner
+  public final StateIntegrator getStateIntegrator() {
+    return stateIntegrator;
   }
 }

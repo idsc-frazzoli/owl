@@ -29,12 +29,12 @@ public class GokartWaypoint2Demo extends Se2CarDemo {
   private static final Tensor ARROWHEAD = Tensors.matrixDouble( //
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(2));
   private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { { 7.5, 0, 0 }, { 0, -7.5, 640 }, { 0, 0, 1 } });
-  Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
-  CostFunction waypointCost = new WaypointDistanceCost(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640));
 
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
+    Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
+    CostFunction costFunction = WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640));
     GokartEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
@@ -43,7 +43,7 @@ public class GokartWaypoint2Demo extends Se2CarDemo {
 
       @Override
       public Optional<CostFunction> getPrimaryCost() {
-        return Optional.of(waypointCost);
+        return Optional.of(costFunction);
       }
     };
     // ---

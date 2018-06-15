@@ -25,7 +25,8 @@ public class ImageCostFunction implements CostFunction, Serializable {
   // ---
   private final Tensor image;
   private final Tensor range;
-  /* package for testing */ final FlipYXTensorInterp<Scalar> flipYXTensorInterp;
+  /* public for testing */
+  public final FlipYXTensorInterp<Scalar> flipYXTensorInterp;
 
   /** @param image as a matrix
    * @param range effective size of image in coordinate space
@@ -37,7 +38,7 @@ public class ImageCostFunction implements CostFunction, Serializable {
   }
 
   @Override // from HeuristicFunction
-  public Scalar minCostToGoal(Tensor tensor) {
+  public final Scalar minCostToGoal(Tensor tensor) {
     return RealScalar.ZERO;
   }
 
@@ -50,11 +51,11 @@ public class ImageCostFunction implements CostFunction, Serializable {
     return cost.dot(dts).Get();
   }
 
-  public Tensor image() {
+  public final Tensor image() {
     return image.unmodifiable();
   }
 
-  public Tensor range() {
+  public final Tensor range() {
     return range.unmodifiable();
   }
 

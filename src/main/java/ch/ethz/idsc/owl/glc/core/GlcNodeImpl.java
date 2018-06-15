@@ -39,6 +39,8 @@ import ch.ethz.idsc.tensor.Tensor;
     this.flow = flow;
     this.stateTime = stateTime;
     this.costFromRoot = costFromRoot;
+    // if (!Scalars.lessEquals(minCostToGoal.zero(), minCostToGoal))
+    // throw TensorRuntimeException.of(minCostToGoal);
     merit = costFromRoot.add(minCostToGoal);
   }
 
