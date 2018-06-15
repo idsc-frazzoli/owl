@@ -30,4 +30,14 @@ public class EtaRasterTest extends TestCase {
     assertEquals(tensor, Tensors.vector(150));
     assertTrue(ExactScalarQ.all(tensor));
   }
+
+  public void testFail() {
+    EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1), StateTime::joined);
+    try {
+      EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1.), StateTime::joined);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

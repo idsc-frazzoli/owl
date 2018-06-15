@@ -11,15 +11,22 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.AbsSquared;
 
 /** Paden thesis (5.5.13) on p.57
  * cost of lateral acceleration (believed to be correlated with rider comfort)
  * 2*u^2 where d_theta(t) = u(t)
  * 
- * in the implementation below we simply use the formula u^2 */
-public enum Se2LateralAcceleration implements CostFunction {
-  INSTANCE;
+ * in the implementation below we simply use the formula u^2
+ * 
+ * @see Se2LateralAcceleration */
+public class ScaledLateralAcceleration implements CostFunction {
+  private final Scalar weight;
+
+  /** @param weight */
+  public ScaledLateralAcceleration(Scalar weight) {
+    this.weight = weight;
+  }
+
   // ---
   /** Curvature is changed angle over distance covered */
   @Override // from CostIncrementFunction
@@ -34,8 +41,8 @@ public enum Se2LateralAcceleration implements CostFunction {
 
   /** @param u for instance {2.5[m*s^-1], 0.0, 1.0[rad*s^-1]}
    * @param dt for instance 0.5[s]
-   * @return quantity with unit [rad^2*s^-1] */
-  public static Scalar cost(Tensor u, Scalar dt) {
-    return AbsSquared.FUNCTION.apply(u.Get(2)).multiply(dt);
+   * @return quantity with unit [rad^2*s^-1] multiplied by weight */
+  Scalar cost(Tensor u, Scalar dt) {
+    return Se2LateralAcceleration.cost(u, dt).multiply(weight);
   }
 }
