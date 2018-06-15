@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Round;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
@@ -23,8 +22,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 
   @Override
   protected StateTimeRaster stateTimeRaster() {
-    Scalar dt = FIXED_STATE_INTEGRATOR.getTimeStepTrajectory();
-    return EtaRaster.joined(PARTITION_SCALE.copy().append(dt.reciprocal()));
+    return EtaRaster.timeDependent(PARTITION_SCALE, FIXED_STATE_INTEGRATOR.getTimeStepTrajectory(), StateTime::joined);
   }
 
   @Override
