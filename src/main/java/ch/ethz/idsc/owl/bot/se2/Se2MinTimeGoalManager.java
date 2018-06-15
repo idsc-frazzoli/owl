@@ -49,7 +49,7 @@ public final class Se2MinTimeGoalManager implements Region<Tensor>, CostFunction
         se2ComboRegion.d_angle(tensor).divide(maxTurning));
   }
 
-  @Override
+  @Override // from Region
   public boolean isMember(Tensor xya) {
     return se2ComboRegion.isMember(xya);
   }

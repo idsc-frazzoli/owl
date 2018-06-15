@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.glc.std;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 
-public interface RelabelDecision { // jan removed template arguments. can be reintroduced as soon as needed
+public interface RelabelDecision {
   /** @param newNode
    * @param formerNode
    * @return */
