@@ -46,7 +46,7 @@ enum Se2Demo {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
     System.out.println("scale=" + eta);
-    FlowsInterface carFlows = CarFlows.standard(RealScalar.ONE, Degree.of(35));
+    FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, Degree.of(35));
     Collection<Flow> controls = carFlows.getFlows(10);
     Se2ComboRegion se2ComboRegion = //
         Se2ComboRegion.spherical(Tensors.vector(2, 1, Math.PI * -1), Tensors.vector(0.1, 0.1, 10 / 180 * Math.PI));//

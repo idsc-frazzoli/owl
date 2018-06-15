@@ -37,7 +37,7 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
   private static final Color PED_COLOR = new Color(23, 12, 200);
   private static final float MAX_A = 0.6f; // [m/s²]
   private static final float REACTION_TIME = 0.5f;
-  private static final FlowsInterface CARFLOWS = CarFlows.forward(RealScalar.ONE, Degree.of(70));
+  private static final FlowsInterface CARFLOWS = Se2CarFlows.forward(RealScalar.ONE, Degree.of(70));
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 128), Subdivide.of(0, 5, 60));
 
