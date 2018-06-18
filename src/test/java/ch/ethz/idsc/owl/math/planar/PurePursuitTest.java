@@ -3,14 +3,19 @@ package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import junit.framework.TestCase;
@@ -18,11 +23,12 @@ import junit.framework.TestCase;
 public class PurePursuitTest extends TestCase {
   public void testMatch2() {
     Tensor curve = Tensors.fromString("{{-0.4},{0.6},{1.4},{2.2}}");
-    PurePursuit purePursuit = PurePursuit.fromTrajectory(curve, RealScalar.ONE);
-    Optional<Tensor> optional = purePursuit.lookAhead();
-    assertTrue(optional.isPresent());
-    Tensor point = optional.get();
-    assertEquals(point, Tensors.vector(1));
+    try {
+      PurePursuit.fromTrajectory(curve, RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testDistanceFail() {
@@ -130,5 +136,41 @@ public class PurePursuitTest extends TestCase {
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, distance);
     Optional<Scalar> optional = purePursuit.ratio();
     assertFalse(optional.isPresent());
+  }
+
+  public void testRatioPositiveX() {
+    for (Tensor lookAhead : Tensors.of(Tensors.vector(3, 1), Tensors.vector(3, -1))) {
+      Optional<Scalar> optional = PurePursuit.ratioPositiveX(lookAhead);
+      Scalar ratio = optional.get();
+      Scalar speed = RealScalar.of(3.217506); // through experimentation
+      Tensor u = Tensors.of(speed, RealScalar.ZERO, ratio.multiply(speed));
+      Tensor tensor = Se2CarIntegrator.INSTANCE.spin(Array.zeros(3), u);
+      assertTrue(Chop._06.close(tensor.extract(0, 2), lookAhead));
+    }
+  }
+
+  public void testCreateLookAhead() {
+    Distribution distribution = UniformDistribution.of(-0.3, +0.3);
+    Distribution speeds = UniformDistribution.of(0, 3);
+    for (Tensor _ratio : RandomVariate.of(distribution, 100)) {
+      Scalar ratio = _ratio.Get();
+      Scalar speed = RandomVariate.of(speeds);
+      Tensor u = Tensors.of(speed, RealScalar.ZERO, ratio.multiply(speed));
+      Tensor lookAhead = Se2CarIntegrator.INSTANCE.spin(Array.zeros(3), u);
+      Optional<Scalar> optional = PurePursuit.ratioPositiveX(lookAhead);
+      Scalar scalar = optional.get();
+      assertTrue(Chop._07.close(ratio, scalar));
+    }
+  }
+
+  public void testRatioNegativeX() {
+    for (Tensor lookAhead : Tensors.of(Tensors.vector(-3, 1), Tensors.vector(-3, -1))) {
+      Optional<Scalar> optional = PurePursuit.ratioNegativeX(lookAhead);
+      Scalar ratio = optional.get();
+      Scalar speed = RealScalar.of(-3.217506); // through experimentation
+      Tensor u = Tensors.of(speed, RealScalar.ZERO, ratio.multiply(speed));
+      Tensor tensor = Se2CarIntegrator.INSTANCE.spin(Array.zeros(3), u);
+      assertTrue(Chop._06.close(tensor.extract(0, 2), lookAhead));
+    }
   }
 }

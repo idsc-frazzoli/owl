@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
 public class PurePursuitControl extends StateTrajectoryControl {
@@ -38,7 +39,6 @@ public class PurePursuitControl extends StateTrajectoryControl {
 
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
-    // TODO controller is not able to execute backwards motion
     Tensor u = trailAhead.get(0).getFlow().get().getU();
     Scalar speed = u.Get(0);
     Tensor state = tail.state();
@@ -48,6 +48,8 @@ public class PurePursuitControl extends StateTrajectoryControl {
         .map(StateTime::state) //
         .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
+    if (Sign.isNegative(speed))
+      beacons.set(Scalar::negate, Tensor.ALL, 0);
     PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, lookAhead);
     if (_purePursuit.ratio().isPresent()) {
       Scalar ratio = _purePursuit.ratio().get();
