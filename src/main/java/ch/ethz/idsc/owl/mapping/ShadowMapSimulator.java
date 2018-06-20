@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 
-public class ShadowMapSimulator extends ShadowMap {
+public class ShadowMapSimulator extends ShadowMapJavaCV {
   private boolean isPaused = false;
   private Timer increaserTimer;
 

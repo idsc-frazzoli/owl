@@ -67,7 +67,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     // ---
     Tensor image = ResourceData.of("/map/scenarios/multiarea.png");
     BufferedImage bufferedImage = ImageFormat.of(image);
-    bufferedImage = ImageAlpha.scale(bufferedImage, 0.3);
+    bufferedImage = ImageAlpha.scale(bufferedImage, 0.3f);
     //
     int dim1 = bufferedImage.getWidth();
     int dim0 = bufferedImage.getHeight();
@@ -97,11 +97,11 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     owlyAnimationFrame.addBackground(shadowMapPed);
     shadowMapPed.startNonBlocking(10);
     //
-    ShadowMapSimulator shadowMapCar = //
-        new ShadowMapSimulator(lidarEmulator, imageRegionCar, carEntity::getStateTimeNow, CAR_VELOCITY, CAR_RADIUS);
-    shadowMapCar.setColor(CAR_COLOR);
-    owlyAnimationFrame.addBackground(shadowMapCar);
-    shadowMapCar.startNonBlocking(10);
+    //ShadowMapSimulator shadowMapCar = //
+    //    new ShadowMapSimulator(lidarEmulator, imageRegionCar, carEntity::getStateTimeNow, CAR_VELOCITY, CAR_RADIUS);
+    //shadowMapCar.setColor(CAR_COLOR);
+    //owlyAnimationFrame.addBackground(shadowMapCar);
+    //shadowMapCar.startNonBlocking(10);
     //
     {
       RenderInterface renderInterface = new MouseShapeRender( //
@@ -117,7 +117,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       public void windowClosed(WindowEvent e) {
         System.out.println("window was closed. terminating...");
         shadowMapPed.flagShutdown();
-        shadowMapCar.flagShutdown();
+        //shadowMapCar.flagShutdown();
       }
     });
   }
