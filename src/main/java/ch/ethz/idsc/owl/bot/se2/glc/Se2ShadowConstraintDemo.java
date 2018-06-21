@@ -71,8 +71,8 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
     shadowMapPed.setColor(PED_COLOR);
     owlyAnimationFrame.addBackground(shadowMapPed);
     shadowMapPed.startNonBlocking(10);
-    SimpleShadowConstraint shadowConstraintPed = //
-        new SimpleShadowConstraint(shadowMapPed, MAX_A, REACTION_TIME);
+    SimpleShadowConstraintJavaCV shadowConstraintPed = //
+        new SimpleShadowConstraintJavaCV(shadowMapPed, MAX_A, REACTION_TIME);
     constraintCollection.add(shadowConstraintPed);
     // ---
     {
