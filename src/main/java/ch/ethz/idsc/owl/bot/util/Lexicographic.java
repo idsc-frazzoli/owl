@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 public enum Lexicographic implements Comparator<Tensor> {
   COMPARATOR;
   // ---
-  @Override
+  @Override // from Comparator
   public int compare(Tensor t1, Tensor t2) {
     if (t1.length() != t2.length())
       throw TensorRuntimeException.of(t1, t2);
