@@ -6,13 +6,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.data.img.ImageAlpha;
-import ch.ethz.idsc.owl.data.img.ImageTensors;
 import ch.ethz.idsc.owl.glc.adapter.MultiConstraintAdapter;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -20,11 +17,11 @@ import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.mapping.ShadowMapDirected;
 import ch.ethz.idsc.owl.mapping.ShadowMapSimulator;
+import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
-import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.region.RegionIntersection;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -42,19 +39,19 @@ import ch.ethz.idsc.tensor.qty.Degree;
 public class Se2ShadowRulesDemo extends Se2CarDemo {
   private static final float PED_VELOCITY = 0.2f;
   private static final float PED_RADIUS = 0.05f;
-  private static final Color PED_COLOR = new Color(23, 200, 20, 100);
+  private static final Color PED_COLOR = new Color(38, 239, 248, 200);
   private static final float CAR_VELOCITY = 0.6f;
   private static final float CAR_RADIUS = 0.3f;
   private static final Color CAR_COLOR = new Color(200, 80, 20, 150);
-  private static final Tensor RANGE = Tensors.vector(5, 10);
+  private static final Tensor RANGE = Tensors.vector(10.4, 8);
   // ---
   private static final FlowsInterface CARFLOWS = Se2CarFlows.forward(RealScalar.ONE, Degree.of(70));
   private static final LidarRaytracer LIDAR_RAYTRACER = //
-      new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 128), Subdivide.of(0, 5, 60));
+      new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 5, 60));
 
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    StateTime stateTime = new StateTime(Tensors.vector(2.9, 1.0, 3.14 / 2), RealScalar.ZERO);
+    StateTime stateTime = new StateTime(Tensors.vector(5.0, 1.0, 0), RealScalar.ZERO);
     CarEntity carEntity = new CarEntity( //
         stateTime, //
         new PurePursuitControl(CarEntity.LOOKAHEAD, Degree.of(75)), //
@@ -65,20 +62,23 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       }
     };
     // ---
-    Tensor image = ResourceData.of("/map/scenarios/multiarea.png");
+    Tensor image = ResourceData.of("/map/scenarios/ped_obs_legal1.BMP");
     BufferedImage bufferedImage = ImageFormat.of(image);
-    bufferedImage = ImageAlpha.scale(bufferedImage, 0.3f);
+    // bufferedImage = ImageAlpha.scale(bufferedImage, 0.5f);
     //
     int dim1 = bufferedImage.getWidth();
     int dim0 = bufferedImage.getHeight();
     Tensor scale = Tensors.vector(dim1, dim0).pmul(RANGE.map(Scalar::reciprocal));
     //
-    Tensor imageCar = ImageTensors.reduceInverted(image, 1);
-    Tensor imagePed = ImageTensors.reduceInverted(image, 2);
+    // Tensor imageCar = ImageTensors.reduceInverted(image, 1);
+    // Tensor imagePed = ImageTensors.reduceInverted(image, 2);
+    Tensor imageCar = ResourceData.of("/map/scenarios/car_obs1.BMP");
+    Tensor imagePed = ResourceData.of("/map/scenarios/ped_obs_legal1.BMP");
+    Tensor imageLid = ResourceData.of("/map/scenarios/ped_obs_illegal1.BMP");
     ImageRegion imageRegionCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion imageRegionPed = new ImageRegion(imagePed, RANGE, false);
-    Region<Tensor> intersectionRegion = RegionIntersection.wrap(Arrays.asList(imageRegionCar, imageRegionPed));
-    TrajectoryRegionQuery rayComp = SimpleTrajectoryRegionQuery.timeInvariant(intersectionRegion);
+    ImageRegion imageRegionLid = new ImageRegion(imageLid, RANGE, false);
+    TrajectoryRegionQuery lidarRay = SimpleTrajectoryRegionQuery.timeInvariant(imageRegionLid);
     //
     Collection<PlannerConstraint> constraintCollection = new ArrayList<>();
     PlannerConstraint regionConstraint = createConstraint(imageRegionCar);
@@ -88,20 +88,23 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     owlyAnimationFrame.addBackground(imgRender);
     // Lidar
     LidarEmulator lidarEmulator = new LidarEmulator( //
-        LIDAR_RAYTRACER, carEntity::getStateTimeNow, rayComp);
+        LIDAR_RAYTRACER, carEntity::getStateTimeNow, lidarRay);
     owlyAnimationFrame.addBackground(lidarEmulator);
-    // Shadowmap
-    ShadowMapSimulator shadowMapPed = //
-        new ShadowMapSimulator(lidarEmulator, imageRegionPed, carEntity::getStateTimeNow, PED_VELOCITY, PED_RADIUS);
+    //  ---
+    // ShadowMaps
+    ShadowMapSpherical shadowMapPed = //
+        new ShadowMapSpherical(lidarEmulator, imageRegionPed, PED_VELOCITY, PED_RADIUS);
     shadowMapPed.setColor(PED_COLOR);
     owlyAnimationFrame.addBackground(shadowMapPed);
-    shadowMapPed.startNonBlocking(10);
+    ShadowMapSimulator shadowSimPed = new ShadowMapSimulator(shadowMapPed, carEntity::getStateTimeNow);
+    shadowSimPed.startNonBlocking(10);
     //
-    ShadowMapSimulator shadowMapCar = //
-        new ShadowMapSimulator(lidarEmulator, imageRegionCar, carEntity::getStateTimeNow, CAR_VELOCITY, CAR_RADIUS);
+    ShadowMapDirected shadowMapCar = //
+        new ShadowMapDirected(lidarEmulator, imageRegionCar, CAR_VELOCITY);
     shadowMapCar.setColor(CAR_COLOR);
     owlyAnimationFrame.addBackground(shadowMapCar);
-    shadowMapCar.startNonBlocking(10);
+    ShadowMapSimulator shadowSimCar = new ShadowMapSimulator(shadowMapCar, carEntity::getStateTimeNow);
+    shadowSimCar.startNonBlocking(10);
     {
       RenderInterface renderInterface = new MouseShapeRender( //
           SimpleTrajectoryRegionQuery.timeInvariant(line(imageRegionCar)), //
@@ -115,8 +118,8 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       @Override
       public void windowClosed(WindowEvent e) {
         System.out.println("window was closed. terminating...");
-        shadowMapPed.flagShutdown();
-        shadowMapCar.flagShutdown();
+        shadowSimPed.flagShutdown();
+        shadowSimCar.flagShutdown();
       }
     });
   }

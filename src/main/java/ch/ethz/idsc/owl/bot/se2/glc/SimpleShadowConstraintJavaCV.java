@@ -11,7 +11,7 @@ import org.bytedeco.javacpp.indexer.UByteRawIndexer;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
-import ch.ethz.idsc.owl.mapping.ShadowMapJavaCV;
+import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -23,13 +23,13 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public final class SimpleShadowConstraintJavaCV implements PlannerConstraint, Serializable {
-  private final ShadowMapJavaCV shadowMap;
+  private final ShadowMapSpherical shadowMap;
   private final float a;
   private final float reactionTime;
   private final Mat initArea;
   private final Tensor dir = AngleVector.of(RealScalar.ZERO);
 
-  public SimpleShadowConstraintJavaCV(ShadowMapJavaCV shadowMapPed, float a, float reactionTime) {
+  public SimpleShadowConstraintJavaCV(ShadowMapSpherical shadowMapPed, float a, float reactionTime) {
     this.shadowMap = shadowMapPed;
     this.a = a;
     this.reactionTime = reactionTime;

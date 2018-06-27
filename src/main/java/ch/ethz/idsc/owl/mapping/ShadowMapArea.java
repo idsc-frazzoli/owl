@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
-public class ShadowMap implements RenderInterface {
+public class ShadowMapArea implements RenderInterface {
   //
   private Color COLOR_SHADOW_FILL;
   private Color COLOR_SHADOW_DRAW;
@@ -40,7 +40,7 @@ public class ShadowMap implements RenderInterface {
   private final float vMax;
   private final float rMin;
 
-  public ShadowMap(LidarEmulator lidar, ImageRegion imageRegion, Supplier<StateTime> stateTimeSupplier, float vMax, float rMin) {
+  public ShadowMapArea(LidarEmulator lidar, ImageRegion imageRegion, Supplier<StateTime> stateTimeSupplier, float vMax, float rMin) {
     this.lidar = lidar;
     this.stateTimeSupplier = stateTimeSupplier;
     this.vMax = vMax;

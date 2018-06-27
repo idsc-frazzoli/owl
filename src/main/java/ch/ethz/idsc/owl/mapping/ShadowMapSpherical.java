@@ -8,7 +8,8 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.WindowConstants;
 
@@ -16,6 +17,7 @@ import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_core.Size;
+import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacpp.opencv_imgproc;
 import org.bytedeco.javacpp.indexer.UByteBufferIndexer;
 import org.bytedeco.javacv.CanvasFrame;
@@ -34,13 +36,11 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
-public class ShadowMapJavaCV implements RenderInterface {
+public class ShadowMapSpherical implements ShadowMap, RenderInterface {
   //
   private Color COLOR_SHADOW_FILL;
-  private Color COLOR_SHADOW_DRAW;
   // ---
   private final LidarEmulator lidar;
-  public final Supplier<StateTime> stateTimeSupplier;
   private Mat initArea;
   private Mat shadowArea;
   private final float vMax;
@@ -49,14 +49,14 @@ public class ShadowMapJavaCV implements RenderInterface {
   Scalar pixelDimInv;
   private final GeometricLayer world2pixelLayer;
   private final Mat ellipseKernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
-      new Size(3, 3));
+      new Size(7, 7));
+  Mat kernOrig = opencv_imgcodecs.imread("/home/ynager/Downloads/kernel6.bmp", opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
   Tensor world2pixel;
   Tensor pixel2world;
   Tensor scaling;
 
-  public ShadowMapJavaCV(LidarEmulator lidar, ImageRegion imageRegion, Supplier<StateTime> stateTimeSupplier, float vMax, float rMin) {
+  public ShadowMapSpherical(LidarEmulator lidar, ImageRegion imageRegion, float vMax, float rMin) {
     this.lidar = lidar;
-    this.stateTimeSupplier = stateTimeSupplier;
     this.vMax = vMax;
     this.rMin = rMin;
     BufferedImage bufferedImage = RegionRenders.image(imageRegion.image());
@@ -75,8 +75,7 @@ public class ShadowMapJavaCV implements RenderInterface {
         scale.Get(0).reciprocal(), scale.Get(1).negate().reciprocal(), RealScalar.ONE);
     pixel2world.set(RealScalar.of(bufferedImage.getHeight()).multiply(scale.Get(1).reciprocal()), 1, 2);
     world2pixelLayer = GeometricLayer.of(world2pixel);
-    //  TESTESTEST
-    // TESTEST
+    //
     Mat obstacleArea = area.clone();
     initArea = new Mat(obstacleArea.size(), obstacleArea.type(), org.bytedeco.javacpp.opencv_core.Scalar.WHITE);
     opencv_imgproc.erode(initArea, initArea, ellipseKernel, new Point(-1, -1), 1, opencv_core.BORDER_CONSTANT, null);
@@ -98,8 +97,10 @@ public class ShadowMapJavaCV implements RenderInterface {
         (int) point2D.getY());
   }
 
-  public void updateMap(Mat area, StateTime stateTime, float timeDelta) {
+  public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
     synchronized (world2pixelLayer) {
+      Mat area = area_.clone();
+      List<Mat> updatedMatList = new ArrayList<>();
       Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
       world2pixelLayer.pushMatrix(gokart2world.forward_se2());
       Tensor poly = lidar.getPolygon(stateTime);
@@ -111,7 +112,7 @@ public class ShadowMapJavaCV implements RenderInterface {
       graphics.fill(lidarPath2D);
       Mat lidarMat = new Mat(initArea.size(), area.type());
       //
-      //  TODO use opencv_core.fillPoly() ! 
+      //  FIXME use opencv_core.fillPoly() ! 
       byte[] buffer = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
       lidarMat.data().put(buffer);
       int it = radius2it(ellipseKernel, timeDelta * vMax);
@@ -119,6 +120,7 @@ public class ShadowMapJavaCV implements RenderInterface {
       opencv_core.subtract(area, lidarMat, area);
       opencv_imgproc.dilate(area, area, ellipseKernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
       opencv_core.bitwise_and(initArea, area, area);
+      area.copyTo(area_);
     }
   }
 

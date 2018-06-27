@@ -7,7 +7,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
-import ch.ethz.idsc.owl.mapping.ShadowMap;
+import ch.ethz.idsc.owl.mapping.ShadowMapArea;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -19,13 +19,13 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public final class SimpleShadowConstraint implements PlannerConstraint, Serializable {
-  private final ShadowMap shadowMap;
+  private final ShadowMapArea shadowMap;
   private final float a;
   private final float reactionTime;
   private final Area initArea;
   private final Tensor dir = AngleVector.of(RealScalar.ZERO);
 
-  public SimpleShadowConstraint(ShadowMap shadowMapPed, float a, float reactionTime) {
+  public SimpleShadowConstraint(ShadowMapArea shadowMapPed, float a, float reactionTime) {
     this.shadowMap = shadowMapPed;
     this.a = a;
     this.reactionTime = reactionTime;

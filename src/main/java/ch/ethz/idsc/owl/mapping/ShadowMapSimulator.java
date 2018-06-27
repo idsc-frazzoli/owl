@@ -5,16 +5,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Supplier;
 
-import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 
-public class ShadowMapSimulator extends ShadowMapJavaCV {
+public class ShadowMapSimulator {
+  private final Timer increaserTimer = new Timer("MapUpdateTimer");
+  private final ShadowMap shadowMap;
+  private final Supplier<StateTime> stateTimeSupplier;
   private boolean isPaused = false;
-  private Timer increaserTimer;
 
-  public ShadowMapSimulator(LidarEmulator lidar, ImageRegion imageRegion, Supplier<StateTime> stateTimeSupplier, float vMax, float rMin) {
-    super(lidar, imageRegion, stateTimeSupplier, vMax, rMin);
+  public ShadowMapSimulator(ShadowMap shadowMap, Supplier<StateTime> stateTimeSupplier) {
+    this.shadowMap = shadowMap;
+    this.stateTimeSupplier = stateTimeSupplier;
   }
 
   public final void startNonBlocking(int updateRate) {
@@ -22,10 +23,9 @@ public class ShadowMapSimulator extends ShadowMapJavaCV {
       @Override
       public void run() {
         if (!isPaused)
-          updateMap(stateTimeSupplier.get(), 1.0f / updateRate);
+          shadowMap.updateMap(stateTimeSupplier.get(), 1.0f / updateRate);
       }
     };
-    increaserTimer = new Timer("MapUpdateTimer");
     increaserTimer.scheduleAtFixedRate(mapUpdate, 10, 1000 / updateRate);
   }
 
