@@ -45,7 +45,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
   private static final Color CAR_COLOR = new Color(200, 80, 20, 150);
   private static final Tensor RANGE = Tensors.vector(10.4, 8);
   // ---
-  private static final FlowsInterface CARFLOWS = Se2CarFlows.forward(RealScalar.ONE, Degree.of(70));
+  private static final FlowsInterface CARFLOWS = Se2CarFlows.standard(RealScalar.ONE, Degree.of(70));
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 5, 60));
 
@@ -62,7 +62,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       }
     };
     // ---
-    Tensor image = ResourceData.of("/map/scenarios/ped_obs_legal1.BMP");
+    Tensor image = ResourceData.of("/map/scenarios/S1_ped_obs_legal.BMP");
     BufferedImage bufferedImage = ImageFormat.of(image);
     // bufferedImage = ImageAlpha.scale(bufferedImage, 0.5f);
     //
@@ -70,11 +70,9 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     int dim0 = bufferedImage.getHeight();
     Tensor scale = Tensors.vector(dim1, dim0).pmul(RANGE.map(Scalar::reciprocal));
     //
-    // Tensor imageCar = ImageTensors.reduceInverted(image, 1);
-    // Tensor imagePed = ImageTensors.reduceInverted(image, 2);
-    Tensor imageCar = ResourceData.of("/map/scenarios/car_obs1.BMP");
-    Tensor imagePed = ResourceData.of("/map/scenarios/ped_obs_legal1.BMP");
-    Tensor imageLid = ResourceData.of("/map/scenarios/ped_obs_illegal1.BMP");
+    Tensor imageCar = ResourceData.of("/map/scenarios/S1_car_obs.BMP");
+    Tensor imagePed = ResourceData.of("/map/scenarios/S1_ped_obs_legal.BMP");
+    Tensor imageLid = ResourceData.of("/map/scenarios/S1_ped_obs_illegal.BMP");
     ImageRegion imageRegionCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion imageRegionPed = new ImageRegion(imagePed, RANGE, false);
     ImageRegion imageRegionLid = new ImageRegion(imageLid, RANGE, false);

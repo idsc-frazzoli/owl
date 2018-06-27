@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.mapping;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -100,24 +99,31 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
   public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
     synchronized (world2pixelLayer) {
       Mat area = area_.clone();
+      // get lidar polygon and transform to pixel values
       List<Mat> updatedMatList = new ArrayList<>();
       Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
       world2pixelLayer.pushMatrix(gokart2world.forward_se2());
       Tensor poly = lidar.getPolygon(stateTime);
-      Path2D lidarPath2D = world2pixelLayer.toPath2D(poly);
+      //  ---
+      // transform lidar polygon to pixel values
+      Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
       world2pixelLayer.popMatrix();
-      BufferedImage img = new BufferedImage(initArea.arrayWidth(), initArea.arrayHeight(), BufferedImage.TYPE_BYTE_GRAY);
-      Graphics2D graphics = ((Graphics2D) img.getGraphics());
-      graphics.setColor(new Color(255, 255, 255));
-      graphics.fill(lidarPath2D);
-      Mat lidarMat = new Mat(initArea.size(), area.type());
-      //
-      //  FIXME use opencv_core.fillPoly() ! 
-      byte[] buffer = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
-      lidarMat.data().put(buffer);
-      int it = radius2it(ellipseKernel, timeDelta * vMax);
-      // System.out.println(timeDelta + " " + vMax + " " + ellipseKernel.arrayWidth() +" " + it);
+      // put array into Point
+      int[] intArr = new int[tens.length() * 2];
+      for (int i = 0; i < tens.length(); i++) {
+        intArr[i * 2] = tens.get(i).Get(0).number().intValue();
+        intArr[i * 2 + 1] = tens.get(i).Get(1).number().intValue();
+      }
+      Point polygonPoint = new opencv_core.Point(intArr.length);
+      polygonPoint.put(intArr, 0, intArr.length);
+      // ---
+      // fill lidar polygon and subtract it from shadow region
+      Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
+      opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { intArr.length / 2 }, 1, opencv_core.Scalar.WHITE);
       opencv_core.subtract(area, lidarMat, area);
+      //  ---
+      // dilate and intersect
+      int it = radius2it(ellipseKernel, timeDelta * vMax);
       opencv_imgproc.dilate(area, area, ellipseKernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
       opencv_core.bitwise_and(initArea, area, area);
       area.copyTo(area_);
