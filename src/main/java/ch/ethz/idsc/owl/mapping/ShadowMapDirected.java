@@ -64,8 +64,8 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     this.vMax = vMax;
     // setup
     // TODO pass obstacles and lanes as arguments
-    URL carLanes = getClass().getResource("/map/scenarios/S1_car_lanes.BMP");
-    URL carObs = getClass().getResource("/map/scenarios/S1_car_obs.BMP");
+    URL carLanes = getClass().getResource("/map/scenarios/s1/car_lanes.png");
+    URL carObs = getClass().getResource("/map/scenarios/s1/car_obs.png");
     URL kernel = getClass().getResource("/cv/kernels/kernel6.bmp");
     float pixelPerSeg = 253.0f / (NSEGS);
     int[] limits = IntStream.rangeClosed(0, NSEGS).map(i -> (int) (i * pixelPerSeg)).toArray();
@@ -130,6 +130,7 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
   private static void dilateSegment(int s, Mat region, List<Mat> kernels, Point kernCenter, List<Mat> masks, List<Mat> list, int iterations) {
     Mat updatedSegment = new Mat(region.size(), region.type());
     opencv_core.bitwise_and(region, masks.get(s), updatedSegment);
+    // opencv_cudaarithm.bitwise_and(region, masks.get(s), updatedSegment);
     opencv_imgproc.dilate(updatedSegment, updatedSegment, kernels.get(s), kernCenter, iterations, opencv_core.BORDER_CONSTANT, null);
     synchronized (list) {
       list.add(updatedSegment);
