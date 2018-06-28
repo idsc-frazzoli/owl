@@ -62,7 +62,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       }
     };
     // ---
-    Tensor image = ResourceData.of("/map/scenarios/S1_ped_obs_legal.BMP");
+    Tensor image = ResourceData.of("/map/scenarios/s1/ped_obs_legal.png");
     BufferedImage bufferedImage = ImageFormat.of(image);
     // bufferedImage = ImageAlpha.scale(bufferedImage, 0.5f);
     //
@@ -70,9 +70,9 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     int dim0 = bufferedImage.getHeight();
     Tensor scale = Tensors.vector(dim1, dim0).pmul(RANGE.map(Scalar::reciprocal));
     //
-    Tensor imageCar = ResourceData.of("/map/scenarios/S1_car_obs.BMP");
-    Tensor imagePed = ResourceData.of("/map/scenarios/S1_ped_obs_legal.BMP");
-    Tensor imageLid = ResourceData.of("/map/scenarios/S1_ped_obs_illegal.BMP");
+    Tensor imageCar = ResourceData.of("/map/scenarios/s1/car_obs.png");
+    Tensor imagePed = ResourceData.of("/map/scenarios/s1/ped_obs_legal.png");
+    Tensor imageLid = ResourceData.of("/map/scenarios/s1/ped_obs_illegal.png");
     ImageRegion imageRegionCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion imageRegionPed = new ImageRegion(imagePed, RANGE, false);
     ImageRegion imageRegionLid = new ImageRegion(imageLid, RANGE, false);

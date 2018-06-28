@@ -49,6 +49,7 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
   private final GeometricLayer world2pixelLayer;
   private final Mat ellipseKernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
       new Size(7, 7));
+  // TODO ref to local file
   Mat kernOrig = opencv_imgcodecs.imread("/home/ynager/Downloads/kernel6.bmp", opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
   Tensor world2pixel;
   Tensor pixel2world;
@@ -84,10 +85,12 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
     setColor(new Color(255, 50, 74));
   }
 
+  @Override
   public void updateMap(StateTime stateTime, float timeDelta) {
     updateMap(shadowArea, stateTime, timeDelta);
   }
 
+  @Override
   public Point state2pixel(Tensor state) {
     GeometricLayer layer = GeometricLayer.of(world2pixel);
     Point2D point2D = layer.toPoint2D(state);
@@ -96,6 +99,7 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
         (int) point2D.getY());
   }
 
+  @Override
   public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
     synchronized (world2pixelLayer) {
       Mat area = area_.clone();
