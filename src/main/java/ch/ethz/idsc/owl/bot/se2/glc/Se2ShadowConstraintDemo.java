@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.mapping.ShadowMapSimulator;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -66,14 +65,14 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
         LIDAR_RAYTRACER, carEntity::getStateTimeNow, ray);
     owlyAnimationFrame.addBackground(lidarEmulator);
     // Shadow Map
-    ShadowMapSimulator shadowMapPed = //
-        new ShadowMapSimulator(lidarEmulator, imageRegion, carEntity::getStateTimeNow, PED_VELOCITY, PED_RADIUS);
-    shadowMapPed.setColor(PED_COLOR);
-    owlyAnimationFrame.addBackground(shadowMapPed);
-    shadowMapPed.startNonBlocking(10);
-    SimpleShadowConstraint shadowConstraintPed = //
-        new SimpleShadowConstraint(shadowMapPed, MAX_A, REACTION_TIME);
-    constraintCollection.add(shadowConstraintPed);
+    // ShadowMapSimulator shadowMapPed = //
+    // new ShadowMapSimulator(lidarEmulator, imageRegion, carEntity::getStateTimeNow, PED_VELOCITY, PED_RADIUS);
+    // shadowMapPed.setColor(PED_COLOR);
+    // owlyAnimationFrame.addBackground(shadowMapPed);
+    // shadowMapPed.startNonBlocking(10);
+    // SimpleShadowConstraintJavaCV shadowConstraintPed = //
+    // new SimpleShadowConstraintJavaCV(shadowMapPed, MAX_A, REACTION_TIME);
+    // constraintCollection.add(shadowConstraintPed);
     // ---
     {
       RenderInterface renderInterface = new MouseShapeRender( //
@@ -88,7 +87,7 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
       @Override
       public void windowClosed(WindowEvent e) {
         System.out.println("window was closed. terminating...");
-        shadowMapPed.flagShutdown();
+        // shadowMapPed.flagShutdown();
       }
     });
   }

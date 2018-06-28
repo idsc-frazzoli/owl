@@ -1,13 +1,17 @@
 // code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import java.awt.geom.Area;
 import java.io.Serializable;
 import java.util.List;
 
+import org.bytedeco.javacpp.opencv_core.Mat;
+import org.bytedeco.javacpp.opencv_core.Point;
+import org.bytedeco.javacpp.indexer.Indexer;
+import org.bytedeco.javacpp.indexer.UByteRawIndexer;
+
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
-import ch.ethz.idsc.owl.mapping.ShadowMapArea;
+import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -18,14 +22,14 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public final class SimpleShadowConstraint implements PlannerConstraint, Serializable {
-  private final ShadowMapArea shadowMap;
+public final class SimpleShadowConstraintJavaCV implements PlannerConstraint, Serializable {
+  private final ShadowMapSpherical shadowMap;
   private final float a;
   private final float reactionTime;
-  private final Area initArea;
+  private final Mat initArea;
   private final Tensor dir = AngleVector.of(RealScalar.ZERO);
 
-  public SimpleShadowConstraint(ShadowMapArea shadowMapPed, float a, float reactionTime) {
+  public SimpleShadowConstraintJavaCV(ShadowMapSpherical shadowMapPed, float a, float reactionTime) {
     this.shadowMap = shadowMapPed;
     this.a = a;
     this.reactionTime = reactionTime;
@@ -39,7 +43,7 @@ public final class SimpleShadowConstraint implements PlannerConstraint, Serializ
     float tStop = vel / a + reactionTime + reactionTime;
     float dStop = tStop * vel / 2;
     // simulate shadow map during braking
-    Area simShadowArea = (Area) initArea.clone();
+    Mat simShadowArea = initArea.clone();
     StateTime childStateTime = trajectory.get(trajectory.size() - 1);
     shadowMap.updateMap(simShadowArea, childStateTime, tStop);
     //  ---
@@ -47,11 +51,13 @@ public final class SimpleShadowConstraint implements PlannerConstraint, Serializ
     TensorUnaryOperator forward = se2Bijection.forward();
     Tensor range = Subdivide.of(0, dStop, 10);
     Tensor ray = TensorProduct.of(range, dir);
+    UByteRawIndexer sI = simShadowArea.createIndexer();
     return !ray.stream() //
-        .anyMatch(local -> isMember(simShadowArea, forward.apply(local)));
+        .anyMatch(local -> isMember(sI, forward.apply(local)));
   }
 
-  private static boolean isMember(Area area, Tensor state) {
-    return area.contains(state.Get(0).number().doubleValue(), state.Get(1).number().doubleValue());
+  private boolean isMember(Indexer sI, Tensor state) {
+    Point pixel = shadowMap.state2pixel(state);
+    return sI.getDouble(pixel.y(), pixel.x()) == 255.0;
   }
 }
