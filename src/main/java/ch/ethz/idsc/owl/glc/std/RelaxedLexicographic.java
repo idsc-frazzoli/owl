@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** Lexicographical comparator with slack for {@link VectorScalar}s
@@ -17,23 +18,26 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final Tensor slack;
 
   public RelaxedLexicographic(Tensor slack) {
-    this.slack = slack;
+    this.slack = VectorQ.require(slack);
   }
 
-  // TODO function name causes confusion with Comparable interface
-  public int compare(Tensor newCost, Tensor oldCost) {
-    if (oldCost.length() != newCost.length() || oldCost.length() != slack.length())
-      throw TensorRuntimeException.of(oldCost, newCost, slack);
+  /** @param newMerit
+   * @param oldMerit
+   * @return -1 if newMerit < oldMerit */
+  // TODO implementation of numerics is not compatible/well-defined for use with Quantity
+  public int quasiCompare(Tensor newMerit, Tensor oldMerit) {
+    if (oldMerit.length() != newMerit.length() || oldMerit.length() != slack.length())
+      throw TensorRuntimeException.of(oldMerit, newMerit, slack);
     int cmp = 0;
-    for (int index = 0; index < oldCost.length() && cmp == 0; ++index) {
-      Scalar min = oldCost.Get(index);
+    for (int index = 0; index < oldMerit.length() && cmp == 0; ++index) {
+      Scalar min = oldMerit.Get(index);
       if (Scalars.isZero(min))
-        cmp = Scalars.compare(newCost.Get(index), min);
+        cmp = Scalars.compare(newMerit.Get(index), min);
       else {
-        Scalar diffRatio = newCost.Get(index).subtract(min).divide(min);
+        Scalar diffRatio = newMerit.Get(index).subtract(min).divide(min);
         cmp = Scalars.lessEquals(diffRatio.abs(), slack.Get(index)) //
             ? 0
-            : Sign.of(diffRatio).number().intValue();
+            : Sign.FUNCTION.apply(diffRatio).number().intValue();
       }
     }
     return cmp;
