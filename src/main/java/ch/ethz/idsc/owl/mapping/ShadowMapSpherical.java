@@ -7,23 +7,16 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.WindowConstants;
 
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_core.Size;
-import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacpp.opencv_imgproc;
-import org.bytedeco.javacpp.indexer.UByteBufferIndexer;
-import org.bytedeco.javacv.CanvasFrame;
-import org.bytedeco.javacv.OpenCVFrameConverter;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.data.img.CvHelper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -36,38 +29,29 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 public class ShadowMapSpherical implements ShadowMap, RenderInterface {
-  //
   private Color COLOR_SHADOW_FILL;
   // ---
   private final LidarEmulator lidar;
-  private Mat initArea;
-  private Mat shadowArea;
+  private final Mat initArea;
+  private final Mat shadowArea;
   private final float vMax;
-  private final float rMin;
-  Scalar pixelDim;
-  Scalar pixelDimInv;
+  private final Scalar pixelDim;
   private final GeometricLayer world2pixelLayer;
+  private final Tensor world2pixel;
+  private final Tensor pixel2world;
   private final Mat ellipseKernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
       new Size(7, 7));
-  // TODO ref to local file
-  Mat kernOrig = opencv_imgcodecs.imread("/home/ynager/Downloads/kernel6.bmp", opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-  Tensor world2pixel;
-  Tensor pixel2world;
-  Tensor scaling;
 
   public ShadowMapSpherical(LidarEmulator lidar, ImageRegion imageRegion, float vMax, float rMin) {
     this.lidar = lidar;
     this.vMax = vMax;
-    this.rMin = rMin;
     BufferedImage bufferedImage = RegionRenders.image(imageRegion.image());
-    // TODO 244 and 5 magic const, redundant to values specified elsewhere
-    Mat area = bufferedImageToMat(bufferedImage);
-    opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV);
+    Mat area = CvHelper.bufferedImageToMat(bufferedImage);
+    opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV); // TODO magic consts
     //
     // convert imageRegion into Area
     Tensor scale = imageRegion.scale(); // pixels per meter
     pixelDim = scale.Get(0).reciprocal(); // meters per pixel
-    scaling = DiagonalMatrix.of(pixelDim, pixelDim.negate(), RealScalar.ONE).unmodifiable();
     world2pixel = DiagonalMatrix.of(scale.Get(0), scale.Get(1).negate(), RealScalar.ONE);
     world2pixel.set(RealScalar.of(bufferedImage.getHeight()), 1, 2);
     //
@@ -104,7 +88,6 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
     synchronized (world2pixelLayer) {
       Mat area = area_.clone();
       // get lidar polygon and transform to pixel values
-      List<Mat> updatedMatList = new ArrayList<>();
       Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
       world2pixelLayer.pushMatrix(gokart2world.forward_se2());
       Tensor poly = lidar.getPolygon(stateTime);
@@ -112,18 +95,11 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
       // transform lidar polygon to pixel values
       Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
       world2pixelLayer.popMatrix();
-      // put array into Point
-      int[] intArr = new int[tens.length() * 2];
-      for (int i = 0; i < tens.length(); i++) {
-        intArr[i * 2] = tens.get(i).Get(0).number().intValue();
-        intArr[i * 2 + 1] = tens.get(i).Get(1).number().intValue();
-      }
-      Point polygonPoint = new opencv_core.Point(intArr.length);
-      polygonPoint.put(intArr, 0, intArr.length);
+      Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
       // ---
       // fill lidar polygon and subtract it from shadow region
       Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
-      opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { intArr.length / 2 }, 1, opencv_core.Scalar.WHITE);
+      opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { tens.length() }, 1, opencv_core.Scalar.WHITE);
       opencv_core.subtract(area, lidarMat, area);
       //  ---
       // dilate and intersect
@@ -132,11 +108,6 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
       opencv_core.bitwise_and(initArea, area, area);
       area.copyTo(area_);
     }
-  }
-
-  public final boolean isMember(Tensor state) {
-    UByteBufferIndexer sI = shadowArea.createIndexer();
-    return sI.get(0, 0) != 0;
   }
 
   public final Mat getCurrentMap() {
@@ -149,13 +120,6 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
 
   public void setColor(Color color) {
     COLOR_SHADOW_FILL = color;
-  }
-
-  public static Mat bufferedImageToMat(BufferedImage bi) {
-    Mat mat = new Mat(bi.getHeight(), bi.getWidth(), opencv_core.CV_8U);
-    byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
-    mat.data().put(data);
-    return mat;
   }
 
   private final int radius2it(final Mat spericalKernel, float radius) {
@@ -183,12 +147,5 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
     byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
     plotArea.data().get(data);
     graphics.drawImage(img, transform, null);
-  }
-
-  static void display(Mat image, String caption) {
-    final CanvasFrame canvas = new CanvasFrame(caption, 1.0);
-    canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    final OpenCVFrameConverter converter = new OpenCVFrameConverter.ToMat();
-    canvas.showImage(converter.convert(image));
   }
 }
