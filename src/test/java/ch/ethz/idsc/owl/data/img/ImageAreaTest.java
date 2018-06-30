@@ -32,6 +32,7 @@ public class ImageAreaTest extends TestCase {
   public void testFail() {
     try {
       ImageArea.fromImage(null, Color.BLACK, 2);
+      assertTrue(false);
     } catch (Exception exception) {
       // ---
     }

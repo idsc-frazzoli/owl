@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class ImageGradientInterpolationTest extends TestCase {
-  public void testSimple() throws Exception {
+  public void testLinear() {
     Tensor range = Tensors.vector(9, 6.5);
     Tensor res;
     Scalar max;
@@ -36,7 +36,7 @@ public class ImageGradientInterpolationTest extends TestCase {
     }
   }
 
-  public void testNearest() throws Exception {
+  public void testNearest() {
     Tensor range = Tensors.vector(9, 6.5);
     Tensor res;
     Scalar max;

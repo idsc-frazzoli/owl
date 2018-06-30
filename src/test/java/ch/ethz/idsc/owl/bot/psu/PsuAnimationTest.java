@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import junit.framework.TestCase;
 
 public class PsuAnimationTest extends TestCase {
-  public void testSimple() {
+  public void testVectorField() {
     Tensor range = Tensors.vector(Math.PI, 3);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
     RandomSampleInterface sampler = new BoxRandomSample(range.negate(), range);

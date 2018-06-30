@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import junit.framework.TestCase;
 
 public class DeltaAnimationTest extends TestCase {
-  public void testSimple() {
+  public void testConstructors() {
     Scalar amp = RealScalar.of(-.05);
     Tensor range = Tensors.vector(12.6, 9.1).unmodifiable();
     ImageGradientInterpolation imageGradientInterpolation = //

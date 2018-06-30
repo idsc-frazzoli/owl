@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.sca.Log;
 import junit.framework.TestCase;
 
 public class LvDemoTest extends TestCase {
-  public void testSimple() {
+  public void testPlan() {
     for (int index = 0; index < 5; ++index) {
       Tensor eta = Tensors.vector(10, 10);
       StateIntegrator stateIntegrator = FixedStateIntegrator.create( //

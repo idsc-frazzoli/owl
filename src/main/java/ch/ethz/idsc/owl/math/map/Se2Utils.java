@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -10,8 +9,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Cos;
-import ch.ethz.idsc.tensor.sca.Cot;
 import ch.ethz.idsc.tensor.sca.Sin;
+import ch.ethz.idsc.tensor.sca.Tan;
 
 public enum Se2Utils {
   ;
@@ -42,8 +41,8 @@ public enum Se2Utils {
     Scalar x = g.Get(0);
     Scalar y = g.Get(1);
     Scalar be2 = be.divide(RealScalar.of(2));
-    Scalar cot = Cot.FUNCTION.apply(be2);
-    return Tensors.of(y.add(x.multiply(cot)).multiply(be2), y.multiply(cot).subtract(x).multiply(be2), be);
+    Scalar tan = Tan.FUNCTION.apply(be2);
+    return Tensors.of(y.add(x.divide(tan)).multiply(be2), y.divide(tan).subtract(x).multiply(be2), be);
   }
 
   /** maps a vector from the group SE2 to a matrix in SE2
@@ -87,7 +86,7 @@ public enum Se2Utils {
    * @param matrix
    * @return */
   public static Tensor fromSE2Matrix(Tensor matrix) { // only used in tests
-    GlobalAssert.that(SquareMatrixQ.of(matrix));
+    SquareMatrixQ.require(matrix);
     return Tensors.of(matrix.Get(0, 2), matrix.Get(1, 2), //
         ArcTan.of(matrix.Get(0, 0), matrix.Get(1, 0))); // arc tan is numerically stable
   }

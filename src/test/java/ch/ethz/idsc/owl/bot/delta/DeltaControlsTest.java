@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class DeltaControlsTest extends TestCase {
-  public void testSimple() {
+  public void testFlows() {
     ImageGradientInterpolation imageGradientInterpolation = ImageGradientInterpolation.linear( //
         ResourceData.of("/io/delta_uxy.png"), Tensors.vector(10, 10), RealScalar.of(.1));
     Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();
