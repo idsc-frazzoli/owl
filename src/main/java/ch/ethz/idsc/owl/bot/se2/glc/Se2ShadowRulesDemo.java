@@ -109,8 +109,8 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
           CarEntity.SHAPE, () -> carEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }
-    PlannerConstraint constraints = MultiConstraintAdapter.of(constraintCollection);
-    MouseGoal.simple(owlyAnimationFrame, carEntity, constraints);
+    PlannerConstraint plannerConstraint = MultiConstraintAdapter.of(constraintCollection);
+    MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     owlyAnimationFrame.add(carEntity);
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override

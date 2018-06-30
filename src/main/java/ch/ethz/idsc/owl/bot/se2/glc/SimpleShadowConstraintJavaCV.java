@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.indexer.Indexer;
 import org.bytedeco.javacpp.indexer.UByteRawIndexer;
 
+import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
@@ -22,6 +23,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO implementation is redundant to SimpleShadowConstraint
 public final class SimpleShadowConstraintJavaCV implements PlannerConstraint, Serializable {
   private final ShadowMapSpherical shadowMap;
   private final float a;
@@ -38,13 +40,13 @@ public final class SimpleShadowConstraintJavaCV implements PlannerConstraint, Se
 
   @Override // from CostIncrementFunction
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    //
+    // TODO there are few different values for vel => precompute
     float vel = flow.getU().Get(0).number().floatValue();
     float tStop = vel / a + reactionTime + reactionTime;
     float dStop = tStop * vel / 2;
     // simulate shadow map during braking
     Mat simShadowArea = initArea.clone();
-    StateTime childStateTime = trajectory.get(trajectory.size() - 1);
+    StateTime childStateTime = Lists.getLast(trajectory);
     shadowMap.updateMap(simShadowArea, childStateTime, tStop);
     //  ---
     Se2Bijection se2Bijection = new Se2Bijection(childStateTime.state());
@@ -53,11 +55,12 @@ public final class SimpleShadowConstraintJavaCV implements PlannerConstraint, Se
     Tensor ray = TensorProduct.of(range, dir);
     UByteRawIndexer sI = simShadowArea.createIndexer();
     return !ray.stream() //
-        .anyMatch(local -> isMember(sI, forward.apply(local)));
+        .map(forward) //
+        .map(shadowMap::state2pixel) //
+        .anyMatch(local -> isMember(sI, local));
   }
 
-  private boolean isMember(Indexer sI, Tensor state) {
-    Point pixel = shadowMap.state2pixel(state);
+  private static boolean isMember(Indexer sI, Point pixel) {
     return sI.getDouble(pixel.y(), pixel.x()) == 255.0;
   }
 }

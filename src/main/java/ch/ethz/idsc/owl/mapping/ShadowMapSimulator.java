@@ -19,14 +19,14 @@ public class ShadowMapSimulator {
   }
 
   public final void startNonBlocking(int updateRate) {
-    TimerTask mapUpdate = new TimerTask() {
+    TimerTask timerTask = new TimerTask() {
       @Override
       public void run() {
         if (!isPaused)
           shadowMap.updateMap(stateTimeSupplier.get(), 1.0f / updateRate);
       }
     };
-    increaserTimer.scheduleAtFixedRate(mapUpdate, 10, 1000 / updateRate);
+    increaserTimer.scheduleAtFixedRate(timerTask, 10, 1000 / updateRate);
   }
 
   public final void flagShutdown() {

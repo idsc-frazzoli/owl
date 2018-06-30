@@ -32,9 +32,9 @@ public final class SimpleShadowConstraint implements PlannerConstraint, Serializ
     this.initArea = shadowMapPed.getInitMap();
   }
 
-  @Override // from CostIncrementFunction
+  @Override // from PlannerConstraint
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    //
+    // TODO there are few different values for vel => precompute
     float vel = flow.getU().Get(0).number().floatValue();
     float tStop = vel / a + reactionTime + reactionTime;
     float dStop = tStop * vel / 2;
@@ -48,10 +48,13 @@ public final class SimpleShadowConstraint implements PlannerConstraint, Serializ
     Tensor range = Subdivide.of(0, dStop, 10);
     Tensor ray = TensorProduct.of(range, dir);
     return !ray.stream() //
-        .anyMatch(local -> isMember(simShadowArea, forward.apply(local)));
+        .map(forward) //
+        .anyMatch(local -> isMember(simShadowArea, local));
   }
 
   private static boolean isMember(Area area, Tensor state) {
-    return area.contains(state.Get(0).number().doubleValue(), state.Get(1).number().doubleValue());
+    return area.contains( //
+        state.Get(0).number().doubleValue(), //
+        state.Get(1).number().doubleValue());
   }
 }
