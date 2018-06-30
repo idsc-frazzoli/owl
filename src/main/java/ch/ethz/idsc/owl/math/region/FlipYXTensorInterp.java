@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 // API class name may not be ideal
 public class FlipYXTensorInterp<T> implements Serializable {
   private final Tensor image;
+  private final Tensor scale;
   private final int dim1;
   private final float scaleX;
   private final float scaleY;
@@ -31,7 +32,7 @@ public class FlipYXTensorInterp<T> implements Serializable {
     dim1 = dimensions.get(1);
     max_y = dimensions.get(0) - 1;
     VectorQ.requireLength(range, 2);
-    Tensor scale = Tensors.vector(dimensions.get(1), dimensions.get(0)).pmul(range.map(Scalar::reciprocal));
+    scale = Tensors.vector(dimensions.get(1), dimensions.get(0)).pmul(range.map(Scalar::reciprocal));
     scaleX = scale.Get(0).number().floatValue();
     scaleY = scale.Get(1).number().floatValue();
     this.outside = outside;
@@ -51,5 +52,9 @@ public class FlipYXTensorInterp<T> implements Serializable {
         return scalarMapper.apply(image.Get(piy, pix));
     }
     return outside;
+  }
+
+  public Tensor scale() {
+    return scale;
   }
 }

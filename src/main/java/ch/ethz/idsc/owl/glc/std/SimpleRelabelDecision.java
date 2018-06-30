@@ -1,13 +1,18 @@
 // code by jph, ynager
 package ch.ethz.idsc.owl.glc.std;
 
+import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Sign;
 
+/** for real-valued {@link CostFunction}
+ * 
+ * in particular, not for cost functions that operate on {@link VectorScalar} */
 public enum SimpleRelabelDecision implements RelabelDecision {
   INSTANCE;
   /** minimum threshold of improvement by a candidate */

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
@@ -41,8 +42,8 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
   private final So2Region so2Region;
 
   public Se2ComboRegion(RegionWithDistance<Tensor> regionWithDistance, So2Region so2Region) {
-    this.regionWithDistance = regionWithDistance;
-    this.so2Region = so2Region;
+    this.regionWithDistance = Objects.requireNonNull(regionWithDistance);
+    this.so2Region = Objects.requireNonNull(so2Region);
   }
 
   /** @param xya == {px, py, angle}

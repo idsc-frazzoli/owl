@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -18,11 +20,16 @@ public class Se2GeodesicTest extends TestCase {
 
   public void testEndPoints() {
     Distribution distribution = NormalDistribution.standard();
-    for (int index = 0; index < 10; ++index) {
+    Se2Wrap se2Wrap = new Se2Wrap(Tensors.vector(1, 1, 1));
+    for (int index = 0; index < 100; ++index) {
       Tensor p = RandomVariate.of(distribution, 3);
       Tensor q = RandomVariate.of(distribution, 3);
       assertTrue(Chop._14.close(p, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
-      assertTrue(Chop._10.close(q, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ONE)));
+      Tensor r = Se2Geodesic.INSTANCE.split(p, q, RealScalar.ONE);
+      if (!Chop._14.close(q, r)) {
+        Scalar distance = se2Wrap.distance(q, r);
+        assertTrue(Chop._14.allZero(distance));
+      }
     }
   }
 }

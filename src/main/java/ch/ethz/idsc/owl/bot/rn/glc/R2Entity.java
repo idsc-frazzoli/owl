@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /** extra cost functions, for instance to prevent cutting corners */
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
   protected final R2Flows r2Flows = new R2Flows(RealScalar.ONE);
-  private RegionWithDistance<Tensor> goalRegion = null;
+  protected RegionWithDistance<Tensor> goalRegion = null;
 
   /** @param state initial position of entity */
   public R2Entity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
@@ -75,7 +75,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Collection<Flow> controls = createControls(); // TODO design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
