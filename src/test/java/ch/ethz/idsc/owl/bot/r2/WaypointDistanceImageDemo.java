@@ -19,8 +19,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 enum WaypointDistanceImageDemo {
   ;
   public static void main(String[] args) {
-    Tensor waypoints = Objects.requireNonNull(ResourceData.of("/dubilab/waypoints/20180425.csv"));
-    waypoints = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE).apply(waypoints);
+    Tensor waypoints = Objects.requireNonNull(ResourceData.of("/dubilab/waypoints/20180610.csv"));
+    waypoints = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);
     System.out.println(Dimensions.of(waypoints));
     // ImageCostFunction wdc = WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(440, 640));
     BufferedImage bufferedImage = WaypointDistanceImage.linear(waypoints, Tensors.vector(85.33, 85.33), 2, new Dimension(600, 800));

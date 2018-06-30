@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public enum WaypointDistanceImage {
   ;
-  public static final int OFF_PATH_COST = 128;
+  public static final int OFF_PATH_COST = 1;
 
   /** connects given waypoints with linear strokes
    * 

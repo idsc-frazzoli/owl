@@ -10,10 +10,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import junit.framework.TestCase;
 
-public class WaypointDistanceImagesTest extends TestCase {
+public class WaypointDistanceImageTest extends TestCase {
   public void testSimple() {
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180425.csv");
-    waypoints = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE).apply(waypoints);
+    waypoints = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);
     WaypointDistanceImage.linear(waypoints, RealScalar.of(100), 5, new Dimension(640, 640));
   }
 }
