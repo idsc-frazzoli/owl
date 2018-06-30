@@ -39,6 +39,8 @@ public class GlcWaypointFollowing extends WaypointFollowing {
       motionPlanWorker = null;
     }
     motionPlanWorker = new MotionPlanWorker(MAX_STEPS);
+    if (entity instanceof GlcPlannerCallback)
+      motionPlanWorker.addCallback((GlcPlannerCallback) entity);
     motionPlanWorker.addCallback(glcPlannerCallback);
     motionPlanWorker.start(head, entity.createTrajectoryPlanner(plannerConstraint, goal));
   }
