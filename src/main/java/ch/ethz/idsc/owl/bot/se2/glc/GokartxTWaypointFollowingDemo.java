@@ -91,16 +91,17 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
     owlyAnimationFrame.addBackground(renderInterface);
     SimpleGlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(gokartEntity);
     glcPlannerCallback.showCost();
-    GlcWaypointFollowing wpf = new GlcWaypointFollowing(waypoints, RealScalar.of(2), //
-        gokartEntity, plannerConstraint, glcPlannerCallback);
-    wpf.setHorizonDistance(RealScalar.of(5));
-    wpf.startNonBlocking();
+    GlcWaypointFollowing glcWaypointFollowing = new GlcWaypointFollowing( //
+        waypoints, RealScalar.of(2), gokartEntity, plannerConstraint, //
+        Arrays.asList(gokartEntity, glcPlannerCallback));
+    glcWaypointFollowing.setHorizonDistance(RealScalar.of(5));
+    glcWaypointFollowing.startNonBlocking();
     // ---
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent e) {
         System.out.println("window was closed. terminating...");
-        wpf.flagShutdown();
+        glcWaypointFollowing.flagShutdown();
       }
     });
   }

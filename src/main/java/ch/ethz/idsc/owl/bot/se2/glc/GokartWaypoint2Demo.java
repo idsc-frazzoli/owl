@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.WaypointDistanceCost;
@@ -61,16 +62,17 @@ public class GokartWaypoint2Demo extends Se2CarDemo {
     RenderInterface renderInterface = new Se2WaypointRender(waypoints, ARROWHEAD, new Color(64, 192, 64, 64));
     owlyAnimationFrame.addBackground(renderInterface);
     GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(gokartEntity);
-    GlcWaypointFollowing wpf = new GlcWaypointFollowing(waypoints, RealScalar.of(2), //
-        gokartEntity, plannerConstraint, glcPlannerCallback);
-    wpf.setHorizonDistance(RealScalar.of(7));
-    wpf.startNonBlocking();
+    GlcWaypointFollowing glcWaypointFollowing = new GlcWaypointFollowing( //
+        waypoints, RealScalar.of(2), gokartEntity, plannerConstraint, //
+        Arrays.asList(gokartEntity, glcPlannerCallback));
+    glcWaypointFollowing.setHorizonDistance(RealScalar.of(7));
+    glcWaypointFollowing.startNonBlocking();
     // ---
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent e) {
         System.out.println("window was closed. terminating...");
-        wpf.flagShutdown();
+        glcWaypointFollowing.flagShutdown();
       }
     });
   }

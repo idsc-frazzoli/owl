@@ -1,6 +1,7 @@
 // code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public class GlcWaypointFollowing extends WaypointFollowing {
   private static final int MAX_STEPS = 5000; // magic const
   // ---
-  protected final GlcPlannerCallback glcPlannerCallback;
+  protected final Collection<GlcPlannerCallback> glcPlannerCallbacks;
   private MotionPlanWorker motionPlanWorker = null;
   private final PlannerConstraint plannerConstraint;
 
@@ -23,12 +24,12 @@ public class GlcWaypointFollowing extends WaypointFollowing {
    * @param replanningRate
    * @param entity
    * @param plannerConstraint
-   * @param glcPlannerCallback */
+   * @param glcPlannerCallbacks */
   public GlcWaypointFollowing( //
       Tensor waypoints, Scalar replanningRate, TrajectoryEntity entity, //
-      PlannerConstraint plannerConstraint, GlcPlannerCallback glcPlannerCallback) {
+      PlannerConstraint plannerConstraint, Collection<GlcPlannerCallback> glcPlannerCallbacks) {
     super(waypoints, replanningRate, entity);
-    this.glcPlannerCallback = glcPlannerCallback;
+    this.glcPlannerCallbacks = glcPlannerCallbacks;
     this.plannerConstraint = plannerConstraint;
   }
 
@@ -38,10 +39,7 @@ public class GlcWaypointFollowing extends WaypointFollowing {
       motionPlanWorker.flagShutdown();
       motionPlanWorker = null;
     }
-    motionPlanWorker = new MotionPlanWorker(MAX_STEPS);
-    if (entity instanceof GlcPlannerCallback)
-      motionPlanWorker.addCallback((GlcPlannerCallback) entity);
-    motionPlanWorker.addCallback(glcPlannerCallback);
+    motionPlanWorker = new MotionPlanWorker(MAX_STEPS, glcPlannerCallbacks);
     motionPlanWorker.start(head, entity.createTrajectoryPlanner(plannerConstraint, goal));
   }
 }
