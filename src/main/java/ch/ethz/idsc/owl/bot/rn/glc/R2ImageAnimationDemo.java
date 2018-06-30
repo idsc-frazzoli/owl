@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /** demo shows the use of a cost image that is added to the distance cost
  * which gives an incentive to stay clear of obstacles */
 public class R2ImageAnimationDemo implements DemoInterface {
-  @Override
+  @Override // from DemoInterface
   public OwlyAnimationFrame start() {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     // ---

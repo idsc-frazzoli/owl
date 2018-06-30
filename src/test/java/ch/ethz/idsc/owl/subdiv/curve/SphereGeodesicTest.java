@@ -31,7 +31,7 @@ public class SphereGeodesicTest extends TestCase {
       Tensor q = Normalize.of(RandomVariate.of(distribution, 3));
       assertTrue(Chop._14.close(p, SphereGeodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
       Tensor r = SphereGeodesic.INSTANCE.split(p, q, RealScalar.ONE);
-      assertTrue(Chop._14.close(q, r));
+      assertTrue(Chop._12.close(q, r));
       assertTrue(Chop._14.close(Norm._2.of(r), RealScalar.ONE));
     }
   }

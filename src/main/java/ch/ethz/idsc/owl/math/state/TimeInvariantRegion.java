@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.state;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,7 +14,7 @@ public final class TimeInvariantRegion implements Region<StateTime>, Serializabl
   private final Region<Tensor> region;
 
   public TimeInvariantRegion(Region<Tensor> region) {
-    this.region = region;
+    this.region = Objects.requireNonNull(region);
   }
 
   /** @param StateTime of point to check
