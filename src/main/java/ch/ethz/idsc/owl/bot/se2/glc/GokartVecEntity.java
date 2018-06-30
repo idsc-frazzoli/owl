@@ -19,6 +19,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 
+/** gokart that operates on vector costs */
 public class GokartVecEntity extends GokartEntity {
   public GokartVecEntity(StateTime stateTime) {
     super(stateTime);
@@ -35,7 +36,7 @@ public class GokartVecEntity extends GokartEntity {
     getPrimaryCost().map(costs::add);
     costs.add(new Se2MinTimeGoalManager(se2ComboRegion, controls));
     // ---
-    GoalInterface goalInterface = new VectorCostGoalAdapter(costs, se2ComboRegion, controls);
+    GoalInterface goalInterface = new VectorCostGoalAdapter(costs, se2ComboRegion);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     //  ---

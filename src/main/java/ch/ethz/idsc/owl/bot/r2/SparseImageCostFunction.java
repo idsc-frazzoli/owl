@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** slightly different from {@link ImageCostFunction}
  * because evaluation only happens at last state of trajectory */
-public class SparseImageCostFunction extends ImageCostFunction {
+/* package */ class SparseImageCostFunction extends ImageCostFunction {
   public SparseImageCostFunction(Tensor image, Tensor range, Scalar outside) {
     super(image, range, outside);
   }

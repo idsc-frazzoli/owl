@@ -9,34 +9,28 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
-import java.util.DoubleSummaryStatistics;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.VectorScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** renders the edges between nodes
  * 
- * the edges are drawn as straight lines with the color of the cost to root
- * 
- * only real-valued costs are supported
- * in particular costs of type {@link VectorScalar} are not supported
- * @see EdgeRender */
-public class TreeRender implements RenderInterface {
+ * the edges are drawn as straight lines with the color of the cost to root */
+public class EdgeRender implements RenderInterface {
   private static final int NODE_WIDTH = 2;
   private static final int NODE_BOUND = 2500;
   private static final Color CONVEXHULL = new Color(192, 192, 0, 128);
+  private static final Color COLOR_EDGE = new Color(128, 128, 255, 64);
   // ---
   private Collection<? extends StateCostNode> collection;
   private Tensor polygon;
 
-  public TreeRender(Collection<? extends StateCostNode> collection) {
+  public EdgeRender(Collection<? extends StateCostNode> collection) {
     setCollection(collection);
   }
 
@@ -45,39 +39,26 @@ public class TreeRender implements RenderInterface {
     Collection<? extends StateCostNode> _collection = collection;
     if (Objects.isNull(_collection) || _collection.isEmpty())
       return;
-    TreeColor treeColor = TreeColor.ofDimensions(_collection.iterator().next().state().length());
-    DoubleSummaryStatistics dss = _collection.stream() //
-        .map(StateCostNode::costFromRoot) //
-        .map(Scalar::number) //
-        .mapToDouble(Number::doubleValue) //
-        .filter(Double::isFinite) //
-        .summaryStatistics();
-    final double min = dss.getMin();
-    final double max = dss.getMax();
-    long count = dss.getCount();
+    long count = _collection.size();
     if (Objects.nonNull(polygon)) {
       graphics.setColor(CONVEXHULL);
       Path2D path2D = geometricLayer.toPath2D(polygon);
       path2D.closePath();
       graphics.draw(path2D);
     }
-    double inverse = 1 / (max - min);
-    // System.out.println("count=" + count + ", inverse=" + inverse);
-    if (count <= NODE_BOUND) // don't draw tree beyond certain node count
+    if (count <= NODE_BOUND) { // don't draw tree beyond certain node count
+      graphics.setColor(COLOR_EDGE);
       for (StateCostNode node : _collection) {
-        double value = node.costFromRoot().number().doubleValue();
-        final double interp = (value - min) * inverse;
-        graphics.setColor(treeColor.nodeColor.rescaled(interp));
         final Point2D p1 = geometricLayer.toPoint2D(node.state());
         graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));
         StateCostNode parent = node.parent();
         if (Objects.nonNull(parent)) {
           Point2D p2 = geometricLayer.toPoint2D(parent.state());
-          graphics.setColor(treeColor.edgeColor.rescaled(interp));
           Shape shape = new Line2D.Double(p1.getX(), p1.getY(), p2.getX(), p2.getY());
           graphics.draw(shape);
         }
       }
+    }
   }
 
   public void setCollection(Collection<? extends StateCostNode> collection) {

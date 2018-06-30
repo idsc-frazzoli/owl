@@ -114,6 +114,7 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
     return shadowArea.clone();
   }
 
+  @Override
   public final Mat getInitMap() {
     return initArea.clone();
   }

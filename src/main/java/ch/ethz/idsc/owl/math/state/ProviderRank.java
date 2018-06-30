@@ -28,7 +28,9 @@ public enum ProviderRank {
   TESTING, //
   /** for instance when lidar detects approaching obstacle
    * that is too fast to be considered by the path planner
-   * safety control may override autonomous logic */
+   * safety control may override autonomous logic,
+   * or
+   * when sensors fail that are obligatory for autonomous mode */
   SAFETY, //
   /** when following a trajectory for instance provided by a path planner */
   AUTONOMOUS, //

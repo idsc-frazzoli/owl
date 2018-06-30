@@ -1,22 +1,33 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.awt.Graphics2D;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
+import ch.ethz.idsc.owl.gui.ren.EdgeRender;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.EntityControl;
 import ch.ethz.idsc.owl.math.state.ProviderRank;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 /** test if api is sufficient to model gokart */
-public class GokartEntity extends CarEntity {
+public class GokartEntity extends CarEntity implements GlcPlannerCallback {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal()).unmodifiable();
   static final Scalar SPEED = RealScalar.of(2.5);
@@ -26,9 +37,11 @@ public class GokartEntity extends CarEntity {
   static final FlowsInterface CARFLOWS = Se2CarFlows.forward(SPEED, MAX_TURNING_PLAN);
   public static final Tensor SHAPE = ResourceData.of("/gokart/footprint/20171201.csv");
   // ---
+  private EdgeRender edgeRender;
   /** simulation of occasional feedback from localization algorithm */
   private final EntityControl localizationFeedback = new EntityControl() {
     private final Random random = new Random();
+    private final Distribution distribution = NormalDistribution.standard();
     private boolean trigger = false;
 
     @Override
@@ -39,12 +52,8 @@ public class GokartEntity extends CarEntity {
     @Override
     public Optional<Tensor> control(StateTime tail, Scalar now) {
       Optional<Tensor> optional = Optional.empty();
-      if (trigger) {
-        optional = Optional.of(Tensors.vector( //
-            random.nextGaussian(), // shift x
-            random.nextGaussian(), // shift y
-            random.nextGaussian())); // shift angle
-      }
+      if (trigger)
+        optional = Optional.of(RandomVariate.of(distribution, 3));
       trigger = 0 == random.nextInt(20); // TODO use now to alter position every 1[s] for instance
       return optional;
     }
@@ -56,5 +65,18 @@ public class GokartEntity extends CarEntity {
         PARTITIONSCALE, CARFLOWS, SHAPE);
     // ---
     add(localizationFeedback);
+  }
+
+  @Override
+  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    edgeRender = new EdgeRender(trajectoryPlanner.getDomainMap().values());
+  }
+
+  @Override
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    if (Objects.nonNull(edgeRender))
+      edgeRender.render(geometricLayer, graphics);
+    // ---
+    super.render(geometricLayer, graphics);
   }
 }

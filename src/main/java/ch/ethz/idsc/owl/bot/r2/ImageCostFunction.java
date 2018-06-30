@@ -59,6 +59,10 @@ public class ImageCostFunction implements CostFunction, Serializable {
     return range.unmodifiable();
   }
 
+  public Tensor scale() {
+    return flipYXTensorInterp.scale();
+  }
+
   public Tensor origin() {
     return ORIGIN;
   }

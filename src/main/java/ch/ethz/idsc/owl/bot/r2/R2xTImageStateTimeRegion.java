@@ -32,8 +32,7 @@ public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterf
     this.imageRegion = imageRegion;
     this.rigidFamily = rigidFamily;
     this.supplier = supplier;
-    renderInterface = //
-        new ImageRender(RegionRenders.image(imageRegion.image()), imageRegion.scale());
+    renderInterface = new ImageRender(RegionRenders.image(imageRegion.image()), imageRegion.scale());
   }
 
   @Override // from Region

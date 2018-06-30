@@ -44,6 +44,8 @@ public enum RegionRenders {
     return Scalars.isZero(scalar) ? TFF : OBS;
   }
 
+  /** @param image with rank 2
+   * @return */
   public static BufferedImage image(Tensor image) { // TODO test
     return ImageFormat.of(MatrixQ.require(image).map(RegionRenders::color));
   }

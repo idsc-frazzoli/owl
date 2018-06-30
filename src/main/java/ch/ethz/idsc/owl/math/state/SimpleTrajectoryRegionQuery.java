@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.state;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.region.Region;
@@ -12,7 +13,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * implementation is used throughout the repository */
 public class SimpleTrajectoryRegionQuery implements TrajectoryRegionQuery, Serializable {
   /** @param region that is queried with tensor = StateTime::state
-   * @return */
+   * @return
+   * @throws Exception if given region is null */
   public static TrajectoryRegionQuery timeInvariant(Region<Tensor> region) {
     return new SimpleTrajectoryRegionQuery(new TimeInvariantRegion(region));
   }
@@ -20,9 +22,9 @@ public class SimpleTrajectoryRegionQuery implements TrajectoryRegionQuery, Seria
   // ---
   protected final Region<StateTime> region;
 
-  /** @param region */
+  /** @param region non-null */
   public SimpleTrajectoryRegionQuery(Region<StateTime> region) {
-    this.region = region;
+    this.region = Objects.requireNonNull(region);
   }
 
   @Override // from TrajectoryRegionQuery
