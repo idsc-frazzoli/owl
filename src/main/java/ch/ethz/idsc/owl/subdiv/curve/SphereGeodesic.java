@@ -9,9 +9,7 @@ import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
-/**
- * 
- */
+/** geodesic on 2-dimensional sphere embedded in R^3 */
 public enum SphereGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---

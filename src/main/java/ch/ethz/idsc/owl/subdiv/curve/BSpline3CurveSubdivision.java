@@ -1,11 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class BSpline3CurveSubdivision implements CurveSubdivision {
+public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable {
   private final GeodesicInterface geodesicInterface;
 
   public BSpline3CurveSubdivision(GeodesicInterface geodesicInterface) {

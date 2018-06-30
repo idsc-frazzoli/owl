@@ -1,12 +1,14 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class FourPointCurveSubdivision implements CurveSubdivision {
+public class FourPointCurveSubdivision implements CurveSubdivision, Serializable {
   private final static Scalar WEIGHTA = RationalScalar.of(+9, 8);
   private final static Scalar WEIGHTB = RationalScalar.of(-1, 8);
   // ---

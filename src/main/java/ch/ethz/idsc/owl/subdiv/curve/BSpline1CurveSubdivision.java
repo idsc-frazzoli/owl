@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -8,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /** linear subdivision
  * 
  * the scheme interpolates the control points */
-public class BSpline1CurveSubdivision implements CurveSubdivision {
+public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable {
   private final GeodesicInterface geodesicInterface;
 
   public BSpline1CurveSubdivision(GeodesicInterface geodesicInterface) {
