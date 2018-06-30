@@ -47,7 +47,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
   // ---
   private static final FlowsInterface CARFLOWS = Se2CarFlows.standard(RealScalar.ONE, Degree.of(70));
   private static final LidarRaytracer LIDAR_RAYTRACER = //
-      new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 5, 60));
+      new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 2.5, 30));
 
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
@@ -62,7 +62,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       }
     };
     // ---
-    Tensor image = ResourceData.of("/map/scenarios/s1/ped_obs_legal.png");
+    Tensor image = ResourceData.of("/map/scenarios/s1/render.png");
     BufferedImage bufferedImage = ImageFormat.of(image);
     // bufferedImage = ImageAlpha.scale(bufferedImage, 0.5f);
     //
