@@ -30,7 +30,7 @@ public class Se2IntegratorTest extends TestCase {
   public void testExpSubstitute() {
     Tensor mat = exp_of(1, 2, .3);
     Tensor vec = Se2Integrator.INSTANCE.spin(Array.zeros(3), Tensors.vector(1, 2, .3));
-    Tensor v0 = Se2Utils.integrate_g0(Tensors.vector(1, 2, .3));
+    Tensor v0 = Se2Utils.exp(Tensors.vector(1, 2, .3));
     assertEquals(vec, v0);
     Tensor alt = Se2Utils.toSE2Matrix(vec);
     assertTrue(Chop._13.close(mat, alt));
@@ -41,7 +41,7 @@ public class Se2IntegratorTest extends TestCase {
       Tensor rnd = RandomVariate.of(NormalDistribution.standard(), 3);
       Tensor mat = exp_of(rnd.Get(0), rnd.Get(1), rnd.Get(2));
       Tensor vec = Se2Integrator.INSTANCE.spin(Array.zeros(3), rnd);
-      Tensor v0 = Se2Utils.integrate_g0(rnd);
+      Tensor v0 = Se2Utils.exp(rnd);
       assertEquals(vec, v0);
       Tensor alt = Se2Utils.toSE2Matrix(vec);
       boolean close = Chop._11.close(mat, alt);

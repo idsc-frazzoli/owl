@@ -20,9 +20,7 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
-/** rotated gradient of potential function
- * 
- * implementation does not extends */
+/** rotated gradient of potential function */
 public class ImageGradientInterpolation implements Serializable {
   /** @param image
    * @param range

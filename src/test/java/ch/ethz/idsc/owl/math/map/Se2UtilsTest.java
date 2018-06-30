@@ -7,6 +7,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.Det;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -16,6 +19,36 @@ public class Se2UtilsTest extends TestCase {
     assertEquals(matrix.get(2), Tensors.vector(0, 0, 1));
     Scalar det = Det.of(matrix);
     assertTrue(Chop._14.close(det, RealScalar.ONE));
+  }
+
+  public void testLog() {
+    Distribution distribution = UniformDistribution.of(-5, 5);
+    for (int index = 0; index < 10; ++index) {
+      Tensor x = RandomVariate.of(distribution, 3);
+      Tensor g = Se2Utils.exp(x);
+      Tensor log_g = Se2Utils.log(g);
+      assertTrue(Chop._13.close(x, log_g));
+    }
+  }
+
+  public void testExp() {
+    Distribution distribution = UniformDistribution.of(-5, 5);
+    for (int index = 0; index < 10; ++index) {
+      Tensor g = RandomVariate.of(distribution, 3);
+      Tensor x = Se2Utils.log(g);
+      Tensor exp_x = Se2Utils.exp(x);
+      assertTrue(Chop._13.close(g, exp_x));
+    }
+  }
+
+  public void testLog0() {
+    Distribution distribution = UniformDistribution.of(-5, 5);
+    for (int index = 0; index < 10; ++index) {
+      Tensor x = RandomVariate.of(distribution, 2).append(RealScalar.ZERO);
+      Tensor g0 = Se2Utils.exp(x);
+      Tensor x2 = Se2Utils.log(g0);
+      assertTrue(Chop._13.close(x, x2));
+    }
   }
 
   public void testFromMatrix() {
@@ -34,18 +67,18 @@ public class Se2UtilsTest extends TestCase {
 
   public void testG0() {
     Tensor u = Tensors.vector(1.2, 0, 0);
-    Tensor m = Se2Utils.integrate_g0(u);
+    Tensor m = Se2Utils.exp(u);
     assertEquals(m, u);
   }
 
   public void testSome() {
     Tensor u = Tensors.vector(1.2, 0, 0.75);
-    Tensor m = Se2Utils.toSE2Matrix(Se2Utils.integrate_g0(u));
+    Tensor m = Se2Utils.toSE2Matrix(Se2Utils.exp(u));
     Tensor p = Tensors.vector(-2, 3);
     Tensor v = m.dot(p.copy().append(RealScalar.ONE));
-    Tensor r = Se2Integrator.INSTANCE.spin(Se2Utils.integrate_g0(u), p.append(RealScalar.ZERO));
+    Tensor r = Se2Integrator.INSTANCE.spin(Se2Utils.exp(u), p.append(RealScalar.ZERO));
     assertEquals(r.extract(0, 2), v.extract(0, 2));
-    Se2ForwardAction se2ForwardAction = new Se2ForwardAction(Se2Utils.integrate_g0(u));
+    Se2ForwardAction se2ForwardAction = new Se2ForwardAction(Se2Utils.exp(u));
     assertEquals(se2ForwardAction.apply(p), v.extract(0, 2));
   }
 

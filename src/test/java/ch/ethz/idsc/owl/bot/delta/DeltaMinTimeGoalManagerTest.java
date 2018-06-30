@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class DeltaMinTimeGoalManagerTest extends TestCase {
-  public void testSimple() {
+  public void testConstructors() {
     ImageGradientInterpolation imageGradientInterpolation = ImageGradientInterpolation.linear( //
         ResourceData.of("/io/delta_uxy.png"), Tensors.vector(10, 10), RealScalar.of(.1));
     Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();

@@ -83,6 +83,7 @@ public class EllipsoidRegionTest extends TestCase {
     }
     try {
       new EllipsoidRegion(Tensors.vector(10, 2, 3), Tensors.vector(1, 0.0, 3));
+      assertTrue(false);
     } catch (Exception exception) {
       // ---
     }

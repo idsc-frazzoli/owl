@@ -1,9 +1,8 @@
 // code by ynager
-package ch.ethz.idsc.owl.bot.se2.glc;
+package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.Dimension;
 
-import ch.ethz.idsc.owl.bot.r2.ImageCostFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

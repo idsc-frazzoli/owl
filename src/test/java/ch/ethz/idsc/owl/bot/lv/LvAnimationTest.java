@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import junit.framework.TestCase;
 
 public class LvAnimationTest extends TestCase {
-  public void testSimple() {
+  public void testVectorField() {
     Tensor fallback_u = Array.zeros(1);
     StateSpaceModel stateSpaceModel = LvStateSpaceModel.of(1, 2);
     Collection<Flow> controls = LvControls.create(stateSpaceModel, 2);

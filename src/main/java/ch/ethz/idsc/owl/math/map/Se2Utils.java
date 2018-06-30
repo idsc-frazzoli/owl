@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -11,14 +10,15 @@ import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
+import ch.ethz.idsc.tensor.sca.Tan;
 
 public enum Se2Utils {
   ;
   /** maps a vector x from the Lie-algebra se2 to a vector of the Lie-group SE2
    * 
-   * @param x == {vx, vy, beta}
+   * @param x element in the se2 Lie-algebra of the form {vx, vy, beta}
    * @return element g in SE2 as vector with coordinates of g == exp x */
-  public static Tensor integrate_g0(Tensor x) {
+  public static Tensor exp(Tensor x) {
     Scalar be = x.Get(2);
     if (Scalars.isZero(be))
       return x.copy();
@@ -30,6 +30,19 @@ public enum Se2Utils {
         sd.multiply(vx).add(cd.multiply(vy)).divide(be), //
         sd.multiply(vy).subtract(cd.multiply(vx)).divide(be), //
         be);
+  }
+
+  /** @param g element in the SE2 Lie group of the form {px, py, beta}
+   * @return element x in the se2 Lie algebra with x == log g, and g == exp x */
+  public static Tensor log(Tensor g) {
+    final Scalar be = g.Get(2);
+    if (Scalars.isZero(be))
+      return g.copy();
+    Scalar x = g.Get(0);
+    Scalar y = g.Get(1);
+    Scalar be2 = be.divide(RealScalar.of(2));
+    Scalar tan = Tan.FUNCTION.apply(be2);
+    return Tensors.of(y.add(x.divide(tan)).multiply(be2), y.divide(tan).subtract(x).multiply(be2), be);
   }
 
   /** maps a vector from the group SE2 to a matrix in SE2
@@ -73,7 +86,7 @@ public enum Se2Utils {
    * @param matrix
    * @return */
   public static Tensor fromSE2Matrix(Tensor matrix) { // only used in tests
-    GlobalAssert.that(SquareMatrixQ.of(matrix));
+    SquareMatrixQ.require(matrix);
     return Tensors.of(matrix.Get(0, 2), matrix.Get(1, 2), //
         ArcTan.of(matrix.Get(0, 0), matrix.Get(1, 0))); // arc tan is numerically stable
   }
