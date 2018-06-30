@@ -129,10 +129,12 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     }
   }
 
+  @Override
   public void updateMap(StateTime stateTime, float timeDelta) {
     updateMap(shadowArea, stateTime, timeDelta);
   }
 
+  @Override
   public Point state2pixel(Tensor state) {
     GeometricLayer layer = GeometricLayer.of(world2pixel);
     Point2D point2D = layer.toPoint2D(state);
@@ -141,6 +143,7 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
         (int) point2D.getY());
   }
 
+  @Override
   public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
     synchronized (world2pixelLayer) {
       // get lidar polygon and transform to pixel values
@@ -177,6 +180,7 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     return shadowArea.clone();
   }
 
+  @Override
   public final Mat getInitMap() {
     return initArea.clone();
   }

@@ -20,6 +20,8 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.subdiv.curve.BSpline2CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.Se2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -44,6 +46,7 @@ public class GokartWaypoint0Demo extends GokartDemo {
     HelperHangarMap hangarMap = new HelperHangarMap("/dubilab/obstacles/20180423.png", gokartEntity);
     // ---
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180425.csv");
+    waypoints = new BSpline2CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);
     Region<Tensor> polygonRegion = PolygonRegions.numeric(VIRTUAL);
     Region<Tensor> union = RegionUnion.wrap(Arrays.asList(hangarMap.region, polygonRegion));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(union);

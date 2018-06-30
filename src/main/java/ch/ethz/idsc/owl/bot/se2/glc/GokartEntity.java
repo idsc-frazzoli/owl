@@ -13,6 +13,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 /** test if api is sufficient to model gokart */
@@ -29,6 +32,7 @@ public class GokartEntity extends CarEntity {
   /** simulation of occasional feedback from localization algorithm */
   private final EntityControl localizationFeedback = new EntityControl() {
     private final Random random = new Random();
+    private final Distribution distribution = NormalDistribution.standard();
     private boolean trigger = false;
 
     @Override
@@ -39,12 +43,8 @@ public class GokartEntity extends CarEntity {
     @Override
     public Optional<Tensor> control(StateTime tail, Scalar now) {
       Optional<Tensor> optional = Optional.empty();
-      if (trigger) {
-        optional = Optional.of(Tensors.vector( //
-            random.nextGaussian(), // shift x
-            random.nextGaussian(), // shift y
-            random.nextGaussian())); // shift angle
-      }
+      if (trigger)
+        optional = Optional.of(RandomVariate.of(distribution, 3));
       trigger = 0 == random.nextInt(20); // TODO use now to alter position every 1[s] for instance
       return optional;
     }

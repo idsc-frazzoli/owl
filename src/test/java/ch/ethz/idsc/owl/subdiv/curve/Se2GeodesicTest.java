@@ -22,7 +22,7 @@ public class Se2GeodesicTest extends TestCase {
       Tensor p = RandomVariate.of(distribution, 3);
       Tensor q = RandomVariate.of(distribution, 3);
       assertTrue(Chop._14.close(p, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
-      assertTrue(Chop._14.close(q, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ONE)));
+      assertTrue(Chop._12.close(q, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ONE)));
     }
   }
 }
