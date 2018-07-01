@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.map;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -56,5 +57,15 @@ public class Se2GroupActionTest extends TestCase {
       Tensor prod = Se2Integrator.INSTANCE.spin(xya, v);
       assertTrue(Chop._10.close(prod, result));
     }
+  }
+
+  public void testQuantity() {
+    Tensor xya = Tensors.fromString("{1[m],2[m],.34}");
+    Tensor oth = Tensors.fromString("{-.3[m],.8[m],-.5}");
+    Se2GroupAction se2GroupAction = new Se2GroupAction(xya);
+    Tensor inverse = se2GroupAction.inverse();
+    assertEquals(inverse, Tensors.fromString("{-1.6097288498099749[m], -1.552022238915878[m], -0.34}"));
+    Tensor circ = se2GroupAction.circ(oth);
+    assertEquals(circ, Tensors.fromString("{0.4503839266288446[m], 2.654157604780433[m], -0.15999999999999998}"));
   }
 }
