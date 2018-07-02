@@ -12,8 +12,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * SE2 matrix dot point
  * 
  * @see Se2InverseAction */
-// TODO also make package visibility
-public class Se2ForwardAction implements TensorUnaryOperator {
+/* package */ class Se2ForwardAction implements TensorUnaryOperator {
   private final Scalar px;
   private final Scalar py;
   private final Scalar ca;

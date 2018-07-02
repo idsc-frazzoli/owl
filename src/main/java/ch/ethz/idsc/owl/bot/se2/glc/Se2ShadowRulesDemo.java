@@ -41,7 +41,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
   private static final float PED_RADIUS = 0.05f;
   private static final Color PED_COLOR = new Color(38, 239, 248, 200);
   private static final float CAR_VELOCITY = 0.6f;
-  private static final float CAR_RADIUS = 0.3f;
+  // private static final float CAR_RADIUS = 0.3f;
   private static final Color CAR_COLOR = new Color(200, 80, 20, 150);
   private static final Tensor RANGE = Tensors.vector(10.4, 8);
   // ---

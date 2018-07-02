@@ -104,7 +104,8 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     opencv_imgproc.threshold(img, obsLane, 0, 255, opencv_imgproc.THRESH_BINARY_INV);
     opencv_imgproc.dilate(obsLane, obsLane, ellipseKernel);
     obsDilArea = Mat.zeros(img.size(), img.type()).asMat();
-    opencv_imgproc.dilate(obsLane, obsDilArea, ellipseKernel, new Point(-1, -1), radius2it(ellipseKernel, CAR_WIDTH), opencv_core.BORDER_CONSTANT, null); // TODO
+    // TODO
+    opencv_imgproc.dilate(obsLane, obsDilArea, ellipseKernel, new Point(-1, -1), radius2it(ellipseKernel, CAR_WIDTH), opencv_core.BORDER_CONSTANT, null);
     // TODO use spherical for lanes, carkernel for other obstacles
     Mat carObs = opencv_imgcodecs.imread(carObsURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
     IntStream.range(0, NSEGS).parallel() //
@@ -113,7 +114,7 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     //
     pixel2world = DiagonalMatrix.of( //
         scale.Get(0).reciprocal(), scale.Get(1).negate().reciprocal(), RealScalar.ONE);
-    pixel2world.set(RealScalar.of(img.arrayHeight()).multiply(scale.Get(1).reciprocal()), 1, 2);
+    pixel2world.set(RealScalar.of(img.arrayHeight()).divide(scale.Get(1)), 1, 2);
     world2pixelLayer = GeometricLayer.of(world2pixel);
     //
     initArea = new Mat(img.size(), img.type(), opencv_core.Scalar.WHITE);

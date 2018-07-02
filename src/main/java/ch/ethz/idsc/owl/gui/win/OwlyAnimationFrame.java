@@ -52,7 +52,8 @@ public class OwlyAnimationFrame extends TimerFrame {
         public void actionPerformed(ActionEvent event) {
           boolean selected = jToggleButtonRecord.isSelected();
           if (selected) {
-            TrajectoryEntity abstractEntity = (TrajectoryEntity) animationInterfaces.get(0); // TODO
+            // TODO implementation not generic
+            TrajectoryEntity abstractEntity = (TrajectoryEntity) animationInterfaces.get(0);
             File directory = UserHome.Pictures(abstractEntity.getClass().getSimpleName() + "_" + System.currentTimeMillis());
             directory.mkdir();
             GlobalAssert.that(directory.isDirectory());

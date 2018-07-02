@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
@@ -17,8 +16,6 @@ import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 // TODO several issues: 
@@ -33,40 +30,29 @@ public class CameraEmulator implements RenderInterface {
   private final Supplier<StateTime> supplier;
   private final TrajectoryRegionQuery raytraceQuery;
   // ---
-  private BufferedImage bufferedImage;
-  private final Tensor localPoints = Tensors.empty(); // TODO unmodifiable
-  private Scalar next;
+  private final BufferedImage bufferedImage;
+  private final Tensor localPoints;
+  // ---
+  private Scalar next = null;
 
   /** @param resolution of image in pixels along width and height
    * @param frameRate
    * @param supplier
    * @param raytraceQuery */
   public CameraEmulator( //
-      int resolution, Scalar frameRate, //
-      Supplier<StateTime> supplier, //
-      TrajectoryRegionQuery raytraceQuery) {
+      int resolution, Scalar frameRate, Supplier<StateTime> supplier, TrajectoryRegionQuery raytraceQuery) {
     this.resolution = resolution;
     this.interval = frameRate.reciprocal();
     this.supplier = supplier;
     this.raytraceQuery = raytraceQuery;
     bufferedImage = new BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_ARGB);
-    for (Tensor _xn : Subdivide.of(0, 1, resolution - 1)) {
-      double xn = _xn.Get().number().doubleValue();
-      double dist = 0.6 + 1.5 * xn + xn * xn;
-      for (Tensor _yn : Subdivide.of(-0.5, 0.5, resolution - 1)) {
-        double y = _yn.Get().number().doubleValue();
-        Tensor probe = Tensors.vector(dist, y * dist);
-        localPoints.append(probe);
-      }
-    }
-    GlobalAssert.that(localPoints.length() == resolution * resolution);
+    localPoints = StaticHelper.create(resolution).unmodifiable();
   }
 
   /** @param stateTime from where to expose
    * @return */
   public BufferedImage exposure(StateTime stateTime) {
-    if (Objects.isNull(bufferedImage) || //
-        Objects.isNull(next) || Scalars.lessThan(next, stateTime.time())) {
+    if (Objects.isNull(next) || Scalars.lessThan(next, stateTime.time())) {
       next = stateTime.time().add(interval);
       Se2Bijection se2Bijection = new Se2Bijection(stateTime.state());
       TensorUnaryOperator forward = se2Bijection.forward();
@@ -89,7 +75,7 @@ public class CameraEmulator implements RenderInterface {
     return bufferedImage;
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     BufferedImage bufferedImage = exposure(supplier.get());
     int SCREEN = resolution * 2;

@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   // TODO implementation of numerics is not compatible/well-defined for use with Quantity
   public int quasiCompare(Tensor newMerit, Tensor oldMerit) {
     if (oldMerit.length() != newMerit.length() || oldMerit.length() != slack.length())
-      throw TensorRuntimeException.of(oldMerit, newMerit, slack);
+      throw TensorRuntimeException.of(newMerit, oldMerit, slack);
     int cmp = 0;
     for (int index = 0; index < oldMerit.length() && cmp == 0; ++index) {
       Scalar min = oldMerit.Get(index);
