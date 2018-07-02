@@ -31,10 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** demo to simulate dubendorf hangar */
-// TODO this demo requires
-public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
-  private static final Tensor ARROWHEAD = Tensors.matrixDouble( //
-      new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(2));
+public class GokartxTWaypointFollowingDemo extends GokartDemo {
   private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { { 7.5, 0, 0 }, { 0, -7.5, 640 }, { 0, 0, 1 } });
   private static final Tensor VIRTUAL = Tensors.fromString("{{38, 39}, {42, 47}, {51, 52}, {46, 43}}");
 
@@ -49,7 +46,7 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
       }
     };
     // ---
-    Tensor ext = Tensors.vector(0.7, 0.7).unmodifiable(); // TODO magic const
+    Tensor ext = Tensors.vector(0.7, 0.7).unmodifiable(); // 0.7 is the half-width of the gokart
     BijectionFamily oscillation = new SimpleTranslationFamily(s -> Tensors.vector( //
         Math.sin(s.number().doubleValue() * -.4) * 6.0 + 44, //
         Math.cos(s.number().doubleValue() * -.4) * 6.0 + 44.0));
@@ -91,16 +88,17 @@ public class GokartxTWaypointFollowingDemo extends Se2CarDemo {
     owlyAnimationFrame.addBackground(renderInterface);
     SimpleGlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(gokartEntity);
     glcPlannerCallback.showCost();
-    GlcWaypointFollowing wpf = new GlcWaypointFollowing(waypoints, RealScalar.of(2), //
-        gokartEntity, plannerConstraint, glcPlannerCallback);
-    wpf.setHorizonDistance(RealScalar.of(5));
-    wpf.startNonBlocking();
+    GlcWaypointFollowing glcWaypointFollowing = new GlcWaypointFollowing( //
+        waypoints, RealScalar.of(2), gokartEntity, plannerConstraint, //
+        Arrays.asList(gokartEntity, glcPlannerCallback));
+    glcWaypointFollowing.setHorizonDistance(RealScalar.of(5));
+    glcWaypointFollowing.startNonBlocking();
     // ---
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent e) {
         System.out.println("window was closed. terminating...");
-        wpf.flagShutdown();
+        glcWaypointFollowing.flagShutdown();
       }
     });
   }

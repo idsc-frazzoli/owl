@@ -4,6 +4,8 @@ package ch.ethz.idsc.owl.gui.win;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.ethz.idsc.owl.glc.std.GoalConsumer;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
@@ -15,9 +17,12 @@ import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 public enum MouseGoal {
   ;
   public static void simple(OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint) {
-    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(trajectoryEntity);
+    List<GlcPlannerCallback> list = new ArrayList<>();
+    if (trajectoryEntity instanceof GlcPlannerCallback)
+      list.add((GlcPlannerCallback) trajectoryEntity);
+    list.add(new SimpleGlcPlannerCallback(trajectoryEntity));
     supply(owlyAnimationFrame.geometricComponent, //
-        new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, glcPlannerCallback));
+        new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, list));
   }
 
   private static void supply(GeometricComponent geometricComponent, GoalConsumer goalConsumer) {

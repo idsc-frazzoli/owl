@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.win;
 
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
@@ -14,16 +14,14 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 
 public class MotionPlanWorker {
-  private final List<GlcPlannerCallback> glcPlannerCallbacks = new LinkedList<>();
-  private volatile boolean isRelevant = true;
   private final int maxSteps;
+  private final Collection<GlcPlannerCallback> glcPlannerCallbacks;
+  // ---
+  private volatile boolean isRelevant = true;
 
-  public MotionPlanWorker(int maxSteps) {
+  public MotionPlanWorker(int maxSteps, Collection<GlcPlannerCallback> glcPlannerCallbacks) {
     this.maxSteps = maxSteps;
-  }
-
-  public void addCallback(GlcPlannerCallback glcPlannerCallback) {
-    glcPlannerCallbacks.add(glcPlannerCallback);
+    this.glcPlannerCallbacks = glcPlannerCallbacks;
   }
 
   /** the planner motion plans from the last {@link StateTime} in head

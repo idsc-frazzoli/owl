@@ -34,14 +34,15 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 public class ShadowMapDirected implements ShadowMap, RenderInterface {
-  private Color COLOR_SHADOW_FILL;
-  //  ---
+  private final static int NSEGS = 40;
+  private final static float CAR_WIDTH = 0.2f;
+  // ---
   private final LidarEmulator lidar;
   private final Mat initArea;
   private final Mat shadowArea;
   private final Mat obsDilArea;
-  private final Mat ellipseKernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
-      new Size(5, 5));
+  private final Mat ellipseKernel = //
+      opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, new Size(5, 5));
   private final float vMax;
   private final Scalar pixelDim;
   private final GeometricLayer world2pixelLayer;
@@ -50,8 +51,8 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
   private final List<Mat> laneMasks = new ArrayList<>();
   private final List<Mat> updateKernels = new ArrayList<>();
   private final List<Mat> carKernels = new ArrayList<>();
-  private final static int NSEGS = 40;
-  private final static float CAR_WIDTH = 0.2f;
+  // ---
+  private Color COLOR_SHADOW_FILL;
 
   public ShadowMapDirected(LidarEmulator lidar, ImageRegion imageRegion, float vMax) {
     this.lidar = lidar;
@@ -66,7 +67,12 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     Mat img = opencv_imgcodecs.imread(carLanesURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
     Mat kernOrig = opencv_imgcodecs.imread(kernelURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
     Mat carKernel = Mat.ones(new Size(5, 5), kernOrig.type()).asMat();
-    byte[] a = { 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0 };
+    byte[] a = { //
+        0, 1, 1, 1, 0, //
+        0, 1, 1, 1, 0, //
+        0, 1, 1, 1, 0, //
+        0, 1, 1, 1, 0, //
+        0, 1, 1, 1, 0 };
     carKernel.data().put(a);
     //
     Tensor scale = imageRegion.scale(); // pixels per meter
@@ -98,18 +104,17 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     opencv_imgproc.threshold(img, obsLane, 0, 255, opencv_imgproc.THRESH_BINARY_INV);
     opencv_imgproc.dilate(obsLane, obsLane, ellipseKernel);
     obsDilArea = Mat.zeros(img.size(), img.type()).asMat();
-    opencv_imgproc.dilate(obsLane, obsDilArea, ellipseKernel, new Point(-1, -1), radius2it(ellipseKernel, CAR_WIDTH), opencv_core.BORDER_CONSTANT, null); // TODO
-                                                                                                                                                          // magic
-    List<Mat> obsList = new ArrayList<>();
+    // TODO
+    opencv_imgproc.dilate(obsLane, obsDilArea, ellipseKernel, new Point(-1, -1), radius2it(ellipseKernel, CAR_WIDTH), opencv_core.BORDER_CONSTANT, null);
     // TODO use spherical for lanes, carkernel for other obstacles
     Mat carObs = opencv_imgcodecs.imread(carObsURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-    IntStream.range(0, NSEGS).parallel().forEach( //
-        seg -> dilateSegment(seg, carObs, carKernels, new Point(2, 2), laneMasks, obsList, 15)); // TODO magic iteration number
-    obsList.parallelStream().forEach((upimg) -> opencv_core.add(obsDilArea, upimg, obsDilArea));
+    IntStream.range(0, NSEGS).parallel() //
+        .mapToObj(seg -> StaticHelper.dilateSegment(seg, carObs, carKernels, new Point(2, 2), laneMasks, 15)) // TODO magic iteration number
+        .forEach(upimg -> opencv_core.add(obsDilArea, upimg, obsDilArea));
     //
     pixel2world = DiagonalMatrix.of( //
         scale.Get(0).reciprocal(), scale.Get(1).negate().reciprocal(), RealScalar.ONE);
-    pixel2world.set(RealScalar.of(img.arrayHeight()).multiply(scale.Get(1).reciprocal()), 1, 2);
+    pixel2world.set(RealScalar.of(img.arrayHeight()).divide(scale.Get(1)), 1, 2);
     world2pixelLayer = GeometricLayer.of(world2pixel);
     //
     initArea = new Mat(img.size(), img.type(), opencv_core.Scalar.WHITE);
@@ -119,17 +124,7 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     setColor(new Color(255, 50, 74));
   }
 
-  private static void dilateSegment(int s, Mat region, List<Mat> kernels, Point kernCenter, List<Mat> masks, List<Mat> list, int iterations) {
-    Mat updatedSegment = new Mat(region.size(), region.type());
-    opencv_core.bitwise_and(region, masks.get(s), updatedSegment);
-    // opencv_cudaarithm.bitwise_and(region, masks.get(s), updatedSegment);
-    opencv_imgproc.dilate(updatedSegment, updatedSegment, kernels.get(s), kernCenter, iterations, opencv_core.BORDER_CONSTANT, null);
-    synchronized (list) {
-      list.add(updatedSegment);
-    }
-  }
-
-  @Override
+  @Override // from ShadowMap
   public void updateMap(StateTime stateTime, float timeDelta) {
     updateMap(shadowArea, stateTime, timeDelta);
   }
@@ -143,37 +138,35 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
         (int) point2D.getY());
   }
 
-  @Override
-  public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
-    synchronized (world2pixelLayer) {
-      // get lidar polygon and transform to pixel values
-      Mat area = area_.clone();
-      List<Mat> updatedMatList = new ArrayList<>();
-      Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
-      world2pixelLayer.pushMatrix(gokart2world.forward_se2());
-      Tensor poly = lidar.getPolygon(stateTime);
-      //  ---
-      // transform lidar polygon to pixel values
-      Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
-      world2pixelLayer.popMatrix();
-      Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
-      // ---
-      // fill lidar polygon and subtract it from shadow region
-      Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
-      opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { tens.length() }, 1, opencv_core.Scalar.WHITE);
-      opencv_core.subtract(area, lidarMat, area);
-      // expand shadow region according to lane direction
-      // TODO this is a bottleneck! takes ~150ms
-      // !!
-      int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO check if correct
-      IntStream.range(0, NSEGS).parallel().forEach(s -> dilateSegment(s, area, updateKernels, new Point(-1, -1), laneMasks, updatedMatList, it));
-      // Mat.zeros(area.size(), area.type()).asMat().assignTo(region);
-      updatedMatList.stream().forEach(upimg -> opencv_core.add(area, upimg, area));
-      opencv_core.subtract(area, obsDilArea, area);
-      opencv_core.bitwise_and(initArea, area, area);
-      // ---
-      area.copyTo(area_);
-    }
+  // if synchronization is needed simply declare "private synchronized void"
+  private void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
+    // get lidar polygon and transform to pixel values
+    Mat area = area_.clone();
+    Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
+    world2pixelLayer.pushMatrix(gokart2world.forward_se2());
+    Tensor poly = lidar.getPolygon(stateTime);
+    //  ---
+    // transform lidar polygon to pixel values
+    Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
+    world2pixelLayer.popMatrix();
+    Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
+    // ---
+    // fill lidar polygon and subtract it from shadow region
+    Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
+    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { tens.length() }, 1, opencv_core.Scalar.WHITE);
+    opencv_core.subtract(area, lidarMat, area);
+    // expand shadow region according to lane direction
+    // TODO this is a bottleneck! takes ~150ms
+    // !!
+    int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO check if correct
+    IntStream.range(0, NSEGS).parallel() //
+        .mapToObj(s -> StaticHelper.dilateSegment(s, area, updateKernels, new Point(-1, -1), laneMasks, it)) //
+        // Mat.zeros(area.size(), area.type()).asMat().assignTo(region);
+        .forEach(upimg -> opencv_core.add(area, upimg, area));
+    opencv_core.subtract(area, obsDilArea, area);
+    opencv_core.bitwise_and(initArea, area, area);
+    // ---
+    area.copyTo(area_);
   }
 
   public final Mat getCurrentMap() {
@@ -189,7 +182,7 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     COLOR_SHADOW_FILL = color;
   }
 
-  private final int radius2it(final Mat spericalKernel, float radius) {
+  private final int radius2it(Mat spericalKernel, float radius) {
     float pixelRadius = spericalKernel.arrayWidth() / 2.0f;
     float worldRadius = pixelRadius * pixelDim.number().floatValue();
     return (int) Math.ceil(radius / worldRadius);
@@ -203,16 +196,13 @@ public class ShadowMapDirected implements ShadowMap, RenderInterface {
     // setup colorspace
     opencv_imgproc.cvtColor(plotArea, plotArea, opencv_imgproc.CV_GRAY2RGBA);
     Mat color = new Mat(4, 1, opencv_core.CV_8UC4);
-    byte[] a = { (byte) COLOR_SHADOW_FILL.getAlpha(), //
-        (byte) COLOR_SHADOW_FILL.getGreen(), //
-        (byte) COLOR_SHADOW_FILL.getRed(), //
-        (byte) COLOR_SHADOW_FILL.getBlue() };
+    byte[] a = StaticHelper.toAGRB(COLOR_SHADOW_FILL);
     color.data().put(a);
     plotArea.setTo(color, plotArea);
     //  convert to bufferedimage
-    BufferedImage img = new BufferedImage(plotArea.arrayWidth(), plotArea.arrayHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-    byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+    BufferedImage bufferedImage = new BufferedImage(plotArea.arrayWidth(), plotArea.arrayHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+    byte[] data = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
     plotArea.data().get(data);
-    graphics.drawImage(img, transform, null);
+    graphics.drawImage(bufferedImage, transform, null);
   }
 }

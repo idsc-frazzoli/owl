@@ -1,17 +1,12 @@
 // code by ynager
 package ch.ethz.idsc.owl.mapping;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -28,21 +23,19 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
+/** implementation uses only java spe */
 public class ShadowMapArea implements RenderInterface {
+  private final LidarEmulator lidar;
+  private final Area initArea;
+  private final Area shadowArea;
+  private final float vMax;
+  private final float rMin;
   //
   private Color COLOR_SHADOW_FILL;
   private Color COLOR_SHADOW_DRAW;
-  // ---
-  private final LidarEmulator lidar;
-  public final Supplier<StateTime> stateTimeSupplier;
-  private final Area initArea;
-  private Area shadowArea;
-  private final float vMax;
-  private final float rMin;
 
-  public ShadowMapArea(LidarEmulator lidar, ImageRegion imageRegion, Supplier<StateTime> stateTimeSupplier, float vMax, float rMin) {
+  public ShadowMapArea(LidarEmulator lidar, ImageRegion imageRegion, float vMax, float rMin) {
     this.lidar = lidar;
-    this.stateTimeSupplier = stateTimeSupplier;
     this.vMax = vMax;
     this.rMin = rMin;
     BufferedImage bufferedImage = RegionRenders.image(imageRegion.image());
@@ -82,21 +75,12 @@ public class ShadowMapArea implements RenderInterface {
     area.intersect(initArea);
   }
 
-  /* TODO: Stoke should have cap and join as BasicStroke.CAP_ROUND, this
-   * / however reduces performance */
   protected void dilate(Area area, float radius) {
-    makeStroke(area, radius, Area::add);
+    StaticHelper.makeStroke(area, radius, Area::add);
   }
 
   protected void erode(Area area, float radius) {
-    makeStroke(area, radius, Area::subtract);
-  }
-
-  private static void makeStroke(Area area, float radius, BiConsumer<Area, Area> function) {
-    Stroke stroke = new BasicStroke(radius * 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
-    Shape strokeShape = stroke.createStrokedShape(area);
-    Area strokeArea = new Area(strokeShape);
-    function.accept(area, strokeArea);
+    StaticHelper.makeStroke(area, radius, Area::subtract);
   }
 
   public final Area getCurrentMap() {

@@ -2,13 +2,11 @@
 package ch.ethz.idsc.owl.glc.adapter;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 
@@ -30,14 +28,5 @@ public enum GlcNodes {
     return Nodes.listFromRoot(node).stream() //
         .map(GlcNode::stateTime) //
         .collect(Collectors.toList());
-  }
-
-  /** @param trajectoryPlanner
-   * @return */
-  // TODO not clear why this function exists
-  public static Optional<GlcNode> getFinalGoalNode(TrajectoryPlanner trajectoryPlanner) {
-    return HeuristicQ.of(trajectoryPlanner.getHeuristicFunction()) //
-        ? trajectoryPlanner.getBestOrElsePeek() //
-        : trajectoryPlanner.getBest();
   }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
+import ch.ethz.idsc.owl.bot.se2.Se2GroupWrap;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
@@ -91,6 +92,7 @@ enum Se2WrapDemo {
   }
 
   public static void main(String[] args) {
+    demo(new Se2GroupWrap(Tensors.vector(1, 1, 1)));
     demo(new Se2Wrap(Tensors.vector(1, 1, 1)));
     demo(IdentityWrap.INSTANCE);
   }

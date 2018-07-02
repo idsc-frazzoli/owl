@@ -11,15 +11,17 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Mod;
 
-/** identifies (x,y,theta) === (x,y,theta + 2 pi n) for all n */
+/** identifies (x,y,theta) === (x,y,theta + 2 pi n) for all n
+ * 
+ * @see Se2GroupWrap */
 public class Se2Wrap implements CoordinateWrap, Serializable {
-  private static final int INDEX_ANGLE = 2;
-  private static final Mod MOD = Mod.function(Math.PI * 2);
-  private static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
+  protected static final int INDEX_ANGLE = 2;
+  protected static final Mod MOD = Mod.function(Math.PI * 2);
+  protected static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
   // ---
   // angular error may need a different "weight" from error in x, y
   // figure out default scaling
-  private final Tensor scale;
+  protected final Tensor scale;
 
   /** one can choose scale == {1, 1, 1}, or scale == {1, 1, 1, a, b, c, ...}
    * 
@@ -36,16 +38,25 @@ public class Se2Wrap implements CoordinateWrap, Serializable {
   }
 
   @Override // from CoordinateWrap
-  public Tensor represent(Tensor x) {
+  public final Tensor represent(Tensor x) {
     Tensor r = x.copy();
     r.set(MOD, INDEX_ANGLE);
     return r;
   }
 
   @Override // from TensorMetric
-  public Scalar distance(Tensor p, Tensor q) {
-    Tensor d = p.subtract(q);
+  public final Scalar distance(Tensor p, Tensor q) {
+    Tensor d = difference(p, q);
     d.set(MOD_DISTANCE, INDEX_ANGLE);
     return Norm._2.ofVector(d.pmul(scale));
+  }
+
+  /** default difference is simply the vector difference
+   * 
+   * @param p
+   * @param q
+   * @return */
+  protected Tensor difference(Tensor p, Tensor q) {
+    return p.subtract(q);
   }
 }

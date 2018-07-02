@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.std;
 
+import java.util.Collection;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
@@ -13,13 +14,14 @@ public class SimpleGoalConsumer implements GoalConsumer {
   // ---
   private final TrajectoryEntity trajectoryEntity;
   private final PlannerConstraint plannerConstraint;
-  private final GlcPlannerCallback glcPlannerCallback;
+  private final Collection<GlcPlannerCallback> glcPlannerCallbacks;
+  // ---
   private MotionPlanWorker motionPlanWorker = null;
 
-  public SimpleGoalConsumer(TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, GlcPlannerCallback glcPlannerCallback) {
+  public SimpleGoalConsumer(TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, Collection<GlcPlannerCallback> glcPlannerCallbacks) {
     this.trajectoryEntity = trajectoryEntity;
     this.plannerConstraint = plannerConstraint;
-    this.glcPlannerCallback = glcPlannerCallback;
+    this.glcPlannerCallbacks = glcPlannerCallbacks;
   }
 
   @Override
@@ -29,10 +31,7 @@ public class SimpleGoalConsumer implements GoalConsumer {
       motionPlanWorker.flagShutdown();
       motionPlanWorker = null;
     }
-    motionPlanWorker = new MotionPlanWorker(MAX_STEPS);
-    motionPlanWorker.addCallback(glcPlannerCallback);
-    if (trajectoryEntity instanceof GlcPlannerCallback)
-      motionPlanWorker.addCallback((GlcPlannerCallback) trajectoryEntity);
+    motionPlanWorker = new MotionPlanWorker(MAX_STEPS, glcPlannerCallbacks);
     motionPlanWorker.start( //
         trajectoryEntity.getFutureTrajectoryUntil(trajectoryEntity.delayHint()), //
         trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal));

@@ -83,31 +83,29 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
         (int) point2D.getY());
   }
 
-  @Override
-  public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
-    synchronized (world2pixelLayer) {
-      Mat area = area_.clone();
-      // get lidar polygon and transform to pixel values
-      Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
-      world2pixelLayer.pushMatrix(gokart2world.forward_se2());
-      Tensor poly = lidar.getPolygon(stateTime);
-      //  ---
-      // transform lidar polygon to pixel values
-      Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
-      world2pixelLayer.popMatrix();
-      Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
-      // ---
-      // fill lidar polygon and subtract it from shadow region
-      Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
-      opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { tens.length() }, 1, opencv_core.Scalar.WHITE);
-      opencv_core.subtract(area, lidarMat, area);
-      //  ---
-      // dilate and intersect
-      int it = radius2it(ellipseKernel, timeDelta * vMax);
-      opencv_imgproc.dilate(area, area, ellipseKernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
-      opencv_core.bitwise_and(initArea, area, area);
-      area.copyTo(area_);
-    }
+  // @Override
+  public synchronized void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
+    Mat area = area_.clone();
+    // get lidar polygon and transform to pixel values
+    Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
+    world2pixelLayer.pushMatrix(gokart2world.forward_se2());
+    Tensor poly = lidar.getPolygon(stateTime);
+    //  ---
+    // transform lidar polygon to pixel values
+    Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
+    world2pixelLayer.popMatrix();
+    Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
+    // ---
+    // fill lidar polygon and subtract it from shadow region
+    Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
+    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { tens.length() }, 1, opencv_core.Scalar.WHITE);
+    opencv_core.subtract(area, lidarMat, area);
+    //  ---
+    // dilate and intersect
+    int it = radius2it(ellipseKernel, timeDelta * vMax);
+    opencv_imgproc.dilate(area, area, ellipseKernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
+    opencv_core.bitwise_and(initArea, area, area);
+    area.copyTo(area_);
   }
 
   public final Mat getCurrentMap() {

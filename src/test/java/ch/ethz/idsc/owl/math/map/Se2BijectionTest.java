@@ -1,8 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -26,5 +29,12 @@ public class Se2BijectionTest extends TestCase {
     Tensor vector = Tensors.vector(5, 6);
     Tensor imaged = se2Bijection.forward().apply(vector);
     assertTrue(Chop._14.close(se2Inverse.forward().apply(imaged), vector));
+  }
+
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    Se2Bijection se2Bijection = new Se2Bijection(Tensors.vector(2, -3, 1.3));
+    Se2Bijection copy = Serialization.copy(se2Bijection);
+    Tensor vector = Tensors.vector(.32, -.98);
+    assertEquals(se2Bijection.forward().apply(vector), copy.forward().apply(vector));
   }
 }

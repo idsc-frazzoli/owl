@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.glc.adapter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
@@ -13,21 +14,22 @@ import ch.ethz.idsc.owl.math.state.StateTime;
  * 
  * @see GoalAdapter */
 public class MultiConstraintAdapter implements PlannerConstraint {
-  /** @param constraintCollection
+  /** @param plannerConstraints non-null
    * @return */
-  public static PlannerConstraint of(Collection<PlannerConstraint> constraintCollection) {
-    return new MultiConstraintAdapter(constraintCollection);
+  public static PlannerConstraint of(Collection<PlannerConstraint> plannerConstraints) {
+    return new MultiConstraintAdapter(plannerConstraints);
   }
 
-  private final Collection<PlannerConstraint> constraintCollection;
+  // ---
+  private final Collection<PlannerConstraint> plannerConstraints;
 
-  private MultiConstraintAdapter(Collection<PlannerConstraint> constraintCollection) {
-    this.constraintCollection = constraintCollection;
+  private MultiConstraintAdapter(Collection<PlannerConstraint> plannerConstraints) {
+    this.plannerConstraints = Objects.requireNonNull(plannerConstraints);
   }
 
-  @Override
+  @Override // from PlannerConstraint
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    return constraintCollection.stream() //
+    return plannerConstraints.stream() //
         .allMatch(constraint -> constraint.isSatisfied(glcNode, trajectory, flow));
   }
 }

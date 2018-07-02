@@ -13,9 +13,9 @@ public class LexicographicRelabelDecision implements RelabelDecision {
   }
 
   @Override // from RelabelDecisionInterface
-  public boolean doRelabel(GlcNode newNode, GlcNode formerNode) {
+  public boolean doRelabel(GlcNode newNode, GlcNode oldNode) {
     Tensor newMerit = ((VectorScalar) newNode.merit()).vector();
-    Tensor formerMerit = ((VectorScalar) formerNode.merit()).vector();
+    Tensor formerMerit = ((VectorScalar) oldNode.merit()).vector();
     return relaxedLexicographic.quasiCompare(newMerit, formerMerit) == -1;
   }
 }

@@ -5,7 +5,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 
 public interface RelabelDecision {
   /** @param newNode
-   * @param formerNode
+   * @param oldNode
    * @return */
-  boolean doRelabel(GlcNode newNode, GlcNode formerNode);
+  boolean doRelabel(GlcNode newNode, GlcNode oldNode);
 }

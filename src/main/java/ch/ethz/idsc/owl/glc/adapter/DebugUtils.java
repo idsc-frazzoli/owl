@@ -54,7 +54,7 @@ public enum DebugUtils {
    * 
    * @param trajectoryPlanner */
   public static final void heuristicConsistencyCheck(TrajectoryPlanner trajectoryPlanner) {
-    Optional<GlcNode> finalNode = GlcNodes.getFinalGoalNode(trajectoryPlanner);
+    Optional<GlcNode> finalNode = DebugUtils.getFinalGoalNode(trajectoryPlanner);
     if (!finalNode.isPresent()) {
       System.out.println("No Final GoalNode, therefore no ConsistencyCheck");
       return;
@@ -80,5 +80,11 @@ public enum DebugUtils {
       // monotonously increasing merit means, that delta(Cost) >= delta(CostToGo)
       // as: Cost(Goal)== Merit(Goal) >= (Cost(Node) + CostToGo(Node)) = Merit (Node)
     }
+  }
+
+  private static Optional<GlcNode> getFinalGoalNode(TrajectoryPlanner trajectoryPlanner) {
+    return HeuristicQ.of(trajectoryPlanner.getHeuristicFunction()) //
+        ? trajectoryPlanner.getBestOrElsePeek() //
+        : trajectoryPlanner.getBest();
   }
 }

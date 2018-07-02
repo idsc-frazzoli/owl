@@ -6,6 +6,13 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+/** Se2Bijection forward
+ * SE2 matrix dot point
+ * 
+ * Se2Bijection inverse
+ * (SE2 matrix)^-1 dot point
+ * 
+ * @see Se2InverseAction */
 public class Se2Bijection implements RigidBijection, Serializable {
   private final Tensor xya;
 
