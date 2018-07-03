@@ -54,6 +54,14 @@ public class Se2WrapTest extends TestCase {
     assertTrue(Chop._12.close(res, Quantity.of(Math.sqrt(2 * 2 + 2 * 3 * 6), "CHF")));
   }
 
+  public void testMod2Pi() {
+    Tensor p = Tensors.vector(20, -43, -2 * Math.PI * 8);
+    Tensor q = Tensors.vector(20, -43, +2 * Math.PI + 0.1);
+    Se2Wrap se2Wrap = new Se2Wrap(Tensors.vector(1, 1, 1));
+    Scalar distance = se2Wrap.distance(p, q);
+    assertTrue(Chop._10.close(distance, RealScalar.of(0.1)));
+  }
+
   public void testFail() {
     try {
       new Se2Wrap(Tensors.vector(1, 2));

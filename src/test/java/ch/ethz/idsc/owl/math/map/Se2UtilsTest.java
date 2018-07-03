@@ -21,8 +21,29 @@ public class Se2UtilsTest extends TestCase {
     assertTrue(Chop._14.close(det, RealScalar.ONE));
   }
 
+  public void test2PiModLogExp() {
+    for (int n = -5; n <= 5; ++n) {
+      double value = 1 + 2 * Math.PI * n;
+      Tensor g = Tensors.vector(2, 3, value);
+      Tensor x = Se2Utils.log(g);
+      Tensor exp_x = Se2Utils.exp(x);
+      assertEquals(exp_x.Get(2), RealScalar.of(value));
+      assertTrue(Chop._13.close(g, exp_x));
+    }
+  }
+
+  public void test2PiModExpLog() {
+    for (int n = -5; n <= 5; ++n) {
+      double value = 1 + 2 * Math.PI * n;
+      Tensor x = Tensors.vector(2, 3, value);
+      Tensor g = Se2Utils.exp(x);
+      Tensor log_g = Se2Utils.log(g);
+      assertTrue(Chop._13.close(x, log_g));
+    }
+  }
+
   public void testLog() {
-    Distribution distribution = UniformDistribution.of(-5, 5);
+    Distribution distribution = UniformDistribution.of(-25, 25);
     for (int index = 0; index < 10; ++index) {
       Tensor x = RandomVariate.of(distribution, 3);
       Tensor g = Se2Utils.exp(x);
@@ -32,7 +53,7 @@ public class Se2UtilsTest extends TestCase {
   }
 
   public void testExp() {
-    Distribution distribution = UniformDistribution.of(-5, 5);
+    Distribution distribution = UniformDistribution.of(-25, 25);
     for (int index = 0; index < 10; ++index) {
       Tensor g = RandomVariate.of(distribution, 3);
       Tensor x = Se2Utils.log(g);
