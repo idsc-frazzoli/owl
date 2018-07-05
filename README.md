@@ -14,7 +14,13 @@ The library was developed with the following objectives in mind
 
 ![usecase_motionplan](https://user-images.githubusercontent.com/4012178/35968244-96577dee-0cc3-11e8-80a1-b38691e863af.png)
 
-Simulation
+Motion planning
+
+<td>
+
+![shadow_regions](https://user-images.githubusercontent.com/4012178/42315433-b53034de-8047-11e8-8fc2-87fa504460c5.png)
+
+Obstacle anticipation
 
 <td>
 
@@ -37,6 +43,7 @@ Simulation
 * integrators: Euler, Midpoint, Runge-Kutta 4-5th order, exact integrator for the group SE2
 * state-space models: car-like, two-wheel-drive, pendulum-swing-up, Lotka-Volterra, etc.
 * efficient heuristic for goal regions: sphere, conic section
+* refinement of waypoint sequence using non-linear subdivision along geodesics
 * visualizations and animations, see [video](https://www.youtube.com/watch?v=lPQW3GqQqSY)
 
 ## Examples
