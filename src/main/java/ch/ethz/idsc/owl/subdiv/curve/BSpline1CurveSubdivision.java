@@ -17,7 +17,7 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
     this.geodesicInterface = geodesicInterface;
   }
 
-  @Override
+  @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     Tensor curve = Tensors.empty();
     for (int index = 0; index < tensor.length(); ++index) {
@@ -26,6 +26,19 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
       curve.append(p);
       curve.append(geodesicInterface.split(p, q, RationalScalar.HALF));
     }
+    return curve;
+  }
+
+  public Tensor string(Tensor tensor) {
+    Tensor curve = Tensors.empty();
+    int last = tensor.length() - 1;
+    for (int index = 0; index < last; ++index) {
+      Tensor p = tensor.get(index);
+      Tensor q = tensor.get(index + 1);
+      curve.append(p);
+      curve.append(geodesicInterface.split(p, q, RationalScalar.HALF));
+    }
+    curve.append(tensor.get(last));
     return curve;
   }
 }

@@ -14,8 +14,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class BSpline1CurveSubdivisionTest extends TestCase {
-  public void testSimple() {
-    BSpline1CurveSubdivision subdivision = new BSpline1CurveSubdivision(EuclideanGeodesic.INSTANCE);
+  public void testCyclic() {
+    BSpline1CurveSubdivision subdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = subdivision.cyclic(tensor);
@@ -24,8 +24,15 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
     assertEquals(expected, actual);
   }
 
+  public void testString() {
+    BSpline1CurveSubdivision subdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor string = subdivision.string(Tensors.fromString("{{0,10}, {1,12}}"));
+    assertEquals(string, Tensors.fromString("{{0, 10}, {1/2, 11}, {1, 12}}"));
+    assertTrue(ExactScalarQ.all(string));
+  }
+
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator fps = new BSpline1CurveSubdivision(EuclideanGeodesic.INSTANCE)::cyclic;
+    TensorUnaryOperator fps = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
   }

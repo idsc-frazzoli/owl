@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum EuclideanGeodesic implements GeodesicInterface {
+public enum RnGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   @Override // from GeodesicInterface

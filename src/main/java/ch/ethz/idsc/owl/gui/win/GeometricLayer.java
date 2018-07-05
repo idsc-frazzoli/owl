@@ -105,7 +105,9 @@ public class GeometricLayer {
     return path2d;
   }
 
-  /** @return {x, y, alpha} unmodifiable */
+  /** Hint: alpha counts rotations!
+   * 
+   * @return {x, y, alpha} unmodifiable */
   public Tensor getMouseSe2State() {
     // TODO function is deprecated in the long run
     return mouseSe2State;

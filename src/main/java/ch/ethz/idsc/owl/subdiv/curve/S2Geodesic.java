@@ -9,12 +9,14 @@ import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
-/** geodesic on 2-dimensional sphere embedded in R^3 */
-public enum SphereGeodesic implements GeodesicInterface {
+/** geodesic on 2-dimensional sphere embedded in R^3
+ * 
+ * https://en.wikipedia.org/wiki/N-sphere */
+public enum S2Geodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   /** p and q are vectors of length 3 with unit length */
-  @Override
+  @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
     Tensor c = Cross.of(p, q);
     Scalar a = ArcCos.FUNCTION.apply(p.dot(q).Get());

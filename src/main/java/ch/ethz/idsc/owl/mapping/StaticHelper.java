@@ -14,8 +14,6 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_imgproc;
 
-import ch.ethz.idsc.owl.data.Stopwatch;
-
 /* package */ enum StaticHelper {
   ;
   static void makeStroke(Area area, float radius, BiConsumer<Area, Area> function) {
@@ -29,10 +27,10 @@ import ch.ethz.idsc.owl.data.Stopwatch;
     Mat updatedSegment = new Mat(region.size(), region.type());
     //
     //
-    Stopwatch stopwatch = Stopwatch.started();
+    // Stopwatch stopwatch = Stopwatch.started();
     opencv_core.bitwise_and(region, masks.get(s), updatedSegment);
     // opencv_cudaarithm.bitwise_and(region, masks.get(s), updatedSegment);
-    System.out.println(stopwatch.display_nanoSeconds());
+    // System.out.println(stopwatch.display_nanoSeconds());
     opencv_imgproc.dilate(updatedSegment, updatedSegment, kernels.get(s), kernCenter, iterations, opencv_core.BORDER_CONSTANT, null);
     return updatedSegment;
   }
