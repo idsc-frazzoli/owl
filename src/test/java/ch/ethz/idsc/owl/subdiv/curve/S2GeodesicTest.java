@@ -14,11 +14,11 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class SphereGeodesicTest extends TestCase {
+public class S2GeodesicTest extends TestCase {
   public void testSimple() {
     Tensor p = UnitVector.of(3, 0);
     Tensor q = UnitVector.of(3, 1);
-    Tensor split = SphereGeodesic.INSTANCE.split(p, q, RationalScalar.HALF);
+    Tensor split = S2Geodesic.INSTANCE.split(p, q, RationalScalar.HALF);
     assertEquals(Norm._2.of(split), RealScalar.ONE);
     assertEquals(split.Get(0), split.Get(1));
     assertTrue(Scalars.isZero(split.Get(2)));
@@ -29,8 +29,8 @@ public class SphereGeodesicTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor p = Normalize.of(RandomVariate.of(distribution, 3));
       Tensor q = Normalize.of(RandomVariate.of(distribution, 3));
-      assertTrue(Chop._14.close(p, SphereGeodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
-      Tensor r = SphereGeodesic.INSTANCE.split(p, q, RealScalar.ONE);
+      assertTrue(Chop._14.close(p, S2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
+      Tensor r = S2Geodesic.INSTANCE.split(p, q, RealScalar.ONE);
       assertTrue(Chop._12.close(q, r));
       assertTrue(Chop._14.close(Norm._2.of(r), RealScalar.ONE));
     }

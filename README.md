@@ -1,6 +1,6 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.1.4`
+Library for motion planning in Java, version `0.1.5`
 
 The library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
@@ -79,6 +79,28 @@ Two-wheel drive (with Lidar simulator)
 </tr>
 </table>
 
+---
+
+Simulation: autonomous gokart or car
+
+<table>
+<tr>
+<td>
+
+Gokart
+
+![_1530775215911](https://user-images.githubusercontent.com/4012178/42308510-10283bf0-8036-11e8-8a42-b8f1f807bb88.gif)
+
+<td>
+
+Car
+
+![_1530775403211](https://user-images.githubusercontent.com/4012178/42308523-1ae4ea8e-8036-11e8-8067-83bdd67a2d33.gif)
+
+</tr>
+</table>
+
+
 ### RRT*
 
 R^2
@@ -106,7 +128,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.1.4</version>
+        <version>0.1.5</version>
       </dependency>
     </dependencies>
 

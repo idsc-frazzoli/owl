@@ -10,7 +10,7 @@ public enum So3Geodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   /** p and q are orthogonal matrices with dimension 3 x 3 */
-  @Override
+  @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
     return p.dot(Rodriguez.exp(Rodriguez.log(LinearSolve.of(p, q)).multiply(scalar)));
   }
