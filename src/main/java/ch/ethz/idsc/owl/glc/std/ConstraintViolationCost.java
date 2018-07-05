@@ -12,9 +12,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** 
- * Transforms a @PlannerConstraint to a @CostFunction by counting constraint violations
- */
+/** Transforms a @PlannerConstraint to a @CostFunction by counting constraint violations */
 public class ConstraintViolationCost implements CostFunction, Serializable {
   private final PlannerConstraint constraint;
 
