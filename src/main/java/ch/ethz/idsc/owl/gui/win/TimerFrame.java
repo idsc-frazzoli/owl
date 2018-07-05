@@ -7,7 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimerFrame extends BaseFrame {
-  public final Timer timer = new Timer();
+  protected final Timer timer = new Timer();
 
   public TimerFrame() {
     { // periodic task for rendering

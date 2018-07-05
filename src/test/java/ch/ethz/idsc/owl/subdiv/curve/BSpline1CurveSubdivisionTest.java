@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 
 public class BSpline1CurveSubdivisionTest extends TestCase {
   public void testSimple() {
-    BSpline1CurveSubdivision subdivision = new BSpline1CurveSubdivision(EuclideanGeodesic.INSTANCE);
+    BSpline1CurveSubdivision subdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = subdivision.cyclic(tensor);
@@ -25,7 +25,7 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator fps = new BSpline1CurveSubdivision(EuclideanGeodesic.INSTANCE)::cyclic;
+    TensorUnaryOperator fps = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
   }

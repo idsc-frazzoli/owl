@@ -11,9 +11,9 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class EuclideanGeodesicTest extends TestCase {
+public class RnGeodesicTest extends TestCase {
   public void testSimple() {
-    Tensor actual = EuclideanGeodesic.INSTANCE.split(Tensors.vector(10, 1), Tensors.vector(11, 0), RealScalar.of(-1));
+    Tensor actual = RnGeodesic.INSTANCE.split(Tensors.vector(10, 1), Tensors.vector(11, 0), RealScalar.of(-1));
     assertTrue(ExactScalarQ.all(actual));
     assertEquals(Tensors.vector(9, 2), actual);
   }
@@ -23,8 +23,8 @@ public class EuclideanGeodesicTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor p = RandomVariate.of(distribution, 7);
       Tensor q = RandomVariate.of(distribution, 7);
-      assertTrue(Chop._14.close(p, EuclideanGeodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
-      assertTrue(Chop._14.close(q, EuclideanGeodesic.INSTANCE.split(p, q, RealScalar.ONE)));
+      assertTrue(Chop._14.close(p, RnGeodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
+      assertTrue(Chop._14.close(q, RnGeodesic.INSTANCE.split(p, q, RealScalar.ONE)));
     }
   }
 }

@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 class TnWrap implements CoordinateWrap, Serializable {
-  private static final Scalar NEGATIVE_HALF = RationalScalar.of(-1, 2);
+  private static final Scalar NEGATIVE_HALF = RationalScalar.HALF.negate();
   // ---
   private final Tensor extension;
   private final List<Mod> mod_distance = new ArrayList<>();

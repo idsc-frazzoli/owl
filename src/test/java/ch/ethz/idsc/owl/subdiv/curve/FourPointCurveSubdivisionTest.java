@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 public class FourPointCurveSubdivisionTest extends TestCase {
   public void testSimple() {
-    FourPointCurveSubdivision subdivision = new FourPointCurveSubdivision(EuclideanGeodesic.INSTANCE);
+    FourPointCurveSubdivision subdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = Nest.of(subdivision::cyclic, tensor, 1);
@@ -25,7 +25,7 @@ public class FourPointCurveSubdivisionTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator fps = new FourPointCurveSubdivision(EuclideanGeodesic.INSTANCE)::cyclic;
+    TensorUnaryOperator fps = new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
   }
