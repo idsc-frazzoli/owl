@@ -25,12 +25,8 @@ import org.bytedeco.javacpp.opencv_imgproc;
 
   static Mat dilateSegment(int s, Mat region, List<Mat> kernels, Point kernCenter, List<Mat> masks, int iterations) {
     Mat updatedSegment = new Mat(region.size(), region.type());
-    //
-    //
-    // Stopwatch stopwatch = Stopwatch.started();
     opencv_core.bitwise_and(region, masks.get(s), updatedSegment);
     // opencv_cudaarithm.bitwise_and(region, masks.get(s), updatedSegment);
-    // System.out.println(stopwatch.display_nanoSeconds());
     opencv_imgproc.dilate(updatedSegment, updatedSegment, kernels.get(s), kernCenter, iterations, opencv_core.BORDER_CONSTANT, null);
     return updatedSegment;
   }

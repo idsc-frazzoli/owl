@@ -9,13 +9,18 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
 import org.bytedeco.javacpp.opencv_core;
+import org.bytedeco.javacpp.opencv_core.GpuMat;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_core.Size;
+import org.bytedeco.javacpp.opencv_cudaarithm;
+import org.bytedeco.javacpp.opencv_cudafilters;
+import org.bytedeco.javacpp.opencv_cudafilters.Filter;
 import org.bytedeco.javacpp.opencv_imgproc;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.data.img.CvHelper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
@@ -41,6 +46,10 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
   private final Tensor pixel2world;
   private final Mat ellipseKernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
       new Size(7, 7));
+  //
+  private GpuMat initAreaGpu;
+  private GpuMat shadowAreaGpu;
+  private GpuMat lidarMatGpu;
 
   public ShadowMapSpherical(LidarEmulator lidar, ImageRegion imageRegion, float vMax, float rMin) {
     this.lidar = lidar;
@@ -67,11 +76,20 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
     opencv_core.subtract(initArea, obstacleArea, initArea);
     this.shadowArea = initArea.clone();
     setColor(new Color(255, 50, 74));
+    //
+    initAreaGpu = new GpuMat(initArea.size(), initArea.type());
+    shadowAreaGpu = new GpuMat(shadowArea.size(), shadowArea.type());
+    lidarMatGpu = new GpuMat(initArea.size(), initArea.type());
+    shadowAreaGpu.upload(shadowArea);
+    initAreaGpu.upload(initArea);
   }
 
   @Override
   public void updateMap(StateTime stateTime, float timeDelta) {
-    updateMap(shadowArea, stateTime, timeDelta);
+    // Stopwatch stopwatch = Stopwatch.started();
+    // updateMap(shadowArea, stateTime, timeDelta);
+    updateMapGpu(shadowAreaGpu, stateTime, timeDelta);
+    // System.out.println(stopwatch.display_nanoSeconds() / 1000000.0);
   }
 
   @Override
@@ -108,6 +126,31 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
     area.copyTo(area_);
   }
 
+  // @Override
+  public void updateMapGpu(GpuMat area, StateTime stateTime, float timeDelta) {
+    // get lidar polygon and transform to pixel values
+    Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
+    world2pixelLayer.pushMatrix(gokart2world.forward_se2());
+    Tensor poly = lidar.getPolygon(stateTime);
+    //  ---
+    // transform lidar polygon to pixel values
+    Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
+    world2pixelLayer.popMatrix();
+    Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
+    // ---
+    // fill lidar polygon and subtract it from shadow region
+    Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
+    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { tens.length() }, 1, opencv_core.Scalar.WHITE);
+    lidarMatGpu.upload(lidarMat);
+    int it = radius2it(ellipseKernel, timeDelta * vMax);
+    opencv_cudaarithm.subtract(area, lidarMatGpu, area);
+    //  ---
+    // dilate and intersect
+    Filter filter = opencv_cudafilters.createMorphologyFilter(opencv_imgproc.MORPH_DILATE, area.type(), ellipseKernel, new Point(-1, -1), it);
+    filter.apply(area, area);
+    opencv_cudaarithm.bitwise_and(initAreaGpu, area, area);
+  }
+
   public final Mat getCurrentMap() {
     return shadowArea.clone();
   }
@@ -129,6 +172,8 @@ public class ShadowMapSpherical implements ShadowMap, RenderInterface {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    // shadowAreaGpu.download(shadowArea);
+    //
     final Tensor matrix = geometricLayer.getMatrix();
     AffineTransform transform = AffineTransforms.toAffineTransform(matrix.dot(pixel2world));
     Mat plotArea = shadowArea.clone();
