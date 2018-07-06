@@ -26,33 +26,40 @@ public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable 
       Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % tensor.length());
-      Tensor pq = geodesicInterface.split(p, q, _3_4);
-      Tensor qr = geodesicInterface.split(q, r, _1_4);
-      curve.append(geodesicInterface.split(pq, qr, _2_4));
-      curve.append(geodesicInterface.split(q, r, _2_4));
+      curve.append(center(p, q, r));
+      curve.append(center(q, r));
     }
     return curve;
   }
 
+  @Override
   public Tensor string(Tensor tensor) {
     Tensor curve = Tensors.empty();
     {
       Tensor q = tensor.get(0);
       Tensor r = tensor.get(1);
       curve.append(q);
-      curve.append(geodesicInterface.split(q, r, _2_4));
+      curve.append(center(q, r));
     }
     int last = tensor.length() - 1;
     for (int index = 1; index < last; /* nothing */ ) {
       Tensor p = tensor.get(index - 1);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get(++index);
-      Tensor pq = geodesicInterface.split(p, q, _3_4);
-      Tensor qr = geodesicInterface.split(q, r, _1_4);
-      curve.append(geodesicInterface.split(pq, qr, _2_4));
-      curve.append(geodesicInterface.split(q, r, _2_4));
+      curve.append(center(p, q, r));
+      curve.append(center(q, r));
     }
     curve.append(tensor.get(last));
     return curve;
+  }
+
+  private Tensor center(Tensor p, Tensor q, Tensor r) {
+    Tensor pq = geodesicInterface.split(p, q, _3_4);
+    Tensor qr = geodesicInterface.split(q, r, _1_4);
+    return geodesicInterface.split(pq, qr, _2_4);
+  }
+
+  private Tensor center(Tensor q, Tensor r) {
+    return geodesicInterface.split(q, r, _2_4);
   }
 }

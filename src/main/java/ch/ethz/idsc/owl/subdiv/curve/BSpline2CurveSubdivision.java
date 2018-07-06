@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 
 public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
@@ -21,26 +22,32 @@ public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable 
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     Tensor curve = string(tensor);
-    Tensor p = tensor.get(tensor.length() - 1);
+    Tensor p = Last.of(tensor);
     Tensor q = tensor.get(0);
-    curve.append(geodesicInterface.split(p, q, _1_4));
-    curve.append(geodesicInterface.split(p, q, _3_4));
-    return curve;
+    return curve.append(lo(p, q)).append(hi(p, q));
   }
 
   /** Hint: curve contracts at the sides
    * 
    * @param tensor
    * @return */
+  @Override
   public Tensor string(Tensor tensor) {
     Tensor curve = Tensors.empty();
     int last = tensor.length() - 1;
     for (int index = 0; index < last; /* nothing */ ) {
       Tensor p = tensor.get(index);
       Tensor q = tensor.get(++index);
-      curve.append(geodesicInterface.split(p, q, _1_4));
-      curve.append(geodesicInterface.split(p, q, _3_4));
+      curve.append(lo(p, q)).append(hi(p, q));
     }
     return curve;
+  }
+
+  private Tensor lo(Tensor p, Tensor q) {
+    return geodesicInterface.split(p, q, _1_4);
+  }
+
+  private Tensor hi(Tensor p, Tensor q) {
+    return geodesicInterface.split(p, q, _3_4);
   }
 }
