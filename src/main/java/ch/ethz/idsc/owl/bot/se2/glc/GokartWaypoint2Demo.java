@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.WaypointDistanceCost;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -38,17 +37,15 @@ public class GokartWaypoint2Demo extends GokartDemo {
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
     waypoints = new BSpline2CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);
     CostFunction costFunction = WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 6.0f, new Dimension(640, 640));
-    GokartEntity gokartEntity = new GokartVecEntity(initial) {
+    GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
         return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
       }
-
-      @Override
-      public Optional<CostFunction> getPrimaryCost() {
-        return Optional.of(costFunction);
-      }
     };
+    // define cost funcion hierarchy
+    gokartEntity.setCostVector(Arrays.asList(costFunction), Arrays.asList(0.0));
+    gokartEntity.addTimeCost(1, 0.0);
     // ---
     HelperHangarMap hangarMap = new HelperHangarMap("/dubilab/localization/20180603.png", gokartEntity);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(hangarMap.region);
