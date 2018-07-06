@@ -28,7 +28,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -64,11 +63,6 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     // ---
     Tensor image = ResourceData.of("/map/scenarios/s1/render.png");
     BufferedImage bufferedImage = ImageFormat.of(image);
-    // bufferedImage = ImageAlpha.scale(bufferedImage, 0.5f);
-    //
-    int dim1 = bufferedImage.getWidth();
-    int dim0 = bufferedImage.getHeight();
-    Tensor scale = Tensors.vector(dim1, dim0).pmul(RANGE.map(Scalar::reciprocal));
     //
     Tensor imageCar = ResourceData.of("/map/scenarios/s1/car_obs.png");
     Tensor imagePed = ResourceData.of("/map/scenarios/s1/ped_obs_legal.png");
@@ -82,7 +76,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     PlannerConstraint regionConstraint = createConstraint(imageRegionCar);
     constraintCollection.add(regionConstraint);
     //
-    ImageRender imgRender = new ImageRender(bufferedImage, scale);
+    ImageRender imgRender = ImageRender.of(bufferedImage, RANGE);
     owlyAnimationFrame.addBackground(imgRender);
     // Lidar
     LidarEmulator lidarEmulator = new LidarEmulator( //

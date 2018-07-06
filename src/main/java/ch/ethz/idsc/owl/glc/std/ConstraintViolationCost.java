@@ -14,6 +14,10 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** Transforms a @PlannerConstraint to a @CostFunction by counting constraint violations */
 public class ConstraintViolationCost implements CostFunction, Serializable {
+  public static ConstraintViolationCost of(PlannerConstraint constraint) {
+    return new ConstraintViolationCost(constraint);
+  }
+
   private final PlannerConstraint constraint;
 
   public ConstraintViolationCost(PlannerConstraint constraint) {

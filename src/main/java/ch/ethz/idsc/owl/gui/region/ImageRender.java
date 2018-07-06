@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
@@ -27,6 +28,14 @@ public class ImageRender implements RenderInterface {
         Tensors.vector(0, -bufferedImage.getHeight()));
     matrix = invsc.dot(translate);
     // System.out.println(Pretty.of(matrix));
+  }
+
+  /** @param bufferedImage
+   * @param range */
+  public static ImageRender of(BufferedImage bufferedImage, Tensor range) {
+    Tensor scale = Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()) //
+        .pmul(range.map(Scalar::reciprocal));
+    return new ImageRender(bufferedImage, scale);
   }
 
   @Override // from RenderInterface
