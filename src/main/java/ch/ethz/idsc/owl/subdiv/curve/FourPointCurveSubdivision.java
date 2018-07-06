@@ -40,7 +40,8 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
   // FIXME implementation is incorrect
   public Tensor string(Tensor tensor) {
     Tensor curve = Tensors.empty();
-    for (int index = 1; index < tensor.length() - 1; ++index) {
+    int last = tensor.length() - 1;
+    for (int index = 1; index < last; ++index) {
       Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % tensor.length());
