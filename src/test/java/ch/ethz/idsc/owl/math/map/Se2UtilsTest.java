@@ -48,7 +48,7 @@ public class Se2UtilsTest extends TestCase {
       Tensor x = RandomVariate.of(distribution, 3);
       Tensor g = Se2Utils.exp(x);
       Tensor log_g = Se2Utils.log(g);
-      assertTrue(Chop._13.close(x, log_g));
+      assertTrue(Chop._10.close(x, log_g));
     }
   }
 
@@ -58,7 +58,7 @@ public class Se2UtilsTest extends TestCase {
       Tensor g = RandomVariate.of(distribution, 3);
       Tensor x = Se2Utils.log(g);
       Tensor exp_x = Se2Utils.exp(x);
-      assertTrue(Chop._13.close(g, exp_x));
+      assertTrue(Chop._10.close(g, exp_x));
     }
   }
 

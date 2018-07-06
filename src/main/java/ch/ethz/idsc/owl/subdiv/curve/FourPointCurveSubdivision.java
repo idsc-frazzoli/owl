@@ -9,11 +9,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 public class FourPointCurveSubdivision implements CurveSubdivision, Serializable {
-  private final static Scalar P9_8 = RationalScalar.of(+9, 8);
   private final static Scalar N1_8 = RationalScalar.of(-1, 8);
-  // ---
-  private final static Scalar P3_8 = RationalScalar.of(+3, 8);
-  private final static Scalar P6_8 = RationalScalar.of(+6, 8);
+  private final static Scalar P9_8 = RationalScalar.of(+9, 8);
+  private final static Scalar N1_4 = RationalScalar.of(-1, 4);
+  private final static Scalar P1_4 = RationalScalar.of(+1, 4);
   // ---
   private final GeodesicInterface geodesicInterface;
 
@@ -29,27 +28,55 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % tensor.length());
       Tensor t = tensor.get((index + 2) % tensor.length());
-      Tensor pq = geodesicInterface.split(p, q, P9_8);
-      Tensor rt = geodesicInterface.split(r, t, N1_8);
-      curve.append(q);
-      curve.append(geodesicInterface.split(pq, rt, RationalScalar.HALF));
+      curve.append(q).append(center(p, q, r, t));
     }
     return curve;
   }
 
-  // FIXME implementation is incorrect
+  @Override
   public Tensor string(Tensor tensor) {
     Tensor curve = Tensors.empty();
-    for (int index = 1; index < tensor.length() - 1; ++index) {
-      Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
+    {
+      Tensor p = tensor.get(0);
+      Tensor q = tensor.get(1);
+      Tensor r = tensor.get(2);
+      curve.append(p).append(triple(p, q, r));
+    }
+    int last = tensor.length() - 2;
+    for (int index = 1; index < last; ++index) {
+      Tensor p = tensor.get(index - 1);
       Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % tensor.length());
-      Tensor t = tensor.get((index + 2) % tensor.length());
-      Tensor pq = geodesicInterface.split(p, q, P3_8);
-      Tensor rt = geodesicInterface.split(r, t, P6_8);
-      curve.append(q);
-      curve.append(geodesicInterface.split(pq, rt, RationalScalar.HALF));
+      Tensor r = tensor.get(index + 1);
+      Tensor t = tensor.get(index + 2);
+      curve.append(q).append(center(p, q, r, t));
+    }
+    {
+      Tensor p = tensor.get(last + 1);
+      Tensor q = tensor.get(last);
+      Tensor r = tensor.get(last - 1);
+      curve.append(q).append(triple(p, q, r)).append(p);
     }
     return curve;
+  }
+
+  /** @param p
+   * @param q
+   * @param r
+   * @param t
+   * @return point between q and r */
+  private Tensor center(Tensor p, Tensor q, Tensor r, Tensor t) {
+    Tensor pq = geodesicInterface.split(p, q, P9_8);
+    Tensor rt = geodesicInterface.split(r, t, N1_8);
+    return geodesicInterface.split(pq, rt, RationalScalar.HALF);
+  }
+
+  /** @param p
+   * @param q
+   * @param r
+   * @return point between p and q */
+  private Tensor triple(Tensor p, Tensor q, Tensor r) {
+    Tensor pq = geodesicInterface.split(p, q, P1_4);
+    Tensor rt = geodesicInterface.split(q, r, N1_4);
+    return geodesicInterface.split(pq, rt, RationalScalar.HALF);
   }
 }

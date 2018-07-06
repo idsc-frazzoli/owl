@@ -12,7 +12,6 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
@@ -40,11 +39,14 @@ public class ImageAreaTest extends TestCase {
 
   public void testBlackWhite() throws IOException {
     BufferedImage bufferedImage = image("/dubilab/obstacles/20180423.png");
-    Stopwatch stopwatch = Stopwatch.started();
-    Area area = ImageArea.fromImage(bufferedImage);
-    System.out.println(stopwatch.display_seconds());
+    // Stopwatch stopwatch = Stopwatch.started();
+    Area area = ImageArea.fromImage(bufferedImage); // takes ~6[s]
+    // System.out.println(stopwatch.display_seconds());
     Rectangle rectangle = area.getBounds();
-    System.out.println(rectangle);
+    assertEquals(rectangle.x, 16);
+    assertEquals(rectangle.y, 16);
+    assertEquals(rectangle.width, 593);
+    assertEquals(rectangle.height, 585);
   }
 
   private static BufferedImage image(String string) throws IOException {

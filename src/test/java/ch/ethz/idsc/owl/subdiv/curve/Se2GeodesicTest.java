@@ -29,8 +29,8 @@ public class Se2GeodesicTest extends TestCase {
       assertTrue(Chop._14.close(p, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
       Tensor r = Se2Geodesic.INSTANCE.split(p, q, RealScalar.ONE);
       if (!Chop._14.close(q, r)) {
-        assertTrue(Chop._12.allZero(se2Wrap.distance(q, r)));
-        assertTrue(Chop._12.allZero(se2GroupWrap.distance(q, r)));
+        assertTrue(Chop._10.allZero(se2Wrap.distance(q, r)));
+        assertTrue(Chop._10.allZero(se2GroupWrap.distance(q, r)));
       }
     }
   }
