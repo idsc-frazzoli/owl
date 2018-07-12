@@ -28,7 +28,7 @@ public enum TSe2StateSpaceModel implements StateSpaceModel {
         Cos.FUNCTION.apply(angle).multiply(vx), // change in px
         Sin.FUNCTION.apply(angle).multiply(vx), // change in py
         u.Get(2), // angular rate
-        u.Get(0)  // acceleration
+        u.Get(0) // acceleration
     );
   }
 

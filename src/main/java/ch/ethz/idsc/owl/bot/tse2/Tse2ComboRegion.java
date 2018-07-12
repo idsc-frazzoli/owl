@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.RadiusXY;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.LinearRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -25,21 +25,10 @@ public class Tse2ComboRegion implements Region<Tensor>, Serializable {
     return new Tse2ComboRegion( //
         new SphericalRegion(goal.extract(0, 2), RadiusXY.requireSame(radiusVector)), //
         new So2Region(goal.Get(2), radiusVector.Get(2)), //
-        new SphericalRegion(goal.Get(3), radiusVector.Get(3)));
+        new LinearRegion(goal.Get(3), radiusVector.Get(3)));
   }
 
-  /** @param goal {px, py, angle, vel}
-   * @param semi
-   * @param radius
-   * @return */
-  public static Tse2ComboRegion cone(Tensor goal, Scalar semi, Scalar radius) {
-    return new Tse2ComboRegion( //
-        new ConeRegion(goal, semi), //
-        new So2Region(goal.Get(2), radius), //
-        new SphericalRegion(goal.Get(3), radius));
-  }
   // ---
-
   private final RegionWithDistance<Tensor> xyRegion;
   private final So2Region angleRegion;
   private final RegionWithDistance<Tensor> velRegion;
@@ -52,26 +41,26 @@ public class Tse2ComboRegion implements Region<Tensor>, Serializable {
 
   /** @param xyav == {px, py, angle, vel}
    * @return distance of {px, py} from spherical region */
-  protected final Scalar d_xy(Tensor xya) {
-    return xyRegion.distance(xya.extract(0, 2));
+  protected final Scalar d_xy(Tensor xyav) {
+    return xyRegion.distance(xyav.extract(0, 2));
   }
 
   /** @param xyav == {px, py, angle, vel}
    * @return distance of angle from so2region */
-  protected final Scalar d_angle(Tensor xya) {
-    return angleRegion.distance(xya.get(2));
+  protected final Scalar d_angle(Tensor xyav) {
+    return angleRegion.distance(xyav.get(2));
   }
-  
+
   /** @param xyav == {px, py, angle, vel}
    * @return distance of velocity from so2region */
-  protected final Scalar d_vel(Tensor xya) {
-    return velRegion.distance(xya.get(3));
+  protected final Scalar d_vel(Tensor xyav) {
+    return velRegion.distance(xyav.get(3));
   }
 
   @Override // from Region
-  public final boolean isMember(Tensor xya) {
-    return xyRegion.isMember(xya.extract(0, 2)) //
-        && angleRegion.isMember(xya.get(2)) //
-        && velRegion.isMember(xya.get(3));
+  public final boolean isMember(Tensor xyav) {
+    return xyRegion.isMember(xyav.extract(0, 2)) //
+        && angleRegion.isMember(xyav.get(2)) //
+        && velRegion.isMember(xyav.get(3));
   }
 }
