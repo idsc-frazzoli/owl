@@ -29,12 +29,12 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class GokartShadowPlanning0Demo extends GokartDemo {
-  private static final float PED_VELOCITY = 0.2f;
-  private static final float PED_RADIUS = 0.05f;
+  private static final float PED_VELOCITY = 1.2f;
+  private static final float PED_RADIUS = 0.3f;
   private static final Color PED_LEGAL_COLOR = new Color(38, 239, 248, 200);
-  private static final Color PED_ILLEGAL_COLOR = new Color(38, 239, 248, 200);
-  private static final float MAX_A = 0.6f; // [m/s²]
-  private static final float REACTION_TIME = 0.5f;
+  private static final Color PED_ILLEGAL_COLOR = new Color(38, 100, 248, 200);
+  private static final float MAX_A = 0.8f; // [m/s²]
+  private static final float REACTION_TIME = 0.3f;
   private static final Tensor RANGE = Tensors.vector(52, 40);
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 20, 60));
@@ -42,7 +42,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
     // ---
-    final StateTime initial = new StateTime(Tensors.vector(25, 5, 0), RealScalar.ZERO);
+    final StateTime initial = new StateTime(Tensors.vector(36.283, 8.850, 1.571), RealScalar.ZERO);
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
@@ -79,15 +79,14 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
         new ShadowMapSpherical(lidarEmulator, irPedIllegal, PED_VELOCITY, PED_RADIUS);
     smPedLegal.setColor(PED_LEGAL_COLOR);
     smPedIllegal.setColor(PED_ILLEGAL_COLOR);
-    // owlyAnimationFrame.addBackground(smPedLegal);
-    // owlyAnimationFrame.addBackground(smPedIllegal);
+    //owlyAnimationFrame.addBackground(smPedLegal);
     // ---
     CostFunction pedLegalCost = //
         ConstraintViolationCost.of(new SimpleShadowConstraintJavaCV(smPedLegal, MAX_A, REACTION_TIME));
     CostFunction pedIllegalCost = //
         ConstraintViolationCost.of(new SimpleShadowConstraintJavaCV(smPedIllegal, MAX_A, REACTION_TIME));
     gokartEntity.setCostVector(Arrays.asList(pedLegalCost, pedIllegalCost), Arrays.asList(0.0, 0.0));
-    gokartEntity.addTimeCost(1, 0.25);
+    gokartEntity.addTimeCost(1, 0.1);
     // ---
     MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);
   }
