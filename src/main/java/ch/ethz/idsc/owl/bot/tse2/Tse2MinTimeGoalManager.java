@@ -46,7 +46,7 @@ public final class Tse2MinTimeGoalManager implements Region<Tensor>, CostFunctio
     // units: d_an [rad] / maxTurning [rad/s] -> time [s]
     return Max.of( //
         tse2ComboRegion.d_xy(tensor).divide(maxSpeed), // FIXME admissible but inacurate heuristic
-        tse2ComboRegion.d_angle(tensor).divide(maxTurning));
+        tse2ComboRegion.d_angle(tensor).divide(maxTurning.multiply(maxSpeed)));
   }
 
   @Override // from Region

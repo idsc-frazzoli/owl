@@ -18,16 +18,15 @@ public enum TSe2StateSpaceModel implements StateSpaceModel {
   // ---
   @Override
   public Tensor f(Tensor x, Tensor u) {
-    // return AngleVector.of(x.Get(2)).multiply(u.Get(0)).append(u.Get(2)); // <- short form
     // x = {px, py, theta, vx}
     // u = {ax, ay == 0, rate, 0}
-    // speed: positive for forward motion, or negative for backward motion
+    // acceleration: positive for forward acceleration, negative for backward acceleration
     Scalar angle = x.Get(2);
     Scalar vx = x.Get(3);
     return Tensors.of( //
         Cos.FUNCTION.apply(angle).multiply(vx), // change in px
         Sin.FUNCTION.apply(angle).multiply(vx), // change in py
-        u.Get(2), // angular rate
+        u.Get(2).multiply(vx), // angular rate
         u.Get(0) // acceleration
     );
   }
@@ -35,6 +34,6 @@ public enum TSe2StateSpaceModel implements StateSpaceModel {
   /** | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 | */
   @Override
   public Scalar getLipschitz() {
-    return RealScalar.ONE;
+    return RealScalar.ONE; // TODO check if correct
   }
 }

@@ -31,10 +31,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
-public class TseCarEntity extends Tse2Entity {
+public class Tse2CarEntity extends Tse2Entity {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(5), RealScalar.of(5), Degree.of(7).reciprocal(), RealScalar.of(10)).unmodifiable();
-  static final Scalar MAX_SPEED = RealScalar.of(2.0);
+  static final Scalar MAX_SPEED = RealScalar.of(3.0); // FIXME implement max speed constraint
   static final Scalar MAX_TURNING_PLAN = Degree.of(45);
   static final Scalar LOOKAHEAD = RealScalar.of(0.5);
   static final Scalar MAX_TURNING_RATE = Degree.of(50); // slightly higher for pure pursuit
@@ -53,8 +53,8 @@ public class TseCarEntity extends Tse2Entity {
   // ---
   static final Tse2Wrap TSE2WRAP = new Tse2Wrap(Tensors.vector(1, 1, 2, 2));
 
-  public static TseCarEntity createDefault(StateTime stateTime) {
-    return new TseCarEntity(stateTime, //
+  public static Tse2CarEntity createDefault(StateTime stateTime) {
+    return new Tse2CarEntity(stateTime, //
         new PurePursuitControlTse2(LOOKAHEAD, MAX_TURNING_RATE), //
         PARTITIONSCALE, CARFLOWS, SHAPE);
   }
@@ -68,7 +68,7 @@ public class TseCarEntity extends Tse2Entity {
 
   /** extra cost functions, for instance
    * @param stateTime initial position */
-  public TseCarEntity(StateTime stateTime, TrajectoryControl trajectoryControl, Tensor partitionScale, FlowsInterface carFlows, Tensor shape) {
+  public Tse2CarEntity(StateTime stateTime, TrajectoryControl trajectoryControl, Tensor partitionScale, FlowsInterface carFlows, Tensor shape) {
     super(stateTime, trajectoryControl);
     this.trajectoryControl = trajectoryControl;
     this.controls = carFlows.getFlows(9);
