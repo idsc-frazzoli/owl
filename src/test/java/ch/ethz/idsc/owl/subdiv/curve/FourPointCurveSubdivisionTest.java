@@ -6,7 +6,9 @@ import java.io.IOException;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -31,6 +33,17 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     Tensor string = subdivision.string(vector);
     assertEquals(string, Subdivide.of(0, 3, 6));
     assertTrue(ExactScalarQ.all(string));
+  }
+
+  public void testSimple1() {
+    Tensor curve = Tensors.fromString("{{0,0},{1,0},{0,1}}");
+    TensorUnaryOperator subdivision = //
+        new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
+    Tensor n1 = Nest.of(subdivision, curve, 1);
+    assertEquals(n1.get(0), Array.zeros(2));
+    assertEquals(n1.get(1), Tensors.fromString("{9/16, -1/8}"));
+    assertEquals(n1.get(2), UnitVector.of(2, 0));
+    assertEquals(n1.get(3), Tensors.fromString("{9/16, 9/16}"));
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

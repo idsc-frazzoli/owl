@@ -95,6 +95,7 @@ public class TseCarEntity extends Tse2Entity {
 
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+    goal = goal.append(RealScalar.ZERO); // 4th component of goal
     // TODO add max velocity constraint
     Tse2ComboRegion se2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     Tse2MinTimeGoalManager se2MinTimeGoalManager = new Tse2MinTimeGoalManager(se2ComboRegion, controls, MAX_SPEED);
