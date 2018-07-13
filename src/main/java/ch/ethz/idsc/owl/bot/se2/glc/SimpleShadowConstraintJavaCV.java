@@ -54,13 +54,15 @@ public final class SimpleShadowConstraintJavaCV implements PlannerConstraint, Se
     Tensor range = Subdivide.of(0, dStop, 10);
     Tensor ray = TensorProduct.of(range, dir);
     UByteRawIndexer sI = simShadowArea.createIndexer();
-    return !ray.stream() //
+    return !ray.stream().parallel() //
         .map(forward) //
         .map(shadowMap::state2pixel) //
         .anyMatch(local -> isMember(sI, local));
   }
 
-  private static boolean isMember(Indexer sI, Point pixel) {
-    return sI.getDouble(pixel.y(), pixel.x()) == 255.0;
+  private boolean isMember(Indexer sI, Point pixel) {
+    if(pixel.y() < initArea.rows() && pixel.x() < initArea.cols())
+      return sI.getDouble(pixel.y(), pixel.x()) == 255.0;
+    return false;
   }
 }
