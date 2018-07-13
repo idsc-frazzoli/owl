@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.std.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
-import ch.ethz.idsc.tensor.RealScalar;
 
 public enum MouseGoal {
   ;
@@ -34,7 +33,7 @@ public enum MouseGoal {
         final int mask = MouseWheelEvent.CTRL_DOWN_MASK; // 128 = 2^7
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
           if ((mods & mask) == 0) // no ctrl pressed
-            goalConsumer.accept(geometricComponent.getMouseSe2State().append(RealScalar.ZERO));
+            goalConsumer.accept(geometricComponent.getMouseSe2State());
         }
       }
     };
