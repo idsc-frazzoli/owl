@@ -27,11 +27,8 @@ public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable 
     return curve.append(lo(p, q)).append(hi(p, q));
   }
 
-  /** Hint: curve contracts at the sides
-   * 
-   * @param tensor
-   * @return */
-  @Override
+  // Hint: curve contracts at the sides
+  @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
     Tensor curve = Tensors.empty();
     int last = tensor.length() - 1;

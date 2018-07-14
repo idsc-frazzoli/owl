@@ -23,7 +23,7 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
     return string(tensor).append(center(Last.of(tensor), tensor.get(0)));
   }
 
-  @Override
+  @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
     Tensor curve = Tensors.empty();
     int last = tensor.length() - 1;

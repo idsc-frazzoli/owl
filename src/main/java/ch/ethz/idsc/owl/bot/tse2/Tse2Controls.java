@@ -1,4 +1,4 @@
-// code by jph, ynager
+// code by ynager
 package ch.ethz.idsc.owl.bot.tse2;
 
 import java.util.Collection;
