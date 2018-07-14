@@ -1,5 +1,5 @@
-// code by jph
-package ch.ethz.idsc.owl.bot.se2.glc;
+// code by ynager
+package ch.ethz.idsc.owl.bot.tse2;
 
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
@@ -15,25 +15,26 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class Se2Letter2Demo extends Se2CarDemo {
+public class Tse2Car0Demo extends Tse2CarDemo {
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    CarEntity carEntity = CarEntity.createDefault(new StateTime(Tensors.vector(6, 5, 1), RealScalar.ZERO));
+    Tse2CarEntity carEntity = Tse2CarEntity.createDefault(new StateTime(Tensors.vector(6, 5, 1, 0), RealScalar.ZERO));
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     owlyAnimationFrame.add(carEntity);
+    // TODO add option to select goal velocity / range
     MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     {
       RenderInterface renderInterface = new MouseShapeRender( //
           SimpleTrajectoryRegionQuery.timeInvariant(line(imageRegion)), //
-          CarEntity.SHAPE, () -> carEntity.getStateTimeNow().time());
+          Tse2CarEntity.SHAPE, () -> carEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }
   }
 
   public static void main(String[] args) {
-    new Se2Letter2Demo().start().jFrame.setVisible(true);
+    new Tse2Car0Demo().start().jFrame.setVisible(true);
   }
 }
