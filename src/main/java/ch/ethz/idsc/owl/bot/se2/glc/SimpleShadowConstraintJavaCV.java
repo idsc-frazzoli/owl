@@ -61,7 +61,7 @@ public final class SimpleShadowConstraintJavaCV implements PlannerConstraint, Se
   }
 
   private boolean isMember(Indexer sI, Point pixel) {
-    if(pixel.y() < initArea.rows() && pixel.x() < initArea.cols())
+    if (pixel.y() < initArea.rows() && pixel.x() < initArea.cols())
       return sI.getDouble(pixel.y(), pixel.x()) == 255.0;
     return false;
   }

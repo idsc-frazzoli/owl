@@ -79,7 +79,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
         new ShadowMapSpherical(lidarEmulator, irPedIllegal, PED_VELOCITY, PED_RADIUS);
     smPedLegal.setColor(PED_LEGAL_COLOR);
     smPedIllegal.setColor(PED_ILLEGAL_COLOR);
-    //owlyAnimationFrame.addBackground(smPedLegal);
+    // owlyAnimationFrame.addBackground(smPedLegal);
     // ---
     CostFunction pedLegalCost = //
         ConstraintViolationCost.of(new SimpleShadowConstraintJavaCV(smPedLegal, MAX_A, REACTION_TIME));

@@ -46,7 +46,6 @@ public class PurePursuitControl extends StateTrajectoryControl {
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state) //
-        .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
     if (Sign.isNegative(speed))
       beacons.set(Scalar::negate, Tensor.ALL, 0);

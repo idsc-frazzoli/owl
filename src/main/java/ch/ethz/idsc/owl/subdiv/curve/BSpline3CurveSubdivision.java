@@ -32,7 +32,7 @@ public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable 
     return curve;
   }
 
-  @Override
+  @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
     Tensor curve = Tensors.empty();
     {

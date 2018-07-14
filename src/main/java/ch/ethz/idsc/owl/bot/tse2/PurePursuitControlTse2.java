@@ -21,8 +21,8 @@ public class PurePursuitControlTse2 extends StateTrajectoryControl {
   /** (vx, vy, omega) */
   private static final Tse2Wrap TSE2WRAP = new Tse2Wrap(Tensors.vector(1, 1, 2, 2));
   // ---
-  private final Clip clip;
   private final Scalar lookAhead;
+  private final Clip clip;
 
   public PurePursuitControlTse2(Scalar lookAhead, Scalar maxTurningRate) {
     this.lookAhead = lookAhead;
@@ -45,7 +45,6 @@ public class PurePursuitControlTse2 extends StateTrajectoryControl {
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state) //
-        .map(tensor -> tensor.extract(0, 2)) //
         .map(tensorUnaryOperator));
     if (Sign.isNegative(speed))
       beacons.set(Scalar::negate, Tensor.ALL, 0);
