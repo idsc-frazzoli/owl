@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * Since the state space model is parameter free, the access
  * to the model is via a singleton instance. */
-public enum PsuStateSpaceModel implements StateSpaceModel {
+enum PsuStateSpaceModel implements StateSpaceModel {
   INSTANCE;
   // ---
   /** @param x == {angle, angular rate}

@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** objective is minimum path length
  * path length is measured in Euclidean distance */
-public class RnNoHeuristicCircleGoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
+class RnNoHeuristicCircleGoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
   /** constructor creates a spherical region in R^n with given center and radius.
    * distance measure is Euclidean distance.
    * 

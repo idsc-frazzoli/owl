@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum RnFlowTrajectory {
+enum RnFlowTrajectory {
   ;
   /** implementation produces shortcuts at corners.
    * the flow of the segment bridging a corner may be of smaller magnitude than

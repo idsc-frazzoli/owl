@@ -1,9 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.rn.rrts;
+package ch.ethz.idsc.owl.bot.rn;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.rn.RnTransition;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;

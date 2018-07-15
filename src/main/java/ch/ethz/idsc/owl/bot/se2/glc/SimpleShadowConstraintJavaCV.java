@@ -23,8 +23,8 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-// TODO implementation is redundant to SimpleShadowConstraint
-public final class SimpleShadowConstraintJavaCV implements PlannerConstraint, Serializable {
+// TODO (JAN refactor) implementation is redundant to SimpleShadowConstraint
+class SimpleShadowConstraintJavaCV implements PlannerConstraint, Serializable {
   private final ShadowMapSpherical shadowMap;
   private final float a;
   private final float reactionTime;

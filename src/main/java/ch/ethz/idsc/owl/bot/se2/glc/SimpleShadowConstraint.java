@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public final class SimpleShadowConstraint implements PlannerConstraint, Serializable {
+class SimpleShadowConstraint implements PlannerConstraint, Serializable {
   private final ShadowMapArea shadowMap;
   private final float a;
   private final float reactionTime;
