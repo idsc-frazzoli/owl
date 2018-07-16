@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
-import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -62,5 +61,6 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     // Tensor eta2 = trajectoryPlanner.getEta();
     // assertEquals(eta, eta2);
     DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
+    DebugUtils.nodeAmountCompare(trajectoryPlanner);
   }
 }
