@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.util;
+package ch.ethz.idsc.owl.math;
 
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;

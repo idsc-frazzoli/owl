@@ -1,6 +1,6 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.1.5`
+Library for motion planning in Java, version `0.1.6`
 
 The library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems

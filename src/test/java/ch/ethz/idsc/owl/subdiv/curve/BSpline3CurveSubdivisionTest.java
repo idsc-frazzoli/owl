@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -31,6 +32,46 @@ public class BSpline3CurveSubdivisionTest extends TestCase {
     Tensor refined = subdivision.string(curve);
     assertEquals(refined, Tensors.fromString("{0, 1/2, 1, 3/2, 2, 5/2, 3}"));
     assertTrue(ExactScalarQ.all(refined));
+  }
+
+  public void testStringTwo() {
+    Tensor curve = Tensors.vector(0, 1);
+    BSpline3CurveSubdivision subdivision = new BSpline3CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = subdivision.string(curve);
+    assertEquals(refined, Tensors.fromString("{0, 1/2, 1}"));
+    assertTrue(ExactScalarQ.all(refined));
+  }
+
+  public void testStringOne() {
+    Tensor curve = Tensors.vector(1);
+    BSpline3CurveSubdivision subdivision = new BSpline3CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = subdivision.string(curve);
+    assertEquals(refined, Tensors.fromString("{1}"));
+    assertTrue(ExactScalarQ.all(refined));
+  }
+
+  public void testStringEmpty() {
+    Tensor curve = Tensors.vector();
+    BSpline3CurveSubdivision subdivision = new BSpline3CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = subdivision.string(curve);
+    assertTrue(Tensors.isEmpty(refined));
+    assertTrue(ExactScalarQ.all(refined));
+  }
+
+  public void testScalarFail() {
+    BSpline3CurveSubdivision subdivision = new BSpline3CurveSubdivision(Se2Geodesic.INSTANCE);
+    try {
+      subdivision.string(RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      subdivision.cyclic(RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

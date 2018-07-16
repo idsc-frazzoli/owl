@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -35,5 +36,21 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
     TensorUnaryOperator fps = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
+  }
+
+  public void testScalarFail() {
+    CurveSubdivision subdivision = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE);
+    try {
+      subdivision.string(RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      subdivision.cyclic(RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

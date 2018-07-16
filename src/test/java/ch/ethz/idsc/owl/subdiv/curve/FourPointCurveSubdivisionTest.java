@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -35,6 +36,22 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     assertTrue(ExactScalarQ.all(string));
   }
 
+  public void testStringTwo() {
+    FourPointCurveSubdivision subdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor vector = Tensors.vector(0, 1);
+    Tensor string = subdivision.string(vector);
+    assertEquals(string, Subdivide.of(0, 1, 2));
+    assertTrue(ExactScalarQ.all(string));
+  }
+
+  public void testStringOne() {
+    FourPointCurveSubdivision subdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor vector = Tensors.vector(3);
+    Tensor string = subdivision.string(vector);
+    assertEquals(string, Tensors.vector(3));
+    assertTrue(ExactScalarQ.all(string));
+  }
+
   public void testSimple1() {
     Tensor curve = Tensors.fromString("{{0,0},{1,0},{0,1}}");
     TensorUnaryOperator subdivision = //
@@ -50,5 +67,21 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     TensorUnaryOperator fps = new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
+  }
+
+  public void testScalarFail() {
+    CurveSubdivision subdivision = new FourPointCurveSubdivision(Se2Geodesic.INSTANCE);
+    try {
+      subdivision.string(RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      subdivision.cyclic(RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }
