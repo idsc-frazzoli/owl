@@ -1,10 +1,8 @@
 // code by ynager
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.core;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.glc.core.CostIncrementFunction;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 

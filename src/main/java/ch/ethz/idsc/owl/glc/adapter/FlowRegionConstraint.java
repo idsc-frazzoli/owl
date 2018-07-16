@@ -1,19 +1,21 @@
 // code by ynager
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.adapter;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** Implements a @PlannerConstraint to define and check flow constraints in certain regions.
+/** Implements a {@link PlannerConstraint} to define and check flow constraints in certain regions.
  * non-empty intersection of the trajectory with the StateTime region and the flow region
  * represents a constraint violation. */
+// TODO functionality is not used
 public class FlowRegionConstraint implements PlannerConstraint, Serializable {
   public static PlannerConstraint create(Region<Tensor> flowregion, Region<StateTime> region) {
     return new FlowRegionConstraint(flowregion, region);

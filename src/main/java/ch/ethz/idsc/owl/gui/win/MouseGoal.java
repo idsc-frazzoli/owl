@@ -7,10 +7,10 @@ import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.ethz.idsc.owl.glc.std.GoalConsumer;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.std.SimpleGlcPlannerCallback;
-import ch.ethz.idsc.owl.glc.std.SimpleGoalConsumer;
+import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
+import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
+import ch.ethz.idsc.owl.glc.core.GoalConsumer;
+import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 

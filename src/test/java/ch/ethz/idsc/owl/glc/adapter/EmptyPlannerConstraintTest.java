@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.adapter;
 
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import junit.framework.TestCase;
 
 public class EmptyPlannerConstraintTest extends TestCase {

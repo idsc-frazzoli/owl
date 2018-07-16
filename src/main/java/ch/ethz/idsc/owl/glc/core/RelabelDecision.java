@@ -1,7 +1,5 @@
 // code by ynager
-package ch.ethz.idsc.owl.glc.std;
-
-import ch.ethz.idsc.owl.glc.core.GlcNode;
+package ch.ethz.idsc.owl.glc.core;
 
 public interface RelabelDecision {
   /** @param newNode
