@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.red.Nest;
 
 enum CurveSubdivisionDemo {
@@ -31,13 +30,10 @@ enum CurveSubdivisionDemo {
       public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
         Tensor q = geometricLayer.getMouseSe2State();
         graphics.setColor(new Color(128, 128, 128, 128));
-        Tensor curve = Tensors.of(Array.zeros(3), q);
+        Tensor curve = Tensors.of(Array.zeros(3), Tensors.vector(3, 3, Math.PI / 2), q);
         CurveSubdivision curveSubdivision = new FourPointCurveSubdivision(Se2Geodesic.INSTANCE);
-        Tensor result = Nest.of(curveSubdivision::string, curve, 2);
-        System.out.println(Dimensions.of(result));
-        // for (Tensor scalar : Subdivide.of(0, 1, 20))
-        // Tensor split = Se2Geodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
-        // split = RnGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
+        curveSubdivision = new BSpline3CurveSubdivision(Se2Geodesic.INSTANCE);
+        Tensor result = Nest.of(curveSubdivision::string, curve, 4);
         for (Tensor split : result) {
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(split));
           Path2D path2d = geometricLayer.toPath2D(ARROWHEAD);

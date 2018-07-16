@@ -20,43 +20,43 @@ import junit.framework.TestCase;
 
 public class FourPointCurveSubdivisionTest extends TestCase {
   public void testSimple() {
-    FourPointCurveSubdivision subdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
-    Tensor actual = Nest.of(subdivision::cyclic, tensor, 1);
+    Tensor actual = Nest.of(curveSubdivision::cyclic, tensor, 1);
     assertTrue(ExactScalarQ.all(actual));
     assertEquals(actual, Tensors.fromString("{{1, 0}, {5/8, 5/8}, {0, 1}, {-5/8, 5/8}, {-1, 0}, {-5/8, -5/8}, {0, -1}, {5/8, -5/8}}"));
   }
 
   public void testString() {
-    FourPointCurveSubdivision subdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
     Tensor vector = Tensors.vector(0, 1, 2, 3);
-    Tensor string = subdivision.string(vector);
+    Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Subdivide.of(0, 3, 6));
     assertTrue(ExactScalarQ.all(string));
   }
 
   public void testStringTwo() {
-    FourPointCurveSubdivision subdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
     Tensor vector = Tensors.vector(0, 1);
-    Tensor string = subdivision.string(vector);
+    Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Subdivide.of(0, 1, 2));
     assertTrue(ExactScalarQ.all(string));
   }
 
   public void testStringOne() {
-    FourPointCurveSubdivision subdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
     Tensor vector = Tensors.vector(3);
-    Tensor string = subdivision.string(vector);
+    Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Tensors.vector(3));
     assertTrue(ExactScalarQ.all(string));
   }
 
   public void testSimple1() {
     Tensor curve = Tensors.fromString("{{0,0},{1,0},{0,1}}");
-    TensorUnaryOperator subdivision = //
+    TensorUnaryOperator curveSubdivision = //
         new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
-    Tensor n1 = Nest.of(subdivision, curve, 1);
+    Tensor n1 = Nest.of(curveSubdivision, curve, 1);
     assertEquals(n1.get(0), Array.zeros(2));
     assertEquals(n1.get(1), Tensors.fromString("{9/16, -1/8}"));
     assertEquals(n1.get(2), UnitVector.of(2, 0));

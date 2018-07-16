@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 public class BSpline2CurveSubdivisionTest extends TestCase {
   public void testSimple() {
-    BSpline2CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = subdivision.cyclic(tensor);
@@ -26,11 +26,35 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
   }
 
   public void testString() {
-    BSpline2CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
     Tensor string = subdivision.string(Tensors.vector(10, 11.));
     assertEquals(string, Tensors.vector(10.25, 10.75));
     assertFalse(ExactScalarQ.all(string));
   }
+  public void testStringTwo() {
+    Tensor curve = Tensors.vector(0, 1);
+    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = subdivision.string(curve);
+    assertEquals(refined, Tensors.fromString("{1/4, 3/4}"));
+    assertTrue(ExactScalarQ.all(refined));
+  }
+
+  public void testStringOne() {
+    Tensor curve = Tensors.vector(1);
+    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = subdivision.string(curve);
+    assertEquals(refined, Tensors.fromString("{1}"));
+    assertTrue(ExactScalarQ.all(refined));
+  }
+
+  public void testStringEmpty() {
+    Tensor curve = Tensors.vector();
+    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = subdivision.string(curve);
+    assertTrue(Tensors.isEmpty(refined));
+    assertTrue(ExactScalarQ.all(refined));
+  }
+
 
   public void testSerializable() throws ClassNotFoundException, IOException {
     TensorUnaryOperator fps = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE)::cyclic;

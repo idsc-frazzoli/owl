@@ -41,7 +41,12 @@ public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable 
       return Tensors.empty();
     case 1:
       return tensor.copy();
+    default:
+      return refine(tensor);
     }
+  }
+
+  private Tensor refine(Tensor tensor) {
     Tensor curve = Tensors.empty();
     {
       Tensor q = tensor.get(0);
