@@ -31,6 +31,7 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
     assertEquals(string, Tensors.vector(10.25, 10.75));
     assertFalse(ExactScalarQ.all(string));
   }
+
   public void testStringTwo() {
     Tensor curve = Tensors.vector(0, 1);
     CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
@@ -54,7 +55,6 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
     assertTrue(Tensors.isEmpty(refined));
     assertTrue(ExactScalarQ.all(refined));
   }
-
 
   public void testSerializable() throws ClassNotFoundException, IOException {
     TensorUnaryOperator fps = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
