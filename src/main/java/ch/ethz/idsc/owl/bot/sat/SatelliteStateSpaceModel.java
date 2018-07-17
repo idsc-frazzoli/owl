@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public class SatelliteStateSpaceModel implements StateSpaceModel, Serializable {
+class SatelliteStateSpaceModel implements StateSpaceModel, Serializable {
   /** @param x of the form {px, py, vx, vy}
    * @param u of the form {ux, uy} */
   @Override // from StateSpaceModel

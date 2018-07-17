@@ -10,10 +10,16 @@ import ch.ethz.idsc.tensor.alg.TensorMap;
 public class ImageTensors {
   private static final Scalar TFF = RealScalar.of(255);
 
+  /** @param image
+   * @param rgba
+   * @return b/w image */
   public static Tensor reduce(Tensor image, Tensor rgba) {
     return TensorMap.of(color -> color.equals(rgba) ? TFF : RealScalar.ZERO, image, 2);
   }
 
+  /** @param image
+   * @param channel
+   * @return b/w image */
   public static Tensor reduce(Tensor image, int channel) {
     return TensorMap.of(color -> Scalars.isZero(color.Get(channel)) ? RealScalar.ZERO : TFF, image, 2);
   }

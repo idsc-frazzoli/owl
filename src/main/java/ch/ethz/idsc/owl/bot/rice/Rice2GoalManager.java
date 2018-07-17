@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
-public class Rice2GoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+class Rice2GoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   public static GoalInterface create(Tensor center, Tensor radius) {
     return new Rice2GoalManager(new EllipsoidRegion(center, radius));
   }

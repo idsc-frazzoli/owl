@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -21,6 +22,7 @@ public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable 
 
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
+    ScalarQ.thenThrow(tensor);
     Tensor curve = Tensors.empty();
     for (int index = 0; index < tensor.length(); ++index) {
       Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
@@ -34,6 +36,17 @@ public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable 
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
+    switch (tensor.length()) {
+    case 0:
+      return Tensors.empty();
+    case 1:
+      return tensor.copy();
+    default:
+      return refine(tensor);
+    }
+  }
+
+  private Tensor refine(Tensor tensor) {
     Tensor curve = Tensors.empty();
     {
       Tensor q = tensor.get(0);

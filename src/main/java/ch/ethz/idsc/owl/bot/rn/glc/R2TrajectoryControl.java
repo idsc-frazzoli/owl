@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-public class R2TrajectoryControl extends StateTrajectoryControl {
+class R2TrajectoryControl extends StateTrajectoryControl {
   @Override
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
     Tensor state = tail.state();

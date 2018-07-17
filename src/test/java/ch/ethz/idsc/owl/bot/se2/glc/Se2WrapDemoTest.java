@@ -6,6 +6,7 @@ import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.IdentityWrap;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.DebugUtils;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -24,6 +25,9 @@ public class Se2WrapDemoTest extends TestCase {
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     Scalar error = Norm._2.ofVector(glcNode.state().subtract(Tensors.vector(-0.2, 0, Math.PI * 2)));
     assertTrue(Scalars.lessThan(error, RealScalar.of(0.5)));
+    // FIXME check why failure:
+    // DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
+    // DebugUtils.nodeAmountCompare(trajectoryPlanner);
   }
 
   public void testIdentity() {
@@ -36,5 +40,7 @@ public class Se2WrapDemoTest extends TestCase {
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     Scalar error = Norm._2.ofVector(glcNode.state().subtract(Tensors.vector(-0.2, 0, 0)));
     assertTrue(Scalars.lessThan(error, RealScalar.of(0.5)));
+    DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
+    DebugUtils.nodeAmountCompare(trajectoryPlanner);
   }
 }

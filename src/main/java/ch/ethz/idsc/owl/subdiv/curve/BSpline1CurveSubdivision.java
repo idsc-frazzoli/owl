@@ -25,6 +25,10 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
+    switch (tensor.length()) {
+    case 0:
+      return Tensors.empty();
+    }
     Tensor curve = Tensors.empty();
     int last = tensor.length() - 1;
     for (int index = 0; index < last; /* nothing */ ) {

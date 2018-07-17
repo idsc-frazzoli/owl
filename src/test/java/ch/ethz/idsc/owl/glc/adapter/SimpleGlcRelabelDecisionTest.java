@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.adapter;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;

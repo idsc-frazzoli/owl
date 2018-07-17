@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** controls for position and velocity */
-public class SatelliteControls implements FlowsInterface, Serializable {
+class SatelliteControls implements FlowsInterface, Serializable {
   private static final Tensor ZEROS = N.DOUBLE.of(Array.zeros(2));
   // ---
   private final Scalar amp;

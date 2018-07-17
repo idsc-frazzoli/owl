@@ -3,9 +3,9 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.util.Collections;
 
-import ch.ethz.idsc.owl.glc.adapter.HeuristicQ;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.HeuristicQ;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;

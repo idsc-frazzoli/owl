@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class SatelliteGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
+class SatelliteGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   public static GoalInterface create(Tensor center, Tensor radius) {
     return new SatelliteGoalManager(new EllipsoidRegion(center, radius));
   }

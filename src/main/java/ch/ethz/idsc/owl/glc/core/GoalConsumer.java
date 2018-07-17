@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.core;
 
 import ch.ethz.idsc.tensor.Tensor;
 

@@ -16,13 +16,13 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * the implementation finds the polygon that results from the intersection of a clip region with the given polygons.
  * the polygons are specified as Tensors that contain vertex in counter clock-wise order. */
 public class PolygonClip implements TensorUnaryOperator {
-  /** @param clipper, has to be convex, vertices ordered ccw
+  /** @param clip convex, vertices ordered ccw
    * @return */
   public static TensorUnaryOperator of(Tensor clip) {
     return new PolygonClip(clip);
   }
-  // ---
 
+  // ---
   private final Tensor clip;
 
   private PolygonClip(Tensor clip) {

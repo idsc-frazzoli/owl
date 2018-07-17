@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public class DeltaCoastingControl implements EntityControl, Serializable {
+class DeltaCoastingControl implements EntityControl, Serializable {
   private final ImageGradientInterpolation imageGradientInterpolation;
   private final Scalar u_norm;
 

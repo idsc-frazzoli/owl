@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** agents moves with unit speed, i.e.
  * Euclidean length of line segment equals the time required to traverse */
-public class RnTransition extends AbstractTransition {
+class RnTransition extends AbstractTransition {
   public RnTransition(Tensor start, Tensor end) {
     super(start, end);
   }
@@ -46,6 +46,7 @@ public class RnTransition extends AbstractTransition {
   @Override
   public StateTime splitAt(Scalar t1) {
     // not yet implemented
+    // TODO use RnGeodesic
     throw new RuntimeException();
   }
 }

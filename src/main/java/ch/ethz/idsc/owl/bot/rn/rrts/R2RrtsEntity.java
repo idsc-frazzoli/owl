@@ -9,8 +9,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.gui.ani.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 // LONGTERM the redundancy in R2****Entity shows that re-factoring is needed!
-public class R2RrtsEntity extends AbstractRrtsEntity {
+class R2RrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(0.5);
   // ---

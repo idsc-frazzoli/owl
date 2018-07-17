@@ -32,7 +32,7 @@ enum GeodesicDemo {
         graphics.setColor(new Color(128, 128, 128, 128));
         for (Tensor scalar : Subdivide.of(0, 1, 20)) {
           Tensor split = Se2Geodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
-          split = RnGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
+          // split = RnGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(split));
           Path2D path2d = geometricLayer.toPath2D(ARROWHEAD);
           graphics.fill(path2d);

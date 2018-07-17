@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * class is a simple reference implementation for testing.
  * use {@link RungeKutta45Integrator} for applications */
-/* package */ enum RungeKutta45Reference implements Integrator {
+public enum RungeKutta45Reference implements Integrator {
   INSTANCE;
   // ---
   private static final Scalar W1 = RationalScalar.of(-1, 15);

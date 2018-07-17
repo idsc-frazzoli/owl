@@ -1,5 +1,5 @@
 // code by ynager
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.adapter;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

@@ -6,21 +6,28 @@ import java.awt.image.RescaleOp;
 
 public enum ImageAlpha {
   ;
-  public static BufferedImage scale(BufferedImage image, float scale) {
+  private static final float[] ZEROS = new float[] { 0, 0, 0, 0 };
+
+  public static BufferedImage scale(BufferedImage bufferedImage, float scale) {
     float[] scales;
-    float[] offsets;
-    switch (image.getType()) {
-    case BufferedImage.TYPE_INT_ARGB:
-      scales = new float[] { 1.0f, 1.0f, 1.0f, scale };
-      offsets = new float[] { 0.0f, 0.0f, 0.0f, 0.0f };
-      return new RescaleOp(scales, offsets, null).filter(image, null);
+    switch (bufferedImage.getType()) {
+    case BufferedImage.TYPE_INT_ARGB: // used by the tensor library
+      scales = new float[] { 1, 1, 1, scale };
+      return new RescaleOp(scales, ZEROS, null).filter(bufferedImage, null);
     case BufferedImage.TYPE_4BYTE_ABGR:
-      scales = new float[] { scale, 1.0f, 1.0f, 1.0f };
-      offsets = new float[] { 0.0f, 0.0f, 0.0f, 0.0f };
-      return new RescaleOp(scales, offsets, null).filter(image, null);
-    case BufferedImage.TYPE_BYTE_GRAY:
-      return new RescaleOp(scale, 0.0f, null).filter(image, null);
+      scales = new float[] { scale, 1, 1, 1 };
+      return new RescaleOp(scales, ZEROS, null).filter(bufferedImage, null);
+    default:
+      throw new RuntimeException();
     }
-    return image;
+  }
+
+  public static BufferedImage grayscale(BufferedImage image, float scale) {
+    switch (image.getType()) {
+    case BufferedImage.TYPE_BYTE_GRAY:
+      return new RescaleOp(scale, (1 - scale) * 256, null).filter(image, null);
+    default:
+      throw new RuntimeException();
+    }
   }
 }

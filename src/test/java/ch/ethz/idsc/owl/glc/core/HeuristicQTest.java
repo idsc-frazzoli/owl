@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.adapter;
+package ch.ethz.idsc.owl.glc.core;
 
 import ch.ethz.idsc.owl.bot.se2.ScaledLateralAcceleration;
 import ch.ethz.idsc.owl.bot.se2.Se2LateralAcceleration;

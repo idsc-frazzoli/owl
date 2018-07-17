@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** Single Integrator with friction
  * 
  * implementation for n-dimensional velocity */
-public class Duncan2StateSpaceModel implements StateSpaceModel, Serializable {
+class Duncan2StateSpaceModel implements StateSpaceModel, Serializable {
   private final Scalar lambda;
 
   /** @param lambda non-negative friction coefficient typically with unit [s^-1] */

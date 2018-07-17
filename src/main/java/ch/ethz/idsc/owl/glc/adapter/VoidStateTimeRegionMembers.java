@@ -7,6 +7,7 @@ import java.util.Collections;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.StateTimeRegionCallback;
 
+// TODO functionality is not used
 public enum VoidStateTimeRegionMembers implements StateTimeRegionCallback {
   INSTANCE;
   // ---

@@ -1,5 +1,5 @@
 // code by jl
-package ch.ethz.idsc.owl.glc.adapter;
+package ch.ethz.idsc.owl.glc.std;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,7 +8,10 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.tree.Nodes;
+import ch.ethz.idsc.owl.glc.adapter.GlcNodes;
+import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.HeuristicQ;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalars;
 
@@ -16,14 +19,14 @@ public enum DebugUtils {
   ;
   // ---
   // function for convenience
-  public static final void nodeAmountCompare(TrajectoryPlanner trajectoryPlanner) {
+  public static void nodeAmountCompare(TrajectoryPlanner trajectoryPlanner) {
     nodeAmountCompare( //
         Nodes.rootFrom(trajectoryPlanner.getBestOrElsePeek().get()), //
         trajectoryPlanner.getDomainMap().size());
   }
 
   // ---
-  private static final void nodeAmountCompare(GlcNode best, int size) {
+  private static void nodeAmountCompare(GlcNode best, int size) {
     final GlcNode root = Nodes.rootFrom(best);
     if (size != Nodes.ofSubtree(root).size()) {
       System.out.println("****NODE CHECK****");
@@ -33,7 +36,7 @@ public enum DebugUtils {
     }
   }
 
-  public static final void connectivityCheck(Collection<GlcNode> treeCollection) {
+  public static void connectivityCheck(Collection<GlcNode> treeCollection) {
     Iterator<GlcNode> iterator = treeCollection.iterator();
     while (iterator.hasNext()) {
       GlcNode node = iterator.next();
@@ -53,7 +56,7 @@ public enum DebugUtils {
   /** Checks if the Cost and the Heuristic along the found trajectory are consistent
    * 
    * @param trajectoryPlanner */
-  public static final void heuristicConsistencyCheck(TrajectoryPlanner trajectoryPlanner) {
+  public static void heuristicConsistencyCheck(TrajectoryPlanner trajectoryPlanner) {
     Optional<GlcNode> finalNode = DebugUtils.getFinalGoalNode(trajectoryPlanner);
     if (!finalNode.isPresent()) {
       System.out.println("No Final GoalNode, therefore no ConsistencyCheck");

@@ -7,6 +7,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.data.tree.Node;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.DebugUtils;
 import junit.framework.TestCase;
 
 public class PsuDemoTest extends TestCase {
@@ -17,5 +18,7 @@ public class PsuDemoTest extends TestCase {
     assertTrue(100 < values.size());
     long count = values.stream().map(Node::parent).filter(Objects::isNull).count();
     assertEquals(count, 1);
+    DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
+    DebugUtils.nodeAmountCompare(trajectoryPlanner);
   }
 }

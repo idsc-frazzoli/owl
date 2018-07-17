@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 
-public class ImageGradientCostFunction implements CostFunction, Serializable {
+class ImageGradientCostFunction implements CostFunction, Serializable {
   private final ImageGradientInterpolation imageGradientInterpolation;
 
   public ImageGradientCostFunction(ImageGradientInterpolation imageGradientInterpolation) {

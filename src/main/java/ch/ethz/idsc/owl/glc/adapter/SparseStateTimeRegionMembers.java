@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** distinguishes the first 2 coordinates of StateTime::state */
-public class SparseStateTimeRegionMembers implements StateTimeRegionCallback, Serializable {
+class SparseStateTimeRegionMembers implements StateTimeRegionCallback, Serializable {
   /** magic constants of scale are not universal but are suitable for most examples */
   private final RasterMap<StateTime> rasterMap = new LinearRasterMap<>(Tensors.vector(10, 10));
 

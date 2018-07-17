@@ -1,8 +1,9 @@
 // code by jph, ynager
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.adapter;
 
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.RelabelDecision;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;

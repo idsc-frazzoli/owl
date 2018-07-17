@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
-import ch.ethz.idsc.owl.glc.adapter.HeuristicQ;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
+import ch.ethz.idsc.owl.glc.core.HeuristicQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;

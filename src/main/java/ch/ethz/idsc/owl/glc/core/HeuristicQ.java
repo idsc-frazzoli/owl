@@ -1,9 +1,7 @@
 // code by jl
-package ch.ethz.idsc.owl.glc.adapter;
+package ch.ethz.idsc.owl.glc.core;
 
 import java.util.Objects;
-
-import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 
 /** class contains static utility function that operate on instances of the {@link HeuristicFunction}
  * to test for the implementation of a heuristic */
