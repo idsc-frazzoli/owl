@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 
 enum StaticHelper {
   ;
-  static Tensor curvature(Tensor curve) {
+  static Tensor curvature(Tensor curve, Scalar scale) {
     Tensor tensor = Tensors.empty();
     for (int index = 1; index < curve.length() - 1; ++index) {
       Tensor a = curve.get(index - 1).extract(0, 2);
@@ -21,8 +21,9 @@ enum StaticHelper {
       Optional<Scalar> optional = SignedCurvature2D.of(a, b, c);
       if (optional.isPresent()) {
         Scalar curvature = optional.get();
+        Scalar factor = curvature.multiply(scale);
         Tensor normal = Normalize.of(Cross2D.of(c.subtract(a)));
-        tensor.append(b.add(normal.multiply(curvature)));
+        tensor.append(b.add(normal.multiply(factor)));
       } else
         System.err.println("curve undefined");
     }
