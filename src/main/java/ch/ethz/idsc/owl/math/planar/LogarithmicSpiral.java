@@ -2,11 +2,13 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.lie.AngleVector;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Exp;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** https://en.wikipedia.org/wiki/Logarithmic_spiral */
-public class LogarithmicSpiral implements ScalarUnaryOperator {
+public class LogarithmicSpiral implements ScalarTensorFunction {
   private final Scalar a;
   private final Scalar b;
 
@@ -17,8 +19,9 @@ public class LogarithmicSpiral implements ScalarUnaryOperator {
     this.b = b;
   }
 
-  @Override
-  public Scalar apply(Scalar theta) {
-    return a.multiply(Exp.FUNCTION.apply(b.multiply(theta)));
+  @Override // from ScalarTensorFunction
+  public Tensor apply(Scalar theta) {
+    Scalar radius = a.multiply(Exp.FUNCTION.apply(b.multiply(theta)));
+    return AngleVector.of(theta).multiply(radius);
   }
 }

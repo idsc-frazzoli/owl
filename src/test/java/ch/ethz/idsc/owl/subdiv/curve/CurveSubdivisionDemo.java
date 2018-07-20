@@ -49,12 +49,11 @@ class CurveSubdivisionDemo {
   private final TimerFrame timerFrame = new TimerFrame();
   private Tensor mouse = Array.zeros(3);
   private Integer min_index = null;
-  private static final Tensor FCURVE =
-      // LogarithmicSpiralCurve.of(RealScalar.of(2), RealScalar.of(0.1759));
-      // Nest.of( //
-      // new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic, //
-      // DUBILAB, 5);
-      FresnelCurve.of(300).multiply(RealScalar.of(10));
+  private static final Tensor FCURVE = LogarithmicSpiralCurve.of(RealScalar.of(2), RealScalar.of(0.1759));
+  // Nest.of( //
+  // new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic, //
+  // DUBILAB, 5);
+  // FresnelCurve.of(300).multiply(RealScalar.of(10));
 
   CurveSubdivisionDemo() {
     SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
@@ -125,8 +124,8 @@ class CurveSubdivisionDemo {
           // Scalar z = ComplexScalar.fromPolar(logarithmicSpiral.apply(theta), theta);
           // path.append(Tensors.of(Real.of(z), Imag.of(z)));
           // }
-          // graphics.setColor(new Color(128 - 64, 255, 128, 255));
-          // graphics.draw(geometricLayer.toPath2D(FCURVE));
+          graphics.setColor(new Color(128 - 64, 255, 128, 255));
+          graphics.draw(geometricLayer.toPath2D(FCURVE));
         }
         Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
         boolean isR2 = jToggleButton.isSelected();
