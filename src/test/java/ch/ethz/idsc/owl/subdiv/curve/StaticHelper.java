@@ -24,8 +24,9 @@ enum StaticHelper {
         Scalar factor = curvature.multiply(scale);
         Tensor normal = Normalize.of(Cross2D.of(c.subtract(a)));
         tensor.append(b.add(normal.multiply(factor)));
-      } else
-        System.err.println("curve undefined");
+      }
+      // else
+      // System.err.println("curve undefined");
     }
     return tensor;
   }

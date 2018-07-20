@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 public enum FresnelCurve {
   ;
   public static Tensor of(int n) {
-    return Subdivide.of(-6, 6, 1000) //
+    return Subdivide.of(-5, 5, 1000) //
         .map(t -> Tensors.of(FresnelC.FUNCTION.apply(t), FresnelS.FUNCTION.apply(t)));
   }
 }

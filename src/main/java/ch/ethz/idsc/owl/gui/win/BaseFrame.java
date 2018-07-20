@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.gui.win;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -31,6 +32,7 @@ public class BaseFrame {
   protected BaseFrame() {
     jFrame.setBounds(100, 50, 800, 800);
     jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    jToolBar.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
     jToolBar.setFloatable(false);
     {
       JButton jButton = new JButton("save2png");

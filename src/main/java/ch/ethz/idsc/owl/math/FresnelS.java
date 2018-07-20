@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public enum FresnelS implements ScalarUnaryOperator {
   FUNCTION;
   // ---
-  private static final Clip CLIP = Clip.function(0, 6);
+  private static final Clip CLIP = Clip.function(0, 5);
 
   @Override
   public Scalar apply(Scalar x) {

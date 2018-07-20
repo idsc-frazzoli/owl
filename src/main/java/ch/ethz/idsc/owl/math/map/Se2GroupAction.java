@@ -27,7 +27,7 @@ public class Se2GroupAction implements LieGroupAction, Serializable {
 
   /** @param tensor of the form {px, py, angle}
    * @return vector of length 3 */
-  @Override
+  @Override // from LieGroupAction
   public Tensor circ(Tensor tensor) {
     Scalar qx = tensor.Get(0);
     Scalar qy = tensor.Get(1);
@@ -38,7 +38,7 @@ public class Se2GroupAction implements LieGroupAction, Serializable {
         pa.add(qa));
   }
 
-  @Override
+  @Override // from LieGroupAction
   public Tensor inverse() {
     return Tensors.of( //
         px.multiply(ca).add(py.multiply(sa)).negate(), //

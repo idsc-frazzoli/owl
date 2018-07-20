@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Arg;
 
 /** inspired by Mathematica's documentation of Gamma */
-enum FresnelDemo {
+public enum FresnelDemo {
   ;
   // ---
   private static final int RES = 128 + 64;
