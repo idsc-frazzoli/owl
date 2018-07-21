@@ -142,7 +142,7 @@ class CurveSubdivisionDemo {
             graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
-          CurveSubdivision curveSubdivision = function.apply(Se2CoverGeodesic.INSTANCE);
+          CurveSubdivision curveSubdivision = function.apply(Se2CoveringGeodesic.INSTANCE);
           TensorUnaryOperator tuo = isCyclic //
               ? curveSubdivision::cyclic
               : curveSubdivision::string;

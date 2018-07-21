@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
-import ch.ethz.idsc.owl.math.map.Se2GroupAction;
+import ch.ethz.idsc.owl.math.map.Se2CoveringGroupAction;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** measures difference between p and q in SE2 Lie-Group relative to p
@@ -13,7 +13,7 @@ public class Se2GroupWrap extends Se2Wrap {
 
   @Override // from Se2Wrap
   protected Tensor difference(Tensor p, Tensor q) {
-    Tensor p_inv = new Se2GroupAction(p).inverse();
-    return new Se2GroupAction(p_inv).circ(q);
+    Tensor p_inv = new Se2CoveringGroupAction(p).inverse();
+    return new Se2CoveringGroupAction(p_inv).combine(q);
   }
 }

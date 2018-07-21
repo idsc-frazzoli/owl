@@ -31,8 +31,8 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
       Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % tensor.length());
-      Tensor t = tensor.get((index + 2) % tensor.length());
-      curve.append(q).append(center(p, q, r, t));
+      Tensor s = tensor.get((index + 2) % tensor.length());
+      curve.append(q).append(center(p, q, r, s));
     }
     return curve;
   }
@@ -54,8 +54,8 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
       Tensor p = tensor.get(index - 1);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get(index + 1);
-      Tensor t = tensor.get(index + 2);
-      curve.append(q).append(center(p, q, r, t));
+      Tensor s = tensor.get(index + 2);
+      curve.append(q).append(center(p, q, r, s));
     }
     {
       Tensor p = tensor.get(last + 1);
@@ -69,11 +69,11 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
   /** @param p
    * @param q
    * @param r
-   * @param t
+   * @param s
    * @return point between q and r */
-  private Tensor center(Tensor p, Tensor q, Tensor r, Tensor t) {
+  private Tensor center(Tensor p, Tensor q, Tensor r, Tensor s) {
     Tensor pq = geodesicInterface.split(p, q, P9_8);
-    Tensor rt = geodesicInterface.split(r, t, N1_8);
+    Tensor rt = geodesicInterface.split(r, s, N1_8);
     return geodesicInterface.split(pq, rt, RationalScalar.HALF);
   }
 

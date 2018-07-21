@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
-public class Se2GroupAction implements LieGroupAction, Serializable {
+public class Se2CoveringGroupAction implements LieGroupAction, Serializable {
   private final Scalar px;
   private final Scalar py;
   private final Scalar pa;
@@ -17,7 +17,7 @@ public class Se2GroupAction implements LieGroupAction, Serializable {
   private final Scalar sa;
 
   /** @param xya == {px, py, angle} as member of Lie group SE2 */
-  public Se2GroupAction(Tensor xya) {
+  public Se2CoveringGroupAction(Tensor xya) {
     px = xya.Get(0);
     py = xya.Get(1);
     pa = xya.Get(2);
@@ -28,7 +28,7 @@ public class Se2GroupAction implements LieGroupAction, Serializable {
   /** @param tensor of the form {px, py, angle}
    * @return vector of length 3 */
   @Override // from LieGroupAction
-  public Tensor circ(Tensor tensor) {
+  public Tensor combine(Tensor tensor) {
     Scalar qx = tensor.Get(0);
     Scalar qy = tensor.Get(1);
     Scalar qa = tensor.Get(2);

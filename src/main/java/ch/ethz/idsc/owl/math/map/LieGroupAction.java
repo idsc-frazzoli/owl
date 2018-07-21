@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public interface LieGroupAction {
   /** @param tensor
    * @return this element . tensor */
-  Tensor circ(Tensor tensor);
+  Tensor combine(Tensor tensor);
 
   /** @return inverse of this element */
   Tensor inverse();
