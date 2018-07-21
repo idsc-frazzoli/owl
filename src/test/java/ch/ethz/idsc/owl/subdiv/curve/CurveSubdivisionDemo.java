@@ -106,34 +106,21 @@ class CurveSubdivisionDemo {
         if (Objects.nonNull(min_index))
           control.set(mouse, min_index);
         {
-          // LogarithmicSpiral logarithmicSpiral = new LogarithmicSpiral(RealScalar.of(2), RealScalar.of(0.1759));
-          // Tensor path = Tensors.empty();
-          // for (Tensor _r : Subdivide.of(0, 20, 100)) {
-          // Scalar theta = _r.Get();
-          // Scalar z = ComplexScalar.fromPolar(logarithmicSpiral.apply(theta), theta);
-          // path.append(Tensors.of(Real.of(z), Imag.of(z)));
-          // }
-          // graphics.setColor(new Color(128, 128, 128, 128));
-          // graphics.draw(geometricLayer.toPath2D(path));
-        }
-        {
-          // LogarithmicSpiral logarithmicSpiral = new LogarithmicSpiral(RealScalar.of(2), RealScalar.of(0.1759));
-          // Tensor path = Tensors.empty();
-          // for (Tensor _r : Subdivide.of(0, 20, 100)) {
-          // Scalar theta = _r.Get();
-          // Scalar z = ComplexScalar.fromPolar(logarithmicSpiral.apply(theta), theta);
-          // path.append(Tensors.of(Real.of(z), Imag.of(z)));
-          // }
           graphics.setColor(new Color(128 - 64, 255, 128, 255));
           graphics.draw(geometricLayer.toPath2D(FCURVE));
         }
         Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
         boolean isR2 = jToggleButton.isSelected();
+        boolean isCyclic = jToggleCyclic.isSelected();
         int levels = spinnerRefine.getValue();
+        final Tensor refined;
         if (isR2) {
           CurveSubdivision curveSubdivision = function.apply(RnGeodesic.INSTANCE);
           Tensor rnctrl = Tensor.of(control.stream().map(ExtractXY::of));
-          Tensor refined = Nest.of(curveSubdivision::cyclic, rnctrl, levels);
+          TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
+              ? curveSubdivision::cyclic
+              : curveSubdivision::string;
+          refined = Nest.of(tuo, rnctrl, levels);
           {
             graphics.setColor(new Color(0, 0, 255, 128));
             graphics.draw(geometricLayer.toPath2D(refined));
@@ -143,14 +130,6 @@ class CurveSubdivisionDemo {
             geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
             graphics.fill(geometricLayer.toPath2D(CIRCLE_HI));
             geometricLayer.popMatrix();
-          }
-          {
-            graphics.setColor(Color.BLUE);
-            graphics.draw(geometricLayer.toPath2D(refined));
-            if (jToggleComb.isSelected()) {
-              graphics.setColor(COLOR_CURVATURE_COMB);
-              graphics.draw(geometricLayer.toPath2D(CurvatureComb.of(refined, SCALE)));
-            }
           }
         } else {
           for (Tensor point : control) {
@@ -164,10 +143,10 @@ class CurveSubdivisionDemo {
             geometricLayer.popMatrix();
           }
           CurveSubdivision curveSubdivision = function.apply(Se2CoverGeodesic.INSTANCE);
-          TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
+          TensorUnaryOperator tuo = isCyclic //
               ? curveSubdivision::cyclic
               : curveSubdivision::string;
-          Tensor refined = Nest.of(tuo, control, levels);
+          refined = Nest.of(tuo, control, levels);
           if (levels < 5) {
             graphics.setColor(new Color(128, 128, 128, 128));
             for (Tensor point : refined) {
@@ -176,14 +155,20 @@ class CurveSubdivisionDemo {
               geometricLayer.popMatrix();
             }
           }
-          {
-            graphics.setColor(Color.BLUE);
-            graphics.draw(geometricLayer.toPath2D(refined));
-            if (jToggleComb.isSelected()) {
-              graphics.setColor(COLOR_CURVATURE_COMB);
-              graphics.draw(geometricLayer.toPath2D(CurvatureComb.of(refined, SCALE)));
-            }
-          }
+        }
+        {
+          graphics.setColor(Color.BLUE);
+          Path2D path2d = geometricLayer.toPath2D(refined);
+          if (isCyclic)
+            path2d.closePath();
+          graphics.draw(path2d);
+        }
+        if (jToggleComb.isSelected()) {
+          graphics.setColor(COLOR_CURVATURE_COMB);
+          Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, SCALE, isCyclic));
+          if (isCyclic)
+            path2d.closePath();
+          graphics.draw(path2d);
         }
         if (Objects.isNull(min_index)) {
           graphics.setColor(Color.GREEN);
