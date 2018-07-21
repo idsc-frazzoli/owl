@@ -25,8 +25,8 @@ public class Se2UtilsTest extends TestCase {
     for (int n = -5; n <= 5; ++n) {
       double value = 1 + 2 * Math.PI * n;
       Tensor g = Tensors.vector(2, 3, value);
-      Tensor x = Se2Utils.log(g);
-      Tensor exp_x = Se2Utils.exp(x);
+      Tensor x = Se2CoveringExponential.INSTANCE.log(g);
+      Tensor exp_x = Se2CoveringExponential.INSTANCE.exp(x);
       assertEquals(exp_x.Get(2), RealScalar.of(value));
       assertTrue(Chop._13.close(g, exp_x));
     }
@@ -36,8 +36,8 @@ public class Se2UtilsTest extends TestCase {
     for (int n = -5; n <= 5; ++n) {
       double value = 1 + 2 * Math.PI * n;
       Tensor x = Tensors.vector(2, 3, value);
-      Tensor g = Se2Utils.exp(x);
-      Tensor log_g = Se2Utils.log(g);
+      Tensor g = Se2CoveringExponential.INSTANCE.exp(x);
+      Tensor log_g = Se2CoveringExponential.INSTANCE.log(g);
       assertTrue(Chop._13.close(x, log_g));
     }
   }
@@ -46,8 +46,8 @@ public class Se2UtilsTest extends TestCase {
     Distribution distribution = UniformDistribution.of(-25, 25);
     for (int index = 0; index < 10; ++index) {
       Tensor x = RandomVariate.of(distribution, 3);
-      Tensor g = Se2Utils.exp(x);
-      Tensor log_g = Se2Utils.log(g);
+      Tensor g = Se2CoveringExponential.INSTANCE.exp(x);
+      Tensor log_g = Se2CoveringExponential.INSTANCE.log(g);
       assertTrue(Chop._10.close(x, log_g));
     }
   }
@@ -56,8 +56,8 @@ public class Se2UtilsTest extends TestCase {
     Distribution distribution = UniformDistribution.of(-25, 25);
     for (int index = 0; index < 10; ++index) {
       Tensor g = RandomVariate.of(distribution, 3);
-      Tensor x = Se2Utils.log(g);
-      Tensor exp_x = Se2Utils.exp(x);
+      Tensor x = Se2CoveringExponential.INSTANCE.log(g);
+      Tensor exp_x = Se2CoveringExponential.INSTANCE.exp(x);
       assertTrue(Chop._10.close(g, exp_x));
     }
   }
@@ -66,8 +66,8 @@ public class Se2UtilsTest extends TestCase {
     Distribution distribution = UniformDistribution.of(-5, 5);
     for (int index = 0; index < 10; ++index) {
       Tensor x = RandomVariate.of(distribution, 2).append(RealScalar.ZERO);
-      Tensor g0 = Se2Utils.exp(x);
-      Tensor x2 = Se2Utils.log(g0);
+      Tensor g0 = Se2CoveringExponential.INSTANCE.exp(x);
+      Tensor x2 = Se2CoveringExponential.INSTANCE.log(g0);
       assertTrue(Chop._13.close(x, x2));
     }
   }
@@ -88,18 +88,18 @@ public class Se2UtilsTest extends TestCase {
 
   public void testG0() {
     Tensor u = Tensors.vector(1.2, 0, 0);
-    Tensor m = Se2Utils.exp(u);
+    Tensor m = Se2CoveringExponential.INSTANCE.exp(u);
     assertEquals(m, u);
   }
 
   public void testSome() {
     Tensor u = Tensors.vector(1.2, 0, 0.75);
-    Tensor m = Se2Utils.toSE2Matrix(Se2Utils.exp(u));
+    Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u));
     Tensor p = Tensors.vector(-2, 3);
     Tensor v = m.dot(p.copy().append(RealScalar.ONE));
-    Tensor r = Se2Integrator.INSTANCE.spin(Se2Utils.exp(u), p.append(RealScalar.ZERO));
+    Tensor r = Se2Integrator.INSTANCE.spin(Se2CoveringExponential.INSTANCE.exp(u), p.append(RealScalar.ZERO));
     assertEquals(r.extract(0, 2), v.extract(0, 2));
-    Se2ForwardAction se2ForwardAction = new Se2ForwardAction(Se2Utils.exp(u));
+    Se2ForwardAction se2ForwardAction = new Se2ForwardAction(Se2CoveringExponential.INSTANCE.exp(u));
     assertEquals(se2ForwardAction.apply(p), v.extract(0, 2));
   }
 

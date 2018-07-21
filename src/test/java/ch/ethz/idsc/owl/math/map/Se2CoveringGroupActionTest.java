@@ -52,7 +52,7 @@ public class Se2CoveringGroupActionTest extends TestCase {
       Tensor xya = RandomVariate.of(distribution, 3);
       Se2CoveringGroupAction se2GroupAction = new Se2CoveringGroupAction(xya);
       Tensor v = RandomVariate.of(distribution, 3);
-      Tensor other = Se2Utils.exp(v);
+      Tensor other = Se2CoveringExponential.INSTANCE.exp(v);
       Tensor result = se2GroupAction.combine(other);
       Tensor prod = Se2Integrator.INSTANCE.spin(xya, v);
       assertTrue(Chop._10.close(prod, result));

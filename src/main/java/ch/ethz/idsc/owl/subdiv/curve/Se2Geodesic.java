@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import ch.ethz.idsc.owl.math.map.Se2CoveringExponential;
 import ch.ethz.idsc.owl.math.map.Se2CoveringGroupAction;
 import ch.ethz.idsc.owl.math.map.Se2Integrator;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
@@ -19,7 +19,7 @@ public enum Se2Geodesic implements GeodesicInterface {
     Tensor p_inv = new Se2CoveringGroupAction(p).inverse();
     Tensor delta = new Se2CoveringGroupAction(p_inv).combine(q);
     delta.set(MOD_DISTANCE, INDEX_ANGLE);
-    Tensor x = Se2Utils.log(delta).multiply(scalar);
+    Tensor x = Se2CoveringExponential.INSTANCE.log(delta).multiply(scalar);
     return Se2Integrator.INSTANCE.spin(p, x);
   }
 }
