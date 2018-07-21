@@ -37,4 +37,13 @@ public class Cross2DTest extends TestCase {
       // ---
     }
   }
+
+  public void testFailNull() {
+    try {
+      Cross2D.of(null);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

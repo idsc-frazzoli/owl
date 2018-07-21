@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 
-/** linear subdivision
+/** linear B-spline
  * 
  * the scheme interpolates the control points */
 public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable {
@@ -25,10 +25,8 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
-    switch (tensor.length()) {
-    case 0:
+    if (Tensors.isEmpty(tensor))
       return Tensors.empty();
-    }
     Tensor curve = Tensors.empty();
     int last = tensor.length() - 1;
     for (int index = 0; index < last; /* nothing */ ) {

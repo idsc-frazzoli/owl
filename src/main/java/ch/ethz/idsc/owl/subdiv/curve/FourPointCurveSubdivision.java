@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+/** C1 four-point scheme
+ * Dubuc 1986, Dyn/Gregory/Levin 1987 */
 public class FourPointCurveSubdivision implements CurveSubdivision, Serializable {
   private final static Scalar N1_8 = RationalScalar.of(-1, 8);
   private final static Scalar P9_8 = RationalScalar.of(+9, 8);
@@ -37,14 +39,9 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
-    switch (tensor.length()) {
-    case 0:
-      return Tensors.empty();
-    case 1:
-      return tensor.copy();
-    case 2:
+    if (tensor.length() < 3)
       return new BSpline3CurveSubdivision(geodesicInterface).string(tensor);
-    }
+    // ---
     Tensor curve = Tensors.empty();
     {
       Tensor p = tensor.get(0);
