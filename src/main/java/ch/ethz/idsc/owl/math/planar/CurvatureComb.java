@@ -13,35 +13,35 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 
 public enum CurvatureComb {
   ;
-  /** @param curve
+  /** @param tensor
    * @param scalar
-   * @return curve + normal * curvature * scalar */
-  public static Tensor of(Tensor curve, Scalar scalar) {
-    if (Tensors.isEmpty(curve))
+   * @return tensor + normal * curvature * scalar */
+  public static Tensor of(Tensor tensor, Scalar scalar) {
+    if (Tensors.isEmpty(tensor))
       return Tensors.empty();
-    List<Integer> dims = Dimensions.of(curve);
+    List<Integer> dims = Dimensions.of(tensor);
     if (2 < dims.get(1))
-      curve = Tensor.of(curve.stream().map(ExtractXY::of));
-    return curve.add(string(curve).multiply(scalar));
+      tensor = Tensor.of(tensor.stream().map(ExtractXY::of));
+    return tensor.add(string(tensor).multiply(scalar));
   }
 
-  /** @param curve of dimension n x 2
-   * @return normals of dimension n x 2 scaled according to curvature */
-  public static Tensor string(Tensor curve) {
-    Tensor tensor = Tensors.empty();
-    if (0 < curve.length())
-      tensor.append(Array.zeros(2));
-    for (int index = 1; index < curve.length() - 1; ++index) {
-      Tensor a = curve.get(index - 1).extract(0, 2);
-      Tensor b = curve.get(index + 0).extract(0, 2);
-      Tensor c = curve.get(index + 1).extract(0, 2);
+  /** @param tensor of dimension n x 2
+   * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
+  public static Tensor string(Tensor tensor) {
+    Tensor normal = Tensors.empty();
+    if (0 < tensor.length())
+      normal.append(Array.zeros(2));
+    for (int index = 1; index < tensor.length() - 1; ++index) {
+      Tensor a = tensor.get(index - 1).extract(0, 2);
+      Tensor b = tensor.get(index + 0).extract(0, 2);
+      Tensor c = tensor.get(index + 1).extract(0, 2);
       Optional<Scalar> optional = SignedCurvature2D.of(a, b, c);
-      tensor.append(optional.isPresent() //
+      normal.append(optional.isPresent() //
           ? Normalize.of(Cross2D.of(c.subtract(a))).multiply(optional.get())
           : Array.zeros(2));
     }
-    if (1 < curve.length())
-      tensor.append(Array.zeros(2));
-    return tensor;
+    if (1 < tensor.length())
+      normal.append(Array.zeros(2));
+    return normal;
   }
 }
