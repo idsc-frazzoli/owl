@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
-import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
@@ -20,6 +19,8 @@ import ch.ethz.idsc.owl.gui.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.math.planar.CurvatureComb;
+import ch.ethz.idsc.owl.math.planar.ExtractXY;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -77,13 +78,12 @@ class CurveSubdivisionDemo {
       JButton jButton = new JButton("print");
       jButton.addActionListener(actionEvent -> {
         System.out.println(control);
-        long now = System.currentTimeMillis();
-        File file = new File("src/main/resources/subdiv/se2", now + ".csv");
+        // long now = System.currentTimeMillis();
+        // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
         try {
           // Export.of(file, control.map(CsvFormat.strict()));
-        } catch (Exception e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        } catch (Exception exception) {
+          exception.printStackTrace();
         }
       });
       timerFrame.jToolBar.add(jButton);
@@ -149,7 +149,7 @@ class CurveSubdivisionDemo {
             graphics.draw(geometricLayer.toPath2D(refined));
             if (jToggleComb.isSelected()) {
               graphics.setColor(COLOR_CURVATURE_COMB);
-              graphics.draw(geometricLayer.toPath2D(StaticHelper.curvature(refined, SCALE)));
+              graphics.draw(geometricLayer.toPath2D(CurvatureComb.of(refined, SCALE)));
             }
           }
         } else {
@@ -181,7 +181,7 @@ class CurveSubdivisionDemo {
             graphics.draw(geometricLayer.toPath2D(refined));
             if (jToggleComb.isSelected()) {
               graphics.setColor(COLOR_CURVATURE_COMB);
-              graphics.draw(geometricLayer.toPath2D(StaticHelper.curvature(refined, SCALE)));
+              graphics.draw(geometricLayer.toPath2D(CurvatureComb.of(refined, SCALE)));
             }
           }
         }

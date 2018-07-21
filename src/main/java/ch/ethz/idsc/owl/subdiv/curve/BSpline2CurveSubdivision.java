@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 
+/** quadratic B-spline
+ * Chaikin 1965 */
 public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _3_4 = RationalScalar.of(3, 4);

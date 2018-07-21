@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+/** cubic B-spline */
 public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _2_4 = RationalScalar.of(2, 4);

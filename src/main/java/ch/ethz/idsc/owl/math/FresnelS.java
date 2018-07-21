@@ -21,9 +21,9 @@ public enum FresnelS implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
+    CLIP.requireInside(x.abs());
     if (ExactScalarQ.of(x))
       x = N.DOUBLE.apply(x);
-    CLIP.requireInside(x.abs());
     Scalar sum = RealScalar.ZERO;
     Scalar last;
     int n = 0;
