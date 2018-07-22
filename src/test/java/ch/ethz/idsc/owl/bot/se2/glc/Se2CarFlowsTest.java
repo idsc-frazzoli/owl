@@ -6,7 +6,7 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
-import ch.ethz.idsc.owl.math.map.Se2Integrator;
+import ch.ethz.idsc.owl.math.map.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -39,7 +39,7 @@ public class Se2CarFlowsTest extends TestCase {
     // System.out.println(u);
     Scalar half_turn = DoubleScalar.of(Math.PI).divide(u.Get(2));
     // System.out.println(half_turn);
-    Tensor res = Se2Integrator.INSTANCE.spin(origin, u.multiply(half_turn));
+    Tensor res = Se2CoveringIntegrator.INSTANCE.spin(origin, u.multiply(half_turn));
     res = res.map(Chop._12);
     // System.out.println(res);
     Scalar radius = res.Get(1).divide(RealScalar.of(2));

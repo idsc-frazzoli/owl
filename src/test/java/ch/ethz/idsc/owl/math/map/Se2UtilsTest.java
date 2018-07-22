@@ -97,7 +97,7 @@ public class Se2UtilsTest extends TestCase {
     Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u));
     Tensor p = Tensors.vector(-2, 3);
     Tensor v = m.dot(p.copy().append(RealScalar.ONE));
-    Tensor r = Se2Integrator.INSTANCE.spin(Se2CoveringExponential.INSTANCE.exp(u), p.append(RealScalar.ZERO));
+    Tensor r = Se2CoveringIntegrator.INSTANCE.spin(Se2CoveringExponential.INSTANCE.exp(u), p.append(RealScalar.ZERO));
     assertEquals(r.extract(0, 2), v.extract(0, 2));
     Se2ForwardAction se2ForwardAction = new Se2ForwardAction(Se2CoveringExponential.INSTANCE.exp(u));
     assertEquals(se2ForwardAction.apply(p), v.extract(0, 2));
