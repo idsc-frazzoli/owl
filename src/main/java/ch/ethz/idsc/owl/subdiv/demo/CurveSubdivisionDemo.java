@@ -61,6 +61,7 @@ class CurveSubdivisionDemo {
   // new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic, //
   // DUBILAB, 5);
   // FresnelCurve.of(300).multiply(RealScalar.of(10));
+  private boolean printref = false;
 
   CurveSubdivisionDemo() {
     // BufferedImage image = ImageIO.read(UserHome.file("trebleclef25.png"));
@@ -99,9 +100,13 @@ class CurveSubdivisionDemo {
         Tensors.fromString("{{1,0,0},{1,0,0},{4,-1,3.1415/2},{2,0,3.14159},{1,0,3.14159}}"));
     control = DubinsGenerator.of(Tensors.vector(0, 0, Math.PI / 4 - .15), //
         Tensors.fromString("{{1.5,0,0},{1.5,0,0},{9,0,7.85398},{3,0,0},{1.5,0,0}}"));
-    control = DubinsGenerator.of(Tensors.vector(0, 0, 0), //
-        Tensors
-            .fromString("{{3,0,3.141592653589793},{2.5,0,-3.141592653589793},{2,0,3.141592653589793},{1.5,0,-3.141592653589793},{1.0,0,3.141592653589793}}"));
+    control = DubinsGenerator.of(Tensors.vector(0, 0, 0), Tensors.fromString( //
+        "{{3,0,3.141592653589793},{2.5,0,-3.141592653589793},{2,0,3.141592653589793},{1.5,0,-3.141592653589793},{1.0,0,3.141592653589793}}"));
+    // dubins intro
+    control = DubinsGenerator.of(Tensors.vector(0, 0, 3.1 + 1), Tensors.fromString( //
+        "{{2,0,0},{3.5,0,-4.5},{3.5,0,0},{1.6,0,3},{2.3,0,2}}"));
+    // pathological
+    control = Tensors.fromString("{{0, 0, 0}, {2, 0, 1.308996938995747}, {4, 0, 0.5235987755982988}}");
     {
       JButton jButton = new JButton("clear");
       jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
@@ -121,6 +126,13 @@ class CurveSubdivisionDemo {
       });
       timerFrame.jToolBar.add(jButton);
     }
+    {
+      JButton jButton = new JButton("p-ref");
+      jButton.addActionListener(actionEvent -> {
+        printref = true;
+      });
+      timerFrame.jToolBar.add(jButton);
+    }
     JToggleButton jToggleCtrl = new JToggleButton("ctrl");
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
@@ -128,6 +140,10 @@ class CurveSubdivisionDemo {
     JToggleButton jToggleComb = new JToggleButton("comb");
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
+    // ---
+    JToggleButton jToggleLine = new JToggleButton("line");
+    jToggleLine.setSelected(false);
+    timerFrame.jToolBar.add(jToggleLine);
     // ---
     JToggleButton jToggleCyclic = new JToggleButton("cyclic");
     // jToggleCyclic.setSelected(true);
@@ -137,7 +153,6 @@ class CurveSubdivisionDemo {
     jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
     timerFrame.jToolBar.add(jToggleButton);
     timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
-      @SuppressWarnings("unused")
       @Override
       public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
         // graphics.drawImage(image, 100, 100, null);
@@ -207,7 +222,7 @@ class CurveSubdivisionDemo {
           // TensorUnaryOperator tuo = new SplitScheme(curveSubdivision, angleSubdivision);
           refined = Nest.of(tuo, _control, levels);
         }
-        if (false) {
+        if (jToggleLine.isSelected()) {
           CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(Se2CoveringGeodesic.INSTANCE);
           TensorUnaryOperator tuo = isCyclic //
               ? curveSubdivision::cyclic
@@ -257,6 +272,10 @@ class CurveSubdivisionDemo {
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
           graphics.fill(geometricLayer.toPath2D(isR2 ? CIRCLE_HI : ARROWHEAD_HI));
           geometricLayer.popMatrix();
+        }
+        if (printref) {
+          printref = false;
+          System.out.println(refined);
         }
       }
     });
