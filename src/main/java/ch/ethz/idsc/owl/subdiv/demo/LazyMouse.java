@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui;
+package ch.ethz.idsc.owl.subdiv.demo;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class LazyMouse implements MouseListener, MouseMotionListener {
+class LazyMouse implements MouseListener, MouseMotionListener {
   public static final float default_tolerance = 3;
   // ---
   private Point myPressedC = new Point(); // component

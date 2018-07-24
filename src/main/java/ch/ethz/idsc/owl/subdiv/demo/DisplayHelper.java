@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui;
+package ch.ethz.idsc.owl.subdiv.demo;
 
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -8,19 +8,19 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class DisplayHelper {
-  private Rectangle myScreen = new Rectangle();
+class DisplayHelper {
+  private Rectangle screen = new Rectangle();
 
   public DisplayHelper() {
     GraphicsEnvironment myGraphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
     for (GraphicsDevice myGraphicsDevice : myGraphicsEnvironment.getScreenDevices())
       for (GraphicsConfiguration myGraphicsConfiguration : myGraphicsDevice.getConfigurations())
-        myScreen = myScreen.union(myGraphicsConfiguration.getBounds());
+        screen = screen.union(myGraphicsConfiguration.getBounds());
   }
 
   public Rectangle allVisible(int x, int y, int width, int height) {
-    x = Math.max(0, Math.min(x, myScreen.width - width));
-    y = Math.max(0, Math.min(y, myScreen.height - height));
+    x = Math.max(0, Math.min(x, screen.width - width));
+    y = Math.max(0, Math.min(y, screen.height - height));
     return new Rectangle(x, y, width, height);
   }
 
@@ -29,12 +29,12 @@ public class DisplayHelper {
   }
 
   public Rectangle getScreenRectangle() {
-    return myScreen;
+    return screen;
   }
 
   @Override
   public String toString() {
-    return "Display point=(" + myScreen.x + ", " + myScreen.y + ") dimension=(" + myScreen.width + ", " + myScreen.height + ")";
+    return "Display point=(" + screen.x + ", " + screen.y + ") dimension=(" + screen.width + ", " + screen.height + ")";
   }
 
   public static Point getMouseLocation() {

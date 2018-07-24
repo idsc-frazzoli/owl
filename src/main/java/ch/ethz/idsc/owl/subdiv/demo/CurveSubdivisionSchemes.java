@@ -1,7 +1,16 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.curve;
+package ch.ethz.idsc.owl.subdiv.demo;
 
 import java.util.function.Function;
+
+import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.BSpline2CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.BSpline3CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.FourPointCurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
+import ch.ethz.idsc.owl.subdiv.curve.ThreePointCurveSubdivision;
 
 enum CurveSubdivisionSchemes {
   BSPLINE1(BSpline1CurveSubdivision::new), //

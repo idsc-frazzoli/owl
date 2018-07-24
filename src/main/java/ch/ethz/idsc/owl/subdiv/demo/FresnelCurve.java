@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.curve;
+package ch.ethz.idsc.owl.subdiv.demo;
 
 import ch.ethz.idsc.owl.math.FresnelC;
 import ch.ethz.idsc.owl.math.FresnelS;

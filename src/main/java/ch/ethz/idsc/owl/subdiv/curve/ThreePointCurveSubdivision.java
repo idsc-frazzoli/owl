@@ -58,7 +58,7 @@ public class ThreePointCurveSubdivision implements CurveSubdivision, Serializabl
     {
       Tensor p = tensor.get(0);
       Tensor q = tensor.get(1);
-      curve.append(lo(p, q));
+      curve.append(lo(p, q)); // TODO there should be a better formula here for BSpline4
     }
     int last = tensor.length() - 1;
     for (int index = 1; index < last; ++index) {
