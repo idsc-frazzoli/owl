@@ -28,8 +28,8 @@ public class Se2CoveringGeodesicTest extends TestCase {
     // this used to be the result with the former implementation of Se2CoveringIntegrator
     // {2.017191762967754, -0.08474511292102775, 0.9817477042468103}
     // System.out.println(tensor);
-    Tensor p_inv = new Se2CoveringGroupAction(p).inverse();
-    Tensor delta = new Se2CoveringGroupAction(p_inv).combine(q);
+    // Tensor p_inv = ;
+    Tensor delta = new Se2CoveringGroupAction(p).inverse().combine(q);
     Tensor x = Se2CoveringExponential.INSTANCE.log(delta).multiply(scalar);
     x.get();
     // x= {0.20432112230000457, -0.1559021143001622, -5.551115123125783E-17}

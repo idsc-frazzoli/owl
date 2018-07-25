@@ -16,8 +16,7 @@ public enum Se2Geodesic implements GeodesicInterface {
 
   @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
-    Tensor p_inv = new Se2CoveringGroupAction(p).inverse();
-    Tensor delta = new Se2CoveringGroupAction(p_inv).combine(q);
+    Tensor delta = new Se2CoveringGroupAction(p).inverse().combine(q);
     delta.set(MOD_DISTANCE, INDEX_ANGLE);
     Tensor x = Se2CoveringExponential.INSTANCE.log(delta).multiply(scalar);
     return Se2CoveringIntegrator.INSTANCE.spin(p, x);

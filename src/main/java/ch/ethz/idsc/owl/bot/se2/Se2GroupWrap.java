@@ -13,7 +13,6 @@ public class Se2GroupWrap extends Se2Wrap {
 
   @Override // from Se2Wrap
   protected Tensor difference(Tensor p, Tensor q) {
-    Tensor p_inv = new Se2CoveringGroupAction(p).inverse();
-    return new Se2CoveringGroupAction(p_inv).combine(q);
+    return new Se2CoveringGroupAction(p).inverse().combine(q);
   }
 }

@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.map;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -28,7 +29,7 @@ public class Se2CoveringGroupActionTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
       Tensor xya = RandomVariate.of(distribution, 3);
-      Tensor result = new Se2CoveringGroupAction(xya).inverse();
+      Tensor result = new Se2CoveringGroupAction(xya).inverse().combine(Array.zeros(3));
       Tensor prod = Inverse.of(Se2Utils.toSE2Matrix(xya));
       Tensor matrix = Se2Utils.toSE2Matrix(result);
       assertTrue(Chop._10.close(prod, matrix));
@@ -40,7 +41,7 @@ public class Se2CoveringGroupActionTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor xya = RandomVariate.of(distribution, 3);
       Se2CoveringGroupAction se2GroupAction = new Se2CoveringGroupAction(xya);
-      Tensor result = se2GroupAction.inverse();
+      Tensor result = se2GroupAction.inverse().combine(Array.zeros(3));
       Tensor circ = se2GroupAction.combine(result);
       assertTrue(Chop._14.allZero(circ));
     }
@@ -63,7 +64,7 @@ public class Se2CoveringGroupActionTest extends TestCase {
     Tensor xya = Tensors.fromString("{1[m],2[m],.34}");
     Tensor oth = Tensors.fromString("{-.3[m],.8[m],-.5}");
     Se2CoveringGroupAction se2GroupAction = new Se2CoveringGroupAction(xya);
-    Tensor inverse = se2GroupAction.inverse();
+    Tensor inverse = se2GroupAction.inverse().combine(Array.zeros(3));
     assertEquals(inverse, Tensors.fromString("{-1.6097288498099749[m], -1.552022238915878[m], -0.34}"));
     Tensor circ = se2GroupAction.combine(oth);
     assertEquals(circ, Tensors.fromString("{0.4503839266288446[m], 2.654157604780433[m], -0.15999999999999998}"));

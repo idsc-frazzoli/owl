@@ -137,6 +137,10 @@ class CurveSubdivisionDemo {
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
+    JToggleButton jToggleBndy = new JToggleButton("bndy");
+    jToggleBndy.setSelected(true);
+    timerFrame.jToolBar.add(jToggleBndy);
+    // ---
     JToggleButton jToggleComb = new JToggleButton("comb");
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
@@ -169,7 +173,7 @@ class CurveSubdivisionDemo {
         boolean isR2 = jToggleButton.isSelected();
         boolean isCyclic = jToggleCyclic.isSelected();
         Tensor _control = control.copy();
-        if (!isCyclic && 1 < _control.length()) {
+        if (jToggleBndy.isSelected() && !isCyclic && 1 < _control.length()) {
           switch (scheme) {
           case BSPLINE2:
           case BSPLINE4:
@@ -227,7 +231,7 @@ class CurveSubdivisionDemo {
           TensorUnaryOperator tuo = isCyclic //
               ? curveSubdivision::cyclic
               : curveSubdivision::string;
-          Tensor linear = Nest.of(tuo, _control, levels);
+          Tensor linear = Nest.of(tuo, _control, 8);
           graphics.setColor(new Color(0, 255, 0, 128));
           Path2D path2d = geometricLayer.toPath2D(linear);
           if (isCyclic)
@@ -327,7 +331,7 @@ class CurveSubdivisionDemo {
 
   public static void main(String[] args) {
     CurveSubdivisionDemo curveSubdivisionDemo = new CurveSubdivisionDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 600, 600);
+    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
   }
 }
