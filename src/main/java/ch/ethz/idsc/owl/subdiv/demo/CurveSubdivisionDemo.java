@@ -46,7 +46,7 @@ class CurveSubdivisionDemo {
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(1.2));
   private static final Tensor ARROWHEAD_LO = Tensors.matrixDouble( //
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(.6));
-  private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.2));
+  private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
   private static final Scalar COMB_SCALE = DoubleScalar.of(.5);
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // private static final Tensor DUBILAB = //
@@ -62,6 +62,7 @@ class CurveSubdivisionDemo {
   // DUBILAB, 5);
   // FresnelCurve.of(300).multiply(RealScalar.of(10));
   private boolean printref = false;
+  private boolean ref2ctrl = false;
 
   CurveSubdivisionDemo() {
     // BufferedImage image = ImageIO.read(UserHome.file("trebleclef25.png"));
@@ -128,9 +129,12 @@ class CurveSubdivisionDemo {
     }
     {
       JButton jButton = new JButton("p-ref");
-      jButton.addActionListener(actionEvent -> {
-        printref = true;
-      });
+      jButton.addActionListener(actionEvent -> printref = true);
+      timerFrame.jToolBar.add(jButton);
+    }
+    {
+      JButton jButton = new JButton("r2c");
+      jButton.addActionListener(actionEvent -> ref2ctrl = true);
       timerFrame.jToolBar.add(jButton);
     }
     JToggleButton jToggleCtrl = new JToggleButton("ctrl");
@@ -202,7 +206,12 @@ class CurveSubdivisionDemo {
           graphics.setColor(new Color(255, 128, 128, 255));
           for (Tensor point : _control) {
             geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-            graphics.fill(geometricLayer.toPath2D(CIRCLE_HI));
+            Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
+            path2d.closePath();
+            graphics.setColor(new Color(255, 128, 128, 64));
+            graphics.fill(path2d);
+            graphics.setColor(new Color(255, 128, 128, 255));
+            graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
         } else { // SE2
@@ -280,6 +289,10 @@ class CurveSubdivisionDemo {
         if (printref) {
           printref = false;
           System.out.println(refined);
+        }
+        if (ref2ctrl) {
+          ref2ctrl = false;
+          control = refined;
         }
       }
     });
