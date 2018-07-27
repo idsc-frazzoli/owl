@@ -1,64 +1,40 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import java.util.Arrays;
+
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class DodgsonSabinCurveSubdivisionTest extends TestCase {
-  public void testSimple() {
-    System.out.println("here");
+  public void testThree() {
+    Tensor a = Tensors.vector(1, 1.1);
+    Tensor b = Tensors.vector(2.2, 0.5);
+    Tensor c = Tensors.vector(3, 1.5);
+    Tensor tensor = Tensors.of(a, b, c);
+    Tensor string = DodgsonSabinCurveSubdivision.INSTANCE.string(tensor);
+    assertEquals(Dimensions.of(string), Arrays.asList(5, 2));
+    assertEquals(string.get(0), a);
+    assertEquals(string.get(2), b);
+    assertEquals(string.get(4), c);
   }
-  // public static void main(String[] args) {
-  // DodgsonSabinScheme scheme = new DodgsonSabinScheme();
-  // {
-  // Tensor A = Tensors.vector(1.0, 2.0);
-  // Tensor B = Tensors.vector(0.3, 0.6);
-  // Tensor C = Tensors.vector(3.3, 4.0);
-  // System.out.println(DodgsonSabinScheme.curvature(A, B, C));
-  // SphereFit mySphereFit = SphereFit.create(Arrays.asList(A, B, C));
-  // System.out.println(-1 / mySphereFit.radius);
-  // System.out.println(mySphereFit);
-  // }
-  // public void testAverageCurvature() {
-  // double curvature = DodgsonSabinCurveSubdivision.averageCurvature(
-  // // System.out.println(DodgsonSabinScheme.averageCurvature( //
-  // Tensors.vector(1.0, 2.0), //
-  // Tensors.vector(0.3, 0.6), //
-  // Tensors.vector(3.3, 4.0), //
-  // Tensors.vector(5.3, 6.0));
-  // System.out.println(curvature);
-  // assertEquals(curvature, -0.1140224958364258);
-  // }
-  // System.out.println("---");
-  // System.out.println(DodgsonSabinScheme.lambda( //
-  // Tensors.vector(1.0, 2.0), //
-  // Tensors.vector(0.3, 0.6), //
-  // Tensors.vector(3.3, 4.0), //
-  // Tensors.vector(5.3, 6.0), //
-  // .1));
-  // System.out.println("---");
-  // System.out.println( //
-  // DodgsonSabinScheme.intersectCircleLine( //
-  // Tensors.vector(1.0, 2.0), //
-  // Tensors.vector(0.3, 0.6), //
-  // -.12, .3));
-  // System.out.println("---");
-  // System.out.println(scheme.midpoint( //
-  // Tensors.vector(1.0, 2.0), //
-  // Tensors.vector(0.3, 0.6), //
-  // Tensors.vector(3.3, 4.0), //
-  // Tensors.vector(5.3, 6.0)));
-  // System.out.println("---");
-  // System.out.println(scheme.midpoint( //
-  // Tensors.vector(1.0, 0.0), //
-  // Tensors.vector(2.0, 0.0), //
-  // Tensors.vector(3.0, 0.0), //
-  // Tensors.vector(4.0, 0.0)));
-  // System.out.println("---");
-  // System.out.println(scheme.midpoint( //
-  // Tensors.vector(0.0, 1.0), //
-  // Tensors.vector(0.0, 2.0), //
-  // Tensors.vector(0.0, 3.0), //
-  // Tensors.vector(0.0, 4.0)));
-  // System.out.println("---");
-  // }
+
+  public void testFour() {
+    Tensor a = Tensors.vector(1, 1.1);
+    Tensor b = Tensors.vector(2.2, 0.5);
+    Tensor c = Tensors.vector(3, 1.5);
+    Tensor d = Tensors.vector(3.5, 2.9);
+    Tensor tensor = Tensors.of(a, b, c, d);
+    Tensor string = DodgsonSabinCurveSubdivision.INSTANCE.string(tensor);
+    assertEquals(Dimensions.of(string), Arrays.asList(7, 2));
+    assertEquals(string.get(0), a);
+    assertEquals(string.get(2), b);
+    assertEquals(string.get(4), c);
+    assertEquals(string.get(6), d);
+    assertTrue(Chop._13.close(string.get(3), //
+        Tensors.fromString("{2.64619661516195, 0.8388990046231528}")));
+  }
 }
