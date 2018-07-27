@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
-import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -29,8 +28,8 @@ public class Se2IntegratorTest extends TestCase {
 
   public void testExpSubstitute() {
     Tensor mat = exp_of(1, 2, .3);
-    Tensor vec = Se2Integrator.INSTANCE.spin(Array.zeros(3), Tensors.vector(1, 2, .3));
-    Tensor v0 = Se2Utils.exp(Tensors.vector(1, 2, .3));
+    Tensor vec = Se2CoveringIntegrator.INSTANCE.spin(Array.zeros(3), Tensors.vector(1, 2, .3));
+    Tensor v0 = Se2CoveringExponential.INSTANCE.exp(Tensors.vector(1, 2, .3));
     assertEquals(vec, v0);
     Tensor alt = Se2Utils.toSE2Matrix(vec);
     assertTrue(Chop._13.close(mat, alt));
@@ -40,8 +39,8 @@ public class Se2IntegratorTest extends TestCase {
     for (int index = 0; index < 20; ++index) {
       Tensor rnd = RandomVariate.of(NormalDistribution.standard(), 3);
       Tensor mat = exp_of(rnd.Get(0), rnd.Get(1), rnd.Get(2));
-      Tensor vec = Se2Integrator.INSTANCE.spin(Array.zeros(3), rnd);
-      Tensor v0 = Se2Utils.exp(rnd);
+      Tensor vec = Se2CoveringIntegrator.INSTANCE.spin(Array.zeros(3), rnd);
+      Tensor v0 = Se2CoveringExponential.INSTANCE.exp(rnd);
       assertEquals(vec, v0);
       Tensor alt = Se2Utils.toSE2Matrix(vec);
       boolean close = Chop._11.close(mat, alt);
@@ -53,19 +52,8 @@ public class Se2IntegratorTest extends TestCase {
     }
   }
 
-  public void testCombine() {
-    for (int index = 0; index < 20; ++index) {
-      Tensor g = RandomVariate.of(NormalDistribution.standard(), 3);
-      Tensor x = RandomVariate.of(NormalDistribution.standard(), 3);
-      x.set(RealScalar.ZERO, 1);
-      assertTrue(Chop._12.close( //
-          Se2Integrator.INSTANCE.spin(g, x), //
-          Se2CarIntegrator.INSTANCE.spin(g, x)));
-    }
-  }
-
   public void testUnits() {
-    Tensor spin = Se2Integrator.INSTANCE.spin( //
+    Tensor spin = Se2CoveringIntegrator.INSTANCE.spin( //
         Tensors.fromString("{1[m],2[m],3}"), //
         Tensors.fromString("{.4[m],-.3[m],.7}"));
     // System.out.println(spin);

@@ -1,10 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -24,6 +27,21 @@ public class S2GeodesicTest extends TestCase {
     assertTrue(Scalars.isZero(split.Get(2)));
   }
 
+  public void testSame() {
+    Tensor p = UnitVector.of(3, 2);
+    Tensor q = UnitVector.of(3, 2);
+    Tensor split = S2Geodesic.INSTANCE.split(p, q, RandomVariate.of(NormalDistribution.standard()));
+    assertTrue(ExactScalarQ.all(split));
+    assertEquals(split, p);
+  }
+
+  public void testOpposite() {
+    Tensor p = UnitVector.of(3, 2);
+    Tensor q = UnitVector.of(3, 2).negate();
+    Tensor split = S2Geodesic.INSTANCE.split(p, q, RandomVariate.of(NormalDistribution.standard()));
+    assertTrue(NumberQ.all(split));
+  }
+
   public void testEndPoints() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
@@ -34,5 +52,15 @@ public class S2GeodesicTest extends TestCase {
       assertTrue(Chop._12.close(q, r));
       assertTrue(Chop._14.close(Norm._2.of(r), RealScalar.ONE));
     }
+  }
+
+  public void testFail() {
+    try {
+      S2Geodesic.INSTANCE.split(UnitVector.of(4, 0), UnitVector.of(3, 1), RealScalar.ZERO);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+    S2Geodesic.INSTANCE.split(Tensors.vector(1, 2, 3), Tensors.vector(4, 5, 6), RationalScalar.HALF);
   }
 }

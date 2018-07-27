@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.curve;
+package ch.ethz.idsc.owl.subdiv.demo;
 
 import ch.ethz.idsc.owl.math.planar.LogarithmicSpiral;
 import ch.ethz.idsc.tensor.Scalar;

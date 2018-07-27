@@ -5,10 +5,10 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** action of an element of a Lie-group */
 public interface LieGroupAction {
+  /** @return inverse action of this element */
+  LieGroupAction inverse();
+
   /** @param tensor
    * @return this element . tensor */
-  Tensor circ(Tensor tensor);
-
-  /** @return inverse of this element */
-  Tensor inverse();
+  Tensor combine(Tensor tensor);
 }

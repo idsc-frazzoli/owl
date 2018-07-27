@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui;
+package ch.ethz.idsc.owl.subdiv.demo;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -13,7 +13,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-public abstract class StandardMenu {
+abstract class StandardMenu {
   public static <Type extends StandardMenu> void bind(JButton myJButton, Supplier<Type> mySupplier) {
     myJButton.addActionListener(new ActionListener() {
       long tic = System.nanoTime();

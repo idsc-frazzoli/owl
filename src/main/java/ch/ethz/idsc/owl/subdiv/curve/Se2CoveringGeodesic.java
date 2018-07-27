@@ -3,22 +3,18 @@ package ch.ethz.idsc.owl.subdiv.curve;
 
 import ch.ethz.idsc.owl.math.map.Se2CoveringExponential;
 import ch.ethz.idsc.owl.math.map.Se2CoveringGroupAction;
-import ch.ethz.idsc.owl.math.map.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Mod;
 
-public enum Se2Geodesic implements GeodesicInterface {
+public enum Se2CoveringGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---
-  private static final int INDEX_ANGLE = 2;
-  private static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
-
   @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
-    Tensor delta = new Se2CoveringGroupAction(p).inverse().combine(q);
-    delta.set(MOD_DISTANCE, INDEX_ANGLE);
+    Se2CoveringGroupAction p_act = new Se2CoveringGroupAction(p);
+    Tensor delta = p_act.inverse().combine(q);
     Tensor x = Se2CoveringExponential.INSTANCE.log(delta).multiply(scalar);
-    return Se2CoveringIntegrator.INSTANCE.spin(p, x);
+    Tensor m = Se2CoveringExponential.INSTANCE.exp(x);
+    return p_act.combine(m);
   }
 }

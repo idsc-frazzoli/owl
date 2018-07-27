@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
-public class Se2GroupAction implements LieGroupAction, Serializable {
+public class Se2CoveringGroupAction implements LieGroupAction, Serializable {
   private final Scalar px;
   private final Scalar py;
   private final Scalar pa;
@@ -17,7 +17,7 @@ public class Se2GroupAction implements LieGroupAction, Serializable {
   private final Scalar sa;
 
   /** @param xya == {px, py, angle} as member of Lie group SE2 */
-  public Se2GroupAction(Tensor xya) {
+  public Se2CoveringGroupAction(Tensor xya) {
     px = xya.Get(0);
     py = xya.Get(1);
     pa = xya.Get(2);
@@ -25,10 +25,29 @@ public class Se2GroupAction implements LieGroupAction, Serializable {
     sa = Sin.FUNCTION.apply(pa);
   }
 
+  // strictly private
+  private Se2CoveringGroupAction(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
+    this.px = px;
+    this.py = py;
+    this.pa = pa;
+    this.ca = ca;
+    this.sa = sa;
+  }
+
+  @Override // from LieGroupAction
+  public Se2CoveringGroupAction inverse() {
+    return new Se2CoveringGroupAction( //
+        px.multiply(ca).add(py.multiply(sa)).negate(), //
+        px.multiply(sa).subtract(py.multiply(ca)), //
+        pa.negate(), //
+        ca, //
+        sa.negate());
+  }
+
   /** @param tensor of the form {px, py, angle}
    * @return vector of length 3 */
   @Override // from LieGroupAction
-  public Tensor circ(Tensor tensor) {
+  public Tensor combine(Tensor tensor) {
     Scalar qx = tensor.Get(0);
     Scalar qy = tensor.Get(1);
     Scalar qa = tensor.Get(2);
@@ -36,13 +55,5 @@ public class Se2GroupAction implements LieGroupAction, Serializable {
         px.add(qx.multiply(ca)).subtract(qy.multiply(sa)), //
         py.add(qy.multiply(ca)).add(qx.multiply(sa)), //
         pa.add(qa));
-  }
-
-  @Override // from LieGroupAction
-  public Tensor inverse() {
-    return Tensors.of( //
-        px.multiply(ca).add(py.multiply(sa)).negate(), //
-        px.multiply(sa).subtract(py.multiply(ca)), //
-        pa.negate());
   }
 }

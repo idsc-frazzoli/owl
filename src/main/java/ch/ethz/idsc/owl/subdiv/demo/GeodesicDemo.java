@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.curve;
+package ch.ethz.idsc.owl.subdiv.demo;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.subdiv.curve.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -31,7 +32,7 @@ enum GeodesicDemo {
         Tensor q = geometricLayer.getMouseSe2State();
         graphics.setColor(new Color(128, 128, 128, 128));
         for (Tensor scalar : Subdivide.of(0, 1, 20)) {
-          Tensor split = Se2CoverGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
+          Tensor split = Se2CoveringGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
           // split = RnGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(split));
           Path2D path2d = geometricLayer.toPath2D(ARROWHEAD);
