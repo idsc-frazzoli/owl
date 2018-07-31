@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 public enum Se2Utils {
   ;
+  // TODO NEXT RELEASE
   @Deprecated
   public static Tensor exp(Tensor x) {
     return Se2CoveringExponential.INSTANCE.exp(x);
