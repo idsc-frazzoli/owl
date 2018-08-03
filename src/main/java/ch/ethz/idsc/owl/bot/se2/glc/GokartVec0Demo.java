@@ -41,12 +41,12 @@ public class GokartVec0Demo extends GokartDemo {
       }
     };
     // define cost funcion hierarchy
-    Tensor polygon = Tensors.matrixFloat(new float[][] { { 7, 10 }, { 10, 0 }, { 13, 10 }, { 10, 20 } });
+    Tensor polygon = Tensors.matrixFloat(new float[][] { { 3, 10 }, {3, 0}, { 23, 0 }, { 23, 20 }});
     PolygonRegion polygonRegion = new PolygonRegion(polygon);
     PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(regionConstraint);
-    gokartEntity.setCostVector(Arrays.asList(regionCost), Arrays.asList(0.0));
-    gokartEntity.addTimeCost(0, 0.2);
+    //gokartEntity.setCostVector(Arrays.asList(regionCost), Arrays.asList(0.0));
+    gokartEntity.addTimeCost(0, 0.0);
     // ---
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---
@@ -62,7 +62,7 @@ public class GokartVec0Demo extends GokartDemo {
       TimeUnit.SECONDS.sleep(1);
     } catch (InterruptedException e) {
     }
-    goalconsumer.accept(Tensors.vector(20, 10, 0));
+    goalconsumer.accept(Tensors.vector(35, 10, 0));
   }
 
   public static void main(String[] args) {

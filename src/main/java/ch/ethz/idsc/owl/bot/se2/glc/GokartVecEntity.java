@@ -2,8 +2,10 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.PriorityQueue;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
@@ -11,10 +13,13 @@ import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
+import ch.ethz.idsc.owl.glc.core.CustomNodeMeritComparator;
+import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.math.DiscretizedLexicographic;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
@@ -53,6 +58,8 @@ public class GokartVecEntity extends GokartEntity {
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     ((StandardTrajectoryPlanner) trajectoryPlanner).relabelDecision = //
         new LexicographicRelabelDecision(Tensors.vector(slacks));
+    Comparator<GlcNode> comparator = new CustomNodeMeritComparator(DiscretizedLexicographic.of(Tensors.vector(slacks)));
+    ((StandardTrajectoryPlanner) trajectoryPlanner).queue = new PriorityQueue<>(comparator);
     return trajectoryPlanner;
   }
 
