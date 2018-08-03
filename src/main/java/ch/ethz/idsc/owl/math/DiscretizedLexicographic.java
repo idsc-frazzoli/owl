@@ -31,7 +31,7 @@ public class DiscretizedLexicographic implements Comparator<Tensor> {
     if (t1.length() != t2.length())
       throw TensorRuntimeException.of(t1, t2);
     int cmp = 0;
-    for (int index = 0; index < 1 && cmp == 0; ++index) {
+    for (int index = 0; index < t1.length() && cmp == 0; ++index) {
       Scalar a = t1.Get(index);
       Scalar b = t2.Get(index);
       Scalar s = slack.Get(index);
@@ -40,7 +40,6 @@ public class DiscretizedLexicographic implements Comparator<Tensor> {
         b = Floor.FUNCTION.apply(b.divide(s)).multiply(s);
       }
       cmp = Scalars.compare(a, b);
-      //System.out.println(a + " " + b + " " + cmp);
     }
     if (cmp == 0)
       cmp = Lexicographic.COMPARATOR.compare(t1, t2);

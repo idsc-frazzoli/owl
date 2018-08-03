@@ -14,12 +14,16 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalConsumer;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
+import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
+import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -41,12 +45,12 @@ public class GokartVec0Demo extends GokartDemo {
       }
     };
     // define cost funcion hierarchy
-    Tensor polygon = Tensors.matrixFloat(new float[][] { { 3, 10 }, {3, 0}, { 23, 0 }, { 23, 20 }});
+    Tensor polygon = Tensors.matrixFloat(new float[][] { { 3, 10 }, { 3, 0 }, { 23, 0 }, { 23, 20 } });
     PolygonRegion polygonRegion = new PolygonRegion(polygon);
     PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(regionConstraint);
-    //gokartEntity.setCostVector(Arrays.asList(regionCost), Arrays.asList(0.0));
-    gokartEntity.addTimeCost(0, 0.0);
+    gokartEntity.setCostVector(Arrays.asList(regionCost), Arrays.asList(0.0));
+    gokartEntity.addTimeCost(0, 0.8); //set priority to 0, allow for 0.8 seconds of slack
     // ---
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---
@@ -63,6 +67,13 @@ public class GokartVec0Demo extends GokartDemo {
     } catch (InterruptedException e) {
     }
     goalconsumer.accept(Tensors.vector(35, 10, 0));
+    MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);
+    {
+      RenderInterface renderInterface = new MouseShapeRender( //
+          SimpleTrajectoryRegionQuery.timeInvariant(polygonRegion), //
+          CarEntity.SHAPE, () -> gokartEntity.getStateTimeNow().time());
+      owlyAnimationFrame.addBackground(renderInterface);
+    }
   }
 
   public static void main(String[] args) {

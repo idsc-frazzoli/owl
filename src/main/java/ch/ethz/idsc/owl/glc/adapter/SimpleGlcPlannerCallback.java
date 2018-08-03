@@ -22,7 +22,7 @@ public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
-      if (showCost)
+      if (true)
         System.out.println("Cost to Goal: " + optional.get().costFromRoot());
       List<TrajectorySample> tail = //
           GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
