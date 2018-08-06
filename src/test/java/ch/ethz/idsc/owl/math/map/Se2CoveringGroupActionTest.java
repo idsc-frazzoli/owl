@@ -69,4 +69,15 @@ public class Se2CoveringGroupActionTest extends TestCase {
     Tensor circ = se2GroupAction.combine(oth);
     assertEquals(circ, Tensors.fromString("{0.4503839266288446[m], 2.654157604780433[m], -0.15999999999999998}"));
   }
+
+  public void testMatrixAction() {
+    Distribution distribution = NormalDistribution.of(0, 10);
+    for (int index = 0; index < 10; ++index) {
+      Tensor xya1 = RandomVariate.of(distribution, 3);
+      Tensor xya2 = RandomVariate.of(distribution, 3);
+      Tensor xya3 = new Se2CoveringGroupAction(xya1).combine(xya2);
+      Tensor xyam = Se2Utils.toSE2Matrix(xya1).dot(Se2Utils.toSE2Matrix(xya2));
+      assertTrue(Chop._12.close(Se2Utils.toSE2Matrix(xya3), xyam));
+    }
+  }
 }
