@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,8 +12,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 public enum SignedCurvature2D {
   ;
-  private static final Scalar TWO = RealScalar.of(2);
-
   /** @param a
    * @param b
    * @param c
@@ -27,6 +24,6 @@ public enum SignedCurvature2D {
     Scalar den = Hypot.of(v, w).multiply(n);
     return Scalars.isZero(den) //
         ? Optional.empty()
-        : Optional.of(TWO.multiply(v).divide(den));
+        : Optional.of(v.add(v).divide(den)); // 2 * v / den == (v + v) / den
   }
 }
