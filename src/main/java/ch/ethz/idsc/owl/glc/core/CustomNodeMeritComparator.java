@@ -19,7 +19,6 @@ public class CustomNodeMeritComparator implements Comparator<GlcNode> {
     if (o1.merit() instanceof VectorScalar)
       return comparator.compare(((VectorScalar) o1.merit()).vector(), //
           ((VectorScalar) o2.merit()).vector());
-    else
-      return comparator.compare(o1.merit(), o2.merit());
+    return comparator.compare(o1.merit(), o2.merit());
   }
 }

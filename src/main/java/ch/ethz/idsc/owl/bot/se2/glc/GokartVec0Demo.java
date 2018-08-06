@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** demo to show effect of lexocographic vector cost comparison
+/** demo to show effect of lexicographic vector cost comparison
  * 1. Cost: Time
  * 2. Cost: Polygon region penalty */
 public class GokartVec0Demo extends GokartDemo {
@@ -44,13 +44,13 @@ public class GokartVec0Demo extends GokartDemo {
         return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
       }
     };
-    // define cost funcion hierarchy
+    // define cost function hierarchy
     Tensor polygon = Tensors.matrixFloat(new float[][] { { 3, 10 }, { 3, 0 }, { 23, 0 }, { 23, 20 } });
     PolygonRegion polygonRegion = new PolygonRegion(polygon);
     PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(regionConstraint);
     gokartEntity.setCostVector(Arrays.asList(regionCost), Arrays.asList(0.0));
-    gokartEntity.addTimeCost(0, 0.8); //set priority to 0, allow for 0.8 seconds of slack
+    gokartEntity.addTimeCost(0, 0.8); // set priority to 0, allow for 0.8 seconds of slack
     // ---
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---
@@ -59,12 +59,13 @@ public class GokartVec0Demo extends GokartDemo {
     owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
     // ---
     List<GlcPlannerCallback> list = new ArrayList<>();
-    list.add((GlcPlannerCallback) gokartEntity);
+    list.add(gokartEntity);
     list.add(new SimpleGlcPlannerCallback(gokartEntity));
     GoalConsumer goalconsumer = new SimpleGoalConsumer(gokartEntity, plannerConstraint, list);
     try {
       TimeUnit.SECONDS.sleep(1);
     } catch (InterruptedException e) {
+      // ---
     }
     goalconsumer.accept(Tensors.vector(35, 10, 0));
     MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);

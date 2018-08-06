@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.DiscretizedLexicographic;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
@@ -46,7 +48,8 @@ class R2VecEntity extends R2Entity implements GlcPlannerCallback {
         plannerConstraint, goalInterface);
     //  ---
     Tensor slack = Array.zeros(costs.size()); // slack equal to zero for now
-    trajectoryPlanner.relabelDecision = new LexicographicRelabelDecision(slack);
+    Comparator<Tensor> comparator = DiscretizedLexicographic.of(slack);
+    trajectoryPlanner.relabelDecision = new LexicographicRelabelDecision(comparator);
     // ---
     return trajectoryPlanner;
   }

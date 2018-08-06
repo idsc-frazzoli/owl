@@ -1,4 +1,4 @@
-// code by jph
+// code by ynager
 package ch.ethz.idsc.owl.math;
 
 import java.util.Comparator;
@@ -19,15 +19,16 @@ public class DiscretizedLexicographic implements Comparator<Tensor> {
     return new DiscretizedLexicographic(slack);
   }
 
+  // ---
   private final Tensor slack;
 
-  public DiscretizedLexicographic(Tensor slack) {
+  private DiscretizedLexicographic(Tensor slack) {
     this.slack = slack;
+    // any conditions regarding entries on slack: non-negativity?
   }
 
   @Override // from Comparator
   public int compare(Tensor t1, Tensor t2) {
-    // return Scalars.compare(t1.Get(0), t2.Get(0));
     if (t1.length() != t2.length())
       throw TensorRuntimeException.of(t1, t2);
     int cmp = 0;
@@ -35,12 +36,15 @@ public class DiscretizedLexicographic implements Comparator<Tensor> {
       Scalar a = t1.Get(index);
       Scalar b = t2.Get(index);
       Scalar s = slack.Get(index);
-      if (!Scalars.isZero(s)) {
+      if (Scalars.nonZero(s)) {
+        // could use Floor.toMultipleOf(s)
+        // but multiplication with s should be obsolete for comparison
         a = Floor.FUNCTION.apply(a.divide(s)).multiply(s);
         b = Floor.FUNCTION.apply(b.divide(s)).multiply(s);
       }
       cmp = Scalars.compare(a, b);
     }
+    // TODO <- jan suggests to simply return 0 here
     if (cmp == 0)
       cmp = Lexicographic.COMPARATOR.compare(t1, t2);
     return cmp;
