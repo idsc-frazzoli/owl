@@ -23,7 +23,6 @@ import ch.ethz.idsc.subare.core.Policy;
 import ch.ethz.idsc.subare.core.RewardInterface;
 import ch.ethz.idsc.subare.core.StepInterface;
 import ch.ethz.idsc.subare.core.adapter.StepAdapter;
-import ch.ethz.idsc.subare.core.td.OriginalSarsa;
 import ch.ethz.idsc.subare.core.td.Sarsa;
 import ch.ethz.idsc.subare.core.td.SarsaType;
 import ch.ethz.idsc.subare.core.util.DefaultLearningRate;
@@ -82,8 +81,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     prev_reward = null;
     if (!episodeLog.isEmpty()) {
       // System.out.println("learn " + episodeLog.size());
-      sarsaType.supply(carDiscreteModel, qsa, learningRate);
-      Sarsa sarsa = new OriginalSarsa(carDiscreteModel, qsa, learningRate);
+      Sarsa sarsa = sarsaType.supply(carDiscreteModel, learningRate, qsa);
       int nstep = 50;
       Deque<StepInterface> deque = new LinkedList<>(episodeLog.subList(Math.max(1, episodeLog.size() - nstep), episodeLog.size()));
       while (!deque.isEmpty()) {
