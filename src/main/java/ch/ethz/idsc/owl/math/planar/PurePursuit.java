@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -19,8 +18,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
 // TODO class contains 2 formulas in one: fining beacon, and computing turning rate to selected target lookAhead
 // ... better to split!
 public class PurePursuit {
-  private static final Scalar TWO = DoubleScalar.of(2);
-
   /** @param tensor of waypoints {{x1, y1}, {x2, y2}, ...}
    * @param distance to look ahead
    * @return */
@@ -76,9 +73,9 @@ public class PurePursuit {
     Scalar x = lookAhead.Get(0);
     if (Sign.isPositive(x)) {
       Scalar angle = ArcTan.of(x, lookAhead.Get(1));
-      // in the formula below, 2 is not a magic constant
+      // in the formula below, 2*angle == angle+angle is not a magic constant
       // but has an exact geometric interpretation
-      return Optional.of(Sin.FUNCTION.apply(angle.multiply(TWO)).divide(x));
+      return Optional.of(Sin.FUNCTION.apply(angle.add(angle)).divide(x));
     }
     return Optional.empty();
   }

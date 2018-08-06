@@ -23,7 +23,9 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---
-  private final Queue<GlcNode> queue = new PriorityQueue<>(NodeMeritComparator.INSTANCE);
+  // TODO design so that queue is private final
+  // TODO comparator for queue, best, relabel decision
+  public Queue<GlcNode> queue = new PriorityQueue<>(NodeMeritComparator.INSTANCE);
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
   /** best is a reference to a Node in the goal region,
    * or null if such a node has not been identified
