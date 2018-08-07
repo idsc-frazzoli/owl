@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 public class So2Region extends ImplicitFunctionRegion<Tensor> implements //
     RegionWithDistance<Tensor>, Serializable {
-  private static final Scalar TWO = RealScalar.of(2);
-  // ---
   private final Scalar center;
   private final Scalar radius;
   private final Mod mod;
@@ -27,7 +25,9 @@ public class So2Region extends ImplicitFunctionRegion<Tensor> implements //
   public So2Region(Scalar center, Scalar radius, Scalar half_circumference) {
     this.center = center;
     this.radius = Sign.requirePositiveOrZero(radius);
-    mod = Mod.function(half_circumference.multiply(TWO), half_circumference.negate());
+    mod = Mod.function( //
+        half_circumference.add(half_circumference), // 2*half_circumference
+        half_circumference.negate());
   }
 
   @Override // from SignedDistanceFunction<Tensor>
