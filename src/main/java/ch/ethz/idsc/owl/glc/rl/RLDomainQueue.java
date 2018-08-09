@@ -25,7 +25,7 @@ public class RLDomainQueue extends RLQueue {
 
   @Override
   public boolean add(GlcNode e) {
-    VectorScalar merit = (VectorScalar) e.merit();
+    Tensor merit = ((VectorScalar) e.merit()).vector();
     for (int i = 0; i < vectorSize; i++) {
       Scalar m = merit.Get(i);
       if (Scalars.lessThan(m, minValues.Get(i))) {

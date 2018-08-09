@@ -74,7 +74,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   }
 
   private boolean isWithinSlack(GlcNode next, RLDomainQueue domainQueue) {
-    VectorScalar merit = (VectorScalar) next.merit();
+    Tensor merit = ((VectorScalar) next.merit()).vector();
     for (int i = 0; i < costSize; i++) {
       if (Scalars.lessThan(domainQueue.getBounds().Get(i), merit.Get(i)))
         return false; // cost out of slack bounds
@@ -97,8 +97,8 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
             // find nodes to be removed from OPEN queue
             formerQueue.add(next); // add node to domainQueue
             for (int i = 0; i < costSize; i++) {
-              if (Scalars.lessThan(((VectorScalar) next.merit()).vector().Get(i), formerQueue.getMinValues().Get(i))) { // is cost component lower than previous
-                                                                                                                        // min ?
+              // is cost lower than prev min?
+              if (Scalars.lessThan(((VectorScalar) next.merit()).vector().Get(i), formerQueue.getMinValues().Get(i))) {
                 final int j = i;
                 List<GlcNode> toRemove = formerQueue.queue.stream() // find nodes to be removed
                     .filter(n -> Scalars.lessThan(bounds.Get(j), ((VectorScalar) n.merit()).vector().Get(j))).collect(Collectors.toList());
