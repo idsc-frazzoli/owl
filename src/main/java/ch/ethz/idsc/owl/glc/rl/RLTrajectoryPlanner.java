@@ -8,6 +8,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.ExpandInterface;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -38,7 +39,7 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
   /** @param stateTime */
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(openQueue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
-    insert(stateTimeRaster.convertToKey(stateTime), StaticHelper.createRoot(stateTime, heuristicFunction));
+    insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
   }
 
   /** @param domain_key

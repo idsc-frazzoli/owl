@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 public class StaticHelperTest extends TestCase {
   public void testCostIncrement1() {
-    GlcNode root = StaticHelper.createRoot(new StateTime(Tensors.vector(2, 2), RealScalar.ZERO), x -> RealScalar.ZERO);
+    GlcNode root = GlcNodes.createRoot(new StateTime(Tensors.vector(2, 2), RealScalar.ZERO), x -> RealScalar.ZERO);
     GoalInterface rnGoal = RnMinDistGoalManager.sperical(Tensors.vector(5, 0), RealScalar.of(2));
     Scalar incr = rnGoal.costIncrement( //
         root, Collections.singletonList(new StateTime(Tensors.vector(10, 2), RealScalar.ZERO)), null);
@@ -24,7 +24,7 @@ public class StaticHelperTest extends TestCase {
   }
 
   public void testCostIncrement2() {
-    GlcNode root = StaticHelper.createRoot(new StateTime(Tensors.vector(2, 2), RealScalar.ZERO), x -> RealScalar.ZERO);
+    GlcNode root = GlcNodes.createRoot(new StateTime(Tensors.vector(2, 2), RealScalar.ZERO), x -> RealScalar.ZERO);
     RnNoHeuristicCircleGoalManager rnGoal = new RnNoHeuristicCircleGoalManager(Tensors.vector(5, 0), RealScalar.of(2));
     Scalar incr = rnGoal.costIncrement( //
         root, Collections.singletonList(new StateTime(Tensors.vector(10, 2), RealScalar.ZERO)), null);
@@ -32,7 +32,7 @@ public class StaticHelperTest extends TestCase {
   }
 
   public void testSimple() {
-    GlcNode glcNode = StaticHelper.createRoot( //
+    GlcNode glcNode = GlcNodes.createRoot( //
         new StateTime(Tensors.vector(1, 2), RealScalar.of(10)), //
         x -> RealScalar.ZERO);
     StateTime last = new StateTime(Tensors.vector(1, 2), RealScalar.of(15));
@@ -42,7 +42,7 @@ public class StaticHelperTest extends TestCase {
 
   public void testSimple2() {
     CostFunction costFunction = new Se2ShiftCostFunction(Quantity.of(100, "CHF"));
-    GlcNode glcNode = StaticHelper.createRoot(new StateTime(Tensors.vector(1, 2), RealScalar.ONE), costFunction);
+    GlcNode glcNode = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2), RealScalar.ONE), costFunction);
     Scalar scalar = costFunction.costIncrement(glcNode, null, null);
     assertEquals(scalar, Quantity.of(0, "CHF"));
   }

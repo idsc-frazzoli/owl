@@ -135,7 +135,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.1.5</version>
+        <version>0.1.6</version>
       </dependency>
     </dependencies>
 

@@ -1,9 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.adapter;
+package ch.ethz.idsc.owl.glc.core;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
