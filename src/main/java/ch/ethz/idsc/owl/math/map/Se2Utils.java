@@ -12,17 +12,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 public enum Se2Utils {
   ;
-  // TODO NEXT RELEASE
-  @Deprecated
-  public static Tensor exp(Tensor x) {
-    return Se2CoveringExponential.INSTANCE.exp(x);
-  }
-
-  @Deprecated
-  public static Tensor log(Tensor g) {
-    return Se2CoveringExponential.INSTANCE.log(g);
-  }
-
   /** maps a vector from the group SE2 to a matrix in SE2
    * 
    * @param g = {px, py, angle}

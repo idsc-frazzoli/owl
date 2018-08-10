@@ -8,13 +8,16 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 
 import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -36,6 +39,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.io.CsvFormat;
+import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
@@ -47,7 +52,7 @@ class CurveSubdivisionDemo {
   private static final Tensor ARROWHEAD_LO = Tensors.matrixDouble( //
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(.6));
   private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
-  private static final Scalar COMB_SCALE = DoubleScalar.of(.5);
+  private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // private static final Tensor DUBILAB = //
   // ResourceData.of("/dubilab/controlpoints/eight/20180603.csv").multiply(RealScalar.of(.4)).unmodifiable();
@@ -71,7 +76,7 @@ class CurveSubdivisionDemo {
     SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
     // control = Tensors.fromString(
     // "{{499/60, -43/60, 4.1887902047863905}, {-19/60, 11/20, 2.617993877991494}, {41/15, 43/10, 1.0471975511965976}, {-221/60, 16/5, 3.141592653589793}, {-9,
-    // 247/60, 0.7853981633974483}, {-46/15, 43/15, 3.141592653589793}, {-451/60, 1, 0.7853981633974483}, {431/60, 9/5, 4.1887902047863905}}");
+    // 247/60, 0.7853981633974483}, {-46/15, 43/15, 3.141592653589793}, {60, 1, 0.7853981633974483}, {431/60, 9/5, 4.1887902047863905}}");
     // control = Tensors.fromString( //
     // "{{31/15, -1/3, 1.0471975511965976}, {-27/10, 107/60, 3.665191429188092}, {23/6, -44/15, 6.8067840827778845}, {-47/15, 409/60, 9.686577348568528}}");
     // TREBLE CLEF
@@ -95,32 +100,49 @@ class CurveSubdivisionDemo {
         Tensors.fromString("{{1.5,0,0},{1.5,0,0},{2,0,3.141592653589793},{1.5,0,0},{1.5,0,0},{4,0,3.141592653589793},{1.5,0,0},{1.5,0,0}}"));
     control = DubinsGenerator.of(Tensors.vector(0, 0, 0.5), //
         Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}"));
-    control = Tensors.fromString( //
-        "{{-23/30, 17/5, 0.0}, {-8/15, -73/60, -1.0471975511965976}, {-35/12, -7/2, 0.2617993877991494}, {-1/5, -133/30, 2.356194490192345}, {-103/60, -39/10, 6.544984694978735}, {-17/30, -131/30, 7.853981633974482}, {-31/15, -173/60, 5.497787143782138}, {1/5, -91/20, 1.832595714594046}, {-3, -26/15, -1.0471975511965976}, {-37/30, 7/20, -1.308996938995747}, {-7/20, 5/2, -0.5235987755982988}, {-13/10, 23/15, 1.0471975511965976}, {-59/60, -47/30, 1.5707963267948966}}");
-    control = DubinsGenerator.of(Tensors.vector(0, 0, 0), //
-        Tensors.fromString("{{1,0,0},{1,0,0},{4,-1,3.1415/2},{2,0,3.14159},{1,0,3.14159}}"));
-    control = DubinsGenerator.of(Tensors.vector(0, 0, Math.PI / 4 - .15), //
-        Tensors.fromString("{{1.5,0,0},{1.5,0,0},{9,0,7.85398},{3,0,0},{1.5,0,0}}"));
-    control = DubinsGenerator.of(Tensors.vector(0, 0, 0), Tensors.fromString( //
-        "{{3,0,3.141592653589793},{2.5,0,-3.141592653589793},{2,0,3.141592653589793},{1.5,0,-3.141592653589793},{1.0,0,3.141592653589793}}"));
+    {
+      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+      control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1)))));
+    }
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+    // Tensors.fromString("{{1.3,0,0},{1.3,0,0},{2.6,0,2.5708},{1.3,0,2.1},{1.9,0,0},{3.0,0,-1.2},{1.8,0,0},{5.2,0,3.14159},{2.6,0,3.14159},{2.6,0,0}}"));
+    // control = Tensors.fromString( //
+    // "{{-23/30, 17/5, 0.0}, {-8/15, -73/60, -1.0471975511965976}, {-35/12, -7/2, 0.2617993877991494}, {-1/5, -133/30, 2.356194490192345}, {-103/60, -39/10,
+    // 6.544984694978735}, {-17/30, -131/30, 7.853981633974482}, {-31/15, -173/60, 5.497787143782138}, {1/5, -91/20, 1.832595714594046}, {-3, -26/15,
+    // -1.0471975511965976}, {-37/30, 7/20, -1.308996938995747}, {-7/20, 5/2, -0.5235987755982988}, {-13/10, 23/15, 1.0471975511965976}, {-59/60, -47/30,
+    // 1.5707963267948966}}");
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, 0), //
+    // Tensors.fromString("{{1,0,0},{1,0,0},{4,-1,3.1415/2},{2,0,3.14159},{1,0,3.14159}}"));
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, Math.PI / 4 - .15), //
+    // Tensors.fromString("{{1.5,0,0},{1.5,0,0},{9,0,7.85398},{3,0,0},{1.5,0,0}}"));
+    // waviness
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, 0), Tensors.fromString( //
+    // "{{3,0,3.141592653589793},{2.5,0,-3.141592653589793},{2,0,3.141592653589793},{1.5,0,-3.141592653589793},{1.0,0,3.141592653589793}}"));
     // dubins intro
-    control = DubinsGenerator.of(Tensors.vector(0, 0, 3.1 + 1), Tensors.fromString( //
-        "{{2,0,0},{3.5,0,-4.5},{3.5,0,0},{1.6,0,3},{2.3,0,2}}"));
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, 3.1 + 1), Tensors.fromString( //
+    // "{{2,0,0},{3.5,0,-4.5},{3.5,0,0},{1.6,0,3},{2.3,0,2}}"));
     // pathological
-    control = Tensors.fromString("{{0, 0, 0}, {2, 0, 1.308996938995747}, {4, 0, 0.5235987755982988}}");
+    // control = Tensors.fromString("{{0, 0, 0}, {2, 0, 1.308996938995747}, {4, 0, 0.5235987755982988}}");
     {
       JButton jButton = new JButton("clear");
       jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
       timerFrame.jToolBar.add(jButton);
+    }
+    JTextField jTextField = new JTextField(10);
+    jTextField.setPreferredSize(new Dimension(100, 28));
+    {
+      timerFrame.jToolBar.add(jTextField);
     }
     {
       JButton jButton = new JButton("print");
       jButton.addActionListener(actionEvent -> {
         System.out.println(control);
         // long now = System.currentTimeMillis();
+        File file = UserHome.file("" + jTextField.getText() + ".csv");
         // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
         try {
-          // Export.of(file, control.map(CsvFormat.strict()));
+          Export.of(file, control.map(CsvFormat.strict()));
         } catch (Exception exception) {
           exception.printStackTrace();
         }

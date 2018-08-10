@@ -10,6 +10,9 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Tan;
 
+/** References:
+ * http://vixra.org/abs/1807.0463
+ * https://www.youtube.com/watch?v=2vDciaUgL4E */
 public enum Se2CoveringExponential implements LieExponential {
   INSTANCE;
   // ---
@@ -43,6 +46,9 @@ public enum Se2CoveringExponential implements LieExponential {
     Scalar y = g.Get(1);
     Scalar be2 = be.divide(RealScalar.of(2));
     Scalar tan = Tan.FUNCTION.apply(be2);
-    return Tensors.of(y.add(x.divide(tan)).multiply(be2), y.divide(tan).subtract(x).multiply(be2), be);
+    return Tensors.of( //
+        y.add(x.divide(tan)).multiply(be2), //
+        y.divide(tan).subtract(x).multiply(be2), //
+        be);
   }
 }
