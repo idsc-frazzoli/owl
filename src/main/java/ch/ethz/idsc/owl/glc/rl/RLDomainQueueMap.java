@@ -9,8 +9,7 @@ import java.util.Map.Entry;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */
-class RLDomainQueueMap implements Iterable<Entry<Tensor, RLDomainQueue>> {
+/* package */ class RLDomainQueueMap implements Iterable<Entry<Tensor, RLDomainQueue>> {
   /** map from domain keys to queues of nodes */
   final Map<Tensor, RLDomainQueue> map = new HashMap<>();
   private final Tensor slacks;

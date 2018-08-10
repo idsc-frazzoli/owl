@@ -1,3 +1,4 @@
+// code by ynager
 package ch.ethz.idsc.owl.glc.rl;
 
 import java.util.ArrayList;
@@ -49,23 +50,32 @@ public class RLQueue implements Iterable<GlcNode> {
     return queue.removeAll(c);
   }
 
-  /** Get first element from best set */
+  /** @return first element from best set
+   * @throws Exception if queue is empty */
   private GlcNode getFromBest() {
     List<GlcNode> queueCopy = new ArrayList<>(queue);
     getBestSet(queueCopy, 0);
     return queueCopy.get(0);
   }
 
-  /** recursively find best set */
+  /** iteratively find best set
+   * 
+   * @param list is modified by function
+   * @param d level
+   * @return list with inferior nodes removed
+   * @throws Exception if queue is empty */
   private List<GlcNode> getBestSet(List<GlcNode> list, int d) {
     GlcNode minCostNode = Collections.min(list, new Comparator<GlcNode>() {
       @Override
       public int compare(GlcNode first, GlcNode second) {
-        return Scalars.compare(((VectorScalar) first.merit()).vector().Get(d), ((VectorScalar) second.merit()).vector().Get(d));
+        return Scalars.compare( //
+            ((VectorScalar) first.merit()).vector().Get(d), //
+            ((VectorScalar) second.merit()).vector().Get(d));
       }
     });
     Scalar minMerit = ((VectorScalar) minCostNode.merit()).vector().Get(d);
-    list.removeIf(n -> Scalars.lessThan(minMerit.add(slack.Get(d)), ((VectorScalar) n.merit()).vector().Get(d)));
+    Scalar threshold = minMerit.add(slack.Get(d));
+    list.removeIf(node -> Scalars.lessThan(threshold, ((VectorScalar) node.merit()).vector().Get(d)));
     if (d == vectorSize - 1)
       return list;
     return getBestSet(list, d + 1);

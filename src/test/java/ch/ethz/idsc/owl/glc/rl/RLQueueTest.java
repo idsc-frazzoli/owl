@@ -1,6 +1,8 @@
 // code by ynager
 package ch.ethz.idsc.owl.glc.rl;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.data.Stopwatch;
@@ -56,5 +58,14 @@ public class RLQueueTest extends TestCase {
     Stopwatch sw = Stopwatch.started();
     rlQueue.poll();
     System.out.println(sw.display_seconds());
+  }
+
+  public void testCollectionMin() {
+    try {
+      Collections.min(Arrays.asList());
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

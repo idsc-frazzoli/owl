@@ -75,7 +75,7 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
    * @param connector */
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
     reachingSet.add(node);
-    // FIXME: remove inferiour nodes & nodes outside slack bounds
+    // FIXME: remove inferior nodes & nodes outside slack bounds
   }
 
   @Override // from ExpandInterface
