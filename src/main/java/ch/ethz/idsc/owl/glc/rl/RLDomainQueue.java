@@ -1,6 +1,9 @@
 // code by ynager
 package ch.ethz.idsc.owl.glc.rl;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,32 +25,32 @@ public class RLDomainQueue extends RLQueue {
   }
 
   // ---
-  private Tensor bounds = Tensors.vector(a -> INTEGER_MAX, vectorSize); // TODO find simpler way
-  private Tensor minValues = bounds;
-
   @Override
   public boolean add(GlcNode e) {
-    Tensor merit = ((VectorScalar) e.merit()).vector();
-    for (int i = 0; i < vectorSize; i++) {
-      Scalar m = merit.Get(i);
-      if (Scalars.lessThan(m, minValues.Get(i))) {
-        minValues.set(m, i); // update minValue
-        bounds.set(m.add(slack.get(i)), i); // update bounds
-      }
-    }
     return queue.add(e);
   }
 
-  public Tensor getBounds() {
-    return bounds;
-  }
-
   public Tensor getMinValues() {
+    if (queue.isEmpty())
+      return Tensors.vector(a -> INTEGER_MAX, vectorSize);
+    Tensor minValues = Tensors.vector(a -> INTEGER_MAX, vectorSize);
+    for (int i = 0; i < vectorSize; i++) {
+      final int j = i;
+      GlcNode minCostNode = Collections.min(queue, new Comparator<GlcNode>() {
+        @Override
+        public int compare(GlcNode first, GlcNode second) {
+          return Scalars.compare( //
+              ((VectorScalar) first.merit()).vector().Get(j), //
+              ((VectorScalar) second.merit()).vector().Get(j));
+        }
+      });
+      minValues.set(((VectorScalar) minCostNode.merit()).vector().Get(i), i);
+    }
     return minValues;
   }
 
   // ---
-  private RLDomainQueue(Tensor slacks) {
+  public RLDomainQueue(Tensor slacks) {
     super(slacks);
   }
 }

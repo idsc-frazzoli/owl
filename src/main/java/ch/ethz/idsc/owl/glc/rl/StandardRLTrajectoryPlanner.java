@@ -20,6 +20,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** transcription of the c++ implementation by bapaden
  * 
@@ -35,16 +36,19 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   private final GoalInterface goalInterface;
   private transient final ControlsIntegrator controlsIntegrator;
   // ---
-  private final static Tensor SLACKS = Tensors.vector(0, 0); // FIXME
-  private final int costSize = SLACKS.length(); // FIXME
+  private final Tensor slacks;
+  private final int costSize;
 
   public StandardRLTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, //
       StateIntegrator stateIntegrator, //
       Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, //
-      GoalInterface goalInterface) {
-    super(stateTimeRaster, goalInterface, SLACKS);
+      GoalInterface goalInterface, 
+      Tensor slacks) {
+    super(stateTimeRaster, goalInterface, slacks);
+    this.slacks = slacks;
+    this.costSize = slacks.length();
     this.stateIntegrator = stateIntegrator;
     this.plannerConstraint = Objects.requireNonNull(plannerConstraint);
     this.goalInterface = goalInterface;
@@ -58,28 +62,26 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   public void expand(final GlcNode node) {
     Map<GlcNode, List<StateTime>> connectors = controlsIntegrator.from(node);
     // ---
-    RLDomainQueueMap domainQueueMap = new RLDomainQueueMap(SLACKS); // holds candidates for insertion
+    RLDomainQueueMap domainQueueMap = new RLDomainQueueMap(slacks); // holds candidates for insertion
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
-      Optional<RLDomainQueue> former = getNode(domainKey);
-      if (former.isPresent()) { // is already some domain queue present from previous exploration ?
-        if (isWithinSlack(next, former.get()))
+      Optional<RLDomainQueue> formerQueue = getDomainQueue(domainKey);
+      if (formerQueue.isPresent()) { // is already some domain queue present from previous exploration ?
+        if (isWithinSlack(next, formerQueue.get())) {
           domainQueueMap.put(domainKey, next); // new node lies within slack, potentially better than previous ones
+        }
       } else
         domainQueueMap.put(domainKey, next); // node is considered without comparison to any former node
     }
     // ---
-    domainQueueMap.map.entrySet().stream().parallel() //
+    domainQueueMap.map.entrySet().stream() // FIXME make parallel
         .forEach(entry -> processCandidates(node, connectors, entry.getKey(), entry.getValue()));
   }
 
   private boolean isWithinSlack(GlcNode next, RLDomainQueue domainQueue) {
     Tensor merit = ((VectorScalar) next.merit()).vector();
-    for (int i = 0; i < costSize; i++) {
-      if (Scalars.lessThan(domainQueue.getBounds().Get(i), merit.Get(i)))
-        return false; // cost out of slack bounds
-    }
-    return true;
+    Tensor diff = domainQueue.getMinValues().add(slacks).subtract(merit);
+    return !diff.stream().anyMatch(c -> Sign.isNegative(c.Get()));
   }
 
   private void processCandidates( //
@@ -87,33 +89,38 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
     for (GlcNode next : domainQueue) { // iterate over the candidates in DomainQueue
       final List<StateTime> trajectory = connectors.get(next);
       if (plannerConstraint.isSatisfied(node, trajectory, next.flow())) {
-        Optional<RLDomainQueue> former = getNode(domainKey);
+        Optional<RLDomainQueue> former = getDomainQueue(domainKey);
         boolean isPresent = former.isPresent();
         // ---
         synchronized (this) {
           if (isPresent) { // are already nodes present from previous exploration ?
             RLDomainQueue formerQueue = former.get();
-            Tensor bounds = formerQueue.getBounds();
-            // find nodes to be removed from OPEN queue
-            formerQueue.add(next); // add node to domainQueue
+            Tensor minValues = formerQueue.getMinValues();
+            Tensor merits = ((VectorScalar) next.merit()).vector();
+            // find nodes outside of bounds
             for (int i = 0; i < costSize; i++) {
               // is cost lower than prev min?
-              if (Scalars.lessThan(((VectorScalar) next.merit()).vector().Get(i), formerQueue.getMinValues().Get(i))) {
+              if (Scalars.lessThan(merits.Get(i), minValues.Get(i))) {
                 final int j = i;
                 List<GlcNode> toRemove = formerQueue.queue.stream() // find nodes to be removed
-                    .filter(n -> Scalars.lessThan(bounds.Get(j), ((VectorScalar) n.merit()).vector().Get(j))).collect(Collectors.toList());
+                    .filter(n -> Scalars.lessThan(merits.Get(j).add(slacks.Get(j)), //
+                        ((VectorScalar) n.merit()).vector().Get(j)))
+                    .collect(Collectors.toList());
+                //
                 if (!toRemove.isEmpty()) {
                   boolean removed = queue().removeAll(toRemove); // remove bad nodes from OPEN queue
-                  formerQueue.removeAll(toRemove); // remove bad nodes from domainqueue
-                  toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // remove edges from parent TODO check if correct
+                  formerQueue.removeAll(toRemove); // remove bad nodes from domain queue
+                  toRemove.stream().distinct().forEach(n -> n.parent().removeEdgeTo(n)); // remove edges from parent
                   if (!removed) //
-                    System.err.println("miss: " + domainKey);
+                    System.err.println("miss - nodes to be removed dont exist " + domainKey);
                 }
               }
             }
           }
+          // TODO only add if cost distance to existing nodes in domain is above threshold
           node.insertEdgeTo(next);
-          insert(domainKey, next); // insert node into OPEN queue and domainQueueMap
+          addToDomainMap(domainKey, next); // insert node to domain queue
+          addToOpen(domainKey, next); // insert node into OPEN
           if (goalInterface.firstMember(trajectory).isPresent()) // GOAL check
             offerDestination(next, trajectory);
         }
