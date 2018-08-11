@@ -85,11 +85,12 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
       VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
       // System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
       Scalar lowerBound = Ramp.of(Norm._2.ofVector(stateGoal.subtract(stateRoot)).subtract(radius));
-      if (Scalars.lessThan(((VectorScalar) cost).vector().Get(0), lowerBound))
+      if (Scalars.lessThan(cost.vector().Get(0), lowerBound))
         throw TensorRuntimeException.of(cost, lowerBound);
       // ---
-      GlcNode minCostNode = Collections //
-          .min(trajectoryPlanner.reachingSet.list, new Comparator<GlcNode>() {
+      GlcNode minCostNode = Collections.min( //
+          trajectoryPlanner.reachingSet.collection(), //
+          new Comparator<GlcNode>() {
             @Override
             public int compare(GlcNode first, GlcNode second) {
               return Scalars.compare( //
