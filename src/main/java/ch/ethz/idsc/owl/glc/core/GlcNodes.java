@@ -1,15 +1,23 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.adapter;
+package ch.ethz.idsc.owl.glc.core;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.Scalar;
 
 public enum GlcNodes {
   ;
+  /** @param stateTime
+   * @param heuristicFunction
+   * @return */
+  public static GlcNode createRoot(StateTime stateTime, HeuristicFunction heuristicFunction) {
+    Scalar minCost = heuristicFunction.minCostToGoal(stateTime.state());
+    return GlcNode.of(null, stateTime, minCost.zero(), minCost);
+  }
+
   /** coarse path of {@link StateTime}s of nodes from root to given node
    * 
    * @return path to goal if found, or path to current Node in queue

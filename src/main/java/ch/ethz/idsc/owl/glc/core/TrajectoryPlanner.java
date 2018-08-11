@@ -41,7 +41,7 @@ public abstract class TrajectoryPlanner implements ExpandInterface<GlcNode>, Ser
   /** @param stateTime */
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(queue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
-    boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), StaticHelper.createRoot(stateTime, heuristicFunction));
+    boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
     GlobalAssert.that(!replaced); // root insertion should not replace any other node
   }
 
