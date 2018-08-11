@@ -89,7 +89,7 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
       final int j = i;
       if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
         //
-        List<GlcNode> toRemove = reachingSet.queue.stream() // find nodes to be removed
+        List<GlcNode> toRemove = reachingSet.list.stream() // find nodes to be removed
             .filter(n -> Scalars.lessThan(merit.Get(j).add(slacks.Get(j)), //
                 ((VectorScalar) n.merit()).vector().Get(j)))
             .collect(Collectors.toList());

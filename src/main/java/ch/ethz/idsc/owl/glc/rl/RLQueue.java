@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class RLQueue implements Iterable<GlcNode> {
-  protected final List<GlcNode> queue = new ArrayList<>(500);
+  protected final List<GlcNode> list = new ArrayList<>(500);
   protected final int vectorSize;
   protected final Tensor slack;
 
@@ -25,12 +25,12 @@ public class RLQueue implements Iterable<GlcNode> {
   }
 
   public boolean add(GlcNode e) {
-    return queue.add(e);
+    return list.add(e);
   }
 
   public GlcNode poll() {
     GlcNode best = getFromBest();
-    queue.remove(best);
+    list.remove(best);
     return best;
   }
 
@@ -39,21 +39,21 @@ public class RLQueue implements Iterable<GlcNode> {
   }
 
   public int size() {
-    return queue.size();
+    return list.size();
   }
 
   public boolean remove(GlcNode e) {
-    return queue.remove(e);
+    return list.remove(e);
   }
 
   public boolean removeAll(Collection<GlcNode> c) {
-    return queue.removeAll(c);
+    return list.removeAll(c);
   }
 
   /** @return first element from best set
    * @throws Exception if queue is empty */
   private GlcNode getFromBest() {
-    List<GlcNode> queueCopy = new ArrayList<>(queue);
+    List<GlcNode> queueCopy = new ArrayList<>(list);
     getBestSet(queueCopy, 0);
     return queueCopy.get(0);
   }
@@ -82,11 +82,11 @@ public class RLQueue implements Iterable<GlcNode> {
   }
 
   public boolean isEmpty() {
-    return queue.isEmpty();
+    return list.isEmpty();
   }
 
   @Override // from Iterable
   public Iterator<GlcNode> iterator() {
-    return queue.iterator();
+    return list.iterator();
   }
 }

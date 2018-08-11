@@ -19,17 +19,8 @@ import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** transcription of the c++ implementation by bapaden
- * 
- * subsequent modifications include:
- * <ul>
- * <li>parallel integration of trajectories
- * <li>parallel processing of queues
- * <li>nodes that get replaced in a domain, are also removed from the queue
- * </ul> */
 public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
@@ -44,8 +35,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
       StateIntegrator stateIntegrator, //
       Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, //
-      GoalInterface goalInterface, 
-      Tensor slacks) {
+      GoalInterface goalInterface, Tensor slacks) {
     super(stateTimeRaster, goalInterface, slacks);
     this.slacks = slacks;
     this.costSize = slacks.length();
@@ -67,21 +57,26 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       Optional<RLDomainQueue> formerQueue = getDomainQueue(domainKey);
       if (formerQueue.isPresent()) { // is already some domain queue present from previous exploration ?
-        if (isWithinSlack(next, formerQueue.get())) {
+        if (isWithinSlack(next, formerQueue.get()) && !isEqual(next, formerQueue.get())) {
           domainQueueMap.put(domainKey, next); // new node lies within slack, potentially better than previous ones
         }
       } else
         domainQueueMap.put(domainKey, next); // node is considered without comparison to any former node
     }
     // ---
-    domainQueueMap.map.entrySet().stream() // FIXME make parallel
+    domainQueueMap.map.entrySet().stream().parallel() // FIXME make parallel
         .forEach(entry -> processCandidates(node, connectors, entry.getKey(), entry.getValue()));
   }
 
   private boolean isWithinSlack(GlcNode next, RLDomainQueue domainQueue) {
     Tensor merit = ((VectorScalar) next.merit()).vector();
     Tensor diff = domainQueue.getMinValues().add(slacks).subtract(merit);
-    return !diff.stream().anyMatch(c -> Sign.isNegative(c.Get()));
+    return !diff.stream().map(Tensor::Get).anyMatch(Sign::isNegative);
+  }
+
+  private boolean isEqual(GlcNode next, RLDomainQueue domainQueue) {
+    // TODO check if close to existing nodes / assert if this is helpful
+    return false;
   }
 
   private void processCandidates( //
@@ -97,12 +92,10 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
             RLDomainQueue formerQueue = former.get();
             Tensor minValues = formerQueue.getMinValues();
             Tensor merits = ((VectorScalar) next.merit()).vector();
-            // find nodes outside of bounds
-            for (int i = 0; i < costSize; i++) {
-              // is cost lower than prev min?
-              if (Scalars.lessThan(merits.Get(i), minValues.Get(i))) {
+            for (int i = 0; i < costSize; i++) { // find nodes outside of bounds
+              if (Scalars.lessThan(merits.Get(i), minValues.Get(i))) { // cost lower than prev min?
                 final int j = i;
-                List<GlcNode> toRemove = formerQueue.queue.stream() // find nodes to be removed
+                List<GlcNode> toRemove = formerQueue.list.stream() // find nodes to be removed
                     .filter(n -> Scalars.lessThan(merits.Get(j).add(slacks.Get(j)), //
                         ((VectorScalar) n.merit()).vector().Get(j)))
                     .collect(Collectors.toList());
@@ -110,16 +103,15 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
                 if (!toRemove.isEmpty()) {
                   boolean removed = queue().removeAll(toRemove); // remove bad nodes from OPEN queue
                   formerQueue.removeAll(toRemove); // remove bad nodes from domain queue
-                  toRemove.stream().distinct().forEach(n -> n.parent().removeEdgeTo(n)); // remove edges from parent
+                  toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // remove edges from parent
                   if (!removed) //
                     System.err.println("miss - nodes to be removed dont exist " + domainKey);
                 }
               }
             }
           }
-          // TODO only add if cost distance to existing nodes in domain is above threshold
-          node.insertEdgeTo(next);
           addToDomainMap(domainKey, next); // insert node to domain queue
+          node.insertEdgeTo(next);
           addToOpen(domainKey, next); // insert node into OPEN
           if (goalInterface.firstMember(trajectory).isPresent()) // GOAL check
             offerDestination(next, trajectory);

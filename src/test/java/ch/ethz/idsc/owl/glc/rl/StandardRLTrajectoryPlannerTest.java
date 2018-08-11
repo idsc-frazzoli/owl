@@ -3,6 +3,8 @@ package ch.ethz.idsc.owl.glc.rl;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +20,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -31,9 +34,12 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Ramp;
 import junit.framework.TestCase;
 
 public class StandardRLTrajectoryPlannerTest extends TestCase {
@@ -41,9 +47,9 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
     final Scalar radius = DoubleScalar.of(.25);
-    final Tensor slacks = Tensors.vector(0, 0, 0);
+    final Tensor slacks = Tensors.vector(1.5, 0, 0);
     // ---
-    Tensor eta = Tensors.vector(4, 4);
+    Tensor eta = Tensors.vector(8, 8);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(36);
@@ -59,7 +65,7 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
         return ((RegionWithDistance<Tensor>) goalRegion).distance(x);
       }
     };
-    Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 }});
+    Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
     PolygonRegion polygonRegion = new PolygonRegion(polygon);
     PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(regionConstraint);
@@ -72,12 +78,28 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcRLExpand glcExpand = new GlcRLExpand(trajectoryPlanner);
-    glcExpand.untilOptimal(500);
+    glcExpand.untilOptimal(1000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       GlcNode goalNode = optional.get(); // <- throws exception if
-      Scalar cost = goalNode.costFromRoot();
-      System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
+      VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
+      // System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
+      Scalar lowerBound = Ramp.of(Norm._2.ofVector(stateGoal.subtract(stateRoot)).subtract(radius));
+      if (Scalars.lessThan(((VectorScalar) cost).vector().Get(0), lowerBound))
+        throw TensorRuntimeException.of(cost, lowerBound);
+      // ---
+      GlcNode minCostNode = Collections //
+          .min(trajectoryPlanner.reachingSet.list, new Comparator<GlcNode>() {
+            @Override
+            public int compare(GlcNode first, GlcNode second) {
+              return Scalars.compare( //
+                  ((VectorScalar) first.merit()).vector().Get(0), //
+                  ((VectorScalar) second.merit()).vector().Get(0));
+            }
+          });
+      Tensor minComp = ((VectorScalar) minCostNode.merit()).vector(); // min cost component in goal
+      Scalar upperBound = minComp.Get(0).add(slacks.Get(0));
+      assertTrue(Scalars.lessEquals(cost.vector().Get(0), upperBound));
     }
   }
 }

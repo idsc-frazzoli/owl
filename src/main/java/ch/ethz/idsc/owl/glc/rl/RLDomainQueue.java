@@ -27,16 +27,16 @@ public class RLDomainQueue extends RLQueue {
   // ---
   @Override
   public boolean add(GlcNode e) {
-    return queue.add(e);
+    return list.add(e);
   }
 
   public Tensor getMinValues() {
-    if (queue.isEmpty())
-      return Tensors.vector(a -> INTEGER_MAX, vectorSize);
     Tensor minValues = Tensors.vector(a -> INTEGER_MAX, vectorSize);
+    if (list.isEmpty())
+      return minValues;
     for (int i = 0; i < vectorSize; i++) {
       final int j = i;
-      GlcNode minCostNode = Collections.min(queue, new Comparator<GlcNode>() {
+      GlcNode minCostNode = Collections.min(list, new Comparator<GlcNode>() {
         @Override
         public int compare(GlcNode first, GlcNode second) {
           return Scalars.compare( //

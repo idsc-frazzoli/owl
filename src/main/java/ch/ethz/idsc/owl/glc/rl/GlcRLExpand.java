@@ -29,7 +29,7 @@ public class GlcRLExpand {
   public void untilOptimal(int limit) {
     expand(limit, this::isOptimal);
   }
-  
+
   /** iterates until expansion creates a first node goal region
    * 
    * @param limit */
