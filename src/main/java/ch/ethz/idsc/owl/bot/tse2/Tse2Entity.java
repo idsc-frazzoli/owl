@@ -34,7 +34,7 @@ public abstract class Tse2Entity extends TrajectoryEntity {
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
 
   protected Tse2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
-    super(new SimpleEpisodeIntegrator(TSe2StateSpaceModel.INSTANCE, //
+    super(new SimpleEpisodeIntegrator(Tse2StateSpaceModel.INSTANCE, //
         RungeKutta4Integrator.INSTANCE, //
         stateTime), //
         trajectoryControl);
