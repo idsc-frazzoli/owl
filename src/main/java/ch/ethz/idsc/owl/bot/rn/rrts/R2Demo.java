@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-enum R2Demo {
+/* package */ enum R2Demo {
   ;
   private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
 

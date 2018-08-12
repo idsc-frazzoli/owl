@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 // LONGTERM the redundancy in R2****Entity shows that re-factoring is needed!
-class R2RrtsEntity extends AbstractRrtsEntity {
+/* package */ class R2RrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(0.5);
   // ---

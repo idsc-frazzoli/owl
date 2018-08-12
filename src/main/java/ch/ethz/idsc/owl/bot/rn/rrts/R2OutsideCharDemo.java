@@ -22,7 +22,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
-enum R2OutsideCharDemo {
+/* package */ enum R2OutsideCharDemo {
   ;
   private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
 

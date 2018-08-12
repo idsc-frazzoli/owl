@@ -21,6 +21,7 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -44,7 +45,7 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
-enum R2DemoSlow {
+/* package */ enum R2DemoSlow {
   ;
   static TrajectoryPlanner simpleEmpty() throws Exception {
     return simple(EmptyTrajectoryRegionQuery.INSTANCE);
@@ -70,6 +71,7 @@ enum R2DemoSlow {
     Collection<Flow> controls = r2Config.getFlows(6);
     SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
+    RenderInterface renderInterface = RegionRenders.create(obstacleQuery);
     // ---
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(obstacleQuery);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
@@ -79,7 +81,7 @@ enum R2DemoSlow {
     try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
-      // owlyFrame.addBackground(RenderElements.create(plannerConstraint));
+      owlyFrame.addBackground(renderInterface); // reference to collection
       for (int i = 0; i < 20; i++) {
         Optional<GlcNode> optional = trajectoryPlanner.getBest();
         if (optional.isPresent())

@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-enum R2InsideCharDemo {
+/* package */ enum R2InsideCharDemo {
   ;
   private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
 

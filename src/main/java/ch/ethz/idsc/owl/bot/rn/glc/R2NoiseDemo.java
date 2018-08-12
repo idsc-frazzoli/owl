@@ -33,6 +33,7 @@ import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -43,7 +44,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 
 /** expands: 1491
  * computation time: 0.876993604 */
-enum R2NoiseDemo {
+/* package */ enum R2NoiseDemo {
   ;
   public static void main(String[] args) {
     Tensor partitionScale = Tensors.vector(8, 8);
@@ -59,8 +60,8 @@ enum R2NoiseDemo {
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         new RnMinDistGoalManager(sphericalRegion), //
         Arrays.asList(new R2NoiseCostFunction(threshold.subtract(RealScalar.of(0.3)))));
-    PlannerConstraint plannerConstraint = //
-        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
+    TrajectoryRegionQuery trajectoryRegionQuery = CatchyTrajectoryRegionQuery.timeInvariant(region);
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(partitionScale), stateIntegrator, controls, plannerConstraint, goalInterface);
@@ -76,6 +77,7 @@ enum R2NoiseDemo {
     }
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    owlyFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
     owlyFrame.configCoordinateOffset(100, 300);
   }
 }

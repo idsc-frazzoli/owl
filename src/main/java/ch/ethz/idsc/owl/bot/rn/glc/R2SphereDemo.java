@@ -32,6 +32,7 @@ import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -39,7 +40,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
-enum R2SphereDemo {
+/* package */ enum R2SphereDemo {
   ;
   public static void main(String[] args) {
     Tensor partitionScale = Tensors.vector(3.5, 4);
@@ -50,9 +51,9 @@ enum R2SphereDemo {
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     Region<Tensor> region1 = new EllipsoidRegion(Tensors.vector(3, 3), Tensors.vector(2, 2));
     Region<Tensor> region2 = new EllipsoidRegion(Tensors.vector(2.5, 0), Tensors.vector(2, 1.5));
-    PlannerConstraint plannerConstraint = //
-        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant( //
-            RegionUnion.wrap(Arrays.asList(region1, region2))));
+    TrajectoryRegionQuery trajectoryRegionQuery = CatchyTrajectoryRegionQuery.timeInvariant( //
+        RegionUnion.wrap(Arrays.asList(region1, region2)));
+    PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(partitionScale), stateIntegrator, controls, plannerConstraint, goalInterface);
@@ -68,5 +69,6 @@ enum R2SphereDemo {
     owlyFrame.addBackground(RegionRenders.create(region1));
     owlyFrame.addBackground(RegionRenders.create(region2));
     owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    owlyFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
   }
 }

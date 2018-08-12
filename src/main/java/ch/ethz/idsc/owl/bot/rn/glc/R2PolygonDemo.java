@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
-enum R2PolygonDemo {
+/* package */ enum R2PolygonDemo {
   ;
   public static void main(String[] args) {
     Tensor partitionScale = Tensors.vector(5, 5);

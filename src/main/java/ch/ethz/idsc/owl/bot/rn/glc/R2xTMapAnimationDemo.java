@@ -38,7 +38,7 @@ public class R2xTMapAnimationDemo implements DemoInterface {
     // ---
     ImageRegion imageRegion = null;
     imageRegion = ImageRegions.loadFromRepository( //
-        "/map/dubendorf/hangar/20180122.png", Tensors.vector(10, 10), false);
+        "/dubilab/localization/20180122.png", Tensors.vector(10, 10), false);
     Region<Tensor> region = RnPointcloudRegions.from(imageRegion, RealScalar.of(0.15));
     // ---
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);

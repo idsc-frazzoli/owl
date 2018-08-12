@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
 
-enum R2ExpandDemo {
+/* package */ enum R2ExpandDemo {
   ;
   private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
 

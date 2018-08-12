@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 
 /** functionality is used in tests */
 @DontModify
-enum R2Demo {
+/* package */ enum R2Demo {
   ;
   static final StateIntegrator STATE_INTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
