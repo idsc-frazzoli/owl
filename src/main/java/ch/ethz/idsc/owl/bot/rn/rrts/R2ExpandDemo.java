@@ -14,21 +14,23 @@ import ch.ethz.idsc.owl.rrts.core.Rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
 
 enum R2ExpandDemo {
   ;
+  private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
+
   public static void main(String[] args) throws Exception {
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
     Tensor max = Tensors.vector(wid, wid);
-    RnTransitionSpace rnss = new RnTransitionSpace();
     RrtsNodeCollection nc = new RnNodeCollection(min, max);
     TransitionRegionQuery trq = StaticHelper.polygon1();
     // ---
-    Rrts rrts = new DefaultRrts(rnss, nc, trq, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     BoxRandomSample rnUniformSampler = new BoxRandomSample(min, max);
     try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("r2rrts.gif"), 250)) {
@@ -48,6 +50,6 @@ enum R2ExpandDemo {
         gsw.append(owlyFrame.offscreen());
     }
     System.out.println(rrts.rewireCount());
-    RrtsNodes.costConsistency(root, rnss, LengthCostFunction.IDENTITY);
+    RrtsNodes.costConsistency(root, TRANSITION_SPACE, LengthCostFunction.IDENTITY);
   }
 }

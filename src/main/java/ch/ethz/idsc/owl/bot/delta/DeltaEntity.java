@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y); // non-negative
+    return Norm2Squared.between(x, y);
   }
 
   @Override

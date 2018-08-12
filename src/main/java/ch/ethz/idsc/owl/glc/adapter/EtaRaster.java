@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.glc.adapter;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.owl.bot.lv.LvStateSpaceModel;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -18,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * <p>Examples for represent are:
  * identity for R^n
  * mod for So2
- * log for {@link LvStateSpaceModel}
+ * log for Lotka-Volterra state space model
  * 
  * <p>The default value drops time information and only considers
  * {@link StateTime#state()}. */

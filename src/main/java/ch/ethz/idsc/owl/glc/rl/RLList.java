@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-// TODO ynager possibly implementation is not needed anymore
+// TODO YN possibly implementation is not needed anymore
 @Deprecated
 class RLList implements Iterable<GlcNode> {
   // TODO probably better not to use default value

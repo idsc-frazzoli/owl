@@ -47,6 +47,7 @@ public class RnMinDistGoalManager extends SimpleTrajectoryRegionQuery implements
 
   @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+    // assumes that flow is along a straight line
     return Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()); // ||x_prev - x_next||
   }
 

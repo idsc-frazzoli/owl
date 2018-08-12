@@ -9,13 +9,17 @@ import ch.ethz.idsc.tensor.sca.Mod;
 
 /** identifies (x,y,theta) === (x,y,theta + 2 pi n) for all n
  * 
+ * representation of angles is in the interval [0, 2pi)
+ * 
+ * differences are mapped to [-pi, pi)
+ * 
  * @see Se2CoveringWrap */
 public enum Se2Wrap implements CoordinateWrap {
   INSTANCE;
   // ---
-  protected static final int INDEX_ANGLE = 2;
-  protected static final Mod MOD = Mod.function(Math.PI * 2);
-  protected static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
+  private static final int INDEX_ANGLE = 2;
+  private static final Mod MOD = Mod.function(Math.PI * 2);
+  private static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
 
   @Override // from CoordinateWrap
   public final Tensor represent(Tensor x) {

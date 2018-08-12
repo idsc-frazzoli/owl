@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * The use of {@link Duncan1StateSpaceModel} is preferred and
  * supports the use of units.
  * 
- * <p>Rice1StateSpaceModel is a single Integrator with friction.
+ * <p>Rice1StateSpaceModel is a single integrator with friction.
  * Rice1StateSpaceModel is unit less.
  * The implementation for n-dimensional velocity */
 public class Rice1StateSpaceModel implements StateSpaceModel, Serializable {

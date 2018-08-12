@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return PsuMetric.INSTANCE.distance(x, y); // non-negative
+    return PsuMetric.INSTANCE.distance(x, y);
   }
 
   @Override

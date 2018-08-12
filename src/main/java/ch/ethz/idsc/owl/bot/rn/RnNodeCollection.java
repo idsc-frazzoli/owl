@@ -23,17 +23,17 @@ public class RnNodeCollection implements RrtsNodeCollection {
     ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20); // magic const
   }
 
-  @Override
+  @Override // from RrtsNodeCollection
   public void insert(RrtsNode rrtsNode) {
     ndMap.add(rrtsNode.state(), rrtsNode);
   }
 
-  @Override
+  @Override // from RrtsNodeCollection
   public int size() {
     return ndMap.size();
   }
 
-  @Override
+  @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
     NdCenterInterface distanceInterface = NdCenterInterface.euclidean(end);
     NdCluster<RrtsNode> cluster = ndMap.buildCluster(distanceInterface, k_nearest);
@@ -41,7 +41,7 @@ public class RnNodeCollection implements RrtsNodeCollection {
     return cluster.stream().map(NdEntry::value).collect(Collectors.toList());
   }
 
-  @Override
+  @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearFrom(Tensor start, int k_nearest) {
     return nearTo(start, k_nearest);
   }

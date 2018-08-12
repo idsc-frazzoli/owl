@@ -36,14 +36,14 @@ import ch.ethz.idsc.tensor.alg.Array;
  * 
  * References:
  * "Mobility and Autonomous Reconfiguration of Marsokhod" */
-enum Rice1dDemo {
+/* package */ enum Rice1dDemo {
   ;
   public static TrajectoryPlanner simple() {
     Tensor eta = Tensors.vector(8, 8);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         MidpointIntegrator.INSTANCE, RationalScalar.of(1, 8), 5);
     Collection<Flow> controls = Rice2Controls.create1d(RealScalar.of(-0.5), 15); //
-    GoalInterface goalInterface = Rice1GoalManager.create(Tensors.vector(6, -.7), Tensors.vector(0.4, 0.3));
+    GoalInterface goalInterface = new Rice1GoalManager(new EllipsoidRegion(Tensors.vector(6, -.7), Tensors.vector(0.4, 0.3)));
     Region<Tensor> region1 = new EllipsoidRegion(Tensors.vector(+3, +1), Tensors.vector(1.75, 0.75));
     Region<Tensor> region2 = new EllipsoidRegion(Tensors.vector(-2, +0), Tensors.vector(1, 1));
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant( //

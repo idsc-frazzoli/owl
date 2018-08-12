@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** position and velocity control in 2D with friction */
-enum Rice2dDemo {
+/* package */ enum Rice2dDemo {
   ;
   static final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create( //
       MidpointIntegrator.INSTANCE, RationalScalar.HALF, 5);

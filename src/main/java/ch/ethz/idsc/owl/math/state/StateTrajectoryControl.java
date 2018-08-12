@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.ArgMin;
 
 /** trajectory control for a time-invariant state-space */
+// TODO JAN consider extending from TensorMetric
 public abstract class StateTrajectoryControl implements TrajectoryControl {
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;

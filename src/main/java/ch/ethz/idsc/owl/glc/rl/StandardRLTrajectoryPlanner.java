@@ -82,7 +82,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   private void processCandidates( //
       GlcNode node, Map<GlcNode, List<StateTime>> connectors, Tensor domainKey, RLDomainQueue domainQueue) {
     // iterate over the candidates in DomainQueue
-    // TODO ynager is there any requirement on the ordering of the nodes in the iterator?
+    // TODO YN is there any requirement on the ordering of the nodes in the iterator?
     for (GlcNode next : domainQueue) {
       final List<StateTime> trajectory = connectors.get(next);
       if (plannerConstraint.isSatisfied(node, trajectory, next.flow())) {
