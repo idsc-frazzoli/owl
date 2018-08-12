@@ -59,7 +59,7 @@ enum Se2ExpandDemo {
             new HyperplaneRegion(Tensors.vector(0, +1, 0), RealScalar.of(2.0)) //
         )));
     // ---
-    CoordinateWrap coordinateWrap = new Se2Wrap(Tensors.vector(1, 1, 1));
+    CoordinateWrap coordinateWrap = Se2Wrap.INSTANCE;
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(coordinateWrap::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface);

@@ -74,9 +74,10 @@ public enum DebugUtils {
         StateTimeTrajectories.print(GlcNodes.getPathFromRootTo(finalNode.get()));
         throw new RuntimeException();
       }
-      if (Scalars.lessEquals(current.merit(), parent.merit())) {
-        System.err.println("At time " + current.stateTime().time() + " merit decreased from  " + //
-            parent.merit() + " to " + current.merit());
+      // jan changed the condition to strictly less < because equal merit is permitted
+      if (Scalars.lessThan(current.merit(), parent.merit())) {
+        System.err.println(String.format("At time %s merit decreased\n %s\n %s", //
+            current.stateTime().time(), parent.merit(), current.merit()));
         StateTimeTrajectories.print(GlcNodes.getPathFromRootTo(finalNode.get()));
         throw new RuntimeException();
       }

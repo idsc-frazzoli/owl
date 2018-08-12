@@ -8,6 +8,6 @@ import ch.ethz.idsc.tensor.Tensor;
 class PsuTrajectoryControl extends StateTrajectoryControl {
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
-    return PsuWrap.INSTANCE.distance(x, y);
+    return PsuMetric.INSTANCE.distance(x, y);
   }
 }

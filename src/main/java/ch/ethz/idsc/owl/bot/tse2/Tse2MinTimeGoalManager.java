@@ -26,11 +26,11 @@ public final class Tse2MinTimeGoalManager implements Region<Tensor>, CostFunctio
   private final Tse2ComboRegion tse2ComboRegion;
   private final Scalar maxSpeed;
   private final Scalar maxTurning;
-  private final Tensor minmaxAcc; // TODO make use of max accelerations for heuristic
+  private final Tensor minmaxAcc; // TODO YN make use of max accelerations for heuristic
 
   public Tse2MinTimeGoalManager(Tse2ComboRegion se2ComboRegion, Collection<Flow> controls, Scalar maxSpeed) {
     this.tse2ComboRegion = se2ComboRegion;
-    this.maxSpeed = maxSpeed; // TODO max speed for forward and reverse
+    this.maxSpeed = maxSpeed; // TODO YN max speed for forward and reverse
     this.maxTurning = Tse2Controls.maxTurning(controls);
     this.minmaxAcc = Tensors.of(Tse2Controls.minAcc(controls), Tse2Controls.maxAcc(controls));
   }
@@ -44,8 +44,9 @@ public final class Tse2MinTimeGoalManager implements Region<Tensor>, CostFunctio
   public Scalar minCostToGoal(Tensor tensor) {
     // units: d_xy [m] / maxSpeed [m/s] -> time [s]
     // units: d_an [rad] / maxTurning [rad/s] -> time [s]
+    // why? FIXME YN admissible but inaccurate heuristic
     return Max.of( //
-        tse2ComboRegion.d_xy(tensor).divide(maxSpeed), // FIXME admissible but inacurate heuristic
+        tse2ComboRegion.d_xy(tensor).divide(maxSpeed), //
         tse2ComboRegion.d_angle(tensor).divide(maxTurning.multiply(maxSpeed)));
   }
 

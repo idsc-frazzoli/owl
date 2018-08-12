@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -88,7 +89,7 @@ public class Tse2CarEntity extends Tse2Entity {
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return TSE2WRAP.distance(x, y); // non-negative
+    return Norm._2.ofVector(TSE2WRAP.difference(x, y)); // non-negative
   }
 
   protected RegionWithDistance<Tensor> goalRegion = null;

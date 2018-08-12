@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return PsuWrap.INSTANCE.distance(x, y); // non-negative
+    return PsuMetric.INSTANCE.distance(x, y); // non-negative
   }
 
   @Override
@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //
-        psuWrap, psuWrap.represent(goal.extract(0, 2)), RealScalar.of(0.2));
+        PsuMetric.INSTANCE, psuWrap.represent(goal.extract(0, 2)), RealScalar.of(0.2));
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(psuWrap::represent));
     return new StandardTrajectoryPlanner( //

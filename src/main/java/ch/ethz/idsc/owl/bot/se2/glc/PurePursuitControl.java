@@ -12,15 +12,15 @@ import ch.ethz.idsc.owl.math.state.StateTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
 public class PurePursuitControl extends StateTrajectoryControl {
   /** (vx, vy, omega) */
-  private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
+  // private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
   // ---
   private final Clip clip;
   private final Scalar lookAhead;
@@ -32,7 +32,7 @@ public class PurePursuitControl extends StateTrajectoryControl {
 
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
-    return SE2WRAP.distance(x, y);
+    return Norm._2.ofVector(Se2Wrap.INSTANCE.difference(x, y));
   }
 
   PurePursuit purePursuit = null;

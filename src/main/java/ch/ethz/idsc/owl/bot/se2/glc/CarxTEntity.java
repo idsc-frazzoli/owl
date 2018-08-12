@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.StateTimeCoordinateWrap;
@@ -24,6 +25,6 @@ class CarxTEntity extends CarEntity {
   @Override
   protected StateTimeRaster stateTimeRaster() {
     return EtaRaster.timeDependent( //
-        partitionScale, FIXEDSTATEINTEGRATOR.getTimeStepTrajectory(), new StateTimeCoordinateWrap(SE2WRAP));
+        partitionScale, FIXEDSTATEINTEGRATOR.getTimeStepTrajectory(), new StateTimeCoordinateWrap(Se2Wrap.INSTANCE));
   }
 }

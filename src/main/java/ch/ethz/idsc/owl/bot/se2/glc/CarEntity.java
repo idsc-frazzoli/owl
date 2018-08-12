@@ -36,6 +36,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -63,7 +64,7 @@ public class CarEntity extends Se2Entity {
           { -.1, +.07 } //
       }).unmodifiable();
   // ---
-  static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
+  // static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
 
   public static CarEntity createDefault(StateTime stateTime) {
     return new CarEntity(stateTime, //
@@ -103,7 +104,8 @@ public class CarEntity extends Se2Entity {
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return SE2WRAP.distance(x, y); // non-negative
+    // FIXME JAN check if log is required
+    return Norm._2.ofVector(Se2Wrap.INSTANCE.difference(x, y)); // non-negative
   }
 
   protected RegionWithDistance<Tensor> goalRegion = null;
@@ -126,7 +128,7 @@ public class CarEntity extends Se2Entity {
 
   @Override // from Se2Entity
   protected StateTimeRaster stateTimeRaster() {
-    return new EtaRaster(partitionScale, StateTimeTensorFunction.state(SE2WRAP::represent));
+    return new EtaRaster(partitionScale, StateTimeTensorFunction.state(Se2Wrap.INSTANCE::represent));
   }
 
   @Override // from Se2Entity

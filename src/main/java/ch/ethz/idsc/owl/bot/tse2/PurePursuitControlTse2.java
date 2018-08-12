@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -31,7 +32,7 @@ public class PurePursuitControlTse2 extends StateTrajectoryControl {
 
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
-    return TSE2WRAP.distance(x, y);
+    return Norm._2.ofVector(TSE2WRAP.difference(x, y));
   }
 
   PurePursuit purePursuit = null;

@@ -5,10 +5,8 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** identifies (x,y,theta,v) === (x,y,theta + 2 pi n,v) for all n */
@@ -38,19 +36,19 @@ public class Tse2Wrap implements CoordinateWrap, Serializable {
     return r;
   }
 
-  @Override // from TensorMetric
-  public final Scalar distance(Tensor p, Tensor q) {
-    Tensor d = difference(p, q);
-    d.set(MOD_DISTANCE, INDEX_ANGLE);
-    return Norm._2.ofVector(d.pmul(scale));
-  }
-
+  // @Override // from TensorMetric
+  // public final Scalar distance(Tensor p, Tensor q) {
+  // Tensor d = difference(p, q);
+  // d.set(MOD_DISTANCE, INDEX_ANGLE);
+  // return Norm._2.ofVector(d.pmul(scale));
+  // }
   /** default difference is simply the vector difference
    * 
    * @param p
    * @param q
    * @return */
-  protected Tensor difference(Tensor p, Tensor q) {
+  @Override
+  public Tensor difference(Tensor p, Tensor q) {
     return p.subtract(q);
   }
 }

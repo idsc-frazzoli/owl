@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** exact integration of flow using exponential map and logarithm.
- * states are encoded in the default coordinates of the se2 lie-algebra.
+ * states are encoded in the default coordinates of the se2 Lie-algebra.
  * 
  * Important: u is assumed to be of the form u == {vx, 0, rate}
  * 

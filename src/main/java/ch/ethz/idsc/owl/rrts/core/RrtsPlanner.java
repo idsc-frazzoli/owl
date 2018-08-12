@@ -36,7 +36,7 @@ public class RrtsPlanner implements ExpandInterface<RrtsNode> {
   public void expand(RrtsNode node) {
     final int k_nearest = 12; // magic const
     rrts.insertAsNode(spaceSample.randomSample(), k_nearest);
-    if (queue.isEmpty()) { // TODO logic not final
+    if (queue.isEmpty()) { // TODO RRTS logic not final
       Optional<RrtsNode> optional = rrts.insertAsNode(goalSample.randomSample(), k_nearest);
       if (optional.isPresent())
         queue.add(optional.get());

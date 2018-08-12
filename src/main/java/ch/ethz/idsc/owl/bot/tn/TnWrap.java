@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 class TnWrap implements CoordinateWrap, Serializable {
@@ -34,9 +33,8 @@ class TnWrap implements CoordinateWrap, Serializable {
   }
 
   @Override
-  public Scalar distance(Tensor p, Tensor q) {
+  public Tensor difference(Tensor p, Tensor q) {
     Tensor d = p.subtract(q);
-    Tensor m = Tensors.vector(i -> mod_distance.get(i).apply(d.Get(i)), d.length());
-    return Norm._2.ofVector(m);
+    return Tensors.vector(i -> mod_distance.get(i).apply(d.Get(i)), d.length());
   }
 }
