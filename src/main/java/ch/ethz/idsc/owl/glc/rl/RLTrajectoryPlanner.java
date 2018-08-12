@@ -82,7 +82,7 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
    * @param node
    * @param connector */
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
-    // FIXME: remove inferior nodes
+    // FIXME YN remove inferior nodes
     Tensor minValues = reachingSet.getMinValues();
     Tensor merit = ((VectorScalar) node.merit()).vector();
     for (int i = 0; i < costSize; i++) {
@@ -96,7 +96,7 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
         if (!toRemove.isEmpty()) {
           queue().removeAll(toRemove);
           reachingSet.removeAll(toRemove);
-          // toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // FIXME
+          // toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // FIXME YN
         }
       }
     }
@@ -116,7 +116,7 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
     return Optional.ofNullable(getBest().orElse(openQueue.peek()));
   }
 
-  // FIXME
+  // TODO YN
   // /** @return number of replacements in the domain map caused by {@link RLTrajectoryPlanner#insert(Tensor, GlcNode)} */
   // public final int replaceCount() {
   // return replaceCount;
@@ -136,7 +136,7 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
   // public final Collection<GlcNode> getQueue() {
   // return Collections.unmodifiableCollection(openQueue);
   // }
-  // FIXME
+  // TODO YN
   // /** @return unmodifiable view on domain map for display and tests */
   // public final RLDomainQueueMap getDomainMap() {
   // return Collections.unmodifiableMap(domainMap);

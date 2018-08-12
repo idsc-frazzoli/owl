@@ -11,6 +11,14 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Normalize;
 
+/** .
+ * G0 - Position, tangent of curve is not continuous, example: polygons
+ * G1 - Tangent, curvature is discontinuous, example: Dubins path
+ * G2 - Curvature, curvature is continuous but not regular, cubic B-spline
+ * G3 - Curvature is regular
+ * 
+ * source:
+ * http://www.aliasworkbench.com/theoryBuilders/images/CombPlot4.jpg */
 public enum CurvatureComb {
   ;
   /** @param tensor

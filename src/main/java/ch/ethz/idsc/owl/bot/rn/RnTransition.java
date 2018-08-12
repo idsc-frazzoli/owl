@@ -45,8 +45,7 @@ class RnTransition extends AbstractTransition {
 
   @Override
   public StateTime splitAt(Scalar t1) {
-    // not yet implemented
-    // TODO use RnGeodesic
+    // not yet implemented, use RnGeodesic
     throw new RuntimeException();
   }
 }

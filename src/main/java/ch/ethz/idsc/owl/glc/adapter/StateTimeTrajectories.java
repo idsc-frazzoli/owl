@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** utility functions that operate on List<StateTime> */
 public enum StateTimeTrajectories {
   ;
-  // ---
   /** @param glcNode
    * @param trajectory
    * @return time increment between given from State and end of trajectory
@@ -23,6 +22,7 @@ public enum StateTimeTrajectories {
     return timeIncrement(glcNode.stateTime(), trajectory);
   }
 
+  // helper function
   private static Scalar timeIncrement(StateTime stateTime, List<StateTime> trajectory) {
     Scalar dt = Lists.getLast(trajectory).time().subtract(stateTime.time());
     return Sign.requirePositiveOrZero(dt);
@@ -42,7 +42,9 @@ public enum StateTimeTrajectories {
     return dts;
   }
 
-  /** @param list */
+  /** print trajectory to console
+   * 
+   * @param list */
   public static void print(List<StateTime> list) {
     System.out.println("Trajectory (" + list.size() + ")");
     for (StateTime stateTime : list)
