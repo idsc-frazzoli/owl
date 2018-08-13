@@ -1,24 +1,27 @@
 // code by ynager
 package ch.ethz.idsc.owl.glc.rl;
 
-import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
-import ch.ethz.idsc.owl.glc.core.ExpandInterface;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, Serializable {
+public abstract class RLTrajectoryPlanner implements TrajectoryPlanner {
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---
@@ -116,11 +119,6 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
     return Optional.ofNullable(getBest().orElse(openQueue.peek()));
   }
 
-  // TODO YN
-  // /** @return number of replacements in the domain map caused by {@link RLTrajectoryPlanner#insert(Tensor, GlcNode)} */
-  // public final int replaceCount() {
-  // return replaceCount;
-  // }
   /** @return state integrator for the state space to generate trajectories from given controls */
   public abstract StateIntegrator getStateIntegrator();
 
@@ -132,13 +130,12 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
   protected final RLQueue queue() {
     return openQueue;
   }
-  // /** @return unmodifiable view on queue for display and tests */
-  // public final Collection<GlcNode> getQueue() {
-  // return Collections.unmodifiableCollection(openQueue);
-  // }
-  // TODO YN
-  // /** @return unmodifiable view on domain map for display and tests */
-  // public final RLDomainQueueMap getDomainMap() {
-  // return Collections.unmodifiableMap(domainMap);
-  // }
+
+  public Map<Tensor, GlcNode> getDomainMap() {
+    return new HashMap<Tensor, GlcNode>(); // FIXME YN
+  }
+
+  public Collection<GlcNode> getQueue() {
+    return Collections.unmodifiableCollection(queue().collection());
+  }
 }

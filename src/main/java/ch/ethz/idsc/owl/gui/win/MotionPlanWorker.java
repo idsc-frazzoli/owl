@@ -8,6 +8,8 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.rl.GlcRLExpand;
+import ch.ethz.idsc.owl.glc.rl.RLTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -35,10 +37,16 @@ public class MotionPlanWorker {
         Stopwatch stopwatch = Stopwatch.started();
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
         trajectoryPlanner.insertRoot(root);
-        GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-        glcExpand.setContinued(() -> isRelevant);
-        // ---
-        glcExpand.untilOptimal(maxSteps);
+        if (trajectoryPlanner instanceof RLTrajectoryPlanner) {
+          GlcRLExpand glcExpand = new GlcRLExpand((RLTrajectoryPlanner) trajectoryPlanner);
+          glcExpand.setContinued(() -> isRelevant);
+          glcExpand.untilOptimal(maxSteps);
+        } 
+        else {
+          GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+          glcExpand.setContinued(() -> isRelevant);
+          glcExpand.untilOptimal(maxSteps);
+        }
         if (isRelevant) {
           RealScalar.of(stopwatch.display_seconds());
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
