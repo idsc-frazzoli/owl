@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //
-        psuWrap, Tensors.vector(Math.PI * 0.7, .5), RealScalar.of(0.3));
+        PsuMetric.INSTANCE, Tensors.vector(Math.PI * 0.7, .5), RealScalar.of(0.3));
     // ---
     StateTimeRaster stateTimeRasterization = new EtaRaster(eta, StateTimeTensorFunction.state(psuWrap::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //
-        psuWrap, Tensors.vector(Math.PI, 2), RealScalar.of(0.3));
+        PsuMetric.INSTANCE, Tensors.vector(Math.PI, 2), RealScalar.of(0.3));
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(psuWrap::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //

@@ -1,4 +1,4 @@
-// code by jph
+// code by ynager, jph
 package ch.ethz.idsc.owl.bot.tse2;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
@@ -13,21 +13,21 @@ import ch.ethz.idsc.tensor.sca.Sin;
 /** Nonholonomic Wheeled Robot
  * 
  * @see Se2CarIntegrator */
-public enum TSe2StateSpaceModel implements StateSpaceModel {
+public enum Tse2StateSpaceModel implements StateSpaceModel {
   INSTANCE;
   // ---
   @Override
   public Tensor f(Tensor x, Tensor u) {
     // x = {px, py, theta, vx}
-    // u = {ax, ay == 0, rate, 0}
+    // u = {rate, ax}
     // acceleration: positive for forward acceleration, negative for backward acceleration
     Scalar angle = x.Get(2);
     Scalar vx = x.Get(3);
     return Tensors.of( //
         Cos.FUNCTION.apply(angle).multiply(vx), // change in px
         Sin.FUNCTION.apply(angle).multiply(vx), // change in py
-        u.Get(2).multiply(vx), // angular rate
-        u.Get(0) // acceleration
+        u.Get(0).multiply(vx), // angular rate
+        u.Get(1) // acceleration
     );
   }
 

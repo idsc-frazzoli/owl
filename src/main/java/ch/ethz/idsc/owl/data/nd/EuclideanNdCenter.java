@@ -14,12 +14,12 @@ import ch.ethz.idsc.tensor.red.Norm;
     this.center = center.copy().unmodifiable();
   }
 
-  @Override
+  @Override // from VectorNormInterface
   public Scalar ofVector(Tensor vector) {
     return Norm._2.between(vector, center);
   }
 
-  @Override
+  @Override // from NdCenterInterface
   public Tensor center() {
     return center;
   }

@@ -7,6 +7,7 @@ import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -39,7 +40,7 @@ class GokartxTEntity extends CarEntity implements GlcPlannerCallback {
   protected StateTimeRaster stateTimeRaster() {
     return EtaRaster.timeDependent( //
         partitionScale, FIXEDSTATEINTEGRATOR.getTimeStepTrajectory(), //
-        new StateTimeCoordinateWrap(SE2WRAP));
+        new StateTimeCoordinateWrap(Se2Wrap.INSTANCE));
   }
 
   @Override

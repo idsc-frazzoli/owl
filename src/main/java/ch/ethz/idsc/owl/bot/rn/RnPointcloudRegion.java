@@ -23,7 +23,9 @@ public class RnPointcloudRegion implements Region<Tensor>, Serializable {
    * @param radius
    * @return */
   public static Region<Tensor> of(Tensor points, Scalar radius) {
-    return Tensors.isEmpty(points) ? Regions.emptyRegion() : new RnPointcloudRegion(points, radius);
+    return Tensors.isEmpty(points) //
+        ? Regions.emptyRegion()
+        : new RnPointcloudRegion(points, radius);
   }
 
   // ---
@@ -42,7 +44,7 @@ public class RnPointcloudRegion implements Region<Tensor>, Serializable {
       ndMap.add(point, null);
   }
 
-  @Override
+  @Override // from Region
   public boolean isMember(Tensor tensor) {
     NdCenterInterface distanceInterface = NdCenterInterface.euclidean(tensor);
     NdCluster<Void> ndCluster = ndMap.buildCluster(distanceInterface, 1);

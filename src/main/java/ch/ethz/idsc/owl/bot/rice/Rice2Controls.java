@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 
 /** controls for position and velocity */
-class Rice2Controls implements FlowsInterface, Serializable {
+/* package */ class Rice2Controls implements FlowsInterface, Serializable {
   /** @param mu coefficient, any real number
    * @param num amplitude resolution
    * @return */

@@ -52,7 +52,7 @@ public class GlcRLExpand {
 
   /** @return true if no node in queue can achieve a lower cost than best node in goal region */
   public boolean isOptimal() {
-    // FIXME
+    // FIXME YN
     return false;
   }
 }

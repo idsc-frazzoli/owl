@@ -30,6 +30,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Degree;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class TwdEntity extends Se2Entity {
@@ -39,7 +40,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   // triangle
   static final Tensor SHAPE = Tensors.matrixDouble( //
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).unmodifiable();
-  private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vectorDouble(1, 1, 2));
+  // private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vectorDouble(1, 1, 2));
 
   public static TwdEntity createDuckie(StateTime stateTime) {
     TwdEntity twdEntity = new TwdEntity( //
@@ -70,7 +71,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override
   public Scalar distance(Tensor x, Tensor y) {
-    return SE2WRAP.distance(x, y); // non-negative
+    return Norm._2.ofVector(Se2Wrap.INSTANCE.difference(x, y)); // non-negative
   }
 
   @Override
@@ -102,7 +103,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override
   protected StateTimeRaster stateTimeRaster() {
-    return new EtaRaster(PARTITIONSCALE, StateTimeTensorFunction.state(SE2WRAP::represent));
+    return new EtaRaster(PARTITIONSCALE, StateTimeTensorFunction.state(Se2Wrap.INSTANCE::represent));
   }
 
   @Override

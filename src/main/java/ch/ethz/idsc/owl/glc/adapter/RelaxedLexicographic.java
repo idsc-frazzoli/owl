@@ -14,6 +14,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** Lexicographical comparator with slack for {@link VectorScalar}s
  * 
  * the bifunction is not anti-symmetric */
+// TODO YN can this class be removed?
+@Deprecated
 /* package */ class RelaxedLexicographic implements Serializable {
   private final Tensor slack;
 

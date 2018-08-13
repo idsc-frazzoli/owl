@@ -1,11 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.adapter;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** suggested base class for all implementations of {@link Transition} */
-public abstract class AbstractTransition implements Transition {
+public abstract class AbstractTransition implements Transition, Serializable {
   private final Tensor start;
   private final Tensor end;
 

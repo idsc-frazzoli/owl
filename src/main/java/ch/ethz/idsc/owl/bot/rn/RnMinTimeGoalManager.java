@@ -28,9 +28,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * {@link SphericalRegion}. */
 @DontModify
 public class RnMinTimeGoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
-  /** creates a spherical region in R^n with given center and radius.
-   * 
-   * @param regionWithDistance
+  /** @param regionWithDistance
    * @param controls */
   public static GoalInterface create(RegionWithDistance<Tensor> regionWithDistance, Collection<Flow> controls) {
     return new RnMinTimeGoalManager(regionWithDistance, RnControls.maxSpeed(controls));
@@ -55,7 +53,6 @@ public class RnMinTimeGoalManager extends CatchyTrajectoryRegionQuery implements
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    // max(0, ||x - center|| - radius) / maxSpeed
     return regionWithDistance.distance(x).divide(maxSpeed);
   }
 }

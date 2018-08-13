@@ -28,7 +28,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 
-class R2VecEntity extends R2Entity implements GlcPlannerCallback {
+/* package */ class R2VecEntity extends R2Entity implements GlcPlannerCallback {
   public R2VecEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
   }

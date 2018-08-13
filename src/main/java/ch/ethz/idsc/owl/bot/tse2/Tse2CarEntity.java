@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
+import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -38,7 +39,7 @@ public class Tse2CarEntity extends Tse2Entity {
   static final Scalar MAX_TURNING_PLAN = Degree.of(45);
   static final Scalar LOOKAHEAD = RealScalar.of(0.5);
   static final Scalar MAX_TURNING_RATE = Degree.of(50); // slightly higher for pure pursuit
-  static final FlowsInterface CARFLOWS = Tse2CarFlows.of(Tensors.vector(-0.7, 0, 0.7), MAX_TURNING_PLAN);
+  static final FlowsInterface CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-0.7, 0, 0.7));
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   private static final Scalar SHIFT_PENALTY = RealScalar.of(0.4);
   // ---
@@ -51,7 +52,6 @@ public class Tse2CarEntity extends Tse2Entity {
           { -.1, +.07 } //
       }).unmodifiable();
   // ---
-  static final Tse2Wrap TSE2WRAP = new Tse2Wrap(Tensors.vector(1, 1, 2, 2));
 
   public static Tse2CarEntity createDefault(StateTime stateTime) {
     return new Tse2CarEntity(stateTime, //
@@ -88,7 +88,7 @@ public class Tse2CarEntity extends Tse2Entity {
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    return TSE2WRAP.distance(x, y); // non-negative
+    return Norm2Squared.ofVector(Tse2Wrap.INSTANCE.difference(x, y));
   }
 
   protected RegionWithDistance<Tensor> goalRegion = null;
@@ -106,7 +106,7 @@ public class Tse2CarEntity extends Tse2Entity {
 
   @Override // from Se2Entity
   protected StateTimeRaster stateTimeRaster() {
-    return new EtaRaster(partitionScale, StateTimeTensorFunction.state(TSE2WRAP::represent));
+    return new EtaRaster(partitionScale, StateTimeTensorFunction.state(Tse2Wrap.INSTANCE::represent));
   }
 
   @Override // from Se2Entity

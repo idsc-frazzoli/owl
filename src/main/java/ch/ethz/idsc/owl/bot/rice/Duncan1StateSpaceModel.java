@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** Single Integrator with friction
+/** single integrator with friction
  * implementation for n-dimensional velocity
  * 
  * The state x (typically velocity) is bounded by "u_max / lambda"

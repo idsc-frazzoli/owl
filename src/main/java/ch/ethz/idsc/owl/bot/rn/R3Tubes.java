@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.io.Primitives;
 /** example functions for use with RnImplicitObstacle
  *
  * positive return value (including zero) means inside obstacle region */
-class R3Tubes extends ImplicitFunctionRegion<Tensor> implements Serializable {
+/* package */ class R3Tubes extends ImplicitFunctionRegion<Tensor> implements Serializable {
   /** 3-dimensional tube network
    * the challenge is to find the path through narrow passages along the diagonal
    *

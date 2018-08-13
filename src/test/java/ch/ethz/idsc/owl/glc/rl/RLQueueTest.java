@@ -44,7 +44,7 @@ public class RLQueueTest extends TestCase {
     GlobalAssert.that(best.merit() == node32.merit());
     best = rlQueue.poll();
     GlobalAssert.that(best.merit() == node23.merit());
-    GlobalAssert.that(rlQueue.size() == 0);
+    GlobalAssert.that(rlQueue.isEmpty());
   }
 
   public void testSpeed() {

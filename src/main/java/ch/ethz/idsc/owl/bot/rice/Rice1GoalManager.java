@@ -15,12 +15,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
-class Rice1GoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
-  public static GoalInterface create(Tensor center, Tensor radius) {
-    return new Rice1GoalManager(new EllipsoidRegion(center, radius));
-  }
-
-  // ---
+/* package */ class Rice1GoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
   private final Tensor center;
   private final Tensor radius;
 

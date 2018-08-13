@@ -81,7 +81,9 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
 
   private void processCandidates( //
       GlcNode node, Map<GlcNode, List<StateTime>> connectors, Tensor domainKey, RLDomainQueue domainQueue) {
-    for (GlcNode next : domainQueue) { // iterate over the candidates in DomainQueue
+    // iterate over the candidates in DomainQueue
+    // TODO YN is there any requirement on the ordering of the nodes in the iterator?
+    for (GlcNode next : domainQueue) {
       final List<StateTime> trajectory = connectors.get(next);
       if (plannerConstraint.isSatisfied(node, trajectory, next.flow())) {
         Optional<RLDomainQueue> former = getDomainQueue(domainKey);
@@ -95,7 +97,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
             for (int i = 0; i < costSize; i++) { // find nodes outside of bounds
               if (Scalars.lessThan(merits.Get(i), minValues.Get(i))) { // cost lower than prev min?
                 final int j = i;
-                List<GlcNode> toRemove = formerQueue.list.stream() // find nodes to be removed
+                List<GlcNode> toRemove = formerQueue.stream() // find nodes to be removed
                     .filter(n -> Scalars.lessThan(merits.Get(j).add(slacks.Get(j)), //
                         ((VectorScalar) n.merit()).vector().Get(j)))
                     .collect(Collectors.toList());

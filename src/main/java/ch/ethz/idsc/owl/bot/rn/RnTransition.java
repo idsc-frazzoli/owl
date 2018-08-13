@@ -15,17 +15,17 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** agents moves with unit speed, i.e.
  * Euclidean length of line segment equals the time required to traverse */
-class RnTransition extends AbstractTransition {
+/* package */ class RnTransition extends AbstractTransition {
   public RnTransition(Tensor start, Tensor end) {
     super(start, end);
   }
 
-  @Override
+  @Override // from Transition
   public Scalar length() {
     return Norm._2.between(start(), end());
   }
 
-  @Override
+  @Override // from Transition
   public List<StateTime> sampled(Scalar t0, Scalar ofs, Scalar dt) {
     if (Scalars.lessThan(dt, ofs))
       throw TensorRuntimeException.of(ofs, dt);
@@ -43,10 +43,9 @@ class RnTransition extends AbstractTransition {
     return list;
   }
 
-  @Override
+  @Override // from Transition
   public StateTime splitAt(Scalar t1) {
-    // not yet implemented
-    // TODO use RnGeodesic
+    // not yet implemented, use RnGeodesic
     throw new RuntimeException();
   }
 }

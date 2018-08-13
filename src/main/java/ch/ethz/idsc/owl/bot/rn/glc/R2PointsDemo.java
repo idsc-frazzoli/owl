@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-enum R2PointsDemo {
+/* package */ enum R2PointsDemo {
   ;
   public static void main(String[] args) {
     Tensor partitionScale = Tensors.vector(5, 5);

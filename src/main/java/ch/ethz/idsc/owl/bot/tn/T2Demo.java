@@ -17,7 +17,9 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
+import ch.ethz.idsc.owl.math.SimpleTensorMetric;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
+import ch.ethz.idsc.owl.math.TensorMetric;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -40,7 +42,8 @@ enum T2Demo {
     CoordinateWrap coordinateWrap;
     coordinateWrap = new TnWrap(Tensors.vector(5, 7));
     // coordinateWrap = new IdentityWrap();
-    TnGoalManager rnGoal = new TnGoalManager(coordinateWrap, Tensors.vector(4, 6), RealScalar.of(0.25));
+    TensorMetric tensorMetric = new SimpleTensorMetric(coordinateWrap);
+    TnGoalManager rnGoal = new TnGoalManager(tensorMetric, Tensors.vector(4, 6), RealScalar.of(0.25));
     // performance depends on heuristic: zeroHeuristic vs rnGoal
     // Heuristic heuristic = new ZeroHeuristic(); // rnGoal
     // ---

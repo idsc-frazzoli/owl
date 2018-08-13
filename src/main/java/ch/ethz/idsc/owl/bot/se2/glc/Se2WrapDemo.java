@@ -7,13 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
-import ch.ethz.idsc.owl.bot.se2.Se2GroupWrap;
+import ch.ethz.idsc.owl.bot.se2.Se2CoveringWrap;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
-import ch.ethz.idsc.owl.glc.adapter.IdentityWrap;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -23,7 +22,9 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
+import ch.ethz.idsc.owl.math.SimpleTensorMetric;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
+import ch.ethz.idsc.owl.math.TensorMetric;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
@@ -68,7 +69,8 @@ enum Se2WrapDemo {
     FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.ONE, Degree.of(45));
     Collection<Flow> controls = carFlows.getFlows(6);
     Tensor GOAL = Tensors.vector(-.5, 0, 0);
-    Se2WrapGoalManager se2GoalManager = new Se2WrapGoalManager(coordinateWrap, GOAL, RealScalar.of(0.25));
+    TensorMetric tensorMetric = new SimpleTensorMetric(coordinateWrap);
+    Se2WrapMinTimeGoalManager se2GoalManager = new Se2WrapMinTimeGoalManager(tensorMetric, GOAL, RealScalar.of(0.25), controls);
     TrajectoryRegionQuery obstacleQuery = obstacleQuery();
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(coordinateWrap::represent));
@@ -92,8 +94,8 @@ enum Se2WrapDemo {
   }
 
   public static void main(String[] args) {
-    demo(new Se2GroupWrap(Tensors.vector(1, 1, 1)));
-    demo(new Se2Wrap(Tensors.vector(1, 1, 1)));
-    demo(IdentityWrap.INSTANCE);
+    demo(Se2CoveringWrap.INSTANCE);
+    demo(Se2Wrap.INSTANCE);
+    // demo(IdentityWrap.INSTANCE);
   }
 }

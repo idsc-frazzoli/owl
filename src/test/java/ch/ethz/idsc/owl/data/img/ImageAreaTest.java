@@ -20,7 +20,7 @@ public class ImageAreaTest extends TestCase {
     BufferedImage bufferedImage = RegionRenders.image(Tensors.fromString("{{1,0,1}}"));
     // Tensor s = ImageFormat.from(bufferedImage);
     // System.out.println(s);
-    // TODO Jan figure out why 244 ends up being the color value here
+    // TODO JAN figure out why 244 ends up being the color value here
     Area area = ImageArea.fromImage(bufferedImage, new Color(244, 244, 244), 5);
     // System.out.println(area);
     assertTrue(area.contains(new Point2D.Double(.5, .5)));

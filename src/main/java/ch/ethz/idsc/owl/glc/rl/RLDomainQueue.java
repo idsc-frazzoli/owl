@@ -25,32 +25,31 @@ public class RLDomainQueue extends RLQueue {
   }
 
   // ---
-  @Override
-  public boolean add(GlcNode e) {
-    return list.add(e);
+  public RLDomainQueue(Tensor slacks) {
+    super(slacks);
   }
 
+  // TODO implementation not different from RLQueue
+  // @Override
+  // public boolean add(GlcNode e) {
+  // return list.add(e);
+  // }
   public Tensor getMinValues() {
     Tensor minValues = Tensors.vector(a -> INTEGER_MAX, vectorSize);
-    if (list.isEmpty())
+    if (isEmpty())
       return minValues;
     for (int i = 0; i < vectorSize; i++) {
-      final int j = i;
-      GlcNode minCostNode = Collections.min(list, new Comparator<GlcNode>() {
+      final int fi = i;
+      GlcNode minCostNode = Collections.min(collection(), new Comparator<GlcNode>() {
         @Override
         public int compare(GlcNode first, GlcNode second) {
           return Scalars.compare( //
-              ((VectorScalar) first.merit()).vector().Get(j), //
-              ((VectorScalar) second.merit()).vector().Get(j));
+              ((VectorScalar) first.merit()).vector().Get(fi), //
+              ((VectorScalar) second.merit()).vector().Get(fi));
         }
       });
       minValues.set(((VectorScalar) minCostNode.merit()).vector().Get(i), i);
     }
     return minValues;
-  }
-
-  // ---
-  public RLDomainQueue(Tensor slacks) {
-    super(slacks);
   }
 }

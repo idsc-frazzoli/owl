@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalar;
@@ -15,45 +18,60 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class RLQueue implements Iterable<GlcNode> {
-  protected final List<GlcNode> list = new ArrayList<>(500);
+  // TODO probably better not to use default value
+  private final Set<GlcNode> set = new HashSet<>();
+  private final Tensor slack;
   protected final int vectorSize;
-  protected final Tensor slack;
 
   public RLQueue(Tensor slack) {
     this.slack = slack;
     this.vectorSize = slack.length();
   }
 
-  public boolean add(GlcNode e) {
-    return list.add(e);
+  public final boolean add(GlcNode glcNode) {
+    return set.add(glcNode);
   }
 
-  public GlcNode poll() {
+  public final GlcNode poll() {
     GlcNode best = getFromBest();
-    list.remove(best);
+    remove(best);
     return best;
   }
 
-  public GlcNode peek() {
+  public final GlcNode peek() {
     return getFromBest();
   }
 
-  public int size() {
-    return list.size();
+  public final boolean removeAll(Collection<GlcNode> collection) {
+    return set.removeAll(collection);
   }
 
-  public boolean remove(GlcNode e) {
-    return list.remove(e);
+  public final boolean isEmpty() {
+    return set.isEmpty();
   }
 
-  public boolean removeAll(Collection<GlcNode> c) {
-    return list.removeAll(c);
+  public Stream<GlcNode> stream() {
+    return set.stream();
+  }
+
+  public Collection<GlcNode> collection() {
+    return Collections.unmodifiableCollection(set);
+  }
+
+  @Override // from Iterable
+  public final Iterator<GlcNode> iterator() {
+    return set.iterator();
+  }
+
+  // not used outside class
+  private boolean remove(GlcNode glcNode) {
+    return set.remove(glcNode);
   }
 
   /** @return first element from best set
    * @throws Exception if queue is empty */
   private GlcNode getFromBest() {
-    List<GlcNode> queueCopy = new ArrayList<>(list);
+    List<GlcNode> queueCopy = new ArrayList<>(set);
     getBestSet(queueCopy, 0);
     return queueCopy.get(0);
   }
@@ -79,14 +97,5 @@ public class RLQueue implements Iterable<GlcNode> {
     if (d == vectorSize - 1)
       return list;
     return getBestSet(list, d + 1);
-  }
-
-  public boolean isEmpty() {
-    return list.isEmpty();
-  }
-
-  @Override // from Iterable
-  public Iterator<GlcNode> iterator() {
-    return list.iterator();
   }
 }

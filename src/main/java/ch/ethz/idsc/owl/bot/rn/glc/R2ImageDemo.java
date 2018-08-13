@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
-enum R2ImageDemo {
+/* package */ enum R2ImageDemo {
   ;
   public static void main(String[] args) throws Exception {
     Tensor partitionScale = Tensors.vector(6, 6);
