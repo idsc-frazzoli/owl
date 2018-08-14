@@ -3,16 +3,20 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.mapping.ShadowEvaluator;
 import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -35,7 +39,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
   private static final Color PED_LEGAL_COLOR = new Color(38, 239, 248, 200);
   private static final Color PED_ILLEGAL_COLOR = new Color(38, 100, 248, 200);
   private static final float MAX_A = 0.8f; // [m/s²]
-  private static final float REACTION_TIME = 0.3f;
+  private static final float REACTION_TIME = 0.0f;
   private static final Tensor RANGE = Tensors.vector(52, 40);
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 20, 60));
@@ -87,9 +91,13 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     CostFunction pedIllegalCost = //
         ConstraintViolationCost.of(new SimpleShadowConstraintJavaCV(smPedIllegal, MAX_A, REACTION_TIME));
     gokartEntity.setCostVector(Arrays.asList(pedLegalCost, pedIllegalCost), Arrays.asList(0.0, 0.0));
-    gokartEntity.addTimeCost(1, 0.1);
+    gokartEntity.addTimeCost(1, 0.4);
     // ---
-    MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);
+    List<GlcPlannerCallback> callbacks = new ArrayList<>();
+    // ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal);
+    // callbacks.add(evaluator.minReactionTime);
+    MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint, callbacks);
+    // ---
   }
 
   public static void main(String[] args) {
