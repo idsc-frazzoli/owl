@@ -2,23 +2,26 @@
 package ch.ethz.idsc.owl.glc.rl;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
-import ch.ethz.idsc.owl.glc.core.ExpandInterface;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.VectorScalar;
-import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, Serializable {
+public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializable {
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---
@@ -41,12 +44,6 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
     this.reachingSet = new RLDomainQueue(slacks);
   }
 
-  /** @param stateTime */
-  public final void insertRoot(StateTime stateTime) {
-    GlobalAssert.that(openQueue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
-    addToOpen(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
-  }
-
   /** @param domain_key
    * @param node non-null
    * @return true if node is added to open queue and domain queue */
@@ -66,12 +63,6 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
    * @return RLDomainQueue in domain or Optional.empty() if domain has not been assigned a node yet */
   protected final Optional<RLDomainQueue> getDomainQueue(Tensor domain_key) {
     return Optional.ofNullable(domainMap.get(domain_key));
-  }
-
-  @Override // from ExpandInterface
-  public final Optional<GlcNode> pollNext() {
-    // Queue#poll() returns the head of queue, or null if queue is empty
-    return Optional.ofNullable(openQueue.poll());
   }
 
   /** method is invoked to notify planner that the
@@ -103,42 +94,48 @@ public abstract class RLTrajectoryPlanner implements ExpandInterface<GlcNode>, S
     reachingSet.add(node);
   }
 
+  protected final RLQueue queue() {
+    return openQueue;
+  }
+
+  /***************************************************/
+  @Override // from ExpandInterface
+  public final Optional<GlcNode> pollNext() {
+    // Queue#poll() returns the head of queue, or null if queue is empty
+    return Optional.ofNullable(openQueue.poll());
+  }
+
   @Override // from ExpandInterface
   public final Optional<GlcNode> getBest() {
     System.out.println(reachingSet.getMinValues());
     return Optional.ofNullable(reachingSet.isEmpty() ? null : reachingSet.peek());
   }
 
-  /** @return best node known to be in goal, or top node in queue, or null,
-   * in this order depending on existence */
+  /***************************************************/
+  @Override // from TrajectoryPlanner
+  public final void insertRoot(StateTime stateTime) {
+    GlobalAssert.that(openQueue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
+    addToOpen(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
+  }
+
+  @Override // from TrajectoryPlanner
   public final Optional<GlcNode> getBestOrElsePeek() {
     // Queue#peek() returns the head of queue, or null if queue is empty
     return Optional.ofNullable(getBest().orElse(openQueue.peek()));
   }
 
-  // TODO YN
-  // /** @return number of replacements in the domain map caused by {@link RLTrajectoryPlanner#insert(Tensor, GlcNode)} */
-  // public final int replaceCount() {
-  // return replaceCount;
-  // }
-  /** @return state integrator for the state space to generate trajectories from given controls */
-  public abstract StateIntegrator getStateIntegrator();
-
-  /** @return goal query for the purpose of inspection */
+  @Override // from TrajectoryPlanner
   public final HeuristicFunction getHeuristicFunction() {
     return heuristicFunction;
   }
 
-  protected final RLQueue queue() {
-    return openQueue;
+  @Override // from TrajectoryPlanner
+  public final Map<Tensor, GlcNode> getDomainMap() {
+    return new HashMap<>(); // FIXME YN
   }
-  // /** @return unmodifiable view on queue for display and tests */
-  // public final Collection<GlcNode> getQueue() {
-  // return Collections.unmodifiableCollection(openQueue);
-  // }
-  // TODO YN
-  // /** @return unmodifiable view on domain map for display and tests */
-  // public final RLDomainQueueMap getDomainMap() {
-  // return Collections.unmodifiableMap(domainMap);
-  // }
+
+  @Override // from TrajectoryPlanner
+  public final Collection<GlcNode> getQueue() {
+    return Collections.unmodifiableCollection(queue().collection());
+  }
 }

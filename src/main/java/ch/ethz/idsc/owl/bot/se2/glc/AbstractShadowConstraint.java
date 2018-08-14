@@ -34,7 +34,7 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
     // TODO there are few different values for vel => precompute
     // simulate shadow map during braking
     float vel = flow.getU().Get(0).number().floatValue();
-    float tStop = vel / a + reactionTime + reactionTime;
+    float tStop = vel / a + reactionTime;
     float dStop = tStop * vel / 2;
     Tensor range = Subdivide.of(0, dStop, RESOLUTION);
     Tensor ray = TensorProduct.of(range, dir);

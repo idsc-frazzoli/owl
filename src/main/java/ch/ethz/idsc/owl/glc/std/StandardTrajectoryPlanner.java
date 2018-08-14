@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.glc.adapter.SimpleRelabelDecision;
+import ch.ethz.idsc.owl.glc.core.CTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.DomainQueue;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -15,7 +16,6 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.RelabelDecision;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * <li>parallel processing of queues
  * <li>nodes that get replaced in a domain, are also removed from the queue
  * </ul> */
-public class StandardTrajectoryPlanner extends TrajectoryPlanner {
+public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;

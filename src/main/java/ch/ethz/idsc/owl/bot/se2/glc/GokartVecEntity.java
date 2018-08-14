@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
+import ch.ethz.idsc.owl.glc.core.CTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.CustomNodeMeritComparator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -54,7 +55,7 @@ public class GokartVecEntity extends GokartEntity {
     }
     // ---
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, se2ComboRegion);
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    CTrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(Tensors.vector(slacks));
     ((StandardTrajectoryPlanner) trajectoryPlanner).relabelDecision = //

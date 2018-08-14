@@ -17,6 +17,8 @@ import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -29,6 +31,8 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   // ---
   private final Tensor slacks;
   private final int costSize;
+  //
+  private static final Scalar MERIT_EPS = RationalScalar.of(1, 100);
 
   public StandardRLTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, //
@@ -74,9 +78,11 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
     return !diff.stream().map(Tensor::Get).anyMatch(Sign::isNegative);
   }
 
-  private boolean isEqual(GlcNode next, RLDomainQueue domainQueue) {
+  private static boolean isEqual(GlcNode next, RLDomainQueue domainQueue) {
     // TODO check if close to existing nodes / assert if this is helpful
-    return false;
+    Tensor nextMerit = ((VectorScalar) next.merit()).vector();
+    return domainQueue.stream().anyMatch(a -> ((VectorScalar) a.merit()).vector().subtract(nextMerit) //
+        .stream().map(Tensor::Get).allMatch(v -> Scalars.lessThan(v, MERIT_EPS)));
   }
 
   private void processCandidates( //
