@@ -41,8 +41,7 @@ public class MotionPlanWorker {
           GlcRLExpand glcExpand = new GlcRLExpand((RLTrajectoryPlanner) trajectoryPlanner);
           glcExpand.setContinued(() -> isRelevant);
           glcExpand.untilOptimal(maxSteps);
-        } 
-        else {
+        } else {
           GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
           glcExpand.setContinued(() -> isRelevant);
           glcExpand.untilOptimal(maxSteps);

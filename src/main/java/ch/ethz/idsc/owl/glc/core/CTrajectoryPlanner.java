@@ -1,6 +1,7 @@
 // code by bapaden, jph, jl, ynager
 package ch.ethz.idsc.owl.glc.core;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,12 +14,11 @@ import java.util.Queue;
 import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
-import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** base class for classic generalized label correction implementation */
-public abstract class CTrajectoryPlanner implements TrajectoryPlanner {
+public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializable {
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---
@@ -35,13 +35,6 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner {
   protected CTrajectoryPlanner(StateTimeRaster stateTimeRaster, HeuristicFunction heuristicFunction) {
     this.stateTimeRaster = stateTimeRaster;
     this.heuristicFunction = heuristicFunction;
-  }
-
-  /** @param stateTime */
-  public final void insertRoot(StateTime stateTime) {
-    GlobalAssert.that(queue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
-    boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
-    GlobalAssert.that(!replaced); // root insertion should not replace any other node
   }
 
   /** @param domain_key
@@ -67,12 +60,6 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner {
     return Optional.ofNullable(domainMap.get(domain_key));
   }
 
-  @Override // from ExpandInterface
-  public final Optional<GlcNode> pollNext() {
-    // Queue#poll() returns the head of queue, or null if queue is empty
-    return Optional.ofNullable(queue.poll());
-  }
-
   /** method is invoked to notify planner that the
    * intersection of the goal interface and the connector is non-empty
    * 
@@ -86,42 +73,54 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner {
       best.remove(best.lastKey());
   }
 
-  @Override // from ExpandInterface
-  public final Optional<GlcNode> getBest() {
-    return Optional.ofNullable(best.isEmpty() ? null : best.firstKey());
-  }
-
-  /** @return best node known to be in goal, or top node in queue, or null,
-   * in this order depending on existence */
-  public final Optional<GlcNode> getBestOrElsePeek() {
-    // Queue#peek() returns the head of queue, or null if queue is empty
-    return Optional.ofNullable(getBest().orElse(queue.peek()));
-  }
-
-  /** @return number of replacements in the domain map caused by {@link TrajectoryPlanner#insert(Tensor, GlcNode)} */
+  /** @return number of replacements in the domain map caused by
+   * {@link TrajectoryPlanner#insert(Tensor, GlcNode)} */
   public final int replaceCount() {
     return replaceCount;
-  }
-
-  /** @return state integrator for the state space to generate trajectories from given controls */
-  public abstract StateIntegrator getStateIntegrator();
-
-  /** @return goal query for the purpose of inspection */
-  public final HeuristicFunction getHeuristicFunction() {
-    return heuristicFunction;
   }
 
   protected final Collection<GlcNode> queue() {
     return queue;
   }
 
-  /** @return unmodifiable view on queue for display and tests */
-  public final Collection<GlcNode> getQueue() {
-    return Collections.unmodifiableCollection(queue);
+  /***************************************************/
+  @Override // from ExpandInterface
+  public final Optional<GlcNode> getBest() {
+    return Optional.ofNullable(best.isEmpty() ? null : best.firstKey());
   }
 
-  /** @return unmodifiable view on domain map for display and tests */
+  @Override // from ExpandInterface
+  public final Optional<GlcNode> pollNext() {
+    // Queue#poll() returns the head of queue, or null if queue is empty
+    return Optional.ofNullable(queue.poll());
+  }
+
+  /***************************************************/
+  @Override // from TrajectoryPlanner
+  public final void insertRoot(StateTime stateTime) {
+    GlobalAssert.that(queue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
+    boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
+    GlobalAssert.that(!replaced); // root insertion should not replace any other node
+  }
+
+  @Override // from TrajectoryPlanner
+  public final Optional<GlcNode> getBestOrElsePeek() {
+    // Queue#peek() returns the head of queue, or null if queue is empty
+    return Optional.ofNullable(getBest().orElse(queue.peek()));
+  }
+
+  @Override // from TrajectoryPlanner
+  public final HeuristicFunction getHeuristicFunction() {
+    return heuristicFunction;
+  }
+
+  @Override // from TrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
     return Collections.unmodifiableMap(domainMap);
+  }
+
+  @Override // from TrajectoryPlanner
+  public final Collection<GlcNode> getQueue() {
+    return Collections.unmodifiableCollection(queue);
   }
 }

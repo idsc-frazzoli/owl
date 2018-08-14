@@ -16,12 +16,15 @@ import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 
 public enum MouseGoal {
   ;
-  public static void simple(OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint) {
+  public static void simple( //
+      OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint) {
     List<GlcPlannerCallback> list = new ArrayList<>();
     simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint, list);
   }
-  
-  public static void simple(OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, List<GlcPlannerCallback> callbacks) {
+
+  public static void simple( //
+      OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, //
+      List<GlcPlannerCallback> callbacks) {
     if (trajectoryEntity instanceof GlcPlannerCallback)
       callbacks.add((GlcPlannerCallback) trajectoryEntity);
     callbacks.add(new SimpleGlcPlannerCallback(trajectoryEntity));

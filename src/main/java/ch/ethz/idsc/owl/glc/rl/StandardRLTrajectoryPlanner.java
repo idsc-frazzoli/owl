@@ -31,7 +31,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   // ---
   private final Tensor slacks;
   private final int costSize;
-  // 
+  //
   private static final Scalar MERIT_EPS = RationalScalar.of(1, 100);
 
   public StandardRLTrajectoryPlanner( //
@@ -78,7 +78,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
     return !diff.stream().map(Tensor::Get).anyMatch(Sign::isNegative);
   }
 
-  private boolean isEqual(GlcNode next, RLDomainQueue domainQueue) {
+  private static boolean isEqual(GlcNode next, RLDomainQueue domainQueue) {
     // TODO check if close to existing nodes / assert if this is helpful
     Tensor nextMerit = ((VectorScalar) next.merit()).vector();
     return domainQueue.stream().anyMatch(a -> ((VectorScalar) a.merit()).vector().subtract(nextMerit) //
