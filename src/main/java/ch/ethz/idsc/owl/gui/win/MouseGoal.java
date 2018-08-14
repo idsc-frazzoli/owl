@@ -18,11 +18,15 @@ public enum MouseGoal {
   ;
   public static void simple(OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint) {
     List<GlcPlannerCallback> list = new ArrayList<>();
+    simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint, list);
+  }
+  
+  public static void simple(OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, List<GlcPlannerCallback> callbacks) {
     if (trajectoryEntity instanceof GlcPlannerCallback)
-      list.add((GlcPlannerCallback) trajectoryEntity);
-    list.add(new SimpleGlcPlannerCallback(trajectoryEntity));
+      callbacks.add((GlcPlannerCallback) trajectoryEntity);
+    callbacks.add(new SimpleGlcPlannerCallback(trajectoryEntity));
     supply(owlyAnimationFrame.geometricComponent, //
-        new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, list));
+        new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, callbacks));
   }
 
   private static void supply(GeometricComponent geometricComponent, GoalConsumer goalConsumer) {
