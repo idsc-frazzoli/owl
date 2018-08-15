@@ -17,9 +17,13 @@ public interface Rrts {
    * @return */
   Optional<RrtsNode> insertAsNode(Tensor state, int k_nearest);
 
-  /** @param rrtsNode
+  /** rewire around given RrtsNode "parent" which would
+   * become the new parent to nodes that benefit from the connection
+   * typically, rewire is invoked on the most recently inserted node
+   * 
+   * @param parent
    * @param k_nearest */
-  void rewireAround(RrtsNode rrtsNode, int k_nearest);
+  void rewireAround(RrtsNode parent, int k_nearest);
 
   /** @return number of times re-wiring was effective, i.e.
    * altered the parent of an existing node */

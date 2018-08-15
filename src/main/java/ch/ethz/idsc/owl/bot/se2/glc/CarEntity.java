@@ -63,9 +63,8 @@ public class CarEntity extends Se2Entity {
           { -.1, -.07 }, //
           { -.1, +.07 } //
       }).unmodifiable();
-  // ---
-  // static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
 
+  // ---
   public static CarEntity createDefault(StateTime stateTime) {
     return new CarEntity(stateTime, //
         new PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
@@ -104,7 +103,8 @@ public class CarEntity extends Se2Entity {
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    // FIXME JAN check if log is required
+    // Se2Wrap.INSTANCE.difference uses the logarithm internally and is proportional
+    // to the geodesic connection between x and y that allows side slip
     return Norm._2.ofVector(Se2Wrap.INSTANCE.difference(x, y)); // non-negative
   }
 
