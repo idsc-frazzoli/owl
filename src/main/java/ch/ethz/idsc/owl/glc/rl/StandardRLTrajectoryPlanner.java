@@ -68,13 +68,14 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
         domainQueueMap.put(domainKey, next); // node is considered without comparison to any former node
     }
     // ---
-    domainQueueMap.map.entrySet().stream().parallel() // FIXME make parallel
+    domainQueueMap.mapEntrySetStream() //
+        .parallel() //
         .forEach(entry -> processCandidates(node, connectors, entry.getKey(), entry.getValue()));
   }
 
   private boolean isWithinSlack(GlcNode next, RLDomainQueue domainQueue) {
     Tensor merit = ((VectorScalar) next.merit()).vector();
-    Tensor diff = domainQueue.getMinValues().add(slacks).subtract(merit);
+    Tensor diff = domainQueue.getMinValues().get().add(slacks).subtract(merit);
     return !diff.stream().map(Tensor::Get).anyMatch(Sign::isNegative);
   }
 
@@ -98,7 +99,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
         synchronized (this) {
           if (isPresent) { // are already nodes present from previous exploration ?
             RLDomainQueue formerQueue = former.get();
-            Tensor minValues = formerQueue.getMinValues();
+            Tensor minValues = formerQueue.getMinValues().get();
             Tensor merits = ((VectorScalar) next.merit()).vector();
             for (int i = 0; i < costSize; i++) { // find nodes outside of bounds
               if (Scalars.lessThan(merits.Get(i), minValues.Get(i))) { // cost lower than prev min?

@@ -103,4 +103,7 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
       assertTrue(Scalars.lessEquals(cost.vector().Get(0), upperBound));
     }
   }
+  // public static void main(String[] args) {
+  // new StandardRLTrajectoryPlannerTest().testSimple();
+  // }
 }
