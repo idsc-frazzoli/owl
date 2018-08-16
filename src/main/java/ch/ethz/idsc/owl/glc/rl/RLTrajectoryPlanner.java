@@ -74,9 +74,7 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
    * @param connector */
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
     Optional<Tensor> optional = reachingSet.getMinValues();
-    // TODO YN check if construction with optional is ok
     if (optional.isPresent()) {
-      // FIXME YN remove inferior nodes <- is comment still warranted?
       Tensor minValues = optional.get();
       Tensor merit = ((VectorScalar) node.merit()).vector();
       for (int i = 0; i < costSize; i++) {

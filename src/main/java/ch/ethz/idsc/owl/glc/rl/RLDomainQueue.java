@@ -44,21 +44,5 @@ public class RLDomainQueue extends RLQueue {
         .map(VectorScalar.class::cast) //
         .map(VectorScalar::vector) //
         .reduce(Entrywise.min());
-    // if (collection.isEmpty())
-    // return Optional.empty();
-    // return Optional.of(Tensor.of( //
-    // IntStream.range(0, vectorSize) //
-    // .mapToObj(index -> {
-    // GlcNode glcNode = Collections.min(collection, new Comparator<GlcNode>() {
-    // @Override
-    // public int compare(GlcNode first, GlcNode second) {
-    // return Scalars.compare( //
-    // ((VectorScalar) first.merit()).vector().Get(index), //
-    // ((VectorScalar) second.merit()).vector().Get(index));
-    // }
-    // });
-    // VectorScalar vectorScalar = (VectorScalar) glcNode.merit();
-    // return vectorScalar.vector().Get(index);
-    // })));
   }
 }
