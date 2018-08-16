@@ -18,7 +18,6 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class RLQueue implements Iterable<GlcNode> {
-  // TODO probably better not to use default value
   private final Set<GlcNode> set = new HashSet<>();
   private final Tensor slack;
   protected final int vectorSize;

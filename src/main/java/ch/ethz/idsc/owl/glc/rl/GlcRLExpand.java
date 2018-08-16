@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 
 /** following the observation by ynager the expansion has to continue
  * until merit of queue node is no less than cost of node in goal */
+// TODO YN currently lot's of redundancy to GlcExpand -> perhaps extend from GlcExpand?, or create common abstract base class
 public class GlcRLExpand {
   private final RLTrajectoryPlanner trajectoryPlanner;
   private Supplier<Boolean> isContinued = () -> true;

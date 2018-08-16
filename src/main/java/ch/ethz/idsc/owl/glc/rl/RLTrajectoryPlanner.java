@@ -41,7 +41,7 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
     this.heuristicFunction = heuristicFunction;
     this.openQueue = new RLQueue(slacks); // holds not expanded nodes of OPEN list
     this.domainMap = new RLDomainQueueMap(slacks); // maps domain key to RLQueues of OPEN nodes.
-    this.reachingSet = new RLDomainQueue(slacks);
+    this.reachingSet = RLDomainQueue.empty(slacks);
   }
 
   /** @param domain_key
@@ -73,21 +73,22 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
    * @param node
    * @param connector */
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
-    // FIXME YN remove inferior nodes
-    Tensor minValues = reachingSet.getMinValues();
-    Tensor merit = ((VectorScalar) node.merit()).vector();
-    for (int i = 0; i < costSize; i++) {
-      final int j = i;
-      if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
-        //
-        List<GlcNode> toRemove = reachingSet.stream() // find nodes to be removed
-            .filter(n -> Scalars.lessThan(merit.Get(j).add(slacks.Get(j)), //
-                ((VectorScalar) n.merit()).vector().Get(j)))
-            .collect(Collectors.toList());
-        if (!toRemove.isEmpty()) {
-          queue().removeAll(toRemove);
-          reachingSet.removeAll(toRemove);
-          // toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // FIXME YN
+    Optional<Tensor> optional = reachingSet.getMinValues();
+    if (optional.isPresent()) {
+      Tensor minValues = optional.get();
+      Tensor merit = ((VectorScalar) node.merit()).vector();
+      for (int i = 0; i < costSize; i++) {
+        final int j = i;
+        if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
+          List<GlcNode> toRemove = reachingSet.stream() // find nodes to be removed
+              .filter(n -> Scalars.lessThan(merit.Get(j).add(slacks.Get(j)), //
+                  ((VectorScalar) n.merit()).vector().Get(j)))
+              .collect(Collectors.toList());
+          if (!toRemove.isEmpty()) {
+            queue().removeAll(toRemove);
+            reachingSet.removeAll(toRemove);
+            // toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // FIXME YN
+          }
         }
       }
     }

@@ -2,17 +2,17 @@
 package ch.ethz.idsc.owl.glc.rl;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class RLDomainQueueMap implements Iterable<Entry<Tensor, RLDomainQueue>> {
-  /** map from domain keys to queues of nodes */
-  final Map<Tensor, RLDomainQueue> map = new HashMap<>();
+/* package */ class RLDomainQueueMap {
   private final Tensor slacks;
+  /** map from domain keys to queues of nodes */
+  private final Map<Tensor, RLDomainQueue> map = new HashMap<>();
 
   public RLDomainQueueMap(Tensor slacks) {
     this.slacks = slacks;
@@ -30,11 +30,6 @@ import ch.ethz.idsc.tensor.Tensor;
       map.put(domain_key, RLDomainQueue.singleton(glcNode, slacks)); // create a new queue with single entry
   }
 
-  @Override // from Iterable
-  public Iterator<Entry<Tensor, RLDomainQueue>> iterator() {
-    return map.entrySet().iterator();
-  }
-
   public boolean isEmpty() {
     return map.isEmpty();
   }
@@ -45,5 +40,9 @@ import ch.ethz.idsc.tensor.Tensor;
 
   public RLDomainQueue get(Tensor domain_key) {
     return map.get(domain_key);
+  }
+
+  public Stream<Entry<Tensor, RLDomainQueue>> mapEntrySetStream() {
+    return map.entrySet().stream();
   }
 }

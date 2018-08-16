@@ -10,7 +10,6 @@ import ch.ethz.idsc.owl.bot.se2.glc.CarHelper;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -63,8 +62,5 @@ public class Se2ControlsTest extends TestCase {
     Scalar maxTurning = Se2Controls.maxTurning(controls);
     assertEquals(Units.of(maxTurning), Unit.of("rad*s^-1"));
     assertEquals(maxTurning, Quantity.of(6, "rad*s^-1"));
-    So2Region so2Region = new So2Region(Quantity.of(2, "rad"), Quantity.of(1, "rad"), Quantity.of(Math.PI, "rad"));
-    Scalar duration = so2Region.signedDistance(Quantity.of(4, "rad")).divide(maxTurning);
-    assertEquals(Units.of(duration), Unit.of("s"));
   }
 }
