@@ -92,9 +92,8 @@ public class ShadowMapDirected extends ShadowMap implements RenderInterface {
     opencv_imgproc.threshold(img, obsLane, 0, 255, opencv_imgproc.THRESH_BINARY_INV);
     opencv_imgproc.dilate(obsLane, obsLane, ellipseKernel);
     obsDilArea = Mat.zeros(img.size(), img.type()).asMat();
-    // TODO YN
     opencv_imgproc.dilate(obsLane, obsDilArea, ellipseKernel, new Point(-1, -1), radius2it(ellipseKernel, CAR_WIDTH), opencv_core.BORDER_CONSTANT, null);
-    // TODO use spherical for lanes, carkernel for other obstacles
+    // TODO YN use spherical for lanes, carkernel for other obstacles
     // Mat carObs = opencv_imgcodecs.imread(carObsURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
     // IntStream.range(0, NSEGS).parallel() //
     // .mapToObj(seg -> StaticHelper.dilateSegment(seg, carObs, carKernels, new Point(2, 2), laneMasks, 15)) // TODO magic iteration number

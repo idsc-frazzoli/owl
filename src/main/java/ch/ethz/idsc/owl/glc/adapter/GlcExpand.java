@@ -11,9 +11,9 @@ import ch.ethz.idsc.tensor.Scalars;
 /** following the observation by ynager the expansion has to continue
  * until merit of queue node is no less than cost of node in goal */
 public class GlcExpand {
-  private final TrajectoryPlanner trajectoryPlanner;
-  private Supplier<Boolean> isContinued = () -> true;
-  private int expandCount = 0;
+  protected final TrajectoryPlanner trajectoryPlanner;
+  protected Supplier<Boolean> isContinued = () -> true;
+  protected int expandCount = 0;
 
   public GlcExpand(TrajectoryPlanner trajectoryPlanner) {
     this.trajectoryPlanner = trajectoryPlanner;

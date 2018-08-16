@@ -46,8 +46,8 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
   public void testSimple() {
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
-    final Scalar radius = DoubleScalar.of(.25);
-    final Tensor slacks = Tensors.vector(1.5, 0, 0);
+    final Scalar radius = DoubleScalar.of(.05);
+    final Tensor slacks = Tensors.vector(1, 0, 0);
     // ---
     Tensor eta = Tensors.vector(8, 8);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
