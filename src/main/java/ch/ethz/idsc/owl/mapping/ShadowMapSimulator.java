@@ -19,14 +19,15 @@ public class ShadowMapSimulator {
   }
 
   public final void startNonBlocking(int updateRate) {
+    float period = Math.max(1.0f / updateRate, shadowMap.getMinTimeDelta());
     TimerTask timerTask = new TimerTask() {
       @Override
       public void run() {
         if (!isPaused)
-          shadowMap.updateMap(stateTimeSupplier.get(), 1.0f / updateRate);
+          shadowMap.updateMap(stateTimeSupplier.get(), period);
       }
     };
-    increaserTimer.scheduleAtFixedRate(timerTask, 10, 1000 / updateRate);
+    increaserTimer.scheduleAtFixedRate(timerTask, 10, (long) (1000 * period));
   }
 
   public final void flagShutdown() {
