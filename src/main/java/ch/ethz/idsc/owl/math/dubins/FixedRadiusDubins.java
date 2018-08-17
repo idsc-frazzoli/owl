@@ -34,7 +34,7 @@ public class FixedRadiusDubins implements DubinsPathGenerator {
     double th_total = deltacenter.Get(2).number().doubleValue();
     th_tr = StaticHelper.principalValue(th_tr);
     th_total = StaticHelper.principalValue(th_total);
-    return dubinsPathType.dubinsSteer.steer(dist_tr, th_tr, th_total, radius) //
+    return dubinsPathType.dubinsSteer().steer(dist_tr, th_tr, th_total, radius) //
         .map(segLength -> new DubinsPath(dubinsPathType, radius, segLength));
   }
 

@@ -18,7 +18,6 @@ import ch.ethz.idsc.tensor.Tensors;
   public Optional<Tensor> steer(double dist_tr, double th_tr, double th_total, Scalar _radius) {
     double radius = _radius.number().doubleValue();
     double aux = dist_tr / 4.0 / radius;
-    assert 0 <= aux;
     if (1 < aux)
       return Optional.empty();
     double th_aux = Math.acos(aux);

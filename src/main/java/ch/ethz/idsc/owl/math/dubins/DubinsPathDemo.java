@@ -13,13 +13,12 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
-class DubinsPathDemo {
+/* package */ class DubinsPathDemo {
   private static final Tensor ARROWHEAD_HI = Tensors.matrixDouble( //
       new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(1.2));
   // ---
@@ -41,23 +40,25 @@ class DubinsPathDemo {
         // ---
         FixedRadiusDubins fixedRadiusDubins = new FixedRadiusDubins(mouse, RealScalar.of(1));
         for (DubinsPath dubinsPath : fixedRadiusDubins.allValid().collect(Collectors.toList())) {
-          Scalar length = dubinsPath.length();
-          Tensor tensor = Tensors.empty();
-          for (Tensor _at : Subdivide.of(RealScalar.ZERO, length, 200)) {
-            Scalar lambda = (Scalar) _at;
-            Tensor poseAt = dubinsPath.getPoseAt(Array.zeros(3), lambda);
-            tensor.append(poseAt);
-          }
-          {
-            graphics.setColor(Color.BLUE);
-            Path2D path2d = geometricLayer.toPath2D(tensor);
-            graphics.setStroke(new BasicStroke(1.25f));
-            graphics.draw(path2d);
-            graphics.setStroke(new BasicStroke(1f));
-          }
+          graphics.setColor(Color.BLUE);
+          Path2D path2d = geometricLayer.toPath2D(sample(dubinsPath));
+          graphics.draw(path2d);
+        }
+        {
+          DubinsPath dubinsPath = fixedRadiusDubins.allValid().min(DubinsPathLengthComparator.INSTANCE).get();
+          graphics.setColor(Color.RED);
+          Path2D path2d = geometricLayer.toPath2D(sample(dubinsPath));
+          graphics.setStroke(new BasicStroke(1.25f));
+          graphics.draw(path2d);
+          graphics.setStroke(new BasicStroke(1f));
         }
       }
     });
+  }
+
+  private static Tensor sample(DubinsPath dubinsPath) {
+    return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), 200) //
+        .map(dubinsPath.sampler(Array.zeros(3)));
   }
 
   public static void main(String[] args) {
