@@ -44,7 +44,7 @@ public final class Tse2MinTimeGoalManager implements Region<Tensor>, CostFunctio
   public Scalar minCostToGoal(Tensor tensor) {
     // units: d_xy [m] / maxSpeed [m/s] -> time [s]
     // units: d_an [rad] / maxTurning [rad/s] -> time [s]
-    // why? FIXME YN admissible but inaccurate heuristic
+    // FIXME YN admissible but inaccurate heuristic -> use accelerations for a better bound
     return Max.of( //
         tse2ComboRegion.d_xy(tensor).divide(maxSpeed), //
         tse2ComboRegion.d_angle(tensor).divide(maxTurning.multiply(maxSpeed)));

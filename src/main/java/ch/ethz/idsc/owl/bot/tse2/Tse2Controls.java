@@ -19,12 +19,12 @@ public enum Tse2Controls {
   /** @param flows
    * @return min acceleration (max deceleration) with unit "m*s^-2" */
   public static Scalar minAcc(Collection<Flow> flows) {
-    return flows.stream().map(Flow::getU).map(u -> u.Get(1).abs()).reduce(Min::of).get();
+    return flows.stream().map(Flow::getU).map(u -> u.Get(1)).reduce(Min::of).get();
   }
 
   /** @param flows
    * @return max acceleration with unit "m*s^-2" */
   public static Scalar maxAcc(Collection<Flow> flows) {
-    return flows.stream().map(Flow::getU).map(u -> u.Get(1).abs()).reduce(Max::of).get();
+    return flows.stream().map(Flow::getU).map(u -> u.Get(1)).reduce(Max::of).get();
   }
 }
