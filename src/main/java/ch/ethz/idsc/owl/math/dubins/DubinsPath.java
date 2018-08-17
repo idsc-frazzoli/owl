@@ -22,8 +22,7 @@ public class DubinsPath {
     return (Scalar) Total.of(segLength);
   }
 
-  public Tensor getPoseAt(Tensor start, Scalar lambda) {
-    Tensor g = start;
+  public Tensor getPoseAt(Tensor g, Scalar lambda) {
     for (int index = 0; index < 3; ++index) {
       Tensor x = dubinsPathType.tangent(index, radius);
       if (Scalars.lessEquals(lambda, segLength.Get(index)))

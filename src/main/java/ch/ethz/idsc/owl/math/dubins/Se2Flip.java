@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public enum Se2Flip implements TensorUnaryOperator {
+/* package */ enum Se2Flip implements TensorUnaryOperator {
   FUNCTION;
   // ---
   @Override
