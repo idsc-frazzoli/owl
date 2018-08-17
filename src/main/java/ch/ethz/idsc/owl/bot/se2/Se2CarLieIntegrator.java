@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.lie.RotationMatrix;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
-/* package */ enum Se2CarLieIntegrator implements LieIntegrator {
+public enum Se2CarLieIntegrator implements LieIntegrator {
   INSTANCE;
   // ---
   /** function integrates the special case where the y-component of x
