@@ -23,10 +23,12 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.owl.math.planar.ExtractXY;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivisionInterpolationApproximation;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
 import ch.ethz.idsc.owl.subdiv.curve.RnGeodesic;
 import ch.ethz.idsc.owl.subdiv.curve.Se2CoveringGeodesic;
@@ -47,10 +49,8 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 
 class CurveSubdivisionDemo {
-  private static final Tensor ARROWHEAD_HI = Tensors.matrixDouble( //
-      new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(1.2));
-  private static final Tensor ARROWHEAD_LO = Tensors.matrixDouble( //
-      new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(.6));
+  private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
+  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
@@ -175,6 +175,10 @@ class CurveSubdivisionDemo {
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
+    JToggleButton jToggleInterp = new JToggleButton("interp");
+    jToggleInterp.setSelected(false);
+    timerFrame.jToolBar.add(jToggleInterp);
+    // ---
     JToggleButton jToggleCyclic = new JToggleButton("cyclic");
     // jToggleCyclic.setSelected(true);
     timerFrame.jToolBar.add(jToggleCyclic);
@@ -220,6 +224,8 @@ class CurveSubdivisionDemo {
           TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
               ? curveSubdivision::cyclic
               : curveSubdivision::string;
+          if (jToggleInterp.isSelected())
+            rnctrl = new CurveSubdivisionInterpolationApproximation(tuo).fixed(rnctrl, 20);
           refined = Nest.of(tuo, rnctrl, levels);
           {
             graphics.setColor(new Color(0, 0, 255, 128));
@@ -255,7 +261,10 @@ class CurveSubdivisionDemo {
               ? curveSubdivision::cyclic
               : curveSubdivision::string;
           // TensorUnaryOperator tuo = new SplitScheme(curveSubdivision, angleSubdivision);
-          refined = Nest.of(tuo, _control, levels);
+          Tensor se2ctrl = _control.copy();
+          if (jToggleInterp.isSelected())
+            se2ctrl = new CurveSubdivisionInterpolationApproximation(tuo).fixed(se2ctrl, 20);
+          refined = Nest.of(tuo, se2ctrl, levels);
         }
         if (jToggleLine.isSelected()) {
           CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(Se2CoveringGeodesic.INSTANCE);
@@ -333,7 +342,7 @@ class CurveSubdivisionDemo {
     {
       spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-      spinnerRefine.setValue(9);
+      spinnerRefine.setValue(6);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {

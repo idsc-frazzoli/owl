@@ -172,7 +172,7 @@ public class ShadowEvaluator {
     return stateTimeReact;
   }
 
-  private boolean isMember(Indexer indexer, Point pixel, int cols, int rows) {
+  private static boolean isMember(Indexer indexer, Point pixel, int cols, int rows) {
     return pixel.y() < rows //
         && pixel.x() < cols //
         && indexer.getDouble(pixel.y(), pixel.x()) == 255.0;

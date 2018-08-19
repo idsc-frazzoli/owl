@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.Cross;
-import ch.ethz.idsc.tensor.lie.Rodriguez;
+import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
@@ -25,6 +25,6 @@ public enum S2Geodesic implements GeodesicInterface {
     if (Scalars.isZero(sina)) // when p == q or p == -q
       return p;
     Scalar factor = scalar.multiply(a).divide(sina);
-    return Rodriguez.exp(Cross.of(p, q).multiply(factor)).dot(p);
+    return Rodrigues.exp(Cross.of(p, q).multiply(factor)).dot(p);
   }
 }
