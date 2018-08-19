@@ -20,17 +20,17 @@
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>tensor</artifactId>
-			<version>0.5.7</version>
+			<version>0.5.8</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>ephemeral</artifactId>
-			<version>0.0.3</version>
+			<version>0.0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>subare</artifactId>
-			<version>0.1.5</version>
+			<version>0.1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
