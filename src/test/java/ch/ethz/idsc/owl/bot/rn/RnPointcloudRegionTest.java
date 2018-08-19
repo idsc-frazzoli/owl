@@ -40,7 +40,7 @@ public class RnPointcloudRegionTest extends TestCase {
 
   public void testNonMatrix() {
     try {
-      RnPointcloudRegion.of(LieAlgebras.sl3(), RealScalar.of(1.0));
+      RnPointcloudRegion.of(LieAlgebras.sl2(), RealScalar.of(1.0));
       assertTrue(false);
     } catch (Exception exception) {
       // ---

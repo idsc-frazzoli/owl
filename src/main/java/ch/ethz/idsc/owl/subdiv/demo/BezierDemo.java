@@ -22,6 +22,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.owl.math.planar.ExtractXY;
 import ch.ethz.idsc.owl.subdiv.curve.BezierCurve;
@@ -41,10 +42,8 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.red.Norm;
 
 class BezierDemo {
-  private static final Tensor ARROWHEAD_HI = Tensors.matrixDouble( //
-      new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(1.2));
-  private static final Tensor ARROWHEAD_LO = Tensors.matrixDouble( //
-      new double[][] { { .3, 0 }, { -.1, -.1 }, { -.1, +.1 } }).multiply(RealScalar.of(.6));
+  private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
+  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);

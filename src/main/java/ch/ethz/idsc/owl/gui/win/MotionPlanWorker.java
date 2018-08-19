@@ -38,7 +38,7 @@ public class MotionPlanWorker {
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
         trajectoryPlanner.insertRoot(root);
         if (trajectoryPlanner instanceof RLTrajectoryPlanner) {
-          GlcRLExpand glcExpand = new GlcRLExpand((RLTrajectoryPlanner) trajectoryPlanner);
+          GlcRLExpand glcExpand = new GlcRLExpand(trajectoryPlanner);
           glcExpand.setContinued(() -> isRelevant);
           glcExpand.untilOptimal(maxSteps);
         } else {

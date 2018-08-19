@@ -26,6 +26,7 @@ public final class Tse2MinTimeGoalManager implements Region<Tensor>, CostFunctio
   private final Tse2ComboRegion tse2ComboRegion;
   private final Scalar maxSpeed;
   private final Scalar maxTurning;
+  @SuppressWarnings("unused")
   private final Tensor minmaxAcc; // TODO YN make use of max accelerations for heuristic
 
   public Tse2MinTimeGoalManager(Tse2ComboRegion se2ComboRegion, Collection<Flow> controls, Scalar maxSpeed) {

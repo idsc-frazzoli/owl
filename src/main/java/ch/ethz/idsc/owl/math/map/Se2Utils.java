@@ -26,7 +26,7 @@ public enum Se2Utils {
     Scalar angle = xya.Get(2);
     Scalar cos = Cos.FUNCTION.apply(angle);
     Scalar sin = Sin.FUNCTION.apply(angle);
-    return Tensors.matrix(new Tensor[][] { //
+    return Tensors.matrix(new Scalar[][] { //
         { cos, sin.negate(), xya.Get(0) }, //
         { sin, cos /*----*/, xya.Get(1) }, //
         { RealScalar.ZERO, RealScalar.ZERO, RealScalar.ONE }, //
@@ -41,7 +41,7 @@ public enum Se2Utils {
    * [0 0 1]
    * </pre> */
   public static Tensor toSE2Translation(Tensor xy) {
-    return Tensors.matrix(new Tensor[][] { //
+    return Tensors.matrix(new Scalar[][] { //
         { RealScalar.ONE, RealScalar.ZERO, xy.Get(0) }, //
         { RealScalar.ZERO, RealScalar.ONE, xy.Get(1) }, //
         { RealScalar.ZERO, RealScalar.ZERO, RealScalar.ONE }, //
