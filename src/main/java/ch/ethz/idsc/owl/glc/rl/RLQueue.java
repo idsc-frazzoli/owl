@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.VectorScalar;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,11 +20,9 @@ import ch.ethz.idsc.tensor.Tensor;
 public class RLQueue implements Iterable<GlcNode> {
   private final Set<GlcNode> set = new HashSet<>();
   private final Tensor slack;
-  protected final int vectorSize;
 
   public RLQueue(Tensor slack) {
     this.slack = slack;
-    this.vectorSize = slack.length();
   }
 
   public final boolean add(GlcNode glcNode) {
@@ -86,14 +84,14 @@ public class RLQueue implements Iterable<GlcNode> {
       @Override
       public int compare(GlcNode first, GlcNode second) {
         return Scalars.compare( //
-            ((VectorScalar) first.merit()).vector().Get(d), //
-            ((VectorScalar) second.merit()).vector().Get(d));
+            VectorScalars.at(first.merit(), d), //
+            VectorScalars.at(second.merit(), d));
       }
     });
-    Scalar minMerit = ((VectorScalar) minCostNode.merit()).vector().Get(d);
+    Scalar minMerit = VectorScalars.at(minCostNode.merit(), d);
     Scalar threshold = minMerit.add(slack.Get(d));
-    list.removeIf(node -> Scalars.lessThan(threshold, ((VectorScalar) node.merit()).vector().Get(d)));
-    if (d == vectorSize - 1)
+    list.removeIf(node -> Scalars.lessThan(threshold, VectorScalars.at(node.merit(), d)));
+    if (d == slack.length() - 1)
       return list;
     return getBestSet(list, d + 1);
   }

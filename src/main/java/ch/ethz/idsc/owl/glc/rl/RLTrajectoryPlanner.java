@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.math.VectorScalar;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -26,7 +26,6 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
   private final HeuristicFunction heuristicFunction;
   // ---
   private final Tensor slacks;
-  private final int costSize;
   /** holds not expanded nodes of OPEN list */
   private final RLQueue openQueue;
   /** maps domain key to RLQueues of OPEN nodes */
@@ -35,7 +34,6 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
   protected final RLDomainQueue reachingSet;
 
   protected RLTrajectoryPlanner(StateTimeRaster stateTimeRaster, HeuristicFunction heuristicFunction, Tensor slacks) {
-    this.costSize = slacks.length();
     this.slacks = slacks;
     this.stateTimeRaster = stateTimeRaster;
     this.heuristicFunction = heuristicFunction;
@@ -75,15 +73,17 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
     Optional<Tensor> optional = reachingSet.getMinValues();
     if (optional.isPresent()) {
+      // TODO YN code redundant to StdRL.TPlanner#processCandidates -> can simplify?
       Tensor minValues = optional.get();
-      Tensor merit = ((VectorScalar) node.merit()).vector();
-      for (int i = 0; i < costSize; i++) {
+      Tensor merit = VectorScalars.vector(node.merit());
+      for (int i = 0; i < slacks.length(); i++) {
         final int j = i;
         if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
           List<GlcNode> toRemove = reachingSet.stream() // find nodes to be removed
-              .filter(n -> Scalars.lessThan(merit.Get(j).add(slacks.Get(j)), //
-                  ((VectorScalar) n.merit()).vector().Get(j)))
-              .collect(Collectors.toList());
+              .filter(n -> Scalars.lessThan( //
+                  merit.Get(j).add(slacks.Get(j)), // lhs
+                  VectorScalars.at(n.merit(), j) // rhs
+              )).collect(Collectors.toList());
           if (!toRemove.isEmpty()) {
             queue().removeAll(toRemove);
             reachingSet.removeAll(toRemove);

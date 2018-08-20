@@ -8,20 +8,18 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.math.VectorScalar;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
@@ -29,20 +27,19 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   private final GoalInterface goalInterface;
   private transient final ControlsIntegrator controlsIntegrator;
   // ---
+  private final SlackWrap slackWrap;
   private final Tensor slacks;
-  private final int costSize;
-  //
-  private static final Scalar MERIT_EPS = RationalScalar.of(1, 100);
 
   public StandardRLTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, //
       StateIntegrator stateIntegrator, //
       Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, //
-      GoalInterface goalInterface, Tensor slacks) {
+      GoalInterface goalInterface, //
+      Tensor slacks) {
     super(stateTimeRaster, goalInterface, slacks);
+    this.slackWrap = new SlackWrap(slacks);
     this.slacks = slacks;
-    this.costSize = slacks.length();
     this.stateIntegrator = stateIntegrator;
     this.plannerConstraint = Objects.requireNonNull(plannerConstraint);
     this.goalInterface = goalInterface;
@@ -61,7 +58,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       Optional<RLDomainQueue> formerQueue = getDomainQueue(domainKey);
       if (formerQueue.isPresent()) { // is already some domain queue present from previous exploration ?
-        if (isWithinSlack(next, formerQueue.get()) && !isEqual(next, formerQueue.get())) {
+        if (isWithinSlack(next, formerQueue.get()) && !StaticHelper.isEqual(next, formerQueue.get())) {
           domainQueueMap.put(domainKey, next); // new node lies within slack, potentially better than previous ones
         }
       } else
@@ -74,16 +71,9 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   }
 
   private boolean isWithinSlack(GlcNode next, RLDomainQueue domainQueue) {
-    Tensor merit = ((VectorScalar) next.merit()).vector();
-    Tensor diff = domainQueue.getMinValues().get().add(slacks).subtract(merit);
-    return !diff.stream().map(Tensor::Get).anyMatch(Sign::isNegative);
-  }
-
-  private static boolean isEqual(GlcNode next, RLDomainQueue domainQueue) {
-    // TODO check if close to existing nodes / assert if this is helpful
-    Tensor nextMerit = ((VectorScalar) next.merit()).vector();
-    return domainQueue.stream().anyMatch(a -> ((VectorScalar) a.merit()).vector().subtract(nextMerit) //
-        .stream().map(Tensor::Get).allMatch(v -> Scalars.lessThan(v, MERIT_EPS)));
+    return slackWrap.isWithin( //
+        VectorScalars.vector(next.merit()), //
+        domainQueue.getMinValues().get());
   }
 
   private void processCandidates( //
@@ -100,24 +90,24 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
           if (isPresent) { // are already nodes present from previous exploration ?
             RLDomainQueue formerQueue = former.get();
             Tensor minValues = formerQueue.getMinValues().get();
-            Tensor merits = ((VectorScalar) next.merit()).vector();
-            for (int i = 0; i < costSize; i++) { // find nodes outside of bounds
+            Tensor merits = VectorScalars.vector(next.merit());
+            for (int i = 0; i < slacks.length(); ++i) // find nodes outside of bounds
               if (Scalars.lessThan(merits.Get(i), minValues.Get(i))) { // cost lower than prev min?
                 final int j = i;
                 List<GlcNode> toRemove = formerQueue.stream() // find nodes to be removed
-                    .filter(n -> Scalars.lessThan(merits.Get(j).add(slacks.Get(j)), //
-                        ((VectorScalar) n.merit()).vector().Get(j)))
-                    .collect(Collectors.toList());
+                    .filter(n -> Scalars.lessThan( //
+                        merits.Get(j).add(slacks.Get(j)), // lhs
+                        VectorScalars.at(n.merit(), j) // rhs
+                    )).collect(Collectors.toList());
                 //
                 if (!toRemove.isEmpty()) {
                   boolean removed = queue().removeAll(toRemove); // remove bad nodes from OPEN queue
                   formerQueue.removeAll(toRemove); // remove bad nodes from domain queue
-                  toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // remove edges from parent
+                  toRemove.stream().forEach(Nodes::disjoinChild); // remove edges from parent
                   if (!removed) //
                     System.err.println("miss - nodes to be removed dont exist " + domainKey);
                 }
               }
-            }
           }
           addToDomainMap(domainKey, next); // insert node to domain queue
           node.insertEdgeTo(next);

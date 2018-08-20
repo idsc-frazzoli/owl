@@ -69,4 +69,11 @@ public enum Nodes {
       parent.removeEdgeTo(node);
     return parent;
   }
+
+  /** @param node
+   * @throws Exception if given child has no parent
+   * @see Nodes#disjoinAt(Node) */
+  public static void disjoinChild(Node node) {
+    node.parent().removeEdgeTo(node);
+  }
 }
