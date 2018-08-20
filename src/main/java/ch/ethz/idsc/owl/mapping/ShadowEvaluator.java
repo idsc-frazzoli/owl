@@ -41,19 +41,24 @@ public class ShadowEvaluator {
   private final ShadowMapSpherical shadowMap;
   //
   final int RESOLUTION = 10;
-  final int MAX_TREACT = 2;
-  final float DELTA_TREACT = 0.1f; // [s]
+  final int MAX_TREACT = 3;
+  final float delta_treact; // [s]
   final Scalar a = DoubleScalar.of(0.85); // [m/s^2];
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
-  final Tensor tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / DELTA_TREACT));
+  final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-100, -100, 0), RealScalar.ZERO); // TODO YN not nice
 
   public ShadowEvaluator(ShadowMapSpherical shadowMap) {
     this.shadowMap = shadowMap;
+    this.delta_treact = shadowMap.getMinTimeDelta();
+    tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
   }
 
-  /** Evalates min reaction time necessary to avoid shadow region along trajectory */
-  public GlcPlannerCallback minReactionTime = new GlcPlannerCallback() {
+  /** Evalates time to react (TTR) along trajectory
+   * The Time-To-React (TTR) is the maximum time we can continue the current trajectory
+   * before we have to execute an evasive trajectory to avoid entering the set of colliding states
+   * here, colliding states are states intersecting with the shadow region */
+  public GlcPlannerCallback timeToReact = new GlcPlannerCallback() {
     @Override
     public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
       Function<StateTime, Mat> mapSupplier = new Function<StateTime, Mat>() {
@@ -68,7 +73,7 @@ public class ShadowEvaluator {
             GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
         List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
         // ---
-        Tensor minTimeReact = minReactionTime(trajectory, mapSupplier);
+        Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
         try {
           File file = UserHome.file("" + "minReactionTime" + ".csv");
           Export.of(file, minTimeReact.get().map(CsvFormat.strict()));
@@ -79,8 +84,8 @@ public class ShadowEvaluator {
     }
   };
   // -
-  /** Evalates min reaction time necessary to avoid shadow region along trajectory for each sector */
-  public GlcPlannerCallback minSectorReactionTime = new GlcPlannerCallback() {
+  /** Evalates time to react (TTR) along trajectory for each sector */
+  public GlcPlannerCallback sectorTimeToReact = new GlcPlannerCallback() {
     @Override
     public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
       Tensor angles = Subdivide.of(Degree.of(0), Degree.of(360), 72);
@@ -92,6 +97,7 @@ public class ShadowEvaluator {
         // ---
         Tensor mtrMatrix = Tensors.empty();
         for (int i = 0; i < angles.length() - 1; i++) {
+          System.out.println("Evaluating sector " + (i + 1) + " / " + (angles.length() - 1));
           final int fi = i;
           Function<StateTime, Mat> mapSupplier = new Function<StateTime, Mat>() {
             @Override
@@ -99,12 +105,14 @@ public class ShadowEvaluator {
               return extractSector(shadowMap.getInitMap(), t.state(), angles.extract(fi, fi + 2));
             }
           };
-          Tensor minTimeReact = minReactionTime(trajectory, mapSupplier);
+          Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
           mtrMatrix.append(minTimeReact);
         }
         try {
-          File file = UserHome.file("" + "minSecReactionTime" + ".csv");
-          Export.of(file, mtrMatrix.map(CsvFormat.strict()));
+          File file1 = UserHome.file("" + "minSecReactionTime" + ".csv");
+          File file2 = UserHome.file("" + "state" + ".csv");
+          Export.of(file1, mtrMatrix.map(CsvFormat.strict()));
+          Export.of(file2, Tensor.of(trajectory.stream().map(a -> a.stateTime().state())).map(CsvFormat.strict()));
         } catch (Exception exception) {
           exception.printStackTrace();
         }
@@ -112,9 +120,9 @@ public class ShadowEvaluator {
     }
   };
 
-  private Tensor minReactionTime(List<TrajectorySample> trajectory, Function<StateTime, Mat> mapSupplier) {
+  private Tensor timeToReact(List<TrajectorySample> trajectory, Function<StateTime, Mat> mapSupplier) {
     // -
-    Tensor stateTimeReact = Tensors.empty();
+    Tensor timeToReactVec = Tensors.empty();
     // -
     Scalar tEnd = Lists.getLast(trajectory).stateTime().time();
     int maxSize = trajectory.stream().filter(c -> Scalars.lessThan(c.stateTime().time(), tEnd.subtract(RealScalar.of(MAX_TREACT)))) //
@@ -144,9 +152,9 @@ public class ShadowEvaluator {
           .map(shadowMap::state2pixel) //
           .anyMatch(local -> isMember(indexer, local, simArea.cols(), simArea.rows()));
       // -
-      Scalar tMinReact = RealScalar.of(-1);
+      Scalar timeToReact = RealScalar.of(-1);
       if (clear) {
-        tMinReact = RealScalar.ZERO;
+        timeToReact = RealScalar.ZERO;
         for (Tensor tReact : tReactVec) {
           // get stateTime tReact in future
           Optional<TrajectorySample> fut = trajectory.stream()//
@@ -156,20 +164,20 @@ public class ShadowEvaluator {
           // -
           if (fut.isPresent()) {
             se2Bijection = new Se2Bijection(fut.get().stateTime().state());
-            shadowMap.updateMap(simArea, oob, DELTA_TREACT);
+            shadowMap.updateMap(simArea, oob, delta_treact);
             dStop = tStop.add(tReact).multiply(vel).divide(RealScalar.of(2));
             Tensor st = dir.multiply(dStop);
             Point px = shadowMap.state2pixel(se2Bijection.forward().apply(st));
             boolean intersect = isMember(indexer, px, simArea.cols(), simArea.rows());
             if (intersect)
               break;
-            tMinReact = tReact.Get();
+            timeToReact = tReact.Get();
           }
         }
       }
-      stateTimeReact.append(tMinReact);
+      timeToReactVec.append(timeToReact);
     }
-    return stateTimeReact;
+    return timeToReactVec;
   }
 
   private static boolean isMember(Indexer indexer, Point pixel, int cols, int rows) {
