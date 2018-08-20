@@ -75,6 +75,12 @@ public class VectorScalar extends AbstractScalar implements //
     return vector.unmodifiable();
   }
 
+  /** @param index
+   * @return */
+  public Scalar at(int index) {
+    return vector.Get(index);
+  }
+
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     if (scalar instanceof VectorScalar)
