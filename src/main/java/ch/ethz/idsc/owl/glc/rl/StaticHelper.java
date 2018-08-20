@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
         .reduce(Entrywise.min());
   }
 
-  // TODO magic const
+  // FIXME magic const
   private static final Scalar MERIT_EPS = RationalScalar.of(1, 100);
 
   static boolean isEqual(GlcNode next, RLDomainQueue domainQueue) {

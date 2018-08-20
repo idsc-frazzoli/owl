@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -90,13 +91,14 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
           if (isPresent) { // are already nodes present from previous exploration ?
             RLDomainQueue formerQueue = former.get();
             Tensor minValues = formerQueue.getMinValues().get();
-            Tensor merits = VectorScalars.vector(next.merit());
+            Tensor merit = VectorScalars.vector(next.merit());
             for (int i = 0; i < slacks.length(); ++i) // find nodes outside of bounds
-              if (Scalars.lessThan(merits.Get(i), minValues.Get(i))) { // cost lower than prev min?
+              if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) { // cost lower than prev min?
+                Scalar margin = merit.Get(i).add(slacks.Get(i));
                 final int j = i;
                 List<GlcNode> toRemove = formerQueue.stream() // find nodes to be removed
                     .filter(n -> Scalars.lessThan( //
-                        merits.Get(j).add(slacks.Get(j)), // lhs
+                        margin, // lhs
                         VectorScalars.at(n.merit(), j) // rhs
                     )).collect(Collectors.toList());
                 //

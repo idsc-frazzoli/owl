@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -77,11 +78,12 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
       Tensor minValues = optional.get();
       Tensor merit = VectorScalars.vector(node.merit());
       for (int i = 0; i < slacks.length(); i++) {
-        final int j = i;
         if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
+          Scalar margin = merit.Get(i).add(slacks.Get(i));
+          final int j = i;
           List<GlcNode> toRemove = reachingSet.stream() // find nodes to be removed
               .filter(n -> Scalars.lessThan( //
-                  merit.Get(j).add(slacks.Get(j)), // lhs
+                  margin, // lhs
                   VectorScalars.at(n.merit(), j) // rhs
               )).collect(Collectors.toList());
           if (!toRemove.isEmpty()) {

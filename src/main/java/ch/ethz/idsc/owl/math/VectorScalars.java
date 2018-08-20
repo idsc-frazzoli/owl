@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public enum VectorScalars {
   ;
   /** @param scalar
-   * @return
+   * @return unmodifiable
    * @throws Exception if given scalar is not an instance of {@link VectorScalar} */
   public static Tensor vector(Scalar scalar) {
     return ((VectorScalar) scalar).vector();

@@ -16,9 +16,4 @@ public class SlackWrap {
     // TODO diff.stream().map(Tensor::Get).allMatch(Sign::isPositiveOrZero);
     return !diff.stream().map(Tensor::Get).anyMatch(Sign::isNegative);
   }
-  // public boolean isSome(Tensor merits) {
-  // return Scalars.lessThan( //
-  // merits.Get(j).add(slacks.Get(j)), // lhs
-  // ((VectorScalar) n.merit()).vector().Get(j)
-  // }
 }
