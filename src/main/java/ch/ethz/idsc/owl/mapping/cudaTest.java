@@ -6,6 +6,7 @@ import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.GpuMat;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
+import org.bytedeco.javacpp.opencv_core.Scalar;
 import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_cudafilters;
 import org.bytedeco.javacpp.opencv_cudafilters.Filter;
@@ -20,30 +21,53 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 enum cudaTest {
   ;
   public static void main(String[] args) {
+    int radius = 8;
     Mat kernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
-        new Size(2, 2));
+        new Size(2*radius, 2*radius));
+    int it = 3;
     //
-    Tensor image = ResourceData.of("/map/scenarios/s1/car_obs.png");
+    Tensor image = ResourceData.of("/map/scenarios/s1/ped_obs_legal.png");
     BufferedImage bufferedImage = ImageFormat.of(image);
-    Mat img = CvHelper.bufferedImageToMat(bufferedImage);
+    Mat src = CvHelper.bufferedImageToMat(bufferedImage);
+    //opencv_imgproc.resize(src, src, new Size(2*src.size(0), 2*src.size(1)));
+    //
     // CPU dilate
-    Mat dst = new Mat(img.size(), img.type());
+    Mat dst = new Mat(src.size(), src.type());
     Stopwatch s = Stopwatch.started();
-    opencv_imgproc.dilate(img, dst, kernel, new Point(-1, -1), 100, opencv_core.BORDER_CONSTANT, null);
+    opencv_imgproc.dilate(src, dst, kernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
     //opencv_imgproc.threshold(img, dst, 128.0, 255.0, opencv_imgproc.THRESH_BINARY);
-    System.out.println(s.display_seconds());
     s.stop();
+    System.out.println("CPU: " + s.display_seconds());
+    CvHelper.displayMat(dst, "CPU");
     s.resetToZero();
     // 
     // GPU dilate
-    GpuMat src_g = new GpuMat(img.size(), img.type());
-    GpuMat dst_g = new GpuMat(img.size(), img.type());
-    src_g.upload(img);
-    Filter filter = opencv_cudafilters.createMorphologyFilter(opencv_imgproc.MORPH_DILATE, src_g.type(), kernel, new Point(-1, -1), 100);
+    GpuMat src_g = new GpuMat(src.size(), src.type());
+    GpuMat dst_g = new GpuMat(src.size(), src.type());
+    src_g.upload(src);
+    Filter filter = opencv_cudafilters.createMorphologyFilter(opencv_imgproc.MORPH_DILATE, src_g.type(), kernel, new Point(-1, -1), it);
     s.start();
     filter.apply(src_g, dst_g);
     //opencv_cudaarithm.threshold(src_g, dst_g, 128.0, 255.0, opencv_imgproc.THRESH_BINARY);
-    System.out.println(s.display_seconds());
+    s.stop();
+    System.out.println("GPU: " + s.display_seconds());
+    s.resetToZero();
+    dst_g.download(dst);
+    CvHelper.displayMat(dst, "GPU");
+    //
+    // CPU DT
+    Mat negSrc = new Mat();
+    Mat negSrcDT = new Mat();
+    Mat dilated = new Mat();
+    Mat rad = new Mat(Scalar.all(it*radius));
+    s.start();
+    opencv_core.bitwise_not(src, negSrc);
+    opencv_imgproc.distanceTransform(negSrc, negSrcDT, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
+    opencv_core.compare(negSrcDT, rad, dilated, opencv_core.CMP_LE);
+    s.stop();
+    CvHelper.displayMat(dilated, "DT CPU");
+    System.out.println("DT CPU: " + s.display_seconds());
 
+    // 
   }
 }
