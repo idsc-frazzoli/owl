@@ -41,9 +41,9 @@ public class ShadowEvaluator {
   private final ShadowMapSpherical shadowMap;
   //
   final int RESOLUTION = 10;
-  final int MAX_TREACT = 3;
+  final int MAX_TREACT = 2;
   final float delta_treact; // [s]
-  final Scalar a = DoubleScalar.of(0.85); // [m/s^2];
+  final Scalar a = DoubleScalar.of(0.80); // [m/s^2];
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-100, -100, 0), RealScalar.ZERO); // TODO YN not nice
@@ -102,15 +102,15 @@ public class ShadowEvaluator {
           Function<StateTime, Mat> mapSupplier = new Function<StateTime, Mat>() {
             @Override
             public Mat apply(StateTime t) {
-              return extractSector(shadowMap.getInitMap(), t.state(), angles.extract(fi, fi + 2));
+              return maskSector(shadowMap.getInitMap(), t.state(), angles.extract(fi, fi + 2));
             }
           };
           Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
           mtrMatrix.append(minTimeReact);
         }
         try {
-          File file1 = UserHome.file("" + "minSecReactionTime" + ".csv");
-          File file2 = UserHome.file("" + "state" + ".csv");
+          File file1 = UserHome.file("" + "/Desktop/eval/minSecTTR" + ".csv");
+          File file2 = UserHome.file("" + "/Desktop/eval/state" + ".csv");
           Export.of(file1, mtrMatrix.map(CsvFormat.strict()));
           Export.of(file2, Tensor.of(trajectory.stream().map(a -> a.stateTime().state())).map(CsvFormat.strict()));
         } catch (Exception exception) {
@@ -130,7 +130,7 @@ public class ShadowEvaluator {
     for (int i = 0; i < maxSize; i++) {
       // System.out.println("processing sample " + i + " / " + maxSize);
       StateTime stateTime = trajectory.get(i).stateTime();
-      final Mat simArea = mapSupplier.apply(stateTime).clone();
+      Mat simArea = mapSupplier.apply(stateTime).clone();
       Indexer indexer = simArea.createIndexer();
       // -
       Scalar vel = RealScalar.ZERO;
@@ -139,14 +139,14 @@ public class ShadowEvaluator {
       else if (trajectory.get(i).getFlow().isPresent())
         vel = trajectory.get(i).getFlow().get().getU().Get(0); // vel is in flow
       // -
-      Scalar tStop = vel.divide(a); // 0 reaction time
-      Scalar dStop = tStop.multiply(vel).divide(RealScalar.of(2));
+      Scalar tBrake = vel.divide(a); // 0 reaction time
+      Scalar dBrake = tBrake.multiply(vel).divide(RealScalar.of(2));
       Se2Bijection se2Bijection = new Se2Bijection(stateTime.state());
       // -
-      Tensor range = Subdivide.of(0, dStop.number(), RESOLUTION);
+      Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
       Tensor ray = TensorProduct.of(range, dir);
       // -
-      shadowMap.updateMap(simArea, stateTime, tStop.number().floatValue());
+      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue());
       boolean clear = !ray.stream().parallel() //
           .map(se2Bijection.forward()) //
           .map(shadowMap::state2pixel) //
@@ -164,9 +164,9 @@ public class ShadowEvaluator {
           // -
           if (fut.isPresent()) {
             se2Bijection = new Se2Bijection(fut.get().stateTime().state());
-            shadowMap.updateMap(simArea, oob, delta_treact);
-            dStop = tStop.add(tReact).multiply(vel).divide(RealScalar.of(2));
-            Tensor st = dir.multiply(dStop);
+            shadowMap.updateMap(simArea, oob, delta_treact); // update sr by delta_treact w.o. new lidar info
+            dBrake = tBrake.multiply(vel).divide(RealScalar.of(2)); // FIXME vel should be updated to vel at fut
+            Tensor st = dir.multiply(dBrake);
             Point px = shadowMap.state2pixel(se2Bijection.forward().apply(st));
             boolean intersect = isMember(indexer, px, simArea.cols(), simArea.rows());
             if (intersect)
@@ -186,12 +186,17 @@ public class ShadowEvaluator {
         && indexer.getDouble(pixel.y(), pixel.x()) == 255.0;
   }
 
-  private Mat extractSector(final Mat map, Tensor state, Tensor angles) {
+  /** Mask mat with a sector with origin at state and
+   * @param mat
+   * @param state origin of sector
+   * @param angles
+   * @return masked mat */
+  private Mat maskSector(final Mat mat, Tensor state, Tensor angles) {
     // build polygon
     Se2Bijection se2Bijection = new Se2Bijection(state);
     TensorUnaryOperator forward = se2Bijection.forward();
     // -
-    Scalar range = RealScalar.of(100); // TODO YN replace by max range of lidar
+    Scalar range = RealScalar.of(100); // TODO magic const
     Tensor rays = Tensor.of(angles.stream().map(Scalar.class::cast).map(AngleVector::of)).multiply(range);
     rays.append(Tensors.vector(0, 0)); // append origin
     // get pixel coordinates as Points
@@ -200,9 +205,10 @@ public class ShadowEvaluator {
         .map(shadowMap::state2pixel) //
         .map(a -> Tensors.vector(a.x(), a.y())));
     Point polyPoint = CvHelper.tensorToPoint(polyTens);
-    Mat segment = new Mat(map.size(), map.type(), opencv_core.Scalar.BLACK);
-    opencv_imgproc.fillPoly(segment, polyPoint, new int[] { 3 }, 1, opencv_core.Scalar.WHITE);
-    opencv_core.bitwise_and(map, segment, segment);
+    Mat segment = new Mat(mat.size(), mat.type(), opencv_core.Scalar.BLACK);
+    // opencv_imgproc.fillPoly(segment, polyPoint, new int[] { 3 }, 1, opencv_core.Scalar.WHITE);
+    opencv_imgproc.fillConvexPoly(segment, polyPoint, 3, opencv_core.Scalar.WHITE);
+    opencv_core.bitwise_and(mat, segment, segment);
     return segment;
   }
 }

@@ -24,7 +24,7 @@ class SimpleShadowConstraintJavaCV extends AbstractShadowConstraint {
   @Override // from CostIncrementFunction
   boolean isSatisfied(StateTime childStateTime, float tStop, Tensor ray, TensorUnaryOperator forward) {
     Mat simShadowArea = initArea.clone();
-    shadowMap.updateMap(simShadowArea, childStateTime, tStop);
+    shadowMap.updateMap(simShadowArea, childStateTime, tStop + tReact);
     Indexer indexer = simShadowArea.createIndexer();
     return !ray.stream().parallel() //
         .map(forward) //

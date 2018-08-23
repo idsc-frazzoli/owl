@@ -11,6 +11,7 @@ import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.GpuMat;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
+import org.bytedeco.javacpp.opencv_core.Scalar;
 import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_cudaarithm;
 import org.bytedeco.javacpp.opencv_cudafilters;
@@ -34,11 +35,12 @@ public class ShadowMapSpherical extends ShadowMap implements RenderInterface {
   private final Mat initArea;
   private final Mat shadowArea;
   private final float vMax;
-  // private final Scalar pixelDim;
-  // private final GeometricLayer world2pixelLayer;
   private final Mat sphericalKernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
       new Size(7, 7));
-  //
+  private final float kernelWorldRadius;
+  // ---
+  Mat negSrc = new Mat();
+  // ---
   private GpuMat initAreaGpu;
   private GpuMat shadowAreaGpu;
   private GpuMat lidarMatGpu;
@@ -48,6 +50,7 @@ public class ShadowMapSpherical extends ShadowMap implements RenderInterface {
     super(imageRegion);
     this.lidar = lidar;
     this.vMax = vMax;
+    this.kernelWorldRadius = sphericalKernel.arrayWidth() / 2.0f * pixelDim.number().floatValue();
     Mat area = CvHelper.bufferedImageToMat(bufferedImage);
     opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV); // TODO magic consts
     //
@@ -84,7 +87,9 @@ public class ShadowMapSpherical extends ShadowMap implements RenderInterface {
     return sphericalKernel.arrayWidth() * pixelDim.number().floatValue() / (2.0f * vMax);
   }
 
-  public synchronized void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
+  public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
+    // Stopwatch s = Stopwatch.started();
+    GeometricLayer world2pixelLayer = GeometricLayer.of(world2pixel);
     Mat area = area_.clone();
     // get lidar polygon and transform to pixel values
     Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
@@ -102,10 +107,16 @@ public class ShadowMapSpherical extends ShadowMap implements RenderInterface {
     opencv_core.subtract(area, lidarMat, area);
     //  ---
     // dilate and intersect
-    int it = radius2it(timeDelta * vMax);
-    opencv_imgproc.dilate(area, area, sphericalKernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
+    // int it = radius2it(timeDelta * vMax);
+    // opencv_imgproc.dilate(area, area, sphericalKernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
+    Mat rad = new Mat(Scalar.all((timeDelta * vMax) / pixelDim.number().floatValue()));
+    opencv_core.bitwise_not(area, negSrc);
+    opencv_imgproc.distanceTransform(negSrc, area, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
+    opencv_core.compare(area, rad, area, opencv_core.CMP_LE);
+    // ---
     opencv_core.bitwise_and(initArea, area, area);
     area.copyTo(area_);
+    // System.out.println(s.display_nanoSeconds());
   }
 
   public void updateMapGpu(GpuMat area_, StateTime stateTime, float timeDelta) {
@@ -143,9 +154,7 @@ public class ShadowMapSpherical extends ShadowMap implements RenderInterface {
   }
 
   private final int radius2it(float radius) {
-    float pixelRadius = sphericalKernel.arrayWidth() / 2.0f;
-    float worldRadius = pixelRadius * pixelDim.number().floatValue();
-    return (int) Math.ceil(radius / worldRadius);
+    return (int) Math.ceil(radius / kernelWorldRadius);
   }
 
   public void useGPU() {

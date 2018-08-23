@@ -12,8 +12,10 @@ import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
+import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
@@ -38,7 +40,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
   private static final Color PED_LEGAL_COLOR = new Color(38, 239, 248, 200);
   private static final Color PED_ILLEGAL_COLOR = new Color(38, 100, 248, 200);
   private static final float MAX_A = 0.8f; // [m/s²]
-  private static final float REACTION_TIME = 0.0f;
+  private static final float REACTION_TIME = 0.3f;
   private static final Tensor RANGE = Tensors.vector(52, 40);
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 20, 60));
@@ -76,6 +78,11 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     LidarEmulator lidarEmulator = new LidarEmulator( //
         LIDAR_RAYTRACER, gokartEntity::getStateTimeNow, lidarRay);
     owlyAnimationFrame.addBackground(lidarEmulator);
+    //
+    RenderInterface renderInterface = new MouseShapeRender( //
+        SimpleTrajectoryRegionQuery.timeInvariant(irCar), //
+        GokartEntity.SHAPE, () -> gokartEntity.getStateTimeNow().time());
+    owlyAnimationFrame.addBackground(renderInterface);
     // ---
     ShadowMapSpherical smPedLegal = //
         new ShadowMapSpherical(lidarEmulator, irPedLegal, PED_VELOCITY, PED_RADIUS);
@@ -83,18 +90,17 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
         new ShadowMapSpherical(lidarEmulator, irPedIllegal, PED_VELOCITY, PED_RADIUS);
     smPedLegal.setColor(PED_LEGAL_COLOR);
     smPedIllegal.setColor(PED_ILLEGAL_COLOR);
-    // owlyAnimationFrame.addBackground(smPedLegal);
     // ---
     CostFunction pedLegalCost = //
         ConstraintViolationCost.of(new SimpleShadowConstraintJavaCV(smPedLegal, MAX_A, REACTION_TIME));
     CostFunction pedIllegalCost = //
         ConstraintViolationCost.of(new SimpleShadowConstraintJavaCV(smPedIllegal, MAX_A, REACTION_TIME));
-    gokartEntity.setCostVector(Arrays.asList(pedLegalCost, pedIllegalCost), Arrays.asList(0.0, 0.0));
-    gokartEntity.addTimeCost(1, 0.4);
+    gokartEntity.setCostVector(Arrays.asList(pedLegalCost), Arrays.asList(0.0));
+    gokartEntity.addTimeCost(1, 0.0);
     // ---
     List<GlcPlannerCallback> callbacks = new ArrayList<>();
     // ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal);
-    // callbacks.add(evaluator.minReactionTime);
+    // callbacks.add(evaluator.sectorTimeToReact);
     MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint, callbacks);
     // ---
   }
