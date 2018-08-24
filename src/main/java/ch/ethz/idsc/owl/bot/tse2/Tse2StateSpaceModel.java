@@ -18,8 +18,9 @@ public enum Tse2StateSpaceModel implements StateSpaceModel {
   INSTANCE;
   // ---
   public static final int STATE_INDEX_VEL = 3;
-  public static final TensorScalarFunction STATE_VELOCITY = t -> t.Get(3);
+  public static final TensorScalarFunction STATE_VELOCITY = t -> t.Get(STATE_INDEX_VEL);
   public static final int CONTROL_INDEX_STEER = 0;
+  public static final int CONTROL_INDEX_ACC = 1;
 
   // ---
   @Override
@@ -33,7 +34,7 @@ public enum Tse2StateSpaceModel implements StateSpaceModel {
         Cos.FUNCTION.apply(angle).multiply(vx), // change in px
         Sin.FUNCTION.apply(angle).multiply(vx), // change in py
         u.Get(CONTROL_INDEX_STEER).multiply(vx), // angular rate
-        u.Get(1) // acceleration
+        u.Get(CONTROL_INDEX_ACC) // acceleration
     );
   }
 
