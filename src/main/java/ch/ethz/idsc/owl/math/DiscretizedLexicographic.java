@@ -37,10 +37,9 @@ public class DiscretizedLexicographic implements Comparator<Tensor> {
       Scalar b = t2.Get(index);
       Scalar s = slack.Get(index);
       if (Scalars.nonZero(s)) {
-        // could use Floor.toMultipleOf(s)
-        // but multiplication with s should be obsolete for comparison
-        a = Floor.FUNCTION.apply(a.divide(s)).multiply(s);
-        b = Floor.FUNCTION.apply(b.divide(s)).multiply(s);
+        // multiplication with s should be obsolete for comparison
+        a = Floor.FUNCTION.apply(a.divide(s)); // .multiply(s)
+        b = Floor.FUNCTION.apply(b.divide(s)); // .multiply(s)
       }
       cmp = Scalars.compare(a, b);
     }

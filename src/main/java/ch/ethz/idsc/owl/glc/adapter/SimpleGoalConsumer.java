@@ -26,7 +26,7 @@ public class SimpleGoalConsumer implements GoalConsumer {
     this.glcPlannerCallbacks = glcPlannerCallbacks;
   }
 
-  @Override
+  @Override // from GoalConsumer
   public void accept(Tensor goal) {
     // System.out.println("goal: " + goal);
     if (Objects.nonNull(motionPlanWorker)) {

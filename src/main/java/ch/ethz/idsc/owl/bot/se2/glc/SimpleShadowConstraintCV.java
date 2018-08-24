@@ -10,13 +10,12 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-class SimpleShadowConstraintJavaCV extends AbstractShadowConstraint {
+class SimpleShadowConstraintCV extends AbstractShadowConstraint {
   private final ShadowMapSpherical shadowMap;
   private final Mat initArea;
 
-  public SimpleShadowConstraintJavaCV(ShadowMapSpherical shadowMapPed, float a, float reactionTime) {
-    super(a, reactionTime);
-    // ---
+  public SimpleShadowConstraintCV(ShadowMapSpherical shadowMapPed, float a, float reactionTime, boolean tse2) {
+    super(a, reactionTime, tse2);
     this.shadowMap = shadowMapPed;
     this.initArea = shadowMapPed.getInitMap();
   }
@@ -24,7 +23,7 @@ class SimpleShadowConstraintJavaCV extends AbstractShadowConstraint {
   @Override // from CostIncrementFunction
   boolean isSatisfied(StateTime childStateTime, float tStop, Tensor ray, TensorUnaryOperator forward) {
     Mat simShadowArea = initArea.clone();
-    shadowMap.updateMap(simShadowArea, childStateTime, tStop);
+    shadowMap.updateMap(simShadowArea, childStateTime, tStop + tReact);
     Indexer indexer = simShadowArea.createIndexer();
     return !ray.stream().parallel() //
         .map(forward) //
