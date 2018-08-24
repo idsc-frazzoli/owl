@@ -1,6 +1,8 @@
+// code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +43,8 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
   public static final Tensor SHAPE = ResourceData.of("/gokart/footprint/20171201.csv");
   static final FlowsInterface CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-0.7, 0, 0.7));
   //
-  private List<CostFunction> costVector = new ArrayList<>();
-  private List<Double> slackVector = new ArrayList<>();
+  private List<CostFunction> costVector = Collections.emptyList();
+  private List<Double> slackVector = Collections.emptyList();
   private Optional<Integer> timeCostPriority = Optional.empty();
   private Optional<Double> timeCostSlack = Optional.empty();
 
@@ -64,15 +66,13 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
 
   @Override
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    goal = goal.append(goalVelocity); // FIXME YN
+    goal = goal.copy().append(goalVelocity); // FIXME YN What is there to fix?
     goalRegion = getGoalRegionWithDistance(goal);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     //  ---
     // costs with higher priority come first
-    List<CostFunction> costs = new ArrayList<>();
-    List<Double> slacks = new ArrayList<>();
-    costs.addAll(costVector);
-    slacks.addAll(slackVector);
+    List<CostFunction> costs = new ArrayList<>(costVector);
+    List<Double> slacks = new ArrayList<>(slackVector);
     // ---
     if (timeCostPriority.isPresent() && timeCostSlack.isPresent()) {
       GlobalAssert.that(timeCostPriority.get() <= costs.size());
@@ -92,6 +92,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
   }
 
   /** Sets the cost vector and their respective slacks. Lower indices have higher priority.
+   * 
    * @param costVector
    * @param slackVector */
   public void setCostVector(List<CostFunction> costVector, List<Double> slackVector) {
@@ -101,6 +102,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
   }
 
   /** Add time cost to the cost vector
+   * 
    * @param priority
    * @param slack */
   public void addTimeCost(int priority, Double slack) {

@@ -106,9 +106,9 @@ public class Tse2CarEntity extends Tse2Entity {
 
   protected RegionWithDistance<Tensor> goalRegion = null;
 
-  @Override
+  @Override // from TrajectoryEntity
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    goal = goal.append(goalVelocity); // // FIXME YN 4th component of goal
+    goal = goal.copy().append(goalVelocity); // FIXME YN 4th component of goal. What is there to fix?
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     Tse2MinTimeGoalManager se2MinTimeGoalManager = new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(se2MinTimeGoalManager.getGoalInterface(), extraCosts);

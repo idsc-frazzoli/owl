@@ -21,12 +21,12 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 abstract class AbstractShadowConstraint implements PlannerConstraint, Serializable {
+  static final Tensor DIR = AngleVector.of(RealScalar.ZERO).unmodifiable();
   private static final int RESOLUTION = 10;
   // ---
   protected final float a;
   protected final float tReact;
   protected final float timeStep = 0.1f; // TODO YN get from state integrator
-  protected final Tensor dir = AngleVector.of(RealScalar.ZERO);
   private final int steps;
   private final BiFunction<StateTime, Flow, Scalar> velSupplier;
 
@@ -40,13 +40,9 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
     this.tReact = tReact;
     this.steps = Math.max((int) Math.ceil(tReact / timeStep), 1);
     if (tse2)
-      velSupplier = (StateTime stateTime, Flow flow) -> {
-        return stateTime.state().Get(3);
-      };
+      velSupplier = (StateTime stateTime, Flow flow) -> stateTime.state().Get(3);
     else
-      velSupplier = (StateTime stateTime, Flow flow) -> {
-        return flow.getU().Get(0);
-      };
+      velSupplier = (StateTime stateTime, Flow flow) -> flow.getU().Get(0);
   }
 
   @Override
@@ -57,7 +53,7 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
     float tBrake = vel / a;
     float dBrake = tBrake * vel / 2;
     Tensor range = Subdivide.of(0, dBrake, RESOLUTION);
-    Tensor ray = TensorProduct.of(range, dir);
+    Tensor ray = TensorProduct.of(range, DIR);
     Se2Bijection se2Bijection = new Se2Bijection(childStateTime.state());
     // -
     StateTime pastStateTime = trajectory.get(trajectory.size() - steps);

@@ -18,8 +18,8 @@ public class LexicographicRelabelDecision implements RelabelDecision {
 
   @Override // from RelabelDecisionInterface
   public boolean doRelabel(GlcNode newNode, GlcNode oldNode) {
-    Tensor newMerit = VectorScalars.vector(newNode.merit());
-    Tensor formerMerit = VectorScalars.vector(oldNode.merit());
-    return comparator.compare(newMerit, formerMerit) == -1;
+    return comparator.compare( //
+        VectorScalars.vector(newNode.merit()), //
+        VectorScalars.vector(oldNode.merit())) == -1;
   }
 }
