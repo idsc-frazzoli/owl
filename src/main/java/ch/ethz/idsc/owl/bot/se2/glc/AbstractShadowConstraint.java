@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
+import ch.ethz.idsc.owl.bot.tse2.Tse2StateSpaceModel;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -24,11 +26,12 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
   static final Tensor DIR = AngleVector.of(RealScalar.ZERO).unmodifiable();
   private static final int RESOLUTION = 10;
   // ---
-  protected final float a;
-  protected final float tReact;
-  protected final float timeStep = 0.1f; // TODO YN get from state integrator
   private final int steps;
   private final BiFunction<StateTime, Flow, Scalar> velSupplier;
+  // ---
+  final float a;
+  final float tReact;
+  final float timeStep = 0.1f; // TODO YN get from state integrator
 
   public AbstractShadowConstraint(float a, float tReact) {
     this(a, tReact, false);
@@ -39,10 +42,9 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
     this.a = a;
     this.tReact = tReact;
     this.steps = Math.max((int) Math.ceil(tReact / timeStep), 1);
-    if (tse2)
-      velSupplier = (StateTime stateTime, Flow flow) -> stateTime.state().Get(3);
-    else
-      velSupplier = (StateTime stateTime, Flow flow) -> flow.getU().Get(0);
+    velSupplier = tse2 //
+        ? (StateTime stateTime, Flow flow) -> stateTime.state().Get(Tse2StateSpaceModel.STATE_INDEX_VEL)
+        : (StateTime stateTime, Flow flow) -> flow.getU().Get(Se2StateSpaceModel.CONTROL_INDEX_VEL);
   }
 
   @Override

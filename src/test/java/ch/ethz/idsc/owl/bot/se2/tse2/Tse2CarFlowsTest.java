@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class Tse2CarFlowsTest extends TestCase {
@@ -19,5 +20,14 @@ public class Tse2CarFlowsTest extends TestCase {
     assertEquals(Tse2Controls.maxAcc(flows), RealScalar.of(1));
     assertEquals(Tse2Controls.minAcc(flows), RealScalar.of(-2));
     assertEquals(Tse2Controls.maxTurning(flows), RealScalar.of(3));
+  }
+
+  public void testFail() {
+    try {
+      Tse2CarFlows.of(Quantity.of(1, "m^-1"), Quantity.of(2, "m*s^-2"));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

@@ -26,6 +26,8 @@ import ch.ethz.idsc.tensor.sca.Sin;
 public enum Se2StateSpaceModel implements StateSpaceModel {
   INSTANCE;
   // ---
+  public static final int CONTROL_INDEX_VEL = 3;
+
   @Override
   public Tensor f(Tensor x, Tensor u) {
     // return AngleVector.of(x.Get(2)).multiply(u.Get(0)).append(u.Get(2)); // <- short form
@@ -33,7 +35,7 @@ public enum Se2StateSpaceModel implements StateSpaceModel {
     // u = {vx, vy == 0, rate}
     // speed: positive for forward motion, or negative for backward motion
     Scalar angle = x.Get(2);
-    Scalar vx = u.Get(0);
+    Scalar vx = u.Get(CONTROL_INDEX_VEL);
     return Tensors.of( //
         Cos.FUNCTION.apply(angle).multiply(vx), // change in px
         Sin.FUNCTION.apply(angle).multiply(vx), // change in py

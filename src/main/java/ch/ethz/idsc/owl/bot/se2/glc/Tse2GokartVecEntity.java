@@ -66,7 +66,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
 
   @Override
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    goal = goal.copy().append(goalVelocity); // FIXME YN What is there to fix?
+    goal = goal.copy().append(goalVelocity);
     goalRegion = getGoalRegionWithDistance(goal);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     //  ---
