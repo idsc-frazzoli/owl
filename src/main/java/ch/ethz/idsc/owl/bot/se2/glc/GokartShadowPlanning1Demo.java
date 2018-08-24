@@ -8,7 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
+import ch.ethz.idsc.owl.bot.tse2.Tse2CarEntity;
+import ch.ethz.idsc.owl.bot.tse2.Tse2VelocityConstraint;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
+import ch.ethz.idsc.owl.glc.adapter.MultiConstraintAdapter;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -19,9 +22,7 @@ import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
-import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -34,13 +35,13 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
-public class GokartShadowPlanning0Demo extends GokartDemo {
-  private static final float PED_VELOCITY = 1.2f;
+public class GokartShadowPlanning1Demo extends GokartDemo {
+  private static final float PED_VELOCITY = 1.5f;
   private static final float PED_RADIUS = 0.3f;
   private static final Color PED_LEGAL_COLOR = new Color(38, 239, 248, 200);
   private static final Color PED_ILLEGAL_COLOR = new Color(38, 100, 248, 200);
   private static final float MAX_A = 0.8f; // [m/s²]
-  private static final float REACTION_TIME = 0.3f;
+  private static final float REACTION_TIME = 0.2f;
   private static final Tensor RANGE = Tensors.vector(52, 40);
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 20, 60));
@@ -48,13 +49,10 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
     // ---
-    final StateTime initial = new StateTime(Tensors.vector(36.283, 8.850, 1.571), RealScalar.ZERO);
-    GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
-      @Override
-      public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
-      }
-    };
+    // final StateTime initial = new StateTime(Tensors.vector(36.283, 8.850, 1.571, 0), RealScalar.ZERO);
+    final StateTime initial = new StateTime(Tensors.vector(36.283, 12.850, 1.571, 0), RealScalar.ZERO);
+    Tse2GokartVecEntity gokartEntity = Tse2GokartVecEntity.createDefault(initial);
+    gokartEntity.setVelGoal(RealScalar.ZERO, RealScalar.of(100));
     // ---
     Tensor image = ResourceData.of("/map/scenarios/s1/render.png");
     BufferedImage bufferedImage = ImageFormat.of(image);
@@ -73,12 +71,16 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     owlyAnimationFrame.add(gokartEntity);
     // ---
     TrajectoryRegionQuery lidarRay = SimpleTrajectoryRegionQuery.timeInvariant(irLid);
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(irCar);
+    // ---
+    List<PlannerConstraint> collection = new ArrayList<>();
+    collection.add(RegionConstraints.timeInvariant(irCar));
+    collection.add(new Tse2VelocityConstraint(RealScalar.ZERO, Tse2CarEntity.MAX_SPEED));
+    PlannerConstraint constraints = MultiConstraintAdapter.of(collection);
     // ---
     LidarEmulator lidarEmulator = new LidarEmulator( //
         LIDAR_RAYTRACER, gokartEntity::getStateTimeNow, lidarRay);
     owlyAnimationFrame.addBackground(lidarEmulator);
-    // ---
+    //
     RenderInterface renderInterface = new MouseShapeRender( //
         SimpleTrajectoryRegionQuery.timeInvariant(irCar), //
         GokartEntity.SHAPE, () -> gokartEntity.getStateTimeNow().time());
@@ -92,20 +94,20 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     smPedIllegal.setColor(PED_ILLEGAL_COLOR);
     // ---
     CostFunction pedLegalCost = //
-        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedLegal, MAX_A, REACTION_TIME, false));
+        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedLegal, MAX_A, REACTION_TIME, true));
     CostFunction pedIllegalCost = //
-        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedIllegal, MAX_A, REACTION_TIME, false));
+        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedIllegal, MAX_A, REACTION_TIME, true));
     gokartEntity.setCostVector(Arrays.asList(pedLegalCost), Arrays.asList(0.0));
     gokartEntity.addTimeCost(1, 0.0);
     // ---
     List<GlcPlannerCallback> callbacks = new ArrayList<>();
     // ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal);
     // callbacks.add(evaluator.sectorTimeToReact);
-    MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint, callbacks);
+    MouseGoal.simple(owlyAnimationFrame, gokartEntity, constraints, callbacks);
     // ---
   }
 
   public static void main(String[] args) {
-    new GokartShadowPlanning0Demo().start().jFrame.setVisible(true);
+    new GokartShadowPlanning1Demo().start().jFrame.setVisible(true);
   }
 }

@@ -10,13 +10,12 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-class SimpleShadowConstraintJavaCV extends AbstractShadowConstraint {
+class SimpleShadowConstraintCV extends AbstractShadowConstraint {
   private final ShadowMapSpherical shadowMap;
   private final Mat initArea;
 
-  public SimpleShadowConstraintJavaCV(ShadowMapSpherical shadowMapPed, float a, float reactionTime) {
-    super(a, reactionTime);
-    // ---
+  public SimpleShadowConstraintCV(ShadowMapSpherical shadowMapPed, float a, float reactionTime, boolean tse2) {
+    super(a, reactionTime, tse2);
     this.shadowMap = shadowMapPed;
     this.initArea = shadowMapPed.getInitMap();
   }
