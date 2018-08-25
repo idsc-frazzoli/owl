@@ -36,6 +36,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 import junit.framework.TestCase;
@@ -68,7 +69,7 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
     PolygonRegion polygonRegion = new PolygonRegion(polygon);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(polygonRegion);
-    CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, RealScalar.ONE);
+    CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, Quantity.of(1, ""));
     // ---
     GoalInterface goalInterface = new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost, distanceCost), goalRegion);
     // ---

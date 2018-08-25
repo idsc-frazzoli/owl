@@ -55,13 +55,13 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
   }
 
   protected final void addToDomainMap(Tensor domain_key, GlcNode node) {
-    domainMap.put(domain_key, node);
+    domainMap.addToDomainMap(domain_key, node);
   }
 
   /** @param domain_key
    * @return RLDomainQueue in domain or Optional.empty() if domain has not been assigned a node yet */
   protected final Optional<RLDomainQueue> getDomainQueue(Tensor domain_key) {
-    return Optional.ofNullable(domainMap.get(domain_key));
+    return Optional.ofNullable(domainMap.getQueue(domain_key));
   }
 
   /** method is invoked to notify planner that the

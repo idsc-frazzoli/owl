@@ -10,9 +10,9 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RLDomainQueueMap {
-  private final Tensor slacks;
   /** map from domain keys to queues of nodes */
   private final Map<Tensor, RLDomainQueue> map = new HashMap<>();
+  private final Tensor slacks;
 
   public RLDomainQueueMap(Tensor slacks) {
     this.slacks = slacks;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * 
    * @param domain_key
    * @param glcNode */
-  public void put(Tensor domain_key, GlcNode glcNode) {
+  public void addToDomainMap(Tensor domain_key, GlcNode glcNode) {
     if (map.containsKey(domain_key)) // has another node has already reached this domain ?
       map.get(domain_key).add(glcNode); // add node to existing queue
     else
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.Tensor;
     return map.containsKey(domain_key);
   }
 
-  public RLDomainQueue get(Tensor domain_key) {
+  public RLDomainQueue getQueue(Tensor domain_key) {
     return map.get(domain_key);
   }
 

@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class RLQueue implements Iterable<GlcNode> {
+/* package */ class RLQueue implements Iterable<GlcNode> {
   private final Set<GlcNode> set = new HashSet<>();
   private final Tensor slack;
 
@@ -30,7 +30,7 @@ public class RLQueue implements Iterable<GlcNode> {
 
   public final GlcNode poll() {
     GlcNode best = getFromBest();
-    remove(best);
+    set.remove(best);
     return best;
   }
 
@@ -46,22 +46,17 @@ public class RLQueue implements Iterable<GlcNode> {
     return set.isEmpty();
   }
 
-  public Stream<GlcNode> stream() {
+  public final Stream<GlcNode> stream() {
     return set.stream();
   }
 
-  public Collection<GlcNode> collection() {
+  public final Collection<GlcNode> collection() {
     return Collections.unmodifiableCollection(set);
   }
 
   @Override // from Iterable
   public final Iterator<GlcNode> iterator() {
     return set.iterator();
-  }
-
-  // not used outside class
-  private boolean remove(GlcNode glcNode) {
-    return set.remove(glcNode);
   }
 
   /** @return first element from best set
