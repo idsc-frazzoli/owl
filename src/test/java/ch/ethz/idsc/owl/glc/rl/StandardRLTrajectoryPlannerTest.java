@@ -3,8 +3,6 @@ package ch.ethz.idsc.owl.glc.rl;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +19,10 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.VectorScalar;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
-import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -53,7 +51,7 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(36);
-    Region<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
+    RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
     CostFunction distanceCost = new CostFunction() {
       @Override // from CostIncrementFunction
       public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
@@ -62,7 +60,7 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
 
       @Override // from HeuristicFunction
       public Scalar minCostToGoal(Tensor x) {
-        return ((RegionWithDistance<Tensor>) goalRegion).distance(x);
+        return goalRegion.distance(x);
       }
     };
     Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
@@ -80,30 +78,18 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     GlcRLExpand glcExpand = new GlcRLExpand(trajectoryPlanner);
     glcExpand.untilOptimal(1000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
-    if (optional.isPresent()) {
-      GlcNode goalNode = optional.get(); // <- throws exception if
-      VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
-      // System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
-      Scalar lowerBound = Ramp.of(Norm._2.ofVector(stateGoal.subtract(stateRoot)).subtract(radius));
-      if (Scalars.lessThan(cost.vector().Get(0), lowerBound))
-        throw TensorRuntimeException.of(cost, lowerBound);
-      // ---
-      GlcNode minCostNode = Collections.min( //
-          trajectoryPlanner.reachingSet.collection(), //
-          new Comparator<GlcNode>() {
-            @Override
-            public int compare(GlcNode first, GlcNode second) {
-              return Scalars.compare( //
-                  ((VectorScalar) first.merit()).vector().Get(0), //
-                  ((VectorScalar) second.merit()).vector().Get(0));
-            }
-          });
-      Tensor minComp = ((VectorScalar) minCostNode.merit()).vector(); // min cost component in goal
-      Scalar upperBound = minComp.Get(0).add(slacks.Get(0));
-      assertTrue(Scalars.lessEquals(cost.vector().Get(0), upperBound));
-    }
+    assertTrue(optional.isPresent());
+    GlcNode goalNode = optional.get(); // <- throws exception if
+    VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
+    // System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
+    Scalar lowerBound = Ramp.of(Norm._2.ofVector(stateGoal.subtract(stateRoot)).subtract(radius));
+    if (Scalars.lessThan(cost.vector().Get(0), lowerBound))
+      throw TensorRuntimeException.of(cost, lowerBound);
+    // ---
+    GlcNode minCostNode = StaticHelper.getMin(trajectoryPlanner.reachingSet.collection(), 0);
+    Tensor minComp = VectorScalars.vector(minCostNode.merit()); // min cost component in goal
+    System.out.println("minComp=" + minComp);
+    Scalar upperBound = minComp.Get(0).add(slacks.Get(0));
+    assertTrue(Scalars.lessEquals(cost.vector().Get(0), upperBound));
   }
-  // public static void main(String[] args) {
-  // new StandardRLTrajectoryPlannerTest().testSimple();
-  // }
 }

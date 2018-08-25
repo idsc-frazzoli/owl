@@ -13,10 +13,10 @@ import ch.ethz.idsc.tensor.Scalar;
 public interface GlcNode extends StateCostNode {
   /** creates {@link GlcNode} without parent and without descendants/children
    * 
-   * @param flow used to reach this node
+   * @param flow used to reach this node, or null if this node is root
    * @param stateTime
-   * @param costFromRoot
-   * @param minCostToGoal
+   * @param costFromRoot exact accumulation of costs along edges from root to this node
+   * @param minCostToGoal lower bound for remaining costs to reach the goal region from given stateTime
    * @return */
   static GlcNode of(Flow flow, StateTime stateTime, Scalar costFromRoot, Scalar minCostToGoal) {
     return new GlcNodeImpl(flow, stateTime, costFromRoot, minCostToGoal);

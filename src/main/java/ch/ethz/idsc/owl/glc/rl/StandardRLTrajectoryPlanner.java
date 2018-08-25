@@ -59,9 +59,8 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       Optional<RLDomainQueue> formerQueue = getDomainQueue(domainKey);
       if (formerQueue.isPresent()) { // is already some domain queue present from previous exploration ?
-        if (isWithinSlack(next, formerQueue.get()) && !StaticHelper.isEqual(next, formerQueue.get())) {
+        if (isWithinSlack(next, formerQueue.get()) && !StaticHelper.isEqual(next, formerQueue.get()))
           domainQueueMap.put(domainKey, next); // new node lies within slack, potentially better than previous ones
-        }
       } else
         domainQueueMap.put(domainKey, next); // node is considered without comparison to any former node
     }

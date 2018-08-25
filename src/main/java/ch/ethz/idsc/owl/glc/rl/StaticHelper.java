@@ -1,6 +1,9 @@
 // code by yn, jph
 package ch.ethz.idsc.owl.glc.rl;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -34,5 +37,20 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     return domainQueue.stream() //
         .anyMatch(a -> VectorScalars.vector(a.merit()).subtract(nextMerit) //
             .stream().map(Tensor::Get).allMatch(v -> Scalars.lessThan(v, MERIT_EPS)));
+  }
+
+  /** @param collection
+   * @param dimension
+   * @return best node in collection along given dimension
+   * @throws Exception if collection is empty */
+  static GlcNode getMin(Collection<GlcNode> collection, int dimension) {
+    return Collections.min(collection, new Comparator<GlcNode>() {
+      @Override
+      public int compare(GlcNode first, GlcNode second) {
+        return Scalars.compare( //
+            VectorScalars.at(first.merit(), dimension), //
+            VectorScalars.at(second.merit(), dimension));
+      }
+    });
   }
 }

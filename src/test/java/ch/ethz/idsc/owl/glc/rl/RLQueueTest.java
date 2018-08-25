@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.subare.util.GlobalAssert;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
@@ -50,9 +51,11 @@ public class RLQueueTest extends TestCase {
   public void testSpeed() {
     Tensor slack = Tensors.vector(1, 0, 0);
     RLQueue rlQueue = new RLQueue(slack);
-    Random s = new Random();
+    Random random = new Random();
     for (int i = 0; i < 1000; i++) {
-      GlcNode node = GlcNode.of(null, null, VectorScalar.of(Tensors.vectorDouble(s.doubles(3, 1, 2).toArray())), VectorScalar.of(0, 0, 0));
+      Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
+      Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
+      GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
       rlQueue.add(node);
     }
     Stopwatch sw = Stopwatch.started();
