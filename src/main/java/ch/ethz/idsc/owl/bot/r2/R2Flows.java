@@ -35,11 +35,15 @@ public class R2Flows implements FlowsInterface, Serializable {
     GlobalAssert.that(2 < resolution); // otherwise does not cover plane
     List<Flow> list = new ArrayList<>();
     for (Tensor u : CirclePoints.of(resolution))
-      list.add(StateSpaceModels.createFlow(SINGLE_INTEGRATOR, u.multiply(speed)));
+      list.add(StateSpaceModels.createFlow(SINGLE_INTEGRATOR, mapU(u).multiply(speed)));
     return list;
   }
 
   public Flow stayPut() {
     return StateSpaceModels.createFlow(SINGLE_INTEGRATOR, Array.zeros(2));
+  }
+
+  protected Tensor mapU(Tensor u) {
+    return u;
   }
 }

@@ -1,9 +1,12 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class SphericalRegionTest extends TestCase {
@@ -29,6 +32,22 @@ public class SphericalRegionTest extends TestCase {
     SphericalRegion sr = new SphericalRegion(Tensors.vector(1, 2), RealScalar.of(5));
     assertEquals(sr.center(), Tensors.vector(1, 2));
     assertEquals(sr.radius(), RealScalar.of(5));
+  }
+
+  public void testQuantity() {
+    RegionWithDistance<Tensor> regionWithDistance = new SphericalRegion(Tensors.fromString("{10[m],20[m]}"), Quantity.of(5, "m"));
+    assertTrue(regionWithDistance.isMember(Tensors.fromString("{11[m],19[m]}")));
+    Scalar scalar = regionWithDistance.distance(Tensors.fromString("{10[m],0[m]}"));
+    assertEquals(scalar, Quantity.of(15, "m"));
+    assertTrue(ExactScalarQ.of(scalar));
+  }
+
+  public void testSignedDistance() {
+    ImplicitFunctionRegion<Tensor> implicitFunctionRegion = new SphericalRegion(Tensors.fromString("{10[m],20[m]}"), Quantity.of(5, "m"));
+    assertTrue(implicitFunctionRegion.isMember(Tensors.fromString("{11[m],19[m]}")));
+    Scalar scalar = implicitFunctionRegion.signedDistance(Tensors.fromString("{11[m],20[m]}"));
+    assertEquals(scalar, Quantity.of(-4, "m"));
+    assertTrue(ExactScalarQ.of(scalar));
   }
 
   public void testFail() {

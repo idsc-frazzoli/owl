@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
+import ch.ethz.idsc.owl.bot.r2.R2RationalFlows;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
@@ -15,6 +16,7 @@ import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
@@ -28,32 +30,34 @@ import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Ramp;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class StandardRLTrajectoryPlannerTest extends TestCase {
-  public void testSimple() {
+  private static void _withSlack(Tensor slacks) {
+    System.out.println("---slacks=" + slacks);
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
-    final Scalar radius = DoubleScalar.of(.05);
-    final Tensor slacks = Tensors.vector(1, 0, 0);
     // ---
-    Tensor eta = Tensors.vector(8, 8);
+    int n = 8;
+    Tensor eta = Tensors.vector(n, n);
+    // radius is chosen so that goal region contains at least one domain entirely
+    final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
-    R2Flows r2Config = new R2Flows(RealScalar.ONE);
-    Collection<Flow> controls = r2Config.getFlows(36);
+    R2Flows r2Flows =
+        // new R2Flows(RealScalar.ONE);
+        new R2RationalFlows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(4);
     RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
-    // the 1st cost penalizes distance of path
+    // the 1st cost penalizes distance of path with slack
     CostFunction distanceCost = new CostFunction() {
       @Override // from CostIncrementFunction
       public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
@@ -71,7 +75,9 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, Quantity.of(1, ""));
     // ---
-    GoalInterface goalInterface = new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost, distanceCost), goalRegion);
+    // the 3rd cost penalizes distance of path
+    GoalInterface goalInterface = //
+        new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost, distanceCost), goalRegion);
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     RLTrajectoryPlanner trajectoryPlanner = new StandardRLTrajectoryPlanner( //
@@ -81,18 +87,27 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     GlcRLExpand glcExpand = new GlcRLExpand(trajectoryPlanner);
     glcExpand.untilOptimal(1000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
-    assertTrue(optional.isPresent());
-    GlcNode goalNode = optional.get(); // <- throws exception if
+    assertTrue(optional.isPresent()); // guarantee optimal solution exists
+    GlcNode goalNode = optional.get();
     VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
-    // System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
-    Scalar lowerBound = Ramp.of(Norm._2.ofVector(stateGoal.subtract(stateRoot)).subtract(radius));
-    if (Scalars.lessThan(cost.vector().Get(0), lowerBound))
-      throw TensorRuntimeException.of(cost, lowerBound);
+    System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
+    Scalar lowerBound = goalRegion.distance(stateRoot);
+    System.out.println("lowerBound=" + lowerBound);
+    Scalar marginDist = cost.vector().Get(0).subtract(lowerBound);
+    System.out.println("marginDist=" + marginDist);
+    Sign.requirePositiveOrZero(marginDist);
     // ---
     GlcNode minCostNode = StaticHelper.getMin(trajectoryPlanner.reachingSet.collection(), 0);
     Tensor minComp = VectorScalars.vector(minCostNode.merit()); // min cost component in goal
     System.out.println("minComp=" + minComp);
     Scalar upperBound = minComp.Get(0).add(slacks.Get(0));
     assertTrue(Scalars.lessEquals(cost.vector().Get(0), upperBound));
+    List<StateTime> pathFromRootTo = GlcNodes.getPathFromRootTo(goalNode);
+    pathFromRootTo.stream().map(StateTime::toInfoString).forEach(System.out::println);
+  }
+
+  public void testSimple() {
+    _withSlack(Tensors.vector(1.3, 0, 0));
+    _withSlack(Tensors.vector(0, 0, 0));
   }
 }
