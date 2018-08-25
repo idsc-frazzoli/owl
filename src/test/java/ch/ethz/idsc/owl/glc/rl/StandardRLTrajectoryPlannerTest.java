@@ -52,6 +52,7 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(36);
     RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
+    // the 1st cost penalizes distance of path
     CostFunction distanceCost = new CostFunction() {
       @Override // from CostIncrementFunction
       public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
@@ -63,10 +64,11 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
         return goalRegion.distance(x);
       }
     };
+    // the 2nd cost penalizes membership in region
     Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
     PolygonRegion polygonRegion = new PolygonRegion(polygon);
-    PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
-    CostFunction regionCost = ConstraintViolationCost.of(regionConstraint);
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(polygonRegion);
+    CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, RealScalar.ONE);
     // ---
     GoalInterface goalInterface = new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost, distanceCost), goalRegion);
     // ---
