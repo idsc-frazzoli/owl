@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class StandardRLTrajectoryPlannerTest extends TestCase {
-  private static void _withSlack(Tensor slacks) {
+  private static GlcNode _withSlack(Tensor slacks) {
     System.out.println("---slacks=" + slacks);
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
@@ -104,10 +104,30 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     assertTrue(Scalars.lessEquals(cost.vector().Get(0), upperBound));
     List<StateTime> pathFromRootTo = GlcNodes.getPathFromRootTo(goalNode);
     pathFromRootTo.stream().map(StateTime::toInfoString).forEach(System.out::println);
+    return goalNode;
   }
 
-  public void testSimple() {
-    _withSlack(Tensors.vector(1.3, 0, 0));
-    _withSlack(Tensors.vector(0, 0, 0));
+  public void testFour() {
+    GlcNode goalNode = _withSlack(Tensors.vector(4, 0, 0));
+    Tensor costFromRoot = VectorScalars.vector(goalNode.costFromRoot());
+    assertEquals(costFromRoot, Tensors.vector(9, 2, 9));
+  }
+
+  public void testTwo() {
+    GlcNode goalNode = _withSlack(Tensors.vector(2, 0, 0));
+    Tensor costFromRoot = VectorScalars.vector(goalNode.costFromRoot());
+    assertEquals(costFromRoot, Tensors.vector(7, 3, 7));
+  }
+
+  public void testZeroEbbes() {
+    GlcNode goalNode = _withSlack(Tensors.vector(1.3, 0, 0));
+    Tensor costFromRoot = VectorScalars.vector(goalNode.costFromRoot());
+    assertEquals(costFromRoot, Tensors.vector(5, 4, 5));
+  }
+
+  public void testZero() {
+    GlcNode bestNode = _withSlack(Tensors.vector(0, 0, 0));
+    Tensor costFromRoot = VectorScalars.vector(bestNode.costFromRoot());
+    assertEquals(costFromRoot, Tensors.vector(5, 4, 5));
   }
 }
