@@ -16,6 +16,7 @@ public class CircleCurveIntersectionTest extends TestCase {
     CurveIntersection curveIntersection = new CircleCurveIntersection(RationalScalar.HALF);
     for (int index = 0; index < curve.length(); ++index) {
       Optional<Tensor> optional = curveIntersection.string(RotateLeft.of(curve, index));
+      // System.out.println(index+" "+optional);
       assertEquals(optional.isPresent(), index != 1);
       if (index != 1) {
         Tensor tensor = optional.get();
@@ -35,5 +36,19 @@ public class CircleCurveIntersectionTest extends TestCase {
       assertTrue(ExactScalarQ.all(tensor));
       assertEquals(tensor, Tensors.vector(0.5, 0));
     }
+  }
+
+  public void testPoint() {
+    Tensor curve = Tensors.fromString("{{1,0}}").unmodifiable();
+    CurveIntersection curveIntersection = new CircleCurveIntersection(RationalScalar.HALF);
+    assertFalse(curveIntersection.cyclic(curve).isPresent());
+    assertFalse(curveIntersection.string(curve).isPresent());
+  }
+
+  public void testEmpty() {
+    Tensor curve = Tensors.empty().unmodifiable();
+    CurveIntersection curveIntersection = new CircleCurveIntersection(RationalScalar.HALF);
+    assertFalse(curveIntersection.cyclic(curve).isPresent());
+    assertFalse(curveIntersection.string(curve).isPresent());
   }
 }

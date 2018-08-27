@@ -19,27 +19,28 @@ public class CircleCurveIntersection implements CurveIntersection {
     this.distance = radius;
   }
 
-  @Override
-  public Optional<Tensor> string(Tensor tensor) {
-    return universal(tensor, tensor.length());
-  }
-
-  @Override
+  @Override // from CurveIntersection
   public Optional<Tensor> cyclic(Tensor tensor) {
-    return universal(tensor, tensor.length() + 1);
+    return universal(tensor, 0);
   }
 
-  private Optional<Tensor> universal(Tensor tensor, int max) {
-    if (1 < tensor.length()) { // tensor is required to contain at least two entries
-      Tensor prev = tensor.get(0);
+  @Override // from CurveIntersection
+  public Optional<Tensor> string(Tensor tensor) {
+    return universal(tensor, 1);
+  }
+
+  private Optional<Tensor> universal(Tensor tensor, final int first) {
+    int tensor_length = tensor.length();
+    if (1 < tensor_length) { // tensor is required to contain at least two entries
+      Tensor prev = tensor.get((first + tensor_length - 1) % tensor_length);
       Scalar lo = Norm._2.of(prev);
-      for (int count = 1; count < max; ++count) {
-        Tensor next = tensor.get(count % tensor.length());
-        Scalar hi = Norm._2.of(next);
+      for (int count = first; count < tensor_length; ++count) {
+        Tensor next = tensor.get(count);
+        Scalar hi = Norm._2.of(next); // "hi" may even be less than "lo"
         if (Scalars.lessEquals(lo, distance) && Scalars.lessEquals(distance, hi)) {
           Clip clip = Clip.function(lo, hi); // lo <= distance <= hi
-          Scalar lambda = clip.rescale(distance);
           Interpolation interpolation = LinearInterpolation.of(Tensors.of(prev, next));
+          Scalar lambda = clip.rescale(distance);
           return Optional.of(interpolation.at(lambda));
         }
         prev = next;
