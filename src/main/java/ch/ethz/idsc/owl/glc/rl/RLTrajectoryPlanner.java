@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.glc.rl;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -134,7 +133,12 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
 
   @Override // from TrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
-    return new HashMap<>(); // FIXME YN
+    // LONGTERM investigate unified design
+    throw new UnsupportedOperationException();
+  }
+
+  public final Map<Tensor, RLDomainQueue> getRLDomainQueueMap() {
+    return domainMap.getMap();
   }
 
   @Override // from TrajectoryPlanner

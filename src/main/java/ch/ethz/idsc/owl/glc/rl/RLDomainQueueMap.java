@@ -1,6 +1,7 @@
 // code by ynager
 package ch.ethz.idsc.owl.glc.rl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,5 +45,9 @@ import ch.ethz.idsc.tensor.Tensor;
 
   public Stream<Entry<Tensor, RLDomainQueue>> mapEntrySetStream() {
     return map.entrySet().stream();
+  }
+
+  public Map<Tensor, RLDomainQueue> getMap() {
+    return Collections.unmodifiableMap(map);
   }
 }

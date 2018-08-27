@@ -54,6 +54,10 @@ import ch.ethz.idsc.tensor.Tensor;
     return Collections.unmodifiableCollection(set);
   }
 
+  public final int size() {
+    return set.size();
+  }
+
   @Override // from Iterable
   public final Iterator<GlcNode> iterator() {
     return set.iterator();
