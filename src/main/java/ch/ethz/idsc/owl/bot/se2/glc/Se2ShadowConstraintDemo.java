@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
 import ch.ethz.idsc.owl.math.planar.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -30,11 +31,10 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class Se2ShadowConstraintDemo extends Se2CarDemo {
-  // private static final float PED_VELOCITY = 0.3f;
-  // private static final float PED_RADIUS = 0.1f;
-  // private static final Color PED_COLOR = new Color(23, 12, 200);
-  // private static final float MAX_A = 0.6f; // [m/s²]
-  // private static final float REACTION_TIME = 0.5f;
+  private static final float PED_VELOCITY = 0.3f;
+  private static final float PED_RADIUS = 0.1f;
+  private static final float MAX_A = 0.6f; // [m/s²]
+  private static final float REACTION_TIME = 0.4f;
   private static final FlowsInterface CARFLOWS = Se2CarFlows.forward(RealScalar.ONE, Degree.of(70));
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 128), Subdivide.of(0, 5, 60));
@@ -64,14 +64,11 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
         LIDAR_RAYTRACER, carEntity::getStateTimeNow, ray);
     owlyAnimationFrame.addBackground(lidarEmulator);
     // Shadow Map
-    // ShadowMapSimulator shadowMapPed = //
-    // new ShadowMapSimulator(lidarEmulator, imageRegion, carEntity::getStateTimeNow, PED_VELOCITY, PED_RADIUS);
-    // shadowMapPed.setColor(PED_COLOR);
-    // owlyAnimationFrame.addBackground(shadowMapPed);
-    // shadowMapPed.startNonBlocking(10);
-    // SimpleShadowConstraintJavaCV shadowConstraintPed = //
-    // new SimpleShadowConstraintJavaCV(shadowMapPed, MAX_A, REACTION_TIME);
-    // constraintCollection.add(shadowConstraintPed);
+    ShadowMapSpherical shadowMapPed = //
+        new ShadowMapSpherical(lidarEmulator, imageRegion, PED_VELOCITY, PED_RADIUS);
+    SimpleShadowConstraintCV shadowConstraintPed = //
+        new SimpleShadowConstraintCV(shadowMapPed, MAX_A, REACTION_TIME, false);
+    constraintCollection.add(shadowConstraintPed);
     // ---
     {
       RenderInterface renderInterface = new MouseShapeRender( //
@@ -86,7 +83,6 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
       @Override
       public void windowClosed(WindowEvent e) {
         System.out.println("window was closed. terminating...");
-        // shadowMapPed.flagShutdown();
       }
     });
   }
