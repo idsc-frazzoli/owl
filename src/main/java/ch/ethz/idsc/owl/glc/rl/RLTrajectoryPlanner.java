@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.glc.rl;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,13 +54,13 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
   }
 
   protected final void addToDomainMap(Tensor domain_key, GlcNode node) {
-    domainMap.put(domain_key, node);
+    domainMap.addToDomainMap(domain_key, node);
   }
 
   /** @param domain_key
    * @return RLDomainQueue in domain or Optional.empty() if domain has not been assigned a node yet */
   protected final Optional<RLDomainQueue> getDomainQueue(Tensor domain_key) {
-    return Optional.ofNullable(domainMap.get(domain_key));
+    return Optional.ofNullable(domainMap.getQueue(domain_key));
   }
 
   /** method is invoked to notify planner that the
@@ -134,7 +133,12 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
 
   @Override // from TrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
-    return new HashMap<>(); // FIXME YN
+    // LONGTERM investigate unified design
+    throw new UnsupportedOperationException();
+  }
+
+  public final Map<Tensor, RLDomainQueue> getRLDomainQueueMap() {
+    return domainMap.getMap();
   }
 
   @Override // from TrajectoryPlanner

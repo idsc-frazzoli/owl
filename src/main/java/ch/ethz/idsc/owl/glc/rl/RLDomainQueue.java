@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** priority queue with ordering defined by {@link NodeMeritComparator} */
-public class RLDomainQueue extends RLQueue {
+/* package */ class RLDomainQueue extends RLQueue {
   /** @param glcNode
    * @param slacks
    * @return relaxed lexicographic domain queue that contains given glcNode as single element */

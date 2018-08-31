@@ -10,31 +10,40 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** Transforms a {@link PlannerConstraint} to a {@link CostFunction} by counting
- * constraint violations */
 public class ConstraintViolationCost implements CostFunction, Serializable {
-  public static ConstraintViolationCost of(PlannerConstraint plannerConstraint) {
-    return new ConstraintViolationCost(plannerConstraint);
+  /** Transforms the given planner constraint to a cost function by counting
+   * constraint violations. A violation incurs a predefined unit cost.
+   * 
+   * @param plannerConstraint
+   * @param unit
+   * @return */
+  public static CostFunction of(PlannerConstraint plannerConstraint, Scalar unit) {
+    return new ConstraintViolationCost(plannerConstraint, unit);
   }
 
   // ---
   private final PlannerConstraint plannerConstraint;
+  private final Scalar unit;
+  private final Scalar unit_zero;
 
-  public ConstraintViolationCost(PlannerConstraint plannerConstraint) {
+  private ConstraintViolationCost(PlannerConstraint plannerConstraint, Scalar unit) {
     this.plannerConstraint = Objects.requireNonNull(plannerConstraint);
+    this.unit = unit;
+    unit_zero = unit.zero();
   }
 
   @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    return plannerConstraint.isSatisfied(glcNode, trajectory, flow) ? RealScalar.ZERO : RealScalar.ONE;
+    return plannerConstraint.isSatisfied(glcNode, trajectory, flow) //
+        ? unit_zero
+        : unit;
   }
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    return RealScalar.ZERO;
+    return unit_zero;
   }
 }

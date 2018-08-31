@@ -34,6 +34,8 @@ class SimpleShadowConstraintCV extends AbstractShadowConstraint {
   private boolean isMember(Indexer indexer, Point pixel) {
     return pixel.y() < initArea.rows() //
         && pixel.x() < initArea.cols() //
+        && pixel.y() >= 0 //
+        && pixel.x() >= 0 //
         && indexer.getDouble(pixel.y(), pixel.x()) == 255.0;
   }
 }

@@ -48,7 +48,7 @@ public class GokartVec0Demo extends GokartDemo {
     Tensor polygon = Tensors.matrixFloat(new float[][] { { 3, 10 }, { 3, 0 }, { 23, 0 }, { 23, 20 } });
     PolygonRegion polygonRegion = new PolygonRegion(polygon);
     PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
-    CostFunction regionCost = ConstraintViolationCost.of(regionConstraint);
+    CostFunction regionCost = ConstraintViolationCost.of(regionConstraint, RealScalar.ONE);
     gokartEntity.setCostVector(Arrays.asList(regionCost), Arrays.asList(0.0));
     gokartEntity.addTimeCost(0, 0.8); // set priority to 0, allow for 0.8 seconds of slack
     // ---

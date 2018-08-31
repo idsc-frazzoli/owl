@@ -94,9 +94,9 @@ public class GokartShadowPlanning1Demo extends GokartDemo {
     smPedIllegal.setColor(PED_ILLEGAL_COLOR);
     // ---
     CostFunction pedLegalCost = //
-        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedLegal, MAX_A, REACTION_TIME, true));
+        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedLegal, MAX_A, REACTION_TIME, true), RealScalar.ONE);
     CostFunction pedIllegalCost = //
-        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedIllegal, MAX_A, REACTION_TIME, true));
+        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedIllegal, MAX_A, REACTION_TIME, true), RealScalar.ONE);
     gokartEntity.setCostVector(Arrays.asList(pedLegalCost), Arrays.asList(0.0));
     gokartEntity.addTimeCost(1, 0.0);
     // ---
