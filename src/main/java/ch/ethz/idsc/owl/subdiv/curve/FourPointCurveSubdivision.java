@@ -17,7 +17,7 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
   private final static Scalar N1_4 = RationalScalar.of(-1, 4);
   private final static Scalar P1_4 = RationalScalar.of(+1, 4);
   // ---
-  private final GeodesicInterface geodesicInterface;
+  protected final GeodesicInterface geodesicInterface;
 
   public FourPointCurveSubdivision(GeodesicInterface geodesicInterface) {
     this.geodesicInterface = geodesicInterface;
@@ -71,7 +71,7 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
    * @param r
    * @param s
    * @return point between q and r */
-  private Tensor center(Tensor p, Tensor q, Tensor r, Tensor s) {
+  Tensor center(Tensor p, Tensor q, Tensor r, Tensor s) {
     Tensor pq = geodesicInterface.split(p, q, P9_8);
     Tensor rt = geodesicInterface.split(r, s, N1_8);
     return geodesicInterface.split(pq, rt, RationalScalar.HALF);
@@ -81,7 +81,7 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
    * @param q
    * @param r
    * @return point between p and q */
-  private Tensor triple(Tensor p, Tensor q, Tensor r) {
+  Tensor triple(Tensor p, Tensor q, Tensor r) {
     Tensor pq = geodesicInterface.split(p, q, P1_4);
     Tensor rt = geodesicInterface.split(q, r, N1_4);
     return geodesicInterface.split(pq, rt, RationalScalar.HALF);
