@@ -370,7 +370,6 @@ class CurveSubdivisionDemo {
         }
       }
     });
-    // timerFrame.geometricComponent.addRenderInterface(GridRender.INSTANCE);
   }
 
   public static void main(String[] args) {
