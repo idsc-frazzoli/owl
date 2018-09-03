@@ -32,6 +32,8 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.opt.ConvexHull;
+import ch.ethz.idsc.tensor.opt.FermatWeberProblem;
 import ch.ethz.idsc.tensor.red.Norm;
 
 class SphereFitDemo {
@@ -98,6 +100,25 @@ class SphereFitDemo {
             graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
+        }
+        {
+          Tensor hull = ConvexHull.of(rnctrl);
+          Path2D path2d = geometricLayer.toPath2D(hull);
+          path2d.closePath();
+          graphics.setColor(new Color(128, 255, 128, 255));
+          graphics.draw(path2d);
+        }
+        {
+          FermatWeberProblem fermatWeberProblem = new FermatWeberProblem(rnctrl);
+          Tensor weiszfeld = fermatWeberProblem.weiszfeld();
+          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(weiszfeld.copy().append(RealScalar.ZERO)));
+          Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
+          path2d.closePath();
+          graphics.setColor(new Color(128, 128, 255, 64));
+          graphics.fill(path2d);
+          graphics.setColor(new Color(128, 128, 255, 255));
+          graphics.draw(path2d);
+          geometricLayer.popMatrix();
         }
         {
           graphics.setColor(new Color(255, 128, 128, 255));
