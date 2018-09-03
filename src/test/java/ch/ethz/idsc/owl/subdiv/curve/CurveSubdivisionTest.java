@@ -26,7 +26,7 @@ public class CurveSubdivisionTest extends TestCase {
       _checkSym(BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE), tensor);
       _checkSym(new FourPointCurveSubdivision(RnGeodesic.INSTANCE), tensor);
       _checkSym(DodgsonSabinCurveSubdivision.INSTANCE, tensor);
-      _checkSym(ThreePointCurveSubdivision.hormannSabin(RnGeodesic.INSTANCE), tensor);
+      _checkSym(HormannSabinCurveSubdivision.of(RnGeodesic.INSTANCE), tensor);
     }
   }
 }

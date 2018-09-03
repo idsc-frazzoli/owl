@@ -212,18 +212,6 @@ class BezierDemo {
         }
       }
     });
-    // {
-    // spinnerLabel.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-    // spinnerLabel.setArray(CurveSubdivisionSchemes.values());
-    // spinnerLabel.setIndex(2);
-    // spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
-    // }
-    // {
-    // spinnerAlpha.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-    // spinnerAlpha.setArray(CurveSubdivisionSchemes.values());
-    // spinnerAlpha.setIndex(2);
-    // spinnerAlpha.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
-    // }
     {
       spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
@@ -255,7 +243,6 @@ class BezierDemo {
         }
       }
     });
-    // timerFrame.geometricComponent.addRenderInterface(GridRender.INSTANCE);
   }
 
   public static void main(String[] args) {

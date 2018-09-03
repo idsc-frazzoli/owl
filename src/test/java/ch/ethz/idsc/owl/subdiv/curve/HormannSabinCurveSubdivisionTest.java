@@ -15,9 +15,9 @@ import ch.ethz.idsc.tensor.sca.Rationalize;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
-public class ThreePointCurveSubdivisionTest extends TestCase {
+public class HormannSabinCurveSubdivisionTest extends TestCase {
   public void testSimple() {
-    CurveSubdivision curveSubdivision = ThreePointCurveSubdivision.hormannSabin(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = HormannSabinCurveSubdivision.of(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = Nest.of(curveSubdivision::cyclic, tensor, 1);
@@ -31,7 +31,7 @@ public class ThreePointCurveSubdivisionTest extends TestCase {
   }
 
   public void testString() {
-    CurveSubdivision curveSubdivision = ThreePointCurveSubdivision.hormannSabin(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = HormannSabinCurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor vector = Tensors.vector(0, 1, 2, 3);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Tensors.fromString("{1/4, 3/4, 5/4, 7/4, 9/4, 11/4}"));
@@ -39,7 +39,7 @@ public class ThreePointCurveSubdivisionTest extends TestCase {
   }
 
   public void testStringTwo() {
-    CurveSubdivision curveSubdivision = ThreePointCurveSubdivision.hormannSabin(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = HormannSabinCurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor vector = Tensors.vector(0, 1);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Tensors.fromString("{1/4, 3/4}"));
@@ -47,7 +47,7 @@ public class ThreePointCurveSubdivisionTest extends TestCase {
   }
 
   public void testStringOne() {
-    CurveSubdivision curveSubdivision = ThreePointCurveSubdivision.hormannSabin(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = HormannSabinCurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor vector = Tensors.vector(3);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Tensors.vector(3));
@@ -55,13 +55,13 @@ public class ThreePointCurveSubdivisionTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator fps = ThreePointCurveSubdivision.hormannSabin(RnGeodesic.INSTANCE)::cyclic;
+    TensorUnaryOperator fps = HormannSabinCurveSubdivision.of(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
   }
 
   public void testScalarFail() {
-    CurveSubdivision subdivision = ThreePointCurveSubdivision.hormannSabin(Se2Geodesic.INSTANCE);
+    CurveSubdivision subdivision = HormannSabinCurveSubdivision.of(Se2Geodesic.INSTANCE);
     try {
       subdivision.string(RealScalar.ONE);
       assertTrue(false);

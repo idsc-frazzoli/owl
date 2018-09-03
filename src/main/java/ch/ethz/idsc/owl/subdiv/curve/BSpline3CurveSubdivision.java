@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /** cubic B-spline */
 public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable {
-  private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _3_4 = RationalScalar.of(3, 4);
   // ---
   private final GeodesicInterface geodesicInterface;
@@ -70,7 +69,7 @@ public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable 
   private Tensor center(Tensor p, Tensor q, Tensor r) {
     return center( //
         geodesicInterface.split(p, q, _3_4), //
-        geodesicInterface.split(q, r, _1_4));
+        geodesicInterface.split(r, q, _3_4));
   }
 
   private Tensor center(Tensor q, Tensor r) {

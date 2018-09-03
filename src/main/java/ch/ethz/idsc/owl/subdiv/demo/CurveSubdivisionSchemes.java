@@ -9,9 +9,11 @@ import ch.ethz.idsc.owl.subdiv.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.DodgsonSabinCurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.FarSixPointCurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.FourPointCurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
-import ch.ethz.idsc.owl.subdiv.curve.ThreePointCurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.HormannSabinCurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.SixPointCurveSubdivision;
 
 enum CurveSubdivisionSchemes {
   BSPLINE1(BSpline1CurveSubdivision::new), //
@@ -19,8 +21,10 @@ enum CurveSubdivisionSchemes {
   BSPLINE3(BSpline3CurveSubdivision::new), //
   BSPLINE4(BSpline4CurveSubdivision::of), //
   DOBSEB(i -> DodgsonSabinCurveSubdivision.INSTANCE), //
-  THREEPOINT(ThreePointCurveSubdivision::hormannSabin), //
+  THREEPOINT(HormannSabinCurveSubdivision::of), //
   FOURPOINT(FourPointCurveSubdivision::new), //
+  SIXPOINT(SixPointCurveSubdivision::new), //
+  SIXFAR(FarSixPointCurveSubdivision::new), //
   ;
   public final Function<GeodesicInterface, CurveSubdivision> function;
 

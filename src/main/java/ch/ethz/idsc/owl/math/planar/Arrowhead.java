@@ -7,11 +7,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** inspired by
+/** the arrowhead is a pointy triangle with the
+ * tip at coordinate (1, 0) and mean (0, 0).
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Arrowheads.html">Arrowheads</a> */
 public enum Arrowhead {
   ;
-  // former coordinates { .3, 0 }, { -.1, -.1 }, { -.1, +.1 }
   private static final Scalar THIRD = RationalScalar.of(1, 3);
   private static final Tensor POLYGON = Tensors.matrix(new Scalar[][] { //
       { RealScalar.ONE, RealScalar.ZERO }, //
@@ -20,13 +22,13 @@ public enum Arrowhead {
   });
 
   /** @param scalar
-   * @return */
+   * @return arrowhead coordinates scaled by given scalar */
   public static Tensor of(Scalar scalar) {
     return POLYGON.multiply(scalar);
   }
 
   /** @param number
-   * @return */
+   * @return arrowhead coordinates scaled by given number */
   public static Tensor of(Number number) {
     return of(RealScalar.of(number));
   }
