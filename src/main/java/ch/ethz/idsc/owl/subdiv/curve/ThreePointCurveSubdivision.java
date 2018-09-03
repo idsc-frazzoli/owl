@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
@@ -12,24 +11,18 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /** dual scheme */
 public class ThreePointCurveSubdivision implements CurveSubdivision, Serializable {
-  private static final Scalar OMEGA = RationalScalar.of(1, 32);
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
-
-  /** @param geodesicInterface
-   * @return three-point scheme Hormann/Sabin 2008 */
-  public static CurveSubdivision hormannSabin(GeodesicInterface geodesicInterface) {
-    return new ThreePointCurveSubdivision(geodesicInterface, OMEGA);
-  }
-
   // ---
   private final GeodesicInterface geodesicInterface;
   private final Scalar pq_f;
   private final Scalar qr_f;
+  private final Scalar pqqr;
 
-  public ThreePointCurveSubdivision(GeodesicInterface geodesicInterface, Scalar omega) {
+  public ThreePointCurveSubdivision(GeodesicInterface geodesicInterface, Scalar pq_f, Scalar qr_f, Scalar pqqr) {
     this.geodesicInterface = geodesicInterface;
-    pq_f = RationalScalar.HALF.add(RealScalar.of(6).multiply(omega));
-    qr_f = RealScalar.of(6).multiply(omega).negate();
+    this.pq_f = pq_f;
+    this.qr_f = qr_f;
+    this.pqqr = pqqr;
   }
 
   @Override // from CurveSubdivision
@@ -79,7 +72,7 @@ public class ThreePointCurveSubdivision implements CurveSubdivision, Serializabl
   private Tensor lo(Tensor p, Tensor q, Tensor r) {
     Tensor pq = geodesicInterface.split(p, q, pq_f);
     Tensor qr = geodesicInterface.split(q, r, qr_f);
-    return geodesicInterface.split(pq, qr, RationalScalar.HALF);
+    return geodesicInterface.split(pq, qr, pqqr);
   }
 
   // point between p and q but more towards p

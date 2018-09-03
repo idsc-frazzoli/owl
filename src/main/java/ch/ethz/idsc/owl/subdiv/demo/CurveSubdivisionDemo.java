@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -27,12 +28,14 @@ import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.owl.math.planar.ExtractXY;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivisionInterpolationApproximation;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
 import ch.ethz.idsc.owl.subdiv.curve.RnGeodesic;
 import ch.ethz.idsc.owl.subdiv.curve.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -74,6 +77,7 @@ class CurveSubdivisionDemo {
     SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
     // SpinnerLabel<CurveSubdivisionSchemes> spinnerAlpha = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+    SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
     // control = Tensors.fromString(
     // "{{499/60, -43/60, 4.1887902047863905}, {-19/60, 11/20, 2.617993877991494}, {41/15, 43/10, 1.0471975511965976}, {-221/60, 16/5, 3.141592653589793}, {-9,
     // 247/60, 0.7853981633974483}, {-46/15, 43/15, 3.141592653589793}, {60, 1, 0.7853981633974483}, {431/60, 9/5, 4.1887902047863905}}");
@@ -328,7 +332,6 @@ class CurveSubdivisionDemo {
       }
     });
     {
-      spinnerLabel.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerLabel.setArray(CurveSubdivisionSchemes.values());
       spinnerLabel.setIndex(2);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
@@ -340,10 +343,18 @@ class CurveSubdivisionDemo {
     // spinnerAlpha.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
     // }
     {
-      spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
       spinnerRefine.setValue(6);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    }
+    {
+      spinnerMagicC.addSpinnerListener(value -> BSpline4CurveSubdivision.MAGIC_C = value);
+      spinnerMagicC.setList( //
+          Tensors.fromString("{1/100, 1/10, 1/8, 1/6, 1/4, 1/3, 1/2, 2/3, 9/10, 99/100}").stream() //
+              .map(Scalar.class::cast) //
+              .collect(Collectors.toList()));
+      spinnerMagicC.setValue(RationalScalar.HALF);
+      spinnerMagicC.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
