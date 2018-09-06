@@ -15,8 +15,7 @@ import org.bytedeco.javacpp.indexer.Indexer;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.img.CvHelper;
-import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
-import ch.ethz.idsc.owl.glc.adapter.Trajectories;
+import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
@@ -69,9 +68,11 @@ public class ShadowEvaluator {
       };
       Optional<GlcNode> optional = trajectoryPlanner.getBest();
       if (optional.isPresent()) {
-        List<TrajectorySample> tail = //
-            GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
-        List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
+        // List<TrajectorySample> tail = //
+        // GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
+        // List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
+        List<TrajectorySample> trajectory = Nodes.listFromRoot(optional.get()).stream().map(n -> new TrajectorySample(n.stateTime(), n.flow()))
+            .collect(Collectors.toList());
         // ---
         Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
         try {
@@ -91,9 +92,12 @@ public class ShadowEvaluator {
       Tensor angles = Subdivide.of(Degree.of(0), Degree.of(360), 72);
       Optional<GlcNode> optional = trajectoryPlanner.getBest();
       if (optional.isPresent()) {
-        List<TrajectorySample> tail = //
-            GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
-        List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
+        // List<TrajectorySample> tail = //
+        // GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
+        // List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
+        System.out.println(optional.get().costFromRoot());
+        List<TrajectorySample> trajectory = Nodes.listFromRoot(optional.get()).stream().map(n -> new TrajectorySample(n.stateTime(), n.flow()))
+            .collect(Collectors.toList());
         // ---
         Tensor mtrMatrix = Tensors.empty();
         for (int i = 0; i < angles.length() - 1; i++) {

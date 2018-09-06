@@ -29,7 +29,7 @@ import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class ShadowMapDirected extends ShadowMap implements RenderInterface {
+public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   private final static int NSEGS = 40;
   private final static float CAR_WIDTH = 0.2f;
   // ---
@@ -116,9 +116,9 @@ public class ShadowMapDirected extends ShadowMap implements RenderInterface {
     return initArea.clone();
   }
 
-  // if synchronization is needed simply declare "private synchronized void"
-  private void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
+  public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
     // get lidar polygon and transform to pixel values
+    GeometricLayer world2pixelLayer = GeometricLayer.of(world2pixel);
     Mat area = area_.clone();
     Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
     world2pixelLayer.pushMatrix(gokart2world.forward_se2());

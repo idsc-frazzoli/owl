@@ -9,11 +9,11 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 
 public class ShadowMapSimulator {
   private final Timer increaserTimer = new Timer("MapUpdateTimer");
-  private final ShadowMap shadowMap;
+  private final ShadowMapCV shadowMap;
   private final Supplier<StateTime> stateTimeSupplier;
   private boolean isPaused = false;
 
-  public ShadowMapSimulator(ShadowMap shadowMap, Supplier<StateTime> stateTimeSupplier) {
+  public ShadowMapSimulator(ShadowMapCV shadowMap, Supplier<StateTime> stateTimeSupplier) {
     this.shadowMap = shadowMap;
     this.stateTimeSupplier = stateTimeSupplier;
   }
