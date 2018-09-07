@@ -117,7 +117,7 @@ public class ShadowEvaluator {
         }
         try {
           File file1 = UserHome.file("" + "/Desktop/eval/minSecTTR_" + id + ".csv");
-          File file2 = UserHome.file("" + "/Desktop/eval/state_" + id  + ".csv");
+          File file2 = UserHome.file("" + "/Desktop/eval/state_" + id + ".csv");
           Export.of(file1, mtrMatrix.map(CsvFormat.strict()));
           Export.of(file2, Tensor.of(trajectory.stream().map(a -> a.stateTime().state())).map(CsvFormat.strict()));
         } catch (Exception exception) {
