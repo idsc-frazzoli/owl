@@ -14,7 +14,7 @@ class SimpleShadowConstraint extends AbstractShadowConstraint {
   private final Area initArea;
 
   public SimpleShadowConstraint(ShadowMapArea shadowMapPed, float a, float reactionTime) {
-    super(a, reactionTime);
+    super(a, reactionTime, false);
     // ---
     this.shadowMap = shadowMapPed;
     this.initArea = shadowMapPed.getInitMap();

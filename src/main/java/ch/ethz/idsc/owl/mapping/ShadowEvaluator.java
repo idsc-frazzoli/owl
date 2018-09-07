@@ -15,7 +15,8 @@ import org.bytedeco.javacpp.indexer.Indexer;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.img.CvHelper;
-import ch.ethz.idsc.owl.data.tree.Nodes;
+import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
+import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
@@ -40,16 +41,18 @@ public class ShadowEvaluator {
   private final ShadowMapSpherical shadowMap;
   //
   final int RESOLUTION = 10;
-  final int MAX_TREACT = 2;
+  final int MAX_TREACT = 1;
+  final String id;
   final float delta_treact; // [s]
-  final Scalar a = DoubleScalar.of(0.80); // [m/s^2];
+  final Scalar a = DoubleScalar.of(6.0); // [m/s^2];
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-100, -100, 0), RealScalar.ZERO); // TODO YN not nice
 
-  public ShadowEvaluator(ShadowMapSpherical shadowMap) {
+  public ShadowEvaluator(ShadowMapSpherical shadowMap, String id) {
     this.shadowMap = shadowMap;
     this.delta_treact = shadowMap.getMinTimeDelta();
+    this.id = id;
     tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
   }
 
@@ -68,15 +71,15 @@ public class ShadowEvaluator {
       };
       Optional<GlcNode> optional = trajectoryPlanner.getBest();
       if (optional.isPresent()) {
-        // List<TrajectorySample> tail = //
-        // GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
-        // List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
-        List<TrajectorySample> trajectory = Nodes.listFromRoot(optional.get()).stream().map(n -> new TrajectorySample(n.stateTime(), n.flow()))
-            .collect(Collectors.toList());
+        List<TrajectorySample> tail = //
+            GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
+        List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
+        // List<TrajectorySample> trajectory = Nodes.listFromRoot(optional.get()).stream().map(n -> new TrajectorySample(n.stateTime(), n.flow()))
+        // .collect(Collectors.toList());
         // ---
         Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
         try {
-          File file = UserHome.file("" + "minReactionTime" + ".csv");
+          File file = UserHome.file("" + "minReactionTime_" + id + ".csv");
           Export.of(file, minTimeReact.get().map(CsvFormat.strict()));
         } catch (Exception exception) {
           exception.printStackTrace();
@@ -92,12 +95,12 @@ public class ShadowEvaluator {
       Tensor angles = Subdivide.of(Degree.of(0), Degree.of(360), 72);
       Optional<GlcNode> optional = trajectoryPlanner.getBest();
       if (optional.isPresent()) {
-        // List<TrajectorySample> tail = //
-        // GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
-        // List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
-        System.out.println(optional.get().costFromRoot());
-        List<TrajectorySample> trajectory = Nodes.listFromRoot(optional.get()).stream().map(n -> new TrajectorySample(n.stateTime(), n.flow()))
-            .collect(Collectors.toList());
+        List<TrajectorySample> tail = //
+            GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
+        List<TrajectorySample> trajectory = tail; // Trajectories.glue(head, tail);
+        // System.out.println(optional.get().costFromRoot());
+        // List<TrajectorySample> trajectory = Nodes.listFromRoot(optional.get()).stream().map(n -> new TrajectorySample(n.stateTime(), n.flow()))
+        // .collect(Collectors.toList());
         // ---
         Tensor mtrMatrix = Tensors.empty();
         for (int i = 0; i < angles.length() - 1; i++) {
@@ -113,8 +116,8 @@ public class ShadowEvaluator {
           mtrMatrix.append(minTimeReact);
         }
         try {
-          File file1 = UserHome.file("" + "/Desktop/eval/minSecTTR" + ".csv");
-          File file2 = UserHome.file("" + "/Desktop/eval/state" + ".csv");
+          File file1 = UserHome.file("" + "/Desktop/eval/minSecTTR_" + id + ".csv");
+          File file2 = UserHome.file("" + "/Desktop/eval/state_" + id + ".csv");
           Export.of(file1, mtrMatrix.map(CsvFormat.strict()));
           Export.of(file2, Tensor.of(trajectory.stream().map(a -> a.stateTime().state())).map(CsvFormat.strict()));
         } catch (Exception exception) {
@@ -187,6 +190,8 @@ public class ShadowEvaluator {
   private static boolean isMember(Indexer indexer, Point pixel, int cols, int rows) {
     return pixel.y() < rows //
         && pixel.x() < cols //
+        && pixel.y() >= 0 //
+        && pixel.x() >= 0 //
         && indexer.getDouble(pixel.y(), pixel.x()) == 255.0;
   }
 

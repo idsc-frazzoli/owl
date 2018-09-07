@@ -16,10 +16,10 @@ import ch.ethz.idsc.tensor.Tensor;
 /** collection of nodes in R^n backed by a n-dimensional uniform tree
  * in 2-d, the data structure is a quad tree
  * in 3-d, the data structure is a octree */
-public class RnNodeCollection implements RrtsNodeCollection {
+public class RnRrtsNodeCollection implements RrtsNodeCollection {
   private final NdMap<RrtsNode> ndMap;
 
-  public RnNodeCollection(Tensor lbounds, Tensor ubounds) {
+  public RnRrtsNodeCollection(Tensor lbounds, Tensor ubounds) {
     ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20); // magic const
   }
 
@@ -38,7 +38,9 @@ public class RnNodeCollection implements RrtsNodeCollection {
     NdCenterInterface distanceInterface = NdCenterInterface.euclidean(end);
     NdCluster<RrtsNode> cluster = ndMap.buildCluster(distanceInterface, k_nearest);
     // System.out.println("considered " + cluster.considered() + " " + ndMap.size());
-    return cluster.stream().map(NdEntry::value).collect(Collectors.toList());
+    return cluster.stream() //
+        .map(NdEntry::value) //
+        .collect(Collectors.toList());
   }
 
   @Override // from RrtsNodeCollection

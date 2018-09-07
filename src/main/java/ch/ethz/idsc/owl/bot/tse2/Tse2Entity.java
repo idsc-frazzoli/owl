@@ -33,12 +33,16 @@ public abstract class Tse2Entity extends TrajectoryEntity {
   // ---
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
 
+  /** @param stateTime initial configuration
+   * @param trajectoryControl */
   protected Tse2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
-    super(new SimpleEpisodeIntegrator(Tse2StateSpaceModel.INSTANCE, //
+    super(new SimpleEpisodeIntegrator( //
+        Tse2StateSpaceModel.INSTANCE, //
         RungeKutta4Integrator.INSTANCE, //
         stateTime), //
         trajectoryControl);
-    add(new FallbackControl(Array.zeros(4)));
+    // TODO use tse2 fallback control
+    add(new FallbackControl(Array.zeros(2)));
   }
 
   protected abstract StateTimeRaster stateTimeRaster();
