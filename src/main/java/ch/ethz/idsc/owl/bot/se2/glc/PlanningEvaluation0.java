@@ -82,7 +82,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   final StateTime initial = new StateTime(Tensors.vector(12, 3.5, 1.571, 6), RealScalar.ZERO);
   // v_init = 4 ok for illegal
   // private Tensor goal = Tensors.vector(22, 33.5, 0, MAX_SPEED.number()); // around curve
-  private Tensor goal = Tensors.vector(12, 30, 1.571, MAX_SPEED.number());  // only straigh
+  private Tensor goal = Tensors.vector(12, 30, 1.571, MAX_SPEED.number()); // only straigh
   private Tensor goalRadius;
   //
   private static final float PED_VELOCITY = 2.0f;
@@ -102,7 +102,7 @@ public class PlanningEvaluation0 extends Se2Demo {
 
   public PlanningEvaluation0() {
     final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
-    final Scalar goalRadius_theta = SQRT2.divide(RealScalar.of(20)); //SQRT2.divide(PARTITIONSCALE.Get(2));
+    final Scalar goalRadius_theta = SQRT2.divide(RealScalar.of(20)); // SQRT2.divide(PARTITIONSCALE.Get(2));
     final Scalar goalRadius_v = RealScalar.of(10); // SQRT2.divide(PARTITIONSCALE.Get(3));
     this.goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta, goalRadius_v);
     this.controls = CARFLOWS.getFlows(FLOWRES);
@@ -145,16 +145,19 @@ public class PlanningEvaluation0 extends Se2Demo {
         new ShadowMapSpherical(lidarEmulator, irPedLegal, PED_VELOCITY, PED_RADIUS);
     ShadowMapSpherical smPedIllegal = //
         new ShadowMapSpherical(lidarEmulator, irPedIllegal, PED_VELOCITY, PED_RADIUS);
-    ShadowMapDirected smCar = //
-        new ShadowMapDirected(lidarEmulator, irCar, "/simulation/s3/car_lanes.png", CAR_VELOCITY);
+    // ImageRegion imageRegionCar = new ImageRegion(imageCar, RANGE, false);
+    // TODO YN check if line below is intended
+    ShadowMapDirected smCar = new ShadowMapDirected( //
+        lidarEmulator, irCar, // "/simulation/s3/car_lanes.png",
+        CAR_VELOCITY);
     //
     // SHADOW REGION CONSTRAINTS
     PlannerConstraint pedLegalConst = new SimpleShadowConstraintCV(smPedLegal, MAX_A, REACTION_TIME, true);
     PlannerConstraint pedIllegalConst = new SimpleShadowConstraintCV(smPedIllegal, MAX_A, REACTION_TIME, true);
     PlannerConstraint carConst = new SimpleShadowConstraintCV(smCar, MAX_A, REACTION_TIME, true);
-    //constraints.add(pedLegalConst);
+    // constraints.add(pedLegalConst);
     constraints.add(pedIllegalConst);
-    //constraints.add(carConst);
+    // constraints.add(carConst);
     //
     // SETUP PLANNER
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
