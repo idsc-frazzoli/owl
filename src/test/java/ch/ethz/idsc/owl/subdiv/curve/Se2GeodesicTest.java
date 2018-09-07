@@ -32,14 +32,7 @@ public class Se2GeodesicTest extends TestCase {
   public void testMod2Pi() {
     Tensor p = Tensors.vector(0, 0, -2 * Math.PI * 3);
     Tensor q = Tensors.vector(0, 0, +2 * Math.PI + 0.1);
-    // Tensor split =
-    // Se2Geodesic.INSTANCE.split(p, q, RationalScalar.HALF);
-    // System.out.println(split);
     Tensor difference = Se2Wrap.INSTANCE.difference(p, q);
     assertTrue(Chop._13.close(difference, Tensors.vector(0, 0, 0.1)));
-    // Se2Wrap se2Wrap = new Se2Wrap(Tensors.vector(1, 1, 1));
-    // Se2GroupWrap se2GroupWrap = new Se2GroupWrap(Tensors.vector(1, 1, 1));
-    // assertTrue(Chop._10.close(Se2Wrap.INSTANCE.difference(p, q), RealScalar.of(0.1)));
-    // assertTrue(Chop._10.close(se2GroupWrap.distance(p, q), RealScalar.of(0.1)));
   }
 }

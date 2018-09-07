@@ -105,7 +105,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
    * 
    * @param priority
    * @param slack */
-  public void addTimeCost(int priority, Double slack) {
+  public void addTimeCost(int priority, double slack) {
     this.timeCostPriority = Optional.of(priority);
     this.timeCostSlack = Optional.of(slack);
   }

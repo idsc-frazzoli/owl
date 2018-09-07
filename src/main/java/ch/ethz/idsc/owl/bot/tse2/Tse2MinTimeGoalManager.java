@@ -21,7 +21,9 @@ import ch.ethz.idsc.tensor.red.Max;
 
 /** min time cost function with indecent heuristic
  * 
- * The cost does not account for curvature. */
+ * Note: class cannot be derived from Se2MinTimeGoalManager
+ * because the se2 flows assume constant speed.
+ * For Tse2, the min-time to reach goal formula is more complicated. */
 public final class Tse2MinTimeGoalManager implements Region<Tensor>, CostFunction, Serializable {
   private final Tse2ComboRegion tse2ComboRegion;
   private final Scalar maxSpeed;
@@ -29,8 +31,8 @@ public final class Tse2MinTimeGoalManager implements Region<Tensor>, CostFunctio
   @SuppressWarnings("unused")
   private final Tensor minmaxAcc; // TODO YN make use of max accelerations for heuristic
 
-  public Tse2MinTimeGoalManager(Tse2ComboRegion se2ComboRegion, Collection<Flow> controls, Scalar maxSpeed) {
-    this.tse2ComboRegion = se2ComboRegion;
+  public Tse2MinTimeGoalManager(Tse2ComboRegion tse2ComboRegion, Collection<Flow> controls, Scalar maxSpeed) {
+    this.tse2ComboRegion = tse2ComboRegion;
     this.maxSpeed = maxSpeed; // TODO YN max speed for forward and reverse
     this.maxTurning = Tse2Controls.maxTurning(controls);
     this.minmaxAcc = Tensors.of(Tse2Controls.minAcc(controls), Tse2Controls.maxAcc(controls));

@@ -76,7 +76,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   //
   static final Scalar MAX_SPEED = RealScalar.of(8); // 8
   static final Scalar MAX_TURNING_PLAN = Degree.of(30); // 45
-  static final FlowsInterface CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-2, 0, 2));
+  static final FlowsInterface TSE2_CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-2, 0, 2));
   static final int FLOWRES = 9;
   static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 6), RealScalar.ZERO);
   static final Tensor PARTITIONSCALE = Tensors.of( //
@@ -105,7 +105,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     final Scalar goalRadius_theta = Sqrt.of(RealScalar.of(2)).divide(RealScalar.of(20)); // SQRT2.divide(PARTITIONSCALE.Get(2));
     final Scalar goalRadius_v = RealScalar.of(10); // SQRT2.divide(PARTITIONSCALE.Get(3));
     this.goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta, goalRadius_v);
-    this.controls = CARFLOWS.getFlows(FLOWRES);
+    this.controls = TSE2_CARFLOWS.getFlows(FLOWRES);
   }
 
   @Override
@@ -122,7 +122,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     Tensor imagePedIllegal = ResourceData.of("/simulation/s3/ped_obs_illegal.png");
     Tensor imageCar = ResourceData.of("/simulation/s3/car_obs_1.png");
     imageCar = ImageEdges.extrusion(imageCar, 10); // == 0.73 * 7.5 == 5.475
-    Tensor imageLid = ResourceData.of("/simulation/s2/ped_obs_illegal.png");
+    Tensor imageLid = ResourceData.of("/simulation/s3/ped_obs_illegal.png");
     ImageRegion irPedLegal = new ImageRegion(imagePedLegal, RANGE, false);
     ImageRegion irPedIllegal = new ImageRegion(imagePedIllegal, RANGE, false);
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);

@@ -16,7 +16,7 @@ public class Tse2VelocityConstraint implements PlannerConstraint, Serializable {
   private final Clip clip;
 
   /** @param min allowed velocity
-   * @param max allowed velocity */
+   * @param max allowed velocity greater equals min */
   public Tse2VelocityConstraint(Scalar min, Scalar max) {
     clip = Clip.function(min, max);
   }

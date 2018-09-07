@@ -46,20 +46,25 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
     this.so2Region = Objects.requireNonNull(so2Region);
   }
 
-  /** @param xya == {px, py, angle}
+  /** function is used to compute heuristic in {@link Se2MinTimeGoalManager}
+   * 
+   * @param xya == {px, py, angle}
    * @return distance of {px, py} from spherical region */
-  protected final Scalar d_xy(Tensor xya) {
+  public final Scalar d_xy(Tensor xya) {
     return regionWithDistance.distance(xya.extract(0, 2));
   }
 
-  /** @param xya == {px, py, angle}
+  /** function is used to compute heuristic in {@link Se2MinTimeGoalManager}
+   * 
+   * @param xya == {px, py, angle}
    * @return distance of angle from so2region */
-  protected final Scalar d_angle(Tensor xya) {
+  public final Scalar d_angle(Tensor xya) {
     return so2Region.distance(xya.get(2));
   }
 
   @Override // from Region
-  public final boolean isMember(Tensor xya) {
+  public boolean isMember(Tensor xya) {
+    // only the first three entries of xya are considered
     return regionWithDistance.isMember(xya.extract(0, 2)) && so2Region.isMember(xya.get(2));
   }
 }

@@ -1,12 +1,11 @@
 // code by jph, ynager
 package ch.ethz.idsc.owl.bot.tse2;
 
-import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.region.LinearRegion;
-import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
@@ -17,9 +16,9 @@ import ch.ethz.idsc.tensor.Tensor;
  * all implemented methods in this layer are final.
  * 
  * class defines circle region for (x,y) component, periodic intervals in angular component, linear region in v */
-public class Tse2ComboRegion implements Region<Tensor>, Serializable {
+public class Tse2ComboRegion extends Se2ComboRegion {
   /** @param goal {px, py, angle, v}
-   * @param radiusVector {dist_radius, dist_radius, dist_angle}
+   * @param radiusVector {dist_radius, dist_radius, dist_angle, dist_v}
    * @throws Exception if first two entries of radiusVector are different */
   public static Tse2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new Tse2ComboRegion( //
@@ -29,38 +28,26 @@ public class Tse2ComboRegion implements Region<Tensor>, Serializable {
   }
 
   // ---
-  private final RegionWithDistance<Tensor> xyRegion;
-  private final So2Region angleRegion;
-  private final RegionWithDistance<Tensor> velRegion;
+  private final LinearRegion linearRegion;
 
-  public Tse2ComboRegion(RegionWithDistance<Tensor> xyRegion, So2Region angleRegion, RegionWithDistance<Tensor> velRegion) {
-    this.xyRegion = Objects.requireNonNull(xyRegion);
-    this.angleRegion = Objects.requireNonNull(angleRegion);
-    this.velRegion = Objects.requireNonNull(velRegion);
+  /** @param regionWithDistance for xy
+   * @param so2Region for angle
+   * @param linearRegion for velocity */
+  public Tse2ComboRegion(RegionWithDistance<Tensor> regionWithDistance, So2Region so2Region, LinearRegion linearRegion) {
+    super(regionWithDistance, so2Region);
+    this.linearRegion = Objects.requireNonNull(linearRegion);
   }
 
-  /** @param xyav == {px, py, angle, vel}
-   * @return distance of {px, py} from spherical region */
-  protected final Scalar d_xy(Tensor xyav) {
-    return xyRegion.distance(xyav.extract(0, 2));
-  }
-
-  /** @param xyav == {px, py, angle, vel}
-   * @return distance of angle from so2region */
-  protected final Scalar d_angle(Tensor xyav) {
-    return angleRegion.distance(xyav.get(2));
-  }
-
-  /** @param xyav == {px, py, angle, vel}
-   * @return distance of velocity from so2region */
+  /** function used in computation of heuristic {@link Tse2MinTimeGoalManager}
+   * 
+   * @param xyav == {px, py, angle, vel}
+   * @return distance of velocity from linearRegion */
   protected final Scalar d_vel(Tensor xyav) {
-    return velRegion.distance(xyav.get(3));
+    return linearRegion.distance(xyav.get(3));
   }
 
   @Override // from Region
   public final boolean isMember(Tensor xyav) {
-    return xyRegion.isMember(xyav.extract(0, 2)) //
-        && angleRegion.isMember(xyav.get(2)) //
-        && velRegion.isMember(xyav.get(3));
+    return super.isMember(xyav) && linearRegion.isMember(xyav.get(3));
   }
 }

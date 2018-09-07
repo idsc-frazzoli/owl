@@ -115,11 +115,15 @@ public class ShadowEvaluator {
           Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
           mtrMatrix.append(minTimeReact);
         }
+        File folder = UserHome.file("/Desktop/eval");
+        folder.mkdirs();
         try {
-          File file1 = UserHome.file("" + "/Desktop/eval/minSecTTR_" + id + ".csv");
-          File file2 = UserHome.file("" + "/Desktop/eval/state_" + id + ".csv");
+          File file1 = new File(folder, "minSecTTR_" + id + ".csv");
+          File file2 = new File(folder, "state_" + id + ".csv");
           Export.of(file1, mtrMatrix.map(CsvFormat.strict()));
-          Export.of(file2, Tensor.of(trajectory.stream().map(a -> a.stateTime().state())).map(CsvFormat.strict()));
+          Export.of(file2, Tensor.of(trajectory.stream() //
+              .map(TrajectorySample::stateTime) //
+              .map(StateTime::state)).map(CsvFormat.strict()));
         } catch (Exception exception) {
           exception.printStackTrace();
         }
