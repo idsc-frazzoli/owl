@@ -16,14 +16,14 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
-abstract class ShadowMap {
+public abstract class ShadowMapCV implements ShadowMapInterface {
   protected final Tensor pixel2world;
   protected final Tensor world2pixel;
   protected final GeometricLayer world2pixelLayer;
   protected final Scalar pixelDim;
   protected final BufferedImage bufferedImage;
 
-  public ShadowMap(ImageRegion imageRegion) {
+  public ShadowMapCV(ImageRegion imageRegion) {
     bufferedImage = RegionRenders.image(imageRegion.image());
     Tensor scale = imageRegion.scale();
     Scalar height = RealScalar.of(bufferedImage.getHeight());
@@ -36,12 +36,6 @@ abstract class ShadowMap {
     world2pixelLayer = GeometricLayer.of(world2pixel);
   }
 
-  abstract void updateMap(StateTime stateTime, float timeDelta);
-
-  abstract Mat getInitMap();
-
-  abstract float getMinTimeDelta();
-
   public Point state2pixel(Tensor state) {
     GeometricLayer layer = GeometricLayer.of(world2pixel);
     Point2D point2D = layer.toPoint2D(state);
@@ -49,4 +43,6 @@ abstract class ShadowMap {
         (int) point2D.getX(), //
         (int) point2D.getY());
   }
+
+  public abstract void updateMap(Mat mat, StateTime stateTime, float timeDelta);
 }

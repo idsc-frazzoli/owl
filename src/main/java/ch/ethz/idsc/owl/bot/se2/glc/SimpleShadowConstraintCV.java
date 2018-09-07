@@ -5,16 +5,16 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.indexer.Indexer;
 
-import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
+import ch.ethz.idsc.owl.mapping.ShadowMapCV;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 class SimpleShadowConstraintCV extends AbstractShadowConstraint {
-  private final ShadowMapSpherical shadowMap;
+  private final ShadowMapCV shadowMap;
   private final Mat initArea;
 
-  public SimpleShadowConstraintCV(ShadowMapSpherical shadowMapPed, float a, float reactionTime, boolean tse2) {
+  public SimpleShadowConstraintCV(ShadowMapCV shadowMapPed, float a, float reactionTime, boolean tse2) {
     super(a, reactionTime, tse2);
     this.shadowMap = shadowMapPed;
     this.initArea = shadowMapPed.getInitMap();

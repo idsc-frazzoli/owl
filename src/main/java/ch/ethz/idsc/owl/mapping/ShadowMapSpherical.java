@@ -28,7 +28,7 @@ import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class ShadowMapSpherical extends ShadowMap implements RenderInterface {
+public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
   private Color COLOR_SHADOW_FILL;
   // ---
   private final LidarEmulator lidar;
