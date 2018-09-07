@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Ramp;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -39,5 +40,9 @@ public class LinearRegion extends ImplicitFunctionRegion<Tensor> implements //
 
   public Scalar radius() {
     return radius;
+  }
+
+  public Clip clip() {
+    return Clip.function(center.subtract(radius), center.add(radius));
   }
 }

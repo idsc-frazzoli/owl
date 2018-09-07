@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * class defines circle region for (x,y) component, periodic intervals in angular component, linear region in v */
 public class Tse2ComboRegion extends Se2ComboRegion {
   /** @param goal {px, py, angle, v}
-   * @param radiusVector {dist_radius, dist_radius, dist_angle}
+   * @param radiusVector {dist_radius, dist_radius, dist_angle, dist_v}
    * @throws Exception if first two entries of radiusVector are different */
   public static Tse2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new Tse2ComboRegion( //
@@ -38,8 +38,10 @@ public class Tse2ComboRegion extends Se2ComboRegion {
     this.linearRegion = Objects.requireNonNull(linearRegion);
   }
 
-  /** @param xyav == {px, py, angle, vel}
-   * @return distance of velocity from so2region */
+  /** function used in computation of heuristic {@link Tse2MinTimeGoalManager}
+   * 
+   * @param xyav == {px, py, angle, vel}
+   * @return distance of velocity from linearRegion */
   protected final Scalar d_vel(Tensor xyav) {
     return linearRegion.distance(xyav.get(3));
   }

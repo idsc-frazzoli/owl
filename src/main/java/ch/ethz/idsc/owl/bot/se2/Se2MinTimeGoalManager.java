@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
@@ -21,9 +20,7 @@ import ch.ethz.idsc.tensor.red.Max;
 
 /** min time cost function with decent heuristic
  * 
- * The cost does not account for curvature. */
-// DO NOT MODIFY THIS CLASS SINCE THE FUNCTIONALITY IS USED IN MANY DEMOS
-@DontModify
+ * The cost does not account for other criteria such as curvature. */
 public final class Se2MinTimeGoalManager implements Region<Tensor>, CostFunction, Serializable {
   private final Se2ComboRegion se2ComboRegion;
   private final Scalar maxSpeed;
