@@ -34,6 +34,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.opt.FermatWeberProblem;
+import ch.ethz.idsc.tensor.opt.SphereFit;
 import ch.ethz.idsc.tensor.red.Norm;
 
 class SphereFitDemo {
@@ -84,11 +85,8 @@ class SphereFitDemo {
         mouse = geometricLayer.getMouseSe2State();
         if (Objects.nonNull(min_index))
           control.set(mouse, min_index);
-        @SuppressWarnings("unused")
         Tensor rnctrl = Tensor.of(control.stream().map(ExtractXY::of));
-        // TODO JPH tensor v059
-        Optional<Tensor> some = Optional.empty();
-        // SphereFit.of(rnctrl);
+        Optional<Tensor> some = SphereFit.of(rnctrl);
         if (some.isPresent()) {
           Tensor center = some.get().get(0);
           Scalar radius = some.get().Get(1);

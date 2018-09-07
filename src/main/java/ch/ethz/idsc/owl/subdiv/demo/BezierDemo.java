@@ -131,6 +131,7 @@ class BezierDemo {
         if (isR2) {
           BezierCurve bezierCurve = new BezierCurve(RnGeodesic.INSTANCE);
           Tensor rnctrl = Tensor.of(_control.stream().map(ExtractXY::of));
+          // refined = LanczosCurve.refine(rnctrl, 1 << levels);
           refined = bezierCurve.refine(rnctrl, 1 << levels);
           {
             graphics.setColor(new Color(0, 0, 255, 128));
