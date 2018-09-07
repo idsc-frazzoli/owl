@@ -18,7 +18,9 @@ public class ThreePointCurveSubdivision implements CurveSubdivision, Serializabl
   private final Scalar qr_f;
   private final Scalar pqqr;
 
-  public ThreePointCurveSubdivision(GeodesicInterface geodesicInterface, Scalar pq_f, Scalar qr_f, Scalar pqqr) {
+  public ThreePointCurveSubdivision( //
+      GeodesicInterface geodesicInterface, //
+      Scalar pq_f, Scalar qr_f, Scalar pqqr) {
     this.geodesicInterface = geodesicInterface;
     this.pq_f = pq_f;
     this.qr_f = qr_f;

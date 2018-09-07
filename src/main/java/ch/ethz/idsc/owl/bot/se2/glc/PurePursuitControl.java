@@ -19,9 +19,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
 public class PurePursuitControl extends StateTrajectoryControl {
-  /** (vx, vy, omega) */
-  // private static final Se2Wrap SE2WRAP = new Se2Wrap(Tensors.vector(1, 1, 2));
-  // ---
   private final Clip clip;
   private final Scalar lookAhead;
 

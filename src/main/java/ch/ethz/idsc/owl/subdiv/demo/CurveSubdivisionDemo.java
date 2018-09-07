@@ -15,8 +15,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -355,6 +358,17 @@ class CurveSubdivisionDemo {
               .collect(Collectors.toList()));
       spinnerMagicC.setValue(RationalScalar.HALF);
       spinnerMagicC.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    }
+    {
+      JSlider jSlider = new JSlider(1, 999, 500);
+      jSlider.setPreferredSize(new Dimension(500, 28));
+      jSlider.addChangeListener(new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent changeEvent) {
+          BSpline4CurveSubdivision.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000);
+        }
+      });
+      timerFrame.jToolBar.add(jSlider);
     }
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
