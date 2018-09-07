@@ -38,6 +38,7 @@ import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
+import ch.ethz.idsc.owl.mapping.ShadowEvaluator;
 import ch.ethz.idsc.owl.mapping.ShadowMapDirected;
 import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
@@ -68,7 +69,7 @@ public class PlanningEvaluation0 extends Se2Demo {
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
   public static final Scalar MAX_SPEED = RealScalar.of(8); //
   static final Scalar MAX_TURNING_PLAN = Degree.of(30); // 45
-  static final FlowsInterface CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-3, 0, 3));
+  static final FlowsInterface CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-2, 0, 2));
   static final int FLOWRES = 9;
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   static final Tensor SHAPE = Tensors.matrixDouble( //
@@ -79,8 +80,7 @@ public class PlanningEvaluation0 extends Se2Demo {
           { -.1, -.07 }, //
           { -.1, +.07 } //
       }).unmodifiable();
-  final StateTime initial = new StateTime(Tensors.vector(12, 3.5, 1.571, 6), RealScalar.ZERO);
-  // v_init = 4 ok for illegal
+  final StateTime initial = new StateTime(Tensors.vector(12, 3.0, 1.571, 6), RealScalar.ZERO);
   // private Tensor goal = Tensors.vector(22, 33.5, 0, MAX_SPEED.number()); // around curve
   private Tensor goal = Tensors.vector(12, 30, 1.571, MAX_SPEED.number()); // only straigh
   private Tensor goalRadius;
@@ -145,18 +145,16 @@ public class PlanningEvaluation0 extends Se2Demo {
         new ShadowMapSpherical(lidarEmulator, irPedLegal, PED_VELOCITY, PED_RADIUS);
     ShadowMapSpherical smPedIllegal = //
         new ShadowMapSpherical(lidarEmulator, irPedIllegal, PED_VELOCITY, PED_RADIUS);
-    // ImageRegion imageRegionCar = new ImageRegion(imageCar, RANGE, false);
-    // TODO YN check if line below is intended
     ShadowMapDirected smCar = new ShadowMapDirected( //
-        lidarEmulator, irCar, // "/simulation/s3/car_lanes.png",
+        lidarEmulator, irCar, "/simulation/s3/car_lanes.png",
         CAR_VELOCITY);
     //
     // SHADOW REGION CONSTRAINTS
-    PlannerConstraint pedLegalConst = new SimpleShadowConstraintCV(smPedLegal, MAX_A, REACTION_TIME, true);
-    PlannerConstraint pedIllegalConst = new SimpleShadowConstraintCV(smPedIllegal, MAX_A, REACTION_TIME, true);
-    PlannerConstraint carConst = new SimpleShadowConstraintCV(smCar, MAX_A, REACTION_TIME, true);
-    // constraints.add(pedLegalConst);
-    constraints.add(pedIllegalConst);
+    PlannerConstraint pedLegalConst = new SimpleShadowConstraintCV(smPedLegal, irCar, MAX_A, REACTION_TIME, true);
+    PlannerConstraint pedIllegalConst = new SimpleShadowConstraintCV(smPedIllegal, irCar, MAX_A, REACTION_TIME, true);
+    PlannerConstraint carConst = new SimpleShadowConstraintCV(smCar, irCar, MAX_A, REACTION_TIME, true);
+    constraints.add(pedLegalConst);
+    // constraints.add(pedIllegalConst);
     // constraints.add(carConst);
     //
     // SETUP PLANNER
@@ -169,6 +167,11 @@ public class PlanningEvaluation0 extends Se2Demo {
     // SETUP CALLBACKS
     List<GlcPlannerCallback> callbacks = new ArrayList<>();
     //
+    // EVALUATOR
+    ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal);
+    // callbacks.add(evaluator.sectorTimeToReact);
+    //
+    // MOTION PLAN WORKER
     Thread mpw = new Thread(new Runnable() {
       @Override // from Runnable
       public void run() {
@@ -197,6 +200,7 @@ public class PlanningEvaluation0 extends Se2Demo {
         }
       }
     });
+    System.out.println("Planning...");
     mpw.start();
     // RENDERING
     owlyAnimationFrame.addBackground(EllipseRegionRender.of(new SphericalRegion(goal, goalRadius.Get(0))));

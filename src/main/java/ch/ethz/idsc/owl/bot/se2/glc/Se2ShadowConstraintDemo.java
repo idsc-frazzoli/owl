@@ -67,7 +67,7 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
     ShadowMapSpherical shadowMapPed = //
         new ShadowMapSpherical(lidarEmulator, imageRegion, PED_VELOCITY, PED_RADIUS);
     SimpleShadowConstraintCV shadowConstraintPed = //
-        new SimpleShadowConstraintCV(shadowMapPed, MAX_A, REACTION_TIME, false);
+        new SimpleShadowConstraintCV(shadowMapPed, imageRegion, MAX_A, REACTION_TIME, false);
     constraintCollection.add(shadowConstraintPed);
     // ---
     {

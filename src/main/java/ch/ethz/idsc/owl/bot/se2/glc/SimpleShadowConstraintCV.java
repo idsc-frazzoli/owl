@@ -6,18 +6,21 @@ import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.indexer.Indexer;
 
 import ch.ethz.idsc.owl.mapping.ShadowMapCV;
+import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 class SimpleShadowConstraintCV extends AbstractShadowConstraint {
   private final ShadowMapCV shadowMap;
+  private final ImageRegion obsRegion;
   private final Mat initArea;
 
-  public SimpleShadowConstraintCV(ShadowMapCV shadowMapPed, float a, float reactionTime, boolean tse2) {
+  public SimpleShadowConstraintCV(ShadowMapCV shadowMapPed, ImageRegion obsRegion, float a, float reactionTime, boolean tse2) {
     super(a, reactionTime, tse2);
     this.shadowMap = shadowMapPed;
     this.initArea = shadowMapPed.getInitMap();
+    this.obsRegion = obsRegion;
   }
 
   @Override // from CostIncrementFunction
@@ -27,8 +30,7 @@ class SimpleShadowConstraintCV extends AbstractShadowConstraint {
     Indexer indexer = simShadowArea.createIndexer();
     return !ray.stream().parallel() //
         .map(forward) //
-        .map(shadowMap::state2pixel) //
-        .anyMatch(local -> isMember(indexer, local));
+        .anyMatch(local -> isMember(indexer, shadowMap.state2pixel(local)) || obsRegion.isMember(local));
   }
 
   private boolean isMember(Indexer indexer, Point pixel) {

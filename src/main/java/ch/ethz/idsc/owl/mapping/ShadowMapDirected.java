@@ -46,13 +46,13 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   // ---
   private Color COLOR_SHADOW_FILL;
 
-  public ShadowMapDirected(LidarEmulator lidar, ImageRegion imageRegion, float vMax) {
+  public ShadowMapDirected(LidarEmulator lidar, ImageRegion imageRegion, String lanes, float vMax) {
     super(imageRegion);
     this.lidar = lidar;
     this.vMax = vMax;
     // setup
     // TODO pass obstacles and lanes as arguments
-    URL carLanesURL = getClass().getResource("/map/scenarios/s1/car_lanes.png");
+    URL carLanesURL = getClass().getResource(lanes);
     // URL carObsURL = getClass().getResource("/map/scenarios/s1/car_obs.png");
     URL kernelURL = getClass().getResource("/cv/kernels/kernel6.bmp");
     float pixelPerSeg = 253.0f / (NSEGS);

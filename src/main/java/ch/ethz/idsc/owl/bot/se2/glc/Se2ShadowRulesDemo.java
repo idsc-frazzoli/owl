@@ -93,7 +93,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     shadowSimPed.startNonBlocking(10);
     //
     ShadowMapDirected shadowMapCar = //
-        new ShadowMapDirected(lidarEmulator, imageRegionCar, CAR_VELOCITY);
+        new ShadowMapDirected(lidarEmulator, imageRegionCar, "/map/scenarios/s1/car_lanes.png", CAR_VELOCITY);
     shadowMapCar.setColor(CAR_COLOR);
     owlyAnimationFrame.addBackground(shadowMapCar);
     ShadowMapSimulator shadowSimCar = new ShadowMapSimulator(shadowMapCar, carEntity::getStateTimeNow);
