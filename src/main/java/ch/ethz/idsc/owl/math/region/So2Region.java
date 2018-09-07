@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.region;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -27,7 +28,7 @@ public final class So2Region extends ImplicitFunctionRegion<Tensor> implements /
 
   // constructor exists to test with units
   /* package */ So2Region(Scalar center, Scalar radius, Scalar half_circumference) {
-    this.center = center;
+    this.center = Objects.requireNonNull(center);
     this.radius = Sign.requirePositiveOrZero(radius);
     mod = Mod.function( //
         half_circumference.add(half_circumference), // 2*half_circumference
@@ -36,7 +37,7 @@ public final class So2Region extends ImplicitFunctionRegion<Tensor> implements /
 
   @Override // from SignedDistanceFunction<Tensor>
   public Scalar signedDistance(Tensor x) {
-    return mod.apply(x.Get().subtract(center)).abs().subtract(radius);
+    return mod.apply(center.subtract(x)).abs().subtract(radius);
   }
 
   @Override // from DistanceFunction<Tensor>
