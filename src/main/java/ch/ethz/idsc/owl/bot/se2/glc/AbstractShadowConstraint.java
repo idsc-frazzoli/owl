@@ -32,10 +32,6 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
   final float tReact;
   final float timeStep = 0.1f; // TODO YN get from state integrator
 
-  public AbstractShadowConstraint(float a, float tReact) {
-    this(a, tReact, false);
-  }
-
   public AbstractShadowConstraint(float a, float tReact, boolean tse2) {
     GlobalAssert.that(tReact <= 0.4f); // TODO YN magic const
     this.a = a;
