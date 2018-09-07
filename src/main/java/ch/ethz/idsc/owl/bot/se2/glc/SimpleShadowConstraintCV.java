@@ -16,10 +16,10 @@ class SimpleShadowConstraintCV extends AbstractShadowConstraint {
   private final ImageRegion obsRegion;
   private final Mat initArea;
 
-  public SimpleShadowConstraintCV(ShadowMapCV shadowMapPed, ImageRegion obsRegion, float a, float reactionTime, boolean tse2) {
+  public SimpleShadowConstraintCV(ShadowMapCV shadowMap, ImageRegion obsRegion, float a, float reactionTime, boolean tse2) {
     super(a, reactionTime, tse2);
-    this.shadowMap = shadowMapPed;
-    this.initArea = shadowMapPed.getInitMap();
+    this.shadowMap = shadowMap;
+    this.initArea = shadowMap.getInitMap();
     this.obsRegion = obsRegion;
   }
 
