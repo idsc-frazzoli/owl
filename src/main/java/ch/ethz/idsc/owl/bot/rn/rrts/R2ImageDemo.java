@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
-import ch.ethz.idsc.owl.bot.rn.RnNodeCollection;
+import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public static void main(String[] args) throws Exception {
     ImageRegion imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
-    RrtsNodeCollection nc = new RnNodeCollection(imageRegion.origin(), imageRegion.range());
+    RrtsNodeCollection nc = new RnRrtsNodeCollection(imageRegion.origin(), imageRegion.range());
     TransitionRegionQuery trq = new SampledTransitionRegionQuery( //
         CatchyTrajectoryRegionQuery.timeInvariant(imageRegion), RealScalar.of(0.1));
     // ---

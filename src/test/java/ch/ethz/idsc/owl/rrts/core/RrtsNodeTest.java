@@ -25,4 +25,19 @@ public class RrtsNodeTest extends TestCase {
     assertEquals(n3.costFromRoot(), RealScalar.of(6.5));
     assertEquals(nm.costFromRoot(), RealScalar.of(.5));
   }
+
+  public void testFail() {
+    try {
+      RrtsNode.createRoot(null, RealScalar.ZERO);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      RrtsNode.createRoot(Tensors.vector(1, 2, 3), null);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

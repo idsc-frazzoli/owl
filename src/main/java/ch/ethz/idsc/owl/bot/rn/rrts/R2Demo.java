@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
-import ch.ethz.idsc.owl.bot.rn.RnNodeCollection;
+import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.Tensors;
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
     Tensor max = Tensors.vector(wid, wid);
-    RrtsNodeCollection nc = new RnNodeCollection(min, max);
+    RrtsNodeCollection nc = new RnRrtsNodeCollection(min, max);
     TransitionRegionQuery trq = StaticHelper.polygon1();
     // ---
     Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.IDENTITY);

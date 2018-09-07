@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.rn.RnNodeCollection;
+import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -42,7 +42,7 @@ class NoiseCircleHelper {
     final Tensor center = Mean.of(Tensors.of(orig, goal));
     Tensor min = center.map(s -> s.subtract(radius));
     Tensor max = center.map(s -> s.add(radius));
-    RrtsNodeCollection nc = new RnNodeCollection(min, max);
+    RrtsNodeCollection nc = new RnRrtsNodeCollection(min, max);
     // obstacleQuery = StaticHelper.noise1();
     this.obstacleQuery = obstacleQuery;
     // ---
