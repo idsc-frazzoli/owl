@@ -42,15 +42,17 @@ public class ShadowEvaluator {
   //
   final int RESOLUTION = 10;
   final int MAX_TREACT = 1;
+  final String id;
   final float delta_treact; // [s]
-  final Scalar a = DoubleScalar.of(4.0); // [m/s^2];
+  final Scalar a = DoubleScalar.of(6.0); // [m/s^2];
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-100, -100, 0), RealScalar.ZERO); // TODO YN not nice
 
-  public ShadowEvaluator(ShadowMapSpherical shadowMap) {
+  public ShadowEvaluator(ShadowMapSpherical shadowMap, String id) {
     this.shadowMap = shadowMap;
     this.delta_treact = shadowMap.getMinTimeDelta();
+    this.id = id;
     tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
   }
 
@@ -77,7 +79,7 @@ public class ShadowEvaluator {
         // ---
         Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
         try {
-          File file = UserHome.file("" + "minReactionTime" + ".csv");
+          File file = UserHome.file("" + "minReactionTime_" + id + ".csv");
           Export.of(file, minTimeReact.get().map(CsvFormat.strict()));
         } catch (Exception exception) {
           exception.printStackTrace();
@@ -114,8 +116,8 @@ public class ShadowEvaluator {
           mtrMatrix.append(minTimeReact);
         }
         try {
-          File file1 = UserHome.file("" + "/Desktop/eval/minSecTTR" + ".csv");
-          File file2 = UserHome.file("" + "/Desktop/eval/state" + ".csv");
+          File file1 = UserHome.file("" + "/Desktop/eval/minSecTTR_" + id + ".csv");
+          File file2 = UserHome.file("" + "/Desktop/eval/state_" + id + ".csv");
           Export.of(file1, mtrMatrix.map(CsvFormat.strict()));
           Export.of(file2, Tensor.of(trajectory.stream().map(a -> a.stateTime().state())).map(CsvFormat.strict()));
         } catch (Exception exception) {
