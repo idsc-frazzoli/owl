@@ -122,7 +122,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     Tensor imagePedIllegal = ResourceData.of("/simulation/s3/ped_obs_illegal.png");
     Tensor imageCar = ResourceData.of("/simulation/s3/car_obs_1.png");
     imageCar = ImageEdges.extrusion(imageCar, 10); // == 0.73 * 7.5 == 5.475
-    Tensor imageLid = ResourceData.of("/simulation/s2/ped_obs_illegal.png");
+    Tensor imageLid = ResourceData.of("/simulation/s3/ped_obs_illegal.png");
     ImageRegion irPedLegal = new ImageRegion(imagePedLegal, RANGE, false);
     ImageRegion irPedIllegal = new ImageRegion(imagePedIllegal, RANGE, false);
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
