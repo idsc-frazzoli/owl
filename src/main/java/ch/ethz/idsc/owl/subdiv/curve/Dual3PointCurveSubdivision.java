@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** dual scheme */
-public class ThreePointCurveSubdivision implements CurveSubdivision, Serializable {
+public class Dual3PointCurveSubdivision implements CurveSubdivision, Serializable {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   // ---
   private final GeodesicInterface geodesicInterface;
@@ -18,7 +18,7 @@ public class ThreePointCurveSubdivision implements CurveSubdivision, Serializabl
   private final Scalar qr_f;
   private final Scalar pqqr;
 
-  public ThreePointCurveSubdivision( //
+  public Dual3PointCurveSubdivision( //
       GeodesicInterface geodesicInterface, //
       Scalar pq_f, Scalar qr_f, Scalar pqqr) {
     this.geodesicInterface = geodesicInterface;
