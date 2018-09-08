@@ -15,10 +15,10 @@ public enum CarHelper {
   /** the turning radius of the flow is the reciprocal of the given rate
    * 
    * @param speed, positive for forward, and negative for backward, unit [m/s]
-   * @param rate of turning, unit [rad/m]
+   * @param ratePerMeter of turning, unit [rad*m^-1]
    * @return flow with u == {speed[m*s^-1], 0.0, (rate*speed)[rad*s^-1]} */
-  public static Flow singleton(Scalar speed, Tensor rate) {
+  public static Flow singleton(Scalar speed, Tensor ratePerMeter) {
     return StateSpaceModels.createFlow(Se2StateSpaceModel.INSTANCE, //
-        N.DOUBLE.of(Tensors.of(speed, RealScalar.ZERO, rate.Get().multiply(speed))));
+        N.DOUBLE.of(Tensors.of(speed, RealScalar.ZERO, ratePerMeter.Get().multiply(speed))));
   }
 }
