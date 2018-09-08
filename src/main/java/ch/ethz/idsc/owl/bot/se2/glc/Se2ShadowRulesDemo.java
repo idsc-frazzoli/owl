@@ -49,7 +49,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 2.5, 30));
 
   @Override
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     StateTime stateTime = new StateTime(Tensors.vector(5.0, 1.0, 0), RealScalar.ZERO);
     CarEntity carEntity = new CarEntity( //
         stateTime, //

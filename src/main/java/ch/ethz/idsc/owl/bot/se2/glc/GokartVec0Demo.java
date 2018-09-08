@@ -36,7 +36,7 @@ public class GokartVec0Demo extends GokartDemo {
   private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { { 7.5, 0, 0 }, { 0, -7.5, 640 }, { 0, 0, 1 } });
 
   @Override
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(0, 10, 0), RealScalar.ZERO);
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override

@@ -32,7 +32,7 @@ public class GokartWaypoint2Demo extends GokartDemo {
   private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { { 7.5, 0, 0 }, { 0, -7.5, 640 }, { 0, 0, 1 } });
 
   @Override
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
     waypoints = new BSpline2CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);

@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-class SimpleShadowConstraintCV extends AbstractShadowConstraint {
+public class SimpleShadowConstraintCV extends AbstractShadowConstraint {
   private final ShadowMapCV shadowMap;
   private final ImageRegion obsRegion;
   private final Mat initArea;
