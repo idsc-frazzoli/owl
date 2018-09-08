@@ -11,11 +11,11 @@ import ch.ethz.idsc.tensor.sca.N;
   ;
   /** the turning radius of the flow is the reciprocal of the given rate
    * 
-   * @param speed, positive for forward, and negative for backward, unit [m/s]
-   * @param rate of turning, unit [rad/m]
-   * @return flow with u == { rate[rad/m], acceleration[m*s^-2]} */
-  public static Flow singleton(Scalar rate, Scalar acc) {
+   * @param rate of turning [rad*m^-1]
+   * @param acceleration [m*s^-2]
+   * @return flow with u == { rate[rad*m^-1], acceleration[m*s^-2]} */
+  public static Flow singleton(Scalar rate, Scalar acceleration) {
     return StateSpaceModels.createFlow( //
-        Tse2StateSpaceModel.INSTANCE, N.DOUBLE.of(Tensors.of(rate, acc)));
+        Tse2StateSpaceModel.INSTANCE, N.DOUBLE.of(Tensors.of(rate, acceleration)));
   }
 }

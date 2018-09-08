@@ -17,18 +17,18 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
-public class PurePursuitControlTse2 extends StateTrajectoryControl {
+/* package */ class Tse2PurePursuitControl extends StateTrajectoryControl {
   private final Scalar lookAhead;
   private final Clip clip;
 
-  public PurePursuitControlTse2(Scalar lookAhead, Scalar maxTurningRate) {
+  public Tse2PurePursuitControl(Scalar lookAhead, Scalar maxTurningRate) {
     this.lookAhead = lookAhead;
     this.clip = Clip.function(maxTurningRate.negate(), maxTurningRate);
   }
 
   @Override
   protected Scalar distance(Tensor x, Tensor y) {
-    return Norm._2.ofVector(Tse2Wrap.INSTANCE.difference(x, y));
+    return Norm._2.ofVector(Tse2Wrap.INSTANCE.difference(x, y).extract(0, 3));
   }
 
   PurePursuit purePursuit = null;

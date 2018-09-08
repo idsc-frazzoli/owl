@@ -57,7 +57,7 @@ public class Tse2CarEntity extends Tse2Entity {
 
   public static Tse2CarEntity createDefault(StateTime stateTime) {
     return new Tse2CarEntity(stateTime, //
-        new PurePursuitControlTse2(LOOKAHEAD, MAX_TURNING_RATE), //
+        new Tse2PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
         PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
@@ -110,8 +110,9 @@ public class Tse2CarEntity extends Tse2Entity {
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     goal = goal.copy().append(goalVelocity); // FIXME YN 4th component of goal. What is there to fix?
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
-    Tse2MinTimeGoalManager se2MinTimeGoalManager = new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
-    GoalInterface goalInterface = MultiCostGoalAdapter.of(se2MinTimeGoalManager.getGoalInterface(), extraCosts);
+    Tse2MinTimeGoalManager tse2MinTimeGoalManager = //
+        new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
+    GoalInterface goalInterface = MultiCostGoalAdapter.of(tse2MinTimeGoalManager.getGoalInterface(), extraCosts);
     return new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
   }

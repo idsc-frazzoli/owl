@@ -10,9 +10,11 @@ import ch.ethz.idsc.tensor.alg.Last;
 
 /** linear B-spline
  * 
- * the scheme interpolates the control points */
+ * the scheme interpolates the control points
+ * 
+ * Dyn/Sharon 2014 p.14 show that the contractivity factor is mu = 1/2 */
 public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable {
-  private final GeodesicInterface geodesicInterface;
+  protected final GeodesicInterface geodesicInterface;
 
   public BSpline1CurveSubdivision(GeodesicInterface geodesicInterface) {
     this.geodesicInterface = geodesicInterface;
@@ -39,7 +41,10 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
     return curve;
   }
 
-  private Tensor center(Tensor p, Tensor q) {
+  /** @param p
+   * @param q
+   * @return point between p and q */
+  protected final Tensor center(Tensor p, Tensor q) {
     return geodesicInterface.split(p, q, RationalScalar.HALF);
   }
 }

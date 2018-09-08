@@ -26,11 +26,11 @@ class SimpleShadowConstraintCV extends AbstractShadowConstraint {
   @Override // from CostIncrementFunction
   boolean isSatisfied(StateTime childStateTime, float tStop, Tensor ray, TensorUnaryOperator forward) {
     Mat simShadowArea = initArea.clone();
-    shadowMap.updateMap(simShadowArea, childStateTime, tStop + tReact);
+    shadowMap.updateMap(simShadowArea, childStateTime, tStop + tReact + 0.55f);
     Indexer indexer = simShadowArea.createIndexer();
     return !ray.stream().parallel() //
         .map(forward) //
-        .anyMatch(local -> isMember(indexer, shadowMap.state2pixel(local)) || obsRegion.isMember(local));
+        .anyMatch(local -> isMember(indexer, shadowMap.state2pixel(local))); // || obsRegion.isMember(local));
   }
 
   private boolean isMember(Indexer indexer, Point pixel) {

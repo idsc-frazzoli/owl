@@ -18,18 +18,18 @@ import ch.ethz.idsc.tensor.Tensors;
 public class Tse2Car0Demo extends Tse2CarDemo {
   @Override
   void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    Tse2CarEntity carEntity = Tse2CarEntity.createDefault(new StateTime(Tensors.vector(6, 5, 1, 0), RealScalar.ZERO));
+    Tse2CarEntity tse2CarEntity = Tse2CarEntity.createDefault(new StateTime(Tensors.vector(6, 5, 1, 0), RealScalar.ZERO));
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
-    owlyAnimationFrame.add(carEntity);
+    owlyAnimationFrame.add(tse2CarEntity);
     // TODO add option to select goal velocity / range
-    MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
+    MouseGoal.simple(owlyAnimationFrame, tse2CarEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     {
       RenderInterface renderInterface = new MouseShapeRender( //
           SimpleTrajectoryRegionQuery.timeInvariant(line(imageRegion)), //
-          Tse2CarEntity.SHAPE, () -> carEntity.getStateTimeNow().time());
+          Tse2CarEntity.SHAPE, () -> tse2CarEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }
   }

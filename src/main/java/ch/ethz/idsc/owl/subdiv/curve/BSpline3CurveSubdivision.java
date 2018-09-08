@@ -1,22 +1,21 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** cubic B-spline */
-public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable {
+/** cubic B-spline
+ * 
+ * Dyn/Sharon 2014 p.16 show that the scheme has a contractivity factor of mu = 1/2 */
+public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
   private static final Scalar _3_4 = RationalScalar.of(3, 4);
-  // ---
-  private final GeodesicInterface geodesicInterface;
 
+  // ---
   public BSpline3CurveSubdivision(GeodesicInterface geodesicInterface) {
-    this.geodesicInterface = geodesicInterface;
+    super(geodesicInterface);
   }
 
   @Override // from CurveSubdivision
@@ -70,9 +69,5 @@ public class BSpline3CurveSubdivision implements CurveSubdivision, Serializable 
     return center( //
         geodesicInterface.split(p, q, _3_4), //
         geodesicInterface.split(r, q, _3_4));
-  }
-
-  private Tensor center(Tensor q, Tensor r) {
-    return geodesicInterface.split(q, r, RationalScalar.HALF);
   }
 }

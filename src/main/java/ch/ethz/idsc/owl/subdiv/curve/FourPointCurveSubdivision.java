@@ -1,26 +1,36 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** C1 four-point scheme
- * Dubuc 1986, Dyn/Gregory/Levin 1987 */
-public class FourPointCurveSubdivision implements CurveSubdivision, Serializable {
-  private final static Scalar N1_8 = RationalScalar.of(-1, 8);
-  private final static Scalar P9_8 = RationalScalar.of(+9, 8);
+/** C1 interpolatory four-point scheme
+ * Dubuc 1986, Dyn/Gregory/Levin 1987
+ * 
+ * Dyn/Sharon 2014 p.14 show that for general omega the contractivity is mu = 4 * omega + 1/2
+ * 
+ * for the important case omega = 1/16 the contractivity factor is mu = 3/4 */
+public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
+  private final static Scalar P1_16 = RationalScalar.of(1, 16);
   private final static Scalar N1_4 = RationalScalar.of(-1, 4);
   private final static Scalar P1_4 = RationalScalar.of(+1, 4);
   // ---
-  protected final GeodesicInterface geodesicInterface;
+  private final Scalar lambda;
 
+  public FourPointCurveSubdivision(GeodesicInterface geodesicInterface, Scalar omega) {
+    super(geodesicInterface);
+    lambda = omega.add(omega).add(RealScalar.ONE);
+  }
+
+  /** standard four point scheme with omega = 1/16
+   * 
+   * @param geodesicInterface */
   public FourPointCurveSubdivision(GeodesicInterface geodesicInterface) {
-    this.geodesicInterface = geodesicInterface;
+    this(geodesicInterface, P1_16);
   }
 
   @Override // from CurveSubdivision
@@ -72,9 +82,9 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
    * @param s
    * @return point between q and r */
   Tensor center(Tensor p, Tensor q, Tensor r, Tensor s) {
-    Tensor pq = geodesicInterface.split(p, q, P9_8);
-    Tensor rt = geodesicInterface.split(r, s, N1_8);
-    return geodesicInterface.split(pq, rt, RationalScalar.HALF);
+    return center( //
+        geodesicInterface.split(p, q, lambda), //
+        geodesicInterface.split(s, r, lambda));
   }
 
   /** @param p
@@ -82,8 +92,8 @@ public class FourPointCurveSubdivision implements CurveSubdivision, Serializable
    * @param r
    * @return point between p and q */
   Tensor triple(Tensor p, Tensor q, Tensor r) {
-    Tensor pq = geodesicInterface.split(p, q, P1_4);
-    Tensor rt = geodesicInterface.split(q, r, N1_4);
-    return geodesicInterface.split(pq, rt, RationalScalar.HALF);
+    return center( //
+        geodesicInterface.split(p, q, P1_4), //
+        geodesicInterface.split(q, r, N1_4));
   }
 }

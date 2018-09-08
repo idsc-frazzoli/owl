@@ -25,6 +25,6 @@ public class SixPointCurveSubdivision extends AbstractSixPointCurveSubdivision {
     Tensor _r = geodesicInterface.split(pq, r, _R);
     Tensor ut = geodesicInterface.split(u, t, PQ);
     Tensor _s = geodesicInterface.split(ut, s, _R);
-    return geodesicInterface.split(_r, _s, RationalScalar.HALF);
+    return center(_r, _s);
   }
 }

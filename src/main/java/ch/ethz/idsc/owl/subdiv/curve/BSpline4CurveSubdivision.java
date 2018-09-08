@@ -23,6 +23,11 @@ public enum BSpline4CurveSubdivision {
         c);
   }
 
+  /** geodesic split suggested by Dyn/Sharon 2014 p.16 who also show
+   * that the scheme with this split has a contractivity factor of mu = 5/6
+   * 
+   * @param geodesicInterface
+   * @return */
   public static CurveSubdivision split2Lo(GeodesicInterface geodesicInterface) {
     return new Split2LoDual3PointCurveSubdivision(geodesicInterface, //
         RationalScalar.of(2, 3), RationalScalar.of(1, 16));

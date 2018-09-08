@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.tse2.Tse2StateSpaceModel;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -37,10 +38,9 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
     this.a = a;
     this.tReact = tReact;
     this.steps = Math.max((int) Math.ceil(tReact / timeStep), 1);
-    // TODO YN check if control index steer is really intended here?
     velSupplier = tse2 //
         ? (StateTime stateTime, Flow flow) -> stateTime.state().Get(Tse2StateSpaceModel.STATE_INDEX_VEL)
-        : (StateTime stateTime, Flow flow) -> flow.getU().Get(Tse2StateSpaceModel.CONTROL_INDEX_STEER);
+        : (StateTime stateTime, Flow flow) -> flow.getU().Get(Se2StateSpaceModel.CONTROL_INDEX_VEL);
   }
 
   @Override
