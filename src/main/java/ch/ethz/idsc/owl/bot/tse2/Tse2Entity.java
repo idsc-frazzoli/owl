@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -29,7 +28,7 @@ public abstract class Tse2Entity extends TrajectoryEntity {
   /** fixed state integrator is used for planning
    * the time difference between two successive nodes in the planner tree is 4/10 */
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = // node interval == 2/5
-      FixedStateIntegrator.create(RungeKutta4Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
+      FixedStateIntegrator.create(Tse2Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
   // ---
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
 
@@ -38,7 +37,7 @@ public abstract class Tse2Entity extends TrajectoryEntity {
   protected Tse2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
     super(new SimpleEpisodeIntegrator( //
         Tse2StateSpaceModel.INSTANCE, //
-        RungeKutta4Integrator.INSTANCE, //
+        Tse2Integrator.INSTANCE, //
         stateTime), //
         trajectoryControl);
     // TODO use tse2 fallback control

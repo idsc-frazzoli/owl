@@ -57,7 +57,7 @@ public class Tse2CarEntity extends Tse2Entity {
 
   public static Tse2CarEntity createDefault(StateTime stateTime) {
     return new Tse2CarEntity(stateTime, //
-        new PurePursuitControlTse2(LOOKAHEAD, MAX_TURNING_RATE), //
+        new Tse2PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
         PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 
