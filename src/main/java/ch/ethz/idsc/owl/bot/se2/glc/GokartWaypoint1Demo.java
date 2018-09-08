@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.red.Nest;
  * therefore a virtual obstacle region in the center to prevent corner cutting is not required. */
 public class GokartWaypoint1Demo extends GokartDemo {
   @Override
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
     System.out.println(Pretty.of(waypoints));

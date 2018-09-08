@@ -36,7 +36,7 @@ public class GokartxTWaypointFollowingDemo extends GokartDemo {
   private static final Tensor VIRTUAL = Tensors.fromString("{{38, 39}, {42, 47}, {51, 52}, {46, 43}}");
 
   @Override
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     // {50.800, 55.733, -0.314}
     final StateTime initial = new StateTime(Tensors.vector(35.733, 38.267, 1.885), RealScalar.of(0.0));
     GokartxTEntity gokartEntity = new GokartxTEntity(initial) {

@@ -29,7 +29,7 @@ public class Se2Letter3Demo extends Se2CarDemo {
       new LidarRaytracer(Subdivide.of(Degree.of(-90), Degree.of(90), 32), Subdivide.of(0, 5, 30));
 
   @Override // from Se2CarDemo
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     StateTime stateTime = new StateTime(Tensors.vector(6, 6, 1), RealScalar.ZERO);
     CarEntity carEntity = new CarEntity( //

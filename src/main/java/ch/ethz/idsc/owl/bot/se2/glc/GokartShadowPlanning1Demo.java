@@ -47,7 +47,7 @@ public class GokartShadowPlanning1Demo extends GokartDemo {
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 20, 60));
 
   @Override
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     // ---
     // final StateTime initial = new StateTime(Tensors.vector(36.283, 8.850, 1.571, 0), RealScalar.ZERO);
     final StateTime initial = new StateTime(Tensors.vector(36.283, 12.850, 1.571, 0), RealScalar.ZERO);

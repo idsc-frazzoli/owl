@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 
-abstract class Se2Demo implements DemoInterface {
+public abstract class Se2Demo implements DemoInterface {
   @Override
   public final OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
@@ -14,5 +14,5 @@ abstract class Se2Demo implements DemoInterface {
     return owlyAnimationFrame;
   }
 
-  abstract void configure(OwlyAnimationFrame owlyAnimationFrame);
+  protected abstract void configure(OwlyAnimationFrame owlyAnimationFrame);
 }

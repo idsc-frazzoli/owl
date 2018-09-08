@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class Se2Letter1Demo extends Se2CarDemo {
   @Override
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     CarEntity carEntity = CarEntity.createDefault(new StateTime(Tensors.vector(10, 5, 1), RealScalar.ZERO));
     ImageRegion imageRegion = R2ImageRegions.inside_0f5c();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);

@@ -1,5 +1,5 @@
 // code by ynager
-package ch.ethz.idsc.owl.bot.se2.glc;
+package ch.ethz.idsc.owl.bot.tse2;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -12,11 +12,8 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.ImageEdges;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
-import ch.ethz.idsc.owl.bot.tse2.Tse2CarFlows;
-import ch.ethz.idsc.owl.bot.tse2.Tse2ComboRegion;
-import ch.ethz.idsc.owl.bot.tse2.Tse2MinTimeGoalManager;
-import ch.ethz.idsc.owl.bot.tse2.Tse2VelocityConstraint;
-import ch.ethz.idsc.owl.bot.tse2.Tse2Wrap;
+import ch.ethz.idsc.owl.bot.se2.glc.Se2Demo;
+import ch.ethz.idsc.owl.bot.se2.glc.SimpleShadowConstraintCV;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -42,7 +39,6 @@ import ch.ethz.idsc.owl.mapping.ShadowMapDirected;
 import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -97,7 +93,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   //
   static final int MAX_STEPS = 10000;
   static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = // node interval == 2/5
-      FixedStateIntegrator.create(RungeKutta4Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
+      FixedStateIntegrator.create(Tse2Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
   final Collection<Flow> controls;
   final Collection<CostFunction> extraCosts = new LinkedList<>();
 
@@ -110,7 +106,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   }
 
   @Override
-  void configure(OwlyAnimationFrame owlyAnimationFrame) {
+  protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     // ---
     Tensor image = ResourceData.of("/simulation/s3/render.png");
     BufferedImage bufferedImage = ImageFormat.of(image);

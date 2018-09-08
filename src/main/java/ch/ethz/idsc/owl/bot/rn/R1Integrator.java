@@ -3,11 +3,10 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Series;
 
 /** DSolve[{v'[h] == a, p'[h] == v[h], v[0] == v0, p[0] == p0}, {p[h], v[h]}, h]
  * results in
@@ -23,8 +22,9 @@ public enum R1Integrator implements Integrator {
   public static Tensor direct(Tensor x, Scalar a, Scalar h) {
     Scalar p0 = x.Get(0);
     Scalar v0 = x.Get(1);
+    Scalar a2 = a.multiply(RationalScalar.HALF);
     return Tensors.of( //
-        Series.of(Tensors.of(p0, v0, a.divide(RealScalar.of(2)))).apply(h), //
-        v0.add(a.multiply(h)));
+        a2.multiply(h).add(v0).multiply(h).add(p0), // Series.of(Tensors.of(p0, v0, a2)).apply(h),
+        a.multiply(h).add(v0));
   }
 }
