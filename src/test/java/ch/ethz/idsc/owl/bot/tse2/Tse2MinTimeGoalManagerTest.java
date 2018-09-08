@@ -1,9 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2.tse2;
+package ch.ethz.idsc.owl.bot.tse2;
 
-import ch.ethz.idsc.owl.bot.tse2.Tse2CarFlows;
-import ch.ethz.idsc.owl.bot.tse2.Tse2ComboRegion;
-import ch.ethz.idsc.owl.bot.tse2.Tse2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
