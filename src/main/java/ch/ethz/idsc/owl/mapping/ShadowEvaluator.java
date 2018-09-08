@@ -23,7 +23,6 @@ import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -44,15 +43,16 @@ public class ShadowEvaluator {
   final int MAX_TREACT = 1;
   final String id;
   final float delta_treact; // [s]
-  final Scalar a = DoubleScalar.of(6.0); // [m/s^2];
+  final Scalar a;
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-100, -100, 0), RealScalar.ZERO); // TODO YN not nice
 
-  public ShadowEvaluator(ShadowMapSpherical shadowMap, String id) {
+  public ShadowEvaluator(ShadowMapSpherical shadowMap, Scalar max_a, String id) {
     this.shadowMap = shadowMap;
-    this.delta_treact = shadowMap.getMinTimeDelta();
+    this.delta_treact = 0.1f; //shadowMap.getMinTimeDelta();
     this.id = id;
+    this.a = max_a;
     tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
   }
 
@@ -157,7 +157,7 @@ public class ShadowEvaluator {
       Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
       Tensor ray = TensorProduct.of(range, dir);
       // -
-      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue());
+      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue() + 0.75f); //TODO 0.75 for car radius
       boolean clear = !ray.stream().parallel() //
           .map(se2Bijection.forward()) //
           .map(shadowMap::state2pixel) //

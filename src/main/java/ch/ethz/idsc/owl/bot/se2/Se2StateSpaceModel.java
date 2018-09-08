@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * @see Se2CarIntegrator */
 public enum Se2StateSpaceModel implements StateSpaceModel {
   INSTANCE;
+  public static final int CONTROL_INDEX_VEL = 0;
   // ---
   @Override
   public Tensor f(Tensor x, Tensor u) {
