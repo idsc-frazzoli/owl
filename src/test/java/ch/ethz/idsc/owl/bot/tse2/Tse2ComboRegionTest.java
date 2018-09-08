@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2.tse2;
+package ch.ethz.idsc.owl.bot.tse2;
 
-import ch.ethz.idsc.owl.bot.tse2.Tse2ComboRegion;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 

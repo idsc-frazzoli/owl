@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -23,6 +24,18 @@ public class BSpline4CurveSubdivisionTest extends TestCase {
     Tensor actual = Nest.of(curveSubdivision::cyclic, tensor, 1);
     assertTrue(ExactScalarQ.all(actual));
     assertEquals(actual.extract(0, 3), Tensors.fromString("{{5/8, -1/4}, {5/8, 1/4}, {1/4, 5/8}}"));
+  }
+
+  public void test2Lo() {
+    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split2Lo(RnGeodesic.INSTANCE);
+    Tensor tensor = curveSubdivision.string(UnitVector.of(5, 2));
+    assertEquals(tensor, Tensors.fromString("{0, 1/16, 5/16, 5/8, 5/8, 5/16, 1/16, 0}"));
+  }
+
+  public void test2Hi() {
+    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split2Hi(RnGeodesic.INSTANCE);
+    Tensor tensor = curveSubdivision.string(UnitVector.of(5, 2));
+    assertEquals(tensor, Tensors.fromString("{0, 1/16, 5/16, 5/8, 5/8, 5/16, 1/16, 0}"));
   }
 
   public void testCyclic() {

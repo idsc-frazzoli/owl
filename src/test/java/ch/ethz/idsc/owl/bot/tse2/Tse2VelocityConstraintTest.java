@@ -1,9 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2.tse2;
+package ch.ethz.idsc.owl.bot.tse2;
 
 import java.util.Arrays;
 
-import ch.ethz.idsc.owl.bot.tse2.Tse2VelocityConstraint;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;

@@ -18,6 +18,6 @@ public enum HormannSabinCurveSubdivision {
     Scalar pq_f = RationalScalar.HALF.add(RealScalar.of(6).multiply(omega));
     Scalar qr_f = RealScalar.of(6).multiply(omega).negate();
     Scalar pqqf = RationalScalar.HALF;
-    return new ThreePointCurveSubdivision(geodesicInterface, pq_f, qr_f, pqqf);
+    return new Split3Dual3PointCurveSubdivision(geodesicInterface, pq_f, qr_f, pqqf);
   }
 }

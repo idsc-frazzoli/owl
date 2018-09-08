@@ -10,25 +10,17 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** dual scheme */
-public class ThreePointCurveSubdivision implements CurveSubdivision, Serializable {
+public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Serializable {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   // ---
   private final GeodesicInterface geodesicInterface;
-  private final Scalar pq_f;
-  private final Scalar qr_f;
-  private final Scalar pqqr;
 
-  public ThreePointCurveSubdivision( //
-      GeodesicInterface geodesicInterface, //
-      Scalar pq_f, Scalar qr_f, Scalar pqqr) {
+  public Dual3PointCurveSubdivision(GeodesicInterface geodesicInterface) {
     this.geodesicInterface = geodesicInterface;
-    this.pq_f = pq_f;
-    this.qr_f = qr_f;
-    this.pqqr = pqqr;
   }
 
   @Override // from CurveSubdivision
-  public Tensor cyclic(Tensor tensor) {
+  public final Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     Tensor curve = Tensors.empty();
     for (int index = 0; index < tensor.length(); ++index) {
@@ -41,7 +33,7 @@ public class ThreePointCurveSubdivision implements CurveSubdivision, Serializabl
   }
 
   @Override // from CurveSubdivision
-  public Tensor string(Tensor tensor) {
+  public final Tensor string(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     switch (tensor.length()) {
     case 0:
@@ -70,12 +62,11 @@ public class ThreePointCurveSubdivision implements CurveSubdivision, Serializabl
     return curve;
   }
 
-  // point between p and q but more towards q
-  private Tensor lo(Tensor p, Tensor q, Tensor r) {
-    Tensor pq = geodesicInterface.split(p, q, pq_f);
-    Tensor qr = geodesicInterface.split(q, r, qr_f);
-    return geodesicInterface.split(pq, qr, pqqr);
-  }
+  /** @param p
+   * @param q
+   * @param r
+   * @return point between p and q but more towards q */
+  protected abstract Tensor lo(Tensor p, Tensor q, Tensor r);
 
   // point between p and q but more towards p
   private Tensor lo(Tensor p, Tensor q) {
