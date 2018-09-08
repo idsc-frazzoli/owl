@@ -214,6 +214,8 @@ class CurveSubdivisionDemo {
           switch (scheme) {
           case BSPLINE2:
           case BSPLINE4:
+          case BSPLINE4LO:
+          case BSPLINE4HI:
             _control = Join.of( //
                 _control.extract(0, 1), //
                 _control, //

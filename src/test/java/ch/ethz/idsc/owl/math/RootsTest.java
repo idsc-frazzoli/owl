@@ -2,10 +2,14 @@
 package ch.ethz.idsc.owl.math;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Series;
+import ch.ethz.idsc.tensor.alg.Sort;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -51,9 +55,74 @@ public class RootsTest extends TestCase {
   }
 
   public void testQuadraticQuantity() {
-    Tensor coeffs = Tensors.fromString("{21, - 10 [s^-1], +1 [s^-2]}");
+    Tensor coeffs = Tensors.fromString("{21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(roots, Tensors.fromString("{3[s], 7[s]}"));
     assertTrue(ExactScalarQ.all(roots));
+  }
+
+  public void testPseudoCubicQuantity() {
+    Tensor coeffs = Tensors.fromString("{0, 21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
+    Tensor roots = Roots.of(coeffs);
+    assertEquals(Sort.of(roots), Tensors.fromString("{0[s], 3[s], 7[s]}"));
+    assertTrue(ExactScalarQ.all(roots));
+  }
+
+  public void testPseudoQuarticQuantity() {
+    Tensor coeffs = Tensors.fromString("{0, 0, 21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
+    Tensor roots = Roots.of(coeffs);
+    assertEquals(Sort.of(roots), Tensors.fromString("{0[s], 0[s], 3[s], 7[s]}"));
+    assertTrue(ExactScalarQ.all(roots));
+  }
+
+  public void testScalarFail() {
+    try {
+      Roots.of(RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testEmptyFail() {
+    try {
+      Roots.of(Tensors.empty());
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testConstantFail() {
+    try {
+      Roots.of(Tensors.vector(0));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      Roots.of(Tensors.vector(1));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testZerosFail() {
+    try {
+      Roots.of(Array.zeros(4));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testMatrixFail() {
+    try {
+      Roots.of(HilbertMatrix.of(2, 3));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

@@ -6,19 +6,30 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 /** cubic B-spline */
-public class BSpline4CurveSubdivision extends Dual3PointCurveSubdivision {
+public enum BSpline4CurveSubdivision {
+  ;
   /** values in the interval [1/6, 2/3] give the best results */
   // FIXME design not final
   public static Scalar MAGIC_C = RationalScalar.of(1, 6);
 
   public static CurveSubdivision of(GeodesicInterface geodesicInterface) {
-    return new BSpline4CurveSubdivision(geodesicInterface, MAGIC_C);
+    return split3(geodesicInterface, MAGIC_C);
   }
 
-  public BSpline4CurveSubdivision(GeodesicInterface geodesicInterface, Scalar c) {
-    super(geodesicInterface, //
+  public static CurveSubdivision split3(GeodesicInterface geodesicInterface, Scalar c) {
+    return new Split3Dual3PointCurveSubdivision(geodesicInterface, //
         RealScalar.of(5).divide(RealScalar.of(16).multiply(c.subtract(RealScalar.ONE))).add(RealScalar.ONE), //
         c.multiply(RealScalar.of(16)).reciprocal(), //
         c);
+  }
+
+  public static CurveSubdivision split2Lo(GeodesicInterface geodesicInterface) {
+    return new Split2LoDual3PointCurveSubdivision(geodesicInterface, //
+        RationalScalar.of(2, 3), RationalScalar.of(1, 16));
+  }
+
+  public static CurveSubdivision split2Hi(GeodesicInterface geodesicInterface) {
+    return new Split2HiDual3PointCurveSubdivision(geodesicInterface, //
+        RationalScalar.of(11, 16), RationalScalar.of(1, 11));
   }
 }
