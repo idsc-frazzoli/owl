@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
+import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_imgproc;
 import org.bytedeco.javacpp.indexer.Indexer;
 
@@ -37,7 +38,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class ShadowEvaluator {
-  private final ShadowMapSpherical shadowMap;
+  private final ShadowMapCV shadowMap;
   //
   final int RESOLUTION = 10;
   final int MAX_TREACT = 1;
@@ -47,10 +48,11 @@ public class ShadowEvaluator {
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-100, -100, 0), RealScalar.ZERO); // TODO YN not nice
+  private final Mat kernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_RECT, new Size(3, 3));
 
-  public ShadowEvaluator(ShadowMapSpherical shadowMap, Scalar max_a, String id) {
+  public ShadowEvaluator(ShadowMapCV shadowMap, Scalar max_a, String id) {
     this.shadowMap = shadowMap;
-    this.delta_treact = 0.1f; //shadowMap.getMinTimeDelta();
+    this.delta_treact = 0.1f; // shadowMap.getMinTimeDelta();
     this.id = id;
     this.a = max_a;
     tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
@@ -157,7 +159,7 @@ public class ShadowEvaluator {
       Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
       Tensor ray = TensorProduct.of(range, dir);
       // -
-      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue() + 0.75f); //TODO 0.75 for car radius
+      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue() + 0.5f); // TODO 0.5*2 for car radius
       boolean clear = !ray.stream().parallel() //
           .map(se2Bijection.forward()) //
           .map(shadowMap::state2pixel) //
@@ -221,6 +223,7 @@ public class ShadowEvaluator {
     Mat segment = new Mat(mat.size(), mat.type(), opencv_core.Scalar.BLACK);
     // opencv_imgproc.fillPoly(segment, polyPoint, new int[] { 3 }, 1, opencv_core.Scalar.WHITE);
     opencv_imgproc.fillConvexPoly(segment, polyPoint, 3, opencv_core.Scalar.WHITE);
+    opencv_imgproc.dilate(segment, segment, kernel, new Point(-1, -1), 1, opencv_core.BORDER_CONSTANT, null);
     opencv_core.bitwise_and(mat, segment, segment);
     return segment;
   }
