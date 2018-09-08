@@ -1,19 +1,10 @@
 // code by jl
 package ch.ethz.idsc.owl.bot.se2;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
-import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
-import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
-import ch.ethz.idsc.owl.glc.core.CostFunction;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.adapter.AbstractMinTimeGoalManager;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
@@ -21,20 +12,16 @@ import ch.ethz.idsc.tensor.red.Max;
 /** min time cost function with decent heuristic
  * 
  * The cost does not account for other criteria such as curvature. */
-public final class Se2MinTimeGoalManager implements Region<Tensor>, CostFunction, Serializable {
+public final class Se2MinTimeGoalManager extends AbstractMinTimeGoalManager {
   private final Se2ComboRegion se2ComboRegion;
   private final Scalar maxSpeed;
   private final Scalar maxTurning;
 
   public Se2MinTimeGoalManager(Se2ComboRegion se2ComboRegion, Collection<Flow> controls) {
+    super(se2ComboRegion);
     this.se2ComboRegion = se2ComboRegion;
     maxSpeed = Se2Controls.maxSpeed(controls);
     maxTurning = Se2Controls.maxTurning(controls);
-  }
-
-  @Override // from CostFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    return StateTimeTrajectories.timeIncrement(glcNode, trajectory);
   }
 
   @Override // from HeuristicFunction
@@ -44,14 +31,5 @@ public final class Se2MinTimeGoalManager implements Region<Tensor>, CostFunction
     return Max.of( //
         se2ComboRegion.d_xy(tensor).divide(maxSpeed), //
         se2ComboRegion.d_angle(tensor).divide(maxTurning));
-  }
-
-  @Override // from Region
-  public boolean isMember(Tensor xya) {
-    return se2ComboRegion.isMember(xya);
-  }
-
-  public final GoalInterface getGoalInterface() {
-    return new GoalAdapter(SimpleTrajectoryRegionQuery.timeInvariant(this), this);
   }
 }

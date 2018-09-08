@@ -9,7 +9,9 @@ import ch.ethz.idsc.tensor.Tensor;
  * Instead, use {@link SixPointCurveSubdivision}
  * 
  * refinement according to
- * Dyn/Sharon: Manifold-valued subdivision schemes based on geodesic inductive averaging
+ * Dyn/Sharon 2014: Manifold-valued subdivision schemes based on geodesic inductive averaging
+ * 
+ * Dyn/Sharon 2014 p.20 show for this split a contractivity factor of mu = 0.9844
  * 
  * weights = {3, -25, 150, 150, -25, 3}/256;
  * {b (1 - a), 1 - b, a b, a b, 1 - b, b (1 - a)}/2

@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
@@ -10,14 +8,13 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** cubic B-spline */
-public class BSpline5CurveSubdivision implements CurveSubdivision, Serializable {
+public class BSpline5CurveSubdivision extends BSpline1CurveSubdivision {
   private static final Scalar _5_8 = RationalScalar.of(5, 8);
   private static final Scalar _15_16 = RationalScalar.of(15, 16);
-  // ---
-  private final GeodesicInterface geodesicInterface;
 
+  // ---
   public BSpline5CurveSubdivision(GeodesicInterface geodesicInterface) {
-    this.geodesicInterface = geodesicInterface;
+    super(geodesicInterface);
   }
 
   @Override // from CurveSubdivision
@@ -48,6 +45,7 @@ public class BSpline5CurveSubdivision implements CurveSubdivision, Serializable 
     throw new RuntimeException();
   }
 
+  @SuppressWarnings("unused")
   private Tensor refine(Tensor tensor) {
     Tensor curve = Tensors.empty();
     {
@@ -75,10 +73,7 @@ public class BSpline5CurveSubdivision implements CurveSubdivision, Serializable 
         geodesicInterface.split(r, q, _5_8));
   }
 
-  private Tensor center(Tensor q, Tensor r) {
-    return geodesicInterface.split(q, r, RationalScalar.HALF);
-  }
-
+  // insertion between points q and r
   private Tensor center(Tensor p, Tensor q, Tensor r, Tensor s) {
     return center( //
         geodesicInterface.split(p, q, _15_16), //
