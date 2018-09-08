@@ -1,0 +1,30 @@
+// code by jph
+package ch.ethz.idsc.owl.bot.rn;
+
+import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.flow.Integrator;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Series;
+
+/** DSolve[{v'[h] == a, p'[h] == v[h], v[0] == v0, p[0] == p0}, {p[h], v[h]}, h]
+ * results in
+ * {p[h] -> (a h^2)/2 + p0 + h v0, v[h] -> a h + v0} */
+public enum R1Integrator implements Integrator {
+  INSTANCE;
+  // ---
+  @Override
+  public Tensor step(Flow flow, Tensor x, Scalar h) {
+    return direct(x, flow.getU().Get(), h);
+  }
+
+  public static Tensor direct(Tensor x, Scalar a, Scalar h) {
+    Scalar p0 = x.Get(0);
+    Scalar v0 = x.Get(1);
+    return Tensors.of( //
+        Series.of(Tensors.of(p0, v0, a.divide(RealScalar.of(2)))).apply(h), //
+        v0.add(a.multiply(h)));
+  }
+}
