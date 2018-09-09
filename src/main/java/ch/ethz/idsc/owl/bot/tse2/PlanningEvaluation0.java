@@ -29,8 +29,8 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
-import ch.ethz.idsc.owl.gui.region.EllipseRegionRender;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
+import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -63,6 +63,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 public class PlanningEvaluation0 extends Se2Demo {
   // Entity Stuff
   static final int ID = 1;
+  static final String SCEN = "s3";
   //
   static final boolean SR_PED_LEGAL = false;
   static final boolean SR_PED_ILLEGAL = false;
@@ -73,23 +74,25 @@ public class PlanningEvaluation0 extends Se2Demo {
   //
   static final Scalar MAX_SPEED = RealScalar.of(8); // 8
   static final Scalar MAX_TURNING_PLAN = Degree.of(20); // 45
-  static final FlowsInterface TSE2_CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-1, 0, 1));
+  static final FlowsInterface TSE2_CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-2, 0, 2));
   static final int FLOWRES = 9;
-  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 8), RealScalar.ZERO);
+  static final float CAR_RAD = 1.1f; // [m]
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 6), RealScalar.ZERO);
+  static final StateTime INITIAL = new StateTime(Tensors.vector(11, 3.0, 1.571, 8), RealScalar.ZERO); // left
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
   // static final Tensor GOAL = Tensors.vector(20, 33.5, 0, MAX_SPEED.number()); // around curve
-  static final Tensor GOAL = Tensors.vector(12, 30, 1.571, MAX_SPEED.number()); // only straigh
+  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.number()); // only straigh
   final Tensor goalRadius;
   //
   static final float PED_VELOCITY = 2.0f;
-  static final float CAR_VELOCITY = 4;
+  static final float CAR_VELOCITY = 10.0f;
   static final float PED_RADIUS = 0.3f;
   static final float MAX_A = 5.0f; // [m/s²]
   static final float REACTION_TIME = 0.0f;
   static final Tensor RANGE = Tensors.vector(30.5, 43.1);
   static final LidarRaytracer LIDAR_RAYTRACER = //
-      new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 30, 90));
+      new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 40, 120));
   //
   static final int MAX_STEPS = 10000;
   static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = // node interval == 2/5
@@ -108,18 +111,18 @@ public class PlanningEvaluation0 extends Se2Demo {
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     // ---
-    Tensor image = ResourceData.of("/simulation/s3/render.png");
+    Tensor image = ResourceData.of("/simulation/" + SCEN + "/render.png");
     BufferedImage bufferedImage = ImageFormat.of(image);
     //
     ImageRender imgRender = ImageRender.of(bufferedImage, RANGE);
     owlyAnimationFrame.addBackground(imgRender);
     //
     // IMAGE REGIONS
-    Tensor imagePedLegal = ResourceData.of("/simulation/s3/ped_obs_legal.png");
-    Tensor imagePedIllegal = ResourceData.of("/simulation/s3/ped_obs_illegal.png");
-    Tensor imageCar = ResourceData.of("/simulation/s3/car_obs_1.png");
-    imageCar = ImageEdges.extrusion(imageCar, 10);
-    Tensor imageLid = ResourceData.of("/simulation/s3/lidar_obs.png");
+    Tensor imagePedLegal = ResourceData.of("/simulation/" + SCEN + "/ped_obs_legal.png");
+    Tensor imagePedIllegal = ResourceData.of("/simulation/" + SCEN + "/ped_obs_illegal.png");
+    Tensor imageCar = ResourceData.of("/simulation/" + SCEN + "/car_obs_2.png");
+    imageCar = ImageEdges.extrusion(imageCar, 12);
+    Tensor imageLid = ResourceData.of("/simulation/" + SCEN + "/lidar_obs.png");
     ImageRegion irPedLegal = new ImageRegion(imagePedLegal, RANGE, false);
     ImageRegion irPedIllegal = new ImageRegion(imagePedIllegal, RANGE, false);
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
@@ -142,19 +145,19 @@ public class PlanningEvaluation0 extends Se2Demo {
     ShadowMapSpherical smPedIllegal = //
         new ShadowMapSpherical(lidarEmulator, irPedIllegal, PED_VELOCITY, PED_RADIUS);
     ShadowMapDirected smCar = new ShadowMapDirected( //
-        lidarEmulator, irCar, "/simulation/s3/car_lanes.png", CAR_VELOCITY);
+        lidarEmulator, irCar, "/simulation/" + SCEN + "/car_lanes.png", CAR_VELOCITY);
     //
     // SHADOW REGION CONSTRAINTS
     if (SR_PED_LEGAL) {
-      PlannerConstraint pedLegalConst = new SimpleShadowConstraintCV(smPedLegal, irCar, MAX_A, REACTION_TIME, true);
+      PlannerConstraint pedLegalConst = new SimpleShadowConstraintCV(smPedLegal, irCar, CAR_RAD, MAX_A, REACTION_TIME, true);
       constraints.add(pedLegalConst);
     }
     if (SR_PED_ILLEGAL) {
-      PlannerConstraint pedIllegalConst = new SimpleShadowConstraintCV(smPedIllegal, irCar, MAX_A, REACTION_TIME, true);
+      PlannerConstraint pedIllegalConst = new SimpleShadowConstraintCV(smPedIllegal, irCar, CAR_RAD, MAX_A, REACTION_TIME, true);
       constraints.add(pedIllegalConst);
     }
     if (SR_CAR) {
-      PlannerConstraint carConst = new SimpleShadowConstraintCV(smCar, irCar, MAX_A, REACTION_TIME, true);
+      PlannerConstraint carConst = new SimpleShadowConstraintCV(smCar, irCar, CAR_RAD, MAX_A, REACTION_TIME, true);
       constraints.add(carConst);
     }
     //
@@ -162,7 +165,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(GOAL, goalRadius);
     Tse2MinTimeGoalManager tse2MinTimeGoalManager = new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(tse2MinTimeGoalManager.getGoalInterface(), extraCosts);
-    owlyAnimationFrame.addBackground(EllipseRegionRender.of(new SphericalRegion(GOAL, goalRadius.Get(0))));
+    owlyAnimationFrame.addBackground(new SphericalRegionRender(new SphericalRegion(GOAL, goalRadius.Get(0))));
     TrajectoryPlanner tp = new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraints, goalInterface);
     // SETUP CALLBACKS
