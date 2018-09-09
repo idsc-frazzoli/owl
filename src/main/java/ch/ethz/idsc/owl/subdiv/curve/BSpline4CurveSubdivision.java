@@ -8,8 +8,8 @@ import ch.ethz.idsc.tensor.Scalar;
 /** cubic B-spline */
 public enum BSpline4CurveSubdivision {
   ;
-  private static final Scalar _2_3 = RationalScalar.of(2, 3);
-  private static final Scalar _1_16 = RationalScalar.of(1, 16);
+  private static final Scalar P2_3 = RationalScalar.of(2, 3);
+  private static final Scalar P1_16 = RationalScalar.of(1, 16);
 
   /** geodesic split suggested by Dyn/Sharon 2014 p.16 who also show
    * that the scheme with this split has a contractivity factor of mu = 5/6
@@ -17,7 +17,7 @@ public enum BSpline4CurveSubdivision {
    * @param geodesicInterface
    * @return */
   public static CurveSubdivision of(GeodesicInterface geodesicInterface) {
-    return new Split2LoDual3PointCurveSubdivision(geodesicInterface, _2_3, _1_16);
+    return new Split2LoDual3PointCurveSubdivision(geodesicInterface, P2_3, P1_16);
   }
 
   /***************************************************/
@@ -39,10 +39,10 @@ public enum BSpline4CurveSubdivision {
   }
 
   /***************************************************/
-  private static final Scalar _1_11 = RationalScalar.of(1, 11);
-  private static final Scalar _11_16 = RationalScalar.of(11, 16);
+  private static final Scalar P11_16 = RationalScalar.of(11, 16);
+  private static final Scalar P1_11 = RationalScalar.of(1, 11);
 
   public static CurveSubdivision split2(GeodesicInterface geodesicInterface) {
-    return new Split2HiDual3PointCurveSubdivision(geodesicInterface, _11_16, _1_11);
+    return new Split2HiDual3PointCurveSubdivision(geodesicInterface, P11_16, P1_11);
   }
 }

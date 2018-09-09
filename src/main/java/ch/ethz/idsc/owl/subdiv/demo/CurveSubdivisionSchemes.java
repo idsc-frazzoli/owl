@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.subdiv.curve.BSpline5CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline6CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.DodgsonSabinCurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.DualC2FourPointCurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.FarSixPointCurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.FourPointCurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
@@ -29,6 +30,8 @@ enum CurveSubdivisionSchemes {
   DOBSEB(i -> DodgsonSabinCurveSubdivision.INSTANCE), //
   THREEPOINT(HormannSabinCurveSubdivision::of), //
   FOURPOINT(FourPointCurveSubdivision::new), //
+  C2CUBIC(DualC2FourPointCurveSubdivision::cubic), //
+  C2TIGHT(DualC2FourPointCurveSubdivision::tightest), //
   SIXPOINT(SixPointCurveSubdivision::new), //
   SIXFAR(FarSixPointCurveSubdivision::new), //
   ;
