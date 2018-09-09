@@ -57,13 +57,14 @@ public enum Roots {
   }
 
   /** @param coeffs {a, b, c} representing a + b*x + c*x^2 == 0
-   * @return vector of length 2 with the roots as entries */
+   * @return vector of length 2 with the roots as entries
+   * if the two roots are real, then the smaller root is the first entry */
   private static Tensor quadratic(Tensor coeffs) {
     Scalar c = coeffs.Get(2);
     Scalar p = coeffs.Get(1).divide(c).multiply(N1_2);
     Scalar p2 = p.multiply(p);
     Scalar q = coeffs.Get(0).divide(c);
     Scalar discr = Sqrt.of(p2.subtract(q));
-    return Tensors.of(p.add(discr), p.subtract(discr));
+    return Tensors.of(p.subtract(discr), p.add(discr));
   }
 }

@@ -53,7 +53,7 @@ public class RootsTest extends TestCase {
   }
 
   public void testQuadraticNormal() {
-    Distribution distribution = NormalDistribution.standard();
+    Distribution distribution = NormalDistribution.of(0, .3);
     for (int index = 0; index < 200; ++index) {
       Tensor coeffs = RandomVariate.of(distribution, 3);
       Tensor roots = Roots.of(coeffs);
@@ -65,14 +65,14 @@ public class RootsTest extends TestCase {
   public void testQuadraticQuantity() {
     Tensor coeffs = Tensors.fromString("{21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
     Tensor roots = Roots.of(coeffs);
-    assertEquals(Sort.of(roots), Tensors.fromString("{3[s], 7[s]}"));
+    assertEquals(roots, Tensors.fromString("{3[s], 7[s]}"));
     assertTrue(ExactScalarQ.all(roots));
   }
 
   public void testQuadraticComplexQuantity() {
     Tensor coeffs = Tensors.fromString("{1, 0 [s^-1], 1 [s^-2]}");
     Tensor roots = Roots.of(coeffs);
-    assertEquals(roots, Tensors.fromString("{I[s], -I[s]}"));
+    assertEquals(roots, Tensors.fromString("{-I[s], I[s]}"));
     assertTrue(ExactScalarQ.all(roots));
   }
 

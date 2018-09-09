@@ -6,6 +6,7 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.glc.adapter.AbstractMinTimeGoalManager;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.red.Max;
@@ -20,11 +21,16 @@ public final class Tse2ForwardMinTimeGoalManager extends AbstractMinTimeGoalMana
   private final Scalar maxTurning;
   private final LinearVelocity2MinTime linearVelocity2MinTime;
 
-  public Tse2ForwardMinTimeGoalManager(Tse2ComboRegion tse2ComboRegion, Collection<Flow> controls, Scalar v_max) {
+  /** @param tse2ComboRegion
+   * @param controls
+   * @throws Exception if permitted velocity region is not an interval of the form [0, v_max] */
+  public Tse2ForwardMinTimeGoalManager(Tse2ComboRegion tse2ComboRegion, Collection<Flow> controls) {
     super(tse2ComboRegion);
     this.tse2ComboRegion = tse2ComboRegion;
-    // this.v_max = v_max;
-    this.maxTurning = Tse2Controls.maxTurning(controls);
+    if (Scalars.nonZero(tse2ComboRegion.v_range().min()))
+      throw TensorRuntimeException.of(tse2ComboRegion.v_range().min());
+    Scalar v_max = tse2ComboRegion.v_range().max();
+    this.maxTurning = Tse2Controls.maxTurning(controls).multiply(v_max);
     Scalar a_min = Tse2Controls.minAcc(controls);
     Scalar a_max = Tse2Controls.maxAcc(controls);
     if (!a_max.equals(a_min.negate()))
@@ -36,11 +42,10 @@ public final class Tse2ForwardMinTimeGoalManager extends AbstractMinTimeGoalMana
   public Scalar minCostToGoal(Tensor tensor) {
     // units: d_xy [m] / maxSpeed [m/s] -> time [s]
     // units: d_an [rad] / maxTurning [rad/s] -> time [s]
-    // FIXME YN admissible but inaccurate heuristic -> use accelerations for a better bound
     Scalar d_tar = tse2ComboRegion.d_xy(tensor);
     Scalar v_cur = tensor.Get(Tse2StateSpaceModel.STATE_INDEX_VEL);
     return Max.of( //
         linearVelocity2MinTime.minTime(d_tar, v_cur), //
-        tse2ComboRegion.d_angle(tensor).divide(maxTurning.multiply(null))); // FIXME
+        tse2ComboRegion.d_angle(tensor).divide(maxTurning));
   }
 }

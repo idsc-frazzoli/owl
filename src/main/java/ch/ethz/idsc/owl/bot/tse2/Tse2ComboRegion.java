@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 /** suggested base class for tse2 goal managers.
  * all implemented methods in this layer are final.
@@ -49,5 +50,9 @@ public class Tse2ComboRegion extends Se2ComboRegion {
   @Override // from Region
   public final boolean isMember(Tensor xyav) {
     return super.isMember(xyav) && linearRegion.isMember(xyav.get(3));
+  }
+
+  public Clip v_range() {
+    return linearRegion.clip();
   }
 }
