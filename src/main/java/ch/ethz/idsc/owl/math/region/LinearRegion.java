@@ -7,12 +7,9 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
-import ch.ethz.idsc.tensor.sca.Ramp;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public class LinearRegion extends ImplicitFunctionRegion<Tensor> implements //
-    RegionWithDistance<Tensor>, Serializable {
-  // ---
+public class LinearRegion extends ImplicitRegionWithDistance implements Serializable {
   private final Scalar center;
   private final Scalar radius;
 
@@ -29,19 +26,17 @@ public class LinearRegion extends ImplicitFunctionRegion<Tensor> implements //
     return center.subtract(x).abs().subtract(radius);
   }
 
-  @Override // from DistanceFunction<Tensor>
-  public Scalar distance(Tensor x) {
-    return Ramp.FUNCTION.apply(signedDistance(x));
-  }
-
+  /** @return center of region */
   public Scalar center() {
     return center;
   }
 
+  /** @return radius of region */
   public Scalar radius() {
     return radius;
   }
 
+  /** @return region as clip interval */
   public Clip clip() {
     return Clip.function(center.subtract(radius), center.add(radius));
   }

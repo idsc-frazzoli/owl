@@ -22,7 +22,9 @@ public class SphereRandomSample implements RandomSampleInterface {
   public static RandomSampleInterface of(Tensor center, Scalar radius) {
     switch (center.length()) {
     case 1:
-      Distribution distribution = UniformDistribution.of(center.Get(0).subtract(radius), center.Get(0).add(radius));
+      Distribution distribution = UniformDistribution.of( //
+          center.Get(0).subtract(radius), //
+          center.Get(0).add(radius));
       return UniformRandomSample.of(distribution, 1);
     case 2:
       return new CircleRandomSample(center, radius);

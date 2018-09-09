@@ -43,7 +43,7 @@ public class SphericalRegionTest extends TestCase {
   }
 
   public void testSignedDistance() {
-    ImplicitFunctionRegion<Tensor> implicitFunctionRegion = new SphericalRegion(Tensors.fromString("{10[m],20[m]}"), Quantity.of(5, "m"));
+    ImplicitFunctionRegion implicitFunctionRegion = new SphericalRegion(Tensors.fromString("{10[m],20[m]}"), Quantity.of(5, "m"));
     assertTrue(implicitFunctionRegion.isMember(Tensors.fromString("{11[m],19[m]}")));
     Scalar scalar = implicitFunctionRegion.signedDistance(Tensors.fromString("{11[m],20[m]}"));
     assertEquals(scalar, Quantity.of(-4, "m"));

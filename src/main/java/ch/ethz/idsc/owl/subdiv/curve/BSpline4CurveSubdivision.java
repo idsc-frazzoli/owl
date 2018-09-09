@@ -43,6 +43,6 @@ public enum BSpline4CurveSubdivision {
   private static final Scalar _11_16 = RationalScalar.of(11, 16);
 
   public static CurveSubdivision split2(GeodesicInterface geodesicInterface) {
-    return new Split2HiDual3PointCurveSubdivision(geodesicInterface, _1_11, _11_16);
+    return new Split2HiDual3PointCurveSubdivision(geodesicInterface, _11_16, _1_11);
   }
 }

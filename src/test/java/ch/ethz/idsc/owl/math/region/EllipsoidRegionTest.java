@@ -42,17 +42,17 @@ public class EllipsoidRegionTest extends TestCase {
   }
 
   public void testInfty() {
-    ImplicitFunctionRegion<Tensor> ifr = new EllipsoidRegion(Tensors.vector(5, 10), Tensors.vector(1 / 0.0, 2));
+    ImplicitFunctionRegion ifr = new EllipsoidRegion(Tensors.vector(5, 10), Tensors.vector(1 / 0.0, 2));
     assertEquals(ifr.signedDistance(Tensors.vector(1000, 8)), RealScalar.ZERO);
   }
 
   public void test1D() {
-    ImplicitFunctionRegion<Tensor> ifr = new EllipsoidRegion(Tensors.vector(10), Tensors.vector(2));
+    ImplicitFunctionRegion ifr = new EllipsoidRegion(Tensors.vector(10), Tensors.vector(2));
     assertEquals(ifr.signedDistance(Tensors.vector(8)), RealScalar.ZERO);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    ImplicitFunctionRegion<Tensor> ifr = new EllipsoidRegion(Tensors.vector(10), Tensors.vector(2));
+    ImplicitFunctionRegion ifr = new EllipsoidRegion(Tensors.vector(10), Tensors.vector(2));
     Serialization.copy(ifr);
   }
 

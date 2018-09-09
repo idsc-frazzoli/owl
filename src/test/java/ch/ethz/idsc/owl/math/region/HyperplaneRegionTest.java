@@ -40,7 +40,7 @@ public class HyperplaneRegionTest extends TestCase {
   }
 
   public void testDistance() {
-    ImplicitFunctionRegion<Tensor> ifr = HyperplaneRegion.normalize(Tensors.vector(2, 0), RealScalar.of(-10));
+    ImplicitFunctionRegion ifr = HyperplaneRegion.normalize(Tensors.vector(2, 0), RealScalar.of(-10));
     assertTrue(ifr.isMember(Array.zeros(2)));
     assertTrue(ifr.isMember(Tensors.vector(9, 0)));
     assertTrue(ifr.isMember(Tensors.vector(9, -3)));
@@ -54,7 +54,7 @@ public class HyperplaneRegionTest extends TestCase {
   }
 
   public void testDistanceFail() {
-    ImplicitFunctionRegion<Tensor> ifr = HyperplaneRegion.normalize(Tensors.vector(2, 0), RealScalar.of(-10));
+    ImplicitFunctionRegion ifr = HyperplaneRegion.normalize(Tensors.vector(2, 0), RealScalar.of(-10));
     try {
       ifr.signedDistance(Array.zeros(3));
       assertTrue(false);

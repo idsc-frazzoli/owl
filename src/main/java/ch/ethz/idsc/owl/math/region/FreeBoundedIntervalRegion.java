@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 /** axis-aligned region of infinity extension in the direction of other axes */
-public class FreeBoundedIntervalRegion extends ImplicitFunctionRegion<Tensor> implements Serializable {
+public class FreeBoundedIntervalRegion extends ImplicitFunctionRegion implements Serializable {
   private static final Scalar HALF = RationalScalar.HALF;
   // ---
   private final int index;
