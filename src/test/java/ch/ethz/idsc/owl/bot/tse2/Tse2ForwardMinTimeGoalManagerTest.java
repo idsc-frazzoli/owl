@@ -32,13 +32,17 @@ public class Tse2ForwardMinTimeGoalManagerTest extends TestCase {
       Scalar minCostToGoal = tse2ForwardMinTimeGoalManager.minCostToGoal(Tensors.fromString("{0[m], 0[m], 0, 6[m*s^-1]}"));
       assertTrue(Chop._10.close(minCostToGoal, Quantity.of(1.3484692283495345, "s")));
     }
+    assertTrue(tse2ForwardMinTimeGoalManager.isMember(Tensors.fromString("{10[m], 0[m], 0, 4[m*s^-1]}")));
+    assertTrue(tse2ForwardMinTimeGoalManager.isMember(Tensors.fromString("{11[m], 0[m], 0, 4[m*s^-1]}")));
+    assertTrue(tse2ForwardMinTimeGoalManager.isMember(Tensors.fromString("{10[m], 0[m], 0, 0[m*s^-1]}")));
+    assertTrue(tse2ForwardMinTimeGoalManager.isMember(Tensors.fromString("{10[m], 0[m], 0, 8[m*s^-1]}")));
+    assertFalse(tse2ForwardMinTimeGoalManager.isMember(Tensors.fromString("{10[m], 0[m], 0, 9[m*s^-1]}")));
   }
 
   public void testFail() {
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical( //
         Tensors.fromString("{10[m], 0[m], 0, 4[m*s^-1]}"), //
         Tensors.fromString("{1[m], 1[m], 1, 5[m*s^-1]}"));
-    Clip v_range = tse2ComboRegion.v_range();
     FlowsInterface flowsInterface = Tse2CarFlows.of(Quantity.of(1, "m^-1"), Tensors.fromString("{-1[m*s^-2],0[m*s^-2],1[m*s^-2]}"));
     Collection<Flow> controls = flowsInterface.getFlows(1);
     try {
