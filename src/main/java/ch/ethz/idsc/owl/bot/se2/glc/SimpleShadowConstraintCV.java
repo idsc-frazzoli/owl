@@ -26,7 +26,7 @@ public class SimpleShadowConstraintCV extends AbstractShadowConstraint {
     this.shadowMap = shadowMap;
     this.initArea = shadowMap.getInitMap();
     this.obsRegion = obsRegion;
-    this.carRad = new Mat(Scalar.all(rad));
+    this.carRad = new Mat(Scalar.all(rad / shadowMap.pixelDim.number().doubleValue()));
   }
 
   @Override // from CostIncrementFunction
@@ -35,7 +35,7 @@ public class SimpleShadowConstraintCV extends AbstractShadowConstraint {
     shadowMap.updateMap(simShadowArea, childStateTime, tStop + tReact);
     //
     opencv_core.bitwise_not(simShadowArea, negSrc);
-    opencv_imgproc.distanceTransform(negSrc, simShadowArea, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_3);
+    opencv_imgproc.distanceTransform(negSrc, simShadowArea, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
     opencv_core.compare(simShadowArea, carRad, simShadowArea, opencv_core.CMP_LE);
     //
     Indexer indexer = simShadowArea.createIndexer();

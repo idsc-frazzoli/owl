@@ -49,7 +49,7 @@ public class ShadowEvaluator {
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-100, -100, 0), RealScalar.ZERO); // TODO YN not nice
   private final Mat kernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_RECT, new Size(3, 3));
-  Mat carRad = new Mat(opencv_core.Scalar.all(1.1));
+  Mat carRad;
   Mat negSrc = new Mat();
 
   public ShadowEvaluator(ShadowMapCV shadowMap, Scalar max_a, String id) {
@@ -57,7 +57,8 @@ public class ShadowEvaluator {
     this.delta_treact = 0.1f; // shadowMap.getMinTimeDelta();
     this.id = id;
     this.a = max_a;
-    tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
+    this.tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
+    this.carRad = new Mat(opencv_core.Scalar.all(1.4 / shadowMap.pixelDim.number().doubleValue())); // TODO const
   }
 
   /** Evalates time to react (TTR) along trajectory
