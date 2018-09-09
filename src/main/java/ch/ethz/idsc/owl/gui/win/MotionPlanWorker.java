@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.glc.rl.RLTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.tensor.RealScalar;
 
 public class MotionPlanWorker {
   private final int maxSteps;
@@ -37,17 +36,13 @@ public class MotionPlanWorker {
         Stopwatch stopwatch = Stopwatch.started();
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
         trajectoryPlanner.insertRoot(root);
-        if (trajectoryPlanner instanceof RLTrajectoryPlanner) {
-          GlcRLExpand glcExpand = new GlcRLExpand(trajectoryPlanner);
-          glcExpand.setContinued(() -> isRelevant);
-          glcExpand.untilOptimal(maxSteps);
-        } else {
-          GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-          glcExpand.setContinued(() -> isRelevant);
-          glcExpand.untilOptimal(maxSteps);
-        }
+        GlcExpand glcExpand = trajectoryPlanner instanceof RLTrajectoryPlanner //
+            ? new GlcRLExpand(trajectoryPlanner)
+            : new GlcExpand(trajectoryPlanner);
+        glcExpand.setContinued(() -> isRelevant);
+        glcExpand.findAny(maxSteps);
         if (isRelevant) {
-          RealScalar.of(stopwatch.display_seconds());
+          stopwatch.display_seconds();
           for (GlcPlannerCallback glcPlannerCallback : glcPlannerCallbacks)
             glcPlannerCallback.expandResult(head, trajectoryPlanner);
         }

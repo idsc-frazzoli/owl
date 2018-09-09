@@ -12,7 +12,7 @@ public class EuclideanTrajectoryControl extends StateTrajectoryControl {
   }
 
   @Override // from StateTrajectoryControl
-  protected final Scalar distance(Tensor x, Tensor y) {
+  protected final Scalar pseudoDistance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y);
   }
 }

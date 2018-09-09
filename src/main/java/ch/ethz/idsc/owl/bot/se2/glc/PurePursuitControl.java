@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -27,9 +27,9 @@ public class PurePursuitControl extends StateTrajectoryControl {
     this.clip = Clip.function(maxTurningRate.negate(), maxTurningRate);
   }
 
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
-    return Norm._2.ofVector(Se2Wrap.INSTANCE.difference(x, y));
+  @Override // from StateTrajectoryControl
+  protected Scalar pseudoDistance(Tensor x, Tensor y) {
+    return Norm2Squared.ofVector(Se2Wrap.INSTANCE.difference(x, y));
   }
 
   PurePursuit purePursuit = null;

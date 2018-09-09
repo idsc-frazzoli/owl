@@ -22,8 +22,8 @@ enum CurveSubdivisionSchemes {
   BSPLINE2(BSpline2CurveSubdivision::new), //
   BSPLINE3(BSpline3CurveSubdivision::new), //
   BSPLINE4(BSpline4CurveSubdivision::of), //
-  BSPLINE4LO(BSpline4CurveSubdivision::split2Lo), //
-  BSPLINE4HI(BSpline4CurveSubdivision::split2Hi), //
+  BSPLINE4S2(BSpline4CurveSubdivision::split2), //
+  BSPLINE4S3(BSpline4CurveSubdivision::split3), //
   BSPLINE5(BSpline5CurveSubdivision::new), //
   BSPLINE6(BSpline6CurveSubdivision::of), //
   DOBSEB(i -> DodgsonSabinCurveSubdivision.INSTANCE), //
