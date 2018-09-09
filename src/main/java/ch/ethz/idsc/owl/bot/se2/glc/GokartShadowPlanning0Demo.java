@@ -41,6 +41,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
   private static final Color PED_ILLEGAL_COLOR = new Color(38, 100, 248, 200);
   private static final float MAX_A = 0.8f; // [m/s²]
   private static final float REACTION_TIME = 0.3f;
+  private static final float CAR_RADIUS = 0.2f;
   private static final Tensor RANGE = Tensors.vector(52, 40);
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 20, 60));
@@ -92,9 +93,11 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     smPedIllegal.setColor(PED_ILLEGAL_COLOR);
     // ---
     CostFunction pedLegalCost = //
-        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedLegal, irCar, MAX_A, REACTION_TIME, false), RealScalar.ONE);
+        ConstraintViolationCost.of(new SimpleShadowConstraintCV( //
+            smPedLegal, irCar, CAR_RADIUS, MAX_A, REACTION_TIME, false), RealScalar.ONE);
     CostFunction pedIllegalCost = //
-        ConstraintViolationCost.of(new SimpleShadowConstraintCV(smPedIllegal, irCar, MAX_A, REACTION_TIME, false), RealScalar.ONE);
+        ConstraintViolationCost.of(new SimpleShadowConstraintCV( //
+            smPedIllegal, irCar, CAR_RADIUS, MAX_A, REACTION_TIME, false), RealScalar.ONE);
     gokartEntity.setCostVector(Arrays.asList(pedLegalCost), Arrays.asList(0.0));
     gokartEntity.addTimeCost(1, 0.0);
     // ---

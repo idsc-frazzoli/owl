@@ -49,6 +49,8 @@ public class ShadowEvaluator {
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-100, -100, 0), RealScalar.ZERO); // TODO YN not nice
   private final Mat kernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_RECT, new Size(3, 3));
+  Mat carRad = new Mat(opencv_core.Scalar.all(1.1));
+  Mat negSrc = new Mat();
 
   public ShadowEvaluator(ShadowMapCV shadowMap, Scalar max_a, String id) {
     this.shadowMap = shadowMap;
@@ -159,7 +161,12 @@ public class ShadowEvaluator {
       Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
       Tensor ray = TensorProduct.of(range, dir);
       // -
-      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue() + 0.5f); // TODO 0.5*2 for car radius
+      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue());
+      //
+      opencv_core.bitwise_not(simArea, negSrc);
+      opencv_imgproc.distanceTransform(negSrc, simArea, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_3);
+      opencv_core.compare(simArea, carRad, simArea, opencv_core.CMP_LE);
+      //
       boolean clear = !ray.stream().parallel() //
           .map(se2Bijection.forward()) //
           .map(shadowMap::state2pixel) //
