@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.ArgMin;
 
 /** trajectory control for a time-invariant state-space */
-// TODO JAN consider extending from TensorMetric
 public abstract class StateTrajectoryControl implements TrajectoryControl {
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
@@ -58,12 +57,10 @@ public abstract class StateTrajectoryControl implements TrajectoryControl {
         .collect(Collectors.toList());
   }
 
-  /** override function if necessary
-   * 
-   * @param x from trajectory
+  /** @param x from trajectory
    * @param y present state of entity
-   * @return */
-  protected abstract Scalar distance(Tensor x, Tensor y);
+   * @return distance mapped by a monotonous function, for instance Norm2Squared instead of Norm._2 */
+  protected abstract Scalar pseudoDistance(Tensor x, Tensor y);
 
   /** @param trajectory
    * @return */
@@ -91,7 +88,7 @@ public abstract class StateTrajectoryControl implements TrajectoryControl {
     Tensor dist = Tensor.of(trajectory.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state) //
-        .map(state -> distance(state, y)));
+        .map(state -> pseudoDistance(state, y)));
     int argmin = ArgMin.of(dist);
     // the below 'correction' does not help in tracking
     // instead one could try blending flows depending on distance

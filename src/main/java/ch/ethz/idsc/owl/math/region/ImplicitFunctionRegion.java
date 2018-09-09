@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.region;
 
 import ch.ethz.idsc.owl.math.SignedDistanceFunction;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** region {x | f(x) <= 0} defined by the overriding
@@ -14,9 +15,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <li>zero when in contact with the obstacle, and
  * <li>negative when in collision
  * </ul> */
-public abstract class ImplicitFunctionRegion<T> implements Region<T>, SignedDistanceFunction<T> {
+public abstract class ImplicitFunctionRegion implements Region<Tensor>, SignedDistanceFunction<Tensor> {
   @Override // from Region<Tensor>
-  public final boolean isMember(T element) {
-    return Sign.isNegativeOrZero(signedDistance(element));
+  public final boolean isMember(Tensor tensor) {
+    return Sign.isNegativeOrZero(signedDistance(tensor));
   }
 }

@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * Notice: evaluate(...) does not correspond to Euclidean distance
  * 
  * @see SphericalRegion */
-public class EllipsoidRegion extends ImplicitFunctionRegion<Tensor> implements Serializable {
+public class EllipsoidRegion extends ImplicitFunctionRegion implements Serializable {
   private final Tensor center;
   private final Tensor radius;
   private final Tensor invert;

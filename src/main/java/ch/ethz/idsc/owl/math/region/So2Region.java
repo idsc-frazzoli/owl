@@ -8,12 +8,10 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
-import ch.ethz.idsc.tensor.sca.Ramp;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** region describes a section of the unit circle */
-public final class So2Region extends ImplicitFunctionRegion<Tensor> implements //
-    RegionWithDistance<Tensor>, Serializable {
+public final class So2Region extends ImplicitRegionWithDistance implements Serializable {
   private static final Scalar PI = RealScalar.of(Math.PI);
   // ---
   private final Scalar center;
@@ -38,11 +36,6 @@ public final class So2Region extends ImplicitFunctionRegion<Tensor> implements /
   @Override // from SignedDistanceFunction<Tensor>
   public Scalar signedDistance(Tensor x) {
     return mod.apply(center.subtract(x)).abs().subtract(radius);
-  }
-
-  @Override // from DistanceFunction<Tensor>
-  public Scalar distance(Tensor x) {
-    return Ramp.FUNCTION.apply(signedDistance(x));
   }
 
   /** @return center angle of region on unit circle */

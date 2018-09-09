@@ -1,19 +1,20 @@
 // code by ynager
 package ch.ethz.idsc.owl.glc.rl;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 
 public class GlcRLExpand extends GlcExpand {
+  private final RLTrajectoryPlanner rlTrajectoryPlanner;
+
   public GlcRLExpand(TrajectoryPlanner trajectoryPlanner) {
     super(trajectoryPlanner);
-    GlobalAssert.that(trajectoryPlanner instanceof RLTrajectoryPlanner);
+    this.rlTrajectoryPlanner = (RLTrajectoryPlanner) trajectoryPlanner;
   }
 
-  /** @return true if no node in queue can achieve a lower cost than best node in goal region */
   @Override
   public boolean isOptimal() {
-    return false; // FIXME YN
+    // FIXME YN unfinished
+    return false;
   }
 }

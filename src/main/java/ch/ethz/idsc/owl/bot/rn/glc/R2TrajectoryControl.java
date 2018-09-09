@@ -28,8 +28,8 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     return Optional.empty();
   }
 
-  @Override
-  protected Scalar distance(Tensor x, Tensor y) {
+  @Override // from StateTrajectoryControl
+  protected Scalar pseudoDistance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y);
   }
 }

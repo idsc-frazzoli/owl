@@ -27,13 +27,13 @@ public class BSpline4CurveSubdivisionTest extends TestCase {
   }
 
   public void test2Lo() {
-    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split2Lo(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split3(RnGeodesic.INSTANCE);
     Tensor tensor = curveSubdivision.string(UnitVector.of(5, 2));
     assertEquals(tensor, Tensors.fromString("{0, 1/16, 5/16, 5/8, 5/8, 5/16, 1/16, 0}"));
   }
 
   public void test2Hi() {
-    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split2Hi(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split2(RnGeodesic.INSTANCE);
     Tensor tensor = curveSubdivision.string(UnitVector.of(5, 2));
     assertEquals(tensor, Tensors.fromString("{0, 1/16, 5/16, 5/8, 5/8, 5/16, 1/16, 0}"));
   }

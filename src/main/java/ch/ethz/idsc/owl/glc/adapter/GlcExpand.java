@@ -8,12 +8,12 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalars;
 
-/** following the observation by ynager the expansion has to continue
+/** following the observation by ynager the expansion may continue
  * until merit of queue node is no less than cost of node in goal */
 public class GlcExpand {
-  protected final TrajectoryPlanner trajectoryPlanner;
-  protected Supplier<Boolean> isContinued = () -> true;
-  protected int expandCount = 0;
+  private final TrajectoryPlanner trajectoryPlanner;
+  private Supplier<Boolean> isContinued = () -> true;
+  private int expandCount = 0;
 
   public GlcExpand(TrajectoryPlanner trajectoryPlanner) {
     this.trajectoryPlanner = trajectoryPlanner;
@@ -35,7 +35,9 @@ public class GlcExpand {
     expand(limit, () -> trajectoryPlanner.getBest().isPresent());
   }
 
-  /** iterates until expansion creates a node in the goal region
+  /** Hint: the use of findAny is preferred over untilOptimal
+   * 
+   * iterates until expansion creates a node with edge through the goal region
    * that is optimal with respect to the merits of all remaining nodes in the queue
    * 
    * @param limit */

@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.tensor.Tensor;
 
 /** container class that bundles information to follow a trajectory */
 public class TrajectorySample implements Serializable {
@@ -27,6 +26,7 @@ public class TrajectorySample implements Serializable {
     this.flow = flow;
   }
 
+  /** @return statetime of this trajectory sample */
   public StateTime stateTime() {
     return stateTime;
   }
@@ -43,10 +43,7 @@ public class TrajectorySample implements Serializable {
     return Optional.ofNullable(flow);
   }
 
-  public Optional<Tensor> getControl() {
-    return Optional.ofNullable(Objects.isNull(flow) ? null : flow.getU());
-  }
-
+  /** @return info string representation */
   public String toInfoString() {
     String ustring = Objects.isNull(flow) ? "null" : flow.getU().toString();
     return stateTime.toInfoString() + "  u=" + ustring;
