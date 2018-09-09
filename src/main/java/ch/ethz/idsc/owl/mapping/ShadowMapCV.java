@@ -20,8 +20,8 @@ public abstract class ShadowMapCV implements ShadowMapInterface {
   protected final Tensor pixel2world;
   protected final Tensor world2pixel;
   protected final GeometricLayer world2pixelLayer;
-  protected final Scalar pixelDim;
   protected final BufferedImage bufferedImage;
+  public final Scalar pixelDim;
 
   public ShadowMapCV(ImageRegion imageRegion) {
     bufferedImage = RegionRenders.image(imageRegion.image());

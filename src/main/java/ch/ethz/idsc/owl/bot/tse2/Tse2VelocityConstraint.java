@@ -12,14 +12,18 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /** Velocity constraint for {@link Tse2StateSpaceModel} */
-public class Tse2VelocityConstraint implements PlannerConstraint, Serializable {
+public final class Tse2VelocityConstraint implements PlannerConstraint, Serializable {
   private final Clip clip;
+
+  public Tse2VelocityConstraint(Clip clip) {
+    this.clip = clip;
+  }
 
   /** @param min allowed velocity
    * @param max allowed velocity greater equals min
    * @throws Exception if min exceeds max */
   public Tse2VelocityConstraint(Scalar min, Scalar max) {
-    clip = Clip.function(min, max);
+    this(Clip.function(min, max));
   }
 
   @Override // from PlannerConstraint
