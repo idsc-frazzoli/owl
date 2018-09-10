@@ -58,6 +58,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public class PlanningEvaluation0 extends Se2Demo {
@@ -95,8 +96,9 @@ public class PlanningEvaluation0 extends Se2Demo {
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 40, 120));
   //
   static final int MAX_STEPS = 10000;
-  static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = // node interval == 2/5
-      FixedStateIntegrator.create(Tse2Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
+  /** node interval == 2/5 */
+  static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = FixedStateIntegrator.create( //
+      new Tse2Integrator(Clip.function(MAX_SPEED.zero(), MAX_SPEED)), RationalScalar.of(1, 10), 4);
   final Collection<Flow> controls;
   final Collection<CostFunction> extraCosts = new LinkedList<>();
 
@@ -131,7 +133,6 @@ public class PlanningEvaluation0 extends Se2Demo {
     // SETUP CONSTRAINTS
     List<PlannerConstraint> constraints = new ArrayList<>();
     constraints.add(RegionConstraints.timeInvariant(irCar));
-    constraints.add(new Tse2VelocityConstraint(RealScalar.ZERO, MAX_SPEED));
     PlannerConstraint plannerConstraints = MultiConstraintAdapter.of(constraints);
     //
     // LIDAR EMULATOR

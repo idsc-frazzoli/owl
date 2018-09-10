@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** several magic constants are hard-coded in the implementation.
@@ -37,6 +38,7 @@ public class Tse2CarEntity extends Tse2Entity {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(5), RealScalar.of(5), Degree.of(7).reciprocal(), RealScalar.of(10)).unmodifiable();
   public static final Scalar MAX_SPEED = RealScalar.of(3.0); //
+  public static final Clip v_range = Clip.function(MAX_SPEED.zero(), MAX_SPEED);
   static final Scalar MAX_TURNING_PLAN = Degree.of(45);
   static final Scalar LOOKAHEAD = RealScalar.of(0.5);
   static final Scalar MAX_TURNING_RATE = Degree.of(50); // slightly higher for pure pursuit
@@ -71,7 +73,7 @@ public class Tse2CarEntity extends Tse2Entity {
   /** extra cost functions, for instance
    * @param stateTime initial position */
   public Tse2CarEntity(StateTime stateTime, TrajectoryControl trajectoryControl, Tensor partitionScale, FlowsInterface carFlows, Tensor shape) {
-    super(stateTime, trajectoryControl);
+    super(v_range, stateTime, trajectoryControl);
     this.trajectoryControl = trajectoryControl;
     this.controls = carFlows.getFlows(9);
     final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
@@ -114,7 +116,7 @@ public class Tse2CarEntity extends Tse2Entity {
         new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(tse2MinTimeGoalManager.getGoalInterface(), extraCosts);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster(), fixedStateIntegrator, controls, plannerConstraint, goalInterface);
   }
 
   @Override // from Se2Entity

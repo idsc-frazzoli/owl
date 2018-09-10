@@ -82,7 +82,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
     // ---
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, tse2ComboRegion);
     CTrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster(), fixedStateIntegrator, controls, plannerConstraint, goalInterface);
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(Tensors.vector(slacks));
     ((StandardTrajectoryPlanner) trajectoryPlanner).relabelDecision = //
         new LexicographicRelabelDecision(comparator);

@@ -8,10 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
-import ch.ethz.idsc.owl.bot.tse2.Tse2CarEntity;
-import ch.ethz.idsc.owl.bot.tse2.Tse2VelocityConstraint;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
-import ch.ethz.idsc.owl.glc.adapter.MultiConstraintAdapter;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -73,10 +70,11 @@ public class GokartShadowPlanning1Demo extends GokartDemo {
     // ---
     TrajectoryRegionQuery lidarRay = SimpleTrajectoryRegionQuery.timeInvariant(irLid);
     // ---
-    List<PlannerConstraint> collection = new ArrayList<>();
-    collection.add(RegionConstraints.timeInvariant(irCar));
-    collection.add(new Tse2VelocityConstraint(RealScalar.ZERO, Tse2CarEntity.MAX_SPEED));
-    PlannerConstraint constraints = MultiConstraintAdapter.of(collection);
+    // List<PlannerConstraint> collection = new ArrayList<>();
+    // collection.add(RegionConstraints.timeInvariant(irCar));
+    // collection.add(new Tse2VelocityConstraint(RealScalar.ZERO, Tse2CarEntity.MAX_SPEED));
+    PlannerConstraint constraints = RegionConstraints.timeInvariant(irCar);
+    // MultiConstraintAdapter.of(collection);
     // ---
     LidarEmulator lidarEmulator = new LidarEmulator( //
         LIDAR_RAYTRACER, gokartEntity::getStateTimeNow, lidarRay);
