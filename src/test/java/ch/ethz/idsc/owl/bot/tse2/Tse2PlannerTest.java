@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.AbstractMinTimeGoalManager;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
@@ -41,11 +42,12 @@ public class Tse2PlannerTest extends TestCase {
     AbstractMinTimeGoalManager tse2ForwardMinTimeGoalManager = //
         new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);
     GoalInterface goalInterface = tse2ForwardMinTimeGoalManager.getGoalInterface();
-    PlannerConstraint plannerConstraint = new Tse2VelocityConstraint(v_range);
+    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
+    // new Tse2VelocityConstraint(v_range);
     Tensor eta = Tensors.fromString("{7[m^-1],7[m^-1],4,7[s*m^-1]}");
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        Tse2Integrator.INSTANCE, Scalars.fromString("1/10[s]"), 4);
+        new Tse2Integrator(v_range), Scalars.fromString("1/10[s]"), 4);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, //
         stateIntegrator, //
@@ -79,11 +81,12 @@ public class Tse2PlannerTest extends TestCase {
     AbstractMinTimeGoalManager tse2ForwardMinTimeGoalManager = //
         new Tse2MinTimeGoalManager(tse2ComboRegion, controls, v_range.max());
     GoalInterface goalInterface = tse2ForwardMinTimeGoalManager.getGoalInterface();
-    PlannerConstraint plannerConstraint = new Tse2VelocityConstraint(v_range);
+    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
+    // new Tse2VelocityConstraint(v_range);
     Tensor eta = Tensors.fromString("{7[m^-1],7[m^-1],4,7[s*m^-1]}");
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        Tse2Integrator.INSTANCE, Scalars.fromString("1/10[s]"), 4);
+        new Tse2Integrator(v_range), Scalars.fromString("1/10[s]"), 4);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, //
         stateIntegrator, //

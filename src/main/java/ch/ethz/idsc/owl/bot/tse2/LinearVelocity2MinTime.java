@@ -7,28 +7,25 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** use in combination with {@link Tse2Integrator} */
 /* package */ class LinearVelocity2MinTime {
   private final Scalar v_max;
   private final Scalar a_max;
-  private final Clip v_range;
 
   /** @param v_max positive
    * @param a_max positive */
   public LinearVelocity2MinTime(Scalar v_max, Scalar a_max) {
     this.v_max = Sign.requirePositive(v_max);
-    v_range = Clip.function(v_max.zero(), v_max);
     this.a_max = Sign.requirePositive(a_max);
   }
 
   /** @param d_tar
    * @param v_cur in [0, v_max]
-   * @return */
-  public Scalar minTime(final Scalar d_tar, final Scalar _v_cur) {
-    Scalar v_cur = v_range.apply(_v_cur);
+   * @return
+   * @throws Exception if v_cur is outside valid range */
+  public Scalar minTime(final Scalar d_tar, final Scalar v_cur) {
     final TimeDistPair minDistToV_max = timeDistToV_max(v_cur);
     final Scalar d_remain = d_tar.subtract(minDistToV_max.dist);
     if (Sign.isPositive(d_remain)) {

@@ -11,8 +11,11 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Clip;
 
-/** Velocity constraint for {@link Tse2StateSpaceModel} */
-public final class Tse2VelocityConstraint implements PlannerConstraint, Serializable {
+/** Velocity constraint for {@link Tse2StateSpaceModel}
+ * 
+ * this constraint is obsolete when using the {@link Tse2Integrator}
+ * which already bounds the velocity */
+/* package */ class Tse2VelocityConstraint implements PlannerConstraint, Serializable {
   private final Clip clip;
 
   public Tse2VelocityConstraint(Clip clip) {

@@ -23,23 +23,25 @@ import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 public abstract class Tse2Entity extends TrajectoryEntity {
   /** fixed state integrator is used for planning
    * the time difference between two successive nodes in the planner tree is 4/10 */
-  public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = // node interval == 2/5
-      FixedStateIntegrator.create(Tse2Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
+  protected final FixedStateIntegrator fixedStateIntegrator;
   // ---
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
 
   /** @param stateTime initial configuration
    * @param trajectoryControl */
-  protected Tse2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
+  protected Tse2Entity(Clip v_range, StateTime stateTime, TrajectoryControl trajectoryControl) {
     super(new SimpleEpisodeIntegrator( //
         Tse2StateSpaceModel.INSTANCE, //
-        Tse2Integrator.INSTANCE, //
+        new Tse2Integrator(v_range), //
         stateTime), //
         trajectoryControl);
+    fixedStateIntegrator = // node interval == 2/5
+        FixedStateIntegrator.create(new Tse2Integrator(v_range), RationalScalar.of(1, 10), 4);
     // TODO use tse2 fallback control
     add(new FallbackControl(Array.zeros(2)));
   }

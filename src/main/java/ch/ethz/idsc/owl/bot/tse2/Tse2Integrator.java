@@ -8,10 +8,17 @@ import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Clip;
 
-/** should be exact */
-/* package */ enum Tse2Integrator implements Integrator {
-  INSTANCE;
+/** exact integration of state for a period h during which a constant acceleration is assumed. */
+/* package */ class Tse2Integrator implements Integrator {
+  private final Clip v_range;
+
+  /** @param v_range */
+  public Tse2Integrator(Clip v_range) {
+    this.v_range = v_range;
+  }
+
   // ---
   @Override
   public Tensor step(Flow flow, Tensor x, Scalar h) {
@@ -27,6 +34,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // from rad*m^-1 to rad
     Scalar da = u_tse2.Get(Tse2StateSpaceModel.CONTROL_INDEX_STEER).multiply(dp);
     Tensor shift = Tensors.of(dp, dp.zero(), da);
-    return Se2CarLieIntegrator.INSTANCE.spin(x.extract(0, 3), shift).append(r1.get(1));
+    return Se2CarLieIntegrator.INSTANCE.spin(x.extract(0, 3), shift) //
+        .append(v_range.apply(r1.Get(1)));
   }
 }
