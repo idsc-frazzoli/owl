@@ -78,12 +78,12 @@ public class PlanningEvaluation0 extends Se2Demo {
   static final FlowsInterface TSE2_CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-2, 0, 2));
   static final int FLOWRES = 9;
   static final float CAR_RAD = 1.1f; // [m]
-  // static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 6), RealScalar.ZERO);
-  static final StateTime INITIAL = new StateTime(Tensors.vector(11, 3.0, 1.571, 8), RealScalar.ZERO); // left
+  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 6), RealScalar.ZERO);
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(11, 3.0, 1.571, 8), RealScalar.ZERO); // left
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
   // static final Tensor GOAL = Tensors.vector(20, 33.5, 0, MAX_SPEED.number()); // around curve
-  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.number()); // only straigh
+  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straigh
   final Tensor goalRadius;
   //
   static final float PED_VELOCITY = 2.0f;
@@ -105,7 +105,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   public PlanningEvaluation0() {
     final Scalar goalRadius_xy = DoubleScalar.of(1.2); // Sqrt.of(RealScalar.of(2)).divide(PARTITIONSCALE.Get(0));
     final Scalar goalRadius_theta = Sqrt.of(RealScalar.of(2)).divide(RealScalar.of(20)); // SQRT2.divide(PARTITIONSCALE.Get(2));
-    final Scalar goalRadius_v = RealScalar.of(12); // SQRT2.divide(PARTITIONSCALE.Get(3));
+    final Scalar goalRadius_v = MAX_SPEED.divide(RealScalar.of(2)); // SQRT2.divide(PARTITIONSCALE.Get(3));
     this.goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta, goalRadius_v);
     this.controls = TSE2_CARFLOWS.getFlows(FLOWRES);
   }
@@ -122,7 +122,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     // IMAGE REGIONS
     Tensor imagePedLegal = ResourceData.of("/simulation/" + SCEN + "/ped_obs_legal.png");
     Tensor imagePedIllegal = ResourceData.of("/simulation/" + SCEN + "/ped_obs_illegal.png");
-    Tensor imageCar = ResourceData.of("/simulation/" + SCEN + "/car_obs_2.png");
+    Tensor imageCar = ResourceData.of("/simulation/" + SCEN + "/car_obs_1.png");
     imageCar = ImageEdges.extrusion(imageCar, 12);
     Tensor imageLid = ResourceData.of("/simulation/" + SCEN + "/lidar_obs.png");
     ImageRegion irPedLegal = new ImageRegion(imagePedLegal, RANGE, false);
@@ -164,7 +164,8 @@ public class PlanningEvaluation0 extends Se2Demo {
     //
     // SETUP PLANNER
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(GOAL, goalRadius);
-    Tse2MinTimeGoalManager tse2MinTimeGoalManager = new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
+    // Tse2MinTimeGoalManager tse2MinTimeGoalManager = new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
+    Tse2ForwardMinTimeGoalManager tse2MinTimeGoalManager = new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(tse2MinTimeGoalManager.getGoalInterface(), extraCosts);
     owlyAnimationFrame.addBackground(new SphericalRegionRender(new SphericalRegion(GOAL, goalRadius.Get(0))));
     TrajectoryPlanner tp = new StandardTrajectoryPlanner( //
@@ -207,6 +208,7 @@ public class PlanningEvaluation0 extends Se2Demo {
           trajectoryRender.trajectory(traj);
           trajectoryRender.setColor(Color.GREEN);
           owlyAnimationFrame.addBackground(trajectoryRender);
+          traj.stream().forEach(a -> System.out.println(a.stateTime().state().get(3)));
         } else {
           System.out.println("no traj found");
         }

@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.data.GlobalAssert;
+import ch.ethz.idsc.tensor.sca.Sign;
+
 /** utility functions */
 public enum Nodes {
   ;
@@ -40,6 +43,19 @@ public enum Nodes {
     List<T> list = listToRoot(node);
     Collections.reverse(list);
     return list;
+  }
+
+  /** @param node
+   * @param n
+   * @return n'th degree parent of node. For direct parent, n = 0; */
+  @SuppressWarnings("unchecked")
+  public static <T extends Node> T getParent(T node, int n) {
+    GlobalAssert.that(n >= 0);
+    T parnode = node;
+    for (int i = 0; Objects.nonNull(parnode.parent()) && i < n; i++) {
+      parnode = (T) parnode.parent();
+    }
+    return parnode;
   }
 
   public static <T extends Node> boolean areConnected(T node1, T node2) {
