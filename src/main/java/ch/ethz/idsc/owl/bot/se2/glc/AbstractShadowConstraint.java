@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 abstract class AbstractShadowConstraint implements PlannerConstraint, Serializable {
   static final Tensor DIR = AngleVector.of(RealScalar.ZERO).unmodifiable();
   private static final int RESOLUTION = 10;
-  private static final int SEGLENGTH = 4;
+  private static final int SEGLENGTH = 3;
   private static final float TIMESTEP = 0.1f; // TODO YN get from state integrator
   // ---
   private final int steps;
