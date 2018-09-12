@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /** exact integration of state for a period h during which a constant acceleration is assumed. */
-/* package */ class Tse2Integrator implements Integrator {
+public class Tse2Integrator implements Integrator {
   private final Clip v_range;
 
   /** @param v_range */
