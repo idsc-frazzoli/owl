@@ -10,11 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.bot.r2.ImageEdges;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2Demo;
 import ch.ethz.idsc.owl.bot.se2.glc.SimpleShadowConstraintCV;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.owl.bot.util.StreetScenarioData;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
@@ -56,7 +56,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -64,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 public class PlanningEvaluation0 extends Se2Demo {
   // Entity Stuff
   static final int ID = 1;
-  static final String SCEN = "s3";
+  static final StreetScenarioData STREET_SCENARIO = StreetScenarioData.load("s3");
   //
   static final boolean SR_PED_LEGAL = false;
   static final boolean SR_PED_ILLEGAL = false;
@@ -83,7 +82,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
   // static final Tensor GOAL = Tensors.vector(20, 33.5, 0, MAX_SPEED.number()); // around curve
-  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straigh
+  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straight
   final Tensor goalRadius;
   //
   static final float PED_VELOCITY = 2.0f;
@@ -112,23 +111,17 @@ public class PlanningEvaluation0 extends Se2Demo {
 
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    // ---
-    Tensor image = ResourceData.of("/simulation/" + SCEN + "/render.png");
-    BufferedImage bufferedImage = ImageFormat.of(image);
+    BufferedImage bufferedImage = ImageFormat.of(STREET_SCENARIO.render);
     //
     ImageRender imgRender = ImageRender.of(bufferedImage, RANGE);
     owlyAnimationFrame.addBackground(imgRender);
     //
     // IMAGE REGIONS
-    Tensor imagePedLegal = ResourceData.of("/simulation/" + SCEN + "/ped_obs_legal.png");
-    Tensor imagePedIllegal = ResourceData.of("/simulation/" + SCEN + "/ped_obs_illegal.png");
-    Tensor imageCar = ResourceData.of("/simulation/" + SCEN + "/car_obs_1.png");
-    imageCar = ImageEdges.extrusion(imageCar, 12);
-    Tensor imageLid = ResourceData.of("/simulation/" + SCEN + "/lidar_obs.png");
-    ImageRegion irPedLegal = new ImageRegion(imagePedLegal, RANGE, false);
-    ImageRegion irPedIllegal = new ImageRegion(imagePedIllegal, RANGE, false);
+    Tensor imageCar = STREET_SCENARIO.imageCar_extrude(12);
+    ImageRegion irPedLegal = new ImageRegion(STREET_SCENARIO.imagePedLegal, RANGE, false);
+    ImageRegion irPedIllegal = new ImageRegion(STREET_SCENARIO.imagePedIllegal, RANGE, false);
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
-    ImageRegion irLid = new ImageRegion(imageLid, RANGE, false);
+    ImageRegion irLid = new ImageRegion(STREET_SCENARIO.imageLid, RANGE, false);
     //
     // SETUP CONSTRAINTS
     List<PlannerConstraint> constraints = new ArrayList<>();
@@ -146,7 +139,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     ShadowMapSpherical smPedIllegal = //
         new ShadowMapSpherical(lidarEmulator, irPedIllegal, PED_VELOCITY, PED_RADIUS);
     ShadowMapDirected smCar = new ShadowMapDirected( //
-        lidarEmulator, irCar, "/simulation/" + SCEN + "/car_lanes.png", CAR_VELOCITY);
+        lidarEmulator, irCar, STREET_SCENARIO.imageLanesString, CAR_VELOCITY);
     //
     // SHADOW REGION CONSTRAINTS
     if (SR_PED_LEGAL) {

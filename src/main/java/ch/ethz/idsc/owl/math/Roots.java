@@ -29,23 +29,24 @@ public enum Roots {
    * @param coeffs of polynomial, for instance {a, b, c, d} represents
    * cubic polynomial a + b*x + c*x^2 + d*x^3
    * @return roots of polynomial as vector with length of that of coeffs minus one
+   * @throws Exception given coeffs vector is empty
    * @throws Exception if roots cannot be determined
    * @see Series */
   public static Tensor of(Tensor coeffs) {
+    int degree = coeffs.length() - 1;
+    if (Scalars.isZero(coeffs.Get(degree)))
+      return of(coeffs.extract(0, degree));
+    switch (degree) {
+    case 0:
+      return Tensors.empty();
+    case 1: // a + b*x == 0
+      return linear(coeffs);
+    case 2: // a + b*x + c*x^2 == 0
+      return quadratic(coeffs);
+    }
     if (Scalars.isZero(coeffs.Get(0))) {
       Tensor roots = of(coeffs.extract(1, coeffs.length()));
       return roots.append(roots.Get(0).zero());
-    }
-    int last = coeffs.length() - 1;
-    if (Scalars.isZero(coeffs.Get(last)))
-      return of(coeffs.extract(0, last));
-    switch (coeffs.length()) {
-    case 1:
-      return Tensors.empty();
-    case 2: // a + b*x == 0
-      return linear(coeffs);
-    case 3: // a + b*x + c*x^2 == 0
-      return quadratic(coeffs);
     }
     throw TensorRuntimeException.of(coeffs);
   }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
+import ch.ethz.idsc.owl.bot.util.StreetScenarioData;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
@@ -29,10 +30,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class GokartShadowPlanning1Demo extends GokartDemo {
+  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenarioData.load("s1");
   private static final float PED_VELOCITY = 1.5f;
   private static final float PED_RADIUS = 0.3f;
   private static final Color PED_LEGAL_COLOR = new Color(38, 239, 248, 200);
@@ -52,13 +53,13 @@ public class GokartShadowPlanning1Demo extends GokartDemo {
     Tse2GokartVecEntity gokartEntity = Tse2GokartVecEntity.createDefault(initial);
     gokartEntity.setVelGoal(RealScalar.ZERO, RealScalar.of(100));
     // ---
-    Tensor image = ResourceData.of("/map/scenarios/s1/render.png");
+    Tensor image = STREET_SCENARIO_DATA.render;
     BufferedImage bufferedImage = ImageFormat.of(image);
     // ---
-    Tensor imagePedLegal = ResourceData.of("/map/scenarios/s1/ped_obs_legal.png");
-    Tensor imagePedIllegal = ResourceData.of("/map/scenarios/s1/ped_obs_illegal.png");
-    Tensor imageCar = ResourceData.of("/map/scenarios/s1/car_obs.png");
-    Tensor imageLid = ResourceData.of("/map/scenarios/s1/ped_obs_illegal.png");
+    Tensor imagePedLegal = STREET_SCENARIO_DATA.imagePedLegal;
+    Tensor imagePedIllegal = STREET_SCENARIO_DATA.imagePedIllegal;
+    Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(0);
+    Tensor imageLid = STREET_SCENARIO_DATA.imageLid;
     ImageRegion irPedLegal = new ImageRegion(imagePedLegal, RANGE, false);
     ImageRegion irPedIllegal = new ImageRegion(imagePedIllegal, RANGE, false);
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);

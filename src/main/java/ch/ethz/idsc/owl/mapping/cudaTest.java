@@ -26,7 +26,7 @@ enum cudaTest {
         new Size(2 * radius, 2 * radius));
     int it = 1;
     //
-    Tensor image = ResourceData.of("/map/scenarios/s1/ped_obs_legal.png");
+    Tensor image = ResourceData.of("/simulation/s1/ped_obs_legal.png");
     BufferedImage bufferedImage = ImageFormat.of(image);
     Mat src = CvHelper.bufferedImageToMat(bufferedImage);
     // opencv_imgproc.resize(src, src, new Size(2*src.arrayWidth(), 2*src.arrayHeight()));

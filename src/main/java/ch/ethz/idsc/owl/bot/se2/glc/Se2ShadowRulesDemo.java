@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.owl.bot.util.StreetScenarioData;
 import ch.ethz.idsc.owl.glc.adapter.MultiConstraintAdapter;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -32,10 +33,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class Se2ShadowRulesDemo extends Se2CarDemo {
+  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenarioData.load("s1");
   private static final float PED_VELOCITY = 0.6f;
   private static final float PED_RADIUS = 0.05f;
   private static final Color PED_COLOR = new Color(38, 239, 248, 200);
@@ -61,12 +62,12 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       }
     };
     // ---
-    Tensor image = ResourceData.of("/map/scenarios/s1/render.png");
+    Tensor image = STREET_SCENARIO_DATA.render;
     BufferedImage bufferedImage = ImageFormat.of(image);
     //
-    Tensor imageCar = ResourceData.of("/map/scenarios/s1/car_obs.png");
-    Tensor imagePed = ResourceData.of("/map/scenarios/s1/ped_obs_legal.png");
-    Tensor imageLid = ResourceData.of("/map/scenarios/s1/ped_obs_illegal.png");
+    Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(0);
+    Tensor imagePed = STREET_SCENARIO_DATA.imagePedLegal;
+    Tensor imageLid = STREET_SCENARIO_DATA.imagePedIllegal;
     ImageRegion imageRegionCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion imageRegionPed = new ImageRegion(imagePed, RANGE, false);
     ImageRegion imageRegionLid = new ImageRegion(imageLid, RANGE, false);
@@ -93,7 +94,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     shadowSimPed.startNonBlocking(10);
     //
     ShadowMapDirected shadowMapCar = //
-        new ShadowMapDirected(lidarEmulator, imageRegionCar, "/map/scenarios/s1/car_lanes.png", CAR_VELOCITY);
+        new ShadowMapDirected(lidarEmulator, imageRegionCar, STREET_SCENARIO_DATA.imageLanesString, CAR_VELOCITY);
     shadowMapCar.setColor(CAR_COLOR);
     owlyAnimationFrame.addBackground(shadowMapCar);
     ShadowMapSimulator shadowSimCar = new ShadowMapSimulator(shadowMapCar, carEntity::getStateTimeNow);
