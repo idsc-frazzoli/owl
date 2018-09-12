@@ -45,7 +45,7 @@ public class ImageGradientInterpolation implements Serializable {
   private final Interpolation interpolation;
   private final Scalar maxNormGradient;
 
-  /** @param image with rank 2. For instance, Dimensions.of(image) == [179, 128]
+  /** @param render with rank 2. For instance, Dimensions.of(image) == [179, 128]
    * @param range with length() == 2
    * @param amp factor */
   private ImageGradientInterpolation(Tensor _image, Tensor range, Scalar amp, Function<Tensor, Interpolation> function) {

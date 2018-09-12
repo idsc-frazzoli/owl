@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.alg.Sort;
+import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -22,6 +23,30 @@ public class RootsTest extends TestCase {
   public void testConstantUniform() {
     Tensor roots = Roots.of(Tensors.vector(2));
     assertTrue(Tensors.isEmpty(roots));
+  }
+
+  public void testZeros() {
+    Tensor roots = Roots.of(Tensors.vector(0, 0, 1, 0));
+    assertEquals(roots, Array.zeros(2));
+  }
+
+  public void testUnitVector() {
+    for (int length = 1; length < 10; ++length) {
+      Tensor coeffs = UnitVector.of(length, length - 1);
+      assertEquals(Roots.of(coeffs), Array.zeros(length - 1));
+    }
+  }
+
+  public void testUnitVectorPlus() {
+    for (int length = 1; length < 10; ++length) {
+      Tensor coeffs = UnitVector.of(length + 3, length - 1);
+      assertEquals(Roots.of(coeffs), Array.zeros(length - 1));
+    }
+  }
+
+  public void testZerosQuantity() {
+    Tensor roots = Roots.of(Tensors.fromString("{0, 0, 1[m^-2],0[m^-3]}"));
+    assertEquals(roots, Tensors.fromString("{0[m^2], 0[m^2]}"));
   }
 
   public void testLinearUniform() {
@@ -108,7 +133,17 @@ public class RootsTest extends TestCase {
     }
   }
 
-  public void testConstantFail() {
+  public void testOnes() {
+    Tensor coeffs = Tensors.vector(0);
+    try {
+      Roots.of(coeffs);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testConstantZeroFail() {
     try {
       Roots.of(Tensors.vector(0));
       assertTrue(false);
@@ -118,17 +153,27 @@ public class RootsTest extends TestCase {
   }
 
   public void testZerosFail() {
+    for (int length = 0; length < 10; ++length)
+      try {
+        Roots.of(Array.zeros(length));
+        assertTrue(false);
+      } catch (Exception exception) {
+        // ---
+      }
+  }
+
+  public void testMatrixFail() {
     try {
-      Roots.of(Array.zeros(4));
+      Roots.of(HilbertMatrix.of(2, 3));
       assertTrue(false);
     } catch (Exception exception) {
       // ---
     }
   }
 
-  public void testMatrixFail() {
+  public void testNotImplemented() {
     try {
-      Roots.of(HilbertMatrix.of(2, 3));
+      Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6));
       assertTrue(false);
     } catch (Exception exception) {
       // ---
