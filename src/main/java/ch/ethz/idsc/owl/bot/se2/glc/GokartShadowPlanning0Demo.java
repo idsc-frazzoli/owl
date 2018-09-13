@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +30,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class GokartShadowPlanning0Demo extends GokartDemo {
@@ -58,9 +56,6 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
       }
     };
     // ---
-    Tensor image = STREET_SCENARIO_DATA.render;
-    BufferedImage bufferedImage = ImageFormat.of(image);
-    // ---
     Tensor imagePedLegal = STREET_SCENARIO_DATA.imagePedLegal;
     Tensor imagePedIllegal = STREET_SCENARIO_DATA.imagePedIllegal;
     Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(0);
@@ -70,7 +65,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion irLid = new ImageRegion(imageLid, RANGE, false);
     // ---
-    ImageRender imgRender = ImageRender.of(bufferedImage, RANGE);
+    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
     owlyAnimationFrame.addBackground(imgRender);
     owlyAnimationFrame.add(gokartEntity);
     // ---

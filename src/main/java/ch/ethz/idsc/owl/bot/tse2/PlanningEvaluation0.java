@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.tse2;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -55,7 +54,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -63,7 +61,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 public class PlanningEvaluation0 extends Se2Demo {
   // Entity Stuff
   static final int ID = 1;
-  static final StreetScenarioData STREET_SCENARIO = StreetScenarioData.load("s3");
+  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenarioData.load("s3");
   //
   static final boolean SR_PED_LEGAL = false;
   static final boolean SR_PED_ILLEGAL = false;
@@ -111,17 +109,15 @@ public class PlanningEvaluation0 extends Se2Demo {
 
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    BufferedImage bufferedImage = ImageFormat.of(STREET_SCENARIO.render);
-    //
-    ImageRender imgRender = ImageRender.of(bufferedImage, RANGE);
+    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
     owlyAnimationFrame.addBackground(imgRender);
     //
     // IMAGE REGIONS
-    Tensor imageCar = STREET_SCENARIO.imageCar_extrude(12);
-    ImageRegion irPedLegal = new ImageRegion(STREET_SCENARIO.imagePedLegal, RANGE, false);
-    ImageRegion irPedIllegal = new ImageRegion(STREET_SCENARIO.imagePedIllegal, RANGE, false);
+    Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(12);
+    ImageRegion irPedLegal = new ImageRegion(STREET_SCENARIO_DATA.imagePedLegal, RANGE, false);
+    ImageRegion irPedIllegal = new ImageRegion(STREET_SCENARIO_DATA.imagePedIllegal, RANGE, false);
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
-    ImageRegion irLid = new ImageRegion(STREET_SCENARIO.imageLid, RANGE, false);
+    ImageRegion irLid = new ImageRegion(STREET_SCENARIO_DATA.imageLid, RANGE, false);
     //
     // SETUP CONSTRAINTS
     List<PlannerConstraint> constraints = new ArrayList<>();
@@ -139,7 +135,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     ShadowMapSpherical smPedIllegal = //
         new ShadowMapSpherical(lidarEmulator, irPedIllegal, PED_VELOCITY, PED_RADIUS);
     ShadowMapDirected smCar = new ShadowMapDirected( //
-        lidarEmulator, irCar, STREET_SCENARIO.imageLanesString, CAR_VELOCITY);
+        lidarEmulator, irCar, STREET_SCENARIO_DATA.imageLanesString, CAR_VELOCITY);
     //
     // SHADOW REGION CONSTRAINTS
     if (SR_PED_LEGAL) {
