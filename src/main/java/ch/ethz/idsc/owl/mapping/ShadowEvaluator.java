@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
-import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_imgproc;
 import org.bytedeco.javacpp.indexer.Indexer;
 
@@ -40,27 +39,24 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
 public class ShadowEvaluator {
   private final ShadowMapCV shadowMap;
-  //
   final int RESOLUTION = 10;
   final float MAX_TREACT = 1.0f;
-  final float CAR_RAD = 1.1f;
   final String id;
   final float delta_treact; // [s]
   final Scalar a;
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-1000, -1000, 0), RealScalar.ZERO); // TODO YN not nice
-  private final Mat kernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, new Size(3, 3));
   Mat carRad;
   Mat negSrc = new Mat();
 
-  public ShadowEvaluator(ShadowMapCV shadowMap, Scalar max_a, String id) {
+  public ShadowEvaluator(ShadowMapCV shadowMap, Scalar max_a, Scalar car_radius, String id) {
     this.shadowMap = shadowMap;
     this.delta_treact = 0.1f; // shadowMap.getMinTimeDelta();
     this.id = id;
     this.a = max_a;
     this.tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
-    this.carRad = new Mat(opencv_core.Scalar.all(CAR_RAD / shadowMap.pixelDim.number().doubleValue())); // TODO const
+    this.carRad = new Mat(opencv_core.Scalar.all(car_radius.divide(shadowMap.pixelDim).number().doubleValue()));
   }
 
   /** Evalates time to react (TTR) along trajectory
@@ -163,7 +159,7 @@ public class ShadowEvaluator {
       Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
       Tensor ray = TensorProduct.of(range, dir);
       // -
-      shadowMap.updateMap(simArea, stateTime, (tBrake.number().floatValue() + 0.68f) / 3.0f);
+      shadowMap.updateMap(simArea, stateTime, (tBrake.number().floatValue() + 0.68f) / 3.0f); //TODO YN fix
       shadowMap.updateMap(simArea, oob, (tBrake.number().floatValue() + 0.68f) / 3.0f);
       shadowMap.updateMap(simArea, oob, (tBrake.number().floatValue() + 0.68f) / 3.0f);
       //

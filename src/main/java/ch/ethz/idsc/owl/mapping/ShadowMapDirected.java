@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   private final static int NSEGS = 40;
-  private final static float CAR_RAD = 0.0f;
+  private final static float CAR_RAD = 1.0f;
   // ---
   private final LidarEmulator lidar;
   private final Mat initArea;

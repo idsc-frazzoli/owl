@@ -176,15 +176,15 @@ public class PlanningEvaluation0 extends Se2Demo {
     //
     // EVALUATOR
     if (EVAL_PED_LEGAL) {
-      ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal, RealScalar.of(MAX_A), "legal" + String.valueOf(ID));
+      ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal, RealScalar.of(MAX_A), RealScalar.of(CAR_RAD), "legal" + String.valueOf(ID));
       callbacks.add(evaluator.sectorTimeToReact);
     }
     if (EVAL_PED_ILLEGAL) {
-      ShadowEvaluator evaluator = new ShadowEvaluator(smPedIllegal, RealScalar.of(MAX_A), "illegal" + String.valueOf(ID));
+      ShadowEvaluator evaluator = new ShadowEvaluator(smPedIllegal, RealScalar.of(MAX_A), RealScalar.of(CAR_RAD), "illegal" + String.valueOf(ID));
       callbacks.add(evaluator.sectorTimeToReact);
     }
     if (EVAL_CAR) {
-      ShadowEvaluator evaluator = new ShadowEvaluator(smCar, RealScalar.of(MAX_A), "ped" + String.valueOf(ID));
+      ShadowEvaluator evaluator = new ShadowEvaluator(smCar, RealScalar.of(MAX_A), RealScalar.of(CAR_RAD), "ped" + String.valueOf(ID));
       callbacks.add(evaluator.sectorTimeToReact);
     }
     //

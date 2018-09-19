@@ -26,14 +26,9 @@ public class EntityImageRender implements RenderInterface {
   private final Supplier<StateTime> supplier;
   private BufferedImage img;
 
-  public EntityImageRender(Supplier<StateTime> supplier, String src, Tensor range) {
+  public EntityImageRender(Supplier<StateTime> supplier, BufferedImage img, Tensor range) {
     this.supplier = supplier;
-    try {
-      URL url = this.getClass().getResource("/graphics/ferrari.png");
-      img = ImageIO.read(url);
-    } catch (IOException i) {
-      i.printStackTrace();
-    }
+    this.img = img;
     Tensor scale = Tensors.vector(img.getWidth(), img.getHeight()) //
         .pmul(range.map(Scalar::reciprocal));
     Tensor invsc = DiagonalMatrix.of( //
