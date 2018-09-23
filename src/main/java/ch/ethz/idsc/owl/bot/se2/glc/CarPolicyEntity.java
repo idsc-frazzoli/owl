@@ -18,16 +18,18 @@ import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
-import ch.ethz.idsc.subare.core.LearningRate;
-import ch.ethz.idsc.subare.core.Policy;
 import ch.ethz.idsc.subare.core.RewardInterface;
+import ch.ethz.idsc.subare.core.StateActionCounter;
 import ch.ethz.idsc.subare.core.StepInterface;
 import ch.ethz.idsc.subare.core.adapter.StepAdapter;
 import ch.ethz.idsc.subare.core.td.Sarsa;
 import ch.ethz.idsc.subare.core.td.SarsaType;
 import ch.ethz.idsc.subare.core.util.DefaultLearningRate;
 import ch.ethz.idsc.subare.core.util.DiscreteQsa;
-import ch.ethz.idsc.subare.core.util.EGreedyPolicy;
+import ch.ethz.idsc.subare.core.util.DiscreteStateActionCounter;
+import ch.ethz.idsc.subare.core.util.LearningRate;
+import ch.ethz.idsc.subare.core.util.PolicyBase;
+import ch.ethz.idsc.subare.core.util.PolicyType;
 import ch.ethz.idsc.subare.core.util.PolicyWrap;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -47,8 +49,9 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
   // ---
   private final Tensor start;
   private final SarsaType sarsaType;
+  StateActionCounter sac = new DiscreteStateActionCounter();
   DiscreteQsa qsa;
-  Policy policy;
+  PolicyBase policy;
   private final LidarRaytracer LidarRaytracer;
   private LidarEmulator lidarEmulator;
   private final CarDiscreteModel carDiscreteModel;
@@ -63,7 +66,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     this.sarsaType = sarsaType;
     CarDiscreteModel carDiscreteModel = new CarDiscreteModel(5);
     qsa = DiscreteQsa.build(carDiscreteModel);
-    policy = EGreedyPolicy.bestEquiprobable(carDiscreteModel, qsa, RealScalar.of(0.2));
+    policy = PolicyType.EGREEDY.bestEquiprobable(carDiscreteModel, qsa, sac);
     this.carDiscreteModel = carDiscreteModel;
     this.raytraceQuery = raytraceQuery;
     // ---
@@ -81,14 +84,14 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     prev_reward = null;
     if (!episodeLog.isEmpty()) {
       // System.out.println("learn " + episodeLog.size());
-      Sarsa sarsa = sarsaType.supply(carDiscreteModel, learningRate, qsa);
+      Sarsa sarsa = sarsaType.supply(carDiscreteModel, learningRate, qsa, sac, policy);
       int nstep = 50;
       Deque<StepInterface> deque = new LinkedList<>(episodeLog.subList(Math.max(1, episodeLog.size() - nstep), episodeLog.size()));
       while (!deque.isEmpty()) {
         sarsa.digest(deque);
         deque.poll();
       }
-      policy = EGreedyPolicy.bestEquiprobable(carDiscreteModel, qsa, RealScalar.of(0.1));
+      policy = PolicyType.EGREEDY.bestEquiprobable(carDiscreteModel, qsa, sac);
       episodeLog.clear();
     }
     StateTime stateTime = new StateTime(start, now);

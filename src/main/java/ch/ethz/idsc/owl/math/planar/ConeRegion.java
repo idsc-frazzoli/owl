@@ -41,7 +41,7 @@ public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
   public boolean isMember(Tensor tensor) {
     Tensor local = inverse.apply(tensor);
     local.set(Scalar::abs, 1); // normalize y coordinate
-    Scalar angle = ArcTan.of(local.Get(0), local.Get(1)); // non-negative
+    Scalar angle = ArcTan2D.of(local); // non-negative
     return Scalars.lessThan(angle, semi);
   }
 
