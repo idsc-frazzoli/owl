@@ -29,7 +29,7 @@ public abstract class StateTrajectoryControl implements TrajectoryControl {
     // implementation does not require that current position is perfectly located on trajectory
     if (Objects.nonNull(trajectory)) {
       final int argmin = indexOfPassedTrajectorySample(tail, trajectory.subList(trajectory_skip, trajectory.size()));
-      GlobalAssert.that(argmin != ArgMin.NOINDEX);
+      GlobalAssert.that(argmin != ArgMin.EMPTY);
       int index = trajectory_skip + argmin;
       trajectory_skip = index;
       ++index; // <- next node has flow control

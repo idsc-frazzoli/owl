@@ -33,7 +33,8 @@ import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
-import ch.ethz.idsc.tensor.opt.FermatWeberProblem;
+import ch.ethz.idsc.tensor.opt.HungarianAlgorithm;
+import ch.ethz.idsc.tensor.opt.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.SphereFit;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -107,8 +108,26 @@ class SphereFitDemo {
           graphics.draw(path2d);
         }
         {
-          FermatWeberProblem fermatWeberProblem = new FermatWeberProblem(rnctrl);
-          Tensor weiszfeld = fermatWeberProblem.weiszfeld();
+          Tensor circle = CirclePoints.of(10).multiply(RealScalar.of(3));
+          {
+            graphics.setColor(Color.GRAY);
+            Path2D path2d = geometricLayer.toPath2D(circle);
+            path2d.closePath();
+            graphics.draw(path2d);
+          }
+          Tensor matrix = Tensors.matrix((i, j) -> //
+          Norm._2.between(rnctrl.get(i), circle.get(j)), rnctrl.length(), circle.length());
+          HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);
+          int[] matching = hungarianAlgorithm.matching();
+          graphics.setColor(Color.RED);
+          for (int index = 0; index < matching.length; ++index)
+            if (matching[index] != HungarianAlgorithm.UNASSIGNED) {
+              Path2D path2d = geometricLayer.toPath2D(Tensors.of(rnctrl.get(index), circle.get(matching[index])));
+              graphics.draw(path2d);
+            }
+        }
+        {
+          Tensor weiszfeld = SpatialMedian.with(1e-4).uniform(rnctrl).get();
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(weiszfeld.copy().append(RealScalar.ZERO)));
           Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
           path2d.closePath();

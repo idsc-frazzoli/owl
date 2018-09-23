@@ -7,12 +7,12 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.math.map.Se2CoveringGroupAction;
+import ch.ethz.idsc.owl.math.planar.ArcTan2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.ArcTan;
 
 public class FixedRadiusDubins implements DubinsPathGenerator {
   private final Tensor g;
@@ -30,7 +30,7 @@ public class FixedRadiusDubins implements DubinsPathGenerator {
     Tensor center3 = new Se2CoveringGroupAction(gnorm).combine(h);
     Tensor deltacenter = new Se2CoveringGroupAction(center1).inverse().combine(center3);
     double dist_tr = Norm._2.ofVector(deltacenter.extract(0, 2)).number().doubleValue();
-    double th_tr = ArcTan.of(deltacenter.Get(0), deltacenter.Get(1)).number().doubleValue();
+    double th_tr = ArcTan2D.of(deltacenter).number().doubleValue();
     double th_total = deltacenter.Get(2).number().doubleValue();
     th_tr = StaticHelper.principalValue(th_tr);
     th_total = StaticHelper.principalValue(th_total);
