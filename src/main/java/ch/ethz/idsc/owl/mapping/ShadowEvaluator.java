@@ -159,7 +159,7 @@ public class ShadowEvaluator {
       Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
       Tensor ray = TensorProduct.of(range, dir);
       // -
-      shadowMap.updateMap(simArea, stateTime, (tBrake.number().floatValue() + 0.68f) / 3.0f); //TODO YN fix
+      shadowMap.updateMap(simArea, stateTime, (tBrake.number().floatValue() + 0.68f) / 3.0f); // TODO YN fix
       shadowMap.updateMap(simArea, oob, (tBrake.number().floatValue() + 0.68f) / 3.0f);
       shadowMap.updateMap(simArea, oob, (tBrake.number().floatValue() + 0.68f) / 3.0f);
       //

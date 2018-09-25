@@ -40,8 +40,8 @@ public abstract class Tse2Entity extends TrajectoryEntity {
         new Tse2Integrator(v_range), //
         stateTime), //
         trajectoryControl);
-    fixedStateIntegrator = // node interval == 2/5
-        FixedStateIntegrator.create(new Tse2Integrator(v_range), RationalScalar.of(1, 10), 4);
+    fixedStateIntegrator = // node interval == 3/10
+        FixedStateIntegrator.create(new Tse2Integrator(v_range), RationalScalar.of(1, 10), 3);
     // TODO use tse2 fallback control
     add(new FallbackControl(Array.zeros(2)));
   }

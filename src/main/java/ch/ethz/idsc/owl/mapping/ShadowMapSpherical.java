@@ -57,15 +57,12 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     Mat obstacleArea = area.clone();
     initArea = new Mat(obstacleArea.size(), obstacleArea.type(), org.bytedeco.javacpp.opencv_core.Scalar.WHITE);
     opencv_imgproc.erode(initArea, initArea, sphericalKernel, new Point(-1, -1), 1, opencv_core.BORDER_CONSTANT, null);
-    //opencv_imgproc.dilate(obstacleArea, obstacleArea, sphericalKernel, new Point(-1, -1), radius2it(rMin), opencv_core.BORDER_CONSTANT, null);
-    
+    // opencv_imgproc.dilate(obstacleArea, obstacleArea, sphericalKernel, new Point(-1, -1), radius2it(rMin), opencv_core.BORDER_CONSTANT, null);
     Mat rad = new Mat(Scalar.all((rMin) / pixelDim.number().floatValue()));
     opencv_core.bitwise_not(obstacleArea, negSrc);
     opencv_imgproc.distanceTransform(negSrc, obstacleArea, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
     opencv_core.compare(obstacleArea, rad, obstacleArea, opencv_core.CMP_LE);
     opencv_core.subtract(initArea, obstacleArea, initArea);
-    
-    
     this.shadowArea = initArea.clone();
     setColor(new Color(255, 50, 74));
     //
@@ -91,7 +88,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
 
   @Override // from ShadowMap
   public float getMinTimeDelta() {
-    if(useGPU)
+    if (useGPU)
       return sphericalKernel.arrayWidth() * pixelDim.number().floatValue() / (2.0f * vMax);
     return 3 * pixelDim.number().floatValue() / vMax;
   }

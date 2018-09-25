@@ -110,7 +110,7 @@ public class Tse2CarEntity extends Tse2Entity {
 
   @Override // from TrajectoryEntity
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    goal = goal.copy().append(goalVelocity); // FIXME YN 4th component of goal. What is there to fix?
+    goal = goal.copy().append(goalVelocity);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     Tse2MinTimeGoalManager tse2MinTimeGoalManager = //
         new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);

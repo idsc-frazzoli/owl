@@ -63,32 +63,38 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public class PlanningEvaluation0 extends Se2Demo {
   // Entity Stuff
-  static final int ID = 5;
+  static final int ID = 15;
   static final String SCEN = "s3";
   //
-  static final boolean SR_PED_LEGAL = true;
-  static final boolean SR_PED_ILLEGAL = false;
+  static final boolean SR_PED_LEGAL = false;
+  static final boolean SR_PED_ILLEGAL = true;
   static final boolean SR_CAR = false;
-  static final boolean EVAL_PED_LEGAL = true;
-  static final boolean EVAL_PED_ILLEGAL = false;
+  static final boolean EVAL_PED_LEGAL = false;
+  static final boolean EVAL_PED_ILLEGAL = true;
   static final boolean EVAL_CAR = false;
   //
   static final Scalar MAX_SPEED = RealScalar.of(8); // 8
-  static final Scalar MAX_TURNING_PLAN = Degree.of(20); // 45
+  static final Scalar MAX_TURNING_PLAN = Degree.of(12); // 45
   static final FlowsInterface TSE2_CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-2, 0, 2));
   static final int FLOWRES = 9;
-  static final float CAR_RAD = 1.1f; // [m]
-  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 8), RealScalar.ZERO);
-  // static final StateTime INITIAL = new StateTime(Tensors.vector(11, 3.0, 1.571, 8), RealScalar.ZERO); // left
+  static final float CAR_RAD = 1.2f; // [m]
+  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 7.5), RealScalar.ZERO); // normal (s3,s4)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(10.5, 3.0, 1.571, 8), RealScalar.ZERO); // left (s3,s4)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(21.5, 1.5, 1.571, 7), RealScalar.ZERO); // normal (s6)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(20.0, 1.5, 1.571, 7), RealScalar.ZERO); // left (s6)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(21.5, 20.0, 1.571, 7), RealScalar.ZERO); // up (s6)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(19.0, 6.0, 1.571, 8), RealScalar.ZERO); // normal (s7)
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
-  // static final Tensor GOAL = Tensors.vector(20, 33.5, 0, MAX_SPEED.number()); // around curve
-  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straigh
-                                                                                                         // MAX_SPEED.divide(RealScalar.of(2)).number()
+  // static final Tensor GOAL = Tensors.vector(27, 33.5, 0, MAX_SPEED.divide(RealScalar.of(2)).number()); // around curve (s3,s4)
+  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straigh (s3,s4)
+  // static final Tensor GOAL = Tensors.vector(20.0, 34, 1.3f*Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // hc (s6)
+  // static final Tensor GOAL = Tensors.vector(21.5, 32, Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // normal (s6)
+  // static final Tensor GOAL = Tensors.vector(19.0, 42, Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // normal (s7)
   final Tensor goalRadius;
   //
   static final float PED_VELOCITY = 1.6f;
-  static final float CAR_VELOCITY = 10.0f;
+  static final float CAR_VELOCITY = 8.0f;
   static final float PED_RADIUS = 0.3f;
   static final float MAX_A = 5.0f; // [m/s²]
   static final float REACTION_TIME = 0.6f;
@@ -104,7 +110,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   final Collection<CostFunction> extraCosts = new LinkedList<>();
 
   public PlanningEvaluation0() {
-    final Scalar goalRadius_xy = DoubleScalar.of(1.2); // Sqrt.of(RealScalar.of(2)).divide(PARTITIONSCALE.Get(0));
+    final Scalar goalRadius_xy = DoubleScalar.of(2.0); // Sqrt.of(RealScalar.of(2)).divide(PARTITIONSCALE.Get(0));
     final Scalar goalRadius_theta = Sqrt.of(RealScalar.of(2)).divide(RealScalar.of(20)); // SQRT2.divide(PARTITIONSCALE.Get(2));
     final Scalar goalRadius_v = MAX_SPEED.divide(RealScalar.of(2)); // SQRT2.divide(PARTITIONSCALE.Get(3));
     this.goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta, goalRadius_v);
@@ -159,11 +165,12 @@ public class PlanningEvaluation0 extends Se2Demo {
       constraints.add(pedIllegalConst);
     }
     if (SR_CAR) {
-      PlannerConstraint carConst = new SimpleShadowConstraintCV(smCar, irCar, CAR_RAD, MAX_A, REACTION_TIME, true);
+      PlannerConstraint carConst = new SimpleShadowConstraintCV(smCar, irCar, CAR_RAD * 1.6f, MAX_A, REACTION_TIME, true);
       constraints.add(carConst);
     }
     //
     // SETUP PLANNER
+    extraCosts.add(Tse2LateralAcceleration.INSTANCE);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(GOAL, goalRadius);
     // Tse2MinTimeGoalManager tse2MinTimeGoalManager = new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
     Tse2ForwardMinTimeGoalManager tse2MinTimeGoalManager = new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);

@@ -4,11 +4,7 @@ package ch.ethz.idsc.owl.gui.ren;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.function.Supplier;
-
-import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
