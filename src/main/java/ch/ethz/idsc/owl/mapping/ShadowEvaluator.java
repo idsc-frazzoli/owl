@@ -43,20 +43,22 @@ public class ShadowEvaluator {
   final float MAX_TREACT = 1.0f;
   final String id;
   final float delta_treact; // [s]
-  final Scalar a;
+  final Scalar maxA;
+  final Scalar carRadius;
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-1000, -1000, 0), RealScalar.ZERO); // TODO YN not nice
   Mat carRad;
   Mat negSrc = new Mat();
 
-  public ShadowEvaluator(ShadowMapCV shadowMap, Scalar max_a, Scalar car_radius, String id) {
+  public ShadowEvaluator(ShadowMapCV shadowMap, Scalar maxA, Scalar carRadius, String id) {
     this.shadowMap = shadowMap;
     this.delta_treact = 0.1f; // shadowMap.getMinTimeDelta();
     this.id = id;
-    this.a = max_a;
+    this.carRadius = carRadius;
+    this.maxA = maxA;
     this.tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
-    this.carRad = new Mat(opencv_core.Scalar.all(car_radius.divide(shadowMap.pixelDim).number().doubleValue()));
+    this.carRad = new Mat(opencv_core.Scalar.all(carRadius.divide(shadowMap.pixelDim).number().doubleValue()));
   }
 
   /** Evalates time to react (TTR) along trajectory
@@ -77,9 +79,6 @@ public class ShadowEvaluator {
         List<TrajectorySample> tail = //
             GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
         List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
-        // List<TrajectorySample> trajectory = Nodes.listFromRoot(optional.get()).stream().map(n -> new TrajectorySample(n.stateTime(), n.flow()))
-        // .collect(Collectors.toList());
-        // ---
         Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
         try {
           File file = UserHome.file("" + "minReactionTime_" + id + ".csv");
@@ -101,10 +100,6 @@ public class ShadowEvaluator {
         List<TrajectorySample> tail = //
             GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
         List<TrajectorySample> trajectory = tail; // Trajectories.glue(head, tail);
-        // System.out.println(optional.get().costFromRoot());
-        // List<TrajectorySample> trajectory = Nodes.listFromRoot(optional.get()).stream().map(n -> new TrajectorySample(n.stateTime(), n.flow()))
-        // .collect(Collectors.toList());
-        // ---
         Tensor mtrMatrix = Tensors.empty();
         for (int i = 0; i < angles.length() - 1; i++) {
           System.out.println("Evaluating sector " + (i + 1) + " / " + (angles.length() - 1));
@@ -152,23 +147,26 @@ public class ShadowEvaluator {
       else if (trajectory.get(i).getFlow().isPresent())
         vel = trajectory.get(i).getFlow().get().getU().Get(0); // vel is in flow
       // -
-      Scalar tBrake = vel.divide(a); // 0 reaction time
+      Scalar tBrake = vel.divide(maxA); // 0 reaction time
       Scalar dBrake = tBrake.multiply(vel).divide(RealScalar.of(2));
       Se2Bijection se2Bijection = new Se2Bijection(stateTime.state());
       // -
       Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
       Tensor ray = TensorProduct.of(range, dir);
       // -
-      shadowMap.updateMap(simArea, stateTime, (tBrake.number().floatValue() + 0.68f) / 3.0f); // TODO YN fix
-      shadowMap.updateMap(simArea, oob, (tBrake.number().floatValue() + 0.68f) / 3.0f);
-      shadowMap.updateMap(simArea, oob, (tBrake.number().floatValue() + 0.68f) / 3.0f);
-      //
-      Indexer indexer = simArea.createIndexer();
+      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue() / 3.0f); // TODO YN fix
+      shadowMap.updateMap(simArea, oob, tBrake.number().floatValue() / 3.0f);
+      shadowMap.updateMap(simArea, oob, tBrake.number().floatValue() / 3.0f);
+      
+      Mat shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
+      Indexer indexer = shape.createIndexer();
+      final int cols = shape.cols();
+      final int rows = shape.rows();
       //
       boolean clear = !ray.stream().parallel() //
           .map(se2Bijection.forward()) //
           .map(shadowMap::state2pixel) //
-          .anyMatch(local -> isMember(indexer, local, simArea.cols(), simArea.rows()));
+          .anyMatch(local -> isMember(indexer, local, cols, rows));
       // -
       Scalar timeToReact = RealScalar.of(-1);
       if (clear) {
@@ -183,11 +181,12 @@ public class ShadowEvaluator {
           if (fut.isPresent()) {
             se2Bijection = new Se2Bijection(fut.get().stateTime().state());
             shadowMap.updateMap(simArea, oob, delta_treact); // update sr by delta_treact w.o. new lidar info
+            shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
             dBrake = tBrake.multiply(vel).divide(RealScalar.of(2)); // FIXME vel should be updated to vel at fut
             Tensor st = dir.multiply(dBrake);
             Point px = shadowMap.state2pixel(se2Bijection.forward().apply(st));
             //
-            boolean intersect = isMember(indexer, px, simArea.cols(), simArea.rows());
+            boolean intersect = isMember(indexer, px, cols, rows);
             if (intersect)
               break;
             timeToReact = tReact.Get();

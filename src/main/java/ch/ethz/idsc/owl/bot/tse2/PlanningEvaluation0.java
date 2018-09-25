@@ -63,29 +63,29 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public class PlanningEvaluation0 extends Se2Demo {
   // Entity Stuff
-  static final int ID = 15;
+  static final int ID = 20;
   static final String SCEN = "s3";
   //
-  static final boolean SR_PED_LEGAL = false;
-  static final boolean SR_PED_ILLEGAL = true;
+  static final boolean SR_PED_LEGAL = true;
+  static final boolean SR_PED_ILLEGAL = false;
   static final boolean SR_CAR = false;
-  static final boolean EVAL_PED_LEGAL = false;
-  static final boolean EVAL_PED_ILLEGAL = true;
+  static final boolean EVAL_PED_LEGAL = true;
+  static final boolean EVAL_PED_ILLEGAL = false;
   static final boolean EVAL_CAR = false;
   //
   static final Scalar MAX_SPEED = RealScalar.of(8); // 8
   static final Scalar MAX_TURNING_PLAN = Degree.of(12); // 45
   static final FlowsInterface TSE2_CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-2, 0, 2));
   static final int FLOWRES = 9;
-  static final float CAR_RAD = 1.2f; // [m]
-  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 7.5), RealScalar.ZERO); // normal (s3,s4)
+  static final float CAR_RAD = 0.9f; // [m]
+  static final Tensor PARTITIONSCALE = Tensors.of( //
+      RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
+  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 8.0), RealScalar.ZERO); // normal (s3,s4)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(10.5, 3.0, 1.571, 8), RealScalar.ZERO); // left (s3,s4)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(21.5, 1.5, 1.571, 7), RealScalar.ZERO); // normal (s6)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(20.0, 1.5, 1.571, 7), RealScalar.ZERO); // left (s6)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(21.5, 20.0, 1.571, 7), RealScalar.ZERO); // up (s6)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(19.0, 6.0, 1.571, 8), RealScalar.ZERO); // normal (s7)
-  static final Tensor PARTITIONSCALE = Tensors.of( //
-      RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
   // static final Tensor GOAL = Tensors.vector(27, 33.5, 0, MAX_SPEED.divide(RealScalar.of(2)).number()); // around curve (s3,s4)
   static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straigh (s3,s4)
   // static final Tensor GOAL = Tensors.vector(20.0, 34, 1.3f*Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // hc (s6)

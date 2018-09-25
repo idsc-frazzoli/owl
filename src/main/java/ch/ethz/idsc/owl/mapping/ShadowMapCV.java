@@ -45,4 +45,6 @@ public abstract class ShadowMapCV implements ShadowMapInterface {
   }
 
   public abstract void updateMap(Mat mat, StateTime stateTime, float timeDelta);
+  
+  public abstract Mat getShape(Mat mat, float radius);
 }
