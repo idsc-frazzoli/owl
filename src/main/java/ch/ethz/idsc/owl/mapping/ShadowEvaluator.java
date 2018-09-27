@@ -157,7 +157,6 @@ public class ShadowEvaluator {
       shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue() / 3.0f); // TODO YN fix
       shadowMap.updateMap(simArea, oob, tBrake.number().floatValue() / 3.0f);
       shadowMap.updateMap(simArea, oob, tBrake.number().floatValue() / 3.0f);
-      
       Mat shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
       Indexer indexer = shape.createIndexer();
       final int cols = shape.cols();

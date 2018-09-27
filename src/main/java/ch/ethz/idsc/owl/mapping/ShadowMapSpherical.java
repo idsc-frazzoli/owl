@@ -152,7 +152,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     opencv_cudaarithm.bitwise_and(initAreaGpu, area, area);
     area.copyTo(area_);
   }
-  
+
   public final Mat getShape(Mat map, float carRad) {
     Mat shape = map.clone();
     Mat radPx = new Mat(Scalar.all((rMin + carRad) / pixelDim.number().floatValue()));

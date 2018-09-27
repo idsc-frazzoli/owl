@@ -5,7 +5,7 @@
 
 	<groupId>ch.ethz.idsc</groupId>
 	<artifactId>owl</artifactId>
-	<version>0.1.7</version>
+	<version>0.1.9</version>
 	<packaging>jar</packaging>
 
 	<name>owl</name>
@@ -20,17 +20,17 @@
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>tensor</artifactId>
-			<version>0.5.9</version>
+			<version>0.6.0</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>ephemeral</artifactId>
-			<version>0.0.7</version>
+			<version>0.0.8</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>
 			<artifactId>subare</artifactId>
-			<version>0.1.7</version>
+			<version>0.1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.ethz.idsc</groupId>

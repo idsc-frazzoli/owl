@@ -16,15 +16,15 @@ public class MinMax {
   private final Tensor max;
 
   private MinMax(Tensor tensor) {
-    min = tensor.stream().reduce(Entrywise.min()).get(); // {-0.295, -0.725, -0.25}
-    max = tensor.stream().reduce(Entrywise.max()).get(); // {1.765, 0.725, -0.25}
+    min = tensor.stream().reduce(Entrywise.min()).get().unmodifiable();
+    max = tensor.stream().reduce(Entrywise.max()).get().unmodifiable();
   }
 
   public Tensor min() {
-    return min.unmodifiable();
+    return min;
   }
 
   public Tensor max() {
-    return max.unmodifiable();
+    return max;
   }
 }

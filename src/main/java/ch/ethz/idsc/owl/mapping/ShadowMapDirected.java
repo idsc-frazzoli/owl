@@ -16,6 +16,7 @@ import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_core.Point2f;
+import org.bytedeco.javacpp.opencv_core.Scalar;
 import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacpp.opencv_imgproc;
@@ -52,7 +53,6 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     this.lidar = lidar;
     this.vMax = vMax;
     // setup
-    // TODO pass obstacles and lanes as arguments
     URL carLanesURL = getClass().getResource(lanes);
     // URL carObsURL = getClass().getResource("/map/scenarios/s1/car_obs.png");
     URL kernelURL = getClass().getResource("/cv/kernels/kernel6.bmp");
@@ -185,5 +185,17 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   @Override
   public float getMinTimeDelta() {
     return updateKernels.get(0).arrayWidth() * pixelDim.number().floatValue() / (2.0f * vMax);
+  }
+
+  @Override
+  public Mat getShape(Mat mat, float radius) {
+    // TODO use car shape
+    Mat shape = mat.clone();
+    Mat radPx = new Mat(Scalar.all((CAR_RAD + radius) / pixelDim.number().floatValue()));
+    Mat negSrc = new Mat(shape.size(), shape.type());
+    opencv_core.bitwise_not(shape, negSrc);
+    opencv_imgproc.distanceTransform(negSrc, shape, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
+    opencv_core.compare(shape, radPx, shape, opencv_core.CMP_LE);
+    return shape;
   }
 }

@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.r2.ImageEdges;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
+import ch.ethz.idsc.owl.bot.util.StreetScenarioData;
 import ch.ethz.idsc.owl.glc.adapter.MultiConstraintAdapter;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -37,6 +37,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class Se2ShadowRulesDemo extends Se2CarDemo {
+  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenarioData.load("s5");
   private static final float PED_VELOCITY = 1.5f;
   private static final float PED_RADIUS = 0.2f;
   private static final Color PED_COLOR_LEGAL = new Color(211, 249, 114, 200);
@@ -59,13 +60,9 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
       }
     };
     // ---
-    Tensor image = ResourceData.of("/simulation/s5/render.png");
-    BufferedImage bufferedImage = ImageFormat.of(image);
-    //
-    Tensor imageCar = ResourceData.of("/simulation/s5/car_obs_1.png");
-    imageCar = ImageEdges.extrusion(imageCar, 10);
-    Tensor imagePed = ResourceData.of("/simulation/s5/ped_obs_legal.png");
-    Tensor imageLid = ResourceData.of("/simulation/s5/ped_obs_illegal.png");
+    Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(12);
+    Tensor imagePed = STREET_SCENARIO_DATA.imagePedLegal;
+    Tensor imageLid = STREET_SCENARIO_DATA.imagePedIllegal;
     ImageRegion imageRegionCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion imageRegionPed = new ImageRegion(imagePed, RANGE, false);
     ImageRegion imageRegionLid = new ImageRegion(imageLid, RANGE, true);
@@ -75,7 +72,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     PlannerConstraint regionConstraint = createConstraint(imageRegionCar);
     constraintCollection.add(regionConstraint);
     //
-    ImageRender imgRender = ImageRender.of(bufferedImage, RANGE);
+    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
     owlyAnimationFrame.addBackground(imgRender);
     // Lidar
     LidarEmulator lidarEmulator = new LidarEmulator( //
@@ -98,12 +95,12 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
         new ShadowMapSpherical(lidarEmulator, imageRegionLid, PED_VELOCITY, PED_RADIUS);
     smPedIllegal.setColor(PED_COLOR_ILLEGAL);
     smPedIllegal.useGPU();
-    // owlyAnimationFrame.addBackground(smPedIllegal);
     ShadowMapSimulator simPedIllegal = new ShadowMapSimulator(smPedIllegal, carEntity::getStateTimeNow);
+    // owlyAnimationFrame.addBackground(smPedIllegal);
     // simPedIllegal.startNonBlocking(10);
     //
     ShadowMapDirected smCarLegal = //
-        new ShadowMapDirected(lidarEmulator, imageRegionCar, "/simulation//s5/car_lanes.png", CAR_VELOCITY);
+        new ShadowMapDirected(lidarEmulator, imageRegionCar, STREET_SCENARIO_DATA.imageLanesString, CAR_VELOCITY);
     smCarLegal.setColor(CAR_COLOR_LEGAL);
     owlyAnimationFrame.addBackground(smCarLegal);
     ShadowMapSimulator simCarLegal = new ShadowMapSimulator(smCarLegal, carEntity::getStateTimeNow);
@@ -113,6 +110,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
         SimpleTrajectoryRegionQuery.timeInvariant(line(imageRegionCar)), //
         CarEntity.SHAPE, () -> carEntity.getStateTimeNow().time());
     owlyAnimationFrame.addBackground(renderInterface);
+    //
     PlannerConstraint plannerConstraint = MultiConstraintAdapter.of(constraintCollection);
     MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     owlyAnimationFrame.add(carEntity);

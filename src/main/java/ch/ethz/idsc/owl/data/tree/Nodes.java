@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 /** utility functions */
 public enum Nodes {
@@ -18,10 +17,10 @@ public enum Nodes {
    * @return root that is the result of visiting the parents from given start node */
   @SuppressWarnings("unchecked")
   public static <T extends Node> T rootFrom(T node) {
-    T root = node;
+    Node root = node;
     while (Objects.nonNull(root.parent()))
-      root = (T) root.parent();
-    return root;
+      root = root.parent();
+    return (T) root;
   }
 
   /** @param node
@@ -47,15 +46,14 @@ public enum Nodes {
 
   /** @param node
    * @param n
-   * @return n'th degree parent of node. For direct parent, n = 0; */
+   * @return n'th degree parent of node; 0 for given node, 1 for parent of given node, etc. */
   @SuppressWarnings("unchecked")
   public static <T extends Node> T getParent(T node, int n) {
-    GlobalAssert.that(n >= 0);
-    T parnode = node;
-    for (int i = 0; Objects.nonNull(parnode.parent()) && i < n; i++) {
-      parnode = (T) parnode.parent();
-    }
-    return parnode;
+    GlobalAssert.that(0 <= n);
+    Node parent = node;
+    for (int i = 0; Objects.nonNull(parent.parent()) && i < n; ++i)
+      parent = parent.parent();
+    return (T) parent;
   }
 
   public static <T extends Node> boolean areConnected(T node1, T node2) {

@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 1) requires less operations than if treated as an elliptic case
  * 2) is numerically more stable in corner cases
  * 
- * <p>the function {@link #apply(Tensor)} returns the minimal Euclidean distance
+ * <p>the function {@link #uniform(Tensor)} returns the minimal Euclidean distance
  * that is separating the input coordinate from the spherical region, and negative
  * values when inside the spherical region.
  * 
