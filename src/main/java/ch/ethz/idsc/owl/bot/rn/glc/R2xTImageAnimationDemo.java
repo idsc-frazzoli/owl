@@ -26,7 +26,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /** the obstacle region in the demo is the outside of a rotating letter 'a' */
 public class R2xTImageAnimationDemo implements DemoInterface {
-  private static final Scalar DELAY = RealScalar.of(1.5);
+  // private static final Scalar DELAY = RealScalar.of(1.5); // TODO
+  private static final Scalar DELAY = RealScalar.of(0);
 
   @Override
   public OwlyAnimationFrame start() {

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.ani;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -30,16 +31,28 @@ public abstract class AbstractEntity implements RenderInterface, AnimationInterf
     entityControls.add(entityControl);
   }
 
+  private Scalar last = null;
+
   @Override
   public final synchronized void integrate(Scalar now) {
+    Scalar delta = Objects.nonNull(last) //
+        ? now.subtract(last)
+        : now.zero();
+    Scalar _now = getStateTimeNow().time().add(delta);
+    // System.out.println(_now + " " + entityControls.size());
     for (EntityControl entityControl : entityControls) {
-      Optional<Tensor> u = entityControl.control(getStateTimeNow(), now);
+      Optional<Tensor> u = entityControl.control(getStateTimeNow(), _now);
       if (u.isPresent()) {
-        episodeIntegrator.move(u.get(), now);
+        episodeIntegrator.move(u.get(), _now);
+        last = now;
         return;
       }
     }
-    throw new RuntimeException("control missing");
+    // if (Objects.nonNull(last))
+    // System.err.println("switch to passive");
+    last = null;
+    // System.err.println("control missing");
+    // throw new RuntimeException("control missing");
   }
 
   public final StateTime getStateTimeNow() {

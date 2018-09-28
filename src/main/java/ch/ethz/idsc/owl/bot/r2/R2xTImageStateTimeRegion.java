@@ -28,6 +28,7 @@ public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterf
   /** @param imageRegion
    * @param rigidFamily
    * @param supplier */
+  // TODO create interface TimeSupplier extends Supplier<Scalar>
   public R2xTImageStateTimeRegion(ImageRegion imageRegion, RigidFamily rigidFamily, Supplier<Scalar> supplier) {
     this.imageRegion = imageRegion;
     this.rigidFamily = rigidFamily;

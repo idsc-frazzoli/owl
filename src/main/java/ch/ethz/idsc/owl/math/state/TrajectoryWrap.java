@@ -54,12 +54,14 @@ public class TrajectoryWrap {
   /** @param now
    * @return true if trajectory defines control value now or in the future */
   public boolean isRelevant(Scalar now) {
+    // System.out.println("is relevant = " + now + "<" + clip.max());
     return Scalars.lessThan(now, clip.max());
   }
 
   /** @param now
    * @return true, if given now is in semi-open interval */
   public boolean isDefined(Scalar now) {
+    // System.out.println("is defined = " + clip.min() + "<=" + now);
     return Scalars.lessEquals(clip.min(), now) && isRelevant(now);
   }
 

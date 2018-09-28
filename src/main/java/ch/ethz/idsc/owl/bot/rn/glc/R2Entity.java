@@ -23,7 +23,6 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -31,7 +30,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /** omni-directional movement with constant speed
@@ -50,7 +48,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /** @param state initial position of entity */
   public R2Entity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
-    add(new FallbackControl(Array.zeros(2)));
+    // add(new FallbackControl(Array.zeros(2)));
   }
 
   @Override

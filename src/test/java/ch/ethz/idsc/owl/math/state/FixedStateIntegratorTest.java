@@ -17,35 +17,33 @@ import junit.framework.TestCase;
 
 public class FixedStateIntegratorTest extends TestCase {
   public void testSimple() {
-    FixedStateIntegrator fsi = //
+    FixedStateIntegrator fixedStateIntegrator = //
         FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 2), 3);
     Flow flow = StateSpaceModels.createFlow(SingleIntegratorStateSpaceModel.INSTANCE, Tensors.vector(1, 2));
-    List<StateTime> list = fsi.trajectory(new StateTime(Tensors.vector(2, 3), RealScalar.of(10)), flow);
+    List<StateTime> list = fixedStateIntegrator.trajectory(new StateTime(Tensors.vector(2, 3), RealScalar.of(10)), flow);
     assertEquals(list.size(), 3);
     assertEquals(list.get(2).time(), Scalars.fromString("10+3/2"));
-    assertEquals(fsi.getTimeStepTrajectory(), RationalScalar.of(3, 2));
+    assertEquals(fixedStateIntegrator.getTimeStepTrajectory(), RationalScalar.of(3, 2));
   }
 
   public void testCarEx() {
     Scalar dt = RationalScalar.of(1, 10);
-    FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
+    FixedStateIntegrator fixedStateIntegrator = //
         FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, dt, 4);
-    Scalar r = FIXEDSTATEINTEGRATOR.getTimeStepTrajectory();
-    assertEquals(r, dt.multiply(RealScalar.of(4)));
+    Scalar totalDt = fixedStateIntegrator.getTimeStepTrajectory();
+    assertEquals(totalDt, dt.multiply(RealScalar.of(4)));
   }
 
-  public void testFail1() {
+  public void testZeroAdvance() {
+    FixedStateIntegrator fixedStateIntegrator = //
+        FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.of(0), 3);
+    Scalar totalDt = fixedStateIntegrator.getTimeStepTrajectory();
+    assertEquals(totalDt, RealScalar.of(0));
+  }
+
+  public void testFailNegative() {
     try {
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.of(-.1), 3);
-      assertTrue(false);
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testFail2() {
-    try {
-      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.of(0), 3);
       assertTrue(false);
     } catch (Exception exception) {
       // ---
