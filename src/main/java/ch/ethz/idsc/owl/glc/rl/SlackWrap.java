@@ -1,6 +1,7 @@
 // code by jph, yn
 package ch.ethz.idsc.owl.glc.rl;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -11,9 +12,10 @@ public class SlackWrap {
     this.slack = slack;
   }
 
+  // TODO name is not good, more like: "isBetter" ?
   public boolean isWithin(Tensor merit, Tensor entrywiseMin) {
     Tensor diff = entrywiseMin.add(slack).subtract(merit);
-    // TODO diff.stream().map(Tensor::Get).allMatch(Sign::isPositiveOrZero);
-    return !diff.stream().map(Tensor::Get).anyMatch(Sign::isNegative);
+    // TODO diff.stream().map(Scalar.class::cast).allMatch(Sign::isPositiveOrZero);
+    return !diff.stream().map(Scalar.class::cast).anyMatch(Sign::isNegative);
   }
 }
