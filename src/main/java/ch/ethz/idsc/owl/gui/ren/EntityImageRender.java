@@ -4,11 +4,7 @@ package ch.ethz.idsc.owl.gui.ren;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.function.Supplier;
-
-import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
@@ -26,14 +22,9 @@ public class EntityImageRender implements RenderInterface {
   private final Supplier<StateTime> supplier;
   private BufferedImage img;
 
-  public EntityImageRender(Supplier<StateTime> supplier, String src, Tensor range) {
+  public EntityImageRender(Supplier<StateTime> supplier, BufferedImage img, Tensor range) {
     this.supplier = supplier;
-    try {
-      URL url = this.getClass().getResource("/graphics/ferrari.png");
-      img = ImageIO.read(url);
-    } catch (IOException i) {
-      i.printStackTrace();
-    }
+    this.img = img;
     Tensor scale = Tensors.vector(img.getWidth(), img.getHeight()) //
         .pmul(range.map(Scalar::reciprocal));
     Tensor invsc = DiagonalMatrix.of( //

@@ -60,10 +60,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public class PlanningEvaluation0 extends Se2Demo {
   // Entity Stuff
-  static final int ID = 1;
+  static final int ID = 30;
   static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenarioData.load("s3");
   //
-  static final boolean SR_PED_LEGAL = false;
+  static final boolean SR_PED_LEGAL = true;
   static final boolean SR_PED_ILLEGAL = false;
   static final boolean SR_CAR = false;
   static final boolean EVAL_PED_LEGAL = false;
@@ -71,23 +71,32 @@ public class PlanningEvaluation0 extends Se2Demo {
   static final boolean EVAL_CAR = false;
   //
   static final Scalar MAX_SPEED = RealScalar.of(8); // 8
-  static final Scalar MAX_TURNING_PLAN = Degree.of(20); // 45
+  static final Scalar MAX_TURNING_PLAN = Degree.of(7); // 12
   static final FlowsInterface TSE2_CARFLOWS = Tse2CarFlows.of(MAX_TURNING_PLAN, Tensors.vector(-2, 0, 2));
-  static final int FLOWRES = 9;
-  static final float CAR_RAD = 1.1f; // [m]
-  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 6), RealScalar.ZERO);
-  // static final StateTime INITIAL = new StateTime(Tensors.vector(11, 3.0, 1.571, 8), RealScalar.ZERO); // left
+  static final int FLOWRES = 7;
+  static final float CAR_RAD = 1.0f; // [m]
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
-  // static final Tensor GOAL = Tensors.vector(20, 33.5, 0, MAX_SPEED.number()); // around curve
-  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straight
+  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 8.0), RealScalar.ZERO); // normal (s3,s4)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(10.5, 3.0, 1.571, 8), RealScalar.ZERO); // left (s3,s4)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(20.5, 1.5, 1.571, 7), RealScalar.ZERO); // normal (s6)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(20.0, 1.5, 1.571, 7), RealScalar.ZERO); // left (s6)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(21.5, 20.0, 1.571, 7), RealScalar.ZERO); // up (s6)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(19.0, 6.0, Math.PI / 2.0f, 8), RealScalar.ZERO); // normal (s7)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(21.8, 1.5, Math.PI / 2.0f, 8), RealScalar.ZERO); // normal (s8)
+  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straigh (s3,s4)
+  // static final Tensor GOAL = Tensors.vector(27, 33.5, 0, MAX_SPEED.divide(RealScalar.of(2)).number()); // around curve (s3,s4)
+  // static final Tensor GOAL = Tensors.vector(20.0, 34, 1.3f*Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // hc (s6)
+  // static final Tensor GOAL = Tensors.vector(21.5, 32, Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // normal (s6)
+  // static final Tensor GOAL = Tensors.vector(19.0, 42, Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // normal (s7)
+  // static final Tensor GOAL = Tensors.vector(21.8, 22.0, Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // normal (s8)
   final Tensor goalRadius;
   //
-  static final float PED_VELOCITY = 2.0f;
-  static final float CAR_VELOCITY = 10.0f;
+  static final float PED_VELOCITY = 1.6f;
+  static final float CAR_VELOCITY = 11.0f;
   static final float PED_RADIUS = 0.3f;
   static final float MAX_A = 5.0f; // [m/s²]
-  static final float REACTION_TIME = 0.0f;
+  static final float REACTION_TIME = 0.3f;
   static final Tensor RANGE = Tensors.vector(30.5, 43.1);
   static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 40, 120));
@@ -95,12 +104,12 @@ public class PlanningEvaluation0 extends Se2Demo {
   static final int MAX_STEPS = 10000;
   /** node interval == 2/5 */
   static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = FixedStateIntegrator.create( //
-      new Tse2Integrator(Clip.function(MAX_SPEED.zero(), MAX_SPEED)), RationalScalar.of(1, 10), 4);
+      new Tse2Integrator(Clip.function(MAX_SPEED.zero(), MAX_SPEED)), RationalScalar.of(1, 10), 3);
   final Collection<Flow> controls;
   final Collection<CostFunction> extraCosts = new LinkedList<>();
 
   public PlanningEvaluation0() {
-    final Scalar goalRadius_xy = DoubleScalar.of(1.2); // Sqrt.of(RealScalar.of(2)).divide(PARTITIONSCALE.Get(0));
+    final Scalar goalRadius_xy = DoubleScalar.of(1.3); // Sqrt.of(RealScalar.of(2)).divide(PARTITIONSCALE.Get(0));
     final Scalar goalRadius_theta = Sqrt.of(RealScalar.of(2)).divide(RealScalar.of(20)); // SQRT2.divide(PARTITIONSCALE.Get(2));
     final Scalar goalRadius_v = MAX_SPEED.divide(RealScalar.of(2)); // SQRT2.divide(PARTITIONSCALE.Get(3));
     this.goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta, goalRadius_v);
@@ -113,7 +122,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     owlyAnimationFrame.addBackground(imgRender);
     //
     // IMAGE REGIONS
-    Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(12);
+    Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(10);
     ImageRegion irPedLegal = new ImageRegion(STREET_SCENARIO_DATA.imagePedLegal, RANGE, false);
     ImageRegion irPedIllegal = new ImageRegion(STREET_SCENARIO_DATA.imagePedIllegal, RANGE, false);
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
@@ -128,7 +137,6 @@ public class PlanningEvaluation0 extends Se2Demo {
     TrajectoryRegionQuery lidarRay = SimpleTrajectoryRegionQuery.timeInvariant(irLid);
     LidarEmulator lidarEmulator = new LidarEmulator( //
         LIDAR_RAYTRACER, () -> new StateTime(Tensors.vector(0, 0, 0), RealScalar.ZERO), lidarRay);
-    owlyAnimationFrame.addBackground(lidarEmulator);
     // SHADOW REGIONS
     ShadowMapSpherical smPedLegal = //
         new ShadowMapSpherical(lidarEmulator, irPedLegal, PED_VELOCITY, PED_RADIUS);
@@ -152,6 +160,7 @@ public class PlanningEvaluation0 extends Se2Demo {
     }
     //
     // SETUP PLANNER
+    extraCosts.add(Tse2LateralAcceleration.INSTANCE);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(GOAL, goalRadius);
     // Tse2MinTimeGoalManager tse2MinTimeGoalManager = new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED);
     Tse2ForwardMinTimeGoalManager tse2MinTimeGoalManager = new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);
@@ -164,15 +173,15 @@ public class PlanningEvaluation0 extends Se2Demo {
     //
     // EVALUATOR
     if (EVAL_PED_LEGAL) {
-      ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal, RealScalar.of(MAX_A), "legal" + String.valueOf(ID));
+      ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal, RealScalar.of(MAX_A), RealScalar.of(CAR_RAD), "legal" + String.valueOf(ID));
       callbacks.add(evaluator.sectorTimeToReact);
     }
     if (EVAL_PED_ILLEGAL) {
-      ShadowEvaluator evaluator = new ShadowEvaluator(smPedIllegal, RealScalar.of(MAX_A), "illegal" + String.valueOf(ID));
+      ShadowEvaluator evaluator = new ShadowEvaluator(smPedIllegal, RealScalar.of(MAX_A), RealScalar.of(CAR_RAD), "illegal" + String.valueOf(ID));
       callbacks.add(evaluator.sectorTimeToReact);
     }
     if (EVAL_CAR) {
-      ShadowEvaluator evaluator = new ShadowEvaluator(smCar, RealScalar.of(MAX_A), "ped" + String.valueOf(ID));
+      ShadowEvaluator evaluator = new ShadowEvaluator(smCar, RealScalar.of(MAX_A), RealScalar.of(CAR_RAD), "ped" + String.valueOf(ID));
       callbacks.add(evaluator.sectorTimeToReact);
     }
     //

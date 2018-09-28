@@ -38,6 +38,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
   private final Mat sphericalKernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
       new Size(7, 7));
   private final float kernelWorldRadius;
+  private final float rMin;
   // ---
   Mat negSrc = new Mat();
   // ---
@@ -50,6 +51,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     super(imageRegion);
     this.lidar = lidar;
     this.vMax = vMax;
+    this.rMin = rMin;
     this.kernelWorldRadius = sphericalKernel.arrayWidth() / 2.0f * pixelDim.number().floatValue();
     Mat area = CvHelper.bufferedImageToMat(bufferedImage);
     opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV); // TODO magic consts
@@ -57,7 +59,11 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     Mat obstacleArea = area.clone();
     initArea = new Mat(obstacleArea.size(), obstacleArea.type(), org.bytedeco.javacpp.opencv_core.Scalar.WHITE);
     opencv_imgproc.erode(initArea, initArea, sphericalKernel, new Point(-1, -1), 1, opencv_core.BORDER_CONSTANT, null);
-    opencv_imgproc.dilate(obstacleArea, obstacleArea, sphericalKernel, new Point(-1, -1), radius2it(rMin), opencv_core.BORDER_CONSTANT, null);
+    // opencv_imgproc.dilate(obstacleArea, obstacleArea, sphericalKernel, new Point(-1, -1), radius2it(rMin), opencv_core.BORDER_CONSTANT, null);
+    Mat radPx = new Mat(Scalar.all((rMin) / pixelDim.number().floatValue()));
+    opencv_core.bitwise_not(obstacleArea, negSrc);
+    opencv_imgproc.distanceTransform(negSrc, obstacleArea, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
+    opencv_core.compare(obstacleArea, radPx, obstacleArea, opencv_core.CMP_LE);
     opencv_core.subtract(initArea, obstacleArea, initArea);
     this.shadowArea = initArea.clone();
     setColor(new Color(255, 50, 74));
@@ -84,7 +90,9 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
 
   @Override // from ShadowMap
   public float getMinTimeDelta() {
-    return sphericalKernel.arrayWidth() * pixelDim.number().floatValue() / (2.0f * vMax);
+    if (useGPU)
+      return sphericalKernel.arrayWidth() * pixelDim.number().floatValue() / (2.0f * vMax);
+    return 3 * pixelDim.number().floatValue() / vMax;
   }
 
   public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
@@ -143,6 +151,16 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     filter.apply(area, area);
     opencv_cudaarithm.bitwise_and(initAreaGpu, area, area);
     area.copyTo(area_);
+  }
+
+  public final Mat getShape(Mat map, float carRad) {
+    Mat shape = map.clone();
+    Mat radPx = new Mat(Scalar.all((rMin + carRad) / pixelDim.number().floatValue()));
+    Mat negSrc = new Mat(shape.size(), shape.type());
+    opencv_core.bitwise_not(shape, negSrc);
+    opencv_imgproc.distanceTransform(negSrc, shape, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
+    opencv_core.compare(shape, radPx, shape, opencv_core.CMP_LE);
+    return shape;
   }
 
   public final Mat getCurrentMap() {
