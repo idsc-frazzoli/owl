@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
+import ch.ethz.idsc.owl.bot.util.StreetScenario;
 import ch.ethz.idsc.owl.bot.util.StreetScenarioData;
 import ch.ethz.idsc.owl.glc.adapter.MultiConstraintAdapter;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -37,7 +38,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class Se2ShadowRulesDemo extends Se2CarDemo {
-  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenarioData.load("s5");
+  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenario.S5.load();
   private static final float PED_VELOCITY = 1.5f;
   private static final float PED_RADIUS = 0.2f;
   private static final Color PED_COLOR_LEGAL = new Color(211, 249, 114, 200);
