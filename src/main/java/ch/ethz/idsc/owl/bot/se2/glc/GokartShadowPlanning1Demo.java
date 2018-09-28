@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
+import ch.ethz.idsc.owl.bot.util.StreetScenario;
 import ch.ethz.idsc.owl.bot.util.StreetScenarioData;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
@@ -31,7 +32,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class GokartShadowPlanning1Demo extends GokartDemo {
-  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenarioData.load("s1");
+  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenario.S1.load();
   private static final float PED_VELOCITY = 1.5f;
   private static final float PED_RADIUS = 0.3f;
   private static final Color PED_LEGAL_COLOR = new Color(38, 239, 248, 200);

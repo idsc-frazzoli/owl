@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2Demo;
 import ch.ethz.idsc.owl.bot.se2.glc.SimpleShadowConstraintCV;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.owl.bot.util.StreetScenario;
 import ch.ethz.idsc.owl.bot.util.StreetScenarioData;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -61,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 public class PlanningEvaluation0 extends Se2Demo {
   // Entity Stuff
   static final int ID = 30;
-  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenarioData.load("s3");
+  static final StreetScenarioData STREET_SCENARIO_DATA = StreetScenario.S3.load();
   //
   static final boolean SR_PED_LEGAL = true;
   static final boolean SR_PED_ILLEGAL = false;

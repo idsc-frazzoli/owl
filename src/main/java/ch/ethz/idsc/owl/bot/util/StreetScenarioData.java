@@ -23,7 +23,7 @@ public class StreetScenarioData {
   private final Tensor imageCar;
   /** bw obstacles detected by lidar and creating occlusions */
   public final Tensor imageLid;
-  /** string to resource with */
+  /** string to resource with grayscale */
   public final String imageLanesString;
   // public final Tensor imageLanes;
 
@@ -39,5 +39,9 @@ public class StreetScenarioData {
 
   public Tensor imageCar_extrude(int width) {
     return ImageEdges.extrusion(imageCar, width);
+  }
+  
+  Tensor imageLanes() {
+    return ResourceData.of(imageLanesString);
   }
 }
