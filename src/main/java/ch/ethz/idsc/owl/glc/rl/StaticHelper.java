@@ -35,8 +35,8 @@ import ch.ethz.idsc.tensor.red.Entrywise;
     // TODO check if close to existing nodes / assert if this is helpful
     Tensor nextMerit = VectorScalars.vector(next.merit());
     return domainQueue.stream() //
-        .anyMatch(a -> VectorScalars.vector(a.merit()).subtract(nextMerit) //
-            .stream().map(Tensor::Get).allMatch(v -> Scalars.lessThan(v, MERIT_EPS)));
+        .anyMatch(a -> VectorScalars.vector(a.merit()).subtract(nextMerit).stream() //
+            .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(v, MERIT_EPS)));
   }
 
   /** @param collection

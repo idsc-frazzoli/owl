@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Roots.html">Roots</a> */
+// TODO V061 obsolete
 public enum Roots {
   ;
   private static final Scalar N1_2 = RationalScalar.HALF.negate();

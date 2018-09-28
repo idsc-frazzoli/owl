@@ -2,9 +2,6 @@
 package ch.ethz.idsc.owl.bot.util;
 
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.owl.bot.r2.ImageEdges;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,7 +29,7 @@ public class StreetScenarioData {
 
   private StreetScenarioData(String id) {
     final String prefix = "/simulation/" + id + "/";
-    render = bufferedImage(prefix + "render.png");
+    render = ResourceData.bufferedImage(prefix + "render.png");
     imagePedLegal = ResourceData.of(prefix + "ped_obs_legal.png");
     imagePedIllegal = ResourceData.of(prefix + "ped_obs_illegal.png");
     imageCar = ResourceData.of(prefix + "car_obs_1.png");
@@ -42,15 +39,5 @@ public class StreetScenarioData {
 
   public Tensor imageCar_extrude(int width) {
     return ImageEdges.extrusion(imageCar, width);
-  }
-
-  // TODO JAN tensor v060
-  private static BufferedImage bufferedImage(String string) {
-    try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImageIO.read(inputStream);
-    } catch (Exception exception) {
-      // ---
-    }
-    return null;
   }
 }
