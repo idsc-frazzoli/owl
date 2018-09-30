@@ -12,6 +12,8 @@ enum IntegerMath {
     int value = index % size;
     // if value is below 0, then -size < value && value < 0.
     // For instance: -3%3==0, and -2%3==-2.
-    return value < 0 ? size + value : value;
+    return value < 0 //
+        ? size + value
+        : value;
   }
 }

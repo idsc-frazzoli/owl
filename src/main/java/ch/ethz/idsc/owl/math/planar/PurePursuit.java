@@ -48,7 +48,9 @@ public class PurePursuit {
 
   public PurePursuit(Optional<Tensor> lookAhead) {
     this.lookAhead = lookAhead;
-    ratio = lookAhead.isPresent() ? ratioPositiveX(lookAhead.get()) : Optional.empty();
+    ratio = lookAhead.isPresent() //
+        ? ratioPositiveX(lookAhead.get())
+        : Optional.empty();
   }
 
   public Optional<Tensor> lookAhead() {
