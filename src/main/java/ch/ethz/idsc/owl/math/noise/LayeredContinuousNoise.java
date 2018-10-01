@@ -21,7 +21,7 @@ public class LayeredContinuousNoise implements NativeContinuousNoise {
 
   private LayeredContinuousNoise(NativeContinuousNoise nativeContinuousNoise, double[] magnitude, double[] frequency) {
     if (magnitude.length != frequency.length)
-      throw new RuntimeException();
+      throw new IllegalArgumentException();
     this.nativeContinuousNoise = nativeContinuousNoise;
     this.magnitude = magnitude;
     this.frequency = frequency;

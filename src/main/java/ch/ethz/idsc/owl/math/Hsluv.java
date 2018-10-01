@@ -18,7 +18,7 @@ public enum Hsluv {
    * @return color */
   public static Color of(double hue, double sat, double lgt, double alpha) {
     if (!Double.isFinite(hue))
-      throw new RuntimeException("h=" + hue);
+      throw new IllegalArgumentException("hue=" + hue);
     hue %= 1;
     if (hue < 0)
       hue += 1;

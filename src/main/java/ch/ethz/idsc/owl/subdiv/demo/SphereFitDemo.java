@@ -21,7 +21,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.ExtractXY;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -86,7 +86,7 @@ class SphereFitDemo {
         mouse = geometricLayer.getMouseSe2State();
         if (Objects.nonNull(min_index))
           control.set(mouse, min_index);
-        Tensor rnctrl = Tensor.of(control.stream().map(ExtractXY::of));
+        Tensor rnctrl = Tensor.of(control.stream().map(Extract2D::of));
         Optional<Tensor> some = SphereFit.of(rnctrl);
         if (some.isPresent()) {
           Tensor center = some.get().get(0);

@@ -29,7 +29,7 @@ public enum CurvatureComb {
       return Tensors.empty();
     List<Integer> dims = Dimensions.of(tensor);
     if (2 < dims.get(1))
-      tensor = Tensor.of(tensor.stream().map(ExtractXY::of));
+      tensor = Tensor.of(tensor.stream().map(Extract2D::of));
     return tensor.add((isCyclic ? cyclic(tensor) : string(tensor)).multiply(scalar));
   }
 

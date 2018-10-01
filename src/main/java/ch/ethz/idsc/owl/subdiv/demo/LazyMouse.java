@@ -22,7 +22,7 @@ class LazyMouse implements MouseListener, MouseMotionListener {
 
   public void setTolerance(float tolerance) {
     if (tolerance < 0)
-      throw new RuntimeException("tolerance is negative");
+      throw new IllegalArgumentException("tolerance is negative");
     this.tolerance = tolerance;
   }
 
