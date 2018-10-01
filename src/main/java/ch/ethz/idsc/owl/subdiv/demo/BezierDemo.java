@@ -24,7 +24,7 @@ import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
-import ch.ethz.idsc.owl.math.planar.ExtractXY;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.subdiv.curve.BezierCurve;
 import ch.ethz.idsc.owl.subdiv.curve.RnGeodesic;
 import ch.ethz.idsc.owl.subdiv.curve.Se2CoveringGeodesic;
@@ -130,7 +130,7 @@ class BezierDemo {
         final Tensor refined;
         if (isR2) {
           BezierCurve bezierCurve = new BezierCurve(RnGeodesic.INSTANCE);
-          Tensor rnctrl = Tensor.of(_control.stream().map(ExtractXY::of));
+          Tensor rnctrl = Tensor.of(_control.stream().map(Extract2D::of));
           // refined = LanczosCurve.refine(rnctrl, 1 << levels);
           refined = bezierCurve.refine(rnctrl, 1 << levels);
           {

@@ -27,7 +27,9 @@ public class TemporalTrajectoryControl implements TrajectoryControl, Serializabl
 
   @Override
   public synchronized void trajectory(List<TrajectorySample> trajectory) {
-    trajectoryWrap = Objects.isNull(trajectory) ? null : TrajectoryWrap.of(trajectory);
+    trajectoryWrap = Objects.isNull(trajectory) //
+        ? null
+        : TrajectoryWrap.of(trajectory);
   }
 
   @Override

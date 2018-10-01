@@ -30,7 +30,7 @@ public class MouseShapeRender implements RenderInterface {
     StateTime stateTime = new StateTime(xya, supplier.get());
     geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
     Color color = region.isMember(stateTime) //
-        ? color = new Color(255, 96, 96, 128)
+        ? new Color(255, 96, 96, 128)
         : new Color(0, 128, 255, 192);
     graphics.setColor(color);
     graphics.fill(geometricLayer.toPath2D(shape));

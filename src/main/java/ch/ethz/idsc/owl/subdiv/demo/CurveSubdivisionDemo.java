@@ -29,7 +29,7 @@ import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
-import ch.ethz.idsc.owl.math.planar.ExtractXY;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
@@ -229,7 +229,7 @@ class CurveSubdivisionDemo {
         final Tensor refined;
         if (isR2) {
           CurveSubdivision curveSubdivision = function.apply(RnGeodesic.INSTANCE);
-          Tensor rnctrl = Tensor.of(_control.stream().map(ExtractXY::of));
+          Tensor rnctrl = Tensor.of(_control.stream().map(Extract2D::of));
           TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
               ? curveSubdivision::cyclic
               : curveSubdivision::string;
