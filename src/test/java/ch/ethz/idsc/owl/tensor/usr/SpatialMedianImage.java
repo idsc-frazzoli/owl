@@ -29,11 +29,11 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 
-class Some {
+class Pixel2Coord {
   private final Tensor inv = Inverse.of(DemoHelper.SE2);
   private final Tensor points;
 
-  public Some(Tensor points) {
+  public Pixel2Coord(Tensor points) {
     this.points = points;
   }
 
@@ -55,7 +55,7 @@ enum SpatialMedianImage {
       Tensor solution = optional.get();
       Tensor px = Range.of(0, 192);
       Tensor py = Range.of(0, 192);
-      Some some = new Some(points);
+      Pixel2Coord some = new Pixel2Coord(points);
       Tensor image = Tensors.matrix((j, i) -> some.dist(px.Get(i), py.Get(j)), px.length(), py.length());
       BufferedImage background = ImageFormat.of(ArrayPlot.of(image, ColorDataGradients.DENSITY));
       Graphics2D graphics = bufferedImage.createGraphics();
