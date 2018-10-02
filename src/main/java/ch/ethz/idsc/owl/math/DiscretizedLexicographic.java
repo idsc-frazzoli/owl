@@ -43,7 +43,7 @@ public class DiscretizedLexicographic implements Comparator<Tensor> {
       }
       cmp = Scalars.compare(a, b);
     }
-    // TODO <- jan suggests to simply return 0 here
+    // TODO suggestion by jan is to simply return 0 here
     if (cmp == 0)
       cmp = Lexicographic.COMPARATOR.compare(t1, t2);
     return cmp;

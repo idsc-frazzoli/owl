@@ -71,7 +71,8 @@ public class DefaultRrts implements Rrts {
           costFromRoot = compare;
         }
     }
-    return parent.connectTo(state, costFromRoot); // FIXME RRTS what if costFromRoot == null, or parent == null
+    // FIXME RRTS what if costFromRoot == null, or parent == null
+    return parent.connectTo(state, costFromRoot);
   }
 
   @Override // from Rrts

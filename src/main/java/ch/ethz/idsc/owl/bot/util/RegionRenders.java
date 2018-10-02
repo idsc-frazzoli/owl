@@ -46,7 +46,7 @@ public enum RegionRenders {
 
   /** @param image with rank 2
    * @return */
-  public static BufferedImage image(Tensor image) { // TODO test
+  public static BufferedImage image(Tensor image) {
     return ImageFormat.of(MatrixQ.require(image).map(RegionRenders::color));
   }
 

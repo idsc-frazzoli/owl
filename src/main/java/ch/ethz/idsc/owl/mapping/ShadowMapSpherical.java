@@ -95,6 +95,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     return 3 * pixelDim.number().floatValue() / vMax;
   }
 
+  @Override
   public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
     // Stopwatch s = Stopwatch.started();
     GeometricLayer world2pixelLayer = GeometricLayer.of(world2pixel);
@@ -153,6 +154,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     area.copyTo(area_);
   }
 
+  @Override
   public final Mat getShape(Mat map, float carRad) {
     Mat shape = map.clone();
     Mat radPx = new Mat(Scalar.all((rMin + carRad) / pixelDim.number().floatValue()));

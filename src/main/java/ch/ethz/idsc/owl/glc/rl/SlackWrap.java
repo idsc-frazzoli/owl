@@ -15,7 +15,7 @@ public class SlackWrap {
   // TODO name is not good, more like: "isBetter" ?
   public boolean isWithin(Tensor merit, Tensor entrywiseMin) {
     Tensor diff = entrywiseMin.add(slack).subtract(merit);
-    // TODO diff.stream().map(Scalar.class::cast).allMatch(Sign::isPositiveOrZero);
+    // old: diff.stream().map(Scalar.class::cast).allMatch(Sign::isPositiveOrZero);
     return !diff.stream().map(Scalar.class::cast).anyMatch(Sign::isNegative);
   }
 }

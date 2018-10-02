@@ -18,8 +18,10 @@ import ch.ethz.idsc.tensor.alg.Array;
  */
 @DontModify
 public class GeometricLayer {
+  private static final Tensor ZEROS = Array.zeros(3);
+
   public static GeometricLayer of(Tensor model2pixel) {
-    return new GeometricLayer(model2pixel, Array.zeros(3));
+    return new GeometricLayer(model2pixel, ZEROS);
   }
 
   // ---
@@ -109,7 +111,6 @@ public class GeometricLayer {
    * 
    * @return {x, y, alpha} unmodifiable */
   public Tensor getMouseSe2State() {
-    // TODO function is deprecated in the long run
     return mouseSe2State;
   }
 }

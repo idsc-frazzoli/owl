@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public class Se2NodeCollection implements RrtsNodeCollection {
   private final NdMap<RrtsNode> ndMap;
 
-  // FIXME JPH
+  // FIXME RRTS JPH
   public Se2NodeCollection(Tensor lbounds, Tensor ubounds) {
     ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20); // magic const
   }

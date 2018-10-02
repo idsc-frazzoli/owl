@@ -117,6 +117,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     return initArea.clone();
   }
 
+  @Override
   public void updateMap(Mat area_, StateTime stateTime, float timeDelta) {
     // get lidar polygon and transform to pixel values
     GeometricLayer world2pixelLayer = GeometricLayer.of(world2pixel);
