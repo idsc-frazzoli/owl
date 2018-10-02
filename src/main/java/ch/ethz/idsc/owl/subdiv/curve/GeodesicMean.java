@@ -56,8 +56,8 @@ public class GeodesicMean implements TensorUnaryOperator {
     for (int index = 0; index < radius; ++index) {
       int pos = index + 1;
       Scalar scalar = splits.Get(index);
-      pL = geodesicInterface.split(tensor.get(pos), pL, scalar);
-      pR = geodesicInterface.split(tensor.get(2 * radius - pos), pR, scalar);
+      pL = geodesicInterface.split(pL, tensor.get(pos), scalar);
+      pR = geodesicInterface.split(pR, tensor.get(2 * radius - pos), scalar);
     }
     return geodesicInterface.split(pL, pR, RationalScalar.HALF);
   }
