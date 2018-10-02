@@ -18,13 +18,13 @@ import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
 import ch.ethz.idsc.owl.subdiv.curve.HormannSabinCurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.SixPointCurveSubdivision;
 
-enum CurveSubdivisionSchemes {
+public enum CurveSubdivisionSchemes {
   BSPLINE1(BSpline1CurveSubdivision::new), //
   BSPLINE2(BSpline2CurveSubdivision::new), //
   BSPLINE3(BSpline3CurveSubdivision::new), //
   BSPLINE4(BSpline4CurveSubdivision::of), //
   BSPLINE4S2(BSpline4CurveSubdivision::split2), //
-  BSPLINE4S3(BSpline4CurveSubdivision::split3), //
+  BSPLINE4S3(StaticHelper::split3), //
   BSPLINE5(BSpline5CurveSubdivision::new), //
   BSPLINE6(BSpline6CurveSubdivision::of), //
   DOBSEB(i -> DodgsonSabinCurveSubdivision.INSTANCE), //

@@ -31,7 +31,6 @@ import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
-import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivisionInterpolationApproximation;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
@@ -353,7 +352,7 @@ class CurveSubdivisionDemo {
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
     {
-      spinnerMagicC.addSpinnerListener(value -> BSpline4CurveSubdivision.MAGIC_C = value);
+      spinnerMagicC.addSpinnerListener(value -> StaticHelper.MAGIC_C = value);
       spinnerMagicC.setList( //
           Tensors.fromString("{1/100, 1/10, 1/8, 1/6, 1/4, 1/3, 1/2, 2/3, 9/10, 99/100}").stream() //
               .map(Scalar.class::cast) //
@@ -367,7 +366,7 @@ class CurveSubdivisionDemo {
       jSlider.addChangeListener(new ChangeListener() {
         @Override
         public void stateChanged(ChangeEvent changeEvent) {
-          BSpline4CurveSubdivision.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000);
+          StaticHelper.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000);
         }
       });
       timerFrame.jToolBar.add(jSlider);

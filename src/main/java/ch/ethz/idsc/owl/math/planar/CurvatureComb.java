@@ -37,7 +37,7 @@ public enum CurvatureComb {
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
   public static Tensor string(Tensor tensor) {
     Tensor normal = Tensors.empty();
-    // TODO can do better at the start and end
+    // TODO JPH can do better at the start and end
     if (0 < tensor.length())
       normal.append(Array.zeros(2));
     for (int index = 1; index < tensor.length() - 1; ++index) {

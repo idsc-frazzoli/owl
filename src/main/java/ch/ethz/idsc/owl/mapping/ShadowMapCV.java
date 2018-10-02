@@ -36,6 +36,7 @@ public abstract class ShadowMapCV implements ShadowMapInterface {
     world2pixelLayer = GeometricLayer.of(world2pixel);
   }
 
+  @Override
   public Point state2pixel(Tensor state) {
     GeometricLayer layer = GeometricLayer.of(world2pixel);
     Point2D point2D = layer.toPoint2D(state);

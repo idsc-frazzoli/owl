@@ -1,3 +1,4 @@
+// code by ynager
 package ch.ethz.idsc.owl.mapping;
 
 import java.io.File;
@@ -38,6 +39,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class ShadowEvaluator {
+  private static final Scalar TWO = RealScalar.of(2);
+  // ---
   private final ShadowMapCV shadowMap;
   final int RESOLUTION = 10;
   final float MAX_TREACT = 1.0f;
@@ -148,7 +151,7 @@ public class ShadowEvaluator {
         vel = trajectory.get(i).getFlow().get().getU().Get(0); // vel is in flow
       // -
       Scalar tBrake = vel.divide(maxA); // 0 reaction time
-      Scalar dBrake = tBrake.multiply(vel).divide(RealScalar.of(2));
+      Scalar dBrake = tBrake.multiply(vel).divide(TWO);
       Se2Bijection se2Bijection = new Se2Bijection(stateTime.state());
       // -
       Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
@@ -181,7 +184,8 @@ public class ShadowEvaluator {
             se2Bijection = new Se2Bijection(fut.get().stateTime().state());
             shadowMap.updateMap(simArea, oob, delta_treact); // update sr by delta_treact w.o. new lidar info
             shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
-            dBrake = tBrake.multiply(vel).divide(RealScalar.of(2)); // FIXME vel should be updated to vel at fut
+            // FIXME YN vel should be updated to vel at fut
+            dBrake = tBrake.multiply(vel).divide(TWO);
             Tensor st = dir.multiply(dBrake);
             Point px = shadowMap.state2pixel(se2Bijection.forward().apply(st));
             //

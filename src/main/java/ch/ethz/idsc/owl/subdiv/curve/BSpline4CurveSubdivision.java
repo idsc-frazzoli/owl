@@ -20,22 +20,14 @@ public enum BSpline4CurveSubdivision {
     return new Split2LoDual3PointCurveSubdivision(geodesicInterface, P2_3, P1_16);
   }
 
-  /***************************************************/
-  // FIXME design not final
-  public static Scalar MAGIC_C = RationalScalar.of(1, 6);
-
-  public static CurveSubdivision split3(GeodesicInterface geodesicInterface) {
-    return split3(geodesicInterface, MAGIC_C);
-  }
-
   /** @param geodesicInterface
-   * @param c values in the interval [1/6, 2/3] give the best results
+   * @param value in the interval [1/6, 2/3] give the best results
    * @return */
-  public static CurveSubdivision split3(GeodesicInterface geodesicInterface, Scalar c) {
+  public static CurveSubdivision split3(GeodesicInterface geodesicInterface, Scalar value) {
     return new Split3Dual3PointCurveSubdivision(geodesicInterface, //
-        RealScalar.of(5).divide(RealScalar.of(16).multiply(c.subtract(RealScalar.ONE))).add(RealScalar.ONE), //
-        c.multiply(RealScalar.of(16)).reciprocal(), //
-        c);
+        RealScalar.of(5).divide(RealScalar.of(16).multiply(value.subtract(RealScalar.ONE))).add(RealScalar.ONE), //
+        value.multiply(RealScalar.of(16)).reciprocal(), //
+        value);
   }
 
   /***************************************************/

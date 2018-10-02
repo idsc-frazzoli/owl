@@ -23,7 +23,7 @@ public class Se2WrapDemoTest extends TestCase {
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     Scalar error = Norm._2.ofVector(glcNode.state().subtract(Tensors.vector(-0.2, 0, Math.PI * 2)));
     assertTrue(Scalars.lessThan(error, RealScalar.of(0.5)));
-    // FIXME check why failure:
+    // FIXME GLC check why failure:
     // DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
     // DebugUtils.nodeAmountCompare(trajectoryPlanner);
   }

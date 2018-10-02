@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -27,7 +28,8 @@ public class BSpline4CurveSubdivisionTest extends TestCase {
   }
 
   public void test2Lo() {
-    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split3(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = //
+        BSpline4CurveSubdivision.split3(RnGeodesic.INSTANCE, RationalScalar.of(1, 6));
     Tensor tensor = curveSubdivision.string(UnitVector.of(5, 2));
     assertEquals(tensor, Tensors.fromString("{0, 1/16, 5/16, 5/8, 5/8, 5/16, 1/16, 0}"));
   }

@@ -35,13 +35,13 @@ public class Se2Transition extends AbstractTransition {
 
   @Override
   public List<StateTime> sampled(Scalar t0, Scalar ofs, Scalar dt) {
-    // TODO Auto-generated method stub
+    // TODO RRTS Auto-generated method stub
     return null;
   }
 
   @Override
   public StateTime splitAt(Scalar t1) {
-    // TODO Auto-generated method stub
+    // TODO RRTS Auto-generated method stub
     return null;
   }
 }
