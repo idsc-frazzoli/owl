@@ -6,6 +6,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+/** projects a sequence of points to their geodesic center
+ * 
+ * Example: if the points are from R^n the center would simply be the mean */
 public class GeodesicMean extends GeodesicCenter {
   public GeodesicMean(GeodesicInterface geodesicInterface) {
     super(geodesicInterface, GeodesicMean::window);
