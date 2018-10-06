@@ -9,6 +9,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 public enum GeodesicMean {
   ;
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface) {
-    return new GeodesicCenter(geodesicInterface, ConstantMask.FUNCTION);
+    return new GeodesicCenter(geodesicInterface, FilterMask.CONSTANT);
   }
 }

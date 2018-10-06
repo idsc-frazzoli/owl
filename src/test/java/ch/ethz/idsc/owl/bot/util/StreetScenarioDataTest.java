@@ -7,20 +7,24 @@ import junit.framework.TestCase;
 
 public class StreetScenarioDataTest extends TestCase {
   public void testLoad() {
-    for (StreetScenario streetScenario : StreetScenario.values()) {
-      System.out.println(streetScenario.name());
-      StreetScenarioData streetScenarioData = streetScenario.load();
-      assertTrue(0 < streetScenarioData.render.getWidth());
-      // System.out.println("imagePedLegal");
-      MatrixQ.require(streetScenarioData.imagePedLegal);
-      // System.out.println("imagePedIllegal");
-      MatrixQ.require(streetScenarioData.imagePedIllegal);
-      // System.out.println("imageCar");
-      MatrixQ.require(streetScenarioData.imageCar_extrude(1));
-      // System.out.println("imageLid");
-      MatrixQ.require(streetScenarioData.imageLid);
-      Tensor imageLanes = streetScenarioData.imageLanes();
-      MatrixQ.require(imageLanes);
-    }
+    for (StreetScenario streetScenario : StreetScenario.values())
+      try {
+        System.out.println(streetScenario.name());
+        StreetScenarioData streetScenarioData = streetScenario.load();
+        assertTrue(0 < streetScenarioData.render.getWidth());
+        // System.out.println("imagePedLegal");
+        MatrixQ.require(streetScenarioData.imagePedLegal);
+        // System.out.println("imagePedIllegal");
+        MatrixQ.require(streetScenarioData.imagePedIllegal);
+        // System.out.println("imageCar");
+        MatrixQ.require(streetScenarioData.imageCar_extrude(1));
+        // System.out.println("imageLid");
+        MatrixQ.require(streetScenarioData.imageLid);
+        Tensor imageLanes = streetScenarioData.imageLanes();
+        MatrixQ.require(imageLanes);
+      } catch (Exception exception) {
+        exception.printStackTrace();
+        break;
+      }
   }
 }

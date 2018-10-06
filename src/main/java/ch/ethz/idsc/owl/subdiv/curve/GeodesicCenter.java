@@ -23,7 +23,9 @@ public class GeodesicCenter implements TensorUnaryOperator {
    * @return weights of Kalman-style iterative moving average */
   /* package */ static Tensor splits(Tensor mask) {
     int radius = (mask.length() - 1) / 2;
-    Tensor halfmask = Tensors.vector(i -> i == 0 ? mask.Get(i) : mask.Get(i).multiply(TWO), radius);
+    Tensor halfmask = Tensors.vector(i -> i == 0 //
+        ? mask.Get(radius + i)
+        : mask.Get(radius + i).multiply(TWO), radius);
     Scalar factor = RealScalar.ONE;
     Tensor splits = Tensors.empty();
     for (int index = 0; index < radius; ++index) {
@@ -57,8 +59,8 @@ public class GeodesicCenter implements TensorUnaryOperator {
     Tensor pL = tensor.get(0);
     Tensor pR = tensor.get(2 * radius);
     for (int index = 0; index < radius; ++index) {
-      int pos = index + 1;
       Scalar scalar = splits.Get(index);
+      int pos = index + 1;
       pL = geodesicInterface.split(pL, tensor.get(pos), scalar);
       pR = geodesicInterface.split(pR, tensor.get(2 * radius - pos), scalar);
     }
