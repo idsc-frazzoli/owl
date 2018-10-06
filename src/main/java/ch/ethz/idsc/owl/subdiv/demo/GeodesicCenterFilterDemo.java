@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
 
-import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
@@ -46,15 +45,22 @@ class GeodesicCenterFilterDemo {
     {
       String resource;
       resource = "/dubilab/app/filter/0w/20180702T133612_1.csv";
-      resource = "/dubilab/app/filter/2r/20180820T143852_1.csv";
+      resource = "/dubilab/app/filter/0w/20180702T180041_2.csv";
+      // resource = "/dubilab/app/filter/2r/20180820T143852_1.csv";
+      // resource = "/dubilab/app/filter/2r/20180820T165637_1.csv";
+      // resource = "/dubilab/app/filter/slow/20180924T141613_2.csv";
+      // resource = "/dubilab/app/filter/slow/20180503T160522_1.csv";
+      // resource = "/dubilab/app/filter/3az/20180827T170643_1.csv";
+      // resource = "/dubilab/app/filter/3az/20180830T111749_8.csv";
+      //
       Tensor table = ResourceData.of(resource);
-      control = Tensor.of(table.stream().limit(2400).map(row -> row.extract(1, 4)));
+      control = Tensor.of(table.stream().limit(50000).map(row -> row.extract(1, 4)));
     }
-    {
-      JButton jButton = new JButton("clear");
-      jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-      timerFrame.jToolBar.add(jButton);
-    }
+    // {
+    // JButton jButton = new JButton("clear");
+    // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+    // timerFrame.jToolBar.add(jButton);
+    // }
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));
     {
@@ -93,7 +99,7 @@ class GeodesicCenterFilterDemo {
             new GeodesicCenterFilter(new GeodesicCenter(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
         refined = geodesicCenterFilter.apply(control);
         Tensor speeds = Se2SpeedEstimate.FUNCTION.apply(refined);
-        final int baseline_y = 300;
+        final int baseline_y = 200;
         {
           graphics.setColor(Color.BLACK);
           graphics.drawLine(0, baseline_y, 1200, baseline_y);
@@ -102,7 +108,7 @@ class GeodesicCenterFilterDemo {
         {
           int piy = 30;
           graphics.drawString("Filter: " + spinnerFilter.getValue(), 0, piy);
-          Scalar width = Quantity.of(0.05 * (spinnerRadius.getValue() * 2 - 1), "s");
+          Scalar width = Quantity.of(0.05 * (spinnerRadius.getValue() * 2 + 1), "s");
           graphics.drawString("Window: " + Round._3.apply(width), 0, piy += 15);
           graphics.setColor(colorDataIndexed.getColor(0));
           graphics.drawString("Tangent velocity", 0, piy += 15);
