@@ -14,14 +14,18 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+/** projects a sequence of points to their geodesic center
+ * with each point weighted as provided by an external function */
 public class GeodesicCenter implements TensorUnaryOperator {
   private static final Scalar TWO = RealScalar.of(2);
 
-  /** @param radius
-   * @return weights of kalman */
-  private static Tensor splits(Tensor weights) {
-    int radius = (weights.length() - 1) / 2;
-    Tensor halfmask = Tensors.vector(i -> i == 0 ? weights.Get(i) : weights.Get(i).multiply(TWO), radius);
+  /** @param mask
+   * @return weights of Kalman-style iterative moving average */
+  /* package */ static Tensor splits(Tensor mask) {
+    int radius = (mask.length() - 1) / 2;
+    Tensor halfmask = Tensors.vector(i -> i == 0 //
+        ? mask.Get(radius + i)
+        : mask.Get(radius + i).multiply(TWO), radius);
     Scalar factor = RealScalar.ONE;
     Tensor splits = Tensors.empty();
     for (int index = 0; index < radius; ++index) {
@@ -55,8 +59,8 @@ public class GeodesicCenter implements TensorUnaryOperator {
     Tensor pL = tensor.get(0);
     Tensor pR = tensor.get(2 * radius);
     for (int index = 0; index < radius; ++index) {
-      int pos = index + 1;
       Scalar scalar = splits.Get(index);
+      int pos = index + 1;
       pL = geodesicInterface.split(pL, tensor.get(pos), scalar);
       pR = geodesicInterface.split(pR, tensor.get(2 * radius - pos), scalar);
     }
