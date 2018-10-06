@@ -222,11 +222,11 @@ public class ShadowEvaluator {
     Tensor rays = Tensor.of(angles.stream().map(Scalar.class::cast).map(AngleVector::of)).multiply(range);
     rays.append(Tensors.vector(0, 0)); // append origin
     // get pixel coordinates as Points
-    Tensor polyTens = Tensor.of(rays.stream() //
+    Point polyPoint = StaticHelper.toPoint(rays.stream() //
         .map(forward::apply) //
-        .map(shadowMap::state2pixel) //
+        .map(shadowMap::state2pixel) // TODO not efficient since converts point -> int{x,y} -> vector -> int[]
+        // ... suggestion: use geometricLayer.toVector
         .map(a -> Tensors.vector(a.x(), a.y())));
-    Point polyPoint = StaticHelper.tensorToPoint(polyTens);
     Mat segment = new Mat(mat.size(), mat.type(), opencv_core.Scalar.BLACK);
     // opencv_imgproc.fillPoly(segment, polyPoint, new int[] { 3 }, 1, opencv_core.Scalar.WHITE);
     opencv_imgproc.fillConvexPoly(segment, polyPoint, 3, opencv_core.Scalar.WHITE);

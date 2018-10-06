@@ -106,13 +106,13 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     Tensor poly = lidar.getPolygon(stateTime);
     //  ---
     // transform lidar polygon to pixel values
-    Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
+    Point polygonPoint = StaticHelper.toPoint(poly.stream().map(world2pixelLayer::toVector));
     world2pixelLayer.popMatrix();
-    Point polygonPoint = StaticHelper.tensorToPoint(tens); // reformat polygon to point
+    // tens); // reformat polygon to point
     // ---
     // fill lidar polygon and subtract it from shadow region
     Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
-    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { tens.length() }, 1, opencv_core.Scalar.WHITE);
+    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, opencv_core.Scalar.WHITE);
     opencv_core.subtract(area, lidarMat, area);
     //  ---
     // dilate and intersect
@@ -136,13 +136,12 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     Tensor poly = lidar.getPolygon(stateTime);
     //  ---
     // transform lidar polygon to pixel values
-    Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
+    Point polygonPoint = StaticHelper.toPoint(poly.stream().map(world2pixelLayer::toVector)); // reformat polygon to point
     world2pixelLayer.popMatrix();
-    Point polygonPoint = StaticHelper.tensorToPoint(tens); // reformat polygon to point
     // ---
     // fill lidar polygon and subtract it from shadow region
     Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
-    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { tens.length() }, 1, opencv_core.Scalar.WHITE);
+    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, opencv_core.Scalar.WHITE);
     lidarMatGpu.upload(lidarMat);
     int it = radius2it(timeDelta * vMax);
     opencv_cudaarithm.subtract(area, lidarMatGpu, area);
