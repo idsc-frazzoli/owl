@@ -22,7 +22,6 @@ import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacpp.opencv_imgproc;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
-import ch.ethz.idsc.owl.data.img.CvHelper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -129,7 +128,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     // transform lidar polygon to pixel values
     Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
     world2pixelLayer.popMatrix();
-    Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
+    Point polygonPoint = StaticHelper.tensorToPoint(tens); // reformat polygon to point
     // ---
     // fill lidar polygon and subtract it from shadow region
     Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);

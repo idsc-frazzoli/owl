@@ -14,6 +14,8 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_imgproc;
 
+import ch.ethz.idsc.tensor.Tensor;
+
 /* package */ enum StaticHelper {
   ;
   static void makeStroke(Area area, float radius, BiConsumer<Area, Area> function) {
@@ -37,5 +39,19 @@ import org.bytedeco.javacpp.opencv_imgproc;
         (byte) color.getGreen(), //
         (byte) color.getRed(), //
         (byte) color.getBlue() };
+  }
+
+  /** @param tensor of the form {{x1, y1}, {x2, y2}, ..., {xn, yn}}
+   * @return */
+  static Point tensorToPoint(Tensor tensor) {
+    int[] data = new int[tensor.length() * 2];
+    int index = -1;
+    for (Tensor point : tensor) {
+      data[++index] = point.Get(0).number().intValue();
+      data[++index] = point.Get(1).number().intValue();
+    }
+    Point point = new opencv_core.Point(data.length);
+    point.put(data, 0, data.length);
+    return point;
   }
 }

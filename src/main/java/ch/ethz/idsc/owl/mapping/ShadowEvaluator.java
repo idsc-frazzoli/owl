@@ -15,7 +15,6 @@ import org.bytedeco.javacpp.indexer.Indexer;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.data.img.CvHelper;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -227,7 +226,7 @@ public class ShadowEvaluator {
         .map(forward::apply) //
         .map(shadowMap::state2pixel) //
         .map(a -> Tensors.vector(a.x(), a.y())));
-    Point polyPoint = CvHelper.tensorToPoint(polyTens);
+    Point polyPoint = StaticHelper.tensorToPoint(polyTens);
     Mat segment = new Mat(mat.size(), mat.type(), opencv_core.Scalar.BLACK);
     // opencv_imgproc.fillPoly(segment, polyPoint, new int[] { 3 }, 1, opencv_core.Scalar.WHITE);
     opencv_imgproc.fillConvexPoly(segment, polyPoint, 3, opencv_core.Scalar.WHITE);

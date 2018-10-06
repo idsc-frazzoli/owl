@@ -108,7 +108,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     // transform lidar polygon to pixel values
     Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
     world2pixelLayer.popMatrix();
-    Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
+    Point polygonPoint = StaticHelper.tensorToPoint(tens); // reformat polygon to point
     // ---
     // fill lidar polygon and subtract it from shadow region
     Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
@@ -138,7 +138,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     // transform lidar polygon to pixel values
     Tensor tens = Tensor.of(poly.stream().map(world2pixelLayer::toVector));
     world2pixelLayer.popMatrix();
-    Point polygonPoint = CvHelper.tensorToPoint(tens); // reformat polygon to point
+    Point polygonPoint = StaticHelper.tensorToPoint(tens); // reformat polygon to point
     // ---
     // fill lidar polygon and subtract it from shadow region
     Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
