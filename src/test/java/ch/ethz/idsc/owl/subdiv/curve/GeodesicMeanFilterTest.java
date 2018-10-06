@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -37,6 +38,7 @@ public class GeodesicMeanFilterTest extends TestCase {
       Tensor apply = geodesicMeanFilter.apply(tensor);
       Tensor compar = MeanFilter.of(tensor, radius);
       assertEquals(apply.Get(radius), compar.Get(radius));
+      assertTrue(ExactScalarQ.all(apply));
     }
   }
 }

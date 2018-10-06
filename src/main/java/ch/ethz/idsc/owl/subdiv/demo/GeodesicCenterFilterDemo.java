@@ -17,9 +17,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.owl.subdiv.curve.BinomialMask;
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.owl.subdiv.curve.Se2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -30,8 +27,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 class GeodesicCenterFilterDemo {
-  private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
+  private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
+  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.12);
   // ---
   private final TimerFrame timerFrame = new TimerFrame();
   private Tensor control = Tensors.of(Array.zeros(3));
@@ -40,7 +37,7 @@ class GeodesicCenterFilterDemo {
     SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
       Tensor table = ResourceData.of("/dubilab/app/filter/0w/20180702T133612_1.csv");
-      control = Tensor.of(table.stream().map(row -> row.extract(1, 4)));
+      control = Tensor.of(table.stream().limit(400).map(row -> row.extract(1, 4)));
     }
     {
       JButton jButton = new JButton("clear");
@@ -82,8 +79,8 @@ class GeodesicCenterFilterDemo {
             geometricLayer.popMatrix();
           }
         TensorUnaryOperator geodesicMeanFilter = //
-            new GeodesicCenterFilter(new GeodesicCenter(Se2Geodesic.INSTANCE, BinomialMask.FUNCTION), radius);
-        GeodesicMeanFilter.of(Se2Geodesic.INSTANCE, radius);
+            // new GeodesicCenterFilter(new GeodesicCenter(Se2Geodesic.INSTANCE, BinomialMask.FUNCTION), radius);
+            GeodesicMeanFilter.of(Se2Geodesic.INSTANCE, radius);
         refined = geodesicMeanFilter.apply(control);
         // curve = Nest.of(BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE)::string, refined, 7);
         {
@@ -109,7 +106,7 @@ class GeodesicCenterFilterDemo {
     {
       spinnerRadius.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-      spinnerRadius.setValue(9);
+      spinnerRadius.setValue(6);
       spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
   }

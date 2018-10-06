@@ -21,7 +21,7 @@ public class GeodesicCenter implements TensorUnaryOperator {
 
   /** @param mask
    * @return weights of Kalman-style iterative moving average */
-  private static Tensor splits(Tensor mask) {
+  /* package */ static Tensor splits(Tensor mask) {
     int radius = (mask.length() - 1) / 2;
     Tensor halfmask = Tensors.vector(i -> i == 0 ? mask.Get(i) : mask.Get(i).multiply(TWO), radius);
     Scalar factor = RealScalar.ONE;
