@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.demo;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -22,11 +23,15 @@ import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
 import ch.ethz.idsc.owl.subdiv.curve.Se2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Round;
 
 class GeodesicCenterFilterDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
@@ -39,8 +44,11 @@ class GeodesicCenterFilterDemo {
     SpinnerLabel<FilterMask> spinnerFilter = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
-      Tensor table = ResourceData.of("/dubilab/app/filter/0w/20180702T133612_1.csv");
-      control = Tensor.of(table.stream().limit(400).map(row -> row.extract(1, 4)));
+      String resource;
+      resource = "/dubilab/app/filter/0w/20180702T133612_1.csv";
+      resource = "/dubilab/app/filter/2r/20180820T143852_1.csv";
+      Tensor table = ResourceData.of(resource);
+      control = Tensor.of(table.stream().limit(2400).map(row -> row.extract(1, 4)));
     }
     {
       JButton jButton = new JButton("clear");
@@ -81,18 +89,35 @@ class GeodesicCenterFilterDemo {
             graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
-        TensorUnaryOperator geodesicMeanFilter = //
+        GeodesicCenterFilter geodesicCenterFilter = //
             new GeodesicCenterFilter(new GeodesicCenter(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
-        // GeodesicMeanFilter.of(Se2Geodesic.INSTANCE, radius);
-        refined = geodesicMeanFilter.apply(control);
-        // curve = Nest.of(BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE)::string, refined, 7);
+        refined = geodesicCenterFilter.apply(control);
+        Tensor speeds = Se2SpeedEstimate.FUNCTION.apply(refined);
+        final int baseline_y = 300;
         {
-          // graphics.setColor(Color.BLUE);
-          // Path2D path2d = geometricLayer.toPath2D(curve);
-          // graphics.setStroke(new BasicStroke(1.25f));
-          // graphics.draw(path2d);
-          // graphics.setStroke(new BasicStroke(1f));
+          graphics.setColor(Color.BLACK);
+          graphics.drawLine(0, baseline_y, 1200, baseline_y);
         }
+        ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
+        {
+          int piy = 30;
+          graphics.drawString("Filter: " + spinnerFilter.getValue(), 0, piy);
+          Scalar width = Quantity.of(0.05 * (spinnerRadius.getValue() * 2 - 1), "s");
+          graphics.drawString("Window: " + Round._3.apply(width), 0, piy += 15);
+          graphics.setColor(colorDataIndexed.getColor(0));
+          graphics.drawString("Tangent velocity", 0, piy += 15);
+          graphics.setColor(colorDataIndexed.getColor(1));
+          graphics.drawString("Side slip", 0, piy += 15);
+          graphics.setColor(colorDataIndexed.getColor(2));
+          graphics.drawString("Rotational rate", 0, piy += 15);
+        }
+        for (int c = 0; c < 3; ++c) {
+          graphics.setColor(colorDataIndexed.getColor(c));
+          Path2D path2d = plotFunc(graphics, speeds.get(Tensor.ALL, c).multiply(RealScalar.of(400)), baseline_y);
+          graphics.setStroke(new BasicStroke(1.3f));
+          graphics.draw(path2d);
+        }
+        graphics.setStroke(new BasicStroke(1f));
         for (Tensor point : refined) {
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
           Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
@@ -114,10 +139,19 @@ class GeodesicCenterFilterDemo {
     }
     {
       // spinnerRadius.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+      spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
       spinnerRadius.setValue(6);
       spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
+  }
+
+  protected Path2D plotFunc(Graphics2D graphics, Tensor tensor, int baseline_y) {
+    Path2D path2d = new Path2D.Double();
+    if (Tensors.nonEmpty(tensor))
+      path2d.moveTo(0, baseline_y - tensor.Get(0).number().doubleValue());
+    for (int pix = 1; pix < tensor.length(); ++pix)
+      path2d.lineTo(pix, baseline_y - tensor.Get(pix).number().doubleValue());
+    return path2d;
   }
 
   public static void main(String[] args) {
