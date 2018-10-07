@@ -50,7 +50,6 @@ public class ShadowEvaluator {
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-1000, -1000, 0), RealScalar.ZERO); // TODO YN not nice
-  Mat carRad;
   Mat negSrc = new Mat();
 
   public ShadowEvaluator(ShadowMapCV shadowMap, Scalar maxA, Scalar carRadius, String id) {
@@ -60,7 +59,6 @@ public class ShadowEvaluator {
     this.carRadius = carRadius;
     this.maxA = maxA;
     this.tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
-    this.carRad = new Mat(opencv_core.Scalar.all(carRadius.divide(shadowMap.pixelDim).number().doubleValue()));
   }
 
   /** Evalates time to react (TTR) along trajectory
@@ -103,7 +101,7 @@ public class ShadowEvaluator {
             GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
         List<TrajectorySample> trajectory = tail; // Trajectories.glue(head, tail);
         Tensor mtrMatrix = Tensors.empty();
-        for (int i = 0; i < angles.length() - 1; i++) {
+        for (int i = 0; i < angles.length() - 1; ++i) {
           System.out.println("Evaluating sector " + (i + 1) + " / " + (angles.length() - 1));
           final int fi = i;
           Function<StateTime, Mat> mapSupplier = new Function<StateTime, Mat>() {
@@ -138,7 +136,7 @@ public class ShadowEvaluator {
     Scalar tEnd = Lists.getLast(trajectory).stateTime().time();
     int maxSize = trajectory.stream().filter(c -> Scalars.lessThan(c.stateTime().time(), tEnd.subtract(DoubleScalar.of(MAX_TREACT)))) //
         .collect(Collectors.toList()).size();
-    for (int i = 0; i < maxSize; i++) {
+    for (int i = 0; i < maxSize; ++i) {
       // System.out.println("processing sample " + i + " / " + maxSize);
       StateTime stateTime = trajectory.get(i).stateTime();
       Mat simArea = mapSupplier.apply(stateTime).clone();
@@ -172,27 +170,28 @@ public class ShadowEvaluator {
       Scalar timeToReact = RealScalar.of(-1);
       if (clear) {
         timeToReact = RealScalar.ZERO;
+        int idx = 1;
         for (Tensor tReact : tReactVec) {
-          // get stateTime tReact in future
-          Optional<TrajectorySample> fut = trajectory.stream()//
-              .skip(i) //
-              .filter(st -> Scalars.lessEquals(stateTime.time().add(tReact), st.stateTime().time())) //
-              .findFirst(); // get new future state on trajectory after tReact
-          // -
-          if (fut.isPresent()) {
-            se2Bijection = new Se2Bijection(fut.get().stateTime().state());
-            shadowMap.updateMap(simArea, oob, delta_treact); // update sr by delta_treact w.o. new lidar info
-            shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
-            // FIXME YN vel should be updated to vel at fut
-            dBrake = tBrake.multiply(vel).divide(TWO);
-            Tensor st = dir.multiply(dBrake);
-            Point px = shadowMap.state2pixel(se2Bijection.forward().apply(st));
-            //
-            boolean intersect = isMember(indexer, px, cols, rows);
-            if (intersect)
-              break;
-            timeToReact = tReact.Get();
-          }
+          // TODO YN trajectory.get(i + idx) is never null, check code below
+          // Optional<TrajectorySample> fut = Optional.ofNullable(trajectory.get(i + idx));
+          TrajectorySample tjs = trajectory.get(i + idx);
+          idx += 1;
+          vel = tjs.stateTime().state().Get(3); // get velocity of future state
+          se2Bijection = new Se2Bijection(tjs.stateTime().state());
+          shadowMap.updateMap(simArea, oob, delta_treact); // update sr by delta_treact w.o. new lidar info
+          shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
+          // FIXME YN vel should be updated to vel at fut
+          dBrake = tBrake.multiply(vel).divide(TWO);
+          range = Subdivide.of(0, dBrake.number(), RESOLUTION);
+          ray = TensorProduct.of(range, dir);
+          Indexer newindexer = shape.createIndexer();
+          clear = !ray.stream() //
+              .map(se2Bijection.forward()) //
+              .map(shadowMap::state2pixel) //
+              .anyMatch(local -> isMember(newindexer, local, cols, rows));
+          if (!clear)
+            break;
+          timeToReact = tReact.Get();
         }
       }
       timeToReactVec.append(timeToReact);

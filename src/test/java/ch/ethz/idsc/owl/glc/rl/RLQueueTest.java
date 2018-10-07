@@ -52,7 +52,7 @@ public class RLQueueTest extends TestCase {
     Tensor slack = Tensors.vector(1, 0, 0);
     RLQueue rlQueue = new RLQueue(slack);
     Random random = new Random();
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 1000; ++i) {
       Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
       Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
       GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);

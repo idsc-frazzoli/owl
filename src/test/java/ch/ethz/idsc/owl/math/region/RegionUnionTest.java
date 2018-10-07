@@ -16,13 +16,13 @@ public class RegionUnionTest extends TestCase {
     List<Region<Tensor>> regionList = new ArrayList<>();
     Tensor radius = Tensors.vector(0.1, 0.1);
     // Goalstates: {0, 0}, {1, 1},{2, 2},{3, 3},{4, 4},{5, 5},{6, 6},{7, 7}
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; ++i) {
       Tensor goal = Tensors.of(RealScalar.of(1 * i), RealScalar.of(1 * i));
       stateList.add(new StateTime(goal, RealScalar.ZERO));
       regionList.add(new EllipsoidRegion(goal, radius));
     }
     Region<Tensor> region = RegionUnion.wrap(regionList);
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; ++i) {
       Tensor testState = Tensors.of(RealScalar.of(1 * i), RealScalar.of(1 * i));
       assertTrue(region.isMember(testState));
       assertTrue(region.isMember(testState.add(Tensors.vector(0.05, 0.05))));

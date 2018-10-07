@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
       owlyFrame.addBackground(renderInterface); // reference to collection
-      for (int i = 0; i < 20; i++) {
+      for (int i = 0; i < 20; ++i) {
         Optional<GlcNode> optional = trajectoryPlanner.getBest();
         if (optional.isPresent())
           break;
@@ -90,7 +90,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
         owlyFrame.setGlc(trajectoryPlanner);
         gsw.append(owlyFrame.offscreen());
       }
-      for (int i = 0; i < 4; i++)
+      for (int i = 0; i < 4; ++i)
         gsw.append(owlyFrame.offscreen());
     }
     Optional<GlcNode> optional = trajectoryPlanner.getBest();

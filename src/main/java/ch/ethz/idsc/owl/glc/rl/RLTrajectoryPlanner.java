@@ -76,7 +76,7 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
       // TODO YN code redundant to StdRL.TPlanner#processCandidates -> can simplify?
       Tensor minValues = optional.get();
       Tensor merit = VectorScalars.vector(node.merit());
-      for (int i = 0; i < slacks.length(); i++) {
+      for (int i = 0; i < slacks.length(); ++i) {
         if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
           Scalar margin = merit.Get(i).add(slacks.Get(i));
           final int j = i;
