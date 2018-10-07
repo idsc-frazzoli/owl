@@ -176,6 +176,7 @@ public class ShadowEvaluator {
           Optional<TrajectorySample> fut = Optional.ofNullable(trajectory.get(i + idx));
           idx += 1;
           if (fut.isPresent()) {
+            vel = fut.get().stateTime().state().Get(3); //get velocity of future state
             se2Bijection = new Se2Bijection(fut.get().stateTime().state());
             shadowMap.updateMap(simArea, oob, delta_treact); // update sr by delta_treact w.o. new lidar info
             shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
