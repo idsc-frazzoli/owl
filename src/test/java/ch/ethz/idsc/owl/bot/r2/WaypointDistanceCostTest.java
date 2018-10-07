@@ -13,8 +13,8 @@ public class WaypointDistanceCostTest extends TestCase {
   public void testSimple() {
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180425.csv");
     ImageCostFunction wdc = WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640));
-    for (int i = 0; i < waypoints.length(); i++)
-      assertEquals(wdc.flipYXTensorInterp.at(waypoints.get(i)), RealScalar.ZERO);
+    for (Tensor waypoint : waypoints)
+      assertEquals(wdc.flipYXTensorInterp.at(waypoint), RealScalar.ZERO);
     assertEquals(wdc.flipYXTensorInterp.at(Tensors.vector(10, 10)), RealScalar.ONE);
   }
 }

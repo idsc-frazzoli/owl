@@ -36,7 +36,7 @@ enum R2Waypoints {
     final Rectangle2D rInit = new Rectangle2D.Double(0, 0, dimension.width, dimension.height);
     final Area rInitArea = new Area(rInit);
     final Stroke stroke = new BasicStroke(pathWidth, BasicStroke.CAP_ROUND, BasicStroke.CAP_BUTT);
-    for (int i = 0; i < waypoints.length() - 1; i++) {
+    for (int i = 0; i < waypoints.length() - 1; ++i) {
       Line2D line = new Line2D.Double( //
           toImagePoint(waypoints.get(i + 0), dimension.height), //
           toImagePoint(waypoints.get(i + 1), dimension.height));

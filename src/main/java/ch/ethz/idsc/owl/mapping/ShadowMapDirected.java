@@ -138,7 +138,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     // TODO this is a bottleneck! takes ~150ms
     // !!
     int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO check if correct
-    for (int i = 1; i < it; i++) {
+    for (int i = 1; i < it; ++i) {
       List<Mat> updated = IntStream.range(0, NSEGS).parallel() //
           .mapToObj(s -> StaticHelper.dilateSegment(s, area, updateKernels, new Point(-1, -1), laneMasks, 1)) //
           .collect(Collectors.toList());

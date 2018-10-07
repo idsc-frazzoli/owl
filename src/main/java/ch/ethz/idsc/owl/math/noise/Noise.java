@@ -27,7 +27,7 @@ package ch.ethz.idsc.owl.math.noise;
       throw new RuntimeException("corrupted");
     System.arraycopy(value, 0, perm, 0, value.length);
     System.arraycopy(value, 0, perm, value.length, value.length);
-    for (int i = 0; i < 512; i++)
+    for (int i = 0; i < 512; ++i)
       perm_12[i] = perm[i] % 12;
   }
 

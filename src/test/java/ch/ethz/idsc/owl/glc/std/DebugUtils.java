@@ -45,7 +45,7 @@ public enum DebugUtils {
     }
     if (treeCollection instanceof List<?>) {
       GlobalAssert.that(((List<GlcNode>) treeCollection).get(0).isRoot());
-      for (int i = 1; i < treeCollection.size(); i++) {
+      for (int i = 1; i < treeCollection.size(); ++i) {
         GlcNode node = ((List<GlcNode>) treeCollection).get(i);
         GlcNode previous = ((List<GlcNode>) treeCollection).get(i - 1);
         GlobalAssert.that(node.parent() == previous);
@@ -65,7 +65,7 @@ public enum DebugUtils {
     List<GlcNode> trajectory = Nodes.listFromRoot(finalNode.get());
     // omit last Node, since last node may lie outside of goal region, as Trajectory to it was in
     connectivityCheck(trajectory);
-    for (int i = 1; i < trajectory.size() - 1; i++) {
+    for (int i = 1; i < trajectory.size() - 1; ++i) {
       GlcNode current = trajectory.get(i);
       GlcNode parent = current.parent();
       if (Scalars.lessEquals(current.costFromRoot(), parent.costFromRoot())) {
