@@ -6,10 +6,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class GeodesicCenterFilter implements TensorUnaryOperator {
-  private final GeodesicCenter geodesicCenter;
+  private final TensorUnaryOperator geodesicCenter;
   private final int radius;
 
-  public GeodesicCenterFilter(GeodesicCenter geodesicCenter, int radius) {
+  public GeodesicCenterFilter(TensorUnaryOperator geodesicCenter, int radius) {
     this.geodesicCenter = geodesicCenter;
     this.radius = radius;
   }

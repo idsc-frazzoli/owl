@@ -8,11 +8,15 @@ import java.awt.Stroke;
 import java.awt.geom.Area;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_imgproc;
+
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ enum StaticHelper {
   ;
@@ -37,5 +41,19 @@ import org.bytedeco.javacpp.opencv_imgproc;
         (byte) color.getGreen(), //
         (byte) color.getRed(), //
         (byte) color.getBlue() };
+  }
+
+  /** @param stream of points {x1, y1}, {x2, y2}, ..., {xn, yn}
+   * @return */
+  static Point toPoint(Stream<Tensor> stream) {
+    int[] data = stream //
+        .flatMap(Tensor::stream) //
+        .map(Scalar.class::cast) //
+        .map(Scalar::number) //
+        .mapToInt(Number::intValue) //
+        .toArray();
+    Point point = new opencv_core.Point(data.length);
+    point.put(data, 0, data.length);
+    return point;
   }
 }

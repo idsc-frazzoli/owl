@@ -15,7 +15,6 @@ import org.bytedeco.javacpp.indexer.Indexer;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.data.img.CvHelper;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -176,7 +175,7 @@ public class ShadowEvaluator {
           Optional<TrajectorySample> fut = Optional.ofNullable(trajectory.get(i + idx));
           idx += 1;
           if (fut.isPresent()) {
-            vel = fut.get().stateTime().state().Get(3); //get velocity of future state
+            vel = fut.get().stateTime().state().Get(3); // get velocity of future state
             se2Bijection = new Se2Bijection(fut.get().stateTime().state());
             shadowMap.updateMap(simArea, oob, delta_treact); // update sr by delta_treact w.o. new lidar info
             shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
@@ -222,11 +221,11 @@ public class ShadowEvaluator {
     Tensor rays = Tensor.of(angles.stream().map(Scalar.class::cast).map(AngleVector::of)).multiply(range);
     rays.append(Tensors.vector(0, 0)); // append origin
     // get pixel coordinates as Points
-    Tensor polyTens = Tensor.of(rays.stream() //
+    Point polyPoint = StaticHelper.toPoint(rays.stream() //
         .map(forward::apply) //
-        .map(shadowMap::state2pixel) //
+        .map(shadowMap::state2pixel) // TODO not efficient since converts point -> int{x,y} -> vector -> int[]
+        // ... suggestion: use geometricLayer.toVector
         .map(a -> Tensors.vector(a.x(), a.y())));
-    Point polyPoint = CvHelper.tensorToPoint(polyTens);
     Mat segment = new Mat(mat.size(), mat.type(), opencv_core.Scalar.BLACK);
     // opencv_imgproc.fillPoly(segment, polyPoint, new int[] { 3 }, 1, opencv_core.Scalar.WHITE);
     opencv_imgproc.fillConvexPoly(segment, polyPoint, 3, opencv_core.Scalar.WHITE);

@@ -41,6 +41,7 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -55,11 +56,9 @@ class GeodesicMeanFilterDemo {
   private final TimerFrame timerFrame = new TimerFrame();
   private Tensor mouse = Array.zeros(3);
   private Integer min_index = null;
-  private boolean printref = false;
-  private boolean ref2ctrl = false;
 
   GeodesicMeanFilterDemo() {
-    SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+    SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
       control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
@@ -88,16 +87,6 @@ class GeodesicMeanFilterDemo {
           exception.printStackTrace();
         }
       });
-      timerFrame.jToolBar.add(jButton);
-    }
-    {
-      JButton jButton = new JButton("p-ref");
-      jButton.addActionListener(actionEvent -> printref = true);
-      timerFrame.jToolBar.add(jButton);
-    }
-    {
-      JButton jButton = new JButton("r2c");
-      jButton.addActionListener(actionEvent -> ref2ctrl = true);
       timerFrame.jToolBar.add(jButton);
     }
     JToggleButton jToggleCtrl = new JToggleButton("ctrl");
@@ -129,7 +118,7 @@ class GeodesicMeanFilterDemo {
           control.set(mouse, min_index);
         boolean isR2 = jToggleButton.isSelected();
         Tensor _control = control.copy();
-        int levels = spinnerRefine.getValue();
+        int radius = spinnerRadius.getValue();
         final Tensor refined;
         final Tensor curve;
         if (isR2) {
@@ -146,7 +135,7 @@ class GeodesicMeanFilterDemo {
             graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
-          GeodesicMeanFilter geodesicMeanFilter = new GeodesicMeanFilter(RnGeodesic.INSTANCE, levels);
+          TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(RnGeodesic.INSTANCE, radius);
           refined = geodesicMeanFilter.apply(rnctrl);
           curve = Nest.of(BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE)::string, refined, 7);
         } else { // SE2
@@ -161,7 +150,7 @@ class GeodesicMeanFilterDemo {
               graphics.draw(path2d);
               geometricLayer.popMatrix();
             }
-          GeodesicMeanFilter geodesicMeanFilter = new GeodesicMeanFilter(Se2CoveringGeodesic.INSTANCE, levels);
+          TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(Se2CoveringGeodesic.INSTANCE, radius);
           refined = geodesicMeanFilter.apply(control);
           curve = Nest.of(BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE)::string, refined, 7);
         }
@@ -201,21 +190,13 @@ class GeodesicMeanFilterDemo {
           graphics.fill(geometricLayer.toPath2D(isR2 ? CIRCLE_HI : ARROWHEAD_HI));
           geometricLayer.popMatrix();
         }
-        if (printref) {
-          printref = false;
-          System.out.println(refined);
-        }
-        if (ref2ctrl) {
-          ref2ctrl = false;
-          control = refined;
-        }
       }
     });
     {
-      spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-      spinnerRefine.setValue(9);
-      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+      spinnerRadius.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
+      spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+      spinnerRadius.setValue(9);
+      spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override

@@ -1,6 +1,9 @@
+// code by ynager
 package ch.ethz.idsc.owl.mapping;
 
 import java.awt.image.BufferedImage;
+
+import javax.swing.WindowConstants;
 
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.GpuMat;
@@ -11,6 +14,8 @@ import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_cudafilters;
 import org.bytedeco.javacpp.opencv_cudafilters.Filter;
 import org.bytedeco.javacpp.opencv_imgproc;
+import org.bytedeco.javacv.CanvasFrame;
+import org.bytedeco.javacv.OpenCVFrameConverter;
 
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.data.img.CvHelper;
@@ -18,8 +23,15 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-enum cudaTest {
+enum CudaDemo {
   ;
+  private static void displayMat(Mat image, String caption) {
+    CanvasFrame canvas = new CanvasFrame(caption, 1.0);
+    canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    OpenCVFrameConverter<?> converter = new OpenCVFrameConverter.ToMat();
+    canvas.showImage(converter.convert(image));
+  }
+
   public static void main(String[] args) {
     int radius = 4;
     Mat kernel = opencv_imgproc.getStructuringElement(opencv_imgproc.MORPH_ELLIPSE, //
@@ -33,40 +45,40 @@ enum cudaTest {
     //
     // CPU dilate
     Mat dst = new Mat(src.size(), src.type());
-    Stopwatch s = Stopwatch.started();
+    Stopwatch stopwatch = Stopwatch.started();
     opencv_imgproc.dilate(src, dst, kernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
     // opencv_imgproc.threshold(img, dst, 128.0, 255.0, opencv_imgproc.THRESH_BINARY);
-    s.stop();
-    System.out.println("CPU: " + s.display_seconds());
-    CvHelper.displayMat(dst, "CPU");
-    s.resetToZero();
+    stopwatch.stop();
+    System.out.println("CPU: " + stopwatch.display_seconds());
+    displayMat(dst, "CPU");
+    stopwatch.resetToZero();
     //
     // GPU dilate
     GpuMat src_g = new GpuMat(src.size(), src.type());
     GpuMat dst_g = new GpuMat(src.size(), src.type());
     src_g.upload(src);
     Filter filter = opencv_cudafilters.createMorphologyFilter(opencv_imgproc.MORPH_DILATE, src_g.type(), kernel, new Point(-1, -1), it);
-    s.start();
+    stopwatch.start();
     filter.apply(src_g, dst_g);
     // opencv_cudaarithm.threshold(src_g, dst_g, 128.0, 255.0, opencv_imgproc.THRESH_BINARY);
-    s.stop();
-    System.out.println("GPU: " + s.display_seconds());
-    s.resetToZero();
+    stopwatch.stop();
+    System.out.println("GPU: " + stopwatch.display_seconds());
+    stopwatch.resetToZero();
     dst_g.download(dst);
-    CvHelper.displayMat(dst, "GPU");
+    displayMat(dst, "GPU");
     //
     // CPU DT dilate
     Mat negSrc = new Mat();
     Mat negSrcDT = new Mat();
     Mat dilated = new Mat();
     Mat rad = new Mat(Scalar.all(it * radius));
-    s.start();
+    stopwatch.start();
     opencv_core.bitwise_not(src, negSrc);
     opencv_imgproc.distanceTransform(negSrc, negSrcDT, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
     opencv_core.compare(negSrcDT, rad, dilated, opencv_core.CMP_LE);
-    s.stop();
-    CvHelper.displayMat(dilated, "DT CPU");
-    System.out.println("DT CPU: " + s.display_seconds());
+    stopwatch.stop();
+    displayMat(dilated, "DT CPU");
+    System.out.println("DT CPU: " + stopwatch.display_seconds());
     //
   }
 }
