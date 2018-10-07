@@ -9,7 +9,6 @@ public class StreetScenarioDataTest extends TestCase {
   public void testLoad() {
     for (StreetScenario streetScenario : StreetScenario.values())
       try {
-        System.out.println(streetScenario.name());
         StreetScenarioData streetScenarioData = streetScenario.load();
         assertTrue(0 < streetScenarioData.render.getWidth());
         // System.out.println("imagePedLegal");
@@ -23,6 +22,7 @@ public class StreetScenarioDataTest extends TestCase {
         Tensor imageLanes = streetScenarioData.imageLanes();
         MatrixQ.require(imageLanes);
       } catch (Exception exception) {
+        System.err.println(streetScenario.name());
         exception.printStackTrace();
         break;
       }

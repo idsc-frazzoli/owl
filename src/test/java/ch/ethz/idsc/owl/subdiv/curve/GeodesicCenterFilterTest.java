@@ -1,17 +1,25 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Flatten;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sig.WindowFunctions;
 import junit.framework.TestCase;
 
 public class GeodesicCenterFilterTest extends TestCase {
   public void testSimple() {
-    GeodesicCenter geodesicCenter = new GeodesicCenter(RnGeodesic.INSTANCE, FilterMask.BINOMIAL);
-    GeodesicCenterFilter geodesicCenterFilter = new GeodesicCenterFilter(geodesicCenter, 3);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, WindowFunctions.BINOMIAL);
+    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 3);
     Tensor linear = Range.of(0, 10);
     Tensor result = geodesicCenterFilter.apply(linear);
     assertEquals(result, linear);
@@ -19,8 +27,8 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testKernel3() {
-    GeodesicCenter geodesicCenter = new GeodesicCenter(RnGeodesic.INSTANCE, FilterMask.BINOMIAL);
-    GeodesicCenterFilter geodesicCenterFilter = new GeodesicCenterFilter(geodesicCenter, 3);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, WindowFunctions.BINOMIAL);
+    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 3);
     Tensor signal = UnitVector.of(9, 4);
     Tensor result = geodesicCenterFilter.apply(signal);
     assertTrue(ExactScalarQ.all(result));
@@ -28,11 +36,35 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testKernel1() {
-    GeodesicCenter geodesicCenter = new GeodesicCenter(RnGeodesic.INSTANCE, FilterMask.BINOMIAL);
-    GeodesicCenterFilter geodesicCenterFilter = new GeodesicCenterFilter(geodesicCenter, 1);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, WindowFunctions.BINOMIAL);
+    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Tensor signal = UnitVector.of(5, 2);
     Tensor result = geodesicCenterFilter.apply(signal);
     assertTrue(ExactScalarQ.all(result));
     assertEquals(result, Tensors.fromString("{0, 1/4, 1/2, 1/4, 0}"));
+  }
+
+  public void testData() {
+    String resource = "/dubilab/app/pose/2r/20180820T165637_1.csv";
+    Tensor table = ResourceData.of(resource);
+    Tensor xyz = Tensor.of(table.stream().map(row -> row.extract(1, 4)));
+    for (WindowFunctions windowFunctions : WindowFunctions.values()) {
+      TensorUnaryOperator tensorUnaryOperator = //
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, windowFunctions), 3);
+      Tensor res = tensorUnaryOperator.apply(xyz);
+      Tensor xy = Tensor.of(xyz.stream().map(Extract2D::of));
+      Tensor uv = Tensor.of(res.stream().map(Extract2D::of));
+      Tensor dif = Flatten.of(xy.subtract(uv));
+      assertTrue(Scalars.lessThan(Norm.INFINITY.of(dif), RealScalar.of(.5)));
+    }
+  }
+
+  public void testFail() {
+    try {
+      GeodesicCenterFilter.of(null, 1);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

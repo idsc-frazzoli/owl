@@ -38,7 +38,6 @@ import ch.ethz.idsc.tensor.sca.Round;
 public final class GeometricComponent {
   private static final Font DEFAULT_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
   private static final double WHEEL_ANGLE = Math.PI / 12;
-  private static final int BUTTON_DRAG = 3;
   /** initial model to pixel matrix */
   private static final Tensor MODEL2PIXEL_INITIAL = Tensors.matrix(new Number[][] { //
       { 60, 0, 300 }, //
@@ -68,6 +67,7 @@ public final class GeometricComponent {
   private long lastRepaint = System.nanoTime();
   private int mouseWheel = 0;
   private boolean isZoomable = true;
+  private int buttonDrag = MouseEvent.BUTTON3;
 
   public GeometricComponent() {
     jComponent.addMouseWheelListener(event -> {
@@ -100,7 +100,7 @@ public final class GeometricComponent {
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-          if (mouseEvent.getButton() == BUTTON_DRAG) {
+          if (mouseEvent.getButton() == buttonDrag) {
             down = mouseEvent.getPoint();
             Dimension dimension = jComponent.getSize();
             center = toModel(new Point(dimension.width / 2, dimension.height / 2)).unmodifiable();
@@ -159,6 +159,11 @@ public final class GeometricComponent {
    * @param isZoomable */
   public void setZoomable(boolean isZoomable) {
     this.isZoomable = isZoomable;
+  }
+
+  /** @param button for instance MouseEvent.BUTTON1 */
+  public void setButtonDrag(int button) {
+    buttonDrag = button;
   }
 
   /** function only clears render interfaces in the foreground.

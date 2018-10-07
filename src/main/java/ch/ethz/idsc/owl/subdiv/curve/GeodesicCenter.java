@@ -3,37 +3,27 @@ package ch.ethz.idsc.owl.subdiv.curve;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/** projects a sequence of points to their geodesic center
+/** Careful: the implementation only supports sequences with odd number of elements
+ * 
+ * projects a sequence of points to their geodesic center
  * with each point weighted as provided by an external function */
+// TODO class is not yet serializable
 public class GeodesicCenter implements TensorUnaryOperator {
-  private static final Scalar TWO = RealScalar.of(2);
-
-  /** @param mask
-   * @return weights of Kalman-style iterative moving average */
-  /* package */ static Tensor splits(Tensor mask) {
-    int radius = (mask.length() - 1) / 2;
-    Tensor halfmask = Tensors.vector(i -> i == 0 //
-        ? mask.Get(radius + i)
-        : mask.Get(radius + i).multiply(TWO), radius);
-    Scalar factor = RealScalar.ONE;
-    Tensor splits = Tensors.empty();
-    for (int index = 0; index < radius; ++index) {
-      Scalar lambda = halfmask.Get(index).divide(factor);
-      splits.append(lambda);
-      factor = factor.multiply(RealScalar.ONE.subtract(lambda));
-    }
-    return Reverse.of(splits);
+  /** @param geodesicInterface
+   * @param function
+   * @return
+   * @throws Exception if either input parameters is null */
+  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
+    return new GeodesicCenter(geodesicInterface, function);
   }
 
   // ---
@@ -41,28 +31,28 @@ public class GeodesicCenter implements TensorUnaryOperator {
   private final Function<Integer, Tensor> function;
   private final List<Tensor> weights = new ArrayList<>();
 
-  public GeodesicCenter(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
-    this.geodesicInterface = geodesicInterface;
-    this.function = function;
+  private GeodesicCenter(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
+    this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
+    this.function = Objects.requireNonNull(function);
   }
 
   @Override
   public Tensor apply(Tensor tensor) {
+    // TODO support sequences with even number of elements
     if (tensor.length() % 2 != 1)
       throw TensorRuntimeException.of(tensor);
     int radius = (tensor.length() - 1) / 2;
     synchronized (weights) {
       while (weights.size() <= radius)
-        weights.add(splits(function.apply(weights.size())));
+        weights.add(StaticHelper.splits(function.apply(weights.size())));
     }
     Tensor splits = weights.get(radius);
     Tensor pL = tensor.get(0);
     Tensor pR = tensor.get(2 * radius);
-    for (int index = 0; index < radius; ++index) {
-      Scalar scalar = splits.Get(index);
-      int pos = index + 1;
-      pL = geodesicInterface.split(pL, tensor.get(pos), scalar);
-      pR = geodesicInterface.split(pR, tensor.get(2 * radius - pos), scalar);
+    for (int index = 0; index < radius;) {
+      Scalar scalar = splits.Get(index++);
+      pL = geodesicInterface.split(pL, tensor.get(index), scalar);
+      pR = geodesicInterface.split(pR, tensor.get(2 * radius - index), scalar);
     }
     return geodesicInterface.split(pL, pR, RationalScalar.HALF);
   }

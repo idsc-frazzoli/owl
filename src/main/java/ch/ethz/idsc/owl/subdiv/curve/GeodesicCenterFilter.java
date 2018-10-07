@@ -1,16 +1,26 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class GeodesicCenterFilter implements TensorUnaryOperator {
+  /** @param geodesicCenter
+   * @param radius
+   * @return */
+  public static TensorUnaryOperator of(TensorUnaryOperator geodesicCenter, int radius) {
+    return new GeodesicCenterFilter(geodesicCenter, radius);
+  }
+
+  // ---
   private final TensorUnaryOperator geodesicCenter;
   private final int radius;
 
-  public GeodesicCenterFilter(TensorUnaryOperator geodesicCenter, int radius) {
-    this.geodesicCenter = geodesicCenter;
+  private GeodesicCenterFilter(TensorUnaryOperator geodesicCenter, int radius) {
+    this.geodesicCenter = Objects.requireNonNull(geodesicCenter);
     this.radius = radius;
   }
 
