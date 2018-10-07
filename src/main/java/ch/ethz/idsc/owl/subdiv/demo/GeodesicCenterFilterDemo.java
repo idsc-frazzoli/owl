@@ -140,7 +140,7 @@ class GeodesicCenterFilterDemo {
     {
       // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerFilter.setList(Arrays.asList(FilterMask.values()));
-      spinnerFilter.setValue(FilterMask.CONSTANT);
+      spinnerFilter.setValue(FilterMask.DIRICHLET);
       spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
     }
     {

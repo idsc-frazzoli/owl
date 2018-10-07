@@ -23,15 +23,15 @@ public class GeodesicCenterTest extends TestCase {
 
   public void testSplitsMean() {
     {
-      Tensor tensor = GeodesicCenter.splits(FilterMask.CONSTANT.apply(1));
+      Tensor tensor = GeodesicCenter.splits(FilterMask.DIRICHLET.apply(1));
       assertEquals(tensor, Tensors.fromString("{1/3}"));
     }
     {
-      Tensor tensor = GeodesicCenter.splits(FilterMask.CONSTANT.apply(2));
+      Tensor tensor = GeodesicCenter.splits(FilterMask.DIRICHLET.apply(2));
       assertEquals(tensor, Tensors.fromString("{1/2, 1/5}"));
     }
     {
-      Tensor tensor = GeodesicCenter.splits(FilterMask.CONSTANT.apply(3));
+      Tensor tensor = GeodesicCenter.splits(FilterMask.DIRICHLET.apply(3));
       assertEquals(tensor, Tensors.fromString("{1/2, 1/3, 1/7}"));
     }
   }
