@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Binomial;
@@ -18,6 +19,7 @@ import ch.ethz.idsc.tensor.sig.GaussianWindow;
 import ch.ethz.idsc.tensor.sig.HammingWindow;
 import ch.ethz.idsc.tensor.sig.HannWindow;
 import ch.ethz.idsc.tensor.sig.NuttallWindow;
+import ch.ethz.idsc.tensor.sig.SymmetricVectorQ;
 import ch.ethz.idsc.tensor.sig.TukeyWindow;
 
 public enum FilterMask implements Function<Integer, Tensor> {
@@ -48,10 +50,14 @@ public enum FilterMask implements Function<Integer, Tensor> {
 
   @Override
   public Tensor apply(Integer i) {
-    return i == 0 //
-        ? Tensors.vector(1)
-        : Normalize.of( //
-            Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i).map(scalarUnaryOperator), //
-            Norm._1);
+    if (i == 0) //
+      return Tensors.vector(1);
+    Tensor vector = Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
+        .map(scalarUnaryOperator);
+    if (Scalars.isZero(vector.Get(0)))
+      vector = Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i + 2) //
+          .map(scalarUnaryOperator) //
+          .extract(1, 2 * i + 2);
+    return SymmetricVectorQ.require(Normalize.of(vector, Norm._1));
   }
 }
