@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.owl.subdiv.curve.FilterMask;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
 import ch.ethz.idsc.owl.subdiv.curve.Se2Geodesic;
@@ -29,8 +28,10 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
 class GeodesicCenterFilterDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
@@ -40,21 +41,21 @@ class GeodesicCenterFilterDemo {
   private Tensor control = Tensors.of(Array.zeros(3));
 
   GeodesicCenterFilterDemo() {
-    SpinnerLabel<FilterMask> spinnerFilter = new SpinnerLabel<>();
+    SpinnerLabel<WindowFunctions> spinnerFilter = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
       String resource;
-      resource = "/dubilab/app/filter/0w/20180702T133612_1.csv";
-      resource = "/dubilab/app/filter/0w/20180702T180041_2.csv";
-      // resource = "/dubilab/app/filter/2r/20180820T143852_1.csv";
-      // resource = "/dubilab/app/filter/2r/20180820T165637_1.csv";
-      // resource = "/dubilab/app/filter/slow/20180924T141613_2.csv";
-      // resource = "/dubilab/app/filter/slow/20180503T160522_1.csv";
-      // resource = "/dubilab/app/filter/3az/20180827T170643_1.csv";
-      // resource = "/dubilab/app/filter/3az/20180830T111749_8.csv";
+      resource = "/dubilab/app/pose/0w/20180702T133612_1.csv";
+      resource = "/dubilab/app/pose/0w/20180702T180041_2.csv";
+      // resource = "/dubilab/app/pose/2r/20180820T143852_1.csv";
+      resource = "/dubilab/app/pose/2r/20180820T165637_1.csv";
+      // resource = "/dubilab/app/pose/slow/20180924T141613_2.csv";
+      // resource = "/dubilab/app/pose/slow/20180503T160522_1.csv";
+      // resource = "/dubilab/app/pose/3az/20180827T170643_1.csv";
+      // resource = "/dubilab/app/pose/3az/20180830T111749_8.csv";
       //
       Tensor table = ResourceData.of(resource);
-      control = Tensor.of(table.stream().limit(50000).map(row -> row.extract(1, 4)));
+      control = Tensor.of(table.stream().limit(500).map(row -> row.extract(1, 4)));
     }
     // {
     // JButton jButton = new JButton("clear");
@@ -95,8 +96,8 @@ class GeodesicCenterFilterDemo {
             graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
-        GeodesicCenterFilter geodesicCenterFilter = //
-            new GeodesicCenterFilter(new GeodesicCenter(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
+        TensorUnaryOperator geodesicCenterFilter = //
+            GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
         refined = geodesicCenterFilter.apply(control);
         Tensor speeds = Se2SpeedEstimate.FUNCTION.apply(refined);
         final int baseline_y = 200;
@@ -139,8 +140,8 @@ class GeodesicCenterFilterDemo {
     });
     {
       // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerFilter.setList(Arrays.asList(FilterMask.values()));
-      spinnerFilter.setValue(FilterMask.DIRICHLET);
+      spinnerFilter.setList(Arrays.asList(WindowFunctions.values()));
+      spinnerFilter.setValue(WindowFunctions.DIRICHLET);
       spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
     }
     {

@@ -7,12 +7,12 @@ import ch.ethz.idsc.tensor.sca.Cos;
 
 enum StaticHelper {
   ;
-  private static final Scalar TWO_PI = RealScalar.of(2 * Math.PI);
+  private static final Scalar _2_PI = RealScalar.of(2 * Math.PI);
   private static final Scalar _4_PI = RealScalar.of(4 * Math.PI);
   private static final Scalar _6_PI = RealScalar.of(6 * Math.PI);
 
   static Scalar deg1(Scalar a0, Scalar a1, Scalar x) {
-    return a0.add(a1.multiply(Cos.FUNCTION.apply(x.multiply(TWO_PI))));
+    return a0.add(a1.multiply(Cos.FUNCTION.apply(x.multiply(_2_PI))));
   }
 
   static Scalar deg2(Scalar a0, Scalar a1, Scalar a2, Scalar x) {
