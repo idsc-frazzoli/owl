@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.symlink;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -19,11 +20,13 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Round;
 
 public class SymLinkRender implements RenderInterface {
-  private static final Tensor CIRCLE = CirclePoints.of(31).multiply(RealScalar.of(.075));
+  private static final Tensor CIRCLE_END = CirclePoints.of(31).multiply(RealScalar.of(.066));
+  private static final Tensor CIRCLE_MID = CirclePoints.of(31).multiply(RealScalar.of(.033));
+  // ---
   private final SymLink symLink;
 
-  public SymLinkRender(SymLink root) {
-    this.symLink = root;
+  public SymLinkRender(SymLink symLink) {
+    this.symLink = symLink;
   }
 
   @Override
@@ -31,22 +34,36 @@ public class SymLinkRender implements RenderInterface {
     Tensor here = symLink.getPosition();
     if (symLink instanceof SymNode) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(here));
-      Path2D path2d = geometricLayer.toPath2D(CIRCLE);
+      Path2D path2d = geometricLayer.toPath2D(CIRCLE_END);
       path2d.closePath();
       graphics.setColor(Color.BLACK);
+      graphics.setStroke(new BasicStroke(1f));
       graphics.fill(path2d);
       geometricLayer.popMatrix();
     } else {
       {
+        geometricLayer.pushMatrix(Se2Utils.toSE2Translation(here));
+        Path2D path2d = geometricLayer.toPath2D(CIRCLE_MID);
+        path2d.closePath();
+        graphics.setColor(Color.BLACK);
+        graphics.setStroke(new BasicStroke(1f));
+        graphics.fill(path2d);
+        geometricLayer.popMatrix();
+      }
+      {
         new SymLinkRender(symLink.lP).render(geometricLayer, graphics);
         Tensor there = symLink.lP.getPosition();
         Path2D path2d = geometricLayer.toPath2D(Tensors.of(here, there));
+        graphics.setStroke(new BasicStroke(1.5f));
+        graphics.setColor(Color.BLACK);
         graphics.draw(path2d);
       }
       {
         new SymLinkRender(symLink.lQ).render(geometricLayer, graphics);
         Tensor there = symLink.lQ.getPosition();
         Path2D path2d = geometricLayer.toPath2D(Tensors.of(here, there));
+        graphics.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
+        graphics.setColor(Color.BLACK);
         graphics.draw(path2d);
       }
       {
@@ -54,7 +71,8 @@ public class SymLinkRender implements RenderInterface {
         String string = nice(symLink.lambda);
         FontMetrics fontMetrics = graphics.getFontMetrics();
         int stringWidth = fontMetrics.stringWidth(string);
-        graphics.setColor(new Color(192, 192, 192, 192));
+        int rgb = 192 + 32;
+        graphics.setColor(new Color(rgb, rgb, rgb, 192));
         int pix = (int) point2d.getX() - stringWidth / 2;
         int piy = (int) point2d.getY() - 10;
         graphics.fillRect(pix, piy - 18, stringWidth, 22);
