@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
+import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
+import ch.ethz.idsc.owl.math.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

@@ -1,8 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.curve;
+package ch.ethz.idsc.owl.math.group;
 
-import ch.ethz.idsc.owl.math.map.Se2CoveringExponential;
-import ch.ethz.idsc.owl.math.map.Se2CoveringGroupElement;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

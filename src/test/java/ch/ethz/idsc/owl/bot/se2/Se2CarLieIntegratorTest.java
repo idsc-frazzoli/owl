@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.math.map.Se2CoveringIntegrator;
+import ch.ethz.idsc.owl.math.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

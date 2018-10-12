@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import ch.ethz.idsc.owl.math.map.RnExponential;
-import ch.ethz.idsc.owl.math.map.RnGroup;
+import ch.ethz.idsc.owl.math.group.RnExponential;
+import ch.ethz.idsc.owl.math.group.RnGroup;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.pdf.Distribution;

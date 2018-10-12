@@ -3,6 +3,8 @@ package ch.ethz.idsc.owl.subdiv.curve;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.math.group.RnGeodesic;
+import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

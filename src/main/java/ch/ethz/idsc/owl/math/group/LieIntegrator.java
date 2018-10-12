@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.flow;
+package ch.ethz.idsc.owl.math.group;
 
 import ch.ethz.idsc.tensor.Tensor;
 

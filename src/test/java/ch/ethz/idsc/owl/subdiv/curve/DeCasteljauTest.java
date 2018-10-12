@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import ch.ethz.idsc.owl.math.group.RnGeodesic;
+import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;

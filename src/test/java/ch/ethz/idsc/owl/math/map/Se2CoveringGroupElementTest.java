@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
+import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
+import ch.ethz.idsc.owl.math.group.Se2CoveringGroupElement;
+import ch.ethz.idsc.owl.math.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;

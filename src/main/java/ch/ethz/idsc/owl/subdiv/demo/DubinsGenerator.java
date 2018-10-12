@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.demo;
 
-import ch.ethz.idsc.owl.math.map.Se2CoveringIntegrator;
+import ch.ethz.idsc.owl.math.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;

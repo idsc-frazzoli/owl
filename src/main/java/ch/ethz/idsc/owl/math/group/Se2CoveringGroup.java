@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.curve;
+package ch.ethz.idsc.owl.math.group;
 
-import ch.ethz.idsc.owl.math.map.Se2CoveringGroupElement;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** the covering group of SE(2) is parameterized by R^3 */

@@ -1,11 +1,14 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import ch.ethz.idsc.owl.math.map.LieExponential;
+import ch.ethz.idsc.owl.math.group.LieExponential;
+import ch.ethz.idsc.owl.math.group.LieGroup;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+/** generalization of {@link Differences} */
 public class GeodesicDifferences implements TensorUnaryOperator {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;

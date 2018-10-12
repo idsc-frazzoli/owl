@@ -6,7 +6,7 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
-import ch.ethz.idsc.owl.math.map.Se2CoveringIntegrator;
+import ch.ethz.idsc.owl.math.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

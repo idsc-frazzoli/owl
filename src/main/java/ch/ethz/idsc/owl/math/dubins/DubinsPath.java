@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.dubins;
 
-import ch.ethz.idsc.owl.math.map.Se2CoveringIntegrator;
+import ch.ethz.idsc.owl.math.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;

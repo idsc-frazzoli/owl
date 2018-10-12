@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.math.map;
+package ch.ethz.idsc.owl.math.group;
 
-import ch.ethz.idsc.owl.subdiv.curve.LieGroup;
 import ch.ethz.idsc.tensor.Tensor;
 
 public enum RnGroup implements LieGroup {
