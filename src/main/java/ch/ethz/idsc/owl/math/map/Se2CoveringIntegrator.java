@@ -12,6 +12,6 @@ public enum Se2CoveringIntegrator implements LieIntegrator {
    * @return g . exp x */
   @Override // from LieIntegrator
   public Tensor spin(Tensor g, Tensor x) {
-    return new Se2CoveringGroupAction(g).combine(Se2CoveringExponential.INSTANCE.exp(x));
+    return new Se2CoveringGroupElement(g).combine(Se2CoveringExponential.INSTANCE.exp(x));
   }
 }

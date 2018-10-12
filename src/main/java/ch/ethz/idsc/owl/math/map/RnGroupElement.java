@@ -6,19 +6,19 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Tensor;
 
 /**  */
-public class RnGroupElement implements LieGroupAction, Serializable {
+public class RnGroupElement implements LieGroupElement, Serializable {
   private final Tensor tensor;
 
   public RnGroupElement(Tensor tensor) {
     this.tensor = tensor;
   }
 
-  @Override // from LieGroupAction
-  public LieGroupAction inverse() {
+  @Override // from LieGroupElement
+  public RnGroupElement inverse() {
     return new RnGroupElement(tensor.negate());
   }
 
-  @Override // from LieGroupAction
+  @Override // from LieGroupElement
   public Tensor combine(Tensor tensor) {
     return this.tensor.add(tensor);
   }

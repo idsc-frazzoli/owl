@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.owl.math.map.Se2CoveringExponential;
-import ch.ethz.idsc.owl.math.map.Se2CoveringGroupAction;
+import ch.ethz.idsc.owl.math.map.Se2CoveringGroupElement;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** measures difference between p and q in SE(2) covering group relative to p
@@ -18,7 +18,7 @@ public enum Se2CoveringWrap implements CoordinateWrap {
 
   @Override // from TensorDifference
   public Tensor difference(Tensor p, Tensor q) {
-    Tensor tensor = new Se2CoveringGroupAction(p).inverse().combine(q);
+    Tensor tensor = new Se2CoveringGroupElement(p).inverse().combine(q);
     return Se2CoveringExponential.INSTANCE.log(tensor);
   }
 }

@@ -8,7 +8,7 @@ public enum RnGroup implements LieGroup {
   INSTANCE;
   // ---
   @Override
-  public LieGroupAction element(Tensor tensor) {
+  public RnGroupElement element(Tensor tensor) {
     return new RnGroupElement(tensor);
   }
 }
