@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import java.io.Serializable;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

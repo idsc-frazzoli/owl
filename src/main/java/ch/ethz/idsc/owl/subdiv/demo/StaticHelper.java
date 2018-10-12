@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.demo;
 
+import ch.ethz.idsc.owl.math.GeodesicInterface;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 

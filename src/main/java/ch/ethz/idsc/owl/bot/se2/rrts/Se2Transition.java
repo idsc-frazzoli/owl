@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.math.dubins.DubinsPath;
 import ch.ethz.idsc.owl.math.dubins.DubinsPathGenerator;
 import ch.ethz.idsc.owl.math.dubins.DubinsPathLengthComparator;
 import ch.ethz.idsc.owl.math.dubins.FixedRadiusDubins;
-import ch.ethz.idsc.owl.math.map.Se2CoveringGroupAction;
+import ch.ethz.idsc.owl.math.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.tensor.Scalar;
@@ -19,7 +19,7 @@ public class Se2Transition extends AbstractTransition {
   public Se2Transition(Tensor start, Tensor end, Scalar radius) {
     super(start, end);
     DubinsPathGenerator dubinsPathGenerator = //
-        new FixedRadiusDubins(new Se2CoveringGroupAction(start).inverse().combine(end), radius);
+        new FixedRadiusDubins(new Se2CoveringGroupElement(start).inverse().combine(end), radius);
     dubinsPath = dubinsPathGenerator.allValid() //
         .min(DubinsPathLengthComparator.INSTANCE).get();
   }

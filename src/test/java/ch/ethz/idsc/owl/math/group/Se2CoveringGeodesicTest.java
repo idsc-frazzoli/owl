@@ -1,8 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.curve;
+package ch.ethz.idsc.owl.math.group;
 
-import ch.ethz.idsc.owl.math.map.Se2CoveringExponential;
-import ch.ethz.idsc.owl.math.map.Se2CoveringGroupAction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -29,7 +27,7 @@ public class Se2CoveringGeodesicTest extends TestCase {
     // {2.017191762967754, -0.08474511292102775, 0.9817477042468103}
     // System.out.println(tensor);
     // Tensor p_inv = ;
-    Tensor delta = new Se2CoveringGroupAction(p).inverse().combine(q);
+    Tensor delta = new Se2CoveringGroupElement(p).inverse().combine(q);
     Tensor x = Se2CoveringExponential.INSTANCE.log(delta).multiply(scalar);
     x.get();
     // x= {0.20432112230000457, -0.1559021143001622, -5.551115123125783E-17}

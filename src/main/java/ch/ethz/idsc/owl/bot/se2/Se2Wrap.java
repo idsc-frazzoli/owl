@@ -2,8 +2,8 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.owl.math.CoordinateWrap;
-import ch.ethz.idsc.owl.math.map.Se2CoveringExponential;
-import ch.ethz.idsc.owl.math.map.Se2CoveringGroupAction;
+import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
+import ch.ethz.idsc.owl.math.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
@@ -30,7 +30,7 @@ public enum Se2Wrap implements CoordinateWrap {
 
   @Override // from TensorDifference
   public Tensor difference(Tensor p, Tensor q) {
-    Tensor tensor = new Se2CoveringGroupAction(p).inverse().combine(q);
+    Tensor tensor = new Se2CoveringGroupElement(p).inverse().combine(q);
     tensor.set(MOD_DISTANCE, INDEX_ANGLE);
     return Se2CoveringExponential.INSTANCE.log(tensor);
   }
