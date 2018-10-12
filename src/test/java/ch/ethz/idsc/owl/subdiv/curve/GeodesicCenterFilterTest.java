@@ -7,11 +7,18 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Flatten;
+import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sig.WindowFunctions;
 import junit.framework.TestCase;
@@ -42,6 +49,24 @@ public class GeodesicCenterFilterTest extends TestCase {
     Tensor result = geodesicCenterFilter.apply(signal);
     assertTrue(ExactScalarQ.all(result));
     assertEquals(result, Tensors.fromString("{0, 1/4, 1/2, 1/4, 0}"));
+  }
+
+  public void testS2() {
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(S2Geodesic.INSTANCE, WindowFunctions.HANN);
+    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
+    Distribution distribution = NormalDistribution.standard();
+    Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(Normalize::of));
+    Tensor result = geodesicCenterFilter.apply(tensor);
+    assertEquals(Dimensions.of(tensor), Dimensions.of(result));
+  }
+
+  public void testSo3() {
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(So3Geodesic.INSTANCE, WindowFunctions.HAMMING);
+    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
+    Distribution distribution = UniformDistribution.unit();
+    Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(Rodrigues::exp));
+    Tensor result = geodesicCenterFilter.apply(tensor);
+    assertEquals(Dimensions.of(tensor), Dimensions.of(result));
   }
 
   public void testData() {

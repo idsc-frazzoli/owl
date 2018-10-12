@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO also apply to cyclic curves
 public class GeodesicCenterFilter implements TensorUnaryOperator {
   /** @param geodesicCenter
    * @param radius

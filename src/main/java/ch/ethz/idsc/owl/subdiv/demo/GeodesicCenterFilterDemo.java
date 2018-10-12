@@ -15,11 +15,14 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
+import ch.ethz.idsc.owl.math.map.Se2CoveringExponential;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
+import ch.ethz.idsc.owl.subdiv.curve.GeodesicDifferences;
 import ch.ethz.idsc.owl.subdiv.curve.Se2Geodesic;
+import ch.ethz.idsc.owl.subdiv.curve.Se2Group;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -55,7 +58,7 @@ class GeodesicCenterFilterDemo {
       // resource = "/dubilab/app/pose/3az/20180830T111749_8.csv";
       //
       Tensor table = ResourceData.of(resource);
-      control = Tensor.of(table.stream().limit(500).map(row -> row.extract(1, 4)));
+      control = Tensor.of(table.stream().limit(5000).map(row -> row.extract(1, 4)));
     }
     // {
     // JButton jButton = new JButton("clear");
@@ -99,7 +102,9 @@ class GeodesicCenterFilterDemo {
         TensorUnaryOperator geodesicCenterFilter = //
             GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
         refined = geodesicCenterFilter.apply(control);
-        Tensor speeds = Se2SpeedEstimate.FUNCTION.apply(refined);
+        GeodesicDifferences geodesicDifferences = //
+            new GeodesicDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+        Tensor speeds = geodesicDifferences.apply(refined);
         final int baseline_y = 200;
         {
           graphics.setColor(Color.BLACK);
