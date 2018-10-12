@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Binomial;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -70,6 +69,7 @@ public enum WindowFunctions implements Function<Integer, Tensor> {
             .extract(1, 2 * i + 2)
         : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
             .map(scalarUnaryOperator);
-    return Normalize.of(vector, Norm._1);
+    // TODO V062 refactor
+    return Normalize.of(vector, v -> VectorTotal.FUNCTION.apply(v));
   }
 }
