@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.group;
 
 import java.util.function.Function;
 
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicInterface;
+import ch.ethz.idsc.owl.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 

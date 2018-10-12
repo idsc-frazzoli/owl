@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.subdiv.curve;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.owl.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
