@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.demo;
+package ch.ethz.idsc.owl.symlink;
 
 import java.util.stream.IntStream;
 

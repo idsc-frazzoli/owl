@@ -54,6 +54,26 @@ public class WindowFunctionsTest extends TestCase {
       }
   }
 
+  public void testIsZeroBlackman() {
+    assertTrue(WindowFunctions.BLACKMAN.isZero());
+  }
+
+  public void testIsZeroHann() {
+    assertTrue(WindowFunctions.HANN.isZero());
+  }
+
+  public void testIsZeroNutall() {
+    assertTrue(WindowFunctions.NUTTALL.isZero());
+  }
+
+  public void testIsZeroParzen() {
+    assertTrue(WindowFunctions.PARZEN.isZero());
+  }
+
+  public void testIsZeroTukey() {
+    assertTrue(WindowFunctions.TUKEY.isZero());
+  }
+
   public void testAllFail() {
     for (WindowFunctions windowFunctions : WindowFunctions.values())
       try {

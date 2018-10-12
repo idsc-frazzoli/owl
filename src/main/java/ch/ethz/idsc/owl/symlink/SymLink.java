@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.subdiv.demo;
+package ch.ethz.idsc.owl.symlink;
 
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -9,9 +9,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Min;
 
 public class SymLink {
+  public static final Scalar SHIFT_Y = RealScalar.of(.5);
+  // ---
   public final SymLink lP;
   public final SymLink lQ;
-  private final Scalar lambda;
+  public final Scalar lambda;
 
   public SymLink(SymLink lP, SymLink lQ, Scalar lambda) {
     this.lP = lP;
@@ -23,7 +25,7 @@ public class SymLink {
     Tensor posP = lP.getPosition();
     Tensor posQ = lQ.getPosition();
     Tensor x = RnGeodesic.INSTANCE.split(posP.Get(0), posQ.Get(0), lambda);
-    Scalar y = Min.of(posP.Get(1), posQ.Get(1)).subtract(RealScalar.ONE);
+    Scalar y = Min.of(posP.Get(1), posQ.Get(1)).subtract(SHIFT_Y);
     return Tensors.of(x, y);
   }
 

@@ -6,12 +6,12 @@ import java.util.function.Function;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Binomial;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -56,7 +56,12 @@ public enum WindowFunctions implements Function<Integer, Tensor> {
 
   private WindowFunctions(ScalarUnaryOperator scalarUnaryOperator) {
     this.scalarUnaryOperator = scalarUnaryOperator;
-    isZero = Scalars.isZero(scalarUnaryOperator.apply(RationalScalar.HALF));
+    isZero = Chop._10.allZero(scalarUnaryOperator.apply(RationalScalar.HALF));
+  }
+
+  /** @return true if function at 1/2 evaluates to zero */
+  boolean isZero() {
+    return isZero;
   }
 
   @Override
