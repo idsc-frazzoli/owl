@@ -22,6 +22,7 @@ import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacpp.opencv_imgproc;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
+import ch.ethz.idsc.owl.data.img.CvHelper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -29,6 +30,7 @@ import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   private final static int NSEGS = 40;
@@ -52,12 +54,11 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     this.lidar = lidar;
     this.vMax = vMax;
     // setup
-    URL carLanesURL = getClass().getResource(lanes);
-    // URL carObsURL = getClass().getResource("/map/scenarios/s1/car_obs.png");
+    BufferedImage carLanesImg = ResourceData.bufferedImage(lanes);
+    Mat img = CvHelper.bufferedImageToMat(carLanesImg);
     URL kernelURL = getClass().getResource("/cv/kernels/kernel6.bmp");
     float pixelPerSeg = 253.0f / (NSEGS);
     int[] limits = IntStream.rangeClosed(0, NSEGS).map(i -> (int) (i * pixelPerSeg)).toArray();
-    Mat img = opencv_imgcodecs.imread(carLanesURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
     Mat kernOrig = opencv_imgcodecs.imread(kernelURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
     Mat carKernel = Mat.ones(new Size(5, 5), kernOrig.type()).asMat();
     byte[] a = { //
@@ -135,8 +136,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, opencv_core.Scalar.WHITE);
     opencv_core.subtract(area, lidarMat, area);
     // expand shadow region according to lane direction
-    // TODO this is a bottleneck! takes ~150ms
-    // !!
+    // TODO this is a bottleneck
     int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO check if correct
     for (int i = 1; i < it; ++i) {
       List<Mat> updated = IntStream.range(0, NSEGS).parallel() //
@@ -191,7 +191,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   public Mat getShape(Mat mat, float radius) {
     // TODO use car shape
     Mat shape = mat.clone();
-    Mat radPx = new Mat(Scalar.all((CAR_RAD + radius) / pixelDim.number().floatValue()));
+    Mat radPx = new Mat(Scalar.all((CAR_RAD + radius + 0.5) / pixelDim.number().floatValue()));
     Mat negSrc = new Mat(shape.size(), shape.type());
     opencv_core.bitwise_not(shape, negSrc);
     opencv_imgproc.distanceTransform(negSrc, shape, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);

@@ -170,17 +170,13 @@ public class ShadowEvaluator {
       Scalar timeToReact = RealScalar.of(-1);
       if (clear) {
         timeToReact = RealScalar.ZERO;
-        int idx = 1;
-        for (Tensor tReact : tReactVec) {
-          // TODO YN trajectory.get(i + idx) is never null, check code below
-          // Optional<TrajectorySample> fut = Optional.ofNullable(trajectory.get(i + idx));
+        for (int idx = 1; (idx + i) <= trajectory.size() && idx < tReactVec.length(); ++idx){
+          Tensor tReact = tReactVec.get(idx); 
           TrajectorySample tjs = trajectory.get(i + idx);
-          idx += 1;
           vel = tjs.stateTime().state().Get(3); // get velocity of future state
           se2Bijection = new Se2Bijection(tjs.stateTime().state());
           shadowMap.updateMap(simArea, oob, delta_treact); // update sr by delta_treact w.o. new lidar info
           shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
-          // FIXME YN vel should be updated to vel at fut
           dBrake = tBrake.multiply(vel).divide(TWO);
           range = Subdivide.of(0, dBrake.number(), RESOLUTION);
           ray = TensorProduct.of(range, dir);
