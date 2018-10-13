@@ -215,7 +215,7 @@ class BezierDemo {
     });
     {
       spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
       spinnerRefine.setValue(9);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }

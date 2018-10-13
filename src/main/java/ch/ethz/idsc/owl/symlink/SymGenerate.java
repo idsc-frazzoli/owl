@@ -34,8 +34,14 @@ enum SymGenerate {
     Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::of));
     CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
     Tensor tensor = curveSubdivision.string(vector);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(2));
-    ImageIO.write(symLinkImage.bufferedImage(), "png", UserHome.Pictures("export/bspline3.png"));
+    {
+      SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(2));
+      ImageIO.write(symLinkImage.bufferedImage(), "png", UserHome.Pictures("export/bspline3.png"));
+    }
+    {
+      SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
+      ImageIO.write(symLinkImage.bufferedImage(), "png", UserHome.Pictures("export/bspline3m.png"));
+    }
   }
 
   public static void subdiv4a1() throws IOException {
@@ -89,13 +95,13 @@ enum SymGenerate {
   }
 
   public static void main(String[] args) throws IOException {
-    // for (WindowFunctions windowFunctions : WindowFunctions.values())
-    // for (int radius = 1; radius <= 4; ++radius)
-    // window(windowFunctions, radius);
-    // subdiv3();
-    // subdiv4a1();
-    // subdiv4a2();
-    // subdiv4b();
+    for (WindowFunctions windowFunctions : WindowFunctions.values())
+      for (int radius = 1; radius <= 4; ++radius)
+        window(windowFunctions, radius);
+    // subdiv3(); // manually edited 1 pic!
+    subdiv4a1();
+    subdiv4a2();
+    subdiv4b();
     // custom();
     decastL();
     decastR();

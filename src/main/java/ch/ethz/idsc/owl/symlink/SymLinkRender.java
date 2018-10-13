@@ -88,4 +88,11 @@ class SymLinkRender implements RenderInterface {
         : Round._4.apply(scalar);
     return simplified.toString();
   }
+
+  public static String nice3(Scalar scalar) {
+    Scalar simplified = ExactScalarQ.of(scalar) //
+        ? scalar
+        : Round._3.apply(scalar);
+    return simplified.toString();
+  }
 }
