@@ -6,11 +6,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -43,33 +46,47 @@ class GeodesicCenterFilterDemo {
   private final TimerFrame timerFrame = new TimerFrame();
   private Tensor control = Tensors.of(Array.zeros(3));
 
+  static List<String> appPose() {
+    List<String> list = new ArrayList<>();
+    File root = UserHome.file("Projects/ephemeral/src/main/resources/dubilab/app/pose");
+    for (File folder : root.listFiles())
+      for (File file : folder.listFiles()) {
+        String name = file.getName();
+        String total = folder.getName() + "/" + name.substring(0, name.length() - 4);
+        list.add(total);
+      }
+    return list;
+  }
+
   GeodesicCenterFilterDemo() {
     SpinnerLabel<WindowFunctions> spinnerFilter = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
-      String resource;
-      resource = "/dubilab/app/pose/0w/20180702T133612_1.csv";
-      resource = "/dubilab/app/pose/0w/20180702T180041_2.csv";
-      // resource = "/dubilab/app/pose/2r/20180820T143852_1.csv";
-      resource = "/dubilab/app/pose/2r/20180820T165637_1.csv";
-      // resource = "/dubilab/app/pose/slow/20180924T141613_2.csv";
-      // resource = "/dubilab/app/pose/slow/20180503T160522_1.csv";
-      // resource = "/dubilab/app/pose/3az/20180827T170643_1.csv";
-      // resource = "/dubilab/app/pose/3az/20180830T111749_8.csv";
-      //
-      Tensor table = ResourceData.of(resource);
-      control = Tensor.of(table.stream().limit(5000).map(row -> row.extract(1, 4)));
+      SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
+      List<String> list = appPose();
+      // Arrays.asList( //
+      // "0w/20180702T133612_1", //
+      // "0w/20180702T180041_2", //
+      // "2r/20180820T143852_1", //
+      // "2r/20180820T165637_1", //
+      // "3az/20180827T170643_1", //
+      // "3az/20180830T111749_8", //
+      // "4o/20181008T183011_3", //
+      // "slow/20180924T141613_2", //
+      // "slow/20180503T160522_1" //
+      // );
+      spinnerLabel.addSpinnerListener(resource -> //
+      control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream().limit(5000).map(row -> row.extract(1, 4))));
+      // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
+      spinnerLabel.setList(list);
+      // spinnerData.setValue(WindowFunctions.GAUSSIAN);
+      spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
     // {
     // JButton jButton = new JButton("clear");
     // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
     // timerFrame.jToolBar.add(jButton);
     // }
-    JTextField jTextField = new JTextField(10);
-    jTextField.setPreferredSize(new Dimension(100, 28));
-    {
-      timerFrame.jToolBar.add(jTextField);
-    }
     JToggleButton jToggleCtrl = new JToggleButton("ctrl");
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
@@ -146,7 +163,7 @@ class GeodesicCenterFilterDemo {
     {
       // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerFilter.setList(Arrays.asList(WindowFunctions.values()));
-      spinnerFilter.setValue(WindowFunctions.DIRICHLET);
+      spinnerFilter.setValue(WindowFunctions.GAUSSIAN);
       spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
     }
     {

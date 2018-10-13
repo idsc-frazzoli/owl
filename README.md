@@ -1,6 +1,6 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.2.1`
+Library for motion planning in Java, version `0.2.2`
 
 The library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
@@ -135,7 +135,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.2.1</version>
+        <version>0.2.2</version>
       </dependency>
     </dependencies>
 
@@ -153,3 +153,6 @@ by Brian Paden and Emilio Frazzoli,
 * *Sampling-based algorithms for optimal motion planning*
 by Sertac Karaman and Emilio Frazzoli,
 [IJRR11](http://ares.lids.mit.edu/papers/Karaman.Frazzoli.IJRR11.pdf)
+* *Curve Subdivision in SE(2)*
+by Jan Hakenberg,
+[viXra:1807.0463](http://vixra.org/abs/1807.0463)

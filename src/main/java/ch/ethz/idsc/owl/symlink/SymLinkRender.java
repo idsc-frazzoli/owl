@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Round;
 
-public class SymLinkRender implements RenderInterface {
+class SymLinkRender implements RenderInterface {
   private static final Tensor CIRCLE_END = CirclePoints.of(31).multiply(RealScalar.of(.066));
   private static final Tensor CIRCLE_MID = CirclePoints.of(31).multiply(RealScalar.of(.033));
   // ---
@@ -74,7 +74,7 @@ public class SymLinkRender implements RenderInterface {
         int rgb = 192 + 32;
         graphics.setColor(new Color(rgb, rgb, rgb, 192));
         int pix = (int) point2d.getX() - stringWidth / 2;
-        int piy = (int) point2d.getY() - 10;
+        int piy = (int) point2d.getY() - 14;
         graphics.fillRect(pix, piy - 18, stringWidth, 22);
         graphics.setColor(Color.BLACK);
         graphics.drawString(string, pix, piy);

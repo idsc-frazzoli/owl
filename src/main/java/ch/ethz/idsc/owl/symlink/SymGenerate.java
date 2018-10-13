@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.DeCasteljau;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
-public enum SymGen {
+enum SymGenerate {
   ;
   public static void window(WindowFunctions wf, int radius) throws IOException {
     TensorUnaryOperator tensorUnaryOperator = //
@@ -71,14 +72,32 @@ public enum SymGen {
     ImageIO.write(symLinkImage.bufferedImage(), "png", UserHome.Pictures("export/custom.png"));
   }
 
+  public static void decastL() throws IOException {
+    Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::of));
+    DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
+    SymScalar symScalar = (SymScalar) deCasteljau.apply(RationalScalar.of(1, 3));
+    SymLinkImage symLinkImage = new SymLinkImage(symScalar);
+    ImageIO.write(symLinkImage.bufferedImage(), "png", UserHome.Pictures("export/decastel41_3.png"));
+  }
+
+  public static void decastR() throws IOException {
+    Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::of));
+    DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
+    SymScalar symScalar = (SymScalar) deCasteljau.apply(RationalScalar.of(3, 4));
+    SymLinkImage symLinkImage = new SymLinkImage(symScalar);
+    ImageIO.write(symLinkImage.bufferedImage(), "png", UserHome.Pictures("export/decastel43_4.png"));
+  }
+
   public static void main(String[] args) throws IOException {
     // for (WindowFunctions windowFunctions : WindowFunctions.values())
     // for (int radius = 1; radius <= 4; ++radius)
     // window(windowFunctions, radius);
-    subdiv3();
-    subdiv4a1();
-    subdiv4a2();
-    subdiv4b();
-    custom();
+    // subdiv3();
+    // subdiv4a1();
+    // subdiv4a2();
+    // subdiv4b();
+    // custom();
+    decastL();
+    decastR();
   }
 }

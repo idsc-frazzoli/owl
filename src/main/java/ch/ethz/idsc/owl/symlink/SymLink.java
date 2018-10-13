@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Min;
 
-public class SymLink {
+class SymLink {
   public static final Scalar SHIFT_Y = RealScalar.of(.5);
   // ---
   public final SymLink lP;

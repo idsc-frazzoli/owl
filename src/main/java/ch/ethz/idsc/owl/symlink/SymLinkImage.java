@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class SymLinkImage {
+class SymLinkImage {
   private static final Tensor MODEL2PIXEL = Tensors.fromString("{{100,0,80},{0,-100,50},{0,0,1}}");
   private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 22);
   private static final TensorUnaryOperator IMAGE_CROP = ImageCrop.constant(Tensors.vector(255, 255, 255, 255));

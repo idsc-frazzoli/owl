@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
-public enum SymGeodesic implements GeodesicInterface {
+enum SymGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   @Override

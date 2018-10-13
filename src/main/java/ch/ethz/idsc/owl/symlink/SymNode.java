@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class SymNode extends SymLink {
+class SymNode extends SymLink {
   private final Scalar symScalar;
 
   public SymNode(Scalar symScalar) {

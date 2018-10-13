@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.red.Total;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ImageCrop.html">ImageCrop</a> */
+// TODO obsolete V062
 public class ImageCrop implements TensorUnaryOperator {
   public static TensorUnaryOperator constant(Tensor value) {
     return new ImageCrop(entry -> entry.equals(value));
