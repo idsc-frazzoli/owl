@@ -1,16 +1,14 @@
-// source:
 // http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
 // adapted by jph
 package ch.ethz.idsc.owl.math;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.io.Pretty;
-import ch.ethz.idsc.tensor.sca.Round;
 
 public enum QuaternionToRotationMatrix {
   ;
+  /** @param wxyz vector of length 4, does not have to have unit length
+   * @return */
   public static Tensor of(Tensor wxyz) {
     double q_w = wxyz.Get(0).number().doubleValue();
     double q_x = wxyz.Get(1).number().doubleValue();
@@ -41,11 +39,5 @@ public enum QuaternionToRotationMatrix {
         { m00, m01, m02 }, //
         { m10, m11, m12 }, //
         { m20, m21, m22 } });
-  }
-
-  public static void main(String[] args) {
-    Tensor s = of(Tensors.vector(0.240810, -0.761102, -0.355923, -0.485854));
-    Tensor m = Transpose.of(s).dot(s);
-    System.out.println(Pretty.of(m.map(Round._4)));
   }
 }

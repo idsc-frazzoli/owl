@@ -63,9 +63,4 @@ class SymScalar extends ScalarAdapter {
   public String toString() {
     return tensor.toString();
   }
-
-  public static void main(String[] args) {
-    Scalar scalar = SymScalar.of(3);
-    System.out.println(scalar.getClass());
-  }
 }

@@ -44,7 +44,7 @@ public class Loxodrome implements ScalarTensorFunction {
 
   public static void main(String[] args) throws IOException {
     Loxodrome loxodrome = new Loxodrome(RealScalar.of(.15));
-    Tensor tensor = Subdivide.of(0, 4, 200).map(AbsSquared.FUNCTION).map(loxodrome);
+    Tensor tensor = Subdivide.of(0, 4.5, 250).map(AbsSquared.FUNCTION).map(loxodrome);
     Export.of(UserHome.file("loxodrome_exact.csv"), tensor);
     Tensor noise = RandomVariate.of(NormalDistribution.of(0, .05), Dimensions.of(tensor));
     tensor = tensor.add(noise);
@@ -52,7 +52,7 @@ public class Loxodrome implements ScalarTensorFunction {
     Export.of(UserHome.file("loxodrome_noise.csv"), tensor);
     for (WindowFunctions windowFunctions : WindowFunctions.values()) {
       TensorUnaryOperator tensorUnaryOperator = GeodesicCenterFilter.of( //
-          GeodesicCenter.of(S2Geodesic.INSTANCE, windowFunctions), 6);
+          GeodesicCenter.of(S2Geodesic.INSTANCE, windowFunctions), 7);
       Tensor smooth = tensorUnaryOperator.apply(tensor);
       Export.of(UserHome.file("loxodrome_" + windowFunctions.name().toLowerCase() + ".csv"), smooth);
     }

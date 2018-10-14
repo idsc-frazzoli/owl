@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.JToggleButton;
 
@@ -49,8 +51,8 @@ class GeodesicCenterFilterDemo {
   static List<String> appPose() {
     List<String> list = new ArrayList<>();
     File root = UserHome.file("Projects/ephemeral/src/main/resources/dubilab/app/pose");
-    for (File folder : root.listFiles())
-      for (File file : folder.listFiles()) {
+    for (File folder : Stream.of(root.listFiles()).sorted().collect(Collectors.toList()))
+      for (File file : Stream.of(folder.listFiles()).sorted().collect(Collectors.toList())) {
         String name = file.getName();
         String total = folder.getName() + "/" + name.substring(0, name.length() - 4);
         list.add(total);
@@ -92,8 +94,12 @@ class GeodesicCenterFilterDemo {
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
     JToggleButton jToggleLine = new JToggleButton("line");
-    jToggleLine.setSelected(false);
+    jToggleLine.setSelected(true);
     timerFrame.jToolBar.add(jToggleLine);
+    // ---
+    JToggleButton jToggleDiff = new JToggleButton("diff");
+    jToggleDiff.setSelected(false);
+    timerFrame.jToolBar.add(jToggleDiff);
     // ---
     timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
       @Override
@@ -105,55 +111,68 @@ class GeodesicCenterFilterDemo {
         final int radius = spinnerRadius.getValue();
         final Tensor refined;
         // final Tensor curve;
-        if (jToggleCtrl.isSelected())
+        if (jToggleCtrl.isSelected()) {
+          final Color color = new Color(255, 128, 128, 255);
+          if (jToggleLine.isSelected()) {
+            graphics.setColor(color);
+            graphics.draw(geometricLayer.toPath2D(control));
+          }
           for (Tensor point : control) {
             geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
             Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
             path2d.closePath();
             graphics.setColor(new Color(255, 128, 128, 64));
             graphics.fill(path2d);
-            graphics.setColor(new Color(255, 128, 128, 255));
+            graphics.setColor(color);
             graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
+        }
         TensorUnaryOperator geodesicCenterFilter = //
             GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
         refined = geodesicCenterFilter.apply(control);
-        GeodesicDifferences geodesicDifferences = //
-            new GeodesicDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
-        Tensor speeds = geodesicDifferences.apply(refined);
-        final int baseline_y = 200;
-        {
-          graphics.setColor(Color.BLACK);
-          graphics.drawLine(0, baseline_y, 1200, baseline_y);
-        }
-        ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
-        {
-          int piy = 30;
-          graphics.drawString("Filter: " + spinnerFilter.getValue(), 0, piy);
-          Scalar width = Quantity.of(0.05 * (spinnerRadius.getValue() * 2 + 1), "s");
-          graphics.drawString("Window: " + Round._3.apply(width), 0, piy += 15);
-          graphics.setColor(colorDataIndexed.getColor(0));
-          graphics.drawString("Tangent velocity", 0, piy += 15);
-          graphics.setColor(colorDataIndexed.getColor(1));
-          graphics.drawString("Side slip", 0, piy += 15);
-          graphics.setColor(colorDataIndexed.getColor(2));
-          graphics.drawString("Rotational rate", 0, piy += 15);
-        }
-        for (int c = 0; c < 3; ++c) {
-          graphics.setColor(colorDataIndexed.getColor(c));
-          Path2D path2d = plotFunc(graphics, speeds.get(Tensor.ALL, c).multiply(RealScalar.of(400)), baseline_y);
-          graphics.setStroke(new BasicStroke(1.3f));
-          graphics.draw(path2d);
+        if (jToggleDiff.isSelected()) {
+          final int baseline_y = 200;
+          {
+            graphics.setColor(Color.BLACK);
+            graphics.drawLine(0, baseline_y, 1200, baseline_y);
+          }
+          ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
+          {
+            int piy = 30;
+            graphics.drawString("Filter: " + spinnerFilter.getValue(), 0, piy);
+            Scalar width = Quantity.of(0.05 * (spinnerRadius.getValue() * 2 + 1), "s");
+            graphics.drawString("Window: " + Round._3.apply(width), 0, piy += 15);
+            graphics.setColor(colorDataIndexed.getColor(0));
+            graphics.drawString("Tangent velocity", 0, piy += 15);
+            graphics.setColor(colorDataIndexed.getColor(1));
+            graphics.drawString("Side slip", 0, piy += 15);
+            graphics.setColor(colorDataIndexed.getColor(2));
+            graphics.drawString("Rotational rate", 0, piy += 15);
+          }
+          GeodesicDifferences geodesicDifferences = //
+              new GeodesicDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+          Tensor speeds = geodesicDifferences.apply(refined);
+          for (int c = 0; c < 3; ++c) {
+            graphics.setColor(colorDataIndexed.getColor(c));
+            Path2D path2d = plotFunc(graphics, speeds.get(Tensor.ALL, c).multiply(RealScalar.of(400)), baseline_y);
+            graphics.setStroke(new BasicStroke(1.3f));
+            graphics.draw(path2d);
+          }
         }
         graphics.setStroke(new BasicStroke(1f));
+        int rgb = 128 + 32;
+        final Color color = new Color(rgb, rgb, rgb, 128 + 64);
+        if (jToggleLine.isSelected()) {
+          graphics.setColor(color);
+          graphics.draw(geometricLayer.toPath2D(refined));
+        }
         for (Tensor point : refined) {
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
           Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
           geometricLayer.popMatrix();
-          int rgb = 128 + 32;
           path2d.closePath();
-          graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
+          graphics.setColor(color);
           graphics.fill(path2d);
           graphics.setColor(Color.BLACK);
           graphics.draw(path2d);

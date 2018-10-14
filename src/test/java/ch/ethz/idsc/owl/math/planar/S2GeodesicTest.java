@@ -54,6 +54,15 @@ public class S2GeodesicTest extends TestCase {
     }
   }
 
+  public void testArticle() {
+    Tensor p = Tensors.vector(1, 0, 0);
+    Tensor q = Tensors.vector(0, 1 / Math.sqrt(5), 2 / Math.sqrt(5));
+    Tensor tensor = S2Geodesic.INSTANCE.split(p, q, RealScalar.of(.4));
+    // in sync with Mathematica
+    Tensor expect = Tensors.vector(0.8090169943749473, 0.2628655560595668, 0.5257311121191336);
+    assertTrue(Chop._12.close(tensor, expect));
+  }
+
   public void testFail() {
     try {
       S2Geodesic.INSTANCE.split(UnitVector.of(4, 0), UnitVector.of(3, 1), RealScalar.ZERO);
