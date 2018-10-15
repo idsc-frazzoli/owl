@@ -61,34 +61,18 @@ class GeodesicCenterFilterDemo {
   }
 
   GeodesicCenterFilterDemo() {
+    timerFrame.jFrame.setTitle(getClass().getSimpleName());
     SpinnerLabel<WindowFunctions> spinnerFilter = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = appPose();
-      // Arrays.asList( //
-      // "0w/20180702T133612_1", //
-      // "0w/20180702T180041_2", //
-      // "2r/20180820T143852_1", //
-      // "2r/20180820T165637_1", //
-      // "3az/20180827T170643_1", //
-      // "3az/20180830T111749_8", //
-      // "4o/20181008T183011_3", //
-      // "slow/20180924T141613_2", //
-      // "slow/20180503T160522_1" //
-      // );
       spinnerLabel.addSpinnerListener(resource -> //
-      control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream().limit(5000).map(row -> row.extract(1, 4))));
-      // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
+      control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
+          .limit(300).map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
-      // spinnerData.setValue(WindowFunctions.GAUSSIAN);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
-    // {
-    // JButton jButton = new JButton("clear");
-    // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-    // timerFrame.jToolBar.add(jButton);
-    // }
     JToggleButton jToggleCtrl = new JToggleButton("ctrl");
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);

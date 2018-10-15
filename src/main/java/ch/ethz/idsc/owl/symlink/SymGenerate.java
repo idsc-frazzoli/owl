@@ -27,6 +27,7 @@ enum SymGenerate {
     Tensor vector = Tensor.of(IntStream.range(0, 2 * radius + 1).mapToObj(SymScalar::of));
     Tensor tensor = tensorUnaryOperator.apply(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor);
+    symLinkImage.title("" + wf.name() + "[" + (2 * radius + 1) + "]");
     ImageIO.write(symLinkImage.bufferedImage(), "png", UserHome.Pictures("export/" + wf.name().toLowerCase() + radius + ".png"));
   }
 
@@ -95,15 +96,17 @@ enum SymGenerate {
   }
 
   public static void main(String[] args) throws IOException {
-    for (WindowFunctions windowFunctions : WindowFunctions.values())
-      for (int radius = 1; radius <= 4; ++radius)
-        window(windowFunctions, radius);
+    window(WindowFunctions.GAUSSIAN, 5);
+    window(WindowFunctions.GAUSSIAN, 6);
+    // for (WindowFunctions windowFunctions : WindowFunctions.values())
+    // for (int radius = 1; radius <= 4; ++radius)
+    // window(windowFunctions, radius);
     // subdiv3(); // manually edited 1 pic!
-    subdiv4a1();
-    subdiv4a2();
-    subdiv4b();
-    // custom();
-    decastL();
-    decastR();
+    // subdiv4a1();
+    // subdiv4a2();
+    // subdiv4b();
+    // // custom();
+    // decastL();
+    // decastR();
   }
 }

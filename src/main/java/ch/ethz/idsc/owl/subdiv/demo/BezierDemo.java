@@ -56,6 +56,7 @@ class BezierDemo {
   private boolean ref2ctrl = false;
 
   BezierDemo() {
+    timerFrame.jFrame.setTitle(getClass().getSimpleName());
     SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
