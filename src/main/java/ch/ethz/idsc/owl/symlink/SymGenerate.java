@@ -63,7 +63,8 @@ enum SymGenerate {
 
   public static void subdiv4b() throws IOException {
     Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::of));
-    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split3(SymGeodesic.INSTANCE, RationalScalar.HALF);
+    CurveSubdivision curveSubdivision = //
+        BSpline4CurveSubdivision.split3(SymGeodesic.INSTANCE, RationalScalar.HALF);
     Tensor tensor = curveSubdivision.string(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
     ImageIO.write(symLinkImage.bufferedImage(), "png", UserHome.Pictures("export/bspline4b.png"));
