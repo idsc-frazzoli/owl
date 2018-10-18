@@ -69,7 +69,7 @@ class GeodesicCenterFilterDemo {
       List<String> list = appPose();
       spinnerLabel.addSpinnerListener(resource -> //
       control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          .limit(300).map(row -> row.extract(1, 4))));
+          .limit(700).map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
@@ -82,12 +82,18 @@ class GeodesicCenterFilterDemo {
     timerFrame.jToolBar.add(jToggleLine);
     // ---
     JToggleButton jToggleDiff = new JToggleButton("diff");
-    jToggleDiff.setSelected(false);
+    jToggleDiff.setSelected(true);
     timerFrame.jToolBar.add(jToggleDiff);
+    // ---
+    JToggleButton jToggleWait = new JToggleButton("wait");
+    jToggleWait.setSelected(false);
+    timerFrame.jToolBar.add(jToggleWait);
     // ---
     timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
       @Override
       public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+        if (jToggleWait.isSelected())
+          return;
         // graphics.drawImage(image, 100, 100, null);
         GraphicsUtil.setQualityHigh(graphics);
         // boolean isR2 = jToggleButton.isSelected();

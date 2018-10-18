@@ -156,3 +156,6 @@ by Sertac Karaman and Emilio Frazzoli,
 * *Curve Subdivision in SE(2)*
 by Jan Hakenberg,
 [viXra:1807.0463](http://vixra.org/abs/1807.0463)
+* *Smoothing using Geodesic Averages*
+by Jan Hakenberg
+
