@@ -15,6 +15,7 @@ public enum HammingWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
+    StaticHelper.SEMI.requireInside(x);
     return StaticHelper.deg1(_25_46, _21_46, x);
   }
 }

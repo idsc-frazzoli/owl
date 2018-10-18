@@ -34,6 +34,7 @@ import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivisionInterpolationApproximation;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -54,6 +55,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 
 class CurveSubdivisionDemo {
+  private static final boolean BSPLINE4 = false;
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
@@ -66,18 +68,13 @@ class CurveSubdivisionDemo {
   private final TimerFrame timerFrame = new TimerFrame();
   private Tensor mouse = Array.zeros(3);
   private Integer min_index = null;
-  // private static final Tensor FCURVE = LogarithmicSpiralCurve.of(RealScalar.of(2), RealScalar.of(0.1759));
-  // Nest.of( //
-  // new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic, //
-  // DUBILAB, 5);
-  // FresnelCurve.of(300).multiply(RealScalar.of(10));
   private boolean printref = false;
   private boolean ref2ctrl = false;
 
   CurveSubdivisionDemo() {
+    timerFrame.jFrame.setTitle(getClass().getSimpleName());
     // BufferedImage image = ImageIO.read(UserHome.file("trebleclef25.png"));
     SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
-    // SpinnerLabel<CurveSubdivisionSchemes> spinnerAlpha = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
     SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
     // control = Tensors.fromString(
@@ -186,7 +183,6 @@ class CurveSubdivisionDemo {
     timerFrame.jToolBar.add(jToggleInterp);
     // ---
     JToggleButton jToggleCyclic = new JToggleButton("cyclic");
-    // jToggleCyclic.setSelected(true);
     timerFrame.jToolBar.add(jToggleCyclic);
     // ---
     JToggleButton jToggleButton = new JToggleButton("R2");
@@ -263,8 +259,6 @@ class CurveSubdivisionDemo {
               geometricLayer.popMatrix();
             }
           CurveSubdivision curveSubdivision = function.apply(Se2CoveringGeodesic.INSTANCE);
-          // Function<GeodesicInterface, CurveSubdivision> fun = spinnerAlpha.getValue().function;
-          // CurveSubdivision angleSubdivision = fun.apply(Se2CoveringGeodesic.INSTANCE);
           TensorUnaryOperator tuo = isCyclic //
               ? curveSubdivision::cyclic
               : curveSubdivision::string;
@@ -289,6 +283,18 @@ class CurveSubdivisionDemo {
           // graphics.setStroke(new BasicStroke(1f));
         }
         {
+          if (BSPLINE4) {
+            CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE);
+            // curveSubdivision.string(_control);
+            Tensor refined2 = Nest.of(curveSubdivision::string, _control, levels);
+            graphics.setColor(Color.GREEN);
+            Path2D path2d = geometricLayer.toPath2D(refined2);
+            if (isCyclic)
+              path2d.closePath();
+            graphics.setStroke(new BasicStroke(1.25f));
+            graphics.draw(path2d);
+            graphics.setStroke(new BasicStroke(1f));
+          }
           graphics.setColor(Color.BLUE);
           Path2D path2d = geometricLayer.toPath2D(refined);
           if (isCyclic)
@@ -340,12 +346,6 @@ class CurveSubdivisionDemo {
       spinnerLabel.setIndex(2);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
     }
-    // {
-    // spinnerAlpha.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-    // spinnerAlpha.setArray(CurveSubdivisionSchemes.values());
-    // spinnerAlpha.setIndex(2);
-    // spinnerAlpha.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
-    // }
     {
       spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
       spinnerRefine.setValue(6);

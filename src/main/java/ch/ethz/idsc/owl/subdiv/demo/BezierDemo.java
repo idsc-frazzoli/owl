@@ -8,15 +8,12 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
-import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 
 import javax.swing.JButton;
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -36,8 +33,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.io.CsvFormat;
-import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -56,6 +51,7 @@ class BezierDemo {
   private boolean ref2ctrl = false;
 
   BezierDemo() {
+    timerFrame.jFrame.setTitle(getClass().getSimpleName());
     SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
@@ -67,43 +63,9 @@ class BezierDemo {
       jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
       timerFrame.jToolBar.add(jButton);
     }
-    JTextField jTextField = new JTextField(10);
-    jTextField.setPreferredSize(new Dimension(100, 28));
-    {
-      timerFrame.jToolBar.add(jTextField);
-    }
-    {
-      JButton jButton = new JButton("print");
-      jButton.addActionListener(actionEvent -> {
-        System.out.println(control);
-        // long now = System.currentTimeMillis();
-        File file = UserHome.file("" + jTextField.getText() + ".csv");
-        // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
-        try {
-          Export.of(file, control.map(CsvFormat.strict()));
-        } catch (Exception exception) {
-          exception.printStackTrace();
-        }
-      });
-      timerFrame.jToolBar.add(jButton);
-    }
-    {
-      JButton jButton = new JButton("p-ref");
-      jButton.addActionListener(actionEvent -> printref = true);
-      timerFrame.jToolBar.add(jButton);
-    }
-    {
-      JButton jButton = new JButton("r2c");
-      jButton.addActionListener(actionEvent -> ref2ctrl = true);
-      timerFrame.jToolBar.add(jButton);
-    }
     JToggleButton jToggleCtrl = new JToggleButton("ctrl");
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
-    // ---
-    JToggleButton jToggleBndy = new JToggleButton("bndy");
-    jToggleBndy.setSelected(true);
-    timerFrame.jToolBar.add(jToggleBndy);
     // ---
     JToggleButton jToggleComb = new JToggleButton("comb");
     jToggleComb.setSelected(true);
@@ -215,7 +177,7 @@ class BezierDemo {
     });
     {
       spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
       spinnerRefine.setValue(9);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }

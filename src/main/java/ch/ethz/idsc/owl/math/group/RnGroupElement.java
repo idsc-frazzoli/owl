@@ -5,7 +5,8 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-/**  */
+/** represents a vector in Euclidean space
+ * with addition as group operation */
 public class RnGroupElement implements LieGroupElement, Serializable {
   private final Tensor tensor;
 

@@ -6,6 +6,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
+/** {@link DeCasteljau} */
+// TODO document how this class is intended for use
 public class BezierCurve {
   private final GeodesicInterface geodesicInterface;
 

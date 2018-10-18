@@ -19,6 +19,7 @@ public enum ParzenWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
+    StaticHelper.SEMI.requireInside(x);
     x = x.abs();
     return Scalars.lessEquals(x, _1_4) //
         ? S1.apply(x)

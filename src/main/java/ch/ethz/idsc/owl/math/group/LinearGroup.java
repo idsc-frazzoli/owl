@@ -3,11 +3,11 @@ package ch.ethz.idsc.owl.math.group;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum So3Group implements LieGroup {
+public enum LinearGroup implements LieGroup {
   INSTANCE;
   // ---
   @Override // from LieGroup
-  public LieGroupElement element(Tensor matrix) {
-    return new So3GroupElement(matrix);
+  public LinearGroupElement element(Tensor matrix) {
+    return new LinearGroupElement(matrix);
   }
 }

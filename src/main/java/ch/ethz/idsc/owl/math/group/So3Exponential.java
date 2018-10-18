@@ -4,6 +4,9 @@ package ch.ethz.idsc.owl.math.group;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.Rodrigues;
 
+/** a group element SO(3) is represented as a 3x3 orthogonal matrix
+ * 
+ * an element of the algebra so(3) is represented as a vector of length 3 */
 public enum So3Exponential implements LieExponential {
   INSTANCE;
   // ---

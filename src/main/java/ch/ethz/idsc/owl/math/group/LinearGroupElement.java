@@ -4,16 +4,16 @@ package ch.ethz.idsc.owl.math.group;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
 
-public class So3GroupElement implements LieGroupElement {
-  Tensor matrix;
+public class LinearGroupElement implements LieGroupElement {
+  private final Tensor matrix;
 
-  public So3GroupElement(Tensor matrix) {
+  public LinearGroupElement(Tensor matrix) {
     this.matrix = matrix;
   }
 
   @Override // from LieGroupElement
-  public LieGroupElement inverse() {
-    return new So3GroupElement(Inverse.of(matrix));
+  public LinearGroupElement inverse() {
+    return new LinearGroupElement(Inverse.of(matrix));
   }
 
   @Override // from LieGroupElement

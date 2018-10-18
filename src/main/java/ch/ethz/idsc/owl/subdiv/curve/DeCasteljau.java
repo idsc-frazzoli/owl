@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 /** algorithm for the evaluation of Bezier curves
  * 
  * https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm */
-/* package */ class DeCasteljau implements ScalarTensorFunction {
+public class DeCasteljau implements ScalarTensorFunction {
   private final GeodesicInterface geodesicInterface;
   private final Tensor points;
 

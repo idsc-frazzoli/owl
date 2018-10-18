@@ -6,11 +6,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -23,6 +28,7 @@ import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicDifferences;
+import ch.ethz.idsc.owl.symlink.WindowFunctions;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,7 +40,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
 class GeodesicCenterFilterDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
@@ -43,44 +48,52 @@ class GeodesicCenterFilterDemo {
   private final TimerFrame timerFrame = new TimerFrame();
   private Tensor control = Tensors.of(Array.zeros(3));
 
+  static List<String> appPose() {
+    List<String> list = new ArrayList<>();
+    File root = UserHome.file("Projects/ephemeral/src/main/resources/dubilab/app/pose");
+    for (File folder : Stream.of(root.listFiles()).sorted().collect(Collectors.toList()))
+      for (File file : Stream.of(folder.listFiles()).sorted().collect(Collectors.toList())) {
+        String name = file.getName();
+        String total = folder.getName() + "/" + name.substring(0, name.length() - 4);
+        list.add(total);
+      }
+    return list;
+  }
+
   GeodesicCenterFilterDemo() {
+    timerFrame.jFrame.setTitle(getClass().getSimpleName());
     SpinnerLabel<WindowFunctions> spinnerFilter = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
-      String resource;
-      resource = "/dubilab/app/pose/0w/20180702T133612_1.csv";
-      resource = "/dubilab/app/pose/0w/20180702T180041_2.csv";
-      // resource = "/dubilab/app/pose/2r/20180820T143852_1.csv";
-      resource = "/dubilab/app/pose/2r/20180820T165637_1.csv";
-      // resource = "/dubilab/app/pose/slow/20180924T141613_2.csv";
-      // resource = "/dubilab/app/pose/slow/20180503T160522_1.csv";
-      // resource = "/dubilab/app/pose/3az/20180827T170643_1.csv";
-      // resource = "/dubilab/app/pose/3az/20180830T111749_8.csv";
-      //
-      Tensor table = ResourceData.of(resource);
-      control = Tensor.of(table.stream().limit(5000).map(row -> row.extract(1, 4)));
-    }
-    // {
-    // JButton jButton = new JButton("clear");
-    // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-    // timerFrame.jToolBar.add(jButton);
-    // }
-    JTextField jTextField = new JTextField(10);
-    jTextField.setPreferredSize(new Dimension(100, 28));
-    {
-      timerFrame.jToolBar.add(jTextField);
+      SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
+      List<String> list = appPose();
+      spinnerLabel.addSpinnerListener(resource -> //
+      control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
+          .limit(700).map(row -> row.extract(1, 4))));
+      spinnerLabel.setList(list);
+      spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
     JToggleButton jToggleCtrl = new JToggleButton("ctrl");
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
     JToggleButton jToggleLine = new JToggleButton("line");
-    jToggleLine.setSelected(false);
+    jToggleLine.setSelected(true);
     timerFrame.jToolBar.add(jToggleLine);
+    // ---
+    JToggleButton jToggleDiff = new JToggleButton("diff");
+    jToggleDiff.setSelected(true);
+    timerFrame.jToolBar.add(jToggleDiff);
+    // ---
+    JToggleButton jToggleWait = new JToggleButton("wait");
+    jToggleWait.setSelected(false);
+    timerFrame.jToolBar.add(jToggleWait);
     // ---
     timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
       @Override
       public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+        if (jToggleWait.isSelected())
+          return;
         // graphics.drawImage(image, 100, 100, null);
         GraphicsUtil.setQualityHigh(graphics);
         // boolean isR2 = jToggleButton.isSelected();
@@ -88,55 +101,68 @@ class GeodesicCenterFilterDemo {
         final int radius = spinnerRadius.getValue();
         final Tensor refined;
         // final Tensor curve;
-        if (jToggleCtrl.isSelected())
+        if (jToggleCtrl.isSelected()) {
+          final Color color = new Color(255, 128, 128, 255);
+          if (jToggleLine.isSelected()) {
+            graphics.setColor(color);
+            graphics.draw(geometricLayer.toPath2D(control));
+          }
           for (Tensor point : control) {
             geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
             Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
             path2d.closePath();
             graphics.setColor(new Color(255, 128, 128, 64));
             graphics.fill(path2d);
-            graphics.setColor(new Color(255, 128, 128, 255));
+            graphics.setColor(color);
             graphics.draw(path2d);
             geometricLayer.popMatrix();
           }
+        }
         TensorUnaryOperator geodesicCenterFilter = //
             GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
         refined = geodesicCenterFilter.apply(control);
-        GeodesicDifferences geodesicDifferences = //
-            new GeodesicDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
-        Tensor speeds = geodesicDifferences.apply(refined);
-        final int baseline_y = 200;
-        {
-          graphics.setColor(Color.BLACK);
-          graphics.drawLine(0, baseline_y, 1200, baseline_y);
-        }
-        ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
-        {
-          int piy = 30;
-          graphics.drawString("Filter: " + spinnerFilter.getValue(), 0, piy);
-          Scalar width = Quantity.of(0.05 * (spinnerRadius.getValue() * 2 + 1), "s");
-          graphics.drawString("Window: " + Round._3.apply(width), 0, piy += 15);
-          graphics.setColor(colorDataIndexed.getColor(0));
-          graphics.drawString("Tangent velocity", 0, piy += 15);
-          graphics.setColor(colorDataIndexed.getColor(1));
-          graphics.drawString("Side slip", 0, piy += 15);
-          graphics.setColor(colorDataIndexed.getColor(2));
-          graphics.drawString("Rotational rate", 0, piy += 15);
-        }
-        for (int c = 0; c < 3; ++c) {
-          graphics.setColor(colorDataIndexed.getColor(c));
-          Path2D path2d = plotFunc(graphics, speeds.get(Tensor.ALL, c).multiply(RealScalar.of(400)), baseline_y);
-          graphics.setStroke(new BasicStroke(1.3f));
-          graphics.draw(path2d);
+        if (jToggleDiff.isSelected()) {
+          final int baseline_y = 200;
+          {
+            graphics.setColor(Color.BLACK);
+            graphics.drawLine(0, baseline_y, 1200, baseline_y);
+          }
+          ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
+          {
+            int piy = 30;
+            graphics.drawString("Filter: " + spinnerFilter.getValue(), 0, piy);
+            Scalar width = Quantity.of(0.05 * (spinnerRadius.getValue() * 2 + 1), "s");
+            graphics.drawString("Window: " + Round._3.apply(width), 0, piy += 15);
+            graphics.setColor(colorDataIndexed.getColor(0));
+            graphics.drawString("Tangent velocity", 0, piy += 15);
+            graphics.setColor(colorDataIndexed.getColor(1));
+            graphics.drawString("Side slip", 0, piy += 15);
+            graphics.setColor(colorDataIndexed.getColor(2));
+            graphics.drawString("Rotational rate", 0, piy += 15);
+          }
+          GeodesicDifferences geodesicDifferences = //
+              new GeodesicDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+          Tensor speeds = geodesicDifferences.apply(refined);
+          for (int c = 0; c < 3; ++c) {
+            graphics.setColor(colorDataIndexed.getColor(c));
+            Path2D path2d = plotFunc(graphics, speeds.get(Tensor.ALL, c).multiply(RealScalar.of(400)), baseline_y);
+            graphics.setStroke(new BasicStroke(1.3f));
+            graphics.draw(path2d);
+          }
         }
         graphics.setStroke(new BasicStroke(1f));
+        int rgb = 128 + 32;
+        final Color color = new Color(rgb, rgb, rgb, 128 + 64);
+        if (jToggleLine.isSelected()) {
+          graphics.setColor(color);
+          graphics.draw(geometricLayer.toPath2D(refined));
+        }
         for (Tensor point : refined) {
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
           Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
           geometricLayer.popMatrix();
-          int rgb = 128 + 32;
           path2d.closePath();
-          graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
+          graphics.setColor(color);
           graphics.fill(path2d);
           graphics.setColor(Color.BLACK);
           graphics.draw(path2d);
@@ -146,7 +172,7 @@ class GeodesicCenterFilterDemo {
     {
       // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerFilter.setList(Arrays.asList(WindowFunctions.values()));
-      spinnerFilter.setValue(WindowFunctions.DIRICHLET);
+      spinnerFilter.setValue(WindowFunctions.GAUSSIAN);
       spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
     }
     {

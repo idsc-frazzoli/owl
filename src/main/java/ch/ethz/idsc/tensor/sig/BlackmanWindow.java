@@ -15,6 +15,7 @@ public enum BlackmanWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
+    StaticHelper.SEMI.requireInside(x);
     return StaticHelper.deg2(_21_50, RationalScalar.HALF, _2_25, x);
   }
 }

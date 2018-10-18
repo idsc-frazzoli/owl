@@ -12,6 +12,7 @@ public enum DirichletWindow implements ScalarUnaryOperator {
   // ---
   @Override
   public Scalar apply(Scalar x) {
+    StaticHelper.SEMI.requireInside(x);
     return RealScalar.ONE;
   }
 }

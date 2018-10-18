@@ -2,8 +2,8 @@
 package ch.ethz.idsc.owl.subdiv.curve;
 
 import ch.ethz.idsc.owl.math.GeodesicInterface;
+import ch.ethz.idsc.owl.symlink.WindowFunctions;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
 /** Careful: the implementation only supports sequences with odd number of elements
  * 

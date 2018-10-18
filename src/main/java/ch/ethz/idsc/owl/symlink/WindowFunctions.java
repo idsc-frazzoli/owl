@@ -1,20 +1,28 @@
 // code by jph
-package ch.ethz.idsc.tensor.sig;
+package ch.ethz.idsc.owl.symlink;
 
 import java.util.function.Function;
 
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Binomial;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sig.BlackmanWindow;
+import ch.ethz.idsc.tensor.sig.DirichletWindow;
+import ch.ethz.idsc.tensor.sig.GaussianWindow;
+import ch.ethz.idsc.tensor.sig.HammingWindow;
+import ch.ethz.idsc.tensor.sig.HannWindow;
+import ch.ethz.idsc.tensor.sig.NuttallWindow;
+import ch.ethz.idsc.tensor.sig.ParzenWindow;
+import ch.ethz.idsc.tensor.sig.TukeyWindow;
+import ch.ethz.idsc.tensor.sig.VectorTotal;
 
 /** Filter-Design Window Functions
  * 
@@ -57,7 +65,12 @@ public enum WindowFunctions implements Function<Integer, Tensor> {
 
   private WindowFunctions(ScalarUnaryOperator scalarUnaryOperator) {
     this.scalarUnaryOperator = scalarUnaryOperator;
-    isZero = Scalars.isZero(scalarUnaryOperator.apply(RationalScalar.HALF));
+    isZero = Chop._10.allZero(scalarUnaryOperator.apply(RationalScalar.HALF));
+  }
+
+  /** @return true if function at 1/2 evaluates to zero */
+  boolean isZero() {
+    return isZero;
   }
 
   @Override
@@ -70,6 +83,7 @@ public enum WindowFunctions implements Function<Integer, Tensor> {
             .extract(1, 2 * i + 2)
         : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
             .map(scalarUnaryOperator);
-    return Normalize.of(vector, Norm._1);
+    // TODO V062 refactor
+    return Normalize.of(vector, v -> VectorTotal.FUNCTION.apply(v));
   }
 }

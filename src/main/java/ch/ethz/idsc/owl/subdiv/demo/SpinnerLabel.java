@@ -24,7 +24,7 @@ import javax.swing.SwingConstants;
 /** selector in gui for easy scrolling through a list with mouse-wheel but no pull-down menu
  * 
  * @param <Type> */
-class SpinnerLabel<Type> {
+public class SpinnerLabel<Type> {
   public static final Color background1 = new Color(248, 248, 248, 128);
   public static final Color background0 = new Color(248, 248, 248, 64);
   private static final int border_width_min = 9;
