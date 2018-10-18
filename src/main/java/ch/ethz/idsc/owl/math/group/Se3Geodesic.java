@@ -6,6 +6,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 
+/** geodesic in special Euclidean group if affine transformations
+ * 
+ * input p and q are 4x4 matrices that encode affine transformations */
 public enum Se3Geodesic implements GeodesicInterface {
   INSTANCE;
   // ---

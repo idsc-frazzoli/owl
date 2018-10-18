@@ -13,6 +13,6 @@ public enum SpdGeodesic implements GeodesicInterface {
   // ---
   @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
-    return null;
+    throw new UnsupportedOperationException(); // TODO not implemented yet
   }
 }

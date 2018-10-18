@@ -5,7 +5,8 @@ import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-/** Euclidean vector space with addition
+/** Euclidean vector space
+ * group action is addition
  * neutral element is 0 */
 public enum RnGroup implements LieGroup {
   INSTANCE;
