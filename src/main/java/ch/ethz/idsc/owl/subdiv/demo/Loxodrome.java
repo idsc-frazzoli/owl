@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.math.planar.S2Geodesic;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
+import ch.ethz.idsc.owl.symlink.WindowFunctions;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,7 +24,6 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
-import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
 public class Loxodrome implements ScalarTensorFunction {
   private final Scalar angle;

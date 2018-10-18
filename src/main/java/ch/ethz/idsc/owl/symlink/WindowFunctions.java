@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sig;
+package ch.ethz.idsc.owl.symlink;
 
 import java.util.function.Function;
 
@@ -14,6 +14,15 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sig.BlackmanWindow;
+import ch.ethz.idsc.tensor.sig.DirichletWindow;
+import ch.ethz.idsc.tensor.sig.GaussianWindow;
+import ch.ethz.idsc.tensor.sig.HammingWindow;
+import ch.ethz.idsc.tensor.sig.HannWindow;
+import ch.ethz.idsc.tensor.sig.NuttallWindow;
+import ch.ethz.idsc.tensor.sig.ParzenWindow;
+import ch.ethz.idsc.tensor.sig.TukeyWindow;
+import ch.ethz.idsc.tensor.sig.VectorTotal;
 
 /** Filter-Design Window Functions
  * 

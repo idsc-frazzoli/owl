@@ -44,7 +44,6 @@ import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
 class SymDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);

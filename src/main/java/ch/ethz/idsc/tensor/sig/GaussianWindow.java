@@ -16,6 +16,7 @@ public enum GaussianWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
+    StaticHelper.SEMI.requireInside(x);
     return Exp.FUNCTION.apply(Times.of(_50_9, x, x));
   }
 }

@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
 enum SymGeodesic implements GeodesicInterface {
   INSTANCE;

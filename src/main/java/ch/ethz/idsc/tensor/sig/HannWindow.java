@@ -16,7 +16,9 @@ public enum HannWindow implements ScalarUnaryOperator {
   // ---
   @Override
   public Scalar apply(Scalar x) {
+    StaticHelper.SEMI.requireInside(x);
     Scalar scalar = StaticHelper.deg1(RationalScalar.HALF, RationalScalar.HALF, x);
+    // TODO this is not reasonable
     Scalar apply = RATIONALIZE.apply(scalar);
     return Chop._08.close(scalar, apply) //
         ? apply

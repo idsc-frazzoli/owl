@@ -28,6 +28,7 @@ import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicDifferences;
+import ch.ethz.idsc.owl.symlink.WindowFunctions;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -39,7 +40,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sig.WindowFunctions;
 
 class GeodesicCenterFilterDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);

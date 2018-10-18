@@ -6,6 +6,7 @@ import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.owl.math.group.So3Geodesic;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.S2Geodesic;
+import ch.ethz.idsc.owl.symlink.WindowFunctions;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -24,7 +25,6 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sig.WindowFunctions;
 import junit.framework.TestCase;
 
 public class GeodesicCenterFilterTest extends TestCase {

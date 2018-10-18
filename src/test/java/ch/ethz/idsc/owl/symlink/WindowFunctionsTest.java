@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sig;
+package ch.ethz.idsc.owl.symlink;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sig.SymmetricVectorQ;
 import junit.framework.TestCase;
 
 public class WindowFunctionsTest extends TestCase {

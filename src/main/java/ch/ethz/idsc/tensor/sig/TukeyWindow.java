@@ -18,6 +18,7 @@ public enum TukeyWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
+    StaticHelper.SEMI.requireInside(x);
     x = x.abs();
     if (Scalars.lessEquals(x, _1_6))
       return RealScalar.ONE;

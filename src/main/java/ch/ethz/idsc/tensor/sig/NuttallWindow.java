@@ -17,6 +17,7 @@ public enum NuttallWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
+    StaticHelper.SEMI.requireInside(x);
     return StaticHelper.deg3(A0, A1, A2, A3, x);
   }
 }

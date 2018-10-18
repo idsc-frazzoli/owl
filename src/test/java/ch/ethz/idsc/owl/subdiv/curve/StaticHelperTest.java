@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import ch.ethz.idsc.owl.symlink.WindowFunctions;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sig.WindowFunctions;
 import junit.framework.TestCase;
 
 public class StaticHelperTest extends TestCase {
