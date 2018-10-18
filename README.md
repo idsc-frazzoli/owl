@@ -156,6 +156,8 @@ by Sertac Karaman and Emilio Frazzoli,
 * *Curve Subdivision in SE(2)*
 by Jan Hakenberg,
 [viXra:1807.0463](http://vixra.org/abs/1807.0463)
+* *What lies in the shadows? Safe and computation-aware motion planning for autonomous vehicles using intent-aware dynamic shadow regions*
+by Yannik Nager, Andrea Censi, Emilio Frazzoli
 * *Smoothing using Geodesic Averages*
-by Jan Hakenberg
-
+by Jan Hakenberg,
+[viXra:1807.0463](http://vixra.org/abs/1810.0283)
