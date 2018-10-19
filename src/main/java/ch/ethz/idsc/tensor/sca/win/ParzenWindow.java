@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sig;
+package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -14,6 +14,16 @@ public class ParzenWindow extends AbstractWindowFunction {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final ScalarUnaryOperator S1 = Series.of(Tensors.vector(1, 0, -24, 48));
   private static final ScalarUnaryOperator S2 = Series.of(Tensors.vector(2, -12, 24, -16));
+  // ---
+  private static final WindowFunction FUNCTION = new ParzenWindow();
+
+  public static WindowFunction function() {
+    return FUNCTION;
+  }
+
+  // ---
+  private ParzenWindow() {
+  }
 
   @Override
   public Scalar protected_apply(Scalar x) {

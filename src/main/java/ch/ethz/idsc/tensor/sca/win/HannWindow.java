@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sig;
+package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -11,6 +11,15 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/HannWindow.html">HannWindow</a> */
 public class HannWindow extends AbstractWindowFunction {
   private static final ScalarUnaryOperator RATIONALIZE = Rationalize.withDenominatorLessEquals(100);
+  private static final WindowFunction FUNCTION = new HannWindow();
+
+  public static WindowFunction function() {
+    return FUNCTION;
+  }
+
+  // ---
+  private HannWindow() {
+  }
 
   @Override
   public Scalar protected_apply(Scalar x) {

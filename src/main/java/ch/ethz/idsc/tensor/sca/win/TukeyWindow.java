@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sig;
+package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -12,6 +12,16 @@ import ch.ethz.idsc.tensor.sca.Cos;
 public class TukeyWindow extends AbstractWindowFunction {
   private static final Scalar _1_6 = RationalScalar.of(1, 6);
   private static final Scalar _3_PI = RealScalar.of(3 * Math.PI);
+  // ---
+  private static final WindowFunction FUNCTION = new TukeyWindow();
+
+  public static WindowFunction function() {
+    return FUNCTION;
+  }
+
+  // ---
+  private TukeyWindow() {
+  }
 
   @Override
   public Scalar protected_apply(Scalar x) {

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sig;
+package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
