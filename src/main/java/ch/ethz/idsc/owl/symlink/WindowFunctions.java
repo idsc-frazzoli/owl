@@ -48,17 +48,17 @@ public enum WindowFunctions implements Function<Integer, Tensor> {
       return Tensors.vector(k -> Binomial.of(two_i, k), two_i + 1).divide(Power.of(2, two_i));
     }
   }, //
-  BLACKMAN(BlackmanWindow.FUNCTION), //
+  BLACKMAN(new BlackmanWindow()), //
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
-  DIRICHLET(DirichletWindow.FUNCTION), //
-  GAUSSIAN(GaussianWindow.FUNCTION), //
+  DIRICHLET(new DirichletWindow()), //
+  GAUSSIAN(new GaussianWindow()), //
   /** has nice properties in the frequency domain */
-  HAMMING(HammingWindow.FUNCTION), //
-  HANN(HannWindow.FUNCTION), //
-  NUTTALL(NuttallWindow.FUNCTION), //
-  PARZEN(ParzenWindow.FUNCTION), //
-  TUKEY(TukeyWindow.FUNCTION), //
+  HAMMING(new HammingWindow()), //
+  HANN(new HannWindow()), //
+  NUTTALL(new NuttallWindow()), //
+  PARZEN(new ParzenWindow()), //
+  TUKEY(new TukeyWindow()), //
   ;
   private final ScalarUnaryOperator scalarUnaryOperator;
   private final boolean isZero;

@@ -9,14 +9,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HannWindow.html">HannWindow</a> */
-public enum HannWindow implements ScalarUnaryOperator {
-  FUNCTION;
+public class HannWindow extends AbstractWindowFunction {
   private static final ScalarUnaryOperator RATIONALIZE = Rationalize.withDenominatorLessEquals(100);
 
-  // ---
   @Override
-  public Scalar apply(Scalar x) {
-    StaticHelper.SEMI.requireInside(x);
+  public Scalar protected_apply(Scalar x) {
     Scalar scalar = StaticHelper.deg1(RationalScalar.HALF, RationalScalar.HALF, x);
     // TODO this is not reasonable
     Scalar apply = RATIONALIZE.apply(scalar);
