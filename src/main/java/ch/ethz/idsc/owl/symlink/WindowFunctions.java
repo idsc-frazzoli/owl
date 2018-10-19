@@ -14,15 +14,14 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.sig.BlackmanWindow;
-import ch.ethz.idsc.tensor.sig.DirichletWindow;
-import ch.ethz.idsc.tensor.sig.GaussianWindow;
-import ch.ethz.idsc.tensor.sig.HammingWindow;
-import ch.ethz.idsc.tensor.sig.HannWindow;
-import ch.ethz.idsc.tensor.sig.NuttallWindow;
-import ch.ethz.idsc.tensor.sig.ParzenWindow;
-import ch.ethz.idsc.tensor.sig.TukeyWindow;
-import ch.ethz.idsc.tensor.sig.VectorTotal;
+import ch.ethz.idsc.tensor.sca.win.BlackmanWindow;
+import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
+import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
+import ch.ethz.idsc.tensor.sca.win.HammingWindow;
+import ch.ethz.idsc.tensor.sca.win.HannWindow;
+import ch.ethz.idsc.tensor.sca.win.NuttallWindow;
+import ch.ethz.idsc.tensor.sca.win.ParzenWindow;
+import ch.ethz.idsc.tensor.sca.win.VectorTotal;
 
 /** Filter-Design Window Functions
  * 
@@ -48,17 +47,17 @@ public enum WindowFunctions implements Function<Integer, Tensor> {
       return Tensors.vector(k -> Binomial.of(two_i, k), two_i + 1).divide(Power.of(2, two_i));
     }
   }, //
-  BLACKMAN(BlackmanWindow.FUNCTION), //
+  BLACKMAN(BlackmanWindow.function()), //
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
-  DIRICHLET(DirichletWindow.FUNCTION), //
-  GAUSSIAN(GaussianWindow.FUNCTION), //
+  DIRICHLET(DirichletWindow.function()), //
+  GAUSSIAN(GaussianWindow.function()), //
   /** has nice properties in the frequency domain */
-  HAMMING(HammingWindow.FUNCTION), //
-  HANN(HannWindow.FUNCTION), //
-  NUTTALL(NuttallWindow.FUNCTION), //
-  PARZEN(ParzenWindow.FUNCTION), //
-  TUKEY(TukeyWindow.FUNCTION), //
+  HAMMING(HammingWindow.function()), //
+  HANN(HannWindow.function()), //
+  NUTTALL(NuttallWindow.function()), //
+  PARZEN(ParzenWindow.function()), //
+  TUKEY(ParzenWindow.function()), //
   ;
   private final ScalarUnaryOperator scalarUnaryOperator;
   private final boolean isZero;

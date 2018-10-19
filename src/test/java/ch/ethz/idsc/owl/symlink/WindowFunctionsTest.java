@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sig.SymmetricVectorQ;
+import ch.ethz.idsc.tensor.sca.win.SymmetricVectorQ;
 import junit.framework.TestCase;
 
 public class WindowFunctionsTest extends TestCase {

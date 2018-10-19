@@ -46,7 +46,7 @@ Obstacle anticipation
 * refinement of waypoint sequence using non-linear curve subdivision along geodesics
 * visualizations and animations, see [video](https://www.youtube.com/watch?v=lPQW3GqQqSY)
 
-## Examples
+## Motion Planning
 
 ### GLC
 
@@ -116,6 +116,10 @@ R^2
 
 ![r2](https://cloud.githubusercontent.com/assets/4012178/26045794/16bd0a54-394c-11e7-9d11-19558bc3be88.png)
 
+## Geometry in Nonlinear Spaces
+
+
+
 ## Integration
 
 Specify `repository` and `dependency` of the owl library in the `pom.xml` file of your maven project:
@@ -160,4 +164,4 @@ by Jan Hakenberg,
 by Yannik Nager, Andrea Censi, Emilio Frazzoli
 * *Smoothing using Geodesic Averages*
 by Jan Hakenberg,
-[viXra:1807.0463](http://vixra.org/abs/1810.0283)
+[viXra:1810.0283](http://vixra.org/abs/1810.0283)

@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
-import ch.ethz.idsc.tensor.sig.SymmetricVectorQ;
+import ch.ethz.idsc.tensor.sca.win.SymmetricVectorQ;
 
 enum StaticHelper {
   ;
