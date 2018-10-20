@@ -182,7 +182,7 @@ public class PlanningEvaluation0 extends Se2Demo {
       callbacks.add(evaluator.sectorTimeToReact);
     }
     if (EVAL_CAR) {
-      ShadowEvaluator evaluator = new ShadowEvaluator(smCar, RealScalar.of(MAX_A), RealScalar.of(CAR_RAD), "ped" + String.valueOf(ID));
+      ShadowEvaluator evaluator = new ShadowEvaluator(smCar, RealScalar.of(MAX_A), RealScalar.of(CAR_RAD), "car" + String.valueOf(ID));
       callbacks.add(evaluator.sectorTimeToReact);
     }
     //
