@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 enum SymGenerate {
   ;
-  public static void window(WindowFunctions wf, int radius) throws IOException {
+  public static void window(SmoothingKernel wf, int radius) throws IOException {
     TensorUnaryOperator tensorUnaryOperator = //
         GeodesicCenter.of(SymGeodesic.INSTANCE, wf);
     Tensor vector = Tensor.of(IntStream.range(0, 2 * radius + 1).mapToObj(SymScalar::of));
@@ -96,8 +96,8 @@ enum SymGenerate {
   }
 
   public static void main(String[] args) throws IOException {
-    window(WindowFunctions.GAUSSIAN, 5);
-    window(WindowFunctions.GAUSSIAN, 6);
+    window(SmoothingKernel.GAUSSIAN, 5);
+    window(SmoothingKernel.GAUSSIAN, 6);
     // for (WindowFunctions windowFunctions : WindowFunctions.values())
     // for (int radius = 1; radius <= 4; ++radius)
     // window(windowFunctions, radius);

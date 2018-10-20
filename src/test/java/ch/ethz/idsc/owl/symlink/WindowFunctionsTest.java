@@ -22,7 +22,7 @@ public class WindowFunctionsTest extends TestCase {
 
   public void testConstant() {
     for (int width = 0; width < 5; ++width) {
-      Tensor tensor = WindowFunctions.DIRICHLET.apply(width);
+      Tensor tensor = SmoothingKernel.DIRICHLET.apply(width);
       assertEquals(tensor, constant(width));
       assertTrue(ExactScalarQ.all(tensor));
       assertEquals(Total.of(tensor), RealScalar.ONE);
@@ -31,22 +31,22 @@ public class WindowFunctionsTest extends TestCase {
 
   public void testBinomial() {
     for (int size = 0; size < 5; ++size) {
-      Tensor mask = WindowFunctions.BINOMIAL.apply(size);
+      Tensor mask = BinomialWeights.INSTANCE.apply(size);
       assertEquals(Total.of(mask), RealScalar.ONE);
       assertTrue(ExactScalarQ.all(mask));
     }
   }
 
   public void testSpecific() {
-    Tensor result = WindowFunctions.BINOMIAL.apply(2);
+    Tensor result = BinomialWeights.INSTANCE.apply(2);
     Tensor expect = Tensors.fromString("{1/16, 1/4, 3/8, 1/4, 1/16}");
     assertEquals(result, expect);
   }
 
   public void testAll() {
-    for (WindowFunctions windowFunctions : WindowFunctions.values())
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       for (int size = 0; size < 5; ++size) {
-        Tensor tensor = windowFunctions.apply(size);
+        Tensor tensor = smoothingKernel.apply(size);
         SymmetricVectorQ.require(tensor);
         assertTrue(Chop._13.close(Total.of(tensor), RealScalar.ONE));
         assertFalse(Scalars.isZero(tensor.Get(0)));
@@ -55,30 +55,10 @@ public class WindowFunctionsTest extends TestCase {
       }
   }
 
-  public void testIsZeroBlackman() {
-    assertTrue(WindowFunctions.BLACKMAN.isZero());
-  }
-
-  public void testIsZeroHann() {
-    assertTrue(WindowFunctions.HANN.isZero());
-  }
-
-  public void testIsZeroNutall() {
-    assertTrue(WindowFunctions.NUTTALL.isZero());
-  }
-
-  public void testIsZeroParzen() {
-    assertTrue(WindowFunctions.PARZEN.isZero());
-  }
-
-  public void testIsZeroTukey() {
-    assertTrue(WindowFunctions.TUKEY.isZero());
-  }
-
   public void testAllFail() {
-    for (WindowFunctions windowFunctions : WindowFunctions.values())
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       try {
-        windowFunctions.apply(-1);
+        smoothingKernel.apply(-1);
         assertTrue(false);
       } catch (Exception exception) {
         // ---

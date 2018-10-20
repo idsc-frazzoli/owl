@@ -28,7 +28,7 @@ import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicDifferences;
-import ch.ethz.idsc.owl.symlink.WindowFunctions;
+import ch.ethz.idsc.owl.symlink.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -62,7 +62,7 @@ class GeodesicCenterFilterDemo {
 
   GeodesicCenterFilterDemo() {
     timerFrame.jFrame.setTitle(getClass().getSimpleName());
-    SpinnerLabel<WindowFunctions> spinnerFilter = new SpinnerLabel<>();
+    SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
@@ -171,8 +171,8 @@ class GeodesicCenterFilterDemo {
     });
     {
       // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerFilter.setList(Arrays.asList(WindowFunctions.values()));
-      spinnerFilter.setValue(WindowFunctions.GAUSSIAN);
+      spinnerFilter.setList(Arrays.asList(SmoothingKernel.values()));
+      spinnerFilter.setValue(SmoothingKernel.GAUSSIAN);
       spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
     }
     {

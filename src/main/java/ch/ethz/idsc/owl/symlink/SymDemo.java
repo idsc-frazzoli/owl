@@ -58,7 +58,7 @@ class SymDemo {
 
   SymDemo() {
     timerFrame.jFrame.setTitle(getClass().getSimpleName());
-    SpinnerLabel<WindowFunctions> spinnerFilter = new SpinnerLabel<>();
+    SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
     {
       JButton jButton = new JButton("clear");
       jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
@@ -189,8 +189,8 @@ class SymDemo {
     });
     {
       // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerFilter.setList(Arrays.asList(WindowFunctions.values()));
-      spinnerFilter.setValue(WindowFunctions.GAUSSIAN);
+      spinnerFilter.setList(Arrays.asList(SmoothingKernel.values()));
+      spinnerFilter.setValue(SmoothingKernel.GAUSSIAN);
       spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
     }
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {

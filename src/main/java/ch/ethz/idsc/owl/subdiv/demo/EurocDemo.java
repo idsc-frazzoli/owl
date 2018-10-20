@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.math.group.Se3Geodesic;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicDifferences;
-import ch.ethz.idsc.owl.symlink.WindowFunctions;
+import ch.ethz.idsc.owl.symlink.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -55,7 +55,7 @@ enum EurocDemo {
     System.out.println("smooth");
     {
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, WindowFunctions.GAUSSIAN), 4 * 3 * 2);
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 4 * 3 * 2);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       System.out.println("store");
       Put.of(UserHome.file("MH_04_difficult_poses_smooth.file"), smooth);
