@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.math.group.So3Geodesic;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.S2Geodesic;
 import ch.ethz.idsc.owl.symlink.BinomialWeights;
-import ch.ethz.idsc.owl.symlink.WindowFunctions;
+import ch.ethz.idsc.owl.symlink.SmoothingKernel;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -57,7 +57,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testS2() {
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(S2Geodesic.INSTANCE, WindowFunctions.HANN);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(S2Geodesic.INSTANCE, SmoothingKernel.HANN);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Distribution distribution = NormalDistribution.standard();
     Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(Normalize::of));
@@ -66,7 +66,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testSo3() {
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(So3Geodesic.INSTANCE, WindowFunctions.HAMMING);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(So3Geodesic.INSTANCE, SmoothingKernel.HAMMING);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Distribution distribution = UniformDistribution.unit();
     Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(Rodrigues::exp));
@@ -78,9 +78,9 @@ public class GeodesicCenterFilterTest extends TestCase {
     String resource = "/dubilab/app/pose/2r/20180820T165637_1.csv";
     Tensor table = ResourceData.of(resource);
     Tensor xyz = Tensor.of(table.stream().map(row -> row.extract(1, 4)));
-    for (WindowFunctions windowFunctions : WindowFunctions.values()) {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, windowFunctions), 3);
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel), 3);
       Tensor res = tensorUnaryOperator.apply(xyz);
       Tensor xy = Tensor.of(xyz.stream().map(Extract2D::of));
       Tensor uv = Tensor.of(res.stream().map(Extract2D::of));

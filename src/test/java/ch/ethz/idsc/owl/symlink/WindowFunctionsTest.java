@@ -22,7 +22,7 @@ public class WindowFunctionsTest extends TestCase {
 
   public void testConstant() {
     for (int width = 0; width < 5; ++width) {
-      Tensor tensor = WindowFunctions.DIRICHLET.apply(width);
+      Tensor tensor = SmoothingKernel.DIRICHLET.apply(width);
       assertEquals(tensor, constant(width));
       assertTrue(ExactScalarQ.all(tensor));
       assertEquals(Total.of(tensor), RealScalar.ONE);
@@ -44,9 +44,9 @@ public class WindowFunctionsTest extends TestCase {
   }
 
   public void testAll() {
-    for (WindowFunctions windowFunctions : WindowFunctions.values())
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       for (int size = 0; size < 5; ++size) {
-        Tensor tensor = windowFunctions.apply(size);
+        Tensor tensor = smoothingKernel.apply(size);
         SymmetricVectorQ.require(tensor);
         assertTrue(Chop._13.close(Total.of(tensor), RealScalar.ONE));
         assertFalse(Scalars.isZero(tensor.Get(0)));
@@ -56,9 +56,9 @@ public class WindowFunctionsTest extends TestCase {
   }
 
   public void testAllFail() {
-    for (WindowFunctions windowFunctions : WindowFunctions.values())
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       try {
-        windowFunctions.apply(-1);
+        smoothingKernel.apply(-1);
         assertTrue(false);
       } catch (Exception exception) {
         // ---

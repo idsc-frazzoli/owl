@@ -24,7 +24,7 @@ enum SymGeodesic implements GeodesicInterface {
     SymScalar s3 = (SymScalar) SymScalar.of(s1, s2, RationalScalar.HALF);
     System.out.println(s3);
     System.out.println(s3.evaluate());
-    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(SymGeodesic.INSTANCE, WindowFunctions.DIRICHLET);
+    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(SymGeodesic.INSTANCE, SmoothingKernel.DIRICHLET);
     Tensor vector = Tensor.of(IntStream.range(0, 5).mapToObj(SymScalar::of));
     Tensor tensor = tensorUnaryOperator.apply(vector);
     System.out.println(tensor);

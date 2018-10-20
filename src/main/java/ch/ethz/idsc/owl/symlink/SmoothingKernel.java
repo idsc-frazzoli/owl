@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunction;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
-public enum WindowFunctions implements Function<Integer, Tensor> {
+public enum SmoothingKernel implements Function<Integer, Tensor> {
   BARTLETT(BartlettWindow.function()), //
   BLACKMAN(BlackmanWindow.function()), //
   /** Dirichlet window
@@ -52,7 +52,7 @@ public enum WindowFunctions implements Function<Integer, Tensor> {
   ;
   private final WindowFunction windowFunction;
 
-  private WindowFunctions(WindowFunction windowFunction) {
+  private SmoothingKernel(WindowFunction windowFunction) {
     this.windowFunction = windowFunction;
   }
 

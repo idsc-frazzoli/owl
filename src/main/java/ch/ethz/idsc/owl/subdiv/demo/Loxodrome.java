@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.math.planar.S2Geodesic;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
-import ch.ethz.idsc.owl.symlink.WindowFunctions;
+import ch.ethz.idsc.owl.symlink.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -50,11 +50,11 @@ public class Loxodrome implements ScalarTensorFunction {
     tensor = tensor.add(noise);
     tensor = Tensor.of(tensor.stream().map(Normalize::of));
     Export.of(UserHome.file("loxodrome_noise.csv"), tensor);
-    for (WindowFunctions windowFunctions : WindowFunctions.values()) {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = GeodesicCenterFilter.of( //
-          GeodesicCenter.of(S2Geodesic.INSTANCE, windowFunctions), 7);
+          GeodesicCenter.of(S2Geodesic.INSTANCE, smoothingKernel), 7);
       Tensor smooth = tensorUnaryOperator.apply(tensor);
-      Export.of(UserHome.file("loxodrome_" + windowFunctions.name().toLowerCase() + ".csv"), smooth);
+      Export.of(UserHome.file("loxodrome_" + smoothingKernel.name().toLowerCase() + ".csv"), smooth);
     }
   }
 }
