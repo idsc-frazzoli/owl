@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 /** inspired by
@@ -27,6 +28,8 @@ public class HannWindow extends AbstractWindowFunction {
   public Scalar protected_apply(Scalar x) {
     x = x.abs();
     if (ExactScalarQ.of(x)) {
+      if (x.equals(RealScalar.ZERO))
+        return RealScalar.ONE;
       if (x.equals(_1_3))
         return _1_4;
       if (x.equals(_1_4))

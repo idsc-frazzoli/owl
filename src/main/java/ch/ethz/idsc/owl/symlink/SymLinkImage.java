@@ -79,6 +79,10 @@ class SymLinkImage {
   }
 
   public BufferedImage bufferedImage() {
+    return bufferedImage;
+  }
+
+  public BufferedImage bufferedImageCropped() {
     Tensor tensor = ImageFormat.from(bufferedImage);
     tensor = IMAGE_CROP.apply(tensor);
     BufferedImage image = ImageFormat.of(tensor);

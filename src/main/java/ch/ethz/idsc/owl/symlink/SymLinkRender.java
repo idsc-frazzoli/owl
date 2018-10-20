@@ -68,7 +68,7 @@ class SymLinkRender implements RenderInterface {
       }
       {
         Point2D point2d = geometricLayer.toPoint2D(here);
-        String string = nice(symLink.lambda);
+        String string = nice3(symLink.lambda);
         FontMetrics fontMetrics = graphics.getFontMetrics();
         int stringWidth = fontMetrics.stringWidth(string);
         int rgb = 192 + 32;

@@ -28,8 +28,9 @@ import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivisions;
 import ch.ethz.idsc.owl.subdiv.curve.BezierCurve;
+import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.DeCasteljau;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.demo.SpinnerLabel;
@@ -58,7 +59,8 @@ class SymDemo {
 
   SymDemo() {
     timerFrame.jFrame.setTitle(getClass().getSimpleName());
-    SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
+    SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
+    SpinnerLabel<BSpline4CurveSubdivisions> spinnerBSpline4 = new SpinnerLabel<>();
     {
       JButton jButton = new JButton("clear");
       jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
@@ -113,18 +115,6 @@ class SymDemo {
         if (Objects.nonNull(min_index))
           control.set(mouse, min_index);
         Tensor _control = control.copy();
-        { // SE2
-          for (Tensor point : control) {
-            geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-            Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-            path2d.closePath();
-            graphics.setColor(new Color(255, 128, 128, 64));
-            graphics.fill(path2d);
-            graphics.setColor(new Color(255, 128, 128, 255));
-            graphics.draw(path2d);
-            geometricLayer.popMatrix();
-          }
-        }
         Tensor xya = null;
         final Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::of));
         if (control.length() == 4) {
@@ -138,10 +128,10 @@ class SymDemo {
           SymLink symLink = symLinkBuilder.build(symScalar);
           new SymGeoRender(symLink).render(geometricLayer, graphics);
           xya = symLink.getPosition(Se2CoveringGeodesic.INSTANCE);
-        } else if (control.length() == 3 && false) {
-          // TensorUnaryOperator tensorUnaryOperator = new BSpline4CurveSubdivision(SymGeodesic.INSTANCE)::string;
-          // TensorUnaryOperator tensorUnaryOperator = BSpline4CurveSubdivision.of(SymGeodesic.INSTANCE)::cyclic;
-          TensorUnaryOperator tensorUnaryOperator = BSpline4CurveSubdivision.split3(SymGeodesic.INSTANCE, RationalScalar.HALF)::cyclic;
+        } else //
+        if (control.length() == 3 && false) {
+          CurveSubdivision curveSubdivision = spinnerBSpline4.getValue().function.apply(SymGeodesic.INSTANCE);
+          TensorUnaryOperator tensorUnaryOperator = curveSubdivision::cyclic;
           Tensor tensor = tensorUnaryOperator.apply(vector).Get(2);
           SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
           SymLink symLink = symLinkBuilder.build((SymScalar) tensor);
@@ -149,14 +139,32 @@ class SymDemo {
           xya = symLink.getPosition(Se2CoveringGeodesic.INSTANCE);
         } else //
         if (control.length() % 2 == 1) {
-          int radius = (control.length() - 1) / 2;
+          SmoothingKernel smoothingKernel = spinnerKernel.getValue();
+          {
+            int radius = (control.length() - 1) / 2;
+            SymLinkImage symLinkImage = SymGenerate.window(smoothingKernel, radius);
+            graphics.drawImage(symLinkImage.bufferedImage(), 0, 200, null);
+          }
+          // ---
           TensorUnaryOperator tensorUnaryOperator = //
-              GeodesicCenter.of(SymGeodesic.INSTANCE, spinnerFilter.getValue());
+              GeodesicCenter.of(SymGeodesic.INSTANCE, smoothingKernel);
           Tensor tensor = tensorUnaryOperator.apply(vector);
           SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
           SymLink symLink = symLinkBuilder.build((SymScalar) tensor);
           new SymGeoRender(symLink).render(geometricLayer, graphics);
           xya = symLink.getPosition(Se2CoveringGeodesic.INSTANCE);
+        }
+        { // SE2
+          for (Tensor point : control) {
+            geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
+            Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
+            path2d.closePath();
+            graphics.setColor(new Color(255, 128, 128, 64));
+            graphics.fill(path2d);
+            graphics.setColor(new Color(255, 128, 128, 255));
+            graphics.draw(path2d);
+            geometricLayer.popMatrix();
+          }
         }
         if (Objects.nonNull(xya)) {
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
@@ -188,10 +196,14 @@ class SymDemo {
       }
     });
     {
-      // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerFilter.setList(Arrays.asList(SmoothingKernel.values()));
-      spinnerFilter.setValue(SmoothingKernel.GAUSSIAN);
-      spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
+      spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
+      spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
+      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
+    }
+    {
+      spinnerBSpline4.setList(Arrays.asList(BSpline4CurveSubdivisions.values()));
+      spinnerBSpline4.setValue(BSpline4CurveSubdivisions.DYN_SHARON);
+      spinnerBSpline4.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "bspline4");
     }
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
