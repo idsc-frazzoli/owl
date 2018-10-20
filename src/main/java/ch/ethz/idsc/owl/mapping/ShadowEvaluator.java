@@ -170,8 +170,8 @@ public class ShadowEvaluator {
       Scalar timeToReact = RealScalar.of(-1);
       if (clear) {
         timeToReact = RealScalar.ZERO;
-        for (int idx = 1; (idx + i) <= trajectory.size() && idx < tReactVec.length(); ++idx){
-          Tensor tReact = tReactVec.get(idx); 
+        for (int idx = 1; (idx + i) <= trajectory.size() && idx < tReactVec.length(); ++idx) {
+          Tensor tReact = tReactVec.get(idx);
           TrajectorySample tjs = trajectory.get(i + idx);
           vel = tjs.stateTime().state().Get(3); // get velocity of future state
           se2Bijection = new Se2Bijection(tjs.stateTime().state());

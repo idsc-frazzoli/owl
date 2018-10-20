@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.win.SymmetricVectorQ;
 import junit.framework.TestCase;
 
-public class WindowFunctionsTest extends TestCase {
+public class SmoothingKernelTest extends TestCase {
   private static Tensor constant(int i) {
     int width = 2 * i + 1;
     Scalar weight = RationalScalar.of(1, width);
@@ -41,6 +41,11 @@ public class WindowFunctionsTest extends TestCase {
     Tensor result = BinomialWeights.INSTANCE.apply(2);
     Tensor expect = Tensors.fromString("{1/16, 1/4, 3/8, 1/4, 1/16}");
     assertEquals(result, expect);
+  }
+
+  public void testHann() {
+    assertTrue(ExactScalarQ.all(SmoothingKernel.HANN.apply(1)));
+    assertTrue(ExactScalarQ.all(SmoothingKernel.HANN.apply(2)));
   }
 
   public void testAll() {
