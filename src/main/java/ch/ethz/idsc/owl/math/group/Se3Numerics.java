@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.sca.Sinc;
   final Scalar A;
   final Scalar B;
   final Scalar C;
+  /** D is only used in log function */
   final Scalar D;
 
   public Se3Numerics(Scalar theta) {

@@ -6,6 +6,7 @@ import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.owl.math.group.So3Geodesic;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.S2Geodesic;
+import ch.ethz.idsc.owl.symlink.BinomialWeights;
 import ch.ethz.idsc.owl.symlink.WindowFunctions;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -29,7 +30,7 @@ import junit.framework.TestCase;
 
 public class GeodesicCenterFilterTest extends TestCase {
   public void testSimple() {
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, WindowFunctions.BINOMIAL);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, BinomialWeights.INSTANCE);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 3);
     Tensor linear = Range.of(0, 10);
     Tensor result = geodesicCenterFilter.apply(linear);
@@ -38,7 +39,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testKernel3() {
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, WindowFunctions.BINOMIAL);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, BinomialWeights.INSTANCE);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 3);
     Tensor signal = UnitVector.of(9, 4);
     Tensor result = geodesicCenterFilter.apply(signal);
@@ -47,7 +48,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testKernel1() {
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, WindowFunctions.BINOMIAL);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, BinomialWeights.INSTANCE);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Tensor signal = UnitVector.of(5, 2);
     Tensor result = geodesicCenterFilter.apply(signal);

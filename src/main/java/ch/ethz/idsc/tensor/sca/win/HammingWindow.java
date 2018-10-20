@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 public class HammingWindow extends AbstractWindowFunction {
   private static final Scalar _25_46 = RationalScalar.of(25, 46);
   private static final Scalar _21_46 = RationalScalar.of(21, 46);
+  // ---
   private static final WindowFunction FUNCTION = new HammingWindow();
 
   public static WindowFunction function() {

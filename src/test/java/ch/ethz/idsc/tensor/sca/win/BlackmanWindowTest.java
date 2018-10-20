@@ -16,4 +16,8 @@ public class BlackmanWindowTest extends TestCase {
   public void testFail() {
     assertEquals(BlackmanWindow.function().apply(RealScalar.of(-.51)), RealScalar.ZERO);
   }
+
+  public void testIsZero() {
+    assertTrue(BlackmanWindow.function().isZero());
+  }
 }

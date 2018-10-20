@@ -8,12 +8,9 @@ import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Binomial;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Power;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sca.win.BartlettWindow;
 import ch.ethz.idsc.tensor.sca.win.BlackmanWindow;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
@@ -22,6 +19,7 @@ import ch.ethz.idsc.tensor.sca.win.HannWindow;
 import ch.ethz.idsc.tensor.sca.win.NuttallWindow;
 import ch.ethz.idsc.tensor.sca.win.ParzenWindow;
 import ch.ethz.idsc.tensor.sca.win.VectorTotal;
+import ch.ethz.idsc.tensor.sca.win.WindowFunction;
 
 /** Filter-Design Window Functions
  * 
@@ -37,20 +35,13 @@ import ch.ethz.idsc.tensor.sca.win.VectorTotal;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
 public enum WindowFunctions implements Function<Integer, Tensor> {
-  /** close to gaussian filter */
-  BINOMIAL(s -> s) {
-    @Override
-    public Tensor apply(Integer i) {
-      if (i < 0)
-        throw new IllegalArgumentException("i=" + i);
-      int two_i = 2 * i;
-      return Tensors.vector(k -> Binomial.of(two_i, k), two_i + 1).divide(Power.of(2, two_i));
-    }
-  }, //
+  BARTLETT(BartlettWindow.function()), //
   BLACKMAN(BlackmanWindow.function()), //
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
   DIRICHLET(DirichletWindow.function()), //
+  /** the Gaussian kernel works well in practice
+   * in particular for masks of small support */
   GAUSSIAN(GaussianWindow.function()), //
   /** has nice properties in the frequency domain */
   HAMMING(HammingWindow.function()), //
@@ -59,29 +50,22 @@ public enum WindowFunctions implements Function<Integer, Tensor> {
   PARZEN(ParzenWindow.function()), //
   TUKEY(ParzenWindow.function()), //
   ;
-  private final ScalarUnaryOperator scalarUnaryOperator;
-  private final boolean isZero;
+  private final WindowFunction windowFunction;
 
-  private WindowFunctions(ScalarUnaryOperator scalarUnaryOperator) {
-    this.scalarUnaryOperator = scalarUnaryOperator;
-    isZero = Chop._10.allZero(scalarUnaryOperator.apply(RationalScalar.HALF));
-  }
-
-  /** @return true if function at 1/2 evaluates to zero */
-  boolean isZero() {
-    return isZero;
+  private WindowFunctions(WindowFunction windowFunction) {
+    this.windowFunction = windowFunction;
   }
 
   @Override
   public Tensor apply(Integer i) {
     if (i == 0) //
       return Tensors.vector(1);
-    Tensor vector = isZero //
+    Tensor vector = windowFunction.isZero() //
         ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i + 2) //
-            .map(scalarUnaryOperator) //
+            .map(windowFunction) //
             .extract(1, 2 * i + 2)
         : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
-            .map(scalarUnaryOperator);
+            .map(windowFunction);
     // TODO V062 refactor
     return Normalize.of(vector, v -> VectorTotal.FUNCTION.apply(v));
   }
