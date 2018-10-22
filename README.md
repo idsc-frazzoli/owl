@@ -161,7 +161,7 @@ by Sertac Karaman and Emilio Frazzoli,
 by Jan Hakenberg,
 [viXra:1807.0463](http://vixra.org/abs/1807.0463)
 * *What lies in the shadows? Safe and computation-aware motion planning for autonomous vehicles using intent-aware dynamic shadow regions*
-by Yannik Nager, Andrea Censi, Emilio Frazzoli
+by Yannik Nager, Andrea Censi, and Emilio Frazzoli
 * *Smoothing using Geodesic Averages*
 by Jan Hakenberg,
 [viXra:1810.0283](http://vixra.org/abs/1810.0283)

@@ -2,6 +2,7 @@
 // adapted by jph
 package ch.ethz.idsc.owl.math;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -11,10 +12,14 @@ public enum QuaternionToRotationMatrix {
   /** @param wxyz vector of length 4, does not have to have unit length
    * @return */
   public static Tensor of(Tensor wxyz) {
-    double q_w = wxyz.Get(0).number().doubleValue();
-    double q_x = wxyz.Get(1).number().doubleValue();
-    double q_y = wxyz.Get(2).number().doubleValue();
-    double q_z = wxyz.Get(3).number().doubleValue();
+    return of(wxyz.Get(0), wxyz.Get(1), wxyz.Get(2), wxyz.Get(3));
+  }
+
+  public static Tensor of(Scalar w, Scalar x, Scalar y, Scalar z) {
+    double q_w = w.number().doubleValue();
+    double q_x = x.number().doubleValue();
+    double q_y = y.number().doubleValue();
+    double q_z = z.number().doubleValue();
     double sqw = q_w * q_w;
     double sqx = q_x * q_x;
     double sqy = q_y * q_y;

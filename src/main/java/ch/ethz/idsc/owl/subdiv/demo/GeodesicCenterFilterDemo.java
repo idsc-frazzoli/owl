@@ -69,7 +69,7 @@ class GeodesicCenterFilterDemo {
       List<String> list = appPose();
       spinnerLabel.addSpinnerListener(resource -> //
       control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          .limit(700).map(row -> row.extract(1, 4))));
+          .limit(270).map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
@@ -125,7 +125,7 @@ class GeodesicCenterFilterDemo {
           final int baseline_y = 200;
           {
             graphics.setColor(Color.BLACK);
-            graphics.drawLine(0, baseline_y, 1200, baseline_y);
+            graphics.drawLine(0, baseline_y, 300, baseline_y);
           }
           ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
           {
