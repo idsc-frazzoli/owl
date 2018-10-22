@@ -29,9 +29,14 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   public final GlcNode poll() {
+    if(set.isEmpty())
+      return null;
     GlcNode best = getFromBest();
     set.remove(best);
     return best;
+    //GlcNode best = StaticHelper.getMin(set, 0);
+    //set.remove(best);
+    //return best;
   }
 
   public final GlcNode peek() {

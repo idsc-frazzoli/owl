@@ -71,28 +71,30 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
    * @param node
    * @param connector */
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
-    Optional<Tensor> optional = reachingSet.getMinValues();
-    if (optional.isPresent()) {
-      // TODO YN code redundant to StdRL.TPlanner#processCandidates -> can simplify?
-      Tensor minValues = optional.get();
-      Tensor merit = VectorScalars.vector(node.merit());
-      for (int i = 0; i < slacks.length(); ++i) {
-        if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
-          Scalar margin = merit.Get(i).add(slacks.Get(i));
-          final int j = i;
-          List<GlcNode> toRemove = reachingSet.stream() // find nodes to be removed
-              .filter(n -> Scalars.lessThan( //
-                  margin, // lhs
-                  VectorScalars.at(n.merit(), j) // rhs
-              )).collect(Collectors.toList());
-          if (!toRemove.isEmpty()) {
-            queue().removeAll(toRemove);
-            reachingSet.removeAll(toRemove);
-            // toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // FIXME YN
-          }
-        }
-      }
-    }
+    System.out.print("offer:");
+    System.out.println(node.costFromRoot());
+    // Optional<Tensor> optional = reachingSet.getMinValues();
+    // if (optional.isPresent()) {
+    // // TODO YN code redundant to StdRL.TPlanner#processCandidates -> can simplify?
+    // Tensor minValues = optional.get();
+    // Tensor merit = VectorScalars.vector(node.merit());
+    // for (int i = 0; i < slacks.length(); ++i) {
+    // if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
+    // Scalar margin = merit.Get(i).add(slacks.Get(i));
+    // final int j = i;
+    // List<GlcNode> toRemove = reachingSet.stream() // find nodes to be removed
+    // .filter(n -> Scalars.lessThan( //
+    // margin, // lhs
+    // VectorScalars.at(n.merit(), j) // rhs
+    // )).collect(Collectors.toList());
+    // if (!toRemove.isEmpty()) {
+    // queue().removeAll(toRemove);
+    // reachingSet.removeAll(toRemove);
+    // // toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // FIXME YN
+    // }
+    // }
+    // }
+    // }
     reachingSet.add(node);
   }
 
@@ -109,7 +111,7 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
 
   @Override // from ExpandInterface
   public final Optional<GlcNode> getBest() {
-    System.out.println(reachingSet.getMinValues());
+    // System.out.println(reachingSet.getMinValues());
     return Optional.ofNullable(reachingSet.isEmpty() ? null : reachingSet.peek());
   }
 
