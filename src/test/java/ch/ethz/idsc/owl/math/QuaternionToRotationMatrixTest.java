@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.math;
 
+import java.util.Random;
+
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -11,6 +14,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quaternion;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Conjugate;
 import junit.framework.TestCase;
 
 public class QuaternionToRotationMatrixTest extends TestCase {
@@ -31,6 +35,21 @@ public class QuaternionToRotationMatrixTest extends TestCase {
       Quaternion invers = (Quaternion) scalar.reciprocal();
       Tensor invmat = QuaternionToRotationMatrix.of(Tensors.of(invers.re(), invers.im(), invers.jm(), invers.km()));
       assertTrue(Chop._12.close(matrix.dot(invmat), ID3));
+    }
+  }
+
+  public void testQuaternionVector() {
+    Random random = new Random();
+    for (int index = 0; index < 100; ++index) {
+      Scalar q = Quaternion.of(random.nextGaussian(), random.nextGaussian(), random.nextGaussian(), random.nextGaussian());
+      q = q.divide(q.abs()); // normalize
+      Tensor vector = RandomVariate.of(NormalDistribution.standard(), 3);
+      Scalar v = Quaternion.of(RealScalar.ZERO, vector.Get(0), vector.Get(1), vector.Get(2));
+      Quaternion qvq = (Quaternion) q.multiply(v).multiply(Conjugate.FUNCTION.apply(q));
+      Quaternion qq = (Quaternion) q;
+      Tensor matrix = QuaternionToRotationMatrix.of(Tensors.of(qq.re(), qq.im(), qq.jm(), qq.km()));
+      Tensor result = matrix.dot(vector);
+      assertTrue(Chop._12.close(result, Tensors.of(qvq.im(), qvq.jm(), qvq.km())));
     }
   }
 }
