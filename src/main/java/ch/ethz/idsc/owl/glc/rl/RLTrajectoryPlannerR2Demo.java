@@ -43,18 +43,18 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 
-class RLTrajectoryPlanner0Demo implements DemoInterface {
+class RLTrajectoryPlannerR2Demo implements DemoInterface {
   @Override
   public BaseFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    Tensor slacks = Tensors.vector(1, 0, 0);
+    Tensor slacks = Tensors.vector(4, 0);
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
     // ---
     int n = 8;
     Tensor eta = Tensors.vector(n, n);
     final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
+    StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(4);
     RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
@@ -78,28 +78,31 @@ class RLTrajectoryPlanner0Demo implements DemoInterface {
     // ---
     // the 3rd cost penalizes distance of path
     GoalInterface goalInterface = //
-        new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost, distanceCost), goalRegion);
+        new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost), goalRegion);
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     RLTrajectoryPlanner trajectoryPlanner = new StandardRLTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcRLExpand glcExpand = new GlcRLExpand(trajectoryPlanner);
-    glcExpand.findAny(1000);
+    glcExpand.untilOptimal(1000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
-    GlcNode goalNode = optional.get();
-    VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
-    // ---
-    List<TrajectorySample> trajectory = GlcTrajectories.detailedTrajectoryTo(stateIntegrator, goalNode);
-    // ---
-    owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
-    TrajectoryRender trajectoryRender = new TrajectoryRender();
-    trajectoryRender.trajectory(trajectory);
-    owlyAnimationFrame.addBackground(trajectoryRender);
+    if(optional.isPresent()) {
+      GlcNode goalNode = optional.get();
+      VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
+      System.out.println("Cost from root: " + cost);
+      // ---
+      List<TrajectorySample> trajectory = GlcTrajectories.detailedTrajectoryTo(stateIntegrator, goalNode);
+      // ---
+      owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
+      TrajectoryRender trajectoryRender = new TrajectoryRender();
+      trajectoryRender.trajectory(trajectory);
+      owlyAnimationFrame.addBackground(trajectoryRender);
+    }
     return owlyAnimationFrame;
   }
 
   public static void main(String[] args) throws IOException {
-    new RLTrajectoryPlanner0Demo().start().jFrame.setVisible(true);
+    new RLTrajectoryPlannerR2Demo().start().jFrame.setVisible(true);
   }
 }

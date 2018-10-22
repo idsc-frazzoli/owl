@@ -58,10 +58,17 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       Optional<RLDomainQueue> formerQueue = getDomainQueue(domainKey);
+      Optional<Tensor> minVec = StaticHelper.entrywiseMin(reachingSet.stream());
+      boolean withinGoal = true;
+      if(minVec.isPresent()) {
+        withinGoal = slackWrap.isWithin(VectorScalars.vector(next.merit()), minVec.get());
+        //System.out.println("cost:  " + next.merit() + "   minVec:" + minVec.get());
+      }
+      // ---
       if (formerQueue.isPresent()) { // is already some domain queue present from previous exploration ?
-        if (isWithinSlack(next, formerQueue.get()) && !StaticHelper.isEqual(next, formerQueue.get()))
+        if (isWithinSlack(next, formerQueue.get()) && withinGoal ) //&& !StaticHelper.isEqual(next, formerQueue.get()))
           domainQueueMap.addToDomainMap(domainKey, next); // new node lies within slack, potentially better than previous ones
-      } else
+      } else if (withinGoal)
         domainQueueMap.addToDomainMap(domainKey, next); // node is considered without comparison to any former node
     }
     // ---
@@ -93,7 +100,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
             Tensor merit = VectorScalars.vector(next.merit());
             for (int i = 0; i < slacks.length(); ++i) // find nodes outside of bounds
               if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) { // cost lower than prev min?
-                Scalar margin = merit.Get(i).add(slacks.Get(i));
+                Scalar margin = merit.Get(i).add(slacks.Get(i)); // new boundary
                 final int j = i;
                 List<GlcNode> toRemove = formerQueue.stream() // find nodes to be removed
                     .filter(n -> Scalars.lessThan( //
