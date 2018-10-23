@@ -61,6 +61,10 @@ public enum SmoothingKernel implements IntegerTensorFunction {
     this.windowFunction = windowFunction;
   }
 
+  public WindowFunction windowFunction() {
+    return windowFunction;
+  }
+
   @Override
   public Tensor apply(Integer i) {
     if (i == 0) //

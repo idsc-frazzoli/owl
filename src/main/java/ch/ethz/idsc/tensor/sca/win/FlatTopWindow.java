@@ -24,12 +24,12 @@ public class FlatTopWindow extends AbstractWindowFunction {
   }
 
   @Override
-  public boolean isContinuous() {
-    return true;
+  protected Scalar protected_apply(Scalar x) {
+    return StaticHelper.deg4(A0, A1, A2, A3, A4, x);
   }
 
   @Override
-  protected Scalar protected_apply(Scalar x) {
-    return StaticHelper.deg4(A0, A1, A2, A3, A4, x);
+  public boolean isContinuous() {
+    return true;
   }
 }
