@@ -1,8 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.symlink;
 
-import java.util.function.Function;
-
+import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -37,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunction;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
-public enum SmoothingKernel implements Function<Integer, Tensor> {
+public enum SmoothingKernel implements IntegerTensorFunction {
   BARTLETT(BartlettWindow.function()), //
   BLACKMAN(BlackmanWindow.function()), //
   BLACKMAN_HARRIS(BlackmanHarrisWindow.function()), //

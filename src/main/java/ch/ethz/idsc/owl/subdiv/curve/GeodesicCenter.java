@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.subdiv.curve;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
 import ch.ethz.idsc.owl.math.GeodesicInterface;
+import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,22 +17,21 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * 
  * projects a sequence of points to their geodesic center
  * with each point weighted as provided by an external function */
-// TODO class is not yet serializable
 public class GeodesicCenter implements TensorUnaryOperator {
   /** @param geodesicInterface
    * @param function
    * @return
    * @throws Exception if either input parameters is null */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
+  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
     return new GeodesicCenter(geodesicInterface, function);
   }
 
   // ---
   private final GeodesicInterface geodesicInterface;
-  private final Function<Integer, Tensor> function;
+  private final IntegerTensorFunction function;
   private final List<Tensor> weights = new ArrayList<>();
 
-  private GeodesicCenter(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
+  private GeodesicCenter(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
     this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
     this.function = Objects.requireNonNull(function);
   }
