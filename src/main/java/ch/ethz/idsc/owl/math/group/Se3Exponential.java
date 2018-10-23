@@ -32,6 +32,7 @@ public enum Se3Exponential implements LieExponential {
     Tensor R = ID3.add(wx.multiply(se3Numerics.A)).add(wx2.multiply(se3Numerics.B));
     Tensor V = ID3.add(wx.multiply(se3Numerics.B)).add(wx2.multiply(se3Numerics.C));
     Tensor Vu = V.dot(u);
+    // TODO use Se3Utils
     return Tensors.of( //
         Join.of(R.get(0), Vu.extract(0, 1)), //
         Join.of(R.get(1), Vu.extract(1, 2)), //

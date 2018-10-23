@@ -11,6 +11,8 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
  * Rotation Between Two Vectors in R^3 */
 public enum RotationMatrix3D {
   ;
+  private static final Tensor ID3 = IdentityMatrix.of(3);
+
   /** @param a vector with 3 entries and 2-norm equals to 1
    * @param b vector with 3 entries and 2-norm equals to 1
    * @return 3x3 orthogonal matrix */
@@ -19,6 +21,6 @@ public enum RotationMatrix3D {
     Tensor wx = Cross.of(w);
     Scalar ab = a.dot(b).Get();
     Scalar c = ab.add(RealScalar.ONE).reciprocal();
-    return IdentityMatrix.of(3).add(wx).add(wx.dot(wx).multiply(c));
+    return ID3.add(wx).add(wx.dot(wx).multiply(c));
   }
 }
