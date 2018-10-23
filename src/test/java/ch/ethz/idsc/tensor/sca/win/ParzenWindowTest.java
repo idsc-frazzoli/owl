@@ -11,6 +11,6 @@ public class ParzenWindowTest extends TestCase {
   }
 
   public void testIsZero() {
-    assertTrue(ParzenWindow.function().isZero());
+    assertTrue(ParzenWindow.function().isContinuous());
   }
 }

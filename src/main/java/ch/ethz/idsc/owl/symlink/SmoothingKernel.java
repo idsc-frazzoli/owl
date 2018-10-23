@@ -11,8 +11,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.win.BartlettWindow;
+import ch.ethz.idsc.tensor.sca.win.BlackmanHarrisWindow;
+import ch.ethz.idsc.tensor.sca.win.BlackmanNuttallWindow;
 import ch.ethz.idsc.tensor.sca.win.BlackmanWindow;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
+import ch.ethz.idsc.tensor.sca.win.FlatTopWindow;
 import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
 import ch.ethz.idsc.tensor.sca.win.HammingWindow;
 import ch.ethz.idsc.tensor.sca.win.HannWindow;
@@ -37,9 +40,12 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunction;
 public enum SmoothingKernel implements Function<Integer, Tensor> {
   BARTLETT(BartlettWindow.function()), //
   BLACKMAN(BlackmanWindow.function()), //
+  BLACKMAN_HARRIS(BlackmanHarrisWindow.function()), //
+  BLACKMAN_NUTTALL(BlackmanNuttallWindow.function()), //
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
   DIRICHLET(DirichletWindow.function()), //
+  FLAT_TOP(FlatTopWindow.function()), //
   /** the Gaussian kernel works well in practice
    * in particular for masks of small support */
   GAUSSIAN(GaussianWindow.function()), //
@@ -60,7 +66,7 @@ public enum SmoothingKernel implements Function<Integer, Tensor> {
   public Tensor apply(Integer i) {
     if (i == 0) //
       return Tensors.vector(1);
-    Tensor vector = windowFunction.isZero() //
+    Tensor vector = windowFunction.isContinuous() //
         ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i + 2) //
             .map(windowFunction) //
             .extract(1, 2 * i + 2)
