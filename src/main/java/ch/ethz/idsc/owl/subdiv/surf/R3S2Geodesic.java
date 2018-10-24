@@ -9,14 +9,18 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
-/** elements of R3S2 are tensors of the form
+/** R3S2 represents the space of positions in R^3
+ * and the sphere S^2 at each point.
+ * An elements from the sphere represent a surface normal.
+ * 
+ * Elements of R3S2 are tensors of the form
  * {{px, py, pz}, {nx, ny, nz}} */
 public enum R3S2Geodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   private static final Tensor ID3 = IdentityMatrix.of(3);
 
-  @Override
+  @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
     Tensor pt = p.get(0);
     Tensor pn = p.get(1);
