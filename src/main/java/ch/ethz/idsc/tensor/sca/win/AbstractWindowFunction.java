@@ -18,8 +18,8 @@ public abstract class AbstractWindowFunction implements WindowFunction {
         : RealScalar.ZERO;
   }
 
-  @Override
-  public final boolean isZero() {
+  @Override // from WindowFunction
+  public boolean isContinuous() {
     return Chop._10.allZero(protected_apply(RationalScalar.HALF));
   }
 

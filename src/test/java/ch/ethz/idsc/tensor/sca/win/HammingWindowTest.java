@@ -14,6 +14,6 @@ public class HammingWindowTest extends TestCase {
   }
 
   public void testIsZero() {
-    assertFalse(HammingWindow.function().isZero());
+    assertFalse(HammingWindow.function().isContinuous());
   }
 }

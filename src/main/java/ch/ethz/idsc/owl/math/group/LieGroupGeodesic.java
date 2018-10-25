@@ -16,7 +16,7 @@ public class LieGroupGeodesic implements GeodesicInterface {
     this.lieExponential = lieExponential;
   }
 
-  @Override
+  @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
     LieGroupElement lieGroupAction = function.apply(p);
     Tensor delta = lieGroupAction.inverse().combine(q);

@@ -1,8 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.symlink;
 
-import java.util.function.Function;
-
+import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -11,8 +10,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.win.BartlettWindow;
+import ch.ethz.idsc.tensor.sca.win.BlackmanHarrisWindow;
+import ch.ethz.idsc.tensor.sca.win.BlackmanNuttallWindow;
 import ch.ethz.idsc.tensor.sca.win.BlackmanWindow;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
+import ch.ethz.idsc.tensor.sca.win.FlatTopWindow;
 import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
 import ch.ethz.idsc.tensor.sca.win.HammingWindow;
 import ch.ethz.idsc.tensor.sca.win.HannWindow;
@@ -34,12 +36,15 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunction;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
-public enum SmoothingKernel implements Function<Integer, Tensor> {
+public enum SmoothingKernel implements IntegerTensorFunction {
   BARTLETT(BartlettWindow.function()), //
   BLACKMAN(BlackmanWindow.function()), //
+  BLACKMAN_HARRIS(BlackmanHarrisWindow.function()), //
+  BLACKMAN_NUTTALL(BlackmanNuttallWindow.function()), //
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
   DIRICHLET(DirichletWindow.function()), //
+  FLAT_TOP(FlatTopWindow.function()), //
   /** the Gaussian kernel works well in practice
    * in particular for masks of small support */
   GAUSSIAN(GaussianWindow.function()), //
@@ -56,11 +61,15 @@ public enum SmoothingKernel implements Function<Integer, Tensor> {
     this.windowFunction = windowFunction;
   }
 
+  public WindowFunction windowFunction() {
+    return windowFunction;
+  }
+
   @Override
   public Tensor apply(Integer i) {
     if (i == 0) //
       return Tensors.vector(1);
-    Tensor vector = windowFunction.isZero() //
+    Tensor vector = windowFunction.isContinuous() //
         ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i + 2) //
             .map(windowFunction) //
             .extract(1, 2 * i + 2)

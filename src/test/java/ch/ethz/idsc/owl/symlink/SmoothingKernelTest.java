@@ -8,6 +8,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.win.SymmetricVectorQ;
@@ -58,6 +60,17 @@ public class SmoothingKernelTest extends TestCase {
         assertFalse(Scalars.isZero(tensor.Get(tensor.length() - 1)));
         assertEquals(tensor.length(), 2 * size + 1);
       }
+  }
+
+  public void testSymmetric() {
+    for (int size = 0; size < 5; ++size) {
+      Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4);
+      for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+        Tensor v1 = tensor.map(smoothingKernel.windowFunction());
+        Tensor v2 = tensor.negate().map(smoothingKernel.windowFunction());
+        assertEquals(v1, v2);
+      }
+    }
   }
 
   public void testAllFail() {

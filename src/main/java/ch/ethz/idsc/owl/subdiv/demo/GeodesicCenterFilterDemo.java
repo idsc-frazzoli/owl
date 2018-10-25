@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.swing.JToggleButton;
@@ -173,11 +174,10 @@ class GeodesicCenterFilterDemo {
       // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
       spinnerFilter.setList(Arrays.asList(SmoothingKernel.values()));
       spinnerFilter.setValue(SmoothingKernel.GAUSSIAN);
-      spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
+      spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
     }
     {
-      // spinnerRadius.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+      spinnerRadius.setList(IntStream.range(0, 21).boxed().collect(Collectors.toList()));
       spinnerRadius.setValue(6);
       spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }

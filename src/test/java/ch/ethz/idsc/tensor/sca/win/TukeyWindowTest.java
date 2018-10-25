@@ -5,6 +5,6 @@ import junit.framework.TestCase;
 
 public class TukeyWindowTest extends TestCase {
   public void testIsZeroTukey() {
-    assertTrue(TukeyWindow.function().isZero());
+    assertTrue(TukeyWindow.function().isContinuous());
   }
 }
