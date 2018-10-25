@@ -27,11 +27,11 @@ public enum R3S2Geodesic implements GeodesicInterface {
     Tensor qt = q.get(0);
     Tensor qn = q.get(1);
     Tensor rotation = RotationMatrix3D.of(pn, qn);
-    Tensor pSe3 = Se3Utils.of(ID3, pt);
-    Tensor qSe3 = Se3Utils.of(rotation, qt);
+    Tensor pSe3 = Se3Utils.toMatrix4x4(ID3, pt);
+    Tensor qSe3 = Se3Utils.toMatrix4x4(rotation, qt);
     Tensor split = Se3Geodesic.INSTANCE.split(pSe3, qSe3, scalar);
     Tensor r = Se3Utils.rotation(split);
-    Tensor t = split.get(Tensor.ALL, 3).extract(0, 3);
+    Tensor t = Se3Utils.translation(split);
     return Tensors.of(t, r.dot(pn));
   }
 }

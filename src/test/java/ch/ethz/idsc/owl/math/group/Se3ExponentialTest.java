@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.group;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -36,6 +37,7 @@ public class Se3ExponentialTest extends TestCase {
         Tensors.vector(1, 2, 3), //
         Tensors.vector(0, 0, 0));
     Tensor g = Se3Exponential.INSTANCE.exp(input);
+    assertEquals(g, Se3Utils.toMatrix4x4(IdentityMatrix.of(3), input.get(0)));
     Tensor u_w = Se3Exponential.INSTANCE.log(g);
     assertTrue(Chop._12.close(input, u_w));
   }

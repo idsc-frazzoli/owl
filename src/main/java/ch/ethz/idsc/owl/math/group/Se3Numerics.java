@@ -13,9 +13,12 @@ import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sinc;
 
-/** the computation of the exponential and logarithm functions for SE3
+/** The computation of the exponential and logarithm functions for SE3
  * require the evaluation of taylor series to prevent numerical
- * instability */
+ * instability
+ * 
+ * from "Lie Groups for 2D and 3D Transformations" by Ethan Eade
+ * http://ethaneade.com/ */
 /* package */ class Se3Numerics {
   private static final ScalarUnaryOperator SERIES1 = Series.of(N.DOUBLE.of(Tensors.fromString( //
       "{1/2, 0, -1/24, 0, 1/720, 0, -1/40320, 0, 1/3628800, 0, -1/479001600, 0, 1/87178291200, 0, -1/20922789888000}")));
@@ -46,6 +49,7 @@ import ch.ethz.idsc.tensor.sca.Sinc;
     }
   }
 
+  // for testing
   Tensor vector() {
     return Tensors.of(Boole.of(series), A, B, C, D);
   }
