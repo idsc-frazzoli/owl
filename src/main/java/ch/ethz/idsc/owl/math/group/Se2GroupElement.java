@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.group;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
@@ -15,6 +16,10 @@ public class Se2GroupElement extends Se2CoveringGroupElement {
     super(xya);
   }
 
+  private Se2GroupElement(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
+    super(px, py, pa, ca, sa);
+  }
+
   /** @param tensor of the form {px, py, angle}
    * @return vector of length 3 */
   @Override // from Se2CoveringGroupElement
@@ -22,5 +27,10 @@ public class Se2GroupElement extends Se2CoveringGroupElement {
     Tensor xya = super.combine(tensor);
     xya.set(MOD_ANGLE, MOD_INDEX);
     return xya;
+  }
+
+  @Override // from Se2CoveringGroupElement
+  Se2GroupElement create(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
+    return new Se2GroupElement(px, py, pa, ca, sa);
   }
 }

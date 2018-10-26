@@ -70,7 +70,7 @@ class GeodesicCenterFilterDemo {
       List<String> list = appPose();
       spinnerLabel.addSpinnerListener(resource -> //
       control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          .limit(270).map(row -> row.extract(1, 4))));
+          .limit(2070).map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
