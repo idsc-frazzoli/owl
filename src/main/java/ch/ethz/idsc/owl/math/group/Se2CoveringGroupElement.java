@@ -9,12 +9,16 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
+/** represents an element of the covering group SE(2),
+ * which is defined by three real values, or equivalently by a vector from R^3
+ * 
+ * {@link Se2CoveringGroup} */
 public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
-  final Scalar px;
-  final Scalar py;
-  final Scalar pa;
-  final Scalar ca;
-  final Scalar sa;
+  private final Scalar px;
+  private final Scalar py;
+  private final Scalar pa;
+  private final Scalar ca;
+  private final Scalar sa;
 
   /** @param xya == {px, py, angle} as member of Lie group SE2 */
   public Se2CoveringGroupElement(Tensor xya) {
