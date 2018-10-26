@@ -10,11 +10,11 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
-  private final Scalar px;
-  private final Scalar py;
-  private final Scalar pa;
-  private final Scalar ca;
-  private final Scalar sa;
+  final Scalar px;
+  final Scalar py;
+  final Scalar pa;
+  final Scalar ca;
+  final Scalar sa;
 
   /** @param xya == {px, py, angle} as member of Lie group SE2 */
   public Se2CoveringGroupElement(Tensor xya) {
