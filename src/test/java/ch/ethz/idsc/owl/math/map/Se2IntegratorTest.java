@@ -58,7 +58,6 @@ public class Se2IntegratorTest extends TestCase {
     Tensor spin = Se2CoveringIntegrator.INSTANCE.spin( //
         Tensors.fromString("{1[m],2[m],3}"), //
         Tensors.fromString("{.4[m],-.3[m],.7}"));
-    // System.out.println(spin);
     Tensor expected = Tensors.fromString("{0.5557854299223493[m], 2.2064712267635618[m], 3.7}");
     assertTrue(Chop._13.close(spin, expected));
   }

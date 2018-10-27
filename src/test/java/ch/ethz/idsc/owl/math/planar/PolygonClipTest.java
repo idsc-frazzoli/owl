@@ -52,7 +52,6 @@ public class PolygonClipTest extends TestCase {
     Tensor result = PolygonClip.of(clipper).apply(subject);
     assertTrue(equalsCycle(subject, result));
     Scalar area = PolygonArea.FUNCTION.apply(result);
-    // System.out.println(area);
     assertEquals(area, RationalScalar.of(1, 4));
     assertTrue(ExactScalarQ.of(area));
   }

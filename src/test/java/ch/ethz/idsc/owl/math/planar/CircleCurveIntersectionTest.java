@@ -16,7 +16,6 @@ public class CircleCurveIntersectionTest extends TestCase {
     CurveIntersection curveIntersection = new CircleCurveIntersection(RationalScalar.HALF);
     for (int index = 0; index < curve.length(); ++index) {
       Optional<Tensor> optional = curveIntersection.string(RotateLeft.of(curve, index));
-      // System.out.println(index+" "+optional);
       assertEquals(optional.isPresent(), index != 1);
       if (index != 1) {
         Tensor tensor = optional.get();

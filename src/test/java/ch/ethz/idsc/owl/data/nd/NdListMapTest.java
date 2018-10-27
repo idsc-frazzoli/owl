@@ -64,7 +64,6 @@ public class NdListMapTest extends TestCase {
         m2.add(location, value);
       }
     }
-    // System.out.println(m1.size());
     assertEquals(m1.size(), m2.size());
     NdCenterInterface dinf = NdCenterInterface.euclidean(center);
     NdCluster<String> c1 = m1.buildCluster(dinf, n);
@@ -78,7 +77,6 @@ public class NdListMapTest extends TestCase {
       System.out.println(s2);
     }
     assertTrue(Chop._11.close(s1, s2));
-    // System.out.println("considered " + c2.considered() + " / " + m2.size());
   }
 
   public void testOne() {

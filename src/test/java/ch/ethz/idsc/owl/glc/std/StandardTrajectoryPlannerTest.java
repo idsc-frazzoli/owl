@@ -54,12 +54,9 @@ public class StandardTrajectoryPlannerTest extends TestCase {
       GlcNode goalNode = optional.get(); // <- throws exception if
       Scalar cost = goalNode.costFromRoot();
       Scalar lowerBound = Ramp.of(Norm._2.ofVector(stateGoal.subtract(stateRoot)).subtract(radius));
-      // System.out.println("has best");
       if (Scalars.lessThan(cost, lowerBound))
         throw TensorRuntimeException.of(cost, lowerBound);
     }
-    // Tensor eta2 = trajectoryPlanner.getEta();
-    // assertEquals(eta, eta2);
     DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
     DebugUtils.nodeAmountCompare(trajectoryPlanner);
   }

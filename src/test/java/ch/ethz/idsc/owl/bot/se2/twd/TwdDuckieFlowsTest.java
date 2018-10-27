@@ -29,7 +29,6 @@ public class TwdDuckieFlowsTest extends TestCase {
     Scalar sa = Quantity.of(0.567, "m*rad^-1");
     TwdDuckieFlows twdConfig = new TwdDuckieFlows(ms, sa);
     Collection<Flow> controls = twdConfig.getFlows(8);
-    // System.out.println(controls.iterator().next().getU());
     Scalar maxSpeed = Se2Controls.maxSpeed(controls);
     assertEquals(maxSpeed, ms);
     assertEquals(Units.of(maxSpeed), Unit.of("m*s^-1"));

@@ -29,7 +29,6 @@ public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
     sa = Sin.FUNCTION.apply(pa);
   }
 
-  // strictly private
   Se2CoveringGroupElement(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
     this.px = px;
     this.py = py;
