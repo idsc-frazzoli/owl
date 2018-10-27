@@ -62,12 +62,10 @@ public class NdTreeMapTest extends TestCase {
       new Thread(new Runnable() {
         @Override
         public void run() {
-          // System.out.println("beg " + ficount);
           Tensor center = RandomVariate.of(distribution, 2);
           NdCenterInterface distancer = NdCenterInterface.euclidean(center);
           NdCluster<Void> cluster = ndTreeMap.buildCluster(distancer, 100);
           assertEquals(cluster.size(), 100);
-          // System.out.println("end " + ficount);
         }
       }).start();
       Thread.sleep(3);
@@ -133,8 +131,6 @@ public class NdTreeMapTest extends TestCase {
       Tensor location = RandomVariate.of(UniformDistribution.unit(), 2);
       ndTreeMap.add(location, "s" + c);
     }
-    // testTree.print();
-    // System.out.println(testTree.binSize());
   }
 
   public void testFail0() {

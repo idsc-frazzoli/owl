@@ -4,11 +4,13 @@ package ch.ethz.idsc.owl.symlink;
 import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
+import ch.ethz.idsc.subare.util.VectorTotal;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.win.BartlettWindow;
 import ch.ethz.idsc.tensor.sca.win.BlackmanHarrisWindow;
 import ch.ethz.idsc.tensor.sca.win.BlackmanNuttallWindow;
@@ -20,7 +22,6 @@ import ch.ethz.idsc.tensor.sca.win.HammingWindow;
 import ch.ethz.idsc.tensor.sca.win.HannWindow;
 import ch.ethz.idsc.tensor.sca.win.NuttallWindow;
 import ch.ethz.idsc.tensor.sca.win.ParzenWindow;
-import ch.ethz.idsc.tensor.sca.win.VectorTotal;
 import ch.ethz.idsc.tensor.sca.win.WindowFunction;
 
 /** Filter-Design Window Functions
@@ -55,6 +56,8 @@ public enum SmoothingKernel implements IntegerTensorFunction {
   PARZEN(ParzenWindow.function()), //
   TUKEY(ParzenWindow.function()), //
   ;
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorTotal.FUNCTION);
+  // ---
   private final WindowFunction windowFunction;
 
   private SmoothingKernel(WindowFunction windowFunction) {
@@ -75,7 +78,6 @@ public enum SmoothingKernel implements IntegerTensorFunction {
             .extract(1, 2 * i + 2)
         : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
             .map(windowFunction);
-    // TODO V062 refactor
-    return Normalize.of(vector, v -> VectorTotal.FUNCTION.apply(v));
+    return NORMALIZE.apply(vector);
   }
 }

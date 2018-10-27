@@ -19,10 +19,8 @@ public class ImageAreaTest extends TestCase {
   public void testSimple() {
     BufferedImage bufferedImage = RegionRenders.image(Tensors.fromString("{{1,0,1}}"));
     // Tensor s = ImageFormat.from(bufferedImage);
-    // System.out.println(s);
     // TODO JAN figure out why 244 ends up being the color value here
     Area area = ImageArea.fromImage(bufferedImage, new Color(244, 244, 244), 5);
-    // System.out.println(area);
     assertTrue(area.contains(new Point2D.Double(.5, .5)));
     assertFalse(area.contains(new Point2D.Double(1.5, .5)));
     assertTrue(area.contains(new Point2D.Double(2.5, .5)));
@@ -39,9 +37,7 @@ public class ImageAreaTest extends TestCase {
 
   public void testBlackWhite() throws IOException {
     BufferedImage bufferedImage = image("/dubilab/obstacles/20180423.png");
-    // Stopwatch stopwatch = Stopwatch.started();
     Area area = ImageArea.fromImage(bufferedImage); // takes ~6[s]
-    // System.out.println(stopwatch.display_seconds());
     Rectangle rectangle = area.getBounds();
     assertEquals(rectangle.x, 16);
     assertEquals(rectangle.y, 16);

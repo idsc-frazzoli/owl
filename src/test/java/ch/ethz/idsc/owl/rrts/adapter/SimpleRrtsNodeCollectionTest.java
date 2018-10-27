@@ -23,19 +23,13 @@ public class SimpleRrtsNodeCollectionTest extends TestCase {
     for (int index = 0; index < 200; ++index)
       rrtsNodeCollection.insert(RrtsNode.createRoot(RandomVariate.of(distribution, 3), RealScalar.of(10)));
     Tensor center = Tensors.vector(.5, .5, .5);
-    {
-      for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(center, 3)) {
-        Scalar scalar = Norm._2.between(center, rrtsNode.state());
-        System.out.println(scalar);
-        assertTrue(Scalars.lessThan(scalar, RealScalar.of(.3)));
-      }
+    for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(center, 3)) {
+      Scalar scalar = Norm._2.between(center, rrtsNode.state());
+      assertTrue(Scalars.lessThan(scalar, RealScalar.of(.3)));
     }
-    {
-      for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(center, 3)) {
-        Scalar scalar = Norm._2.between(center, rrtsNode.state());
-        System.out.println(scalar);
-        assertTrue(Scalars.lessThan(scalar, RealScalar.of(.3)));
-      }
+    for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(center, 3)) {
+      Scalar scalar = Norm._2.between(center, rrtsNode.state());
+      assertTrue(Scalars.lessThan(scalar, RealScalar.of(.3)));
     }
   }
 }

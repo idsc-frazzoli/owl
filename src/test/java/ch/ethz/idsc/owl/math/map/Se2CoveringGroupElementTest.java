@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class Se2CoveringGroupElementTest extends TestCase {
@@ -82,5 +83,11 @@ public class Se2CoveringGroupElementTest extends TestCase {
       Tensor xyam = Se2Utils.toSE2Matrix(xya1).dot(Se2Utils.toSE2Matrix(xya2));
       assertTrue(Chop._12.close(Se2Utils.toSE2Matrix(xya3), xyam));
     }
+  }
+
+  public void testNoWrap() {
+    Se2CoveringGroupElement element = new Se2CoveringGroupElement(Tensors.vector(1, 2, 3));
+    Tensor tensor = element.combine(Tensors.vector(6, 7, 8));
+    assertTrue(Sign.isPositive(tensor.Get(2)));
   }
 }

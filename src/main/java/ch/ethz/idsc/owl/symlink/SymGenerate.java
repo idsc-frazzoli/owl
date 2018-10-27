@@ -100,7 +100,7 @@ enum SymGenerate {
     {
       SymLinkImage symLinkImage = window(SmoothingKernel.GAUSSIAN, 2);
       BufferedImage bufferedImage = symLinkImage.bufferedImageCropped();
-      ImageIO.write(bufferedImage, "png", UserHome.Pictures("gaussian2.png"));
+      ImageIO.write(bufferedImage, "png", UserHome.Pictures("gaussian23.png"));
     }
     // BufferedImage bufferedImage =
     window(SmoothingKernel.GAUSSIAN, 5);

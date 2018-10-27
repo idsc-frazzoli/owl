@@ -5,12 +5,12 @@ import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.math.QuaternionToRotationMatrix;
+import ch.ethz.idsc.owl.math.group.LieDifferences;
 import ch.ethz.idsc.owl.math.group.LinearGroup;
 import ch.ethz.idsc.owl.math.group.Se3Exponential;
 import ch.ethz.idsc.owl.math.group.Se3Geodesic;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicDifferences;
 import ch.ethz.idsc.owl.symlink.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -23,8 +23,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 enum EurocDemo {
   ;
-  private static final GeodesicDifferences GEODESIC_DIFFERENCES = //
-      new GeodesicDifferences(LinearGroup.INSTANCE, Se3Exponential.INSTANCE);
+  private static final LieDifferences LIE_DIFFERENCES = //
+      new LieDifferences(LinearGroup.INSTANCE, Se3Exponential.INSTANCE);
 
   public static void main(String[] args) throws IOException {
     System.out.println("here");
@@ -49,7 +49,7 @@ enum EurocDemo {
     Put.of(UserHome.file("MH_04_difficult_poses.file"), poses);
     System.out.println("differences");
     {
-      Tensor delta = GEODESIC_DIFFERENCES.apply(poses);
+      Tensor delta = LIE_DIFFERENCES.apply(poses);
       Put.of(UserHome.file("MH_04_difficult_delta.file"), delta);
     }
     System.out.println("smooth");
@@ -60,7 +60,7 @@ enum EurocDemo {
       System.out.println("store");
       Put.of(UserHome.file("MH_04_difficult_poses_smooth.file"), smooth);
       System.out.println("differences");
-      Tensor delta = GEODESIC_DIFFERENCES.apply(smooth);
+      Tensor delta = LIE_DIFFERENCES.apply(smooth);
       System.out.println("store");
       Put.of(UserHome.file("MH_04_difficult_delta_smooth.file"), delta);
     }

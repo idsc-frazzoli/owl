@@ -57,16 +57,11 @@ public class Tse2PlannerTest extends TestCase {
     trajectoryPlanner.insertRoot(new StateTime(Tensors.fromString("{0[m],0[m],0,0[m*s^-1]}"), Quantity.of(1, "s")));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);
-    int expandCount = glcExpand.getExpandCount();
-    System.out.println(expandCount);
+    glcExpand.getExpandCount();
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     GlcNode glcNode = optional.get();
-    System.out.println(glcNode.stateTime().toInfoString());
-    // List<StateTime> pathFromRootTo = GlcNodes.getPathFromRootTo(glcNode);
-    // Trajectories.print(list);
     List<TrajectorySample> trajectory = GlcTrajectories.detailedTrajectoryTo(stateIntegrator, glcNode);
     assertTrue(20 < trajectory.size());
-    // Trajectories.print(trajectory);
   }
 
   public void testGeneral() {

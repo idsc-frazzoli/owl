@@ -50,7 +50,6 @@ public class LvDemoTest extends TestCase {
         DebugUtils.nodeAmountCompare(trajectoryPlanner);
         return;
       }
-      System.out.println("lv steps=" + glcExpand.getExpandCount());
     }
     assertTrue(false);
   }
