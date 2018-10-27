@@ -10,19 +10,19 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import ch.ethz.idsc.owl.data.img.ImageCrop;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.img.ImageCrop;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 class SymLinkImage {
   private static final Tensor MODEL2PIXEL = Tensors.fromString("{{100,0,80},{0,-100,50+25},{0,0,1}}");
   private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 22);
-  private static final TensorUnaryOperator IMAGE_CROP = ImageCrop.constant(Tensors.vector(255, 255, 255, 255));
+  private static final TensorUnaryOperator IMAGE_CROP = ImageCrop.color(Tensors.vector(255, 255, 255, 255));
   // private static final Tensor CIRCLE = CirclePoints.of(21).multiply(RealScalar.of(.07));
   // ---
   private final BufferedImage bufferedImage = new BufferedImage(1400, 500, BufferedImage.TYPE_INT_ARGB);
