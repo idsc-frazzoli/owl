@@ -26,7 +26,7 @@ public class CatmullClarkSubdivisionTest extends TestCase {
     Tensor mid2 = catmullClarkSubdivision.quad(quad.get(2), quad.get(3), quad.get(4), quad.get(5));
     assertEquals(mid1, RationalScalar.of(1, 4));
     assertEquals(mid2, RationalScalar.of(0, 4));
-    Tensor edge = catmullClarkSubdivision.quad(mid1, quad.get(2), quad.get(3), mid2);
+    Tensor edge = catmullClarkSubdivision.quad(mid1, mid2, quad.get(2), quad.get(3));
     assertEquals(edge, RationalScalar.of(1, 16));
   }
 
@@ -37,7 +37,7 @@ public class CatmullClarkSubdivisionTest extends TestCase {
     Tensor mid2 = catmullClarkSubdivision.quad(quad.get(2), quad.get(3), quad.get(4), quad.get(5));
     assertEquals(mid1, RationalScalar.of(1, 4));
     assertEquals(mid2, RationalScalar.of(1, 4));
-    Tensor edge = catmullClarkSubdivision.quad(mid1, quad.get(2), quad.get(3), mid2);
+    Tensor edge = catmullClarkSubdivision.quad(mid1, mid2, quad.get(2), quad.get(3));
     assertEquals(edge, RationalScalar.of(3, 8));
   }
 
@@ -71,7 +71,7 @@ public class CatmullClarkSubdivisionTest extends TestCase {
 
   public void testRefine() {
     CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(RnGeodesic.INSTANCE);
-    Tensor grid = Tensors.fromString("{{1,0,0},{0,0,0},{0,0,0}}");
+    Tensor grid = Tensors.fromString("{{0,0,0,0},{0,1,0,0},{0,0,0,1}}");
     Tensor refine = catmullClarkSubdivision.refine(grid);
     System.out.println(Pretty.of(refine));
   }
