@@ -2,12 +2,15 @@
 package ch.ethz.idsc.owl.subdiv.surf;
 
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.Pretty;
+import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -26,7 +29,7 @@ public class CatmullClarkSubdivisionTest extends TestCase {
     Tensor mid2 = catmullClarkSubdivision.quad(quad.get(2), quad.get(3), quad.get(4), quad.get(5));
     assertEquals(mid1, RationalScalar.of(1, 4));
     assertEquals(mid2, RationalScalar.of(0, 4));
-    Tensor edge = catmullClarkSubdivision.quad(mid1, quad.get(2), quad.get(3), mid2);
+    Tensor edge = catmullClarkSubdivision.quad(mid1, mid2, quad.get(2), quad.get(3));
     assertEquals(edge, RationalScalar.of(1, 16));
   }
 
@@ -37,7 +40,7 @@ public class CatmullClarkSubdivisionTest extends TestCase {
     Tensor mid2 = catmullClarkSubdivision.quad(quad.get(2), quad.get(3), quad.get(4), quad.get(5));
     assertEquals(mid1, RationalScalar.of(1, 4));
     assertEquals(mid2, RationalScalar.of(1, 4));
-    Tensor edge = catmullClarkSubdivision.quad(mid1, quad.get(2), quad.get(3), mid2);
+    Tensor edge = catmullClarkSubdivision.quad(mid1, mid2, quad.get(2), quad.get(3));
     assertEquals(edge, RationalScalar.of(3, 8));
   }
 
@@ -71,8 +74,25 @@ public class CatmullClarkSubdivisionTest extends TestCase {
 
   public void testRefine() {
     CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(RnGeodesic.INSTANCE);
-    Tensor grid = Tensors.fromString("{{1,0,0},{0,0,0},{0,0,0}}");
+    Tensor grid = Tensors.fromString("{{0,0,0,0},{0,1,0,0},{0,0,0,1}}");
     Tensor refine = catmullClarkSubdivision.refine(grid);
-    System.out.println(Pretty.of(refine));
+    String string = "{{0, 0, 0, 0, 0, 0, 0}, {0, 1/4, 3/8, 1/4, 1/16, 0, 0}, {0, 3/8, 9/16, 3/8, 7/64, 1/16, 1/8}, {0, 1/4, 3/8, 1/4, 1/8, 1/4, 1/2}, {0, 0, 0, 0, 1/8, 1/2, 1}}";
+    assertEquals(refine, Tensors.fromString(string));
+  }
+
+  public void testRefineX() {
+    CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(RnGeodesic.INSTANCE);
+    Tensor grid = Tensors.fromString("{{0,1},{0,1},{0,1}}");
+    Tensor refine = Nest.of(catmullClarkSubdivision::refine, grid, 2);
+    assertEquals(refine, Tensors.vector(i -> Subdivide.of(0, 1, 4), 9));
+    assertTrue(ExactScalarQ.all(refine));
+  }
+
+  public void testRefineY() {
+    CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(RnGeodesic.INSTANCE);
+    Tensor grid = Tensors.fromString("{{0,0},{1,1},{2,2}}");
+    Tensor refine = Nest.of(catmullClarkSubdivision::refine, grid, 2);
+    assertEquals(Transpose.of(refine), Tensors.vector(i -> Subdivide.of(0, 2, 8), 5));
+    assertTrue(ExactScalarQ.all(refine));
   }
 }

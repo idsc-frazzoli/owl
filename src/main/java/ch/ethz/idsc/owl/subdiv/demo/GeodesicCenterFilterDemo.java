@@ -58,6 +58,27 @@ class GeodesicCenterFilterDemo {
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
+    // try {
+    // Tensor rows = Import.of(new File("/home/datahaki/Documents/datasets/swisstrolley/processed/1.csv"));
+    // control = Tensors.empty();
+    // Scalar RAD2DEG = RealScalar.of(180 / Math.PI);
+    // int index = 0;
+    // for (Tensor row : rows) {
+    // Scalar x = row.Get(0).multiply(RAD2DEG);
+    // Scalar y = row.Get(1).multiply(RAD2DEG);
+    // Tensor transform = WGS84toCH1903LV03Plus.transform(x, y);
+    // control.append(transform.append(row.Get(2)));
+    // ++index;
+    // if (2000 < index)
+    // break;
+    // }
+    // control = Tensor.of(control.stream().map(r -> r.pmul(Tensors.vector(.1, .1, -1))));
+    // Tensor mean = Mean.of(control);
+    // mean.set(RealScalar.of(Math.PI / 2), 2);
+    // control = Tensor.of(control.stream().map(row -> row.subtract(mean)));
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // }
     JToggleButton jToggleCtrl = new JToggleButton("ctrl");
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);

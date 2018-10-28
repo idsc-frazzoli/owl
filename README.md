@@ -118,6 +118,22 @@ R^2
 
 ## Geometry in Nonlinear Spaces
 
+<table>
+<tr>
+<td>
+
+![curve_se2](https://user-images.githubusercontent.com/4012178/47620685-408eba00-daed-11e8-90f5-3001e6d56310.png)
+
+Curve Subdivision
+
+<td>
+
+![smoothing](https://user-images.githubusercontent.com/4012178/47620686-41275080-daed-11e8-8484-8d9d4cd4793d.png)
+
+Smoothing
+
+</tr>
+</table>
 
 
 ## Integration
@@ -153,15 +169,19 @@ Jan Hakenberg, Jonas Londschien, Yannik Nager
 
 * *A Generalized Label Correcting Method for Optimal Kinodynamic Motion Planning*
 by Brian Paden and Emilio Frazzoli, 
-[arXiv:1607.06966](https://arxiv.org/abs/1607.06966)
+[arXiv:1607.06966](https://arxiv.org/abs/1607.06966),
+[video](https://www.youtube.com/watch?v=4-r6Oi8GHxc)
 * *Sampling-based algorithms for optimal motion planning*
 by Sertac Karaman and Emilio Frazzoli,
 [IJRR11](http://ares.lids.mit.edu/papers/Karaman.Frazzoli.IJRR11.pdf)
 * *Curve Subdivision in SE(2)*
 by Jan Hakenberg,
-[viXra:1807.0463](http://vixra.org/abs/1807.0463)
+[viXra:1807.0463](http://vixra.org/abs/1807.0463),
+[video](https://www.youtube.com/watch?v=2vDciaUgL4E)
 * *What lies in the shadows? Safe and computation-aware motion planning for autonomous vehicles using intent-aware dynamic shadow regions*
-by Yannik Nager, Andrea Censi, and Emilio Frazzoli
+by Yannik Nager, Andrea Censi, and Emilio Frazzoli,
+[video](https://www.youtube.com/watch?v=3w6zQF9HOAM)
 * *Smoothing using Geodesic Averages*
 by Jan Hakenberg,
-[viXra:1810.0283](http://vixra.org/abs/1810.0283)
+[viXra:1810.0283](http://vixra.org/abs/1810.0283),
+[video](https://www.youtube.com/watch?v=dmFO72Pigb4)
