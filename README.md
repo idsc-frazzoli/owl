@@ -122,13 +122,13 @@ R^2
 <tr>
 <td>
 
-![curve_se2](https://user-images.githubusercontent.com/4012178/47620685-408eba00-daed-11e8-90f5-3001e6d56310.png)
+![curve_se2](https://user-images.githubusercontent.com/4012178/47631757-8f693d80-db47-11e8-9c00-7796b07c48fc.png)
 
 Curve Subdivision
 
 <td>
 
-![smoothing](https://user-images.githubusercontent.com/4012178/47620686-41275080-daed-11e8-8484-8d9d4cd4793d.png)
+![smoothing](https://user-images.githubusercontent.com/4012178/47631759-91cb9780-db47-11e8-9dc7-a2631a144ecc.png)
 
 Smoothing
 
