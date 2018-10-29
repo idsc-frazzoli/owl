@@ -28,7 +28,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.BSplineFunction;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -59,7 +64,7 @@ class BSplineFunctionDemo {
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
     JToggleButton jToggleComb = new JToggleButton("comb");
-    jToggleComb.setSelected(true);
+    jToggleComb.setSelected(false);
     timerFrame.jToolBar.add(jToggleComb);
     // ---
     timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
@@ -69,8 +74,34 @@ class BSplineFunctionDemo {
         mouse = geometricLayer.getMouseSe2State();
         if (Objects.nonNull(min_index))
           control.set(mouse.extract(0, 2), min_index);
+        int degree = spinnerDegree.getValue();
         int levels = spinnerRefine.getValue();
-        BSplineFunction bSplineFunction = BSplineFunction.of(spinnerDegree.getValue(), control);
+        {
+          graphics.setStroke(new BasicStroke(1.25f));
+          Tensor matrix = geometricLayer.getMatrix();
+          geometricLayer.pushMatrix(Inverse.of(matrix));
+          {
+            ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
+            for (int length = 2; length <= 6; ++length) {
+              Tensor string = Tensors.fromString("{{50,0,0},{0,-50,0},{0,0,1}}");
+              string.set(RealScalar.of(60 * length), 1, 2);
+              geometricLayer.pushMatrix(string);
+              for (int k_th = 0; k_th < length; ++k_th) {
+                BSplineFunction bSplineFunction = BSplineFunction.of(degree, UnitVector.of(length, k_th));
+                Tensor domain = Subdivide.of(0, length - 1, 100);
+                Tensor values = domain.map(bSplineFunction);
+                Tensor tensor = Transpose.of(Tensors.of(domain, values));
+                graphics.setColor(cyclic.getColor(k_th));
+                Path2D path2d = geometricLayer.toPath2D(tensor);
+                graphics.draw(path2d);
+              }
+              geometricLayer.popMatrix();
+            }
+          }
+          geometricLayer.popMatrix();
+          graphics.setStroke(new BasicStroke(1f));
+        }
+        BSplineFunction bSplineFunction = BSplineFunction.of(degree, control);
         final Tensor refined = Subdivide.of(0, control.length() - 1, 4 << levels).map(bSplineFunction);
         {
           graphics.setColor(new Color(0, 0, 255, 128));
@@ -108,7 +139,7 @@ class BSplineFunctionDemo {
       }
     });
     {
-      spinnerDegree.setList(Arrays.asList(0, 1, 2, 3, 4));
+      spinnerDegree.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
       spinnerDegree.setValue(1);
       spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
     }
