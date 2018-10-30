@@ -1,15 +1,50 @@
+//code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.sca.Cos;
+import ch.ethz.idsc.tensor.sca.Sin;
 
-public class ApStateSpaceModel implements StateSpaceModel {
+/** State-Space Model for Flying Aircraft
+ * 
+ * 
+ * @author Andre
+ * @param x = {velocity, flight path angle, altitude}
+ * @param u = {thrust, angle of attack} */
+public enum ApStateSpaceModel implements StateSpaceModel {
+  INSTANCE;
+  private static final Scalar GRAVITY = RealScalar.of(9.81); // acceleration of gravity
+  private static final Scalar MASS = RealScalar.of(60_000); // total mass of airplane
+
   @Override
   public Tensor f(Tensor x, Tensor u) {
-    // TODO Auto-generated method stub
-    return null;
+    // x1' = 1/m * (u1*cos(u2) - D(u2,x1) - m*g*sin(x2))
+    // x2' = 1/(m*x1) * (u1*sin(u2) + L(u2,x1) - m*g*cos(x2))
+    // x3' = x1*sin(x2)
+    Scalar x1 = x.Get(0); // velocity 
+    Scalar x2 = x.Get(1); // Flight path angle
+    Scalar x3 = x.Get(2); // altitude
+    Scalar u1 = u.Get(0); // Thrust
+    Scalar u2 = u.Get(1); // angle of attack
+    return Tensors.of(//
+        u1.multiply(Cos.of(u2)).subtract(D(u2, x1)).subtract(Times.of(MASS, GRAVITY, Sin.of(x2))).divide(MASS), //
+        u1.multiply(Sin.of(u2)).add(L(u2, x1)).subtract(Times.of(MASS, GRAVITY, Cos.of(x2))).divide(MASS).divide(x1), //
+        x1.multiply(Sin.of(x2)));
+  }
+
+  private Scalar D(Scalar u2, Scalar x1) {
+    double value = (1.25 + 4.2 * u2.number().doubleValue());
+    return Times.of(RealScalar.of(2.7 + 3.08 * value * value), x1, x1);
+  }
+
+  private Scalar L(Scalar u2, Scalar x1) {
+    double value = (1.25 + 4.2 * u2.number().doubleValue());
+    return Times.of(RealScalar.of(68.6 * value), x1, x1);
   }
 
   @Override
@@ -19,8 +54,6 @@ public class ApStateSpaceModel implements StateSpaceModel {
   }
 
   public static void main(String[] args) {
-    System.out.println("Test");
-    ApStateSpaceModel apStateSpaceModel = new ApStateSpaceModel();
-    apStateSpaceModel.f(Tensors.vector(1, 2, 3), Tensors.vector(1, 2));
+    ApStateSpaceModel apStateSpaceModel = ApStateSpaceModel.INSTANCE;
   }
 }
