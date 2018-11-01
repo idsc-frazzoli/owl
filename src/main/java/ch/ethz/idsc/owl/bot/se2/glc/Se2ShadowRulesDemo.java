@@ -54,7 +54,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     StateTime stateTime = new StateTime(Tensors.vector(25, 5, 0), RealScalar.ZERO);
-    GokartEntity carEntity = new GokartEntity(stateTime) {
+    GokartEntity gokartEntity = new GokartEntity(stateTime) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
         return new ConeRegion(goal, RealScalar.of(Math.PI / 6));
@@ -77,11 +77,11 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     owlyAnimationFrame.addBackground(imgRender);
     // Lidar
     LidarEmulator lidarEmulator = new LidarEmulator( //
-        LIDAR_RAYTRACER, carEntity::getStateTimeNow, lidarRay);
+        LIDAR_RAYTRACER, gokartEntity::getStateTimeNow, lidarRay);
     owlyAnimationFrame.addBackground(lidarEmulator);
     Tensor imgT = ResourceData.of("/graphics/car.png");
     BufferedImage img = ImageFormat.of(imgT);
-    owlyAnimationFrame.addBackground(new EntityImageRender(() -> carEntity.getStateTimeNow(), img, Tensors.vector(3.5, 2)));
+    owlyAnimationFrame.addBackground(new EntityImageRender(() -> gokartEntity.getStateTimeNow(), img, Tensors.vector(3.5, 2)));
     //  ---
     // ShadowMaps
     ShadowMapSpherical smPedLegal = //
@@ -89,14 +89,14 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     smPedLegal.setColor(PED_COLOR_LEGAL);
     // smPedLegal.useGPU(); // requires CUDA
     owlyAnimationFrame.addBackground(smPedLegal);
-    ShadowMapSimulator simPedLegal = new ShadowMapSimulator(smPedLegal, carEntity::getStateTimeNow);
+    ShadowMapSimulator simPedLegal = new ShadowMapSimulator(smPedLegal, gokartEntity::getStateTimeNow);
     simPedLegal.startNonBlocking(10);
     //
     ShadowMapSpherical smPedIllegal = //
         new ShadowMapSpherical(lidarEmulator, imageRegionLid, PED_VELOCITY, PED_RADIUS);
     smPedIllegal.setColor(PED_COLOR_ILLEGAL);
     // smPedIllegal.useGPU(); // requires CUDA
-    ShadowMapSimulator simPedIllegal = new ShadowMapSimulator(smPedIllegal, carEntity::getStateTimeNow);
+    ShadowMapSimulator simPedIllegal = new ShadowMapSimulator(smPedIllegal, gokartEntity::getStateTimeNow);
     // owlyAnimationFrame.addBackground(smPedIllegal);
     // simPedIllegal.startNonBlocking(10);
     //
@@ -104,17 +104,17 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
         new ShadowMapDirected(lidarEmulator, imageRegionCar, STREET_SCENARIO_DATA.imageLanesString, CAR_VELOCITY);
     smCarLegal.setColor(CAR_COLOR_LEGAL);
     owlyAnimationFrame.addBackground(smCarLegal);
-    ShadowMapSimulator simCarLegal = new ShadowMapSimulator(smCarLegal, carEntity::getStateTimeNow);
+    ShadowMapSimulator simCarLegal = new ShadowMapSimulator(smCarLegal, gokartEntity::getStateTimeNow);
     simCarLegal.startNonBlocking(10);
     //
     RenderInterface renderInterface = new MouseShapeRender( //
         SimpleTrajectoryRegionQuery.timeInvariant(line(imageRegionCar)), //
-        CarEntity.SHAPE, () -> carEntity.getStateTimeNow().time());
+        GokartEntity.SHAPE, () -> gokartEntity.getStateTimeNow().time());
     owlyAnimationFrame.addBackground(renderInterface);
     //
     PlannerConstraint plannerConstraint = MultiConstraintAdapter.of(constraintCollection);
-    MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
-    owlyAnimationFrame.add(carEntity);
+    MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);
+    owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosed(WindowEvent e) {
