@@ -1,7 +1,13 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
+import java.util.List;
+
 import ch.ethz.idsc.owl.glc.adapter.AbstractMinTimeGoalManager;
+import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
+import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -17,7 +23,7 @@ public final class ApMinTimeGoalManager extends AbstractMinTimeGoalManager {
     this.maxSpeed = Sign.requirePositive(maxSpeed);
     //this.maxTurning = ApControls.maxTurning(controls).multiply(maxSpeed);
   }
-
+  
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
     // Euklidian distance to spherical goal region

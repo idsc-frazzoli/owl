@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -58,4 +59,5 @@ public enum ApStateSpaceModel implements StateSpaceModel {
     // TODO Auto-generated method stub
     return null;
   }
+  
 }
