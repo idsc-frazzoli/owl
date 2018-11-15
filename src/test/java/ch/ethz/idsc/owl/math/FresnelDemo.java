@@ -40,7 +40,6 @@ public enum FresnelDemo {
     {
       Tensor plot = Tensors.empty();
       for (Tensor s : Subdivide.of(-6, 6, 1000)) {
-        System.out.println(s);
         Scalar apply = FresnelC.FUNCTION.apply(s.Get());
         plot.append(Tensors.of(s, apply));
       }
@@ -49,7 +48,6 @@ public enum FresnelDemo {
     {
       Tensor plot = Tensors.empty();
       for (Tensor s : Subdivide.of(-6, 6, 1000)) {
-        System.out.println(s);
         Scalar apply = FresnelS.FUNCTION.apply(s.Get());
         plot.append(Tensors.of(s, apply));
       }

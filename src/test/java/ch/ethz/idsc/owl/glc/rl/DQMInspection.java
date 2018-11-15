@@ -23,8 +23,6 @@ class DQMInspection {
     // this.rlDomainQueueMap = rlDomainQueueMap;
     min = rlDomainQueueMap.keySet().stream().reduce(Entrywise.min()).get();
     max = rlDomainQueueMap.keySet().stream().reduce(Entrywise.max()).get();
-    System.out.println("min=" + min);
-    System.out.println("max=" + max);
     Tensor width = max.subtract(min).map(Increment.ONE);
     if (!ExactScalarQ.all(width))
       throw TensorRuntimeException.of(min, max, width);

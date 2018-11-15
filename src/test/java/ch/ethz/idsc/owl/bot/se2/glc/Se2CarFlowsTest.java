@@ -36,12 +36,9 @@ public class Se2CarFlowsTest extends TestCase {
     Flow flow = CarHelper.singleton(speed, rate);
     Tensor u = flow.getU();
     Tensor origin = Tensors.fromString("{0[m],0[m],0}");
-    // System.out.println(u);
     Scalar half_turn = DoubleScalar.of(Math.PI).divide(u.Get(2));
-    // System.out.println(half_turn);
     Tensor res = Se2CoveringIntegrator.INSTANCE.spin(origin, u.multiply(half_turn));
     res = res.map(Chop._12);
-    // System.out.println(res);
     Scalar radius = res.Get(1).divide(RealScalar.of(2));
     assertTrue(Chop._12.close(radius.reciprocal(), rate));
   }

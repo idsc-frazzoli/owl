@@ -60,7 +60,8 @@ public class GeodesicCenterFilterTest extends TestCase {
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(S2Geodesic.INSTANCE, SmoothingKernel.HANN);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Distribution distribution = NormalDistribution.standard();
-    Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(Normalize::of));
+    TensorUnaryOperator tensorUnaryOperator = Normalize.with(Norm._2);
+    Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(tensorUnaryOperator));
     Tensor result = geodesicCenterFilter.apply(tensor);
     assertEquals(Dimensions.of(tensor), Dimensions.of(result));
   }

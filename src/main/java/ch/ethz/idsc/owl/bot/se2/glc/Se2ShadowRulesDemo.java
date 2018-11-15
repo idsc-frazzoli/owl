@@ -87,7 +87,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     ShadowMapSpherical smPedLegal = //
         new ShadowMapSpherical(lidarEmulator, imageRegionPed, PED_VELOCITY, PED_RADIUS);
     smPedLegal.setColor(PED_COLOR_LEGAL);
-    smPedLegal.useGPU();
+    // smPedLegal.useGPU(); // requires CUDA
     owlyAnimationFrame.addBackground(smPedLegal);
     ShadowMapSimulator simPedLegal = new ShadowMapSimulator(smPedLegal, carEntity::getStateTimeNow);
     simPedLegal.startNonBlocking(10);
@@ -95,7 +95,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     ShadowMapSpherical smPedIllegal = //
         new ShadowMapSpherical(lidarEmulator, imageRegionLid, PED_VELOCITY, PED_RADIUS);
     smPedIllegal.setColor(PED_COLOR_ILLEGAL);
-    smPedIllegal.useGPU();
+    // smPedIllegal.useGPU(); // requires CUDA
     ShadowMapSimulator simPedIllegal = new ShadowMapSimulator(smPedIllegal, carEntity::getStateTimeNow);
     // owlyAnimationFrame.addBackground(smPedIllegal);
     // simPedIllegal.startNonBlocking(10);

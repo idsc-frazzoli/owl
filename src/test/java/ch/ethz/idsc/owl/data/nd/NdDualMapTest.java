@@ -45,7 +45,6 @@ public class NdDualMapTest extends TestCase {
         m2.add(location, value);
       }
     }
-    // System.out.println(m1.size());
     NdCenterInterface dinf = NdCenterInterface.euclidean(center);
     NdCluster<String> c2 = m2.buildCluster(dinf, n);
     assertTrue(c2.size() <= n);

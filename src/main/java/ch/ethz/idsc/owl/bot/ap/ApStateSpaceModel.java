@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
@@ -20,10 +21,15 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * @param u = {thrust, angle of attack} */
 public enum ApStateSpaceModel implements StateSpaceModel {
   INSTANCE;
-  private static final Scalar GRAVITY = RealScalar.of(9.81); // acceleration of gravity
-  private static final Scalar MASS = RealScalar.of(60_000); // total mass of airplane
-  public static final Scalar MAX_THRUST = RealScalar.of(160_000); // max thrust in N
-  public static final Scalar MAX_AOA = RealScalar.of(10).multiply(RealScalar.of(Math.PI)).divide(RealScalar.of(180)); // max AOA in radian
+  // ---
+  /** acceleration of gravity */
+  private static final Scalar GRAVITY = RealScalar.of(9.81);
+  /** total mass of airplane */
+  private static final Scalar MASS = RealScalar.of(60_000);
+  /** max thrust in N */
+  public static final Scalar MAX_THRUST = RealScalar.of(160_000);
+  /** max AOA in radian */
+  public static final Scalar MAX_AOA = Degree.of(10);
 
   @Override
   public Tensor f(Tensor x, Tensor u) {
@@ -40,16 +46,15 @@ public enum ApStateSpaceModel implements StateSpaceModel {
     return Tensors.of(//
         u1.multiply(Cos.of(u2)).subtract(D(u2, x1)).subtract(Times.of(MASS, GRAVITY, Sin.of(x2))).divide(MASS), //
         u1.multiply(Sin.of(u2)).add(L(u2, x1)).subtract(Times.of(MASS, GRAVITY, Cos.of(x2))).divide(MASS).divide(x1), //
-        x1.multiply(Cos.of(x2)), 
-        x1.multiply(Sin.of(x2)));
+        x1.multiply(Cos.of(x2)), x1.multiply(Sin.of(x2)));
   }
 
-  private Scalar D(Scalar u2, Scalar x1) {
+  private static Scalar D(Scalar u2, Scalar x1) {
     double value = (1.25 + 4.2 * u2.number().doubleValue());
     return Times.of(RealScalar.of(2.7 + 3.08 * value * value), x1, x1);
   }
 
-  private Scalar L(Scalar u2, Scalar x1) {
+  private static Scalar L(Scalar u2, Scalar x1) {
     double value = (1.25 + 4.2 * u2.number().doubleValue());
     return Times.of(RealScalar.of(68.6 * value), x1, x1);
   }

@@ -13,9 +13,9 @@ enum StaticHelper {
   ;
   private static final Scalar TWO = RealScalar.of(2);
 
-  /** @param mask symmetric and of odd length
+  /** @param mask symmetric vector of odd length
    * @return weights of Kalman-style iterative moving average
-   * @throws Exception if mask is not symmetric or has odd number of elements */
+   * @throws Exception if mask is not symmetric or has even number of elements */
   /* package */ static Tensor splits(Tensor mask) {
     if (mask.length() % 2 == 0)
       throw TensorRuntimeException.of(mask);

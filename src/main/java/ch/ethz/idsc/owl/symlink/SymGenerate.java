@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.symlink;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.stream.IntStream;
 
@@ -96,9 +97,13 @@ enum SymGenerate {
   }
 
   public static void main(String[] args) throws IOException {
-    window(SmoothingKernel.GAUSSIAN, 5);
+    {
+      SymLinkImage symLinkImage = window(SmoothingKernel.GAUSSIAN, 2);
+      BufferedImage bufferedImage = symLinkImage.bufferedImageCropped();
+      ImageIO.write(bufferedImage, "png", UserHome.Pictures("gaussian23.png"));
+    }
     // BufferedImage bufferedImage =
-    window(SmoothingKernel.GAUSSIAN, 6);
+    window(SmoothingKernel.GAUSSIAN, 5);
     // ImageIO.write(bufferedImage, "png", UserHome.Pictures("export/" + wf.name().toLowerCase() + radius + ".png"));
     // for (WindowFunctions windowFunctions : WindowFunctions.values())
     // for (int radius = 1; radius <= 4; ++radius)

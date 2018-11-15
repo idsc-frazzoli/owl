@@ -2,17 +2,23 @@
 package ch.ethz.idsc.owl.subdiv.curve;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2Geodesic;
+import ch.ethz.idsc.owl.subdiv.surf.R3S2Geodesic;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Rationalize;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
@@ -64,6 +70,17 @@ public class BSpline3CurveSubdivisionTest extends TestCase {
     TensorUnaryOperator fps = new BSpline3CurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
+  }
+
+  public void testR3S2() {
+    Tensor tensor = Subdivide.of(-0.5, 0.8, 6) //
+        .map(scalar -> Tensors.of(scalar, RealScalar.of(0.3), RealScalar.ONE));
+    tensor = Tensor.of(tensor.stream() //
+        .map(Normalize.with(Norm._2)) //
+        .map(row -> Tensors.of(row, row)));
+    TensorUnaryOperator string = new BSpline3CurveSubdivision(R3S2Geodesic.INSTANCE)::string;
+    Tensor apply = string.apply(tensor);
+    assertEquals(Dimensions.of(apply), Arrays.asList(13, 2, 3));
   }
 
   public void testScalarFail() {

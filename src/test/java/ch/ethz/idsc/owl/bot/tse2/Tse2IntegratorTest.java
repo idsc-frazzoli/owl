@@ -32,7 +32,6 @@ public class Tse2IntegratorTest extends TestCase {
       Tensor xr = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
       Tensor xt = tse2Integrator.step(flow, x, h);
       Tensor xd = xr.subtract(xt);
-      // System.out.println(xd);
       assertTrue(Chop._04.allZero(xd));
     }
   }

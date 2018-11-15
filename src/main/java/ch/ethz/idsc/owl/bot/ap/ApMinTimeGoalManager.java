@@ -15,13 +15,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public final class ApMinTimeGoalManager extends AbstractMinTimeGoalManager {
   private final ApComboRegion apComboRegion;
   private final Scalar maxSpeed;
-  //private final Scalar maxTurning;
+  // private final Scalar maxTurning;
 
-  public ApMinTimeGoalManager(ApComboRegion apComboRegion, Scalar maxSpeed) { // Collection<Flow> controls, 
+  public ApMinTimeGoalManager(ApComboRegion apComboRegion, Scalar maxSpeed) { // Collection<Flow> controls,
     super(apComboRegion);
     this.apComboRegion = apComboRegion;
     this.maxSpeed = Sign.requirePositive(maxSpeed);
-    //this.maxTurning = ApControls.maxTurning(controls).multiply(maxSpeed);
+    // this.maxTurning = ApControls.maxTurning(controls).multiply(maxSpeed);
   }
   
   @Override // from HeuristicFunction

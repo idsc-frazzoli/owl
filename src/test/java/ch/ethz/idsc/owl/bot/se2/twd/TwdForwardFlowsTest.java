@@ -20,9 +20,7 @@ public class TwdForwardFlowsTest extends TestCase {
     TwdFlows twdFlows = new TwdForwardFlows(Quantity.of(3, "m*s^-1"), Quantity.of(1, "m*rad^-1"));
     int n = 3;
     Collection<Flow> collection = twdFlows.getFlows(n);
-    for (Flow flow : collection) {
-      // System.out.println(Round.of(flow.getU()));
+    for (Flow flow : collection)
       assertFalse(Chop._05.allZero(flow.getU()));
-    }
   }
 }

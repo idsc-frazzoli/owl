@@ -12,9 +12,6 @@ public class Se2CoveringGeodesicTest extends TestCase {
   public void testArticle() {
     Tensor tensor = Se2CoveringGeodesic.INSTANCE.split( //
         Tensors.vector(1, 2, 3), Tensors.vector(4, 5, 6), RealScalar.of(0.7));
-    // System.out.println(tensor);
-    // {4.483830852817113, 3.2143505344919467, 5.1} // p.exp(x)
-    // {4.483830852817112, 3.2143505344919463, 5.1} // spin(p,x)
     assertTrue(Chop._14.close(tensor, Tensors.fromString("{4.483830852817113, 3.2143505344919467, 5.1}")));
   }
 
@@ -23,10 +20,6 @@ public class Se2CoveringGeodesicTest extends TestCase {
     Tensor p = Tensors.vector(2.017191762967754, -0.08474511292102775, 0.9817477042468103);
     Tensor q = Tensors.vector(2.503476971090440, +0.08179934782700435, 0.9817477042468102);
     Scalar scalar = RealScalar.of(0.5);
-    // this used to be the result with the former implementation of Se2CoveringIntegrator
-    // {2.017191762967754, -0.08474511292102775, 0.9817477042468103}
-    // System.out.println(tensor);
-    // Tensor p_inv = ;
     Tensor delta = new Se2CoveringGroupElement(p).inverse().combine(q);
     Tensor x = Se2CoveringExponential.INSTANCE.log(delta).multiply(scalar);
     x.get();
@@ -39,9 +32,5 @@ public class Se2CoveringGeodesicTest extends TestCase {
     // {2.260334367029097, -0.0014728825470118057, 0.9817477042468103}
     assertTrue(Chop._14.close(tensor, //
         Tensors.fromString("{2.260334367029097, -0.0014728825470118057, 0.9817477042468103}")));
-    // System.out.println(tensor);
-    // System.out.println(x);
-    // return Se2CoveringIntegrator.INSTANCE.spin(p, x);
-    // assertEquals(tensor, Tensors.fromString("{4.483830852817112, 3.2143505344919463, 5.1}"));
   }
 }

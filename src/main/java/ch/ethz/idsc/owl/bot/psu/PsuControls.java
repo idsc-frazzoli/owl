@@ -7,7 +7,6 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Partition;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -20,8 +19,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
    * @return */
   public static Collection<Flow> createControls(double amplitude, int num) {
     List<Flow> list = new ArrayList<>();
-    for (Tensor u : Partition.of( //
-        Subdivide.of(DoubleScalar.of(-amplitude), DoubleScalar.of(amplitude), num), 1))
+    for (Tensor u : Partition.of(Subdivide.of(-amplitude, amplitude, num), 1))
       list.add(StateSpaceModels.createFlow(PsuStateSpaceModel.INSTANCE, u));
     return list;
   }

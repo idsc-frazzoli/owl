@@ -25,6 +25,6 @@ public class BartlettWindowTest extends TestCase {
   }
 
   public void testIsZero() {
-    assertTrue(BartlettWindow.function().isZero());
+    assertTrue(BartlettWindow.function().isContinuous());
   }
 }

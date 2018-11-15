@@ -12,17 +12,20 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class R2TrajectoryControl extends StateTrajectoryControl {
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+
   @Override
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
     Tensor state = tail.state();
     for (TrajectorySample trajectorySample : trailAhead) {
       Tensor diff = trajectorySample.stateTime().state().subtract(state);
       if (Scalars.lessThan(RealScalar.of(0.2), Norm._2.ofVector(diff))) // magic const
-        return Optional.of(Normalize.of(diff));
+        return Optional.of(NORMALIZE.apply(diff));
     }
     // System.out.println("fail custom control");
     return Optional.empty();

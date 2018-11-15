@@ -37,4 +37,22 @@ public class StaticHelperTest extends TestCase {
       assertEquals(tensor, Tensors.fromString("{6/7, 15/22, 5/16}"));
     }
   }
+
+  public void testFail() {
+    try {
+      StaticHelper.splits(Tensors.vector(1, 2));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNonSymmetric() {
+    try {
+      StaticHelper.splits(Tensors.vector(1, 2, 2));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

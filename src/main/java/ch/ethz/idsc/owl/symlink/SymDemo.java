@@ -29,7 +29,6 @@ import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivisions;
-import ch.ethz.idsc.owl.subdiv.curve.BezierCurve;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.DeCasteljau;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
@@ -45,6 +44,7 @@ import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.N;
 
 class SymDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
@@ -90,12 +90,9 @@ class SymDemo {
     jToggleBndy.setSelected(true);
     timerFrame.jToolBar.add(jToggleBndy);
     // ---
-    JToggleButton jToggleLine = new JToggleButton("line");
-    jToggleLine.setSelected(false);
-    timerFrame.jToolBar.add(jToggleLine);
-    // ---
     {
-      JSlider jSlider = new JSlider(1, 999, 500);
+      JSlider jSlider = new JSlider(0, 1000, 500);
+      // new JSlider(1, 999, 500);
       jSlider.setPreferredSize(new Dimension(500, 28));
       jSlider.addChangeListener(new ChangeListener() {
         @Override
@@ -120,7 +117,11 @@ class SymDemo {
         if (control.length() == 4) {
           // BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
           DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
-          SymScalar symScalar = (SymScalar) deCasteljau.apply(MAGIC_C);
+          SymScalar symScalar = (SymScalar) deCasteljau.apply(N.DOUBLE.apply(MAGIC_C));
+          {
+            SymLinkImage symLinkImage = new SymLinkImage(symScalar);
+            graphics.drawImage(symLinkImage.bufferedImage(), 0, 200, null);
+          }
           // ScalarTensorFunction scalarTensorFunction = bezierCurve.evaluation(vector);
           // TensorUnaryOperator tensorUnaryOperator = BSpline4CurveSubdivision.split3(SymGeodesic.INSTANCE, RationalScalar.HALF)::cyclic;
           // Scalar tensor = (Scalar) scalarTensorFunction.apply(RationalScalar.of(1, 3));
@@ -142,8 +143,8 @@ class SymDemo {
           SmoothingKernel smoothingKernel = spinnerKernel.getValue();
           {
             int radius = (control.length() - 1) / 2;
-            SymLinkImage symLinkImage = SymGenerate.window(smoothingKernel, radius);
-            graphics.drawImage(symLinkImage.bufferedImage(), 0, 200, null);
+            // SymLinkImage symLinkImage = SymGenerate.window(smoothingKernel, radius);
+            // graphics.drawImage(symLinkImage.bufferedImage(), 0, 200, null);
           }
           // ---
           TensorUnaryOperator tensorUnaryOperator = //
@@ -179,13 +180,6 @@ class SymDemo {
           graphics.setColor(Color.BLACK);
           graphics.draw(path2d);
           geometricLayer.popMatrix();
-        }
-        if (jToggleLine.isSelected()) {
-          BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
-          Tensor linear = bezierCurve.refine(_control, 1 << 8);
-          graphics.setColor(new Color(0, 255, 0, 128));
-          Path2D path2d = geometricLayer.toPath2D(linear);
-          graphics.draw(path2d);
         }
         if (Objects.isNull(min_index)) {
           graphics.setColor(Color.GREEN);
