@@ -52,7 +52,7 @@ class BSplineFunctionDemo {
     SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
     {
-      control = Tensors.fromString("{{0,0},{2,0}}");
+      control = Tensors.fromString("{{0, 0}, {2, 0}}");
     }
     {
       JButton jButton = new JButton("clear");
@@ -83,8 +83,8 @@ class BSplineFunctionDemo {
           {
             ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
             for (int length = 2; length <= 6; ++length) {
-              Tensor string = Tensors.fromString("{{50,0,0},{0,-50,0},{0,0,1}}");
-              string.set(RealScalar.of(60 * length), 1, 2);
+              Tensor string = Tensors.fromString("{{100, 0, 0}, {0, -100, 0}, {0, 0, 1}}");
+              string.set(RealScalar.of(110 * length), 1, 2);
               geometricLayer.pushMatrix(string);
               for (int k_th = 0; k_th < length; ++k_th) {
                 BSplineFunction bSplineFunction = BSplineFunction.of(degree, UnitVector.of(length, k_th));
@@ -177,7 +177,7 @@ class BSplineFunctionDemo {
 
   public static void main(String[] args) {
     BSplineFunctionDemo curveSubdivisionDemo = new BSplineFunctionDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
   }
 }
