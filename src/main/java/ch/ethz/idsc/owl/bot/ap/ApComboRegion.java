@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.ap;
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.region.LinearRegion;
 import ch.ethz.idsc.owl.math.region.Region;
@@ -13,7 +12,6 @@ import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 
 public class ApComboRegion implements Region<Tensor>, Serializable {
   /** @param goal {velocity, pathAngle, x, z}
@@ -39,15 +37,13 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
   /** function is used to compute heuristic in {@link ApMinTimeGoalManager}
    * 
    * @param tensor {velocity, pathAngle, x, z}
-   * @return euklidian distance from x, z of tensor to spherical region*/
+   * @return Euclidean distance from x, z of tensor to spherical region */
   public final Scalar d_xz(Tensor tensor) {
-    return regionWithDistance.distance(tensor.extract(2,4));
+    return regionWithDistance.distance(tensor.extract(2, 4));
   }
 
   @Override // from Region
   public boolean isMember(Tensor goal) {
     return regionWithDistance.isMember(goal.extract(2, 4)) && so2Region.isMember(goal.get(1)) && linearRegion.isMember(goal.get(0));
   }
-  
-
 }

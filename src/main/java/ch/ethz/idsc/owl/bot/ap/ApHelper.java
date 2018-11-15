@@ -20,4 +20,3 @@ public enum ApHelper {
         Tse2StateSpaceModel.INSTANCE, N.DOUBLE.of(Tensors.of(aoa, thrusts)));
   }
 }
- 

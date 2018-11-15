@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
-public class ApFlows implements FlowsInterface, Serializable{
+public class ApFlows implements FlowsInterface, Serializable {
   /** @param aoa_max with unit [rad],
    * @param thrusts vector with unit [N]
    * @return */
@@ -42,5 +42,4 @@ public class ApFlows implements FlowsInterface, Serializable{
         list.add(ApHelper.singleton(aoa.Get(), thrust.Get()));
     return Collections.unmodifiableList(list);
   }
-  
 }
