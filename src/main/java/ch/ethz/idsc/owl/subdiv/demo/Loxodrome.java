@@ -20,12 +20,15 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 public class Loxodrome implements ScalarTensorFunction {
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+  // ---
   private final Scalar angle;
 
   public Loxodrome(Scalar angle) {
@@ -48,7 +51,7 @@ public class Loxodrome implements ScalarTensorFunction {
     Export.of(UserHome.file("loxodrome_exact.csv"), tensor);
     Tensor noise = RandomVariate.of(NormalDistribution.of(0, .05), Dimensions.of(tensor));
     tensor = tensor.add(noise);
-    tensor = Tensor.of(tensor.stream().map(Normalize::of));
+    tensor = Tensor.of(tensor.stream().map(NORMALIZE));
     Export.of(UserHome.file("loxodrome_noise.csv"), tensor);
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = GeodesicCenterFilter.of( //

@@ -61,19 +61,19 @@ public class TreeRender implements RenderInterface {
       path2D.closePath();
       graphics.draw(path2D);
     }
-    double inverse = 1 / (max - min);
+    double inverse = (treeColor.nodeColor.length() - 1) / (max - min);
     // System.out.println("count=" + count + ", inverse=" + inverse);
     if (count <= NODE_BOUND) // don't draw tree beyond certain node count
       for (StateCostNode node : _collection) {
         double value = node.costFromRoot().number().doubleValue();
         final double interp = (value - min) * inverse;
-        graphics.setColor(treeColor.nodeColor.rescaled(interp));
+        graphics.setColor(treeColor.nodeColor.getColor((int) interp));
         final Point2D p1 = geometricLayer.toPoint2D(node.state());
         graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));
         StateCostNode parent = node.parent();
         if (Objects.nonNull(parent)) {
           Point2D p2 = geometricLayer.toPoint2D(parent.state());
-          graphics.setColor(treeColor.edgeColor.rescaled(interp));
+          graphics.setColor(treeColor.edgeColor.getColor((int) interp));
           Shape shape = new Line2D.Double(p1.getX(), p1.getY(), p2.getX(), p2.getY());
           graphics.draw(shape);
         }

@@ -67,14 +67,6 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     opencv_core.subtract(initArea, obstacleArea, initArea);
     this.shadowArea = initArea.clone();
     setColor(new Color(255, 50, 74));
-    //
-    if (useGPU) {
-      initAreaGpu = new GpuMat(initArea.size(), initArea.type());
-      shadowAreaGpu = new GpuMat(shadowArea.size(), shadowArea.type());
-      lidarMatGpu = new GpuMat(initArea.size(), initArea.type());
-      shadowAreaGpu.upload(shadowArea);
-      initAreaGpu.upload(initArea);
-    }
   }
 
   @Override // from ShadowMap
@@ -179,6 +171,11 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
   }
 
   public void useGPU() {
+    initAreaGpu = new GpuMat(initArea.size(), initArea.type());
+    shadowAreaGpu = new GpuMat(shadowArea.size(), shadowArea.type());
+    lidarMatGpu = new GpuMat(initArea.size(), initArea.type());
+    shadowAreaGpu.upload(shadowArea);
+    initAreaGpu.upload(initArea);
     this.useGPU = true;
   }
 

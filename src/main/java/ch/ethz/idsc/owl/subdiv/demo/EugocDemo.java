@@ -4,12 +4,12 @@ package ch.ethz.idsc.owl.subdiv.demo;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.owl.math.group.LieDifferences;
 import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
 import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.owl.math.group.Se2Group;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicDifferences;
 import ch.ethz.idsc.owl.symlink.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -23,8 +23,8 @@ enum EugocDemo {
   // public static void main(String[] args) {
   // control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream().limit(5000).map(row -> row.extract(1, 4))));
   // }
-  private static final GeodesicDifferences GEODESIC_DIFFERENCES = //
-      new GeodesicDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+  private static final LieDifferences LIE_DIFFERENCES = //
+      new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
 
   public static void main(String[] args) throws IOException {
     System.out.println("here");
@@ -38,7 +38,7 @@ enum EugocDemo {
     System.out.println(Dimensions.of(poses));
     Put.of(UserHome.file("gokart_poses.file"), poses);
     {
-      Tensor delta = GEODESIC_DIFFERENCES.apply(poses);
+      Tensor delta = LIE_DIFFERENCES.apply(poses);
       Put.of(UserHome.file("gokart_delta.file"), delta);
     }
     {
@@ -46,7 +46,7 @@ enum EugocDemo {
           GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       Put.of(UserHome.file("gokart_poses_gauss.file"), smooth);
-      Tensor delta = GEODESIC_DIFFERENCES.apply(smooth);
+      Tensor delta = LIE_DIFFERENCES.apply(smooth);
       Put.of(UserHome.file("gokart_delta_gauss.file"), delta);
     }
     {
@@ -54,7 +54,7 @@ enum EugocDemo {
           GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.HAMMING), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       Put.of(UserHome.file("gokart_poses_hammi.file"), smooth);
-      Tensor delta = GEODESIC_DIFFERENCES.apply(smooth);
+      Tensor delta = LIE_DIFFERENCES.apply(smooth);
       Put.of(UserHome.file("gokart_delta_hammi.file"), delta);
     }
   }

@@ -8,7 +8,8 @@ import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** quintic B-spline */
+/** quintic B-spline is implemented as an extension of
+ * cubic B-spline refinement */
 public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
   private static final Scalar _5_8 = RationalScalar.of(5, 8);
   private static final Scalar _15_16 = RationalScalar.of(15, 16);

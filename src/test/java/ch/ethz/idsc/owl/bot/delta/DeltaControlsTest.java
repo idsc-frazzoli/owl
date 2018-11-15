@@ -19,7 +19,6 @@ public class DeltaControlsTest extends TestCase {
     ImageGradientInterpolation imageGradientInterpolation = ImageGradientInterpolation.linear( //
         ResourceData.of("/io/delta_uxy.png"), Tensors.vector(10, 10), RealScalar.of(.1));
     Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();
-    // System.out.println(maxNormGradient);
     assertTrue(Sign.isPositive(maxNormGradient));
     Scalar amp = RealScalar.of(2);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);

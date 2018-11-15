@@ -1,6 +1,6 @@
+// code by yn
 package ch.ethz.idsc.owl.glc.rl;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -99,7 +99,7 @@ class RLTrajectoryPlanner0Demo implements DemoInterface {
     return owlyAnimationFrame;
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     new RLTrajectoryPlanner0Demo().start().jFrame.setVisible(true);
   }
 }

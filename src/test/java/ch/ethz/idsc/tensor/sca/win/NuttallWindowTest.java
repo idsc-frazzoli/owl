@@ -5,6 +5,6 @@ import junit.framework.TestCase;
 
 public class NuttallWindowTest extends TestCase {
   public void testIsZero() {
-    assertTrue(NuttallWindow.function().isZero());
+    assertTrue(NuttallWindow.function().isContinuous());
   }
 }

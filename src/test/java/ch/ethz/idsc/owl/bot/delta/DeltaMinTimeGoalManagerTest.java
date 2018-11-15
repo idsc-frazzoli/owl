@@ -29,9 +29,7 @@ public class DeltaMinTimeGoalManagerTest extends TestCase {
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, amp).getFlows(20);
     assertTrue(Chop._10.close(DeltaControls.maxSpeed(controls), amp));
-    // System.out.println(stateSpaceModel.getLipschitz());
     Scalar maxMove = DeltaControls.maxSpeed(controls).add(imageGradientInterpolation.maxNormGradient());
-    // System.out.println(maxMove);
     assertTrue(Chop._10.close(maxMove, stateSpaceModel.getLipschitz().add(amp)));
     RegionWithDistance<Tensor> regionWithDistance = //
         new SphericalRegion(Tensors.vector(1, 1), RealScalar.ONE);

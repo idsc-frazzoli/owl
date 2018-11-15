@@ -14,6 +14,6 @@ public class GaussianWindowTest extends TestCase {
   }
 
   public void testIsZero() {
-    assertFalse(GaussianWindow.function().isZero());
+    assertFalse(GaussianWindow.function().isContinuous());
   }
 }

@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Norm;
 
 /** .
  * G0 - Position, tangent of curve is not continuous, example: polygons
@@ -21,6 +23,8 @@ import ch.ethz.idsc.tensor.alg.Normalize;
  * http://www.aliasworkbench.com/theoryBuilders/images/CombPlot4.jpg */
 public enum CurvatureComb {
   ;
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+
   /** @param tensor
    * @param scalar
    * @return tensor + normal * curvature * scalar */
@@ -46,7 +50,7 @@ public enum CurvatureComb {
       Tensor c = tensor.get(index + 1);
       Optional<Scalar> optional = SignedCurvature2D.of(a, b, c);
       normal.append(optional.isPresent() //
-          ? Normalize.of(Cross2D.of(c.subtract(a))).multiply(optional.get())
+          ? NORMALIZE.apply(Cross2D.of(c.subtract(a))).multiply(optional.get())
           : Array.zeros(2));
     }
     if (1 < tensor.length())
@@ -64,7 +68,7 @@ public enum CurvatureComb {
       Tensor c = tensor.get((index + 1) % tensor.length());
       Optional<Scalar> optional = SignedCurvature2D.of(a, b, c);
       normal.append(optional.isPresent() //
-          ? Normalize.of(Cross2D.of(c.subtract(a))).multiply(optional.get())
+          ? NORMALIZE.apply(Cross2D.of(c.subtract(a))).multiply(optional.get())
           : Array.zeros(2));
     }
     return normal;

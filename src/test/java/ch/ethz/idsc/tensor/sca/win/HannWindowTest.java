@@ -15,6 +15,6 @@ public class HannWindowTest extends TestCase {
   }
 
   public void testIsZero() {
-    assertTrue(HannWindow.function().isZero());
+    assertTrue(HannWindow.function().isContinuous());
   }
 }

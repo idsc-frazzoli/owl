@@ -20,7 +20,6 @@ public class LexicographicTest extends TestCase {
 
   public void testSimple3() {
     int c1 = Lexicographic.COMPARATOR.compare(Tensors.vector(0, 1, 2, 3), Tensors.vector(0, 1, 2, 4));
-    // System.out.println(c1);
     int c2 = Integer.compare(3, 4);
     assertEquals(c1, c2);
   }

@@ -9,6 +9,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
+/** represents an element of the covering group SE(2),
+ * which is defined by three real values, or equivalently by a vector from R^3
+ * 
+ * {@link Se2CoveringGroup} */
 public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
   private final Scalar px;
   private final Scalar py;
@@ -25,8 +29,7 @@ public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
     sa = Sin.FUNCTION.apply(pa);
   }
 
-  // strictly private
-  private Se2CoveringGroupElement(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
+  Se2CoveringGroupElement(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
     this.px = px;
     this.py = py;
     this.pa = pa;
@@ -35,8 +38,8 @@ public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
   }
 
   @Override // from LieGroupElement
-  public Se2CoveringGroupElement inverse() {
-    return new Se2CoveringGroupElement( //
+  public final Se2CoveringGroupElement inverse() {
+    return create( //
         px.multiply(ca).add(py.multiply(sa)).negate(), //
         px.multiply(sa).subtract(py.multiply(ca)), //
         pa.negate(), //
@@ -55,5 +58,9 @@ public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
         px.add(qx.multiply(ca)).subtract(qy.multiply(sa)), //
         py.add(qy.multiply(ca)).add(qx.multiply(sa)), //
         pa.add(qa));
+  }
+
+  Se2CoveringGroupElement create(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
+    return new Se2CoveringGroupElement(px, py, pa, ca, sa);
   }
 }

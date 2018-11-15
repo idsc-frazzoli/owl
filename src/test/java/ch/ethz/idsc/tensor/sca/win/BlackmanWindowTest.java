@@ -18,6 +18,6 @@ public class BlackmanWindowTest extends TestCase {
   }
 
   public void testIsZero() {
-    assertTrue(BlackmanWindow.function().isZero());
+    assertTrue(BlackmanWindow.function().isContinuous());
   }
 }

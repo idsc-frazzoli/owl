@@ -22,10 +22,8 @@ class SpecialContent implements Serializable {
   }
 
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-    // System.out.println("read obj");
     handled = (Tensor) in.readObject();
     value = (Tensor) in.readObject();
-    // System.out.println("read " + value);
   }
 
   @SuppressWarnings({ "unused", "static-method" })

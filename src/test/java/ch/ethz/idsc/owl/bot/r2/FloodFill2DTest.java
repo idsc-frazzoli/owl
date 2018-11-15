@@ -51,8 +51,6 @@ public class FloodFill2DTest extends TestCase {
     String s = "{{1, 1, 2, 3, 3}, {2, 2, 3, 0, 0}, {3, 2, 2, 3, 0}, {0, 3, 2, 2, 3}}";
     assertEquals(manh, Tensors.fromString(s));
     assertTrue(ExactScalarQ.all(manh));
-    // System.out.println(Pretty.of(manh));
-    // System.out.println(manh);
   }
 
   public void testInvalid() {

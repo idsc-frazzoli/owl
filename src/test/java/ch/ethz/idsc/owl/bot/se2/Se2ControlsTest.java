@@ -54,7 +54,6 @@ public class Se2ControlsTest extends TestCase {
     final Scalar mr = Scalars.fromString("3[rad*m^-1]");
     Flow flow = CarHelper.singleton(ms, mr);
     assertEquals(Units.of(flow.getU().Get(2)), Unit.of("rad*s^-1"));
-    // System.out.println(flow.getU());
     Collection<Flow> controls = Collections.singleton(flow);
     Scalar maxSpeed = Se2Controls.maxSpeed(controls);
     assertEquals(maxSpeed, ms.abs());
