@@ -12,8 +12,4 @@ public class GaussianWindowTest extends TestCase {
     Scalar exact = RealScalar.of(0.80073740291680804078);
     assertTrue(Chop._10.close(apply, exact));
   }
-
-  public void testIsZero() {
-    assertFalse(GaussianWindow.function().isContinuous());
-  }
 }

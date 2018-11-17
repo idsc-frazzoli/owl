@@ -11,10 +11,6 @@ import ch.ethz.idsc.tensor.red.Tally;
 import junit.framework.TestCase;
 
 public class TukeyWindowTest extends TestCase {
-  public void testIsZeroTukey() {
-    assertTrue(TukeyWindow.function().isContinuous());
-  }
-
   public void testSmall() {
     Tensor tensor = Tensors.of(RationalScalar.of(-1, 6), RealScalar.ZERO, RealScalar.of(.01), RationalScalar.of(1, 6));
     Tensor mapped = tensor.map(TukeyWindow.function());

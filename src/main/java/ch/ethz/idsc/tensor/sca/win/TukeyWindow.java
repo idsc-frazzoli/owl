@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Cos;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TukeyWindow.html">TukeyWindow</a> */
@@ -13,9 +14,9 @@ public class TukeyWindow extends AbstractWindowFunction {
   private static final Scalar _1_6 = RationalScalar.of(1, 6);
   private static final Scalar _3_PI = RealScalar.of(3 * Math.PI);
   // ---
-  private static final WindowFunction FUNCTION = new TukeyWindow();
+  private static final ScalarUnaryOperator FUNCTION = new TukeyWindow();
 
-  public static WindowFunction function() {
+  public static ScalarUnaryOperator function() {
     return FUNCTION;
   }
 

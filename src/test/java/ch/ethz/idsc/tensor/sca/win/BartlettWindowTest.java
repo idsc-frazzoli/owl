@@ -23,8 +23,4 @@ public class BartlettWindowTest extends TestCase {
     Scalar scalar = BartlettWindow.function().apply(RealScalar.of(.499999999));
     assertTrue(Chop._07.allZero(scalar));
   }
-
-  public void testIsZero() {
-    assertTrue(BartlettWindow.function().isContinuous());
-  }
 }

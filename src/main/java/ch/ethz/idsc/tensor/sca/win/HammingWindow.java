@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HammingWindow.html">HammingWindow</a> */
@@ -10,9 +11,9 @@ public class HammingWindow extends AbstractWindowFunction {
   private static final Scalar _25_46 = RationalScalar.of(25, 46);
   private static final Scalar _21_46 = RationalScalar.of(21, 46);
   // ---
-  private static final WindowFunction FUNCTION = new HammingWindow();
+  private static final ScalarUnaryOperator FUNCTION = new HammingWindow();
 
-  public static WindowFunction function() {
+  public static ScalarUnaryOperator function() {
     return FUNCTION;
   }
 

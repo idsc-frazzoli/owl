@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HannWindow.html">HannWindow</a> */
@@ -14,9 +15,9 @@ public class HannWindow extends AbstractWindowFunction {
   private static final Scalar _1_6 = RationalScalar.of(1, 6);
   private static final Scalar _3_4 = RationalScalar.of(3, 4);
   // ---
-  private static final WindowFunction FUNCTION = new HannWindow();
+  private static final ScalarUnaryOperator FUNCTION = new HannWindow();
 
-  public static WindowFunction function() {
+  public static ScalarUnaryOperator function() {
     return FUNCTION;
   }
 

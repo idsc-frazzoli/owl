@@ -12,8 +12,4 @@ public class HammingWindowTest extends TestCase {
     Scalar expect = RealScalar.of(0.68455123656247599796); // checked with Mathematica
     assertTrue(Chop._12.close(result, expect));
   }
-
-  public void testIsZero() {
-    assertFalse(HammingWindow.function().isContinuous());
-  }
 }

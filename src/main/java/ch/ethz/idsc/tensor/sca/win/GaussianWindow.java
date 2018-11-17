@@ -5,15 +5,16 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Exp;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GaussianWindow.html">GaussianWindow</a> */
 public class GaussianWindow extends AbstractWindowFunction {
   private static final Scalar _50_9 = RationalScalar.of(-50, 9);
   // ---
-  private static final WindowFunction FUNCTION = new GaussianWindow();
+  private static final ScalarUnaryOperator FUNCTION = new GaussianWindow();
 
-  public static WindowFunction function() {
+  public static ScalarUnaryOperator function() {
     return FUNCTION;
   }
 
