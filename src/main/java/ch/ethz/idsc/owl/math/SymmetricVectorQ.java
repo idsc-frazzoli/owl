@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sca.win;
+package ch.ethz.idsc.owl.math;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;

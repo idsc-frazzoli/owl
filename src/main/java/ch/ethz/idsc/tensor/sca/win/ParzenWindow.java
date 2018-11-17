@@ -15,9 +15,9 @@ public class ParzenWindow extends AbstractWindowFunction {
   private static final ScalarUnaryOperator S1 = Series.of(Tensors.vector(1, 0, -24, 48));
   private static final ScalarUnaryOperator S2 = Series.of(Tensors.vector(2, -12, 24, -16));
   // ---
-  private static final WindowFunction FUNCTION = new ParzenWindow();
+  private static final ScalarUnaryOperator FUNCTION = new ParzenWindow();
 
-  public static WindowFunction function() {
+  public static ScalarUnaryOperator function() {
     return FUNCTION;
   }
 

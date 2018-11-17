@@ -4,11 +4,11 @@ package ch.ethz.idsc.tensor.sca.win;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** reference implementation of {@link WindowFunction} interface */
-public abstract class AbstractWindowFunction implements WindowFunction {
+public abstract class AbstractWindowFunction implements ScalarUnaryOperator {
   private static final Clip SEMI = Clip.function(RationalScalar.HALF.negate(), RationalScalar.HALF);
 
   @Override
@@ -16,11 +16,6 @@ public abstract class AbstractWindowFunction implements WindowFunction {
     return SEMI.isInside(x) //
         ? protected_apply(x)
         : RealScalar.ZERO;
-  }
-
-  @Override // from WindowFunction
-  public boolean isContinuous() {
-    return Chop._10.allZero(protected_apply(RationalScalar.HALF));
   }
 
   /** @param x in the interval [-1/2, 1/2]

@@ -13,8 +13,4 @@ public class HannWindowTest extends TestCase {
     assertEquals(HannWindow.function().apply(RationalScalar.of(-1, 4)), RationalScalar.of(1, 2));
     assertEquals(HannWindow.function().apply(RationalScalar.of(-1, 6)), RationalScalar.of(3, 4));
   }
-
-  public void testIsZero() {
-    assertTrue(HannWindow.function().isContinuous());
-  }
 }

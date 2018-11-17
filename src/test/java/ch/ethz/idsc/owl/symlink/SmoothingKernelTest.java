@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.symlink;
 
+import ch.ethz.idsc.owl.math.SymmetricVectorQ;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -12,7 +13,6 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.win.SymmetricVectorQ;
 import junit.framework.TestCase;
 
 public class SmoothingKernelTest extends TestCase {

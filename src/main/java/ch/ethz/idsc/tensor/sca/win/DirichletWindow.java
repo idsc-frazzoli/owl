@@ -3,13 +3,14 @@ package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/DirichletWindow.html">DirichletWindow</a> */
 public class DirichletWindow extends AbstractWindowFunction {
-  private static final WindowFunction FUNCTION = new DirichletWindow();
+  private static final ScalarUnaryOperator FUNCTION = new DirichletWindow();
 
-  public static WindowFunction function() {
+  public static ScalarUnaryOperator function() {
     return FUNCTION;
   }
 
