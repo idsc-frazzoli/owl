@@ -23,7 +23,7 @@ public class NuttallWindow extends AbstractWindowFunction {
   private NuttallWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   public Scalar protected_apply(Scalar x) {
     return StaticHelper.deg3(A0, A1, A2, A3, x);
   }

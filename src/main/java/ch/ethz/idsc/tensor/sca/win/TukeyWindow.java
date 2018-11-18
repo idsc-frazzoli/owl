@@ -24,7 +24,7 @@ public class TukeyWindow extends AbstractWindowFunction {
   private TukeyWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   public Scalar protected_apply(Scalar x) {
     x = x.abs();
     if (Scalars.lessEquals(x, _1_6))

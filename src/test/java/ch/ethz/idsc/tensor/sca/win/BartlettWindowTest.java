@@ -17,6 +17,7 @@ public class BartlettWindowTest extends TestCase {
   public void testExact() {
     Scalar scalar = BartlettWindow.function().apply(RationalScalar.of(3, 3465));
     assertTrue(ExactScalarQ.of(scalar));
+    assertEquals(scalar, RationalScalar.of(1153, 1155));
   }
 
   public void testContinuous() {

@@ -38,6 +38,7 @@ import ch.ethz.idsc.tensor.sca.win.ParzenWindow;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
 public enum SmoothingKernel implements IntegerTensorFunction {
+  /** triangular function */
   BARTLETT(BartlettWindow.function(), true), //
   BLACKMAN(BlackmanWindow.function(), true), //
   BLACKMAN_HARRIS(BlackmanHarrisWindow.function(), true), //
@@ -45,6 +46,7 @@ public enum SmoothingKernel implements IntegerTensorFunction {
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
   DIRICHLET(DirichletWindow.function(), false), //
+  /** flat-top also evaluates to negative values */
   FLAT_TOP(FlatTopWindow.function(), true), //
   /** the Gaussian kernel works well in practice
    * in particular for masks of small support */

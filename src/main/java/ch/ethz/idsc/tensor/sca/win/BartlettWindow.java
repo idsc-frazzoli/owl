@@ -5,11 +5,11 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/** inspired by
+/** triangular function max(0, 1 - 2*|x|)
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BartlettWindow.html">BartlettWindow</a> */
 public class BartlettWindow extends AbstractWindowFunction {
-  private static final Scalar TWO = RealScalar.of(2);
-  // ---
   private static final ScalarUnaryOperator FUNCTION = new BartlettWindow();
 
   public static ScalarUnaryOperator function() {
@@ -20,8 +20,8 @@ public class BartlettWindow extends AbstractWindowFunction {
   private BartlettWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   protected Scalar protected_apply(Scalar x) {
-    return RealScalar.ONE.subtract(x.abs().multiply(TWO));
+    return RealScalar.ONE.subtract(x.add(x).abs());
   }
 }

@@ -5,9 +5,12 @@ import java.util.Map;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Tally;
+import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class TukeyWindowTest extends TestCase {
@@ -16,5 +19,12 @@ public class TukeyWindowTest extends TestCase {
     Tensor mapped = tensor.map(TukeyWindow.function());
     Map<Tensor, Long> map = Tally.of(mapped);
     assertEquals(map.get(RealScalar.ONE).longValue(), tensor.length());
+  }
+
+  public void testNumerical() {
+    ScalarUnaryOperator scalarUnaryOperator = TukeyWindow.function();
+    assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.12)), RealScalar.ONE);
+    Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(0.22));
+    assertTrue(Chop._12.close(scalar, RealScalar.of(0.9381533400219317))); // mathematica
   }
 }
