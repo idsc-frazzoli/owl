@@ -5,7 +5,9 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/** inspired by
+/** the flat-top window function also evaluates to negative values
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FlatTopWindow.html">FlatTopWindow</a> */
 public class FlatTopWindow extends AbstractWindowFunction {
   private static final Scalar A0 = RationalScalar.of(215578947, 1000000000);
