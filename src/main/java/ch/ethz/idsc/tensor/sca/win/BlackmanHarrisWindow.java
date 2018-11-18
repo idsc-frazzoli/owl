@@ -23,7 +23,7 @@ public class BlackmanHarrisWindow extends AbstractWindowFunction {
   private BlackmanHarrisWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   protected Scalar protected_apply(Scalar x) {
     return StaticHelper.deg3(A0, A1, A2, A3, x);
   }

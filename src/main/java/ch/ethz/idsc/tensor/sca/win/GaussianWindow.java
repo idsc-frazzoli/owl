@@ -22,7 +22,7 @@ public class GaussianWindow extends AbstractWindowFunction {
   private GaussianWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   public Scalar protected_apply(Scalar x) {
     return Exp.FUNCTION.apply(Times.of(_50_9, x, x));
   }

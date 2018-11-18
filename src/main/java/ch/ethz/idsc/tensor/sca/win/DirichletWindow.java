@@ -18,7 +18,7 @@ public class DirichletWindow extends AbstractWindowFunction {
   private DirichletWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   protected Scalar protected_apply(Scalar x) {
     return RealScalar.ONE;
   }

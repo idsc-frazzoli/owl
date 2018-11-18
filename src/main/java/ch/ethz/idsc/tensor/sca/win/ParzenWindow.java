@@ -25,7 +25,7 @@ public class ParzenWindow extends AbstractWindowFunction {
   private ParzenWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   public Scalar protected_apply(Scalar x) {
     x = x.abs();
     return Scalars.lessEquals(x, _1_4) //

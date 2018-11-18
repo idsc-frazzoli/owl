@@ -25,7 +25,7 @@ public class HannWindow extends AbstractWindowFunction {
   private HannWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   public Scalar protected_apply(Scalar x) {
     x = x.abs();
     if (ExactScalarQ.of(x)) {

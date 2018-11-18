@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
- * <a href="https://reference.wolfram.com/language/ref/BlackmanHarrisWindow.html">BlackmanHarrisWindow</a> */
+ * <a href="https://reference.wolfram.com/language/ref/FlatTopWindow.html">FlatTopWindow</a> */
 public class FlatTopWindow extends AbstractWindowFunction {
   private static final Scalar A0 = RationalScalar.of(215578947, 1000000000);
   private static final Scalar A1 = RationalScalar.of(416631580, 1000000000);
@@ -24,7 +24,7 @@ public class FlatTopWindow extends AbstractWindowFunction {
   private FlatTopWindow() {
   }
 
-  @Override
+  @Override // from AbstractWindowFunction
   protected Scalar protected_apply(Scalar x) {
     return StaticHelper.deg4(A0, A1, A2, A3, A4, x);
   }
