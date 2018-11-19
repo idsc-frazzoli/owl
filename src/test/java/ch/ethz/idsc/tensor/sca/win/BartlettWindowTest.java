@@ -10,18 +10,18 @@ import junit.framework.TestCase;
 
 public class BartlettWindowTest extends TestCase {
   public void testZero() {
-    Scalar scalar = BartlettWindow.function().apply(RealScalar.ZERO);
+    Scalar scalar = BartlettWindow.FUNCTION.apply(RealScalar.ZERO);
     assertEquals(scalar, RealScalar.ONE);
   }
 
   public void testExact() {
-    Scalar scalar = BartlettWindow.function().apply(RationalScalar.of(3, 3465));
+    Scalar scalar = BartlettWindow.FUNCTION.apply(RationalScalar.of(3, 3465));
     assertTrue(ExactScalarQ.of(scalar));
     assertEquals(scalar, RationalScalar.of(1153, 1155));
   }
 
   public void testContinuous() {
-    Scalar scalar = BartlettWindow.function().apply(RealScalar.of(.499999999));
+    Scalar scalar = BartlettWindow.FUNCTION.apply(RealScalar.of(.499999999));
     assertTrue(Chop._07.allZero(scalar));
   }
 }

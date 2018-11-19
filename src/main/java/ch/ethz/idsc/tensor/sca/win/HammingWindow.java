@@ -7,22 +7,16 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HammingWindow.html">HammingWindow</a> */
-public class HammingWindow extends AbstractWindowFunction {
+public enum HammingWindow implements ScalarUnaryOperator {
+  FUNCTION;
+  // ---
   private static final Scalar A0 = RationalScalar.of(25, 46);
   private static final Scalar A1 = RationalScalar.of(21, 46);
-  // ---
-  private static final ScalarUnaryOperator FUNCTION = new HammingWindow();
 
-  public static ScalarUnaryOperator function() {
-    return FUNCTION;
-  }
-
-  // ---
-  private HammingWindow() {
-  }
-
-  @Override // from AbstractWindowFunction
-  public Scalar protected_apply(Scalar x) {
-    return StaticHelper.deg1(A0, A1, x);
+  @Override
+  public Scalar apply(Scalar x) {
+    return StaticHelper.SEMI.isInside(x) //
+        ? StaticHelper.deg1(A0, A1, x)
+        : x.zero();
   }
 }

@@ -1,13 +1,19 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca.win;
 
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Cos;
 
 /** helper functions to evaluate window functions */
 /* package */ enum StaticHelper {
   ;
+  static final Clip SEMI = Clip.function( //
+      RationalScalar.HALF.negate(), //
+      RationalScalar.HALF);
+  // ---
   private static final Scalar _2_PI = RealScalar.of(2 * Math.PI);
   private static final Scalar _4_PI = RealScalar.of(4 * Math.PI);
   private static final Scalar _6_PI = RealScalar.of(6 * Math.PI);

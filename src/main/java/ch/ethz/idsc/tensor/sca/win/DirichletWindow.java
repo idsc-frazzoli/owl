@@ -7,19 +7,13 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/DirichletWindow.html">DirichletWindow</a> */
-public class DirichletWindow extends AbstractWindowFunction {
-  private static final ScalarUnaryOperator FUNCTION = new DirichletWindow();
-
-  public static ScalarUnaryOperator function() {
-    return FUNCTION;
-  }
-
+public enum DirichletWindow implements ScalarUnaryOperator {
+  FUNCTION;
   // ---
-  private DirichletWindow() {
-  }
-
-  @Override // from AbstractWindowFunction
-  protected Scalar protected_apply(Scalar x) {
-    return RealScalar.ONE;
+  @Override
+  public Scalar apply(Scalar x) {
+    return StaticHelper.SEMI.isInside(x) //
+        ? RealScalar.ONE
+        : x.zero();
   }
 }

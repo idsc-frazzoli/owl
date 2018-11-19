@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 
 public class HannWindowTest extends TestCase {
   public void testExact() {
-    ScalarUnaryOperator scalarUnaryOperator = HannWindow.function();
+    ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.ZERO), RealScalar.ONE);
     assertEquals(scalarUnaryOperator.apply(RationalScalar.of(+1, 3)), RationalScalar.of(1, 4));
     assertEquals(scalarUnaryOperator.apply(RationalScalar.of(+1, 4)), RationalScalar.of(1, 2));
@@ -20,18 +20,18 @@ public class HannWindowTest extends TestCase {
   }
 
   public void testExactFallback() {
-    ScalarUnaryOperator scalarUnaryOperator = HannWindow.function();
+    ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
     Scalar scalar = scalarUnaryOperator.apply(RationalScalar.of(1, 7));
     assertEquals(scalar, RealScalar.of(0.8117449009293667));
   }
 
   public void testZero() {
-    ScalarUnaryOperator scalarUnaryOperator = HannWindow.function();
+    ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RationalScalar.of(7, 12)), RealScalar.ZERO);
   }
 
   public void testNumeric() {
-    ScalarUnaryOperator scalarUnaryOperator = HannWindow.function();
+    ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.25)), RationalScalar.HALF);
   }
 }
