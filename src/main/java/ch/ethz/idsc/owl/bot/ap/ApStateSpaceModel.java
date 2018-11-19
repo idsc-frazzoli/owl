@@ -30,6 +30,8 @@ public enum ApStateSpaceModel implements StateSpaceModel {
   public static final Scalar MAX_THRUST = RealScalar.of(160_000);
   /** max AOA in radian */
   public static final Scalar MAX_AOA = Degree.of(10);
+  /** max speed */
+  static final Scalar MAX_SPEED = RealScalar.of(83);
 
   @Override
   public Tensor f(Tensor x, Tensor u) {
@@ -64,5 +66,4 @@ public enum ApStateSpaceModel implements StateSpaceModel {
     // TODO Auto-generated method stub
     return null;
   }
-  
 }

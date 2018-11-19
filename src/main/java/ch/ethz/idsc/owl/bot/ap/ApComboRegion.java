@@ -19,7 +19,7 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
    * @throws Exception if first two entries of radiusVector are different */
   public static ApComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new ApComboRegion( //
-        new SphericalRegion(goal.extract(2, 4), RadiusXY.requireSame(radiusVector)), //
+        new SphericalRegion(goal.extract(2, 4), RadiusXY.requireSame(radiusVector.extract(2, 4))), //
         new So2Region(goal.Get(1), radiusVector.Get(2)), new LinearRegion(goal.Get(0), radiusVector.Get(3)));
   }
 
@@ -39,6 +39,8 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
    * @param tensor {velocity, pathAngle, x, z}
    * @return Euclidean distance from x, z of tensor to spherical region */
   public final Scalar d_xz(Tensor tensor) {
+    System.out.println(tensor.extract(2, 4));
+    System.out.println(regionWithDistance.distance(tensor.extract(2, 4)));
     return regionWithDistance.distance(tensor.extract(2, 4));
   }
 

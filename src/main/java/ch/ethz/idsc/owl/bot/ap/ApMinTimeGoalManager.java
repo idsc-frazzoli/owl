@@ -23,7 +23,7 @@ public final class ApMinTimeGoalManager extends AbstractMinTimeGoalManager {
     this.maxSpeed = Sign.requirePositive(maxSpeed);
     // this.maxTurning = ApControls.maxTurning(controls).multiply(maxSpeed);
   }
-  
+
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
     // Euklidian distance to spherical goal region
