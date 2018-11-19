@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.symlink;
+package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.owl.math.SymmetricVectorQ;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -11,8 +10,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class SmoothingKernelTest extends TestCase {
@@ -29,20 +30,6 @@ public class SmoothingKernelTest extends TestCase {
       assertTrue(ExactScalarQ.all(tensor));
       assertEquals(Total.of(tensor), RealScalar.ONE);
     }
-  }
-
-  public void testBinomial() {
-    for (int size = 0; size < 5; ++size) {
-      Tensor mask = BinomialWeights.INSTANCE.apply(size);
-      assertEquals(Total.of(mask), RealScalar.ONE);
-      assertTrue(ExactScalarQ.all(mask));
-    }
-  }
-
-  public void testSpecific() {
-    Tensor result = BinomialWeights.INSTANCE.apply(2);
-    Tensor expect = Tensors.fromString("{1/16, 1/4, 3/8, 1/4, 1/16}");
-    assertEquals(result, expect);
   }
 
   public void testHann() {
@@ -73,10 +60,28 @@ public class SmoothingKernelTest extends TestCase {
     }
   }
 
+  public void testAllNumeric() {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+      ScalarUnaryOperator scalarUnaryOperator = smoothingKernel.windowFunction();
+      assertFalse(ExactScalarQ.of(scalarUnaryOperator.apply(RealScalar.of(2.3))));
+      assertTrue(ExactScalarQ.of(scalarUnaryOperator.apply(RationalScalar.of(5, 2))));
+    }
+  }
+
   public void testAllFail() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       try {
         smoothingKernel.apply(-1);
+        assertTrue(false);
+      } catch (Exception exception) {
+        // ---
+      }
+  }
+
+  public void testAllFailQuantity() {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
+      try {
+        smoothingKernel.windowFunction().apply(Quantity.of(1, "s"));
         assertTrue(false);
       } catch (Exception exception) {
         // ---

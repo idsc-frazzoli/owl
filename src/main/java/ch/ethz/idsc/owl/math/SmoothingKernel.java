@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.symlink;
+package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.subare.util.VectorTotal;
