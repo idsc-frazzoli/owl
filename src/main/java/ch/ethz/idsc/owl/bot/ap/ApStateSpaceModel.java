@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -10,7 +9,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Cos;
-import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 /** State-Space Model for Flying Aircraft
@@ -49,8 +47,8 @@ public enum ApStateSpaceModel implements StateSpaceModel {
     Scalar u1 = u.Get(0); // Thrust
     Scalar u2 = u.Get(1); // angle of attack
     return Tensors.of(//
-        u1.multiply(Cos.of(u2)).subtract(D(u2, x1)).subtract(Times.of(MASS, GRAVITY, Sin.of(x2))).divide(MASS), //
-        u1.multiply(Sin.of(u2)).add(L(u2, x1)).subtract(Times.of(MASS, GRAVITY, Cos.of(x2))).divide(MASS).divide(x1), //
+        (u1.multiply(Cos.of(u2)).subtract(D(u2, x1)).subtract(Times.of(MASS, GRAVITY, Sin.of(x2)))).divide(MASS), //
+        (u1.multiply(Sin.of(u2)).add(L(u2, x1)).subtract(Times.of(MASS, GRAVITY, Cos.of(x2)))).divide(MASS).divide(x1), //
         x1.multiply(Cos.of(x2)), x1.multiply(Sin.of(x2)));
   }
 
