@@ -14,13 +14,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class ApComboRegion implements Region<Tensor>, Serializable {
-  /** @param goal {velocity, pathAngle, x, z}
-   * @param radiusVector {dist_radius, dist_radius, dist_angle, dist_v}
+  /** @param goal {x, z, velocity, pathAngle}
+   * @param radiusVector {dist_radius, dist_radius, dist_v,  dist_angle}
    * @throws Exception if first two entries of radiusVector are different */
   public static ApComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new ApComboRegion( //
-        new SphericalRegion(goal.extract(2, 4), RadiusXY.requireSame(radiusVector.extract(2, 4))), //
-        new So2Region(goal.Get(1), radiusVector.Get(2)), new LinearRegion(goal.Get(0), radiusVector.Get(3)));
+        new SphericalRegion(goal.extract(0, 2), RadiusXY.requireSame(radiusVector.extract(0, 2))), //
+        new So2Region(goal.Get(3), radiusVector.Get(3)), new LinearRegion(goal.Get(2), radiusVector.Get(2)));
   }
 
   private final RegionWithDistance<Tensor> regionWithDistance;
@@ -38,11 +38,15 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
    * @param tensor {velocity, pathAngle, x, z}
    * @return Euclidean distance from x, z of tensor to spherical region */
   public final Scalar d_xz(Tensor tensor) {
-    return regionWithDistance.distance(tensor.extract(2, 4));
+    return regionWithDistance.distance(tensor.extract(0, 2));
   }
+  public final Scalar d_z(Tensor tensor) {
+    return tensor.Get(1).abs();
+  }
+  
 
   @Override // from Region
   public boolean isMember(Tensor goal) {
-    return regionWithDistance.isMember(goal.extract(2, 4)) && so2Region.isMember(goal.get(1)) && linearRegion.isMember(goal.get(0));
+    return regionWithDistance.isMember(goal.extract(0, 2)) && so2Region.isMember(goal.get(3)) && linearRegion.isMember(goal.get(2));
   }
 }

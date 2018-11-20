@@ -28,12 +28,12 @@ public class ApTrajectoryPlanner {
   static StateSpaceModel stateSpaceModel = ApStateSpaceModel.INSTANCE;
   final static int THRUST_PARTIONING = 160;
   final static Tensor THRUSTS = Subdivide.of(RealScalar.ZERO, ApStateSpaceModel.MAX_THRUST, THRUST_PARTIONING);
-  final static Tensor GOAL = Tensors.vector(0, 0, 10000, 0); // goal {velocity, pathAngle, x, z}
-  final static Tensor RADIUS_VECTOR = Tensors.vector(5, 2, 10, 10);
+  final static Tensor GOAL = Tensors.vector(10000, 0, 0, 0); // goal {x,z,velocity, pathAngle}
+  final static Tensor RADIUS_VECTOR = Tensors.of(RealScalar.of(5), RealScalar.of(5), RealScalar.of(10), Degree.of(1));
   final static int FLOWRES = 7;
   final static FlowsInterface AP_FLOWS = ApFlows.of(stateSpaceModel, MAX_AOA, THRUSTS);
   final static Tensor PARTITIONSCALE = Tensors.of( //
-      RealScalar.of(10), Degree.of(1), RealScalar.of(50), RealScalar.of(5)).unmodifiable();
+      RealScalar.of(5), RealScalar.of(5), RealScalar.of(5), Degree.of(1)).unmodifiable();
   static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
 
   static protected StateTimeRaster stateTimeRaster() {
