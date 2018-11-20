@@ -15,7 +15,7 @@ public enum SymmetricVectorQ {
   }
 
   /** @param vector
-   * @return
+   * @return given vector
    * @throws Exception if given vector is not a symmetric vector */
   public static Tensor require(Tensor vector) {
     if (!of(vector))

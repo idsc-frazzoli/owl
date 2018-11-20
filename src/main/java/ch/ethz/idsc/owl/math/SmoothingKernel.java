@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.symlink;
+package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.subare.util.VectorTotal;
@@ -39,24 +38,24 @@ import ch.ethz.idsc.tensor.sca.win.ParzenWindow;
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
 public enum SmoothingKernel implements IntegerTensorFunction {
   /** triangular function */
-  BARTLETT(BartlettWindow.function(), true), //
-  BLACKMAN(BlackmanWindow.function(), true), //
-  BLACKMAN_HARRIS(BlackmanHarrisWindow.function(), true), //
-  BLACKMAN_NUTTALL(BlackmanNuttallWindow.function(), true), //
+  BARTLETT(BartlettWindow.FUNCTION, true), //
+  BLACKMAN(BlackmanWindow.FUNCTION, true), //
+  BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION, true), //
+  BLACKMAN_NUTTALL(BlackmanNuttallWindow.FUNCTION, true), //
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
-  DIRICHLET(DirichletWindow.function(), false), //
+  DIRICHLET(DirichletWindow.FUNCTION, false), //
   /** flat-top also evaluates to negative values */
-  FLAT_TOP(FlatTopWindow.function(), true), //
+  FLAT_TOP(FlatTopWindow.FUNCTION, true), //
   /** the Gaussian kernel works well in practice
    * in particular for masks of small support */
-  GAUSSIAN(GaussianWindow.function(), false), //
+  GAUSSIAN(GaussianWindow.FUNCTION, false), //
   /** has nice properties in the frequency domain */
-  HAMMING(HammingWindow.function(), false), //
-  HANN(HannWindow.function(), true), //
-  NUTTALL(NuttallWindow.function(), true), //
-  PARZEN(ParzenWindow.function(), true), //
-  TUKEY(ParzenWindow.function(), true), //
+  HAMMING(HammingWindow.FUNCTION, false), //
+  HANN(HannWindow.FUNCTION, true), //
+  NUTTALL(NuttallWindow.FUNCTION, true), //
+  PARZEN(ParzenWindow.FUNCTION, true), //
+  TUKEY(ParzenWindow.FUNCTION, true), //
   ;
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorTotal.FUNCTION);
   // ---

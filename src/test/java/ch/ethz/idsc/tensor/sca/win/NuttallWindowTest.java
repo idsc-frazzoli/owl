@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 public class NuttallWindowTest extends TestCase {
   public void testIsZero() {
-    ScalarUnaryOperator scalarUnaryOperator = NuttallWindow.function();
+    ScalarUnaryOperator scalarUnaryOperator = NuttallWindow.FUNCTION;
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.ZERO);
     assertEquals(scalar, RealScalar.ONE);
   }

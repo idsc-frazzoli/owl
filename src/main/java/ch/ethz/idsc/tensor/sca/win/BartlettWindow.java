@@ -9,19 +9,13 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BartlettWindow.html">BartlettWindow</a> */
-public class BartlettWindow extends AbstractWindowFunction {
-  private static final ScalarUnaryOperator FUNCTION = new BartlettWindow();
-
-  public static ScalarUnaryOperator function() {
-    return FUNCTION;
-  }
-
+public enum BartlettWindow implements ScalarUnaryOperator {
+  FUNCTION;
   // ---
-  private BartlettWindow() {
-  }
-
-  @Override // from AbstractWindowFunction
-  protected Scalar protected_apply(Scalar x) {
-    return RealScalar.ONE.subtract(x.add(x).abs());
+  @Override
+  public Scalar apply(Scalar x) {
+    return StaticHelper.SEMI.isInside(x) //
+        ? RealScalar.ONE.subtract(x.add(x).abs())
+        : x.zero();
   }
 }
