@@ -41,14 +41,10 @@ public class ApFlows implements FlowsInterface, Serializable {
     if (resolution % 2 == 1)
       ++resolution;
     Collection<Flow> collection = new ArrayList<>();
-    for (Tensor aoa : Subdivide.of(RealScalar.ZERO, aoa_max, resolution))
-      for (Tensor thrust : thrusts) {
-        collection.add(StateSpaceModels.createFlow(stateSpaceModel, N.DOUBLE.of(Tensors.of(aoa.Get(), thrust.Get()))));
+    for (Tensor thrust : thrusts)
+      for (Tensor aoa : Subdivide.of(RealScalar.ZERO, aoa_max, resolution)) {
+        collection.add(StateSpaceModels.createFlow(stateSpaceModel, N.DOUBLE.of(Tensors.of(thrust.Get(), aoa.Get()))));
       }
     return collection;
-  }
-
-  public static void main(String[] args) {
-    System.out.println(N.DOUBLE.of(Tensors.of(RealScalar.of(1), RealScalar.of(2))));
   }
 }

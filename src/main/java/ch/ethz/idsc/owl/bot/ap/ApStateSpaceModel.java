@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Cos;
+import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 /** State-Space Model for Flying Aircraft
@@ -39,6 +40,8 @@ public enum ApStateSpaceModel implements StateSpaceModel {
     // x2' = 1/(m*x1) * (u1*sin(u2) + L(u2,x1) - m*g*cos(x2))
     // x3' = x1*sin(x2)
     // x4' = x1*cos(x2)
+    // System.out.println("x=" + x);
+    // System.out.println("u=" + u);
     Scalar x1 = x.Get(0); // velocity
     Scalar x2 = x.Get(1); // Flight path angle
     Scalar x3 = x.Get(2); // horizontal distance

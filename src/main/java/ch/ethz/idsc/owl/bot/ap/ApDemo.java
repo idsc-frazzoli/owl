@@ -18,29 +18,36 @@ import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Degree;
+import ch.ethz.idsc.tensor.sca.Real;
 
 /** simple animation of a landing airplane */
 /* package */ enum ApDemo {
   ;
   public static void main(String[] args) throws Exception {
-    final Tensor INITIAL = Tensors.vector(800, 0, 0, 80);
+    final Scalar INITIAL_VEL = RealScalar.of(60);
+    final Scalar INITIAL_GAMMA = Degree.of(5);
+    final Scalar INITIAL_X = RealScalar.of(0);
+    final Scalar INITIAL_Z = RealScalar.of(80);
+    final Tensor INITIAL = Tensors.of(INITIAL_VEL, INITIAL_GAMMA, INITIAL_X, INITIAL_Z);
     SphericalRegion sphericalRegion = new SphericalRegion(ApTrajectoryPlanner.GOAL.extract(2, 4), ApTrajectoryPlanner.RADIUS_VECTOR.Get(2));
     StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
     StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
     // ---
-    OwlyFrame owlyFrame = OwlyGui.start();
+    // OwlyFrame owlyFrame = OwlyGui.start();
     // owlyFrame.configCoordinateOffset(33, 416);
     // owlyFrame.addBackground(RegionRenders.create(region));
-    owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
-    owlyFrame.addBackground(RenderElements.create(stateTimeRaster));
+    // owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    // owlyFrame.addBackground(RenderElements.create(stateTimeRaster));
     // owlyFrame.addBackground(RenderElements.create(plannerConstraint));
     // owlyFrame.addBackground(new DomainRender(trajectoryPlanner.getDomainMap(), eta));
     // ---
     standardTrajectoryPlanner.insertRoot(new StateTime(INITIAL, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(standardTrajectoryPlanner);
-    glcExpand.findAny(1000);
+    glcExpand.findAny(1000000);
     Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
     // ---
     System.out.println("Initial starting point: " + INITIAL);
@@ -52,5 +59,6 @@ import ch.ethz.idsc.tensor.Tensors;
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());
       StateTimeTrajectories.print(trajectory);
     }
+    OwlyGui.glc(standardTrajectoryPlanner);
   }
 }

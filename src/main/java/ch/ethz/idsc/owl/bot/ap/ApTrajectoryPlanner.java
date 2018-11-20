@@ -33,7 +33,7 @@ public class ApTrajectoryPlanner {
   final static int FLOWRES = 7;
   final static FlowsInterface AP_FLOWS = ApFlows.of(stateSpaceModel, MAX_AOA, THRUSTS);
   final static Tensor PARTITIONSCALE = Tensors.of( //
-      RealScalar.of(10), Degree.of(0.5), RealScalar.of(50), RealScalar.of(5)).unmodifiable();
+      RealScalar.of(10), Degree.of(1), RealScalar.of(50), RealScalar.of(5)).unmodifiable();
   static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
 
   static protected StateTimeRaster stateTimeRaster() {

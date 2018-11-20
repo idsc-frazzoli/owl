@@ -17,7 +17,6 @@ public enum ApWrap implements CoordinateWrap {
   public final Tensor represent(Tensor x) {
     Tensor r = x.copy();
     r.set(MOD, INDEX_ANGLE);
-    System.out.println(r);
     return r;
   }
 

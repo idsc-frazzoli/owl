@@ -27,7 +27,6 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
   private final So2Region so2Region;
   private final LinearRegion linearRegion;
 
-  // Constructor
   public ApComboRegion(RegionWithDistance<Tensor> regionWithDistance, So2Region so2Region, LinearRegion linearRegion) {
     this.regionWithDistance = Objects.requireNonNull(regionWithDistance);
     this.so2Region = Objects.requireNonNull(so2Region);
@@ -39,8 +38,6 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
    * @param tensor {velocity, pathAngle, x, z}
    * @return Euclidean distance from x, z of tensor to spherical region */
   public final Scalar d_xz(Tensor tensor) {
-    System.out.println(tensor.extract(2, 4));
-    System.out.println(regionWithDistance.distance(tensor.extract(2, 4)));
     return regionWithDistance.distance(tensor.extract(2, 4));
   }
 
