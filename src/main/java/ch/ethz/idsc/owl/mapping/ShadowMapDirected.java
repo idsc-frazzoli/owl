@@ -56,7 +56,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     // setup
     BufferedImage carLanesImg = ResourceData.bufferedImage(lanes);
     Mat img = CvHelper.bufferedImageToMat(carLanesImg);
-    URL kernelURL = getClass().getResource("/cv/kernels/kernel6.bmp");
+    URL kernelURL = getClass().getResource("/cv/kernels/kernel4.bmp");
     float pixelPerSeg = 253.0f / (NSEGS);
     int[] limits = IntStream.rangeClosed(0, NSEGS).map(i -> (int) (i * pixelPerSeg)).toArray();
     Mat kernOrig = opencv_imgcodecs.imread(kernelURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
