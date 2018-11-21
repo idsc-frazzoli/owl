@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sca.win;
+package ch.ethz.idsc.owl.math;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -15,7 +15,7 @@ public enum SymmetricVectorQ {
   }
 
   /** @param vector
-   * @return
+   * @return given vector
    * @throws Exception if given vector is not a symmetric vector */
   public static Tensor require(Tensor vector) {
     if (!of(vector))

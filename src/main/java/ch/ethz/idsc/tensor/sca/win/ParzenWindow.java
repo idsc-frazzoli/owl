@@ -10,26 +10,20 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ParzenWindow.html">ParzenWindow</a> */
-public class ParzenWindow extends AbstractWindowFunction {
+public enum ParzenWindow implements ScalarUnaryOperator {
+  FUNCTION;
+  // ---
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final ScalarUnaryOperator S1 = Series.of(Tensors.vector(1, 0, -24, 48));
   private static final ScalarUnaryOperator S2 = Series.of(Tensors.vector(2, -12, 24, -16));
-  // ---
-  private static final WindowFunction FUNCTION = new ParzenWindow();
-
-  public static WindowFunction function() {
-    return FUNCTION;
-  }
-
-  // ---
-  private ParzenWindow() {
-  }
 
   @Override
-  public Scalar protected_apply(Scalar x) {
+  public Scalar apply(Scalar x) {
     x = x.abs();
-    return Scalars.lessEquals(x, _1_4) //
-        ? S1.apply(x)
-        : S2.apply(x);
+    if (Scalars.lessEquals(x, RationalScalar.HALF))
+      return Scalars.lessEquals(x, _1_4) //
+          ? S1.apply(x)
+          : S2.apply(x);
+    return x.zero();
   }
 }

@@ -185,3 +185,7 @@ by Yannik Nager, Andrea Censi, and Emilio Frazzoli,
 by Jan Hakenberg,
 [viXra:1810.0283](http://vixra.org/abs/1810.0283),
 [video](https://www.youtube.com/watch?v=dmFO72Pigb4)
+
+---
+
+![ethz300](https://user-images.githubusercontent.com/4012178/45925071-bf9d3b00-bf0e-11e8-9d92-e30650fd6bf6.png)

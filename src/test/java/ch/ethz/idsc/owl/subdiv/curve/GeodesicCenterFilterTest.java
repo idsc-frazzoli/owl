@@ -1,13 +1,13 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import ch.ethz.idsc.owl.math.BinomialWeights;
+import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.owl.math.group.So3Geodesic;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.S2Geodesic;
-import ch.ethz.idsc.owl.symlink.BinomialWeights;
-import ch.ethz.idsc.owl.symlink.SmoothingKernel;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;

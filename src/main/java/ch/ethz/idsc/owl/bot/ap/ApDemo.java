@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 /* package */ enum ApDemo {
   ;
   public static void main(String[] args) throws Exception {
+    // <<<<<<< HEAD
     final Scalar INITIAL_VEL = RealScalar.of(70);
     final Scalar INITIAL_GAMMA = Degree.of(2);
     final Scalar INITIAL_X = RealScalar.of(0);
@@ -32,23 +33,37 @@ import ch.ethz.idsc.tensor.qty.Degree;
     final Tensor INITIAL = Tensors.of(INITIAL_VEL, INITIAL_GAMMA, INITIAL_X, INITIAL_Z);
     // SphericalRegion sphericalRegion = new SphericalRegion(ApTrajectoryPlanner.GOAL.extract(2, 4), ApTrajectoryPlanner.RADIUS_VECTOR.Get(2));
     // StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
+    // =======
+    // final Scalar INITIAL_X = RealScalar.of(0);
+    // final Scalar INITIAL_Z = RealScalar.of(80);
+    // final Scalar INITIAL_VEL = RealScalar.of(60);
+    // final Scalar INITIAL_GAMMA = Degree.of(-5);
+    // final Tensor INITIAL = Tensors.of(INITIAL_X, INITIAL_Z, INITIAL_VEL, INITIAL_GAMMA);
+    // SphericalRegion sphericalRegion = new SphericalRegion(ApTrajectoryPlanner.GOAL.extract(0, 2), ApTrajectoryPlanner.RADIUS_VECTOR.Get(0));
+    // StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
+    // >>>>>>> master
     StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
     // ---
     // OwlyFrame owlyFrame = OwlyGui.start();
-    // owlyFrame.configCoordinateOffset(33, 416);
+    // owlyFrame.configCoordinateOffset(300, 300);
     // owlyFrame.addBackground(RegionRenders.create(region));
     // owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
     // owlyFrame.addBackground(RenderElements.create(stateTimeRaster));
     // owlyFrame.addBackground(RenderElements.create(plannerConstraint));
     // owlyFrame.addBackground(new DomainRender(trajectoryPlanner.getDomainMap(), eta));
     // ---
-    standardTrajectoryPlanner.insertRoot(new StateTime(INITIAL, RealScalar.ZERO));
-    GlcExpand glcExpand = new GlcExpand(standardTrajectoryPlanner);
-    glcExpand.findAny(1000);
-    Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
-    // ---
     System.out.println("Initial starting point: " + INITIAL);
     System.out.println("Final desired point: " + ApTrajectoryPlanner.GOAL);
+    // ---
+    standardTrajectoryPlanner.insertRoot(new StateTime(INITIAL, RealScalar.ZERO));
+    GlcExpand glcExpand = new GlcExpand(standardTrajectoryPlanner);
+    // <<<<<<< HEAD
+    // glcExpand.findAny(1000);
+    // =======
+    glcExpand.findAny(20);
+    // >>>>>>> master
+    Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
+    // ---
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());
     // ---
     if (optional.isPresent()) {

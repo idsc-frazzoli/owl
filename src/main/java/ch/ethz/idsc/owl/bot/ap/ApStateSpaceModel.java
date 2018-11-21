@@ -1,4 +1,4 @@
-//code by astoll
+// code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -34,32 +34,32 @@ public enum ApStateSpaceModel implements StateSpaceModel {
 
   @Override
   public Tensor f(Tensor x, Tensor u) {
-    // x1' = 1/m * (u1*cos(u2) - D(u2,x1) - m*g*sin(x2))
-    // x2' = 1/(m*x1) * (u1*sin(u2) + L(u2,x1) - m*g*cos(x2))
-    // x3' = x1*sin(x2)
-    // x4' = x1*cos(x2)
-    // System.out.println("x=" + x);
-    // System.out.println("u=" + u);
-    Scalar x1 = x.Get(0); // velocity
-    Scalar x2 = x.Get(1); // Flight path angle
-    Scalar x3 = x.Get(2); // horizontal distance
-    Scalar x4 = x.Get(3); // altitude
+    // x1' = x3*sin(x4)
+    // x2' = x3*cos(x4)
+    // x3' = 1/m * (u1*cos(u2) - D(u2,x3) - m*g*sin(x4))
+    // x4' = 1/(m*x3) * (u1*sin(u2) + L(u2,x3) - m*g*cos(x4))
+    System.out.println("x=" + x);
+    System.out.println("u=" + u);
+    Scalar x1 = x.Get(0); // horizontal distance
+    Scalar x2 = x.Get(1); // altitude
+    Scalar x3 = x.Get(2); // velocity
+    Scalar x4 = x.Get(3); // flight path angle
     Scalar u1 = u.Get(0); // Thrust
     Scalar u2 = u.Get(1); // angle of attack
     return Tensors.of(//
-        (u1.multiply(Cos.of(u2)).subtract(D(u2, x1)).subtract(Times.of(MASS, GRAVITY, Sin.of(x2)))).divide(MASS), //
-        (u1.multiply(Sin.of(u2)).add(L(u2, x1)).subtract(Times.of(MASS, GRAVITY, Cos.of(x2)))).divide(MASS).divide(x1), //
-        x1.multiply(Cos.of(x2)), x1.multiply(Sin.of(x2)));
+        u1.multiply(Cos.of(u2)).subtract(D(u2, x3)).subtract(Times.of(MASS, GRAVITY, Sin.of(x4))).divide(MASS), //
+        u1.multiply(Sin.of(u2)).add(L(u2, x3)).subtract(Times.of(MASS, GRAVITY, Cos.of(x4))).divide(MASS).divide(x3), //
+        x3.multiply(Cos.of(x4)), x3.multiply(Sin.of(x4)));
   }
 
-  private static Scalar D(Scalar u2, Scalar x1) {
-    double value = (1.25 + 4.2 * u2.number().doubleValue());
-    return Times.of(RealScalar.of(2.7 + 3.08 * value * value), x1, x1);
+  private static Scalar D(Scalar u2, Scalar x3) {
+    double value = 1.25 + 4.2 * u2.number().doubleValue();
+    return Times.of(RealScalar.of(2.7 + 3.08 * value * value), x3, x3);
   }
 
-  private static Scalar L(Scalar u2, Scalar x1) {
-    double value = (1.25 + 4.2 * u2.number().doubleValue());
-    return Times.of(RealScalar.of(68.6 * value), x1, x1);
+  private static Scalar L(Scalar u2, Scalar x3) {
+    double value = 1.25 + 4.2 * u2.number().doubleValue();
+    return Times.of(RealScalar.of(68.6 * value), x3, x3);
   }
 
   @Override

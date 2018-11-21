@@ -5,11 +5,11 @@ import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
-/** identifies (v,gamma,x,z) === (v,gamma + 2 pi n,x,z) for all n */
+/** identifies (x,z,v,gamma) === (x,z, v,gamma + 2 pi n) for all n */
 public enum ApWrap implements CoordinateWrap {
   INSTANCE;
   // ---
-  private static final int INDEX_ANGLE = 1;
+  private static final int INDEX_ANGLE = 3;
   private static final Mod MOD = Mod.function(Math.PI * 2);
   private static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
 
