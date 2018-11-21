@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.sca.win;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -33,5 +34,14 @@ public class HannWindowTest extends TestCase {
   public void testNumeric() {
     ScalarUnaryOperator scalarUnaryOperator = HannWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.25)), RationalScalar.HALF);
+  }
+
+  public void testQuantityFail() {
+    try {
+      HannWindow.FUNCTION.apply(Quantity.of(2, "s"));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

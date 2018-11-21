@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -26,5 +27,14 @@ public class TukeyWindowTest extends TestCase {
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.12)), RealScalar.ONE);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(0.22));
     assertTrue(Chop._12.close(scalar, RealScalar.of(0.9381533400219317))); // mathematica
+  }
+
+  public void testQuantityFail() {
+    try {
+      TukeyWindow.FUNCTION.apply(Quantity.of(2, "s"));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

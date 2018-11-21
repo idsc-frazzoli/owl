@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public class ApComboRegion implements Region<Tensor>, Serializable {
   /** @param goal {x, z, velocity, pathAngle}
-   * @param radiusVector {dist_radius, dist_radius, dist_v,  dist_angle}
+   * @param radiusVector {dist_radius, dist_radius, dist_v, dist_angle}
    * @throws Exception if first two entries of radiusVector are different */
   public static ApComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new ApComboRegion( //
@@ -40,10 +40,10 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
   public final Scalar d_xz(Tensor tensor) {
     return regionWithDistance.distance(tensor.extract(0, 2));
   }
+
   public final Scalar d_z(Tensor tensor) {
     return tensor.Get(1).abs();
   }
-  
 
   @Override // from Region
   public boolean isMember(Tensor goal) {

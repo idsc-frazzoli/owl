@@ -50,7 +50,6 @@ import ch.ethz.idsc.tensor.qty.Degree;
     glcExpand.findAny(20);
     Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
     // ---
-
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());
     // ---
     if (optional.isPresent()) {
