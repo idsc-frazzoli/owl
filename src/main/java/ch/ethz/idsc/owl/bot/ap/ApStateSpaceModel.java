@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 /** State-Space Model for Flying Aircraft
  * taken from "Validating a Hamilton-Jacobi Approximation to Hybrid System Reachable Sets⋆"
- * 
+ * TODO state authors of article
  * 
  * @author Andre
  * @param x = {velocity, flight path angle, horizontal distance, altitude}
@@ -29,7 +29,8 @@ public enum ApStateSpaceModel implements StateSpaceModel {
   public static final Scalar MAX_THRUST = RealScalar.of(160_000);
   /** max AOA in radian */
   public static final Scalar MAX_AOA = Degree.of(10);
-  /** max speed */
+  /** max speed [m/s] */
+  // TODO does max_speed have to be defined in this class?
   static final Scalar MAX_SPEED = RealScalar.of(83);
 
   @Override
@@ -64,7 +65,6 @@ public enum ApStateSpaceModel implements StateSpaceModel {
 
   @Override
   public Scalar getLipschitz() {
-    // TODO Auto-generated method stub
-    return null;
+    throw new UnsupportedOperationException();
   }
 }

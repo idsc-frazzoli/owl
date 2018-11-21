@@ -12,6 +12,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 
+// FIXME choose consistent ordering of state variables. not consistent:
+// {x, z, velocity, pathAngle}
+// LinearRegion xRegion, LinearRegion zRegion, So2Region so2Region, LinearRegion vRegion
+// 
 public class ApComboRegion implements Region<Tensor>, Serializable {
   /** @param goal {x, z, velocity, pathAngle}
    * @param radiusVector {dist_radius, dist_radius, dist_v, dist_angle}

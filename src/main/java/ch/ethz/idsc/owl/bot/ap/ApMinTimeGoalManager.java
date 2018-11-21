@@ -20,7 +20,7 @@ public final class ApMinTimeGoalManager extends AbstractMinTimeGoalManager {
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
-    // Euklidian distance to spherical goal region
+    // Euclidean distance to spherical goal region
     return apComboRegion.d_xz(tensor).divide(maxSpeed);
   }
 }
