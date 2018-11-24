@@ -5,13 +5,13 @@ import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.math.QuaternionToRotationMatrix;
+import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.math.group.LieDifferences;
 import ch.ethz.idsc.owl.math.group.LinearGroup;
 import ch.ethz.idsc.owl.math.group.Se3Exponential;
 import ch.ethz.idsc.owl.math.group.Se3Geodesic;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
-import ch.ethz.idsc.owl.symlink.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;

@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.symlink;
+package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
 import ch.ethz.idsc.subare.util.VectorTotal;
@@ -11,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.win.BartlettWindow;
 import ch.ethz.idsc.tensor.sca.win.BlackmanHarrisWindow;
@@ -27,60 +27,62 @@ import ch.ethz.idsc.tensor.sca.win.TukeyWindow;
 
 /** Filter-Design Window Functions
  * 
- * Quote from Mathematica:
+ * <p>Quote from Mathematica:
  * set of window functions that are commonly used in the design of finite impulse response
  * (FIR) filters, with additional applications in spectral and spatial analysis.
  * In filter design, windows are typically used to reduce unwanted ripples in the frequency
  * response of a filter.
  * 
- * Wikipedia lists the spectrum for each window
+ * <p>Wikipedia lists the spectrum for each window
  * https://en.wikipedia.org/wiki/Window_function
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
 public enum SmoothingKernel implements IntegerTensorFunction {
-  BARTLETT(BartlettWindow.FUNCTION, true), //
-  BLACKMAN(BlackmanWindow.FUNCTION, true), //
-  BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION, true), //
-  BLACKMAN_NUTTALL(BlackmanNuttallWindow.FUNCTION, true), //
+  BARTLETT(BartlettWindow.FUNCTION), //
+  BLACKMAN(BlackmanWindow.FUNCTION), //
+  BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION), //
+  BLACKMAN_NUTTALL(BlackmanNuttallWindow.FUNCTION), //
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
-  DIRICHLET(DirichletWindow.FUNCTION, false), //
-  FLAT_TOP(FlatTopWindow.FUNCTION, true), //
+  DIRICHLET(DirichletWindow.FUNCTION), //
+  /** flat top kernel may consist of negative values or even values close to zero.
+   * In a geodesic average this is likely to result in numerical instabilities. */
+  FLAT_TOP(FlatTopWindow.FUNCTION), //
   /** the Gaussian kernel works well in practice
    * in particular for masks of small support */
-  GAUSSIAN(GaussianWindow.FUNCTION, false), //
+  GAUSSIAN(GaussianWindow.FUNCTION), //
   /** has nice properties in the frequency domain */
-  HAMMING(HammingWindow.FUNCTION, false), //
-  HANN(HannWindow.FUNCTION, true), //
-  NUTTALL(NuttallWindow.FUNCTION, true), //
-  PARZEN(ParzenWindow.FUNCTION, true), //
-  TUKEY(TukeyWindow.FUNCTION, true), //
+  HAMMING(HammingWindow.FUNCTION), //
+  HANN(HannWindow.FUNCTION), //
+  NUTTALL(NuttallWindow.FUNCTION), //
+  PARZEN(ParzenWindow.FUNCTION), //
+  TUKEY(TukeyWindow.FUNCTION), //
   ;
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorTotal.FUNCTION);
   // ---
-  private final ScalarUnaryOperator windowFunction;
+  private final ScalarUnaryOperator scalarUnaryOperator;
   private final boolean isContinuous;
 
-  private SmoothingKernel(ScalarUnaryOperator windowFunction, boolean isContinuous) {
-    this.windowFunction = windowFunction;
-    this.isContinuous = isContinuous;
+  private SmoothingKernel(ScalarUnaryOperator scalarUnaryOperator) {
+    this.scalarUnaryOperator = scalarUnaryOperator;
+    isContinuous = Chop._03.allZero(scalarUnaryOperator.apply(RationalScalar.HALF));
   }
 
-  public ScalarUnaryOperator windowFunction() {
-    return windowFunction;
+  /* package */ ScalarUnaryOperator windowFunction() {
+    return scalarUnaryOperator;
   }
 
   @Override
   public Tensor apply(Integer i) {
-    if (i == 0) //
+    if (i == 0)
       return Tensors.vector(1);
     Tensor vector = isContinuous //
         ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i + 2) //
-            .map(windowFunction) //
+            .map(scalarUnaryOperator) //
             .extract(1, 2 * i + 2)
         : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
-            .map(windowFunction);
+            .map(scalarUnaryOperator);
     return NORMALIZE.apply(vector);
   }
 }

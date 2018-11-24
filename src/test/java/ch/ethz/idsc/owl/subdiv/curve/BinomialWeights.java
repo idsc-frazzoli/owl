@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.symlink;
+package ch.ethz.idsc.owl.subdiv.curve;
 
 import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.tensor.Tensor;
@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Binomial;
 import ch.ethz.idsc.tensor.sca.Power;
 
-public enum BinomialWeights implements IntegerTensorFunction {
+enum BinomialWeights implements IntegerTensorFunction {
   INSTANCE;
   // ---
   @Override

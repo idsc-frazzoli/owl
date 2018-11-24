@@ -1,8 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import ch.ethz.idsc.owl.symlink.BinomialWeights;
-import ch.ethz.idsc.owl.symlink.SmoothingKernel;
+import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;

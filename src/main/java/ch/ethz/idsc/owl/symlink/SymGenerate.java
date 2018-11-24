@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;

@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.symlink;
+package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.owl.math.SymmetricVectorQ;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -29,20 +28,6 @@ public class SmoothingKernelTest extends TestCase {
       assertTrue(ExactScalarQ.all(tensor));
       assertEquals(Total.of(tensor), RealScalar.ONE);
     }
-  }
-
-  public void testBinomial() {
-    for (int size = 0; size < 5; ++size) {
-      Tensor mask = BinomialWeights.INSTANCE.apply(size);
-      assertEquals(Total.of(mask), RealScalar.ONE);
-      assertTrue(ExactScalarQ.all(mask));
-    }
-  }
-
-  public void testSpecific() {
-    Tensor result = BinomialWeights.INSTANCE.apply(2);
-    Tensor expect = Tensors.fromString("{1/16, 1/4, 3/8, 1/4, 1/16}");
-    assertEquals(result, expect);
   }
 
   public void testHann() {
@@ -76,7 +61,11 @@ public class SmoothingKernelTest extends TestCase {
   public void testContinuity() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       Scalar scalar = smoothingKernel.windowFunction().apply(RationalScalar.HALF);
-      System.out.println(smoothingKernel.name().toLowerCase() + "Window[1/2]=" + scalar);
+      String string = smoothingKernel.name().toLowerCase() + "Window[1/2]=" + scalar;
+      string.length();
+      assertEquals(smoothingKernel.apply(0), Tensors.of(RealScalar.ONE));
+      Tensor vector = smoothingKernel.apply(1);
+      assertTrue(Scalars.lessThan(RealScalar.of(1e-3), vector.Get(0).abs()));
     }
   }
 

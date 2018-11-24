@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.symlink;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.math.GeodesicInterface;
+import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
