@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.symlink;
 
+import ch.ethz.idsc.owl.math.SymmetricVectorQ;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -12,7 +13,6 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.win.SymmetricVectorQ;
 import junit.framework.TestCase;
 
 public class SmoothingKernelTest extends TestCase {
@@ -70,6 +70,13 @@ public class SmoothingKernelTest extends TestCase {
         Tensor v2 = tensor.negate().map(smoothingKernel.windowFunction());
         assertEquals(v1, v2);
       }
+    }
+  }
+
+  public void testContinuity() {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+      Scalar scalar = smoothingKernel.windowFunction().apply(RationalScalar.HALF);
+      System.out.println(smoothingKernel.name().toLowerCase() + "Window[1/2]=" + scalar);
     }
   }
 
