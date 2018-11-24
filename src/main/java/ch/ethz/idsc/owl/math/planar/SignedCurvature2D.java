@@ -12,9 +12,9 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 public enum SignedCurvature2D {
   ;
-  /** @param a
-   * @param b
-   * @param c
+  /** @param a vector of length 2
+   * @param b vector of length 2
+   * @param c vector of length 2
    * @return inverse of radius of circle that interpolates the given points a, b, c,
    * or Optional.empty() if any two of the three points are identical */
   public static Optional<Scalar> of(Tensor a, Tensor b, Tensor c) {

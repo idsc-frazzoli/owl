@@ -228,8 +228,8 @@ class SymDemo {
   }
 
   public static void main(String[] args) {
-    SymDemo curveSubdivisionDemo = new SymDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    SymDemo symDemo = new SymDemo();
+    symDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    symDemo.timerFrame.jFrame.setVisible(true);
   }
 }
