@@ -32,7 +32,6 @@ class DeBoorDemo {
   DeBoorDemo() {
     timerFrame.jFrame.setTitle(getClass().getSimpleName());
     SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
-    SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
     // ---
     timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
       @Override
@@ -51,7 +50,7 @@ class DeBoorDemo {
               Tensor string = Tensors.fromString("{{100, 0, 0}, {0, -80, 0}, {0, 0, 1}}");
               string.set(RealScalar.of(110 * length), 1, 2);
               geometricLayer.pushMatrix(string);
-              Tensor domain = Subdivide.of(0, length - 1, 100);
+              Tensor domain = Subdivide.of(0, length - 1, (length - 1) * 20);
               {
                 for (int k_th = 0; k_th < length; ++k_th) {
                   graphics.setColor(cyclic.getColor(k_th));
@@ -82,16 +81,11 @@ class DeBoorDemo {
       spinnerDegree.setValue(1);
       spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
     }
-    {
-      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
-      spinnerRefine.setValue(4);
-      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    }
   }
 
   public static void main(String[] args) {
-    DeBoorDemo curveSubdivisionDemo = new DeBoorDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    DeBoorDemo deBoorDemo = new DeBoorDemo();
+    deBoorDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
+    deBoorDemo.timerFrame.jFrame.setVisible(true);
   }
 }

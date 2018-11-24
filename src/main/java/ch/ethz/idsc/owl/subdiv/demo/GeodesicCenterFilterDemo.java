@@ -198,8 +198,8 @@ class GeodesicCenterFilterDemo {
   }
 
   public static void main(String[] args) {
-    GeodesicCenterFilterDemo curveSubdivisionDemo = new GeodesicCenterFilterDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    GeodesicCenterFilterDemo geodesicCenterFilterDemo = new GeodesicCenterFilterDemo();
+    geodesicCenterFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    geodesicCenterFilterDemo.timerFrame.jFrame.setVisible(true);
   }
 }

@@ -12,8 +12,8 @@ public enum Cross2D {
    * Cross[{x, y}] == RotationMatrix.of[90 degree] . {x, y}
    * 
    * @param vector with two entries
-   * @return
-   * @throws Exception input is invalid */
+   * @return given vector rotated by 90[deg] counter-clockwise
+   * @throws Exception input is not a vector of length 2 */
   public static Tensor of(Tensor vector) {
     if (vector.length() == 2)
       return Tensors.of(vector.Get(1).negate(), vector.Get(0));

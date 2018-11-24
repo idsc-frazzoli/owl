@@ -227,8 +227,8 @@ class GeodesicMeanFilterDemo {
   }
 
   public static void main(String[] args) {
-    GeodesicMeanFilterDemo curveSubdivisionDemo = new GeodesicMeanFilterDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    GeodesicMeanFilterDemo geodesicMeanFilterDemo = new GeodesicMeanFilterDemo();
+    geodesicMeanFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    geodesicMeanFilterDemo.timerFrame.jFrame.setVisible(true);
   }
 }

@@ -43,4 +43,16 @@ public class SignedCurvature2DTest extends TestCase {
     Tensor c = Tensors.vector(1, 1);
     assertFalse(SignedCurvature2D.of(a, b, c).isPresent());
   }
+
+  public void testFail() {
+    Tensor a = Tensors.vector(1, 1, 0);
+    Tensor b = Tensors.vector(1, 2, 1);
+    Tensor c = Tensors.vector(1, 3, 2);
+    try {
+      SignedCurvature2D.of(a, b, c);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
