@@ -82,7 +82,7 @@ class BSplineFunctionDemo {
           geometricLayer.pushMatrix(Inverse.of(matrix));
           {
             ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
-            for (int length = 2; length <= 6; ++length) {
+            for (int length = 2; length <= 8; ++length) {
               Tensor string = Tensors.fromString("{{100, 0, 0}, {0, -100, 0}, {0, 0, 1}}");
               string.set(RealScalar.of(110 * length), 1, 2);
               geometricLayer.pushMatrix(string);
@@ -92,8 +92,10 @@ class BSplineFunctionDemo {
                 Tensor values = domain.map(bSplineFunction);
                 Tensor tensor = Transpose.of(Tensors.of(domain, values));
                 graphics.setColor(cyclic.getColor(k_th));
-                Path2D path2d = geometricLayer.toPath2D(tensor);
-                graphics.draw(path2d);
+                graphics.draw(geometricLayer.toPath2D(tensor));
+                // ---
+                graphics.setColor(new Color(0, 0, 0, 128));
+                graphics.draw(geometricLayer.toPath2D(Tensors.matrix(new Number[][] { { k_th, 0 }, { k_th, .1 } })));
               }
               geometricLayer.popMatrix();
             }

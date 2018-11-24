@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 
@@ -55,16 +54,18 @@ class DeBoorDemo {
                 for (int k_th = 0; k_th < length; ++k_th) {
                   graphics.setColor(cyclic.getColor(k_th));
                   BSplineFunction bSplineFunction = BSplineFunction.of(degree, UnitVector.of(length, k_th));
-                  DeBoor deBoor = bSplineFunction.deBoor(RealScalar.of(k_th));
+                  DeBoor deBoor = bSplineFunction.deBoor(k_th);
                   Tensor knots = deBoor.knots();
                   Point2D point2d = geometricLayer.toPoint2D(k_th, 0);
-                  graphics.drawString(length + " " + (k_th) + ":" + knots.toString().replace(" ", ""), //
+                  graphics.drawString(length + " " + k_th + ":" + knots.toString().replace(" ", ""), //
                       (int) point2d.getX(), //
                       (int) point2d.getY() + 10);
                   Tensor values = domain.map(bSplineFunction);
                   Tensor tensor = Transpose.of(Tensors.of(domain, values));
-                  Path2D path2d = geometricLayer.toPath2D(tensor);
-                  graphics.draw(path2d);
+                  graphics.draw(geometricLayer.toPath2D(tensor));
+                  // ---
+                  graphics.setColor(new Color(0, 0, 0, 128));
+                  graphics.draw(geometricLayer.toPath2D(Tensors.matrix(new Number[][] { { k_th, 0 }, { k_th, .1 } })));
                 }
               }
               geometricLayer.popMatrix();

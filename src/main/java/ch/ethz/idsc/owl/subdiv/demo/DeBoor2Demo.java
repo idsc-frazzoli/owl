@@ -48,6 +48,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
           // control length
           try {
             Tensor domain = Subdivide.of(0, 1, 100);
+            Tensor domahi = Subdivide.of(1, 2, 100);
             Tensor knots = Tensors.fromString(jTextField.getText());
             if (knots.length() % 2 == 0) {
               int degree = knots.length() >> 1;
@@ -61,11 +62,18 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
               for (int k_th = 0; k_th < length; ++k_th) {
                 graphics.setColor(cyclic.getColor(k_th));
                 DeBoor deBoor = DeBoor.of(knots, UnitVector.of(length, k_th));
-                Tensor values = domain.map(deBoor);
-                Tensor tensor = Transpose.of(Tensors.of(domain, values));
-                // System.out.println("---"+tensor);
-                Path2D path2d = geometricLayer.toPath2D(tensor);
-                graphics.draw(path2d);
+                {
+                  graphics.setStroke(new BasicStroke(1.25f));
+                  Tensor values = domain.map(deBoor);
+                  Tensor tensor = Transpose.of(Tensors.of(domain, values));
+                  graphics.draw(geometricLayer.toPath2D(tensor));
+                }
+                {
+                  graphics.setStroke(new BasicStroke(1.25f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
+                  Tensor values = domahi.map(deBoor);
+                  Tensor tensor = Transpose.of(Tensors.of(domahi, values));
+                  graphics.draw(geometricLayer.toPath2D(tensor));
+                }
               }
             }
           } catch (Exception e) {
