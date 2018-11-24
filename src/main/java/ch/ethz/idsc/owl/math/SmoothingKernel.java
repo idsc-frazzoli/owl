@@ -69,7 +69,7 @@ public enum SmoothingKernel implements IntegerTensorFunction {
     isContinuous = Chop._03.allZero(scalarUnaryOperator.apply(RationalScalar.HALF));
   }
 
-  /* package */ ScalarUnaryOperator windowFunction() {
+  public ScalarUnaryOperator windowFunction() {
     return scalarUnaryOperator;
   }
 

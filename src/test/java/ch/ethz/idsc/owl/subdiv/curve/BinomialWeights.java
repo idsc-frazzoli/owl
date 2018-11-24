@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Binomial;
 import ch.ethz.idsc.tensor.sca.Power;
 
-enum BinomialWeights implements IntegerTensorFunction {
+/* package */ enum BinomialWeights implements IntegerTensorFunction {
   INSTANCE;
   // ---
   @Override
