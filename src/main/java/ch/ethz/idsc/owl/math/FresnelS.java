@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * Careful: not consistent with Mathematica::FresnelS
  * input off by a factor, output off by a factor */
+// TODO JPH refactor to share code with FresnelC
 public enum FresnelS implements ScalarUnaryOperator {
   FUNCTION;
   // ---

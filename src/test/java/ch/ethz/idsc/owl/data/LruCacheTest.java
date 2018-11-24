@@ -3,6 +3,8 @@ package ch.ethz.idsc.owl.data;
 
 import java.util.Map;
 
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Range;
 import junit.framework.TestCase;
 
 public class LruCacheTest extends TestCase {
@@ -31,5 +33,12 @@ public class LruCacheTest extends TestCase {
       int v = map.keySet().iterator().next();
       assertEquals(v, 3);
     }
+  }
+
+  public void testMax() {
+    Map<Tensor, Tensor> map = LruCache.create(3);
+    for (Tensor tensor : Range.of(0, 100))
+      map.put(tensor, tensor);
+    assertEquals(map.size(), 3);
   }
 }

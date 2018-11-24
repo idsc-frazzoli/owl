@@ -13,7 +13,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** produces bi-variate random samples uniformly draw from a circle with
- * given center and radius */
+ * given center and radius
+ * 
+ * implementation supports the use of Quantity */
 public class CircleRandomSample implements RandomSampleInterface {
   private static final Distribution THETA = UniformDistribution.of(-Math.PI, Math.PI);
   // ---

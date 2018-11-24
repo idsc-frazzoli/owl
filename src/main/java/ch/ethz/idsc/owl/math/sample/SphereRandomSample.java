@@ -12,7 +12,9 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** random samples from the interior of a n-dimensional sphere */
+/** random samples from the interior of a n-dimensional sphere
+ * 
+ * implementation supports the use of Quantity */
 public class SphereRandomSample implements RandomSampleInterface {
   private static final Distribution UNIFORM = UniformDistribution.of(-1, 1);
 

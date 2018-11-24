@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 /** References:
  * Time-Optimal Vehicle Posture Control to Mitigate Unavoidable
  * Collisions Using Conventional Control Inputs */
+// TODO JPH RELEASE move to retina
 public enum FrictionCoefficients {
   ;
   public static final Scalar TIRE_DRY_ROAD = RealScalar.of(0.85); // also 0.8

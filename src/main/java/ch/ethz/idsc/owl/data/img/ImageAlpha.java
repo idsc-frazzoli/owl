@@ -9,14 +9,11 @@ public enum ImageAlpha {
   private static final float[] ZEROS = new float[] { 0, 0, 0, 0 };
 
   public static BufferedImage scale(BufferedImage bufferedImage, float scale) {
-    float[] scales;
     switch (bufferedImage.getType()) {
     case BufferedImage.TYPE_INT_ARGB: // used by the tensor library
-      scales = new float[] { 1, 1, 1, scale };
-      return new RescaleOp(scales, ZEROS, null).filter(bufferedImage, null);
+      return new RescaleOp(new float[] { 1, 1, 1, scale }, ZEROS, null).filter(bufferedImage, null);
     case BufferedImage.TYPE_4BYTE_ABGR:
-      scales = new float[] { scale, 1, 1, 1 };
-      return new RescaleOp(scales, ZEROS, null).filter(bufferedImage, null);
+      return new RescaleOp(new float[] { scale, 1, 1, 1 }, ZEROS, null).filter(bufferedImage, null);
     default:
       throw new RuntimeException();
     }

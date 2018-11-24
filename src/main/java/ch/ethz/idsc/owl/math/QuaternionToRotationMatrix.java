@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO use Scalar instead of double!
+// TODO JPH use Scalar instead of double!
 public enum QuaternionToRotationMatrix {
   ;
   /** @param wxyz vector of length 4, does not have to have unit length
