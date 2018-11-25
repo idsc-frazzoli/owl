@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -20,9 +21,13 @@ public class SphereRandomSample implements RandomSampleInterface {
 
   /** @param center vector
    * @param radius non-negative
-   * @return */
+   * @return
+   * @throws Exception if center is not a vector
+   * @throws Exception if radius is negative */
   public static RandomSampleInterface of(Tensor center, Scalar radius) {
     switch (center.length()) {
+    case 0:
+      throw TensorRuntimeException.of(center, radius);
     case 1:
       Distribution distribution = UniformDistribution.of( //
           center.Get(0).subtract(radius), //
@@ -32,7 +37,7 @@ public class SphereRandomSample implements RandomSampleInterface {
       return new CircleRandomSample(center, radius);
     }
     return Scalars.isZero(radius) //
-        ? new ConstantRandomSample(center)
+        ? new ConstantRandomSample(VectorQ.require(center))
         : new SphereRandomSample(center, radius);
   }
 

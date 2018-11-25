@@ -56,4 +56,49 @@ public class SphereRandomSampleTest extends TestCase {
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("m");
     tensor.map(scalarUnaryOperator);
   }
+
+  public void testCenterEmptyFail() {
+    try {
+      SphereRandomSample.of(Tensors.empty(), Quantity.of(2, "m"));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testRadiusNegative2Fail() {
+    try {
+      SphereRandomSample.of(Tensors.vector(1, 2), RealScalar.of(-1));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testRadiusNegative3Fail() {
+    try {
+      SphereRandomSample.of(Tensors.vector(1, 2, 3), RealScalar.of(-1));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testCenterScalarFail() {
+    try {
+      SphereRandomSample.of(RealScalar.ONE, RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testCenterScalarZeroFail() {
+    try {
+      SphereRandomSample.of(RealScalar.ONE, RealScalar.ZERO);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
