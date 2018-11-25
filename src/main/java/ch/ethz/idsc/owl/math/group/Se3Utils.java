@@ -24,12 +24,12 @@ public enum Se3Utils {
   /** @param matrix of dimensions 4 x 4
    * @return 3x3 rotation matrix that is part of given matrix */
   public static Tensor rotation(Tensor matrix) {
-    return Tensor.of(matrix.extract(0, 3).stream().map(row -> row.extract(0, 3)));
+    return Tensor.of(matrix.stream().limit(3).map(row -> row.extract(0, 3)));
   }
 
   /** @param matrix of dimensions 4 x 4
    * @return vector of length 3 that is part of given matrix */
   public static Tensor translation(Tensor matrix) {
-    return matrix.get(Tensor.ALL, 3).extract(0, 3);
+    return Tensor.of(matrix.stream().limit(3).map(row -> row.get(3)));
   }
 }

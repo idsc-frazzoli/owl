@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.rn;
+package ch.ethz.idsc.owl.bot.rn.glc;
 
 import java.util.ArrayList;
 import java.util.Collection;

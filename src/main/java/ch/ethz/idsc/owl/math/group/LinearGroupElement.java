@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math.group;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
@@ -12,7 +14,7 @@ import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
  * new LinearGroupElement(LinearSolve.of(a, b))
  * 
  * @see So3Geodesic */
-public class LinearGroupElement implements LieGroupElement {
+public class LinearGroupElement implements LieGroupElement, Serializable {
   private final Tensor matrix;
 
   /** @param matrix square and invertible
@@ -28,6 +30,6 @@ public class LinearGroupElement implements LieGroupElement {
 
   @Override // from LieGroupElement
   public Tensor combine(Tensor tensor) {
-    return matrix.dot(tensor);
+    return matrix.dot(SquareMatrixQ.require(tensor));
   }
 }

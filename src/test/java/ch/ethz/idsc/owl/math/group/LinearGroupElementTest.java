@@ -1,7 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.math.group;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
@@ -19,9 +23,33 @@ public class LinearGroupElementTest extends TestCase {
     assertTrue(Chop._10.close(result, IdentityMatrix.of(n)));
   }
 
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    Tensor tensor = DiagonalMatrix.of(1, 2, 3);
+    LinearGroupElement linearGroupElement = new LinearGroupElement(tensor);
+    LinearGroupElement copy = Serialization.copy(linearGroupElement);
+    Tensor result = copy.inverse().combine(tensor);
+    assertEquals(result, IdentityMatrix.of(3));
+  }
+
   public void testNonSquareFail() {
     try {
       new LinearGroupElement(HilbertMatrix.of(2, 3));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testCombineNonSquareFail() {
+    LinearGroupElement linearGroupElement = new LinearGroupElement(DiagonalMatrix.of(1, 2));
+    try {
+      linearGroupElement.combine(HilbertMatrix.of(2, 3));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      linearGroupElement.combine(Tensors.vector(1, 2));
       assertTrue(false);
     } catch (Exception exception) {
       // ---

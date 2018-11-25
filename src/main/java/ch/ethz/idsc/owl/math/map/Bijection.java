@@ -10,7 +10,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * 2) inverse and forward action
  * reduce to the identity. */
 public interface Bijection {
+  /** @return forward mapping */
   TensorUnaryOperator forward();
 
+  /** @return inverse mapping */
   TensorUnaryOperator inverse();
 }
