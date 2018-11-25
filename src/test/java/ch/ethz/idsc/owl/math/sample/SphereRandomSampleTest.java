@@ -41,6 +41,14 @@ public class SphereRandomSampleTest extends TestCase {
     assertTrue(rsi instanceof CircleRandomSample);
   }
 
+  public void test3DZeroRadius() {
+    Tensor center = Tensors.vector(10, 20, 3);
+    Scalar radius = RealScalar.of(0.0);
+    RandomSampleInterface randomSampleInterface = SphereRandomSample.of(center, radius);
+    assertTrue(randomSampleInterface instanceof ConstantRandomSample);
+    assertEquals(randomSampleInterface.randomSample(), center);
+  }
+
   public void testQuantity() {
     RandomSampleInterface randomSampleInterface = //
         SphereRandomSample.of(Tensors.fromString("{10[m],20[m],-5[m]}"), Quantity.of(2, "m"));

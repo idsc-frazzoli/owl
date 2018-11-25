@@ -15,4 +15,11 @@ public class So3ExponentialTest extends TestCase {
     assertFalse(Chop._12.close(m1, IdentityMatrix.of(3)));
     assertTrue(Chop._12.close(m1.dot(m2), IdentityMatrix.of(3)));
   }
+
+  public void testLog() {
+    Tensor vector = Tensors.vector(.2, .3, -.4);
+    Tensor matrix = So3Exponential.INSTANCE.exp(vector);
+    Tensor result = So3Exponential.INSTANCE.log(matrix);
+    assertEquals(result, vector);
+  }
 }
