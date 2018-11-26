@@ -4,49 +4,46 @@ package ch.ethz.idsc.owl.bot.ap;
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.region.LinearRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class ApComboRegion implements Region<Tensor>, Serializable {
-  /** @param goal {x, z, velocity, pathAngle}
-   * @param radiusVector {dist_radius, dist_radius, dist_v, dist_angle}
-   * @throws Exception if first two entries of radiusVector are different */
-  public static ApComboRegion spherical(Tensor goal, Tensor radiusVector) {
+  /** @param goal = {zCenter, velocityCenter, gammaCenter} defining center of goal region
+   * @param radiusVector = {zRadius, velocityCenter, gammaCenter} defining radii of goal region
+   * @return new ApComboRegion */
+  public static ApComboRegion createApRegion(Tensor goal, Tensor radiusVector) {
     return new ApComboRegion( //
-        new SphericalRegion(goal.extract(0, 2), RadiusXY.requireSame(radiusVector.extract(0, 2))), //
-        new So2Region(goal.Get(3), radiusVector.Get(3)), new LinearRegion(goal.Get(2), radiusVector.Get(2)));
+        new LinearRegion(goal.Get(0), radiusVector.Get(0)), //
+        new LinearRegion(goal.Get(1), radiusVector.Get(1)), //
+        new So2Region(goal.Get(2), radiusVector.Get(2)));
   }
 
-  private final RegionWithDistance<Tensor> regionWithDistance;
-  private final So2Region so2Region;
-  private final LinearRegion linearRegion;
+  private final LinearRegion zRegion;
+  private final LinearRegion vRegion;
+  private final So2Region gammaRegion;
 
-  public ApComboRegion(RegionWithDistance<Tensor> regionWithDistance, So2Region so2Region, LinearRegion linearRegion) {
-    this.regionWithDistance = Objects.requireNonNull(regionWithDistance);
-    this.so2Region = Objects.requireNonNull(so2Region);
-    this.linearRegion = Objects.requireNonNull(linearRegion);
+  public ApComboRegion(LinearRegion zRegion, LinearRegion vRegion, So2Region gammaRegion) {
+    this.zRegion = Objects.requireNonNull(zRegion);
+    this.vRegion = Objects.requireNonNull(vRegion);
+    this.gammaRegion = Objects.requireNonNull(gammaRegion);
   }
 
-  /** function is used to compute heuristic in {@link ApMinTimeGoalManager}
+  /** Function is used to compute heuristic in {@link ApMinTimeGoalManager}
    * 
-   * @param tensor {velocity, pathAngle, x, z}
-   * @return Euclidean distance from x, z of tensor to spherical region */
-  public final Scalar d_xz(Tensor tensor) {
-    return regionWithDistance.distance(tensor.extract(0, 2));
-  }
-
+   * @param tensor {x, z, velocity, pathAngle}
+   * @return Euclidean distance from z of tensor to zRegion */
   public final Scalar d_z(Tensor tensor) {
-    return tensor.Get(1).abs();
+    Scalar distance = tensor.Get(1).subtract(zRegion.center());
+    return distance.abs();
   }
 
   @Override // from Region
   public boolean isMember(Tensor goal) {
-    return regionWithDistance.isMember(goal.extract(0, 2)) && so2Region.isMember(goal.get(3)) && linearRegion.isMember(goal.get(2));
+    return zRegion.isMember(goal.get(0)) //
+        && vRegion.isMember(goal.get(1)) //
+        && gammaRegion.isMember(goal.get(2));
   }
 }

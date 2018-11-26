@@ -9,18 +9,16 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public final class ApMinTimeGoalManager extends AbstractMinTimeGoalManager {
   private final ApComboRegion apComboRegion;
   private final Scalar maxSpeed;
-  // private final Scalar maxTurning;
 
-  public ApMinTimeGoalManager(ApComboRegion apComboRegion, Scalar maxSpeed) { // Collection<Flow> controls,
+  public ApMinTimeGoalManager(ApComboRegion apComboRegion, Scalar maxSpeed) {
     super(apComboRegion);
     this.apComboRegion = apComboRegion;
     this.maxSpeed = Sign.requirePositive(maxSpeed);
-    // this.maxTurning = ApControls.maxTurning(controls).multiply(maxSpeed);
   }
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
-    // Euklidian distance to spherical goal region
-    return apComboRegion.d_xz(tensor).divide(maxSpeed);
+    // Euclidian distance to goal region
+    return apComboRegion.d_z(tensor).divide(maxSpeed);
   }
 }
