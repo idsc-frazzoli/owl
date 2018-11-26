@@ -36,14 +36,15 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
    * @param tensor {x, z, velocity, pathAngle}
    * @return Euclidean distance from z of tensor to zRegion */
   public final Scalar d_z(Tensor tensor) {
+    // TODO potentiallz use zRegion functionality
     Scalar distance = tensor.Get(1).subtract(zRegion.center());
     return distance.abs();
   }
 
   @Override // from Region
   public boolean isMember(Tensor goal) {
-    return zRegion.isMember(goal.get(0)) //
-        && vRegion.isMember(goal.get(1)) //
-        && gammaRegion.isMember(goal.get(2));
+    return zRegion.isMember(goal.get(1)) //
+        && vRegion.isMember(goal.get(2)) //
+        && gammaRegion.isMember(goal.get(3));
   }
 }

@@ -1,11 +1,15 @@
 package ch.ethz.idsc.owl.bot.ap;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
+import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -15,6 +19,7 @@ import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
+import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -22,25 +27,33 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
+import ch.ethz.idsc.tensor.sca.Sign;
+
+class Ground implements PlannerConstraint, Serializable {
+  @Override
+  public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+    return Sign.isPositiveOrZero(glcNode.state().Get(1));
+  }
+}
 
 public class ApTrajectoryPlanner {
   /* Creation of ApStateSpaceModel instance */
   static StateSpaceModel stateSpaceModel = ApStateSpaceModel.INSTANCE;
   /* Setting up parameters for the ApComboRegion
    * Note: GOAL and RADIUS_VECTOR are 3D, since x is omitted in ApComboRegion */
-  final static Tensor GOAL = Tensors.vector(0, 10, 0.1); // goal = {zCenter,vCenter, gammaCenter}
-  final static Tensor RADIUS_VECTOR = Tensors.of(RealScalar.of(5), RealScalar.of(10), Degree.of(5)); // radius_vector = {zRadius,vRadius, GammaRadius}
+  final static Tensor GOAL = Tensors.vector(5, 40, 0.1); // goal = {zCenter,vCenter, gammaCenter}
+  final static Tensor RADIUS_VECTOR = Tensors.of(RealScalar.of(5), RealScalar.of(200), Degree.of(50)); // radius_vector = {zRadius,vRadius, GammaRadius}
   /* Creation of control flows */
   final static Scalar MAX_AOA = ApStateSpaceModel.MAX_AOA;
-  final static int THRUST_PARTIONING = 4;
+  final static int THRUST_PARTIONING = 5;
   final static Tensor THRUSTS = Subdivide.of(RealScalar.ZERO, ApStateSpaceModel.MAX_THRUST, THRUST_PARTIONING);
-  final static int FLOWRES = 5;
+  final static int FLOWRES = 6;
   final static FlowsInterface AP_FLOWS = ApFlows.of(stateSpaceModel, MAX_AOA, THRUSTS);
   /* Setting up integrator */
   static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
   /* Setting up Time Raster */
   final static Tensor PARTITIONSCALE = Tensors.of( //
-      RealScalar.of(2), RealScalar.of(2), RealScalar.of(1), Degree.of(10).reciprocal()).unmodifiable();
+      RealScalar.of(1), RealScalar.of(1), RealScalar.of(1), Degree.of(1)).unmodifiable();
 
   static protected StateTimeRaster stateTimeRaster() {
     return new EtaRaster(PARTITIONSCALE, StateTimeTensorFunction.state(ApWrap.INSTANCE::represent));
@@ -52,11 +65,12 @@ public class ApTrajectoryPlanner {
    * @return New StandardTrajectoryPlanner for airplane simulation */
   static StandardTrajectoryPlanner ApStandardTrajectoryPlanner() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        INTEGRATOR, RationalScalar.of(1, 7), 10);
+        INTEGRATOR, RationalScalar.of(1, 5), 3);
     Collection<Flow> controls = AP_FLOWS.getFlows(FLOWRES);
     ApComboRegion apComboRegion = ApComboRegion.createApRegion(GOAL, RADIUS_VECTOR);
     ApMinTimeGoalManager apMinTimeGoalManager = new ApMinTimeGoalManager(apComboRegion, ApStateSpaceModel.MAX_SPEED);
     GoalInterface goalInterface = apMinTimeGoalManager.getGoalInterface();
-    return new StandardTrajectoryPlanner(stateTimeRaster(), stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
+    PlannerConstraint pc = new Ground();
+    return new StandardTrajectoryPlanner(stateTimeRaster(), stateIntegrator, controls, pc, goalInterface);
   }
 }

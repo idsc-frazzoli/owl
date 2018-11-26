@@ -74,7 +74,7 @@ public class TreeRender implements RenderInterface {
     }
     double inverse = (treeColor.nodeColor.length() - 1) / (max - min);
     // System.out.println("count=" + count + ", inverse=" + inverse);
-    if (count <= nodeBound) // don't draw tree beyond certain node count
+    if (count <= nodeBound || true) // don't draw tree beyond certain node count
       for (StateCostNode node : _collection) {
         double value = node.costFromRoot().number().doubleValue();
         final double interp = (value - min) * inverse;

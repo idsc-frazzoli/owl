@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -30,14 +31,14 @@ import ch.ethz.idsc.tensor.qty.Degree;
     final Scalar INITIAL_VEL = RealScalar.of(60);
     final Scalar INITIAL_GAMMA = Degree.of(-5);
     final Tensor INITIAL = Tensors.of(INITIAL_X, INITIAL_Z, INITIAL_VEL, INITIAL_GAMMA);
-   
     StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
     StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(300, 300);
+    owlyFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{1,0,10},{0,-1,500},{0,0,1}}"));
     // owlyFrame.addBackground(RegionRenders.create(region));
-    //owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    // owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
     // owlyFrame.addBackground(RenderElements.create(stateTimeRaster));
     // owlyFrame.addBackground(RenderElements.create(plannerConstraint));
     // owlyFrame.addBackground(new DomainRender(trajectoryPlanner.getDomainMap(), eta));
@@ -57,6 +58,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());
       StateTimeTrajectories.print(trajectory);
     }
-    OwlyGui.glc(standardTrajectoryPlanner);
+    owlyFrame.setGlc(standardTrajectoryPlanner);
+    //OwlyFrame owlyFrame2 = OwlyGui.glc(standardTrajectoryPlanner);
   }
 }
