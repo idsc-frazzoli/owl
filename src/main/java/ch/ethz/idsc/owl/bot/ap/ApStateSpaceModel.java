@@ -33,7 +33,10 @@ public enum ApStateSpaceModel implements StateSpaceModel {
   public static final Scalar MAX_AOA = Degree.of(10);
   /** max speed [m*s^-1] */
   static final Scalar MAX_SPEED = RealScalar.of(83);
+  /** stall speed [m*s^-1] */
+  static final Scalar STALL_SPEED = RealScalar.of(50);
 
+  
   @Override
   public Tensor f(Tensor x, Tensor u) {
     // x1' = x3*cos(x4)

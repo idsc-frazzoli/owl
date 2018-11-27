@@ -18,10 +18,9 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.N;
 
 public class ApFlows implements FlowsInterface, Serializable {
-  /** 
-   * @param thrusts vector with unit [N],
+  /** @param thrusts vector with unit [N],
    * @param aoa_max with unit [rad]
-   * @return new ApFlows*/
+   * @return new ApFlows */
   public static FlowsInterface of(StateSpaceModel stateSpaceModel, Scalar aoa_max, Tensor thrusts) {
     return new ApFlows(stateSpaceModel, aoa_max, thrusts);
   }

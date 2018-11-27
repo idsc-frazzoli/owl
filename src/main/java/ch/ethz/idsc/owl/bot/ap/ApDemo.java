@@ -4,8 +4,6 @@ package ch.ethz.idsc.owl.bot.ap;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -14,7 +12,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -29,7 +26,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     final Scalar INITIAL_X = RealScalar.of(0);
     final Scalar INITIAL_Z = RealScalar.of(80);
     final Scalar INITIAL_VEL = RealScalar.of(60);
-    final Scalar INITIAL_GAMMA = Degree.of(-5);
+    final Scalar INITIAL_GAMMA = Degree.of(-1);
     final Tensor INITIAL = Tensors.of(INITIAL_X, INITIAL_Z, INITIAL_VEL, INITIAL_GAMMA);
     StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
     StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
@@ -48,7 +45,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     // ---
     standardTrajectoryPlanner.insertRoot(new StateTime(INITIAL, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(standardTrajectoryPlanner);
-    glcExpand.findAny(2000);
+    glcExpand.findAny(3000);
     Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
     // ---
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());
@@ -59,6 +56,6 @@ import ch.ethz.idsc.tensor.qty.Degree;
       StateTimeTrajectories.print(trajectory);
     }
     owlyFrame.setGlc(standardTrajectoryPlanner);
-    //OwlyFrame owlyFrame2 = OwlyGui.glc(standardTrajectoryPlanner);
+    // OwlyFrame owlyFrame2 = OwlyGui.glc(standardTrajectoryPlanner);
   }
 }

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -70,7 +69,7 @@ public class ApTrajectoryPlanner {
     ApComboRegion apComboRegion = ApComboRegion.createApRegion(GOAL, RADIUS_VECTOR);
     ApMinTimeGoalManager apMinTimeGoalManager = new ApMinTimeGoalManager(apComboRegion, ApStateSpaceModel.MAX_SPEED);
     GoalInterface goalInterface = apMinTimeGoalManager.getGoalInterface();
-    PlannerConstraint pc = new Ground();
-    return new StandardTrajectoryPlanner(stateTimeRaster(), stateIntegrator, controls, pc, goalInterface);
+    PlannerConstraint apPlannerConstraint = new ApPlannerConstraint();
+    return new StandardTrajectoryPlanner(stateTimeRaster(), stateIntegrator, controls, apPlannerConstraint, goalInterface);
   }
 }
