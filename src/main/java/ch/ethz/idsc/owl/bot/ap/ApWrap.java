@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** identifies (x,z,v,gamma) === (x,z, v,gamma + 2 pi n) for all n */
-public enum ApWrap implements CoordinateWrap {
+/* package */ enum ApWrap implements CoordinateWrap {
   INSTANCE;
   // ---
   private static final int INDEX_ANGLE = 3;
