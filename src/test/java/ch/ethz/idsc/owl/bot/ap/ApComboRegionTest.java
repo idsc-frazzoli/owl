@@ -1,3 +1,4 @@
+// code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.math.region.LinearRegion;
@@ -26,11 +27,10 @@ public class ApComboRegionTest extends TestCase {
 
   public void requireNonNullTest() {
     try {
-      ApComboRegion apException = ApComboRegion.createApRegion(Tensors.vector(null, null, null), Tensors.vector(null, null, null));
+      ApComboRegion.createApRegion(null, null);
       fail();
-    } catch (NullPointerException e) {
-      assertNotNull(e);
-      assertEquals(NullPointerException.class, e.getClass());
+    } catch (Exception exception) {
+      // ---
     }
   }
 }

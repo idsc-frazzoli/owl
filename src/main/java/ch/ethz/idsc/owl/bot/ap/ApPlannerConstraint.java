@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public class ApPlannerConstraint implements PlannerConstraint, Serializable {
+/* package */ class ApPlannerConstraint implements PlannerConstraint, Serializable {
   @Override
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     boolean xConstraint = Sign.isPositiveOrZero(glcNode.state().Get(0));

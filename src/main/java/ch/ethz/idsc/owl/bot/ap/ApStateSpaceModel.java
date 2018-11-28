@@ -1,4 +1,4 @@
-//code by astoll
+// code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -16,11 +16,10 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * State space model was slightly altered as x and z are the first two entries of the vector
  * 
- * 
  * @author Andre Stoll
  * @param x = {horizontal distance (x), altitude (z), velocity, flight path angle (gamma)}
  * @param u = {thrust, angle of attack (aoa)} */
-public enum ApStateSpaceModel implements StateSpaceModel {
+/* package */ enum ApStateSpaceModel implements StateSpaceModel {
   INSTANCE;
   // ---
   /** acceleration of gravity [m*s^-2] */
@@ -36,20 +35,19 @@ public enum ApStateSpaceModel implements StateSpaceModel {
   /** stall speed [m*s^-1] */
   static final Scalar STALL_SPEED = RealScalar.of(50);
 
-  
   @Override
   public Tensor f(Tensor x, Tensor u) {
     // x1' = x3*cos(x4)
     // x2' = x3*sin(x4)
     // x3' = 1/m * (u1*cos(u2) - D(u2,x3) - m*g*sin(x4))
     // x4' = 1/(m*x3) * (u1*sin(u2) + L(u2,x3) - m*g*cos(x4))
-    Scalar x1 = x.Get(0); // horizontal distance
-    Scalar x2 = x.Get(1); // altitude
+    // Scalar x1 = x.Get(0); // horizontal distance
+    // Scalar x2 = x.Get(1); // altitude
     Scalar x3 = x.Get(2); // velocity
     Scalar x4 = x.Get(3); // flight path angle
     Scalar u1 = u.Get(0); // Thrust
     Scalar u2 = u.Get(1); // angle of attack
-    return Tensors.of(//
+    return Tensors.of( //
         x3.multiply(Cos.of(x4)), //
         x3.multiply(Sin.of(x4)), //
         (u1.multiply(Cos.of(u2)).subtract(D(u2, x3)).subtract(Times.of(MASS, GRAVITY, Sin.of(x4)))).divide(MASS), //

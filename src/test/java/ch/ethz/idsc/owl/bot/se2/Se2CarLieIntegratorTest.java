@@ -50,7 +50,7 @@ public class Se2CarLieIntegratorTest extends TestCase {
       Tensor lookAhead = Se2CarLieIntegrator.INSTANCE.spin(Array.zeros(3), u);
       Optional<Scalar> optional = PurePursuit.ratioPositiveX(lookAhead);
       Scalar scalar = optional.get();
-      assertTrue(Chop._07.close(ratio, scalar));
+      assertTrue(Chop._06.close(ratio, scalar));
     }
   }
 

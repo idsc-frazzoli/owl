@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class ApComboRegion implements Region<Tensor>, Serializable {
+/* package */ class ApComboRegion implements Region<Tensor>, Serializable {
   /** @param goal = {zCenter, velocityCenter, gammaCenter} defining center of goal region
    * @param radiusVector = {zRadius, velocityCenter, gammaCenter} defining radii of goal region
    * @return new ApComboRegion */
@@ -25,26 +25,27 @@ public class ApComboRegion implements Region<Tensor>, Serializable {
   private final LinearRegion vRegion;
   private final So2Region gammaRegion;
 
-  public ApComboRegion(LinearRegion zRegion, LinearRegion vRegion, So2Region gammaRegion) {
+  ApComboRegion(LinearRegion zRegion, LinearRegion vRegion, So2Region gammaRegion) {
     this.zRegion = Objects.requireNonNull(zRegion);
     this.vRegion = Objects.requireNonNull(vRegion);
     this.gammaRegion = Objects.requireNonNull(gammaRegion);
   }
 
-  /** Function is used to compute heuristic in {@link ApMinTimeGoalManager}
+  /** function is used to compute heuristic in {@link ApMinTimeGoalManager}
    * 
    * @param tensor {x, z, velocity, pathAngle}
    * @return Euclidean distance from z of tensor to zRegion */
   public final Scalar d_z(Tensor tensor) {
-    // TODO potentiallz use zRegion functionality
-    Scalar distance = tensor.Get(1).subtract(zRegion.center());
-    return distance.abs();
+    // TODO andre check if below line is intended
+    return zRegion.distance(tensor.Get(1));
+    // Scalar distance = tensor.Get(1).subtract(zRegion.center());
+    // return distance.abs();
   }
 
   @Override // from Region
-  public boolean isMember(Tensor goal) {
-    return zRegion.isMember(goal.get(1)) //
-        && vRegion.isMember(goal.get(2)) //
-        && gammaRegion.isMember(goal.get(3));
+  public boolean isMember(Tensor tensor) { // {x, z, velocity, pathAngle}
+    return zRegion.isMember(tensor.get(1)) //
+        && vRegion.isMember(tensor.get(2)) //
+        && gammaRegion.isMember(tensor.get(3));
   }
 }

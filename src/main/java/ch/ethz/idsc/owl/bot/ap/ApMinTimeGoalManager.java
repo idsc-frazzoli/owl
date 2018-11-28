@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public final class ApMinTimeGoalManager extends AbstractMinTimeGoalManager {
+/* package */ class ApMinTimeGoalManager extends AbstractMinTimeGoalManager {
   private final ApComboRegion apComboRegion;
   private final Scalar maxSpeed;
 
