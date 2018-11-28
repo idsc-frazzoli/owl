@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.planar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -42,5 +43,25 @@ public class SignedCurvature2DTest extends TestCase {
     Tensor b = Tensors.vector(1, 1);
     Tensor c = Tensors.vector(1, 1);
     assertFalse(SignedCurvature2D.of(a, b, c).isPresent());
+  }
+
+  public void testQuantity() {
+    Tensor a = Tensors.fromString("{1[m],0[m]}");
+    Tensor b = Tensors.fromString("{0[m],1[m]}");
+    Tensor c = Tensors.fromString("{-1[m],0[m]}");
+    assertTrue(Chop._10.close(SignedCurvature2D.of(a, b, c).get(), Quantity.of(-1, "m^-1")));
+    assertTrue(Chop._10.close(SignedCurvature2D.of(c, b, a).get(), Quantity.of(+1, "m^-1")));
+  }
+
+  public void testFail() {
+    Tensor a = Tensors.vector(1, 1, 0);
+    Tensor b = Tensors.vector(1, 2, 1);
+    Tensor c = Tensors.vector(1, 3, 2);
+    try {
+      SignedCurvature2D.of(a, b, c);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

@@ -6,7 +6,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/** generalization of {@link Differences} */
+/** LieDifferences is the generalization of {@link Differences}
+ * 
+ * <pre>
+ * LieDifferences[{a, b, c, d, e}] == {log a^-1.b, log b^-1.c, log c^-1.d, log d^-1.e}
+ * </pre> */
 public class LieDifferences implements TensorUnaryOperator {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;

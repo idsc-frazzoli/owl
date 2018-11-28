@@ -7,8 +7,11 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class SphereRandomSampleTest extends TestCase {
@@ -23,9 +26,9 @@ public class SphereRandomSampleTest extends TestCase {
   public void test1D() {
     Tensor center = Tensors.vector(15);
     Scalar radius = RealScalar.of(3);
-    RandomSampleInterface rsi = SphereRandomSample.of(center, radius);
+    RandomSampleInterface randomSampleInterface = SphereRandomSample.of(center, radius);
     for (int index = 0; index < 100; ++index) {
-      Tensor tensor = rsi.randomSample();
+      Tensor tensor = randomSampleInterface.randomSample();
       VectorQ.requireLength(tensor, 1);
       Clip.function(12, 18).requireInside(tensor.Get(0));
     }
@@ -36,5 +39,66 @@ public class SphereRandomSampleTest extends TestCase {
     Scalar radius = RealScalar.of(2);
     RandomSampleInterface rsi = SphereRandomSample.of(center, radius);
     assertTrue(rsi instanceof CircleRandomSample);
+  }
+
+  public void test3DZeroRadius() {
+    Tensor center = Tensors.vector(10, 20, 3);
+    Scalar radius = RealScalar.of(0.0);
+    RandomSampleInterface randomSampleInterface = SphereRandomSample.of(center, radius);
+    assertTrue(randomSampleInterface instanceof ConstantRandomSample);
+    assertEquals(randomSampleInterface.randomSample(), center);
+  }
+
+  public void testQuantity() {
+    RandomSampleInterface randomSampleInterface = //
+        SphereRandomSample.of(Tensors.fromString("{10[m],20[m],-5[m]}"), Quantity.of(2, "m"));
+    Tensor tensor = randomSampleInterface.randomSample();
+    ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("m");
+    tensor.map(scalarUnaryOperator);
+  }
+
+  public void testCenterEmptyFail() {
+    try {
+      SphereRandomSample.of(Tensors.empty(), Quantity.of(2, "m"));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testRadiusNegative2Fail() {
+    try {
+      SphereRandomSample.of(Tensors.vector(1, 2), RealScalar.of(-1));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testRadiusNegative3Fail() {
+    try {
+      SphereRandomSample.of(Tensors.vector(1, 2, 3), RealScalar.of(-1));
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testCenterScalarFail() {
+    try {
+      SphereRandomSample.of(RealScalar.ONE, RealScalar.ONE);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testCenterScalarZeroFail() {
+    try {
+      SphereRandomSample.of(RealScalar.ONE, RealScalar.ZERO);
+      assertTrue(false);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

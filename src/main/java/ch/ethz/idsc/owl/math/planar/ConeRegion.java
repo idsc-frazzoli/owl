@@ -25,13 +25,13 @@ public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
   private final Scalar semi_pi_half;
   private final Tensor normal;
 
-  /** @param xya vector of the form {x, y, angle} where {x, y} is the apex of the cone, and
+  /** @param apex vector of the form {x, y, angle} where {x, y} is the tip of the cone, and
    * angle aligns with the center line of the cone
    * @param semi half angular width of cone,
    * for instance semi==pi/4 corresponds to a cone with a right angle */
-  public ConeRegion(Tensor xya, Scalar semi) {
-    apex = xya;
-    inverse = new Se2Bijection(xya).inverse();
+  public ConeRegion(Tensor apex, Scalar semi) {
+    this.apex = apex;
+    inverse = new Se2Bijection(apex).inverse();
     this.semi = Sign.requirePositiveOrZero(semi);
     semi_pi_half = semi.add(PI_HALF);
     normal = AngleVector.of(semi_pi_half);

@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import ch.ethz.idsc.owl.math.BinomialWeights;
 import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2Geodesic;

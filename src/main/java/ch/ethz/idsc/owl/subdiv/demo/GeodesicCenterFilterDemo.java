@@ -54,7 +54,7 @@ class GeodesicCenterFilterDemo {
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
       spinnerLabel.addSpinnerListener(resource -> //
       control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          .limit(2070).map(row -> row.extract(1, 4))));
+          .limit(270).map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
@@ -198,8 +198,8 @@ class GeodesicCenterFilterDemo {
   }
 
   public static void main(String[] args) {
-    GeodesicCenterFilterDemo curveSubdivisionDemo = new GeodesicCenterFilterDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    GeodesicCenterFilterDemo geodesicCenterFilterDemo = new GeodesicCenterFilterDemo();
+    geodesicCenterFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    geodesicCenterFilterDemo.timerFrame.jFrame.setVisible(true);
   }
 }

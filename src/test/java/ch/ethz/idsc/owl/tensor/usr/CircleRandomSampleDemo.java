@@ -1,7 +1,10 @@
 // code by jph
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.owl.tensor.usr;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.owl.math.sample.RandomSample;
+import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -12,9 +15,9 @@ import ch.ethz.idsc.tensor.io.Put;
 enum CircleRandomSampleDemo {
   ;
   public static void main(String[] args) throws Exception {
-    CircleRandomSample circleSampler = //
-        new CircleRandomSample(Tensors.vector(1, 1), RealScalar.of(2));
-    Tensor matrix = RandomSample.of(circleSampler, 10000);
+    RandomSampleInterface randomSampleInterface = //
+        SphereRandomSample.of(Tensors.vector(1, 1), RealScalar.of(2));
+    Tensor matrix = RandomSample.of(randomSampleInterface, 10000);
     Put.of(UserHome.file("samples.txt"), matrix);
   }
 }

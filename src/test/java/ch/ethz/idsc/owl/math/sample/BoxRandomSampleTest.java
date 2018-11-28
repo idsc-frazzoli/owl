@@ -16,10 +16,10 @@ public class BoxRandomSampleTest extends TestCase {
   public void testSimple3D() {
     Tensor offset = Tensors.vector(2, 2, 3);
     Tensor width = Tensors.vector(1, 1, 1);
-    RandomSampleInterface rsi = new BoxRandomSample(offset.subtract(width), offset.add(width));
-    Tensor rand = RandomSample.of(rsi, 100);
-    Scalars.compare(Norm._2.ofVector(Mean.of(rand).subtract(offset)), RealScalar.of(.1));
-    assertEquals(Dimensions.of(rand), Arrays.asList(100, 3));
+    RandomSampleInterface randomSampleInterface = new BoxRandomSample(offset.subtract(width), offset.add(width));
+    Tensor samples = RandomSample.of(randomSampleInterface, 100);
+    Scalars.compare(Norm._2.ofVector(Mean.of(samples).subtract(offset)), RealScalar.of(.1));
+    assertEquals(Dimensions.of(samples), Arrays.asList(100, 3));
   }
 
   public void testSingle() {

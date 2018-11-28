@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO use Scalar instead of double!
+// TODO JPH use Scalar instead of double!
 public enum QuaternionToRotationMatrix {
   ;
   /** @param wxyz vector of length 4, does not have to have unit length
@@ -25,22 +25,28 @@ public enum QuaternionToRotationMatrix {
     double sqy = q_y * q_y;
     double sqz = q_z * q_z;
     // invs (inverse square length) is only required if quaternion is not already normalized
-    double invs = 1 / (sqx + sqy + sqz + sqw);
-    double m00 = (sqx - sqy - sqz + sqw) * invs; // since sqw + sqx + sqy + sqz =1/invs*invs
-    double m11 = (-sqx + sqy - sqz + sqw) * invs;
-    double m22 = (-sqx - sqy + sqz + sqw) * invs;
+    double inv = 1 / (sqx + sqy + sqz + sqw);
+    double m00 = (sqx - sqy - sqz + sqw) * inv; // since sqw + sqx + sqy + sqz =1 / inv*inv
+    double m11 = (-sqx + sqy - sqz + sqw) * inv;
+    double m22 = (-sqx - sqy + sqz + sqw) * inv;
     double tmp1 = q_x * q_y;
     double tmp2 = q_z * q_w;
-    double m10 = 2.0 * (tmp1 + tmp2) * invs;
-    double m01 = 2.0 * (tmp1 - tmp2) * invs;
+    double m10 = (tmp1 + tmp2) * inv;
+    m10 += m10;
+    double m01 = (tmp1 - tmp2) * inv;
+    m01 += m01;
     tmp1 = q_x * q_z;
     tmp2 = q_y * q_w;
-    double m20 = 2.0 * (tmp1 - tmp2) * invs;
-    double m02 = 2.0 * (tmp1 + tmp2) * invs;
+    double m20 = (tmp1 - tmp2) * inv;
+    m20 += m20;
+    double m02 = (tmp1 + tmp2) * inv;
+    m02 += m02;
     tmp1 = q_y * q_z;
     tmp2 = q_x * q_w;
-    double m21 = 2.0 * (tmp1 + tmp2) * invs;
-    double m12 = 2.0 * (tmp1 - tmp2) * invs;
+    double m21 = (tmp1 + tmp2) * inv;
+    m21 += m21;
+    double m12 = (tmp1 - tmp2) * inv;
+    m12 += m12;
     return Tensors.matrix(new Number[][] { //
         { m00, m01, m02 }, //
         { m10, m11, m12 }, //

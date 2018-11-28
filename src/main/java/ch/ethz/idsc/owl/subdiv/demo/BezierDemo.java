@@ -209,8 +209,8 @@ class BezierDemo {
   }
 
   public static void main(String[] args) {
-    BezierDemo curveSubdivisionDemo = new BezierDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    BezierDemo bezierDemo = new BezierDemo();
+    bezierDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    bezierDemo.timerFrame.jFrame.setVisible(true);
   }
 }
