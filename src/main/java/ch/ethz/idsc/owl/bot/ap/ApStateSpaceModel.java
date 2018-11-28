@@ -33,7 +33,13 @@ import ch.ethz.idsc.tensor.sca.Sin;
   /** max speed [m*s^-1] */
   static final Scalar MAX_SPEED = RealScalar.of(83);
   /** stall speed [m*s^-1] */
-  static final Scalar STALL_SPEED = RealScalar.of(50);
+  static final Scalar STALL_SPEED = RealScalar.of(58);
+  /** steepest descent flight path angle */
+  static final Scalar MAX_DESCENT_GAMMA = Degree.of(-15);
+  /** maximal touchdown speed */
+  static final Scalar Z_0 = RealScalar.of(0.9144);
+  /** altitude of final landing phase */
+  static final Scalar ALTITUDE_FINAL_PHASE = RealScalar.of(20);
 
   @Override
   public Tensor f(Tensor x, Tensor u) {
