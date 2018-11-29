@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
-import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -30,15 +30,15 @@ import ch.ethz.idsc.tensor.qty.Degree;
   final static Tensor RADIUS_VECTOR = Tensors.of(RealScalar.of(5), RealScalar.of(200), Degree.of(50)); // radius_vector = {zRadius,vRadius, GammaRadius}
   /* Creation of control flows */
   final static Scalar MAX_AOA = ApStateSpaceModel.MAX_AOA;
-  final static int THRUST_PARTIONING = 5;
+  final static int THRUST_PARTIONING = 3;
   final static Tensor THRUSTS = Subdivide.of( //
       ApStateSpaceModel.MAX_THRUST.zero(), //
       ApStateSpaceModel.MAX_THRUST, //
       THRUST_PARTIONING);
-  final static int FLOWRES = 6;
+  final static int FLOWRES = 2;
   final static FlowsInterface AP_FLOWS = ApFlows.of(MAX_AOA, THRUSTS);
   /* Setting up integrator */
-  static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
+  static final Integrator INTEGRATOR = RungeKutta4Integrator.INSTANCE;
   /* Setting up Time Raster */
   final static Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(1), RealScalar.of(1), RealScalar.of(1), Degree.of(1)).unmodifiable();

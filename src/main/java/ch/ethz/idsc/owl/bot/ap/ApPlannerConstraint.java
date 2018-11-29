@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
@@ -21,35 +22,35 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * the flight path angle (gamma) should be no less than -3 degree and always negative
  * the descent rate should be z_dot <= V * sin(gamma) in final landing phase
  * 
- * The values always are to be found in {Link @ApStateSpaceModel}
+ * The values always are to be found in {@link ApStateSpaceModel}
  * 
  * @author Andre */
 /* package */ class ApPlannerConstraint implements PlannerConstraint, Serializable {
-  static final Clip CLIP_GAMMA = Clip.function(ApStateSpaceModel.MAX_DESCENT_GAMMA, ApStateSpaceModel.MAX_DESCENT_GAMMA.zero());
+  private static final Clip CLIP_GAMMA = //
+      Clip.function(ApStateSpaceModel.MAX_DESCENT_GAMMA, ApStateSpaceModel.MAX_DESCENT_GAMMA.zero());
+  private static final Clip CLIP_VELOCITY = //
+      Clip.function(ApStateSpaceModel.STALL_SPEED, ApStateSpaceModel.MAX_SPEED);
 
-  @Override
+  @Override // from PlannerConstraint
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    boolean xConstraint = Sign.isPositiveOrZero(glcNode.state().Get(0));
-    if (!xConstraint) {
+    Tensor state = glcNode.state();
+    // boolean xConstraint = Sign.isPositiveOrZero(state.Get(0));
+    // if (!xConstraint)
+    // return false;
+    Scalar z = state.Get(1);
+    if (Sign.isNegative(z))
       return false;
-    }
-    boolean zConstraint = Sign.isPositiveOrZero(glcNode.state().Get(1));
-    if (!zConstraint) {
+    Scalar v = state.Get(2);
+    // boolean vConstraint = Scalars.lessEquals(v, ApStateSpaceModel.MAX_SPEED)//
+    // && Scalars.lessEquals(ApStateSpaceModel.STALL_SPEED, v);
+    if (CLIP_VELOCITY.isOutside(v))
       return false;
-    }
-    boolean vConstraint = Scalars.lessEquals(glcNode.state().Get(2), ApStateSpaceModel.MAX_SPEED)//
-        && Scalars.lessEquals(ApStateSpaceModel.STALL_SPEED, glcNode.state().Get(2));
-    if (!vConstraint) {
+    Scalar gamma = state.Get(3); // flight path angle
+    if (CLIP_GAMMA.isOutside(gamma))
       return false;
-    }
-    Scalar gamma = glcNode.state().Get(3);
-    boolean gammaConstraint = CLIP_GAMMA.isInside(gamma); // Scalars.lessEquals( ,) && Scalars.lessEquals(glcNode.state().Get(3),
-                                                          // ApStateSpaceModel.MAX_DESCENT_GAMMA.zero());
-    if (!gammaConstraint) {
-      return false;
-    }
-    if (Scalars.lessEquals(glcNode.state().Get(1), ApStateSpaceModel.ALTITUDE_FINAL_PHASE)) {
-      return Scalars.lessEquals(ApStateSpaceModel.Z_0, glcNode.state().Get(2).multiply(Sin.of(glcNode.state().Get(3))));
+    if (Scalars.lessEquals(z, ApStateSpaceModel.ALTITUDE_FINAL_PHASE)) {
+      Scalar v_z = v.multiply(Sin.of(gamma));
+      return Scalars.lessEquals(v_z, ApStateSpaceModel.Z_0);
     }
     return true;//
   }

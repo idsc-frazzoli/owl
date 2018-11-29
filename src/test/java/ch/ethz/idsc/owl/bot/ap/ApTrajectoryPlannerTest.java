@@ -8,5 +8,4 @@ public class ApTrajectoryPlannerTest extends TestCase {
     StandardTrajectoryPlanner apTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
     assertTrue(apTrajectoryPlanner instanceof StandardTrajectoryPlanner);
   }
-  
 }
