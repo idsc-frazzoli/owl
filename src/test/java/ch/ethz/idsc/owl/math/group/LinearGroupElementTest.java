@@ -34,7 +34,7 @@ public class LinearGroupElementTest extends TestCase {
   public void testNonSquareFail() {
     try {
       new LinearGroupElement(HilbertMatrix.of(2, 3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -44,13 +44,13 @@ public class LinearGroupElementTest extends TestCase {
     LinearGroupElement linearGroupElement = new LinearGroupElement(DiagonalMatrix.of(1, 2));
     try {
       linearGroupElement.combine(HilbertMatrix.of(2, 3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       linearGroupElement.combine(Tensors.vector(1, 2));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -60,7 +60,7 @@ public class LinearGroupElementTest extends TestCase {
     LinearGroupElement linearGroupElement = new LinearGroupElement(DiagonalMatrix.of(1, 0, 2));
     try {
       linearGroupElement.inverse();
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

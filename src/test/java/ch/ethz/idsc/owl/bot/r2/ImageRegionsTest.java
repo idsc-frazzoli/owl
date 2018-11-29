@@ -35,7 +35,7 @@ public class ImageRegionsTest extends TestCase {
     try {
       ImageRegions.loadFromRepository( //
           "/does/not/exist.png", Tensors.vector(10, 10), false);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

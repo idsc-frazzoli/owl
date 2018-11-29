@@ -51,7 +51,7 @@ public class GlcNodesTest extends TestCase {
   public void testRootFail() {
     try {
       GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2), RealScalar.ONE), null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -67,7 +67,7 @@ public class GlcNodesTest extends TestCase {
   public void testSimple() {
     try {
       GlcNodes.getPathFromRootTo(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

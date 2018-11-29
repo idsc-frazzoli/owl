@@ -15,13 +15,13 @@ public class ArcTan2DTest extends TestCase {
   public void testVectorXYFail() {
     try {
       ArcTan2D.of(Tensors.vector(1));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       ArcTan2D.of(LieAlgebras.se2());
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

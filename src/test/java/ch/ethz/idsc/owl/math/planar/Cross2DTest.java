@@ -23,7 +23,7 @@ public class Cross2DTest extends TestCase {
   public void testFail() {
     try {
       Cross2D.of(RotationMatrix.of(RealScalar.ONE));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -32,7 +32,7 @@ public class Cross2DTest extends TestCase {
   public void testFail2() {
     try {
       Cross2D.of(Tensors.vector(1, 2, 3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -41,7 +41,7 @@ public class Cross2DTest extends TestCase {
   public void testFailNull() {
     try {
       Cross2D.of(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

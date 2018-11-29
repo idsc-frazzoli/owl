@@ -79,13 +79,13 @@ public class HormannSabinCurveSubdivisionTest extends TestCase {
     CurveSubdivision subdivision = HormannSabinCurveSubdivision.split3(Se2Geodesic.INSTANCE);
     try {
       subdivision.string(RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       subdivision.cyclic(RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

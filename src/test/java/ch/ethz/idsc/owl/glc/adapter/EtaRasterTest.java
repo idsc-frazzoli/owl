@@ -37,7 +37,7 @@ public class EtaRasterTest extends TestCase {
     EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1), StateTime::joined);
     try {
       EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1.), StateTime::joined);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

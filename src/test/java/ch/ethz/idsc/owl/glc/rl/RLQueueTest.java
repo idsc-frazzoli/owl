@@ -66,7 +66,7 @@ public class RLQueueTest extends TestCase {
   public void testCollectionMin() {
     try {
       Collections.min(Arrays.asList());
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

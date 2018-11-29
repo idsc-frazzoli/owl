@@ -76,7 +76,7 @@ public class PolygonAreaTest extends TestCase {
   public void testFailScalar() {
     try {
       PolygonArea.FUNCTION.apply(RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

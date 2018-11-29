@@ -53,13 +53,13 @@ public class SphericalRegionTest extends TestCase {
   public void testFail() {
     try {
       new SphericalRegion(RealScalar.ZERO, RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       new SphericalRegion(Tensors.vector(1, 2), RealScalar.ONE.negate());
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

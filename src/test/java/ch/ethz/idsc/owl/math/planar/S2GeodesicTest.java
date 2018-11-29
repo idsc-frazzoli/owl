@@ -69,7 +69,7 @@ public class S2GeodesicTest extends TestCase {
   public void testFail() {
     try {
       S2Geodesic.INSTANCE.split(UnitVector.of(4, 0), UnitVector.of(3, 1), RealScalar.ZERO);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

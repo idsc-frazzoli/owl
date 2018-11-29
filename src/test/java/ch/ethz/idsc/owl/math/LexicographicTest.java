@@ -34,7 +34,7 @@ public class LexicographicTest extends TestCase {
   public void testFail() {
     try {
       Lexicographic.COMPARATOR.compare(Tensors.vector(0, 1, 2, 3), Tensors.vector(0, 1, 2, 4, 2));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

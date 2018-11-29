@@ -20,13 +20,13 @@ public class BoundedEpisodeIntegratorTest extends TestCase {
     assertEquals(stateTime.time(), RealScalar.of(3));
     try {
       boundedEpisodeIntegrator.move(Tensors.vector(3, 4), RealScalar.of(3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       boundedEpisodeIntegrator.move(Tensors.vector(3, 4), RealScalar.of(2.3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -39,7 +39,7 @@ public class BoundedEpisodeIntegratorTest extends TestCase {
           EulerIntegrator.INSTANCE, //
           new StateTime(Tensors.vector(1, 2), RealScalar.ZERO), //
           RealScalar.of(-1));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

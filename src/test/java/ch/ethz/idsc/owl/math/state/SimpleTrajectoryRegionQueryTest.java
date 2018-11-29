@@ -7,7 +7,7 @@ public class SimpleTrajectoryRegionQueryTest extends TestCase {
   public void testSimple() {
     try {
       new SimpleTrajectoryRegionQuery(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

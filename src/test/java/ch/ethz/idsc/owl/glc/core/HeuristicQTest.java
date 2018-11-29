@@ -15,7 +15,7 @@ public class HeuristicQTest extends TestCase {
   public void testFail() {
     try {
       HeuristicQ.of(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

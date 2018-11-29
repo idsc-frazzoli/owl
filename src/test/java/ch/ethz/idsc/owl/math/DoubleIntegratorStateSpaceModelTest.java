@@ -17,13 +17,13 @@ public class DoubleIntegratorStateSpaceModelTest extends TestCase {
     Tensor x = Tensors.vector(1, 2, 3, 4);
     try {
       DoubleIntegratorStateSpaceModel.INSTANCE.f(x, Tensors.vector(3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       DoubleIntegratorStateSpaceModel.INSTANCE.f(x, Tensors.vector(3, 4, 3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

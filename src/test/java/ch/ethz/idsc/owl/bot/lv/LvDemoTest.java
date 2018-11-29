@@ -51,6 +51,6 @@ public class LvDemoTest extends TestCase {
         return;
       }
     }
-    assertTrue(false);
+    fail();
   }
 }

@@ -30,13 +30,13 @@ public class StateTimeTest extends TestCase {
   public void testFail() {
     try {
       new StateTime(Tensors.vector(1, 2), null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       new StateTime(null, RealScalar.ZERO);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

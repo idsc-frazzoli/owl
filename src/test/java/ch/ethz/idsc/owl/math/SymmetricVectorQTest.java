@@ -17,7 +17,7 @@ public class SymmetricVectorQTest extends TestCase {
   public void testThrow() {
     try {
       SymmetricVectorQ.require(Tensors.vector(1, 1, 3, 1, 1, 1));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

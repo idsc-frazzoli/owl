@@ -36,7 +36,7 @@ public class R2FlowsTest extends TestCase {
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     try {
       r2Config.getFlows(2);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

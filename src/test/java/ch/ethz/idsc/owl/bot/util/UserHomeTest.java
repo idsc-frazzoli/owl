@@ -11,7 +11,7 @@ public class UserHomeTest extends TestCase {
   public void testNull() {
     try {
       UserHome.file(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

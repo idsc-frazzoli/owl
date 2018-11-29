@@ -7,7 +7,7 @@ public class GlobalAssertTest extends TestCase {
   public void testSimple() {
     try {
       GlobalAssert.that(false);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
