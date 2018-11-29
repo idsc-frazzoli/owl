@@ -74,7 +74,7 @@ public class SmoothingKernelTest extends TestCase {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       try {
         smoothingKernel.apply(-1);
-        assertTrue(false);
+        fail();
       } catch (Exception exception) {
         // ---
       }
@@ -84,7 +84,7 @@ public class SmoothingKernelTest extends TestCase {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       try {
         smoothingKernel.windowFunction().apply(Quantity.of(1, "s"));
-        assertTrue(false);
+        fail();
       } catch (Exception exception) {
         // ---
       }

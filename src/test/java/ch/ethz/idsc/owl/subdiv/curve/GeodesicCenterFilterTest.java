@@ -92,7 +92,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   public void testFail() {
     try {
       GeodesicCenterFilter.of(null, 1);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

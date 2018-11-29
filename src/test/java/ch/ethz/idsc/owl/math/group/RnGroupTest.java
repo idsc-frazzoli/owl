@@ -7,7 +7,7 @@ public class RnGroupTest extends TestCase {
   public void testSimple() {
     try {
       RnGroup.INSTANCE.element(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

@@ -12,7 +12,7 @@ public class StopwatchTest extends TestCase {
     assertEquals(stopwatch.display_seconds(), 0.0);
     try {
       stopwatch.stop();
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -29,7 +29,7 @@ public class StopwatchTest extends TestCase {
     assertFalse(stopwatch instanceof Serializable);
     try {
       stopwatch.start();
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -54,7 +54,7 @@ public class StopwatchTest extends TestCase {
     Stopwatch stopwatch = Stopwatch.started();
     try {
       stopwatch.resetToZero();
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

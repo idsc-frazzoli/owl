@@ -16,19 +16,19 @@ public class TrajectoryWrapTest extends TestCase {
     assertFalse(trajectoryWrap.isDefined(RealScalar.of(4)));
     try {
       trajectoryWrap.getControl(RealScalar.of(3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       trajectoryWrap.getSample(RealScalar.of(3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       trajectoryWrap.getSample(RealScalar.of(4));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

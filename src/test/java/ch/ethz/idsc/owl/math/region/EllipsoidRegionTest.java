@@ -59,7 +59,7 @@ public class EllipsoidRegionTest extends TestCase {
   public void testLengthFail() {
     try {
       new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, 0, 3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -68,7 +68,7 @@ public class EllipsoidRegionTest extends TestCase {
   public void testNegativeFail() {
     try {
       new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, -2));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -77,13 +77,13 @@ public class EllipsoidRegionTest extends TestCase {
   public void testZeroFail() {
     try {
       new EllipsoidRegion(Tensors.vector(10, 3), Tensors.vector(1, 0));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       new EllipsoidRegion(Tensors.vector(10, 2, 3), Tensors.vector(1, 0.0, 3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

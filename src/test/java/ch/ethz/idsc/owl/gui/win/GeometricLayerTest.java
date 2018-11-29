@@ -38,7 +38,7 @@ public class GeometricLayerTest extends TestCase {
     assertEquals(mouseSe2State, geometricLayer.getMouseSe2State());
     try {
       geometricLayer.popMatrix();
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -61,7 +61,7 @@ public class GeometricLayerTest extends TestCase {
     geometricLayer.popMatrix();
     try {
       geometricLayer.popMatrix();
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

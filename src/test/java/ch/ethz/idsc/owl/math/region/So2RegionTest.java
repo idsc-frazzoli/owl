@@ -61,7 +61,7 @@ public class So2RegionTest extends TestCase {
   public void testFail() {
     try {
       new So2Region(RealScalar.of(2), RealScalar.of(-1));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

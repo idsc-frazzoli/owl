@@ -92,7 +92,7 @@ public class ConeRegionTest extends TestCase {
   public void testNegativeFail() {
     try {
       new ConeRegion(Tensors.vector(5, 0, Math.PI / 2), RealScalar.of(-Math.PI));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

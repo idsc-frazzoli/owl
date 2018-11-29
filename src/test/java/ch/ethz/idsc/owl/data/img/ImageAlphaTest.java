@@ -22,7 +22,7 @@ public class ImageAlphaTest extends TestCase {
     BufferedImage bufferedImage = ImageFormat.of(tensor);
     try {
       ImageAlpha.scale(bufferedImage, 0.5f);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

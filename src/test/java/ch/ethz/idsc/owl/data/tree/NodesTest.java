@@ -37,19 +37,19 @@ public class NodesTest extends TestCase {
   public void testFail() {
     try {
       Nodes.rootFrom(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       Nodes.listFromRoot(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       Nodes.listToRoot(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

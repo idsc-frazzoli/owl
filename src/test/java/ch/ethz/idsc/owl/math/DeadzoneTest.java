@@ -18,7 +18,7 @@ public class DeadzoneTest extends TestCase {
   public void testFail() {
     try {
       Deadzone.of(0, -1);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

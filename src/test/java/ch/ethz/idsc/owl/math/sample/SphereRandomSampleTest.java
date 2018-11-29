@@ -60,7 +60,7 @@ public class SphereRandomSampleTest extends TestCase {
   public void testCenterEmptyFail() {
     try {
       SphereRandomSample.of(Tensors.empty(), Quantity.of(2, "m"));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -69,7 +69,7 @@ public class SphereRandomSampleTest extends TestCase {
   public void testRadiusNegative2Fail() {
     try {
       SphereRandomSample.of(Tensors.vector(1, 2), RealScalar.of(-1));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -78,7 +78,7 @@ public class SphereRandomSampleTest extends TestCase {
   public void testRadiusNegative3Fail() {
     try {
       SphereRandomSample.of(Tensors.vector(1, 2, 3), RealScalar.of(-1));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -87,7 +87,7 @@ public class SphereRandomSampleTest extends TestCase {
   public void testCenterScalarFail() {
     try {
       SphereRandomSample.of(RealScalar.ONE, RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -96,7 +96,7 @@ public class SphereRandomSampleTest extends TestCase {
   public void testCenterScalarZeroFail() {
     try {
       SphereRandomSample.of(RealScalar.ONE, RealScalar.ZERO);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

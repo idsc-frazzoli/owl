@@ -78,7 +78,7 @@ public class PsuStateSpaceModelTest extends TestCase {
     assertEquals(episodeIntegrator.tail(), init);
     try {
       episodeIntegrator.move(Tensors.vector(1), RealScalar.of(3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

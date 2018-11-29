@@ -19,7 +19,7 @@ public class ImageEdgesTest extends TestCase {
   public void testFail() {
     try {
       ImageEdges.extrusion(Tensors.fromString("{{1,255},{255,0}}"), 1);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

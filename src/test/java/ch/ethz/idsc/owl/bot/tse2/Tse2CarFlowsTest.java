@@ -51,7 +51,7 @@ public class Tse2CarFlowsTest extends TestCase {
   public void testFail() {
     try {
       Tse2CarFlows.of(Quantity.of(1, "m^-1"), Quantity.of(2, "m*s^-2"));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

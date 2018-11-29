@@ -7,7 +7,7 @@ public class MultiConstraintAdapterTest extends TestCase {
   public void testFailNull() {
     try {
       MultiConstraintAdapter.of(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

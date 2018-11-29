@@ -59,7 +59,7 @@ public class SignedCurvature2DTest extends TestCase {
     Tensor c = Tensors.vector(1, 3, 2);
     try {
       SignedCurvature2D.of(a, b, c);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

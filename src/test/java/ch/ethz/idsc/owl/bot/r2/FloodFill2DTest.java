@@ -58,7 +58,7 @@ public class FloodFill2DTest extends TestCase {
     int ttl = -1;
     try {
       FloodFill2D.of(tensor, ttl);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

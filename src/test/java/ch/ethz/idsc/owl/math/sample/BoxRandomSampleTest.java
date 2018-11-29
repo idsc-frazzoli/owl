@@ -33,7 +33,7 @@ public class BoxRandomSampleTest extends TestCase {
   public void testFail() {
     try {
       new BoxRandomSample(Tensors.vector(1, 2), Tensors.vector(1, 2, 3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

@@ -57,7 +57,7 @@ public class HyperplaneRegionTest extends TestCase {
     ImplicitFunctionRegion ifr = HyperplaneRegion.normalize(Tensors.vector(2, 0), RealScalar.of(-10));
     try {
       ifr.signedDistance(Array.zeros(3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
