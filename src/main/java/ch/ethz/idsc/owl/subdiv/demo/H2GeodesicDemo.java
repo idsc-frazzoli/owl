@@ -1,4 +1,4 @@
-// code by jph
+// code by jph and ob
 package ch.ethz.idsc.owl.subdiv.demo;
 
 import java.awt.Color;
@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 enum H2GeodesicDemo {
   ;
@@ -28,15 +29,17 @@ enum H2GeodesicDemo {
     timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
       @Override
       public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-        Tensor q = geometricLayer.getMouseSe2State();
-        graphics.setColor(new Color(128, 128, 128, 128));
-        for (Tensor scalar : Subdivide.of(0, 1, 40)) {
-          Tensor split = H2Geodesic.INSTANCE.split(Tensors.vector(0, 1), q.extract(0, 2), scalar.Get());
-          // split = RnGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
-          geometricLayer.pushMatrix(Se2Utils.toSE2Translation(split));
-          Path2D path2d = geometricLayer.toPath2D(CIRCLE);
-          graphics.fill(path2d);
-          geometricLayer.popMatrix();
+        Tensor q = geometricLayer.getMouseSe2State().extract(0, 2);
+        if (Sign.isPositive(q.Get(1))) {
+          graphics.setColor(new Color(128, 128, 128, 128));
+          for (Tensor scalar : Subdivide.of(0, 1, 40)) {
+            Tensor split = H2Geodesic.INSTANCE.split(Tensors.vector(0, 1), q, scalar.Get());
+            // split = RnGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
+            geometricLayer.pushMatrix(Se2Utils.toSE2Translation(split));
+            Path2D path2d = geometricLayer.toPath2D(CIRCLE);
+            graphics.fill(path2d);
+            geometricLayer.popMatrix();
+          }
         }
       }
     });
