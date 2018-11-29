@@ -7,7 +7,7 @@ public class TimeInvariantRegionTest extends TestCase {
   public void testFailNull() {
     try {
       new TimeInvariantRegion(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

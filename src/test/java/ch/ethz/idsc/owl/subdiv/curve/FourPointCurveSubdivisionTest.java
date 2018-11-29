@@ -75,13 +75,13 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     CurveSubdivision subdivision = new FourPointCurveSubdivision(Se2Geodesic.INSTANCE);
     try {
       subdivision.string(RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       subdivision.cyclic(RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

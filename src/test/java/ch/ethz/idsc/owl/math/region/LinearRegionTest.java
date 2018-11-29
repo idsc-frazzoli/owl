@@ -41,13 +41,13 @@ public class LinearRegionTest extends TestCase {
   public void testFail() {
     try {
       new LinearRegion(null, RealScalar.of(2));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       new LinearRegion(RealScalar.of(2), RealScalar.of(-3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

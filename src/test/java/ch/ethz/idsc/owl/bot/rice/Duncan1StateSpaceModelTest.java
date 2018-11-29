@@ -53,7 +53,7 @@ public class Duncan1StateSpaceModelTest extends TestCase {
   public void testFail() {
     try {
       new Duncan1StateSpaceModel(Quantity.of(-1.0, "s^-1"));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

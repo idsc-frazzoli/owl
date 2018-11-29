@@ -43,8 +43,12 @@ public class So2RegionTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    ImplicitFunctionRegion ifr = new So2Region(RealScalar.ONE, RealScalar.ONE);
-    Serialization.copy(ifr);
+    So2Region so2Region = new So2Region(RealScalar.ONE, RealScalar.of(0.2));
+    assertEquals(so2Region.center(), RealScalar.ONE);
+    assertEquals(so2Region.radius(), RealScalar.of(0.2));
+    So2Region copy = Serialization.copy(so2Region);
+    assertEquals(copy.center(), RealScalar.ONE);
+    assertEquals(copy.radius(), RealScalar.of(0.2));
   }
 
   public void testUnits() {
@@ -57,7 +61,7 @@ public class So2RegionTest extends TestCase {
   public void testFail() {
     try {
       new So2Region(RealScalar.of(2), RealScalar.of(-1));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

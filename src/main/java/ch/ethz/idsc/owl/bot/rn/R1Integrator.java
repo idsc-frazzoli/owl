@@ -8,7 +8,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** DSolve[{v'[h] == a, p'[h] == v[h], v[0] == v0, p[0] == p0}, {p[h], v[h]}, h]
+/** Exact integrator for polynomial equations of the model
+ * state = {position, velocity}
+ * control = {acceleration}
+ * 
+ * The acceleration is assumed to be constant during integration step.
+ * 
+ * DSolve[{v'[h] == a, p'[h] == v[h], v[0] == v0, p[0] == p0}, {p[h], v[h]}, h]
  * results in
  * {p[h] -> (a h^2)/2 + p0 + h v0, v[h] -> a h + v0} */
 public enum R1Integrator implements Integrator {
@@ -16,9 +22,13 @@ public enum R1Integrator implements Integrator {
   // ---
   @Override
   public Tensor step(Flow flow, Tensor x, Scalar h) {
-    return direct(x, flow.getU().Get(), h);
+    return direct(x, flow.getU().Get(0), h);
   }
 
+  /** @param x vector of the form {position, velocity}
+   * @param a acceleration
+   * @param h step size
+   * @return vector of length 2 */
   public static Tensor direct(Tensor x, Scalar a, Scalar h) {
     Scalar p0 = x.Get(0);
     Scalar v0 = x.Get(1);

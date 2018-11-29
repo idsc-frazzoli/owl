@@ -12,7 +12,7 @@ public class Se2ComboRegionTest extends TestCase {
     Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 3));
     try {
       Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

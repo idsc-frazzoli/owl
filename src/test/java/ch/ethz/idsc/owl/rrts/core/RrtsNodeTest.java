@@ -29,13 +29,13 @@ public class RrtsNodeTest extends TestCase {
   public void testFail() {
     try {
       RrtsNode.createRoot(null, RealScalar.ZERO);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       RrtsNode.createRoot(Tensors.vector(1, 2, 3), null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

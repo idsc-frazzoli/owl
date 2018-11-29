@@ -12,17 +12,20 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/** produces bi-variate random samples uniformly draw from a circle with
- * given center and radius */
-public class CircleRandomSample implements RandomSampleInterface {
+/** produces bivariate random samples uniformly draw from a circle with
+ * given center and radius
+ * 
+ * implementation supports the use of Quantity */
+/* package */ class CircleRandomSample implements RandomSampleInterface {
   private static final Distribution THETA = UniformDistribution.of(-Math.PI, Math.PI);
   // ---
   private final Tensor center;
   private final Scalar radius;
 
   /** @param center vector of length 2
-   * @param radius non-negative */
-  public CircleRandomSample(Tensor center, Scalar radius) {
+   * @param radius non-negative
+   * @throws Exception if given center is not a vector */
+  CircleRandomSample(Tensor center, Scalar radius) {
     this.center = VectorQ.requireLength(center, 2);
     this.radius = Sign.requirePositiveOrZero(radius);
   }

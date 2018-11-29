@@ -47,7 +47,7 @@ public class Tse2ForwardMinTimeGoalManagerTest extends TestCase {
     Collection<Flow> controls = flowsInterface.getFlows(1);
     try {
       new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

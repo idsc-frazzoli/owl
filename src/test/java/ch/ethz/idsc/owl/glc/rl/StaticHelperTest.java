@@ -17,7 +17,7 @@ public class StaticHelperTest extends TestCase {
   public void testFailGetMinEmpty() {
     try {
       StaticHelper.getMin(Collections.emptyList(), 2);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

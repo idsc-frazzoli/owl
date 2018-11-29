@@ -22,6 +22,8 @@ public class EtaRasterTest extends TestCase {
     Tensor tensor = stateTimeRaster.convertToKey(new StateTime(Tensors.vector(100, 100), RealScalar.of(97)));
     assertEquals(tensor, Tensors.vector(200, 300, 97 * 4));
     assertTrue(ExactScalarQ.all(tensor));
+    EtaRaster etaRaster = (EtaRaster) stateTimeRaster;
+    assertEquals(etaRaster.eta(), Tensors.vector(2, 3, 4));
   }
 
   public void testExtract() {
@@ -35,7 +37,7 @@ public class EtaRasterTest extends TestCase {
     EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1), StateTime::joined);
     try {
       EtaRaster.timeDependent(Tensors.vector(1, 2), RealScalar.of(1.), StateTime::joined);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

@@ -13,36 +13,43 @@ import junit.framework.TestCase;
 
 public class NodesTest extends TestCase {
   public void testGetParent() {
-    HeuristicFunction hf = new HeuristicFunction() {
+    HeuristicFunction heuristicFunction = new HeuristicFunction() {
       @Override
       public Scalar minCostToGoal(Tensor x) {
         return RealScalar.ZERO;
       }
     };
-    GlcNode node1 = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2, 3), RealScalar.ZERO), hf);
-    GlcNode node2 = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2, 3), RealScalar.ZERO), hf);
+    GlcNode node1 = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2, 3), RealScalar.ZERO), heuristicFunction);
+    GlcNode node2 = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2, 3), RealScalar.ZERO), heuristicFunction);
     node1.insertEdgeTo(node2);
     assertEquals(Nodes.getParent(node2, 0), node2);
     assertEquals(Nodes.getParent(node2, 1), node1);
     assertEquals(Nodes.getParent(node2, 2), node1);
   }
 
+  public void testNotConnected() {
+    GlcNode root1 = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2), RealScalar.ZERO), x -> RealScalar.ZERO);
+    assertTrue(Nodes.areConnected(root1, root1));
+    GlcNode root2 = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2), RealScalar.ZERO), x -> RealScalar.ZERO);
+    assertFalse(Nodes.areConnected(root1, root2));
+  }
+
   public void testFail() {
     try {
       Nodes.rootFrom(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       Nodes.listFromRoot(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       Nodes.listToRoot(null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

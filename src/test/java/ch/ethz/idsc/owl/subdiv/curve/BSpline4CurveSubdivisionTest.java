@@ -89,13 +89,13 @@ public class BSpline4CurveSubdivisionTest extends TestCase {
     CurveSubdivision subdivision = BSpline4CurveSubdivision.of(Se2Geodesic.INSTANCE);
     try {
       subdivision.string(RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       subdivision.cyclic(RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

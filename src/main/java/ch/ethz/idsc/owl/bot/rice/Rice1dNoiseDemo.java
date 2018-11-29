@@ -41,7 +41,7 @@ public class Rice1dNoiseDemo implements DemoInterface {
     Tensor range = Tensors.vector(6, 1);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
     RandomSampleInterface sampler = new BoxRandomSample(range.negate(), range);
-    Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream());
+    Tensor points = RandomSample.of(sampler, 1000);
     vectorFieldRender.uv_pairs = //
         VectorFields.of(Rice2StateSpaceModel.of(mu), points, Array.zeros(1), RealScalar.of(0.2));
     owlyAnimationFrame.addBackground(vectorFieldRender);

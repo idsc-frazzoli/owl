@@ -37,7 +37,7 @@ public class FixedStateIntegratorTest extends TestCase {
   public void testFail1() {
     try {
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.of(-.1), 3);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -46,7 +46,7 @@ public class FixedStateIntegratorTest extends TestCase {
   public void testFail2() {
     try {
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.of(0), 3);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

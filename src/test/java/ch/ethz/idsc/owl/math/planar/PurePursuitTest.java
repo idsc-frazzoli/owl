@@ -24,7 +24,7 @@ public class PurePursuitTest extends TestCase {
     Tensor curve = Tensors.fromString("{{-0.4},{0.6},{1.4},{2.2}}");
     try {
       PurePursuit.fromTrajectory(curve, RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

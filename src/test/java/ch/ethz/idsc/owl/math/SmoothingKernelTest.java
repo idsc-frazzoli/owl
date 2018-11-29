@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class SmoothingKernelTest extends TestCase {
@@ -60,11 +59,14 @@ public class SmoothingKernelTest extends TestCase {
     }
   }
 
-  public void testAllNumeric() {
+  public void testContinuity() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      ScalarUnaryOperator scalarUnaryOperator = smoothingKernel.windowFunction();
-      assertFalse(ExactScalarQ.of(scalarUnaryOperator.apply(RealScalar.of(2.3))));
-      assertTrue(ExactScalarQ.of(scalarUnaryOperator.apply(RationalScalar.of(5, 2))));
+      Scalar scalar = smoothingKernel.windowFunction().apply(RationalScalar.HALF);
+      String string = smoothingKernel.name().toLowerCase() + "Window[1/2]=" + scalar;
+      string.length();
+      assertEquals(smoothingKernel.apply(0), Tensors.of(RealScalar.ONE));
+      Tensor vector = smoothingKernel.apply(1);
+      assertTrue(Scalars.lessThan(RealScalar.of(1e-3), vector.Get(0).abs()));
     }
   }
 
@@ -72,7 +74,7 @@ public class SmoothingKernelTest extends TestCase {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       try {
         smoothingKernel.apply(-1);
-        assertTrue(false);
+        fail();
       } catch (Exception exception) {
         // ---
       }
@@ -82,7 +84,7 @@ public class SmoothingKernelTest extends TestCase {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       try {
         smoothingKernel.windowFunction().apply(Quantity.of(1, "s"));
-        assertTrue(false);
+        fail();
       } catch (Exception exception) {
         // ---
       }

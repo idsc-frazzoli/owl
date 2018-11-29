@@ -18,6 +18,9 @@ import ch.ethz.idsc.tensor.red.Norm;
 public enum RnControls {
   ;
   public static Scalar maxSpeed(Collection<Flow> controls) {
-    return controls.stream().map(Flow::getU).map(Norm._2::ofVector).reduce(Max::of).get();
+    return controls.stream() //
+        .map(Flow::getU) //
+        .map(Norm._2::ofVector) //
+        .reduce(Max::of).get();
   }
 }

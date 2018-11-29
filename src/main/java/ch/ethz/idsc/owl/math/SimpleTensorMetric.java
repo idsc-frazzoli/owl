@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 public class SimpleTensorMetric implements TensorMetric, Serializable {
   private final TensorDifference tensorDifference;
 
+  /** @param tensorDifference that returns a vector */
   public SimpleTensorMetric(TensorDifference tensorDifference) {
     this.tensorDifference = tensorDifference;
   }

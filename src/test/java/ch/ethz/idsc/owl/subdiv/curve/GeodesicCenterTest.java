@@ -35,13 +35,13 @@ public class GeodesicCenterTest extends TestCase {
   public void testFail() {
     try {
       GeodesicCenter.of(RnGeodesic.INSTANCE, null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       GeodesicCenter.of(null, CONSTANT);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

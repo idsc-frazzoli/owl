@@ -45,14 +45,21 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 class CurveSubdivisionDemo {
   private static final boolean BSPLINE4 = false;
@@ -174,6 +181,10 @@ class CurveSubdivisionDemo {
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
     // ---
+    JToggleButton jToggleCrvt = new JToggleButton("crvt");
+    jToggleCrvt.setSelected(false);
+    timerFrame.jToolBar.add(jToggleCrvt);
+    // ---
     JToggleButton jToggleLine = new JToggleButton("line");
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
@@ -184,6 +195,7 @@ class CurveSubdivisionDemo {
     // ---
     JToggleButton jToggleCyclic = new JToggleButton("cyclic");
     timerFrame.jToolBar.add(jToggleCyclic);
+    // ---
     // ---
     JToggleButton jToggleButton = new JToggleButton("R2");
     jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
@@ -259,14 +271,13 @@ class CurveSubdivisionDemo {
               geometricLayer.popMatrix();
             }
           CurveSubdivision curveSubdivision = function.apply(Se2CoveringGeodesic.INSTANCE);
-          TensorUnaryOperator tuo = isCyclic //
+          TensorUnaryOperator subdivision = isCyclic //
               ? curveSubdivision::cyclic
               : curveSubdivision::string;
-          // TensorUnaryOperator tuo = new SplitScheme(curveSubdivision, angleSubdivision);
           Tensor se2ctrl = _control.copy();
           if (jToggleInterp.isSelected())
-            se2ctrl = new CurveSubdivisionInterpolationApproximation(tuo).fixed(se2ctrl, 20);
-          refined = Nest.of(tuo, se2ctrl, levels);
+            se2ctrl = new CurveSubdivisionInterpolationApproximation(subdivision).fixed(se2ctrl, 20);
+          refined = Nest.of(subdivision, se2ctrl, levels);
         }
         if (jToggleLine.isSelected()) {
           CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(Se2CoveringGeodesic.INSTANCE);
@@ -309,6 +320,41 @@ class CurveSubdivisionDemo {
           if (isCyclic)
             path2d.closePath();
           graphics.draw(path2d);
+        }
+        if (jToggleCrvt.isSelected()) {
+          graphics.setStroke(new BasicStroke(1.25f));
+          ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic().deriveWithAlpha(128 + 64);
+          Tensor matrix = geometricLayer.getMatrix();
+          geometricLayer.pushMatrix(Inverse.of(matrix));
+          geometricLayer.pushMatrix(Tensors.fromString("{{1,0,0},{0,-50,100},{0,0,1}}"));
+          Tensor points = Tensor.of(refined.stream().map(Extract2D::of));
+          {
+            graphics.setColor(colorDataIndexed.getColor(0));
+            Tensor curvature = StaticHelper.curvature(points);
+            Tensor domain = Range.of(0, curvature.length());
+            graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, curvature))));
+          }
+          Tensor diffs = Differences.of(refined.get(Tensor.ALL, 2));
+          {
+            graphics.setColor(colorDataIndexed.getColor(1));
+            Tensor domain = Range.of(0, diffs.length());
+            graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, diffs))));
+          }
+          Tensor arclen = Tensor.of(Differences.of(points).stream().map(Norm._2::ofVector));
+          {
+            graphics.setColor(colorDataIndexed.getColor(2));
+            Tensor domain = Range.of(0, arclen.length());
+            graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, arclen))));
+          }
+          {
+            graphics.setColor(colorDataIndexed.getColor(3));
+            Tensor div = diffs.pmul(arclen.map(InvertUnlessZero.FUNCTION));
+            Tensor domain = Range.of(0, div.length());
+            graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, div.multiply(RealScalar.of(-1))))));
+          }
+          geometricLayer.popMatrix();
+          geometricLayer.popMatrix();
+          graphics.setStroke(new BasicStroke(1f));
         }
         if (!isR2) {
           if (levels < 5) {

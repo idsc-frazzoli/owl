@@ -28,7 +28,7 @@ public class FreeBoundedIntervalRegionTest extends TestCase {
   public void testFail() {
     try {
       new FreeBoundedIntervalRegion(0, RealScalar.of(10), RealScalar.of(10));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

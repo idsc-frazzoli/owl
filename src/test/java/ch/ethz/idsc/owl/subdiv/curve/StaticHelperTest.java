@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import ch.ethz.idsc.owl.math.BinomialWeights;
 import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -41,7 +40,7 @@ public class StaticHelperTest extends TestCase {
   public void testFail() {
     try {
       StaticHelper.splits(Tensors.vector(1, 2));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -50,7 +49,7 @@ public class StaticHelperTest extends TestCase {
   public void testNonSymmetric() {
     try {
       StaticHelper.splits(Tensors.vector(1, 2, 2));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

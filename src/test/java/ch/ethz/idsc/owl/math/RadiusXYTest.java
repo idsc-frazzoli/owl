@@ -13,7 +13,7 @@ public class RadiusXYTest extends TestCase {
   public void testFail() {
     try {
       RadiusXY.requireSame(Tensors.vector(1, 2));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

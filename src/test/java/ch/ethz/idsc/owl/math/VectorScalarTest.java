@@ -53,7 +53,7 @@ public class VectorScalarTest extends TestCase {
     Scalar b = VectorScalar.of(0, 3, 6);
     try {
       a.multiply(b);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -98,13 +98,13 @@ public class VectorScalarTest extends TestCase {
   public void testFail() {
     try {
       VectorScalar.of(Tensors.empty()).number();
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       VectorScalar.of(Tensors.empty().add(RealScalar.ONE));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -114,7 +114,7 @@ public class VectorScalarTest extends TestCase {
     Scalar a = VectorScalar.of(Tensors.vector(1, -1, 2));
     try {
       VectorScalar.of(Tensors.of(RealScalar.ONE, a));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -123,7 +123,7 @@ public class VectorScalarTest extends TestCase {
   public void testFailScalar() {
     try {
       VectorScalar.of(RealScalar.ONE);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

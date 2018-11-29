@@ -56,8 +56,12 @@ public enum Nodes {
     return (T) parent;
   }
 
+  /** @param node1
+   * @param node2
+   * @return */
   public static <T extends Node> boolean areConnected(T node1, T node2) {
-    return (Nodes.listToRoot(node1).contains(node2) || Nodes.listToRoot(node2).contains(node1));
+    return Nodes.listToRoot(node1).contains(node2) //
+        || Nodes.listToRoot(node2).contains(node1);
   }
 
   @SuppressWarnings("unchecked")

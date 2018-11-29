@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.curve;
 
-import ch.ethz.idsc.owl.math.BinomialWeights;
 import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2Geodesic;
@@ -93,7 +92,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   public void testFail() {
     try {
       GeodesicCenterFilter.of(null, 1);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

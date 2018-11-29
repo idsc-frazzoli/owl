@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.sca.Chop;
 
@@ -30,13 +31,23 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * @see EdgeRender */
 public class TreeRender implements RenderInterface {
   private static final int NODE_WIDTH = 2;
-  private static final int NODE_BOUND = 2500;
   private static final Color CONVEXHULL = new Color(192, 192, 0, 128);
   // ---
   private Collection<? extends StateCostNode> collection;
   private Tensor polygon;
+  // ---
+  private int xIdx = 0;
+  private int yIdx = 1;
+  private int nodeBound = 2500;
 
   public TreeRender(Collection<? extends StateCostNode> collection) {
+    setCollection(collection);
+  }
+
+  public TreeRender(Collection<? extends StateCostNode> collection, int xIdx, int yIdx, int nodeBound) {
+    this.xIdx = xIdx;
+    this.yIdx = yIdx;
+    this.nodeBound = nodeBound;
     setCollection(collection);
   }
 
@@ -63,16 +74,16 @@ public class TreeRender implements RenderInterface {
     }
     double inverse = (treeColor.nodeColor.length() - 1) / (max - min);
     // System.out.println("count=" + count + ", inverse=" + inverse);
-    if (count <= NODE_BOUND) // don't draw tree beyond certain node count
+    if (count <= nodeBound || true) // don't draw tree beyond certain node count
       for (StateCostNode node : _collection) {
         double value = node.costFromRoot().number().doubleValue();
         final double interp = (value - min) * inverse;
         graphics.setColor(treeColor.nodeColor.getColor((int) interp));
-        final Point2D p1 = geometricLayer.toPoint2D(node.state());
+        final Point2D p1 = geometricLayer.toPoint2D(Tensors.of(node.state().Get(xIdx), node.state().Get(yIdx)));
         graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));
         StateCostNode parent = node.parent();
         if (Objects.nonNull(parent)) {
-          Point2D p2 = geometricLayer.toPoint2D(parent.state());
+          Point2D p2 = geometricLayer.toPoint2D(Tensors.of(parent.state().Get(xIdx), parent.state().Get(yIdx)));
           graphics.setColor(treeColor.edgeColor.getColor((int) interp));
           Shape shape = new Line2D.Double(p1.getX(), p1.getY(), p2.getX(), p2.getY());
           graphics.draw(shape);
@@ -85,7 +96,7 @@ public class TreeRender implements RenderInterface {
     polygon = Objects.nonNull(collection) //
         ? ConvexHull.of(collection.stream() //
             .map(StateCostNode::state) //
-            .map(tensor -> tensor.extract(0, 2)), Chop._10) //
+            .map(tensor -> Tensors.of(tensor.Get(xIdx), tensor.Get(yIdx))), Chop._10) //
         : null;
   }
 }

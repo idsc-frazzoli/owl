@@ -18,7 +18,7 @@ public class MinMaxTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{1,9,3},{4,5}}");
     try {
       MinMax.of(tensor);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -27,7 +27,7 @@ public class MinMaxTest extends TestCase {
   public void testFailScalar() {
     try {
       MinMax.of(RealScalar.ZERO);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

@@ -136,7 +136,7 @@ public class NdTreeMapTest extends TestCase {
   public void testFail0() {
     try {
       new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9, 3), 2, 2);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -148,7 +148,7 @@ public class NdTreeMapTest extends TestCase {
     Tensor location = Array.zeros(3);
     try {
       ndTreeMap.add(location, "string");
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -157,7 +157,7 @@ public class NdTreeMapTest extends TestCase {
   public void testFail2() {
     try {
       new NdTreeMap<>(Tensors.vector(-2, 10), Tensors.vector(8, 9), 10, 10);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

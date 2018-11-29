@@ -72,7 +72,7 @@ public class LinearVelocity2MinTimeTest extends TestCase {
     LinearVelocity2MinTime linearVelocity2MinTime = new LinearVelocity2MinTime(v_max, a_max);
     try {
       linearVelocity2MinTime.timeDistToV_max(Quantity.of(11, "m*s^-1"));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

@@ -14,7 +14,7 @@ public class ListsTest extends TestCase {
   public void testFail() {
     try {
       Lists.getLast(new LinkedList<>());
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

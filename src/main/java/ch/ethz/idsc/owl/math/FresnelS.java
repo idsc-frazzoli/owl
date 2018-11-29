@@ -37,3 +37,4 @@ public enum FresnelS implements ScalarUnaryOperator {
     return sum;
   }
 }
+// TODO JPH refactor to share code with FresnelC

@@ -55,6 +55,8 @@ public class ConeRegionTest extends TestCase {
     ConeRegion coneRegion = new ConeRegion(Tensors.vector(0.1, 0.2, 0.3), RealScalar.of(Math.PI * 0.9));
     for (Tensor tensor : RandomVariate.of(NormalDistribution.standard(), 100, 2))
       assertEquals(coneRegion.isMember(tensor), Scalars.isZero(coneRegion.distance(tensor)));
+    assertEquals(coneRegion.apex(), Tensors.vector(0.1, 0.2, 0.3));
+    assertEquals(coneRegion.semi(), RealScalar.of(Math.PI * 0.9));
   }
 
   public void testCompleteRandom() {
@@ -63,6 +65,8 @@ public class ConeRegionTest extends TestCase {
       assertTrue(coneRegion.isMember(tensor));
       assertEquals(coneRegion.isMember(tensor), Scalars.isZero(coneRegion.distance(tensor)));
     }
+    assertEquals(coneRegion.apex(), Tensors.vector(0.1, -0.1, 0.3));
+    assertEquals(coneRegion.semi(), RealScalar.of(Math.PI * 1.1));
   }
 
   public void testNegativeBug() {
@@ -88,7 +92,7 @@ public class ConeRegionTest extends TestCase {
   public void testNegativeFail() {
     try {
       new ConeRegion(Tensors.vector(5, 0, Math.PI / 2), RealScalar.of(-Math.PI));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

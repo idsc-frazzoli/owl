@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.group;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-/** element of a Lie-group */
+/** interface of an element of a Lie-group */
 public interface LieGroupElement {
   /** @return inverse of this element */
   LieGroupElement inverse();

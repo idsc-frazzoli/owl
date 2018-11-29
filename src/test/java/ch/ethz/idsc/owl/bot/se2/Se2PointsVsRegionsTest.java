@@ -20,7 +20,7 @@ public class Se2PointsVsRegionsTest extends TestCase {
   public void testFail() {
     try {
       Se2PointsVsRegions.line(Tensors.vector(-2, 1, 0, 5), null);
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

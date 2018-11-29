@@ -39,7 +39,7 @@ public class Se2WrapTest extends TestCase {
   public void testFail() {
     try {
       Se2Wrap.INSTANCE.represent(Tensors.vector(1, 2));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }
@@ -48,7 +48,7 @@ public class Se2WrapTest extends TestCase {
   public void testFailMatrix() {
     try {
       Se2Wrap.INSTANCE.represent(IdentityMatrix.of(3));
-      assertTrue(false);
+      fail();
     } catch (Exception exception) {
       // ---
     }

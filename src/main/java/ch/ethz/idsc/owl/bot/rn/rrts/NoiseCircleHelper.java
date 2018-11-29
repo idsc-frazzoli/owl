@@ -7,8 +7,8 @@ import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
-import ch.ethz.idsc.owl.math.sample.CircleRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
@@ -48,8 +48,8 @@ class NoiseCircleHelper {
     // ---
     Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, obstacleQuery, LengthCostFunction.IDENTITY);
     root = rrts.insertAsNode(orig, 5).get();
-    RandomSampleInterface spaceSampler = new CircleRandomSample(center, radius);
-    RandomSampleInterface goalSampler = new CircleRandomSample(goal, RealScalar.of(0.5));
+    RandomSampleInterface spaceSampler = SphereRandomSample.of(center, radius);
+    RandomSampleInterface goalSampler = SphereRandomSample.of(goal, RealScalar.of(0.5));
     rrtsPlanner = new RrtsPlanner(rrts, spaceSampler, goalSampler);
   }
 
