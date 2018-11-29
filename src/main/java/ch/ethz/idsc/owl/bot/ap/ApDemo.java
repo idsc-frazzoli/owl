@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     // ---
     standardTrajectoryPlanner.insertRoot(new StateTime(INITIAL, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(standardTrajectoryPlanner);
-    glcExpand.findAny(5000);
+    glcExpand.findAny(15000);
     Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
     // ---
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());

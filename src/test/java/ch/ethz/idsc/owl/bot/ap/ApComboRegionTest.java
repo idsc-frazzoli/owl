@@ -12,8 +12,10 @@ import junit.framework.TestCase;
 
 public class ApComboRegionTest extends TestCase {
   public void testSimple() {
-    ApComboRegion apComboRegion = new ApComboRegion(new LinearRegion(Quantity.of(5, "m"), Quantity.of(1, "m")),
-        new LinearRegion(Quantity.of(50, "m*s^-1"), Quantity.of(10, "m*s^-1")), new So2Region(RealScalar.of(0.1), RealScalar.of(0.05)));
+    ApComboRegion apComboRegion = new ApComboRegion( //
+        new LinearRegion(Quantity.of(5, "m"), Quantity.of(1, "m")), //
+        new LinearRegion(Quantity.of(50, "m*s^-1"), Quantity.of(10, "m*s^-1")), //
+        new So2Region(RealScalar.of(0.1), RealScalar.of(0.05)));
     assertTrue(apComboRegion.isMember(Tensors.fromString("{1000[m],5[m],45[m*s^-1],0.05}")));
   }
 

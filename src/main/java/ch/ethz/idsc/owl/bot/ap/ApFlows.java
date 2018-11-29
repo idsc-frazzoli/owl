@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class ApFlows implements FlowsInterface, Serializable {
   /** @param aoa_max with unit [rad]
-   * @param thrusts vector with unit [N],
+   * @param thrusts vector with unit [N]
    * @return new ApFlows instance */
   public static FlowsInterface of(Scalar aoa_max, Tensor thrusts) {
     return new ApFlows(aoa_max, thrusts);
@@ -34,8 +34,6 @@ import ch.ethz.idsc.tensor.sca.N;
 
   @Override // from FlowsInterface
   public Collection<Flow> getFlows(int resolution) {
-    if (resolution % 2 == 1)
-      ++resolution;
     Collection<Flow> collection = new ArrayList<>();
     for (Tensor thrust : thrusts)
       for (Tensor aoa : Subdivide.of(aoa_max.zero(), aoa_max, resolution))
