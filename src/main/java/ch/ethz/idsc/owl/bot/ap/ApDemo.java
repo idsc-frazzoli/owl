@@ -21,12 +21,13 @@ import ch.ethz.idsc.tensor.qty.Degree;
 /** simple animation of a landing airplane */
 /* package */ enum ApDemo {
   ;
+  final static Scalar INITIAL_X = RealScalar.of(0);
+  final static Scalar INITIAL_Z = RealScalar.of(80);
+  final static Scalar INITIAL_VEL = RealScalar.of(60);
+  final static Scalar INITIAL_GAMMA = Degree.of(-1);
+  final static Tensor INITIAL = Tensors.of(INITIAL_X, INITIAL_Z, INITIAL_VEL, INITIAL_GAMMA);
+
   public static void main(String[] args) throws Exception {
-    final Scalar INITIAL_X = RealScalar.of(0);
-    final Scalar INITIAL_Z = RealScalar.of(80);
-    final Scalar INITIAL_VEL = RealScalar.of(60);
-    final Scalar INITIAL_GAMMA = Degree.of(-1);
-    final Tensor INITIAL = Tensors.of(INITIAL_X, INITIAL_Z, INITIAL_VEL, INITIAL_GAMMA);
     // StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
     StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
     // ---
