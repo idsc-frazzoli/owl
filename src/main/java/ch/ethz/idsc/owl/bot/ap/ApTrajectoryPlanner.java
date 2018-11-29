@@ -1,13 +1,10 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
@@ -18,7 +15,6 @@ import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
-import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -26,19 +22,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
-import ch.ethz.idsc.tensor.sca.Sign;
-
-class Ground implements PlannerConstraint, Serializable {
-  @Override
-  public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    return Sign.isPositiveOrZero(glcNode.state().Get(1));
-  }
-}
 
 /* package */ class ApTrajectoryPlanner {
   /* Setting up parameters for the ApComboRegion
    * Note: GOAL and RADIUS_VECTOR are 3D, since x is omitted in ApComboRegion */
-  final static Tensor GOAL = Tensors.vector(5, 40, 0.1); // goal = {zCenter,vCenter, gammaCenter}
+  final static Tensor GOAL = Tensors.vector(5, 60, 0); // goal = {zCenter,vCenter, gammaCenter}
   final static Tensor RADIUS_VECTOR = Tensors.of(RealScalar.of(5), RealScalar.of(200), Degree.of(50)); // radius_vector = {zRadius,vRadius, GammaRadius}
   /* Creation of control flows */
   final static Scalar MAX_AOA = ApStateSpaceModel.MAX_AOA;

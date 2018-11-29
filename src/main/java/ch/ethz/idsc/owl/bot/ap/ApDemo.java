@@ -8,7 +8,6 @@ import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
-import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
@@ -28,7 +27,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     final Scalar INITIAL_VEL = RealScalar.of(60);
     final Scalar INITIAL_GAMMA = Degree.of(-1);
     final Tensor INITIAL = Tensors.of(INITIAL_X, INITIAL_Z, INITIAL_VEL, INITIAL_GAMMA);
-    StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
+    // StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
     StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();
@@ -45,7 +44,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     // ---
     standardTrajectoryPlanner.insertRoot(new StateTime(INITIAL, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(standardTrajectoryPlanner);
-    glcExpand.findAny(3000);
+    glcExpand.findAny(5000);
     Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
     // ---
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());
