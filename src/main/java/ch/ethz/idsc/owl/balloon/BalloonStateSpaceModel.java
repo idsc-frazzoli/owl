@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 
-/** state space model taken from ??? Chapter 2.7.2 by ???
+/** state space model taken from ? Chapter 2.7.2 by ?
  * 
  * @param x = {height [m], vertival velocity [m * s^-1], incremental air temperature (theta) [K]}
  * @param u = proportional of heat delivered to air mass by the burner [K * s^-1]
