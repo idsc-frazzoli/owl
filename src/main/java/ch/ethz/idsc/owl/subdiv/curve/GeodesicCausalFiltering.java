@@ -67,9 +67,9 @@ class GeodesicCausalFiltering {
       // Use 2-norm to add up liedifferences between our reference and our updated signal
       Tensor errors = Tensors.empty();
       for (int i = 0; i < measurements.length(); ++i) {
-        Tensor difference = LIE_DIFFERENCES.apply(Tensors.of(reference.get(i), predictions.get(i)));
-        // difference is of the form {{dx,dy,da}}
-        Scalar error = Norm._2.ofVector(difference.get(0)); // get(0) extracts to form {dx,dy,da}
+        Tensor difference = LIE_DIFFERENCES.pair(reference.get(i), predictions.get(i));
+        // difference is of the form {dx,dy,da}
+        Scalar error = Norm._2.ofVector(difference);
         errors.append(error);
       }
       // array of all errors, however strangely for various window-widths always alpha = 1 yields minimum error... => maybe sth wrong with indices of prediction
