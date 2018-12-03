@@ -1,6 +1,14 @@
 // code by ob
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
+
+import ch.ethz.idsc.owl.gui.RenderInterface;
+import ch.ethz.idsc.owl.gui.ren.GridRender;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.GeodesicInterface;
 import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.math.group.LieDifferences;
@@ -8,21 +16,23 @@ import ch.ethz.idsc.owl.math.group.LieGroupGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
 import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.owl.math.group.Se2Group;
+import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.math.planar.H2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 class GeodesicCausalFiltering {
-  private static final LieGroupGeodesic LIE_GROUP_GEODESIC = //
-      new LieGroupGeodesic(Se2Group.INSTANCE::element, Se2CoveringExponential.INSTANCE);
   private static final LieDifferences LIE_DIFFERENCES = //
       new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
   private static final Scalar TWO = RealScalar.of(2);
@@ -33,9 +43,11 @@ class GeodesicCausalFiltering {
   private final Tensor reference;
   /** applied geodesic prediction */
   private Tensor update; //
-  // private
+  /** window size of Filter*/
   private int width = 5;
-
+  /** log of alphas and corresponding errors*/
+  public Tensor log = Tensors.empty();
+  
   GeodesicCausalFiltering(Tensor measurements) {
 
     this.measurements = measurements;
@@ -60,15 +72,13 @@ class GeodesicCausalFiltering {
         update.append(geodesicCausal1Filter.apply(measurements.get(i)));      
         errors.append( Norm._2.ofVector(LIE_DIFFERENCES.pair(reference.get(i), update.get(i))));
       }
-      System.out.println(Tensors.of(alpha, Total.of(errors)).map(Round._5));
+      log.append(Tensors.of(alpha, Total.of(errors)).map(Round._5));
     }
   }
-  
-  // 6. loop over many window sizes & plot
-  // 7. opt. GUI
 
   public static void main(String[] args) {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + "0w/20180702T133612_1" + ".csv").stream().map(row -> row.extract(1, 4)));
     GeodesicCausalFiltering GeodesicCausalFiltering = new GeodesicCausalFiltering(control);
+    System.out.println(GeodesicCausalFiltering.log);
   }
 }
