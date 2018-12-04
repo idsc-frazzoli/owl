@@ -109,7 +109,7 @@ import ch.ethz.idsc.tensor.red.Norm;
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
     }
     // ---
-    if (Objects.nonNull(trajectoryWrap)) { 
+    if (Objects.nonNull(trajectoryWrap)) {
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
       if (trajectoryWrap.isDefined(now)) {

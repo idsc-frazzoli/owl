@@ -27,10 +27,10 @@ public class ApEntityTest extends TestCase {
   }
 
   public void testCreateTrajectoryPlanner() {
-    //TrajectoryPlanner TrajectoryPlanner = apEntity.createTrajectoryPlanner(new ApPlannerConstraint(), ApEntity.GOAL);
-    //assertTrue(standardTrajectoryPlanner instanceof StandardTrajectoryPlanner);
+    // TrajectoryPlanner TrajectoryPlanner = apEntity.createTrajectoryPlanner(new ApPlannerConstraint(), ApEntity.GOAL);
+    // assertTrue(standardTrajectoryPlanner instanceof StandardTrajectoryPlanner);
   }
-  
+
   public void testDistance() {
     Tensor x = Tensors.vector(1, 1, 1, 1);
     Tensor y = Tensors.vector(3, 3, 3, 3);

@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 
 public class ApDemoTest extends TestCase {
   final static Tensor INITIAL_TENSOR = ApDemo.INITIAL;
+
   public void testApDemo() {
     StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
     standardTrajectoryPlanner.insertRoot(new StateTime(INITIAL_TENSOR, RealScalar.ZERO));
@@ -17,5 +18,4 @@ public class ApDemoTest extends TestCase {
     glcExpand.findAny(15000);
     assertTrue(standardTrajectoryPlanner.getBest().isPresent());
   }
-  
 }
