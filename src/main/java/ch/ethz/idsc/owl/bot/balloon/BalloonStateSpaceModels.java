@@ -1,5 +1,5 @@
 // code by astoll and jph
-package ch.ethz.idsc.owl.balloon;
+package ch.ethz.idsc.owl.bot.balloon;
 
 import ch.ethz.idsc.tensor.qty.Quantity;
 

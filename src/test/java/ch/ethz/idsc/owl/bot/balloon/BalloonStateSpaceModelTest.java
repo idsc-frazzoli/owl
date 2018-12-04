@@ -1,5 +1,5 @@
 // code by astoll
-package ch.ethz.idsc.owl.balloon;
+package ch.ethz.idsc.owl.bot.balloon;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
