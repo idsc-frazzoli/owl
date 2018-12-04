@@ -47,7 +47,7 @@ class RLTrajectoryPlannerR2Demo implements DemoInterface {
   @Override
   public BaseFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    Tensor slacks = Tensors.vector(0, 0);
+    Tensor slacks = Tensors.vector(4, 0);
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
     // ---
@@ -101,7 +101,7 @@ class RLTrajectoryPlannerR2Demo implements DemoInterface {
     }
     return owlyAnimationFrame;
   }
-  public static void main(String[] args) {
+  public static void main(String[] args){
     new RLTrajectoryPlannerR2Demo().start().jFrame.setVisible(true);
   }
 }
