@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.swing.JSlider;
 import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -24,8 +27,8 @@ import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.owl.math.group.Se2Group;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenter;
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicCenterFilter;
+import ch.ethz.idsc.owl.subdiv.curve.GeodesicCausal1Filter;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -38,14 +41,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
 
-class GeodesicCenterFilterDemo {
+class GeodesicCausalFilterDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.12);
   // ---
   private final TimerFrame timerFrame = new TimerFrame();
   private Tensor control = Tensors.of(Array.zeros(3));
+  private Scalar alpha = RationalScalar.HALF;
 
-  GeodesicCenterFilterDemo() {
+  GeodesicCausalFilterDemo() {
     timerFrame.jFrame.setTitle(getClass().getSimpleName());
     SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
     SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
@@ -95,26 +99,32 @@ class GeodesicCenterFilterDemo {
     jToggleWait.setSelected(false);
     timerFrame.jToolBar.add(jToggleWait);
     // ---
+    {
+      JSlider jSlider = new JSlider(1, 999, 500);
+      jSlider.setPreferredSize(new Dimension(500, 28));
+      jSlider.addChangeListener(new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent changeEvent) {
+          alpha = RationalScalar.of(jSlider.getValue(), 1000);
+        }
+      });
+      timerFrame.jToolBar.add(jSlider);
+    }
     timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
       @Override
       public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
         if (jToggleWait.isSelected())
           return;
-        // graphics.drawImage(image, 100, 100, null);
         GraphicsUtil.setQualityHigh(graphics);
-        // boolean isR2 = jToggleButton.isSelected();
-        // Tensor _control = control.copy();
         final int radius = spinnerRadius.getValue();
-        final Tensor refined;
-        // final Tensor curve;
         if (jToggleCtrl.isSelected()) {
           final Color color = new Color(255, 128, 128, 255);
           if (jToggleLine.isSelected()) {
             graphics.setColor(color);
             graphics.draw(geometricLayer.toPath2D(control));
           }
-          for (Tensor point : control) {
-            geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
+          for (Tensor xya : control) {
+            geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
             Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
             path2d.closePath();
             graphics.setColor(new Color(255, 128, 128, 64));
@@ -124,9 +134,11 @@ class GeodesicCenterFilterDemo {
             geometricLayer.popMatrix();
           }
         }
-        TensorUnaryOperator geodesicCenterFilter = //
-            GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
-        refined = geodesicCenterFilter.apply(control);
+        // TensorUnaryOperator geodesicCenterFilter = //
+        // GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
+        TensorUnaryOperator geodesicCenterFilter = new GeodesicCausal1Filter(Se2Geodesic.INSTANCE, alpha);
+        final Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
+        // geodesicCenterFilter.apply(control);
         if (jToggleDiff.isSelected()) {
           final int baseline_y = 200;
           {
@@ -198,9 +210,10 @@ class GeodesicCenterFilterDemo {
   }
 
   public static void main(String[] args) {
-    GeodesicCenterFilterDemo geodesicCenterFilterDemo = new GeodesicCenterFilterDemo();
+    GeodesicCausalFilterDemo geodesicCenterFilterDemo = new GeodesicCausalFilterDemo();
     geodesicCenterFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     geodesicCenterFilterDemo.timerFrame.jFrame.setVisible(true);
-    geodesicCenterFilterDemo.timerFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
+    geodesicCenterFilterDemo.timerFrame.geometricComponent.setModel2Pixel( //
+        Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
   }
 }
