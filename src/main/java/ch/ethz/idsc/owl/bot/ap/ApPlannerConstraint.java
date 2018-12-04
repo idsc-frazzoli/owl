@@ -41,8 +41,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
     if (Sign.isNegative(z))
       return false;
     Scalar v = state.Get(2);
-    // boolean vConstraint = Scalars.lessEquals(v, ApStateSpaceModel.MAX_SPEED)//
-    // && Scalars.lessEquals(ApStateSpaceModel.STALL_SPEED, v);
     if (CLIP_VELOCITY.isOutside(v))
       return false;
     Scalar gamma = state.Get(3); // flight path angle
@@ -50,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
       return false;
     if (Scalars.lessEquals(z, ApStateSpaceModel.ALTITUDE_FINAL_PHASE)) {
       Scalar v_z = v.multiply(Sin.of(gamma));
-      return Scalars.lessEquals(v_z, ApStateSpaceModel.Z_0);
+      return Scalars.lessEquals(ApStateSpaceModel.Z_DOT_0_MAX, v_z);
     }
     return true;//
   }

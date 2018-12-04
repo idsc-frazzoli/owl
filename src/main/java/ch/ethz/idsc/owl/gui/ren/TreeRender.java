@@ -16,9 +16,9 @@ import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.VectorScalar;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.sca.Chop;
 
@@ -36,18 +36,9 @@ public class TreeRender implements RenderInterface {
   private Collection<? extends StateCostNode> collection;
   private Tensor polygon;
   // ---
-  private int xIdx = 0;
-  private int yIdx = 1;
   private int nodeBound = 2500;
 
   public TreeRender(Collection<? extends StateCostNode> collection) {
-    setCollection(collection);
-  }
-
-  public TreeRender(Collection<? extends StateCostNode> collection, int xIdx, int yIdx, int nodeBound) {
-    this.xIdx = xIdx;
-    this.yIdx = yIdx;
-    this.nodeBound = nodeBound;
     setCollection(collection);
   }
 
@@ -79,11 +70,11 @@ public class TreeRender implements RenderInterface {
         double value = node.costFromRoot().number().doubleValue();
         final double interp = (value - min) * inverse;
         graphics.setColor(treeColor.nodeColor.getColor((int) interp));
-        final Point2D p1 = geometricLayer.toPoint2D(Tensors.of(node.state().Get(xIdx), node.state().Get(yIdx)));
+        final Point2D p1 = geometricLayer.toPoint2D(node.state());
         graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));
         StateCostNode parent = node.parent();
         if (Objects.nonNull(parent)) {
-          Point2D p2 = geometricLayer.toPoint2D(Tensors.of(parent.state().Get(xIdx), parent.state().Get(yIdx)));
+          Point2D p2 = geometricLayer.toPoint2D(parent.state());
           graphics.setColor(treeColor.edgeColor.getColor((int) interp));
           Shape shape = new Line2D.Double(p1.getX(), p1.getY(), p2.getX(), p2.getY());
           graphics.draw(shape);
@@ -96,7 +87,7 @@ public class TreeRender implements RenderInterface {
     polygon = Objects.nonNull(collection) //
         ? ConvexHull.of(collection.stream() //
             .map(StateCostNode::state) //
-            .map(tensor -> Tensors.of(tensor.Get(xIdx), tensor.Get(yIdx))), Chop._10) //
+            .map(Extract2D::of), Chop._10) //
         : null;
   }
 }

@@ -19,7 +19,7 @@ public class ApComboRegionTest extends TestCase {
     assertTrue(apComboRegion.isMember(Tensors.fromString("{1000[m],5[m],45[m*s^-1],0.05}")));
   }
 
-  public void testD_z_Test() {
+  public void testD_z() {
     Tensor goalRegionTest = Tensors.of(Quantity.of(5, "m"), Quantity.of(50, "m*s^-1"), RealScalar.of(0.1));
     Tensor radiusVectorTest = Tensors.of(Quantity.of(1, "m"), Quantity.of(10, "m*s^-1"), RealScalar.of(0.05));
     ApComboRegion apComboRegionConstructed = ApComboRegion.createApRegion(goalRegionTest, radiusVectorTest);
@@ -27,7 +27,7 @@ public class ApComboRegionTest extends TestCase {
     assertEquals(distanceExpected, apComboRegionConstructed.d_z(Tensors.fromString("{1000[m],10[m],45[m*s^-1],0.05}")));
   }
 
-  public void testRequireNonNullTest() {
+  public void testRequireNonNull() {
     try {
       ApComboRegion.createApRegion(null, null);
       fail();

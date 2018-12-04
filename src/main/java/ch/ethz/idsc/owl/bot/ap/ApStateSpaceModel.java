@@ -36,8 +36,10 @@ import ch.ethz.idsc.tensor.sca.Sin;
   static final Scalar STALL_SPEED = RealScalar.of(58);
   /** steepest descent flight path angle */
   static final Scalar MAX_DESCENT_GAMMA = Degree.of(-15);
+  /** maximal vertical speed in z direction during flight in [m/s] */
+  static final Scalar Z_DOT_FLIGHT_MAX = MAX_SPEED.multiply(Sin.of(MAX_DESCENT_GAMMA));
   /** maximal vertical touchdown speed in z direction in [m/s] */
-  static final Scalar Z_0 = RealScalar.of(0.9144);
+  static final Scalar Z_DOT_0_MAX = RealScalar.of(-0.9144);
   /** altitude of final landing phase in [m] */
   static final Scalar ALTITUDE_FINAL_PHASE = RealScalar.of(20);
 
