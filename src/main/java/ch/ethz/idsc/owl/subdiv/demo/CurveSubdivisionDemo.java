@@ -5,12 +5,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
-import java.io.File;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,7 +17,6 @@ import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.GeodesicInterface;
@@ -39,31 +34,23 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Differences;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.io.CsvFormat;
-import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
-class CurveSubdivisionDemo extends AbstractDemo {
+class CurveSubdivisionDemo extends ControlPointsDemo {
   private static final boolean BSPLINE4 = false;
-  private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
-  private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // private static final Tensor DUBILAB = //
@@ -79,11 +66,7 @@ class CurveSubdivisionDemo extends AbstractDemo {
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleInterp = new JToggleButton("interp");
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
-  private final JToggleButton jToggleButton = new JToggleButton("R2");
   // ---
-  private Tensor control = Tensors.of(Array.zeros(3));
-  private Tensor mouse = Array.zeros(3);
-  private Integer min_index = null;
   private boolean printref = false;
   private boolean ref2ctrl = false;
 
@@ -100,25 +83,25 @@ class CurveSubdivisionDemo extends AbstractDemo {
     // -1.0471975511965976}, {-37/30, 7/20, -1.308996938995747}, {-7/20, 5/2, -0.5235987755982988}, {-79/60, 47/30, 1.0471975511965976}, {-17/15, -11/30,
     // 1.5707963267948966}, {-3/20, -127/20, 1.5707963267948966}, {-1/12, -421/60, 1.0471975511965976}, {-37/15, -27/4, -1.308996938995747}, {-8/5, -29/4,
     // -6.021385919380436}}
-    control = Tensors.fromString( //
-        "{{0, 0, 0}, {4, 0, 0.0}, {8, 0, 0.0}, {8, -3, -3.141592653589793}, {4, -3, -3.141592653589793}, {0, -3, -3.141592653589793}," //
-            + "{0, 3, -6.283185307179586}," //
-            + "{4, 3, -6.283185307179586}, {8, 3, -6.283185307179586}}");
-    control = Tensors.fromString("{{-8,0,0},{-4,0,0},{0,0,0}}");
-    // Math.PI;
-    control = DubinsGenerator.of(Tensors.vector(0, 0, -1), Tensors.fromString("{{2,0,0},{2,0,1.3},{3,0,0},{4,0,-4.2},{5,0,0},{5,0,3.14159265},{3,0,-3}}"));
-    control = DubinsGenerator.of(Tensors.vector(0, 0, -Math.PI - 1), //
-        Tensors.fromString("{{2,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}"));
-    control = Tensors.fromString(
-        "{{11/15, 1/2, -1.0471975511}, {149/60, 43/30, 1.04719755}, {-19/20, 19/30, 2.0943951}, {-44/15, 3/4, 0.2617993}, {-71/60, 17/12, -2.0943951}}");
-    control = DubinsGenerator.of(Tensors.vector(0, 0, Math.PI / 2), //
-        Tensors.fromString("{{1.5,0,0},{1.5,0,0},{2,0,3.141592653589793},{1.5,0,0},{1.5,0,0},{4,0,3.141592653589793},{1.5,0,0},{1.5,0,0}}"));
-    control = DubinsGenerator.of(Tensors.vector(0, 0, 0.5), //
-        Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}"));
+    // control = Tensors.fromString( //
+    // "{{0, 0, 0}, {4, 0, 0.0}, {8, 0, 0.0}, {8, -3, -3.141592653589793}, {4, -3, -3.141592653589793}, {0, -3, -3.141592653589793}," //
+    // + "{0, 3, -6.283185307179586}," //
+    // + "{4, 3, -6.283185307179586}, {8, 3, -6.283185307179586}}");
+    // control = Tensors.fromString("{{-8,0,0},{-4,0,0},{0,0,0}}");
+    // // Math.PI;
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, -1), Tensors.fromString("{{2,0,0},{2,0,1.3},{3,0,0},{4,0,-4.2},{5,0,0},{5,0,3.14159265},{3,0,-3}}"));
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, -Math.PI - 1), //
+    // Tensors.fromString("{{2,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}"));
+    // control = Tensors.fromString(
+    // "{{11/15, 1/2, -1.0471975511}, {149/60, 43/30, 1.04719755}, {-19/20, 19/30, 2.0943951}, {-44/15, 3/4, 0.2617993}, {-71/60, 17/12, -2.0943951}}");
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, Math.PI / 2), //
+    // Tensors.fromString("{{1.5,0,0},{1.5,0,0},{2,0,3.141592653589793},{1.5,0,0},{1.5,0,0},{4,0,3.141592653589793},{1.5,0,0},{1.5,0,0}}"));
+    // control = DubinsGenerator.of(Tensors.vector(0, 0, 0.5), //
+    // Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}"));
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-      control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1)))));
+      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
     // control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
     // Tensors.fromString("{{1.3,0,0},{1.3,0,0},{2.6,0,2.5708},{1.3,0,2.1},{1.9,0,0},{3.0,0,-1.2},{1.8,0,0},{5.2,0,3.14159},{2.6,0,3.14159},{2.6,0,0}}"));
@@ -139,31 +122,31 @@ class CurveSubdivisionDemo extends AbstractDemo {
     // "{{2,0,0},{3.5,0,-4.5},{3.5,0,0},{1.6,0,3},{2.3,0,2}}"));
     // pathological
     // control = Tensors.fromString("{{0, 0, 0}, {2, 0, 1.308996938995747}, {4, 0, 0.5235987755982988}}");
-    {
-      JButton jButton = new JButton("clear");
-      jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-      timerFrame.jToolBar.add(jButton);
-    }
+    // {
+    // JButton jButton = new JButton("clear");
+    // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+    // timerFrame.jToolBar.add(jButton);
+    // }
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));
     {
       timerFrame.jToolBar.add(jTextField);
     }
-    {
-      JButton jButton = new JButton("print");
-      jButton.addActionListener(actionEvent -> {
-        System.out.println(control);
-        // long now = System.currentTimeMillis();
-        File file = UserHome.file("" + jTextField.getText() + ".csv");
-        // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
-        try {
-          Export.of(file, control.map(CsvFormat.strict()));
-        } catch (Exception exception) {
-          exception.printStackTrace();
-        }
-      });
-      timerFrame.jToolBar.add(jButton);
-    }
+    // {
+    // JButton jButton = new JButton("print");
+    // jButton.addActionListener(actionEvent -> {
+    // System.out.println(control);
+    // // long now = System.currentTimeMillis();
+    // File file = UserHome.file("" + jTextField.getText() + ".csv");
+    // // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
+    // try {
+    // Export.of(file, control.map(CsvFormat.strict()));
+    // } catch (Exception exception) {
+    // exception.printStackTrace();
+    // }
+    // });
+    // timerFrame.jToolBar.add(jButton);
+    // }
     {
       JButton jButton = new JButton("p-ref");
       jButton.addActionListener(actionEvent -> printref = true);
@@ -195,7 +178,7 @@ class CurveSubdivisionDemo extends AbstractDemo {
     timerFrame.jToolBar.add(jToggleCyclic);
     // ---
     // ---
-    jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
+    // jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
     timerFrame.jToolBar.add(jToggleButton);
     {
       spinnerLabel.setArray(CurveSubdivisionSchemes.values());
@@ -227,40 +210,12 @@ class CurveSubdivisionDemo extends AbstractDemo {
       });
       timerFrame.jToolBar.add(jSlider);
     }
-    timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton() == 1) {
-          if (Objects.isNull(min_index)) {
-            Scalar cmp = DoubleScalar.of(.2);
-            int index = 0;
-            for (Tensor point : control) {
-              Scalar distance = Norm._2.between(point.extract(0, 2), mouse.extract(0, 2));
-              if (Scalars.lessThan(distance, cmp)) {
-                cmp = distance;
-                min_index = index;
-              }
-              ++index;
-            }
-            if (min_index == null) {
-              min_index = control.length();
-              control.append(mouse);
-            }
-          } else {
-            min_index = null;
-          }
-        }
-      }
-    });
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     // graphics.drawImage(image, 100, 100, null);
     GraphicsUtil.setQualityHigh(graphics);
-    mouse = geometricLayer.getMouseSe2State();
-    if (Objects.nonNull(min_index))
-      control.set(mouse, min_index);
     {
       // graphics.setColor(new Color(128 - 64, 255, 128, 255));
       // graphics.draw(geometricLayer.toPath2D(FCURVE));
@@ -269,7 +224,7 @@ class CurveSubdivisionDemo extends AbstractDemo {
     Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
     boolean isR2 = jToggleButton.isSelected();
     boolean isCyclic = jToggleCyclic.isSelected();
-    Tensor _control = control.copy();
+    Tensor _control = isR2 ? controlR2() : controlSe2();
     if (jToggleBndy.isSelected() && !isCyclic && 1 < _control.length()) {
       switch (scheme) {
       case BSPLINE2:
@@ -289,7 +244,7 @@ class CurveSubdivisionDemo extends AbstractDemo {
     final Tensor refined;
     if (isR2) {
       CurveSubdivision curveSubdivision = function.apply(RnGeodesic.INSTANCE);
-      Tensor rnctrl = Tensor.of(_control.stream().map(Extract2D::of));
+      Tensor rnctrl = controlR2();
       TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
@@ -313,7 +268,7 @@ class CurveSubdivisionDemo extends AbstractDemo {
       }
     } else { // SE2
       if (jToggleCtrl.isSelected())
-        for (Tensor point : control) {
+        for (Tensor point : controlSe2()) {
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
           Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
           path2d.closePath();
@@ -424,20 +379,14 @@ class CurveSubdivisionDemo extends AbstractDemo {
         }
       }
     }
-    if (Objects.isNull(min_index)) {
-      graphics.setColor(Color.GREEN);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-      graphics.fill(geometricLayer.toPath2D(isR2 ? CIRCLE_HI : ARROWHEAD_HI));
-      geometricLayer.popMatrix();
-    }
     if (printref) {
       printref = false;
       System.out.println(refined);
     }
-    if (ref2ctrl) {
-      ref2ctrl = false;
-      control = refined;
-    }
+    // if (ref2ctrl) {
+    // ref2ctrl = false;
+    // control = refined;
+    // }
   }
 
   public static void main(String[] args) {

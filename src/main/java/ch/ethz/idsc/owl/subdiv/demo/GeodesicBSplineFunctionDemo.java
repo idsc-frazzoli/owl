@@ -5,14 +5,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -22,25 +18,17 @@ import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
-import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class GeodesicBSplineFunctionDemo extends AbstractDemo {
+/* package */ class GeodesicBSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
-  private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // ---
@@ -49,24 +37,20 @@ import ch.ethz.idsc.tensor.red.Norm;
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleLine = new JToggleButton("line");
-  private final JToggleButton jToggleButton = new JToggleButton("R2");
   // ---
-  private Tensor control = Tensors.of(Array.zeros(3));
-  private Tensor mouse = Array.zeros(3);
-  private Integer min_index = null;
   private boolean printref = false;
   private boolean ref2ctrl = false;
 
   GeodesicBSplineFunctionDemo() {
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-      control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1)))));
+      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
     {
-      JButton jButton = new JButton("clear");
-      jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-      timerFrame.jToolBar.add(jButton);
+      // JButton jButton = new JButton("clear");
+      // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+      // timerFrame.jToolBar.add(jButton);
     }
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
@@ -77,7 +61,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
-    jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
+    // jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
     timerFrame.jToolBar.add(jToggleButton);
     // ---
     spinnerDegree.setList(DEGREES);
@@ -87,48 +71,20 @@ import ch.ethz.idsc.tensor.red.Norm;
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
     spinnerRefine.setValue(9);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton() == 1) {
-          if (Objects.isNull(min_index)) {
-            Scalar cmp = DoubleScalar.of(.2);
-            int index = 0;
-            for (Tensor point : control) {
-              Scalar distance = Norm._2.between(point.extract(0, 2), mouse.extract(0, 2));
-              if (Scalars.lessThan(distance, cmp)) {
-                cmp = distance;
-                min_index = index;
-              }
-              ++index;
-            }
-            if (min_index == null) {
-              min_index = control.length();
-              control.append(mouse);
-            }
-          } else {
-            min_index = null;
-          }
-        }
-      }
-    });
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     // graphics.drawImage(image, 100, 100, null);
     GraphicsUtil.setQualityHigh(graphics);
-    mouse = geometricLayer.getMouseSe2State();
-    if (Objects.nonNull(min_index))
-      control.set(mouse, min_index);
     boolean isR2 = jToggleButton.isSelected();
-    Tensor _control = control.copy();
+    // Tensor _control = control.copy();
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
     final Tensor refined;
     if (isR2) {
       // BezierCurve bezierCurve = new BezierCurve(RnGeodesic.INSTANCE);
-      Tensor rnctrl = Tensor.of(_control.stream().map(Extract2D::of));
+      Tensor rnctrl = controlR2();
       GeodesicBSplineFunction geodesicBSplineFunction = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, rnctrl);
       // refined = LanczosCurve.refine(rnctrl, 1 << levels);
       refined = Subdivide.of(0, rnctrl.length() - 1, 50).map(geodesicBSplineFunction);
@@ -137,7 +93,7 @@ import ch.ethz.idsc.tensor.red.Norm;
         graphics.draw(geometricLayer.toPath2D(refined));
       }
       graphics.setColor(new Color(255, 128, 128, 255));
-      for (Tensor point : _control) {
+      for (Tensor point : controlSe2()) {
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
         Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
         path2d.closePath();
@@ -149,7 +105,7 @@ import ch.ethz.idsc.tensor.red.Norm;
       }
     } else { // SE2
       if (jToggleCtrl.isSelected())
-        for (Tensor point : control) {
+        for (Tensor point : controlSe2()) {
           geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
           Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
           path2d.closePath();
@@ -159,8 +115,8 @@ import ch.ethz.idsc.tensor.red.Norm;
           graphics.draw(path2d);
           geometricLayer.popMatrix();
         }
-      GeodesicBSplineFunction geodesicBSplineFunction = GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, _control);
-      int upper = _control.length() - 1;
+      GeodesicBSplineFunction geodesicBSplineFunction = GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, controlSe2());
+      int upper = controlSe2().length() - 1;
       refined = Subdivide.of(0, upper, 4 * upper * (levels + 1)).map(geodesicBSplineFunction);
     }
     if (jToggleLine.isSelected()) {
@@ -197,19 +153,13 @@ import ch.ethz.idsc.tensor.red.Norm;
         }
       }
     }
-    if (Objects.isNull(min_index)) {
-      graphics.setColor(Color.GREEN);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-      graphics.fill(geometricLayer.toPath2D(isR2 ? CIRCLE_HI : ARROWHEAD_HI));
-      geometricLayer.popMatrix();
-    }
     if (printref) {
       printref = false;
       System.out.println(refined);
     }
     if (ref2ctrl) {
       ref2ctrl = false;
-      control = refined;
+      // control = refined;
     }
   }
 

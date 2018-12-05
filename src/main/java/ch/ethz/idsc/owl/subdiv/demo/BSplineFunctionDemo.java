@@ -5,14 +5,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -24,22 +20,17 @@ import ch.ethz.idsc.owl.subdiv.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.red.Norm;
 
-class BSplineFunctionDemo extends AbstractDemo {
+class BSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // ---
@@ -48,18 +39,16 @@ class BSplineFunctionDemo extends AbstractDemo {
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   // ---
-  private Tensor control = Tensors.of(Array.zeros(3));
-  private Tensor mouse = Array.zeros(3);
-  private Integer min_index = null;
 
   BSplineFunctionDemo() {
+    jToggleButton.setSelected(true);
     {
-      control = Tensors.fromString("{{0, 0}, {2, 0}}");
+      setControl(Tensors.fromString("{{0, 0}, {2, 0}}"));
     }
     {
-      JButton jButton = new JButton("clear");
-      jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-      timerFrame.jToolBar.add(jButton);
+      // JButton jButton = new JButton("clear");
+      // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+      // timerFrame.jToolBar.add(jButton);
     }
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
@@ -77,41 +66,14 @@ class BSplineFunctionDemo extends AbstractDemo {
       spinnerRefine.setValue(4);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
-    timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton() == 1) {
-          if (Objects.isNull(min_index)) {
-            Scalar cmp = DoubleScalar.of(.2);
-            int index = 0;
-            for (Tensor point : control) {
-              Scalar distance = Norm._2.between(point.extract(0, 2), mouse.extract(0, 2));
-              if (Scalars.lessThan(distance, cmp)) {
-                cmp = distance;
-                min_index = index;
-              }
-              ++index;
-            }
-            if (min_index == null) {
-              min_index = control.length();
-              control.append(mouse.extract(0, 2));
-            }
-          } else {
-            min_index = null;
-          }
-        }
-      }
-    });
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    mouse = geometricLayer.getMouseSe2State();
-    if (Objects.nonNull(min_index))
-      control.set(mouse.extract(0, 2), min_index);
     int degree = spinnerDegree.getValue();
     int levels = spinnerRefine.getValue();
+    Tensor control = controlR2();
     {
       graphics.setStroke(new BasicStroke(1.25f));
       Tensor matrix = geometricLayer.getMatrix();
@@ -167,12 +129,6 @@ class BSplineFunctionDemo extends AbstractDemo {
       graphics.setColor(COLOR_CURVATURE_COMB);
       Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, COMB_SCALE, false));
       graphics.draw(path2d);
-    }
-    if (Objects.isNull(min_index)) {
-      graphics.setColor(Color.GREEN);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-      graphics.fill(geometricLayer.toPath2D(CIRCLE_HI));
-      geometricLayer.popMatrix();
     }
   }
 
