@@ -67,7 +67,7 @@ public class R3S2GeodesicTest extends TestCase {
     Tensor p = Tensors.of(n0, n0);
     Tensor q = Tensors.of(n1, n1);
     Tensor split = R3S2Geodesic.INSTANCE.split(p, q, RationalScalar.of(1, 2));
-    assertTrue(Chop._10.close(split.get(0), split.get(1)));
+    assertTrue(Chop._12.close(split.get(0), split.get(1)));
   }
 
   public void testSphereRepro2() {
@@ -79,7 +79,7 @@ public class R3S2GeodesicTest extends TestCase {
       Tensor p = Tensors.of(pn, pn);
       Tensor q = Tensors.of(qn, qn);
       Tensor split = R3S2Geodesic.INSTANCE.split(p, q, RationalScalar.of(1, 2));
-      assertTrue(Chop._10.close(split.get(0), split.get(1)));
+      assertTrue(Chop._08.close(split.get(0), split.get(1)));
     }
   }
 }

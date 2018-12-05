@@ -30,7 +30,7 @@ public class QuaternionToRotationMatrixTest extends TestCase {
     for (int index = 0; index < 100; ++index) {
       Tensor wxyz = RandomVariate.of(distribution, 4);
       Tensor matrix = QuaternionToRotationMatrix.of(wxyz);
-      assertTrue(OrthogonalMatrixQ.of(matrix));
+      assertTrue(OrthogonalMatrixQ.of(matrix, Chop._10));
       Scalar scalar = Quaternion.of(wxyz.Get(0), wxyz.Get(1), wxyz.Get(2), wxyz.Get(3));
       Quaternion invers = (Quaternion) scalar.reciprocal();
       Tensor invmat = QuaternionToRotationMatrix.of(Tensors.of(invers.re(), invers.im(), invers.jm(), invers.km()));
