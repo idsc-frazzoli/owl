@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
    * All necessary parameters are defined in {@link ApTrajectoryPlanner}
    * 
    * @return New StandardTrajectoryPlanner for airplane simulation */
-  static StandardTrajectoryPlanner ApStandardTrajectoryPlanner() {
+  static StandardTrajectoryPlanner apStandardTrajectoryPlanner() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         INTEGRATOR, RationalScalar.of(1, 5), 3);
     Collection<Flow> controls = AP_FLOWS.getFlows(FLOWRES);

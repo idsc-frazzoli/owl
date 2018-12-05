@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.qty.Quantity;
     return new BalloonStateSpaceModel( //
         Quantity.of(1, "s"), //
         Quantity.of(2, "s"), //
-        Quantity.of(1, "m * K^-1 * s^-2"), //
-        Quantity.of(-2, "m * s^-1"));
+        Quantity.of(1, "m * K^-1 * s^-2"));
   }
 }

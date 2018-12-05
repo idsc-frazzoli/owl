@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
   public static void main(String[] args) throws Exception {
     // StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
-    StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.ApStandardTrajectoryPlanner();
+    StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.apStandardTrajectoryPlanner();
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(300, 300);
