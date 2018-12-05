@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-enum H2GeodesicDemo {
+/* package */ enum H2GeodesicDemo {
   ;
   private static final Tensor CIRCLE = CirclePoints.of(20).multiply(RealScalar.of(.03));
 
