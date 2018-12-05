@@ -18,9 +18,7 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
-import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
@@ -45,21 +43,24 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 
-class GeodesicMeanFilterDemo {
+class GeodesicMeanFilterDemo extends AbstractDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // ---
+  private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
+  private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
+  private final JToggleButton jToggleBndy = new JToggleButton("bndy");
+  private final JToggleButton jToggleComb = new JToggleButton("comb");
+  private final JToggleButton jToggleLine = new JToggleButton("line");
+  private final JToggleButton jToggleButton = new JToggleButton("R2");
   private Tensor control = Tensors.of(Array.zeros(3));
-  private final TimerFrame timerFrame = new TimerFrame();
   private Tensor mouse = Array.zeros(3);
   private Integer min_index = null;
 
   GeodesicMeanFilterDemo() {
-    timerFrame.jFrame.setTitle(getClass().getSimpleName());
-    SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
       control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
@@ -90,115 +91,25 @@ class GeodesicMeanFilterDemo {
       });
       timerFrame.jToolBar.add(jButton);
     }
-    JToggleButton jToggleCtrl = new JToggleButton("ctrl");
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
-    JToggleButton jToggleBndy = new JToggleButton("bndy");
     jToggleBndy.setSelected(true);
     timerFrame.jToolBar.add(jToggleBndy);
     // ---
-    JToggleButton jToggleComb = new JToggleButton("comb");
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
     // ---
-    JToggleButton jToggleLine = new JToggleButton("line");
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
-    JToggleButton jToggleButton = new JToggleButton("R2");
     jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
     timerFrame.jToolBar.add(jToggleButton);
-    timerFrame.geometricComponent.addRenderInterface(new RenderInterface() {
-      @Override
-      public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-        // graphics.drawImage(image, 100, 100, null);
-        GraphicsUtil.setQualityHigh(graphics);
-        mouse = geometricLayer.getMouseSe2State();
-        if (Objects.nonNull(min_index))
-          control.set(mouse, min_index);
-        boolean isR2 = jToggleButton.isSelected();
-        Tensor _control = control.copy();
-        int radius = spinnerRadius.getValue();
-        final Tensor refined;
-        final Tensor curve;
-        if (isR2) {
-          Tensor rnctrl = Tensor.of(_control.stream().map(Extract2D::of));
-          // refined = LanczosCurve.refine(rnctrl, 1 << levels);
-          graphics.setColor(new Color(255, 128, 128, 255));
-          for (Tensor point : _control) {
-            geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-            Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
-            path2d.closePath();
-            graphics.setColor(new Color(255, 128, 128, 64));
-            graphics.fill(path2d);
-            graphics.setColor(new Color(255, 128, 128, 255));
-            graphics.draw(path2d);
-            geometricLayer.popMatrix();
-          }
-          TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(RnGeodesic.INSTANCE, radius);
-          refined = geodesicMeanFilter.apply(rnctrl);
-          curve = Nest.of(BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE)::string, refined, 7);
-        } else { // SE2
-          if (jToggleCtrl.isSelected())
-            for (Tensor point : control) {
-              geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-              Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-              path2d.closePath();
-              graphics.setColor(new Color(255, 128, 128, 64));
-              graphics.fill(path2d);
-              graphics.setColor(new Color(255, 128, 128, 255));
-              graphics.draw(path2d);
-              geometricLayer.popMatrix();
-            }
-          TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(Se2CoveringGeodesic.INSTANCE, radius);
-          refined = geodesicMeanFilter.apply(control);
-          curve = Nest.of(BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE)::string, refined, 7);
-        }
-        if (jToggleLine.isSelected()) {
-          BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
-          Tensor linear = bezierCurve.refine(_control, 1 << 8);
-          graphics.setColor(new Color(0, 255, 0, 128));
-          Path2D path2d = geometricLayer.toPath2D(linear);
-          graphics.draw(path2d);
-        }
-        {
-          graphics.setColor(Color.BLUE);
-          Path2D path2d = geometricLayer.toPath2D(curve);
-          graphics.setStroke(new BasicStroke(1.25f));
-          graphics.draw(path2d);
-          graphics.setStroke(new BasicStroke(1f));
-        }
-        if (jToggleComb.isSelected()) {
-          graphics.setColor(COLOR_CURVATURE_COMB);
-          Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, COMB_SCALE, false));
-          graphics.draw(path2d);
-        }
-        for (Tensor point : refined) {
-          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-          Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
-          geometricLayer.popMatrix();
-          int rgb = 128 + 32;
-          path2d.closePath();
-          graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
-          graphics.fill(path2d);
-          graphics.setColor(Color.BLACK);
-          graphics.draw(path2d);
-        }
-        if (Objects.isNull(min_index)) {
-          graphics.setColor(Color.GREEN);
-          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-          graphics.fill(geometricLayer.toPath2D(isR2 ? CIRCLE_HI : ARROWHEAD_HI));
-          geometricLayer.popMatrix();
-        }
-      }
-    });
-    {
-      spinnerRadius.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-      spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-      spinnerRadius.setValue(9);
-      spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    }
+    // ---
+    spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+    spinnerRadius.setValue(9);
+    spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    // ---
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent mouseEvent) {
@@ -224,6 +135,89 @@ class GeodesicMeanFilterDemo {
         }
       }
     });
+  }
+
+  @Override
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    // graphics.drawImage(image, 100, 100, null);
+    GraphicsUtil.setQualityHigh(graphics);
+    mouse = geometricLayer.getMouseSe2State();
+    if (Objects.nonNull(min_index))
+      control.set(mouse, min_index);
+    boolean isR2 = jToggleButton.isSelected();
+    Tensor _control = control.copy();
+    int radius = spinnerRadius.getValue();
+    final Tensor refined;
+    final Tensor curve;
+    if (isR2) {
+      Tensor rnctrl = Tensor.of(_control.stream().map(Extract2D::of));
+      // refined = LanczosCurve.refine(rnctrl, 1 << levels);
+      graphics.setColor(new Color(255, 128, 128, 255));
+      for (Tensor point : _control) {
+        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
+        Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
+        path2d.closePath();
+        graphics.setColor(new Color(255, 128, 128, 64));
+        graphics.fill(path2d);
+        graphics.setColor(new Color(255, 128, 128, 255));
+        graphics.draw(path2d);
+        geometricLayer.popMatrix();
+      }
+      TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(RnGeodesic.INSTANCE, radius);
+      refined = geodesicMeanFilter.apply(rnctrl);
+      curve = Nest.of(BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE)::string, refined, 7);
+    } else { // SE2
+      if (jToggleCtrl.isSelected())
+        for (Tensor point : control) {
+          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
+          Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
+          path2d.closePath();
+          graphics.setColor(new Color(255, 128, 128, 64));
+          graphics.fill(path2d);
+          graphics.setColor(new Color(255, 128, 128, 255));
+          graphics.draw(path2d);
+          geometricLayer.popMatrix();
+        }
+      TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(Se2CoveringGeodesic.INSTANCE, radius);
+      refined = geodesicMeanFilter.apply(control);
+      curve = Nest.of(BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE)::string, refined, 7);
+    }
+    if (jToggleLine.isSelected()) {
+      BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
+      Tensor linear = bezierCurve.refine(_control, 1 << 8);
+      graphics.setColor(new Color(0, 255, 0, 128));
+      Path2D path2d = geometricLayer.toPath2D(linear);
+      graphics.draw(path2d);
+    }
+    {
+      graphics.setColor(Color.BLUE);
+      Path2D path2d = geometricLayer.toPath2D(curve);
+      graphics.setStroke(new BasicStroke(1.25f));
+      graphics.draw(path2d);
+      graphics.setStroke(new BasicStroke(1f));
+    }
+    if (jToggleComb.isSelected()) {
+      graphics.setColor(COLOR_CURVATURE_COMB);
+      Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, COMB_SCALE, false));
+      graphics.draw(path2d);
+    }
+    for (Tensor point : refined) {
+      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
+      Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
+      geometricLayer.popMatrix();
+      int rgb = 128 + 32;
+      path2d.closePath();
+      graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
+      graphics.fill(path2d);
+      graphics.setColor(Color.BLACK);
+      graphics.draw(path2d);
+    }
+    if (Objects.isNull(min_index)) {
+      graphics.setColor(Color.GREEN);
+      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
+      graphics.fill(geometricLayer.toPath2D(isR2 ? CIRCLE_HI : ARROWHEAD_HI));
+      geometricLayer.popMatrix();
+    }
   }
 
   public static void main(String[] args) {
