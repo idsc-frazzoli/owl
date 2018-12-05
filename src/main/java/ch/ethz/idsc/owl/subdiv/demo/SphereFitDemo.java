@@ -4,30 +4,19 @@ package ch.ethz.idsc.owl.subdiv.demo;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
-import java.io.File;
-import java.util.Objects;
 import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.io.CsvFormat;
-import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.opt.HungarianAlgorithm;
@@ -35,22 +24,17 @@ import ch.ethz.idsc.tensor.opt.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.SphereFit;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class SphereFitDemo extends AbstractDemo {
-  private static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
-  // ---
-  private Tensor control = Tensors.of(Array.zeros(3));
-  private Tensor mouse = Array.zeros(3);
-  private Integer min_index = null;
-
+/* package */ class SphereFitDemo extends ControlPointsDemo {
   SphereFitDemo() {
+    jToggleButton.setSelected(true);
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-      control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1)))));
+      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
     {
       JButton jButton = new JButton("clear");
-      jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+      // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
       timerFrame.jToolBar.add(jButton);
     }
     JTextField jTextField = new JTextField(10);
@@ -59,55 +43,26 @@ import ch.ethz.idsc.tensor.red.Norm;
       timerFrame.jToolBar.add(jTextField);
     }
     {
-      JButton jButton = new JButton("print");
-      jButton.addActionListener(actionEvent -> {
-        System.out.println(control);
-        // long now = System.currentTimeMillis();
-        File file = UserHome.file("" + jTextField.getText() + ".csv");
-        // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
-        try {
-          Export.of(file, control.map(CsvFormat.strict()));
-        } catch (Exception exception) {
-          exception.printStackTrace();
-        }
-      });
-      timerFrame.jToolBar.add(jButton);
+      // JButton jButton = new JButton("print");
+      // jButton.addActionListener(actionEvent -> {
+      // System.out.println(control);
+      // // long now = System.currentTimeMillis();
+      // File file = UserHome.file("" + jTextField.getText() + ".csv");
+      // // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
+      // try {
+      // Export.of(file, control.map(CsvFormat.strict()));
+      // } catch (Exception exception) {
+      // exception.printStackTrace();
+      // }
+      // });
+      // timerFrame.jToolBar.add(jButton);
     }
-    // ---
-    timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mousePressed(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton() == 1) {
-          if (Objects.isNull(min_index)) {
-            Scalar cmp = DoubleScalar.of(.2);
-            int index = 0;
-            for (Tensor point : control) {
-              Scalar distance = Norm._2.between(point.extract(0, 2), mouse.extract(0, 2));
-              if (Scalars.lessThan(distance, cmp)) {
-                cmp = distance;
-                min_index = index;
-              }
-              ++index;
-            }
-            if (min_index == null) {
-              min_index = control.length();
-              control.append(mouse);
-            }
-          } else {
-            min_index = null;
-          }
-        }
-      }
-    });
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    mouse = geometricLayer.getMouseSe2State();
-    if (Objects.nonNull(min_index))
-      control.set(mouse, min_index);
-    Tensor rnctrl = Tensor.of(control.stream().map(Extract2D::of));
+    Tensor rnctrl = controlR2();
     Optional<Tensor> some = SphereFit.of(rnctrl);
     if (some.isPresent()) {
       Tensor center = some.get().get(0);
@@ -160,7 +115,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     }
     {
       graphics.setColor(new Color(255, 128, 128, 255));
-      for (Tensor point : control) {
+      for (Tensor point : controlR2()) {
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
         Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
         path2d.closePath();
@@ -170,12 +125,6 @@ import ch.ethz.idsc.tensor.red.Norm;
         graphics.draw(path2d);
         geometricLayer.popMatrix();
       }
-    }
-    if (Objects.isNull(min_index)) {
-      graphics.setColor(Color.GREEN);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-      graphics.fill(geometricLayer.toPath2D(CIRCLE_HI));
-      geometricLayer.popMatrix();
     }
   }
 

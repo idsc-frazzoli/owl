@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
         if (knots.length() % 2 == 0) {
           int degree = knots.length() >> 1;
           int length = degree + 1;
-          //
+          // ---
           graphics.setColor(Color.LIGHT_GRAY);
           {
             Path2D path2d = geometricLayer.toPath2D(Tensors.fromString("{{0,1},{0,0},{1,0}}"));
@@ -76,8 +76,8 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
             }
           }
         }
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (Exception exception) {
+        exception.printStackTrace();
       }
     }
     geometricLayer.popMatrix();
