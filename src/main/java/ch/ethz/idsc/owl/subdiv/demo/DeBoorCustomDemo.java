@@ -7,11 +7,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Arrays;
 
 import javax.swing.JTextField;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -20,11 +20,9 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.DeBoor;
 
 /* package */ class DeBoorCustomDemo extends AbstractDemo {
-  private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final JTextField jTextField = new JTextField(30);
 
   DeBoorCustomDemo() {
@@ -32,20 +30,16 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
     jTextField.setText("{0, 1}");
     timerFrame.jToolBar.add(jTextField);
     // ---
-    spinnerDegree.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
-    spinnerDegree.setValue(1);
-    spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
+    timerFrame.geometricComponent.addRenderInterface(GridRender.INSTANCE);
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     graphics.setStroke(new BasicStroke(1.25f));
-    geometricLayer.pushMatrix(DiagonalMatrix.of(3, 3, 1));
     {
       ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
       graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
-      // control length
       try {
         Tensor domain = Subdivide.of(0, 1, 100);
         Tensor domahi = Subdivide.of(1, 2, 100);
@@ -80,13 +74,12 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
         exception.printStackTrace();
       }
     }
-    geometricLayer.popMatrix();
     graphics.setStroke(new BasicStroke(1f));
   }
 
   public static void main(String[] args) {
-    DeBoorCustomDemo deBoor2Demo = new DeBoorCustomDemo();
-    deBoor2Demo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    deBoor2Demo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new DeBoorCustomDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

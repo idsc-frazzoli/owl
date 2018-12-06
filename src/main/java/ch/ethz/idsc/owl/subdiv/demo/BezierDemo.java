@@ -24,29 +24,19 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-class BezierDemo extends ControlPointsDemo {
+/* package */ class BezierDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // ---
-  private boolean printref = false;
-  private boolean ref2ctrl = false;
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
   BezierDemo() {
-    {
-      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
-    }
-    // {
-    // JButton jButton = new JButton("clear");
-    // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-    // timerFrame.jToolBar.add(jButton);
-    // }
+    timerFrame.jToolBar.add(jButton);
+    // ---
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
@@ -56,18 +46,21 @@ class BezierDemo extends ControlPointsDemo {
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
-    // jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
     timerFrame.jToolBar.add(jToggleButton);
     // ---
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
     spinnerRefine.setValue(9);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    {
+      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
+    }
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // graphics.drawImage(image, 100, 100, null);
     GraphicsUtil.setQualityHigh(graphics);
     boolean isR2 = jToggleButton.isSelected();
     Tensor _control = controlSe2();
@@ -127,29 +120,18 @@ class BezierDemo extends ControlPointsDemo {
       Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, COMB_SCALE, false));
       graphics.draw(path2d);
     }
-    if (!isR2) {
-      if (levels < 5) {
-        for (Tensor point : refined) {
-          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-          Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
-          geometricLayer.popMatrix();
-          int rgb = 128 + 32;
-          path2d.closePath();
-          graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
-          graphics.fill(path2d);
-          graphics.setColor(Color.BLACK);
-          graphics.draw(path2d);
-        }
+    if (!isR2 && levels < 5)
+      for (Tensor point : refined) {
+        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
+        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
+        geometricLayer.popMatrix();
+        int rgb = 128 + 32;
+        path2d.closePath();
+        graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
+        graphics.fill(path2d);
+        graphics.setColor(Color.BLACK);
+        graphics.draw(path2d);
       }
-    }
-    if (printref) {
-      printref = false;
-      System.out.println(refined);
-    }
-    if (ref2ctrl) {
-      ref2ctrl = false;
-      // control = refined;
-    }
   }
 
   public static void main(String[] args) {

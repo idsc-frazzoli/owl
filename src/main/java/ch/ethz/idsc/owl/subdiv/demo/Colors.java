@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JProgressBar;
 
 /** static functionality */
-public enum Colors {
+/* package */ enum Colors {
   ;
   /** JToggleButton background when selected is 184 207 229 selection color
    * subtracts 24 from each RGB value */
@@ -28,20 +28,12 @@ public enum Colors {
   /** background for items in menus that are selected; not Java official */
   public static final Color activeItem = new Color(243, 239, 124);
 
-  public static Color alpha000(Color myColor) {
-    return new Color(myColor.getRed(), myColor.getGreen(), myColor.getBlue(), 0);
-  }
-
   public static Color alpha064(Color myColor) {
     return new Color(myColor.getRed(), myColor.getGreen(), myColor.getBlue(), 64);
   }
 
   public static Color alpha128(Color myColor) {
     return new Color(myColor.getRed(), myColor.getGreen(), myColor.getBlue(), 128);
-  }
-
-  public static Color alpha192(Color myColor) {
-    return new Color(myColor.getRed(), myColor.getGreen(), myColor.getBlue(), 192);
   }
 
   public static Color withAlpha(Color myColor, int alpha) {
