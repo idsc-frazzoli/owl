@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
-class CurveSubdivisionDemo extends ControlPointsDemo {
+/* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
   private static final boolean BSPLINE4 = false;
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)

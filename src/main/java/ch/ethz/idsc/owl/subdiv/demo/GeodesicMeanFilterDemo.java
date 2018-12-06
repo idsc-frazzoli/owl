@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
-class GeodesicMeanFilterDemo extends ControlPointsDemo {
+/* package */ class GeodesicMeanFilterDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);

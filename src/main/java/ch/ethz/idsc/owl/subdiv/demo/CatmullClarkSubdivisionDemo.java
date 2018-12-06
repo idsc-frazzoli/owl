@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
-import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
@@ -29,7 +28,7 @@ import ch.ethz.idsc.tensor.alg.ArrayReshape;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class CatmullClarkSubdivisionDemo implements RenderInterface {
+/* package */ class CatmullClarkSubdivisionDemo extends AbstractDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   // ---
@@ -131,8 +130,8 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   public static void main(String[] args) {
-    CatmullClarkSubdivisionDemo demo = new CatmullClarkSubdivisionDemo();
-    demo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    demo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new CatmullClarkSubdivisionDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

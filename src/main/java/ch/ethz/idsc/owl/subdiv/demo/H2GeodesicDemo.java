@@ -20,6 +20,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private static final Tensor FIRST = Tensors.vector(0, 1);
   private static final Color COLOR = new Color(128, 128, 128, 128);
   private static final int RESOLUTION = 40;
+  // ---
+  private Tensor q = Tensors.vector(1, 2);
 
   public H2GeodesicDemo() {
     timerFrame.geometricComponent.addRenderInterface(GridRender.INSTANCE);
@@ -27,15 +29,15 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Tensor q = geometricLayer.getMouseSe2State().extract(0, 2);
-    if (Sign.isPositive(q.Get(1))) {
-      graphics.setColor(COLOR);
-      for (Tensor scalar : Subdivide.of(0, 1, RESOLUTION)) {
-        Tensor split = H2Geodesic.INSTANCE.split(FIRST, q, scalar.Get());
-        geometricLayer.pushMatrix(Se2Utils.toSE2Translation(split));
-        graphics.fill(geometricLayer.toPath2D(CIRCLE));
-        geometricLayer.popMatrix();
-      }
+    Tensor candidate = geometricLayer.getMouseSe2State().extract(0, 2);
+    if (Sign.isPositive(candidate.Get(1)))
+      q = candidate;
+    graphics.setColor(COLOR);
+    for (Tensor scalar : Subdivide.of(0, 1, RESOLUTION)) {
+      Tensor split = H2Geodesic.INSTANCE.split(FIRST, q, scalar.Get());
+      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(split));
+      graphics.fill(geometricLayer.toPath2D(CIRCLE));
+      geometricLayer.popMatrix();
     }
   }
 
