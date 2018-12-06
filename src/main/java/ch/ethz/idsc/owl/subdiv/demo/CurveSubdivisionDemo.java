@@ -68,7 +68,6 @@ class CurveSubdivisionDemo extends ControlPointsDemo {
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   // ---
   private boolean printref = false;
-  private boolean ref2ctrl = false;
 
   CurveSubdivisionDemo() {
     // BufferedImage image = ImageIO.read(UserHome.file("trebleclef25.png"));
@@ -152,11 +151,6 @@ class CurveSubdivisionDemo extends ControlPointsDemo {
       jButton.addActionListener(actionEvent -> printref = true);
       timerFrame.jToolBar.add(jButton);
     }
-    {
-      JButton jButton = new JButton("r2c");
-      jButton.addActionListener(actionEvent -> ref2ctrl = true);
-      timerFrame.jToolBar.add(jButton);
-    }
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
@@ -177,28 +171,24 @@ class CurveSubdivisionDemo extends ControlPointsDemo {
     // ---
     timerFrame.jToolBar.add(jToggleCyclic);
     // ---
-    // ---
-    // jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
     timerFrame.jToolBar.add(jToggleButton);
-    {
-      spinnerLabel.setArray(CurveSubdivisionSchemes.values());
-      spinnerLabel.setIndex(2);
-      spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
-    }
-    {
-      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-      spinnerRefine.setValue(6);
-      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    }
-    {
-      spinnerMagicC.addSpinnerListener(value -> StaticHelper.MAGIC_C = value);
-      spinnerMagicC.setList( //
-          Tensors.fromString("{1/100, 1/10, 1/8, 1/6, 1/4, 1/3, 1/2, 2/3, 9/10, 99/100}").stream() //
-              .map(Scalar.class::cast) //
-              .collect(Collectors.toList()));
-      spinnerMagicC.setValue(RationalScalar.HALF);
-      spinnerMagicC.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    }
+    // ---
+    spinnerLabel.setArray(CurveSubdivisionSchemes.values());
+    spinnerLabel.setIndex(2);
+    spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
+    // ---
+    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+    spinnerRefine.setValue(6);
+    spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    // ---
+    spinnerMagicC.addSpinnerListener(value -> StaticHelper.MAGIC_C = value);
+    spinnerMagicC.setList( //
+        Tensors.fromString("{1/100, 1/10, 1/8, 1/6, 1/4, 1/3, 1/2, 2/3, 9/10, 99/100}").stream() //
+            .map(Scalar.class::cast) //
+            .collect(Collectors.toList()));
+    spinnerMagicC.setValue(RationalScalar.HALF);
+    spinnerMagicC.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    // ---
     {
       JSlider jSlider = new JSlider(1, 999, 500);
       jSlider.setPreferredSize(new Dimension(500, 28));
@@ -214,7 +204,6 @@ class CurveSubdivisionDemo extends ControlPointsDemo {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // graphics.drawImage(image, 100, 100, null);
     GraphicsUtil.setQualityHigh(graphics);
     {
       // graphics.setColor(new Color(128 - 64, 255, 128, 255));
@@ -364,34 +353,27 @@ class CurveSubdivisionDemo extends ControlPointsDemo {
       geometricLayer.popMatrix();
       graphics.setStroke(new BasicStroke(1f));
     }
-    if (!isR2) {
-      if (levels < 5) {
-        for (Tensor point : refined) {
-          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-          Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
-          geometricLayer.popMatrix();
-          int rgb = 128 + 32;
-          path2d.closePath();
-          graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
-          graphics.fill(path2d);
-          graphics.setColor(Color.BLACK);
-          graphics.draw(path2d);
-        }
+    if (!isR2 && levels < 5)
+      for (Tensor point : refined) {
+        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
+        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
+        geometricLayer.popMatrix();
+        int rgb = 128 + 32;
+        path2d.closePath();
+        graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
+        graphics.fill(path2d);
+        graphics.setColor(Color.BLACK);
+        graphics.draw(path2d);
       }
-    }
     if (printref) {
       printref = false;
       System.out.println(refined);
     }
-    // if (ref2ctrl) {
-    // ref2ctrl = false;
-    // control = refined;
-    // }
   }
 
   public static void main(String[] args) {
-    CurveSubdivisionDemo curveSubdivisionDemo = new CurveSubdivisionDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new CurveSubdivisionDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

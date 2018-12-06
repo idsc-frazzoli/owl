@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Optional;
 
-import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -26,40 +25,19 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class SphereFitDemo extends ControlPointsDemo {
   SphereFitDemo() {
+    timerFrame.jToolBar.add(jButton);
     jToggleButton.setSelected(true);
-    {
-      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
-    }
-    {
-      JButton jButton = new JButton("clear");
-      // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-      timerFrame.jToolBar.add(jButton);
-    }
+    // ---
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));
-    {
-      timerFrame.jToolBar.add(jTextField);
-    }
-    {
-      // JButton jButton = new JButton("print");
-      // jButton.addActionListener(actionEvent -> {
-      // System.out.println(control);
-      // // long now = System.currentTimeMillis();
-      // File file = UserHome.file("" + jTextField.getText() + ".csv");
-      // // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
-      // try {
-      // Export.of(file, control.map(CsvFormat.strict()));
-      // } catch (Exception exception) {
-      // exception.printStackTrace();
-      // }
-      // });
-      // timerFrame.jToolBar.add(jButton);
-    }
+    timerFrame.jToolBar.add(jTextField);
+    // ---
+    Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+    setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+        Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     Tensor rnctrl = controlR2();
@@ -129,8 +107,8 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   public static void main(String[] args) {
-    SphereFitDemo sphereFitDemo = new SphereFitDemo();
-    sphereFitDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    sphereFitDemo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new SphereFitDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

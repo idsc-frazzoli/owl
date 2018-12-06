@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
 
-class GeodesicCenterFilterDemo extends AbstractDemo {
+/* package */ class GeodesicCenterFilterDemo extends AbstractDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.12);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
@@ -49,6 +49,7 @@ class GeodesicCenterFilterDemo extends AbstractDemo {
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
   private final JToggleButton jToggleWait = new JToggleButton("wait");
+  // ---
   private Tensor control = Tensors.of(Array.zeros(3));
 
   GeodesicCenterFilterDemo() {
@@ -57,7 +58,8 @@ class GeodesicCenterFilterDemo extends AbstractDemo {
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
       spinnerLabel.addSpinnerListener(resource -> //
       control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          .limit(2700).map(row -> row.extract(1, 4))));
+          .limit(2700) //
+          .map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
@@ -194,9 +196,9 @@ class GeodesicCenterFilterDemo extends AbstractDemo {
   }
 
   public static void main(String[] args) {
-    GeodesicCenterFilterDemo geodesicCenterFilterDemo = new GeodesicCenterFilterDemo();
-    geodesicCenterFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    geodesicCenterFilterDemo.timerFrame.jFrame.setVisible(true);
-    geodesicCenterFilterDemo.timerFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
+    AbstractDemo abstractDemo = new GeodesicCenterFilterDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
+    abstractDemo.timerFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
   }
 }

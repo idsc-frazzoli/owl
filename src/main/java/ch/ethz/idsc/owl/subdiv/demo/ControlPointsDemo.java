@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
 
+import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -24,15 +25,18 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ abstract class ControlPointsDemo extends AbstractDemo {
-  static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
-  static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
+public abstract class ControlPointsDemo extends AbstractDemo {
+  protected static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
+  protected static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
   // ---
-  final JToggleButton jToggleButton = new JToggleButton("R2");
+  protected final JButton jButton = new JButton("clear");
+  protected final JToggleButton jToggleButton = new JToggleButton("R2");
+  // ---
   private Tensor control = Tensors.of(Array.zeros(3));
   private Tensor mouse = Array.zeros(3);
   private Integer min_index = null;
-  RenderInterface renderInterface = new RenderInterface() {
+  // ---
+  private final RenderInterface renderInterface = new RenderInterface() {
     @Override
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
       mouse = geometricLayer.getMouseSe2State();
@@ -48,6 +52,8 @@ import ch.ethz.idsc.tensor.red.Norm;
   };
 
   public ControlPointsDemo() {
+    jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+    // --
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent mouseEvent) {

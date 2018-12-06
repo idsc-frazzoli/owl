@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
     spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     int degree = spinnerDegree.getValue();
@@ -46,10 +46,9 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
       {
         ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
         graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
-        // control length
         for (int length = 2; length <= 6; ++length) {
-          Tensor string = Tensors.fromString("{{100, 0, 0}, {0, -80, 0}, {0, 0, 1}}");
-          string.set(RealScalar.of(110 * length), 1, 2);
+          Tensor string = Tensors.fromString("{{200, 0, 0}, {0, -180, 0}, {0, 0, 1}}");
+          string.set(RealScalar.of(210 * (length - 1)), 1, 2);
           geometricLayer.pushMatrix(string);
           Tensor domain = Subdivide.of(0, length - 1, (length - 1) * 20);
           {
@@ -80,8 +79,8 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
   }
 
   public static void main(String[] args) {
-    DeBoorDemo deBoorDemo = new DeBoorDemo();
-    deBoorDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    deBoorDemo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new DeBoorDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.mat.Inverse;
 
-class BSplineFunctionDemo extends ControlPointsDemo {
+/* package */ class BSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
@@ -38,34 +38,25 @@ class BSplineFunctionDemo extends ControlPointsDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
-  // ---
 
   BSplineFunctionDemo() {
+    timerFrame.jToolBar.add(jButton);
     jToggleButton.setSelected(true);
-    {
-      setControl(Tensors.fromString("{{0, 0}, {2, 0}}"));
-    }
-    {
-      // JButton jButton = new JButton("clear");
-      // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-      // timerFrame.jToolBar.add(jButton);
-    }
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
     jToggleComb.setSelected(false);
     timerFrame.jToolBar.add(jToggleComb);
     // ---
-    {
-      spinnerDegree.setList(DEGREES);
-      spinnerDegree.setValue(1);
-      spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
-    }
-    {
-      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
-      spinnerRefine.setValue(4);
-      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    }
+    spinnerDegree.setList(DEGREES);
+    spinnerDegree.setValue(1);
+    spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
+    // ---
+    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+    spinnerRefine.setValue(4);
+    spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    // ---
+    setControl(Tensors.fromString("{{0, 0}, {1, 0}}"));
   }
 
   @Override

@@ -41,36 +41,16 @@ class GeodesicMeanFilterDemo extends ControlPointsDemo {
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
   GeodesicMeanFilterDemo() {
+    timerFrame.jToolBar.add(jButton);
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
-    {
-      // JButton jButton = new JButton("clear");
-      // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-      // timerFrame.jToolBar.add(jButton);
-    }
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));
-    {
-      timerFrame.jToolBar.add(jTextField);
-    }
-    {
-      // JButton jButton = new JButton("print");
-      // jButton.addActionListener(actionEvent -> {
-      // System.out.println(control);
-      // // long now = System.currentTimeMillis();
-      // File file = UserHome.file("" + jTextField.getText() + ".csv");
-      // // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
-      // try {
-      // Export.of(file, control.map(CsvFormat.strict()));
-      // } catch (Exception exception) {
-      // exception.printStackTrace();
-      // }
-      // });
-      // timerFrame.jToolBar.add(jButton);
-    }
+    timerFrame.jToolBar.add(jTextField);
+    // ---
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
@@ -83,7 +63,6 @@ class GeodesicMeanFilterDemo extends ControlPointsDemo {
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
-    // jToggleButton.setSelected(Dimensions.of(control).get(1) == 2);
     timerFrame.jToolBar.add(jToggleButton);
     // ---
     spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
@@ -91,11 +70,10 @@ class GeodesicMeanFilterDemo extends ControlPointsDemo {
     spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // graphics.drawImage(image, 100, 100, null);
     GraphicsUtil.setQualityHigh(graphics);
-    boolean isR2 = jToggleButton.isSelected();
+    final boolean isR2 = jToggleButton.isSelected();
     Tensor _control = controlSe2();
     int radius = spinnerRadius.getValue();
     final Tensor refined;
@@ -166,8 +144,8 @@ class GeodesicMeanFilterDemo extends ControlPointsDemo {
   }
 
   public static void main(String[] args) {
-    GeodesicMeanFilterDemo geodesicMeanFilterDemo = new GeodesicMeanFilterDemo();
-    geodesicMeanFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    geodesicMeanFilterDemo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new GeodesicMeanFilterDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }
