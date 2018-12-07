@@ -108,7 +108,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (jToggleWait.isSelected())
       return;

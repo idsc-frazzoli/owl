@@ -6,13 +6,10 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.GeodesicInterface;
-import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** Careful: the implementation only supports sequences with odd number of elements
@@ -20,12 +17,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * projects a sequence of points to their geodesic center
  * with each point weighted as provided by an external function */
 public class GeodesicBSplineCenter implements TensorUnaryOperator {
-  static Tensor limitMask(int odd) {
-    int next = (odd - 1) / 2;
-    GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, odd, UnitVector.of(2 * odd + 1, odd));
-    return Range.of(next + 1, odd + next + 1).map(func);
-  }
-
   private final GeodesicInterface geodesicInterface;
   private final List<Tensor> weights = new ArrayList<>();
 
@@ -41,7 +32,7 @@ public class GeodesicBSplineCenter implements TensorUnaryOperator {
     int radius = (tensor.length() - 1) / 2;
     synchronized (weights) {
       while (weights.size() <= radius)
-        weights.add(StaticHelper.splits(limitMask(tensor.length())));
+        weights.add(StaticHelper.splits(BSplineLimitMask.FUNCTION.apply(tensor.length())));
     }
     Tensor splits = weights.get(radius);
     Tensor pL = tensor.get(0);
@@ -52,12 +43,5 @@ public class GeodesicBSplineCenter implements TensorUnaryOperator {
       pR = geodesicInterface.split(pR, tensor.get(2 * radius - index), scalar);
     }
     return geodesicInterface.split(pL, pR, RationalScalar.HALF);
-  }
-
-  public static void main(String[] args) {
-    limitMask(1);
-    limitMask(3);
-    limitMask(5);
-    limitMask(7);
   }
 }

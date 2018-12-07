@@ -23,7 +23,7 @@ public class GeodesicBSplineFunctionTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     int n = 20;
     Tensor domain = Subdivide.of(0, n - 1, 100);
-    for (int degree = 1; degree < 10; ++degree) {
+    for (int degree = 1; degree < 7; ++degree) {
       Tensor control = RandomVariate.of(distribution, n, 3);
       GeodesicBSplineFunction mapForward = //
           GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, control);
