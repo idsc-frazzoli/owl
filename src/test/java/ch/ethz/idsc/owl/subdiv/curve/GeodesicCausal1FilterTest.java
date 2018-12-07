@@ -7,11 +7,13 @@ import ch.ethz.idsc.owl.math.group.RnExponential;
 import ch.ethz.idsc.owl.math.group.RnGroup;
 import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
 import ch.ethz.idsc.owl.math.group.Se2Group;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -39,49 +41,19 @@ public class GeodesicCausal1FilterTest extends TestCase {
     GeodesicInterface geodesicInterface = //
         new LieGroupGeodesic(RnGroup.INSTANCE::element, RnExponential.INSTANCE);
     Scalar alpha = RationalScalar.HALF;
-    GeodesicCausal1Filter geodesicCausal1Filter = new GeodesicCausal1Filter(geodesicInterface, alpha);
+    TensorUnaryOperator tensorUnaryOperator = new GeodesicCausal1Filter(geodesicInterface, alpha);
+    assertEquals(tensorUnaryOperator.apply(RealScalar.of(10)), RealScalar.of(10));
+    assertEquals(tensorUnaryOperator.apply(RealScalar.of(10)), RealScalar.of(10));
+    assertEquals(tensorUnaryOperator.apply(RealScalar.of(20)), RealScalar.of(15));
     {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(10));
-      assertEquals(tensor, RealScalar.of(10));
-    }
-    {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(10));
-      assertEquals(tensor, RealScalar.of(10));
-    }
-    {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(20));
-      System.out.println(tensor);
-      assertEquals(tensor, RealScalar.of(15));
-    }
-    {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(20));
-      System.out.println(tensor);
+      Tensor tensor = tensorUnaryOperator.apply(RealScalar.of(20));
+      ExactScalarQ.require(tensor.Get());
       assertEquals(tensor, RealScalar.of(20));
     }
-    {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(20.));
-      System.out.println(tensor);
-      // assertEquals(tensor, RealScalar.of(20));
-    }
-    {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(20.));
-      System.out.println(tensor);
-      // assertEquals(tensor, RealScalar.of(20));
-    }
-    {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(20.));
-      System.out.println(tensor);
-      // assertEquals(tensor, RealScalar.of(20));
-    }
-    {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(20.));
-      System.out.println(tensor);
-      // assertEquals(tensor, RealScalar.of(20));
-    }
-    {
-      Tensor tensor = geodesicCausal1Filter.apply(RealScalar.of(20.));
-      System.out.println(tensor);
-      // assertEquals(tensor, RealScalar.of(20));
-    }
+    assertEquals(tensorUnaryOperator.apply(RealScalar.of(20.)), RealScalar.of(22.5));
+    assertEquals(tensorUnaryOperator.apply(RealScalar.of(20.)), RealScalar.of(22.5));
+    assertEquals(tensorUnaryOperator.apply(RealScalar.of(20.)), RealScalar.of(21.25));
+    assertEquals(tensorUnaryOperator.apply(RealScalar.of(20.)), RealScalar.of(20));
+    assertEquals(tensorUnaryOperator.apply(RealScalar.of(20.)), RealScalar.of(19.375));
   }
 }

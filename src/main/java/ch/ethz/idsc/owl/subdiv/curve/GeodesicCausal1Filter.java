@@ -1,6 +1,8 @@
 // code by ob
 package ch.ethz.idsc.owl.subdiv.curve;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.owl.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -25,16 +27,22 @@ public class GeodesicCausal1Filter implements TensorUnaryOperator {
     this.alpha = alpha;
   }
 
+  public GeodesicCausal1Filter(GeodesicInterface geodesicInterface, Scalar alpha, Tensor p, Tensor q) {
+    this(geodesicInterface, alpha);
+    this.p = p;
+    this.q = q;
+  }
+
   /** @return extrapolated "best guess" value from the previous predictions */
   public synchronized Tensor extrapolate() {
-    if (p == null)
+    if (Objects.isNull(p))
       return q;
     return geodesicInterface.split(p, q, TWO);
   }
 
   @Override
   public synchronized Tensor apply(Tensor tensor) {
-    if (q == null) {
+    if (Objects.isNull(q)) {
       q = tensor.copy();
       return q.copy();
     }
