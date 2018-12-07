@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** state space model taken from the book
  * "Differentially Flat Systems" Chapter 2.7.2
@@ -16,7 +17,9 @@ import ch.ethz.idsc.tensor.Tensors;
  * @param u = proportional of heat delivered to air mass by the burner [K * s^-1]
  * @author Andre */
 /* package */ class BalloonStateSpaceModel implements StateSpaceModel {
-  /** constants of the state space model */
+  /** constants of the hot air balloon */
+  static final Scalar MAX_VERT_SPEED = Quantity.of(5, "m*s^-1");
+  /** parameters of the state space model */
   private final Scalar tau1;
   private final Scalar tau2;
   private final Scalar sigma;
