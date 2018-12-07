@@ -38,7 +38,7 @@ public class So2FamilyTest extends TestCase {
   public void testForwardSe2() {
     RigidFamily rigidFamily = new So2Family(s -> s);
     Tensor matrix = rigidFamily.forward_se2(RealScalar.ONE);
-    assertTrue(OrthogonalMatrixQ.of(matrix));
+    assertTrue(OrthogonalMatrixQ.of(matrix, Chop._14));
     assertEquals(matrix, Se2Utils.toSE2Matrix(Tensors.vector(0, 0, 1)));
   }
 }

@@ -18,7 +18,7 @@ public class So3GeodesicTest extends TestCase {
     Tensor p = Rodrigues.exp(Tensors.vector(1, 2, 3));
     Tensor q = Rodrigues.exp(Tensors.vector(2, -1, 2));
     Tensor split = So3Geodesic.INSTANCE.split(p, q, RationalScalar.HALF);
-    assertTrue(OrthogonalMatrixQ.of(split));
+    assertTrue(OrthogonalMatrixQ.of(split, Chop._14));
   }
 
   public void testEndPoints() {

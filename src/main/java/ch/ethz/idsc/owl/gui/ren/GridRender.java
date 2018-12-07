@@ -6,22 +6,30 @@ import java.awt.Graphics2D;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 public enum GridRender implements RenderInterface {
   INSTANCE;
   // ---
-  @Override
+  private static final Tensor GRID_X = Tensors.matrixInt(new int[][] { { -10, 0 }, { 10, 0 } });
+  private static final Tensor GRID_Y = Tensors.matrixInt(new int[][] { { 0, -10 }, { 0, 10 } });
+  // ---
+  private static final Tensor HELP_X = Tensors.matrixInt(new int[][] { { -10, 1 }, { 10, 1 } });
+  private static final Tensor HELP_Y = Tensors.matrixInt(new int[][] { { 1, -10 }, { 1, 10 } });
+
+  // ---
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     {
       graphics.setColor(Color.LIGHT_GRAY);
-      graphics.draw(geometricLayer.toVector(Tensors.vector(-10, 1), Tensors.vector(20, 0)));
-      graphics.draw(geometricLayer.toVector(Tensors.vector(1, -10), Tensors.vector(0, 20)));
+      graphics.draw(geometricLayer.toPath2D(HELP_X));
+      graphics.draw(geometricLayer.toPath2D(HELP_Y));
     }
     {
       graphics.setColor(Color.GRAY);
-      graphics.draw(geometricLayer.toVector(Tensors.vector(-10, 0), Tensors.vector(20, 0)));
-      graphics.draw(geometricLayer.toVector(Tensors.vector(0, -10), Tensors.vector(0, 20)));
+      graphics.draw(geometricLayer.toPath2D(GRID_X));
+      graphics.draw(geometricLayer.toPath2D(GRID_Y));
     }
   }
 }
