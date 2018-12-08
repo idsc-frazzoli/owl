@@ -49,8 +49,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 /* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
   private static final boolean BSPLINE4 = false;
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
-  // private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
-  // private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // private static final Tensor DUBILAB = //
   // ResourceData.of("/dubilab/controlpoints/eight/20180603.csv").multiply(RealScalar.of(.4)).unmodifiable();
   // ---

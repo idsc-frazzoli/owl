@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-class SymNode extends SymLink {
+/* package */ class SymNode extends SymLink {
   private final Scalar symScalar;
   public Tensor position;
 
@@ -16,17 +16,17 @@ class SymNode extends SymLink {
     this.symScalar = symScalar;
   }
 
-  @Override
+  @Override // from SymLink
   public int getIndex() {
     return symScalar.number().intValue();
   }
 
-  @Override
+  @Override // from SymLink
   public Tensor getPosition() {
     return Tensors.of(symScalar, RealScalar.ZERO);
   }
 
-  @Override
+  @Override // from SymLink
   public Tensor getPosition(GeodesicInterface geodesicInterface) {
     return position;
   }

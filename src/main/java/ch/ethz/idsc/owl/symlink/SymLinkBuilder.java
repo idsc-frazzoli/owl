@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.symlink;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-class SymLinkBuilder {
+/* package */ class SymLinkBuilder {
   private final Tensor control;
 
   public SymLinkBuilder(Tensor control) {

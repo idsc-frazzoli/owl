@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 
-class SymScalar extends ScalarAdapter {
+/* package */ class SymScalar extends ScalarAdapter {
   public static Scalar of(Scalar... scalars) {
     if (scalars.length == 1)
       return new SymScalar(scalars[0]);

@@ -11,8 +11,15 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Min;
 
-class SymLink {
-  public static final Scalar SHIFT_Y = RealScalar.of(.5);
+/* package */ class SymLink {
+  private static final Scalar SHIFT_Y = RealScalar.of(.5);
+
+  public static SymLink build(SymScalar symScalar) {
+    if (symScalar.isScalar())
+      return new SymNode(symScalar.evaluate());
+    return new SymLink(build(symScalar.getP()), build(symScalar.getQ()), symScalar.ratio());
+  }
+
   // ---
   public final SymLink lP;
   public final SymLink lQ;
@@ -45,11 +52,5 @@ class SymLink {
         lP.getPosition(geodesicInterface), //
         lQ.getPosition(geodesicInterface), //
         lambda);
-  }
-
-  public static SymLink build(SymScalar symScalar) {
-    if (symScalar.isScalar())
-      return new SymNode(symScalar.evaluate());
-    return new SymLink(build(symScalar.getP()), build(symScalar.getQ()), symScalar.ratio());
   }
 }

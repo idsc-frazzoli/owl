@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 /** immutable */
 public class DubinsPath {
@@ -33,14 +34,18 @@ public class DubinsPath {
 
   private class AbsoluteDubinsPath implements ScalarTensorFunction {
     private final Tensor g;
+    private final Clip clip;
 
     AbsoluteDubinsPath(Tensor g) {
       this.g = g;
+      Scalar length = length();
+      clip = Clip.function(length.zero(), length);
     }
 
     @Override // from ScalarTensorFunction
     public Tensor apply(Scalar scalar) {
       Tensor g = this.g;
+      clip.requireInside(scalar);
       for (int index = 0; index < 3; ++index) {
         Tensor x = dubinsPathType.tangent(index, radius);
         if (Scalars.lessEquals(scalar, segLength.Get(index)))

@@ -26,8 +26,8 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public abstract class ControlPointsDemo extends AbstractDemo {
-  protected static final Tensor ARROWHEAD_HI = Arrowhead.of(0.40);
-  protected static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(.1));
+  protected static final Tensor ARROWHEAD_HI = Arrowhead.of(0.4);
+  protected static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(0.1));
   // ---
   protected final JButton jButton = new JButton("clear");
   protected final JToggleButton jToggleButton = new JToggleButton("R2");
