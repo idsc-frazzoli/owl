@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.mat.Inverse;
     setControl(Tensors.fromString("{{0, 0}, {1, 0}}"));
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     int degree = spinnerDegree.getValue();

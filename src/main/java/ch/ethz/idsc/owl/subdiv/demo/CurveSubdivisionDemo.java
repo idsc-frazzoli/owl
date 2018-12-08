@@ -27,9 +27,9 @@ import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.BSplineInterpolationApproximation;
 import ch.ethz.idsc.owl.subdiv.curve.BSplineLimitMatrix;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
-import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivisionInterpolationApproximation;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
   private final JToggleButton jToggleLine = new JToggleButton("line");
-  private final JToggleButton jToggleInterp = new JToggleButton("interp");
+  private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   // ---
   private boolean printref = false;
@@ -118,8 +118,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
-    jToggleInterp.setSelected(false);
-    timerFrame.jToolBar.add(jToggleInterp);
+    jToggleItrp.setSelected(false);
+    timerFrame.jToolBar.add(jToggleItrp);
     // ---
     timerFrame.jToolBar.add(jToggleCyclic);
     // ---
@@ -185,10 +185,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
       TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
-      if (jToggleInterp.isSelected())
-        rnctrl = scheme.degree.isPresent() //
-            ? Inverse.of(BSplineLimitMatrix.of(scheme.degree.get(), rnctrl.length())).dot(rnctrl)
-            : new CurveSubdivisionInterpolationApproximation(tuo).fixed(rnctrl, 20);
+      if (jToggleItrp.isSelected() && scheme.degree.isPresent())
+        rnctrl = Inverse.of(BSplineLimitMatrix.of(scheme.degree.get(), rnctrl.length())).dot(rnctrl);
       // ---
       refined = Nest.of(tuo, rnctrl, levels);
       {
@@ -223,8 +221,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
       Tensor se2ctrl = _control.copy();
-      if (jToggleInterp.isSelected())
-        se2ctrl = new CurveSubdivisionInterpolationApproximation(subdivision).fixed(se2ctrl, 20);
+      if (jToggleItrp.isSelected() && scheme.degree.isPresent())
+        se2ctrl = new BSplineInterpolationApproximation(Se2CoveringGeodesic.INSTANCE, scheme.degree.get()).fixed(se2ctrl, 30);
       refined = Nest.of(subdivision, se2ctrl, levels);
     }
     if (jToggleLine.isSelected()) {

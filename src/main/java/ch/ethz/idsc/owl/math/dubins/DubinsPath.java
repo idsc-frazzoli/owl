@@ -54,14 +54,15 @@ public class DubinsPath {
     public Tensor apply(Scalar scalar) {
       Tensor g = this.g;
       clip.requireInside(scalar);
-      for (int index = 0; index < 3; ++index) {
+      for (int index = 0; index < 2; ++index) {
         Tensor x = dubinsPathType.tangent(index, radius);
         if (Scalars.lessEquals(scalar, segLength.Get(index)))
           return Se2CoveringIntegrator.INSTANCE.spin(g, x.multiply(scalar));
         g = Se2CoveringIntegrator.INSTANCE.spin(g, x.multiply(segLength.Get(index)));
         scalar = scalar.subtract(segLength.Get(index));
       }
-      return g;
+      Tensor x = dubinsPathType.tangent(2, radius);
+      return Se2CoveringIntegrator.INSTANCE.spin(g, x.multiply(scalar));
     }
   }
 }

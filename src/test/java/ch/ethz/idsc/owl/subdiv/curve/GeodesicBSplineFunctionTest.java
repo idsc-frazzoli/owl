@@ -94,4 +94,13 @@ public class GeodesicBSplineFunctionTest extends TestCase {
     assertTrue(ExactScalarQ.all(limitMask));
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
   }
+
+  public void testDegreeFail() {
+    try {
+      GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, -1, UnitVector.of(7, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
