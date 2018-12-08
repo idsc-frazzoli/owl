@@ -1,30 +1,33 @@
 // code by jph
-package ch.ethz.idsc.owl.math.dubins;
+package ch.ethz.idsc.owl.subdiv.demo;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.dubins.DubinsPath;
+import ch.ethz.idsc.owl.math.dubins.DubinsPathLengthComparator;
+import ch.ethz.idsc.owl.math.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.owl.subdiv.demo.AbstractDemo;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 /* package */ class DubinsPathDemo extends AbstractDemo {
   private static final Tensor ARROWHEAD = Arrowhead.of(.5);
+  private static final ColorDataIndexed _097 = ColorDataLists._097.cyclic();
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Tensor mouse = Array.zeros(3);
     GraphicsUtil.setQualityHigh(graphics);
-    mouse = geometricLayer.getMouseSe2State();
+    final Tensor mouse = geometricLayer.getMouseSe2State();
     {
       graphics.setColor(Color.GREEN);
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
@@ -33,17 +36,14 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     }
     // ---
     FixedRadiusDubins fixedRadiusDubins = new FixedRadiusDubins(mouse, RealScalar.of(1));
-    for (DubinsPath dubinsPath : fixedRadiusDubins.allValid().collect(Collectors.toList())) {
-      graphics.setColor(Color.BLUE);
-      Path2D path2d = geometricLayer.toPath2D(sample(dubinsPath));
-      graphics.draw(path2d);
-    }
+    graphics.setColor(_097.getColor(0));
+    for (DubinsPath dubinsPath : fixedRadiusDubins.allValid().collect(Collectors.toList()))
+      graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     {
       DubinsPath dubinsPath = fixedRadiusDubins.allValid().min(DubinsPathLengthComparator.INSTANCE).get();
-      graphics.setColor(Color.RED);
-      Path2D path2d = geometricLayer.toPath2D(sample(dubinsPath));
-      graphics.setStroke(new BasicStroke(1.25f));
-      graphics.draw(path2d);
+      graphics.setColor(_097.getColor(1));
+      graphics.setStroke(new BasicStroke(1.5f));
+      graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
       graphics.setStroke(new BasicStroke(1f));
     }
   }
@@ -54,8 +54,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   }
 
   public static void main(String[] args) {
-    DubinsPathDemo dubinsPathDemo = new DubinsPathDemo();
-    dubinsPathDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    dubinsPathDemo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new DubinsPathDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

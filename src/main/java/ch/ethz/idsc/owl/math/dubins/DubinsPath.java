@@ -9,12 +9,18 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Clip;
 
-/** immutable */
+/** compatible with the use of Quantity:
+ * radius and entries in segLength must have the same unit
+ * 
+ * immutable */
 public class DubinsPath {
   private final DubinsPathType dubinsPathType;
   private final Scalar radius;
   private final Tensor segLength;
 
+  /** @param dubinsPathType
+   * @param radius
+   * @param segLength {length1, length2, length3} */
   public DubinsPath(DubinsPathType dubinsPathType, Scalar radius, Tensor segLength) {
     this.dubinsPathType = dubinsPathType;
     this.radius = radius;
@@ -26,7 +32,9 @@ public class DubinsPath {
     return (Scalar) Total.of(segLength);
   }
 
-  /** @param g start configuration
+  /** parameterization of dubins path over the closed interval [length().zero(), length()]
+   * 
+   * @param g start configuration
    * @return scalar function for input in the interval [0, length()] */
   public ScalarTensorFunction sampler(Tensor g) {
     return new AbsoluteDubinsPath(g);
