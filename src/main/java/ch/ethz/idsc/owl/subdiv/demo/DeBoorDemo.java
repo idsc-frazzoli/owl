@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.opt.BSplineFunction;
 import ch.ethz.idsc.tensor.opt.DeBoor;
 
 /* package */ class DeBoorDemo extends AbstractDemo {
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
@@ -44,7 +45,6 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
       Tensor matrix = geometricLayer.getMatrix();
       geometricLayer.pushMatrix(Inverse.of(matrix));
       {
-        ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
         graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
         for (int length = 2; length <= 6; ++length) {
           Tensor string = Tensors.fromString("{{200, 0, 0}, {0, -180, 0}, {0, 0, 1}}");
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
           Tensor domain = Subdivide.of(0, length - 1, (length - 1) * 20);
           {
             for (int k_th = 0; k_th < length; ++k_th) {
-              graphics.setColor(cyclic.getColor(k_th));
+              graphics.setColor(COLOR_DATA_INDEXED.getColor(k_th));
               BSplineFunction bSplineFunction = BSplineFunction.of(degree, UnitVector.of(length, k_th));
               DeBoor deBoor = bSplineFunction.deBoor(k_th);
               Tensor knots = deBoor.knots();

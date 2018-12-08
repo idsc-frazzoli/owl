@@ -17,6 +17,7 @@ import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
+import ch.ethz.idsc.owl.subdiv.curve.BSplineInterpolationApproximation;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,6 +33,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
+  private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
   GeodesicBSplineFunctionDemo() {
@@ -45,6 +47,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     // ---
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
+    // ---
+    timerFrame.jToolBar.add(jToggleItrp);
     // ---
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
@@ -77,7 +81,11 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     final Tensor refined;
     if (isR2) {
       Tensor rnctrl = controlR2();
-      GeodesicBSplineFunction geodesicBSplineFunction = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, rnctrl);
+      Tensor effective = jToggleItrp.isSelected() //
+          ? new BSplineInterpolationApproximation(RnGeodesic.INSTANCE, degree).fixed(rnctrl, 30)
+          : rnctrl;
+      GeodesicBSplineFunction geodesicBSplineFunction = //
+          GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
       refined = domain.map(geodesicBSplineFunction);
       {
         graphics.setColor(new Color(0, 0, 255, 128));
@@ -106,7 +114,11 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
           graphics.draw(path2d);
           geometricLayer.popMatrix();
         }
-      GeodesicBSplineFunction geodesicBSplineFunction = GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, control);
+      Tensor effective = jToggleItrp.isSelected() //
+          ? new BSplineInterpolationApproximation(Se2CoveringGeodesic.INSTANCE, degree).fixed(control, 30)
+          : control;
+      GeodesicBSplineFunction geodesicBSplineFunction = //
+          GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, effective);
       refined = domain.map(geodesicBSplineFunction);
     }
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);

@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-enum SymGenerate {
+/* package */ enum SymGenerate {
   ;
   public static SymLinkImage window(SmoothingKernel wf, int radius) {
     TensorUnaryOperator tensorUnaryOperator = //

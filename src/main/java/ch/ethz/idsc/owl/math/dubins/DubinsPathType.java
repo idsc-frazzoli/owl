@@ -27,16 +27,19 @@ public enum DubinsPathType {
     this.dubinsSteer = dubinsSteer;
   }
 
+  /** @return true if type is RSL or RSR or RLR */
   public boolean isFirstTurnRight() {
     return isFirstTurnRight;
   }
 
+  /** @return true if type is LSL or RSR or LRL or RLR */
   public boolean isFirstEqualsLast() {
     return isFirstEqualsLast;
   }
 
   public Tensor tangent(int index, Scalar radius) {
-    return Tensors.of(RealScalar.ONE, RealScalar.ZERO, scaSign.Get(index).divide(radius));
+    // TODO x should obtain unit from radius!
+    return Tensors.of(RealScalar.ONE, radius.zero(), scaSign.Get(index).divide(radius));
   }
 
   public DubinsSteer dubinsSteer() {

@@ -27,8 +27,9 @@ import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
+import ch.ethz.idsc.owl.subdiv.curve.BSplineInterpolationApproximation;
+import ch.ethz.idsc.owl.subdiv.curve.BSplineLimitMatrix;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
-import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivisionInterpolationApproximation;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -49,8 +50,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 /* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
   private static final boolean BSPLINE4 = false;
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
-  // private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
-  // private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = //
+      ColorDataLists._097.cyclic().deriveWithAlpha(128 + 64);
   // private static final Tensor DUBILAB = //
   // ResourceData.of("/dubilab/controlpoints/eight/20180603.csv").multiply(RealScalar.of(.4)).unmodifiable();
   // ---
@@ -62,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
   private final JToggleButton jToggleLine = new JToggleButton("line");
-  private final JToggleButton jToggleInterp = new JToggleButton("interp");
+  private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   // ---
   private boolean printref = false;
@@ -117,8 +118,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
-    jToggleInterp.setSelected(false);
-    timerFrame.jToolBar.add(jToggleInterp);
+    jToggleItrp.setSelected(false);
+    timerFrame.jToolBar.add(jToggleItrp);
     // ---
     timerFrame.jToolBar.add(jToggleCyclic);
     // ---
@@ -156,11 +157,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    {
-      // graphics.setColor(new Color(128 - 64, 255, 128, 255));
-      // graphics.draw(geometricLayer.toPath2D(FCURVE));
-    }
-    CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
+    final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
     Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
     boolean isR2 = jToggleButton.isSelected();
     boolean isCyclic = jToggleCyclic.isSelected();
@@ -188,8 +185,9 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
       TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
-      if (jToggleInterp.isSelected())
-        rnctrl = new CurveSubdivisionInterpolationApproximation(tuo).fixed(rnctrl, 20);
+      if (jToggleItrp.isSelected() && scheme.degree.isPresent())
+        rnctrl = Inverse.of(BSplineLimitMatrix.of(scheme.degree.get(), rnctrl.length())).dot(rnctrl);
+      // ---
       refined = Nest.of(tuo, rnctrl, levels);
       {
         graphics.setColor(new Color(0, 0, 255, 128));
@@ -223,8 +221,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
       Tensor se2ctrl = _control.copy();
-      if (jToggleInterp.isSelected())
-        se2ctrl = new CurveSubdivisionInterpolationApproximation(subdivision).fixed(se2ctrl, 20);
+      if (jToggleItrp.isSelected() && scheme.degree.isPresent())
+        se2ctrl = new BSplineInterpolationApproximation(Se2CoveringGeodesic.INSTANCE, scheme.degree.get()).fixed(se2ctrl, 30);
       refined = Nest.of(subdivision, se2ctrl, levels);
     }
     if (jToggleLine.isSelected()) {
@@ -258,31 +256,30 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     new CurveRender(refined, isCyclic, jToggleComb.isSelected()).render(geometricLayer, graphics);
     if (jToggleCrvt.isSelected()) {
       graphics.setStroke(new BasicStroke(1.25f));
-      ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic().deriveWithAlpha(128 + 64);
       Tensor matrix = geometricLayer.getMatrix();
       geometricLayer.pushMatrix(Inverse.of(matrix));
       geometricLayer.pushMatrix(Tensors.fromString("{{1,0,0},{0,-50,100},{0,0,1}}"));
       Tensor points = Tensor.of(refined.stream().map(Extract2D::of));
       {
-        graphics.setColor(colorDataIndexed.getColor(0));
+        graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
         Tensor curvature = StaticHelper.curvature(points);
         Tensor domain = Range.of(0, curvature.length());
         graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, curvature))));
       }
       Tensor diffs = Differences.of(refined.get(Tensor.ALL, 2));
       {
-        graphics.setColor(colorDataIndexed.getColor(1));
+        graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
         Tensor domain = Range.of(0, diffs.length());
         graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, diffs))));
       }
       Tensor arclen = Tensor.of(Differences.of(points).stream().map(Norm._2::ofVector));
       {
-        graphics.setColor(colorDataIndexed.getColor(2));
+        graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
         Tensor domain = Range.of(0, arclen.length());
         graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, arclen))));
       }
       {
-        graphics.setColor(colorDataIndexed.getColor(3));
+        graphics.setColor(COLOR_DATA_INDEXED.getColor(3));
         Tensor div = diffs.pmul(arclen.map(InvertUnlessZero.FUNCTION));
         Tensor domain = Range.of(0, div.length());
         graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, div.multiply(RealScalar.of(-1))))));

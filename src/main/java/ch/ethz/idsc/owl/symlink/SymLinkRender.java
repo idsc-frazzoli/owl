@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Round;
 
-class SymLinkRender implements RenderInterface {
+/* package */ class SymLinkRender implements RenderInterface {
   static final Tensor CIRCLE_END = CirclePoints.of(51).multiply(RealScalar.of(.066));
   private static final Tensor CIRCLE_MID = CirclePoints.of(21).multiply(RealScalar.of(.033));
   // ---
@@ -29,7 +29,7 @@ class SymLinkRender implements RenderInterface {
     this.symLink = symLink;
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor here = symLink.getPosition();
     if (symLink instanceof SymNode) {

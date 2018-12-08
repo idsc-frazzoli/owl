@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 
-class SymWeights {
+/* package */ class SymWeights {
   public static Tensor of(SymScalar root) {
     return new SymWeights(root).vector();
   }

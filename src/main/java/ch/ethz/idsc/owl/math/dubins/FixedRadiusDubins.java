@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.math.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.owl.math.planar.ArcTan2D;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -17,15 +16,17 @@ import ch.ethz.idsc.tensor.red.Norm;
 public class FixedRadiusDubins implements DubinsPathGenerator {
   private final Tensor g;
   private final Scalar radius;
+  private final Scalar zero;
 
   public FixedRadiusDubins(Tensor g, Scalar radius) {
     this.g = g;
     this.radius = radius;
+    zero = radius.zero();
   }
 
   public Optional<DubinsPath> create(DubinsPathType dubinsPathType) {
-    Tensor center1 = Tensors.of(RealScalar.ZERO, radius, RealScalar.ZERO);
-    Tensor h = Tensors.of(RealScalar.ZERO, dubinsPathType.isFirstEqualsLast() ? radius : radius.negate(), RealScalar.ZERO);
+    Tensor center1 = Tensors.of(zero, radius, zero);
+    Tensor h = Tensors.of(zero, dubinsPathType.isFirstEqualsLast() ? radius : radius.negate(), zero);
     Tensor gnorm = dubinsPathType.isFirstTurnRight() ? Se2Flip.FUNCTION.apply(g) : g;
     Tensor center3 = new Se2CoveringGroupElement(gnorm).combine(h);
     Tensor deltacenter = new Se2CoveringGroupElement(center1).inverse().combine(center3);
@@ -38,7 +39,7 @@ public class FixedRadiusDubins implements DubinsPathGenerator {
         .map(segLength -> new DubinsPath(dubinsPathType, radius, segLength));
   }
 
-  @Override
+  @Override // from DubinsPathGenerator
   public Stream<DubinsPath> allValid() {
     return Stream.of(DubinsPathType.values()) //
         .map(this::create) //
