@@ -24,13 +24,11 @@ import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivision;
 import ch.ethz.idsc.owl.subdiv.curve.CurveSubdivisionInterpolationApproximation;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -51,8 +49,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 /* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
   private static final boolean BSPLINE4 = false;
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
-  private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
-  private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
+  // private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
+  // private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // private static final Tensor DUBILAB = //
   // ResourceData.of("/dubilab/controlpoints/eight/20180603.csv").multiply(RealScalar.of(.4)).unmodifiable();
   // ---
@@ -70,62 +68,15 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private boolean printref = false;
 
   CurveSubdivisionDemo() {
-    // BufferedImage image = ImageIO.read(UserHome.file("trebleclef25.png"));
-    // control = Tensors.fromString(
-    // "{{499/60, -43/60, 4.1887902047863905}, {-19/60, 11/20, 2.617993877991494}, {41/15, 43/10, 1.0471975511965976}, {-221/60, 16/5, 3.141592653589793}, {-9,
-    // 247/60, 0.7853981633974483}, {-46/15, 43/15, 3.141592653589793}, {60, 1, 0.7853981633974483}, {431/60, 9/5, 4.1887902047863905}}");
-    // control = Tensors.fromString( //
-    // "{{31/15, -1/3, 1.0471975511965976}, {-27/10, 107/60, 3.665191429188092}, {23/6, -44/15, 6.8067840827778845}, {-47/15, 409/60, 9.686577348568528}}");
-    // TREBLE CLEF
-    // {{-23/30, 17/5, 0.0}, {-8/15, -73/60, -1.0471975511965976}, {-35/12, -7/2, 0.2617993877991494}, {-1/5, -133/30, 2.356194490192345}, {-33/20, -61/15,
-    // 6.8067840827778845}, {-17/30, -131/30, 7.853981633974482}, {-31/15, -173/60, 5.497787143782138}, {1/5, -91/20, 1.832595714594046}, {-3, -26/15,
-    // -1.0471975511965976}, {-37/30, 7/20, -1.308996938995747}, {-7/20, 5/2, -0.5235987755982988}, {-79/60, 47/30, 1.0471975511965976}, {-17/15, -11/30,
-    // 1.5707963267948966}, {-3/20, -127/20, 1.5707963267948966}, {-1/12, -421/60, 1.0471975511965976}, {-37/15, -27/4, -1.308996938995747}, {-8/5, -29/4,
-    // -6.021385919380436}}
-    // control = Tensors.fromString( //
-    // "{{0, 0, 0}, {4, 0, 0.0}, {8, 0, 0.0}, {8, -3, -3.141592653589793}, {4, -3, -3.141592653589793}, {0, -3, -3.141592653589793}," //
-    // + "{0, 3, -6.283185307179586}," //
-    // + "{4, 3, -6.283185307179586}, {8, 3, -6.283185307179586}}");
-    // control = Tensors.fromString("{{-8,0,0},{-4,0,0},{0,0,0}}");
-    // // Math.PI;
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, -1), Tensors.fromString("{{2,0,0},{2,0,1.3},{3,0,0},{4,0,-4.2},{5,0,0},{5,0,3.14159265},{3,0,-3}}"));
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, -Math.PI - 1), //
-    // Tensors.fromString("{{2,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}"));
-    // control = Tensors.fromString(
-    // "{{11/15, 1/2, -1.0471975511}, {149/60, 43/30, 1.04719755}, {-19/20, 19/30, 2.0943951}, {-44/15, 3/4, 0.2617993}, {-71/60, 17/12, -2.0943951}}");
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, Math.PI / 2), //
-    // Tensors.fromString("{{1.5,0,0},{1.5,0,0},{2,0,3.141592653589793},{1.5,0,0},{1.5,0,0},{4,0,3.141592653589793},{1.5,0,0},{1.5,0,0}}"));
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, 0.5), //
-    // Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}"));
+    Tensor control = null;
     {
-      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
+      Tensor move = Tensors.fromString( //
+          "{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+      move = Tensor.of(move.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))));
+      Tensor init = Tensors.vector(0, 0, 2.1);
+      control = DubinsGenerator.of(init, move);
     }
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-    // Tensors.fromString("{{1.3,0,0},{1.3,0,0},{2.6,0,2.5708},{1.3,0,2.1},{1.9,0,0},{3.0,0,-1.2},{1.8,0,0},{5.2,0,3.14159},{2.6,0,3.14159},{2.6,0,0}}"));
-    // control = Tensors.fromString( //
-    // "{{-23/30, 17/5, 0.0}, {-8/15, -73/60, -1.0471975511965976}, {-35/12, -7/2, 0.2617993877991494}, {-1/5, -133/30, 2.356194490192345}, {-103/60, -39/10,
-    // 6.544984694978735}, {-17/30, -131/30, 7.853981633974482}, {-31/15, -173/60, 5.497787143782138}, {1/5, -91/20, 1.832595714594046}, {-3, -26/15,
-    // -1.0471975511965976}, {-37/30, 7/20, -1.308996938995747}, {-7/20, 5/2, -0.5235987755982988}, {-13/10, 23/15, 1.0471975511965976}, {-59/60, -47/30,
-    // 1.5707963267948966}}");
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, 0), //
-    // Tensors.fromString("{{1,0,0},{1,0,0},{4,-1,3.1415/2},{2,0,3.14159},{1,0,3.14159}}"));
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, Math.PI / 4 - .15), //
-    // Tensors.fromString("{{1.5,0,0},{1.5,0,0},{9,0,7.85398},{3,0,0},{1.5,0,0}}"));
-    // waviness
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, 0), Tensors.fromString( //
-    // "{{3,0,3.141592653589793},{2.5,0,-3.141592653589793},{2,0,3.141592653589793},{1.5,0,-3.141592653589793},{1.0,0,3.141592653589793}}"));
-    // dubins intro
-    // control = DubinsGenerator.of(Tensors.vector(0, 0, 3.1 + 1), Tensors.fromString( //
-    // "{{2,0,0},{3.5,0,-4.5},{3.5,0,0},{1.6,0,3},{2.3,0,2}}"));
-    // pathological
-    // control = Tensors.fromString("{{0, 0, 0}, {2, 0, 1.308996938995747}, {4, 0, 0.5235987755982988}}");
-    // {
-    // JButton jButton = new JButton("clear");
-    // jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-    // timerFrame.jToolBar.add(jButton);
-    // }
+    setControl(control);
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));
     {
@@ -303,21 +254,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
         graphics.draw(path2d);
         graphics.setStroke(new BasicStroke(1f));
       }
-      graphics.setColor(Color.BLUE);
-      Path2D path2d = geometricLayer.toPath2D(refined);
-      if (isCyclic)
-        path2d.closePath();
-      graphics.setStroke(new BasicStroke(1.25f));
-      graphics.draw(path2d);
-      graphics.setStroke(new BasicStroke(1f));
     }
-    if (jToggleComb.isSelected()) {
-      graphics.setColor(COLOR_CURVATURE_COMB);
-      Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, COMB_SCALE, isCyclic));
-      if (isCyclic)
-        path2d.closePath();
-      graphics.draw(path2d);
-    }
+    new CurveRender(refined, isCyclic, jToggleComb.isSelected()).render(geometricLayer, graphics);
     if (jToggleCrvt.isSelected()) {
       graphics.setStroke(new BasicStroke(1.25f));
       ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic().deriveWithAlpha(128 + 64);

@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.demo;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -18,11 +17,8 @@ import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicBSplineFunction;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -31,8 +27,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 /* package */ class GeodesicBSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
-  private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
-  private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -115,18 +109,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
       GeodesicBSplineFunction geodesicBSplineFunction = GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, control);
       refined = domain.map(geodesicBSplineFunction);
     }
-    {
-      graphics.setColor(Color.BLUE);
-      Path2D path2d = geometricLayer.toPath2D(refined);
-      graphics.setStroke(new BasicStroke(1.25f));
-      graphics.draw(path2d);
-      graphics.setStroke(new BasicStroke(1f));
-    }
-    if (jToggleComb.isSelected()) {
-      graphics.setColor(COLOR_CURVATURE_COMB);
-      Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, COMB_SCALE, false));
-      graphics.draw(path2d);
-    }
+    new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
     if (!isR2 && levels < 5)
       for (Tensor point : refined) {
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
