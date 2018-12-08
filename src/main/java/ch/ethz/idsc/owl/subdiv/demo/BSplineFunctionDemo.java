@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.subdiv.curve.BSplineLimitMatrix;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,10 +29,12 @@ import ch.ethz.idsc.tensor.mat.Inverse;
 
 /* package */ class BSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
+  private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
 
   BSplineFunctionDemo() {
@@ -39,6 +42,7 @@ import ch.ethz.idsc.tensor.mat.Inverse;
     jToggleButton.setSelected(true);
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
+    timerFrame.jToolBar.add(jToggleItrp);
     // ---
     jToggleComb.setSelected(false);
     timerFrame.jToolBar.add(jToggleComb);
@@ -65,7 +69,6 @@ import ch.ethz.idsc.tensor.mat.Inverse;
       Tensor matrix = geometricLayer.getMatrix();
       geometricLayer.pushMatrix(Inverse.of(matrix));
       {
-        ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
         for (int length = 2; length <= 8; ++length) {
           Tensor string = Tensors.fromString("{{100, 0, 0}, {0, -100, 0}, {0, 0, 1}}");
           string.set(RealScalar.of(110 * length), 1, 2);
@@ -75,7 +78,7 @@ import ch.ethz.idsc.tensor.mat.Inverse;
             Tensor domain = Subdivide.of(0, length - 1, 100);
             Tensor values = domain.map(bSplineFunction);
             Tensor tensor = Transpose.of(Tensors.of(domain, values));
-            graphics.setColor(cyclic.getColor(k_th));
+            graphics.setColor(COLOR_DATA_INDEXED.getColor(k_th));
             graphics.draw(geometricLayer.toPath2D(tensor));
             // ---
             graphics.setColor(new Color(0, 0, 0, 128));
@@ -87,8 +90,15 @@ import ch.ethz.idsc.tensor.mat.Inverse;
       geometricLayer.popMatrix();
       graphics.setStroke(new BasicStroke(1f));
     }
-    GeodesicBSplineFunction bSplineFunction = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, control);
-    final Tensor refined = Subdivide.of(0, control.length() - 1, 4 << levels).map(bSplineFunction);
+    // ---
+    final Tensor refined;
+    {
+      Tensor rnctrl = jToggleItrp.isSelected() //
+          ? Inverse.of(BSplineLimitMatrix.of(degree, control.length())).dot(control)
+          : control;
+      GeodesicBSplineFunction bSplineFunction = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, rnctrl);
+      refined = Subdivide.of(0, rnctrl.length() - 1, 4 << levels).map(bSplineFunction);
+    }
     graphics.setColor(new Color(255, 128, 128, 255));
     for (Tensor point : control) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));

@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 /* package */ class DubinsPathDemo extends AbstractDemo {
   private static final Tensor ARROWHEAD = Arrowhead.of(.5);
-  private static final ColorDataIndexed _097 = ColorDataLists._097.cyclic();
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -36,12 +36,12 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     }
     // ---
     FixedRadiusDubins fixedRadiusDubins = new FixedRadiusDubins(mouse, RealScalar.of(1));
-    graphics.setColor(_097.getColor(0));
+    graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
     for (DubinsPath dubinsPath : fixedRadiusDubins.allValid().collect(Collectors.toList()))
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     {
       DubinsPath dubinsPath = fixedRadiusDubins.allValid().min(DubinsPathLengthComparator.INSTANCE).get();
-      graphics.setColor(_097.getColor(1));
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
       graphics.setStroke(new BasicStroke(1.5f));
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
       graphics.setStroke(new BasicStroke(1f));

@@ -23,6 +23,8 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.DeBoor;
 
 /* package */ class DeBoorCustomDemo extends AbstractDemo {
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
+  // ---
   private final JTextField jTextField = new JTextField(30);
 
   DeBoorCustomDemo() {
@@ -38,7 +40,6 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
     GraphicsUtil.setQualityHigh(graphics);
     graphics.setStroke(new BasicStroke(1.25f));
     {
-      ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
       graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
       try {
         Tensor domain = Subdivide.of(0, 1, 100);
@@ -54,7 +55,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
             graphics.draw(path2d);
           }
           for (int k_th = 0; k_th < length; ++k_th) {
-            graphics.setColor(cyclic.getColor(k_th));
+            graphics.setColor(COLOR_DATA_INDEXED.getColor(k_th));
             DeBoor deBoor = DeBoor.of(knots, UnitVector.of(length, k_th));
             {
               graphics.setStroke(new BasicStroke(1.25f));

@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /* package */ class SymGeoRender implements RenderInterface {
   private static final GeodesicInterface GEODESIC_INTERFACE = Se2CoveringGeodesic.INSTANCE;
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.22);
-  private static final ColorDataIndexed CDI = ColorDataLists._097.cyclic();
+  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   // ---
   private final SymLink symLink;
 
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     this.symLink = symLink;
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (symLink instanceof SymNode) {
       // ---
@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       path2d.closePath();
       // int rgb = 128 + 32;
       // final Color color = new Color(rgb, rgb, rgb, 128 + 64);
-      graphics.setColor(CDI.getColor(0));
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.setStroke(new BasicStroke(1f));
       // graphics.setColor(color);
       graphics.fill(path2d);
