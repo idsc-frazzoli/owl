@@ -1,8 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.subdiv.demo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.math.GeodesicInterface;
 import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.owl.subdiv.curve.BSpline4CurveSubdivision;
@@ -12,6 +15,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Put;
 
 enum StaticHelper {
   ;
@@ -36,5 +40,31 @@ enum StaticHelper {
     if (1 < tensor.length())
       normal.append(RealScalar.ZERO);
     return normal;
+  }
+
+  static void ephemeralDubins(String title, Tensor init, Tensor move) {
+    File dir = UserHome.file("Projects/ephemeral/src/main/resources/geometry/dubins/" + title);
+    dir.mkdir();
+    if (dir.isDirectory())
+      try {
+        Put.of(new File(dir, "init.mathematica"), init);
+        Put.of(new File(dir, "move.mathematica"), move);
+      } catch (IOException exception) {
+        exception.printStackTrace();
+      }
+    else
+      System.err.println("no ex");
+  }
+
+  static void ephemeralSe2(String title, Tensor control) {
+    File dir = UserHome.file("Projects/ephemeral/src/main/resources/geometry/se2");
+    if (dir.isDirectory())
+      try {
+        Put.of(new File(dir, title + ".mathematica"), control);
+      } catch (IOException exception) {
+        exception.printStackTrace();
+      }
+    else
+      System.err.println("no ex");
   }
 }

@@ -15,11 +15,8 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicBSplineFunction;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -31,8 +28,6 @@ import ch.ethz.idsc.tensor.mat.Inverse;
 
 /* package */ class BSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
-  private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -94,10 +89,6 @@ import ch.ethz.idsc.tensor.mat.Inverse;
     }
     GeodesicBSplineFunction bSplineFunction = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, control);
     final Tensor refined = Subdivide.of(0, control.length() - 1, 4 << levels).map(bSplineFunction);
-    {
-      graphics.setColor(new Color(0, 0, 255, 128));
-      graphics.draw(geometricLayer.toPath2D(refined));
-    }
     graphics.setColor(new Color(255, 128, 128, 255));
     for (Tensor point : control) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
@@ -109,18 +100,7 @@ import ch.ethz.idsc.tensor.mat.Inverse;
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    {
-      graphics.setColor(Color.BLUE);
-      Path2D path2d = geometricLayer.toPath2D(refined);
-      graphics.setStroke(new BasicStroke(1.25f));
-      graphics.draw(path2d);
-      graphics.setStroke(new BasicStroke(1f));
-    }
-    if (jToggleComb.isSelected()) {
-      graphics.setColor(COLOR_CURVATURE_COMB);
-      Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, COMB_SCALE, false));
-      graphics.draw(path2d);
-    }
+    new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

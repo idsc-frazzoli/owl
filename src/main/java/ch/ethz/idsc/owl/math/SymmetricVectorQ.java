@@ -6,6 +6,15 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
+/** symmetric vectors are of the form
+ * <pre>
+ * {a}
+ * {a,a}
+ * {a,b,a}
+ * {a,b,b,a}
+ * {a,b,c,b,a}
+ * ...
+ * </pre> */
 public enum SymmetricVectorQ {
   ;
   /** @param tensor
