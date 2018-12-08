@@ -14,7 +14,9 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
+import ch.ethz.idsc.owl.math.group.RnGroup;
 import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.owl.math.group.Se2CoveringGroup;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.BSplineInterpolationApproximation;
@@ -82,7 +84,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     if (isR2) {
       Tensor rnctrl = controlR2();
       Tensor effective = jToggleItrp.isSelected() //
-          ? new BSplineInterpolationApproximation(RnGeodesic.INSTANCE, degree).fixed(rnctrl, 30)
+          ? new BSplineInterpolationApproximation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, degree).fixed(rnctrl, 30)
           : rnctrl;
       GeodesicBSplineFunction geodesicBSplineFunction = //
           GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
@@ -115,7 +117,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
           geometricLayer.popMatrix();
         }
       Tensor effective = jToggleItrp.isSelected() //
-          ? new BSplineInterpolationApproximation(Se2CoveringGeodesic.INSTANCE, degree).fixed(control, 30)
+          ? new BSplineInterpolationApproximation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, degree).fixed(control, 30)
           : control;
       GeodesicBSplineFunction geodesicBSplineFunction = //
           GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, effective);

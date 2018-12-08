@@ -22,6 +22,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.GeodesicInterface;
 import ch.ethz.idsc.owl.math.group.RnGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.owl.math.group.Se2CoveringGroup;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
@@ -222,7 +223,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           : curveSubdivision::string;
       Tensor se2ctrl = _control.copy();
       if (jToggleItrp.isSelected() && scheme.degree.isPresent())
-        se2ctrl = new BSplineInterpolationApproximation(Se2CoveringGeodesic.INSTANCE, scheme.degree.get()).fixed(se2ctrl, 30);
+        se2ctrl = new BSplineInterpolationApproximation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, scheme.degree.get()).fixed(se2ctrl, 30);
       refined = Nest.of(subdivision, se2ctrl, levels);
     }
     if (jToggleLine.isSelected()) {
