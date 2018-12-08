@@ -1,6 +1,10 @@
+// code by astoll
 package ch.ethz.idsc.owl.bot.balloon;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
@@ -46,8 +50,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /***************************************************/
   public BalloonEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, StateSpaceModel stateSpaceModel) {
     super(episodeIntegrator, trajectoryControl);
-    // TODO Do I need this as well ? (add(..:)
-    // add(new DeltaCoastingControl(imageGradientInterpolation, U_NORM));
+    add(new BalloonFallbackControl());
     this.stateSpaceModel = stateSpaceModel;
   }
 
@@ -86,6 +89,11 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     // TODO create meaningful render function
     // RegionRenders.draw(geometricLayer, graphics, goalRegion);
     // ---
-    // super.render(geometricLayer, graphics);
+    { // indicate current position
+      Tensor state = getStateTimeNow().state();
+      Point2D point = geometricLayer.toPoint2D(state);
+      graphics.setColor(new Color(64, 128, 64, 192));
+      graphics.fill(new Ellipse2D.Double(point.getX() - 2, point.getY() - 2, 7, 7));
+    }
   }
 }
