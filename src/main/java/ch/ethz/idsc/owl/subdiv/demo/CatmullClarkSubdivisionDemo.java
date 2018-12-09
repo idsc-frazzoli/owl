@@ -36,18 +36,10 @@ import ch.ethz.idsc.tensor.red.Nest;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
+    renderControlPoints(geometricLayer, graphics);
     Tensor control = controlSe2();
-    for (Tensor point : control) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-      Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-      path2d.closePath();
-      graphics.setColor(new Color(255, 128, 128, 64));
-      graphics.fill(path2d);
-      graphics.setColor(new Color(255, 128, 128, 255));
-      graphics.draw(path2d);
-      geometricLayer.popMatrix();
-    }
-    CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(Se2CoveringGeodesic.INSTANCE);
+    CatmullClarkSubdivision catmullClarkSubdivision = //
+        new CatmullClarkSubdivision(Se2CoveringGeodesic.INSTANCE);
     Tensor refined = Nest.of( //
         catmullClarkSubdivision::refine, //
         ArrayReshape.of(control, 2, 3, 3), //

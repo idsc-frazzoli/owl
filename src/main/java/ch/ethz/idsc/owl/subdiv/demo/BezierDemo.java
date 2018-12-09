@@ -16,7 +16,6 @@ import ch.ethz.idsc.owl.math.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.BezierCurve;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -59,6 +58,7 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor _control = controlSe2();
     int levels = spinnerRefine.getValue();
     final Tensor refined;
+    renderControlPoints(geometricLayer, graphics);
     if (isR2) {
       BezierCurve bezierCurve = new BezierCurve(RnGeodesic.INSTANCE);
       Tensor rnctrl = controlR2();
@@ -69,28 +69,7 @@ import ch.ethz.idsc.tensor.Tensors;
         graphics.draw(geometricLayer.toPath2D(refined));
       }
       graphics.setColor(new Color(255, 128, 128, 255));
-      for (Tensor point : controlSe2()) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-        Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
-        path2d.closePath();
-        graphics.setColor(new Color(255, 128, 128, 64));
-        graphics.fill(path2d);
-        graphics.setColor(new Color(255, 128, 128, 255));
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
     } else { // SE2
-      if (jToggleCtrl.isSelected())
-        for (Tensor point : controlSe2()) {
-          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-          Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-          path2d.closePath();
-          graphics.setColor(new Color(255, 128, 128, 64));
-          graphics.fill(path2d);
-          graphics.setColor(new Color(255, 128, 128, 255));
-          graphics.draw(path2d);
-          geometricLayer.popMatrix();
-        }
       BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
       refined = bezierCurve.refine(_control, 1 << levels);
     }

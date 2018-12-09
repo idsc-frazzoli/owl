@@ -24,6 +24,8 @@ import ch.ethz.idsc.tensor.opt.SphereFit;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class SphereFitDemo extends ControlPointsDemo {
+  private static final Tensor CIRCLE = CirclePoints.of(10).multiply(RealScalar.of(3));
+
   SphereFitDemo() {
     timerFrame.jToolBar.add(jButton);
     jToggleButton.setSelected(true);
@@ -41,10 +43,10 @@ import ch.ethz.idsc.tensor.red.Norm;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     Tensor rnctrl = controlR2();
-    Optional<Tensor> some = SphereFit.of(rnctrl);
-    if (some.isPresent()) {
-      Tensor center = some.get().get(0);
-      Scalar radius = some.get().Get(1);
+    Optional<Tensor> sphereFit = SphereFit.of(rnctrl);
+    if (sphereFit.isPresent()) {
+      Tensor center = sphereFit.get().get(0);
+      Scalar radius = sphereFit.get().Get(1);
       {
         geometricLayer.pushMatrix(Se2Utils.toSE2Translation(center));
         graphics.setColor(new Color(0, 0, 255, 128));
@@ -62,21 +64,20 @@ import ch.ethz.idsc.tensor.red.Norm;
       graphics.draw(path2d);
     }
     {
-      Tensor circle = CirclePoints.of(10).multiply(RealScalar.of(3));
       {
         graphics.setColor(Color.GRAY);
-        Path2D path2d = geometricLayer.toPath2D(circle);
+        Path2D path2d = geometricLayer.toPath2D(CIRCLE);
         path2d.closePath();
         graphics.draw(path2d);
       }
       Tensor matrix = Tensors.matrix((i, j) -> //
-      Norm._2.between(rnctrl.get(i), circle.get(j)), rnctrl.length(), circle.length());
+      Norm._2.between(rnctrl.get(i), CIRCLE.get(j)), rnctrl.length(), CIRCLE.length());
       HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);
       int[] matching = hungarianAlgorithm.matching();
       graphics.setColor(Color.RED);
       for (int index = 0; index < matching.length; ++index)
         if (matching[index] != HungarianAlgorithm.UNASSIGNED) {
-          Path2D path2d = geometricLayer.toPath2D(Tensors.of(rnctrl.get(index), circle.get(matching[index])));
+          Path2D path2d = geometricLayer.toPath2D(Tensors.of(rnctrl.get(index), CIRCLE.get(matching[index])));
           graphics.draw(path2d);
         }
     }
@@ -91,19 +92,7 @@ import ch.ethz.idsc.tensor.red.Norm;
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    {
-      graphics.setColor(new Color(255, 128, 128, 255));
-      for (Tensor point : controlR2()) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-        Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
-        path2d.closePath();
-        graphics.setColor(new Color(255, 128, 128, 64));
-        graphics.fill(path2d);
-        graphics.setColor(new Color(255, 128, 128, 255));
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
-    }
+    renderControlPoints(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {
