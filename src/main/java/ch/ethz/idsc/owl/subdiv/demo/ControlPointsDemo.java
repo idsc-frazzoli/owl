@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Path2D;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -28,6 +29,8 @@ import ch.ethz.idsc.tensor.red.Norm;
 public abstract class ControlPointsDemo extends AbstractDemo {
   protected static final Tensor ARROWHEAD_HI = Arrowhead.of(0.4);
   protected static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(0.1));
+  protected static final Color CP_FILL = new Color(255, 128, 128, 64);
+  protected static final Color CP_EDGE = new Color(255, 128, 128, 255);
   // ---
   protected final JButton jButton = new JButton("clear");
   protected final JToggleButton jToggleButton = new JToggleButton("R2");
@@ -45,7 +48,7 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       if (Objects.isNull(min_index)) {
         graphics.setColor(Color.GREEN);
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-        graphics.fill(geometricLayer.toPath2D(jToggleButton.isSelected() ? CIRCLE_HI : ARROWHEAD_HI));
+        graphics.fill(geometricLayer.toPath2D(shape()));
         geometricLayer.popMatrix();
       }
     }
@@ -80,6 +83,24 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       }
     });
     timerFrame.geometricComponent.addRenderInterface(renderInterface);
+  }
+
+  public Tensor shape() {
+    return jToggleButton.isSelected() ? CIRCLE_HI : ARROWHEAD_HI;
+  }
+
+  protected void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {
+    Tensor shape = shape();
+    for (Tensor point : controlSe2()) {
+      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
+      Path2D path2d = geometricLayer.toPath2D(shape);
+      path2d.closePath();
+      graphics.setColor(CP_FILL);
+      graphics.fill(path2d);
+      graphics.setColor(CP_EDGE);
+      graphics.draw(path2d);
+      geometricLayer.popMatrix();
+    }
   }
 
   public void setControl(Tensor control) {

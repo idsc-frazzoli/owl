@@ -74,7 +74,8 @@ import ch.ethz.idsc.tensor.mat.Inverse;
           string.set(RealScalar.of(110 * length), 1, 2);
           geometricLayer.pushMatrix(string);
           for (int k_th = 0; k_th < length; ++k_th) {
-            GeodesicBSplineFunction bSplineFunction = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, UnitVector.of(length, k_th));
+            GeodesicBSplineFunction bSplineFunction = //
+                GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, UnitVector.of(length, k_th));
             Tensor domain = Subdivide.of(0, length - 1, 100);
             Tensor values = domain.map(bSplineFunction);
             Tensor tensor = Transpose.of(Tensors.of(domain, values));
@@ -94,9 +95,10 @@ import ch.ethz.idsc.tensor.mat.Inverse;
     final Tensor refined;
     {
       Tensor rnctrl = jToggleItrp.isSelected() //
-          ? Inverse.of(BSplineLimitMatrix.of(degree, control.length())).dot(control)
+          ? BSplineLimitMatrix.solve(degree, control)
           : control;
-      GeodesicBSplineFunction bSplineFunction = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, rnctrl);
+      GeodesicBSplineFunction bSplineFunction = //
+          GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, rnctrl);
       refined = Subdivide.of(0, rnctrl.length() - 1, 4 << levels).map(bSplineFunction);
     }
     graphics.setColor(new Color(255, 128, 128, 255));

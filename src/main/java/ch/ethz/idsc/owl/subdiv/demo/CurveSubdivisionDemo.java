@@ -180,6 +180,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     }
     int levels = spinnerRefine.getValue();
     final Tensor refined;
+    renderControlPoints(geometricLayer, graphics);
     if (isR2) {
       CurveSubdivision curveSubdivision = function.apply(RnGeodesic.INSTANCE);
       Tensor rnctrl = controlR2();
@@ -187,36 +188,14 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
       if (jToggleItrp.isSelected() && scheme.degree.isPresent())
-        rnctrl = Inverse.of(BSplineLimitMatrix.of(scheme.degree.get(), rnctrl.length())).dot(rnctrl);
+        rnctrl = BSplineLimitMatrix.solve(scheme.degree.get(), rnctrl);
       // ---
       refined = Nest.of(tuo, rnctrl, levels);
       {
         graphics.setColor(new Color(0, 0, 255, 128));
         graphics.draw(geometricLayer.toPath2D(refined));
       }
-      graphics.setColor(new Color(255, 128, 128, 255));
-      for (Tensor point : _control) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-        Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
-        path2d.closePath();
-        graphics.setColor(new Color(255, 128, 128, 64));
-        graphics.fill(path2d);
-        graphics.setColor(new Color(255, 128, 128, 255));
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
     } else { // SE2
-      if (jToggleCtrl.isSelected())
-        for (Tensor point : controlSe2()) {
-          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-          Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-          path2d.closePath();
-          graphics.setColor(new Color(255, 128, 128, 64));
-          graphics.fill(path2d);
-          graphics.setColor(new Color(255, 128, 128, 255));
-          graphics.draw(path2d);
-          geometricLayer.popMatrix();
-        }
       CurveSubdivision curveSubdivision = function.apply(Se2CoveringGeodesic.INSTANCE);
       TensorUnaryOperator subdivision = isCyclic //
           ? curveSubdivision::cyclic

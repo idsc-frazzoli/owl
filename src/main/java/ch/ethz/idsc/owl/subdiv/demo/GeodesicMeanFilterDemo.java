@@ -78,35 +78,13 @@ import ch.ethz.idsc.tensor.red.Nest;
     int radius = spinnerRadius.getValue();
     final Tensor refined;
     final Tensor curve;
+    renderControlPoints(geometricLayer, graphics);
     if (isR2) {
       Tensor rnctrl = controlR2();
-      // refined = LanczosCurve.refine(rnctrl, 1 << levels);
-      graphics.setColor(new Color(255, 128, 128, 255));
-      for (Tensor point : _control) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-        Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
-        path2d.closePath();
-        graphics.setColor(new Color(255, 128, 128, 64));
-        graphics.fill(path2d);
-        graphics.setColor(new Color(255, 128, 128, 255));
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
       TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(RnGeodesic.INSTANCE, radius);
       refined = geodesicMeanFilter.apply(rnctrl);
       curve = Nest.of(BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE)::string, refined, 7);
     } else { // SE2
-      if (jToggleCtrl.isSelected())
-        for (Tensor point : controlSe2()) {
-          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-          Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-          path2d.closePath();
-          graphics.setColor(new Color(255, 128, 128, 64));
-          graphics.fill(path2d);
-          graphics.setColor(new Color(255, 128, 128, 255));
-          graphics.draw(path2d);
-          geometricLayer.popMatrix();
-        }
       TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(Se2CoveringGeodesic.INSTANCE, radius);
       refined = geodesicMeanFilter.apply(controlSe2());
       curve = Nest.of(BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE)::string, refined, 7);

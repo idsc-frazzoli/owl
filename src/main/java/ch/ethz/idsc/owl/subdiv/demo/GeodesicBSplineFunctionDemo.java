@@ -21,7 +21,6 @@ import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.BSplineInterpolationApproximation;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicBSplineFunction;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -81,6 +80,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     int upper = control.length() - 1;
     final Tensor domain = Subdivide.of(0, upper, upper * (levels + 1));
     final Tensor refined;
+    renderControlPoints(geometricLayer, graphics);
     if (isR2) {
       Tensor rnctrl = controlR2();
       Tensor effective = jToggleItrp.isSelected() //
@@ -93,29 +93,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
         graphics.setColor(new Color(0, 0, 255, 128));
         graphics.draw(geometricLayer.toPath2D(refined));
       }
-      graphics.setColor(new Color(255, 128, 128, 255));
-      for (Tensor point : control) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-        Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
-        path2d.closePath();
-        graphics.setColor(new Color(255, 128, 128, 64));
-        graphics.fill(path2d);
-        graphics.setColor(new Color(255, 128, 128, 255));
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
     } else { // SE2
-      if (jToggleCtrl.isSelected())
-        for (Tensor point : control) {
-          geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-          Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-          path2d.closePath();
-          graphics.setColor(new Color(255, 128, 128, 64));
-          graphics.fill(path2d);
-          graphics.setColor(new Color(255, 128, 128, 255));
-          graphics.draw(path2d);
-          geometricLayer.popMatrix();
-        }
       Tensor effective = jToggleItrp.isSelected() //
           ? new BSplineInterpolationApproximation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, degree).fixed(control, 30)
           : control;
