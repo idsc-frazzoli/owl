@@ -16,8 +16,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class BalloonFlows implements FlowsInterface, Serializable {
-  // TODO document units
-  /** @param u_max
+  /** @param u_max with units [K * s^-1]
    * @return new ApFlows instance */
   public static FlowsInterface of(Scalar u_max, StateSpaceModel stateSpaceModel) {
     return new BalloonFlows(u_max, stateSpaceModel);

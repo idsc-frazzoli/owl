@@ -32,7 +32,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   public Tensor f(Tensor x, Tensor u) {
-    /* x' = ??
+    /* TODO define x' properly
+     * x' = ??
      * y' = vel
      * vel' = (-1 / tau2) * vel + sigma * theta + w / tau2
      * theta' = - theta / tau1 + u */
@@ -43,8 +44,10 @@ import ch.ethz.idsc.tensor.Tensors;
     /** unknown perturbation due to vertical velocity of wind
      * unknown horizontal movement due to horizontal winds
      * TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
+    // FIXME w has no unit as of now, crashes when other parameters are given units , w with units [m * s^-2]
     double w = 2 * SimplexContinuousNoise.at(x1.number().doubleValue(), y.number().doubleValue(), vel.number().doubleValue(), theta.number().doubleValue());
-    double x_dot = w * 3;
+    // FIXME if used with units x_dot has none
+    double x_dot = 1;
     // -----
     return Tensors.of( //
         RealScalar.of(x_dot), //

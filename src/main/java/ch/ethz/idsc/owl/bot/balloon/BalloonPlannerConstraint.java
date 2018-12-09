@@ -24,19 +24,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
   @Override // from PlannerConstraint
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     Tensor state = glcNode.state();
-    // boolean xConstraint = Sign.isPositiveOrZero(state.Get(0));
-    // if (!xConstraint)
-    // return false;
     Scalar y = state.Get(1); // altitude
     if (Sign.isNegative(y))
       return false;
     Scalar v = state.Get(2); // vertical speed
     if (vertSpeed_clip.isOutside(v))
       return false;
-    /* not quite sure if this is a valid constraint
-     * Scalar theta = state.Get(3); // f
-     * if (Sign.isNegative(theta))
-     * return false; */
     return true;//
   }
 }

@@ -18,7 +18,6 @@ public class BalloonAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    // Quantity.of(5, "m*s^-1")
     PlannerConstraint plannerConstraint = new BalloonPlannerConstraint(RealScalar.of(1));
     StateTime stateTime = new StateTime(Tensors.vector(5, 0, 10, 0.5), RealScalar.ZERO);
     BalloonStateSpaceModel balloonStateSpaceModel = BalloonStateSpaceModels.defaultWithoutUnits();

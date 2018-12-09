@@ -56,6 +56,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
+    // TODO maybe change to norm2
     return Norm2Squared.between(x, y);
   }
 
