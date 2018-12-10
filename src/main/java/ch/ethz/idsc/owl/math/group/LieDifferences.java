@@ -32,8 +32,8 @@ public class LieDifferences implements TensorUnaryOperator {
     return result;
   }
 
-  /** @param p
-   * @param q
+  /** @param p element of the lie group
+   * @param q element of the lie group
    * @return vector == log(p^-1 . q) so that exp(vector) == p^-1 . q */
   public Tensor pair(Tensor p, Tensor q) {
     return lieExponential.log(lieGroup.element(p).inverse().combine(q));
