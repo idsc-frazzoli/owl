@@ -38,6 +38,9 @@ import ch.ethz.idsc.tensor.Tensors;
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
+    timerFrame.jToolBar.addSeparator();
+    addButtonDubins();
+    // ---
     timerFrame.jToolBar.add(jToggleButton);
     // ---
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());

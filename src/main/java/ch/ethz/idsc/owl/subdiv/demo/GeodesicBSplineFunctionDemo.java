@@ -49,10 +49,13 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
     // ---
-    timerFrame.jToolBar.add(jToggleItrp);
-    // ---
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
+    // ---
+    timerFrame.jToolBar.addSeparator();
+    addButtonDubins();
+    // ---
+    timerFrame.jToolBar.add(jToggleItrp);
     // ---
     timerFrame.jToolBar.add(jToggleButton);
     // ---
@@ -60,7 +63,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     spinnerDegree.setValue(3);
     spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
     // ---
-    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
     spinnerRefine.setValue(9);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
@@ -78,7 +81,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
     int upper = control.length() - 1;
-    final Tensor domain = Subdivide.of(0, upper, upper * (levels + 1));
+    final Tensor domain = Subdivide.of(0, upper, upper * (1 << (levels)));
     final Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     if (isR2) {

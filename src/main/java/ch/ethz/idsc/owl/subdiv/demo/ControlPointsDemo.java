@@ -85,6 +85,13 @@ public abstract class ControlPointsDemo extends AbstractDemo {
     timerFrame.geometricComponent.addRenderInterface(renderInterface);
   }
 
+  public void addButtonDubins() {
+    JButton jButton = new JButton("dubins");
+    jButton.setToolTipText("project control points to dubins path");
+    jButton.addActionListener(actionEvent -> setControl(DubinsGenerator.project(controlSe2())));
+    timerFrame.jToolBar.add(jButton);
+  }
+
   public Tensor shape() {
     return jToggleButton.isSelected() ? CIRCLE_HI : ARROWHEAD_HI;
   }
