@@ -18,10 +18,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
-import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.gui.win.TimerFrame;
-import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.math.group.LieDifferences;
 import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
 import ch.ethz.idsc.owl.math.group.Se2Geodesic;
@@ -29,7 +26,6 @@ import ch.ethz.idsc.owl.math.group.Se2Group;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.subdiv.curve.GeodesicCausal1Filter;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -41,36 +37,22 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.Round;
 
-class GeodesicCausalFilterDemo extends ControlPointsDemo{
-
+class GeodesicCausalFilterDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.12);
   private static final Tensor CIRCLE = CirclePoints.of(20).multiply(RealScalar.of(0.01));
-  private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
-  private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // ---
-
-//  private final SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
+  // private final SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
-  private final JToggleButton jToggleBndy = new JToggleButton("bndy");
-  private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleWait = new JToggleButton("wait");
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
   private final JToggleButton jToggleStep = new JToggleButton("step");
-  
-  
-  
-  
   private Tensor control = Tensors.of(Array.zeros(3));
   private Scalar alpha = RationalScalar.HALF;
 
   GeodesicCausalFilterDemo() {
-    
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
@@ -81,7 +63,6 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
-    
     timerFrame.jToolBar.add(jButton);
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
@@ -95,30 +76,23 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
-    jToggleBndy.setSelected(true);
-    timerFrame.jToolBar.add(jToggleBndy);
-    // ---
-    jToggleComb.setSelected(true);
-    timerFrame.jToolBar.add(jToggleComb);
-    // ---
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
     jToggleStep.setSelected(false);
     timerFrame.jToolBar.add(jToggleStep);
     // ---
-    timerFrame.jToolBar.add(jToggleButton);
-    // ---
     spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
     spinnerRadius.setValue(9);
     spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-//    {
-//      // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
-//      spinnerFilter.setList(Arrays.asList(SmoothingKernel.values()));
-//      spinnerFilter.setValue(SmoothingKernel.GAUSSIAN);
-//      spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
-//    }
+    // {
+    // // spinnerFilter.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
+    // spinnerFilter.setList(Arrays.asList(SmoothingKernel.values()));
+    // spinnerFilter.setValue(SmoothingKernel.GAUSSIAN);
+    // spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
+    // }
   }
+
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
@@ -126,25 +100,18 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
       control = Tensors.of(Array.zeros(3));
       for (int i = 0; i < 300; ++i) {
         if (i < 100) {
-        control.append(Tensors.vector(i*0.01,0,0));
+          control.append(Tensors.vector(i * 0.01, 0, 0));
+        } else if (i > 200) {
+          control.append(Tensors.vector(i * 0.01, 0, 0));
+        } else {
+          control.append(Tensors.vector(i * 0.01, 1, 0));
         }
-        else if (i > 200) {
-          control.append(Tensors.vector(i*0.01,0,0));
-        }
-        else {
-          control.append(Tensors.vector(i*0.01,1,0));
-        }
-        
       }
     }
-    
-    
     if (jToggleWait.isSelected())
       return;
     GraphicsUtil.setQualityHigh(graphics);
-    final int radius = spinnerRadius.getValue();
     if (jToggleCtrl.isSelected()) {
-//      final Color color = new Color(255, 128, 128, 255);
       if (jToggleLine.isSelected()) {
         graphics.setColor(cyclic.getColor(0));
         graphics.draw(geometricLayer.toPath2D(control));
@@ -155,9 +122,7 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
         if (jToggleStep.isSelected()) {
           path2d = geometricLayer.toPath2D(CIRCLE);
         }
-
         path2d.closePath();
-        
         graphics.setColor(cyclic.getColor(0));
         graphics.fill(path2d);
         graphics.setColor(Color.BLACK);
@@ -167,7 +132,6 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
     }
     TensorUnaryOperator geodesicCenterFilter = new GeodesicCausal1Filter(Se2Geodesic.INSTANCE, alpha);
     final Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
-    // geodesicCenterFilter.apply(control);
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;
       {
@@ -177,7 +141,7 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
       ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
       {
         int piy = 30;
-//        graphics.drawString("Window: " + Round._3.apply(width), 0, piy += 15);
+        // graphics.drawString("Window: " + Round._3.apply(width), 0, piy += 15);
         graphics.setColor(colorDataIndexed.getColor(0));
         graphics.drawString("Tangent velocity", 0, piy += 15);
         graphics.setColor(colorDataIndexed.getColor(1));
@@ -196,7 +160,6 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
       }
     }
     graphics.setStroke(new BasicStroke(1f));
-
     if (jToggleLine.isSelected()) {
       graphics.setColor(cyclic.getColor(1));
       graphics.draw(geometricLayer.toPath2D(refined));
@@ -214,8 +177,6 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
       graphics.setColor(Color.BLACK);
       graphics.draw(path2d);
     }
-
-
     {
       JSlider jSlider = new JSlider(1, 999, 500);
       jSlider.setPreferredSize(new Dimension(500, 28));
@@ -228,7 +189,6 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
       });
       timerFrame.jToolBar.add(jSlider);
     }
-
     {
       spinnerRadius.setList(IntStream.range(0, 21).boxed().collect(Collectors.toList()));
       spinnerRadius.setValue(6);
@@ -247,7 +207,7 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo{
 
   public static void main(String[] args) {
     GeodesicCausalFilterDemo geodesicCenterFilterDemo = new GeodesicCausalFilterDemo();
-    geodesicCenterFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    geodesicCenterFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
     geodesicCenterFilterDemo.timerFrame.jFrame.setVisible(true);
     geodesicCenterFilterDemo.timerFrame.geometricComponent.setModel2Pixel( //
         Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
