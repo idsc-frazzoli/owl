@@ -12,6 +12,9 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.group.RnGeodesic;
+import ch.ethz.idsc.owl.subdiv.curve.GeodesicBSplineFunction;
+import ch.ethz.idsc.owl.subdiv.curve.GeodesicDeBoor;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -21,8 +24,6 @@ import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.opt.BSplineFunction;
-import ch.ethz.idsc.tensor.opt.DeBoor;
 
 /* package */ class DeBoorDemo extends AbstractDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
@@ -54,8 +55,8 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
           {
             for (int k_th = 0; k_th < length; ++k_th) {
               graphics.setColor(COLOR_DATA_INDEXED.getColor(k_th));
-              BSplineFunction bSplineFunction = BSplineFunction.of(degree, UnitVector.of(length, k_th));
-              DeBoor deBoor = bSplineFunction.deBoor(k_th);
+              GeodesicBSplineFunction bSplineFunction = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, UnitVector.of(length, k_th));
+              GeodesicDeBoor deBoor = bSplineFunction.deBoor(k_th);
               Tensor knots = deBoor.knots();
               Point2D point2d = geometricLayer.toPoint2D(k_th, 0);
               graphics.drawString(length + " " + k_th + ":" + knots.toString().replace(" ", ""), //

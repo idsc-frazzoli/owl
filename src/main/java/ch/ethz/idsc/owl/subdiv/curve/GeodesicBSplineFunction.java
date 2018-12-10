@@ -51,6 +51,7 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
   private final Clip domain;
   /** clip for knots */
   private final Clip clip;
+  private final Tensor KNOTS;
 
   private GeodesicBSplineFunction(GeodesicInterface geodesicInterface, int degree, Tensor control) {
     this.geodesicInterface = geodesicInterface;
@@ -65,6 +66,7 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
     clip = Clip.function( //
         domain.min().add(shift), //
         domain.max().add(shift));
+    KNOTS = Range.of(0, control.length());
   }
 
   /** @param scalar inside interval [0, control.length() - 1]
@@ -79,9 +81,21 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
   /** @param k in the interval [0, control.length() - 1]
    * @return */
   public GeodesicDeBoor deBoor(int k) {
-    int hi = degree + 1 + k;
-    return new GeodesicDeBoor(geodesicInterface, degree, //
-        Range.of(-degree + 1 + k, hi).map(clip), // knots
+    int lo = -degree + 1 + k;
+    int hi = +degree + 1 + k;
+    Tensor knots1 = Range.of(lo, hi).map(clip);
+    Tensor knots2 = Tensor.of(IntStream.range(lo, hi) //
+        .map(i -> Math.min(Math.max(0, i), control.length() - 1)) //
+        .mapToObj(KNOTS::get)) //
+        .map(clip);
+    // if (!knots1.equals(knots2)) {
+    // System.out.println("---");
+    // System.out.println("k=" + k + " [" + lo + ", " + hi + "]");
+    // System.out.println(knots1);
+    // System.out.println(knots2);
+    // throw TensorRuntimeException.of(knots1, knots2);
+    // }
+    return new GeodesicDeBoor(geodesicInterface, degree, knots1, //
         Tensor.of(IntStream.range(k - half, hi - half) // control
             .map(this::bound) //
             .mapToObj(control::get)));
