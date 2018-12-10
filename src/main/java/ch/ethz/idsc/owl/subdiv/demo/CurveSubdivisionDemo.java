@@ -119,6 +119,9 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
+    timerFrame.jToolBar.addSeparator();
+    addButtonDubins();
+    // ---
     jToggleItrp.setSelected(false);
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
