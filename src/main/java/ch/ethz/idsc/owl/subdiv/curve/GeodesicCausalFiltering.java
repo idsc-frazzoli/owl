@@ -10,9 +10,11 @@ import ch.ethz.idsc.owl.math.group.LieGroupGeodesic;
 import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
 import ch.ethz.idsc.owl.math.group.Se2Geodesic;
 import ch.ethz.idsc.owl.math.group.Se2Group;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.io.ResourceData;
@@ -54,7 +56,7 @@ class GeodesicCausalFiltering {
         .map(new GeodesicCausal1Filter(GEODESIC_INTERFACE, alpha)));
   }
 
-  public Scalar evaluateError(Scalar alpha) {
+  public Scalar evaluate0Error(Scalar alpha) {
     Tensor errors = Tensors.empty();
     GeodesicCausal1Filter geodesicCausal1Filter = //
         new GeodesicCausal1Filter(GEODESIC_INTERFACE, alpha);
@@ -65,23 +67,31 @@ class GeodesicCausalFiltering {
     return Total.of(errors).Get();
   }
 
+  
+  public Scalar evaluate1Error(Scalar alpha) {
+    Tensor errors = Tensors.of(RealScalar.of(0));
+    GeodesicCausal1Filter geodesicCausal1Filter = //
+        new GeodesicCausal1Filter(GEODESIC_INTERFACE, alpha);
+    for (int i = 1; i < measurements.length(); ++i) {      
+      Tensor result = geodesicCausal1Filter.apply(measurements.get(i));
+      Tensor result_prev = geodesicCausal1Filter.apply(measurements.get(i-1));
+      
+      errors.append((Norm._2.of((LIE_DIFFERENCES.pair(reference.get(i-1), reference.get(i))).subtract(LIE_DIFFERENCES.pair(result_prev, result)))));
+          
+    }
+    return Total.of(errors).Get();
+  }
+  
   public static void main(String[] args) {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + "0w/20180702T133612_1" + ".csv").stream().map(row -> row.extract(1, 4)));
     GeodesicCausalFiltering geodesicCausalFiltering = GeodesicCausalFiltering.se2(control);
-    // System.out.println(Pretty.of(GeodesicCausalFiltering.log));
+
     Tensor alpharange = Subdivide.of(0.1, 1, 12);
     Tensor log = Tensors.empty();
     for (int j = 0; j < alpharange.length(); ++j) {
-      // update = measurements.extract(0, 2);
       Scalar alpha = alpharange.Get(j);
-      log.append(Tensors.of(alpha, geodesicCausalFiltering.evaluateError(alpha)));
-      // Tensor errors = Tensors.empty();
-      // GeodesicCausal1Filter geodesicCausal1Filter = //
-      // new GeodesicCausal1Filter(geodesicInterface, alpha);
-      // for (int i = 0; i < measurements.length(); ++i) {
-      // update.append(geodesicCausal1Filter.apply(measurements.get(i)));
-      // errors.append(Norm._2.ofVector(LIE_DIFFERENCES.pair(reference.get(i), update.get(i))));
-      // }
+      log.append(Tensors.of(alpha, geodesicCausalFiltering.evaluate1Error(alpha)));
+
     }
     System.out.println(Pretty.of(log.map(Round._4)));
   }
