@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.balloon;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
@@ -16,12 +17,14 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
 public class BalloonAnimationDemo implements DemoInterface {
-  @Override
+  @Override // from DemoInterface
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    PlannerConstraint plannerConstraint = new BalloonPlannerConstraint(RealScalar.of(1));
-    StateTime stateTime = new StateTime(Tensors.vector(0, 0, 2, 0.5), RealScalar.ZERO);
+    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
+    // TODO ASTOLL reinstate other constraint
+    // new BalloonPlannerConstraint(RealScalar.of(1));
     BalloonStateSpaceModel balloonStateSpaceModel = BalloonStateSpaceModels.defaultWithoutUnits();
+    StateTime stateTime = new StateTime(Tensors.vector(0, 0, 2, 0.5), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         balloonStateSpaceModel, EulerIntegrator.INSTANCE, stateTime);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
