@@ -165,15 +165,8 @@ Jan Hakenberg, Jonas Londschien, Yannik Nager, André Stoll, Oliver Brinkmann
 
 > The code in the repository operates a heavy and fast robot that may endanger living creatures. We follow best practices and coding standards to protect from avoidable errors.
 
-## References
+## Publications
 
-* *A Generalized Label Correcting Method for Optimal Kinodynamic Motion Planning*
-by Brian Paden and Emilio Frazzoli, 
-[arXiv:1607.06966](https://arxiv.org/abs/1607.06966),
-[video](https://www.youtube.com/watch?v=4-r6Oi8GHxc)
-* *Sampling-based algorithms for optimal motion planning*
-by Sertac Karaman and Emilio Frazzoli,
-[IJRR11](http://ares.lids.mit.edu/papers/Karaman.Frazzoli.IJRR11.pdf)
 * *Curve Subdivision in SE(2)*
 by Jan Hakenberg,
 [viXra:1807.0463](http://vixra.org/abs/1807.0463),
@@ -185,6 +178,16 @@ by Yannik Nager, Andrea Censi, and Emilio Frazzoli,
 by Jan Hakenberg,
 [viXra:1810.0283](http://vixra.org/abs/1810.0283),
 [video](https://www.youtube.com/watch?v=dmFO72Pigb4)
+
+## References
+
+* *A Generalized Label Correcting Method for Optimal Kinodynamic Motion Planning*
+by Brian Paden and Emilio Frazzoli, 
+[arXiv:1607.06966](https://arxiv.org/abs/1607.06966),
+[video](https://www.youtube.com/watch?v=4-r6Oi8GHxc)
+* *Sampling-based algorithms for optimal motion planning*
+by Sertac Karaman and Emilio Frazzoli,
+[IJRR11](http://ares.lids.mit.edu/papers/Karaman.Frazzoli.IJRR11.pdf)
 
 ---
 
