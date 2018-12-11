@@ -1,6 +1,10 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.balloon;
 
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
+import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
@@ -54,6 +58,18 @@ public class BalloonEntityTest extends TestCase {
   }
 
   public void testCreateTrajectoryPlanner() {
-    // TODO
+    Tensor goal = Tensors.vector(10, 30);
+    Scalar vertSpeedMax = RealScalar.of(4);
+    PlannerConstraint plannerConstraint = new BalloonPlannerConstraint(vertSpeedMax);
+    TrajectoryPlanner trajectoryPlanner = balloonEntity.createTrajectoryPlanner(plannerConstraint, goal);
+    assertTrue(trajectoryPlanner instanceof TrajectoryPlanner);
+    trajectoryPlanner.insertRoot(stateTime);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(10);
+  }
+
+  public void testStateTimeRaster() {
+    StateTimeRaster stateTimeRaster = balloonEntity.stateTimeRaster();
+    assertTrue(stateTimeRaster instanceof StateTimeRaster);
   }
 }

@@ -45,14 +45,15 @@ import ch.ethz.idsc.tensor.Tensors;
      * unknown horizontal movement due to horizontal winds
      * TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     // FIXME w has no unit as of now, crashes when other parameters are given units , w with units [m * s^-2]
-    double w = 2 * SimplexContinuousNoise.at(x1.number().doubleValue(), y.number().doubleValue(), vel.number().doubleValue(), theta.number().doubleValue());
+    Scalar w = RealScalar.of( //
+        2 * SimplexContinuousNoise.at(x1.number().doubleValue(), y.number().doubleValue(), vel.number().doubleValue(), theta.number().doubleValue()));
     // FIXME if used with units x_dot has none
     double x_dot = 1;
     // -----
     return Tensors.of( //
         RealScalar.of(x_dot), //
         vel, //
-        vel.negate().divide(tau2).add(theta.multiply(sigma)).add(RealScalar.of(w).divide(tau2)), //
+        vel.negate().divide(tau2).add(theta.multiply(sigma)).add(w.divide(tau2)), //
         theta.negate().divide(tau1).add(u.Get(0)));
   }
 

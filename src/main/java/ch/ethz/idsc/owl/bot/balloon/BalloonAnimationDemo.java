@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.balloon;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
+import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -19,7 +20,7 @@ public class BalloonAnimationDemo implements DemoInterface {
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     PlannerConstraint plannerConstraint = new BalloonPlannerConstraint(RealScalar.of(1));
-    StateTime stateTime = new StateTime(Tensors.vector(5, 0, 10, 0.5), RealScalar.ZERO);
+    StateTime stateTime = new StateTime(Tensors.vector(0, 0, 2, 0.5), RealScalar.ZERO);
     BalloonStateSpaceModel balloonStateSpaceModel = BalloonStateSpaceModels.defaultWithoutUnits();
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         balloonStateSpaceModel, EulerIntegrator.INSTANCE, stateTime);
@@ -27,6 +28,7 @@ public class BalloonAnimationDemo implements DemoInterface {
     BalloonEntity balloonEntity = new BalloonEntity(episodeIntegrator, trajectoryControl, balloonStateSpaceModel);
     MouseGoal.simple(owlyAnimationFrame, balloonEntity, plannerConstraint);
     owlyAnimationFrame.add(balloonEntity);
+    owlyAnimationFrame.addBackground(GridRender.INSTANCE);
     return owlyAnimationFrame;
   }
 
