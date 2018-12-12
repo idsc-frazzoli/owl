@@ -13,13 +13,18 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** random samples from the interior of a n-dimensional sphere
+/** uniform random samples from the interior of a n-dimensional sphere
+ * the larger the dimension of the sphere the longer the sample generation may take.
+ * Therefore the dimension is restricted to n <= 10.
  * 
- * implementation supports the use of Quantity */
+ * implementation supports the use of Quantity
+ * 
+ * implementation generalizes {@link UniformRandomSample} and {@link CircleRandomSample} */
 public class SphereRandomSample implements RandomSampleInterface {
+  public static final int MAX_LENGTH = 10;
   private static final Distribution UNIFORM = UniformDistribution.of(-1, 1);
 
-  /** @param center vector
+  /** @param center non-empty vector of length less equals to 10
    * @param radius non-negative
    * @return
    * @throws Exception if center is not a vector
@@ -28,16 +33,19 @@ public class SphereRandomSample implements RandomSampleInterface {
     switch (center.length()) {
     case 0:
       throw TensorRuntimeException.of(center, radius);
-    case 1:
+    case 1: {
+      Scalar middle = center.Get(0);
       Distribution distribution = UniformDistribution.of( //
-          center.Get(0).subtract(radius), //
-          center.Get(0).add(radius));
+          middle.subtract(radius), //
+          middle.add(radius));
       return UniformRandomSample.of(distribution, 1);
+    }
     case 2:
       return new CircleRandomSample(center, radius);
     }
+    VectorQ.require(center);
     return Scalars.isZero(radius) //
-        ? new ConstantRandomSample(VectorQ.require(center))
+        ? new ConstantRandomSample(center)
         : new SphereRandomSample(center, radius);
   }
 
@@ -46,7 +54,9 @@ public class SphereRandomSample implements RandomSampleInterface {
   private final Scalar radius;
 
   private SphereRandomSample(Tensor center, Scalar radius) {
-    this.center = VectorQ.require(center);
+    if (MAX_LENGTH < center.length())
+      throw TensorRuntimeException.of(center);
+    this.center = center;
     this.radius = Sign.requirePositiveOrZero(radius);
   }
 
