@@ -15,7 +15,7 @@ public class BalloonStateSpaceModelTest extends TestCase {
     Tensor uWithoutUnits = Tensors.vector(2);
     StateSpaceModel stateSpaceModel = BalloonStateSpaceModels.defaultWithUnits();
     StateSpaceModel stateSpaceModelWithoutUnits = BalloonStateSpaceModels.defaultWithoutUnits();
-    // assertEquals(stateSpaceModel.f(xWithUnits, uWithUnits).length(),4);
+    assertEquals(stateSpaceModel.f(xWithUnits, uWithUnits).length(), 4);
     assertEquals(stateSpaceModelWithoutUnits.f(xWithoutUnits, uWithoutUnits).length(), 4);
   }
 }

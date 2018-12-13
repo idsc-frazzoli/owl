@@ -1,14 +1,19 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.balloon;
 
+import java.util.List;
+import java.util.Optional;
+
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
+import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
+import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -22,7 +27,7 @@ import junit.framework.TestCase;
 
 public class BalloonEntityTest extends TestCase {
   private static final BalloonStateSpaceModel BALLOON_STATE_SPACE_MODEL = BalloonStateSpaceModels.defaultWithoutUnits();
-  private static final StateTime START = new StateTime(Tensors.vector(5, 0, 10, 0.5), RealScalar.ZERO);
+  private static final StateTime START = new StateTime(Tensors.vector(0, 10, 0, 0.5), RealScalar.ZERO);
   private static final EpisodeIntegrator EPISODE_INTEGRATOR = new SimpleEpisodeIntegrator( //
       BALLOON_STATE_SPACE_MODEL, EulerIntegrator.INSTANCE, START);
 
@@ -39,7 +44,6 @@ public class BalloonEntityTest extends TestCase {
   }
 
   public void testDistanceWithUnits() {
-    // FIXME only working for same type of units,
     Tensor x = Tensors.fromString("{2[m], 2[m]}");
     Tensor y = Tensors.fromString("{4[m], 2[m]}");
     Scalar expected = Quantity.of(4, "m^2");
@@ -52,22 +56,12 @@ public class BalloonEntityTest extends TestCase {
     assertEquals(balloonEntity.delayHint(), RealScalar.of(2));
   }
 
-  public void testGetGoalRegionWithDistance() {
-    Tensor x = Tensors.vector(1, 4);
-    SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(1, 2), RealScalar.of(.3));
-    BalloonEntity balloonEntity = createEntity();
-    // SphericalRegion toBeTested = (SphericalRegion) balloonEntity.getGoalRegionWithDistance(Tensors.vector(1, 2, 1, 3));
-    // FIXME equals method for sphericalRegion?
-    // assertEquals(sphericalRegionExpected, toBeTested);
-    // assertEquals(sphericalRegion.signedDistance(x), toBeTested.signedDistance(x));
-  }
-
   public void testRender() {
     // TODO
   }
 
   public void testCreateTrajectoryPlanner() {
-    Tensor goal = Tensors.vector(10, 30);
+    Tensor goal = Tensors.vector(100, 30);
     Scalar vertSpeedMax = RealScalar.of(4);
     PlannerConstraint plannerConstraint = new BalloonPlannerConstraint(vertSpeedMax);
     BalloonEntity balloonEntity = createEntity();
@@ -75,7 +69,15 @@ public class BalloonEntityTest extends TestCase {
     assertTrue(trajectoryPlanner instanceof StandardTrajectoryPlanner);
     trajectoryPlanner.insertRoot(START);
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-    glcExpand.findAny(10);
+    glcExpand.findAny(10000);
+    Optional<GlcNode> optional = trajectoryPlanner.getBest();
+    System.out.println("ExpandCount=" + glcExpand.getExpandCount());
+    if (optional.isPresent()) {
+      System.out.println(1);
+      List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());
+      StateTimeTrajectories.print(trajectory);
+    }
+    assertTrue(optional.isPresent());
   }
 
   public void testStateTimeRaster() {

@@ -36,9 +36,9 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 3);
   static final int FLOWRES = 3;
   // TODO Look up realistic values and adapt accordingly + allocate to BalloonStateSpaceModels
-  static final Scalar U_MAX = RealScalar.of(20);
+  static final Scalar U_MAX = RealScalar.of(10);
   // TODO adapt when heuristic is changed
-  final static Scalar SPEED_MAX = RealScalar.of(20);
+  final static Scalar SPEED_MAX = RealScalar.of(10);
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(2);
   private static final Scalar GOAL_RADIUS = RealScalar.of(3);
