@@ -18,8 +18,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** TODO ASTOLL comment inaccurate
- * heuristic adds max speed of available control to max norm of image gradient */
+/** heuristic computes minimum time to goal
+ * e.g. shortest path to goal (euclidean distance) travelled with maximum speed */
 /* package */ class BalloonMinTimeGoalManager implements Region<Tensor>, CostFunction, Serializable {
   private final SphericalRegion sphericalRegion;
   /** unit of maxSpeed is velocity, e.g. [m/s] */
