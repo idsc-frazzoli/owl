@@ -6,8 +6,8 @@ package ch.ethz.idsc.owl.math.dubins;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.owl.math.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.owl.math.planar.ArcTan2D;
+import ch.ethz.idsc.sophus.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

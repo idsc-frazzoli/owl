@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicMean;
-import ch.ethz.idsc.owl.subdiv.curve.GeodesicMeanFilter;
+import ch.ethz.idsc.sophus.filter.GeodesicMean;
+import ch.ethz.idsc.sophus.filter.GeodesicMeanFilter;
 import ch.ethz.idsc.subare.util.VectorTotal;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
