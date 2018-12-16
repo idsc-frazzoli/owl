@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
@@ -55,6 +56,21 @@ public class SphereRandomSampleTest extends TestCase {
     Tensor tensor = randomSampleInterface.randomSample();
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("m");
     tensor.map(scalarUnaryOperator);
+  }
+
+  public void testLarge() {
+    RandomSampleInterface randomSampleInterface = //
+        SphereRandomSample.of(Array.zeros(SphereRandomSample.MAX_LENGTH), RealScalar.ONE);
+    randomSampleInterface.randomSample();
+  }
+
+  public void testLargeFail() {
+    try {
+      SphereRandomSample.of(Array.zeros(SphereRandomSample.MAX_LENGTH + 1), RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testCenterEmptyFail() {

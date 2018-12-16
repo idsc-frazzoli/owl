@@ -66,19 +66,19 @@ public class R3S2GeodesicTest extends TestCase {
     Tensor n1 = UnitVector.of(3, 1);
     Tensor p = Tensors.of(n0, n0);
     Tensor q = Tensors.of(n1, n1);
-    Tensor split = R3S2Geodesic.INSTANCE.split(p, q, RationalScalar.of(1, 2));
+    Tensor split = R3S2Geodesic.INSTANCE.split(p, q, RationalScalar.HALF);
     assertTrue(Chop._12.close(split.get(0), split.get(1)));
   }
 
   public void testSphereRepro2() {
-    for (int index = 0; index < 50; ++index) {
-      RandomSampleInterface randomSampleInterface = //
-          SphereRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
+    RandomSampleInterface randomSampleInterface = //
+        SphereRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
+    for (int index = 0; index < 20; ++index) {
       Tensor pn = NORMALIZE.apply(randomSampleInterface.randomSample());
       Tensor qn = NORMALIZE.apply(randomSampleInterface.randomSample());
       Tensor p = Tensors.of(pn, pn);
       Tensor q = Tensors.of(qn, qn);
-      Tensor split = R3S2Geodesic.INSTANCE.split(p, q, RationalScalar.of(1, 2));
+      Tensor split = R3S2Geodesic.INSTANCE.split(p, q, RationalScalar.HALF);
       assertTrue(Chop._08.close(split.get(0), split.get(1)));
     }
   }
