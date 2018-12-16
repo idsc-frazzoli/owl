@@ -35,8 +35,10 @@ enum FilterErrorTable {
     Tensor alpharange = Subdivide.of(0.1, 1, 12);
     for (int j = 0; j < alpharange.length(); ++j) {
       Scalar alpha = alpharange.Get(j);
-      Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0Error(alpha), //
-          geodesicCausal1Filtering.evaluate1Error(alpha));
+//      Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0Error(alpha), //
+//          geodesicCausal1Filtering.evaluate1Error(alpha));
+      Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0ErrorSeperated(alpha), //
+          geodesicCausal1Filtering.evaluate1ErrorSeperated(alpha));
       tableBuilder.appendRow(row);
     }
     Tensor log = tableBuilder.toTable();
@@ -46,7 +48,13 @@ enum FilterErrorTable {
   }
 
   public static void main(String[] args) throws IOException {
-    String dataname = "0w/20180702T133612_1";
+//   String dataname = "gyro/20181203T184122_1";
+//   String dataname = "gyro/20181203T184122_2";
+//   String dataname = "gyro/20181203T184122_3";
+//    String dataname = "2r/20180820T165637_1";
+//    String dataname = "2r/20180820T165637_2";
+    String dataname = "2r/20180820T165637_3";
+//   String dataname = "0w/20180702T133612_2";
     for (int width = 1; width < 12; width++) {
       Tensor tensor = process(dataname, width);
       Export.of(new File(ROOT, dataname.replace('/', '_') + "_" + width + ".csv"), tensor);
