@@ -7,13 +7,13 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.math.TensorMetric;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorMetric;
 
 /** entity executes flows along a given trajectory */
 public abstract class TrajectoryEntity extends AbstractEntity implements TrajectoryListener, TensorMetric {

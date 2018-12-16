@@ -1,7 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math;
-
-import ch.ethz.idsc.tensor.Tensor;
+package ch.ethz.idsc.tensor;
 
 public interface TensorDifference {
   /** @param p

@@ -1,6 +1,7 @@
 // code by jph
-package ch.ethz.idsc.owl.math;
+package ch.ethz.idsc.sophus.math;
 
+import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.filter.GeodesicMean;
 import ch.ethz.idsc.sophus.filter.GeodesicMeanFilter;
 import ch.ethz.idsc.subare.util.VectorTotal;

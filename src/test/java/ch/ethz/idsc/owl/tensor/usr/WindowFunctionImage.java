@@ -12,7 +12,7 @@ import java.io.IOException;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;

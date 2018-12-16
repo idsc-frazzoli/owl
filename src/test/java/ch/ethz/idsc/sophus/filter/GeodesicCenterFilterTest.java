@@ -1,12 +1,12 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
-import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.S2Geodesic;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.So3Geodesic;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;

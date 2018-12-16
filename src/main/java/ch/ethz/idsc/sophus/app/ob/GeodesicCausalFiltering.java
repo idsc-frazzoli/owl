@@ -1,6 +1,7 @@
 // code by ob
-package ch.ethz.idsc.sophus.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
+import ch.ethz.idsc.sophus.filter.GeodesicIIR2Filter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;

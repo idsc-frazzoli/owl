@@ -16,7 +16,6 @@ import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.sophus.app.demo.AbstractDemo;
 import ch.ethz.idsc.sophus.app.demo.ControlPointsDemo;
@@ -26,6 +25,7 @@ import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DeCasteljau;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
