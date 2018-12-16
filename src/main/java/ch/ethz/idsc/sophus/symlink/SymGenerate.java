@@ -8,12 +8,12 @@ import java.util.stream.IntStream;
 import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
-import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DeCasteljau;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

@@ -1,6 +1,7 @@
 // code by jph
-package ch.ethz.idsc.owl.math;
+package ch.ethz.idsc.sophus.math;
 
+import ch.ethz.idsc.owl.math.SymmetricVectorQ;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;

@@ -3,11 +3,10 @@ package ch.ethz.idsc.sophus.app.ob;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.filter.GeodesicCausalFiltering;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

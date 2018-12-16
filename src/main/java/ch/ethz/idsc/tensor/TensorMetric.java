@@ -1,8 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math;
-
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
+package ch.ethz.idsc.tensor;
 
 /** https://en.wikipedia.org/wiki/Metric_(mathematics) */
 public interface TensorMetric {

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorDifference;
 
 /** functionality used in {@code TrajectoryPlanner} to map state coordinates to
  * the coordinates that imply domain keys */

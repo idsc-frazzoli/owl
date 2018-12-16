@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
-import ch.ethz.idsc.owl.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;

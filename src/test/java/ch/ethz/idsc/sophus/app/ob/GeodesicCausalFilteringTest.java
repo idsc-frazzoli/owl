@@ -1,5 +1,5 @@
 // code by ob
-package ch.ethz.idsc.sophus.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import ch.ethz.idsc.sophus.group.LieGroupGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;

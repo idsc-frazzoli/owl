@@ -3,9 +3,9 @@ package ch.ethz.idsc.sophus.symlink;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

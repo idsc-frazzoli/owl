@@ -4,13 +4,13 @@ package ch.ethz.idsc.sophus.app.demo;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
-import ch.ethz.idsc.owl.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;

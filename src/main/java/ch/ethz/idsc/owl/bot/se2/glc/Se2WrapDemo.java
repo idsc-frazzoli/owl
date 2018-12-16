@@ -24,7 +24,6 @@ import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.owl.math.SimpleTensorMetric;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
-import ch.ethz.idsc.owl.math.TensorMetric;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
@@ -35,6 +34,7 @@ import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorMetric;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Degree;
 
