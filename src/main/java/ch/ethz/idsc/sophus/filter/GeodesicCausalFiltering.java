@@ -52,10 +52,9 @@ public class GeodesicCausalFiltering {
    * @return */
   public Scalar evaluate0Error(Scalar alpha) {
     Tensor errors = Tensors.empty();
-    GeodesicIIR2Filter geodesicCausal1Filter = //
-        new GeodesicIIR2Filter(geodesicInterface, alpha);
+    Tensor filteredSignal = filteredSignal(alpha);
     for (int i = 0; i < measurements.length(); ++i) {
-      Tensor result = geodesicCausal1Filter.apply(measurements.get(i));
+      Tensor result = filteredSignal.get(i);
       Scalar scalar = Norm._2.ofVector(lieDifferences.pair(reference.get(i), result));
       errors.append(scalar);
     }
@@ -64,14 +63,13 @@ public class GeodesicCausalFiltering {
 
   public Scalar evaluate1Error(Scalar alpha) {
     Tensor errors = Tensors.of(RealScalar.ZERO);
-    GeodesicIIR2Filter geodesicCausal1Filter = //
-        new GeodesicIIR2Filter(geodesicInterface, alpha);
-    Tensor result_prev = geodesicCausal1Filter.apply(measurements.get(0));
+    Tensor filteredSignal = filteredSignal(alpha);
+    Tensor result_prev = filteredSignal.get(0);
     Tensor ref_prev = reference.get(0);
     for (int i = 2; i < measurements.length(); ++i) {
       Tensor pair1 = lieDifferences.pair(ref_prev, reference.get(i));
-      Tensor pair2 = lieDifferences.pair(result_prev, geodesicCausal1Filter.apply(measurements.get(i)));
-      result_prev = geodesicCausal1Filter.apply(measurements.get(i));
+      Tensor pair2 = lieDifferences.pair(result_prev, filteredSignal.get(i));
+      result_prev = filteredSignal.get(i);
       ref_prev = reference.get(i);
       Scalar scalar = Norm._2.between(pair1, pair2);
       errors.append(scalar);
