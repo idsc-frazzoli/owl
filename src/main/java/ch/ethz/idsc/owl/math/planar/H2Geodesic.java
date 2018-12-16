@@ -1,7 +1,7 @@
 // code by ob
 package ch.ethz.idsc.owl.math.planar;
 
-import ch.ethz.idsc.owl.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

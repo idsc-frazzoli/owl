@@ -2,8 +2,8 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.owl.math.CoordinateWrap;
-import ch.ethz.idsc.owl.math.group.Se2CoveringExponential;
-import ch.ethz.idsc.owl.math.group.Se2CoveringGroupElement;
+import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** measures difference between p and q in SE(2) covering group relative to p

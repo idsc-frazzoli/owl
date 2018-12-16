@@ -9,8 +9,8 @@ import java.util.Objects;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import ch.ethz.idsc.owl.math.group.Se2Geodesic;
-import ch.ethz.idsc.owl.subdiv.curve.BSpline1CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
+import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ArrayPlot;

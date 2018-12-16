@@ -1,7 +1,7 @@
 // code by bapaden and jph
 package ch.ethz.idsc.owl.math.flow;
 
-import ch.ethz.idsc.owl.math.group.LieIntegrator;
+import ch.ethz.idsc.sophus.group.LieIntegrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
