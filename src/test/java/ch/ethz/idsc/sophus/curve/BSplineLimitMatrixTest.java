@@ -6,9 +6,11 @@ import java.util.Arrays;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.opt.BSplineFunction;
 import junit.framework.TestCase;
 
 public class BSplineLimitMatrixTest extends TestCase {
@@ -38,5 +40,14 @@ public class BSplineLimitMatrixTest extends TestCase {
       assertEquals(tensor.dot(vector), vector);
       assertTrue(ExactScalarQ.all(tensor));
     }
+  }
+
+  public void testSolve() {
+    Tensor interp = Tensors.vector(1, 0, 3, 2);
+    Tensor tensor = BSplineLimitMatrix.solve(3, interp);
+    assertTrue(ExactScalarQ.all(tensor));
+    BSplineFunction bSplineFunction = BSplineFunction.of(3, tensor);
+    for (int index = 0; index < interp.length(); ++index)
+      assertEquals(bSplineFunction.apply(RealScalar.of(index)), interp.get(index));
   }
 }

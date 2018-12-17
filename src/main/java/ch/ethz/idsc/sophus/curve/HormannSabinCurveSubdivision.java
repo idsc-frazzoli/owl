@@ -21,7 +21,7 @@ public enum HormannSabinCurveSubdivision {
   private static final Scalar N3_32 = RationalScalar.of(-3, 32);
 
   public static CurveSubdivision of(GeodesicInterface geodesicInterface) {
-    return new Split2LoDual3PointCurveSubdivision(geodesicInterface, P6_7, N3_32);
+    return Split2LoDual3PointCurveSubdivision.of(geodesicInterface, P6_7, N3_32);
   }
 
   /***************************************************/
@@ -34,7 +34,7 @@ public enum HormannSabinCurveSubdivision {
     Scalar pq_f = RationalScalar.HALF.add(RealScalar.of(6).multiply(omega));
     Scalar qr_f = RealScalar.of(6).multiply(omega).negate();
     Scalar pqqf = RationalScalar.HALF;
-    return new Split3Dual3PointCurveSubdivision(geodesicInterface, pq_f, qr_f, pqqf);
+    return Split3Dual3PointCurveSubdivision.of(geodesicInterface, pq_f, qr_f, pqqf);
   }
 
   /***************************************************/
@@ -42,6 +42,6 @@ public enum HormannSabinCurveSubdivision {
   private static final Scalar N1_9 = RationalScalar.of(-1, 9);
 
   public static CurveSubdivision split2(GeodesicInterface geodesicInterface) {
-    return new Split2HiDual3PointCurveSubdivision(geodesicInterface, P27_32, N1_9);
+    return Split2HiDual3PointCurveSubdivision.of(geodesicInterface, P27_32, N1_9);
   }
 }
