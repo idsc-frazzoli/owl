@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.group.LieGroupGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -53,28 +52,62 @@ public class GeodesicCausalFiltering {
    * @return */
   public Scalar evaluate0Error(Scalar alpha) {
     Tensor errors = Tensors.empty();
-    Tensor filteredSignal = filteredSignal(alpha);
+    Tensor filtering = filteredSignal(alpha);
     for (int i = 0; i < measurements.length(); ++i) {
-      Tensor result = filteredSignal.get(i);
-      Scalar scalar = Norm._2.ofVector(lieDifferences.pair(reference.get(i), result));
+      Scalar scalar = Norm._2.ofVector(lieDifferences.pair(reference.get(i), filtering.get(i)));
       errors.append(scalar);
     }
     return Total.of(errors).Get();
   }
 
+  public Tensor evaluate0ErrorSeperated(Scalar alpha) {
+    Tensor errors = Tensors.empty();
+    Tensor filtering = filteredSignal(alpha);
+    for (int i = 0; i < measurements.length(); ++i) {
+      Tensor difference = lieDifferences.pair(reference.get(i), filtering.get(i));
+      Scalar scalar1 = Norm._2.ofVector(difference.extract(0, 2));
+      Scalar scalar2 = Norm._2.ofVector(difference.extract(2, 3));
+      errors.append(Tensors.of(scalar1, scalar2));
+    }
+    return Total.of(errors);
+  }
+
   public Scalar evaluate1Error(Scalar alpha) {
-    Tensor errors = Tensors.of(RealScalar.ZERO);
-    Tensor filteredSignal = filteredSignal(alpha);
-    Tensor result_prev = filteredSignal.get(0);
-    Tensor ref_prev = reference.get(0);
-    for (int i = 2; i < measurements.length(); ++i) {
-      Tensor pair1 = lieDifferences.pair(ref_prev, reference.get(i));
-      Tensor pair2 = lieDifferences.pair(result_prev, filteredSignal.get(i));
-      result_prev = filteredSignal.get(i);
-      ref_prev = reference.get(i);
+    Tensor errors = Tensors.empty();
+    Tensor filtering = filteredSignal(alpha);
+    for (int i = 1; i < measurements.length(); ++i) {
+      Tensor pair1 = lieDifferences.pair(reference.get(i - 1), reference.get(i));
+      Tensor pair2 = lieDifferences.pair(filtering.get(i - 1), filtering.get(i));
       Scalar scalar = Norm._2.between(pair1, pair2);
       errors.append(scalar);
     }
     return Total.of(errors).Get();
   }
+
+  public Tensor evaluate1ErrorSeperated(Scalar alpha) {
+    Tensor errors = Tensors.empty();
+    Tensor filtering = filteredSignal(alpha);
+    for (int i = 1; i < measurements.length(); ++i) {
+      Tensor pair1 = lieDifferences.pair(reference.get(i - 1), reference.get(i));
+      Tensor pair2 = lieDifferences.pair(filtering.get(i - 1), filtering.get(i));
+      Scalar scalar1 = Norm._2.between(pair1.extract(0, 2), pair2.extract(0, 2));
+      Scalar scalar2 = Norm._2.between(pair1.extract(2, 3), pair2.extract(2, 3));
+      errors.append(Tensors.of(scalar1, scalar2));
+    }
+    return Total.of(errors);
+  }
+  // Nur zum Testen von neuen methoden
+  // public static void main(String[] args) {
+  // Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
+  // "0w/20180702T133612_1" + ".csv").stream().map(row -> row.extract(1, 4)));
+  // TensorUnaryOperator geodesicCenterFilter = //
+  // GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 7);
+  // System.out.println(7);
+  // GeodesicCausalFiltering geodesicCausal1Filtering = GeodesicCausalFiltering.se2(control, geodesicCenterFilter.apply(control), 0);
+  // Tensor alpharange = Subdivide.of(0.1, 1, 12);
+  // for (int j = 0; j < alpharange.length(); ++j) {
+  // Scalar alpha = alpharange.Get(j);
+  // System.out.println(geodesicCausal1Filtering.evaluate1ErrorSeperated(alpha));
+  // }
+  // }
 }
