@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.sca.N;
     GraphicsUtil.setQualityHigh(graphics);
     Tensor control = controlSe2();
     Tensor xya = null;
-    final Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::of));
+    final Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::single));
     if (control.length() == 4) {
       // BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
       DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);

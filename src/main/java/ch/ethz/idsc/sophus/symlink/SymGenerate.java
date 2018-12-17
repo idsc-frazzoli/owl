@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public static SymLinkImage window(SmoothingKernel wf, int radius) {
     TensorUnaryOperator tensorUnaryOperator = //
         GeodesicCenter.of(SymGeodesic.INSTANCE, wf);
-    Tensor vector = Tensor.of(IntStream.range(0, 2 * radius + 1).mapToObj(SymScalar::of));
+    Tensor vector = Tensor.of(IntStream.range(0, 2 * radius + 1).mapToObj(SymScalar::single));
     Tensor tensor = tensorUnaryOperator.apply(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor);
     symLinkImage.title("" + wf.name() + "[" + (2 * radius + 1) + "]");
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void subdiv3() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::of));
+    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::single));
     CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
     Tensor tensor = curveSubdivision.string(vector);
     {
@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void subdiv4a1() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::of));
+    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::single));
     CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(SymGeodesic.INSTANCE);
     Tensor tensor = curveSubdivision.string(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void subdiv4a2() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::of));
+    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::single));
     CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split2(SymGeodesic.INSTANCE);
     Tensor tensor = curveSubdivision.string(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void subdiv4b() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::of));
+    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::single));
     CurveSubdivision curveSubdivision = //
         BSpline4CurveSubdivision.split3(SymGeodesic.INSTANCE, RationalScalar.HALF);
     Tensor tensor = curveSubdivision.string(vector);
@@ -72,9 +72,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void custom() throws IOException {
-    Scalar s0 = SymScalar.of(0);
-    Scalar s1 = SymScalar.of(1);
-    Scalar s2 = SymScalar.of(2);
+    Scalar s0 = SymScalar.single(0);
+    Scalar s1 = SymScalar.single(1);
+    Scalar s2 = SymScalar.single(2);
     Scalar s3 = SymScalar.of(s0, s1, RealScalar.of(2));
     Scalar s4 = SymScalar.of(s3, s2, RationalScalar.of(1, 3));
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) s4);
@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void decastL() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::of));
+    Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::single));
     DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
     SymScalar symScalar = (SymScalar) deCasteljau.apply(RationalScalar.of(1, 3));
     SymLinkImage symLinkImage = new SymLinkImage(symScalar);
@@ -90,7 +90,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void decastR() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::of));
+    Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::single));
     DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
     SymScalar symScalar = (SymScalar) deCasteljau.apply(RationalScalar.of(3, 4));
     SymLinkImage symLinkImage = new SymLinkImage(symScalar);
