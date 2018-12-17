@@ -8,12 +8,15 @@ import ch.ethz.idsc.tensor.Scalar;
 
 /** Nira Dyn, Michael S. Floater, Kai Hormann
  * A C2 Four-Point Subdivision Scheme with Fourth Order Accuracy and its Extensions */
+// TODO state reference for the two parameters used in class
 public enum DualC2FourPointCurveSubdivision {
   ;
   public static CurveSubdivision cubic(GeodesicInterface geodesicInterface) {
     return of(geodesicInterface, RationalScalar.of(1, 128));
   }
 
+  /** @param geodesicInterface
+   * @return */
   public static CurveSubdivision tightest(GeodesicInterface geodesicInterface) {
     return of(geodesicInterface, RealScalar.of(0.013723));
   }

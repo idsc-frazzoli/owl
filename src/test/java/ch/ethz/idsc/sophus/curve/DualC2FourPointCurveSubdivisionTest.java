@@ -21,4 +21,9 @@ public class DualC2FourPointCurveSubdivisionTest extends TestCase {
     Tensor cyclic = curveSubdivision.cyclic(UnitVector.of(6, 3));
     assertEquals(cyclic, Tensors.fromString("{0, 0, -5/128, -7/128, 35/128, 105/128, 105/128, 35/128, -7/128, -5/128, 0, 0}"));
   }
+
+  public void testTightest() {
+    CurveSubdivision curveSubdivision = DualC2FourPointCurveSubdivision.tightest(RnGeodesic.INSTANCE);
+    curveSubdivision.cyclic(UnitVector.of(4, 2));
+  }
 }

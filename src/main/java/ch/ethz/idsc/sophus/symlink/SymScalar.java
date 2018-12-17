@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.symlink;
 
-import ch.ethz.idsc.sophus.app.demo.ScalarAdapter;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -11,16 +10,20 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class SymScalar extends ScalarAdapter {
-  public static Scalar of(Scalar... scalars) {
-    if (scalars.length == 1)
-      return new SymScalar(scalars[0]);
-    if (scalars.length == 3)
-      return new SymScalar(Tensors.of(scalars).unmodifiable());
-    throw TensorRuntimeException.of(scalars);
+  /** @param p
+   * @param q
+   * @param ratio
+   * @return */
+  public static Scalar of(Scalar p, Scalar q, Scalar ratio) {
+    if (p instanceof SymScalar && q instanceof SymScalar)
+      return new SymScalar(Tensors.of(p, q, ratio).unmodifiable());
+    throw TensorRuntimeException.of(p, q, ratio);
   }
 
-  public static Scalar of(Number number) {
-    return of(RealScalar.of(number));
+  /** @param number of control coordinate
+   * @return */
+  public static Scalar leaf(int number) {
+    return new SymScalar(RealScalar.of(number));
   }
 
   // ---
@@ -30,6 +33,7 @@ import ch.ethz.idsc.tensor.Tensors;
     this.tensor = tensor;
   }
 
+  /** @return unmodifiable tensor */
   public Tensor tensor() {
     return tensor;
   }
@@ -57,6 +61,20 @@ import ch.ethz.idsc.tensor.Tensors;
         getP().evaluate(), //
         getQ().evaluate(), //
         ratio()).Get();
+  }
+
+  @Override
+  public int hashCode() {
+    return tensor.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    if (object instanceof SymScalar) {
+      SymScalar symScalar = (SymScalar) object;
+      return symScalar.tensor.equals(tensor);
+    }
+    return false;
   }
 
   @Override

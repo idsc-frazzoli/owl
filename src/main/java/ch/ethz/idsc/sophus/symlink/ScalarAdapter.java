@@ -1,10 +1,10 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.demo;
+package ch.ethz.idsc.sophus.symlink;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
-public class ScalarAdapter extends AbstractScalar {
+/* package */ class ScalarAdapter extends AbstractScalar {
   @Override
   public Scalar multiply(Scalar scalar) {
     throw new UnsupportedOperationException();
