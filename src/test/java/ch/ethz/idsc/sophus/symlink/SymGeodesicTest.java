@@ -15,8 +15,8 @@ import junit.framework.TestCase;
 
 public class SymGeodesicTest extends TestCase {
   public void testSimple() {
-    Scalar s1 = SymScalar.single(1);
-    Scalar s2 = SymScalar.single(2);
+    Scalar s1 = SymScalar.leaf(1);
+    Scalar s2 = SymScalar.leaf(2);
     SymScalar s3 = (SymScalar) SymScalar.of(s1, s2, RationalScalar.HALF);
     Scalar scalar = SymScalar.of(s1, s2, RationalScalar.of(1, 2));
     assertEquals(s3, scalar);
@@ -24,7 +24,7 @@ public class SymGeodesicTest extends TestCase {
     assertEquals(evaluate, RationalScalar.of(3, 2));
     TensorUnaryOperator tensorUnaryOperator = //
         GeodesicCenter.of(SymGeodesic.INSTANCE, SmoothingKernel.DIRICHLET);
-    Tensor vector = Tensor.of(IntStream.range(0, 5).mapToObj(SymScalar::single));
+    Tensor vector = Tensor.of(IntStream.range(0, 5).mapToObj(SymScalar::leaf));
     Tensor tensor = tensorUnaryOperator.apply(vector);
     assertEquals(tensor.toString(), "{{{0, 1, 1/2}, 2, 1/5}, {{4, 3, 1/2}, 2, 1/5}, 1/2}");
     SymLink root = SymLink.build((SymScalar) tensor);

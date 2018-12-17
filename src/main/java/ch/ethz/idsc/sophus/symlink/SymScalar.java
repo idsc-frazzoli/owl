@@ -12,15 +12,17 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ class SymScalar extends ScalarAdapter {
   /** @param p
    * @param q
-   * @param split
+   * @param ratio
    * @return */
-  public static Scalar of(Scalar p, Scalar q, Scalar split) {
+  public static Scalar of(Scalar p, Scalar q, Scalar ratio) {
     if (p instanceof SymScalar && q instanceof SymScalar)
-      return new SymScalar(Tensors.of(p, q, split).unmodifiable());
-    throw TensorRuntimeException.of(p, q, split);
+      return new SymScalar(Tensors.of(p, q, ratio).unmodifiable());
+    throw TensorRuntimeException.of(p, q, ratio);
   }
 
-  public static Scalar single(int number) {
+  /** @param number of control coordinate
+   * @return */
+  public static Scalar leaf(int number) {
     return new SymScalar(RealScalar.of(number));
   }
 
@@ -31,6 +33,7 @@ import ch.ethz.idsc.tensor.Tensors;
     this.tensor = tensor;
   }
 
+  /** @return unmodifiable tensor */
   public Tensor tensor() {
     return tensor;
   }
@@ -58,6 +61,11 @@ import ch.ethz.idsc.tensor.Tensors;
         getP().evaluate(), //
         getQ().evaluate(), //
         ratio()).Get();
+  }
+
+  @Override
+  public int hashCode() {
+    return tensor.hashCode();
   }
 
   @Override
