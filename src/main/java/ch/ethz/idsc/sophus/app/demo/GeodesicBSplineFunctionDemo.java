@@ -11,8 +11,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -24,8 +22,8 @@ import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.RnGroup;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
-import ch.ethz.idsc.sophus.symlink.SymDeBoorImage;
 import ch.ethz.idsc.sophus.symlink.SymLinkImage;
+import ch.ethz.idsc.sophus.symlink.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -68,18 +66,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     // ---
     timerFrame.jToolBar.add(jToggleButton);
     timerFrame.jToolBar.add(jToggleSymi);
-    {
-      // JSlider jSlider =
-      jSlider.setPreferredSize(new Dimension(500, 28));
-      jSlider.addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent changeEvent) {
-          // MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000);
-          // System.out.println(MAGIC_C);
-        }
-      });
-      timerFrame.jToolBar.add(jSlider);
-    }
+    // ---
+    jSlider.setPreferredSize(new Dimension(500, 28));
+    timerFrame.jToolBar.add(jSlider);
     // ---
     spinnerDegree.setList(DEGREES);
     spinnerDegree.setValue(3);
@@ -108,7 +97,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     final int value = jSlider.getValue();
     final Scalar parameter = RationalScalar.of(value * upper, 1000);
     if (jToggleSymi.isSelected()) {
-      SymLinkImage symLinkImage = new SymDeBoorImage(degree, upper + 1, parameter).symLinkImage;
+      SymLinkImage symLinkImage = SymLinkImages.deBoor(degree, upper + 1, parameter);
       graphics.drawImage(symLinkImage.bufferedImage(), 0, 0, null);
     }
     renderControlPoints(geometricLayer, graphics);
