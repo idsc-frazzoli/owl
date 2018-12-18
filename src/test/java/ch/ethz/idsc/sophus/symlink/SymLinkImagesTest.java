@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.symlink;
 
 import java.awt.image.BufferedImage;
 
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,5 +24,11 @@ public class SymLinkImagesTest extends TestCase {
     BufferedImage bufferedImage = symLinkImage.bufferedImage();
     assertTrue(300 < bufferedImage.getWidth());
     assertTrue(200 < bufferedImage.getHeight());
+  }
+
+  public void testSmoothingKernel() {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
+      for (int radius = 0; radius < 5; ++radius)
+        SymLinkImages.smoothingKernel(smoothingKernel, radius);
   }
 }

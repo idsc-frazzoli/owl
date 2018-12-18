@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class SymLinkImage {
-  private static final int WIDTH = 50;
+  private static final int WIDTH = 100;
   /** height also appears in the model2pixel matrix */
   private static final int HEIGHT = 50;
   private static final Tensor MODEL2PIXEL = Tensors.fromString("{{100,0,80},{0,-100,50+25},{0,0,1}}");
@@ -31,7 +31,7 @@ public class SymLinkImage {
   private final BufferedImage bufferedImage; // = new BufferedImage(1400, 500, BufferedImage.TYPE_INT_ARGB);
   private final GeometricLayer geometricLayer = GeometricLayer.of(MODEL2PIXEL);
   private final Font font;
-  int minx = 800;
+  int minx = Integer.MAX_VALUE;
   int maxx = 0;
 
   public SymLinkImage(SymScalar symScalar) {
@@ -50,7 +50,7 @@ public class SymLinkImage {
     GraphicsUtil.setQualityHigh(graphics);
     graphics.setFont(font);
     FontMetrics fontMetrics = graphics.getFontMetrics(font);
-    graphics.setColor(Color.WHITE);
+    graphics.setColor(new Color(245, 245, 245));
     graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
     // ---
     new SymLinkRender(root).render(geometricLayer, graphics);

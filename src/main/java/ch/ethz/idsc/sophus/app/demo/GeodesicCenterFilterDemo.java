@@ -24,6 +24,7 @@ import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.symlink.SymLinkImages;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -48,6 +49,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
+  private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JToggleButton jToggleWait = new JToggleButton("wait");
   // ---
   private Tensor control = Tensors.of(Array.zeros(3));
@@ -58,7 +60,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
       spinnerLabel.addSpinnerListener(resource -> //
       control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          // .limit(2700) //
+          .limit(300) //
           .map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
@@ -93,6 +95,9 @@ import ch.ethz.idsc.tensor.sca.Round;
     jToggleDiff.setSelected(true);
     timerFrame.jToolBar.add(jToggleDiff);
     // ---
+    // jToggleSymi.setSelected(true);
+    timerFrame.jToolBar.add(jToggleSymi);
+    // ---
     jToggleWait.setSelected(false);
     timerFrame.jToolBar.add(jToggleWait);
     // ---
@@ -110,15 +115,15 @@ import ch.ethz.idsc.tensor.sca.Round;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    final SmoothingKernel smoothingKernel = spinnerFilter.getValue();
+    GraphicsUtil.setQualityHigh(graphics);
+    final int radius = spinnerRadius.getValue();
+    if (jToggleSymi.isSelected())
+      graphics.drawImage(SymLinkImages.smoothingKernel(smoothingKernel, radius).bufferedImage(), 0, 0, null);
+    // ---
     if (jToggleWait.isSelected())
       return;
-    // graphics.drawImage(image, 100, 100, null);
-    GraphicsUtil.setQualityHigh(graphics);
-    // boolean isR2 = jToggleButton.isSelected();
-    // Tensor _control = control.copy();
-    final int radius = spinnerRadius.getValue();
-    final Tensor refined;
-    // final Tensor curve;
+    // ---
     if (jToggleCtrl.isSelected()) {
       final Color color = new Color(255, 128, 128, 255);
       if (jToggleLine.isSelected()) {
@@ -137,8 +142,8 @@ import ch.ethz.idsc.tensor.sca.Round;
       }
     }
     TensorUnaryOperator geodesicCenterFilter = //
-        GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, spinnerFilter.getValue()), radius);
-    refined = geodesicCenterFilter.apply(control);
+        GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel), radius);
+    final Tensor refined = geodesicCenterFilter.apply(control);
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;
       {

@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Min;
 
 /** SymNode extends from here */
-/* package */ class SymLink {
+public class SymLink {
   private static final Scalar SHIFT_Y = RealScalar.of(.5);
 
   public static SymLink build(SymScalar symScalar) {

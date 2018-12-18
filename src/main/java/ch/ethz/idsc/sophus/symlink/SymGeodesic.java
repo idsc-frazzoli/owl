@@ -5,7 +5,7 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ enum SymGeodesic implements GeodesicInterface {
+public enum SymGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   @Override

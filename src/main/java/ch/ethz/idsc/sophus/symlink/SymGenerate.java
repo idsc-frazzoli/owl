@@ -12,26 +12,14 @@ import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DeCasteljau;
-import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ enum SymGenerate {
   ;
-  public static SymLinkImage window(SmoothingKernel wf, int radius) {
-    TensorUnaryOperator tensorUnaryOperator = //
-        GeodesicCenter.of(SymGeodesic.INSTANCE, wf);
-    Tensor vector = Tensor.of(IntStream.range(0, 2 * radius + 1).mapToObj(SymScalar::leaf));
-    Tensor tensor = tensorUnaryOperator.apply(vector);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor);
-    symLinkImage.title("" + wf.name() + "[" + (2 * radius + 1) + "]");
-    return symLinkImage;
-  }
-
   public static void subdiv3() throws IOException {
     Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
     CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
@@ -99,12 +87,12 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   public static void main(String[] args) throws IOException {
     {
-      SymLinkImage symLinkImage = window(SmoothingKernel.GAUSSIAN, 2);
+      SymLinkImage symLinkImage = SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 2);
       BufferedImage bufferedImage = symLinkImage.bufferedImageCropped();
       ImageIO.write(bufferedImage, "png", UserHome.Pictures("gaussian23.png"));
     }
     // BufferedImage bufferedImage =
-    window(SmoothingKernel.GAUSSIAN, 5);
+    SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 5);
     // ImageIO.write(bufferedImage, "png", UserHome.Pictures("export/" + wf.name().toLowerCase() + radius + ".png"));
     // for (WindowFunctions windowFunctions : WindowFunctions.values())
     // for (int radius = 1; radius <= 4; ++radius)
