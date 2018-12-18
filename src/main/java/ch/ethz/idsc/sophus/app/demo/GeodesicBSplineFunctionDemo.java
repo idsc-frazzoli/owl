@@ -65,6 +65,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
     timerFrame.jToolBar.add(jToggleButton);
+    jToggleSymi.setSelected(true);
     timerFrame.jToolBar.add(jToggleSymi);
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));

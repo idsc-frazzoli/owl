@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ class SymScalar extends ScalarAdapter {
+public class SymScalar extends ScalarAdapter {
   /** @param p
    * @param q
    * @param ratio

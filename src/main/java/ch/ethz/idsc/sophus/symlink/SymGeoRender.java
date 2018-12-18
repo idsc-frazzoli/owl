@@ -18,7 +18,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 
-/* package */ class SymGeoRender implements RenderInterface {
+// TODO redundant to SymLinkImage
+public class SymGeoRender implements RenderInterface {
   private static final GeodesicInterface GEODESIC_INTERFACE = Se2CoveringGeodesic.INSTANCE;
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.22);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();

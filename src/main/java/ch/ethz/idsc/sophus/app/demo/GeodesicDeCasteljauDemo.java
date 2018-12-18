@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.symlink;
+package ch.ethz.idsc.sophus.app.demo;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -17,28 +17,31 @@ import javax.swing.event.ChangeListener;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.sophus.app.demo.AbstractDemo;
-import ch.ethz.idsc.sophus.app.demo.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.demo.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivisions;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DeCasteljau;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.symlink.SymGeoRender;
+import ch.ethz.idsc.sophus.symlink.SymGeodesic;
+import ch.ethz.idsc.sophus.symlink.SymLink;
+import ch.ethz.idsc.sophus.symlink.SymLinkBuilder;
+import ch.ethz.idsc.sophus.symlink.SymLinkImage;
+import ch.ethz.idsc.sophus.symlink.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.N;
 
-/* package */ class SymDemo extends ControlPointsDemo {
+/* package */ class GeodesicDeCasteljauDemo extends ControlPointsDemo {
   private final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
   private final SpinnerLabel<BSpline4CurveSubdivisions> spinnerBSpline4 = new SpinnerLabel<>();
   // ---
   private Scalar MAGIC_C = RationalScalar.of(1, 2);
 
-  SymDemo() {
+  GeodesicDeCasteljauDemo() {
     timerFrame.jToolBar.add(jButton);
     // ---
     {
@@ -142,7 +145,7 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new SymDemo();
+    AbstractDemo abstractDemo = new GeodesicDeCasteljauDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }
