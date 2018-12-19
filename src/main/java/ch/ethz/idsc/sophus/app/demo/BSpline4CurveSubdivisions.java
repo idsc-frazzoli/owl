@@ -1,11 +1,13 @@
 // code by jph
-package ch.ethz.idsc.sophus.curve;
+package ch.ethz.idsc.sophus.app.demo;
 
 import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 
-public enum BSpline4CurveSubdivisions {
+/* package */ enum BSpline4CurveSubdivisions {
   DYN_SHARON(BSpline4CurveSubdivision::of), //
   ALTERNATIVE(BSpline4CurveSubdivision::split2), //
   HAKENBERG(BSpline4CurveSubdivision::split3), //
