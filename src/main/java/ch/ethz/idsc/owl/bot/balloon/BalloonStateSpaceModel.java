@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 /** state space model taken from the book
  * "Differentially Flat Systems" Chapter 2.7.2
@@ -42,20 +43,22 @@ import ch.ethz.idsc.tensor.qty.Quantity;
      * vel' = (-1 / tau2) * vel + sigma * theta + w / tau2
      * theta' = - theta / tau1 + u */
     Scalar x1 = x.Get(0);
-    System.out.println("x1 = " + x1);
+    //System.out.println("x1 = " + x1);
     Scalar y = x.Get(1); // altitude
-    System.out.println("y = " + y);
+    //System.out.println("y = " + y);
     Scalar vel = x.Get(2);
-    System.out.println("vel = " + vel);
+    //System.out.println("vel = " + vel);
     Scalar theta = x.Get(3);
     System.out.println("theta = " + theta);
+    System.out.println(u.Get(0));
     /* TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     /** unknown perturbation due to vertical velocity of wind */
-    Scalar w = RealScalar.of( //
-        2 * SimplexContinuousNoise.at(x1.number().doubleValue(), y.number().doubleValue(), vel.number().doubleValue(), theta.number().doubleValue()));
+    Scalar w = RealScalar.ONE.negate();//of( //
+        //2 * SimplexContinuousNoise.at(x1.number().doubleValue(), y.number().doubleValue(), vel.number().doubleValue(), theta.number().doubleValue()));
     /* unknown horizontal movement due to horizontal winds */
-    System.out.println("w = " + w);
-    Scalar x_dot = y.multiply(RealScalar.ONE);
+    //System.out.println("w = " + w);
+
+    Scalar x_dot = RealScalar.ZERO;//verticalWinds(y);
     /* if stateSpaceModel is instantiated with units w and x_dot are given the necessary units,
      * [x]= m*s^-1 and [w] = m*s^-1 */
     if (hasUnit) {
@@ -67,6 +70,17 @@ import ch.ethz.idsc.tensor.qty.Quantity;
         vel, //
         vel.negate().divide(tau2).add(theta.multiply(sigma)).add(w.divide(tau2)), //
         theta.negate().divide(tau1).add(u.Get(0)));
+  }
+  
+  public Scalar verticalWinds(Scalar y){
+    Scalar changeOfWindDirection = RealScalar.of(10);
+    Clip altitude_clip = Clip.function(changeOfWindDirection.negate(), changeOfWindDirection);
+    if (altitude_clip.isInside(y)) {
+      return RealScalar.of(5);
+    }
+    else {
+      return RealScalar.of(-5);
+    }
   }
 
   @Override

@@ -19,9 +19,10 @@ public class BalloonAnimationDemo implements DemoInterface {
   @Override // from DemoInterface
   public OwlyAnimationFrame start() {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
+    owlyAnimationFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
     PlannerConstraint plannerConstraint = new BalloonPlannerConstraint(BalloonEntity.SPEED_MAX);
     BalloonStateSpaceModel balloonStateSpaceModel = BalloonStateSpaceModels.defaultWithoutUnits();
-    StateTime stateTime = new StateTime(Tensors.vector(0, 100, 0, 0), RealScalar.ZERO);
+    StateTime stateTime = new StateTime(Tensors.vector(0, 30, 0, 0), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         balloonStateSpaceModel, EulerIntegrator.INSTANCE, stateTime);
     TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;

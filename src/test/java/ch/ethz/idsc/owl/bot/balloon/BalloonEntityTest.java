@@ -61,7 +61,7 @@ public class BalloonEntityTest extends TestCase {
   }
 
   public void testCreateTrajectoryPlanner() {
-    Tensor goal = Tensors.vector(100, 30);
+    Tensor goal = Tensors.vector(-30, 0);
     Scalar vertSpeedMax = RealScalar.of(4);
     PlannerConstraint plannerConstraint = new BalloonPlannerConstraint(vertSpeedMax);
     BalloonEntity balloonEntity = createEntity();
