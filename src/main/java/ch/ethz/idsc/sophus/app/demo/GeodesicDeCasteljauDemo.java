@@ -17,7 +17,6 @@ import javax.swing.event.ChangeListener;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivisions;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DeCasteljau;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
