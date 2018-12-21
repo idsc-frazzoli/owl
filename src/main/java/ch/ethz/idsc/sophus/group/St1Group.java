@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.Tensor;

@@ -1,13 +1,11 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Mod;
 
-/** ST(1) is parameterized by R^2*/
+/** ST(1) is parameterized by R^2 */
 public class St1GroupElement extends St1CoveringGroupElement {
-
   // ---
   /** @param lamdbdat == {plambda, pt} as member of Lie group ST1 */
   public St1GroupElement(Tensor lambdat) {

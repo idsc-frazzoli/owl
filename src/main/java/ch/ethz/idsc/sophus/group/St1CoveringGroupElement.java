@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
 import java.io.Serializable;
@@ -6,8 +6,6 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Cos;
-import ch.ethz.idsc.tensor.sca.Sin;
 
 /** represents an element of the covering group ST(1),
  * which is defined by two real values, or equivalently by a vector from R^2 */

@@ -15,9 +15,9 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
 
-public class GeodesicCausalFiltering {
-  public static GeodesicCausalFiltering se2(Tensor measurements, Tensor reference, int order) {
-    return new GeodesicCausalFiltering(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, measurements, reference, order);
+public class GeodesicCausalFilteringIIR {
+  public static GeodesicCausalFilteringIIR se2(Tensor measurements, Tensor reference, int order) {
+    return new GeodesicCausalFilteringIIR(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, measurements, reference, order);
   }
 
   private final LieDifferences lieDifferences;
@@ -32,7 +32,7 @@ public class GeodesicCausalFiltering {
   /** filtered data which we use as 'truth' */
   public Tensor reference;
 
-  GeodesicCausalFiltering(LieGroup lieGroup, LieExponential lieExponential, Tensor measurements, Tensor reference, int order) {
+  GeodesicCausalFilteringIIR(LieGroup lieGroup, LieExponential lieExponential, Tensor measurements, Tensor reference, int order) {
     this.lieDifferences = new LieDifferences(lieGroup, lieExponential);
     this.geodesicInterface = new LieGroupGeodesic(lieGroup::element, lieExponential);
     this.measurements = measurements;

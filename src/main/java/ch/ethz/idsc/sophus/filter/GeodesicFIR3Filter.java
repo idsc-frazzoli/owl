@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
@@ -26,7 +25,7 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
   private Tensor r = null;
   // gamma 2/3 is taken from vertex inserstion example, 7/4 als komplement. Aber hier ist sicher noch ein fehler
   private Scalar gamma = RationalScalar.of(2, 3);
-  private Scalar beta =  RationalScalar.of(7, 4);
+  private Scalar beta = RationalScalar.of(7, 4);
 
   public GeodesicFIR3Filter(GeodesicInterface geodesicInterface, Scalar alpha) {
     this.geodesicInterface = geodesicInterface;
@@ -39,13 +38,13 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
     this.q = q;
     this.r = r;
   }
-  
+
   public synchronized Tensor interpolate() {
     if (Objects.isNull(q)) {
       System.out.println(q);
-      return q;}
+      return q;
+    }
     return geodesicInterface.split(p, q, gamma);
-    
   }
 
   /** @return extrapolated "best guess" value from the previous predictions */
@@ -56,14 +55,13 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
   }
 
   @Override
-  public synchronized Tensor apply(Tensor tensor) { 
+  public synchronized Tensor apply(Tensor tensor) {
     if (Objects.isNull(r)) {
       if (Objects.isNull(q)) {
         q = tensor.copy();
         r = tensor.copy();
         return r;
-      }
-      else {
+      } else {
         r = tensor.copy();
         return r;
       }
@@ -75,4 +73,3 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
     return result;
   }
 }
-

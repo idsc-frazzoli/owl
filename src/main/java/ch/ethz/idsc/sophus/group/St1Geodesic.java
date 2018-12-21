@@ -1,13 +1,9 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.sca.Mod;
 
 /** References: */
 public enum St1Geodesic implements GeodesicInterface {

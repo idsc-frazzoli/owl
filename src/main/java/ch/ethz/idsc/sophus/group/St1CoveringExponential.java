@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -6,11 +6,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
-import ch.ethz.idsc.tensor.sca.Sin;
-import ch.ethz.idsc.tensor.sca.Tan;
 
 /** References:
  * Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.
@@ -22,12 +19,11 @@ public enum St1CoveringExponential implements LieExponential {
    * 
    * @param x element in the st1 Lie-algebra of the form {dlambda, dt}
    * @return element g in ST1 as vector with coordinates of g == exp x */
-  
   @Override // from LieExponential
   public Tensor exp(Tensor x) {
     Scalar dlambda = x.Get(0);
     Scalar dt = x.Get(1);
-    if(Scalars.isZero(dlambda)) {
+    if (Scalars.isZero(dlambda)) {
       return Tensors.of(RealScalar.ONE, dt);
     }
     return Tensors.of(Exp.FUNCTION.apply(dlambda), dlambda.divide(dt).multiply((Exp.FUNCTION.apply(dlambda)).subtract(RealScalar.ONE)));
@@ -35,7 +31,6 @@ public enum St1CoveringExponential implements LieExponential {
 
   /** @param g element in the ST1 Lie group of the form {lambda, t}
    * @return element x in the st1 Lie algebra with x == log g, and g == exp x */
-  
   @Override // from LieExponential
   public Tensor log(Tensor g) {
     Scalar lambda = g.Get(0);

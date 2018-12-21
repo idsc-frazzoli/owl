@@ -49,8 +49,8 @@ public class GeodesicCausalFilteringFIR {
   /** @param alpha filter parameter
    * @return filtered signal when using given alpha */
   public Tensor filteredSignal(Scalar alpha) {
-//    return Tensor.of(measurements.stream() //
-//        .map(new GeodesicFIR2Filter(geodesicInterface, alpha)));
+    // return Tensor.of(measurements.stream() //
+    // .map(new GeodesicFIR2Filter(geodesicInterface, alpha)));
     return Tensor.of(measurements.stream() //
         .map(new GeodesicFIR3Filter(geodesicInterface, alpha)));
   }
@@ -95,7 +95,7 @@ public class GeodesicCausalFilteringFIR {
 
   public Tensor evaluate1ErrorSeperated(Scalar alpha) {
     Tensor errors = Tensors.empty();
-    Tensor filtering = filteredSignal(alpha); 
+    Tensor filtering = filteredSignal(alpha);
     for (int i = 1; i < measurements.length(); ++i) {
       Tensor pair1 = lieDifferences.pair(reference.get(i - 1), reference.get(i));
       Tensor pair2 = lieDifferences.pair(filtering.get(i - 1), filtering.get(i));
