@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -21,6 +22,10 @@ import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.RnGroup;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
+import ch.ethz.idsc.sophus.symlink.SymLinkImage;
+import ch.ethz.idsc.sophus.symlink.SymLinkImages;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -36,6 +41,8 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleLine = new JToggleButton("line");
+  private final JToggleButton jToggleSymi = new JToggleButton("graph");
+  private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   GeodesicBSplineFunctionDemo() {
     {
@@ -58,13 +65,18 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
     timerFrame.jToolBar.add(jToggleButton);
+    jToggleSymi.setSelected(true);
+    timerFrame.jToolBar.add(jToggleSymi);
+    // ---
+    jSlider.setPreferredSize(new Dimension(500, 28));
+    timerFrame.jToolBar.add(jSlider);
     // ---
     spinnerDegree.setList(DEGREES);
     spinnerDegree.setValue(3);
     spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
     // ---
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-    spinnerRefine.setValue(9);
+    spinnerRefine.setValue(5);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
@@ -83,13 +95,20 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     int upper = control.length() - 1;
     final Tensor domain = Subdivide.of(0, upper, upper * (1 << (levels)));
     final Tensor refined;
+    final int value = jSlider.getValue();
+    final Scalar parameter = RationalScalar.of(value * upper, 1000);
+    if (jToggleSymi.isSelected()) {
+      SymLinkImage symLinkImage = SymLinkImages.deBoor(degree, upper + 1, parameter);
+      graphics.drawImage(symLinkImage.bufferedImage(), 0, 0, null);
+    }
     renderControlPoints(geometricLayer, graphics);
+    GeodesicBSplineFunction geodesicBSplineFunction;
     if (isR2) {
       Tensor rnctrl = controlR2();
       Tensor effective = jToggleItrp.isSelected() //
           ? new BSplineInterpolationApproximation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, degree).fixed(rnctrl, 30)
           : rnctrl;
-      GeodesicBSplineFunction geodesicBSplineFunction = //
+      geodesicBSplineFunction = //
           GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
       refined = domain.map(geodesicBSplineFunction);
       {
@@ -100,9 +119,20 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
       Tensor effective = jToggleItrp.isSelected() //
           ? new BSplineInterpolationApproximation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, degree).fixed(control, 30)
           : control;
-      GeodesicBSplineFunction geodesicBSplineFunction = //
+      geodesicBSplineFunction = //
           GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, effective);
       refined = domain.map(geodesicBSplineFunction);
+      {
+        Tensor selected = geodesicBSplineFunction.apply(parameter);
+        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(selected));
+        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
+        // path2d.closePath();
+        graphics.setColor(Color.DARK_GRAY);
+        graphics.fill(path2d);
+        geometricLayer.popMatrix();
+        // GeodesicBSplineFunction geodesicBSplineFunction = //
+        // GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, effective);
+      }
     }
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
     if (!isR2 && levels < 5)

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,10 +17,14 @@ public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializabl
   private final Scalar rs_f;
   private final Scalar pqrs;
 
+  /** @param geodesicInterface non-null
+   * @param pq_f
+   * @param rs_f
+   * @param pqrs */
   public Dual4PointCurveSubdivision( //
       GeodesicInterface geodesicInterface, //
       Scalar pq_f, Scalar rs_f, Scalar pqrs) {
-    this.geodesicInterface = geodesicInterface;
+    this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
     this.pq_f = pq_f;
     this.rs_f = rs_f;
     this.pqrs = pqrs;

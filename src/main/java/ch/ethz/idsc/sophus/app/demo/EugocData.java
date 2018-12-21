@@ -18,11 +18,8 @@ import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-enum EugocDemo {
+/* package */ enum EugocData {
   ;
-  // public static void main(String[] args) {
-  // control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream().limit(5000).map(row -> row.extract(1, 4))));
-  // }
   private static final LieDifferences LIE_DIFFERENCES = //
       new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
 

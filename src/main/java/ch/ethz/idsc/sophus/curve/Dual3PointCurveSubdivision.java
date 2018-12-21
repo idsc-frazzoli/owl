@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -14,10 +15,11 @@ import ch.ethz.idsc.tensor.Tensors;
 public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Serializable {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   // ---
-  private final GeodesicInterface geodesicInterface;
+  protected final GeodesicInterface geodesicInterface;
 
+  /** @param geodesicInterface non-null */
   public Dual3PointCurveSubdivision(GeodesicInterface geodesicInterface) {
-    this.geodesicInterface = geodesicInterface;
+    this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
   }
 
   @Override // from CurveSubdivision

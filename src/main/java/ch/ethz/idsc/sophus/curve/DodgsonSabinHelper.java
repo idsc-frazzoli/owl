@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return intersectCircleLine(b, c, r, RealScalar.ZERO);
   }
 
+  // TODO not covered by tests
   static Tensor midpoint(Tensor B, Tensor C) {
     return B.add(C).multiply(RationalScalar.HALF);
   }

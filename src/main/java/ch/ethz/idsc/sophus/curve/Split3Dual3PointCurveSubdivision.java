@@ -7,16 +7,24 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** dual scheme */
 public class Split3Dual3PointCurveSubdivision extends Dual3PointCurveSubdivision {
-  private final GeodesicInterface geodesicInterface;
+  /** @param geodesicInterface
+   * @param pq_f
+   * @param qr_f
+   * @param pqqr
+   * @return */
+  public static CurveSubdivision of(GeodesicInterface geodesicInterface, Scalar pq_f, Scalar qr_f, Scalar pqqr) {
+    return new Split3Dual3PointCurveSubdivision(geodesicInterface, pq_f, qr_f, pqqr);
+  }
+
+  // ---
   private final Scalar pq_f;
   private final Scalar qr_f;
   private final Scalar pqqr;
 
-  public Split3Dual3PointCurveSubdivision( //
+  private Split3Dual3PointCurveSubdivision( //
       GeodesicInterface geodesicInterface, //
       Scalar pq_f, Scalar qr_f, Scalar pqqr) {
     super(geodesicInterface);
-    this.geodesicInterface = geodesicInterface;
     this.pq_f = pq_f;
     this.qr_f = qr_f;
     this.pqqr = pqqr;

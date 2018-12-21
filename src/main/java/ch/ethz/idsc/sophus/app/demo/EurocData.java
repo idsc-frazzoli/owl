@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-enum EurocDemo {
+/* package */ enum EurocData {
   ;
   private static final LieDifferences LIE_DIFFERENCES = //
       new LieDifferences(LinearGroup.INSTANCE, Se3Exponential.INSTANCE);

@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.opt.BSplineFunction;
 
+// TODO JAN class is obsolete with tensor 065
 public enum BSplineLimitMatrix {
   ;
   /** @param degree of b-spline basis functions

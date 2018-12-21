@@ -116,25 +116,6 @@ R^2
 
 ![r2](https://cloud.githubusercontent.com/assets/4012178/26045794/16bd0a54-394c-11e7-9d11-19558bc3be88.png)
 
-## Geometry in Nonlinear Spaces
-
-<table>
-<tr>
-<td>
-
-![curve_se2](https://user-images.githubusercontent.com/4012178/47631757-8f693d80-db47-11e8-9c00-7796b07c48fc.png)
-
-Curve Subdivision
-
-<td>
-
-![smoothing](https://user-images.githubusercontent.com/4012178/47631759-91cb9780-db47-11e8-9dc7-a2631a144ecc.png)
-
-Smoothing
-
-</tr>
-</table>
-
 
 ## Integration
 
@@ -161,23 +142,15 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
 
 ## Contributors
 
-Jan Hakenberg, Jonas Londschien, Yannik Nager, André Stoll, Oliver Brinkmann
+Jan Hakenberg, Jonas Londschien, Yannik Nager, André Stoll
 
 > The code in the repository operates a heavy and fast robot that may endanger living creatures. We follow best practices and coding standards to protect from avoidable errors.
 
 ## Publications
 
-* *Curve Subdivision in SE(2)*
-by Jan Hakenberg,
-[viXra:1807.0463](http://vixra.org/abs/1807.0463),
-[video](https://www.youtube.com/watch?v=2vDciaUgL4E)
 * *What lies in the shadows? Safe and computation-aware motion planning for autonomous vehicles using intent-aware dynamic shadow regions*
 by Yannik Nager, Andrea Censi, and Emilio Frazzoli,
 [video](https://www.youtube.com/watch?v=3w6zQF9HOAM)
-* *Smoothing using Geodesic Averages*
-by Jan Hakenberg,
-[viXra:1810.0283](http://vixra.org/abs/1810.0283),
-[video](https://www.youtube.com/watch?v=dmFO72Pigb4)
 
 ## References
 
@@ -188,6 +161,62 @@ by Brian Paden and Emilio Frazzoli,
 * *Sampling-based algorithms for optimal motion planning*
 by Sertac Karaman and Emilio Frazzoli,
 [IJRR11](http://ares.lids.mit.edu/papers/Karaman.Frazzoli.IJRR11.pdf)
+
+---
+
+![ethz300](https://user-images.githubusercontent.com/4012178/45925071-bf9d3b00-bf0e-11e8-9d92-e30650fd6bf6.png)
+
+# ch.ethz.idsc.sophus <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
+
+Library for non-linear geometry computation in Java, version `0.0.1`
+
+The library was developed with the following objectives in mind
+* suitable for use in safety-critical real-time systems
+* trajectory design for an autonomous vehicle
+* implementation of theoretical concepts with high level of abstraction
+
+<table>
+<tr>
+<td>
+
+![curve_se2](https://user-images.githubusercontent.com/4012178/47631757-8f693d80-db47-11e8-9c00-7796b07c48fc.png)
+
+Curve Subdivision
+
+<td>
+
+![smoothing](https://user-images.githubusercontent.com/4012178/47631759-91cb9780-db47-11e8-9dc7-a2631a144ecc.png)
+
+Smoothing
+
+<td>
+
+![filtering](https://user-images.githubusercontent.com/4012178/47631759-91cb9780-db47-11e8-9dc7-a2631a144ecc.png)
+
+Filtering
+
+</tr>
+</table>
+
+## Contributors
+
+Jan Hakenberg, Oliver Brinkmann
+
+## Publications
+
+* *Curve Subdivision in SE(2)*
+by Jan Hakenberg,
+[viXra:1807.0463](http://vixra.org/abs/1807.0463),
+[video](https://www.youtube.com/watch?v=2vDciaUgL4E)
+* *Smoothing using Geodesic Averages*
+by Jan Hakenberg,
+[viXra:1810.0283](http://vixra.org/abs/1810.0283),
+[video](https://www.youtube.com/watch?v=dmFO72Pigb4)
+
+## References
+
+* *Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.*
+by Vincent Arsigny, Xavier Pennec and Nicholas Ayache, 
 
 ---
 

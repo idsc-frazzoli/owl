@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.red.Norm;
  * input matrix b,
  * output matrix c, and
  * transmission matrix d */
-class LinearStateSpaceModel implements StateSpaceModel, Serializable {
+public class LinearStateSpaceModel implements StateSpaceModel, Serializable {
   private final Tensor a;
   private final Tensor b;
   private final Tensor c;

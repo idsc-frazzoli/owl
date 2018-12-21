@@ -19,29 +19,42 @@ import ch.ethz.idsc.tensor.img.ImageCrop;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class SymLinkImage {
+public class SymLinkImage {
+  private static final int WIDTH = 100;
+  /** height also appears in the model2pixel matrix */
+  private static final int HEIGHT = 50;
   private static final Tensor MODEL2PIXEL = Tensors.fromString("{{100,0,80},{0,-100,50+25},{0,0,1}}");
-  private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 22);
   private static final TensorUnaryOperator IMAGE_CROP = ImageCrop.color(Tensors.vector(255, 255, 255, 255));
+  private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 22);
   // private static final Tensor CIRCLE = CirclePoints.of(21).multiply(RealScalar.of(.07));
   // ---
-  private final BufferedImage bufferedImage = new BufferedImage(1400, 500, BufferedImage.TYPE_INT_ARGB);
+  private final BufferedImage bufferedImage; // = new BufferedImage(1400, 500, BufferedImage.TYPE_INT_ARGB);
   private final GeometricLayer geometricLayer = GeometricLayer.of(MODEL2PIXEL);
-  int minx = 800;
+  private final Font font;
+  int minx = Integer.MAX_VALUE;
   int maxx = 0;
 
   public SymLinkImage(SymScalar symScalar) {
+    this(symScalar, FONT);
+  }
+
+  public SymLinkImage(SymScalar symScalar, Font font) {
+    final SymLink root = SymLink.build(symScalar);
+    final Tensor vector = SymWeights.of(symScalar);
+    final int depth = root.depth();
+    // ---
+    bufferedImage = new BufferedImage(100 + WIDTH * vector.length(), 100 + HEIGHT * depth, BufferedImage.TYPE_INT_ARGB);
+    // ---
+    this.font = font;
     Graphics2D graphics = bufferedImage.createGraphics();
     GraphicsUtil.setQualityHigh(graphics);
-    graphics.setFont(FONT);
-    FontMetrics fontMetrics = graphics.getFontMetrics(FONT);
-    graphics.setColor(Color.WHITE);
+    graphics.setFont(font);
+    FontMetrics fontMetrics = graphics.getFontMetrics(font);
+    graphics.setColor(new Color(245, 245, 245));
     graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
     // ---
-    SymLink root = SymLink.build(symScalar);
     new SymLinkRender(root).render(geometricLayer, graphics);
     // ---
-    Tensor vector = SymWeights.of(symScalar);
     graphics.setColor(Color.GRAY);
     for (int index = 0; index < vector.length(); ++index) {
       Point2D point2d = geometricLayer.toPoint2D(Tensors.vector(index, .2));
@@ -71,9 +84,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public void title(String string) {
     Graphics2D graphics = bufferedImage.createGraphics();
     GraphicsUtil.setQualityHigh(graphics);
-    FontMetrics fontMetrics = graphics.getFontMetrics(FONT);
+    FontMetrics fontMetrics = graphics.getFontMetrics(font);
     int stringWidth = fontMetrics.stringWidth(string);
-    graphics.setFont(FONT);
+    graphics.setFont(font);
     graphics.setColor(Color.BLACK);
     graphics.drawString(string, (int) (minx + (maxx - minx - stringWidth) * 0.5), 25);
   }

@@ -11,7 +11,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Min;
 
-/* package */ class SymLink {
+/** SymNode extends from here */
+public class SymLink {
   private static final Scalar SHIFT_Y = RealScalar.of(.5);
 
   public static SymLink build(SymScalar symScalar) {
@@ -33,6 +34,12 @@ import ch.ethz.idsc.tensor.red.Min;
 
   public final boolean isNode() {
     return Objects.isNull(lP);
+  }
+
+  public final int depth() {
+    if (isNode())
+      return 0;
+    return Math.max(lP.depth(), lQ.depth()) + 1;
   }
 
   public int getIndex() {

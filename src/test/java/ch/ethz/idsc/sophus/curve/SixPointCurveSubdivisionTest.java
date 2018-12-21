@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -61,5 +62,13 @@ public class SixPointCurveSubdivisionTest extends TestCase {
     Scalar scalar = string.Get(5);
     assertTrue(Scalars.nonZero(scalar));
     assertEquals(string.length(), 6 + 5);
+  }
+
+  public void testCyclic() {
+    SixPointCurveSubdivision spcs = new SixPointCurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor cyclic = spcs.cyclic(Tensors.vector(1, 0, 0, 0, 0, 0));
+    Tensor expected = Tensors.fromString("{1, 75/128, 0, -25/256, 0, 3/256, 0, 3/256, 0, -25/256, 0, 75/128}");
+    assertEquals(cyclic, expected);
+    assertTrue(ExactScalarQ.all(cyclic));
   }
 }
