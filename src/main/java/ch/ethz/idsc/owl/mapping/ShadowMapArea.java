@@ -6,10 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
-import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.img.ImageArea;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
@@ -42,17 +40,15 @@ public class ShadowMapArea implements RenderInterface {
     this.lidar = lidar;
     this.vMax = vMax;
     this.rMin = rMin;
-    BufferedImage bufferedImage = RegionRenders.image(imageRegion.image());
-    // TODO JPH 244 and 5 magic const, redundant to values specified elsewhere
-    // TODO JPH make imageRegion.image() == tensor input to function (instead of buffered image!)
-    Area area = ImageArea.fromImage(bufferedImage, new Color(244, 244, 244), 5);
+    Tensor image = imageRegion.image();
+    Area area = ImageArea.fromTensor(image);
     //
     // convert imageRegion into Area
     Tensor scale = imageRegion.scale();
     Tensor invsc = DiagonalMatrix.of( //
         scale.Get(0).reciprocal(), scale.Get(1).negate().reciprocal(), RealScalar.ONE);
     Tensor translate = IdentityMatrix.of(3);
-    translate.set(RealScalar.of(-bufferedImage.getHeight()), 1, 2);
+    translate.set(RealScalar.of(-image.length()), 1, 2);
     Tensor tmatrix = invsc.dot(translate);
     Area obstacleArea = area.createTransformedArea(AffineTransforms.toAffineTransform(tmatrix));
     Rectangle2D rInit = new Rectangle2D.Double();

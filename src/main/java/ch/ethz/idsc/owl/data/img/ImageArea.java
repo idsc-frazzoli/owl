@@ -1,10 +1,13 @@
 // code by ynager, found on github
 package ch.ethz.idsc.owl.data.img;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+
+import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Unprotect;
 
 /** every pixel is converted to a rectangle and joined with an area.
  * the technique is not very fast. */
@@ -23,32 +26,16 @@ public enum ImageArea {
     return area;
   }
 
-  /** @param bufferedImage non-null
-   * @param color
-   * @param tolerance
+  /** @param tensor
    * @return */
-  @Deprecated
-  public static Area fromImage(BufferedImage bufferedImage, Color color, int tolerance) {
+  public static Area fromTensor(Tensor tensor) {
     Area area = new Area();
-    for (int x = 0; x < bufferedImage.getWidth(); ++x)
-      for (int y = 0; y < bufferedImage.getHeight(); ++y) {
-        Color pixel = new Color(bufferedImage.getRGB(x, y));
-        if (isIncluded(color, pixel, tolerance))
+    int dimY = tensor.length();
+    int dimX = Unprotect.dimension1(tensor);
+    for (int x = 0; x < dimX; ++x)
+      for (int y = 0; y < dimY; ++y)
+        if (Scalars.nonZero(tensor.Get(y, x)))
           area.add(new Area(new Rectangle(x, y, 1, 1)));
-      }
     return area;
-  }
-
-  // TODO make class for this predicate
-  private static boolean isIncluded(Color target, Color pixel, int tolerance) {
-    int rT = target.getRed();
-    int gT = target.getGreen();
-    int bT = target.getBlue();
-    int rP = pixel.getRed();
-    int gP = pixel.getGreen();
-    int bP = pixel.getBlue();
-    return rP - tolerance <= rT && rT <= rP + tolerance && //
-        gP - tolerance <= gT && gT <= gP + tolerance && //
-        bP - tolerance <= bT && bT <= bP + tolerance;
   }
 }
