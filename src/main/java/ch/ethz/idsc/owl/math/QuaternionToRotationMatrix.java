@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO JPH use Scalar instead of double!
 public enum QuaternionToRotationMatrix {
   ;
   /** @param wxyz vector of length 4, does not have to have unit length
@@ -15,18 +14,23 @@ public enum QuaternionToRotationMatrix {
     return of(wxyz.Get(0), wxyz.Get(1), wxyz.Get(2), wxyz.Get(3));
   }
 
-  public static Tensor of(Scalar w, Scalar x, Scalar y, Scalar z) {
-    double q_w = w.number().doubleValue();
-    double q_x = x.number().doubleValue();
-    double q_y = y.number().doubleValue();
-    double q_z = z.number().doubleValue();
+  /** @param re
+   * @param im
+   * @param jm
+   * @param km
+   * @return orthogonal 3x3 matrix */
+  public static Tensor of(Scalar re, Scalar im, Scalar jm, Scalar km) {
+    double q_w = re.number().doubleValue();
+    double q_x = im.number().doubleValue();
+    double q_y = jm.number().doubleValue();
+    double q_z = km.number().doubleValue();
     double sqw = q_w * q_w;
     double sqx = q_x * q_x;
     double sqy = q_y * q_y;
     double sqz = q_z * q_z;
-    // invs (inverse square length) is only required if quaternion is not already normalized
+    // inverse square length is only required if Quaternion is not already normalized
     double inv = 1 / (sqx + sqy + sqz + sqw);
-    double m00 = (sqx - sqy - sqz + sqw) * inv; // since sqw + sqx + sqy + sqz =1 / inv*inv
+    double m00 = (+sqx - sqy - sqz + sqw) * inv; // since sqw + sqx + sqy + sqz =1 / inv*inv
     double m11 = (-sqx + sqy - sqz + sqw) * inv;
     double m22 = (-sqx - sqy + sqz + sqw) * inv;
     double tmp1 = q_x * q_y;

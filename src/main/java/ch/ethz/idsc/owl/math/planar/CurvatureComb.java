@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 public enum CurvatureComb {
   ;
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+  private static final Tensor ZEROS = Array.zeros(2);
 
   /** @param tensor
    * @param scalar
@@ -41,20 +42,29 @@ public enum CurvatureComb {
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
   public static Tensor string(Tensor tensor) {
     Tensor normal = Tensors.empty();
-    // TODO JPH can do better at the start and end
-    if (0 < tensor.length())
-      normal.append(Array.zeros(2));
-    for (int index = 1; index < tensor.length() - 1; ++index) {
+    int length = tensor.length();
+    if (2 < length) {
+      Tensor a = tensor.get(0);
+      Tensor b = tensor.get(1);
+      Tensor c = tensor.get(2);
+      normal.append(normal(a, b, c, b.subtract(a)));
+    } else //
+    if (0 < length)
+      normal.append(ZEROS);
+    for (int index = 1; index < length - 1; ++index) {
       Tensor a = tensor.get(index - 1);
       Tensor b = tensor.get(index + 0);
       Tensor c = tensor.get(index + 1);
-      Optional<Scalar> optional = SignedCurvature2D.of(a, b, c);
-      normal.append(optional.isPresent() //
-          ? NORMALIZE.apply(Cross2D.of(c.subtract(a))).multiply(optional.get())
-          : Array.zeros(2));
+      normal.append(normal(a, b, c, c.subtract(a)));
     }
-    if (1 < tensor.length())
-      normal.append(Array.zeros(2));
+    if (2 < length) {
+      Tensor a = tensor.get(length - 3);
+      Tensor b = tensor.get(length - 2);
+      Tensor c = tensor.get(length - 1);
+      normal.append(normal(a, b, c, c.subtract(b)));
+    } else //
+    if (1 < length)
+      normal.append(ZEROS);
     return normal;
   }
 
@@ -62,15 +72,20 @@ public enum CurvatureComb {
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
   public static Tensor cyclic(Tensor tensor) {
     Tensor normal = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
-      Tensor a = tensor.get((index - 1 + tensor.length()) % tensor.length());
+    int length = tensor.length();
+    for (int index = 0; index < length; ++index) {
+      Tensor a = tensor.get((index - 1 + length) % length);
       Tensor b = tensor.get(index);
-      Tensor c = tensor.get((index + 1) % tensor.length());
-      Optional<Scalar> optional = SignedCurvature2D.of(a, b, c);
-      normal.append(optional.isPresent() //
-          ? NORMALIZE.apply(Cross2D.of(c.subtract(a))).multiply(optional.get())
-          : Array.zeros(2));
+      Tensor c = tensor.get((index + 1) % length);
+      normal.append(normal(a, b, c, c.subtract(a)));
     }
     return normal;
+  }
+
+  private static Tensor normal(Tensor a, Tensor b, Tensor c, Tensor tangent) {
+    Optional<Scalar> optional = SignedCurvature2D.of(a, b, c);
+    return optional.isPresent() //
+        ? NORMALIZE.apply(Cross2D.of(tangent)).multiply(optional.get())
+        : ZEROS;
   }
 }

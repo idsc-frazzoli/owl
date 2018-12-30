@@ -81,7 +81,7 @@ public class ShadowEvaluator {
         List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
         Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
         try {
-          File file = UserHome.file("" + "minReactionTime_" + id + ".csv");
+          File file = UserHome.file("minReactionTime_" + id + ".csv");
           Export.of(file, minTimeReact.get().map(CsvFormat.strict()));
         } catch (Exception exception) {
           exception.printStackTrace();

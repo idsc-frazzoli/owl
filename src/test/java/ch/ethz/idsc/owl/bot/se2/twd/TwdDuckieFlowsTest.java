@@ -11,8 +11,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;
-import ch.ethz.idsc.tensor.qty.Units;
 import ch.ethz.idsc.tensor.sca.Round;
 import junit.framework.TestCase;
 
@@ -31,9 +31,9 @@ public class TwdDuckieFlowsTest extends TestCase {
     Collection<Flow> controls = twdConfig.getFlows(8);
     Scalar maxSpeed = Se2Controls.maxSpeed(controls);
     assertEquals(maxSpeed, ms);
-    assertEquals(Units.of(maxSpeed), Unit.of("m*s^-1"));
+    assertEquals(QuantityUnit.of(maxSpeed), Unit.of("m*s^-1"));
     Scalar maxTurng = Se2Controls.maxTurning(controls);
-    assertEquals(Units.of(maxTurng), Unit.of("rad*s^-1"));
+    assertEquals(QuantityUnit.of(maxTurng), Unit.of("rad*s^-1"));
     assertEquals(maxTurng, ms.divide(sa));
   }
 

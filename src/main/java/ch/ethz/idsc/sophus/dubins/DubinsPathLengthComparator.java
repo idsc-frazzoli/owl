@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.dubins;
+package ch.ethz.idsc.sophus.dubins;
 
 import java.util.Comparator;
 

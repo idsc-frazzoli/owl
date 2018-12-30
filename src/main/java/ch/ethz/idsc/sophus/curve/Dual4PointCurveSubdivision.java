@@ -34,11 +34,12 @@ public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializabl
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     Tensor curve = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
-      Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
+    int length = tensor.length();
+    for (int index = 0; index < length; ++index) {
+      Tensor p = tensor.get((index - 1 + length) % tensor.length());
       Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % tensor.length());
-      Tensor s = tensor.get((index + 2) % tensor.length());
+      Tensor r = tensor.get((index + 1) % length);
+      Tensor s = tensor.get((index + 2) % length);
       curve.append(lo(p, q, r, s)).append(lo(s, r, q, p));
     }
     return curve;
@@ -46,7 +47,6 @@ public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializabl
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
-    // TODO implement non cyclic refinement
     throw new UnsupportedOperationException();
   }
 

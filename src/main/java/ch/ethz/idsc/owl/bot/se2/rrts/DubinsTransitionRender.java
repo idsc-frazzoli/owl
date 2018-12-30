@@ -6,8 +6,8 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.gui.ren.TransitionRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.dubins.DubinsPath;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
+import ch.ethz.idsc.sophus.dubins.DubinsPath;
 
 public class DubinsTransitionRender extends TransitionRender {
   private final Se2TransitionSpace se2TransitionSpace;

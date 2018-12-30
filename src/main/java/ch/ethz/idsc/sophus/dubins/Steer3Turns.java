@@ -1,7 +1,7 @@
 // code by jph
 // adapted from https://github.com/mcapino/trajectorytools
 // adapted from https://github.com/AtsushiSakai/PythonRobotics
-package ch.ethz.idsc.owl.math.dubins;
+package ch.ethz.idsc.sophus.dubins;
 
 import java.util.Optional;
 

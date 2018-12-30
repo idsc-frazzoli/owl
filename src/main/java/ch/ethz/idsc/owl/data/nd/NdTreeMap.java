@@ -224,9 +224,9 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     } else {
       GlobalAssert.that(Objects.isNull(node.lChild));
       GlobalAssert.that(Objects.isNull(node.rChild));
-      System.out.println(v + "" + node.queue.size());
+      System.out.println(v + Integer.toString(node.queue.size()));
       for (NdPair<V> entry : node.queue)
-        System.out.println(v + "" + entry.location + " " + entry.value());
+        System.out.println(v + entry.location.toString() + " " + entry.value());
     }
   }
 }

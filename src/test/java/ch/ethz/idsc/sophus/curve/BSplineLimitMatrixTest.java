@@ -11,12 +11,13 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.BSplineFunction;
+import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
 import junit.framework.TestCase;
 
 public class BSplineLimitMatrixTest extends TestCase {
   public void testLinear() {
     for (int n = 1; n < 6; ++n) {
-      Tensor tensor = BSplineLimitMatrix.of(1, n);
+      Tensor tensor = BSplineInterpolation.matrix(1, n);
       assertEquals(tensor, IdentityMatrix.of(n));
       assertTrue(ExactScalarQ.all(tensor));
     }
@@ -25,7 +26,7 @@ public class BSplineLimitMatrixTest extends TestCase {
   public void testQuadratic() {
     for (int n = 1; n <= 6; ++n) {
       Tensor vector = Array.of(l -> RealScalar.ONE, n);
-      Tensor tensor = BSplineLimitMatrix.of(2, n);
+      Tensor tensor = BSplineInterpolation.matrix(2, n);
       assertEquals(Dimensions.of(tensor), Arrays.asList(n, n));
       assertEquals(tensor.dot(vector), vector);
       assertTrue(ExactScalarQ.all(tensor));
@@ -35,7 +36,7 @@ public class BSplineLimitMatrixTest extends TestCase {
   public void testCubic() {
     for (int n = 1; n <= 6; ++n) {
       Tensor vector = Array.of(l -> RealScalar.ONE, n);
-      Tensor tensor = BSplineLimitMatrix.of(3, n);
+      Tensor tensor = BSplineInterpolation.matrix(3, n);
       assertEquals(Dimensions.of(tensor), Arrays.asList(n, n));
       assertEquals(tensor.dot(vector), vector);
       assertTrue(ExactScalarQ.all(tensor));
@@ -44,7 +45,7 @@ public class BSplineLimitMatrixTest extends TestCase {
 
   public void testSolve() {
     Tensor interp = Tensors.vector(1, 0, 3, 2);
-    Tensor tensor = BSplineLimitMatrix.solve(3, interp);
+    Tensor tensor = BSplineInterpolation.solve(3, interp);
     assertTrue(ExactScalarQ.all(tensor));
     BSplineFunction bSplineFunction = BSplineFunction.of(3, tensor);
     for (int index = 0; index < interp.length(); ++index)
