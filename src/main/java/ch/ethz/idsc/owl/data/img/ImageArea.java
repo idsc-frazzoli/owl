@@ -23,15 +23,16 @@ public enum ImageArea {
     return area;
   }
 
-  /** @param image non-null
+  /** @param bufferedImage non-null
    * @param color
    * @param tolerance
    * @return */
-  public static Area fromImage(BufferedImage image, Color color, int tolerance) {
+  @Deprecated
+  public static Area fromImage(BufferedImage bufferedImage, Color color, int tolerance) {
     Area area = new Area();
-    for (int x = 0; x < image.getWidth(); ++x)
-      for (int y = 0; y < image.getHeight(); ++y) {
-        Color pixel = new Color(image.getRGB(x, y));
+    for (int x = 0; x < bufferedImage.getWidth(); ++x)
+      for (int y = 0; y < bufferedImage.getHeight(); ++y) {
+        Color pixel = new Color(bufferedImage.getRGB(x, y));
         if (isIncluded(color, pixel, tolerance))
           area.add(new Area(new Rectangle(x, y, 1, 1)));
       }

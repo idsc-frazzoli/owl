@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
-/** implementation uses only java spe */
+/** implementation uses only java default function and does not depend on 3rd party libraries */
 public class ShadowMapArea implements RenderInterface {
   private final LidarEmulator lidar;
   private final Area initArea;
@@ -34,12 +34,17 @@ public class ShadowMapArea implements RenderInterface {
   private Color COLOR_SHADOW_FILL;
   private Color COLOR_SHADOW_DRAW;
 
+  /** @param lidar
+   * @param imageRegion documentation!
+   * @param vMax
+   * @param rMin */
   public ShadowMapArea(LidarEmulator lidar, ImageRegion imageRegion, float vMax, float rMin) {
     this.lidar = lidar;
     this.vMax = vMax;
     this.rMin = rMin;
     BufferedImage bufferedImage = RegionRenders.image(imageRegion.image());
-    // TODO 244 and 5 magic const, redundant to values specified elsewhere
+    // TODO JPH 244 and 5 magic const, redundant to values specified elsewhere
+    // TODO JPH make imageRegion.image() == tensor input to function (instead of buffered image!)
     Area area = ImageArea.fromImage(bufferedImage, new Color(244, 244, 244), 5);
     //
     // convert imageRegion into Area
