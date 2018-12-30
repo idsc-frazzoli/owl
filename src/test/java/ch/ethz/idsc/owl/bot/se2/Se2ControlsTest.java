@@ -17,8 +17,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;
-import ch.ethz.idsc.tensor.qty.Units;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -53,13 +53,13 @@ public class Se2ControlsTest extends TestCase {
     final Scalar ms = Quantity.of(2, "m*s^-1");
     final Scalar mr = Scalars.fromString("3[rad*m^-1]");
     Flow flow = CarHelper.singleton(ms, mr);
-    assertEquals(Units.of(flow.getU().Get(2)), Unit.of("rad*s^-1"));
+    assertEquals(QuantityUnit.of(flow.getU().Get(2)), Unit.of("rad*s^-1"));
     Collection<Flow> controls = Collections.singleton(flow);
     Scalar maxSpeed = Se2Controls.maxSpeed(controls);
     assertEquals(maxSpeed, ms.abs());
-    assertEquals(Units.of(maxSpeed), Unit.of("m*s^-1"));
+    assertEquals(QuantityUnit.of(maxSpeed), Unit.of("m*s^-1"));
     Scalar maxTurning = Se2Controls.maxTurning(controls);
-    assertEquals(Units.of(maxTurning), Unit.of("rad*s^-1"));
+    assertEquals(QuantityUnit.of(maxTurning), Unit.of("rad*s^-1"));
     assertEquals(maxTurning, Quantity.of(6, "rad*s^-1"));
   }
 }

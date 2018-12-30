@@ -14,7 +14,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.sophus.curve.BSplineLimitMatrix;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -26,6 +25,7 @@ import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.mat.Inverse;
+import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
 
 /* package */ class BSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -95,7 +95,7 @@ import ch.ethz.idsc.tensor.mat.Inverse;
     final Tensor refined;
     {
       Tensor rnctrl = jToggleItrp.isSelected() //
-          ? BSplineLimitMatrix.solve(degree, control)
+          ? BSplineInterpolation.solve(degree, control)
           : control;
       GeodesicBSplineFunction bSplineFunction = //
           GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, rnctrl);

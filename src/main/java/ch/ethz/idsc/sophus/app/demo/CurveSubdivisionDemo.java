@@ -25,7 +25,6 @@ import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSplineInterpolationApproximation;
-import ch.ethz.idsc.sophus.curve.BSplineLimitMatrix;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
@@ -43,6 +42,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.mat.Inverse;
+import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -191,7 +191,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
       if (jToggleItrp.isSelected() && scheme.degree.isPresent())
-        rnctrl = BSplineLimitMatrix.solve(scheme.degree.get(), rnctrl);
+        rnctrl = BSplineInterpolation.solve(scheme.degree.get(), rnctrl);
       // ---
       refined = Nest.of(tuo, rnctrl, levels);
       {
