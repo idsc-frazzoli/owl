@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.dubins;
+package ch.ethz.idsc.sophus.dubins;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
