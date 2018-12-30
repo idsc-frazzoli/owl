@@ -21,6 +21,8 @@ import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+/** the quaternions in the data set have norm of approximately
+ * 1.00005... due to the use of float precision */
 /* package */ enum EurocData {
   ;
   private static final LieDifferences LIE_DIFFERENCES = //

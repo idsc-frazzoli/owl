@@ -99,6 +99,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     // });
     // timerFrame.jToolBar.add(jButton);
     // }
+    timerFrame.jToolBar.add(jButton);
     {
       JButton jButton = new JButton("p-ref");
       jButton.addActionListener(actionEvent -> printref = true);
