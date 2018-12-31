@@ -7,8 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 
-/** slightly different from {@link ImageCostFunction}
- * because evaluation only happens at last state of trajectory */
+/** TODO JPH test */
 public enum WaypointDistanceCost {
   ;
   public static ImageCostFunction linear(Tensor waypoints, Tensor range, float pathWidth, Dimension resolution) {
