@@ -23,10 +23,11 @@ public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     Tensor curve = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
-      Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
+    int length = tensor.length();
+    for (int index = 0; index < length; ++index) {
+      Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % tensor.length());
+      Tensor r = tensor.get((index + 1) % length);
       curve.append(center(p, q, r));
       curve.append(center(q, r));
     }

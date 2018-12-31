@@ -39,7 +39,7 @@ public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable 
       return tensor.copy();
     Tensor curve = Tensors.empty();
     Tensor p = tensor.get(0);
-    for (int index = 1; index < tensor.length(); ++index) {
+    for (int index = 1; index < length; ++index) {
       Tensor q = tensor.get(index);
       curve.append(lo(p, q)).append(lo(q, p));
       p = q;

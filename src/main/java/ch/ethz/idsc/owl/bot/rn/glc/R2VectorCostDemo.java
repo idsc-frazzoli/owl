@@ -40,13 +40,15 @@ public class R2VectorCostDemo implements DemoInterface {
         new StateTime(Tensors.vector(7, 6), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new R2TrajectoryControl();
     Tensor waypoints = CirclePoints.of(30).multiply(RealScalar.of(10));
-    ImageCostFunction waypointCost = //
-        WaypointDistanceCost.of(waypoints, Tensors.vector(8, 10), 10.0f, new Dimension(100, 100), true);
-    Tensor image = waypointCost.image();
+    ImageCostFunction imageCostFunction = WaypointDistanceCost.of( //
+        waypoints, true, RealScalar.ONE, RealScalar.of(10), new Dimension(120, 100));
+    Tensor range = imageCostFunction.range();
+    System.out.println(range);
+    Tensor image = imageCostFunction.image();
     R2Entity r2Entity = new R2VecEntity(episodeIntegrator, trajectoryControl) {
       @Override
       public Optional<CostFunction> getPrimaryCost() {
-        return Optional.of(waypointCost);
+        return Optional.of(imageCostFunction);
       }
     };
     owlyAnimationFrame.add(r2Entity);
@@ -54,7 +56,7 @@ public class R2VectorCostDemo implements DemoInterface {
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
     owlyAnimationFrame.addBackground(GridRender.INSTANCE);
-    owlyAnimationFrame.addBackground(new ImageRender(RegionRenders.image(image), waypointCost.scale()));
+    owlyAnimationFrame.addBackground(new ImageRender(RegionRenders.image(image), imageCostFunction.scale()));
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     return owlyAnimationFrame;
   }

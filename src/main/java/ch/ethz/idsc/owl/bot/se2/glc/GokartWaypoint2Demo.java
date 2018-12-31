@@ -29,15 +29,18 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** demo to simulate dubendorf hangar */
 public class GokartWaypoint2Demo extends GokartDemo {
-  private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { { 7.5, 0, 0 }, { 0, -7.5, 640 }, { 0, 0, 1 } });
+  private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] { //
+      { 7.5, 0, 0 }, //
+      { 0, -7.5, 640 }, //
+      { 0, 0, 1 } });
 
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
     waypoints = new BSpline2CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);
-    CostFunction costFunction = //
-        WaypointDistanceCost.of(waypoints, Tensors.vector(85.33, 85.33), 6.0f, new Dimension(640, 640), true);
+    CostFunction costFunction = WaypointDistanceCost.of( //
+        waypoints, true, RealScalar.ONE, RealScalar.of(7.5), new Dimension(640, 640));
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {

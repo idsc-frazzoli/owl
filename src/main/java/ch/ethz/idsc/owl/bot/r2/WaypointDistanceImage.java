@@ -9,44 +9,56 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.ImageFormat;
 
-/** TODO JPH document and test */
-/* package */ enum WaypointDistanceImage {
-  ;
+/* package */ class WaypointDistanceImage {
   public static final int OFF_PATH_COST = 1;
+  // ---
+  private final BufferedImage bufferedImage;
+  private final Scalar model2pixel;
 
   /** connects given waypoints with linear strokes
    * 
    * @param waypoints matrix with at least 2 columns
-   * @param range vector of length 2 with entries in model space
-   * @param pathWidth in pixels
-   * @param resolution {width, height} of the image
+   * @param closed
+   * @param width of path in model space
+   * @param model2pixel factor
+   * @param dimension {width, height} of the image
    * @return grayscale image */
-  public static BufferedImage of(Tensor waypoints, Tensor range, float pathWidth, Dimension resolution, boolean closed) {
-    BufferedImage bufferedImage = new BufferedImage(resolution.width, resolution.height, BufferedImage.TYPE_BYTE_GRAY);
+  public WaypointDistanceImage( //
+      Tensor waypoints, boolean closed, Scalar width, Scalar model2pixel, Dimension dimension) {
+    bufferedImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_BYTE_GRAY);
+    this.model2pixel = model2pixel;
     Graphics2D graphics = bufferedImage.createGraphics();
     graphics.setColor(new Color(OFF_PATH_COST, OFF_PATH_COST, OFF_PATH_COST));
-    graphics.fillRect(0, 0, resolution.width, resolution.height);
+    graphics.fillRect(0, 0, dimension.width, dimension.height);
     graphics.setColor(Color.BLACK);
-    graphics.setStroke(new BasicStroke(pathWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-    Path2D path = path2D(waypoints, range, resolution);
+    BasicStroke basicStroke = new BasicStroke( //
+        width.multiply(model2pixel).number().floatValue(), //
+        BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    graphics.setStroke(basicStroke);
+    Path2D path = GeometricLayer.of(Tensors.matrix(new Scalar[][] { //
+        { model2pixel, RealScalar.ZERO, RealScalar.ZERO }, //
+        { RealScalar.ZERO, model2pixel.negate(), RealScalar.of(dimension.height - 1) }, //
+        { RealScalar.ZERO, RealScalar.ZERO, RealScalar.ONE } })).toPath2D(waypoints);
     if (closed)
       path.closePath();
     graphics.draw(path);
+  }
+
+  public BufferedImage bufferedImage() {
     return bufferedImage;
   }
 
-  private static Path2D path2D(Tensor waypoints, Tensor range, Dimension resolution) {
-    int max_y = resolution.height - 1;
-    Tensor scale = Tensors.vector(resolution.height, resolution.width).pmul(range.map(Scalar::reciprocal));
-    float scaleX = scale.Get(1).number().floatValue();
-    float scaleY = scale.Get(0).number().floatValue();
-    Tensor model2pixel = Tensors.matrix(new Number[][] { //
-        { scaleX, 0, 0 }, { 0, -scaleY, max_y }, { 0, 0, 1 } });
-    GeometricLayer geometricLayer = GeometricLayer.of(model2pixel);
-    return geometricLayer.toPath2D(waypoints);
+  public Tensor image() {
+    return ImageFormat.from(bufferedImage);
+  }
+
+  public Tensor range() {
+    return Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()).divide(model2pixel);
   }
 }
