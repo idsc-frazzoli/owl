@@ -1,5 +1,5 @@
 // code by ob
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.sophus.space;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;

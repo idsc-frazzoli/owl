@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
-import ch.ethz.idsc.owl.math.planar.H2Geodesic;
-import ch.ethz.idsc.owl.math.planar.S2Geodesic;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.sophus.space.H2Geodesic;
+import ch.ethz.idsc.sophus.space.S2Geodesic;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

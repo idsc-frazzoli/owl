@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.symlink;
+package ch.ethz.idsc.sophus.app.jph;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -13,6 +13,10 @@ import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DeCasteljau;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.symlink.SymGeodesic;
+import ch.ethz.idsc.sophus.symlink.SymLinkImage;
+import ch.ethz.idsc.sophus.symlink.SymLinkImages;
+import ch.ethz.idsc.sophus.symlink.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

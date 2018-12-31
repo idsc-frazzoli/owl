@@ -4,10 +4,10 @@ package ch.ethz.idsc.sophus.app.demo;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
-import ch.ethz.idsc.owl.math.planar.S2Geodesic;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.space.S2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
