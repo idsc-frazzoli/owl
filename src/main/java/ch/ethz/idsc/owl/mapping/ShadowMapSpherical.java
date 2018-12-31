@@ -29,7 +29,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
-  private Color COLOR_SHADOW_FILL;
+  private Color colorShadowFill;
   // ---
   private final LidarEmulator lidar;
   private final Mat initArea;
@@ -163,7 +163,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
   }
 
   public void setColor(Color color) {
-    COLOR_SHADOW_FILL = color;
+    colorShadowFill = color;
   }
 
   private final int radius2it(float radius) {
@@ -184,19 +184,20 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     if (useGPU)
       shadowAreaGpu.download(shadowArea);
     //
-    final Tensor matrix = geometricLayer.getMatrix();
-    AffineTransform transform = AffineTransforms.toAffineTransform(matrix.dot(pixel2world));
     Mat plotArea = shadowArea.clone();
     // setup colorspace
     opencv_imgproc.cvtColor(plotArea, plotArea, opencv_imgproc.CV_GRAY2RGBA);
     Mat color = new Mat(4, 1, opencv_core.CV_8UC4);
-    byte[] a = StaticHelper.toAGRB(COLOR_SHADOW_FILL);
+    byte[] a = StaticHelper.toAGRB(colorShadowFill);
     color.data().put(a);
     plotArea.setTo(color, plotArea);
     //  convert to bufferedimage
-    BufferedImage img = new BufferedImage(plotArea.arrayWidth(), plotArea.arrayHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-    byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+    BufferedImage bufferedImage = //
+        new BufferedImage(plotArea.arrayWidth(), plotArea.arrayHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+    byte[] data = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
     plotArea.data().get(data);
-    graphics.drawImage(img, transform, null);
+    final Tensor matrix = geometricLayer.getMatrix();
+    AffineTransform affineTransform = AffineTransforms.toAffineTransform(matrix.dot(pixel2world));
+    graphics.drawImage(bufferedImage, affineTransform, null);
   }
 }

@@ -20,6 +20,8 @@ import ch.ethz.idsc.tensor.alg.Array;
 public class GeometricLayer {
   private static final Tensor ZEROS = Array.zeros(3);
 
+  /** @param model2pixel matrix of dimension 3x3 that becomes first element on matrix stack
+   * @return */
   public static GeometricLayer of(Tensor model2pixel) {
     return new GeometricLayer(model2pixel, ZEROS);
   }
@@ -28,7 +30,7 @@ public class GeometricLayer {
   private final Deque<AffineFrame2D> deque = new ArrayDeque<>();
   private final Tensor mouseSe2State;
 
-  /** @param model2pixel matrix that becomes first element on matrix stack
+  /** @param model2pixel matrix of dimension 3x3 that becomes first element on matrix stack
    * @param mouseSe2State typically a vector of length 3 */
   public GeometricLayer(Tensor model2pixel, Tensor mouseSe2State) {
     deque.push(new AffineFrame2D(model2pixel));

@@ -47,7 +47,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   private final List<Mat> updateKernels = new ArrayList<>();
   private final List<Mat> carKernels = new ArrayList<>();
   // ---
-  private Color COLOR_SHADOW_FILL;
+  private Color colorShadowFill;
 
   public ShadowMapDirected(LidarEmulator lidar, ImageRegion imageRegion, String lanes, float vMax) {
     super(imageRegion);
@@ -136,8 +136,8 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, opencv_core.Scalar.WHITE);
     opencv_core.subtract(area, lidarMat, area);
     // expand shadow region according to lane direction
-    // TODO this is a bottleneck
-    int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO check if correct
+    // TODO YN this is a bottleneck
+    int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO YN check if correct
     for (int i = 1; i < it; ++i) {
       List<Mat> updated = IntStream.range(0, NSEGS).parallel() //
           .mapToObj(s -> StaticHelper.dilateSegment(s, area, updateKernels, new Point(-1, -1), laneMasks, 1)) //
@@ -155,7 +155,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   }
 
   public void setColor(Color color) {
-    COLOR_SHADOW_FILL = color;
+    colorShadowFill = color;
   }
 
   private final int radius2it(Mat spericalKernel, float radius) {
@@ -172,7 +172,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     // setup colorspace
     opencv_imgproc.cvtColor(plotArea, plotArea, opencv_imgproc.CV_GRAY2RGBA);
     Mat color = new Mat(4, 1, opencv_core.CV_8UC4);
-    byte[] a = StaticHelper.toAGRB(COLOR_SHADOW_FILL);
+    byte[] a = StaticHelper.toAGRB(colorShadowFill);
     color.data().put(a);
     plotArea.setTo(color, plotArea);
     //  convert to bufferedimage

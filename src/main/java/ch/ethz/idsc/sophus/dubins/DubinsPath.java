@@ -1,13 +1,17 @@
 // code by jph
 package ch.ethz.idsc.sophus.dubins;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.sophus.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** compatible with the use of Quantity:
  * radius and entries in segLength must have the same unit
@@ -18,13 +22,14 @@ public class DubinsPath {
   private final Scalar radius;
   private final Tensor segLength;
 
-  /** @param dubinsPathType
-   * @param radius
-   * @param segLength {length1, length2, length3} */
+  /** @param dubinsPathType non-null
+   * @param radius positive
+   * @param segLength {length1, length2, length3} each non-negative
+   * @throws Exception if radius is non-positive */
   public DubinsPath(DubinsPathType dubinsPathType, Scalar radius, Tensor segLength) {
-    this.dubinsPathType = dubinsPathType;
-    this.radius = radius;
-    this.segLength = segLength;
+    this.dubinsPathType = Objects.requireNonNull(dubinsPathType);
+    this.radius = Sign.requirePositive(radius);
+    this.segLength = VectorQ.requireLength(segLength, 3);
   }
 
   /** @return total length of Dubins path in Euclidean space */
@@ -50,6 +55,7 @@ public class DubinsPath {
       clip = Clip.function(length.zero(), length);
     }
 
+    /** parameter scalar is of same unit as length() of dubins path */
     @Override // from ScalarTensorFunction
     public Tensor apply(Scalar scalar) {
       Tensor g = this.g;
