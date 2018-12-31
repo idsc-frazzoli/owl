@@ -20,6 +20,13 @@ public class H2GeodesicTest extends TestCase {
     assertTrue(Chop._12.close(split, Tensors.vector(1, 1.7320508075688772)));
   }
 
+  public void testNumeric() {
+    Tensor e = Tensors.vector(0.9999999999999999, 2.010051514185878);
+    Tensor t = Tensors.vector(1.0, 2.0);
+    Tensor split = H2Geodesic.INSTANCE.split(e, t, RationalScalar.HALF);
+    Chop._12.requireClose(split, Tensors.vector(1.0, 2.0050194583524013));
+  }
+
   public void testSingularityExact() {
     try {
       H2Geodesic.INSTANCE.split(Tensors.vector(1, 0), Tensors.vector(1, 3), RationalScalar.HALF);

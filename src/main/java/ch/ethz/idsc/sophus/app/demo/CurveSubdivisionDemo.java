@@ -25,8 +25,8 @@ import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BSplineInterpolationApproximation;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.LieGroupBSplineInterpolation;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
@@ -207,7 +207,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           : curveSubdivision::string;
       Tensor se2ctrl = _control.copy();
       if (jToggleItrp.isSelected() && scheme.degree.isPresent())
-        se2ctrl = new BSplineInterpolationApproximation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, scheme.degree.get()).fixed(se2ctrl, 30);
+        se2ctrl = new LieGroupBSplineInterpolation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, scheme.degree.get()).apply(se2ctrl);
       refined = Nest.of(subdivision, se2ctrl, levels);
     }
     if (jToggleLine.isSelected()) {
