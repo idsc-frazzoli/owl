@@ -22,6 +22,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
+import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSplineInterpolationApproximation;
@@ -246,7 +247,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
       Tensor points = Tensor.of(refined.stream().map(Extract2D::of));
       {
         graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
-        Tensor curvature = StaticHelper.curvature(points);
+        Tensor curvature = SignedCurvature2D.string(points);
         Tensor domain = Range.of(0, curvature.length());
         graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, curvature))));
       }
