@@ -6,50 +6,53 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
-
-import javax.swing.JSlider;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.sophus.curve.DeCasteljau;
+import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.symlink.SymGeodesic;
 import ch.ethz.idsc.sophus.symlink.SymLink;
 import ch.ethz.idsc.sophus.symlink.SymLinkBuilder;
-import ch.ethz.idsc.sophus.symlink.SymLinkImage;
+import ch.ethz.idsc.sophus.symlink.SymLinkImages;
 import ch.ethz.idsc.sophus.symlink.SymScalar;
-import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class GeodesicDeCasteljauDemo extends ControlPointsDemo {
-  private Scalar parameter = RationalScalar.HALF;
+/* package */ class GeodesicFilterSplitDemo extends ControlPointsDemo {
+  private final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
 
-  GeodesicDeCasteljauDemo() {
+  GeodesicFilterSplitDemo() {
     timerFrame.jToolBar.add(jButton);
     // ---
-    JSlider jSlider = new JSlider(0, 1000, 500);
-    jSlider.setPreferredSize(new Dimension(500, 28));
-    jSlider.addChangeListener(changeEvent -> parameter = RationalScalar.of(jSlider.getValue(), 1000));
-    timerFrame.jToolBar.add(jSlider);
+    {
+      spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
+      spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
+      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
+    }
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     final Tensor control = controlSe2();
-    final Tensor xya;
-    {
-      Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
-      DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
-      SymScalar symScalar = (SymScalar) deCasteljau.apply(N.DOUBLE.apply(parameter));
-      graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
+    Tensor xya = null;
+    final Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
+    if (control.length() % 2 == 1) {
+      SmoothingKernel smoothingKernel = spinnerKernel.getValue();
+      int radius = (control.length() - 1) / 2;
+      graphics.drawImage(SymLinkImages.smoothingKernel(smoothingKernel, radius).bufferedImage(), 0, 0, null);
+      // ---
+      TensorUnaryOperator tensorUnaryOperator = //
+          GeodesicCenter.of(SymGeodesic.INSTANCE, smoothingKernel);
+      Tensor tensor = tensorUnaryOperator.apply(vector);
       SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
-      SymLink symLink = symLinkBuilder.build(symScalar);
+      SymLink symLink = symLinkBuilder.build((SymScalar) tensor);
       new Se2SplitRender(symLink).render(geometricLayer, graphics);
       xya = symLink.getPosition(Se2CoveringGeodesic.INSTANCE);
     }
@@ -81,7 +84,7 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new GeodesicDeCasteljauDemo();
+    AbstractDemo abstractDemo = new GeodesicFilterSplitDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

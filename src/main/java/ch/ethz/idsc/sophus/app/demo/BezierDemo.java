@@ -19,8 +19,10 @@ import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+/** Bezier curve */
 /* package */ class BezierDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
+  // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
@@ -64,14 +66,9 @@ import ch.ethz.idsc.tensor.Tensors;
     renderControlPoints(geometricLayer, graphics);
     if (isR2) {
       BezierCurve bezierCurve = new BezierCurve(RnGeodesic.INSTANCE);
-      Tensor rnctrl = controlR2();
-      // refined = LanczosCurve.refine(rnctrl, 1 << levels);
-      refined = bezierCurve.refine(rnctrl, 1 << levels);
-      {
-        graphics.setColor(new Color(0, 0, 255, 128));
-        graphics.draw(geometricLayer.toPath2D(refined));
-      }
-      graphics.setColor(new Color(255, 128, 128, 255));
+      refined = bezierCurve.refine(controlR2(), 1 << levels);
+      graphics.setColor(new Color(0, 0, 255, 128));
+      graphics.draw(geometricLayer.toPath2D(refined));
     } else { // SE2
       BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
       refined = bezierCurve.refine(_control, 1 << levels);

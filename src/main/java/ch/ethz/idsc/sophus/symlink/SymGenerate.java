@@ -26,11 +26,11 @@ import ch.ethz.idsc.tensor.Tensor;
     Tensor tensor = curveSubdivision.string(vector);
     {
       SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(2));
-      ImageIO.write(symLinkImage.bufferedImageCropped(), "png", UserHome.Pictures("export/bspline3.png"));
+      ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/bspline3.png"));
     }
     {
       SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
-      ImageIO.write(symLinkImage.bufferedImageCropped(), "png", UserHome.Pictures("export/bspline3m.png"));
+      ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/bspline3m.png"));
     }
   }
 
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.Tensor;
     CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(SymGeodesic.INSTANCE);
     Tensor tensor = curveSubdivision.string(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
-    ImageIO.write(symLinkImage.bufferedImageCropped(), "png", UserHome.Pictures("export/bspline4a1.png"));
+    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/bspline4a1.png"));
   }
 
   public static void subdiv4a2() throws IOException {
@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.Tensor;
     CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split2(SymGeodesic.INSTANCE);
     Tensor tensor = curveSubdivision.string(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
-    ImageIO.write(symLinkImage.bufferedImageCropped(), "png", UserHome.Pictures("export/bspline4a2.png"));
+    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/bspline4a2.png"));
   }
 
   public static void subdiv4b() throws IOException {
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.Tensor;
         BSpline4CurveSubdivision.split3(SymGeodesic.INSTANCE, RationalScalar.HALF);
     Tensor tensor = curveSubdivision.string(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
-    ImageIO.write(symLinkImage.bufferedImageCropped(), "png", UserHome.Pictures("export/bspline4b.png"));
+    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/bspline4b.png"));
   }
 
   public static void custom() throws IOException {
@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.Tensor;
     Scalar s3 = SymScalar.of(s0, s1, RealScalar.of(2));
     Scalar s4 = SymScalar.of(s3, s2, RationalScalar.of(1, 3));
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) s4);
-    ImageIO.write(symLinkImage.bufferedImageCropped(), "png", UserHome.Pictures("export/custom.png"));
+    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/custom.png"));
   }
 
   public static void decastL() throws IOException {
@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.Tensor;
     DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
     SymScalar symScalar = (SymScalar) deCasteljau.apply(RationalScalar.of(1, 3));
     SymLinkImage symLinkImage = new SymLinkImage(symScalar);
-    ImageIO.write(symLinkImage.bufferedImageCropped(), "png", UserHome.Pictures("export/decastel41_3.png"));
+    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/decastel41_3.png"));
   }
 
   public static void decastR() throws IOException {
@@ -82,13 +82,13 @@ import ch.ethz.idsc.tensor.Tensor;
     DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
     SymScalar symScalar = (SymScalar) deCasteljau.apply(RationalScalar.of(3, 4));
     SymLinkImage symLinkImage = new SymLinkImage(symScalar);
-    ImageIO.write(symLinkImage.bufferedImageCropped(), "png", UserHome.Pictures("export/decastel43_4.png"));
+    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/decastel43_4.png"));
   }
 
   public static void main(String[] args) throws IOException {
     {
       SymLinkImage symLinkImage = SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 2);
-      BufferedImage bufferedImage = symLinkImage.bufferedImageCropped();
+      BufferedImage bufferedImage = symLinkImage.bufferedImageCropped(true);
       ImageIO.write(bufferedImage, "png", UserHome.Pictures("gaussian23.png"));
     }
     // BufferedImage bufferedImage =
