@@ -20,7 +20,6 @@ import org.bytedeco.javacpp.opencv_imgproc;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.data.img.CvHelper;
-import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
@@ -28,10 +27,7 @@ import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
-  private Color colorShadowFill;
-  // ---
-  private final LidarEmulator lidar;
+public class ShadowMapSpherical extends ShadowMapCV {
   private final Mat initArea;
   private final Mat shadowArea;
   private final float vMax;
@@ -47,9 +43,8 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
   private GpuMat lidarMatGpu;
   private boolean useGPU = false;
 
-  public ShadowMapSpherical(LidarEmulator lidar, ImageRegion imageRegion, float vMax, float rMin) {
-    super(imageRegion);
-    this.lidar = lidar;
+  public ShadowMapSpherical(LidarEmulator lidarEmulator, ImageRegion imageRegion, float vMax, float rMin) {
+    super(lidarEmulator, imageRegion);
     this.vMax = vMax;
     this.rMin = rMin;
     this.kernelWorldRadius = sphericalKernel.arrayWidth() / 2.0f * pixelDim.number().floatValue();
@@ -97,7 +92,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     // get lidar polygon and transform to pixel values
     Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
     world2pixelLayer.pushMatrix(gokart2world.forward_se2());
-    Tensor poly = lidar.getPolygon(stateTime);
+    Tensor poly = lidarEmulator.getPolygon(stateTime);
     //  ---
     // transform lidar polygon to pixel values
     Point polygonPoint = StaticHelper.toPoint(poly.stream().map(world2pixelLayer::toVector));
@@ -127,7 +122,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     // get lidar polygon and transform to pixel values
     Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
     world2pixelLayer.pushMatrix(gokart2world.forward_se2());
-    Tensor poly = lidar.getPolygon(stateTime);
+    Tensor poly = lidarEmulator.getPolygon(stateTime);
     //  ---
     // transform lidar polygon to pixel values
     Point polygonPoint = StaticHelper.toPoint(poly.stream().map(world2pixelLayer::toVector)); // reformat polygon to point
@@ -160,10 +155,6 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
 
   public final Mat getCurrentMap() {
     return shadowArea.clone();
-  }
-
-  public void setColor(Color color) {
-    colorShadowFill = color;
   }
 
   private final int radius2it(float radius) {

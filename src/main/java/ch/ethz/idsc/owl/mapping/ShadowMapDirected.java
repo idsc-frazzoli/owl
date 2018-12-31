@@ -23,7 +23,6 @@ import org.bytedeco.javacpp.opencv_imgproc;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.data.img.CvHelper;
-import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
@@ -32,11 +31,11 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
+// TODO YN extract more duplicate code from ShadowMapSpherical into common base class  
+public class ShadowMapDirected extends ShadowMapCV {
   private final static int NSEGS = 40;
   private final static float CAR_RAD = 1.0f;
   // ---
-  private final LidarEmulator lidar;
   private final Mat initArea;
   private final Mat shadowArea;
   private final Mat obsDilArea;
@@ -46,12 +45,9 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   private final List<Mat> laneMasks = new ArrayList<>();
   private final List<Mat> updateKernels = new ArrayList<>();
   private final List<Mat> carKernels = new ArrayList<>();
-  // ---
-  private Color colorShadowFill;
 
-  public ShadowMapDirected(LidarEmulator lidar, ImageRegion imageRegion, String lanes, float vMax) {
-    super(imageRegion);
-    this.lidar = lidar;
+  public ShadowMapDirected(LidarEmulator lidarEmulator, ImageRegion imageRegion, String lanes, float vMax) {
+    super(lidarEmulator, imageRegion);
     this.vMax = vMax;
     // setup
     BufferedImage carLanesImg = ResourceData.bufferedImage(lanes);
@@ -124,7 +120,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     Mat area = area_.clone();
     Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
     world2pixelLayer.pushMatrix(gokart2world.forward_se2());
-    Tensor poly = lidar.getPolygon(stateTime);
+    Tensor poly = lidarEmulator.getPolygon(stateTime);
     //  ---
     // transform lidar polygon to pixel values
     Point polygonPoint = StaticHelper.toPoint(poly.stream().map(world2pixelLayer::toVector));
@@ -152,10 +148,6 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
 
   public final Mat getCurrentMap() {
     return shadowArea.clone();
-  }
-
-  public void setColor(Color color) {
-    colorShadowFill = color;
   }
 
   private final int radius2it(Mat spericalKernel, float radius) {
@@ -189,7 +181,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
 
   @Override
   public Mat getShape(Mat mat, float radius) {
-    // TODO use car shape
+    // TODO YN use car shape
     Mat shape = mat.clone();
     Mat radPx = new Mat(Scalar.all((CAR_RAD + radius + 0.5) / pixelDim.number().floatValue()));
     Mat negSrc = new Mat(shape.size(), shape.type());

@@ -29,8 +29,8 @@ public class ShadowMapArea implements RenderInterface {
   private final float vMax;
   private final float rMin;
   //
-  private Color COLOR_SHADOW_FILL;
-  private Color COLOR_SHADOW_DRAW;
+  private Color colorShadowFill;
+  private Color colorShadowDraw;
 
   /** @param lidar
    * @param imageRegion documentation!
@@ -93,17 +93,17 @@ public class ShadowMapArea implements RenderInterface {
   }
 
   public void setColor(Color color) {
-    COLOR_SHADOW_FILL = new Color((color.getRGB() & 0xFFFFFF) | (16 << 24), true);
-    COLOR_SHADOW_DRAW = new Color((color.getRGB() & 0xFFFFFF) | (64 << 24), true);
+    colorShadowFill = new Color((color.getRGB() & 0xFFFFFF) | (16 << 24), true);
+    colorShadowDraw = new Color((color.getRGB() & 0xFFFFFF) | (64 << 24), true);
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final Tensor matrix = geometricLayer.getMatrix();
     Area plotArea = new Area(shadowArea.createTransformedArea(AffineTransforms.toAffineTransform(matrix)));
-    graphics.setColor(COLOR_SHADOW_FILL);
+    graphics.setColor(colorShadowFill);
     graphics.fill(plotArea);
-    graphics.setColor(COLOR_SHADOW_DRAW);
+    graphics.setColor(colorShadowDraw);
     graphics.draw(plotArea);
   }
 }
