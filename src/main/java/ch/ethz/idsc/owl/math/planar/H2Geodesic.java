@@ -1,7 +1,9 @@
 // code by ob
 package ch.ethz.idsc.owl.math.planar;
 
+import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -31,16 +33,21 @@ public enum H2Geodesic implements GeodesicInterface {
     Scalar q1 = q.Get(0);
     Scalar q2 = Sign.requirePositive(q.Get(1));
     if (p1.equals(q1)) // when p == q or p == -q
-      return Tensors.of( //
-          p1, //
-          Power.function(t).apply(q2.divide(p2)).multiply(p2));
+      return Tensors.of(p1, height(p2, q2, t));
     Scalar pq = p1.subtract(q1);
     Scalar c1 = p.dot(p).subtract(q.dot(q)).Get().divide(pq.add(pq));
     Scalar c2 = Sqrt.FUNCTION.apply(AbsSquared.FUNCTION.apply(p1.subtract(c1)).add(p2.multiply(p2)));
     Scalar c3 = ArcTanh.FUNCTION.apply(p1.subtract(c1).divide(c2));
-    Scalar c4 = ArcTanh.FUNCTION.apply(q1.subtract(c1).divide(c2)).subtract(c3);
-    return Tensors.of( //
-        c1.add(c2.multiply(Tanh.FUNCTION.apply(c3.add(c4.multiply(t))))), //
-        c2.divide(Cosh.FUNCTION.apply(c3.add(c4.multiply(t)))));
+    if (NumberQ.of(c3)) {
+      Scalar c4 = ArcTanh.FUNCTION.apply(q1.subtract(c1).divide(c2)).subtract(c3);
+      return Tensors.of( //
+          c1.add(c2.multiply(Tanh.FUNCTION.apply(c3.add(c4.multiply(t))))), //
+          c2.divide(Cosh.FUNCTION.apply(c3.add(c4.multiply(t)))));
+    }
+    return Tensors.of(RnGeodesic.INSTANCE.split(p1, q1, t), height(p2, q2, t));
+  }
+
+  private static Scalar height(Scalar p2, Scalar q2, Scalar t) {
+    return Power.function(t).apply(q2.divide(p2)).multiply(p2);
   }
 }
