@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-enum CudaDemo {
+/* package */ enum CudaDemo {
   ;
   private static void displayMat(Mat image, String caption) {
     CanvasFrame canvas = new CanvasFrame(caption, 1.0);

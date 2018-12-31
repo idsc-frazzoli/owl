@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public enum DubinsPathType {
   LSR(+1, +0, -1, Steer2TurnsDiffSide.INSTANCE), //
@@ -37,12 +38,16 @@ public enum DubinsPathType {
     return isFirstEqualsLast;
   }
 
-  public Tensor tangent(int index, Scalar radius) {
-    // TODO x should obtain unit from radius!
-    return Tensors.of(RealScalar.ONE, radius.zero(), scaSign.Get(index).divide(radius));
+  /* package */ DubinsSteer dubinsSteer() {
+    return dubinsSteer;
   }
 
-  public DubinsSteer dubinsSteer() {
-    return dubinsSteer;
+  /** @param index 0, 1, or 2
+   * @param radius positive
+   * @return vector with first and second entry unitless.
+   * result is multiplied with length of segment */
+  /* package */ Tensor tangent(int index, Scalar radius) {
+    return Tensors.of(RealScalar.ONE, RealScalar.ZERO, //
+        scaSign.Get(index).divide(Sign.requirePositive(radius)));
   }
 }

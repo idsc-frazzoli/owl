@@ -50,7 +50,7 @@ public class ShadowEvaluator {
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
   final StateTime oob = new StateTime(Tensors.vector(-1000, -1000, 0), RealScalar.ZERO); // TODO YN not nice
-  Mat negSrc = new Mat();
+  // Mat negSrc = new Mat();
 
   public ShadowEvaluator(ShadowMapCV shadowMap, Scalar maxA, Scalar carRadius, String id) {
     this.shadowMap = shadowMap;
@@ -61,7 +61,7 @@ public class ShadowEvaluator {
     this.tReactVec = Subdivide.of(0, MAX_TREACT, (int) (MAX_TREACT / delta_treact));
   }
 
-  /** Evalates time to react (TTR) along trajectory
+  /** Evaluates time to react (TTR) along trajectory
    * The Time-To-React (TTR) is the maximum time we can continue the current trajectory
    * before we have to execute an evasive trajectory to avoid entering the set of colliding states
    * here, colliding states are states intersecting with the shadow region */
@@ -104,16 +104,12 @@ public class ShadowEvaluator {
         for (int i = 0; i < angles.length() - 1; ++i) {
           System.out.println("Evaluating sector " + (i + 1) + " / " + (angles.length() - 1));
           final int fi = i;
-          Function<StateTime, Mat> mapSupplier = new Function<StateTime, Mat>() {
-            @Override
-            public Mat apply(StateTime t) {
-              return maskSector(shadowMap.getInitMap(), t.state(), angles.extract(fi, fi + 2));
-            }
-          };
+          Function<StateTime, Mat> mapSupplier = //
+              stateTime -> maskSector(shadowMap.getInitMap(), stateTime.state(), angles.extract(fi, fi + 2));
           Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
           mtrMatrix.append(minTimeReact);
         }
-        File folder = UserHome.file("/Desktop/eval");
+        File folder = UserHome.file("/Desktop/eval"); // TODO YN not generic
         folder.mkdirs();
         try {
           File file1 = new File(folder, "minSecTTR_" + id + ".csv");
@@ -170,7 +166,7 @@ public class ShadowEvaluator {
       Scalar timeToReact = RealScalar.of(-1);
       if (clear) {
         timeToReact = RealScalar.ZERO;
-        for (int idx = 1; (idx + i) <= trajectory.size() && idx < tReactVec.length(); ++idx) {
+        for (int idx = 1; idx + i <= trajectory.size() && idx < tReactVec.length(); ++idx) {
           Tensor tReact = tReactVec.get(idx);
           TrajectorySample tjs = trajectory.get(i + idx);
           vel = tjs.stateTime().state().Get(3); // get velocity of future state

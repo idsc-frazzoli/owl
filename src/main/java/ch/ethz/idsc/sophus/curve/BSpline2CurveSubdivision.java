@@ -34,16 +34,15 @@ public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
-    switch (tensor.length()) {
-    case 1:
+    int length = tensor.length();
+    if (length < 2)
       return tensor.copy();
-    }
     Tensor curve = Tensors.empty();
-    int last = tensor.length() - 1;
-    for (int index = 0; index < last; /* nothing */ ) {
-      Tensor p = tensor.get(index);
-      Tensor q = tensor.get(++index);
+    Tensor p = tensor.get(0);
+    for (int index = 1; index < length; ++index) {
+      Tensor q = tensor.get(index);
       curve.append(lo(p, q)).append(lo(q, p));
+      p = q;
     }
     return curve;
   }

@@ -22,11 +22,22 @@ public class GeodesicBSplineCenterTest extends TestCase {
     assertEquals(tensor, RealScalar.of(3));
   }
 
-  public void testFail() {
+  public void testEvenFail() {
     GeodesicBSplineCenter geodesicBSplineCenter = //
         new GeodesicBSplineCenter(RnGeodesic.INSTANCE);
     try {
       geodesicBSplineCenter.apply(Tensors.vector(1, 2, 3, 4));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testScalarFail() {
+    GeodesicBSplineCenter geodesicBSplineCenter = //
+        new GeodesicBSplineCenter(RnGeodesic.INSTANCE);
+    try {
+      geodesicBSplineCenter.apply(RealScalar.ONE);
       fail();
     } catch (Exception exception) {
       // ---

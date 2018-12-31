@@ -23,7 +23,6 @@ import org.bytedeco.javacpp.opencv_imgproc;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.data.img.CvHelper;
-import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
@@ -32,11 +31,11 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
+// TODO YN extract more duplicate code from ShadowMapSpherical into common base class  
+public class ShadowMapDirected extends ShadowMapCV {
   private final static int NSEGS = 40;
   private final static float CAR_RAD = 1.0f;
   // ---
-  private final LidarEmulator lidar;
   private final Mat initArea;
   private final Mat shadowArea;
   private final Mat obsDilArea;
@@ -46,12 +45,9 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
   private final List<Mat> laneMasks = new ArrayList<>();
   private final List<Mat> updateKernels = new ArrayList<>();
   private final List<Mat> carKernels = new ArrayList<>();
-  // ---
-  private Color COLOR_SHADOW_FILL;
 
-  public ShadowMapDirected(LidarEmulator lidar, ImageRegion imageRegion, String lanes, float vMax) {
-    super(imageRegion);
-    this.lidar = lidar;
+  public ShadowMapDirected(LidarEmulator lidarEmulator, ImageRegion imageRegion, String lanes, float vMax) {
+    super(lidarEmulator, imageRegion);
     this.vMax = vMax;
     // setup
     BufferedImage carLanesImg = ResourceData.bufferedImage(lanes);
@@ -124,7 +120,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     Mat area = area_.clone();
     Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
     world2pixelLayer.pushMatrix(gokart2world.forward_se2());
-    Tensor poly = lidar.getPolygon(stateTime);
+    Tensor poly = lidarEmulator.getPolygon(stateTime);
     //  ---
     // transform lidar polygon to pixel values
     Point polygonPoint = StaticHelper.toPoint(poly.stream().map(world2pixelLayer::toVector));
@@ -136,8 +132,8 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, opencv_core.Scalar.WHITE);
     opencv_core.subtract(area, lidarMat, area);
     // expand shadow region according to lane direction
-    // TODO this is a bottleneck
-    int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO check if correct
+    // TODO YN this is a bottleneck
+    int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO YN check if correct
     for (int i = 1; i < it; ++i) {
       List<Mat> updated = IntStream.range(0, NSEGS).parallel() //
           .mapToObj(s -> StaticHelper.dilateSegment(s, area, updateKernels, new Point(-1, -1), laneMasks, 1)) //
@@ -154,10 +150,6 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     return shadowArea.clone();
   }
 
-  public void setColor(Color color) {
-    COLOR_SHADOW_FILL = color;
-  }
-
   private final int radius2it(Mat spericalKernel, float radius) {
     float pixelRadius = spericalKernel.arrayWidth() / 2.0f;
     float worldRadius = pixelRadius * pixelDim.number().floatValue();
@@ -172,7 +164,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
     // setup colorspace
     opencv_imgproc.cvtColor(plotArea, plotArea, opencv_imgproc.CV_GRAY2RGBA);
     Mat color = new Mat(4, 1, opencv_core.CV_8UC4);
-    byte[] a = StaticHelper.toAGRB(COLOR_SHADOW_FILL);
+    byte[] a = StaticHelper.toAGRB(colorShadowFill);
     color.data().put(a);
     plotArea.setTo(color, plotArea);
     //  convert to bufferedimage
@@ -189,7 +181,7 @@ public class ShadowMapDirected extends ShadowMapCV implements RenderInterface {
 
   @Override
   public Mat getShape(Mat mat, float radius) {
-    // TODO use car shape
+    // TODO YN use car shape
     Mat shape = mat.clone();
     Mat radPx = new Mat(Scalar.all((CAR_RAD + radius + 0.5) / pixelDim.number().floatValue()));
     Mat negSrc = new Mat(shape.size(), shape.type());

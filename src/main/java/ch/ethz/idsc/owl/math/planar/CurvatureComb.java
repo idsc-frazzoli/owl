@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.red.Norm;
  * http://www.aliasworkbench.com/theoryBuilders/images/CombPlot4.jpg */
 public enum CurvatureComb {
   ;
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+  private static final TensorUnaryOperator NORMALIZE = NormalizeUnlessZero.with(Norm._2);
   private static final Tensor ZEROS = Array.zeros(2);
 
   /** @param tensor
@@ -32,8 +32,8 @@ public enum CurvatureComb {
   public static Tensor of(Tensor tensor, Scalar scalar, boolean isCyclic) {
     if (Tensors.isEmpty(tensor))
       return Tensors.empty();
-    List<Integer> dims = Dimensions.of(tensor);
-    if (2 < dims.get(1))
+    List<Integer> dimensions = Dimensions.of(tensor);
+    if (2 < dimensions.get(1))
       tensor = Tensor.of(tensor.stream().map(Extract2D::of));
     return tensor.add((isCyclic ? cyclic(tensor) : string(tensor)).multiply(scalar));
   }
@@ -41,31 +41,7 @@ public enum CurvatureComb {
   /** @param tensor of dimension n x 2
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
   public static Tensor string(Tensor tensor) {
-    Tensor normal = Tensors.empty();
-    int length = tensor.length();
-    if (2 < length) {
-      Tensor a = tensor.get(0);
-      Tensor b = tensor.get(1);
-      Tensor c = tensor.get(2);
-      normal.append(normal(a, b, c, b.subtract(a)));
-    } else //
-    if (0 < length)
-      normal.append(ZEROS);
-    for (int index = 1; index < length - 1; ++index) {
-      Tensor a = tensor.get(index - 1);
-      Tensor b = tensor.get(index + 0);
-      Tensor c = tensor.get(index + 1);
-      normal.append(normal(a, b, c, c.subtract(a)));
-    }
-    if (2 < length) {
-      Tensor a = tensor.get(length - 3);
-      Tensor b = tensor.get(length - 2);
-      Tensor c = tensor.get(length - 1);
-      normal.append(normal(a, b, c, c.subtract(b)));
-    } else //
-    if (1 < length)
-      normal.append(ZEROS);
-    return normal;
+    return SignedCurvature2D.string(tensor).pmul(Normal2D.string(tensor));
   }
 
   /** @param tensor of dimension n x 2

@@ -23,13 +23,15 @@ public class DubinsPathTest extends TestCase {
 
   public void testUnits() {
     DubinsPath dubinsPath = new DubinsPath(DubinsPathType.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 10[m], 1[m]}"));
+    assertEquals(dubinsPath.length(), Quantity.of(12, "m"));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.fromString("{1[m], 2[m], 3}"));
-    Tensor tensor = scalarTensorFunction.apply(Quantity.of(.3, "m"));
+    Tensor tensor = scalarTensorFunction.apply(Quantity.of(0.3, "m"));
     assertTrue(Chop._10.close(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}")));
   }
 
   public void testOutsideFail() {
     DubinsPath dubinsPath = new DubinsPath(DubinsPathType.LRL, RealScalar.ONE, Tensors.vector(1, 10, 1));
+    assertEquals(dubinsPath.length(), Quantity.of(12, ""));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.vector(1, 2, 3));
     try {
       scalarTensorFunction.apply(RealScalar.of(-.1));
@@ -39,6 +41,24 @@ public class DubinsPathTest extends TestCase {
     }
     try {
       scalarTensorFunction.apply(RealScalar.of(13));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNullFail() {
+    try {
+      new DubinsPath(null, RealScalar.ONE, Tensors.vector(1, 10, 1));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testVectorFail() {
+    try {
+      new DubinsPath(DubinsPathType.RLR, RealScalar.ONE, Tensors.vector(1, 10, 1, 3));
       fail();
     } catch (Exception exception) {
       // ---

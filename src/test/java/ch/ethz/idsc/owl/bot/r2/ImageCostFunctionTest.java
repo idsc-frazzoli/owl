@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 public class ImageCostFunctionTest extends TestCase {
   public void testSimple() {
     ImageCostFunction costFunction = //
-        new ImageCostFunction(Tensors.fromString("{{1,2},{3,4}}"), Tensors.vector(10, 10), RealScalar.ZERO);
+        new DenseImageCostFunction(Tensors.fromString("{{1,2},{3,4}}"), Tensors.vector(10, 10), RealScalar.ZERO);
     assertFalse(HeuristicQ.of(costFunction));
     assertEquals(costFunction.flipYXTensorInterp.at(Tensors.vector(1, 1)), RealScalar.of(3));
     assertEquals(costFunction.flipYXTensorInterp.at(Tensors.vector(9, 9)), RealScalar.of(2));
@@ -22,7 +22,7 @@ public class ImageCostFunctionTest extends TestCase {
 
   public void testSerializable() throws Exception {
     CostFunction costFunction = //
-        new ImageCostFunction(Tensors.fromString("{{1,2},{3,4}}"), Tensors.vector(10, 10), RealScalar.ZERO);
+        new DenseImageCostFunction(Tensors.fromString("{{1,2},{3,4}}"), Tensors.vector(10, 10), RealScalar.ZERO);
     Serialization.copy(costFunction);
   }
 }

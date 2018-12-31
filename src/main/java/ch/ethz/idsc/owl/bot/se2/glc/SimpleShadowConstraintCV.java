@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class SimpleShadowConstraintCV extends AbstractShadowConstraint {
   private final ShadowMapCV shadowMap;
-  private final ImageRegion obsRegion;
+  // private final ImageRegion obsRegion;
   private final Mat initArea;
   private final float carRad;
 
@@ -21,7 +21,7 @@ public class SimpleShadowConstraintCV extends AbstractShadowConstraint {
     super(a, tReact, tse2);
     this.shadowMap = shadowMap;
     this.initArea = shadowMap.getInitMap();
-    this.obsRegion = obsRegion;
+    // this.obsRegion = obsRegion;
     this.carRad = rad;
   }
 
