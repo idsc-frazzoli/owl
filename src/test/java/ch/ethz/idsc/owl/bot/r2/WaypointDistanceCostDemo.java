@@ -24,7 +24,7 @@ enum WaypointDistanceCostDemo {
     Tensor waypoints = Objects.requireNonNull(ResourceData.of("/dubilab/waypoints/20180610.csv"));
     waypoints = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);
     ImageCostFunction imageCostFunction = //
-        WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(440, 640));
+        WaypointDistanceCost.of(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(440, 440), true);
     Tensor image = ArrayPlot.of(imageCostFunction.image(), ColorDataGradients.CLASSIC);
     BufferedImage bufferedImage = ImageFormat.of(image);
     JFrame frame = new JFrame() {

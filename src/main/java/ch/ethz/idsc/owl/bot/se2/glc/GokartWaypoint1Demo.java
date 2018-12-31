@@ -40,7 +40,8 @@ public class GokartWaypoint1Demo extends GokartDemo {
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
     System.out.println(Pretty.of(waypoints));
     waypoints = Nest.of(new BSpline3CurveSubdivision(Se2Geodesic.INSTANCE)::cyclic, waypoints, 4);
-    CostFunction waypointCost = WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 6.0f, new Dimension(640, 640));
+    CostFunction waypointCost = //
+        WaypointDistanceCost.of(waypoints, Tensors.vector(85.33, 85.33), 6.0f, new Dimension(640, 640), true);
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {

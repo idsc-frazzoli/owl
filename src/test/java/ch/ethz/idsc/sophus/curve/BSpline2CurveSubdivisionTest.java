@@ -6,9 +6,12 @@ import java.io.IOException;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -18,43 +21,53 @@ import junit.framework.TestCase;
 
 public class BSpline2CurveSubdivisionTest extends TestCase {
   public void testSimple() {
-    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
-    Tensor actual = subdivision.cyclic(tensor);
+    Tensor actual = curveSubdivision.cyclic(tensor);
     assertTrue(ExactScalarQ.all(actual));
     Tensor expected = Tensors.fromString("{{3/4, 1/4}, {1/4, 3/4}, {-1/4, 3/4}, {-3/4, 1/4}, {-3/4, -1/4}, {-1/4, -3/4}, {1/4, -3/4}, {3/4, -1/4}}");
     assertEquals(expected, actual);
   }
 
   public void testString() {
-    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
-    Tensor string = subdivision.string(Tensors.vector(10, 11.));
+    CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor string = curveSubdivision.string(Tensors.vector(10, 11.));
     assertEquals(string, Tensors.vector(10.25, 10.75));
     assertFalse(ExactScalarQ.all(string));
   }
 
   public void testStringTwo() {
     Tensor curve = Tensors.vector(0, 1);
-    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
-    Tensor refined = subdivision.string(curve);
+    CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = curveSubdivision.string(curve);
     assertEquals(refined, Tensors.fromString("{1/4, 3/4}"));
     assertTrue(ExactScalarQ.all(refined));
   }
 
   public void testStringOne() {
     Tensor curve = Tensors.vector(1);
-    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
-    Tensor refined = subdivision.string(curve);
+    CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = curveSubdivision.string(curve);
     assertEquals(refined, Tensors.fromString("{1}"));
     assertTrue(ExactScalarQ.all(refined));
   }
 
   public void testStringEmpty() {
     Tensor curve = Tensors.vector();
-    CurveSubdivision subdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
-    Tensor refined = subdivision.string(curve);
+    CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = curveSubdivision.string(curve);
     assertTrue(Tensors.isEmpty(refined));
+    assertTrue(ExactScalarQ.all(refined));
+  }
+
+  public void testStringRange() {
+    int length = 9;
+    Tensor curve = Range.of(0, length + 1);
+    CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = curveSubdivision.string(curve);
+    Tensor tensor = Subdivide.of(0, length, length * 2).map(scalar -> scalar.add(RationalScalar.of(1, 4)));
+    assertEquals(refined, tensor.extract(0, tensor.length() - 1));
     assertTrue(ExactScalarQ.all(refined));
   }
 
@@ -65,15 +78,15 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
   }
 
   public void testScalarFail() {
-    CurveSubdivision subdivision = new BSpline2CurveSubdivision(Se2Geodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(Se2Geodesic.INSTANCE);
     try {
-      subdivision.string(RealScalar.ONE);
+      curveSubdivision.string(RealScalar.ONE);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      subdivision.cyclic(RealScalar.ONE);
+      curveSubdivision.cyclic(RealScalar.ONE);
       fail();
     } catch (Exception exception) {
       // ---

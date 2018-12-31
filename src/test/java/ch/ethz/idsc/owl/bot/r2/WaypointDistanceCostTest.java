@@ -12,9 +12,10 @@ import junit.framework.TestCase;
 public class WaypointDistanceCostTest extends TestCase {
   public void testSimple() {
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180425.csv");
-    ImageCostFunction wdc = WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640));
+    ImageCostFunction imageCostFunction = //
+        WaypointDistanceCost.of(waypoints, Tensors.vector(85.33, 85.33), 10.0f, new Dimension(640, 640), true);
     for (Tensor waypoint : waypoints)
-      assertEquals(wdc.flipYXTensorInterp.at(waypoint), RealScalar.ZERO);
-    assertEquals(wdc.flipYXTensorInterp.at(Tensors.vector(10, 10)), RealScalar.ONE);
+      assertEquals(imageCostFunction.flipYXTensorInterp.at(waypoint), RealScalar.ZERO);
+    assertEquals(imageCostFunction.flipYXTensorInterp.at(Tensors.vector(10, 10)), RealScalar.ONE);
   }
 }

@@ -10,9 +10,9 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 /** TODO JPH test */
 public enum WaypointDistanceCost {
   ;
-  public static ImageCostFunction linear(Tensor waypoints, Tensor range, float pathWidth, Dimension resolution) {
+  public static ImageCostFunction of(Tensor waypoints, Tensor range, float pathWidth, Dimension resolution, boolean closed) {
     return new SparseImageCostFunction( //
-        ImageFormat.from(WaypointDistanceImage.linear(waypoints, range, pathWidth, resolution)), //
+        ImageFormat.from(WaypointDistanceImage.of(waypoints, range, pathWidth, resolution, closed)), //
         range, //
         RealScalar.of(WaypointDistanceImage.OFF_PATH_COST));
   }

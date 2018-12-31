@@ -36,7 +36,8 @@ public class GokartWaypoint2Demo extends GokartDemo {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
     waypoints = new BSpline2CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);
-    CostFunction costFunction = WaypointDistanceCost.linear(waypoints, Tensors.vector(85.33, 85.33), 6.0f, new Dimension(640, 640));
+    CostFunction costFunction = //
+        WaypointDistanceCost.of(waypoints, Tensors.vector(85.33, 85.33), 6.0f, new Dimension(640, 640), true);
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {

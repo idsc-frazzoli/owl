@@ -40,7 +40,8 @@ public class R2VectorCostDemo implements DemoInterface {
         new StateTime(Tensors.vector(7, 6), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new R2TrajectoryControl();
     Tensor waypoints = CirclePoints.of(30).multiply(RealScalar.of(10));
-    ImageCostFunction waypointCost = WaypointDistanceCost.linear(waypoints, Tensors.vector(8, 10), 10.0f, new Dimension(100, 100));
+    ImageCostFunction waypointCost = //
+        WaypointDistanceCost.of(waypoints, Tensors.vector(8, 10), 10.0f, new Dimension(100, 100), true);
     Tensor image = waypointCost.image();
     R2Entity r2Entity = new R2VecEntity(episodeIntegrator, trajectoryControl) {
       @Override

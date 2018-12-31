@@ -22,7 +22,7 @@ enum WaypointDistanceImageDemo {
   public static void main(String[] args) {
     Tensor waypoints = Objects.requireNonNull(ResourceData.of("/dubilab/waypoints/20180610.csv"));
     waypoints = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE).cyclic(waypoints);
-    BufferedImage bufferedImage = WaypointDistanceImage.linear(waypoints, Tensors.vector(85.33, 85.33), 2, new Dimension(600, 800));
+    BufferedImage bufferedImage = WaypointDistanceImage.of(waypoints, Tensors.vector(85.33, 85.33), 2, new Dimension(600, 800), true);
     WritableRaster writableRaster = bufferedImage.getRaster();
     DataBufferByte dataBufferByte = (DataBufferByte) writableRaster.getDataBuffer();
     byte[] bytes = dataBufferByte.getData();
