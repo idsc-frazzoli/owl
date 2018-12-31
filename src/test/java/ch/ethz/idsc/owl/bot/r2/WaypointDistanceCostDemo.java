@@ -18,10 +18,11 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-/* package */ class WaypointDistanceCostDemo {
+/* package */ enum WaypointDistanceCostDemo {
+  ;
   private static final CurveSubdivision CURVE_SUBDIVISION = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE);
 
-  public WaypointDistanceCostDemo(Tensor waypoints) {
+  public static void show(Tensor waypoints) {
     ImageCostFunction imageCostFunction = WaypointDistanceCost.of( //
         CURVE_SUBDIVISION.cyclic(waypoints), true, //
         RealScalar.ONE, RealScalar.of(7.5), new Dimension(640, 640));
@@ -40,7 +41,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   }
 
   public static void main(String[] args) {
-    new WaypointDistanceCostDemo(ResourceData.of("/dubilab/waypoints/20180610.csv"));
-    new WaypointDistanceCostDemo(ResourceData.of("/dubilab/waypoints/20181126.csv"));
+    show(ResourceData.of("/dubilab/waypoints/20180610.csv"));
+    show(ResourceData.of("/dubilab/waypoints/20181126.csv"));
   }
 }

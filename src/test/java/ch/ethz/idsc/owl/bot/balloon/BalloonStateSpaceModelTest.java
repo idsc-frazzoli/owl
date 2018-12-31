@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 public class BalloonStateSpaceModelTest extends TestCase {
   public void testValidity() {
-    // TODO ASTOLL write new test since introduction of state x and usage of SimplexNoise changed the test outcome
+    // TODO ANDRE write new test since introduction of state x and usage of SimplexNoise changed the test outcome
     Tensor xWithUnits = Tensors.fromString("{2[m],2[m],2[m*s^-1],4[K]}");
     Tensor uWithUnits = Tensors.fromString("{3[K*s^-1]}");
     Tensor xWithoutUnits = Tensors.vector(1, 1, 2, 4);

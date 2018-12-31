@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @param tensor {x, z, velocity, pathAngle}
    * @return Euclidean distance from z of tensor to zRegion */
   public final Scalar d_z(Tensor tensor) {
-    // TODO andre check if below line is intended
+    // TODO ANDRE check if below line is intended
     return zRegion.distance(tensor.Get(1));
     // Scalar distance = tensor.Get(1).subtract(zRegion.center());
     // return distance.abs();

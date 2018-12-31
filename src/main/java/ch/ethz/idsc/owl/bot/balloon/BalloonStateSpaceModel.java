@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
     System.out.println("vel = " + vel);
     Scalar theta = x.Get(3);
     System.out.println("theta = " + theta);
-    /* TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
+    /* TODO ANDRE change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     /** unknown perturbation due to vertical velocity of wind */
     Scalar w = RealScalar.of( //
         2 * SimplexContinuousNoise.at(x1.number().doubleValue(), y.number().doubleValue(), vel.number().doubleValue(), theta.number().doubleValue()));

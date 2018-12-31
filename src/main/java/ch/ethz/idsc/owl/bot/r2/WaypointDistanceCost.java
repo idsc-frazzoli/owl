@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** TODO JPH test */
 public enum WaypointDistanceCost {
   ;
   /** @param waypoints

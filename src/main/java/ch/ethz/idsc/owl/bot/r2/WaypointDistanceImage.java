@@ -1,4 +1,4 @@
-// code by ynager
+// code by ynager and jph
 package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.BasicStroke;
