@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       graphics.setColor(new Color(0, 128 + 64, 0, 255));
       {
         Tensor tensor = Subdivide.of(RealScalar.ZERO, symLink.lambda, 91) //
-            .map(scalar -> GEODESIC_INTERFACE.split(posP, posQ, scalar));
+            .map(GEODESIC_INTERFACE.curve(posP, posQ));
         // Path2D path2d = geometricLayer.toPath2D(Tensors.of(here, there));
         Path2D path2d = geometricLayer.toPath2D(tensor);
         graphics.setStroke(new BasicStroke(1.5f));
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       }
       {
         Tensor tensor = Subdivide.of(symLink.lambda, RealScalar.ONE, 91) //
-            .map(scalar -> GEODESIC_INTERFACE.split(posP, posQ, scalar));
+            .map(GEODESIC_INTERFACE.curve(posP, posQ));
         // Path2D path2d = geometricLayer.toPath2D(Tensors.of(here, there));
         Path2D path2d = geometricLayer.toPath2D(tensor);
         // graphics.setStroke(new BasicStroke(1.5f));

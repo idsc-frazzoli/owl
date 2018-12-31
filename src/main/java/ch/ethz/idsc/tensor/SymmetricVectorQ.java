@@ -1,8 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.math;
+package ch.ethz.idsc.tensor;
 
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 

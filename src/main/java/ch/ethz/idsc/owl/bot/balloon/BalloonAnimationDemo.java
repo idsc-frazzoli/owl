@@ -34,6 +34,6 @@ public class BalloonAnimationDemo implements DemoInterface {
 
   public static void main(String[] args) throws Exception {
     new BalloonAnimationDemo().start().jFrame.setVisible(true);
-    // FIXME ASTOLL can't fly down
+    // FIXME ANDRE can't fly down
   }
 }

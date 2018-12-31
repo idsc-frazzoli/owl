@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.math;
+package ch.ethz.idsc.tensor;
 
-import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
 public class SymmetricVectorQTest extends TestCase {

@@ -51,8 +51,6 @@ public class GeodesicDeBoor implements ScalarTensorFunction {
         Scalar alpha = Scalars.isZero(den) //
             ? RealScalar.ZERO
             : num.divide(den);
-        // Tensor a0 = d.get(j - 1).multiply(RealScalar.ONE.subtract(alpha));
-        // d.set(dj -> dj.multiply(alpha).add(a0), j);
         Tensor a0 = d.get(j - 1);
         d.set(dj -> geodesicInterface.split(a0, dj, alpha), j);
       }

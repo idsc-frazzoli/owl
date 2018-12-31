@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    // TODO maybe change to norm2
+    // TODO ANDRE maybe change to norm2
     return Norm2Squared.between(x, y);
   }
 
@@ -80,7 +80,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override // from AbstractCircularEntity
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // TODO create meaningful render function
+    // TODO ANDRE create meaningful render function
     // RegionRenders.draw(geometricLayer, graphics, goalRegion);
     if (Objects.nonNull(trajectoryWrap)) {
       TrajectoryRender trajectoryRender = new TrajectoryRender();

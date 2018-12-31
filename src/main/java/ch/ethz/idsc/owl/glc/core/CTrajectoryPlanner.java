@@ -22,8 +22,8 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---
-  // TODO design so that queue is private final
-  // TODO comparator for queue, best, relabel decision
+  // TODO TOP design so that queue is private final
+  // TODO TOP comparator for queue, best, relabel decision
   public Queue<GlcNode> queue = new PriorityQueue<>(NodeMeritComparator.INSTANCE);
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
   /** best is a reference to a Node in the goal region,

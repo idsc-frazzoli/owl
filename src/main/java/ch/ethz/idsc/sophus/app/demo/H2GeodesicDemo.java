@@ -33,8 +33,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     if (Sign.isPositive(candidate.Get(1)))
       q = candidate;
     graphics.setColor(COLOR);
-    for (Tensor scalar : Subdivide.of(0, 1, RESOLUTION)) {
-      Tensor split = H2Geodesic.INSTANCE.split(FIRST, q, scalar.Get());
+    for (Tensor split : Subdivide.of(0, 1, RESOLUTION).map(H2Geodesic.INSTANCE.curve(FIRST, q))) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(split));
       graphics.fill(geometricLayer.toPath2D(CIRCLE));
       geometricLayer.popMatrix();

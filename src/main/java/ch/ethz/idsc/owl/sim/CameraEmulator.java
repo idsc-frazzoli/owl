@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-// TODO several issues: 
+// TODO JPH several issues: 
 // 1) frame rate should be handled outside this class!
 // 2) localPoints = Tensors.empty(); // make unmodifiable
 // 3) exposure should not happen inside drawing

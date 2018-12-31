@@ -76,7 +76,7 @@ public class CarEntity extends Se2Entity {
   public final Tensor goalRadius;
   final Tensor partitionScale;
   private final Tensor shape;
-  protected final TrajectoryControl trajectoryControl; // TODO design is despicable
+  protected final TrajectoryControl trajectoryControl; // TODO JPH design is despicable
 
   /** extra cost functions, for instance
    * 1) to penalize switching gears

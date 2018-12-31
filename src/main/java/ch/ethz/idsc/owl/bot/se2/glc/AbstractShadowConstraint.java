@@ -36,7 +36,7 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
   final float tReact;
 
   public AbstractShadowConstraint(float a, float tReact, boolean tse2) {
-    GlobalAssert.that((tReact / TIMESTEP) % SEGLENGTH == 0); // TODO hack
+    GlobalAssert.that((tReact / TIMESTEP) % SEGLENGTH == 0); // TODO YN hack
     this.a = a;
     this.tReact = tReact;
     this.steps = Math.max((int) Math.ceil(tReact / TIMESTEP), 1);
@@ -47,7 +47,7 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
 
   @Override
   public final boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    // TODO there are few different values for vel => precompute
+    // TODO YN there are few different values for vel => precompute
     StateTime childStateTime = Lists.getLast(trajectory);
     float vel = velSupplier.apply(childStateTime, flow).number().floatValue();
     float tBrake = vel / a;

@@ -14,7 +14,7 @@ public interface GeodesicInterface extends TensorGeodesic {
    * for scalar == 0 the function returns p, for scalar == 1 the function returns q */
   Tensor split(Tensor p, Tensor q, Scalar scalar);
 
-  @Override
+  @Override // from TensorGeodesic
   default ScalarTensorFunction curve(Tensor p, Tensor q) {
     return scalar -> split(p, q, scalar);
   }
