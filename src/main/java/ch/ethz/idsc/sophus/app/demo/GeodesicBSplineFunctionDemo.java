@@ -16,8 +16,8 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.sophus.curve.BSplineInterpolationApproximation;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
+import ch.ethz.idsc.sophus.curve.LieGroupBSplineInterpolation;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.RnGroup;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
@@ -106,7 +106,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     if (isR2) {
       Tensor rnctrl = controlR2();
       Tensor effective = jToggleItrp.isSelected() //
-          ? new BSplineInterpolationApproximation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, degree).fixed(rnctrl, 30)
+          ? new LieGroupBSplineInterpolation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, degree).apply(rnctrl)
           : rnctrl;
       geodesicBSplineFunction = //
           GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
@@ -117,7 +117,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
       }
     } else { // SE2
       Tensor effective = jToggleItrp.isSelected() //
-          ? new BSplineInterpolationApproximation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, degree).fixed(control, 30)
+          ? new LieGroupBSplineInterpolation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, degree).apply(control)
           : control;
       geodesicBSplineFunction = //
           GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, effective);
@@ -126,12 +126,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
         Tensor selected = geodesicBSplineFunction.apply(parameter);
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(selected));
         Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-        // path2d.closePath();
         graphics.setColor(Color.DARK_GRAY);
         graphics.fill(path2d);
         geometricLayer.popMatrix();
-        // GeodesicBSplineFunction geodesicBSplineFunction = //
-        // GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, effective);
       }
     }
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
