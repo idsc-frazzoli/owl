@@ -6,22 +6,32 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.Clip;
 
-/** algorithm for the evaluation of Bezier curves
+/** De Casteljau's algorithm for the evaluation of Bezier curves
  * 
  * https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm */
-public class DeCasteljau implements ScalarTensorFunction {
-  private final GeodesicInterface geodesicInterface;
-  private final Tensor points;
+public class BezierFunction implements ScalarTensorFunction {
+  /** @param geodesicInterface
+   * @param control
+   * @return function parameterized by the interval [0, 1] */
+  public static ScalarTensorFunction of(GeodesicInterface geodesicInterface, Tensor control) {
+    return new BezierFunction(geodesicInterface, control);
+  }
 
-  public DeCasteljau(GeodesicInterface geodesicInterface, Tensor points) {
+  // ---
+  private final GeodesicInterface geodesicInterface;
+  private final Tensor control;
+
+  private BezierFunction(GeodesicInterface geodesicInterface, Tensor control) {
     this.geodesicInterface = geodesicInterface;
-    this.points = points;
+    this.control = control;
   }
 
   @Override // from ScalarTensorFunction
   public Tensor apply(Scalar scalar) {
-    Tensor points = this.points;
+    Clip.unit().requireInside(scalar);
+    Tensor points = this.control;
     while (1 < points.length()) {
       Tensor tensor = Tensors.empty();
       Tensor p = points.get(0);

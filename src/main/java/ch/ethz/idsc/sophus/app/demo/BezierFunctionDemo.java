@@ -13,14 +13,17 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.sophus.curve.BezierCurve;
+import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 /** Bezier curve */
-/* package */ class BezierDemo extends ControlPointsDemo {
+/* package */ class BezierFunctionDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -28,7 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
-  BezierDemo() {
+  BezierFunctionDemo() {
     timerFrame.jToolBar.add(jButton);
     // ---
     jToggleCtrl.setSelected(true);
@@ -65,20 +68,11 @@ import ch.ethz.idsc.tensor.Tensors;
     final Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     if (isR2) {
-      BezierCurve bezierCurve = new BezierCurve(RnGeodesic.INSTANCE);
-      refined = bezierCurve.refine(controlR2(), 1 << levels);
-      graphics.setColor(new Color(0, 0, 255, 128));
-      graphics.draw(geometricLayer.toPath2D(refined));
+      ScalarTensorFunction bezierCurve = BezierFunction.of(RnGeodesic.INSTANCE, controlR2());
+      refined = Subdivide.of(Clip.unit(), 1 << levels).map(bezierCurve);
     } else { // SE2
-      BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
-      refined = bezierCurve.refine(_control, 1 << levels);
-    }
-    if (jToggleLine.isSelected()) {
-      BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
-      Tensor linear = bezierCurve.refine(_control, 1 << 8);
-      graphics.setColor(new Color(0, 255, 0, 128));
-      Path2D path2d = geometricLayer.toPath2D(linear);
-      graphics.draw(path2d);
+      ScalarTensorFunction bezierCurve = BezierFunction.of(Se2CoveringGeodesic.INSTANCE, _control);
+      refined = Subdivide.of(Clip.unit(), 1 << levels).map(bezierCurve);
     }
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
     if (!isR2 && levels < 5)
@@ -96,7 +90,7 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   public static void main(String[] args) {
-    BezierDemo bezierDemo = new BezierDemo();
+    BezierFunctionDemo bezierDemo = new BezierFunctionDemo();
     bezierDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     bezierDemo.timerFrame.jFrame.setVisible(true);
   }

@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.DeCasteljau;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.symlink.SymGeodesic;
 import ch.ethz.idsc.sophus.symlink.SymLinkImage;
@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ enum SymGenerate {
   ;
@@ -75,16 +76,16 @@ import ch.ethz.idsc.tensor.Tensor;
 
   public static void decastL() throws IOException {
     Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::leaf));
-    DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
-    SymScalar symScalar = (SymScalar) deCasteljau.apply(RationalScalar.of(1, 3));
+    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
+    SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(RationalScalar.of(1, 3));
     SymLinkImage symLinkImage = new SymLinkImage(symScalar);
     ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/decastel41_3.png"));
   }
 
   public static void decastR() throws IOException {
     Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::leaf));
-    DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
-    SymScalar symScalar = (SymScalar) deCasteljau.apply(RationalScalar.of(3, 4));
+    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
+    SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(RationalScalar.of(3, 4));
     SymLinkImage symLinkImage = new SymLinkImage(symScalar);
     ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", UserHome.Pictures("export/decastel43_4.png"));
   }

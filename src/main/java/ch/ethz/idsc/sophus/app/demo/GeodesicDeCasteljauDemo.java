@@ -14,7 +14,7 @@ import javax.swing.JSlider;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.sophus.curve.DeCasteljau;
+import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.symlink.SymGeodesic;
 import ch.ethz.idsc.sophus.symlink.SymLink;
@@ -24,6 +24,7 @@ import ch.ethz.idsc.sophus.symlink.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class GeodesicDeCasteljauDemo extends ControlPointsDemo {
@@ -45,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.N;
     final Tensor xya;
     {
       Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
-      DeCasteljau deCasteljau = new DeCasteljau(SymGeodesic.INSTANCE, vector);
+      ScalarTensorFunction deCasteljau = BezierFunction.of(SymGeodesic.INSTANCE, vector);
       SymScalar symScalar = (SymScalar) deCasteljau.apply(N.DOUBLE.apply(parameter));
       graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
       SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);

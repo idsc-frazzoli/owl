@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BezierCurve;
+import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.sophus.filter.GeodesicMeanFilter;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
@@ -26,8 +26,10 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 /* package */ class GeodesicMeanFilterDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
@@ -90,8 +92,8 @@ import ch.ethz.idsc.tensor.red.Nest;
       curve = Nest.of(BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE)::string, refined, 7);
     }
     if (jToggleLine.isSelected()) {
-      BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
-      Tensor linear = bezierCurve.refine(_control, 1 << 8);
+      Tensor linear = Subdivide.of(Clip.unit(), 1 << 8) //
+          .map(BezierFunction.of(Se2CoveringGeodesic.INSTANCE, _control));
       graphics.setColor(new Color(0, 255, 0, 128));
       Path2D path2d = geometricLayer.toPath2D(linear);
       graphics.draw(path2d);

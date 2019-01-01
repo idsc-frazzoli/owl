@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.sophus.curve.BezierCurve;
 import ch.ethz.idsc.sophus.curve.GeodesicNeville;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
@@ -75,13 +74,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
       GeodesicNeville geodesicNeville = new GeodesicNeville(Se2CoveringGeodesic.INSTANCE, _control);
       // BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
       refined = Subdivide.of(0, controlR2().length() - 1, 100).map(geodesicNeville);
-    }
-    if (jToggleLine.isSelected()) {
-      BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
-      Tensor linear = bezierCurve.refine(_control, 1 << 8);
-      graphics.setColor(new Color(0, 255, 0, 128));
-      Path2D path2d = geometricLayer.toPath2D(linear);
-      graphics.draw(path2d);
     }
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
     if (!isR2 && levels < 5)
