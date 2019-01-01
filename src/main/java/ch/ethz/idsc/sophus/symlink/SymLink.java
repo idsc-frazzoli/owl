@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.red.Min;
 
 /** SymNode extends from here */
 public class SymLink {
-  private static final Scalar SHIFT_Y = RealScalar.of(.5);
+  private static final Scalar SHIFT_Y = RealScalar.of(0.5);
 
   public static SymLink build(SymScalar symScalar) {
     if (symScalar.isScalar())
@@ -49,9 +49,9 @@ public class SymLink {
   public Tensor getPosition() {
     Tensor posP = lP.getPosition();
     Tensor posQ = lQ.getPosition();
-    Tensor x = RnGeodesic.INSTANCE.split(posP.Get(0), posQ.Get(0), lambda);
-    Scalar y = Min.of(posP.Get(1), posQ.Get(1)).subtract(SHIFT_Y);
-    return Tensors.of(x, y);
+    return Tensors.of( //
+        RnGeodesic.INSTANCE.split(posP.Get(0), posQ.Get(0), lambda), //
+        Min.of(posP.Get(1), posQ.Get(1)).subtract(SHIFT_Y));
   }
 
   public Tensor getPosition(GeodesicInterface geodesicInterface) {

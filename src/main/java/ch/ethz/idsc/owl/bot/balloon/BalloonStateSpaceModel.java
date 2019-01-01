@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 
   @Override
   public Tensor f(Tensor x, Tensor u) {
-    /* TODO define x' properly
+    /* TODO ANDRE define x' properly
      * x' = ??
      * y' = vel
      * vel' = (-1 / tau2) * vel + sigma * theta + w / tau2

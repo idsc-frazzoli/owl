@@ -25,8 +25,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor q = geometricLayer.getMouseSe2State();
     graphics.setColor(new Color(128, 128, 128, 128));
-    for (Tensor scalar : Subdivide.of(0, 1, 20)) {
-      Tensor split = Se2CoveringGeodesic.INSTANCE.split(Array.zeros(3), q, scalar.Get());
+    for (Tensor split : Subdivide.of(0, 1, 20).map(Se2CoveringGeodesic.INSTANCE.curve(Array.zeros(3), q))) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(split));
       graphics.fill(geometricLayer.toPath2D(ARROWHEAD));
       geometricLayer.popMatrix();

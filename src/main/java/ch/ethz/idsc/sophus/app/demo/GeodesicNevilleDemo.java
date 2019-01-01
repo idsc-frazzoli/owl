@@ -14,13 +14,15 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.curve.BezierCurve;
+import ch.ethz.idsc.sophus.curve.GeodesicNeville;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 
 /** Bezier curve */
-/* package */ class BezierDemo extends ControlPointsDemo {
+/* package */ class GeodesicNevilleDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -28,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
-  BezierDemo() {
+  GeodesicNevilleDemo() {
     timerFrame.jToolBar.add(jButton);
     // ---
     jToggleCtrl.setSelected(true);
@@ -50,7 +52,7 @@ import ch.ethz.idsc.tensor.Tensors;
     spinnerRefine.setValue(9);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
-      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
@@ -65,13 +67,14 @@ import ch.ethz.idsc.tensor.Tensors;
     final Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     if (isR2) {
-      BezierCurve bezierCurve = new BezierCurve(RnGeodesic.INSTANCE);
-      refined = bezierCurve.refine(controlR2(), 1 << levels);
+      GeodesicNeville geodesicNeville = new GeodesicNeville(RnGeodesic.INSTANCE, controlR2());
+      refined = Subdivide.of(0, controlR2().length() - 1, 100).map(geodesicNeville);
       graphics.setColor(new Color(0, 0, 255, 128));
       graphics.draw(geometricLayer.toPath2D(refined));
     } else { // SE2
-      BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
-      refined = bezierCurve.refine(_control, 1 << levels);
+      GeodesicNeville geodesicNeville = new GeodesicNeville(Se2CoveringGeodesic.INSTANCE, _control);
+      // BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
+      refined = Subdivide.of(0, controlR2().length() - 1, 100).map(geodesicNeville);
     }
     if (jToggleLine.isSelected()) {
       BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
@@ -96,7 +99,7 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   public static void main(String[] args) {
-    BezierDemo bezierDemo = new BezierDemo();
+    GeodesicNevilleDemo bezierDemo = new GeodesicNevilleDemo();
     bezierDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     bezierDemo.timerFrame.jFrame.setVisible(true);
   }

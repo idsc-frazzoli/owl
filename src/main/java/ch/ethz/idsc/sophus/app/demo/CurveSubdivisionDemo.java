@@ -207,7 +207,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           : curveSubdivision::string;
       Tensor se2ctrl = _control.copy();
       if (jToggleItrp.isSelected() && scheme.degree.isPresent())
-        se2ctrl = new LieGroupBSplineInterpolation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, scheme.degree.get()).apply(se2ctrl);
+        se2ctrl = new LieGroupBSplineInterpolation( //
+            Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, scheme.degree.get(), se2ctrl).apply();
       refined = Nest.of(subdivision, se2ctrl, levels);
     }
     if (jToggleLine.isSelected()) {

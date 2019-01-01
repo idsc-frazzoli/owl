@@ -1,5 +1,5 @@
 // code by ob
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.sophus.space;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 import ch.ethz.idsc.tensor.sca.Tanh;
 
-/** geodesic on 2-dimensional hyperpolic hald
+/** geodesic on 2-dimensional hyperbolic half
  * 
  * half-plane coordinates are of the form {x, y} with y strictly positive
  * 

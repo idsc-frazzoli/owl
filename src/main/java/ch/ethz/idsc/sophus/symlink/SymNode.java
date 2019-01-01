@@ -7,23 +7,24 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+/** characterized by {@link #isNode()} == true */
 /* package */ class SymNode extends SymLink {
-  private final Scalar symScalar;
+  private final Scalar scalar;
   public Tensor position;
 
-  public SymNode(Scalar symScalar) {
+  /* package */ SymNode(Scalar scalar) {
     super(null, null, null);
-    this.symScalar = symScalar;
+    this.scalar = scalar;
   }
 
   @Override // from SymLink
   public int getIndex() {
-    return symScalar.number().intValue();
+    return scalar.number().intValue();
   }
 
   @Override // from SymLink
   public Tensor getPosition() {
-    return Tensors.of(symScalar, RealScalar.ZERO);
+    return Tensors.of(scalar, RealScalar.ZERO);
   }
 
   @Override // from SymLink

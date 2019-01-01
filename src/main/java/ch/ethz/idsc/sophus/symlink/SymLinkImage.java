@@ -19,20 +19,23 @@ import ch.ethz.idsc.tensor.img.ImageCrop;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+/** used in demos */
 public class SymLinkImage {
   private static final int WIDTH = 100;
   /** height also appears in the model2pixel matrix */
   private static final int HEIGHT = 50;
-  private static final Tensor MODEL2PIXEL = Tensors.fromString("{{100,0,80},{0,-100,50+25},{0,0,1}}");
+  private static final Tensor MODEL2PIXEL = Tensors.matrix(new Number[][] { //
+      { 100, 0, 80 }, //
+      { 0, -100, HEIGHT + HEIGHT / 2 }, //
+      { 0, 0, 1 } });
   private static final TensorUnaryOperator IMAGE_CROP = ImageCrop.color(Tensors.vector(255, 255, 255, 255));
   private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 22);
-  // private static final Tensor CIRCLE = CirclePoints.of(21).multiply(RealScalar.of(.07));
   // ---
-  private final BufferedImage bufferedImage; // = new BufferedImage(1400, 500, BufferedImage.TYPE_INT_ARGB);
+  private final BufferedImage bufferedImage;
   private final GeometricLayer geometricLayer = GeometricLayer.of(MODEL2PIXEL);
   private final Font font;
-  int minx = Integer.MAX_VALUE;
-  int maxx = 0;
+  private int minx = Integer.MAX_VALUE;
+  private int maxx = 0;
 
   public SymLinkImage(SymScalar symScalar) {
     this(symScalar, FONT);
@@ -95,16 +98,18 @@ public class SymLinkImage {
     return bufferedImage;
   }
 
-  public BufferedImage bufferedImageCropped() {
+  public BufferedImage bufferedImageCropped(boolean line) {
     Tensor tensor = ImageFormat.from(bufferedImage);
     tensor = IMAGE_CROP.apply(tensor);
     BufferedImage image = ImageFormat.of(tensor);
-    // Graphics2D graphics = image.createGraphics();
-    // GraphicsUtil.setQualityHigh(graphics);
-    // graphics.setStroke(new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 7 }, 0));
-    // graphics.setColor(Color.GRAY);
-    // int piy = 22;
-    // graphics.drawLine(0, piy, bufferedImage.getWidth(), piy);
+    if (line) {
+      Graphics2D graphics = image.createGraphics();
+      GraphicsUtil.setQualityHigh(graphics);
+      graphics.setStroke(new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 7 }, 0));
+      graphics.setColor(Color.GRAY);
+      int piy = 22;
+      graphics.drawLine(0, piy, bufferedImage.getWidth(), piy);
+    }
     return image;
   }
 }
