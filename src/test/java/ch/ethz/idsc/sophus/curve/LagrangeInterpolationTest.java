@@ -10,9 +10,9 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import junit.framework.TestCase;
 
-public class GeodesicNevilleTest extends TestCase {
+public class LagrangeInterpolationTest extends TestCase {
   public void testSimple() {
-    Tensor control = RandomVariate.of(DiscreteUniformDistribution.of(-3, 7), 4, 10).unmodifiable();
+    Tensor control = RandomVariate.of(DiscreteUniformDistribution.of(-3, 7), 4, 7).unmodifiable();
     Interpolation interpolation = LagrangeInterpolation.of(RnGeodesic.INSTANCE, control);
     Tensor domain = Range.of(0, control.length());
     Tensor polynom = domain.map(interpolation::at);

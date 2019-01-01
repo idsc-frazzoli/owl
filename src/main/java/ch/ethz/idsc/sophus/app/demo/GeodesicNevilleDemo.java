@@ -6,75 +6,89 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
+import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.sophus.curve.GeodesicNeville;
+import ch.ethz.idsc.sophus.curve.LagrangeInterpolation;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.symlink.SymGeodesic;
+import ch.ethz.idsc.sophus.symlink.SymLinkImage;
+import ch.ethz.idsc.sophus.symlink.SymScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.N;
 
 /** Bezier curve */
 /* package */ class GeodesicNevilleDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
-  private final JToggleButton jToggleLine = new JToggleButton("line");
+  private final JToggleButton jToggleSymi = new JToggleButton("graph");
+  // ---
+  private Scalar parameter = RationalScalar.HALF;
 
   GeodesicNevilleDemo() {
     timerFrame.jToolBar.add(jButton);
     // ---
-    jToggleCtrl.setSelected(true);
-    timerFrame.jToolBar.add(jToggleCtrl);
-    // ---
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
-    // ---
-    jToggleLine.setSelected(false);
-    timerFrame.jToolBar.add(jToggleLine);
     // ---
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleButton);
     // ---
+    jToggleSymi.setSelected(true);
+    timerFrame.jToolBar.add(jToggleSymi);
+    // ---
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
-    spinnerRefine.setValue(9);
+    spinnerRefine.setValue(7);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
-      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1}}");
+      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,2.1}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
+    // ---
+    JSlider jSlider = new JSlider(0, 1000, 500);
+    jSlider.setPreferredSize(new Dimension(500, 28));
+    jSlider.addChangeListener(changeEvent -> parameter = RationalScalar.of(jSlider.getValue(), 1000));
+    timerFrame.jToolBar.add(jSlider);
   }
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    Tensor _control = controlSe2();
+    if (jToggleSymi.isSelected()) {
+      Tensor vector = Tensor.of(IntStream.range(0, _control.length()).mapToObj(SymScalar::leaf));
+      ScalarTensorFunction scalarTensorFunction = LagrangeInterpolation.of(SymGeodesic.INSTANCE, vector)::at;
+      Scalar scalar = N.DOUBLE.apply(parameter.multiply(RealScalar.of(_control.length() - 1)));
+      SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(scalar);
+      graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
+    }
+    // ---
     GraphicsUtil.setQualityHigh(graphics);
     boolean isR2 = jToggleButton.isSelected();
-    Tensor _control = controlSe2();
     int levels = spinnerRefine.getValue();
-    final Tensor refined;
     renderControlPoints(geometricLayer, graphics);
-    if (isR2) {
-      GeodesicNeville geodesicNeville = new GeodesicNeville(RnGeodesic.INSTANCE, controlR2());
-      refined = Subdivide.of(0, controlR2().length() - 1, 100).map(geodesicNeville);
-      graphics.setColor(new Color(0, 0, 255, 128));
-      graphics.draw(geometricLayer.toPath2D(refined));
-    } else { // SE2
-      GeodesicNeville geodesicNeville = new GeodesicNeville(Se2CoveringGeodesic.INSTANCE, _control);
-      // BezierCurve bezierCurve = new BezierCurve(Se2CoveringGeodesic.INSTANCE);
-      refined = Subdivide.of(0, controlR2().length() - 1, 100).map(geodesicNeville);
-    }
+    Tensor domain = Subdivide.of(0, controlR2().length() - 1, 1 << levels);
+    Tensor refined = isR2 //
+        ? domain.map(LagrangeInterpolation.of(RnGeodesic.INSTANCE, controlR2())::at)
+        : domain.map(LagrangeInterpolation.of(Se2CoveringGeodesic.INSTANCE, _control)::at);
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
     if (!isR2 && levels < 5)
       for (Tensor point : refined) {

@@ -46,8 +46,8 @@ import ch.ethz.idsc.tensor.sca.N;
     final Tensor xya;
     {
       Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
-      ScalarTensorFunction deCasteljau = BezierFunction.of(SymGeodesic.INSTANCE, vector);
-      SymScalar symScalar = (SymScalar) deCasteljau.apply(N.DOUBLE.apply(parameter));
+      ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
+      SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(N.DOUBLE.apply(parameter));
       graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
       SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
       SymLink symLink = symLinkBuilder.build(symScalar);
