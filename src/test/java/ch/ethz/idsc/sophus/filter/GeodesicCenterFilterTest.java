@@ -6,7 +6,7 @@ import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.So3Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.space.S2Geodesic;
+import ch.ethz.idsc.sophus.space.SnGeodesic;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -56,7 +56,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testS2() {
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(S2Geodesic.INSTANCE, SmoothingKernel.HANN);
+    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(SnGeodesic.INSTANCE, SmoothingKernel.HANN);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Distribution distribution = NormalDistribution.standard();
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Norm._2);

@@ -2,15 +2,19 @@
 package ch.ethz.idsc.sophus.space;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
-import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -29,6 +33,27 @@ public class SnGeodesicTest extends TestCase {
     assertEquals(Norm._2.of(split), RealScalar.ONE);
     assertEquals(split.Get(0), split.Get(1));
     assertTrue(Scalars.isZero(split.Get(2)));
+  }
+
+  public void test2D() {
+    ScalarTensorFunction scalarTensorFunction = //
+        SnGeodesic.INSTANCE.curve(UnitVector.of(2, 0), UnitVector.of(2, 1));
+    for (int n = 3; n < 20; ++n) {
+      Tensor points = Subdivide.of(0, 4, n).map(scalarTensorFunction);
+      Tensor circle = CirclePoints.of(n);
+      Chop._12.requireClose(points.extract(0, n), circle);
+    }
+  }
+
+  public void test4D() {
+    ScalarTensorFunction scalarTensorFunction = //
+        SnGeodesic.INSTANCE.curve(UnitVector.of(4, 0), UnitVector.of(4, 1));
+    Tensor ZEROS = Array.zeros(2);
+    for (int n = 3; n < 20; ++n) {
+      Tensor points = Subdivide.of(0, 4, n).map(scalarTensorFunction);
+      Tensor circle = Tensor.of(CirclePoints.of(n).stream().map(t -> Join.of(t, ZEROS)));
+      Chop._12.requireClose(points.extract(0, n), circle);
+    }
   }
 
   public void testRatio() {
@@ -50,8 +75,13 @@ public class SnGeodesicTest extends TestCase {
   public void testOpposite() {
     Tensor p = UnitVector.of(3, 2);
     Tensor q = UnitVector.of(3, 2).negate();
-    Tensor split = SnGeodesic.INSTANCE.split(p, q, RandomVariate.of(NormalDistribution.standard()));
-    assertTrue(NumberQ.all(split));
+    Scalar scalar = RandomVariate.of(NormalDistribution.standard());
+    try {
+      SnGeodesic.INSTANCE.split(p, q, scalar);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testComparison() {

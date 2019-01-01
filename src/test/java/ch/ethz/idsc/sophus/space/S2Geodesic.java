@@ -13,8 +13,10 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 /** geodesic on 2-dimensional sphere embedded in R^3
  * 
- * https://en.wikipedia.org/wiki/N-sphere */
-public enum S2Geodesic implements GeodesicInterface {
+ * https://en.wikipedia.org/wiki/N-sphere
+ * 
+ * superseded by {@link SnGeodesic} */
+/* package */ enum S2Geodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   @Override // from TensorGeodesic

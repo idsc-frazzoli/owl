@@ -68,8 +68,4 @@ public class GeodesicDeBoor implements ScalarTensorFunction {
   public Tensor knots() {
     return knots.unmodifiable();
   }
-
-  public Tensor affine(Tensor p, Tensor q, Scalar alpha) {
-    return p.add(q.subtract(p).multiply(alpha));
-  }
 }
