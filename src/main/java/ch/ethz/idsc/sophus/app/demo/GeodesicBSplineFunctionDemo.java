@@ -106,7 +106,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     if (isR2) {
       Tensor rnctrl = controlR2();
       Tensor effective = jToggleItrp.isSelected() //
-          ? new LieGroupBSplineInterpolation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, degree).apply(rnctrl)
+          ? new LieGroupBSplineInterpolation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, degree, rnctrl).apply()
           : rnctrl;
       geodesicBSplineFunction = //
           GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
@@ -117,7 +117,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
       }
     } else { // SE2
       Tensor effective = jToggleItrp.isSelected() //
-          ? new LieGroupBSplineInterpolation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, degree).apply(control)
+          ? new LieGroupBSplineInterpolation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, degree, control).apply()
           : control;
       geodesicBSplineFunction = //
           GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, effective);

@@ -21,8 +21,8 @@ public final class LieGroupBSplineInterpolation extends GeodesicBSplineInterpola
   /** @param lieGroup
    * @param geodesicInterface corresponding to lie group
    * @param degree of underlying b-spline */
-  public LieGroupBSplineInterpolation(LieGroup lieGroup, GeodesicInterface geodesicInterface, int degree) {
-    super(geodesicInterface, degree);
+  public LieGroupBSplineInterpolation(LieGroup lieGroup, GeodesicInterface geodesicInterface, int degree, Tensor target) {
+    super(geodesicInterface, degree, target);
     this.lieGroup = lieGroup;
   }
 

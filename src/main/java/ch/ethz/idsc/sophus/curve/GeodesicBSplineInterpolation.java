@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
+import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -9,40 +10,39 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 
-public class GeodesicBSplineInterpolation implements TensorUnaryOperator {
+public class GeodesicBSplineInterpolation implements Serializable {
   private static final Scalar TWO = RealScalar.of(2);
-  static final Chop CHOP_DEFAULT = Chop._12;
-  static final int MAXITER = 100;
+  private static final Chop CHOP_DEFAULT = Chop._12;
+  private static final int MAXITER = 500;
   // ---
   private final GeodesicInterface geodesicInterface;
   private final int degree;
+  private final Tensor target;
 
   /** @param lieGroup
    * @param geodesicInterface corresponding to lie group
    * @param degree of underlying b-spline */
-  public GeodesicBSplineInterpolation(GeodesicInterface geodesicInterface, int degree) {
+  public GeodesicBSplineInterpolation(GeodesicInterface geodesicInterface, int degree, Tensor target) {
     this.geodesicInterface = geodesicInterface;
     this.degree = degree;
+    this.target = target;
   }
 
   public class Iteration {
-    private final Tensor target;
     private final Tensor control;
     private final int steps;
 
-    private Iteration(Tensor target, Tensor control, int steps) {
-      this.target = target;
+    private Iteration(Tensor control, int steps) {
       this.control = control;
       this.steps = steps;
     }
 
     public Iteration step() {
       Tensor refine = Range.of(0, target.length()).map(geodesicBSplineFunction(control));
-      return new Iteration(target, Tensor.of(IntStream.range(0, control.length()) //
+      return new Iteration(Tensor.of(IntStream.range(0, control.length()) //
           .mapToObj(index -> move(control.get(index), refine.get(index), target.get(index)))), steps + 1);
     }
 
@@ -55,12 +55,12 @@ public class GeodesicBSplineInterpolation implements TensorUnaryOperator {
     }
   }
 
-  public final Iteration start(Tensor target) {
-    return new Iteration(target, target, 0);
+  public final Iteration init() {
+    return new Iteration(target, 0);
   }
 
-  public final Iteration untilClose(Tensor target, int maxiter, Chop chop) {
-    Iteration iteration = start(target);
+  public final Iteration untilClose(Chop chop, int maxiter) {
+    Iteration iteration = init();
     Tensor p = iteration.control();
     for (int count = 0; count < maxiter; ++count) {
       iteration = iteration.step();
@@ -72,9 +72,8 @@ public class GeodesicBSplineInterpolation implements TensorUnaryOperator {
     return iteration;
   }
 
-  @Override
-  public final Tensor apply(Tensor target) {
-    return untilClose(target, MAXITER, CHOP_DEFAULT).control;
+  public final Tensor apply() {
+    return untilClose(CHOP_DEFAULT, MAXITER).control;
   }
 
   private GeodesicBSplineFunction geodesicBSplineFunction(Tensor control) {
