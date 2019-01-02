@@ -17,16 +17,15 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.CurveRender;
+import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.CurveRender;
-import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
@@ -275,17 +274,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
       graphics.setStroke(new BasicStroke(1f));
     }
     if (levels < 5)
-      for (Tensor point : refined) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
-        geometricLayer.popMatrix();
-        int rgb = 128 + 32;
-        path2d.closePath();
-        graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
-        graphics.fill(path2d);
-        graphics.setColor(Color.BLACK);
-        graphics.draw(path2d);
-      }
+      renderPoints(geometricLayer, graphics, refined);
     if (printref) {
       printref = false;
       System.out.println(refined);

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.util;
 
+import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;

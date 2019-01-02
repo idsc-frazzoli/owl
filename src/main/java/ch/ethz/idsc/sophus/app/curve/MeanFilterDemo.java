@@ -16,9 +16,9 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BezierFunction;
@@ -100,17 +100,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
       Path2D path2d = geometricLayer.toPath2D(CurvatureComb.of(refined, COMB_SCALE, false));
       graphics.draw(path2d);
     }
-    for (Tensor point : refined) {
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
-      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
-      geometricLayer.popMatrix();
-      int rgb = 128 + 32;
-      path2d.closePath();
-      graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
-      graphics.fill(path2d);
-      graphics.setColor(Color.BLACK);
-      graphics.draw(path2d);
-    }
+    renderPoints(geometricLayer, graphics, refined);
   }
 
   public static void main(String[] args) {

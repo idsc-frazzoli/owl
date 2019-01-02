@@ -14,9 +14,9 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.CurveRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
     spinnerRefine.setValue(4);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
-    setControl(Tensors.fromString("{{0, 0}, {1, 0}}"));
+    setControl(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}}"));
   }
 
   @Override // from RenderInterface
