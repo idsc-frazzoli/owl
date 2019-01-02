@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.util;
+package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

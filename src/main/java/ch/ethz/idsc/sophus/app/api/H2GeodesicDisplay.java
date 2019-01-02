@@ -2,46 +2,50 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.group.LieGroup;
-import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
-import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.space.H2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
+public enum H2GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
   // ---
-  private static final Tensor ARROWHEAD = Arrowhead.of(RealScalar.of(0.4));
+  private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.2));
+  private static final ScalarUnaryOperator MAX_Y = Max.function(RealScalar.of(0.01));
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
-    return Se2CoveringGeodesic.INSTANCE;
+    return H2Geodesic.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
   public Tensor shape() {
-    return ARROWHEAD;
+    return TRIANGLE;
   }
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
-    return xya;
+    Tensor point = xya.extract(0, 2);
+    point.set(MAX_Y, 1);
+    return point;
   }
 
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
-    return Se2Utils.toSE2Matrix(p);
+    return Se2Utils.toSE2Translation(p);
   }
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
-    return Se2CoveringGroup.INSTANCE;
+    return null;
   }
 
   @Override // from Object
   public String toString() {
-    return "SE2C";
+    return "H2";
   }
 }

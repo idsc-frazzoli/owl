@@ -40,7 +40,7 @@ public enum R2GeodesicDisplay implements GeodesicDisplay {
     return RnGroup.INSTANCE;
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return "R2";
   }

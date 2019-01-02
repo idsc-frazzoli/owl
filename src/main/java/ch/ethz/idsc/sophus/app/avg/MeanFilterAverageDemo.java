@@ -18,7 +18,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.symlink.SymGeodesic;
 import ch.ethz.idsc.sophus.symlink.SymLink;
@@ -56,22 +55,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       Tensor tensor = tensorUnaryOperator.apply(vector);
       SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
       SymLink symLink = symLinkBuilder.build((SymScalar) tensor);
-      GeodesicInterface geodesicInterface = geodesicInterface();
       GeodesicAverageRender.of(geodesicDisplay, symLink).render(geometricLayer, graphics);
-      xya = symLink.getPosition(geodesicInterface);
+      xya = symLink.getPosition(geodesicDisplay.geodesicInterface());
     }
-    {
-      for (Tensor point : control) {
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
-        Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
-        path2d.closePath();
-        graphics.setColor(new Color(255, 128, 128, 64));
-        graphics.fill(path2d);
-        graphics.setColor(new Color(255, 128, 128, 255));
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
-    }
+    renderControlPoints(geometricLayer, graphics);
     if (Objects.nonNull(xya)) {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(xya));
       Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());

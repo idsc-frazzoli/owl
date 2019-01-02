@@ -63,6 +63,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
           Tensor tensor = Subdivide.of(symLink.lambda, RealScalar.ONE, 91) //
               .map(geodesicInterface.curve(posP, posQ));
           Path2D path2d = geometricLayer.toPath2D(tensor);
+          // TODO JPH instead of regular dashing use parameterization of geodesic
           graphics.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
           graphics.draw(path2d);
         }

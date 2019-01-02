@@ -30,17 +30,17 @@ public enum Se2GeodesicDisplay implements GeodesicDisplay {
     return xya;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
     return Se2Utils.toSE2Matrix(p);
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
     return Se2Group.INSTANCE;
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return "SE2";
   }

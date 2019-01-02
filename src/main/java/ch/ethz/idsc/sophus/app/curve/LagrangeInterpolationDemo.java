@@ -13,13 +13,12 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.CurveRender;
+import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.CurveRender;
-import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.LagrangeInterpolation;
 import ch.ethz.idsc.sophus.symlink.SymGeodesic;
@@ -31,6 +30,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.N;
 
@@ -41,8 +41,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
-  // ---
-  private Scalar parameter = RationalScalar.HALF;
+  private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   LagrangeInterpolationDemo() {
     super(true, GeodesicDisplays.ALL);
@@ -66,15 +65,14 @@ import ch.ethz.idsc.tensor.sca.N;
           Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
     // ---
-    JSlider jSlider = new JSlider(0, 1000, 500);
     jSlider.setPreferredSize(new Dimension(500, 28));
-    jSlider.addChangeListener(changeEvent -> parameter = RationalScalar.of(jSlider.getValue(), 1000));
     timerFrame.jToolBar.add(jSlider);
   }
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Tensor control = control();
+    final Tensor control = control();
+    final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum());
     if (jToggleSymi.isSelected()) {
       Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
       ScalarTensorFunction scalarTensorFunction = LagrangeInterpolation.of(SymGeodesic.INSTANCE, vector)::at;
@@ -84,24 +82,23 @@ import ch.ethz.idsc.tensor.sca.N;
     }
     // ---
     GraphicsUtil.setQualityHigh(graphics);
-    int levels = spinnerRefine.getValue();
     renderControlPoints(geometricLayer, graphics);
-    Tensor domain = Subdivide.of(0, control.length() - 1, 1 << levels);
+    // ---
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor refined = domain.map(LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control())::at);
+    int levels = spinnerRefine.getValue();
+    Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
+    Tensor refined = Subdivide.of(0, control.length() - 1, 1 << levels).map(interpolation::at);
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
+    {
+      Tensor selected = interpolation.at(parameter.multiply(RealScalar.of(control.length() - 1)));
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
+      graphics.setColor(Color.DARK_GRAY);
+      graphics.fill(path2d);
+      geometricLayer.popMatrix();
+    }
     if (levels < 5)
-      for (Tensor point : refined) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
-        geometricLayer.popMatrix();
-        int rgb = 128 + 32;
-        path2d.closePath();
-        graphics.setColor(new Color(rgb, rgb, rgb, 128 + 64));
-        graphics.fill(path2d);
-        graphics.setColor(Color.BLACK);
-        graphics.draw(path2d);
-      }
+      renderPoints(geometricLayer, graphics, refined);
   }
 
   public static void main(String[] args) {
