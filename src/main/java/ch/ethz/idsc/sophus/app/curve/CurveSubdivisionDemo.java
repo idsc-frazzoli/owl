@@ -17,7 +17,6 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -52,7 +51,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
   private static final boolean BSPLINE4 = false;
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = //
       ColorDataLists._097.cyclic().deriveWithAlpha(128 + 64);
   // private static final Tensor DUBILAB = //
@@ -63,7 +61,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private final SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleBndy = new JToggleButton("bndy");
-  private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
@@ -112,9 +109,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     // ---
     jToggleBndy.setSelected(true);
     timerFrame.jToolBar.add(jToggleBndy);
-    // ---
-    jToggleComb.setSelected(true);
-    timerFrame.jToolBar.add(jToggleComb);
     // ---
     jToggleCrvt.setSelected(false);
     timerFrame.jToolBar.add(jToggleCrvt);
@@ -238,7 +232,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
         graphics.setStroke(new BasicStroke(1f));
       }
     }
-    new CurveRender(refined, isCyclic, jToggleComb.isSelected()).render(geometricLayer, graphics);
+    new CurveRender(refined, isCyclic, curvatureButton().isSelected()).render(geometricLayer, graphics);
     if (jToggleCrvt.isSelected()) {
       graphics.setStroke(new BasicStroke(1.25f));
       Tensor matrix = geometricLayer.getMatrix();

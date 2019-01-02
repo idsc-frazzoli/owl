@@ -13,7 +13,6 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
@@ -36,18 +35,12 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /** Bezier curve */
 /* package */ class LagrangeInterpolationDemo extends ControlPointsDemo {
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
-  // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   LagrangeInterpolationDemo() {
     super(true, GeodesicDisplays.ALL);
-    // ---
-    jToggleComb.setSelected(true);
-    timerFrame.jToolBar.add(jToggleComb);
     // ---
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();
@@ -88,7 +81,7 @@ import ch.ethz.idsc.tensor.sca.N;
     int levels = spinnerRefine.getValue();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
     Tensor refined = Subdivide.of(0, control.length() - 1, 1 << levels).map(interpolation::at);
-    new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
+    new CurveRender(refined, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
     {
       Tensor selected = interpolation.at(parameter.multiply(RealScalar.of(control.length() - 1)));
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));

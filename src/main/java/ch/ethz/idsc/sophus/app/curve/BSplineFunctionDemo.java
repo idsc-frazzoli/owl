@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
@@ -32,36 +31,20 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class BSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
-  private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
-  private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   BSplineFunctionDemo() {
-    super(false, GeodesicDisplays.ALL);
-    {
-      JButton jButton = new JButton("clear");
-      jButton.addActionListener(actionEvent -> setControl(Tensors.of(Array.zeros(3), Tensors.vector(1, 0, 0))));
-      timerFrame.jToolBar.add(jButton);
-    }
-    jToggleCtrl.setSelected(true);
-    timerFrame.jToolBar.add(jToggleCtrl);
-    // ---
-    jToggleComb.setSelected(true);
-    timerFrame.jToolBar.add(jToggleComb);
-    // ---
-    jToggleLine.setSelected(false);
-    timerFrame.jToolBar.add(jToggleLine);
+    super(true, GeodesicDisplays.ALL);
     // ---
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();
@@ -105,16 +88,16 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     // ---
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor effective = control;
-    if (jToggleItrp.isSelected()) { //
+    if (jToggleItrp.isSelected()) {
       LieGroup lieGroup = geodesicDisplay.lieGroup();
-      if (Objects.isNull(lieGroup)) {
-        effective = new GeodesicBSplineInterpolation(geodesicDisplay.geodesicInterface(), degree, control).apply();
-      } else
-        effective = new LieGroupBSplineInterpolation(lieGroup, geodesicDisplay.geodesicInterface(), degree, control).apply();
+      GeodesicBSplineInterpolation geodesicBSplineInterpolation = Objects.isNull(lieGroup) //
+          ? new GeodesicBSplineInterpolation(geodesicDisplay.geodesicInterface(), degree, control)
+          : new LieGroupBSplineInterpolation(lieGroup, geodesicDisplay.geodesicInterface(), degree, control);
+      effective = geodesicBSplineInterpolation.untilClose(Chop._08, 100).control();
     }
     GeodesicBSplineFunction geodesicBSplineFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, effective);
-    Tensor refined = Subdivide.of(0, upper, upper * (1 << (levels))).map(geodesicBSplineFunction);
+    Tensor refined = Subdivide.of(0, upper, Math.max(1, upper * (1 << (levels)))).map(geodesicBSplineFunction);
     {
       Tensor selected = geodesicBSplineFunction.apply(parameter);
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
@@ -123,7 +106,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
       graphics.fill(path2d);
       geometricLayer.popMatrix();
     }
-    new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics); // limit curve
+    new CurveRender(refined, false, curvatureButton().isSelected()).render(geometricLayer, graphics); // limit curve
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
   }

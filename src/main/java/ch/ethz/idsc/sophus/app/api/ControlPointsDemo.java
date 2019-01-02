@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -37,6 +38,7 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       new PointsRender(new Color(160, 160, 160, 128 + 64), Color.BLACK);
   // ---
   private final JButton jButton = new JButton("clear");
+  private final JToggleButton jToggleComb = new JToggleButton("comb");
   protected final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
   // ---
   private Tensor control = Tensors.of(Array.zeros(3));
@@ -51,7 +53,7 @@ public abstract class ControlPointsDemo extends AbstractDemo {
         control.set(mouse, min_index);
       if (Objects.isNull(min_index)) {
         Optional<Integer> optional = closest();
-        graphics.setColor(optional.isPresent() ? Color.YELLOW : Color.GREEN);
+        graphics.setColor(optional.isPresent() ? Color.ORANGE : Color.GREEN);
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
         graphics.fill(geometricLayer.toPath2D(geodesicDisplay().shape()));
         geometricLayer.popMatrix();
@@ -64,6 +66,8 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
       timerFrame.jToolBar.add(jButton);
     }
+    jToggleComb.setSelected(true);
+    timerFrame.jToolBar.add(jToggleComb);
     if (!list.isEmpty()) {
       geodesicDisplaySpinner.setList(list);
       geodesicDisplaySpinner.setValue(list.get(0));
@@ -125,8 +129,12 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       throw TensorRuntimeException.of(control);
   }
 
+  public final JToggleButton curvatureButton() {
+    return jToggleComb;
+  }
+
   public final Tensor control() {
-    return Tensor.of(control.stream().map(geodesicDisplay()::project));
+    return Tensor.of(control.stream().map(geodesicDisplay()::project)).unmodifiable();
   }
 
   protected final void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {

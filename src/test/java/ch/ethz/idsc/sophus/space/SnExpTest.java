@@ -15,12 +15,12 @@ import junit.framework.TestCase;
 
 public class SnExpTest extends TestCase {
   public void testSimple() {
-    Tensor tensor = new SnExp(UnitVector.of(3, 0)).apply(UnitVector.of(3, 1).multiply(RealScalar.of(Math.PI / 2)));
+    Tensor tensor = new SnExp(UnitVector.of(3, 0)).exp(UnitVector.of(3, 1).multiply(RealScalar.of(Math.PI / 2)));
     Chop._12.requireClose(tensor, UnitVector.of(3, 1));
   }
 
   public void test4D() {
-    Tensor tensor = new SnExp(UnitVector.of(4, 0)).apply(UnitVector.of(4, 1).multiply(RealScalar.of(Math.PI)));
+    Tensor tensor = new SnExp(UnitVector.of(4, 0)).exp(UnitVector.of(4, 1).multiply(RealScalar.of(Math.PI)));
     Chop._12.requireClose(tensor, UnitVector.of(4, 0).negate());
   }
 
@@ -28,7 +28,7 @@ public class SnExpTest extends TestCase {
     for (int dim = 2; dim < 6; ++dim)
       for (int count = 0; count < 20; ++count) {
         Tensor point = Normalize.with(Norm._2).apply(RandomVariate.of(NormalDistribution.standard(), dim));
-        Tensor apply = new SnExp(point).apply(point.map(Scalar::zero));
+        Tensor apply = new SnExp(point).exp(point.map(Scalar::zero));
         assertEquals(point, apply);
       }
   }
