@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.JButton;
 import javax.swing.JSlider;
@@ -22,7 +23,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
+import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.LieGroupBSplineInterpolation;
+import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.symlink.SymLinkImage;
 import ch.ethz.idsc.sophus.symlink.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -101,9 +104,14 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor effective = jToggleItrp.isSelected() //
-        ? new LieGroupBSplineInterpolation(geodesicDisplay.lieGroup(), geodesicDisplay.geodesicInterface(), degree, control).apply()
-        : control;
+    Tensor effective = control;
+    if (jToggleItrp.isSelected()) { //
+      LieGroup lieGroup = geodesicDisplay.lieGroup();
+      if (Objects.isNull(lieGroup)) {
+        effective = new GeodesicBSplineInterpolation(geodesicDisplay.geodesicInterface(), degree, control).apply();
+      } else
+        effective = new LieGroupBSplineInterpolation(lieGroup, geodesicDisplay.geodesicInterface(), degree, control).apply();
+    }
     GeodesicBSplineFunction geodesicBSplineFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, effective);
     Tensor refined = Subdivide.of(0, upper, upper * (1 << (levels))).map(geodesicBSplineFunction);
