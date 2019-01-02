@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.sophus.app.util.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.util.CurveRender;
 import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;

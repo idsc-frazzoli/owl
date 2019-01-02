@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.util.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;

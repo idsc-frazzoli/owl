@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.util;
+package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -16,6 +16,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
+import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
+import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -36,6 +38,7 @@ public abstract class ControlPointsDemo extends AbstractDemo {
   protected static final Color CP_EDGE = new Color(255, 128, 128, 255);
   // ---
   protected final JButton jButton = new JButton("clear");
+  protected final SpinnerLabel<GeodesicDisplays> geodesicDisplaySpinner = new SpinnerLabel<>();
   protected final JToggleButton jToggleButton = new JToggleButton("R2");
   // ---
   private Tensor control = Tensors.of(Array.zeros(3));
@@ -59,6 +62,8 @@ public abstract class ControlPointsDemo extends AbstractDemo {
 
   public ControlPointsDemo() {
     jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+    geodesicDisplaySpinner.setArray(GeodesicDisplays.values());
+    geodesicDisplaySpinner.setValue(GeodesicDisplays.SE2C);
     // --
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override

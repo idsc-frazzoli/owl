@@ -1,0 +1,29 @@
+// code by jph
+package ch.ethz.idsc.sophus.app.api;
+
+import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
+
+public enum R2GeodesicDisplay implements GeodesicDisplay {
+  INSTANCE;
+  // ---
+  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.1));
+
+  @Override // from GeodesicDisplay
+  public GeodesicInterface geodesicInterface() {
+    return RnGeodesic.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public Tensor pointShape() {
+    return CIRCLE;
+  }
+
+  @Override // from GeodesicDisplay
+  public Tensor project(Tensor xya) {
+    return xya.extract(0, 2);
+  }
+}

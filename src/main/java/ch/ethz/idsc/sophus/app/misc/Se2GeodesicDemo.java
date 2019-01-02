@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.sophus.app.util.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
