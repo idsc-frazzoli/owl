@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -33,6 +34,15 @@ public class SnExpTest extends TestCase {
       }
   }
 
+  public void testLog() {
+    Tensor point = UnitVector.of(3, 0);
+    SnExp snExp = new SnExp(point);
+    Tensor g = Normalize.with(Norm._2).apply(Tensors.vector(1, 1, 1));
+    Tensor vector = snExp.log(g);
+    Tensor retr = snExp.exp(vector);
+    Chop._10.requireClose(g, retr);
+  }
+
   public void test0Fail() {
     try {
       new SnExp(Tensors.empty());
@@ -45,6 +55,15 @@ public class SnExpTest extends TestCase {
   public void test1Fail() {
     try {
       new SnExp(UnitVector.of(1, 0));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testMatrixFail() {
+    try {
+      new SnExp(HilbertMatrix.of(3));
       fail();
     } catch (Exception exception) {
       // ---

@@ -23,4 +23,13 @@ public class DeadzoneTest extends TestCase {
       // ---
     }
   }
+
+  public void testNullFail() {
+    try {
+      Deadzone.of(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
