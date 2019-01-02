@@ -1,7 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.sophus.group.RnGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,12 +21,27 @@ public enum R2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public Tensor pointShape() {
+  public Tensor shape() {
     return CIRCLE;
   }
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     return xya.extract(0, 2);
+  }
+
+  @Override // from GeodesicDisplay
+  public Tensor matrixLift(Tensor p) {
+    return Se2Utils.toSE2Translation(p);
+  }
+
+  @Override // from GeodesicDisplay
+  public LieGroup lieGroup() {
+    return RnGroup.INSTANCE;
+  }
+
+  @Override
+  public String toString() {
+    return "R2";
   }
 }

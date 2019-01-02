@@ -16,12 +16,12 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.CurveRender;
 import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.LagrangeInterpolation;
-import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.symlink.SymGeodesic;
 import ch.ethz.idsc.sophus.symlink.SymLinkImage;
 import ch.ethz.idsc.sophus.symlink.SymScalar;
@@ -45,15 +45,13 @@ import ch.ethz.idsc.tensor.sca.N;
   private Scalar parameter = RationalScalar.HALF;
 
   LagrangeInterpolationDemo() {
-    timerFrame.jToolBar.add(jButton);
+    super(true, GeodesicDisplays.ALL);
     // ---
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
     // ---
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();
-    // ---
-    timerFrame.jToolBar.add(jToggleButton);
     // ---
     jToggleSymi.setSelected(true);
     timerFrame.jToolBar.add(jToggleSymi);
@@ -76,25 +74,23 @@ import ch.ethz.idsc.tensor.sca.N;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Tensor _control = controlSe2();
+    Tensor control = control();
     if (jToggleSymi.isSelected()) {
-      Tensor vector = Tensor.of(IntStream.range(0, _control.length()).mapToObj(SymScalar::leaf));
+      Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
       ScalarTensorFunction scalarTensorFunction = LagrangeInterpolation.of(SymGeodesic.INSTANCE, vector)::at;
-      Scalar scalar = N.DOUBLE.apply(parameter.multiply(RealScalar.of(_control.length() - 1)));
+      Scalar scalar = N.DOUBLE.apply(parameter.multiply(RealScalar.of(control.length() - 1)));
       SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(scalar);
       graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
     }
     // ---
     GraphicsUtil.setQualityHigh(graphics);
-    boolean isR2 = jToggleButton.isSelected();
     int levels = spinnerRefine.getValue();
     renderControlPoints(geometricLayer, graphics);
-    Tensor domain = Subdivide.of(0, controlR2().length() - 1, 1 << levels);
-    Tensor refined = isR2 //
-        ? domain.map(LagrangeInterpolation.of(RnGeodesic.INSTANCE, controlR2())::at)
-        : domain.map(LagrangeInterpolation.of(Se2CoveringGeodesic.INSTANCE, _control)::at);
+    Tensor domain = Subdivide.of(0, control.length() - 1, 1 << levels);
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    Tensor refined = domain.map(LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control())::at);
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
-    if (!isR2 && levels < 5)
+    if (levels < 5)
       for (Tensor point : refined) {
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
         Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);

@@ -21,8 +21,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
+import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicIIR2Filter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
@@ -41,7 +40,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-class GeodesicCausalFilterDemo extends ControlPointsDemo {
+class GeodesicCausalFilterDemo extends AbstractDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
   private static final Tensor CIRCLE = CirclePoints.of(20).multiply(RealScalar.of(0.01));
   // ---
@@ -65,12 +64,6 @@ class GeodesicCausalFilterDemo extends ControlPointsDemo {
           .map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
-    }
-    timerFrame.jToolBar.add(jButton);
-    {
-      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));

@@ -11,15 +11,13 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.CurveRender;
 import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BezierFunction;
-import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -28,21 +26,16 @@ import ch.ethz.idsc.tensor.sca.Clip;
 
 /** Bezier function */
 /* package */ class BezierFunctionDemo extends ControlPointsDemo {
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
-  // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleComb = new JToggleButton("comb");
 
   BezierFunctionDemo() {
-    timerFrame.jToolBar.add(jButton);
-    // ---
+    super(true, GeodesicDisplays.ALL);
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
     // ---
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();
-    // ---
-    timerFrame.jToolBar.add(jToggleButton);
     // ---
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
@@ -58,23 +51,16 @@ import ch.ethz.idsc.tensor.sca.Clip;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    boolean isR2 = jToggleButton.isSelected();
-    Tensor _control = controlSe2();
     int levels = spinnerRefine.getValue();
-    final Tensor refined;
     renderControlPoints(geometricLayer, graphics);
-    if (isR2) {
-      ScalarTensorFunction scalarTensorFunction = BezierFunction.of(RnGeodesic.INSTANCE, controlR2());
-      refined = Subdivide.of(Clip.unit(), 1 << levels).map(scalarTensorFunction);
-    } else { // SE2
-      ScalarTensorFunction scalarTensorFunction = BezierFunction.of(Se2CoveringGeodesic.INSTANCE, _control);
-      refined = Subdivide.of(Clip.unit(), 1 << levels).map(scalarTensorFunction);
-    }
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control());
+    Tensor refined = Subdivide.of(Clip.unit(), 1 << levels).map(scalarTensorFunction);
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
-    if (!isR2 && levels < 5)
+    if (levels < 5)
       for (Tensor point : refined) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+        Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
         geometricLayer.popMatrix();
         int rgb = 128 + 32;
         path2d.closePath();

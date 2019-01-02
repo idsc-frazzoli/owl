@@ -13,20 +13,18 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.sophus.filter.GeodesicMeanFilter;
-import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -36,7 +34,6 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /* package */ class MeanFilterDemo extends ControlPointsDemo {
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   // ---
@@ -47,7 +44,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
   MeanFilterDemo() {
-    timerFrame.jToolBar.add(jButton);
+    super(true, GeodesicDisplays.ALL);
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
@@ -69,8 +66,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
-    timerFrame.jToolBar.add(jToggleButton);
-    // ---
     spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
     spinnerRadius.setValue(9);
     spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
@@ -79,25 +74,16 @@ import ch.ethz.idsc.tensor.sca.Clip;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    final boolean isR2 = jToggleButton.isSelected();
-    Tensor _control = controlSe2();
+    Tensor control = control();
     int radius = spinnerRadius.getValue();
-    final Tensor refined;
-    final Tensor curve;
     renderControlPoints(geometricLayer, graphics);
-    if (isR2) {
-      Tensor rnctrl = controlR2();
-      TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(RnGeodesic.INSTANCE, radius);
-      refined = geodesicMeanFilter.apply(rnctrl);
-      curve = Nest.of(BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE)::string, refined, 7);
-    } else { // SE2
-      TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(Se2CoveringGeodesic.INSTANCE, radius);
-      refined = geodesicMeanFilter.apply(controlSe2());
-      curve = Nest.of(BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE)::string, refined, 7);
-    }
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    TensorUnaryOperator geodesicMeanFilter = GeodesicMeanFilter.of(geodesicDisplay.geodesicInterface(), radius);
+    Tensor refined = geodesicMeanFilter.apply(control);
+    Tensor curve = Nest.of(BSpline4CurveSubdivision.of(geodesicDisplay.geodesicInterface())::string, refined, 7);
     if (jToggleLine.isSelected()) {
       Tensor linear = Subdivide.of(Clip.unit(), 1 << 8) //
-          .map(BezierFunction.of(Se2CoveringGeodesic.INSTANCE, _control));
+          .map(BezierFunction.of(Se2CoveringGeodesic.INSTANCE, control));
       graphics.setColor(new Color(0, 255, 0, 128));
       Path2D path2d = geometricLayer.toPath2D(linear);
       graphics.draw(path2d);
@@ -115,8 +101,8 @@ import ch.ethz.idsc.tensor.sca.Clip;
       graphics.draw(path2d);
     }
     for (Tensor point : refined) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-      Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       geometricLayer.popMatrix();
       int rgb = 128 + 32;
       path2d.closePath();

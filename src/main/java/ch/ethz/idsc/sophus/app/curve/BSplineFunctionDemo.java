@@ -14,19 +14,15 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.CurveRender;
 import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.LieGroupBSplineInterpolation;
-import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.group.RnGroup;
-import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
-import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.symlink.SymLinkImage;
 import ch.ethz.idsc.sophus.symlink.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -38,7 +34,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
 /* package */ class BSplineFunctionDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -50,6 +45,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   BSplineFunctionDemo() {
+    super(false, GeodesicDisplays.ALL);
     {
       JButton jButton = new JButton("clear");
       jButton.addActionListener(actionEvent -> setControl(Tensors.of(Array.zeros(3), Tensors.vector(1, 0, 0))));
@@ -68,8 +64,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleItrp);
-    // ---
-    timerFrame.jToolBar.add(jToggleButton);
     // ---
     jToggleSymi.setSelected(true);
     timerFrame.jToolBar.add(jToggleSymi);
@@ -94,10 +88,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    final boolean isR2 = jToggleButton.isSelected();
-    final Tensor control = controlSe2();
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
+    Tensor control = control();
     int upper = control.length() - 1;
     final Tensor domain = Subdivide.of(0, upper, upper * (1 << (levels)));
     final Tensor refined;
@@ -109,39 +102,30 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     }
     renderControlPoints(geometricLayer, graphics);
     GeodesicBSplineFunction geodesicBSplineFunction;
-    if (isR2) {
-      Tensor rnctrl = controlR2();
-      Tensor effective = jToggleItrp.isSelected() //
-          ? new LieGroupBSplineInterpolation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, degree, rnctrl).apply()
-          : rnctrl;
-      geodesicBSplineFunction = //
-          GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
-      refined = domain.map(geodesicBSplineFunction);
-      {
-        graphics.setColor(new Color(0, 0, 255, 128));
-        graphics.draw(geometricLayer.toPath2D(refined));
-      }
-    } else { // SE2
-      Tensor effective = jToggleItrp.isSelected() //
-          ? new LieGroupBSplineInterpolation(Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, degree, control).apply()
-          : control;
-      geodesicBSplineFunction = //
-          GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, effective);
-      refined = domain.map(geodesicBSplineFunction);
-      {
-        Tensor selected = geodesicBSplineFunction.apply(parameter);
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(selected));
-        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
-        graphics.setColor(Color.DARK_GRAY);
-        graphics.fill(path2d);
-        geometricLayer.popMatrix();
-      }
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    Tensor effective = jToggleItrp.isSelected() //
+        ? new LieGroupBSplineInterpolation(geodesicDisplay.lieGroup(), geodesicDisplay.geodesicInterface(), degree, control).apply()
+        : control;
+    geodesicBSplineFunction = //
+        GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, effective);
+    refined = domain.map(geodesicBSplineFunction);
+    {
+      graphics.setColor(new Color(0, 0, 255, 128));
+      graphics.draw(geometricLayer.toPath2D(refined));
+    }
+    {
+      Tensor selected = geodesicBSplineFunction.apply(parameter);
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
+      graphics.setColor(Color.DARK_GRAY);
+      graphics.fill(path2d);
+      geometricLayer.popMatrix();
     }
     new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
-    if (!isR2 && levels < 5)
+    if (levels < 5)
       for (Tensor point : refined) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+        Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
         geometricLayer.popMatrix();
         int rgb = 128 + 32;
         path2d.closePath();

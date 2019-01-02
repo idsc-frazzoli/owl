@@ -8,8 +8,7 @@ import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.symlink.SymLink;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -20,19 +19,19 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 /** visualization of the geometric geodesic average */
 /* package */ class GeodesicAverageRender {
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.22);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
 
-  // ---
-  public static RenderInterface of(GeodesicInterface geodesicInterface, SymLink symLink) {
-    return new GeodesicAverageRender(geodesicInterface).new Link(symLink);
+  public static RenderInterface of(GeodesicDisplay geodesicDisplay, SymLink symLink) {
+    return new GeodesicAverageRender(geodesicDisplay).new Link(symLink);
   }
 
   // ---
+  private final GeodesicDisplay geodesicDisplay;
   private final GeodesicInterface geodesicInterface;
 
-  private GeodesicAverageRender(GeodesicInterface geodesicInterface) {
-    this.geodesicInterface = geodesicInterface;
+  private GeodesicAverageRender(GeodesicDisplay geodesicDisplay) {
+    this.geodesicDisplay = geodesicDisplay;
+    geodesicInterface = geodesicDisplay.geodesicInterface();
   }
 
   private class Link implements RenderInterface {
@@ -70,9 +69,8 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       }
       // ---
       Tensor xya = symLink.getPosition(geodesicInterface);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
-      // TODO not generic
-      Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(xya));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();
       graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.setStroke(new BasicStroke(1f));

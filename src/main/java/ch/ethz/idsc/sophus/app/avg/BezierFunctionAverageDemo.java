@@ -13,9 +13,10 @@ import javax.swing.JSlider;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.symlink.SymGeodesic;
@@ -34,8 +35,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private Scalar parameter = RationalScalar.HALF;
 
   BezierFunctionAverageDemo() {
-    timerFrame.jToolBar.add(jButton);
-    timerFrame.jToolBar.add(jToggleButton);
+    super(true, GeodesicDisplays.ALL);
     // ---
     JSlider jSlider = new JSlider(0, 1000, 500);
     jSlider.setPreferredSize(new Dimension(500, 28));
@@ -46,34 +46,21 @@ import ch.ethz.idsc.tensor.sca.N;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    final Tensor control = controlSe2();
-    final Tensor xya;
-    {
-      Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
-      ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
-      SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(N.DOUBLE.apply(parameter));
-      graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
-      SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
-      SymLink symLink = symLinkBuilder.build(symScalar);
-      GeodesicInterface geodesicInterface = geodesicInterface();
-      GeodesicAverageRender.of(geodesicInterface, symLink).render(geometricLayer, graphics);
-      xya = symLink.getPosition(geodesicInterface);
-    }
-    {
-      for (Tensor point : control) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-        Path2D path2d = geometricLayer.toPath2D(shape());
-        path2d.closePath();
-        graphics.setColor(new Color(255, 128, 128, 64));
-        graphics.fill(path2d);
-        graphics.setColor(new Color(255, 128, 128, 255));
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
-    }
+    Tensor control = control();
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
+    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
+    SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(N.DOUBLE.apply(parameter));
+    graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
+    SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
+    SymLink symLink = symLinkBuilder.build(symScalar);
+    GeodesicInterface geodesicInterface = geodesicInterface();
+    GeodesicAverageRender.of(geodesicDisplay, symLink).render(geometricLayer, graphics);
+    Tensor xya = symLink.getPosition(geodesicInterface);
+    renderControlPoints(geometricLayer, graphics);
     if (Objects.nonNull(xya)) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
-      Path2D path2d = geometricLayer.toPath2D(shape());
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(xya));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();
       int rgb = 128 + 32;
       final Color color = new Color(rgb, rgb, rgb, 255);

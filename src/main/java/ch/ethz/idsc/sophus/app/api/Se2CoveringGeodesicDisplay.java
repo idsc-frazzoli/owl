@@ -1,8 +1,11 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
+import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,12 +21,27 @@ public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public Tensor pointShape() {
+  public Tensor shape() {
     return ARROWHEAD;
   }
 
   @Override // from GeodesicDisplay
   public Tensor project(Tensor xya) {
     return xya;
+  }
+
+  @Override // from GeodesicDisplay
+  public Tensor matrixLift(Tensor p) {
+    return Se2Utils.toSE2Matrix(p);
+  }
+
+  @Override // from GeodesicDisplay
+  public LieGroup lieGroup() {
+    return Se2CoveringGroup.INSTANCE;
+  }
+
+  @Override
+  public String toString() {
+    return "SE2C";
   }
 }

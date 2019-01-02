@@ -2,44 +2,38 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
+import java.util.List;
 import java.util.Objects;
 
 import javax.swing.JButton;
-import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public abstract class ControlPointsDemo extends AbstractDemo {
-  protected static final Tensor ARROWHEAD_HI = Arrowhead.of(0.4);
-  protected static final Tensor CIRCLE_HI = CirclePoints.of(15).multiply(RealScalar.of(0.1));
   protected static final Color CP_FILL = new Color(255, 128, 128, 64);
   protected static final Color CP_EDGE = new Color(255, 128, 128, 255);
   // ---
-  protected final JButton jButton = new JButton("clear");
-  protected final SpinnerLabel<GeodesicDisplays> geodesicDisplaySpinner = new SpinnerLabel<>();
-  protected final JToggleButton jToggleButton = new JToggleButton("R2");
+  private final JButton jButton = new JButton("clear");
+  protected final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
   // ---
   private Tensor control = Tensors.of(Array.zeros(3));
   private Tensor mouse = Array.zeros(3);
@@ -54,16 +48,25 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       if (Objects.isNull(min_index)) {
         graphics.setColor(Color.GREEN);
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-        graphics.fill(geometricLayer.toPath2D(shape()));
+        graphics.fill(geometricLayer.toPath2D(geodesicDisplay().shape()));
         geometricLayer.popMatrix();
       }
     }
   };
 
-  public ControlPointsDemo() {
-    jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
-    geodesicDisplaySpinner.setArray(GeodesicDisplays.values());
-    geodesicDisplaySpinner.setValue(GeodesicDisplays.SE2C);
+  public ControlPointsDemo(boolean clearButton, List<GeodesicDisplay> list) {
+    if (clearButton) {
+      jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+      timerFrame.jToolBar.add(jButton);
+    }
+    if (!list.isEmpty()) {
+      geodesicDisplaySpinner.setList(list);
+      geodesicDisplaySpinner.setValue(list.get(0));
+      if (1 < list.size()) {
+        geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
+        timerFrame.jToolBar.addSeparator();
+      }
+    }
     // --
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
@@ -96,18 +99,19 @@ public abstract class ControlPointsDemo extends AbstractDemo {
   public void addButtonDubins() {
     JButton jButton = new JButton("dubins");
     jButton.setToolTipText("project control points to dubins path");
-    jButton.addActionListener(actionEvent -> setControl(DubinsGenerator.project(controlSe2())));
+    jButton.addActionListener(actionEvent -> setControl(DubinsGenerator.project(control)));
     timerFrame.jToolBar.add(jButton);
   }
 
-  public Tensor shape() {
-    return jToggleButton.isSelected() ? CIRCLE_HI : ARROWHEAD_HI;
+  public GeodesicDisplay geodesicDisplay() {
+    return geodesicDisplaySpinner.getValue();
   }
 
   protected void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Tensor shape = shape();
-    for (Tensor point : controlSe2()) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    Tensor shape = geodesicDisplay.shape();
+    for (Tensor point : control()) {
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
       Path2D path2d = geometricLayer.toPath2D(shape);
       path2d.closePath();
       graphics.setColor(CP_FILL);
@@ -119,20 +123,18 @@ public abstract class ControlPointsDemo extends AbstractDemo {
   }
 
   public void setControl(Tensor control) {
-    this.control = control;
+    this.control = MatrixQ.require(control);
+    List<Integer> list = Dimensions.of(control);
+    if (list.get(1) != 3)
+      System.err.println(list);
+    // throw new RuntimeException();
   }
 
-  public Tensor controlR2() {
-    return Tensor.of(control.stream().map(Extract2D::of));
-  }
-
-  public Tensor controlSe2() {
-    return control.copy();
+  public Tensor control() {
+    return Tensor.of(control.stream().map(geodesicDisplay()::project));
   }
 
   public GeodesicInterface geodesicInterface() {
-    return jToggleButton.isSelected() //
-        ? RnGeodesic.INSTANCE
-        : Se2CoveringGeodesic.INSTANCE;
+    return geodesicDisplay().geodesicInterface();
   }
 }
