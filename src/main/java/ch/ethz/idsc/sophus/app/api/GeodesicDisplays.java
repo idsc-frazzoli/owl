@@ -8,6 +8,7 @@ public enum GeodesicDisplays {
   ;
   public static final List<GeodesicDisplay> ALL = Arrays.asList( //
       Se2CoveringGeodesicDisplay.INSTANCE, //
+      Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE, //
       H2GeodesicDisplay.INSTANCE);
   // ---

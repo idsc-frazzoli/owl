@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 
+// TODO JPH ImageGradientCostFunction is not used
 class ImageGradientCostFunction implements CostFunction, Serializable {
   private final ImageGradientInterpolation imageGradientInterpolation;
 

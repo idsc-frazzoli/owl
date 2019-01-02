@@ -66,7 +66,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
     }
     // ---
     domainQueueMap.mapEntrySetStream() //
-        .parallel() // TODO check if all operations are thread safe!
+        .parallel() // TODO YN check if all operations are thread safe!
         .forEach(entry -> processCandidates(node, connectors, entry.getKey(), entry.getValue()));
   }
 

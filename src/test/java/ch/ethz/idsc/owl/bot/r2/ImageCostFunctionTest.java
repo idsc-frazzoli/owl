@@ -17,7 +17,6 @@ public class ImageCostFunctionTest extends TestCase {
     assertEquals(costFunction.flipYXTensorInterp.at(Tensors.vector(9, 9)), RealScalar.of(2));
     assertEquals(costFunction.flipYXTensorInterp.at(Tensors.vector(1, 9)), RealScalar.of(1));
     assertEquals(costFunction.flipYXTensorInterp.at(Tensors.vector(9, 1)), RealScalar.of(4));
-    // TODO evaluate cost
   }
 
   public void testSerializable() throws Exception {
