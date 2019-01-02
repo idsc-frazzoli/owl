@@ -16,6 +16,9 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
+import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -120,5 +123,11 @@ public abstract class ControlPointsDemo extends AbstractDemo {
 
   public Tensor controlSe2() {
     return control.copy();
+  }
+
+  public GeodesicInterface geodesicInterface() {
+    return jToggleButton.isSelected() //
+        ? RnGeodesic.INSTANCE
+        : Se2CoveringGeodesic.INSTANCE;
   }
 }

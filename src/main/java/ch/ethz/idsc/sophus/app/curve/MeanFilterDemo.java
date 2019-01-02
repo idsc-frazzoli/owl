@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Clip;
 
-/* package */ class GeodesicMeanFilterDemo extends ControlPointsDemo {
+/* package */ class MeanFilterDemo extends ControlPointsDemo {
   private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.18);
   private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
@@ -46,10 +46,10 @@ import ch.ethz.idsc.tensor.sca.Clip;
   private final JToggleButton jToggleComb = new JToggleButton("comb");
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
-  GeodesicMeanFilterDemo() {
+  MeanFilterDemo() {
     timerFrame.jToolBar.add(jButton);
     {
-      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+      Tensor blub = Tensors.fromString("{{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
@@ -128,7 +128,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new GeodesicMeanFilterDemo();
+    AbstractDemo abstractDemo = new MeanFilterDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

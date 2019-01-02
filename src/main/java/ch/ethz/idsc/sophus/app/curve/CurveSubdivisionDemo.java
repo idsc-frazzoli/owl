@@ -14,8 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -144,7 +142,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     spinnerRefine.setValue(6);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
-    spinnerMagicC.addSpinnerListener(value -> StaticHelper.MAGIC_C = value);
+    spinnerMagicC.addSpinnerListener(value -> CurveSubdivisionHelper.MAGIC_C = value);
     spinnerMagicC.setList( //
         Tensors.fromString("{1/100, 1/10, 1/8, 1/6, 1/4, 1/3, 1/2, 2/3, 9/10, 99/100}").stream() //
             .map(Scalar.class::cast) //
@@ -155,12 +153,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     {
       JSlider jSlider = new JSlider(1, 999, 500);
       jSlider.setPreferredSize(new Dimension(500, 28));
-      jSlider.addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent changeEvent) {
-          StaticHelper.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000);
-        }
-      });
+      jSlider.addChangeListener(changeEvent -> //
+      CurveSubdivisionHelper.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000));
       timerFrame.jToolBar.add(jSlider);
     }
   }

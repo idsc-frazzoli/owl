@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.avg;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.app.util.AbstractDemo;
 import ch.ethz.idsc.sophus.app.util.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.symlink.SymGeodesic;
 import ch.ethz.idsc.sophus.symlink.SymLink;
@@ -27,11 +27,12 @@ import ch.ethz.idsc.sophus.symlink.SymScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class GeodesicFilterSplitDemo extends ControlPointsDemo {
+/* package */ class MeanFilterAverageDemo extends ControlPointsDemo {
   private final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
 
-  GeodesicFilterSplitDemo() {
+  MeanFilterAverageDemo() {
     timerFrame.jToolBar.add(jButton);
+    timerFrame.jToolBar.add(jToggleButton);
     // ---
     {
       spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
@@ -56,13 +57,14 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       Tensor tensor = tensorUnaryOperator.apply(vector);
       SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
       SymLink symLink = symLinkBuilder.build((SymScalar) tensor);
-      new Se2SplitRender(symLink).render(geometricLayer, graphics);
-      xya = symLink.getPosition(Se2CoveringGeodesic.INSTANCE);
+      GeodesicInterface geodesicInterface = geodesicInterface();
+      GeodesicAverageRender.of(geodesicInterface, symLink).render(geometricLayer, graphics);
+      xya = symLink.getPosition(geodesicInterface);
     }
     {
       for (Tensor point : control) {
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
+        Path2D path2d = geometricLayer.toPath2D(shape());
         path2d.closePath();
         graphics.setColor(new Color(255, 128, 128, 64));
         graphics.fill(path2d);
@@ -73,7 +75,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     }
     if (Objects.nonNull(xya)) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
-      Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
+      Path2D path2d = geometricLayer.toPath2D(shape());
       path2d.closePath();
       int rgb = 128 + 32;
       final Color color = new Color(rgb, rgb, rgb, 255);
@@ -87,7 +89,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new GeodesicFilterSplitDemo();
+    AbstractDemo abstractDemo = new MeanFilterAverageDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }
