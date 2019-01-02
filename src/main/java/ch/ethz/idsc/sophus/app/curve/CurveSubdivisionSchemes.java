@@ -19,13 +19,16 @@ import ch.ethz.idsc.sophus.curve.HormannSabinCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.SixPointCurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 
-public enum CurveSubdivisionSchemes {
+/* package */ enum CurveSubdivisionSchemes {
   BSPLINE1(BSpline1CurveSubdivision::new, 1), //
   BSPLINE2(BSpline2CurveSubdivision::new, 2), //
-  BSPLINE3(BSpline3CurveSubdivision::new, 3), //
-  BSPLINE4(BSpline4CurveSubdivision::of, 4), //
+  BSPLINE3(BSpline3CurveSubdivision::new, 3),
+  /** Dyn/Sharon 2014 that uses 2 binary averages */
+  BSPLINE4(BSpline4CurveSubdivision::of, 4),
+  /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */
   BSPLINE4S2(BSpline4CurveSubdivision::split2, 4), //
-  BSPLINE4S3(StaticHelper::split3, 4), //
+  /** Hakenberg 2018 that uses 3 binary averages */
+  BSPLINE4S3(CurveSubdivisionHelper::split3, 4), //
   BSPLINE5(BSpline5CurveSubdivision::new, 5), //
   BSPLINE6(BSpline6CurveSubdivision::of, 6), //
   DOBSEB(i -> DodgsonSabinCurveSubdivision.INSTANCE), //

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.util;
+package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;

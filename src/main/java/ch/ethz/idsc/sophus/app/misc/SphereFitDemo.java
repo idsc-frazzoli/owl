@@ -12,8 +12,10 @@ import javax.swing.JTextField;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.sophus.app.util.AbstractDemo;
-import ch.ethz.idsc.sophus.app.util.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.DubinsGenerator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -30,8 +32,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   private static final Tensor CIRCLE = CirclePoints.of(10).multiply(RealScalar.of(3));
 
   SphereFitDemo() {
-    timerFrame.jToolBar.add(jButton);
-    jToggleButton.setSelected(true);
+    super(true, GeodesicDisplays.R2_ONLY);
     // ---
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));
@@ -45,7 +46,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    Tensor rnctrl = controlR2();
+    Tensor rnctrl = control();
     Optional<Tensor> sphereFit = SphereFit.of(rnctrl);
     if (sphereFit.isPresent()) {
       Tensor center = sphereFit.get().get(0);
@@ -85,9 +86,10 @@ import ch.ethz.idsc.tensor.red.Norm;
         }
     }
     {
+      GeodesicDisplay geodesicDisplay = geodesicDisplay();
       Tensor weiszfeld = SpatialMedian.with(1e-4).uniform(rnctrl).get();
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(weiszfeld.copy().append(RealScalar.ZERO)));
-      Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();
       graphics.setColor(new Color(128, 128, 255, 64));
       graphics.fill(path2d);

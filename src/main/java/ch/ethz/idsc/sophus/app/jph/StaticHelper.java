@@ -1,26 +1,15 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.File;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
-import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.CurveSubdivision;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Put;
 
 enum StaticHelper {
   ;
-  static Scalar MAGIC_C = RationalScalar.of(1, 6);
-
-  static CurveSubdivision split3(GeodesicInterface geodesicInterface) {
-    return BSpline4CurveSubdivision.split3(geodesicInterface, MAGIC_C);
-  }
-
   static void ephemeralDubins(String title, Tensor init, Tensor move) {
     File dir = UserHome.file("Projects/ephemeral/src/main/resources/geometry/dubins/" + title);
     dir.mkdir();

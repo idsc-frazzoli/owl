@@ -13,8 +13,9 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.sophus.app.util.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.CurveRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
@@ -40,8 +41,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
   private final JToggleButton jToggleComb = new JToggleButton("comb");
 
   BSplineBasisDemo() {
-    timerFrame.jToolBar.add(jButton);
-    jToggleButton.setSelected(true);
+    super(true, GeodesicDisplays.R2_ONLY);
     // ---
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
@@ -64,7 +64,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
     GraphicsUtil.setQualityHigh(graphics);
     int degree = spinnerDegree.getValue();
     int levels = spinnerRefine.getValue();
-    Tensor control = controlR2();
+    Tensor control = control();
     {
       graphics.setStroke(new BasicStroke(1.25f));
       Tensor matrix = geometricLayer.getMatrix();
@@ -94,6 +94,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
     }
     // ---
     final Tensor refined;
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
       Tensor rnctrl = jToggleItrp.isSelected() //
           ? BSplineInterpolation.solve(degree, control)
@@ -104,8 +105,8 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
     }
     graphics.setColor(new Color(255, 128, 128, 255));
     for (Tensor point : control) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
-      Path2D path2d = geometricLayer.toPath2D(CIRCLE_HI);
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();
       graphics.setColor(new Color(255, 128, 128, 64));
       graphics.fill(path2d);
