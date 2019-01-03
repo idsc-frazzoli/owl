@@ -37,6 +37,8 @@ import ch.ethz.idsc.tensor.sca.N;
     jSlider.setPreferredSize(new Dimension(500, 28));
     jSlider.addChangeListener(changeEvent -> parameter = RationalScalar.of(jSlider.getValue(), 1000));
     timerFrame.jToolBar.add(jSlider);
+    // ---
+    setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
   }
 
   @Override

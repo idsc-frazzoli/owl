@@ -25,6 +25,7 @@ import ch.ethz.idsc.sophus.symlink.SymLinkBuilder;
 import ch.ethz.idsc.sophus.symlink.SymLinkImages;
 import ch.ethz.idsc.sophus.symlink.SymScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class MeanFilterAverageDemo extends ControlPointsDemo {
@@ -36,6 +37,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
     spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
     spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
+    // ---
+    setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
   }
 
   @Override

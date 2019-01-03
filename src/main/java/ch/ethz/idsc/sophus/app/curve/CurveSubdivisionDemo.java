@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -27,9 +26,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
-import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -49,7 +46,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
-  private static final boolean BSPLINE4 = false;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = //
       ColorDataLists._097.cyclic().deriveWithAlpha(128 + 64);
   // private static final Tensor DUBILAB = //
@@ -63,8 +59,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
-  // ---
-  private boolean printref = false;
 
   CurveSubdivisionDemo() {
     super(true, GeodesicDisplays.ALL);
@@ -97,11 +91,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     // });
     // timerFrame.jToolBar.add(jButton);
     // }
-    {
-      JButton jButton = new JButton("p-ref");
-      jButton.addActionListener(actionEvent -> printref = true);
-      timerFrame.jToolBar.add(jButton);
-    }
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
@@ -177,8 +166,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           : curveSubdivision::string;
       // ---
       refined = Nest.of(tuo, control, levels);
-      graphics.setColor(new Color(0, 0, 255, 128));
-      graphics.draw(geometricLayer.toPath2D(refined));
     }
     if (jToggleLine.isSelected()) {
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface());
@@ -191,21 +178,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
         path2d.closePath();
       graphics.draw(path2d);
     }
-    {
-      if (BSPLINE4) {
-        CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE);
-        // curveSubdivision.string(_control);
-        Tensor refined2 = Nest.of(curveSubdivision::string, control, levels);
-        graphics.setColor(Color.GREEN);
-        Path2D path2d = geometricLayer.toPath2D(refined2);
-        if (isCyclic)
-          path2d.closePath();
-        graphics.setStroke(new BasicStroke(1.25f));
-        graphics.draw(path2d);
-        graphics.setStroke(new BasicStroke(1f));
-      }
-    }
-    new CurveRender(refined, isCyclic, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+    new CurveRender(render, isCyclic, curvatureButton().isSelected()).render(geometricLayer, graphics);
     if (jToggleCrvt.isSelected()) {
       graphics.setStroke(new BasicStroke(1.25f));
       Tensor matrix = geometricLayer.getMatrix();
@@ -242,10 +216,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     }
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
-    if (printref) {
-      printref = false;
-      System.out.println(refined);
-    }
   }
 
   public static void main(String[] args) {

@@ -109,7 +109,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics); // limit curve
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, render);
+      renderPoints(geometricLayer, graphics, refined);
   }
 
   public static void main(String[] args) {
