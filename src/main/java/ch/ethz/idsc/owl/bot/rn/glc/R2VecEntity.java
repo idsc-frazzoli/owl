@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.rn.RnMinTimeGoalManager;
@@ -17,7 +16,6 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.DiscretizedLexicographic;
@@ -28,7 +26,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 
-/* package */ class R2VecEntity extends R2Entity implements GlcPlannerCallback {
+/* package */ class R2VecEntity extends R2Entity {
   public R2VecEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
   }
@@ -58,17 +56,16 @@ import ch.ethz.idsc.tensor.alg.Array;
     return Optional.empty();
   }
 
-  private EdgeRender edgeRender;
+  private final EdgeRender edgeRender = new EdgeRender();
 
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    edgeRender = new EdgeRender(trajectoryPlanner.getDomainMap().values());
+    edgeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (Objects.nonNull(edgeRender))
-      edgeRender.render(geometricLayer, graphics);
+    edgeRender.getRender().render(geometricLayer, graphics);
     // ---
     super.render(geometricLayer, graphics);
   }

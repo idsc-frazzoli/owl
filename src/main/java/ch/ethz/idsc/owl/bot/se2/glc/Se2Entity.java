@@ -12,7 +12,6 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -41,8 +40,8 @@ public abstract class Se2Entity extends TrajectoryEntity implements GlcPlannerCa
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = // node interval == 2/5
       FixedStateIntegrator.create(Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
   // ---
+  private final TreeRender treeRender = new TreeRender();
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
-  private Collection<? extends StateCostNode> collection;
 
   protected Se2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
     super( //
@@ -80,11 +79,11 @@ public abstract class Se2Entity extends TrajectoryEntity implements GlcPlannerCa
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
     }
     // ---
-    new TreeRender(collection).render(geometricLayer, graphics);
+    treeRender.getRender().render(geometricLayer, graphics);
   }
 
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    collection = trajectoryPlanner.getDomainMap().values();
+    treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

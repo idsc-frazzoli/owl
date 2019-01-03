@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.util.Collection;
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -38,8 +37,8 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   private static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = //
       FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
   // ---
+  private final TreeRender treeRender = new TreeRender();
   private final Collection<Flow> controls;
-  private Collection<? extends StateCostNode> collection;
 
   /** @param state initial position of entity */
   public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
@@ -70,11 +69,11 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
     // ---
-    new TreeRender(collection).render(geometricLayer, graphics);
+    treeRender.getRender().render(geometricLayer, graphics);
   }
 
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    collection = trajectoryPlanner.getDomainMap().values();
+    treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

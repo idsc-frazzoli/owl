@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.util.Collection;
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -44,9 +43,10 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
       new double[][] { { .3, 0, 1 }, { -.1, -.1, 1 }, { -.1, +.1, 1 } }).unmodifiable();
   private static final Integrator INTEGRATOR = MidpointIntegrator.INSTANCE;
   // ---
+  private final TreeRender treeRender = new TreeRender();
   private final Collection<Flow> controls;
+  // ---
   public Scalar delayHint = RealScalar.ONE;
-  private Collection<? extends StateCostNode> collection;
 
   /** @param state initial position of entity */
   public Rice2dEntity(Scalar mu, Tensor state, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
     // ---
-    new TreeRender(collection).render(geometricLayer, graphics);
+    treeRender.getRender().render(geometricLayer, graphics);
     {
       Tensor xya = geometricLayer.getMouseSe2State();
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
@@ -95,6 +95,6 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    collection = trajectoryPlanner.getDomainMap().values();
+    treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

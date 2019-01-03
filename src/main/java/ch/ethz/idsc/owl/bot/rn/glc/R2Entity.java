@@ -9,7 +9,6 @@ import java.util.List;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
@@ -47,11 +46,11 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
   // ---
+  private final TreeRender treeRender = new TreeRender();
   /** extra cost functions, for instance to prevent cutting corners */
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
   protected final R2Flows r2Flows = new R2Flows(RealScalar.ONE);
   protected RegionWithDistance<Tensor> goalRegion = null;
-  private Collection<? extends StateCostNode> collection;
 
   /** @param state initial position of entity */
   public R2Entity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
@@ -107,11 +106,11 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     // ---
     super.render(geometricLayer, graphics);
     // ---
-    new TreeRender(collection).render(geometricLayer, graphics);
+    treeRender.getRender().render(geometricLayer, graphics);
   }
 
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    collection = trajectoryPlanner.getDomainMap().values();
+    treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }
