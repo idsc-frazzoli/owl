@@ -16,8 +16,8 @@ public class PsuAnimationTest extends TestCase {
   public void testVectorField() {
     Tensor range = Tensors.vector(Math.PI, 3);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
-    RandomSampleInterface sampler = new BoxRandomSample(range.negate(), range);
-    Tensor points = RandomSample.of(sampler, 1000);
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(range.negate(), range);
+    Tensor points = RandomSample.of(randomSampleInterface, 1000);
     vectorFieldRender.uv_pairs = //
         VectorFields.of(PsuStateSpaceModel.INSTANCE, points, Array.zeros(1), RealScalar.of(0.1));
   }

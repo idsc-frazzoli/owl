@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
@@ -18,13 +19,13 @@ public enum MouseGoal {
   ;
   public static void simple( //
       OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint) {
-    List<GlcPlannerCallback> list = new ArrayList<>();
-    simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint, list);
+    simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint, Collections.emptyList());
   }
 
   public static void simple( //
       OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, //
-      List<GlcPlannerCallback> callbacks) {
+      List<GlcPlannerCallback> _callbacks) {
+    List<GlcPlannerCallback> callbacks = new ArrayList<>(_callbacks);
     if (trajectoryEntity instanceof GlcPlannerCallback)
       callbacks.add((GlcPlannerCallback) trajectoryEntity);
     callbacks.add(new SimpleGlcPlannerCallback(trajectoryEntity));
@@ -32,7 +33,7 @@ public enum MouseGoal {
         new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, callbacks));
   }
 
-  private static void supply(GeometricComponent geometricComponent, GoalConsumer goalConsumer) {
+  public static void supply(GeometricComponent geometricComponent, GoalConsumer goalConsumer) {
     MouseAdapter mouseAdapter = new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent mouseEvent) {

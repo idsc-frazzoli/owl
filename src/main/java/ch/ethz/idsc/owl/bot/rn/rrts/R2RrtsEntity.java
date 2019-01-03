@@ -8,6 +8,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
+import ch.ethz.idsc.owl.bot.rn.glc.R2TrajectoryControl;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -16,21 +17,21 @@ import ch.ethz.idsc.owl.gui.ani.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
+import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 // LONGTERM the redundancy in R2****Entity shows that re-factoring is needed!
 /* package */ class R2RrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(0.5);
-  // ---
-  TransitionRegionQuery obstacleQuery; // TODO design not final
 
   // ---
   /** @param state initial position of entity */
@@ -38,7 +39,9 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     super(new SimpleEpisodeIntegrator( //
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
-        new StateTime(state, RealScalar.ZERO)));
+        new StateTime(state, RealScalar.ZERO)), //
+        new R2TrajectoryControl());
+    add(new FallbackControl(Array.zeros(2)));
   }
 
   @Override
@@ -76,7 +79,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public void startPlanner( //
       RrtsPlannerCallback rrtsPlannerCallback, List<TrajectorySample> head, Tensor goal) {
     StateTime tail = Lists.getLast(head).stateTime();
-    NoiseCircleHelper nch = new NoiseCircleHelper(obstacleQuery, tail, goal.extract(0, 2));
+    NoiseCircleHelper nch = new NoiseCircleHelper(EmptyTransitionRegionQuery.INSTANCE, tail, goal.extract(0, 2));
     nch.plan(350);
     if (nch.trajectory != null) {
       System.out.println("found!");

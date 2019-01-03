@@ -2,6 +2,8 @@
 // formula adapted from users "sigfpe" and "finnw" on stack-overflow
 package ch.ethz.idsc.owl.math.sample;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
@@ -16,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * given center and radius
  * 
  * implementation supports the use of Quantity */
-/* package */ class CircleRandomSample implements RandomSampleInterface {
+/* package */ class CircleRandomSample implements RandomSampleInterface, Serializable {
   private static final Distribution THETA = UniformDistribution.of(-Math.PI, Math.PI);
   // ---
   private final Tensor center;

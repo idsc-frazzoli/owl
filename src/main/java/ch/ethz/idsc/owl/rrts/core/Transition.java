@@ -24,6 +24,7 @@ public interface Transition {
    * @param ofs is non-negative and strictly less than dt
    * @param dt
    * @return */
+  // TODO API not finalize: is List<Tensor> sufficient?
   List<StateTime> sampled(Scalar t0, Scalar ofs, Scalar dt);
 
   StateTime splitAt(Scalar t1);
