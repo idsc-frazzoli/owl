@@ -14,12 +14,15 @@ import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.RenderElements;
+import ch.ethz.idsc.owl.gui.ren.TransitionRender;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.io.Serialization;
 
 public class OwlyFrame extends BaseFrame {
@@ -112,12 +115,14 @@ public class OwlyFrame extends BaseFrame {
       }
   }
 
-  public void setRrts(RrtsNode root, TransitionRegionQuery transitionRegionQuery) {
+  public void setRrts(TransitionSpace transitionSpace, RrtsNode root, TransitionRegionQuery transitionRegionQuery) {
     try {
       Collection<RrtsNode> nodes = Nodes.ofSubtree(root);
       Collection<RrtsNode> collection = Serialization.copy(nodes);
       geometricComponent.setRenderInterfaces( //
           RenderElements.create(collection, Serialization.copy(transitionRegionQuery)));
+      if (!transitionSpace.equals(RnTransitionSpace.INSTANCE))
+        geometricComponent.addRenderInterface(new TransitionRender(transitionSpace).setCollection(collection));
       geometricComponent.jComponent.repaint();
     } catch (Exception exception) {
       exception.printStackTrace();

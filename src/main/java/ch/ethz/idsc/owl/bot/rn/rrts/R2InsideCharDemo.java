@@ -26,14 +26,13 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ enum R2InsideCharDemo {
   ;
-  private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
-
   private static void explore(ImageRegion imageRegion, Tensor start) throws Exception {
     RrtsNodeCollection nc = new RnRrtsNodeCollection(imageRegion.origin(), imageRegion.range());
     TransitionRegionQuery trq = new SampledTransitionRegionQuery( //
         CatchyTrajectoryRegionQuery.timeInvariant(imageRegion), RealScalar.of(0.1));
     // ---
-    Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.IDENTITY);
+    TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
+    Rrts rrts = new DefaultRrts(transitionSpace, nc, trq, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(start, 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(60, 477);
@@ -44,11 +43,11 @@ import ch.ethz.idsc.tensor.Tensors;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int count = 0; count < 50; ++count)
         rrts.insertAsNode(randomSampleInterface.randomSample(), 15);
-      owlyFrame.setRrts(root, trq);
+      owlyFrame.setRrts(transitionSpace, root, trq);
       Thread.sleep(10);
     }
     System.out.println(rrts.rewireCount());
-    RrtsNodes.costConsistency(root, TRANSITION_SPACE, LengthCostFunction.IDENTITY);
+    RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.IDENTITY);
   }
 
   public static void _0b36() throws Exception {

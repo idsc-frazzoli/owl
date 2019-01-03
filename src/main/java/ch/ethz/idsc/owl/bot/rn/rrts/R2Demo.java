@@ -20,25 +20,25 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ enum R2Demo {
   ;
-  private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
-
+  // private static final
   public static void main(String[] args) {
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
     Tensor max = Tensors.vector(wid, wid);
-    RrtsNodeCollection nc = new RnRrtsNodeCollection(min, max);
-    TransitionRegionQuery trq = StaticHelper.polygon1();
+    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(min, max);
+    TransitionRegionQuery transitionRegionQuery = StaticHelper.polygon1();
     // ---
-    Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.IDENTITY);
+    TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
     for (int count = 0; count < 1000; ++count)
       rrts.insertAsNode(randomSampleInterface.randomSample(), 15);
     System.out.println("rewireCount=" + rrts.rewireCount());
-    RrtsNodes.costConsistency(root, TRANSITION_SPACE, LengthCostFunction.IDENTITY);
+    RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.IDENTITY);
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(42, 456);
     owlyFrame.jFrame.setBounds(100, 100, 500, 500);
-    owlyFrame.setRrts(root, trq);
+    owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
   }
 }

@@ -7,6 +7,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.adapter.ExhaustiveNodeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -26,10 +27,10 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
     int wid = 7;
     Tensor min = Tensors.vector(0, 0, 0);
     Tensor max = Tensors.vector(wid, wid, 2 * Math.PI);
-    RrtsNodeCollection rrtsNodeCollection = new Se2NodeCollection(min, max);
+    TransitionSpace transitionSpace = new Se2TransitionSpace(RealScalar.ONE);
+    RrtsNodeCollection rrtsNodeCollection = new ExhaustiveNodeCollection(transitionSpace);
     TransitionRegionQuery transitionRegionQuery = EmptyTransitionRegionQuery.INSTANCE;
     // ---
-    TransitionSpace transitionSpace = new Se2TransitionSpace(RealScalar.ONE);
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
@@ -37,13 +38,13 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.configCoordinateOffset(42, 456);
       owlyFrame.jFrame.setBounds(100, 100, 500, 500);
+      // owlyFrame.geometricComponent.addRenderInterface(renderInterface);
       int frame = 0;
       while (frame++ < 40 && owlyFrame.jFrame.isVisible()) {
-        for (int count = 0; count < 10; ++count)
+        for (int count = 0; count < 5; ++count)
           rrts.insertAsNode(randomSampleInterface.randomSample(), 20);
-        owlyFrame.setRrts(root, transitionRegionQuery);
+        owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
         animationWriter.append(owlyFrame.offscreen());
-        Thread.sleep(100);
       }
       int repeatLast = 3;
       while (0 < repeatLast--)
