@@ -106,9 +106,10 @@ import ch.ethz.idsc.tensor.sca.Chop;
       graphics.fill(path2d);
       geometricLayer.popMatrix();
     }
-    new CurveRender(refined, false, curvatureButton().isSelected()).render(geometricLayer, graphics); // limit curve
+    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+    new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics); // limit curve
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geometricLayer, graphics, render);
   }
 
   public static void main(String[] args) {

@@ -34,6 +34,11 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
     return point;
   }
 
+  @Override
+  public Tensor toPoint(Tensor p) {
+    return p;
+  }
+
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
     return Se2Utils.toSE2Translation(p);

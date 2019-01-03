@@ -50,9 +50,10 @@ import ch.ethz.idsc.tensor.sca.Clip;
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control());
     int levels = spinnerRefine.getValue();
     Tensor refined = Subdivide.of(Clip.unit(), 1 << levels).map(scalarTensorFunction);
-    new CurveRender(refined, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+    new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geometricLayer, graphics, render);
   }
 
   public static void main(String[] args) {
