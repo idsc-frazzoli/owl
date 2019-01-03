@@ -1,3 +1,4 @@
+// code by astoll
 package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;

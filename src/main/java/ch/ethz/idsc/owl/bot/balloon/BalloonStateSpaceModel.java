@@ -48,9 +48,9 @@ import ch.ethz.idsc.tensor.sca.Clip;
     Scalar vel = x.Get(2);
     // System.out.println("vel = " + vel);
     Scalar theta = x.Get(3);
-    System.out.println("theta = " + theta);
+    // System.out.println("theta = " + theta);
     // <<<<<<< HEAD
-    System.out.println(u.Get(0));
+    // System.out.println(u.Get(0));
     /* TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     // =======
     /* TODO ANDRE change to something similar as in the DeltaDemo (imageGradientInterpolation) */
