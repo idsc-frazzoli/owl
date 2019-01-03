@@ -29,7 +29,7 @@ public class Rice2dImageDemo implements DemoInterface {
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
-    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
     TrajectoryEntity trajectoryEntity = new Rice2dEntity(mu, Tensors.vector(7, 6, 0, 0), trajectoryControl, controls);
     owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);

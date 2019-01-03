@@ -25,7 +25,7 @@ public class BalloonAnimationDemo implements DemoInterface {
     StateTime stateTime = new StateTime(Tensors.vector(0, 30, 0, 0), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         balloonStateSpaceModel, EulerIntegrator.INSTANCE, stateTime);
-    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
     BalloonEntity balloonEntity = new BalloonEntity(episodeIntegrator, trajectoryControl, balloonStateSpaceModel);
     MouseGoal.simple(owlyAnimationFrame, balloonEntity, plannerConstraint);
     owlyAnimationFrame.add(balloonEntity);

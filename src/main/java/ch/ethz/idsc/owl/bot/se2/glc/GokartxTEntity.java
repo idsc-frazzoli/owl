@@ -11,7 +11,6 @@ import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeCoordinateWrap;
@@ -24,8 +23,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
-class GokartxTEntity extends CarEntity implements GlcPlannerCallback {
-  private EdgeRender edgeRender;
+class GokartxTEntity extends CarEntity {
+  private final EdgeRender edgeRender = new EdgeRender();
 
   GokartxTEntity(StateTime stateTime) {
     super(stateTime, TemporalTrajectoryControl.createInstance(), GokartEntity.PARTITIONSCALE, GokartEntity.CARFLOWS, GokartEntity.SHAPE);
@@ -45,8 +44,7 @@ class GokartxTEntity extends CarEntity implements GlcPlannerCallback {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (Objects.nonNull(edgeRender))
-      edgeRender.render(geometricLayer, graphics);
+    edgeRender.getRender().render(geometricLayer, graphics);
     // ---
     super.render(geometricLayer, graphics);
     // ---
@@ -64,6 +62,6 @@ class GokartxTEntity extends CarEntity implements GlcPlannerCallback {
 
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    edgeRender = new EdgeRender(trajectoryPlanner.getDomainMap().values());
+    edgeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

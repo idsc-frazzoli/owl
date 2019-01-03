@@ -21,7 +21,7 @@ public class Rice2dEmptyDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     Scalar mu = RealScalar.ZERO;
     Collection<Flow> controls = Rice2Controls.create2d(mu, 1).getFlows(15);
-    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
     TrajectoryEntity trajectoryEntity = new Rice2dEntity(mu, Tensors.vector(0, 0, 0, 0), trajectoryControl, controls);
     owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyObstacleConstraint.INSTANCE);

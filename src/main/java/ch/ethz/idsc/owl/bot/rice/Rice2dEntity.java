@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.rice;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Collection;
+import java.util.List;
 
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -12,6 +13,8 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
+import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
@@ -24,6 +27,7 @@ import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -34,12 +38,14 @@ import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-/* package */ class Rice2dEntity extends AbstractCircularEntity {
+/* package */ class Rice2dEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   private static final Tensor SHAPE = Tensors.matrixDouble( //
       new double[][] { { .3, 0, 1 }, { -.1, -.1, 1 }, { -.1, +.1, 1 } }).unmodifiable();
   private static final Integrator INTEGRATOR = MidpointIntegrator.INSTANCE;
   // ---
+  private final TreeRender treeRender = new TreeRender();
   private final Collection<Flow> controls;
+  // ---
   public Scalar delayHint = RealScalar.ONE;
 
   /** @param state initial position of entity */
@@ -76,6 +82,8 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
+    // ---
+    treeRender.getRender().render(geometricLayer, graphics);
     {
       Tensor xya = geometricLayer.getMouseSe2State();
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
@@ -83,5 +91,10 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
       graphics.fill(geometricLayer.toPath2D(SHAPE));
       geometricLayer.popMatrix();
     }
+  }
+
+  @Override
+  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

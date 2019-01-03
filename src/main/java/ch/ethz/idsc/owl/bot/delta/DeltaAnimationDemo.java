@@ -37,7 +37,7 @@ public class DeltaAnimationDemo implements DemoInterface {
     StateTime stateTime = new StateTime(Tensors.vector(10, 3.5), RealScalar.ZERO);
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
         new DeltaStateSpaceModel(imageGradientInterpolation), EulerIntegrator.INSTANCE, stateTime);
-    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
     DeltaEntity deltaEntity = new DeltaEntity(episodeIntegrator, trajectoryControl, imageGradientInterpolation);
     MouseGoal.simple(owlyAnimationFrame, deltaEntity, plannerConstraint);
     owlyAnimationFrame.add(deltaEntity);

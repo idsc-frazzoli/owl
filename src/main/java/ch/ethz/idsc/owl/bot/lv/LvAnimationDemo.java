@@ -36,7 +36,7 @@ public class LvAnimationDemo implements DemoInterface {
     Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, INTEGRATOR, //
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
     TrajectoryEntity trajectoryEntity = new LvEntity(episodeIntegrator, trajectoryControl, controls);
     owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, EmptyObstacleConstraint.INSTANCE);

@@ -202,7 +202,7 @@ public class PlanningEvaluation0 extends Se2Demo {
           System.out.println("Cost to Goal: " + optional.get().costFromRoot());
           List<TrajectorySample> traj = //
               GlcTrajectories.detailedTrajectoryTo(tp.getStateIntegrator(), optional.get());
-          owlyAnimationFrame.addBackground(new TreeRender(tp.getDomainMap().values()));
+          owlyAnimationFrame.addBackground(new TreeRender().setCollection(tp.getDomainMap().values()));
           TrajectoryRender trajectoryRender = new TrajectoryRender();
           trajectoryRender.trajectory(traj);
           trajectoryRender.setColor(Color.GREEN);

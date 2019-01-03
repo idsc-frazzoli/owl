@@ -25,7 +25,7 @@ public enum RenderElements {
     // list.add(new EtaRender(trajectoryPlanner.getEta()));
     // list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
-    list.add(new TreeRender(trajectoryPlanner.getDomainMap().values()));
+    list.add(new TreeRender().setCollection(trajectoryPlanner.getDomainMap().values()));
     // {
     // TrajectoryRegionQuery trq = trajectoryPlanner.getHeuristicFunction();
     // if (trq instanceof StateTimeCollector)
@@ -71,7 +71,7 @@ public enum RenderElements {
     list.add(GridRender.INSTANCE);
     if (transitionRegionQuery instanceof StateTimeCollector)
       list.add(new ObstacleRender(((StateTimeCollector) transitionRegionQuery).getMembers()));
-    list.add(new TreeRender(collection));
+    list.add(new TreeRender().setCollection(collection));
     return list;
   }
 }
