@@ -42,7 +42,6 @@ import ch.ethz.idsc.tensor.sca.N;
   LagrangeInterpolationDemo() {
     super(true, GeodesicDisplays.ALL);
     // ---
-    timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
     jToggleSymi.setSelected(true);
@@ -81,7 +80,8 @@ import ch.ethz.idsc.tensor.sca.N;
     int levels = spinnerRefine.getValue();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
     Tensor refined = Subdivide.of(0, control.length() - 1, 1 << levels).map(interpolation::at);
-    new CurveRender(refined, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+    new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
     {
       Tensor selected = interpolation.at(parameter.multiply(RealScalar.of(control.length() - 1)));
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));

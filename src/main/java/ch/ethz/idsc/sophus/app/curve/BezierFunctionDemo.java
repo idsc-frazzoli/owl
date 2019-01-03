@@ -27,7 +27,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
   BezierFunctionDemo() {
     super(true, GeodesicDisplays.ALL);
     // ---
-    timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
@@ -53,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, render);
+      renderPoints(geometricLayer, graphics, refined);
   }
 
   public static void main(String[] args) {

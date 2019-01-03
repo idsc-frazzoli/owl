@@ -39,7 +39,7 @@ public abstract class ControlPointsDemo extends AbstractDemo {
   // ---
   private final JButton jButton = new JButton("clear");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
-  protected final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
+  /* package */ final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
   // ---
   private Tensor control = Tensors.of(Array.zeros(3));
   private Tensor mouse = Array.zeros(3);
@@ -141,7 +141,7 @@ public abstract class ControlPointsDemo extends AbstractDemo {
     POINTS_RENDER_0.new Show(geodesicDisplay(), control()).render(geometricLayer, graphics);
   }
 
-  protected final void renderPoints(GeometricLayer geometricLayer, Graphics2D graphics, Tensor refined) {
-    POINTS_RENDER_1.new Show(geodesicDisplay(), refined).render(geometricLayer, graphics);
+  protected final void renderPoints(GeometricLayer geometricLayer, Graphics2D graphics, Tensor points) {
+    POINTS_RENDER_1.new Show(geodesicDisplay(), points).render(geometricLayer, graphics);
   }
 }
