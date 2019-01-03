@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.state;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.ArgMin;
 
 /** trajectory control for a time-invariant state-space */
-public abstract class StateTrajectoryControl implements TrajectoryControl {
+public abstract class StateTrajectoryControl implements TrajectoryControl, Serializable {
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
 

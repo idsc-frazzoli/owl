@@ -32,7 +32,7 @@ public class BalloonEntityTest extends TestCase {
       BALLOON_STATE_SPACE_MODEL, EulerIntegrator.INSTANCE, START);
 
   static BalloonEntity createEntity() {
-    return new BalloonEntity(EPISODE_INTEGRATOR, EuclideanTrajectoryControl.INSTANCE, BALLOON_STATE_SPACE_MODEL);
+    return new BalloonEntity(EPISODE_INTEGRATOR, new EuclideanTrajectoryControl(), BALLOON_STATE_SPACE_MODEL);
   }
 
   public void testDistanceSimple() {

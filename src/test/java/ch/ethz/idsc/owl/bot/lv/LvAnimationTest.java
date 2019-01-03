@@ -31,7 +31,7 @@ public class LvAnimationTest extends TestCase {
     Integrator integrator = RungeKutta45Integrator.INSTANCE;
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, integrator, //
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
     new LvEntity(episodeIntegrator, trajectoryControl, controls);
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();

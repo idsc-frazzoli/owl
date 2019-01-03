@@ -74,7 +74,7 @@ public class R2EntityTest extends TestCase {
         SingleIntegratorStateSpaceModel.INSTANCE, //
         EulerIntegrator.INSTANCE, //
         new StateTime(state, RealScalar.ZERO));
-    TrajectoryControl trajectoryControl = EuclideanTrajectoryControl.INSTANCE;
+    TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
     AbstractEntity abstractEntity = new R2Entity(episodeIntegrator, trajectoryControl);
     StateTime st = abstractEntity.getStateTimeNow();
     assertEquals(st.state(), state);
