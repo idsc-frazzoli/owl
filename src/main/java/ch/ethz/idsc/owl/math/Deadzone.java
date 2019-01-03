@@ -2,25 +2,30 @@
 // adapted by jph
 package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.tensor.RealScalar;
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class Deadzone implements ScalarUnaryOperator {
+  public static Deadzone of(Clip clip) {
+    return new Deadzone(Objects.requireNonNull(clip));
+  }
+
   public static Deadzone of(Scalar min, Scalar max) {
-    return new Deadzone(min, max);
+    return new Deadzone(Clip.function(min, max));
   }
 
   public static Deadzone of(Number min, Number max) {
-    return of(RealScalar.of(min), RealScalar.of(max));
+    return new Deadzone(Clip.function(min, max));
   }
 
   // ---
   private final Clip clip;
 
-  private Deadzone(Scalar min, Scalar max) {
-    clip = Clip.function(min, max);
+  private Deadzone(Clip clip) {
+    this.clip = clip;
   }
 
   @Override // from ScalarUnaryOperator

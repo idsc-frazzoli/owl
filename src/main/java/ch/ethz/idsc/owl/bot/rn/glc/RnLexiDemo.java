@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
-// TODO JAN move class to test area and use RLplanner
+// TODO JPH move class to test area and use RLplanner
 /* package */ enum RnLexiDemo {
   ;
   private static final StateSpaceModel SINGLE_INTEGRATOR = SingleIntegratorStateSpaceModel.INSTANCE;

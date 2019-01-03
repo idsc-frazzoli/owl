@@ -27,7 +27,7 @@ public class GeodesicBSplineCenter implements TensorUnaryOperator {
 
   @Override
   public Tensor apply(Tensor tensor) {
-    // TODO support sequences with even number of elements
+    // TODO JPH support sequences with even number of elements
     if (tensor.length() % 2 != 1)
       throw TensorRuntimeException.of(tensor);
     int radius = (tensor.length() - 1) / 2;

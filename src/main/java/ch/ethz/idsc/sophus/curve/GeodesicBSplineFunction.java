@@ -33,7 +33,7 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
    * @return */
   public static GeodesicBSplineFunction of(GeodesicInterface geodesicInterface, int degree, Tensor control) {
     if (degree < 0)
-      throw new IllegalArgumentException("" + degree);
+      throw new IllegalArgumentException(Integer.toString(degree));
     return new GeodesicBSplineFunction(geodesicInterface, degree, control);
   }
 

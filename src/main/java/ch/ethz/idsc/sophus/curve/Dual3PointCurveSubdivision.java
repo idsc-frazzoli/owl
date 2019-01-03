@@ -11,7 +11,9 @@ import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** dual scheme */
+/** dual scheme
+ * 
+ * Chaikin's rule is used for the generation of the first and last point */
 public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Serializable {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   // ---
@@ -25,11 +27,12 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
   @Override // from CurveSubdivision
   public final Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
+    int length = tensor.length();
     Tensor curve = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
-      Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
+    for (int index = 0; index < length; ++index) {
+      Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % tensor.length());
+      Tensor r = tensor.get((index + 1) % length);
       curve.append(lo(p, q, r)).append(lo(r, q, p));
     }
     return curve;
@@ -48,7 +51,7 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     {
       Tensor p = tensor.get(0);
       Tensor q = tensor.get(1);
-      curve.append(lo(p, q)); // TODO there should be a better formula here for BSpline4
+      curve.append(lo(p, q)); // Chaikin's rule
     }
     int last = tensor.length() - 1;
     for (int index = 1; index < last; ++index) {
@@ -60,7 +63,7 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     {
       Tensor p = tensor.get(last - 1);
       Tensor q = tensor.get(last);
-      curve.append(lo(q, p));
+      curve.append(lo(q, p)); // Chaikin's rule
     }
     return curve;
   }

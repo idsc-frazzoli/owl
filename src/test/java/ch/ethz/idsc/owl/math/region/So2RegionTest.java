@@ -7,8 +7,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;
-import ch.ethz.idsc.tensor.qty.Units;
 import junit.framework.TestCase;
 
 public class So2RegionTest extends TestCase {
@@ -55,7 +55,7 @@ public class So2RegionTest extends TestCase {
     Scalar maxTurning = Quantity.of(6, "rad*s^-1");
     So2Region so2Region = new So2Region(Quantity.of(2, "rad"), Quantity.of(1, "rad"), Quantity.of(Math.PI, "rad"));
     Scalar duration = so2Region.signedDistance(Quantity.of(4, "rad")).divide(maxTurning);
-    assertEquals(Units.of(duration), Unit.of("s"));
+    assertEquals(QuantityUnit.of(duration), Unit.of("s"));
   }
 
   public void testFail() {

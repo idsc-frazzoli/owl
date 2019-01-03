@@ -6,10 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
-import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.img.ImageArea;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
@@ -23,7 +21,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
-/** implementation uses only java spe */
+/** implementation uses only java default function and does not depend on 3rd party libraries */
 public class ShadowMapArea implements RenderInterface {
   private final LidarEmulator lidar;
   private final Area initArea;
@@ -31,23 +29,26 @@ public class ShadowMapArea implements RenderInterface {
   private final float vMax;
   private final float rMin;
   //
-  private Color COLOR_SHADOW_FILL;
-  private Color COLOR_SHADOW_DRAW;
+  private Color colorShadowFill;
+  private Color colorShadowDraw;
 
+  /** @param lidar
+   * @param imageRegion documentation!
+   * @param vMax
+   * @param rMin */
   public ShadowMapArea(LidarEmulator lidar, ImageRegion imageRegion, float vMax, float rMin) {
     this.lidar = lidar;
     this.vMax = vMax;
     this.rMin = rMin;
-    BufferedImage bufferedImage = RegionRenders.image(imageRegion.image());
-    // TODO 244 and 5 magic const, redundant to values specified elsewhere
-    Area area = ImageArea.fromImage(bufferedImage, new Color(244, 244, 244), 5);
+    Tensor image = imageRegion.image();
+    Area area = ImageArea.fromTensor(image);
     //
     // convert imageRegion into Area
     Tensor scale = imageRegion.scale();
     Tensor invsc = DiagonalMatrix.of( //
         scale.Get(0).reciprocal(), scale.Get(1).negate().reciprocal(), RealScalar.ONE);
     Tensor translate = IdentityMatrix.of(3);
-    translate.set(RealScalar.of(-bufferedImage.getHeight()), 1, 2);
+    translate.set(RealScalar.of(-image.length()), 1, 2);
     Tensor tmatrix = invsc.dot(translate);
     Area obstacleArea = area.createTransformedArea(AffineTransforms.toAffineTransform(tmatrix));
     Rectangle2D rInit = new Rectangle2D.Double();
@@ -92,17 +93,17 @@ public class ShadowMapArea implements RenderInterface {
   }
 
   public void setColor(Color color) {
-    COLOR_SHADOW_FILL = new Color((color.getRGB() & 0xFFFFFF) | (16 << 24), true);
-    COLOR_SHADOW_DRAW = new Color((color.getRGB() & 0xFFFFFF) | (64 << 24), true);
+    colorShadowFill = new Color((color.getRGB() & 0xFFFFFF) | (16 << 24), true);
+    colorShadowDraw = new Color((color.getRGB() & 0xFFFFFF) | (64 << 24), true);
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final Tensor matrix = geometricLayer.getMatrix();
     Area plotArea = new Area(shadowArea.createTransformedArea(AffineTransforms.toAffineTransform(matrix)));
-    graphics.setColor(COLOR_SHADOW_FILL);
+    graphics.setColor(colorShadowFill);
     graphics.fill(plotArea);
-    graphics.setColor(COLOR_SHADOW_DRAW);
+    graphics.setColor(colorShadowDraw);
     graphics.draw(plotArea);
   }
 }

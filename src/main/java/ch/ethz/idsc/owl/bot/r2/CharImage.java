@@ -36,7 +36,7 @@ import java.awt.image.BufferedImage;
   }
 
   public void draw(char chr, Point point) {
-    graphics.drawString("" + chr, point.x, point.y);
+    graphics.drawString(Character.toString(chr), point.x, point.y);
   }
 
   public BufferedImage bufferedImage() {

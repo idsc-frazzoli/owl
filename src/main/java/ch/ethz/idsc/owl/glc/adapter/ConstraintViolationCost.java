@@ -18,7 +18,7 @@ public class ConstraintViolationCost implements CostFunction, Serializable {
    * constraint violations. A violation incurs a predefined unit cost.
    * 
    * @param plannerConstraint
-   * @param unit
+   * @param unit cost
    * @return */
   public static CostFunction of(PlannerConstraint plannerConstraint, Scalar unit) {
     return new ConstraintViolationCost(plannerConstraint, unit);

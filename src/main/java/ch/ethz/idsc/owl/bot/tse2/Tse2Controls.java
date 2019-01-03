@@ -12,7 +12,7 @@ public enum Tse2Controls {
   ;
   /** @param flows
    * @return max rate per meter driven in unit "rad*s^-1" */
-  // TODO max effective turning rate/angular rate depends on tangent speed
+  // TODO JPH max effective turning rate/angular rate depends on tangent speed
   public static Scalar maxTurning(Collection<Flow> flows) {
     return flows.stream() //
         .map(Flow::getU) //

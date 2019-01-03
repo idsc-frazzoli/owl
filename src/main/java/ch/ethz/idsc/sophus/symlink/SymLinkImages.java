@@ -21,7 +21,7 @@ public enum SymLinkImages {
     Tensor vector = Tensor.of(IntStream.range(0, 2 * radius + 1).mapToObj(SymScalar::leaf));
     Tensor tensor = tensorUnaryOperator.apply(vector);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor);
-    symLinkImage.title("" + smoothingKernel.name() + "[" + (2 * radius + 1) + "]");
+    symLinkImage.title(smoothingKernel.name() + "[" + (2 * radius + 1) + "]");
     return symLinkImage;
   }
 

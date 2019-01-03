@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.alg.Array;
       max = Math.max(max, index);
       while (sum.length() <= index)
         sum.append(RealScalar.ZERO);
-      sum.set(v -> v.add(weight), index);
+      sum.set(value -> value.add(weight), index);
     } else {
       visit(weight.multiply(RealScalar.ONE.subtract(root.ratio())), root.getP());
       visit(weight.multiply(root.ratio()), root.getQ());

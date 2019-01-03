@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public enum SymGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---
-  @Override
+  @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
     return SymScalar.of(p.Get(), q.Get(), scalar);
   }

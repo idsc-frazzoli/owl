@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
 
-// TODO implementation can be made more efficient
+/** LONGTERM implementation can be made more efficient */
 public class LidarRaytracer implements Serializable {
   private final Tensor directions;
   private final Scalar max_range;

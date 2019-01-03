@@ -13,10 +13,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/** Careful: the implementation only supports sequences with odd number of elements
+/** GeodesicCenter projects a sequence of points to their geodesic center
+ * with each point weighted as provided by an external function.
  * 
- * projects a sequence of points to their geodesic center
- * with each point weighted as provided by an external function */
+ * <p>Careful: the implementation only supports sequences with ODD number of elements!
+ * When a sequence of even length is provided an Exception is thrown. */
 public class GeodesicCenter implements TensorUnaryOperator {
   /** @param geodesicInterface
    * @param function
@@ -38,7 +39,6 @@ public class GeodesicCenter implements TensorUnaryOperator {
 
   @Override
   public Tensor apply(Tensor tensor) {
-    // TODO support sequences with even number of elements
     if (tensor.length() % 2 != 1)
       throw TensorRuntimeException.of(tensor);
     int radius = (tensor.length() - 1) / 2;

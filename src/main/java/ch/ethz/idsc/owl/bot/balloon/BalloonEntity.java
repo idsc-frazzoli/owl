@@ -39,9 +39,9 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 3);
   static final int FLOWRES = 3;
-  // TODO Look up realistic values and adapt accordingly + allocate to BalloonStateSpaceModels
+  // TODO ANDRE Look up realistic values and adapt accordingly + allocate to BalloonStateSpaceModels
   static final Scalar U_MAX = RealScalar.of(10);
-  // TODO adapt when heuristic is changed
+  // TODO ANDRE adapt when heuristic is changed
   final static Scalar SPEED_MAX = RealScalar.of(10);
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(2);
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override // from TensorMetric
   public final Scalar distance(Tensor x, Tensor y) {
-    // TODO maybe change to norm2
+    // TODO ANDRE maybe change to norm2
     return Norm2Squared.between(x, y);
   }
 
@@ -86,7 +86,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override // from AbstractCircularEntity
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // TODO create meaningful render function
+    // TODO ANDRE create meaningful render function
     // RegionRenders.draw(geometricLayer, graphics, goalRegion);
     if (Objects.nonNull(trajectoryWrap)) {
       TrajectoryRender trajectoryRender = new TrajectoryRender();

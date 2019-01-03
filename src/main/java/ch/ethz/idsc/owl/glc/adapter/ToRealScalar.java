@@ -5,6 +5,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
+// TODO JPH functionality is not warranted 
+@Deprecated
 /* package */ enum ToRealScalar implements ScalarUnaryOperator {
   FUNCTION;
   // ---

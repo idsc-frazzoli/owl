@@ -3,12 +3,12 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.dubins.DubinsPath;
-import ch.ethz.idsc.owl.math.dubins.DubinsPathGenerator;
-import ch.ethz.idsc.owl.math.dubins.DubinsPathLengthComparator;
-import ch.ethz.idsc.owl.math.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
+import ch.ethz.idsc.sophus.dubins.DubinsPath;
+import ch.ethz.idsc.sophus.dubins.DubinsPathGenerator;
+import ch.ethz.idsc.sophus.dubins.DubinsPathLengthComparator;
+import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.sophus.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

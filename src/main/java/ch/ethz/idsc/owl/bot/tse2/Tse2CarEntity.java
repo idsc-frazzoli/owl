@@ -68,7 +68,7 @@ public class Tse2CarEntity extends Tse2Entity {
   protected final Tensor goalRadius;
   final Tensor partitionScale;
   private final Tensor shape;
-  protected final TrajectoryControl trajectoryControl; // TODO design is despicable
+  protected final TrajectoryControl trajectoryControl; // TODO JPH design is despicable
 
   /** extra cost functions, for instance
    * @param stateTime initial position */

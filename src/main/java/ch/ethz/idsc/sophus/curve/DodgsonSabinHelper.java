@@ -11,12 +11,15 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ enum DodgsonSabinHelper {
   ;
   static final CurveSubdivision BSPLINE3_EUCLIDEAN = new BSpline3CurveSubdivision(RnGeodesic.INSTANCE);
+  private static final Scalar TWO = RealScalar.of(2);
+  private static final Scalar _1_4 = RationalScalar.of(1, 4);
 
   /** @param b
    * @param c
@@ -27,9 +30,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return intersectCircleLine(b, c, r, RealScalar.ZERO);
   }
 
-  // TODO not covered by tests
-  static Tensor midpoint(Tensor B, Tensor C) {
-    return B.add(C).multiply(RationalScalar.HALF);
+  // not covered by tests
+  static Tensor midpoint(Tensor b, Tensor c) {
+    return b.add(c).multiply(RationalScalar.HALF);
   }
 
   static Tensor midpoint(Tensor a, Tensor b, Tensor c, Tensor d) {
@@ -51,25 +54,25 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         Cross2D.of(D).multiply(RealScalar.of(r.number().doubleValue() * Math.sqrt(d) * 0.25 * (fa - fb)))));
   }
 
-  static Scalar lambda(Tensor A, Tensor B, Tensor C, Tensor D, Scalar R) {
-    Scalar a = Norm._2.between(D, B);
-    Scalar b = Norm._2.between(C, A);
-    Scalar d = Norm2Squared.between(C, B);
-    Scalar mu = b.divide(a);
-    Scalar res = R.multiply(R).multiply(d).divide(RealScalar.of(4));
-    Scalar H = res.divide(RealScalar.ONE.add(Sqrt.of(RealScalar.ONE.subtract(res))));
+  static Scalar lambda(Tensor a, Tensor b, Tensor c, Tensor d, Scalar r) {
+    Scalar ac = Norm._2.between(a, c);
+    Scalar bd = Norm._2.between(b, d);
+    Scalar bc = Norm2Squared.between(b, c); // squared
+    Scalar mu = ac.divide(bd);
+    Scalar res = Times.of(r, r, bc, _1_4);
+    Scalar h = res.divide(RealScalar.ONE.add(Sqrt.of(RealScalar.ONE.subtract(res))));
     Scalar mu1 = mu.add(RealScalar.ONE);
     Scalar mu1_2 = mu1.multiply(mu1);
-    // (1 - H * 2 * mu / mu1_2)
-    Scalar den = H.multiply(RealScalar.of(2)).multiply(mu).divide(mu1_2);
+    // (1 - h * 2 * mu / mu1_2)
+    Scalar den = Times.of(TWO, h, mu).divide(mu1_2);
     return mu.subtract(RealScalar.ONE).divide(mu.add(RealScalar.ONE)).divide(RealScalar.ONE.subtract(den));
   }
 
-  static Scalar averageCurvature(Tensor A, Tensor B, Tensor C, Tensor D) {
-    Scalar a = Norm._2.between(D, B);
-    Scalar b = Norm._2.between(C, A);
-    return SignedCurvature2D.of(A, B, C).get().multiply(a).add( //
-        SignedCurvature2D.of(B, C, D).get().multiply(b)) //
-        .divide(a.add(b));
+  static Scalar averageCurvature(Tensor a, Tensor b, Tensor c, Tensor d) {
+    Scalar ac = Norm._2.between(a, c);
+    Scalar bd = Norm._2.between(b, d);
+    return SignedCurvature2D.of(a, b, c).get().multiply(bd).add( //
+        SignedCurvature2D.of(b, c, d).get().multiply(ac)) //
+        .divide(bd.add(ac));
   }
 }

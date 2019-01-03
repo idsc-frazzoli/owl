@@ -1,6 +1,6 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.2.5`
+Library for motion planning in Java, version `0.2.6`
 
 The library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
@@ -43,7 +43,6 @@ Obstacle anticipation
 * integrators: Euler, Midpoint, Runge-Kutta 4-5th order, exact integrator for the group SE2
 * state-space models: car-like, two-wheel-drive, pendulum-swing-up, Lotka-Volterra, etc.
 * efficient heuristic for goal regions: sphere, conic section
-* refinement of waypoint sequence using non-linear curve subdivision along geodesics
 * visualizations and animations, see [video](https://www.youtube.com/watch?v=lPQW3GqQqSY)
 
 ## Motion Planning
@@ -136,7 +135,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.2.5</version>
+        <version>0.2.6</version>
       </dependency>
     </dependencies>
 
@@ -197,6 +196,13 @@ Filtering
 
 </tr>
 </table>
+
+## Features
+
+* geodesics in Lie-groups and homogeneous spaces: `Rn`, `SE(2)`, `H2`, `Sn`, ...
+* parametric curves defined by control points in non-linear spaces: `GeodesicBSplineFunction`, ...
+* non-linear smoothing of noisy localization data `GeodesicCenterFilter`
+* Dubins path
 
 ## Contributors
 

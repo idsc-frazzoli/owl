@@ -31,7 +31,7 @@ enum FilterErrorTable {
     TensorUnaryOperator geodesicCenterFilter = //
         GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), width);
     System.out.println(width);
-    GeodesicCausalFiltering geodesicCausal1Filtering = GeodesicCausalFiltering.se2(control, geodesicCenterFilter.apply(control), 0);
+    GeodesicCausalFilteringIIR geodesicCausal1Filtering = GeodesicCausalFilteringIIR.se2(control, geodesicCenterFilter.apply(control), 0);
     Tensor alpharange = Subdivide.of(0.1, 1, 12);
     for (int j = 0; j < alpharange.length(); ++j) {
       Scalar alpha = alpharange.Get(j);

@@ -30,15 +30,12 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
   public Tensor string(Tensor tensor) {
     if (Tensors.isEmpty(tensor))
       return Tensors.empty();
-    Tensor curve = Tensors.empty();
-    int last = tensor.length() - 1;
-    for (int index = 0; index < last; /* nothing */ ) {
-      Tensor p = tensor.get(index);
-      Tensor q = tensor.get(++index);
-      curve.append(p);
-      curve.append(center(p, q));
+    Tensor curve = tensor.extract(0, 1);
+    Tensor p = tensor.get(0);
+    for (int index = 1; index < tensor.length(); ++index) {
+      Tensor q = tensor.get(index);
+      curve.append(center(p, q)).append(p = q);
     }
-    curve.append(tensor.get(last));
     return curve;
   }
 

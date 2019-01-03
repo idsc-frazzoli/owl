@@ -64,4 +64,16 @@ public class SignedCurvature2DTest extends TestCase {
       // ---
     }
   }
+
+  public void testString() {
+    Tensor points = Tensors.fromString("{{0,0},{1,1},{2,0}}");
+    Tensor vector = SignedCurvature2D.string(points);
+    Chop._12.requireClose(vector, Tensors.vector(1, 1, 1));
+  }
+
+  public void testStringEmpty() {
+    Tensor points = Tensors.empty();
+    Tensor vector = SignedCurvature2D.string(points);
+    assertEquals(points, vector);
+  }
 }

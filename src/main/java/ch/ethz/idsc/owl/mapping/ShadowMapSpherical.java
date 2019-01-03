@@ -20,7 +20,6 @@ import org.bytedeco.javacpp.opencv_imgproc;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.data.img.CvHelper;
-import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
@@ -28,10 +27,7 @@ import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
-  private Color COLOR_SHADOW_FILL;
-  // ---
-  private final LidarEmulator lidar;
+public class ShadowMapSpherical extends ShadowMapCV {
   private final Mat initArea;
   private final Mat shadowArea;
   private final float vMax;
@@ -47,9 +43,8 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
   private GpuMat lidarMatGpu;
   private boolean useGPU = false;
 
-  public ShadowMapSpherical(LidarEmulator lidar, ImageRegion imageRegion, float vMax, float rMin) {
-    super(imageRegion);
-    this.lidar = lidar;
+  public ShadowMapSpherical(LidarEmulator lidarEmulator, ImageRegion imageRegion, float vMax, float rMin) {
+    super(lidarEmulator, imageRegion);
     this.vMax = vMax;
     this.rMin = rMin;
     this.kernelWorldRadius = sphericalKernel.arrayWidth() / 2.0f * pixelDim.number().floatValue();
@@ -97,7 +92,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     // get lidar polygon and transform to pixel values
     Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
     world2pixelLayer.pushMatrix(gokart2world.forward_se2());
-    Tensor poly = lidar.getPolygon(stateTime);
+    Tensor poly = lidarEmulator.getPolygon(stateTime);
     //  ---
     // transform lidar polygon to pixel values
     Point polygonPoint = StaticHelper.toPoint(poly.stream().map(world2pixelLayer::toVector));
@@ -127,7 +122,7 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     // get lidar polygon and transform to pixel values
     Se2Bijection gokart2world = new Se2Bijection(stateTime.state());
     world2pixelLayer.pushMatrix(gokart2world.forward_se2());
-    Tensor poly = lidar.getPolygon(stateTime);
+    Tensor poly = lidarEmulator.getPolygon(stateTime);
     //  ---
     // transform lidar polygon to pixel values
     Point polygonPoint = StaticHelper.toPoint(poly.stream().map(world2pixelLayer::toVector)); // reformat polygon to point
@@ -162,10 +157,6 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     return shadowArea.clone();
   }
 
-  public void setColor(Color color) {
-    COLOR_SHADOW_FILL = color;
-  }
-
   private final int radius2it(float radius) {
     return (int) Math.ceil(radius / kernelWorldRadius);
   }
@@ -184,19 +175,20 @@ public class ShadowMapSpherical extends ShadowMapCV implements RenderInterface {
     if (useGPU)
       shadowAreaGpu.download(shadowArea);
     //
-    final Tensor matrix = geometricLayer.getMatrix();
-    AffineTransform transform = AffineTransforms.toAffineTransform(matrix.dot(pixel2world));
     Mat plotArea = shadowArea.clone();
     // setup colorspace
     opencv_imgproc.cvtColor(plotArea, plotArea, opencv_imgproc.CV_GRAY2RGBA);
     Mat color = new Mat(4, 1, opencv_core.CV_8UC4);
-    byte[] a = StaticHelper.toAGRB(COLOR_SHADOW_FILL);
+    byte[] a = StaticHelper.toAGRB(colorShadowFill);
     color.data().put(a);
     plotArea.setTo(color, plotArea);
     //  convert to bufferedimage
-    BufferedImage img = new BufferedImage(plotArea.arrayWidth(), plotArea.arrayHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-    byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+    BufferedImage bufferedImage = //
+        new BufferedImage(plotArea.arrayWidth(), plotArea.arrayHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+    byte[] data = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
     plotArea.data().get(data);
-    graphics.drawImage(img, transform, null);
+    final Tensor matrix = geometricLayer.getMatrix();
+    AffineTransform affineTransform = AffineTransforms.toAffineTransform(matrix.dot(pixel2world));
+    graphics.drawImage(bufferedImage, affineTransform, null);
   }
 }
