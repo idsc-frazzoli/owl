@@ -36,7 +36,7 @@ public class TreeRender implements RenderInterface {
   private Collection<? extends StateCostNode> collection;
   private Tensor polygon;
   // ---
-  private int nodeBound = 2500;
+  public int nodeBound = 2500;
 
   public TreeRender(Collection<? extends StateCostNode> collection) {
     setCollection(collection);
@@ -65,7 +65,7 @@ public class TreeRender implements RenderInterface {
     }
     double inverse = (treeColor.nodeColor.length() - 1) / (max - min);
     // System.out.println("count=" + count + ", inverse=" + inverse);
-    if (count <= nodeBound || true) // don't draw tree beyond certain node count
+    if (count <= nodeBound) // don't draw tree beyond certain node count
       for (StateCostNode node : _collection) {
         double value = node.costFromRoot().number().doubleValue();
         final double interp = (value - min) * inverse;

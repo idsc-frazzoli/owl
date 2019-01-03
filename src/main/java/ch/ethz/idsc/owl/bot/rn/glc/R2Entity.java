@@ -4,10 +4,12 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.awt.Graphics2D;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
@@ -17,6 +19,8 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
+import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
+import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -26,6 +30,7 @@ import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -37,7 +42,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 /** omni-directional movement with constant speed
  * 
  * the implementation chooses certain values */
-/* package */ class R2Entity extends AbstractCircularEntity {
+/* package */ class R2Entity extends AbstractCircularEntity implements GlcPlannerCallback {
   protected static final Tensor PARTITION_SCALE = Tensors.vector(8, 8).unmodifiable();
   public static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
@@ -46,6 +51,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
   protected final R2Flows r2Flows = new R2Flows(RealScalar.ONE);
   protected RegionWithDistance<Tensor> goalRegion = null;
+  private Collection<? extends StateCostNode> collection;
 
   /** @param state initial position of entity */
   public R2Entity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
@@ -100,5 +106,12 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     RegionRenders.draw(geometricLayer, graphics, goalRegion);
     // ---
     super.render(geometricLayer, graphics);
+    // ---
+    new TreeRender(collection).render(geometricLayer, graphics);
+  }
+
+  @Override
+  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    collection = trajectoryPlanner.getDomainMap().values();
   }
 }
