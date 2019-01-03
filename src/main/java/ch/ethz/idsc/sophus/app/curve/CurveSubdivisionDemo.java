@@ -43,7 +43,6 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -63,7 +62,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private final JToggleButton jToggleBndy = new JToggleButton("bndy");
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
   private final JToggleButton jToggleLine = new JToggleButton("line");
-  private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   // ---
   private boolean printref = false;
@@ -118,9 +116,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     // ---
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();
-    // ---
-    jToggleItrp.setSelected(false);
-    timerFrame.jToolBar.add(jToggleItrp);
     // ---
     timerFrame.jToolBar.add(jToggleCyclic);
     // ---
@@ -177,46 +172,24 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     renderControlPoints(geometricLayer, graphics);
     {
       CurveSubdivision curveSubdivision = function.apply(geodesicDisplay.geodesicInterface());
-      // Tensor rnctrl = control();
       TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
-      if (jToggleItrp.isSelected() && scheme.degree.isPresent())
-        control = BSplineInterpolation.solve(scheme.degree.get(), control);
       // ---
       refined = Nest.of(tuo, control, levels);
-      // se2ctrl = new LieGroupBSplineInterpolation( //
-      // Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, scheme.degree.get(), se2ctrl).apply();
-      // refined = Nest.of(subdivision, se2ctrl, levels);
-      {
-        graphics.setColor(new Color(0, 0, 255, 128));
-        graphics.draw(geometricLayer.toPath2D(refined));
-      }
+      graphics.setColor(new Color(0, 0, 255, 128));
+      graphics.draw(geometricLayer.toPath2D(refined));
     }
-    // else { // SE2
-    // CurveSubdivision curveSubdivision = function.apply(Se2CoveringGeodesic.INSTANCE);
-    // TensorUnaryOperator subdivision = isCyclic //
-    // ? curveSubdivision::cyclic
-    // : curveSubdivision::string;
-    // Tensor se2ctrl = _control.copy();
-    // if (jToggleItrp.isSelected() && scheme.degree.isPresent())
-    // se2ctrl = new LieGroupBSplineInterpolation( //
-    // Se2CoveringGroup.INSTANCE, Se2CoveringGeodesic.INSTANCE, scheme.degree.get(), se2ctrl).apply();
-    // refined = Nest.of(subdivision, se2ctrl, levels);
-    // }
     if (jToggleLine.isSelected()) {
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface());
-      TensorUnaryOperator tuo = isCyclic //
+      TensorUnaryOperator tensorUnaryOperator = isCyclic //
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
-      Tensor linear = Nest.of(tuo, control, 8);
       graphics.setColor(new Color(0, 255, 0, 128));
-      Path2D path2d = geometricLayer.toPath2D(linear);
+      Path2D path2d = geometricLayer.toPath2D(Nest.of(tensorUnaryOperator, control, 8));
       if (isCyclic)
         path2d.closePath();
-      // graphics.setStroke(new BasicStroke(1.25f));
       graphics.draw(path2d);
-      // graphics.setStroke(new BasicStroke(1f));
     }
     {
       if (BSPLINE4) {

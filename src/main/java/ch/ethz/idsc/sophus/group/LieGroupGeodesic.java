@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.group;
 
+import java.io.Serializable;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -8,7 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-public class LieGroupGeodesic implements GeodesicInterface {
+public class LieGroupGeodesic implements GeodesicInterface, Serializable {
   private final Function<Tensor, LieGroupElement> function;
   private final LieExponential lieExponential;
 
@@ -19,10 +20,10 @@ public class LieGroupGeodesic implements GeodesicInterface {
 
   @Override // from TensorGeodesic
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    LieGroupElement lieGroupAction = function.apply(p);
-    Tensor delta = lieGroupAction.inverse().combine(q);
+    LieGroupElement lieGroupElement = function.apply(p);
+    Tensor delta = lieGroupElement.inverse().combine(q);
     Tensor x = lieExponential.log(delta);
-    return scalar -> lieGroupAction.combine(lieExponential.exp(x.multiply(scalar)));
+    return scalar -> lieGroupElement.combine(lieExponential.exp(x.multiply(scalar)));
   }
 
   @Override // from GeodesicInterface
