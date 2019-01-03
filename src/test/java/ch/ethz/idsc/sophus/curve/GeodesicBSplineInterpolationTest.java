@@ -15,6 +15,10 @@ import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
 
 public class GeodesicBSplineInterpolationTest extends TestCase {
+  /* package */ static Tensor pet(Tensor prev, Tensor eval, Tensor goal) {
+    return prev.add(goal.subtract(eval));
+  }
+
   public void testApplyRn() {
     Tensor target = N.DOUBLE.of(Tensors.vector(1, 2, 0, 2, 1, 3));
     GeodesicBSplineInterpolation geodesicBSplineInterpolation = //
@@ -32,7 +36,7 @@ public class GeodesicBSplineInterpolationTest extends TestCase {
     Tensor eval = tensor.get(1);
     Tensor goal = tensor.get(2);
     Tensor pos0 = geodesicBSplineInterpolation.move(prev, eval, goal);
-    Tensor pos1 = geodesicBSplineInterpolation.test(prev, eval, goal);
+    Tensor pos1 = pet(prev, eval, goal);
     assertEquals(pos0, pos1);
     assertTrue(ExactScalarQ.all(pos0));
     assertTrue(ExactScalarQ.all(pos1));

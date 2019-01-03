@@ -27,7 +27,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
   BezierFunctionDemo() {
     super(true, GeodesicDisplays.ALL);
     // ---
-    timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());

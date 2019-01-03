@@ -91,8 +91,4 @@ public class GeodesicBSplineInterpolation implements Serializable {
     Tensor tf = geodesicInterface.split(et, pt, TWO); // transfer
     return geodesicInterface.split(p, tf, TWO); // push
   }
-
-  /* package */ Tensor test(Tensor prev, Tensor eval, Tensor goal) {
-    return prev.add(goal.subtract(eval)); // not legal, only for testing
-  }
 }

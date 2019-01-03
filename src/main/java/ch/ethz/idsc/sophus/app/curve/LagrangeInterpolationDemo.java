@@ -42,7 +42,6 @@ import ch.ethz.idsc.tensor.sca.N;
   LagrangeInterpolationDemo() {
     super(true, GeodesicDisplays.ALL);
     // ---
-    timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
     jToggleSymi.setSelected(true);

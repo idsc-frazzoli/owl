@@ -28,10 +28,13 @@ import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.symlink.SymLinkImage;
 import ch.ethz.idsc.sophus.symlink.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class BSplineFunctionDemo extends ControlPointsDemo {
@@ -46,7 +49,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
   BSplineFunctionDemo() {
     super(true, GeodesicDisplays.ALL);
     // ---
-    timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleItrp);
@@ -93,6 +95,21 @@ import ch.ethz.idsc.tensor.sca.Chop;
       GeodesicBSplineInterpolation geodesicBSplineInterpolation = Objects.isNull(lieGroup) //
           ? new GeodesicBSplineInterpolation(geodesicDisplay.geodesicInterface(), degree, control)
           : new LieGroupBSplineInterpolation(lieGroup, geodesicDisplay.geodesicInterface(), degree, control);
+      {
+        Tensor tensor = BSplineInterpolationSequence.of(geodesicBSplineInterpolation);
+        Tensor shape = CirclePoints.of(9).multiply(RealScalar.of(.05));
+        graphics.setColor(new Color(64, 64, 64, 64));
+        for (Tensor ctrls : tensor)
+          for (Tensor ctrl : ctrls) {
+            geometricLayer.pushMatrix(geodesicDisplay.matrixLift(ctrl));
+            Path2D path2d = geometricLayer.toPath2D(shape);
+            graphics.fill(path2d);
+            geometricLayer.popMatrix();
+          }
+        graphics.setColor(new Color(64, 64, 64, 192));
+        for (Tensor ctrls : Transpose.of(tensor))
+          graphics.draw(geometricLayer.toPath2D(Tensor.of(ctrls.stream().map(geodesicDisplay::toPoint))));
+      }
       effective = geodesicBSplineInterpolation.untilClose(Chop._08, 100).control();
     }
     GeodesicBSplineFunction geodesicBSplineFunction = //
