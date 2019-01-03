@@ -26,14 +26,14 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
     int wid = 7;
     Tensor min = Tensors.vector(0, 0, 0);
     Tensor max = Tensors.vector(wid, wid, 2 * Math.PI);
-    RrtsNodeCollection nc = new Se2NodeCollection(min, max);
-    TransitionRegionQuery trq = EmptyTransitionRegionQuery.INSTANCE;
+    RrtsNodeCollection rrtsNodeCollection = new Se2NodeCollection(min, max);
+    TransitionRegionQuery transitionRegionQuery = EmptyTransitionRegionQuery.INSTANCE;
     // ---
     TransitionSpace transitionSpace = new Se2TransitionSpace(RealScalar.ONE);
-    Rrts rrts = new DefaultRrts(transitionSpace, nc, trq, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
-    try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("se2rrts.gif"), 250)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(UserHome.Pictures("se2rrts.gif"), 250)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.configCoordinateOffset(42, 456);
       owlyFrame.jFrame.setBounds(100, 100, 500, 500);
@@ -41,13 +41,13 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
       while (frame++ < 40 && owlyFrame.jFrame.isVisible()) {
         for (int count = 0; count < 10; ++count)
           rrts.insertAsNode(randomSampleInterface.randomSample(), 20);
-        owlyFrame.setRrts(root, trq);
-        gsw.append(owlyFrame.offscreen());
+        owlyFrame.setRrts(root, transitionRegionQuery);
+        animationWriter.append(owlyFrame.offscreen());
         Thread.sleep(100);
       }
       int repeatLast = 3;
       while (0 < repeatLast--)
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
     }
     System.out.println(rrts.rewireCount());
     RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.IDENTITY);

@@ -54,7 +54,7 @@ public enum RenderElements {
     }
     return null;
   }
-  //
+
   // public static RenderInterface create(PlannerConstraint plannerConstraint) {
   // if (plannerConstraint instanceof TrajectoryObstacleConstraint) {
   // TrajectoryRegionQuery trajectoryRegionQuery = //
@@ -64,7 +64,6 @@ public enum RenderElements {
   // }
   // return null;
   // }
-
   public static Collection<RenderInterface> create( //
       Collection<? extends StateCostNode> collection, TransitionRegionQuery transitionRegionQuery) {
     List<RenderInterface> list = new LinkedList<>();

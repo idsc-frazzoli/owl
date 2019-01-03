@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
         EtaRaster.state(eta), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-    try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
       owlyFrame.addBackground(renderInterface); // reference to collection
@@ -88,10 +88,10 @@ import ch.ethz.idsc.tensor.sca.Ramp;
           break;
         glcExpand.findAny(1);
         owlyFrame.setGlc(trajectoryPlanner);
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
       }
       for (int i = 0; i < 4; ++i)
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
     }
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
