@@ -6,6 +6,7 @@ import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
+import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -30,9 +31,9 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
-    BoxRandomSample rnUniformSampler = new BoxRandomSample(min, max);
-    for (int c = 0; c < 1000; ++c)
-      rrts.insertAsNode(rnUniformSampler.randomSample(), 15);
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
+    for (int count = 0; count < 1000; ++count)
+      rrts.insertAsNode(randomSampleInterface.randomSample(), 15);
     System.out.println("rewireCount=" + rrts.rewireCount());
     RrtsNodes.costConsistency(root, TRANSITION_SPACE, LengthCostFunction.IDENTITY);
     OwlyFrame owlyFrame = OwlyGui.start();

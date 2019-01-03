@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   // ---
   public static VectorFieldRender vectorFieldRender(StateSpaceModel stateSpaceModel, Tensor range, Region<Tensor> region, Scalar factor) {
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
-    RandomSampleInterface sampler = new BoxRandomSample(Tensors.vector(0, 0), range);
+    RandomSampleInterface sampler = BoxRandomSample.of(Tensors.vector(0, 0), range);
     Tensor points = Tensor.of(RandomSample.of(sampler, 1000).stream().filter(p -> !region.isMember(p)));
     vectorFieldRender.uv_pairs = //
         VectorFields.of(stateSpaceModel, points, Array.zeros(2), factor);

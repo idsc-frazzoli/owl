@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-/* package */ class R2TrajectoryControl extends StateTrajectoryControl {
+public class R2TrajectoryControl extends StateTrajectoryControl {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
   @Override

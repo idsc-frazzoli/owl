@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 
+/** TODO JPH class name too generic */
 public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
   private final TrajectoryEntity trajectoryEntity;
   private boolean showCost = false;

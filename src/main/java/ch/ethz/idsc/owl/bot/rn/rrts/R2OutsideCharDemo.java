@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
+import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -38,11 +39,11 @@ import ch.ethz.idsc.tensor.Tensors;
     owlyFrame.configCoordinateOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
-    BoxRandomSample rnUniformSampler = new BoxRandomSample(Tensors.vector(0, 0), imageRegion.range());
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(Tensors.vector(0, 0), imageRegion.range());
     int frame = 0;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
-      for (int c = 0; c < 50; ++c)
-        rrts.insertAsNode(rnUniformSampler.randomSample(), 15);
+      for (int count = 0; count < 50; ++count)
+        rrts.insertAsNode(randomSampleInterface.randomSample(), 15);
       owlyFrame.setRrts(root, trq);
       Thread.sleep(10);
     }

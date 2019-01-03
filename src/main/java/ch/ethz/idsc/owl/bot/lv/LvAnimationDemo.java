@@ -43,8 +43,8 @@ public class LvAnimationDemo implements DemoInterface {
     // ---
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
-    RandomSampleInterface sampler = new BoxRandomSample(Tensors.vector(0, 0), range);
-    Tensor points = RandomSample.of(sampler, 1000);
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(Tensors.vector(0, 0), range);
+    Tensor points = RandomSample.of(randomSampleInterface, 1000);
     vectorFieldRender.uv_pairs = //
         VectorFields.of(stateSpaceModel, points, Array.zeros(1), RealScalar.of(0.04));
     owlyAnimationFrame.addBackground(vectorFieldRender);

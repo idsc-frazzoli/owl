@@ -23,7 +23,8 @@ public class DefaultRrts implements Rrts {
   private final TransitionCostFunction transitionCostFunction;
   private int rewireCount = 0;
 
-  public DefaultRrts(TransitionSpace transitionSpace, //
+  public DefaultRrts( //
+      TransitionSpace transitionSpace, //
       RrtsNodeCollection rrtsNodeCollection, //
       TransitionRegionQuery obstacleQuery, //
       TransitionCostFunction transitionCostFunction) {

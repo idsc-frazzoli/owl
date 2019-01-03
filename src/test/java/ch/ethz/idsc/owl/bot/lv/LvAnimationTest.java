@@ -35,8 +35,8 @@ public class LvAnimationTest extends TestCase {
     new LvEntity(episodeIntegrator, trajectoryControl, controls);
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
-    RandomSampleInterface sampler = new BoxRandomSample(Tensors.vector(0, 0), range);
-    Tensor points = RandomSample.of(sampler, 1000);
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(Tensors.vector(0, 0), range);
+    Tensor points = RandomSample.of(randomSampleInterface, 1000);
     vectorFieldRender.uv_pairs = //
         VectorFields.of(stateSpaceModel, points, fallback_u, RealScalar.of(0.04));
   }
