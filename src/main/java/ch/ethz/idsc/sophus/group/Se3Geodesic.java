@@ -8,7 +8,10 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 /** geodesic in special Euclidean group SE(3) of affine transformations
  * 
- * input p and q are 4 x 4 matrices that encode affine transformations */
+ * input p and q are 4 x 4 matrices that encode affine transformations
+ * 
+ * @see LinearGroup
+ * @see LieGroupElement */
 public enum Se3Geodesic implements GeodesicInterface {
   INSTANCE;
   // ---

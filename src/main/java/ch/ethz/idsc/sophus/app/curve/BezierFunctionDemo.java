@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 
-import javax.swing.JToggleButton;
-
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -25,13 +23,9 @@ import ch.ethz.idsc.tensor.sca.Clip;
 /** Bezier function */
 /* package */ class BezierFunctionDemo extends ControlPointsDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  private final JToggleButton jToggleComb = new JToggleButton("comb");
 
   BezierFunctionDemo() {
     super(true, GeodesicDisplays.ALL);
-    // ---
-    jToggleComb.setSelected(true);
-    timerFrame.jToolBar.add(jToggleComb);
     // ---
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();
@@ -56,9 +50,10 @@ import ch.ethz.idsc.tensor.sca.Clip;
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control());
     int levels = spinnerRefine.getValue();
     Tensor refined = Subdivide.of(Clip.unit(), 1 << levels).map(scalarTensorFunction);
-    new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
+    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+    new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geometricLayer, graphics, render);
   }
 
   public static void main(String[] args) {

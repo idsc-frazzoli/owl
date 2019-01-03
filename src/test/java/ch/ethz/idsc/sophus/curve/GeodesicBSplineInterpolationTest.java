@@ -40,8 +40,35 @@ public class GeodesicBSplineInterpolationTest extends TestCase {
     assertEquals(iteration.steps(), 0);
   }
 
-  public void testH2() {
+  public void testH2a() {
     Tensor target = Tensors.fromString("{{0,2},{1,2},{2,2}}");
+    GeodesicBSplineInterpolation geodesicBSplineInterpolation = //
+        new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
+    target = N.DOUBLE.of(target);
+    Iteration iteration = geodesicBSplineInterpolation.untilClose(Chop._08, 100);
+    assertTrue(iteration.steps() < 100);
+  }
+
+  public void testH2b() {
+    Tensor target = Tensors.fromString("{{0,1},{1,1},{2,1}}");
+    GeodesicBSplineInterpolation geodesicBSplineInterpolation = //
+        new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
+    target = N.DOUBLE.of(target);
+    Iteration iteration = geodesicBSplineInterpolation.untilClose(Chop._08, 200);
+    assertTrue(iteration.steps() < 150);
+  }
+
+  public void testH2c() {
+    Tensor target = Tensors.fromString("{{0,1},{1,1},{2,0.1},{3,1}}");
+    GeodesicBSplineInterpolation geodesicBSplineInterpolation = //
+        new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
+    target = N.DOUBLE.of(target);
+    Iteration iteration = geodesicBSplineInterpolation.untilClose(Chop._08, 200);
+    assertTrue(iteration.steps() < 150);
+  }
+
+  public void testH2d() {
+    Tensor target = Tensors.fromString("{{2/5, 3/5}, {32/15, 77/60}, {15/4, 11/15}, {73/15, 71/30}, {13/2, 1/2}}");
     GeodesicBSplineInterpolation geodesicBSplineInterpolation = //
         new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
     target = N.DOUBLE.of(target);

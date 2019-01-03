@@ -38,15 +38,12 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
-  private final JToggleButton jToggleComb = new JToggleButton("comb");
 
   BSplineBasisDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
     // ---
+    curvatureButton().setSelected(false);
     timerFrame.jToolBar.add(jToggleItrp);
-    // ---
-    jToggleComb.setSelected(false);
-    timerFrame.jToolBar.add(jToggleComb);
     // ---
     spinnerDegree.setList(DEGREES);
     spinnerDegree.setValue(1);
@@ -114,7 +111,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    new CurveRender(refined, false, jToggleComb.isSelected()).render(geometricLayer, graphics);
+    new CurveRender(refined, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

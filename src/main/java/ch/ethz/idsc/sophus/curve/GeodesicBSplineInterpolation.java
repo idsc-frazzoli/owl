@@ -22,9 +22,9 @@ public class GeodesicBSplineInterpolation implements Serializable {
   private final int degree;
   private final Tensor target;
 
-  /** @param lieGroup
-   * @param geodesicInterface corresponding to lie group
-   * @param degree of underlying b-spline */
+  /** @param geodesicInterface corresponding to lie group
+   * @param degree of underlying b-spline
+   * @param target points to interpolate */
   public GeodesicBSplineInterpolation(GeodesicInterface geodesicInterface, int degree, Tensor target) {
     this.geodesicInterface = geodesicInterface;
     this.degree = degree;
@@ -47,9 +47,10 @@ public class GeodesicBSplineInterpolation implements Serializable {
     }
 
     public Tensor control() {
-      return control;
+      return control.unmodifiable();
     }
 
+    /** @return iteration count */
     public int steps() {
       return steps;
     }
@@ -73,7 +74,7 @@ public class GeodesicBSplineInterpolation implements Serializable {
   }
 
   public final Tensor apply() {
-    return untilClose(CHOP_DEFAULT, MAXITER).control;
+    return untilClose(CHOP_DEFAULT, MAXITER).control();
   }
 
   private GeodesicBSplineFunction geodesicBSplineFunction(Tensor control) {
@@ -85,19 +86,10 @@ public class GeodesicBSplineInterpolation implements Serializable {
    * @param t target position of bspline curve
    * @return */
   protected Tensor move(Tensor p, Tensor e, Tensor t) {
-    // System.out.println("move " + p + " " + e + " " + t);
     Tensor pt = geodesicInterface.split(p, t, RationalScalar.HALF);
-    // System.out.println("pt=" + pt);
-    // System.out.println("e=" + e);
-    // System.out.println("t=" + t);
     Tensor et = geodesicInterface.split(e, t, RationalScalar.HALF);
-    // System.out.println("et=" + et);
-    // System.out.println("HERE");
     Tensor tf = geodesicInterface.split(et, pt, TWO); // transfer
-    // System.out.println("tf=" + tf);
-    Tensor ps = geodesicInterface.split(p, tf, TWO); // push
-    // System.out.println("ps=" + ps);
-    return ps;
+    return geodesicInterface.split(p, tf, TWO); // push
   }
 
   /* package */ Tensor test(Tensor prev, Tensor eval, Tensor goal) {

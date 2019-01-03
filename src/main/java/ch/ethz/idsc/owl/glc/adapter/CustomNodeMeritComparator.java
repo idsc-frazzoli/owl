@@ -17,7 +17,7 @@ public class CustomNodeMeritComparator implements Comparator<GlcNode> {
     this.comparator = comparator;
   }
 
-  @Override
+  @Override // from Comparator
   public int compare(GlcNode glcNode1, GlcNode glcNode2) {
     return comparator.compare( //
         VectorScalars.vector(glcNode1.merit()), //

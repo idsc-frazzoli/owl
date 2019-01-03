@@ -16,7 +16,11 @@ public interface GeodesicDisplay {
    * @return coordinates of control point */
   Tensor project(Tensor xya);
 
-  /** @param p
+  /** @param p control point
+   * @return xya */
+  Tensor toPoint(Tensor p);
+
+  /** @param p control point
    * @return 3x3 matrix */
   Tensor matrixLift(Tensor p);
 

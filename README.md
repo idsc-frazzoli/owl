@@ -43,7 +43,6 @@ Obstacle anticipation
 * integrators: Euler, Midpoint, Runge-Kutta 4-5th order, exact integrator for the group SE2
 * state-space models: car-like, two-wheel-drive, pendulum-swing-up, Lotka-Volterra, etc.
 * efficient heuristic for goal regions: sphere, conic section
-* refinement of waypoint sequence using non-linear curve subdivision along geodesics
 * visualizations and animations, see [video](https://www.youtube.com/watch?v=lPQW3GqQqSY)
 
 ## Motion Planning
@@ -197,6 +196,13 @@ Filtering
 
 </tr>
 </table>
+
+## Features
+
+* geodesics in Lie-groups and homogeneous spaces: `Rn`, `SE(2)`, `H2`, `Sn`, ...
+* parametric curves defined by control points in non-linear spaces: `GeodesicBSplineFunction`, ...
+* non-linear smoothing of noisy localization data `GeodesicCenterFilter`
+* Dubins path
 
 ## Contributors
 

@@ -30,6 +30,11 @@ public enum R2GeodesicDisplay implements GeodesicDisplay {
     return xya.extract(0, 2);
   }
 
+  @Override
+  public Tensor toPoint(Tensor p) {
+    return p;
+  }
+
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
     return Se2Utils.toSE2Translation(p);

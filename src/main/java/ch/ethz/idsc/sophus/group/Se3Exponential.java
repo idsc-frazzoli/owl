@@ -16,7 +16,10 @@ import ch.ethz.idsc.tensor.red.Norm;
  * {{vx, vy, vz}, {wx, wy, wz}}
  * 
  * from "Lie Groups for 2D and 3D Transformations" by Ethan Eade
- * http://ethaneade.com/ */
+ * http://ethaneade.com/
+ * 
+ * @see LinearGroup
+ * @see LieGroupElement */
 public enum Se3Exponential implements LieExponential {
   INSTANCE;
   // ---

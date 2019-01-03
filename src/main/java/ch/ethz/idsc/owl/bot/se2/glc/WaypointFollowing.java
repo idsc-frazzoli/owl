@@ -41,7 +41,7 @@ public abstract class WaypointFollowing {
   /** start planning through waypoints */
   public final void startNonBlocking() {
     TimerTask timerTask = new TimerTask() {
-      int i = 0; // TODO find generic seed
+      int i = 0; // TODO YN find generic seed
 
       @Override
       public void run() {
