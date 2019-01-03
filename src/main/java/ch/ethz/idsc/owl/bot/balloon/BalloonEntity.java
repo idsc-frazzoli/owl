@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -15,11 +16,13 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
+import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectoryControl;
@@ -28,6 +31,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class BalloonEntity extends AbstractCircularEntity {
@@ -45,12 +49,14 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   // ---
   /***************************************************/
   private final StateSpaceModel stateSpaceModel;
+  private BufferedImage bufferedImage;
 
   /***************************************************/
   public BalloonEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, StateSpaceModel stateSpaceModel) {
     super(episodeIntegrator, trajectoryControl);
     add(new BalloonFallbackControl());
     this.stateSpaceModel = stateSpaceModel;
+    bufferedImage = ResourceData.bufferedImage("/graphics/hotairballoon.png");
   }
 
   @Override // from TensorMetric
@@ -94,6 +100,11 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
       Point2D point = geometricLayer.toPoint2D(state);
       graphics.setColor(new Color(64, 128, 64, 192));
       graphics.fill(new Ellipse2D.Double(point.getX() - 2, point.getY() - 2, 7, 7));
+      // graphics.drawImage(bufferedImage, (int) point.getX(), (int) point.getY(), null);
+      ImageRender imageRender = ImageRender.of(bufferedImage, Tensors.vector(1, 1));
+      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(state));
+      imageRender.render(geometricLayer, graphics);
+      geometricLayer.popMatrix();
     }
   }
 }
