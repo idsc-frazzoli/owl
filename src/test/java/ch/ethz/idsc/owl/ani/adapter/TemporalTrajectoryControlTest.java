@@ -1,8 +1,12 @@
 // code by jph
-package ch.ethz.idsc.owl.math.state;
+package ch.ethz.idsc.owl.ani.adapter;
 
 import java.util.List;
 
+import ch.ethz.idsc.owl.ani.api.EntityControl;
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
+import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

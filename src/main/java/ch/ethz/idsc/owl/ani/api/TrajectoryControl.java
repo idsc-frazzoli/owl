@@ -1,9 +1,10 @@
 // code by jph
-package ch.ethz.idsc.owl.math.state;
+package ch.ethz.idsc.owl.ani.api;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.gui.ani.TrajectoryListener;
+import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 
 public interface TrajectoryControl extends EntityControl, TrajectoryListener {

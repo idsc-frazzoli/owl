@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.tse2.Tse2CarEntity;
 import ch.ethz.idsc.owl.bot.tse2.Tse2CarFlows;
 import ch.ethz.idsc.owl.bot.tse2.Tse2ComboRegion;
@@ -26,7 +27,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.DiscretizedLexicographic;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

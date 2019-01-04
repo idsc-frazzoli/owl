@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui.ani;
+package ch.ethz.idsc.owl.ani.api;
 
 import java.util.List;
 import java.util.Objects;
@@ -8,7 +8,6 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
 import ch.ethz.idsc.tensor.Scalar;

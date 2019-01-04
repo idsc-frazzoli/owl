@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui.ani;
+package ch.ethz.idsc.owl.ani.api;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

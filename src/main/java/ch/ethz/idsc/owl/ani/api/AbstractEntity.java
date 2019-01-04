@@ -1,13 +1,11 @@
 // code by jph
-package ch.ethz.idsc.owl.gui.ani;
+package ch.ethz.idsc.owl.ani.api;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.math.state.EntityControl;
-import ch.ethz.idsc.owl.math.state.EntityControlComparator;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;

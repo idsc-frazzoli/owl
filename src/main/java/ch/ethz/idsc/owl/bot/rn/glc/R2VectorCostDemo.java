@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.awt.Dimension;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.r2.ImageCostFunction;
 import ch.ethz.idsc.owl.bot.r2.WaypointDistanceCost;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
@@ -22,7 +23,6 @@ import ch.ethz.idsc.owl.math.region.Regions;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

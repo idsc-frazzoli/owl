@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.state;
+package ch.ethz.idsc.owl.ani.api;
 
 /** rank of a {@link PutProvider} in order of priority
  * 

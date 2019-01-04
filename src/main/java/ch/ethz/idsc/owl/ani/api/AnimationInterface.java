@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.gui.ani;
+package ch.ethz.idsc.owl.ani.api;
 
 import ch.ethz.idsc.tensor.Scalar;
 

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.state;
+package ch.ethz.idsc.owl.ani.api;
 
 import java.util.Iterator;
 import java.util.Set;

@@ -1,8 +1,10 @@
 // code by jph
-package ch.ethz.idsc.owl.math.state;
+package ch.ethz.idsc.owl.ani.api;
 
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
+import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 

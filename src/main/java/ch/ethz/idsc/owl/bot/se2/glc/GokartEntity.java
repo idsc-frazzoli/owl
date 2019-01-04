@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import ch.ethz.idsc.owl.ani.api.EntityControl;
+import ch.ethz.idsc.owl.ani.api.ProviderRank;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.state.EntityControl;
-import ch.ethz.idsc.owl.math.state.ProviderRank;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;

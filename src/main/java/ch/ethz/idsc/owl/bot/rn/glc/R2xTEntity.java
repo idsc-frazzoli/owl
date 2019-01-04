@@ -3,12 +3,12 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.ani.adapter.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
 import ch.ethz.idsc.tensor.Scalar;
 
 /* package */ class R2xTEntity extends R2Entity {
