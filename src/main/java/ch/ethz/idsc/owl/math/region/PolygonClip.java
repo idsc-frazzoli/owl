@@ -1,6 +1,6 @@
 // code by vc
 // inspired by https://rosettacode.org/wiki/Sutherland-Hodgman_polygon_clipping#Java
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.owl.math.region;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

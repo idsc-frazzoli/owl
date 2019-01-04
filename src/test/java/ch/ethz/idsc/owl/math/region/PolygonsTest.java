@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.owl.math.region;
 
 import java.util.ArrayList;
 import java.util.List;

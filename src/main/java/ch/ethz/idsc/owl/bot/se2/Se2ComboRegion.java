@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.RadiusXY;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;

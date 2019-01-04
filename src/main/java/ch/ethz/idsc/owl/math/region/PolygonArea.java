@@ -1,6 +1,6 @@
 // code by vc
 // inspired by https://www.mathopenref.com/coordpolygonarea.html
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.owl.math.region;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
