@@ -41,6 +41,11 @@ public class DubinsPath {
     return length;
   }
 
+  /** @return total curvature */
+  public Scalar curvature() {
+    return segLength.dot(dubinsPathType.signatureAbs()).Get().divide(radius);
+  }
+
   /** parameterization of dubins path over the closed interval [length().zero(), length()]
    * 
    * @param g start configuration

@@ -12,17 +12,17 @@ public interface Transition {
   /** @return end state of this transition */
   Tensor end();
 
-  /** @return time to traverse this transition
+  /** @return length of transition
    * @see TransitionCostFunction
    * @see LengthCostFunction */
   Scalar length();
 
-  /** @param ofs is non-negative and strictly less than dt
-   * @param dt
-   * @return */
-  Tensor sampled(Scalar ofs, Scalar dt);
-
   /** @param scalar in the interval [0, length()]
    * @return point on transition at given parameter value */
   Tensor splitAt(Scalar scalar);
+
+  /** @param ofs is non-negative and strictly less than ds
+   * @param ds
+   * @return */
+  Tensor sampled(Scalar ofs, Scalar ds);
 }

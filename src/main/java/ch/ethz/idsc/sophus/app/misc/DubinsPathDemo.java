@@ -12,17 +12,19 @@ import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.dubins.DubinsPath;
-import ch.ethz.idsc.sophus.dubins.DubinsPathLengthComparator;
+import ch.ethz.idsc.sophus.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.dubins.DubinsPathGenerator;
 import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 /* package */ class DubinsPathDemo extends AbstractDemo {
-  private static final Tensor ARROWHEAD = Arrowhead.of(.5);
+  private static final Tensor START = Tensors.vector(0, 0, 0);
+  private static final Tensor ARROWHEAD = Arrowhead.of(0.5);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
 
   @Override // from RenderInterface
@@ -36,22 +38,27 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       geometricLayer.popMatrix();
     }
     // ---
-    FixedRadiusDubins fixedRadiusDubins = new FixedRadiusDubins(mouse, RealScalar.of(1));
+    DubinsPathGenerator dubinsPathGenerator = FixedRadiusDubins.of(START, mouse, RealScalar.of(1));
     graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
-    for (DubinsPath dubinsPath : fixedRadiusDubins.allValid().collect(Collectors.toList()))
+    graphics.setStroke(new BasicStroke(1f));
+    for (DubinsPath dubinsPath : dubinsPathGenerator.allValid().collect(Collectors.toList()))
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     {
-      DubinsPath dubinsPath = fixedRadiusDubins.allValid().min(DubinsPathLengthComparator.INSTANCE).get();
       graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
-      graphics.setStroke(new BasicStroke(1.5f));
+      graphics.setStroke(new BasicStroke(2f));
+      DubinsPath dubinsPath = dubinsPathGenerator.allValid().min(DubinsPathComparator.length()).get();
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
-      graphics.setStroke(new BasicStroke(1f));
+    }
+    {
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
+      graphics.setStroke(new BasicStroke(2f));
+      DubinsPath dubinsPath = dubinsPathGenerator.allValid().min(DubinsPathComparator.curvature()).get();
+      graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     }
   }
 
   private static Tensor sample(DubinsPath dubinsPath) {
-    return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), 200) //
-        .map(dubinsPath.sampler(Array.zeros(3)));
+    return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), 200).map(dubinsPath.sampler(START));
   }
 
   public static void main(String[] args) {

@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   FUNCTION;
   // ---
   @Override
-  public Tensor apply(Tensor tensor) {
-    return Tensors.of(tensor.Get(0), tensor.Get(1).negate(), tensor.Get(2).negate());
+  public Tensor apply(Tensor xya) {
+    return Tensors.of(xya.Get(0), xya.Get(1).negate(), xya.Get(2).negate());
   }
 }

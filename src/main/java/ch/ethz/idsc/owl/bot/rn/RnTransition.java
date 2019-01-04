@@ -26,6 +26,8 @@ import ch.ethz.idsc.tensor.red.Norm;
 
   @Override // from Transition
   public Tensor sampled(Scalar ofs, Scalar dt) {
+    // RnGeodesic.INSTANCE.curve(start(), end());
+    // TODO JPH implementation not efficient
     if (Scalars.lessThan(dt, ofs))
       throw TensorRuntimeException.of(ofs, dt);
     Tensor tensor = Tensors.empty();
