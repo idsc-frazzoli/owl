@@ -26,7 +26,7 @@ public class SymLink {
   public final SymLink lQ;
   public final Scalar lambda;
 
-  public SymLink(SymLink lP, SymLink lQ, Scalar lambda) {
+  SymLink(SymLink lP, SymLink lQ, Scalar lambda) {
     this.lP = lP;
     this.lQ = lQ;
     this.lambda = lambda;

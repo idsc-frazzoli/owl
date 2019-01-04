@@ -170,8 +170,8 @@ by Sertac Karaman and Emilio Frazzoli,
 Library for non-linear geometry computation in Java, version `0.0.1`
 
 The library was developed with the following objectives in mind
+* trajectory design for autonomous robots
 * suitable for use in safety-critical real-time systems
-* trajectory design for an autonomous vehicle
 * implementation of theoretical concepts with high level of abstraction
 
 <table>
@@ -190,9 +190,9 @@ Smoothing
 
 <td>
 
-![filtering](https://user-images.githubusercontent.com/4012178/47631759-91cb9780-db47-11e8-9dc7-a2631a144ecc.png)
+![dubinspathcurvature](https://user-images.githubusercontent.com/4012178/50681318-5d72cc80-100b-11e9-943e-e168d0463eca.png)
 
-Filtering
+Dubins path curvature
 
 </tr>
 </table>

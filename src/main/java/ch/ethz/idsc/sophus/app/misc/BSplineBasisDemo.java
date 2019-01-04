@@ -14,7 +14,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
@@ -40,9 +39,8 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
 
   BSplineBasisDemo() {
-    super(true, GeodesicDisplays.R2_ONLY);
+    super(true, true, GeodesicDisplays.R2_ONLY);
     // ---
-    curvatureButton().setSelected(false);
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
     spinnerDegree.setList(DEGREES);
@@ -111,7 +109,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    new CurveRender(refined, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    renderCurve(refined, false, geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

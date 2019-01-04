@@ -20,7 +20,6 @@ import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -61,7 +60,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
 
   CurveSubdivisionDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     Tensor control = null;
     {
       Tensor move = Tensors.fromString( //
@@ -179,7 +178,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
       graphics.draw(path2d);
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    new CurveRender(render, isCyclic, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    renderCurve(render, isCyclic, geometricLayer, graphics);
     if (jToggleCrvt.isSelected()) {
       graphics.setStroke(new BasicStroke(1.25f));
       Tensor matrix = geometricLayer.getMatrix();

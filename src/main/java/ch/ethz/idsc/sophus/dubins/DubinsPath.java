@@ -36,6 +36,10 @@ public class DubinsPath {
         .reduce(Scalar::add).get();
   }
 
+  public DubinsPathType dubinsPathType() {
+    return dubinsPathType;
+  }
+
   /** @return total length of Dubins path in Euclidean space */
   public Scalar length() {
     return length;

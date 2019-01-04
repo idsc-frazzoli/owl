@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.twd;
 
+import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
-import ch.ethz.idsc.owl.math.state.StateTrajectoryControl;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;

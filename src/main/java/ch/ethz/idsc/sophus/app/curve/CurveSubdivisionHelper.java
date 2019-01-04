@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;

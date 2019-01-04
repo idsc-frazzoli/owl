@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   private static final Tensor CIRCLE = CirclePoints.of(10).multiply(RealScalar.of(3));
 
   SphereFitDemo() {
-    super(true, GeodesicDisplays.R2_ONLY);
+    super(true, false, GeodesicDisplays.R2_ONLY);
     // ---
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));

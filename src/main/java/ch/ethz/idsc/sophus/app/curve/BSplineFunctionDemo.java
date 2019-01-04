@@ -16,7 +16,6 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -47,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   BSplineFunctionDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     // ---
     addButtonDubins();
     // ---
@@ -124,7 +123,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
       geometricLayer.popMatrix();
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics); // limit curve
+    renderCurve(render, false, geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
   }

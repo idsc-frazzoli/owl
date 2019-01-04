@@ -28,7 +28,7 @@ enum WindowFunctionImage {
   private static Tensor image() {
     Tensor SE2 = Tensors.fromString("{{180, 0, 6+180/2}, {0, -180, 186}, {0, 0, 1}}").unmodifiable();
     GeometricLayer geometricLayer = GeometricLayer.of(SE2);
-    BufferedImage bufferedImage = DemoHelper.createWhite();
+    BufferedImage bufferedImage = StaticHelper.createWhite();
     Graphics2D graphics = bufferedImage.createGraphics();
     GraphicsUtil.setQualityHigh(graphics);
     graphics.setColor(Color.RED);

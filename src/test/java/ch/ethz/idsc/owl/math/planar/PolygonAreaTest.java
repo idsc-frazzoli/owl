@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.planar;
 
+import ch.ethz.idsc.owl.math.region.PolygonArea;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;

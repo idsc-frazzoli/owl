@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.gui.region.StateTimeCollectorRender;
 import ch.ethz.idsc.owl.gui.ren.ConeRegionRender;
 import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;

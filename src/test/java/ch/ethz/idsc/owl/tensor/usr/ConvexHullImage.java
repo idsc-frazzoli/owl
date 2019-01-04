@@ -28,8 +28,8 @@ enum ConvexHullImage {
     Random random = new Random(seed);
     Tensor points = RandomVariate.of(NormalDistribution.of(0.5, .28), random, 30, 2).map(Clip.unit());
     Tensor hull = ConvexHull.of(points);
-    GeometricLayer geometricLayer = GeometricLayer.of(DemoHelper.SE2);
-    BufferedImage bufferedImage = DemoHelper.createWhite();
+    GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2);
+    BufferedImage bufferedImage = StaticHelper.createWhite();
     Graphics2D graphics = bufferedImage.createGraphics();
     GraphicsUtil.setQualityHigh(graphics);
     {
@@ -41,7 +41,7 @@ enum ConvexHullImage {
     graphics.setColor(Color.RED);
     for (Tensor point : points) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(point));
-      Path2D path2d = geometricLayer.toPath2D(DemoHelper.POINT);
+      Path2D path2d = geometricLayer.toPath2D(StaticHelper.POINT);
       graphics.fill(path2d);
       geometricLayer.popMatrix();
     }

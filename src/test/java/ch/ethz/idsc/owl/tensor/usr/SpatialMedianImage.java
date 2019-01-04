@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 
 class Pixel2Coord {
-  private final Tensor inv = Inverse.of(DemoHelper.SE2);
+  private final Tensor inv = Inverse.of(StaticHelper.SE2);
   private final Tensor points;
 
   public Pixel2Coord(Tensor points) {
@@ -49,8 +49,8 @@ enum SpatialMedianImage {
     Random random = new Random(seed);
     Tensor points = RandomVariate.of(UniformDistribution.unit(), random, 15, 2);
     Optional<Tensor> optional = SpatialMedian.with(1e-10).uniform(points);
-    GeometricLayer geometricLayer = GeometricLayer.of(DemoHelper.SE2);
-    BufferedImage bufferedImage = DemoHelper.createWhite();
+    GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2);
+    BufferedImage bufferedImage = StaticHelper.createWhite();
     if (optional.isPresent()) {
       Tensor solution = optional.get();
       Tensor px = Range.of(0, 192);
@@ -71,7 +71,7 @@ enum SpatialMedianImage {
       {
         graphics.setColor(Color.GREEN);
         geometricLayer.pushMatrix(Se2Utils.toSE2Translation(solution));
-        Path2D path2d = geometricLayer.toPath2D(DemoHelper.POINT);
+        Path2D path2d = geometricLayer.toPath2D(StaticHelper.POINT);
         path2d.closePath();
         graphics.fill(path2d);
         geometricLayer.popMatrix();
@@ -79,7 +79,7 @@ enum SpatialMedianImage {
       graphics.setColor(Color.RED);
       for (Tensor point : points) {
         geometricLayer.pushMatrix(Se2Utils.toSE2Translation(point));
-        Path2D path2d = geometricLayer.toPath2D(DemoHelper.POINT);
+        Path2D path2d = geometricLayer.toPath2D(StaticHelper.POINT);
         graphics.fill(path2d);
         geometricLayer.popMatrix();
       }
