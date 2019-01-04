@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
   MeanFilterDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //

@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
   BezierFunctionDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     // ---
     addButtonDubins();
     // ---

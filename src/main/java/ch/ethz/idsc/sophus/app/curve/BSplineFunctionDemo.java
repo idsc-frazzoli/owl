@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   BSplineFunctionDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     // ---
     addButtonDubins();
     // ---

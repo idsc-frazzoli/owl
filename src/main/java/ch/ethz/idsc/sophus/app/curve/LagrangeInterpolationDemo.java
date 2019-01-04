@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   LagrangeInterpolationDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     // ---
     addButtonDubins();
     // ---

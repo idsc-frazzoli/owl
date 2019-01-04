@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
   CatmullClarkSubdivisionDemo() {
-    super(false, GeodesicDisplays.SE2C_ONLY);
+    super(false, false, GeodesicDisplays.SE2C_ONLY);
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
     spinnerRefine.setValue(2);

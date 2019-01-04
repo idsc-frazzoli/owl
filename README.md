@@ -170,8 +170,8 @@ by Sertac Karaman and Emilio Frazzoli,
 Library for non-linear geometry computation in Java, version `0.0.1`
 
 The library was developed with the following objectives in mind
+* trajectory design for autonomous robots
 * suitable for use in safety-critical real-time systems
-* trajectory design for an autonomous vehicle
 * implementation of theoretical concepts with high level of abstraction
 
 <table>

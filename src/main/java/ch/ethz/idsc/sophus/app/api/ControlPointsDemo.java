@@ -61,13 +61,14 @@ public abstract class ControlPointsDemo extends AbstractDemo {
     }
   };
 
-  public ControlPointsDemo(boolean clearButton, List<GeodesicDisplay> list) {
+  public ControlPointsDemo(boolean clearButton, boolean curvatureButton, List<GeodesicDisplay> list) {
     if (clearButton) {
       jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
       timerFrame.jToolBar.add(jButton);
     }
     jToggleComb.setSelected(true);
-    timerFrame.jToolBar.add(jToggleComb);
+    if (curvatureButton)
+      timerFrame.jToolBar.add(jToggleComb);
     if (!list.isEmpty()) {
       geodesicDisplaySpinner.setList(list);
       geodesicDisplaySpinner.setValue(list.get(0));

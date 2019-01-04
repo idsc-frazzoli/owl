@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private Scalar parameter = RationalScalar.HALF;
 
   BezierFunctionAverageDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, false, GeodesicDisplays.ALL);
     // ---
     JSlider jSlider = new JSlider(0, 1000, 500);
     jSlider.setPreferredSize(new Dimension(500, 28));
@@ -49,8 +49,8 @@ import ch.ethz.idsc.tensor.sca.N;
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
     SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(N.DOUBLE.apply(parameter));
     graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
-    SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
-    SymLink symLink = symLinkBuilder.build(symScalar);
+    // ---
+    SymLink symLink = SymLinkBuilder.of(control, symScalar);
     // ---
     GraphicsUtil.setQualityHigh(graphics);
     // ---

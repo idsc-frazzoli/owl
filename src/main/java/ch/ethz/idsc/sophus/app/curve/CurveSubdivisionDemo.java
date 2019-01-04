@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
 
   CurveSubdivisionDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     Tensor control = null;
     {
       Tensor move = Tensors.fromString( //
