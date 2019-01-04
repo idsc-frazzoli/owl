@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -21,6 +20,7 @@ public class DubinsPath {
   private final DubinsPathType dubinsPathType;
   private final Scalar radius;
   private final Tensor segLength;
+  private final Scalar length;
 
   /** @param dubinsPathType non-null
    * @param radius positive
@@ -30,11 +30,15 @@ public class DubinsPath {
     this.dubinsPathType = Objects.requireNonNull(dubinsPathType);
     this.radius = Sign.requirePositive(radius);
     this.segLength = VectorQ.requireLength(segLength, 3);
+    length = segLength.stream() //
+        .map(Scalar.class::cast) //
+        .map(Sign::requirePositiveOrZero) //
+        .reduce(Scalar::add).get();
   }
 
   /** @return total length of Dubins path in Euclidean space */
   public Scalar length() {
-    return (Scalar) Total.of(segLength);
+    return length;
   }
 
   /** parameterization of dubins path over the closed interval [length().zero(), length()]

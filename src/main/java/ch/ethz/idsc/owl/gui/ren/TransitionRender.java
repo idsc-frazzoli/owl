@@ -5,18 +5,16 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.VectorScalar;
-import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Scalar;
 
 /** renders the edges between nodes
  * 
@@ -26,6 +24,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * in particular costs of type {@link VectorScalar} are not supported
  * @see EdgeRender */
 public class TransitionRender {
+  private static final Scalar DT = RealScalar.of(.2); // TODO magic const
+  // ---
   private final TransitionSpace transitionSpace;
   private RenderInterface renderInterface = EmptyRender.INSTANCE;
 
@@ -56,8 +56,7 @@ public class TransitionRender {
       for (RrtsNode parent : collection)
         for (RrtsNode child : parent.children()) {
           Transition transition = transitionSpace.connect(parent.state(), child.state());
-          List<StateTime> sampled = transition.sampled(RealScalar.ZERO, RealScalar.ZERO, RealScalar.of(.2));
-          Path2D path2d = geometricLayer.toPath2D(Tensor.of(sampled.stream().map(StateTime::state)));
+          Path2D path2d = geometricLayer.toPath2D(transition.sampled(RealScalar.ZERO, DT));
           graphics.draw(path2d);
         }
     }

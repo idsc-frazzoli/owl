@@ -1,11 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.sophus.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.dubins.DubinsPathGenerator;
@@ -16,6 +11,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class Se2Transition extends AbstractTransition {
@@ -39,26 +35,21 @@ public class Se2Transition extends AbstractTransition {
   }
 
   @Override
-  public List<StateTime> sampled(Scalar t0, Scalar ofs, Scalar dt) {
-    ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
+  public Tensor sampled(Scalar ofs, Scalar dt) {
     if (Scalars.lessThan(dt, ofs))
       throw TensorRuntimeException.of(ofs, dt);
-    final Scalar length = length();
-    if (Scalars.isZero(length))
-      return Collections.emptyList();
-    List<StateTime> list = new ArrayList<>();
+    ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
+    Scalar length = length();
+    Tensor tensor = Tensors.empty();
     while (Scalars.lessThan(ofs, length)) {
-      Tensor x = scalarTensorFunction.apply(ofs);
-      StateTime stateTime = new StateTime(x, t0.add(ofs));
-      list.add(stateTime);
+      tensor.append(scalarTensorFunction.apply(ofs));
       ofs = ofs.add(dt);
     }
-    return list;
+    return tensor;
   }
 
   @Override
-  public StateTime splitAt(Scalar t1) {
-    // TODO RRTS Auto-generated method stub
-    return null;
+  public Tensor splitAt(Scalar scalar) {
+    return dubinsPath.sampler(start()).apply(scalar);
   }
 }

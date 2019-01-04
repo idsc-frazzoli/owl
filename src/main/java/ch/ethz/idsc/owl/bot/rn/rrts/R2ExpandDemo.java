@@ -26,11 +26,11 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
     Tensor max = Tensors.vector(wid, wid);
-    RrtsNodeCollection nc = new RnRrtsNodeCollection(min, max);
-    TransitionRegionQuery trq = StaticHelper.polygon1();
+    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(min, max);
+    TransitionRegionQuery transitionRegionQuery = StaticHelper.polygon1();
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
-    Rrts rrts = new DefaultRrts(transitionSpace, nc, trq, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
     try (AnimationWriter animationWriter = AnimationWriter.of(UserHome.Pictures("r2rrts.gif"), 250)) {
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
       while (frame++ < 40 && owlyFrame.jFrame.isVisible()) {
         for (int count = 0; count < 10; ++count)
           rrts.insertAsNode(randomSampleInterface.randomSample(), 20);
-        owlyFrame.setRrts(transitionSpace, root, trq);
+        owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
         animationWriter.append(owlyFrame.offscreen());
       }
       int repeatLast = 3;

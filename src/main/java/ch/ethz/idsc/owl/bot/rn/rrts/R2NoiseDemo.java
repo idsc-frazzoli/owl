@@ -24,11 +24,11 @@ import ch.ethz.idsc.tensor.Tensors;
   public static void main(String[] args) {
     Tensor min = Tensors.vector(-1, -3);
     Tensor max = Tensors.vector(-1 + 6, -3 + 6);
-    RrtsNodeCollection nc = new RnRrtsNodeCollection(min, max);
-    TransitionRegionQuery trq = StaticHelper.noise1();
+    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(min, max);
+    TransitionRegionQuery transitionRegionQuery = StaticHelper.noise1();
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
-    Rrts rrts = new DefaultRrts(transitionSpace, nc, trq, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = //
         SphereRandomSample.of(Tensors.vector(2, 0), RealScalar.of(3));
@@ -39,6 +39,6 @@ import ch.ethz.idsc.tensor.Tensors;
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(122, 226);
     owlyFrame.jFrame.setBounds(100, 100, 500, 500);
-    owlyFrame.setRrts(transitionSpace, root, trq);
+    owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
   }
 }
