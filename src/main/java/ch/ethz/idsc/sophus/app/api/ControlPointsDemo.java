@@ -16,7 +16,9 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.math.planar.CurvatureComb;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -130,10 +132,6 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       throw TensorRuntimeException.of(control);
   }
 
-  public final JToggleButton curvatureButton() {
-    return jToggleComb;
-  }
-
   public final Tensor control() {
     return Tensor.of(control.stream().map(geodesicDisplay()::project)).unmodifiable();
   }
@@ -144,5 +142,14 @@ public abstract class ControlPointsDemo extends AbstractDemo {
 
   protected final void renderPoints(GeometricLayer geometricLayer, Graphics2D graphics, Tensor points) {
     POINTS_RENDER_1.new Show(geodesicDisplay(), points).render(geometricLayer, graphics);
+  }
+
+  private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
+  private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
+
+  protected final void renderCurve(Tensor refined, boolean isCyclic, GeometricLayer geometricLayer, Graphics2D graphics) {
+    new CurveRender(refined, isCyclic, Color.BLUE, 1.25f).render(geometricLayer, graphics);
+    if (jToggleComb.isSelected())
+      new CurveRender(CurvatureComb.of(refined, COMB_SCALE, isCyclic), isCyclic, COLOR_CURVATURE_COMB, 1f).render(geometricLayer, graphics);
   }
 }

@@ -14,7 +14,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -81,7 +80,7 @@ import ch.ethz.idsc.tensor.sca.N;
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
     Tensor refined = Subdivide.of(0, control.length() - 1, 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    renderCurve(render, false, geometricLayer, graphics);
     {
       Tensor selected = interpolation.at(parameter.multiply(RealScalar.of(control.length() - 1)));
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
