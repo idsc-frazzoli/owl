@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.symlink;
+package ch.ethz.idsc.sophus.sym;
 
 import ch.ethz.idsc.tensor.Tensor;
 

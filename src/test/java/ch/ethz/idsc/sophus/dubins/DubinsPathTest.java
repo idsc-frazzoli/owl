@@ -29,6 +29,15 @@ public class DubinsPathTest extends TestCase {
     assertTrue(Chop._10.close(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}")));
   }
 
+  public void testSignFail() {
+    try {
+      new DubinsPath(DubinsPathType.LRL, RealScalar.ONE, Tensors.vector(1, -10, 1));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testOutsideFail() {
     DubinsPath dubinsPath = new DubinsPath(DubinsPathType.LRL, RealScalar.ONE, Tensors.vector(1, 10, 1));
     assertEquals(dubinsPath.length(), Quantity.of(12, ""));

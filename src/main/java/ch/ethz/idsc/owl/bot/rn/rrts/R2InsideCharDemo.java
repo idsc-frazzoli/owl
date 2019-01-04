@@ -5,7 +5,6 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -27,12 +26,11 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ enum R2InsideCharDemo {
   ;
   private static void explore(ImageRegion imageRegion, Tensor start) throws Exception {
-    RrtsNodeCollection nc = new RnRrtsNodeCollection(imageRegion.origin(), imageRegion.range());
-    TransitionRegionQuery trq = new SampledTransitionRegionQuery( //
-        CatchyTrajectoryRegionQuery.timeInvariant(imageRegion), RealScalar.of(0.1));
+    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(imageRegion.origin(), imageRegion.range());
+    TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.1));
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
-    Rrts rrts = new DefaultRrts(transitionSpace, nc, trq, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(start, 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(60, 477);
@@ -43,7 +41,7 @@ import ch.ethz.idsc.tensor.Tensors;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int count = 0; count < 50; ++count)
         rrts.insertAsNode(randomSampleInterface.randomSample(), 15);
-      owlyFrame.setRrts(transitionSpace, root, trq);
+      owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
       Thread.sleep(10);
     }
     System.out.println(rrts.rewireCount());

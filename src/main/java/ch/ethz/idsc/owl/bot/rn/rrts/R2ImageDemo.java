@@ -5,7 +5,6 @@ import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -28,12 +27,12 @@ import ch.ethz.idsc.tensor.Tensors;
   public static void main(String[] args) throws Exception {
     ImageRegion imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
-    RrtsNodeCollection nc = new RnRrtsNodeCollection(imageRegion.origin(), imageRegion.range());
-    TransitionRegionQuery trq = new SampledTransitionRegionQuery( //
-        CatchyTrajectoryRegionQuery.timeInvariant(imageRegion), RealScalar.of(0.1));
+    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(imageRegion.origin(), imageRegion.range());
+    TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
+        imageRegion, RealScalar.of(0.1));
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
-    Rrts rrts = new DefaultRrts(transitionSpace, nc, trq, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(60, 477);
@@ -44,7 +43,7 @@ import ch.ethz.idsc.tensor.Tensors;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int c = 0; c < 50; ++c)
         rrts.insertAsNode(randomSampleInterface.randomSample(), 15);
-      owlyFrame.setRrts(transitionSpace, root, trq);
+      owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
       Thread.sleep(10);
     }
     System.out.println(rrts.rewireCount());

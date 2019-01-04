@@ -16,13 +16,15 @@ public enum DubinsPathType {
   RLR(-1, +1, -1, Steer3Turns.INSTANCE), //
   ;
   // ---
-  private final Tensor scaSign;
+  private final Tensor signature;
+  private final Tensor signatureAbs;
   private final boolean isFirstTurnRight;
   private final boolean isFirstEqualsLast;
   private final DubinsSteer dubinsSteer;
 
   private DubinsPathType(int s0s, int s1s, int s2s, DubinsSteer dubinsSteer) {
-    scaSign = Tensors.vector(s0s, s1s, s2s).unmodifiable();
+    signature = Tensors.vector(s0s, s1s, s2s).unmodifiable();
+    signatureAbs = signature.map(Scalar::abs).unmodifiable();
     isFirstTurnRight = s0s == -1;
     isFirstEqualsLast = s0s == s2s;
     this.dubinsSteer = dubinsSteer;
@@ -38,6 +40,10 @@ public enum DubinsPathType {
     return isFirstEqualsLast;
   }
 
+  public Tensor signatureAbs() {
+    return signatureAbs;
+  }
+
   /* package */ DubinsSteer dubinsSteer() {
     return dubinsSteer;
   }
@@ -48,6 +54,6 @@ public enum DubinsPathType {
    * result is multiplied with length of segment */
   /* package */ Tensor tangent(int index, Scalar radius) {
     return Tensors.of(RealScalar.ONE, RealScalar.ZERO, //
-        scaSign.Get(index).divide(Sign.requirePositive(radius)));
+        signature.Get(index).divide(Sign.requirePositive(radius)));
   }
 }
