@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 
-enum DemoHelper {
+/* package */ enum StaticHelper {
   ;
   static final Tensor SE2 = Tensors.fromString("{{180, 0, 6}, {0, -180, 186}, {0, 0, 1}}").unmodifiable();
   static final Tensor POINT = CirclePoints.of(10).multiply(RealScalar.of(.015)).unmodifiable();

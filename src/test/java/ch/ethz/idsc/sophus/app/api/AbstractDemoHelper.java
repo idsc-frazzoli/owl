@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-public enum DemoHelper {
+public enum AbstractDemoHelper {
   ;
   public static void brief(AbstractDemo abstractDemo) {
     abstractDemo.timerFrame.jFrame.setVisible(true);
@@ -16,6 +16,7 @@ public enum DemoHelper {
       } else
         Thread.sleep(400);
     } catch (Exception exception) {
+      exception.printStackTrace();
       throw new RuntimeException();
     }
     abstractDemo.timerFrame.jFrame.setVisible(false);

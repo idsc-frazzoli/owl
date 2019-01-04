@@ -32,8 +32,8 @@ enum SphereFitImage {
     Optional<Tensor> optional = SphereFit.of(points);
     Tensor center = optional.get().get(0);
     Scalar radius = optional.get().Get(1);
-    GeometricLayer geometricLayer = GeometricLayer.of(DemoHelper.SE2);
-    BufferedImage bufferedImage = DemoHelper.createWhite();
+    GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2);
+    BufferedImage bufferedImage = StaticHelper.createWhite();
     Graphics2D graphics = bufferedImage.createGraphics();
     GraphicsUtil.setQualityHigh(graphics);
     {
@@ -47,7 +47,7 @@ enum SphereFitImage {
     graphics.setColor(Color.RED);
     for (Tensor point : points) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(point));
-      Path2D path2d = geometricLayer.toPath2D(DemoHelper.POINT);
+      Path2D path2d = geometricLayer.toPath2D(StaticHelper.POINT);
       graphics.fill(path2d);
       geometricLayer.popMatrix();
     }
