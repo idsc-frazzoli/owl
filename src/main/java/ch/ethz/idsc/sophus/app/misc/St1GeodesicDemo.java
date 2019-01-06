@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import ch.ethz.idsc.owl.gui.ren.GridRender;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private static final Tensor CIRCLE = CirclePoints.of(20).multiply(RealScalar.of(.03));
 
   public St1GeodesicDemo() {
-    timerFrame.geometricComponent.addRenderInterface(GridRender.INSTANCE);
+    timerFrame.geometricComponent.addRenderInterface(AxesRender.INSTANCE);
   }
 
   @Override // from RenderInterface

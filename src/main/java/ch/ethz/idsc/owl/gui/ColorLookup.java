@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.gui;
 
-import ch.ethz.idsc.owl.math.Hsluv;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;

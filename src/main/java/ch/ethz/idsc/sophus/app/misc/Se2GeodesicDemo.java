@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import ch.ethz.idsc.owl.gui.ren.GridRender;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private static final Tensor ARROWHEAD = Arrowhead.of(RealScalar.of(.4));
 
   public Se2GeodesicDemo() {
-    timerFrame.geometricComponent.addRenderInterface(GridRender.INSTANCE);
+    timerFrame.geometricComponent.addRenderInterface(AxesRender.INSTANCE);
   }
 
   @Override // from RenderInterface
