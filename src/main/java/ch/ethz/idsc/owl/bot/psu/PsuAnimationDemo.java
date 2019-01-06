@@ -5,7 +5,7 @@ import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
-import ch.ethz.idsc.owl.gui.ren.GridRender;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -43,7 +43,7 @@ public class PsuAnimationDemo implements DemoInterface {
     vectorFieldRender.uv_pairs = //
         VectorFields.of(PsuStateSpaceModel.INSTANCE, points, Array.zeros(1), RealScalar.of(0.1));
     owlyAnimationFrame.addBackground(vectorFieldRender);
-    owlyAnimationFrame.addBackground(GridRender.INSTANCE);
+    owlyAnimationFrame.addBackground(AxesRender.INSTANCE);
     return owlyAnimationFrame;
   }
 

@@ -21,7 +21,7 @@ public enum RenderElements {
   ;
   public static Collection<RenderInterface> create(TrajectoryPlanner trajectoryPlanner) {
     List<RenderInterface> list = new LinkedList<>();
-    list.add(GridRender.INSTANCE);
+    list.add(AxesRender.INSTANCE);
     // list.add(new EtaRender(trajectoryPlanner.getEta()));
     // list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
@@ -67,7 +67,7 @@ public enum RenderElements {
   public static Collection<RenderInterface> create( //
       Collection<? extends StateCostNode> collection, TransitionRegionQuery transitionRegionQuery) {
     List<RenderInterface> list = new LinkedList<>();
-    list.add(GridRender.INSTANCE);
+    list.add(AxesRender.INSTANCE);
     if (transitionRegionQuery instanceof StateTimeCollector)
       list.add(new ObstacleRender(((StateTimeCollector) transitionRegionQuery).getMembers()));
     list.add(new TreeRender().setCollection(collection));

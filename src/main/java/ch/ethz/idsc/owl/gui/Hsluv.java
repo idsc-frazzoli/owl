@@ -1,6 +1,6 @@
 // code from www.hsluv.org
 // adapted by jph
-package ch.ethz.idsc.owl.math;
+package ch.ethz.idsc.owl.gui;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -27,24 +27,24 @@ public enum Hsluv {
   }
 
   // ---
-  private static double[][] m = new double[][] { //
+  private static final double[][] M = new double[][] { //
       { 3.240969941904521, -1.537383177570093, -0.498610760293 }, //
       { -0.96924363628087, 1.87596750150772, 0.041555057407175 }, //
       { 0.055630079696993, -0.20397695888897, 1.056971514242878 } };
-  private static double refY = 1;
-  private static double refU = 0.19783000664283;
-  private static double refV = 0.46831999493879;
-  private static double kappa = 903.2962962;
-  private static double epsilon = 0.0088564516;
+  private static final double REFY = 1;
+  private static final double REFU = 0.19783000664283;
+  private static final double REFV = 0.46831999493879;
+  private static final double KAPPA = 903.2962962;
+  private static final double EPSILON = 0.0088564516;
 
   private static List<double[]> getBounds(double L) {
     List<double[]> result = new ArrayList<>();
     double sub1 = Math.pow(L + 16, 3) / 1560896;
-    double sub2 = sub1 > epsilon ? sub1 : L / kappa;
+    double sub2 = sub1 > EPSILON ? sub1 : L / KAPPA;
     for (int c = 0; c < 3; ++c) {
-      double m1 = m[c][0];
-      double m2 = m[c][1];
-      double m3 = m[c][2];
+      double m1 = M[c][0];
+      double m2 = M[c][1];
+      double m3 = M[c][2];
       for (int t = 0; t < 2; ++t) {
         double top1 = (284517 * m1 - 94839 * m3) * sub2;
         double top2 = (838422 * m3 + 769860 * m2 + 731718 * m1) * L * sub2 - 769860 * t * L;
@@ -97,16 +97,16 @@ public enum Hsluv {
 
   private static double[] xyzToRgb(double[] tuple) {
     return new double[] { //
-        fromLinear(dotProduct(m[0], tuple)), //
-        fromLinear(dotProduct(m[1], tuple)), //
-        fromLinear(dotProduct(m[2], tuple)), //
+        fromLinear(dotProduct(M[0], tuple)), //
+        fromLinear(dotProduct(M[1], tuple)), //
+        fromLinear(dotProduct(M[2], tuple)), //
     };
   }
 
   private static double lToY(double L) {
     if (L <= 8)
-      return refY * L / kappa;
-    return refY * Math.pow((L + 16) / 116, 3);
+      return REFY * L / KAPPA;
+    return REFY * Math.pow((L + 16) / 116, 3);
   }
 
   private static double[] luvToXyz(double[] tuple) {
@@ -115,8 +115,8 @@ public enum Hsluv {
     double V = tuple[2];
     if (L == 0)
       return new double[] { 0, 0, 0 };
-    double varU = U / (13 * L) + refU;
-    double varV = V / (13 * L) + refV;
+    double varU = U / (13 * L) + REFU;
+    double varV = V / (13 * L) + REFV;
     double Y = lToY(L);
     double X = 0 - (9 * Y * varU) / ((varU - 4) * varV - varU * varV);
     double Z = (9 * Y - (15 * varV * Y) - (varV * X)) / (3 * varV);

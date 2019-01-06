@@ -5,7 +5,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
@@ -89,26 +87,15 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
     }
     // ---
     final Tensor refined;
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
-      Tensor rnctrl = jToggleItrp.isSelected() //
+      Tensor effective = jToggleItrp.isSelected() //
           ? BSplineInterpolation.solve(degree, control)
           : control;
       GeodesicBSplineFunction bSplineFunction = //
-          GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, rnctrl);
-      refined = Subdivide.of(0, rnctrl.length() - 1, 4 << levels).map(bSplineFunction);
+          GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
+      refined = Subdivide.of(0, effective.length() - 1, 4 << levels).map(bSplineFunction);
     }
-    graphics.setColor(new Color(255, 128, 128, 255));
-    for (Tensor point : control) {
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
-      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
-      path2d.closePath();
-      graphics.setColor(new Color(255, 128, 128, 64));
-      graphics.fill(path2d);
-      graphics.setColor(new Color(255, 128, 128, 255));
-      graphics.draw(path2d);
-      geometricLayer.popMatrix();
-    }
+    renderControlPoints(geometricLayer, graphics);
     renderCurve(refined, false, geometricLayer, graphics);
   }
 

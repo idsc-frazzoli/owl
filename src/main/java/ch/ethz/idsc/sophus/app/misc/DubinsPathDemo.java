@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /* package */ class DubinsPathDemo extends AbstractDemo {
   private static final Tensor START = Tensors.vector(0, 0, 0);
   private static final Tensor ARROWHEAD = Arrowhead.of(0.5);
+  private static final int POINTS = 200;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
 
   @Override // from RenderInterface
@@ -39,10 +40,12 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     }
     // ---
     DubinsPathGenerator dubinsPathGenerator = FixedRadiusDubins.of(START, mouse, RealScalar.of(1));
-    graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
-    graphics.setStroke(new BasicStroke(1f));
-    for (DubinsPath dubinsPath : dubinsPathGenerator.allValid().collect(Collectors.toList()))
-      graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
+    {
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
+      graphics.setStroke(new BasicStroke(1f));
+      for (DubinsPath dubinsPath : dubinsPathGenerator.allValid().collect(Collectors.toList()))
+        graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
+    }
     {
       graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
       graphics.setStroke(new BasicStroke(2f));
@@ -58,7 +61,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
   }
 
   private static Tensor sample(DubinsPath dubinsPath) {
-    return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), 200).map(dubinsPath.sampler(START));
+    return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), POINTS).map(dubinsPath.sampler(START));
   }
 
   public static void main(String[] args) {

@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
-import ch.ethz.idsc.owl.gui.ren.GridRender;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -55,7 +55,7 @@ public class R2VectorCostDemo implements DemoInterface {
     Region<Tensor> imageRegion = Regions.emptyRegion();
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
-    owlyAnimationFrame.addBackground(GridRender.INSTANCE);
+    owlyAnimationFrame.addBackground(AxesRender.INSTANCE);
     owlyAnimationFrame.addBackground(new ImageRender(RegionRenders.image(image), imageCostFunction.scale()));
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     return owlyAnimationFrame;

@@ -11,7 +11,7 @@ import java.awt.geom.Path2D;
 import javax.swing.JTextField;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
-import ch.ethz.idsc.owl.gui.ren.GridRender;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
     jTextField.setText("{0, 1}");
     timerFrame.jToolBar.add(jTextField);
     // ---
-    timerFrame.geometricComponent.addRenderInterface(GridRender.INSTANCE);
+    timerFrame.geometricComponent.addRenderInterface(AxesRender.INSTANCE);
   }
 
   @Override // from RenderInterface
