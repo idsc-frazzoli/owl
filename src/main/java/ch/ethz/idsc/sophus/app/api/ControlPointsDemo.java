@@ -4,6 +4,8 @@ package ch.ethz.idsc.sophus.app.api;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -62,10 +64,17 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       }
     }
   };
+  private final ActionListener actionListener = new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+      min_index = null;
+      control = Tensors.of(Array.zeros(3));
+    }
+  };
 
   public ControlPointsDemo(boolean clearButton, boolean curvatureButton, List<GeodesicDisplay> list) {
     if (clearButton) {
-      jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+      jButton.addActionListener(actionListener);
       timerFrame.jToolBar.add(jButton);
     }
     jToggleComb.setSelected(true);
