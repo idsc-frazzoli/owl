@@ -20,6 +20,7 @@ import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.LieGroupBSplineInterpolation;
@@ -91,7 +92,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Tensor effective = control;
     if (jToggleItrp.isSelected()) {
       LieGroup lieGroup = geodesicDisplay.lieGroup();
-      GeodesicBSplineInterpolation geodesicBSplineInterpolation = Objects.isNull(lieGroup) //
+      AbstractBSplineInterpolation geodesicBSplineInterpolation = Objects.isNull(lieGroup) //
           ? new GeodesicBSplineInterpolation(geodesicDisplay.geodesicInterface(), degree, control)
           : new LieGroupBSplineInterpolation(lieGroup, geodesicDisplay.geodesicInterface(), degree, control);
       {

@@ -199,10 +199,16 @@ Dubins path curvature
 
 ## Features
 
-* geodesics in Lie-groups and homogeneous spaces: `Rn`, `SE(2)`, `H2`, `Sn`, ...
+* geodesics in Lie-groups and homogeneous spaces: Euclidean space `R^n`, special Euclidean group `SE(2)`, hyperbolic half-plane `H2`, n-dimensional sphere `S^n`, ...
 * parametric curves defined by control points in non-linear spaces: `GeodesicBSplineFunction`, ...
 * non-linear smoothing of noisy localization data `GeodesicCenterFilter`
 * Dubins path
+
+## Geodesic DeBoor Algorithm
+
+## Smoothing using Geodesic Averages
+
+## Visualization of Geodesic Averages
 
 ## Contributors
 

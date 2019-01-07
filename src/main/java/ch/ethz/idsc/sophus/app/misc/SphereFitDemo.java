@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       Tensor weiszfeld = SpatialMedian.with(1e-4).uniform(rnctrl).get();
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(weiszfeld.copy().append(RealScalar.ZERO)));
+      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(weiszfeld));
       Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();
       graphics.setColor(new Color(128, 128, 255, 64));

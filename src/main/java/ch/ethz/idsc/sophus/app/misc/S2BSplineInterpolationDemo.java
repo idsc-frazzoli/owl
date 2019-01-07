@@ -4,9 +4,10 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
+import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation;
-import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.space.SnGeodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -21,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   public static void main(String[] args) throws IOException {
     Tensor target = Tensors.fromString("{{1,0,0},{0,1,0},{0,0,1},{-1,0,0}}");
     Export.of(UserHome.file("Documents/s2/target.csv"), target.map(Round._6));
-    GeodesicBSplineInterpolation geodesicBSplineInterpolation = //
+    AbstractBSplineInterpolation geodesicBSplineInterpolation = //
         new GeodesicBSplineInterpolation(SnGeodesic.INSTANCE, 2, target);
     Iteration iteration = geodesicBSplineInterpolation.untilClose(Chop._08, 100);
     Tensor control = iteration.control();

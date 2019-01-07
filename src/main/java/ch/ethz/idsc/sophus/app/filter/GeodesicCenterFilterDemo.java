@@ -67,27 +67,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
-    // try {
-    // Tensor rows = Import.of(new File("/home/datahaki/Documents/datasets/swisstrolley/processed/1.csv"));
-    // control = Tensors.empty();
-    // Scalar RAD2DEG = RealScalar.of(180 / Math.PI);
-    // int index = 0;
-    // for (Tensor row : rows) {
-    // Scalar x = row.Get(0).multiply(RAD2DEG);
-    // Scalar y = row.Get(1).multiply(RAD2DEG);
-    // Tensor transform = WGS84toCH1903LV03Plus.transform(x, y);
-    // control.append(transform.append(row.Get(2)));
-    // ++index;
-    // if (2000 < index)
-    // break;
-    // }
-    // control = Tensor.of(control.stream().map(r -> r.pmul(Tensors.vector(.1, .1, -1))));
-    // Tensor mean = Mean.of(control);
-    // mean.set(RealScalar.of(Math.PI / 2), 2);
-    // control = Tensor.of(control.stream().map(row -> row.subtract(mean)));
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // }
+    // ---
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
@@ -97,7 +77,6 @@ import ch.ethz.idsc.tensor.sca.Round;
     jToggleDiff.setSelected(true);
     timerFrame.jToolBar.add(jToggleDiff);
     // ---
-    // jToggleSymi.setSelected(true);
     timerFrame.jToolBar.add(jToggleSymi);
     // ---
     jToggleWait.setSelected(false);
@@ -182,14 +161,14 @@ import ch.ethz.idsc.tensor.sca.Round;
       graphics.draw(geometricLayer.toPath2D(refined));
     }
     for (Tensor point : refined) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point.copy().append(RealScalar.ZERO)));
+      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(point));
       Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
-      geometricLayer.popMatrix();
       path2d.closePath();
       graphics.setColor(color);
       graphics.fill(path2d);
       graphics.setColor(Color.BLACK);
       graphics.draw(path2d);
+      geometricLayer.popMatrix();
     }
   }
 
