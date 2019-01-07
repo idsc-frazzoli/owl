@@ -26,8 +26,8 @@ public class Se2CarFlowsTest extends TestCase {
     Flow flow = collection.iterator().next();
     Tensor x = Tensors.fromString("{1[m],2[m],3[rad]}").map(UnitSystem.SI());
     Tensor r = RungeKutta45Integrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
-    assertTrue(Chop._10.close(r, //
-        Tensors.fromString("{1.9786265584792444[m], 3.5241205617280174[m], -1}")));
+    Chop._10.requireClose(r, //
+        Tensors.fromString("{1.9786265584792444[m], 3.5241205617280174[m], -1}"));
   }
 
   public void testRadius() {
@@ -40,6 +40,6 @@ public class Se2CarFlowsTest extends TestCase {
     Tensor res = Se2CoveringIntegrator.INSTANCE.spin(origin, u.multiply(half_turn));
     res = res.map(Chop._12);
     Scalar radius = res.Get(1).divide(RealScalar.of(2));
-    assertTrue(Chop._12.close(radius.reciprocal(), rate));
+    Chop._12.requireClose(radius.reciprocal(), rate);
   }
 }

@@ -29,7 +29,7 @@ public class R2FlowsTest extends TestCase {
     R2Flows r2Config = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Config.getFlows(n);
     Scalar maxSpeed = RnControls.maxSpeed(controls);
-    assertTrue(Chop._14.close(maxSpeed, RealScalar.ONE));
+    Chop._14.requireClose(maxSpeed, RealScalar.ONE);
   }
 
   public void testFail() {

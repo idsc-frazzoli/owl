@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.Arrays;
 
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
+import ch.ethz.idsc.owl.bot.r2.CogPoints;
 import ch.ethz.idsc.owl.bot.r2.R2ExamplePolygons;
 import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
@@ -17,7 +18,6 @@ import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.map.Se2Family;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
-import ch.ethz.idsc.owl.math.planar.CogPoints;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;

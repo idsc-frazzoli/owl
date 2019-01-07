@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.map.So2Family;
-import ch.ethz.idsc.owl.math.planar.CogPoints;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;

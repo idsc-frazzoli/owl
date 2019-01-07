@@ -23,7 +23,7 @@ public class RotationMatrix3DTest extends TestCase {
       Tensor p = NORMALIZE.apply(randomSampleInterface.randomSample());
       Tensor q = NORMALIZE.apply(randomSampleInterface.randomSample());
       Tensor tensor = RotationMatrix3D.of(p, q);
-      assertTrue(Chop._10.close(tensor.dot(p), q));
+      Chop._10.requireClose(tensor.dot(p), q);
       assertTrue(OrthogonalMatrixQ.of(tensor, Chop._10));
     }
   }

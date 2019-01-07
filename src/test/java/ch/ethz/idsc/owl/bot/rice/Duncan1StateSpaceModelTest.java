@@ -47,7 +47,7 @@ public class Duncan1StateSpaceModelTest extends TestCase {
     List<StateTime> list = stateIntegrator.trajectory(stateTime, flow);
     StateTime last = Lists.getLast(list);
     assertEquals(last.time(), Quantity.of(100, "s"));
-    assertTrue(Chop._12.close(last.state().get(0), push.divide(lambda)));
+    Chop._12.requireClose(last.state().get(0), push.divide(lambda));
   }
 
   public void testFail() {
