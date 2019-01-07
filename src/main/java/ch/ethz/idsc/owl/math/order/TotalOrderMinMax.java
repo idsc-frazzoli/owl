@@ -4,12 +4,13 @@ package ch.ethz.idsc.owl.math.order;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 
+/** @author Andre
+ *
+ * Searches a totally ordered set for its minimal or maximal element */
 public class TotalOrderMinMax {
-  // public static TotalOrderMinMax of(Tensor tensor) {
-  // return new TotalOrderMinMax(tensor);
-  // }
+  /** @param Totally ordered set to be searched for minimal element
+   * @return Minimal element of totally ordered set */
   public static Scalar TOmin(Tensor tensor) {
     Scalar min = tensor.Get(0);
     for (int i = 1; i < tensor.length(); i++) {
@@ -18,17 +19,13 @@ public class TotalOrderMinMax {
     return min;
   }
 
+  /** @param Totally ordered set to be searched for maximal element
+   * @return Maximal element of totally ordered set */
   public static Scalar TOmax(Tensor tensor) {
     Scalar max = tensor.Get(0);
     for (int i = 1; i < tensor.length(); i++) {
       max = (Scalars.lessEquals(tensor.Get(i), max)) ? max : tensor.Get(i);
     }
     return max;
-  }
-
-  public static void main(String[] args) {
-    Tensor x1 = Tensors.vector(1, 2, 3, 4, 0.2);
-    System.out.println(TotalOrderMinMax.TOmin(x1));
-    System.out.println(TotalOrderMinMax.TOmax(x1));
   }
 }
