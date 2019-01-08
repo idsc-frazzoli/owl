@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 /** see for instance
  * Riemannian Variance Filtering: An Independent Filtering Scheme for Statistical
  * Tests on Manifold-valued Data */
-// TODO not implemented yet
+// TODO LONGTERM not implemented yet
 public enum SpdGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---

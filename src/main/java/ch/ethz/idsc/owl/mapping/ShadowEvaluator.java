@@ -209,13 +209,13 @@ public class ShadowEvaluator {
     Se2Bijection se2Bijection = new Se2Bijection(state);
     TensorUnaryOperator forward = se2Bijection.forward();
     // -
-    Scalar range = RealScalar.of(100); // TODO magic const
+    Scalar range = RealScalar.of(100); // TODO YN magic const
     Tensor rays = Tensor.of(angles.stream().map(Scalar.class::cast).map(AngleVector::of)).multiply(range);
     rays.append(Tensors.vector(0, 0)); // append origin
     // get pixel coordinates as Points
     Point polyPoint = StaticHelper.toPoint(rays.stream() //
         .map(forward::apply) //
-        .map(shadowMap::state2pixel) // TODO not efficient since converts point -> int{x,y} -> vector -> int[]
+        .map(shadowMap::state2pixel) // TODO JPH not efficient since converts point -> int{x,y} -> vector -> int[]
         // ... suggestion: use geometricLayer.toVector
         .map(a -> Tensors.vector(a.x(), a.y())));
     Mat segment = new Mat(mat.size(), mat.type(), opencv_core.Scalar.BLACK);

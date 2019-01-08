@@ -2,19 +2,18 @@
 package ch.ethz.idsc.sophus.app.misc;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.dubins.DubinsPathGenerator;
 import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.sophus.group.Se2Utils;
-import ch.ethz.idsc.sophus.planar.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -24,7 +23,6 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 /* package */ class DubinsPathDemo extends AbstractDemo {
   private static final Tensor START = Tensors.vector(0, 0, 0);
-  private static final Tensor ARROWHEAD = Arrowhead.of(0.5);
   private static final int POINTS = 200;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
 
@@ -33,9 +31,9 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
     GraphicsUtil.setQualityHigh(graphics);
     final Tensor mouse = geometricLayer.getMouseSe2State();
     {
-      graphics.setColor(Color.GREEN);
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(3));
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-      graphics.fill(geometricLayer.toPath2D(ARROWHEAD));
+      graphics.fill(geometricLayer.toPath2D(Se2GeodesicDisplay.INSTANCE.shape()));
       geometricLayer.popMatrix();
     }
     // ---

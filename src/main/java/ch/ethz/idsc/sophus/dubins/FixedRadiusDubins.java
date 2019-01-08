@@ -50,10 +50,9 @@ public class FixedRadiusDubins implements DubinsPathGenerator {
     Tensor gnorm = dubinsPathType.isFirstTurnRight() ? Se2Flip.FUNCTION.apply(xya) : xya;
     Tensor center3 = new Se2CoveringGroupElement(gnorm).combine(h);
     Tensor deltacenter = new Se2CoveringGroupElement(center1).inverse().combine(center3);
-    // TODO use Scalar
-    double dist_tr = Norm._2.ofVector(deltacenter.extract(0, 2)).number().doubleValue();
-    double th_tr = ArcTan2D.of(deltacenter).number().doubleValue();
-    double th_total = deltacenter.Get(2).number().doubleValue();
+    Scalar dist_tr = Norm._2.ofVector(deltacenter.extract(0, 2));
+    Scalar th_tr = ArcTan2D.of(deltacenter);
+    Scalar th_total = deltacenter.Get(2);
     th_tr = StaticHelper.principalValue(th_tr);
     th_total = StaticHelper.principalValue(th_total);
     return dubinsPathType.dubinsSteer().steer(dist_tr, th_tr, th_total, radius) //
