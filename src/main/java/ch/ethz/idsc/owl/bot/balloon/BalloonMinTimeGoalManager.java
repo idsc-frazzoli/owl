@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
@@ -35,12 +36,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    return sphericalRegion.distance(x.extract(0, 2)).divide(maxSpeed); // unit [m] / [m/s] simplifies to [s]
+    return sphericalRegion.distance(Extract2D.FUNCTION.apply(x)).divide(maxSpeed); // unit [m] / [m/s] simplifies to [s]
   }
 
   @Override // from Region
   public boolean isMember(Tensor element) {
-    return sphericalRegion.isMember(element.extract(0, 2));
+    return sphericalRegion.isMember(Extract2D.FUNCTION.apply(element));
   }
 
   @Override // from CostFunction

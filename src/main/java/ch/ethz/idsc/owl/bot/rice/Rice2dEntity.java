@@ -21,6 +21,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -72,7 +73,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     Tensor partitionScale = Tensors.vector(3, 3, 6, 6);
     StateIntegrator stateIntegrator = //
         FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
-    Tensor center = Join.of(goal.extract(0, 2), AngleVector.of(goal.Get(2)).multiply(RealScalar.of(0.8)));
+    Tensor center = Join.of(Extract2D.FUNCTION.apply(goal), AngleVector.of(goal.Get(2)).multiply(RealScalar.of(0.8)));
     GoalInterface goalInterface = new Rice2GoalManager(new EllipsoidRegion(center, Tensors.vector(0.5, 0.5, 0.4, 0.4)));
     StateTimeRaster stateTimeRaster = EtaRaster.state(partitionScale);
     return new StandardTrajectoryPlanner( //

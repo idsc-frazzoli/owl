@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -65,7 +66,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     StateIntegrator stateIntegrator = //
         FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
-    Tensor center = Join.of(goal.extract(0, 2), Array.zeros(2));
+    Tensor center = Join.of(Extract2D.FUNCTION.apply(goal), Array.zeros(2));
     GoalInterface goalInterface = SatelliteGoalManager.create( //
         center, Tensors.vector(0.5, 0.5, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     StateTimeRaster stateTimeRaster = EtaRaster.state(PARTITION_SCALE);

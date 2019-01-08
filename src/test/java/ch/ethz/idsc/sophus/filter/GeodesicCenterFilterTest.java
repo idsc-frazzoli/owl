@@ -82,8 +82,8 @@ public class GeodesicCenterFilterTest extends TestCase {
       TensorUnaryOperator tensorUnaryOperator = //
           GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel), 3);
       Tensor res = tensorUnaryOperator.apply(xyz);
-      Tensor xy = Tensor.of(xyz.stream().map(Extract2D::of));
-      Tensor uv = Tensor.of(res.stream().map(Extract2D::of));
+      Tensor xy = Tensor.of(xyz.stream().map(Extract2D.FUNCTION));
+      Tensor uv = Tensor.of(res.stream().map(Extract2D.FUNCTION));
       Tensor dif = Flatten.of(xy.subtract(uv));
       assertTrue(Scalars.lessThan(Norm.INFINITY.of(dif), RealScalar.of(.5)));
     }

@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.math.RadiusXY;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.LinearRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -23,7 +24,7 @@ public class Tse2ComboRegion extends Se2ComboRegion {
    * @throws Exception if first two entries of radiusVector are different */
   public static Tse2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new Tse2ComboRegion( //
-        new SphericalRegion(goal.extract(0, 2), RadiusXY.requireSame(radiusVector)), //
+        new SphericalRegion(Extract2D.FUNCTION.apply(goal), RadiusXY.requireSame(radiusVector)), //
         new So2Region(goal.Get(2), radiusVector.Get(2)), //
         new LinearRegion(goal.Get(3), radiusVector.Get(3)));
   }

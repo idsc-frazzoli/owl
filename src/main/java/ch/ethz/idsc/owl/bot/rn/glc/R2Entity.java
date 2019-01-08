@@ -25,6 +25,7 @@ import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
@@ -76,12 +77,12 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
     Tensor partitionScale = PARTITION_SCALE;
     Scalar goalRadius = RealScalar.of(Math.sqrt(2.0)).divide(partitionScale.Get(0));
-    return new SphericalRegion(goal.extract(0, 2), goalRadius);
+    return new SphericalRegion(Extract2D.FUNCTION.apply(goal), goalRadius);
   }
 
   @Override
   public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    Collection<Flow> controls = createControls(); // TODO design no good
+    Collection<Flow> controls = createControls(); // LONGTERM design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         RnMinTimeGoalManager.create(goalRegion, controls), //

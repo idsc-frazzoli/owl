@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.RigidFamily;
 import ch.ethz.idsc.owl.math.map.TranslationFamily;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
@@ -32,10 +33,10 @@ public class TrajectoryTranslationFamily extends TranslationFamily {
   private final int limit;
 
   private TrajectoryTranslationFamily(List<StateTime> trajectory, StateTime initial) {
-    list.add(initial.state().extract(0, 2));
+    list.add(Extract2D.FUNCTION.apply(initial.state()));
     trajectory.stream() //
         .map(StateTime::state) //
-        .map(tensor -> tensor.extract(0, 2)) //
+        .map(Extract2D.FUNCTION) //
         .forEach(list::add);
     ofs = initial.time();
     delta = trajectory.get(0).time().subtract(ofs);

@@ -14,6 +14,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -55,7 +56,7 @@ public class EdgeRender {
       this.collection = collection;
       polygon = ConvexHull.of(collection.stream() //
           .map(StateCostNode::state) //
-          .map(tensor -> tensor.extract(0, 2)), Chop._10); //
+          .map(Extract2D.FUNCTION), Chop._10); //
     }
 
     @Override // from RenderInterface

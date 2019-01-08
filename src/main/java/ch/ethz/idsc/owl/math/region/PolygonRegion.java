@@ -16,7 +16,7 @@ public class PolygonRegion implements Region<Tensor>, Serializable {
 
   @Override // from Region
   public boolean isMember(Tensor tensor) {
-    // TODO depending on complexity of given polygon, prepend AABB check
+    // LONGTERM depending on complexity of given polygon, prepend AABB check
     return Polygons.isInside(polygon, tensor);
   }
 

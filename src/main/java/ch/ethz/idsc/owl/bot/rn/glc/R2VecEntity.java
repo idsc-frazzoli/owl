@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   @Override
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     System.out.println("goal=" + goal);
-    Collection<Flow> controls = createControls(); // TODO design no good
+    Collection<Flow> controls = createControls(); // LONGTERM design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface minTimeGoal = RnMinTimeGoalManager.create(goalRegion, controls); //
     List<CostFunction> costs = new ArrayList<>();

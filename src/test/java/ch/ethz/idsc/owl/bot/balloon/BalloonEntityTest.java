@@ -56,10 +56,6 @@ public class BalloonEntityTest extends TestCase {
     assertEquals(balloonEntity.delayHint(), RealScalar.of(2));
   }
 
-  public void testRender() {
-    // TODO ANDRE
-  }
-
   public void testCreateTrajectoryPlanner() {
     Tensor goal = Tensors.vector(-30, 0);
     Scalar vertSpeedMax = RealScalar.of(4);

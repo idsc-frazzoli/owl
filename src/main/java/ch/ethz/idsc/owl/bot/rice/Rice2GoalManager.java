@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -35,8 +36,8 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    Tensor pc = x.extract(0, 2);
-    Tensor pd = center.extract(0, 2);
+    Tensor pc = Extract2D.FUNCTION.apply(x);
+    Tensor pd = Extract2D.FUNCTION.apply(center); // TODO JPH precompute this!
     Scalar mindist = Ramp.of(Norm._2.between(pc, pd).subtract(radius));
     return mindist; // .divide(1 [m/s]), since max velocity == 1 => division is obsolete
   }

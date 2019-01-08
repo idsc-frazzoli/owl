@@ -23,6 +23,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.sophus.group.Se2Utils;
@@ -74,7 +75,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Collection<Flow> controls = BalloonFlows.of(U_MAX, stateSpaceModel).getFlows(FLOWRES);
     BalloonMinTimeGoalManager balloonMinTimeGoalManager = //
-        new BalloonMinTimeGoalManager(goal.extract(0, 2), GOAL_RADIUS, SPEED_MAX);
+        new BalloonMinTimeGoalManager(Extract2D.FUNCTION.apply(goal), GOAL_RADIUS, SPEED_MAX);
     GoalInterface goalInterface = balloonMinTimeGoalManager.getGoalInterface();
     return new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);

@@ -73,8 +73,8 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     PlannerConstraint regionConstraint = createConstraint(imageRegionCar);
     constraintCollection.add(regionConstraint);
     //
-    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
-    owlyAnimationFrame.addBackground(imgRender);
+    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    owlyAnimationFrame.addBackground(imageRender);
     // Lidar
     LidarEmulator lidarEmulator = new LidarEmulator( //
         LIDAR_RAYTRACER, gokartEntity::getStateTimeNow, lidarRay);
