@@ -1,6 +1,6 @@
 // code by jph
 // adapted from document by Tobias Ewald
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.sophus.planar;
 
 import java.util.Optional;
 

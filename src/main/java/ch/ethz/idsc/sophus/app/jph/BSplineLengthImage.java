@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;

@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** base class for {@link OwlyFrame} and {@link OwlyAnimationFrame} */

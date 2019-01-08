@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.bot.r2;
 import java.io.IOException;
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.math.ImageGradient;
+import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

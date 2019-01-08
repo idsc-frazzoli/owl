@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.misc;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;

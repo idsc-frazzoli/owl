@@ -1,8 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.math.map;
+package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -92,17 +90,6 @@ public class Se2UtilsTest extends TestCase {
     Tensor u = Tensors.vector(1.2, 0, 0);
     Tensor m = Se2CoveringExponential.INSTANCE.exp(u);
     assertEquals(m, u);
-  }
-
-  public void testSome() {
-    Tensor u = Tensors.vector(1.2, 0, 0.75);
-    Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u));
-    Tensor p = Tensors.vector(-2, 3);
-    Tensor v = m.dot(p.copy().append(RealScalar.ONE));
-    Tensor r = Se2CoveringIntegrator.INSTANCE.spin(Se2CoveringExponential.INSTANCE.exp(u), p.append(RealScalar.ZERO));
-    assertEquals(r.extract(0, 2), v.extract(0, 2));
-    Se2ForwardAction se2ForwardAction = new Se2ForwardAction(Se2CoveringExponential.INSTANCE.exp(u));
-    assertEquals(se2ForwardAction.apply(p), v.extract(0, 2));
   }
 
   public void testTranslations() {

@@ -3,14 +3,14 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
-import ch.ethz.idsc.owl.math.QuaternionToRotationMatrix;
+import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LinearGroup;
 import ch.ethz.idsc.sophus.group.Se3Exponential;
 import ch.ethz.idsc.sophus.group.Se3Geodesic;
+import ch.ethz.idsc.sophus.math.QuaternionToRotationMatrix;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

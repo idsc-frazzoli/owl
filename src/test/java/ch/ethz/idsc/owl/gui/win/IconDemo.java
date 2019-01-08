@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.win;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.sophus.app.util.UserHome;
 
 enum CharImageDemo {
   ;

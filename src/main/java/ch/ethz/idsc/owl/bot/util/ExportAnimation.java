@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
+import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
 
 enum ExportAnimation {

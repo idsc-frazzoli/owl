@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.jph;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Put;
 

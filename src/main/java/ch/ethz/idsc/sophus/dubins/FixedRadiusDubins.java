@@ -6,8 +6,8 @@ package ch.ethz.idsc.sophus.dubins;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.owl.math.planar.ArcTan2D;
 import ch.ethz.idsc.sophus.group.Se2CoveringGroupElement;
+import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -50,6 +50,7 @@ public class FixedRadiusDubins implements DubinsPathGenerator {
     Tensor gnorm = dubinsPathType.isFirstTurnRight() ? Se2Flip.FUNCTION.apply(xya) : xya;
     Tensor center3 = new Se2CoveringGroupElement(gnorm).combine(h);
     Tensor deltacenter = new Se2CoveringGroupElement(center1).inverse().combine(center3);
+    // TODO use Scalar
     double dist_tr = Norm._2.ofVector(deltacenter.extract(0, 2)).number().doubleValue();
     double th_tr = ArcTan2D.of(deltacenter).number().doubleValue();
     double th_total = deltacenter.Get(2).number().doubleValue();

@@ -17,7 +17,7 @@ public interface GeodesicDisplay {
   Tensor project(Tensor xya);
 
   /** @param p control point
-   * @return xya */
+   * @return {x, y} */
   Tensor toPoint(Tensor p);
 
   /** @param p control point
