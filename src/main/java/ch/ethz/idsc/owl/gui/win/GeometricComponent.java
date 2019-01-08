@@ -126,7 +126,7 @@ public final class GeometricComponent {
               model2pixel.set(scalar -> scalar.add(RealScalar.of(dy)), 1, 2);
               // System.out.println(Pretty.of(model2pixel.map(Round._3)));
             } else {
-              Tensor t1 = Se2Utils.toSE2Matrix(Tensors.of(center.Get(0).negate(), center.Get(1).negate(), RealScalar.ZERO));
+              Tensor t1 = Se2Utils.toSE2Translation(center.negate());
               Tensor t2 = Se2Utils.toSE2Matrix(center.copy().append(a2.subtract(a1)));
               model2pixel = model2pixel.dot(t2).dot(t1);
             }

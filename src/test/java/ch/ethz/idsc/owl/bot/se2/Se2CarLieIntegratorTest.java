@@ -23,9 +23,9 @@ public class Se2CarLieIntegratorTest extends TestCase {
       Tensor g = RandomVariate.of(NormalDistribution.standard(), 3);
       Tensor x = RandomVariate.of(NormalDistribution.standard(), 3);
       x.set(RealScalar.ZERO, 1);
-      assertTrue(Chop._10.close( //
+      Chop._10.requireClose( //
           Se2CoveringIntegrator.INSTANCE.spin(g, x), //
-          Se2CarLieIntegrator.INSTANCE.spin(g, x)));
+          Se2CarLieIntegrator.INSTANCE.spin(g, x));
     }
   }
 

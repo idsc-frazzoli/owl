@@ -13,7 +13,7 @@ public class So3ExponentialTest extends TestCase {
     Tensor m1 = So3Exponential.INSTANCE.exp(vector);
     Tensor m2 = So3Exponential.INSTANCE.exp(vector.negate());
     assertFalse(Chop._12.close(m1, IdentityMatrix.of(3)));
-    assertTrue(Chop._12.close(m1.dot(m2), IdentityMatrix.of(3)));
+    Chop._12.requireClose(m1.dot(m2), IdentityMatrix.of(3));
   }
 
   public void testLog() {

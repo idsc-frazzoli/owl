@@ -26,7 +26,7 @@ public class RnMinTimeGoalManagerTest extends TestCase {
     // Scalar cost = ;
     assertEquals(goalInterface.minCostToGoal(Tensors.fromString("{3[m],6[m]}")), Quantity.of(0, "s"));
     assertEquals(goalInterface.minCostToGoal(Tensors.fromString("{2[m],6[m]}")), Quantity.of(0, "s"));
-    assertTrue(Chop._14.close(goalInterface.minCostToGoal( //
-        Tensors.fromString("{0[m],6[m]}")), Quantity.of(1, "s")));
+    Chop._14.requireClose(goalInterface.minCostToGoal( //
+        Tensors.fromString("{0[m],6[m]}")), Quantity.of(1, "s"));
   }
 }

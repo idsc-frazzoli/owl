@@ -199,10 +199,26 @@ Dubins path curvature
 
 ## Features
 
-* geodesics in Lie-groups and homogeneous spaces: `Rn`, `SE(2)`, `H2`, `Sn`, ...
+* geodesics in Lie-groups and homogeneous spaces: Euclidean space `R^n`, special Euclidean group `SE(2)`, hyperbolic half-plane `H2`, n-dimensional sphere `S^n`, ...
 * parametric curves defined by control points in non-linear spaces: `GeodesicBSplineFunction`, ...
 * non-linear smoothing of noisy localization data `GeodesicCenterFilter`
 * Dubins path
+
+## Geodesic DeBoor Algorithm
+
+B-Spline curves in `SE(2)` produced by DeBoor Algorithm or curve subdivision produce curves in the planar subspace `R^2` with appealing curvature. 
+
+## Smoothing using Geodesic Averages
+
+The sequence of localization estimates of a mobile robot often contains noise.
+Instead of using a complicated extended Kalman filter, geodesic averages based on conventional window functions denoise the uniformly sampled signal of poses in `SE(2)`.
+
+## Visualization of Geodesic Averages
+
+A geodesic average is the generalization of an affine combination from the Euclidean space to a non-linear space.
+A geodesic average consists of a nested binary averages.
+Generally, an affine combination does not have a unique expression as a geodesic average.
+Instead, several geodesic averages reduce to the same affine combination when applied in Euclidean space. 
 
 ## Contributors
 

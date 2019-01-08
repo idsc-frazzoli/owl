@@ -24,6 +24,6 @@ public class DeltaControlsTest extends TestCase {
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, amp).getFlows(20);
     Scalar max = DeltaControls.maxSpeed(controls);
-    assertTrue(Chop._12.close(max, amp));
+    Chop._12.requireClose(max, amp);
   }
 }

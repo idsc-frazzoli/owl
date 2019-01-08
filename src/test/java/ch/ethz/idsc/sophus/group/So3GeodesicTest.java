@@ -26,8 +26,8 @@ public class So3GeodesicTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor p = Rodrigues.exp(RandomVariate.of(distribution, 3));
       Tensor q = Rodrigues.exp(RandomVariate.of(distribution, 3));
-      assertTrue(Chop._14.close(p, So3Geodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
-      assertTrue(Chop._11.close(q, So3Geodesic.INSTANCE.split(p, q, RealScalar.ONE)));
+      Chop._14.requireClose(p, So3Geodesic.INSTANCE.split(p, q, RealScalar.ZERO));
+      Chop._11.requireClose(q, So3Geodesic.INSTANCE.split(p, q, RealScalar.ONE));
     }
   }
 }

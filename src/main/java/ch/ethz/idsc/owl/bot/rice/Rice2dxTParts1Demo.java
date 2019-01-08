@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.ani.adapter.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
+import ch.ethz.idsc.owl.bot.r2.CogPoints;
 import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.r2.R2xTPolygonStateTimeRegion;
 import ch.ethz.idsc.owl.bot.rn.glc.R2xTEllipsoidsAnimationDemo;
@@ -20,7 +21,6 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.map.So2Family;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
-import ch.ethz.idsc.owl.math.planar.CogPoints;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;

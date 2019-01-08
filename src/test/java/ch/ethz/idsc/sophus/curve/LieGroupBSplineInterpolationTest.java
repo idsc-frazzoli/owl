@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
-import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation.Iteration;
+import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.RnGroup;
 import ch.ethz.idsc.tensor.ExactScalarQ;

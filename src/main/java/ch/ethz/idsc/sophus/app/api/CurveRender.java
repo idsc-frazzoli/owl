@@ -18,12 +18,18 @@ public class CurveRender implements RenderInterface {
   private final Stroke stroke;
 
   /** @param points
-   * @param isCyclic */
+   * @param isCyclic
+   * @param color
+   * @param width of stroke */
   public CurveRender(Tensor points, boolean isCyclic, Color color, float width) {
     this.points = points;
     this.isCyclic = isCyclic;
     this.color = color;
     stroke = new BasicStroke(width);
+  }
+
+  public CurveRender(Tensor points, boolean isCyclic, Color color) {
+    this(points, isCyclic, color, 1);
   }
 
   @Override

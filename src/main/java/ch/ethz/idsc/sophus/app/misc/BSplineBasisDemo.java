@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.misc;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
@@ -23,14 +22,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.img.ColorDataIndexed;
-import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
 
 /* package */ class BSplineBasisDemo extends ControlPointsDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -73,10 +69,9 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
             Tensor domain = Subdivide.of(0, length - 1, 100);
             Tensor values = domain.map(bSplineFunction);
             Tensor tensor = Transpose.of(Tensors.of(domain, values));
-            graphics.setColor(COLOR_DATA_INDEXED.getColor(k_th));
+            graphics.setColor(StaticHelper.COLOR_DATA_INDEXED.getColor(k_th));
             graphics.draw(geometricLayer.toPath2D(tensor));
-            // ---
-            graphics.setColor(new Color(0, 0, 0, 128));
+            graphics.setColor(StaticHelper.TICKS_COLOR);
             graphics.draw(geometricLayer.toPath2D(Tensors.matrix(new Number[][] { { k_th, 0 }, { k_th, .1 } })));
           }
           geometricLayer.popMatrix();
@@ -86,15 +81,12 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
       graphics.setStroke(new BasicStroke(1f));
     }
     // ---
-    final Tensor refined;
-    {
-      Tensor effective = jToggleItrp.isSelected() //
-          ? BSplineInterpolation.solve(degree, control)
-          : control;
-      GeodesicBSplineFunction bSplineFunction = //
-          GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
-      refined = Subdivide.of(0, effective.length() - 1, 4 << levels).map(bSplineFunction);
-    }
+    Tensor effective = jToggleItrp.isSelected() //
+        ? BSplineInterpolation.solve(degree, control)
+        : control;
+    GeodesicBSplineFunction bSplineFunction = //
+        GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
+    Tensor refined = Subdivide.of(0, effective.length() - 1, 4 << levels).map(bSplineFunction);
     renderControlPoints(geometricLayer, graphics);
     renderCurve(refined, false, geometricLayer, graphics);
   }

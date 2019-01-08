@@ -53,10 +53,10 @@ public class R2xTEllipsoidStateTimeRegion implements Region<StateTime>, RenderIn
     Scalar time = supplier.get();
     TensorUnaryOperator fwd = bijectionFamily.forward(time);
     Path2D path2D = geometricLayer.toPath2D(Tensor.of(polygon.stream().map(fwd)));
+    path2D.closePath();
     graphics.setColor(RegionRenders.COLOR);
     graphics.fill(path2D);
     graphics.setColor(RegionRenders.BOUNDARY);
-    path2D.closePath();
     graphics.draw(path2D);
   }
 }

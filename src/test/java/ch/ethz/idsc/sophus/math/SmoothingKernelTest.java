@@ -42,7 +42,7 @@ public class SmoothingKernelTest extends TestCase {
       for (int size = 0; size < 5; ++size) {
         Tensor tensor = smoothingKernel.apply(size);
         SymmetricVectorQ.require(tensor);
-        assertTrue(Chop._13.close(Total.of(tensor), RealScalar.ONE));
+        Chop._13.requireClose(Total.of(tensor), RealScalar.ONE);
         assertFalse(Scalars.isZero(tensor.Get(0)));
         assertFalse(Scalars.isZero(tensor.Get(tensor.length() - 1)));
         assertEquals(tensor.length(), 2 * size + 1);

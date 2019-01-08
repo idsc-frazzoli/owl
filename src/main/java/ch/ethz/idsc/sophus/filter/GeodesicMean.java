@@ -12,6 +12,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * Example: if the points are from R^n the center would simply be the mean */
 public enum GeodesicMean {
   ;
+  /** @param geodesicInterface
+   * @return geodesic center operator with Dirichlet/constant weights */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface) {
     return GeodesicCenter.of(geodesicInterface, SmoothingKernel.DIRICHLET);
   }

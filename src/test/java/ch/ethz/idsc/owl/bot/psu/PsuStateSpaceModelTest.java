@@ -51,7 +51,7 @@ public class PsuStateSpaceModelTest extends TestCase {
     StateTime stateTime = episodeIntegrator.tail();
     assertEquals(stateTime.time(), now);
     assertFalse(init.equals(stateTime));
-    assertTrue(Chop._04.close(init.state(), stateTime.state()));
+    Chop._04.requireClose(init.state(), stateTime.state());
   }
 
   public void testLarge() {
@@ -66,7 +66,7 @@ public class PsuStateSpaceModelTest extends TestCase {
     StateTime stateTime = episodeIntegrator.tail();
     assertEquals(stateTime.time(), now);
     assertFalse(init.equals(stateTime));
-    assertTrue(Chop._13.close(stateTime.state(), Tensors.vector(1.6034722573306643, 2.015192617032934)));
+    Chop._13.requireClose(stateTime.state(), Tensors.vector(1.6034722573306643, 2.015192617032934));
   }
 
   public void testFail() {

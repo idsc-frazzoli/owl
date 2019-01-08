@@ -92,12 +92,12 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
   public static void main(String[] args) throws IOException {
     {
-      SymLinkImage symLinkImage = SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 2);
-      BufferedImage bufferedImage = symLinkImage.bufferedImageCropped(true);
+      SymLinkImage symLinkImage = SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 3);
+      BufferedImage bufferedImage = symLinkImage.bufferedImage();
       ImageIO.write(bufferedImage, "png", UserHome.Pictures("gaussian23.png"));
     }
     // BufferedImage bufferedImage =
-    SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 5);
+    // SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 5);
     // ImageIO.write(bufferedImage, "png", UserHome.Pictures("export/" + wf.name().toLowerCase() + radius + ".png"));
     // for (WindowFunctions windowFunctions : WindowFunctions.values())
     // for (int radius = 1; radius <= 4; ++radius)

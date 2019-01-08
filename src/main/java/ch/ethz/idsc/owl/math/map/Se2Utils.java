@@ -33,7 +33,7 @@ public enum Se2Utils {
     });
   }
 
-  /** @param vector of the form {px, py}
+  /** @param vector of the form {px, py, ...}
    * @return
    * <pre>
    * [1 0 px]

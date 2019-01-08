@@ -26,6 +26,6 @@ public class Se2StateSpaceModelTest extends TestCase {
     Se2StateSpaceModel.INSTANCE.f(x, flow.getU());
     Tensor expl = Se2CarIntegrator.INSTANCE.step(flow, x, h);
     Tensor impl = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
-    assertTrue(Chop._04.close(expl, impl));
+    Chop._04.requireClose(expl, impl);
   }
 }
