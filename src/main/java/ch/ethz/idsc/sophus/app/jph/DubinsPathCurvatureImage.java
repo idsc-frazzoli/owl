@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.jph;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.sophus.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
@@ -16,6 +15,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum DubinsPathCurvatureImage {
   ;
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.io.Export;
 
   public static void main(String[] args) throws IOException {
     Tensor matrix = Tensors.matrix(DubinsPathCurvatureImage::function, RES, RES);
-    File directory = UserHome.Pictures(DubinsPathCurvatureImage.class.getSimpleName());
+    File directory = HomeDirectory.Pictures(DubinsPathCurvatureImage.class.getSimpleName());
     directory.mkdir();
     for (ColorDataGradients colorDataGradients : ColorDataGradients.values()) {
       Tensor image = ArrayPlot.of(matrix, colorDataGradients);

@@ -25,13 +25,13 @@ import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** simple animation of small boat driving upstream, or downstream in a river delta
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     owlyFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.05)));
     owlyFrame.configCoordinateOffset(33, 416);
     owlyFrame.jFrame.setBounds(100, 100, 620, 475);
-    try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("delta_s.gif"), 250)) {
+    try (AnimationWriter gsw = AnimationWriter.of(HomeDirectory.Pictures("delta_s.gif"), 250)) {
       GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
       while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
         glcExpand.findAny(40);

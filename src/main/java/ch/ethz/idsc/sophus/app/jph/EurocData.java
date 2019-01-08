@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
@@ -17,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     System.out.println("here");
     Tensor tensor = ResourceData.of("/3rdparty/app/pose/euroc/MH_04_difficult.csv");
     System.out.println(Dimensions.of(tensor));
-    Export.of(UserHome.file("MH_04_difficult_time.csv"), tensor.get(Tensor.ALL, 0));
+    Export.of(HomeDirectory.file("MH_04_difficult_time.csv"), tensor.get(Tensor.ALL, 0));
     Tensor poses = Tensors.empty();
     for (Tensor row : tensor) {
       Tensor p = row.extract(1, 4);
@@ -48,11 +48,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         break;
     }
     System.out.println(Dimensions.of(poses));
-    Put.of(UserHome.file("MH_04_difficult_poses.file"), poses);
+    Put.of(HomeDirectory.file("MH_04_difficult_poses.file"), poses);
     System.out.println("differences");
     {
       Tensor delta = LIE_DIFFERENCES.apply(poses);
-      Put.of(UserHome.file("MH_04_difficult_delta.file"), delta);
+      Put.of(HomeDirectory.file("MH_04_difficult_delta.file"), delta);
     }
     System.out.println("smooth");
     {
@@ -60,11 +60,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
           GeodesicCenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 4 * 3 * 2);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       System.out.println("store");
-      Put.of(UserHome.file("MH_04_difficult_poses_smooth.file"), smooth);
+      Put.of(HomeDirectory.file("MH_04_difficult_poses_smooth.file"), smooth);
       System.out.println("differences");
       Tensor delta = LIE_DIFFERENCES.apply(smooth);
       System.out.println("store");
-      Put.of(UserHome.file("MH_04_difficult_delta_smooth.file"), delta);
+      Put.of(HomeDirectory.file("MH_04_difficult_delta_smooth.file"), delta);
     }
   }
 }

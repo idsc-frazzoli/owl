@@ -21,8 +21,8 @@ import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.TimeKeeper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 public class OwlyAnimationFrame extends TimerFrame {
   private static final Dimension RECORDING = new Dimension(400, 400);
@@ -54,7 +54,7 @@ public class OwlyAnimationFrame extends TimerFrame {
           if (selected) {
             // TODO implementation not generic
             TrajectoryEntity abstractEntity = (TrajectoryEntity) animationInterfaces.get(0);
-            File directory = UserHome.Pictures(abstractEntity.getClass().getSimpleName() + "_" + System.currentTimeMillis());
+            File directory = HomeDirectory.Pictures(abstractEntity.getClass().getSimpleName() + "_" + System.currentTimeMillis());
             directory.mkdir();
             GlobalAssert.that(directory.isDirectory());
             timerTask = new TimerTask() {

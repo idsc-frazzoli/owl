@@ -15,10 +15,10 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum R2ExpandDemo {
   ;
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
-    try (AnimationWriter animationWriter = AnimationWriter.of(UserHome.Pictures("r2rrts.gif"), 250)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(HomeDirectory.Pictures("r2rrts.gif"), 250)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.configCoordinateOffset(42, 456);
       owlyFrame.jFrame.setBounds(100, 100, 500, 500);

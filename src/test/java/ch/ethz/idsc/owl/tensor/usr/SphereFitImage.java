@@ -12,11 +12,11 @@ import java.util.Random;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.SphereFit;
@@ -55,14 +55,14 @@ enum SphereFitImage {
   }
 
   public static void main(String[] args) throws IOException {
-    File folder = UserHome.Pictures(SphereFitImage.class.getSimpleName());
+    File folder = HomeDirectory.Pictures(SphereFitImage.class.getSimpleName());
     folder.mkdir();
     for (int seed = 0; seed < 50; ++seed) {
       Tensor image = image(seed);
       Export.of(new File(folder, String.format("%03d.png", seed)), image);
     }
     {
-      Export.of(UserHome.Pictures(SphereFitImage.class.getSimpleName() + ".png"), image(41));
+      Export.of(HomeDirectory.Pictures(SphereFitImage.class.getSimpleName() + ".png"), image(41));
     }
   }
 }

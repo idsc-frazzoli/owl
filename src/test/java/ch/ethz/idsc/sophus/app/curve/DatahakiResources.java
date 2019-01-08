@@ -10,15 +10,16 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.sophus.app.util.UserHome;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.io.UserName;
 
 enum DatahakiResources {
   ;
   public static void main(String[] args) throws IOException {
-    if (!UserHome.file("").getName().equals("datahaki"))
+    if (!UserName.is("datahaki"))
       throw new RuntimeException();
     List<String> list = new ArrayList<>();
-    File root = UserHome.file("Projects/ephemeral/src/main/resources/dubilab/app/pose");
+    File root = HomeDirectory.file("Projects/ephemeral/src/main/resources/dubilab/app/pose");
     Properties properties = new Properties();
     for (File folder : Stream.of(root.listFiles()).sorted().collect(Collectors.toList()))
       for (File file : Stream.of(folder.listFiles()).sorted().collect(Collectors.toList())) {

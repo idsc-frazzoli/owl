@@ -32,7 +32,6 @@ import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -43,6 +42,7 @@ import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.ImageResize;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -115,7 +115,7 @@ public class StandardRLTPMoreTest extends TestCase {
     Tensor count = dqmIntrospection.getCount();
     Tensor image = ArrayPlot.of(count, ColorDataGradients.CLASSIC);
     try {
-      Export.of(UserHome.Pictures(name + ".png"), ImageResize.nearest(image, 4));
+      Export.of(HomeDirectory.Pictures(name + ".png"), ImageResize.nearest(image, 4));
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -22,7 +22,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -32,6 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -81,7 +81,7 @@ public class ShadowEvaluator {
         List<TrajectorySample> trajectory = Trajectories.glue(head, tail);
         Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
         try {
-          File file = UserHome.file("minReactionTime_" + id + ".csv");
+          File file = HomeDirectory.file("minReactionTime_" + id + ".csv");
           Export.of(file, minTimeReact.get().map(CsvFormat.strict()));
         } catch (Exception exception) {
           exception.printStackTrace();
@@ -109,7 +109,7 @@ public class ShadowEvaluator {
           Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
           mtrMatrix.append(minTimeReact);
         }
-        File folder = UserHome.file("/Desktop/eval"); // TODO YN not generic
+        File folder = HomeDirectory.file("Desktop", "eval"); // TODO YN not generic
         folder.mkdirs();
         try {
           File file1 = new File(folder, "minSecTTR_" + id + ".csv");

@@ -6,7 +6,6 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.math.ImageGradient;
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -14,6 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -36,12 +36,12 @@ enum FloodFill2DDemo {
     int ttl = 30;
     // ---
     System.out.println("export image " + Dimensions.of(tensor));
-    Export.of(UserHome.Pictures("image.png"), tensor);
+    Export.of(HomeDirectory.Pictures("image.png"), tensor);
     Stopwatch stopwatch = Stopwatch.started();
     Tensor cost_raw = FloodFill2D.of(tensor, ttl);
     System.out.println("floodfill    " + stopwatch.display_seconds());
     System.out.println("export cost  " + Dimensions.of(cost_raw));
-    Export.of(UserHome.Pictures("image_cost_raw.png"), cost_raw);
+    Export.of(HomeDirectory.Pictures("image_cost_raw.png"), cost_raw);
     // ---
     // stopwatch = Stopwatch.started();
     Tensor cost = cost_raw;
@@ -61,6 +61,6 @@ enum FloodFill2DDemo {
     // System.out.println(min + " " + max);
     // Export.of(UserHome.Pictures("cost_dx.png"), dx);
     // Export.of(UserHome.Pictures("cost_dy.png"), dy);
-    Export.of(UserHome.Pictures("visual.png"), visual);
+    Export.of(HomeDirectory.Pictures("visual.png"), visual);
   }
 }

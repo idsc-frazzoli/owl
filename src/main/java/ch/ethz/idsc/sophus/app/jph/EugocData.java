@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
@@ -14,6 +13,7 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -33,26 +33,26 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       poses.append(xyt);
     }
     System.out.println(Dimensions.of(poses));
-    Put.of(UserHome.file("gokart_poses.file"), poses);
+    Put.of(HomeDirectory.file("gokart_poses.file"), poses);
     {
       Tensor delta = LIE_DIFFERENCES.apply(poses);
-      Put.of(UserHome.file("gokart_delta.file"), delta);
+      Put.of(HomeDirectory.file("gokart_delta.file"), delta);
     }
     {
       TensorUnaryOperator tensorUnaryOperator = //
           GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
-      Put.of(UserHome.file("gokart_poses_gauss.file"), smooth);
+      Put.of(HomeDirectory.file("gokart_poses_gauss.file"), smooth);
       Tensor delta = LIE_DIFFERENCES.apply(smooth);
-      Put.of(UserHome.file("gokart_delta_gauss.file"), delta);
+      Put.of(HomeDirectory.file("gokart_delta_gauss.file"), delta);
     }
     {
       TensorUnaryOperator tensorUnaryOperator = //
           GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.HAMMING), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
-      Put.of(UserHome.file("gokart_poses_hammi.file"), smooth);
+      Put.of(HomeDirectory.file("gokart_poses_hammi.file"), smooth);
       Tensor delta = LIE_DIFFERENCES.apply(smooth);
-      Put.of(UserHome.file("gokart_delta_hammi.file"), delta);
+      Put.of(HomeDirectory.file("gokart_delta_hammi.file"), delta);
     }
   }
 }

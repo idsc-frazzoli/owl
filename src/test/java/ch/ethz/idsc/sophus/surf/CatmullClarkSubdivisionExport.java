@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.surf;
 import java.io.IOException;
 import java.util.Random;
 
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -13,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -87,10 +87,10 @@ enum CatmullClarkSubdivisionExport {
   }
 
   public static void main(String[] args) throws IOException {
-    Put.of(UserHome.file("grid.mathematica"), univariate());
-    Put.of(UserHome.file("se2.mathematica"), se2());
-    Put.of(UserHome.file("r3s2.mathematica"), r3s2());
-    Put.of(UserHome.file("sphere.mathematica"), r3s2_sphere());
+    Put.of(HomeDirectory.file("grid.mathematica"), univariate());
+    Put.of(HomeDirectory.file("se2.mathematica"), se2());
+    Put.of(HomeDirectory.file("r3s2.mathematica"), r3s2());
+    Put.of(HomeDirectory.file("sphere.mathematica"), r3s2_sphere());
     // Tensor vector = r3s2_sp(RealScalar.of(.2), RealScalar.of(.3));
     // System.out.println(vector);
   }

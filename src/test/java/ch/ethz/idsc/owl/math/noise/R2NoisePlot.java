@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.math.noise;
 
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -11,6 +10,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.UnitStep;
 
@@ -33,7 +33,7 @@ enum R2NoisePlot {
 
   public static void main(String[] args) throws Exception {
     Tensor matrix = Tensors.matrix(R2NoisePlot::function, RES, RES);
-    Export.of(UserHome.Pictures("perlinnoise.png"), //
+    Export.of(HomeDirectory.Pictures("perlinnoise.png"), //
         ArrayPlot.of(matrix, ColorDataGradients.COPPER));
   }
 }

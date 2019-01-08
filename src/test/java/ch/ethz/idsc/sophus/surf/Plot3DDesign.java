@@ -3,13 +3,13 @@ package ch.ethz.idsc.sophus.surf;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.util.UserHome;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
@@ -58,9 +58,9 @@ class Plot3DDesign {
       }
       matrix.append(row);
     }
-    Put.of(UserHome.file("sinxy2in.mathematica"), matrix);
+    Put.of(HomeDirectory.file("sinxy2in.mathematica"), matrix);
     CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(R3S2Geodesic.INSTANCE);
     Tensor tensor = Nest.of(catmullClarkSubdivision::refine, matrix, 3);
-    Put.of(UserHome.file("sinxy2.mathematica"), tensor);
+    Put.of(HomeDirectory.file("sinxy2.mathematica"), tensor);
   }
 }
