@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.avg;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -20,6 +21,8 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 /** visualization of the geometric geodesic average */
 /* package */ class GeodesicAverageRender {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
+  private static final Stroke STROKE = //
+      new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
 
   public static RenderInterface of(GeodesicDisplay geodesicDisplay, SymLink symLink) {
     return new GeodesicAverageRender(geodesicDisplay).new Link(symLink);
@@ -66,7 +69,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
           Tensor points = Tensor.of(tensor.stream().map(geodesicDisplay::toPoint));
           Path2D path2d = geometricLayer.toPath2D(points);
           // TODO JPH instead of regular dashing use parameterization of geodesic
-          graphics.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
+          graphics.setStroke(STROKE);
           graphics.draw(path2d);
         }
       }

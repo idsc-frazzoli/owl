@@ -39,10 +39,10 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
 public class ShadowEvaluator {
   private static final Scalar TWO = RealScalar.of(2);
+  private static final int RESOLUTION = 10;
+  private static final float MAX_TREACT = 1.0f;
   // ---
   private final ShadowMapCV shadowMap;
-  final int RESOLUTION = 10;
-  final float MAX_TREACT = 1.0f;
   final String id;
   final float delta_treact; // [s]
   final Scalar maxA;
@@ -109,7 +109,7 @@ public class ShadowEvaluator {
           Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
           mtrMatrix.append(minTimeReact);
         }
-        File folder = HomeDirectory.file("Desktop", "eval"); // TODO YN not generic
+        File folder = HomeDirectory.file("Desktop", "eval");
         folder.mkdirs();
         try {
           File file1 = new File(folder, "minSecTTR_" + id + ".csv");
