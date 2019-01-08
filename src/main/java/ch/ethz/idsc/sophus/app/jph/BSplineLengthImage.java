@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
@@ -18,6 +17,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
   public static void main(String[] args) throws IOException {
     Tensor matrix = Tensors.matrix(BSplineLengthImage::function, RES, RES);
-    File directory = UserHome.Pictures(BSplineLengthImage.class.getSimpleName());
+    File directory = HomeDirectory.Pictures(BSplineLengthImage.class.getSimpleName());
     directory.mkdir();
     for (ColorDataGradients colorDataGradients : //
     Arrays.asList(ColorDataGradients.CLASSIC)

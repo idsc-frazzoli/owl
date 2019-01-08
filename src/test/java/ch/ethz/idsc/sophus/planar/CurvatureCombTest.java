@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 
 public class CurvatureCombTest extends TestCase {
   public void testSimple() {
-    Tensor points = Tensors.fromString("{{0,0,0},{1,1,0},{2,0,0}}");
+    Tensor points = Tensors.fromString("{{0,0},{1,1},{2,0}}");
     Tensor tensor = CurvatureComb.of(points, RealScalar.ONE, false);
     String string = "{{-0.7071067811865474, 0.7071067811865474}, {1, 2}, {2.7071067811865475, 0.7071067811865474}}";
     Tensor result = Tensors.fromString(string);
@@ -48,12 +48,22 @@ public class CurvatureCombTest extends TestCase {
   }
 
   public void testOne() {
-    Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1,2,3}}"), RealScalar.of(2), false);
+    Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1,2}}"), RealScalar.of(2), false);
     assertEquals(tensor, Tensors.fromString("{{1,2}}"));
   }
 
   public void testTwo() {
-    Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1,2,3},{4,5,6}}"), RealScalar.of(2), false);
+    Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1,2},{4,5}}"), RealScalar.of(2), false);
     assertEquals(tensor, Tensors.fromString("{{1,2},{4,5}}"));
+  }
+
+  public void testFail() {
+    Tensor points = Tensors.fromString("{{0,0,0},{1,1,0},{2,0,0}}");
+    try {
+      CurvatureComb.of(points, RealScalar.ONE, false);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

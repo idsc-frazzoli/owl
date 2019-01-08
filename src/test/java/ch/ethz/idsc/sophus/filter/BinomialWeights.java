@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
-import ch.ethz.idsc.owl.math.IntegerTensorFunction;
+import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Binomial;

@@ -9,15 +9,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.opt.HungarianAlgorithm;
+import ch.ethz.idsc.tensor.opt.hun.HungarianAlgorithm;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -61,14 +61,14 @@ enum BipartitionImage {
   }
 
   public static void main(String[] args) throws IOException {
-    File folder = UserHome.Pictures(BipartitionImage.class.getSimpleName());
+    File folder = HomeDirectory.Pictures(BipartitionImage.class.getSimpleName());
     folder.mkdir();
     for (int seed = 0; seed < 50; ++seed) {
       Tensor tensor = image(seed);
       Export.of(new File(folder, String.format("%03d.png", seed)), tensor);
     }
     {
-      Export.of(UserHome.Pictures(BipartitionImage.class.getSimpleName() + ".png"), image(35));
+      Export.of(HomeDirectory.Pictures(BipartitionImage.class.getSimpleName() + ".png"), image(35));
     }
   }
 }

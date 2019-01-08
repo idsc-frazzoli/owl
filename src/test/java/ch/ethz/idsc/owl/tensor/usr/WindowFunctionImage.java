@@ -9,7 +9,6 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
@@ -20,6 +19,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 
 // 3
@@ -60,6 +60,6 @@ enum WindowFunctionImage {
   }
 
   public static void main(String[] args) throws IOException {
-    Export.of(UserHome.Pictures(WindowFunctionImage.class.getSimpleName() + ".png"), image());
+    Export.of(HomeDirectory.Pictures(WindowFunctionImage.class.getSimpleName() + ".png"), image());
   }
 }

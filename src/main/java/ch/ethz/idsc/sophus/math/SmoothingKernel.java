@@ -1,16 +1,15 @@
 // code by jph
 package ch.ethz.idsc.sophus.math;
 
-import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.filter.GeodesicMean;
 import ch.ethz.idsc.sophus.filter.GeodesicMeanFilter;
-import ch.ethz.idsc.subare.util.VectorTotal;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.VectorTotal;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.win.BartlettWindow;

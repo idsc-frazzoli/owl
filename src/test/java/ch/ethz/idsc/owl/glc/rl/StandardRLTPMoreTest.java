@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.r2.R2RationalFlows;
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
@@ -43,6 +42,7 @@ import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.ImageResize;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -115,7 +115,7 @@ public class StandardRLTPMoreTest extends TestCase {
     Tensor count = dqmIntrospection.getCount();
     Tensor image = ArrayPlot.of(count, ColorDataGradients.CLASSIC);
     try {
-      Export.of(UserHome.Pictures(name + ".png"), ImageResize.nearest(image, 4));
+      Export.of(HomeDirectory.Pictures(name + ".png"), ImageResize.nearest(image, 4));
     } catch (IOException e) {
       e.printStackTrace();
     }

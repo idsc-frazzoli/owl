@@ -1,6 +1,6 @@
 // http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
 // adapted by jph
-package ch.ethz.idsc.owl.math;
+package ch.ethz.idsc.sophus.math;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

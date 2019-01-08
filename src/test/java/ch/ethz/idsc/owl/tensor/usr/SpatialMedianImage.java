@@ -10,10 +10,9 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,6 +21,7 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.SpatialMedian;
@@ -88,14 +88,14 @@ enum SpatialMedianImage {
   }
 
   public static void main(String[] args) throws IOException {
-    File folder = UserHome.Pictures(SpatialMedianImage.class.getSimpleName());
+    File folder = HomeDirectory.Pictures(SpatialMedianImage.class.getSimpleName());
     folder.mkdir();
     for (int seed = 30; seed < 40; ++seed) {
       Tensor image = image(seed);
       Export.of(new File(folder, String.format("%03d.png", seed)), image);
     }
     {
-      Export.of(UserHome.Pictures(SpatialMedianImage.class.getSimpleName() + ".png"), image(35));
+      Export.of(HomeDirectory.Pictures(SpatialMedianImage.class.getSimpleName() + ".png"), image(35));
     }
   }
 }

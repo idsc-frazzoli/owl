@@ -9,12 +9,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -49,14 +49,14 @@ enum ConvexHullImage {
   }
 
   public static void main(String[] args) throws IOException {
-    File folder = UserHome.Pictures(ConvexHullImage.class.getSimpleName());
+    File folder = HomeDirectory.Pictures(ConvexHullImage.class.getSimpleName());
     folder.mkdir();
     for (int seed = 0; seed < 51; ++seed) {
       Tensor image = image(seed);
       Export.of(new File(folder, String.format("%03d.png", seed)), image);
     }
     {
-      Export.of(UserHome.Pictures(ConvexHullImage.class.getSimpleName() + ".png"), image(3));
+      Export.of(HomeDirectory.Pictures(ConvexHullImage.class.getSimpleName() + ".png"), image(3));
     }
   }
 }

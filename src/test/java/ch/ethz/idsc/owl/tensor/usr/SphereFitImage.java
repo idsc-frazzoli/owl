@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.SphereFit;
@@ -29,9 +29,9 @@ enum SphereFitImage {
   private static Tensor image(int seed) {
     Random random = new Random(seed);
     Tensor points = RandomVariate.of(UniformDistribution.unit(), random, 10, 2);
-    Optional<Tensor> optional = SphereFit.of(points);
-    Tensor center = optional.get().get(0);
-    Scalar radius = optional.get().Get(1);
+    Optional<SphereFit> optional = SphereFit.of(points);
+    Tensor center = optional.get().center();
+    Scalar radius = optional.get().radius();
     GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2);
     BufferedImage bufferedImage = StaticHelper.createWhite();
     Graphics2D graphics = bufferedImage.createGraphics();
@@ -55,14 +55,14 @@ enum SphereFitImage {
   }
 
   public static void main(String[] args) throws IOException {
-    File folder = UserHome.Pictures(SphereFitImage.class.getSimpleName());
+    File folder = HomeDirectory.Pictures(SphereFitImage.class.getSimpleName());
     folder.mkdir();
     for (int seed = 0; seed < 50; ++seed) {
       Tensor image = image(seed);
       Export.of(new File(folder, String.format("%03d.png", seed)), image);
     }
     {
-      Export.of(UserHome.Pictures(SphereFitImage.class.getSimpleName() + ".png"), image(41));
+      Export.of(HomeDirectory.Pictures(SphereFitImage.class.getSimpleName() + ".png"), image(41));
     }
   }
 }

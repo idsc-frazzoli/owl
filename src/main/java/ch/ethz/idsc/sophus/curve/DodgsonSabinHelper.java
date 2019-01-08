@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
-import ch.ethz.idsc.owl.math.planar.Cross2D;
-import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.sophus.planar.Cross2D;
+import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

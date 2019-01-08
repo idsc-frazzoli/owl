@@ -16,8 +16,6 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
@@ -27,6 +25,7 @@ import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -184,7 +183,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
       Tensor matrix = geometricLayer.getMatrix();
       geometricLayer.pushMatrix(Inverse.of(matrix));
       geometricLayer.pushMatrix(Tensors.fromString("{{1,0,0},{0,-50,100},{0,0,1}}"));
-      Tensor points = Tensor.of(refined.stream().map(Extract2D::of));
+      Tensor points = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
       {
         graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
         Tensor curvature = SignedCurvature2D.string(points);

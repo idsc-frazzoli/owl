@@ -11,13 +11,13 @@ import javax.swing.JTextField;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -26,9 +26,9 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
-import ch.ethz.idsc.tensor.opt.HungarianAlgorithm;
 import ch.ethz.idsc.tensor.opt.SpatialMedian;
 import ch.ethz.idsc.tensor.opt.SphereFit;
+import ch.ethz.idsc.tensor.opt.hun.HungarianAlgorithm;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class SphereFitDemo extends ControlPointsDemo {
@@ -51,10 +51,10 @@ import ch.ethz.idsc.tensor.red.Norm;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     Tensor control = control();
-    Optional<Tensor> optional = SphereFit.of(control);
+    Optional<SphereFit> optional = SphereFit.of(control);
     if (optional.isPresent()) {
-      Tensor center = optional.get().get(0);
-      Scalar radius = optional.get().Get(1);
+      Tensor center = optional.get().center();
+      Scalar radius = optional.get().radius();
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(center));
       new CurveRender(CirclePoints.of(40).multiply(radius), true, COLOR_DATA_INDEXED.getColor(0), 1.5f) //
           .render(geometricLayer, graphics);

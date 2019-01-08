@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math;
+package ch.ethz.idsc.sophus.math;
 
 import java.io.Serializable;
 import java.util.function.Function;

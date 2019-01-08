@@ -12,8 +12,7 @@ import junit.framework.TestCase;
 
 public class FresnelCurveTest extends TestCase {
   public void testSimple() {
-    // TODO TENSOR V066
-    Distribution distribution = UniformDistribution.of(Fresnel.domain().min(), Fresnel.domain().max());
+    Distribution distribution = UniformDistribution.of(Fresnel.domain());
     for (int count = 0; count < 100; ++count) {
       Scalar scalar = RandomVariate.of(distribution);
       Tensor p = FresnelCurve.FUNCTION.apply(scalar);

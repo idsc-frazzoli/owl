@@ -5,7 +5,10 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public enum Extract2D {
   ;
-  public static Tensor of(Tensor vector) {
-    return vector.extract(0, 2);
+  /** @param tensor
+   * @return first two entries of given tensor
+   * @throws Exception if given tensor does not contain at least two elements */
+  public static Tensor of(Tensor tensor) {
+    return tensor.extract(0, 2);
   }
 }

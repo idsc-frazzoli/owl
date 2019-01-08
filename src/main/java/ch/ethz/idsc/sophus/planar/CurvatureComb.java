@@ -1,14 +1,12 @@
 // code by jph
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.sophus.planar;
 
-import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -26,15 +24,12 @@ public enum CurvatureComb {
   private static final TensorUnaryOperator NORMALIZE = NormalizeUnlessZero.with(Norm._2);
   private static final Tensor ZEROS = Array.zeros(2);
 
-  /** @param tensor
+  /** @param tensor with dimensions n x 2
    * @param scalar
    * @return tensor + normal * curvature * scalar */
   public static Tensor of(Tensor tensor, Scalar scalar, boolean isCyclic) {
     if (Tensors.isEmpty(tensor))
       return Tensors.empty();
-    List<Integer> dimensions = Dimensions.of(tensor);
-    if (2 < dimensions.get(1))
-      tensor = Tensor.of(tensor.stream().map(Extract2D::of));
     return tensor.add((isCyclic ? cyclic(tensor) : string(tensor)).multiply(scalar));
   }
 

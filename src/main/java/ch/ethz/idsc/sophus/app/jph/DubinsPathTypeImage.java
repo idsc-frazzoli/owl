@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.jph;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.sophus.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
@@ -15,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum DubinsPathTypeImage {
   ;
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.io.Export;
 
   public static void main(String[] args) throws IOException {
     Tensor matrix = Tensors.matrix(DubinsPathTypeImage::function, RES, RES);
-    File directory = UserHome.Pictures(DubinsPathTypeImage.class.getSimpleName());
+    File directory = HomeDirectory.Pictures(DubinsPathTypeImage.class.getSimpleName());
     directory.mkdir();
     for (ColorDataLists colorDataLists : ColorDataLists.values()) {
       Tensor image = matrix.map(colorDataLists.strict());

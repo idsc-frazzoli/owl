@@ -16,8 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /** base class for {@link OwlyFrame} and {@link OwlyAnimationFrame} */
 public class BaseFrame {
@@ -42,7 +42,7 @@ public class BaseFrame {
         public void actionPerformed(ActionEvent actionEvent) {
           try {
             BufferedImage bufferedImage = offscreen();
-            ImageIO.write(bufferedImage, IMAGE_FORMAT, UserHome.Pictures( //
+            ImageIO.write(bufferedImage, IMAGE_FORMAT, HomeDirectory.Pictures( //
                 String.format("owl_%d.%s", System.currentTimeMillis(), IMAGE_FORMAT)));
           } catch (Exception exception) {
             exception.printStackTrace();

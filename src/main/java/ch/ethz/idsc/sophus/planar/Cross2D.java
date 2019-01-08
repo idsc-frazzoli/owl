@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.planar;
+package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
