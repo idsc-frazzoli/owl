@@ -134,6 +134,7 @@ public abstract class ControlPointsDemo extends AbstractDemo {
     return geodesicDisplaySpinner.getValue();
   }
 
+  /** @param control points as matrix of dimensions N x 3 */
   public final void setControl(Tensor control) {
     this.control = MatrixQ.require(control);
     List<Integer> list = Dimensions.of(control);

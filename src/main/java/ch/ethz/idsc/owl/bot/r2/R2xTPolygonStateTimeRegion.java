@@ -46,10 +46,10 @@ public class R2xTPolygonStateTimeRegion implements Region<StateTime>, RenderInte
     Scalar time = supplier.get();
     TensorUnaryOperator forward = bijectionFamily.forward(time);
     Path2D path2D = geometricLayer.toPath2D(Tensor.of(polygon.stream().map(forward)));
+    path2D.closePath();
     graphics.setColor(RegionRenders.COLOR);
     graphics.fill(path2D);
     graphics.setColor(RegionRenders.BOUNDARY);
-    path2D.closePath();
     graphics.draw(path2D);
   }
 }

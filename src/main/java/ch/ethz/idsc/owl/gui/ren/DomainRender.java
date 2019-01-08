@@ -40,11 +40,10 @@ public class DomainRender implements RenderInterface {
     map.keySet().stream().map(EXTRACT2).distinct().forEach(key -> {
       Tensor x = key.pmul(eta_invert);
       Path2D path2d = geometricLayer.toPath2D(Tensor.of(ratios.stream().map(x::add)));
+      path2d.closePath();
       graphics.setColor(INTERIOR);
       graphics.fill(path2d);
-      // ---
       graphics.setColor(BOUNDARY);
-      path2d.closePath();
       graphics.draw(path2d);
     });
   }

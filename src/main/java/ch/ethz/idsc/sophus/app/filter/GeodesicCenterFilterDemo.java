@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
@@ -48,7 +49,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   // ---
   private final SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
-  private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
+  private final JToggleButton jToggleData = new JToggleButton("data");
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
@@ -68,8 +69,8 @@ import ch.ethz.idsc.tensor.sca.Round;
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
     // ---
-    jToggleCtrl.setSelected(true);
-    timerFrame.jToolBar.add(jToggleCtrl);
+    jToggleData.setSelected(true);
+    timerFrame.jToolBar.add(jToggleData);
     // ---
     jToggleLine.setSelected(true);
     timerFrame.jToolBar.add(jToggleLine);
@@ -105,12 +106,10 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (jToggleWait.isSelected())
       return;
     // ---
-    if (jToggleCtrl.isSelected()) {
+    if (jToggleData.isSelected()) {
       final Color color = new Color(255, 128, 128, 255);
-      if (jToggleLine.isSelected()) {
-        graphics.setColor(color);
-        graphics.draw(geometricLayer.toPath2D(control));
-      }
+      if (jToggleLine.isSelected())
+        new CurveRender(control, false, color).render(geometricLayer, graphics);
       for (Tensor point : control) {
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
         Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
@@ -156,12 +155,10 @@ import ch.ethz.idsc.tensor.sca.Round;
     graphics.setStroke(new BasicStroke(1f));
     int rgb = 128 + 32;
     final Color color = new Color(rgb, rgb, rgb, 128 + 64);
-    if (jToggleLine.isSelected()) {
-      graphics.setColor(color);
-      graphics.draw(geometricLayer.toPath2D(refined));
-    }
+    if (jToggleLine.isSelected())
+      new CurveRender(refined, false, color).render(geometricLayer, graphics);
     for (Tensor point : refined) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(point));
+      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
       Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
       path2d.closePath();
       graphics.setColor(color);

@@ -44,10 +44,10 @@ public class EllipseRegionRender implements RenderInterface {
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Path2D path2D = geometricLayer.toPath2D(polygon);
+    path2D.closePath();
     graphics.setColor(RegionRenders.COLOR);
     graphics.fill(path2D);
     graphics.setColor(RegionRenders.BOUNDARY);
-    path2D.closePath();
     graphics.draw(path2D);
   }
 }
