@@ -50,7 +50,7 @@ public class GeodesicBSplineInterpolationTest extends TestCase {
         new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
     target = N.DOUBLE.of(target);
     Iteration iteration = geodesicBSplineInterpolation.untilClose(Chop._08, 100);
-    assertTrue(iteration.steps() < 100);
+    assertTrue(iteration.steps() < 200);
   }
 
   public void testH2b() {
@@ -59,7 +59,7 @@ public class GeodesicBSplineInterpolationTest extends TestCase {
         new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
     target = N.DOUBLE.of(target);
     Iteration iteration = geodesicBSplineInterpolation.untilClose(Chop._08, 200);
-    assertTrue(iteration.steps() < 150);
+    assertTrue(iteration.steps() < 250);
   }
 
   public void testH2c() {

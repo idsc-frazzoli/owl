@@ -21,6 +21,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
+import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.LieGroupBSplineInterpolation;
@@ -92,11 +93,11 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Tensor effective = control;
     if (jToggleItrp.isSelected()) {
       LieGroup lieGroup = geodesicDisplay.lieGroup();
-      AbstractBSplineInterpolation geodesicBSplineInterpolation = Objects.isNull(lieGroup) //
+      AbstractBSplineInterpolation abstractBSplineInterpolation = Objects.isNull(lieGroup) //
           ? new GeodesicBSplineInterpolation(geodesicDisplay.geodesicInterface(), degree, control)
           : new LieGroupBSplineInterpolation(lieGroup, geodesicDisplay.geodesicInterface(), degree, control);
       {
-        Tensor tensor = BSplineInterpolationSequence.of(geodesicBSplineInterpolation);
+        Tensor tensor = BSplineInterpolationSequence.of(abstractBSplineInterpolation);
         Tensor shape = CirclePoints.of(9).multiply(RealScalar.of(.05));
         graphics.setColor(new Color(64, 64, 64, 64));
         for (Tensor ctrls : tensor)
@@ -110,7 +111,12 @@ import ch.ethz.idsc.tensor.sca.Chop;
         for (Tensor ctrls : Transpose.of(tensor))
           graphics.draw(geometricLayer.toPath2D(Tensor.of(ctrls.stream().map(geodesicDisplay::toPoint))));
       }
-      effective = geodesicBSplineInterpolation.untilClose(Chop._08, 100).control();
+      Iteration iteration = abstractBSplineInterpolation.untilClose(Chop._06, 100);
+      {
+        graphics.setColor(Color.BLACK);
+        graphics.drawString("" + iteration.steps(), 0, 20);
+      }
+      effective = iteration.control();
     }
     GeodesicBSplineFunction geodesicBSplineFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, effective);

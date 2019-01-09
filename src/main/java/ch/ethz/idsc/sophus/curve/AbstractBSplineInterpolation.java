@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -36,7 +37,25 @@ public abstract class AbstractBSplineInterpolation implements Serializable {
       this.steps = steps;
     }
 
-    public Iteration step() {
+    /** Gauss-Seidel-style updates, generally faster than Jacobi
+     * 
+     * @return */
+    public Iteration stepGaussSeidel() {
+      Tensor copy = control.copy();
+      for (int index = 0; index < copy.length(); ++index) {
+        // evaluate curve only at current parameter value
+        Tensor refin = geodesicBSplineFunction(copy).apply(RealScalar.of(index));
+        // update control point at given index
+        copy.set(move(copy.get(index), refin, target.get(index)), index);
+      }
+      return new Iteration(copy, steps + 1);
+    }
+
+    /** Jacobi-style updates
+     * 
+     * @return */
+    public Iteration stepJacobi() {
+      // evaluate curve at all parameter values
       Tensor refine = Range.of(0, target.length()).map(geodesicBSplineFunction(control));
       return new Iteration(Tensor.of(IntStream.range(0, control.length()) //
           .mapToObj(index -> move(control.get(index), refine.get(index), target.get(index)))), steps + 1);
@@ -60,7 +79,7 @@ public abstract class AbstractBSplineInterpolation implements Serializable {
     Iteration iteration = init();
     Tensor p = iteration.control();
     for (int count = 0; count < maxiter; ++count) {
-      iteration = iteration.step();
+      iteration = iteration.stepGaussSeidel();
       Tensor q = iteration.control();
       if (chop.allZero(N.DOUBLE.of(p.subtract(q))))
         break;
