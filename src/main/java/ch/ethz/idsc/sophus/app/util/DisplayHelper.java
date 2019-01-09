@@ -8,7 +8,7 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-class DisplayHelper {
+public class DisplayHelper {
   private Rectangle screen = new Rectangle();
 
   public DisplayHelper() {

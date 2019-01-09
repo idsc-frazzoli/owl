@@ -53,7 +53,7 @@ class SpinnerMenu<Type> extends StandardMenu {
     Type myType = mySpinnerLabel.getValue();
     if (myType != null) {
       int delta = 2;
-      myMap.get(myType).setBackground(Colors.activeItem); // Colors.gold
+      myMap.get(myType).setBackground(Colors.ACTIVE_ITEM); // Colors.gold
       for (Entry<Type, JMenuItem> myEntry : myMap.entrySet()) {
         delta += myEntry.getValue().getPreferredSize().height;
         if (myEntry.getKey().equals(myType)) {

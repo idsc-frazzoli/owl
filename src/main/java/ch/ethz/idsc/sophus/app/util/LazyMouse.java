@@ -7,13 +7,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-class LazyMouse implements MouseListener, MouseMotionListener {
-  public static final float default_tolerance = 3;
+public class LazyMouse implements MouseListener, MouseMotionListener {
+  public static final float TOLERANCE_DEFAULT = 3;
   // ---
   private Point myPressedC = new Point(); // component
   private Point myPressedS = new Point(); // screen
   private boolean isClick;
-  private float tolerance = default_tolerance;
+  private float tolerance = TOLERANCE_DEFAULT;
   private final LazyMouseListener myLazyMouseListener;
 
   public LazyMouse(LazyMouseListener myLazyMouseListener) {
