@@ -23,6 +23,7 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -113,7 +114,7 @@ public class CarEntity extends Se2Entity {
   /** @param goal
    * @return */
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-    return new SphericalRegion(goal.extract(0, 2), goalRadius.Get(0));
+    return new SphericalRegion(Extract2D.FUNCTION.apply(goal), goalRadius.Get(0));
   }
 
   @Override

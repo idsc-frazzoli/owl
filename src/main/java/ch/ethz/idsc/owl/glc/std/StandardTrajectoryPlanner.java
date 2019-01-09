@@ -35,7 +35,7 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   private final GoalInterface goalInterface;
   private transient final ControlsIntegrator controlsIntegrator;
   /** decides if new node is better than existing node
-   * TODO API design not final */
+   * TODO JPH API design not final */
   public RelabelDecision relabelDecision = SimpleRelabelDecision.INSTANCE;
 
   public StandardTrajectoryPlanner( //

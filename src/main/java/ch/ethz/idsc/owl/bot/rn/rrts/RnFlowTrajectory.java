@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @param sequence
    * @param dt
    * @return */
-  // FIXME
+  // FIXME JPH
   public static List<TrajectorySample> createTrajectory( //
       TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
     List<TrajectorySample> trajectory = new LinkedList<>();

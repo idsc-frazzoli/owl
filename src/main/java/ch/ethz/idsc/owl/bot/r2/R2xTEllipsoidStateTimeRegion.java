@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.planar.EllipsePoints;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -37,7 +38,7 @@ public class R2xTEllipsoidStateTimeRegion implements Region<StateTime>, RenderIn
     invert = radius.map(Scalar::reciprocal);
     this.bijectionFamily = bijectionFamily;
     this.supplier = supplier;
-    polygon = EllipsePoints.of(RESOLUTION, radius.extract(0, 2));
+    polygon = EllipsePoints.of(RESOLUTION, Extract2D.FUNCTION.apply(radius));
   }
 
   @Override // from Region

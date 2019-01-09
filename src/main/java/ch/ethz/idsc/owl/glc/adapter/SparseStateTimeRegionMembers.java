@@ -7,6 +7,7 @@ import java.util.Collections;
 
 import ch.ethz.idsc.owl.data.LinearRasterMap;
 import ch.ethz.idsc.owl.data.RasterMap;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.StateTimeRegionCallback;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -21,9 +22,10 @@ class SparseStateTimeRegionMembers implements StateTimeRegionCallback, Serializa
   @Override // from StateTimeRegionCallback
   public void notify_isMember(StateTime stateTime) {
     Tensor x = stateTime.state();
-    rasterMap.put(1 == x.length() //
+    Tensor key = 1 == x.length() //
         ? x.copy().append(RealScalar.ZERO)
-        : x.extract(0, 2), stateTime);
+        : Extract2D.FUNCTION.apply(x);
+    rasterMap.put(key, stateTime);
   }
 
   @Override // from StateTimeCollector

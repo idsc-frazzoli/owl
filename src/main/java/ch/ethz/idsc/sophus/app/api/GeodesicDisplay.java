@@ -9,7 +9,7 @@ public interface GeodesicDisplay {
   /** @return */
   GeodesicInterface geodesicInterface();
 
-  /** @return polygon */
+  /** @return polygon to visualize the control point */
   Tensor shape();
 
   /** @param xya
@@ -21,12 +21,12 @@ public interface GeodesicDisplay {
   Tensor toPoint(Tensor p);
 
   /** @param p control point
-   * @return 3x3 matrix */
+   * @return matrix with dimensions 3 x 3 */
   Tensor matrixLift(Tensor p);
 
   /** @return lie group if the space is a lie group, otherwise null */
   LieGroup lieGroup();
 
-  @Override
+  @Override // from Object
   String toString();
 }

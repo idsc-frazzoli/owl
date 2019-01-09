@@ -13,11 +13,10 @@ import ch.ethz.idsc.tensor.Tensors;
   INSTANCE;
   // ---
   @Override // from DubinsSteer
-  public Optional<Tensor> steer(double dist_tr, double th_tr, double th_total, Scalar _radius) {
-    double radius = _radius.number().doubleValue();
-    return Optional.of(Tensors.vector( //
-        radius * th_tr, //
+  public Optional<Tensor> steer(Scalar dist_tr, Scalar th_tr, Scalar th_total, Scalar radius) {
+    return Optional.of(Tensors.of( //
+        radius.multiply(th_tr), //
         dist_tr, //
-        radius * StaticHelper.principalValue(th_total - th_tr)));
+        radius.multiply(StaticHelper.principalValue(th_total.subtract(th_tr)))));
   }
 }

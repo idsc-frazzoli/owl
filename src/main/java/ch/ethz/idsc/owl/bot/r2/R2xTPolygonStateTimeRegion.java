@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.Polygons;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -35,7 +36,7 @@ public class R2xTPolygonStateTimeRegion implements Region<StateTime>, RenderInte
 
   @Override // from Region
   public boolean isMember(StateTime stateTime) {
-    Tensor state = stateTime.state().extract(0, 2);
+    Tensor state = Extract2D.FUNCTION.apply(stateTime.state());
     Scalar time = stateTime.time();
     TensorUnaryOperator rev = bijectionFamily.inverse(time);
     return Polygons.isInside(polygon, rev.apply(state));

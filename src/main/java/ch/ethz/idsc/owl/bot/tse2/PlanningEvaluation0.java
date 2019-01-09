@@ -119,8 +119,8 @@ public class PlanningEvaluation0 extends Se2Demo {
 
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
-    owlyAnimationFrame.addBackground(imgRender);
+    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    owlyAnimationFrame.addBackground(imageRender);
     //
     // IMAGE REGIONS
     Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(10);

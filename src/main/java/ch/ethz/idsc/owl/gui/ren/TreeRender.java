@@ -66,7 +66,7 @@ public class TreeRender {
 
     public Render(Collection<? extends StateCostNode> collection) {
       this.collection = collection;
-      polygon = ConvexHull.of(collection.stream().map(StateCostNode::state).map(Extract2D::of), Chop._10);
+      polygon = ConvexHull.of(collection.stream().map(StateCostNode::state).map(Extract2D.FUNCTION), Chop._10);
       treeColor = TreeColor.ofDimensions(collection.iterator().next().state().length());
       DoubleSummaryStatistics doubleSummaryStatistics = collection.stream() //
           .map(StateCostNode::costFromRoot) //

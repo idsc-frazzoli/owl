@@ -1,30 +1,20 @@
 // code by jph
 package ch.ethz.idsc.sophus.surf;
 
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Normalize;
-import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class RotationMatrix3DTest extends TestCase {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
-
   public void testSimple() {
-    for (int index = 0; index < 50; ++index) {
-      RandomSampleInterface randomSampleInterface = //
-          SphereRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
-      Tensor p = NORMALIZE.apply(randomSampleInterface.randomSample());
-      Tensor q = NORMALIZE.apply(randomSampleInterface.randomSample());
-      Tensor tensor = RotationMatrix3D.of(p, q);
-      Chop._10.requireClose(tensor.dot(p), q);
-      assertTrue(OrthogonalMatrixQ.of(tensor, Chop._10));
-    }
+    Scalar scalar = RealScalar.of(.5);
+    Tensor tensor = R3S2Geodesic.INSTANCE.split( //
+        Tensors.fromString("{{0,0,0},{1,0,0}}"), //
+        Tensors.fromString("{{1,0,0},{0,1,0}}"), scalar);
+    Chop._11.requireClose(tensor, //
+        Tensors.fromString("{{0.5, -0.20710678118654752, 0.0}, {0.7071067811865476, 0.7071067811865475, 0.0}}"));
   }
 }

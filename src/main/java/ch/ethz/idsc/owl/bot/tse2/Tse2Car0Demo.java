@@ -23,7 +23,7 @@ public class Tse2Car0Demo extends Tse2CarDemo {
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     owlyAnimationFrame.add(tse2CarEntity);
-    // TODO add option to select goal velocity / range
+    // LONGTERM add option to select goal velocity / range
     MouseGoal.simple(owlyAnimationFrame, tse2CarEntity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     {

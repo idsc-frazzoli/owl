@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -26,7 +27,7 @@ class ImageGradientCostFunction implements CostFunction, Serializable {
   /** @param tensor with entries {px, py, alpha}
    * @return */
   private Scalar pointcost(Tensor tensor) {
-    Tensor p = tensor.extract(0, 2); // xy
+    Tensor p = Extract2D.FUNCTION.apply(tensor); // xy
     Tensor v = imageGradientInterpolation.get(p);
     Tensor u = AngleVector.of(tensor.Get(2)); // orientation
     return VectorAngle.of(u, v).orElse(RealScalar.ZERO); // LONGTERM perhaps this can be simplified

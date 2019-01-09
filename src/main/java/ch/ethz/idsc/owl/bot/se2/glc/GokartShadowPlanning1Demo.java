@@ -58,8 +58,8 @@ public class GokartShadowPlanning1Demo extends GokartDemo {
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion irLid = new ImageRegion(imageLid, RANGE, false);
     // ---
-    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
-    owlyAnimationFrame.addBackground(imgRender);
+    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    owlyAnimationFrame.addBackground(imageRender);
     owlyAnimationFrame.add(gokartEntity);
     // ---
     TrajectoryRegionQuery lidarRay = SimpleTrajectoryRegionQuery.timeInvariant(irLid);

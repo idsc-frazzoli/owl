@@ -1,21 +1,30 @@
 // code by jph
 package ch.ethz.idsc.owl.math.sample;
 
+import ch.ethz.idsc.sophus.surf.R3S2Geodesic;
+import ch.ethz.idsc.sophus.surf.RotationMatrix3D;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class SphereRandomSampleTest extends TestCase {
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+
   public void testSimple() {
     Tensor center = Tensors.vector(10, 20, 30, 40);
     Scalar radius = RealScalar.of(2);
@@ -56,6 +65,37 @@ public class SphereRandomSampleTest extends TestCase {
     Tensor tensor = randomSampleInterface.randomSample();
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("m");
     tensor.map(scalarUnaryOperator);
+  }
+
+  public void testR3S2Geodesic() {
+    RandomSampleInterface randomSampleInterface = //
+        SphereRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
+    int fails = 0;
+    for (int index = 0; index < 20; ++index) {
+      Tensor pn = NORMALIZE.apply(randomSampleInterface.randomSample());
+      Tensor qn = NORMALIZE.apply(randomSampleInterface.randomSample());
+      Tensor p = Tensors.of(pn, pn);
+      Tensor q = Tensors.of(qn, qn);
+      try {
+        Tensor split = R3S2Geodesic.INSTANCE.split(p, q, RationalScalar.HALF);
+        Chop._08.requireClose(split.get(0), split.get(1));
+      } catch (Exception exception) {
+        ++fails;
+      }
+    }
+    assertTrue(fails < 5);
+  }
+
+  public void testRotationMatrix3D() {
+    for (int index = 0; index < 50; ++index) {
+      RandomSampleInterface randomSampleInterface = //
+          SphereRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
+      Tensor p = NORMALIZE.apply(randomSampleInterface.randomSample());
+      Tensor q = NORMALIZE.apply(randomSampleInterface.randomSample());
+      Tensor tensor = RotationMatrix3D.of(p, q);
+      Chop._10.requireClose(tensor.dot(p), q);
+      assertTrue(OrthogonalMatrixQ.of(tensor, Chop._10));
+    }
   }
 
   public void testLarge() {

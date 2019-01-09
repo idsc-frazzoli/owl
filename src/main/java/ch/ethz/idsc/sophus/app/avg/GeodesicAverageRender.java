@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.avg;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -16,10 +17,14 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.Clip;
 
 /** visualization of the geometric geodesic average */
 /* package */ class GeodesicAverageRender {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
+  private static final Stroke STROKE = //
+      new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
 
   public static RenderInterface of(GeodesicDisplay geodesicDisplay, SymLink symLink) {
     return new GeodesicAverageRender(geodesicDisplay).new Link(symLink);
@@ -51,32 +56,47 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
       {
         Tensor posP = symLink.lP.getPosition(geodesicInterface);
         Tensor posQ = symLink.lQ.getPosition(geodesicInterface);
+        ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(posP, posQ);
         graphics.setColor(new Color(0, 128 + 64, 0, 255));
         {
           Tensor tensor = Subdivide.of(RealScalar.ZERO, symLink.lambda, 91) //
-              .map(geodesicInterface.curve(posP, posQ));
+              .map(scalarTensorFunction);
           Tensor points = Tensor.of(tensor.stream().map(geodesicDisplay::toPoint));
           Path2D path2d = geometricLayer.toPath2D(points);
           graphics.setStroke(new BasicStroke(1.5f));
           graphics.draw(path2d);
+          graphics.setStroke(new BasicStroke(1f));
         }
         {
           Tensor tensor = Subdivide.of(symLink.lambda, RealScalar.ONE, 91) //
-              .map(geodesicInterface.curve(posP, posQ));
+              .map(scalarTensorFunction);
           Tensor points = Tensor.of(tensor.stream().map(geodesicDisplay::toPoint));
           Path2D path2d = geometricLayer.toPath2D(points);
-          // TODO JPH instead of regular dashing use parameterization of geodesic
-          graphics.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
+          graphics.setStroke(STROKE);
           graphics.draw(path2d);
+          graphics.setStroke(new BasicStroke(1f));
+        }
+        {
+          int limit = 11;
+          Tensor tensor = Subdivide.of(Clip.unit(), limit).extract(1, limit) //
+              .map(scalarTensorFunction);
+          Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.5));
+          graphics.setColor(Color.GRAY);
+          for (Tensor p : tensor) {
+            geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
+            Path2D path2d = geometricLayer.toPath2D(shape);
+            path2d.closePath();
+            graphics.fill(path2d);
+            geometricLayer.popMatrix();
+          }
         }
       }
       // ---
-      Tensor xya = symLink.getPosition(geodesicInterface);
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(xya));
+      Tensor p = symLink.getPosition(geodesicInterface);
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
       Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
-      graphics.setStroke(new BasicStroke(1f));
       graphics.fill(path2d);
       geometricLayer.popMatrix();
     }

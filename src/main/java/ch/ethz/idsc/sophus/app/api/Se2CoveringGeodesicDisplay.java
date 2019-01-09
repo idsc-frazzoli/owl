@@ -7,13 +7,12 @@ import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.planar.Arrowhead;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
   // ---
-  private static final Tensor ARROWHEAD = Arrowhead.of(RealScalar.of(0.4));
+  private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {

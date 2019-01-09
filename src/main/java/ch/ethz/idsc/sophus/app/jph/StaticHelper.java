@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.io.Put;
 enum StaticHelper {
   ;
   static void ephemeralDubins(String title, Tensor init, Tensor move) {
-    File dir = HomeDirectory.file("Projects/ephemeral/src/main/resources/geometry/dubins/" + title);
+    File dir = HomeDirectory.file("Projects", "ephemeral", "src", "main", "resources", "geometry", "dubins", title);
     dir.mkdir();
     if (dir.isDirectory())
       try {
@@ -25,7 +25,7 @@ enum StaticHelper {
   }
 
   static void ephemeralSe2(String title, Tensor control) {
-    File dir = HomeDirectory.file("Projects/ephemeral/src/main/resources/geometry/se2");
+    File dir = HomeDirectory.file("Projects", "ephemeral", "src", "main", "resources", "geometry", "se2");
     if (dir.isDirectory())
       try {
         Put.of(new File(dir, title + ".mathematica"), control);

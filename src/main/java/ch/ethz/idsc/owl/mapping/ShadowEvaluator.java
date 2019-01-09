@@ -39,10 +39,10 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
 public class ShadowEvaluator {
   private static final Scalar TWO = RealScalar.of(2);
+  private static final int RESOLUTION = 10;
+  private static final float MAX_TREACT = 1.0f;
   // ---
   private final ShadowMapCV shadowMap;
-  final int RESOLUTION = 10;
-  final float MAX_TREACT = 1.0f;
   final String id;
   final float delta_treact; // [s]
   final Scalar maxA;
@@ -109,7 +109,7 @@ public class ShadowEvaluator {
           Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
           mtrMatrix.append(minTimeReact);
         }
-        File folder = HomeDirectory.file("Desktop", "eval"); // TODO YN not generic
+        File folder = HomeDirectory.file("Desktop", "eval");
         folder.mkdirs();
         try {
           File file1 = new File(folder, "minSecTTR_" + id + ".csv");
@@ -209,13 +209,13 @@ public class ShadowEvaluator {
     Se2Bijection se2Bijection = new Se2Bijection(state);
     TensorUnaryOperator forward = se2Bijection.forward();
     // -
-    Scalar range = RealScalar.of(100); // TODO magic const
+    Scalar range = RealScalar.of(100); // TODO YN magic const
     Tensor rays = Tensor.of(angles.stream().map(Scalar.class::cast).map(AngleVector::of)).multiply(range);
     rays.append(Tensors.vector(0, 0)); // append origin
     // get pixel coordinates as Points
     Point polyPoint = StaticHelper.toPoint(rays.stream() //
         .map(forward::apply) //
-        .map(shadowMap::state2pixel) // TODO not efficient since converts point -> int{x,y} -> vector -> int[]
+        .map(shadowMap::state2pixel) // TODO JPH not efficient since converts point -> int{x,y} -> vector -> int[]
         // ... suggestion: use geometricLayer.toVector
         .map(a -> Tensors.vector(a.x(), a.y())));
     Mat segment = new Mat(mat.size(), mat.type(), opencv_core.Scalar.BLACK);
