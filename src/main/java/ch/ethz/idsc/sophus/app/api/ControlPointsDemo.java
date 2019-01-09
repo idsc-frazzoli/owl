@@ -18,7 +18,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.sophus.planar.CurvatureComb;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -57,10 +56,11 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       if (Objects.nonNull(min_index))
         control.set(mouse, min_index);
       if (Objects.isNull(min_index)) {
+        GeodesicDisplay geodesicDisplay = geodesicDisplay();
         Optional<Integer> optional = closest();
         graphics.setColor(optional.isPresent() ? Color.ORANGE : Color.GREEN);
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-        graphics.fill(geometricLayer.toPath2D(geodesicDisplay().shape()));
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
+        graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape()));
         geometricLayer.popMatrix();
       }
     }

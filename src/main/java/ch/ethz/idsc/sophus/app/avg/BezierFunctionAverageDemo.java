@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.N;
     setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor control = control();

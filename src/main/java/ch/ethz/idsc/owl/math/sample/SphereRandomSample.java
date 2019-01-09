@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** uniform random samples from the interior of a n-dimensional sphere
@@ -24,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * implementation generalizes {@link UniformRandomSample} and {@link CircleRandomSample} */
 public class SphereRandomSample implements RandomSampleInterface, Serializable {
   public static final int MAX_LENGTH = 10;
-  private static final Distribution UNIFORM = UniformDistribution.of(-1, 1);
+  private static final Distribution UNIFORM = UniformDistribution.of(Clip.absoluteOne());
 
   /** @param center non-empty vector of length less equals to 10
    * @param radius non-negative

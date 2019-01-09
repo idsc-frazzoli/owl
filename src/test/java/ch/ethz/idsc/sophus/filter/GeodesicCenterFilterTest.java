@@ -1,7 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
-import ch.ethz.idsc.owl.math.planar.Extract2D;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.So3Geodesic;
@@ -78,12 +79,13 @@ public class GeodesicCenterFilterTest extends TestCase {
     String resource = "/dubilab/app/pose/2r/20180820T165637_1.csv";
     Tensor table = ResourceData.of(resource);
     Tensor xyz = Tensor.of(table.stream().map(row -> row.extract(1, 4)));
+    GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
           GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel), 3);
       Tensor res = tensorUnaryOperator.apply(xyz);
-      Tensor xy = Tensor.of(xyz.stream().map(Extract2D.FUNCTION));
-      Tensor uv = Tensor.of(res.stream().map(Extract2D.FUNCTION));
+      Tensor xy = Tensor.of(xyz.stream().map(geodesicDisplay::toPoint));
+      Tensor uv = Tensor.of(res.stream().map(geodesicDisplay::toPoint));
       Tensor dif = Flatten.of(xy.subtract(uv));
       assertTrue(Scalars.lessThan(Norm.INFINITY.of(dif), RealScalar.of(.5)));
     }
