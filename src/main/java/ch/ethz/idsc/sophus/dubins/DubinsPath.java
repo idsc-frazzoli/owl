@@ -7,6 +7,7 @@ import ch.ethz.idsc.sophus.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -36,8 +37,14 @@ public class DubinsPath {
         .reduce(Scalar::add).get();
   }
 
+  /** @return dubins path type */
   public DubinsPathType dubinsPathType() {
     return dubinsPathType;
+  }
+
+  /** @return vector of length 3 with parameter values of transition points */
+  public Tensor segments() {
+    return Accumulate.of(segLength);
   }
 
   /** @return total length of Dubins path in Euclidean space */
