@@ -213,13 +213,18 @@ public class SpinnerLabel<Type> {
   private void increment(int delta) {
     int prev = index;
     if (cyclic)
-      index = IntegerMath.mod(index + delta, numel());
+      index = mod(index + delta, numel());
     else
       index = Math.min(Math.max(0, index + delta), numel() - 1);
     if (index != prev) {
       updateLabel();
       reportToAll();
     }
+  }
+
+  private static int mod(int index, int size) {
+    int value = index % size;
+    return value < 0 ? size + value : value;
   }
 
   public void reportToAll() {

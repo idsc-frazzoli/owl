@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(6), RealScalar.of(6), Degree.of(10).reciprocal()).unmodifiable();
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
-  static final Tensor SHAPE = Arrowhead.of(.3);
+  static final Tensor SHAPE = Arrowhead.of(0.3);
 
   public static TwdEntity createDuckie(StateTime stateTime) {
     TwdEntity twdEntity = new TwdEntity( //

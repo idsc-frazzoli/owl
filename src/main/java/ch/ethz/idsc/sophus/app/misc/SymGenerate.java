@@ -39,6 +39,13 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     }
   }
 
+  public static BufferedImage subdiv3a() {
+    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
+    CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
+    Tensor tensor = curveSubdivision.string(vector);
+    return new SymLinkImage((SymScalar) tensor.Get(2)).bufferedImage();
+  }
+
   public static void subdiv4a1() throws IOException {
     Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
     CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(SymGeodesic.INSTANCE);

@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor tensor = Tensors.empty();
     Iteration iteration = geodesicBSplineInterpolation.init();
     for (int count = 0; count < 10; ++count) {
-      iteration = iteration.step();
+      iteration = iteration.stepGaussSeidel();
       tensor.append(iteration.control());
     }
     return tensor;
