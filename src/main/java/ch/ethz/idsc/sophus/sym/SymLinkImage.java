@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -21,14 +22,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** used in demos */
 public class SymLinkImage {
-  private static final Color BACKGROUND_COLOR =
-      // Color.WHITE;
-      new Color(245, 245, 245);
   private static final int WIDTH = 100;
   /** height also appears in the model2pixel matrix */
   private static final int HEIGHT = 50;
   private static final Tensor MODEL2PIXEL = Tensors.matrix(new Number[][] { //
-      { 100, 0, 80 }, //
+      { 100, 0, WIDTH / 2 }, //
       { 0, -100, HEIGHT + HEIGHT / 2 }, //
       { 0, 0, 1 } });
   private static final TensorUnaryOperator IMAGE_CROP = ImageCrop.color(Tensors.vector(255, 255, 255, 255));
@@ -44,18 +42,24 @@ public class SymLinkImage {
   }
 
   public SymLinkImage(SymScalar symScalar, Font font) {
+    this(symScalar, font, null);
+  }
+
+  public SymLinkImage(SymScalar symScalar, Font font, Color background) {
     final SymLink root = SymLink.build(symScalar);
     final Tensor vector = SymWeights.of(symScalar);
     final int depth = root.depth();
     // ---
-    bufferedImage = new BufferedImage(100 + WIDTH * vector.length(), 100 + HEIGHT * depth, BufferedImage.TYPE_INT_ARGB);
+    bufferedImage = new BufferedImage(100 + WIDTH * (vector.length() - 1), 100 + HEIGHT * depth, BufferedImage.TYPE_INT_ARGB);
     // ---
     Graphics2D graphics = bufferedImage.createGraphics();
     GraphicsUtil.setQualityHigh(graphics);
     graphics.setFont(font);
     final FontMetrics fontMetrics = graphics.getFontMetrics(font);
-    graphics.setColor(BACKGROUND_COLOR);
-    graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+    if (Objects.nonNull(background)) {
+      graphics.setColor(background);
+      graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+    }
     // ---
     new SymLinkRender(root).render(geometricLayer, graphics);
     // ---

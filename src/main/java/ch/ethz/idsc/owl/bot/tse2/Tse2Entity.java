@@ -7,29 +7,35 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
+import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
+import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.sca.Clip;
 
-public abstract class Tse2Entity extends TrajectoryEntity {
+public abstract class Tse2Entity extends TrajectoryEntity implements GlcPlannerCallback {
   /** fixed state integrator is used for planning
    * the time difference between two successive nodes in the planner tree is 4/10 */
   protected final FixedStateIntegrator fixedStateIntegrator;
   // ---
+  private final TreeRender treeRender = new TreeRender();
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
 
   /** @param stateTime initial configuration
@@ -72,5 +78,12 @@ public abstract class Tse2Entity extends TrajectoryEntity {
       graphics.setColor(new Color(255, 128, 64, 192));
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
     }
+    // ---
+    treeRender.getRender().render(geometricLayer, graphics);
+  }
+
+  @Override
+  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

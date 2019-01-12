@@ -57,9 +57,8 @@ public class ExhaustiveNodeCollection implements RrtsNodeCollection {
     Queue<NodeTransition> queue = new PriorityQueue<>();
     for (RrtsNode rrtsNode : list)
       queue.add(new NodeTransition(rrtsNode, transitionSpace.connect(rrtsNode.state(), end)));
-    Iterator<NodeTransition> iterator = queue.iterator();
     List<RrtsNode> best = new LinkedList<>();
-    while (iterator.hasNext() && 0 <= --k_nearest) {
+    for (Iterator<NodeTransition> iterator = queue.iterator(); iterator.hasNext() && 0 <= --k_nearest;) {
       NodeTransition nodeTransition = iterator.next();
       best.add(nodeTransition.rrtsNode);
     }
@@ -71,9 +70,8 @@ public class ExhaustiveNodeCollection implements RrtsNodeCollection {
     Queue<NodeTransition> queue = new PriorityQueue<>();
     for (RrtsNode rrtsNode : list)
       queue.add(new NodeTransition(rrtsNode, transitionSpace.connect(start, rrtsNode.state())));
-    Iterator<NodeTransition> iterator = queue.iterator();
     List<RrtsNode> best = new LinkedList<>();
-    while (iterator.hasNext() && 0 <= --k_nearest) {
+    for (Iterator<NodeTransition> iterator = queue.iterator(); iterator.hasNext() && 0 <= --k_nearest;) {
       NodeTransition nodeTransition = iterator.next();
       best.add(nodeTransition.rrtsNode);
     }
