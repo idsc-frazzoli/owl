@@ -8,9 +8,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -25,13 +25,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
-import ch.ethz.idsc.sophus.sym.SymGeodesic;
-import ch.ethz.idsc.sophus.sym.SymLinkImage;
-import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -112,6 +108,8 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleCyclic);
+    // ---
+    jToggleSymi.setSelected(true);
     timerFrame.jToolBar.add(jToggleSymi);
     // ---
     spinnerLabel.setArray(CurveSubdivisionSchemes.values());
@@ -141,14 +139,20 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
     if (jToggleSymi.isSelected()) {
-      graphics.drawImage(subdiv3a(), 0, 0, null);
+      Optional<SymMaskImages> optional = SymMaskImages.get(scheme.name());
+      if (optional.isPresent()) {
+        BufferedImage image0 = optional.get().image0();
+        graphics.drawImage(image0, 0, 0, null);
+        BufferedImage image1 = optional.get().image1();
+        graphics.drawImage(image1, image0.getWidth() + 1, 0, null);
+      }
     }
     GraphicsUtil.setQualityHigh(graphics);
-    final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
     Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    boolean isCyclic = jToggleCyclic.isSelected();
+    final boolean isCyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = control();
     if (jToggleBndy.isSelected() && !isCyclic && 1 < control.length()) {
       switch (scheme) {
@@ -170,7 +174,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     renderControlPoints(geometricLayer, graphics);
     {
       CurveSubdivision curveSubdivision = function.apply(geodesicDisplay.geodesicInterface());
-      TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
+      TensorUnaryOperator tuo = isCyclic //
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
       // ---
@@ -227,13 +231,12 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
       renderPoints(geometricLayer, graphics, refined);
   }
 
-  public static BufferedImage subdiv3a() {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
-    CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
-    Tensor tensor = curveSubdivision.string(vector);
-    return new SymLinkImage((SymScalar) tensor.Get(2)).bufferedImage();
-  }
-
+  // public static BufferedImage subdiv3a() {
+  // Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
+  // CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
+  // Tensor tensor = curveSubdivision.string(vector);
+  // return new SymLinkImage((SymScalar) tensor.Get(2)).bufferedImage();
+  // }
   public static void main(String[] args) {
     AbstractDemo abstractDemo = new CurveSubdivisionDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);

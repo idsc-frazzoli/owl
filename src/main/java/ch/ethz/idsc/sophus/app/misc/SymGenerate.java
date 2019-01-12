@@ -3,74 +3,20 @@ package ch.ethz.idsc.sophus.app.misc;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 
-import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BezierFunction;
-import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ enum SymGenerate {
   ;
-  public static void subdiv3() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
-    CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
-    Tensor tensor = curveSubdivision.string(vector);
-    {
-      SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(2));
-      ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", HomeDirectory.Pictures("export/bspline3.png"));
-    }
-    {
-      SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
-      ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", HomeDirectory.Pictures("export/bspline3m.png"));
-    }
-  }
-
-  public static BufferedImage subdiv3a() {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
-    CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
-    Tensor tensor = curveSubdivision.string(vector);
-    return new SymLinkImage((SymScalar) tensor.Get(2)).bufferedImage();
-  }
-
-  public static void subdiv4a1() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
-    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(SymGeodesic.INSTANCE);
-    Tensor tensor = curveSubdivision.string(vector);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
-    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", HomeDirectory.Pictures("export/bspline4a1.png"));
-  }
-
-  public static void subdiv4a2() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
-    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.split2(SymGeodesic.INSTANCE);
-    Tensor tensor = curveSubdivision.string(vector);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
-    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", HomeDirectory.Pictures("export/bspline4a2.png"));
-  }
-
-  public static void subdiv4b() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
-    CurveSubdivision curveSubdivision = //
-        BSpline4CurveSubdivision.split3(SymGeodesic.INSTANCE, RationalScalar.HALF);
-    Tensor tensor = curveSubdivision.string(vector);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.Get(1));
-    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", HomeDirectory.Pictures("export/bspline4b.png"));
-  }
-
   public static void custom() throws IOException {
     Scalar s0 = SymScalar.leaf(0);
     Scalar s1 = SymScalar.leaf(1);
@@ -81,27 +27,18 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", HomeDirectory.Pictures("export/custom.png"));
   }
 
-  public static void decastL() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::leaf));
-    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
-    SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(RationalScalar.of(1, 3));
-    SymLinkImage symLinkImage = new SymLinkImage(symScalar);
-    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", HomeDirectory.Pictures("export/decastel41_3.png"));
-  }
-
-  public static void decastR() throws IOException {
-    Tensor vector = Tensor.of(IntStream.range(0, 4).mapToObj(SymScalar::leaf));
-    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
-    SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(RationalScalar.of(3, 4));
-    SymLinkImage symLinkImage = new SymLinkImage(symScalar);
-    ImageIO.write(symLinkImage.bufferedImageCropped(true), "png", HomeDirectory.Pictures("export/decastel43_4.png"));
-  }
-
   public static void main(String[] args) throws IOException {
     {
       SymLinkImage symLinkImage = SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 3);
       BufferedImage bufferedImage = symLinkImage.bufferedImage();
       ImageIO.write(bufferedImage, "png", HomeDirectory.Pictures("gaussian23.png"));
+    }
+    {
+      int degree = 5;
+      int upper = 9;
+      Scalar parameter = RationalScalar.of(2 * 3 + 2, 3);
+      SymLinkImage symLinkImage = SymLinkImages.deBoor(degree, upper + 1, parameter);
+      ImageIO.write(symLinkImage.bufferedImage(), "png", HomeDirectory.Pictures("deboor5.png"));
     }
     // BufferedImage bufferedImage =
     // SymLinkImages.smoothingKernel(SmoothingKernel.GAUSSIAN, 5);

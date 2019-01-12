@@ -2,6 +2,8 @@
 
 Library for motion planning in Java, version `0.2.6`
 
+![owl](https://user-images.githubusercontent.com/4012178/51076099-7a0aa680-1694-11e9-8a2d-61836c634ee3.png)
+
 The library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
 * trajectory planning for an autonomous vehicle
@@ -169,6 +171,8 @@ by Sertac Karaman and Emilio Frazzoli,
 
 Library for non-linear geometry computation in Java, version `0.0.1`
 
+![sophus](https://user-images.githubusercontent.com/4012178/51076100-7f67f100-1694-11e9-83d8-f32c99752748.png)
+
 The library was developed with the following objectives in mind
 * trajectory design for autonomous robots
 * suitable for use in safety-critical real-time systems
@@ -206,14 +210,20 @@ Dubins path curvature
 
 ## Geodesic DeBoor Algorithm
 
-B-Spline curves in `SE(2)` produced by DeBoor Algorithm or curve subdivision produce curves in the planar subspace `R^2` with appealing curvature. 
+![loops5](https://user-images.githubusercontent.com/4012178/51076078-3c0d8280-1694-11e9-9857-2166598c09b2.png)
+
+B-Spline curves in `SE(2)` produced by DeBoor Algorithm or curve subdivision produce curves in the planar subspace `R^2` with appealing curvature.
 
 ## Smoothing using Geodesic Averages
+
+![smoothing](https://user-images.githubusercontent.com/4012178/51075989-159b1780-1693-11e9-8ab7-4a7916c4256b.png)
 
 The sequence of localization estimates of a mobile robot often contains noise.
 Instead of using a complicated extended Kalman filter, geodesic averages based on conventional window functions denoise the uniformly sampled signal of poses in `SE(2)`.
 
 ## Visualization of Geodesic Averages
+
+![deboor5](https://user-images.githubusercontent.com/4012178/51075948-ade4cc80-1692-11e9-9c9a-1e75084df796.png)
 
 A geodesic average is the generalization of an affine combination from the Euclidean space to a non-linear space.
 A geodesic average consists of a nested binary averages.
