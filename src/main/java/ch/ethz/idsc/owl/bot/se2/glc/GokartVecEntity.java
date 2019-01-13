@@ -55,11 +55,10 @@ public class GokartVecEntity extends GokartEntity {
     }
     // ---
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, se2ComboRegion);
-    CTrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(Tensors.vector(slacks));
-    ((StandardTrajectoryPlanner) trajectoryPlanner).relabelDecision = //
-        new LexicographicRelabelDecision(comparator);
+    CTrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface, //
+        new LexicographicRelabelDecision(comparator));
     Comparator<GlcNode> comparator2 = new CustomNodeMeritComparator(comparator);
     trajectoryPlanner.queue = new PriorityQueue<>(comparator2);
     return trajectoryPlanner;
