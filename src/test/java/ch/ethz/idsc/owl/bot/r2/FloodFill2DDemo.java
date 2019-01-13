@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.r2;
 import java.io.IOException;
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.math.ImageGradient;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,6 +13,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -37,16 +37,14 @@ enum FloodFill2DDemo {
     // ---
     System.out.println("export image " + Dimensions.of(tensor));
     Export.of(HomeDirectory.Pictures("image.png"), tensor);
-    Stopwatch stopwatch = Stopwatch.started();
+    Timing timing = Timing.started();
     Tensor cost_raw = FloodFill2D.of(tensor, ttl);
-    System.out.println("floodfill    " + stopwatch.display_seconds());
+    System.out.println("floodfill    " + timing.seconds());
     System.out.println("export cost  " + Dimensions.of(cost_raw));
     Export.of(HomeDirectory.Pictures("image_cost_raw.png"), cost_raw);
     // ---
-    // stopwatch = Stopwatch.started();
     Tensor cost = cost_raw;
     // MeanFilter.of(cost_raw, 2);
-    // System.out.println("mean filter " + stopwatch.display_seconds());
     // ---
     Tensor field_copy = ImageGradient.rotated(cost).multiply(DoubleScalar.of(1.0));
     System.out.println("field: " + Dimensions.of(field_copy));

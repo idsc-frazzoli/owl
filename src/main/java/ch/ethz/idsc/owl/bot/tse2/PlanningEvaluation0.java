@@ -47,7 +47,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
-import ch.ethz.idsc.subare.util.Stopwatch;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -55,6 +54,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -190,12 +190,12 @@ public class PlanningEvaluation0 extends Se2Demo {
     Thread mpw = new Thread(new Runnable() {
       @Override // from Runnable
       public void run() {
-        Stopwatch stopwatch = Stopwatch.started();
+        Timing timing = Timing.started();
         tp.insertRoot(INITIAL);
         GlcExpand glcExpand = new GlcExpand(tp);
         glcExpand.findAny(MAX_STEPS);
-        stopwatch.stop();
-        System.out.println("Planning time: " + stopwatch.display_seconds());
+        timing.stop();
+        System.out.println("Planning time: " + timing.seconds());
         //
         Optional<GlcNode> optional = tp.getBest();
         if (optional.isPresent()) {

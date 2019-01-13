@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.group;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Mod;
 
@@ -14,7 +15,7 @@ public enum Se2Geodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   private static final int INDEX_ANGLE = 2;
-  private static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
+  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {

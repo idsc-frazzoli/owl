@@ -9,13 +9,12 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 
 /* package */ enum Steer3Turns implements DubinsSteer {
   INSTANCE;
   // ---
-  private static final Scalar PI = DoubleScalar.of(Math.PI);
-  private static final Scalar PI_HALF = DoubleScalar.of(Math.PI / 2);
   private static final Scalar FOUR = DoubleScalar.of(4);
 
   @Override // from DubinsSteer
@@ -24,10 +23,10 @@ import ch.ethz.idsc.tensor.sca.ArcCos;
     if (StaticHelper.greaterThanOne(aux))
       return Optional.empty();
     Scalar th_aux = ArcCos.FUNCTION.apply(aux);
-    Scalar th_pha = PI_HALF.add(th_aux);
+    Scalar th_pha = Pi.HALF.add(th_aux);
     return Optional.of(Tensors.of( //
         StaticHelper.principalValue(th_tr.add(th_pha)), //
-        PI.add(th_aux).add(th_aux), //
+        Pi.VALUE.add(th_aux).add(th_aux), //
         StaticHelper.principalValue(th_total.subtract(th_tr).add(th_pha))).multiply(radius));
   }
 }

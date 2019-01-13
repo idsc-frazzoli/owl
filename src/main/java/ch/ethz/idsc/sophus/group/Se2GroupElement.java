@@ -3,12 +3,13 @@ package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** SE(2) is parameterized by R^2 x [-pi,+pi) */
 public class Se2GroupElement extends Se2CoveringGroupElement {
   private static final int MOD_INDEX = 2;
-  private static final Mod MOD_ANGLE = Mod.function(Math.PI * 2, -Math.PI);
+  private static final Mod MOD_ANGLE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   // ---
   /** @param xya == {px, py, angle} as member of Lie group SE2 */

@@ -10,14 +10,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.AngleVector;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** planar infinite cone region */
 public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
-  private static final Scalar PI_HALF = RealScalar.of(Math.PI / 2);
-  // ---
   private final Tensor apex;
   private final TensorUnaryOperator inverse;
   private final Scalar semi;
@@ -32,7 +31,7 @@ public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
     this.apex = apex;
     inverse = new Se2Bijection(apex).inverse();
     this.semi = Sign.requirePositiveOrZero(semi);
-    semi_pi_half = semi.add(PI_HALF);
+    semi_pi_half = semi.add(Pi.HALF);
     normal = AngleVector.of(semi_pi_half);
   }
 

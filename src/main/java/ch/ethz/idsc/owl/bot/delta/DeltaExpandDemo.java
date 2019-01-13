@@ -71,17 +71,17 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     owlyFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.05)));
     owlyFrame.configCoordinateOffset(33, 416);
     owlyFrame.jFrame.setBounds(100, 100, 620, 475);
-    try (AnimationWriter gsw = AnimationWriter.of(HomeDirectory.Pictures("delta_s.gif"), 250)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(HomeDirectory.Pictures("delta_s.gif"), 250)) {
       GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
       while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
         glcExpand.findAny(40);
         owlyFrame.setGlc(trajectoryPlanner);
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
         Thread.sleep(1);
       }
       int repeatLast = 6;
       while (0 < repeatLast--)
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
     }
     System.out.println("created gif");
   }
