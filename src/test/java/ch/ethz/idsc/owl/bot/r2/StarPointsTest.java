@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 public class StarPointsTest extends TestCase {
   public void testSimple() {
-    Tensor polygon = StarPoints.of(4, RealScalar.ONE, RealScalar.of(.3));
+    Tensor polygon = StarPoints.of(4, RealScalar.ONE, RealScalar.of(0.3));
     assertEquals(polygon.length(), 16);
   }
 }

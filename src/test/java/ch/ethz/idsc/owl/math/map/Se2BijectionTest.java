@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 public class Se2BijectionTest extends TestCase {
   public void testSimple() {
     Bijection bijection = new Se2Bijection(Tensors.vector(2, 3, .3));
-    Tensor vector = Tensors.vector(.32, -.98);
+    Tensor vector = Tensors.vector(0.32, -0.98);
     Tensor sameor = bijection.inverse().apply(bijection.forward().apply(vector));
     assertTrue(Chop._14.close(vector, sameor));
   }
@@ -35,7 +35,7 @@ public class Se2BijectionTest extends TestCase {
   public void testSerializable() throws ClassNotFoundException, IOException {
     Se2Bijection se2Bijection = new Se2Bijection(Tensors.vector(2, -3, 1.3));
     Se2Bijection copy = Serialization.copy(se2Bijection);
-    Tensor vector = Tensors.vector(.32, -.98);
+    Tensor vector = Tensors.vector(0.32, -0.98);
     assertEquals(se2Bijection.forward().apply(vector), copy.forward().apply(vector));
   }
 }

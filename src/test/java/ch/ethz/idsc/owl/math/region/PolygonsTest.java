@@ -17,19 +17,19 @@ public class PolygonsTest extends TestCase {
         { 1, 1 }, //
         { 0, 1 } //
     });
-    assertTrue(Polygons.isInside(polygon, Tensors.vector(.5, .5)));
-    assertTrue(Polygons.isInside(polygon, Tensors.vector(.9, .9)));
-    assertTrue(Polygons.isInside(polygon, Tensors.vector(.1, .1)));
-    assertFalse(Polygons.isInside(polygon, Tensors.vector(.1, -.1)));
+    assertTrue(Polygons.isInside(polygon, Tensors.vector(0.5, .5)));
+    assertTrue(Polygons.isInside(polygon, Tensors.vector(0.9, .9)));
+    assertTrue(Polygons.isInside(polygon, Tensors.vector(0.1, .1)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(0.1, -0.1)));
     assertFalse(Polygons.isInside(polygon, Tensors.vector(1, 1.1)));
   }
 
   public void testInsideEmpty() {
     Tensor polygon = Tensors.empty();
-    assertFalse(Polygons.isInside(polygon, Tensors.vector(.5, .5)));
-    assertFalse(Polygons.isInside(polygon, Tensors.vector(.9, .9)));
-    assertFalse(Polygons.isInside(polygon, Tensors.vector(.1, .1)));
-    assertFalse(Polygons.isInside(polygon, Tensors.vector(.1, -.1)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(0.5, .5)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(0.9, .9)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(0.1, .1)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(0.1, -0.1)));
     assertFalse(Polygons.isInside(polygon, Tensors.vector(1, 1.1)));
   }
 

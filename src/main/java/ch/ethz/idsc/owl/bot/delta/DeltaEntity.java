@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private static final Scalar U_NORM = RealScalar.of(0.6);
   /** resolution of radial controls */
   private static final int U_SIZE = 15;
-  private static final Scalar GOAL_RADIUS = RealScalar.of(.3);
+  private static final Scalar GOAL_RADIUS = RealScalar.of(0.3);
   /***************************************************/
   private final ImageGradientInterpolation imageGradientInterpolation;
   private RegionWithDistance<Tensor> goalRegion = null;

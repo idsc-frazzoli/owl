@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
           : new LieGroupBSplineInterpolation(lieGroup, geodesicDisplay.geodesicInterface(), degree, control);
       {
         Tensor tensor = BSplineInterpolationSequence.of(abstractBSplineInterpolation);
-        Tensor shape = CirclePoints.of(9).multiply(RealScalar.of(.05));
+        Tensor shape = CirclePoints.of(9).multiply(RealScalar.of(0.05));
         graphics.setColor(new Color(64, 64, 64, 64));
         for (Tensor ctrls : tensor)
           for (Tensor ctrl : ctrls) {

@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Scalar;
  * in particular costs of type {@link VectorScalar} are not supported
  * @see EdgeRender */
 public class TransitionRender {
-  private static final Scalar DT = RealScalar.of(.2); // TODO magic const
+  private static final Scalar DT = RealScalar.of(0.2); // TODO JPH magic const
   // ---
   private final TransitionSpace transitionSpace;
   private RenderInterface renderInterface = EmptyRender.INSTANCE;

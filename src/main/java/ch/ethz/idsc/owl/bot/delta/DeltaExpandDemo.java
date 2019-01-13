@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Region<Tensor> region = new ImageRegion(obstacleImage, range, true);
     // TrajectoryRegionQuery obstacleQuery = ;
     Scalar maxMove = stateSpaceModel.getLipschitz().add(maxInput);
-    SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(.3));
+    SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(0.3));
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(sphericalRegion, maxMove);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));

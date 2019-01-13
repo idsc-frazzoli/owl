@@ -3,6 +3,7 @@
 // adapted from https://github.com/AtsushiSakai/PythonRobotics
 package ch.ethz.idsc.sophus.dubins;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -13,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public class FixedRadiusDubins implements DubinsPathGenerator {
+public class FixedRadiusDubins implements DubinsPathGenerator, Serializable {
   /** @param xya vector of length 3
    * @param radius
    * @return */

@@ -18,7 +18,7 @@ public class R2xTPolygonStateTimeRegionTest extends TestCase {
     Region<StateTime> cog0 = new R2xTPolygonStateTimeRegion(polygon, bijectionFamily, null);
     assertTrue(cog0.isMember(new StateTime(Tensors.vector(0, 0), RealScalar.of(0))));
     assertTrue(cog0.isMember(new StateTime(Tensors.vector(0, 0), RealScalar.of(1))));
-    assertTrue(cog0.isMember(new StateTime(Tensors.vector(.8, .1), RealScalar.of(0))));
-    assertFalse(cog0.isMember(new StateTime(Tensors.vector(.8, .1), RealScalar.of(.2))));
+    assertTrue(cog0.isMember(new StateTime(Tensors.vector(0.8, 0.1), RealScalar.of(0))));
+    assertFalse(cog0.isMember(new StateTime(Tensors.vector(0.8, 0.1), RealScalar.of(0.2))));
   }
 }

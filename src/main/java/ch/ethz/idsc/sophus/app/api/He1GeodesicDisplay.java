@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 public enum He1GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
   // ---
-  private static final Tensor SQUARE = CirclePoints.of(4).multiply(RealScalar.of(.2));
+  private static final Tensor SQUARE = CirclePoints.of(4).multiply(RealScalar.of(0.2));
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {

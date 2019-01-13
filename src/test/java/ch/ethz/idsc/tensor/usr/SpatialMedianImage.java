@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.tensor.usr;
+package ch.ethz.idsc.tensor.usr;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -43,7 +43,7 @@ class Pixel2Coord {
   }
 }
 
-enum SpatialMedianImage {
+/* package */ enum SpatialMedianImage {
   ;
   private static Tensor image(int seed) {
     Random random = new Random(seed);

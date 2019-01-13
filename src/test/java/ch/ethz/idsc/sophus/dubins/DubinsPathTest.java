@@ -1,9 +1,12 @@
 // code by jph
 package ch.ethz.idsc.sophus.dubins;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -24,6 +27,16 @@ public class DubinsPathTest extends TestCase {
   public void testUnits() {
     DubinsPath dubinsPath = new DubinsPath(DubinsPathType.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 10[m], 1[m]}"));
     assertEquals(dubinsPath.length(), Quantity.of(12, "m"));
+    ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.fromString("{1[m], 2[m], 3}"));
+    Tensor tensor = scalarTensorFunction.apply(Quantity.of(0.3, "m"));
+    assertTrue(Chop._10.close(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}")));
+  }
+
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    DubinsPath path = //
+        new DubinsPath(DubinsPathType.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 8[m], 1[m]}"));
+    DubinsPath dubinsPath = Serialization.copy(path);
+    assertEquals(dubinsPath.length(), Quantity.of(10, "m"));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.fromString("{1[m], 2[m], 3}"));
     Tensor tensor = scalarTensorFunction.apply(Quantity.of(0.3, "m"));
     assertTrue(Chop._10.close(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}")));
