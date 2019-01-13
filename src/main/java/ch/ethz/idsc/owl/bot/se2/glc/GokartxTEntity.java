@@ -48,7 +48,7 @@ class GokartxTEntity extends CarEntity {
     // ---
     super.render(geometricLayer, graphics);
     // ---
-    if (Objects.nonNull(trajectoryWrap)) { // TODO code redundant to AbstractCircularEntity
+    if (Objects.nonNull(trajectoryWrap)) {
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
       if (trajectoryWrap.isDefined(now)) {
