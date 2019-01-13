@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     Tensor min = Tensors.vector(0, 0, 0);
     Tensor max = Tensors.vector(wid, wid, 2 * Math.PI);
     TransitionSpace transitionSpace = new Se2TransitionSpace(RealScalar.ONE);
-    RrtsNodeCollection rrtsNodeCollection = new ExhaustiveNodeCollection(transitionSpace);
+    RrtsNodeCollection rrtsNodeCollection = ExhaustiveNodeCollection.of(transitionSpace);
     TransitionRegionQuery transitionRegionQuery = EmptyTransitionRegionQuery.INSTANCE;
     // ---
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);

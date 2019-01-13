@@ -20,14 +20,14 @@ import java.util.PriorityQueue;
    * @return true if element was added
    * @throws Exception */
   @Override // from PriorityQueue
-  public final boolean add(final T element) {
+  public final boolean offer(final T element) {
     if (size() < capacity)
-      return super.add(element);
+      return super.offer(element);
     @SuppressWarnings("unchecked")
     Comparable<T> comparable = (Comparable<T>) element;
     if (isFavored(comparable, peek())) {
       poll();
-      return super.add(element);
+      return super.offer(element);
     }
     return false;
   }
