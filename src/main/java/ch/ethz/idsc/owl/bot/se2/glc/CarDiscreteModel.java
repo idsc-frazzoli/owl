@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   @Override // from DiscreteModel
   public Scalar gamma() {
-    return RealScalar.of(.98);
+    return RealScalar.of(0.98);
   }
 
   @Override // from TerminalInterface

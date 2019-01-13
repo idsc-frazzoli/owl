@@ -50,7 +50,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
+        return new ConeRegion(goal, Degree.of(18));
       }
     };
     // ---

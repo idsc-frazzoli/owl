@@ -33,8 +33,8 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
-  private transient final ControlsIntegrator controlsIntegrator;
   private final RelabelDecision relabelDecision;
+  private transient final ControlsIntegrator controlsIntegrator;
 
   public StandardTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //

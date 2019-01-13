@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.tensor.usr;
+package ch.ethz.idsc.tensor.usr;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 
 // 3
-enum WindowFunctionImage {
+/* package */ enum WindowFunctionImage {
   ;
   private static Tensor image() {
     Tensor SE2 = Tensors.fromString("{{180, 0, 6+180/2}, {0, -180, 186}, {0, 0, 1}}").unmodifiable();

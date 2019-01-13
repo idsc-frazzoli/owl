@@ -36,16 +36,17 @@ import ch.ethz.idsc.tensor.alg.Array;
  * "A Generalized Label Correcting Method for Optimal Kinodynamic Motion Planning" [Paden/Frazzoli] */
 /* package */ enum PsuDemo {
   ;
+  private static final Tensor ETA = Tensors.vector(5, 7);
+
   public static TrajectoryPlanner simple() {
-    Tensor eta = Tensors.vector(5, 7);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta4Integrator.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //
-        PsuMetric.INSTANCE, Tensors.vector(Math.PI * 0.7, .5), RealScalar.of(0.3));
+        PsuMetric.INSTANCE, Tensors.vector(Math.PI * 0.7, 0.5), RealScalar.of(0.3));
     // ---
-    StateTimeRaster stateTimeRasterization = new EtaRaster(eta, StateTimeTensorFunction.state(psuWrap::represent));
+    StateTimeRaster stateTimeRasterization = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRasterization, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     // ---
@@ -56,7 +57,6 @@ import ch.ethz.idsc.tensor.alg.Array;
   }
 
   public static TrajectoryPlanner medium() {
-    Tensor eta = Tensors.vector(5, 7);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
@@ -64,7 +64,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, Tensors.vector(Math.PI, 2), RealScalar.of(0.3));
     // ---
-    StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(psuWrap::represent));
+    StateTimeRaster stateTimeRaster = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     // ---

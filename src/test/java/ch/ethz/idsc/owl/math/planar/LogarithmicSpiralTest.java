@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 
 public class LogarithmicSpiralTest extends TestCase {
   public void testSimple() {
-    ScalarTensorFunction scalarTensorFunction = new LogarithmicSpiral(RealScalar.of(2), RealScalar.of(.1759));
+    ScalarTensorFunction scalarTensorFunction = new LogarithmicSpiral(RealScalar.of(2), RealScalar.of(0.1759));
     assertEquals(scalarTensorFunction.apply(RealScalar.ZERO), Tensors.vector(2, 0));
     assertTrue(Chop._12.close( //
         scalarTensorFunction.apply(RealScalar.ONE), //

@@ -174,11 +174,11 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     renderControlPoints(geometricLayer, graphics);
     {
       CurveSubdivision curveSubdivision = function.apply(geodesicDisplay.geodesicInterface());
-      TensorUnaryOperator tuo = isCyclic //
+      TensorUnaryOperator tensorUnaryOperator = isCyclic //
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
       // ---
-      refined = Nest.of(tuo, control, levels);
+      refined = Nest.of(tensorUnaryOperator, control, levels);
     }
     if (jToggleLine.isSelected()) {
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface());

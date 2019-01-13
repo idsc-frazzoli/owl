@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 public class DeltaControlsTest extends TestCase {
   public void testFlows() {
     ImageGradientInterpolation imageGradientInterpolation = ImageGradientInterpolation.linear( //
-        ResourceData.of("/io/delta_uxy.png"), Tensors.vector(10, 10), RealScalar.of(.1));
+        ResourceData.of("/io/delta_uxy.png"), Tensors.vector(10, 10), RealScalar.of(0.1));
     Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();
     assertTrue(Sign.isPositive(maxNormGradient));
     Scalar amp = RealScalar.of(2);

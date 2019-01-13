@@ -31,7 +31,7 @@ public class TwdxTImageAnimationDemo extends AbstractTwdDemo {
   private final TrajectoryRegionQuery trajectoryRegionQuery;
 
   public TwdxTImageAnimationDemo() {
-    TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1.2), RealScalar.of(.5));
+    TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1.2), RealScalar.of(0.5));
     twdxTEntity = new TwdxTEntity(twdConfig, new StateTime(Tensors.vector(-1, -1, 1.0), RealScalar.ZERO));
     // ---
     RigidFamily rigidFamily = Se2Family.rotationAround( //

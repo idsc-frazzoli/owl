@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.tensor.usr;
+package ch.ethz.idsc.tensor.usr;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

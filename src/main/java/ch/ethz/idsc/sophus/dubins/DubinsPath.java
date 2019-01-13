@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.dubins;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.group.Se2CoveringIntegrator;
@@ -17,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * radius and entries in segLength must have the same unit
  * 
  * immutable */
-public class DubinsPath {
+public class DubinsPath implements Serializable {
   private final DubinsPathType dubinsPathType;
   private final Scalar radius;
   private final Tensor segLength;
@@ -57,7 +58,7 @@ public class DubinsPath {
     return segLength.dot(dubinsPathType.signatureAbs()).Get().divide(radius);
   }
 
-  /** parameterization of dubins path over the closed interval [length().zero(), length()]
+  /** parameterization of Dubins path over the closed interval [length().zero(), length()]
    * 
    * @param g start configuration
    * @return scalar function for input in the interval [0, length()] */

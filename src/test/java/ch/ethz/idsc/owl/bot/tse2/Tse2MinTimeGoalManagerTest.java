@@ -26,7 +26,7 @@ public class Tse2MinTimeGoalManagerTest extends TestCase {
         Tensors.fromString("{10[m], 20[m], 3, 2[m*s^-1]}"), //
         Tensors.fromString("{1[m], 1[m], 1, 1[m*s^-1]}"));
     FlowsInterface flowsInterface = //
-        Tse2CarFlows.of(Quantity.of(.3, "m^-1"), Tensors.fromString("{-1[m*s^-2],0[m*s^-2],1/2[m*s^-2]}"));
+        Tse2CarFlows.of(Quantity.of(0.3, "m^-1"), Tensors.fromString("{-1[m*s^-2],0[m*s^-2],1/2[m*s^-2]}"));
     Tse2MinTimeGoalManager tse2MinTimeGoalManager = //
         new Tse2MinTimeGoalManager(tse2ComboRegion, flowsInterface.getFlows(3), Quantity.of(2, "m*s^-1"));
     Scalar minCostToGoal = tse2MinTimeGoalManager.minCostToGoal( //

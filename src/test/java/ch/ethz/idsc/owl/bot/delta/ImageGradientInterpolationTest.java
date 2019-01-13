@@ -23,7 +23,7 @@ public class ImageGradientInterpolationTest extends TestCase {
     assertEquals(Dimensions.of(image), Arrays.asList(128, 179));
     {
       ImageGradientInterpolation imageGradientInterpolation = //
-          ImageGradientInterpolation.linear(image, range, RealScalar.of(.5));
+          ImageGradientInterpolation.linear(image, range, RealScalar.of(0.5));
       res = imageGradientInterpolation.get(Tensors.vector(2, 3));
       max = imageGradientInterpolation.maxNormGradient();
     }
@@ -44,7 +44,7 @@ public class ImageGradientInterpolationTest extends TestCase {
     assertEquals(Dimensions.of(image), Arrays.asList(128, 179));
     {
       ImageGradientInterpolation imageGradientInterpolation = //
-          ImageGradientInterpolation.nearest(image, range, RealScalar.of(.5));
+          ImageGradientInterpolation.nearest(image, range, RealScalar.of(0.5));
       res = imageGradientInterpolation.get(Tensors.vector(2, 3));
       max = imageGradientInterpolation.maxNormGradient();
     }
@@ -63,7 +63,7 @@ public class ImageGradientInterpolationTest extends TestCase {
     final Tensor image = ResourceData.of("/io/delta_uxy.png");
     assertEquals(Dimensions.of(image), Arrays.asList(128, 179));
     ImageGradientInterpolation imageGradientInterpolation = //
-        ImageGradientInterpolation.linear(image, range, RealScalar.of(.5));
+        ImageGradientInterpolation.linear(image, range, RealScalar.of(0.5));
     Serialization.copy(imageGradientInterpolation);
   }
 }

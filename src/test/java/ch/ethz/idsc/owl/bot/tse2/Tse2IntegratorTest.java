@@ -25,7 +25,7 @@ public class Tse2IntegratorTest extends TestCase {
       Tensor x = Tensors.fromString("{2[m],3[m],4,3[m*s^-1]}").unmodifiable();
       Tensor u = flow.getU().unmodifiable();
       Tensor f = Tse2StateSpaceModel.INSTANCE.f(x, u).unmodifiable();
-      Scalar h = Quantity.of(.1, "s");
+      Scalar h = Quantity.of(0.1, "s");
       Tensor xp = x.add(f.multiply(h));
       Tensor xn = EulerIntegrator.INSTANCE.step(flow, x, h);
       assertEquals(xp, xn);

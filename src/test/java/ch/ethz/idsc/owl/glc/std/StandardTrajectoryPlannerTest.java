@@ -34,7 +34,7 @@ public class StandardTrajectoryPlannerTest extends TestCase {
   public void testSimple() {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
-    final Scalar radius = DoubleScalar.of(.25);
+    final Scalar radius = DoubleScalar.of(0.25);
     // ---
     Tensor eta = Tensors.vector(8, 8);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);

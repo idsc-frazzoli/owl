@@ -21,7 +21,7 @@ public class BoxRandomSampleTest extends TestCase {
     Tensor width = Tensors.vector(1, 1, 1);
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(offset.subtract(width), offset.add(width));
     Tensor samples = RandomSample.of(randomSampleInterface, 100);
-    Scalars.compare(Norm._2.ofVector(Mean.of(samples).subtract(offset)), RealScalar.of(.1));
+    Scalars.compare(Norm._2.ofVector(Mean.of(samples).subtract(offset)), RealScalar.of(0.1));
     assertEquals(Dimensions.of(samples), Arrays.asList(100, 3));
   }
 

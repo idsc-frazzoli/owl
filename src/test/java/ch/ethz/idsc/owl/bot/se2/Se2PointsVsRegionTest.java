@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 public class Se2PointsVsRegionTest extends TestCase {
   public void testSimple() {
     Tensor center = Tensors.vector(1, 2);
-    Region<Tensor> region = new EllipsoidRegion(center, Tensors.vector(.1, .1));
+    Region<Tensor> region = new EllipsoidRegion(center, Tensors.vector(0.1, 0.1));
     Tensor xya = Tensors.vector(4, 5, 6);
     Tensor point = Tensors.vector(7, 8);
     Region<Tensor> region2 = new Se2PointsVsRegion(Tensors.of(point), region);

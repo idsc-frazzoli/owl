@@ -22,8 +22,8 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---
-  // TODO TOP design so that queue is private final
-  // TODO TOP comparator for queue, best, relabel decision
+  // TODO JPH TOP design so that queue is private final
+  // TODO JPH TOP comparator for queue, best, relabel decision
   public Queue<GlcNode> queue = new PriorityQueue<>(NodeMeritComparator.INSTANCE);
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
   /** best is a reference to a Node in the goal region,
@@ -65,10 +65,10 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
    * 
    * {@link AbstractAnyTrajectoryPlanner} overrides this method
    * 
-   * @param node
+   * @param glcNode
    * @param connector */
-  protected final void offerDestination(GlcNode node, List<StateTime> connector) {
-    best.put(node, connector);
+  protected final void offerDestination(GlcNode glcNode, List<StateTime> connector) {
+    best.put(glcNode, connector);
     if (1 < best.size())
       best.remove(best.lastKey());
   }
@@ -81,6 +81,11 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
 
   protected final Collection<GlcNode> queue() {
     return queue;
+  }
+
+  /** @return */
+  public final StateTimeRaster getStateTimeRaster() {
+    return stateTimeRaster;
   }
 
   /***************************************************/

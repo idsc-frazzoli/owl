@@ -9,8 +9,8 @@ import ch.ethz.idsc.tensor.Scalars;
 /* package */ enum NodeMeritComparator implements Comparator<GlcNode> {
   INSTANCE;
   // ---
-  @Override
-  public int compare(GlcNode o1, GlcNode o2) {
-    return Scalars.compare(o1.merit(), o2.merit());
+  @Override // from Comparator
+  public int compare(GlcNode glcNode1, GlcNode glcNode2) {
+    return Scalars.compare(glcNode1.merit(), glcNode2.merit());
   }
 }

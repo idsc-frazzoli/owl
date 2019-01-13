@@ -40,7 +40,7 @@ public class Se2ForwardActionTest extends TestCase {
     Se2Bijection se2Bijection = new Se2Bijection(Tensors.vector(2, -3, 1.3));
     TensorUnaryOperator forward = se2Bijection.forward();
     TensorUnaryOperator copy = Serialization.copy(forward);
-    Tensor vector = Tensors.vector(.32, -.98);
+    Tensor vector = Tensors.vector(0.32, -0.98);
     assertEquals(forward.apply(vector), copy.apply(vector));
   }
 }

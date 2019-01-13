@@ -22,8 +22,8 @@ public class RegionRendersTest extends TestCase {
     Color color = new Color(bufferedImage.getRGB(0, 0));
     assertEquals(color.getRed(), 244); // 230 get's mapped to 244
     Area area = ImageArea.fromTensor(image);
-    assertTrue(area.contains(new Point2D.Double(.5, .5)));
-    assertFalse(area.contains(new Point2D.Double(1.5, .5)));
-    assertTrue(area.contains(new Point2D.Double(2.5, .5)));
+    assertTrue(area.contains(new Point2D.Double(0.5, 0.5)));
+    assertFalse(area.contains(new Point2D.Double(1.5, 0.5)));
+    assertTrue(area.contains(new Point2D.Double(2.5, 0.5)));
   }
 }

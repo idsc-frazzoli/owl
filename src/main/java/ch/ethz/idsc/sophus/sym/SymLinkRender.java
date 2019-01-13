@@ -20,8 +20,8 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ class SymLinkRender implements RenderInterface {
-  static final Tensor CIRCLE_END = CirclePoints.of(51).multiply(RealScalar.of(.066));
-  private static final Tensor CIRCLE_MID = CirclePoints.of(21).multiply(RealScalar.of(.033));
+  static final Tensor CIRCLE_END = CirclePoints.of(51).multiply(RealScalar.of(0.066));
+  private static final Tensor CIRCLE_MID = CirclePoints.of(21).multiply(RealScalar.of(0.033));
   // ---
   private final SymLink symLink;
 

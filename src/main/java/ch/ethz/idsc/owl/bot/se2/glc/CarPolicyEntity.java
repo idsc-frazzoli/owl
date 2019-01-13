@@ -45,7 +45,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
       new Color(192, 255, 192), //
       new Color(192, 192, 255) };
   /** modified in constructor */
-  private final Tensor SHAPE = CirclePoints.of(5).multiply(RealScalar.of(.1));
+  private final Tensor SHAPE = CirclePoints.of(5).multiply(RealScalar.of(0.1));
   // ---
   private final Tensor start;
   private final SarsaType sarsaType;
@@ -74,7 +74,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
         Subdivide.of(Degree.of(+50), Degree.of(-50), carDiscreteModel.resolution - 1), //
         Subdivide.of(0, 5, 23));
     lidarEmulator = new LidarEmulator(LidarRaytracer, this::getStateTimeNow, raytraceQuery);
-    SHAPE.set(Tensors.vector(.2, 0), 0);
+    SHAPE.set(Tensors.vector(0.2, 0), 0);
     reset(RealScalar.ZERO);
   }
 

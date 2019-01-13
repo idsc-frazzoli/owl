@@ -22,7 +22,7 @@ public class PerlinNoiseTest extends TestCase {
   }
 
   public void testExample() {
-    double value = PerlinContinuousNoise.FUNCTION.at(.3, 300.3, -600.5);
+    double value = PerlinContinuousNoise.FUNCTION.at(0.3, 300.3, -600.5);
     assertEquals(value, 0.04274652592000538);
   }
 }

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.tensor.usr;
+package ch.ethz.idsc.tensor.usr;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 
 // 4 22 35
-enum BipartitionImage {
+/* package */ enum BipartitionImage {
   ;
   private static Tensor image(int seed) {
     Random random = new Random(seed);

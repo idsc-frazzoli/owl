@@ -41,7 +41,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   }
 
   public void testQuantity() {
-    FlowsInterface carFlows = Se2CarFlows.standard(Quantity.of(1, "m*s^-1"), Quantity.of(.5, "m^-1"));
+    FlowsInterface carFlows = Se2CarFlows.standard(Quantity.of(1, "m*s^-1"), Quantity.of(0.5, "m^-1"));
     Collection<Flow> controls = carFlows.getFlows(3);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical( //
         Tensors.fromString("{1[m], 2[m], 3}"), //
