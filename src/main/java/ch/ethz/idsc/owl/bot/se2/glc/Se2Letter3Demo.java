@@ -38,7 +38,7 @@ public class Se2Letter3Demo extends Se2CarDemo {
         CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 6));
+        return new ConeRegion(goal, Degree.of(30));
       }
     };
     carEntity.extraCosts.add(r2ImageRegionWrap.costFunction());

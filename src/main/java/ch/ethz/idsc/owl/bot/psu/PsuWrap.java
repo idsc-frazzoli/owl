@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
     return Tensors.of(MOD.apply(x.Get(0)), x.Get(1));
   }
 
-  @Override // from CoordinateWrap
+  @Override // from TensorDifference
   public Tensor difference(Tensor p, Tensor q) {
     Tensor d = p.subtract(q);
     d.set(MOD_DISTANCE, 0);

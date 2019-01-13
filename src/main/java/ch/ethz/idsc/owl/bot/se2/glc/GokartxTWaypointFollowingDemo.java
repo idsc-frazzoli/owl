@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.qty.Degree;
 
 /** demo to simulate dubendorf hangar */
 public class GokartxTWaypointFollowingDemo extends GokartDemo {
@@ -42,7 +43,7 @@ public class GokartxTWaypointFollowingDemo extends GokartDemo {
     GokartxTEntity gokartEntity = new GokartxTEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
+        return new ConeRegion(goal, Degree.of(18));
       }
     };
     // ---

@@ -32,7 +32,7 @@ class TnWrap implements CoordinateWrap, Serializable {
     return Tensors.vector(i -> Mod.function(extension.Get(i)).apply(x.Get(i)), x.length());
   }
 
-  @Override
+  @Override // from TensorDifference
   public Tensor difference(Tensor p, Tensor q) {
     Tensor d = p.subtract(q);
     return Tensors.vector(i -> mod_distance.get(i).apply(d.Get(i)), d.length());

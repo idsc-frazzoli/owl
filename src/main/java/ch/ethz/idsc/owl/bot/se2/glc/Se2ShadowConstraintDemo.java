@@ -56,7 +56,7 @@ public class Se2ShadowConstraintDemo extends Se2CarDemo {
     GokartEntity gokartEntity = new GokartEntity(stateTime) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 6));
+        return new ConeRegion(goal, Degree.of(30));
       }
     };
     Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(6);

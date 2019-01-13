@@ -30,6 +30,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
+import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -37,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 
 public final class GeometricComponent {
   private static final Font DEFAULT_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
-  private static final double WHEEL_ANGLE = Math.PI / 12;
+  private static final Scalar WHEEL_ANGLE = Degree.of(15);
   /** initial model to pixel matrix */
   private static final Tensor MODEL2PIXEL_INITIAL = Tensors.matrix(new Number[][] { //
       { 60, 0, 300 }, //
@@ -181,7 +182,8 @@ public final class GeometricComponent {
 
   /** @return {px, py, angle} in model space */
   Tensor getMouseSe2State() {
-    return mouseLocation.copy().append(RealScalar.of(mouseWheel * WHEEL_ANGLE));
+    Scalar scalar = RealScalar.of(mouseWheel).multiply(WHEEL_ANGLE);
+    return mouseLocation.copy().append(scalar);
   }
 
   public void addRenderInterfaceBackground(RenderInterface renderInterface) {
