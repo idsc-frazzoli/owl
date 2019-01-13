@@ -27,7 +27,7 @@ public enum SignedCurvature2D {
    * or Optional.empty() if any two of the three points are identical */
   public static Optional<Scalar> of(Tensor a, Tensor b, Tensor c) {
     Tensor d_ab = b.subtract(a);
-    Scalar v = d_ab.dot(Cross2D.of(c.subtract(b))).Get();
+    Scalar v = Det2D.of(c.subtract(b), d_ab);
     Scalar w = d_ab.dot(c.subtract(a)).Get();
     Scalar n = Norm._2.between(c, b);
     Scalar den = Hypot.of(v, w).multiply(n);

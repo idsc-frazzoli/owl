@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** planar infinite cone region */
@@ -49,7 +48,7 @@ public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
   public Scalar distance(Tensor tensor) {
     Tensor local = inverse.apply(tensor);
     local.set(Scalar::abs, 1); // normalize y coordinate
-    Scalar angle = ArcTan.of(local.Get(0), local.Get(1)); // non-negative
+    Scalar angle = ArcTan2D.of(local); // non-negative
     if (Scalars.lessThan(angle, semi))
       return RealScalar.ZERO;
     return Scalars.lessThan(angle, semi_pi_half) //
