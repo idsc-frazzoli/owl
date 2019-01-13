@@ -39,7 +39,7 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   public StandardTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface) {
-    this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, SimpleRelabelDecision.INSTANCE);
+    this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, SimpleRelabelDecision.DEFAULT);
   }
 
   public StandardTrajectoryPlanner( //

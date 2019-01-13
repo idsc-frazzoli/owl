@@ -3,10 +3,16 @@ package ch.ethz.idsc.owl.glc.adapter;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class SimpleRelabelDecisionTest extends TestCase {
+  private static boolean doRelabel(Scalar newMerit, Scalar oldMerit, Scalar slack) {
+    return ((SimpleRelabelDecision) SimpleRelabelDecision.with(slack)).doRelabel(newMerit, oldMerit);
+  }
+
   private static void check(boolean a, boolean b, boolean c) {
     boolean r1 = a || (b && c);
     boolean r2 = a || b && c;
@@ -25,15 +31,20 @@ public class SimpleRelabelDecisionTest extends TestCase {
   }
 
   public void testStatic() {
-    assertTrue(SimpleRelabelDecision.doRelabel(RealScalar.of(1), RealScalar.of(2), DoubleScalar.of(2)));
-    assertFalse(SimpleRelabelDecision.doRelabel(RealScalar.of(3), RealScalar.of(2), DoubleScalar.of(2)));
-    assertFalse(SimpleRelabelDecision.doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(2)));
-    assertTrue(SimpleRelabelDecision.doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(.5)));
-    assertFalse(SimpleRelabelDecision.doRelabel(RealScalar.of(2.1), RealScalar.of(2), DoubleScalar.of(.5)));
+    assertTrue(doRelabel(RealScalar.of(1), RealScalar.of(2), DoubleScalar.of(2)));
+    assertFalse(doRelabel(RealScalar.of(3), RealScalar.of(2), DoubleScalar.of(2)));
+    assertFalse(doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(2)));
+    assertTrue(doRelabel(RealScalar.of(1.), RealScalar.of(2), DoubleScalar.of(.5)));
+    assertFalse(doRelabel(RealScalar.of(1.9), RealScalar.of(2), DoubleScalar.of(.5)));
+    assertFalse(doRelabel(RealScalar.of(2.1), RealScalar.of(2), DoubleScalar.of(.5)));
   }
 
   public void testQuantity() {
-    assertTrue(SimpleRelabelDecision.doRelabel(Quantity.of(1, "USD"), Quantity.of(2, "USD"), DoubleScalar.of(.01)));
-    assertFalse(SimpleRelabelDecision.doRelabel(Quantity.of(3, "USD"), Quantity.of(2, "USD"), DoubleScalar.of(.01)));
+    assertTrue(doRelabel(Quantity.of(1, "USD"), Quantity.of(2, "USD"), DoubleScalar.of(.01)));
+    assertFalse(doRelabel(Quantity.of(3, "USD"), Quantity.of(2, "USD"), DoubleScalar.of(.01)));
+  }
+
+  public void testChop() {
+    assertTrue(Chop._05.allZero(Quantity.of(1e-7, "USD")));
   }
 }
