@@ -14,16 +14,16 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 abstract class StandardMenu {
-  public static <Type extends StandardMenu> void bind(JButton myJButton, Supplier<Type> mySupplier) {
-    myJButton.addActionListener(new ActionListener() {
+  public static <Type extends StandardMenu> void bind(JButton jButton, Supplier<Type> supplier) {
+    jButton.addActionListener(new ActionListener() {
       long tic = System.nanoTime();
 
       @Override
-      public void actionPerformed(ActionEvent myActionEvent) {
+      public void actionPerformed(ActionEvent actionEvent) {
         long toc = System.nanoTime();
         if (500_000_000L < toc - tic) {
-          StandardMenu myStandardMenu = mySupplier.get();
-          myStandardMenu.myJPopupMenu.addPopupMenuListener(new PopupMenuListener() {
+          StandardMenu myStandardMenu = supplier.get();
+          myStandardMenu.jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
               // System.out.println("popupMenuWillBecomeVisible");
@@ -41,49 +41,49 @@ abstract class StandardMenu {
               tic = System.nanoTime();
             }
           });
-          myStandardMenu.south(myJButton);
+          myStandardMenu.south(jButton);
         }
       }
     });
   }
 
   // ---
-  protected abstract void design(JPopupMenu myJPopupMenu);
+  protected abstract void design(JPopupMenu jPopupMenu);
 
-  private JPopupMenu myJPopupMenu = new JPopupMenu();
+  private JPopupMenu jPopupMenu = new JPopupMenu();
 
   protected final JPopupMenu designShow() {
-    design(myJPopupMenu);
-    return myJPopupMenu;
+    design(jPopupMenu);
+    return jPopupMenu;
   }
 
   /** non-blocking
    * 
-   * @param myJComponent */
-  public void south(JComponent myJComponent) {
-    designShow().show(myJComponent, 0, myJComponent.getSize().height);
+   * @param jComponent */
+  public void south(JComponent jComponent) {
+    designShow().show(jComponent, 0, jComponent.getSize().height);
   }
 
   /** placement typically avoids that menu is created over mouse pointer
    * 
-   * @param myJComponent */
-  public void southEast(JComponent myJComponent) {
-    designShow().show(myJComponent, myJComponent.getSize().width, myJComponent.getSize().height);
+   * @param jComponent */
+  public void southEast(JComponent jComponent) {
+    designShow().show(jComponent, jComponent.getSize().width, jComponent.getSize().height);
   }
 
-  public void showRelative(JComponent myJComponent, Rectangle myRectangle) {
-    designShow().show(myJComponent, myRectangle.x + myRectangle.width, myRectangle.y);
+  public void showRelative(JComponent jComponent, Rectangle rectangle) {
+    designShow().show(jComponent, rectangle.x + rectangle.width, rectangle.y);
   }
 
-  public void atMouse(JComponent myJComponent) {
+  public void atMouse(JComponent jComponent) {
     Point myMouse = DisplayHelper.getMouseLocation();
-    Point myPoint = myJComponent.getLocationOnScreen();
-    designShow().show(myJComponent, myMouse.x - myPoint.x, myMouse.y - myPoint.y);
+    Point myPoint = jComponent.getLocationOnScreen();
+    designShow().show(jComponent, myMouse.x - myPoint.x, myMouse.y - myPoint.y);
   }
 
   // does not really work :-(
   @Deprecated
-  protected static void quickDemo(StandardMenu myStandardMenu) {
+  protected static void quickDemo(StandardMenu standardMenu) {
     // myStandardMenu.atMouse();
   }
 }
