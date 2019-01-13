@@ -6,7 +6,7 @@ import java.util.Comparator;
 import ch.ethz.idsc.tensor.Scalars;
 
 /** compare two nodes based on {@link GlcNode#merit()} */
-/* package */ enum NodeMeritComparator implements Comparator<GlcNode> {
+public enum NodeMeritComparator implements Comparator<GlcNode> {
   INSTANCE;
   // ---
   @Override // from Comparator
