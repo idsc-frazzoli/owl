@@ -10,14 +10,14 @@ import java.awt.event.MouseMotionListener;
 public class LazyMouse implements MouseListener, MouseMotionListener {
   public static final float TOLERANCE_DEFAULT = 3;
   // ---
-  private Point myPressedC = new Point(); // component
-  private Point myPressedS = new Point(); // screen
+  private Point pressedC = new Point(); // component
+  private Point pressedS = new Point(); // screen
   private boolean isClick;
   private float tolerance = TOLERANCE_DEFAULT;
-  private final LazyMouseListener myLazyMouseListener;
+  private final LazyMouseListener lazyMouseListener;
 
-  public LazyMouse(LazyMouseListener myLazyMouseListener) {
-    this.myLazyMouseListener = myLazyMouseListener;
+  public LazyMouse(LazyMouseListener lazyMouseListener) {
+    this.lazyMouseListener = lazyMouseListener;
   }
 
   public void setTolerance(float tolerance) {
@@ -27,55 +27,55 @@ public class LazyMouse implements MouseListener, MouseMotionListener {
   }
 
   @Override
-  public final void mousePressed(MouseEvent myMouseEvent) {
-    myPressedC = myMouseEvent.getPoint();
-    myPressedS = myMouseEvent.getLocationOnScreen();
+  public final void mousePressed(MouseEvent mouseEvent) {
+    pressedC = mouseEvent.getPoint();
+    pressedS = mouseEvent.getLocationOnScreen();
     isClick = true;
   }
 
-  private boolean shortFromPressed(MouseEvent myMouseEvent) {
-    Point myPointC = myMouseEvent.getPoint();
-    Point myPointS = myMouseEvent.getLocationOnScreen();
-    return Math.hypot(myPointC.x - myPressedC.x, myPointC.y - myPressedC.y) <= tolerance && //
-        Math.hypot(myPointS.x - myPressedS.x, myPointS.y - myPressedS.y) <= tolerance;
+  private boolean shortFromPressed(MouseEvent mouseEvent) {
+    Point myPointC = mouseEvent.getPoint();
+    Point myPointS = mouseEvent.getLocationOnScreen();
+    return Math.hypot(myPointC.x - pressedC.x, myPointC.y - pressedC.y) <= tolerance && //
+        Math.hypot(myPointS.x - pressedS.x, myPointS.y - pressedS.y) <= tolerance;
   }
 
   @Override
-  public final void mouseReleased(MouseEvent myMouseEvent) {
-    isClick &= shortFromPressed(myMouseEvent);
+  public final void mouseReleased(MouseEvent mouseEvent) {
+    isClick &= shortFromPressed(mouseEvent);
     if (isClick)
-      myLazyMouseListener.lazyClicked(myMouseEvent);
+      lazyMouseListener.lazyClicked(mouseEvent);
   }
 
   @Override
-  public final void mouseClicked(MouseEvent myMouseEvent) {
+  public final void mouseClicked(MouseEvent mouseEvent) {
     // this has to be empty!
   }
 
   @Override
-  public final void mouseDragged(MouseEvent myMouseEvent) {
-    isClick &= shortFromPressed(myMouseEvent);
+  public final void mouseDragged(MouseEvent mouseEvent) {
+    isClick &= shortFromPressed(mouseEvent);
     if (!isClick)
-      myLazyMouseListener.lazyDragged(myMouseEvent);
+      lazyMouseListener.lazyDragged(mouseEvent);
   }
 
   @Override
-  public void mouseMoved(MouseEvent myMouseEvent) {
+  public void mouseMoved(MouseEvent mouseEvent) {
     // empty by default
   }
 
   @Override
-  public void mouseEntered(MouseEvent myMouseEvent) {
+  public void mouseEntered(MouseEvent mouseEvent) {
     // empty by default
   }
 
   @Override
-  public void mouseExited(MouseEvent myMouseEvent) {
+  public void mouseExited(MouseEvent mouseEvent) {
     // empty by default
   }
 
-  public void addListenersTo(Component myComponent) {
-    myComponent.addMouseListener(this);
-    myComponent.addMouseMotionListener(this);
+  public void addListenersTo(Component component) {
+    component.addMouseListener(this);
+    component.addMouseMotionListener(this);
   }
 }

@@ -10,7 +10,10 @@ import ch.ethz.idsc.tensor.sca.Clip;
 
 /** De Casteljau's algorithm for the evaluation of Bezier curves
  * 
- * https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm */
+ * https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm
+ * 
+ * <p>inspired by
+ * <a href="https://reference.wolfram.com/language/ref/BezierFunction.html">BezierFunction</a> */
 public class BezierFunction implements ScalarTensorFunction {
   /** @param geodesicInterface
    * @param control

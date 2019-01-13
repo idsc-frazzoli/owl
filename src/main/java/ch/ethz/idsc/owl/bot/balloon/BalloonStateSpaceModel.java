@@ -51,7 +51,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
     // System.out.println("theta = " + theta);
     // <<<<<<< HEAD
     // System.out.println(u.Get(0));
-    /* TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     // =======
     /* TODO ANDRE change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     // >>>>>>> 2b08fc31f538326c38509d49a7c3e25ce86f853b

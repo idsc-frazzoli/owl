@@ -1,7 +1,8 @@
 // code by ynager
 package ch.ethz.idsc.owl.glc.core;
 
-/** TODO is this interface simply a (semi-)order relation: irreflexible, ... */
+/** decides if new node is better than existing node
+ * TODO is this interface simply a (semi-)order relation: irreflexible, ... */
 public interface RelabelDecision {
   /** @param newNode
    * @param oldNode

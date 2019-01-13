@@ -34,20 +34,23 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
   private transient final ControlsIntegrator controlsIntegrator;
-  /** decides if new node is better than existing node
-   * TODO JPH API design not final */
-  public RelabelDecision relabelDecision = SimpleRelabelDecision.INSTANCE;
+  private final RelabelDecision relabelDecision;
 
   public StandardTrajectoryPlanner( //
-      StateTimeRaster stateTimeRaster, //
-      StateIntegrator stateIntegrator, //
-      Collection<Flow> controls, //
-      PlannerConstraint plannerConstraint, //
-      GoalInterface goalInterface) {
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
+      PlannerConstraint plannerConstraint, GoalInterface goalInterface) {
+    this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, SimpleRelabelDecision.DEFAULT);
+  }
+
+  public StandardTrajectoryPlanner( //
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
+      PlannerConstraint plannerConstraint, GoalInterface goalInterface, //
+      RelabelDecision relabelDecision) {
     super(stateTimeRaster, goalInterface);
     this.stateIntegrator = stateIntegrator;
     this.plannerConstraint = Objects.requireNonNull(plannerConstraint);
     this.goalInterface = goalInterface;
+    this.relabelDecision = relabelDecision;
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
         () -> controls.stream().parallel(), //

@@ -2,6 +2,7 @@
 // inspired by https://rosettacode.org/wiki/Sutherland-Hodgman_polygon_clipping#Java
 package ch.ethz.idsc.owl.math.region;
 
+import ch.ethz.idsc.sophus.planar.Det2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -73,9 +74,9 @@ public class PolygonClip implements TensorUnaryOperator {
   /* package */ static Tensor intersection(Tensor a, Tensor b, Tensor p, Tensor q) {
     Tensor ab = a.subtract(b);
     Tensor pq = p.subtract(q);
-    Scalar denom = StaticHelper.det(ab, pq);
+    Scalar denom = Det2D.of(ab, pq);
     if (Chop._40.allZero(denom))
       throw TensorRuntimeException.of(a, b, p, q);
-    return pq.multiply(StaticHelper.det(ab, a)).subtract(ab.multiply(StaticHelper.det(pq, p))).divide(denom);
+    return pq.multiply(Det2D.of(ab, a)).subtract(ab.multiply(Det2D.of(pq, p))).divide(denom);
   }
 }
