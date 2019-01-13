@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.TensorsExt;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -26,8 +26,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
 /** test if api is sufficient to model gokart */
 public class GokartEntity extends CarEntity {
-  static final Tensor PARTITIONSCALE = Tensors.of( //
-      RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal()).unmodifiable();
+  static final Tensor PARTITIONSCALE = TensorsExt.of(2, 2, Degree.of(10).reciprocal()).unmodifiable();
   static final Scalar SPEED = RealScalar.of(2.5);
   static final Scalar LOOKAHEAD = RealScalar.of(3.0);
   static final Scalar MAX_TURNING_PLAN = Degree.of(15);

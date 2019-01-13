@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.TensorsExt;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
 
@@ -40,8 +41,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
   /* Setting up integrator */
   static final Integrator INTEGRATOR = RungeKutta4Integrator.INSTANCE;
   /* Setting up Time Raster */
-  final static Tensor PARTITIONSCALE = Tensors.of( //
-      RealScalar.of(1), RealScalar.of(1), RealScalar.of(1), Degree.of(1)).unmodifiable();
+  final static Tensor PARTITIONSCALE = TensorsExt.of(1, 1, 1, Degree.of(1)).unmodifiable();
 
   static protected StateTimeRaster stateTimeRaster() {
     return new EtaRaster(PARTITIONSCALE, StateTimeTensorFunction.state(ApWrap.INSTANCE::represent));
