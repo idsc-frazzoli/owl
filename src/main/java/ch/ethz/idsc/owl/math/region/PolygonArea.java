@@ -2,6 +2,7 @@
 // inspired by https://www.mathopenref.com/coordpolygonarea.html
 package ch.ethz.idsc.owl.math.region;
 
+import ch.ethz.idsc.sophus.planar.Det2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -21,9 +22,9 @@ public enum PolygonArea implements TensorScalarFunction {
     if (Tensors.isEmpty(polygon))
       return RealScalar.ZERO;
     int last = polygon.length() - 1;
-    Scalar sum = StaticHelper.det(polygon.get(last), polygon.get(0));
+    Scalar sum = Det2D.of(polygon.get(last), polygon.get(0));
     for (int index = 0; index < last; ++index)
-      sum = sum.add(StaticHelper.det(polygon.get(index), polygon.get(index + 1)));
+      sum = sum.add(Det2D.of(polygon.get(index), polygon.get(index + 1)));
     return sum.multiply(RationalScalar.HALF);
   }
 }
