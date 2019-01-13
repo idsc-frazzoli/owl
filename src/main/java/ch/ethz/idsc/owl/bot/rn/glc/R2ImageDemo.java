@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -36,6 +35,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.io.Timing;
 
 /* package */ enum R2ImageDemo {
   ;
@@ -54,10 +54,10 @@ import ch.ethz.idsc.tensor.alg.Array;
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(partitionScale), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
-    Stopwatch stopwatch = Stopwatch.started();
+    Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(10000);
-    System.out.println(glcExpand.getExpandCount() + " " + stopwatch.display_seconds());
+    System.out.println(glcExpand.getExpandCount() + " " + timing.seconds());
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

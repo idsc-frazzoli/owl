@@ -17,11 +17,11 @@ import org.bytedeco.javacpp.opencv_imgproc;
 import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 
-import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.data.img.CvHelper;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.io.Timing;
 
 /* package */ enum CudaDemo {
   ;
@@ -45,25 +45,23 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     //
     // CPU dilate
     Mat dst = new Mat(src.size(), src.type());
-    Stopwatch stopwatch = Stopwatch.started();
+    Timing timing = Timing.started();
     opencv_imgproc.dilate(src, dst, kernel, new Point(-1, -1), it, opencv_core.BORDER_CONSTANT, null);
     // opencv_imgproc.threshold(img, dst, 128.0, 255.0, opencv_imgproc.THRESH_BINARY);
-    stopwatch.stop();
-    System.out.println("CPU: " + stopwatch.display_seconds());
+    System.out.println("CPU: " + timing.seconds());
     displayMat(dst, "CPU");
-    stopwatch.resetToZero();
+    timing = Timing.started();
     //
     // GPU dilate
     GpuMat src_g = new GpuMat(src.size(), src.type());
     GpuMat dst_g = new GpuMat(src.size(), src.type());
     src_g.upload(src);
     Filter filter = opencv_cudafilters.createMorphologyFilter(opencv_imgproc.MORPH_DILATE, src_g.type(), kernel, new Point(-1, -1), it);
-    stopwatch.start();
+    timing.stop();
     filter.apply(src_g, dst_g);
     // opencv_cudaarithm.threshold(src_g, dst_g, 128.0, 255.0, opencv_imgproc.THRESH_BINARY);
-    stopwatch.stop();
-    System.out.println("GPU: " + stopwatch.display_seconds());
-    stopwatch.resetToZero();
+    System.out.println("GPU: " + timing.seconds());
+    timing.resetToZero();
     dst_g.download(dst);
     displayMat(dst, "GPU");
     //
@@ -72,13 +70,13 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Mat negSrcDT = new Mat();
     Mat dilated = new Mat();
     Mat rad = new Mat(Scalar.all(it * radius));
-    stopwatch.start();
+    timing.start();
     opencv_core.bitwise_not(src, negSrc);
     opencv_imgproc.distanceTransform(negSrc, negSrcDT, opencv_imgproc.CV_DIST_L2, opencv_imgproc.CV_DIST_MASK_PRECISE);
     opencv_core.compare(negSrcDT, rad, dilated, opencv_core.CMP_LE);
-    stopwatch.stop();
+    timing.stop();
     displayMat(dilated, "DT CPU");
-    System.out.println("DT CPU: " + stopwatch.display_seconds());
+    System.out.println("DT CPU: " + timing.seconds());
     //
   }
 }

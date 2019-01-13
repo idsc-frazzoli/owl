@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Import;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Mean;
 
 /* package */ enum StaticHelper {
@@ -31,7 +32,7 @@ import ch.ethz.idsc.tensor.red.Mean;
       }
       control = Tensor.of(control.stream().map(r -> r.pmul(Tensors.vector(.1, .1, -1))));
       Tensor mean = Mean.of(control);
-      mean.set(RealScalar.of(Math.PI / 2), 2);
+      mean.set(Pi.HALF, 2);
       control = Tensor.of(control.stream().map(row -> row.subtract(mean)));
     } catch (Exception exception) {
       exception.printStackTrace();

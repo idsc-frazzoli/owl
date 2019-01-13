@@ -84,7 +84,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     prev_reward = null;
     if (!episodeLog.isEmpty()) {
       // System.out.println("learn " + episodeLog.size());
-      Sarsa sarsa = sarsaType.supply(carDiscreteModel, learningRate, qsa, sac, policy);
+      Sarsa sarsa = sarsaType.sarsa(carDiscreteModel, learningRate, qsa, sac, policy);
       int nstep = 50;
       Deque<StepInterface> deque = new LinkedList<>(episodeLog.subList(Math.max(1, episodeLog.size() - nstep), episodeLog.size()));
       while (!deque.isEmpty()) {
