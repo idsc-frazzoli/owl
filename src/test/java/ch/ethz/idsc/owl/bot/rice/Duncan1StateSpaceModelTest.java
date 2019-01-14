@@ -7,8 +7,11 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
+import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
@@ -48,6 +51,19 @@ public class Duncan1StateSpaceModelTest extends TestCase {
     StateTime last = Lists.getLast(list);
     assertEquals(last.time(), Quantity.of(100, "s"));
     Chop._12.requireClose(last.state().get(0), push.divide(lambda));
+  }
+
+  public void testSimple() {
+    Tensor speed = Tensors.fromString("{10[m*s^-1]}");
+    EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator( //
+        new Duncan1StateSpaceModel(Quantity.of(0.2, "s^-1")), //
+        MidpointIntegrator.INSTANCE, //
+        new StateTime(speed, Quantity.of(0, "s")));
+    Tensor accel = Tensors.of(Quantity.of(3, "m*s^-2"));
+    episodeIntegrator.move(accel, Quantity.of(1, "s"));
+    StateTime stateTime = episodeIntegrator.tail();
+    // System.out.println(stateTime.toInfoString());
+    assertTrue(Scalars.lessThan(speed.Get(0), stateTime.state().Get(0)));
   }
 
   public void testFail() {
