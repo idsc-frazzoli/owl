@@ -46,7 +46,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 
-// TODO JPH reduce printout
 public class RLTrajectoryPlanner0Demo implements DemoInterface {
   private static final StateIntegrator STATE_INTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
@@ -93,11 +92,9 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
     return trajectoryPlanner.getBest();
   }
 
-  @Override
+  @Override // from DemoInterface
   public BaseFrame start() {
-    System.out.println("compute");
     Optional<GlcNode> optional = getBest();
-    System.out.println("done");
     GlcNode goalNode = optional.get();
     VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
     // System.out.println(cost);
