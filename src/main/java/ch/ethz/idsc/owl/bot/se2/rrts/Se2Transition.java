@@ -39,11 +39,6 @@ public class Se2Transition extends AbstractTransition {
     return tensor;
   }
 
-  @Override // from Transition
-  public Tensor splitAt(Scalar scalar) {
-    return dubinsPath.sampler(start()).apply(scalar);
-  }
-
   public DubinsPath dubinsPath() {
     return dubinsPath;
   }

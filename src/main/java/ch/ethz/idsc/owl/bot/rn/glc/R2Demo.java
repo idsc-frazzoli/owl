@@ -59,8 +59,8 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     final Scalar radius = DoubleScalar.of(0.25);
     // ---
     Tensor eta = Tensors.vector(8, 8);
-    R2Flows r2Config = new R2Flows(RealScalar.ONE);
-    Collection<Flow> controls = r2Config.getFlows(36);
+    R2Flows r2Flows = new R2Flows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(36);
     SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     // ---
