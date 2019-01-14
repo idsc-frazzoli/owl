@@ -32,6 +32,7 @@ public class PurePursuitControl extends StateTrajectoryControl {
     return Norm2Squared.ofVector(Se2Wrap.INSTANCE.difference(x, y));
   }
 
+  /** available for visualization */
   PurePursuit purePursuit = null;
 
   @Override // from AbstractEntity

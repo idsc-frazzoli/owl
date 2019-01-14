@@ -14,5 +14,6 @@ public interface EntityControl {
    * @return control input to {@link EpisodeIntegrator} */
   Optional<Tensor> control(StateTime tail, Scalar now);
 
+  /** @return rank of this control provider */
   ProviderRank getProviderRank();
 }

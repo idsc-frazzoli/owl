@@ -23,13 +23,13 @@ public abstract class StateTrajectoryControl implements TrajectoryControl, Seria
   private List<TrajectorySample> trajectory = null;
   private int trajectory_skip = 0;
 
-  @Override
+  @Override // from TrajectoryListener
   public final synchronized void trajectory(List<TrajectorySample> trajectory) {
     this.trajectory = trajectory;
     trajectory_skip = 0;
   }
 
-  @Override
+  @Override // from EntityControl
   public final synchronized Optional<Tensor> control(StateTime tail, Scalar now) {
     // implementation does not require that current position is perfectly located on trajectory
     if (Objects.nonNull(trajectory)) {
@@ -62,24 +62,24 @@ public abstract class StateTrajectoryControl implements TrajectoryControl, Seria
         .collect(Collectors.toList());
   }
 
-  /** @param x from trajectory
+  /** function determines closest point of trajectory to current state
+   * 
+   * @param x from trajectory
    * @param y present state of entity
    * @return distance mapped by a monotonous function, for instance Norm2Squared instead of Norm._2 */
   protected abstract Scalar pseudoDistance(Tensor x, Tensor y);
 
-  /** @param trajectory
-   * @return */
-  protected List<TrajectorySample> resetAction(List<TrajectorySample> trajectory) {
-    // System.err.println("out of trajectory");
-    return null;
-  }
-
-  /** override function if necessary
-   * 
+  /** @param tail
    * @param trailAhead
    * @return */
-  protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
-    return Optional.empty();
+  protected abstract Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead);
+
+  /** @param trajectory
+   * @return */
+  private static List<TrajectorySample> resetAction(List<TrajectorySample> trajectory) {
+    // TODO JPH api not clear
+    // System.err.println("out of trajectory");
+    return null;
   }
 
   /** the return index does not refer to node in the trajectory closest to the entity
@@ -103,7 +103,7 @@ public abstract class StateTrajectoryControl implements TrajectoryControl, Seria
     return argmin;
   }
 
-  @Override
+  @Override // from EntityControl
   public final ProviderRank getProviderRank() {
     return ProviderRank.AUTONOMOUS;
   }

@@ -19,12 +19,12 @@ public class FallbackControl implements EntityControl, Serializable {
     this.fallback = N.DOUBLE.of(fallback).unmodifiable();
   }
 
-  @Override
+  @Override // from EntityControl
   public Optional<Tensor> control(StateTime tail, Scalar now) {
     return Optional.of(fallback);
   }
 
-  @Override
+  @Override // from EntityControl
   public ProviderRank getProviderRank() {
     return ProviderRank.FALLBACK;
   }
