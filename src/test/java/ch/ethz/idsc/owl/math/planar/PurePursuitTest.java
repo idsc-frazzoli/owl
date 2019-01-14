@@ -1,9 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.math.region;
+package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

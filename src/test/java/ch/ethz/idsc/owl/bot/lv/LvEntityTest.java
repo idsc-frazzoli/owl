@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import junit.framework.TestCase;
 
-public class LvAnimationTest extends TestCase {
+public class LvEntityTest extends TestCase {
   public void testVectorField() {
     Tensor fallback_u = Array.zeros(1);
     StateSpaceModel stateSpaceModel = LvStateSpaceModel.of(1, 2);

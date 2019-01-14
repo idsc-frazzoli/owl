@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.io.Timing;
 import junit.framework.TestCase;
 
-public class Rice2dTest extends TestCase {
+public class Rice2dDemoTest extends TestCase {
   public void testExpand() throws InterruptedException {
     TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
     Timing timing = Timing.started();

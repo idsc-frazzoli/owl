@@ -1,12 +1,10 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.std;
+package ch.ethz.idsc.owl.glc.core;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.ethz.idsc.owl.glc.core.DomainQueue;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.RealScalar;
 import junit.framework.TestCase;
 
