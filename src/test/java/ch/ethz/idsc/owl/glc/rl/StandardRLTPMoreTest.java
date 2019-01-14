@@ -14,6 +14,7 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
+import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
@@ -90,7 +91,7 @@ public class StandardRLTPMoreTest extends TestCase {
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
     assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
-    GlcRLExpand glcExpand = new GlcRLExpand(trajectoryPlanner);
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.untilOptimal(1000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     assertTrue(optional.isPresent()); // guarantee optimal solution exists

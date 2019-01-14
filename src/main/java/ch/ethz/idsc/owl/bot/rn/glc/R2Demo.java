@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   }
 
   static TrajectoryPlanner simpleR2Bubbles() {
-    return simple(RegionConstraints.timeInvariant(new R2Bubbles()));
+    return simple(RegionConstraints.timeInvariant(R2Bubbles.INSTANCE));
   }
 
   private static TrajectoryPlanner simple(PlannerConstraint plannerConstraint) {

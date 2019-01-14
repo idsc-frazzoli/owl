@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   }
 
   static TrajectoryPlanner simpleR2Bubbles() throws Exception {
-    return simple(CatchyTrajectoryRegionQuery.timeInvariant(new R2Bubbles()));
+    return simple(CatchyTrajectoryRegionQuery.timeInvariant(R2Bubbles.INSTANCE));
   }
 
   static TrajectoryPlanner simpleR2Circle() throws Exception {
