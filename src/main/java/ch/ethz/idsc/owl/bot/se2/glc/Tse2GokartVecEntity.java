@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.PriorityQueue;
 
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.tse2.Tse2CarEntity;
@@ -18,9 +17,7 @@ import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.CustomNodeMeritComparator;
 import ch.ethz.idsc.owl.glc.adapter.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
-import ch.ethz.idsc.owl.glc.core.CTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -83,12 +80,9 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
     // ---
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, tse2ComboRegion);
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(Tensors.vector(slacks));
-    CTrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    return new StandardTrajectoryPlanner( //
         stateTimeRaster(), fixedStateIntegrator, controls, plannerConstraint, goalInterface, //
-        new LexicographicRelabelDecision(comparator));
-    Comparator<GlcNode> comparator2 = new CustomNodeMeritComparator(comparator);
-    trajectoryPlanner.queue = new PriorityQueue<>(comparator2);
-    return trajectoryPlanner;
+        new LexicographicRelabelDecision(comparator), new CustomNodeMeritComparator(comparator));
   }
 
   /** Sets the cost vector and their respective slacks. Lower indices have higher priority.

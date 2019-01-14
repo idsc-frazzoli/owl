@@ -97,8 +97,7 @@ public class GokartxTWaypointFollowingDemo extends GokartDemo {
     // ---
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
-      public void windowClosed(WindowEvent e) {
-        System.out.println("window was closed. terminating...");
+      public void windowClosed(WindowEvent windowEvent) {
         glcWaypointFollowing.flagShutdown();
       }
     });

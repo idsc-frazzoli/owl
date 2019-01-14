@@ -7,7 +7,6 @@ import java.util.function.BiFunction;
 
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.tse2.Tse2StateSpaceModel;
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -26,6 +25,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 abstract class AbstractShadowConstraint implements PlannerConstraint, Serializable {
   static final Tensor DIR = AngleVector.of(RealScalar.ZERO).unmodifiable();
   private static final int RESOLUTION = 10;
+  /** values for seglength have been 3 and 4 */
   private static final int SEGLENGTH = 3;
   private static final float TIMESTEP = 0.1f; // TODO YN get from state integrator
   // ---
@@ -36,7 +36,8 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
   final float tReact;
 
   public AbstractShadowConstraint(float a, float tReact, boolean tse2) {
-    GlobalAssert.that((tReact / TIMESTEP) % SEGLENGTH == 0); // TODO YN hack
+    // TODO YN hack
+    // GlobalAssert.that((tReact / TIMESTEP) % SEGLENGTH == 0); // <- does not work
     this.a = a;
     this.tReact = tReact;
     this.steps = Math.max((int) Math.ceil(tReact / TIMESTEP), 1);

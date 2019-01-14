@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.ani.api;
 
+import java.util.NavigableSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -17,9 +17,10 @@ import ch.ethz.idsc.tensor.Tensor;
  * 3) passive motion */
 public abstract class AbstractEntity implements RenderInterface, AnimationInterface {
   private final EpisodeIntegrator episodeIntegrator;
-  private final Set<EntityControl> entityControls = //
+  private final NavigableSet<EntityControl> entityControls = //
       new ConcurrentSkipListSet<>(EntityControlComparator.INSTANCE);
 
+  // TODO JPH possibly pass in fallback control as argument? to avoid throw in integrate
   protected AbstractEntity(EpisodeIntegrator episodeIntegrator) {
     this.episodeIntegrator = episodeIntegrator;
   }

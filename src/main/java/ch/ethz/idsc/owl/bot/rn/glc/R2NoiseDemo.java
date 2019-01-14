@@ -52,8 +52,8 @@ import ch.ethz.idsc.tensor.io.Timing;
     Region<Tensor> region = new R2NoiseRegion(threshold);
     StateIntegrator stateIntegrator = //
         FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
-    R2Flows r2Config = new R2Flows(RealScalar.ONE);
-    Collection<Flow> controls = r2Config.getFlows(23);
+    R2Flows r2Flows = new R2Flows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(23);
     final Tensor center = Tensors.vector(10, 0);
     final Scalar radius = DoubleScalar.of(0.2);
     SphericalRegion sphericalRegion = new SphericalRegion(center, radius);

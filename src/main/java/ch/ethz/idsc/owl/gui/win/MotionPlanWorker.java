@@ -8,8 +8,6 @@ import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.rl.GlcRLExpand;
-import ch.ethz.idsc.owl.glc.rl.RLTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.io.Timing;
@@ -36,9 +34,7 @@ public class MotionPlanWorker {
         Timing timing = Timing.started();
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
         trajectoryPlanner.insertRoot(root);
-        GlcExpand glcExpand = trajectoryPlanner instanceof RLTrajectoryPlanner //
-            ? new GlcRLExpand(trajectoryPlanner)
-            : new GlcExpand(trajectoryPlanner);
+        GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
         glcExpand.setContinued(() -> isRelevant);
         glcExpand.findAny(maxSteps);
         if (isRelevant) {

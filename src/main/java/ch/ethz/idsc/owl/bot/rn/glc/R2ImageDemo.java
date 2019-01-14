@@ -44,8 +44,8 @@ import ch.ethz.idsc.tensor.io.Timing;
     ImageRegion imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(10, 10), false);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 8), 4);
-    R2Flows r2Config = new R2Flows(RealScalar.ONE);
-    Collection<Flow> controls = r2Config.getFlows(23);
+    R2Flows r2Flows = new R2Flows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(23);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 10), DoubleScalar.of(0.2));
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     PlannerConstraint plannerConstraint = //

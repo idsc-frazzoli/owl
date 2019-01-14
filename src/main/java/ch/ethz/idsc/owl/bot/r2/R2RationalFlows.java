@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public class R2RationalFlows extends R2Flows {
   private static final ScalarUnaryOperator RATIONALIZE = Rationalize.withDenominatorLessEquals(100);
 
+  // ---
   public R2RationalFlows(Scalar speed) {
     super(speed);
   }

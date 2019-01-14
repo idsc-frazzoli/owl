@@ -26,7 +26,7 @@ public enum RenderElements {
     // ---
     if (trajectoryPlanner instanceof CTrajectoryPlanner) {
       CTrajectoryPlanner cTrajectoryPlanner = (CTrajectoryPlanner) trajectoryPlanner;
-      StateTimeRaster stateTimeRaster = cTrajectoryPlanner.getStateTimeRaster();
+      StateTimeRaster stateTimeRaster = cTrajectoryPlanner.stateTimeRaster();
       if (stateTimeRaster instanceof EtaRaster) {
         EtaRaster etaRaster = (EtaRaster) stateTimeRaster;
         list.add(new EtaRender(etaRaster.eta()));

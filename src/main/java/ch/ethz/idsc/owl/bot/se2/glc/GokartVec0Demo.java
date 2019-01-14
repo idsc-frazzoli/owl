@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
@@ -63,11 +62,11 @@ public class GokartVec0Demo extends GokartDemo {
     list.add(gokartEntity);
     list.add(new SimpleGlcPlannerCallback(gokartEntity));
     GoalConsumer goalconsumer = new SimpleGoalConsumer(gokartEntity, plannerConstraint, list);
-    try {
-      TimeUnit.SECONDS.sleep(1);
-    } catch (InterruptedException e) {
-      // ---
-    }
+    // try {
+    // TimeUnit.SECONDS.sleep(1);
+    // } catch (InterruptedException e) {
+    // // ---
+    // }
     goalconsumer.accept(Tensors.vector(35, 10, 0));
     MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);
     {

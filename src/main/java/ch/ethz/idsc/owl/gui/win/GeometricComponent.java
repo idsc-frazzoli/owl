@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public final class GeometricComponent {
   private static final Font DEFAULT_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
@@ -125,7 +126,6 @@ public final class GeometricComponent {
             if ((mods & mask) == 0) {
               model2pixel.set(scalar -> scalar.add(RealScalar.of(dx)), 0, 2);
               model2pixel.set(scalar -> scalar.add(RealScalar.of(dy)), 1, 2);
-              // System.out.println(Pretty.of(model2pixel.map(Round._3)));
             } else {
               Tensor t1 = Se2Utils.toSE2Translation(center.negate());
               Tensor t2 = Se2Utils.toSE2Matrix(center.copy().append(a2.subtract(a1)));
@@ -191,14 +191,15 @@ public final class GeometricComponent {
   }
 
   /***************************************************/
-  /** @param model2pixel with dimensions 3 x 3 */
+  /** @param model2pixel with dimensions 3 x 3
+   * @throws Exception if determinant of matrix is positive */
   public void setModel2Pixel(Tensor model2pixel) {
+    this.model2pixel = model2pixel.copy(); // set matrix regardless of conditions
+    // ---
     Scalar det = Det.of(model2pixel);
-    System.out.println(det);
     if (Chop._08.allZero(det))
       System.err.println("model2pixel must not be singular");
-    else
-      this.model2pixel = model2pixel.copy();
+    Sign.requirePositive(det.negate());
   }
 
   public Tensor getModel2Pixel() {

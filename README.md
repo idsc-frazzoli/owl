@@ -216,7 +216,7 @@ B-Spline curves in `SE(2)` produced by DeBoor Algorithm or curve subdivision pro
 
 ## Smoothing using Geodesic Averages
 
-![smoothing](https://user-images.githubusercontent.com/4012178/51075989-159b1780-1693-11e9-8ab7-4a7916c4256b.png)
+![smoothing](https://user-images.githubusercontent.com/4012178/51090026-283a4d00-1776-11e9-81d3-aae3e34402f1.png)
 
 The sequence of localization estimates of a mobile robot often contains noise.
 Instead of using a complicated extended Kalman filter, geodesic averages based on conventional window functions denoise the uniformly sampled signal of poses in `SE(2)`.

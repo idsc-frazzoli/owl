@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.glc.rl;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.NodeMeritComparator;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** priority queue with ordering defined by {@link NodeMeritComparator} */

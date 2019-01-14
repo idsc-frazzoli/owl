@@ -9,8 +9,8 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/** agents moves with unit speed, i.e.
- * Euclidean length of line segment equals the time required to traverse */
+/** Transition as straight line connecting given start and end point in Euclidean space.
+ * The length of the transition is Euclidean distance between given start and end point. */
 /* package */ class RnTransition extends AbstractTransition {
   private final Scalar length;
 
@@ -38,11 +38,5 @@ import ch.ethz.idsc.tensor.red.Norm;
       ofs = ofs.add(dt);
     }
     return tensor;
-  }
-
-  @Override // from Transition
-  public Tensor splitAt(Scalar t1) {
-    // not yet implemented, use RnGeodesic
-    throw new RuntimeException();
   }
 }

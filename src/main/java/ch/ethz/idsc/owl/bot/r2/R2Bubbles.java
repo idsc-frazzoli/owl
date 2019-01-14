@@ -16,7 +16,13 @@ import ch.ethz.idsc.tensor.io.Primitives;
  * extent = 2
  * root = ( -2.0, -2.0 )
  * goal = ( 2.0, 2.0 ) */
-public class R2Bubbles extends ImplicitFunctionRegion implements Serializable {
+public final class R2Bubbles extends ImplicitFunctionRegion implements Serializable {
+  public static final ImplicitFunctionRegion INSTANCE = new R2Bubbles();
+
+  // ---
+  private R2Bubbles() {
+  }
+
   @Override // from SignedDistanceFunction<Tensor>
   public Scalar signedDistance(Tensor tensor) {
     final double[] data = Primitives.toDoubleArray(tensor);

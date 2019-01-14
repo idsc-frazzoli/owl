@@ -43,12 +43,9 @@ import ch.ethz.idsc.tensor.alg.Array;
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, goalRegion);
     Tensor slack = Array.zeros(costs.size()); // slack equal to zero for now
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(slack);
-    StandardTrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    return new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, //
         plannerConstraint, goalInterface, new LexicographicRelabelDecision(comparator));
-    //  ---
-    // ---
-    return trajectoryPlanner;
   }
 
   public Optional<CostFunction> getPrimaryCost() {
