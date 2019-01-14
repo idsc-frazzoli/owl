@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.sample;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.Tensor;
@@ -31,7 +32,7 @@ public class BoxRandomSample implements RandomSampleInterface, Serializable {
   }
 
   @Override // from RandomSampleInterface
-  public Tensor randomSample() {
+  public Tensor randomSample(Random random) {
     return Tensor.of(distributions.stream().map(RandomVariate::of));
   }
 }

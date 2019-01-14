@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
+import java.util.Random;
+
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
@@ -24,6 +26,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ enum R2OutsideCharDemo {
   ;
+  private static final Random RANDOM = new Random();
+
   public static void main(String[] args) throws Exception {
     ImageRegion imageRegion = R2ImageRegions.outside_0b36();
     RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(Tensors.vector(0, 0), imageRegion.range());
@@ -40,7 +44,7 @@ import ch.ethz.idsc.tensor.Tensors;
     int frame = 0;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int count = 0; count < 50; ++count)
-        rrts.insertAsNode(randomSampleInterface.randomSample(), 15);
+        rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 15);
       owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
       Thread.sleep(10);
     }

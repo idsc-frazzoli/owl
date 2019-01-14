@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 // TODO JPH refactor and generate stats
-public class StandardRLTPMoreTest extends TestCase {
+public class RLTrajectoryPlannerTest extends TestCase {
   private static GlcNode _withSlack(String name, Tensor slacks) {
     System.out.println("---slacks=" + slacks);
     final Tensor stateRoot = Tensors.vector(0, 0);

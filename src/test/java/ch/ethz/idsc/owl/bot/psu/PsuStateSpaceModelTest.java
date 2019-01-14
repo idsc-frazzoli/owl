@@ -1,12 +1,17 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.psu;
 
+import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
+import ch.ethz.idsc.owl.math.VectorFields;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Reference;
+import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
+import ch.ethz.idsc.owl.math.sample.RandomSample;
+import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -15,6 +20,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -67,6 +73,15 @@ public class PsuStateSpaceModelTest extends TestCase {
     assertEquals(stateTime.time(), now);
     assertFalse(init.equals(stateTime));
     Chop._13.requireClose(stateTime.state(), Tensors.vector(1.6034722573306643, 2.015192617032934));
+  }
+
+  public void testVectorField() {
+    Tensor range = Tensors.vector(Math.PI, 3);
+    VectorFieldRender vectorFieldRender = new VectorFieldRender();
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(range.negate(), range);
+    Tensor points = RandomSample.of(randomSampleInterface, 1000);
+    vectorFieldRender.uv_pairs = //
+        VectorFields.of(PsuStateSpaceModel.INSTANCE, points, Array.zeros(1), RealScalar.of(0.1));
   }
 
   public void testFail() {

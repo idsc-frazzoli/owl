@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.pdf.BinCounts;
 import junit.framework.TestCase;
 
-public class PerlinNoiseTest extends TestCase {
+public class PerlinContinuousNoiseTest extends TestCase {
   public void testSimple() {
     Tensor noise = Tensors.vector(i -> DoubleScalar.of(10 * (1 + PerlinContinuousNoise.FUNCTION.at(1.6, .1 * i, .1 + i))), 1000);
     Tensor bins = BinCounts.of(noise);

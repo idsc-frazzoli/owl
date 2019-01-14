@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.sample;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -14,7 +15,7 @@ public class ConstantRandomSample implements RandomSampleInterface, Serializable
   }
 
   @Override // from RandomSampleInterface
-  public Tensor randomSample() {
+  public Tensor randomSample(Random random) {
     return tensor;
   }
 }
