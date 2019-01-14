@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
+import java.util.Random;
+
 import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
@@ -22,6 +24,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum R2ExpandDemo {
   ;
+  private static final Random RANDOM = new Random();
+
   public static void main(String[] args) throws Exception {
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
@@ -40,7 +44,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       int frame = 0;
       while (frame++ < 40 && owlyFrame.jFrame.isVisible()) {
         for (int count = 0; count < 10; ++count)
-          rrts.insertAsNode(randomSampleInterface.randomSample(), 20);
+          rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 20);
         owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
         animationWriter.append(owlyFrame.offscreen());
       }

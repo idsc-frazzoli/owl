@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
+import java.util.Random;
+
 import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
@@ -20,7 +22,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ enum R2Demo {
   ;
-  // private static final
+  private static final Random RANDOM = new Random();
+
   public static void main(String[] args) {
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
@@ -33,7 +36,7 @@ import ch.ethz.idsc.tensor.Tensors;
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
     for (int count = 0; count < 1000; ++count)
-      rrts.insertAsNode(randomSampleInterface.randomSample(), 15);
+      rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 15);
     System.out.println("rewireCount=" + rrts.rewireCount());
     RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.IDENTITY);
     OwlyFrame owlyFrame = OwlyGui.start();

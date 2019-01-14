@@ -7,6 +7,6 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 public enum UniformRandomSample {
   ;
   public static RandomSampleInterface of(Distribution distribution, int length) {
-    return () -> RandomVariate.of(distribution, length);
+    return random -> RandomVariate.of(distribution, random, length);
   }
 }

@@ -3,6 +3,7 @@
 package ch.ethz.idsc.owl.math.sample;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override // from RandomSampleInterface
-  public Tensor randomSample() {
+  public Tensor randomSample(Random random) {
     Scalar theta = RandomVariate.of(THETA);
     Scalar residue = Sqrt.FUNCTION.apply(RandomVariate.of(UniformDistribution.unit()));
     return center.add(AngleVector.of(theta).multiply(radius.multiply(residue)));

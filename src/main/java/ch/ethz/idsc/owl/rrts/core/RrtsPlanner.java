@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.rrts.core;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 
 import ch.ethz.idsc.owl.data.tree.NodeCostComparator;
 import ch.ethz.idsc.owl.glc.core.ExpandInterface;
@@ -11,6 +12,7 @@ import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 
 public class RrtsPlanner implements ExpandInterface<RrtsNode> {
   private static final RrtsNode DUMMY = new RrtsNodeImpl(null, null);
+  private static final Random RANDOM = new Random();
   // ---
   private final Rrts rrts;
   private final RandomSampleInterface spaceSample;
@@ -35,9 +37,9 @@ public class RrtsPlanner implements ExpandInterface<RrtsNode> {
   @Override
   public void expand(RrtsNode node) {
     final int k_nearest = 12; // magic const
-    rrts.insertAsNode(spaceSample.randomSample(), k_nearest);
+    rrts.insertAsNode(spaceSample.randomSample(RANDOM), k_nearest);
     if (queue.isEmpty()) { // TODO RRTS logic not final
-      Optional<RrtsNode> optional = rrts.insertAsNode(goalSample.randomSample(), k_nearest);
+      Optional<RrtsNode> optional = rrts.insertAsNode(goalSample.randomSample(RANDOM), k_nearest);
       if (optional.isPresent())
         queue.add(optional.get());
     }
