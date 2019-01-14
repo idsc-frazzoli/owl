@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.sca.N;
   @Override // from FlowsInterface
   public Collection<Flow> getFlows(int resolution) {
     Collection<Flow> collection = new ArrayList<>();
-    for (Tensor u : Subdivide.of(u_max.zero(), u_max, 1 + resolution))
+    for (Tensor u : Subdivide.of(u_max.negate(), u_max, 1 + resolution))
       collection.add(StateSpaceModels.createFlow(stateSpaceModel, N.DOUBLE.of(Tensors.of(u))));
     return collection;
   }
