@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class BalloonAnimationDemo implements DemoInterface {
@@ -33,12 +32,8 @@ public class BalloonAnimationDemo implements DemoInterface {
     TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
     BalloonEntity balloonEntity = new BalloonEntity(episodeIntegrator, trajectoryControl, balloonStateSpaceModel);
     MouseGoal.simple(owlyAnimationFrame, balloonEntity, plannerConstraint);
-    Tensor range = Tensors.vector(100, 500).unmodifiable();
-    // Tensor obstacleImage = ResourceData.of("/io/mountainChain.png");
-    Tensor obstacleImage = ResourceData.of("/io/delta_free.png");
-    // System.out.println(Pretty.of(obstacleImage));
-    System.out.println(obstacleImage.length());
-    System.out.println(Pretty.of(obstacleImage));
+    Tensor range = Tensors.vector(500, 100).unmodifiable();
+    Tensor obstacleImage = ResourceData.of("/io/mountainChain.png");
     ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.add(balloonEntity);
