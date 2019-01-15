@@ -7,9 +7,9 @@ import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.HeuristicConsistency;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.DebugUtils;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
@@ -46,8 +46,8 @@ public class LvDemoTest extends TestCase {
       GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
       glcExpand.findAny(10000);
       if (glcExpand.getExpandCount() < 9800) {
-        DebugUtils.heuristicConsistencyCheck(trajectoryPlanner);
-        DebugUtils.nodeAmountCompare(trajectoryPlanner);
+        HeuristicConsistency.check(trajectoryPlanner);
+        // TrajectoryPlannerConsistency.check(trajectoryPlanner);
         return;
       }
     }

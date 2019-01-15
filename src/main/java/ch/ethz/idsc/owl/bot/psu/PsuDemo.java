@@ -38,17 +38,22 @@ import ch.ethz.idsc.tensor.alg.Array;
   ;
   private static final Tensor ETA = Tensors.vector(5, 7);
 
-  public static TrajectoryPlanner simple() {
+  public static TrajectoryPlanner raw(GoalInterface goalInterface) {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta4Integrator.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
+    // ---
+    StateTimeRaster stateTimeRaster = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
+    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+        stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
+    return trajectoryPlanner;
+  }
+
+  public static TrajectoryPlanner simple() {
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, Tensors.vector(Math.PI * 0.7, 0.5), RealScalar.of(0.3));
-    // ---
-    StateTimeRaster stateTimeRasterization = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRasterization, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
+    TrajectoryPlanner trajectoryPlanner = raw(goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
