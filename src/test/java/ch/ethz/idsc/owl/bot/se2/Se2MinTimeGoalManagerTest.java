@@ -2,20 +2,27 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.se2.twd.TwdDuckieFlows;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
+import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicQ;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.So2Region;
+import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -98,5 +105,28 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
     Serialization.copy(se2ComboRegion);
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     Serialization.copy(se2MinTimeGoalManager);
+  }
+
+  public void testWrapSuccessor() {
+    FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.ONE, Degree.of(10));
+    Collection<Flow> controls = carFlows.getFlows(6);
+    Se2ComboRegion se2ComboRegion = new Se2ComboRegion( //
+        new SphericalRegion(Tensors.vector(-0.5, 0), RealScalar.of(.3)), //
+        So2Region.covering(RealScalar.of(2), RealScalar.ONE));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    //
+    assertEquals(se2MinTimeGoalManager.minCostToGoal(Tensors.vector(-0.5, 0, 2)), RealScalar.ZERO);
+    assertEquals(se2MinTimeGoalManager.minCostToGoal(Tensors.vector(-0.5, 0, 2 + 10)), RealScalar.of(51.56620156177409));
+    assertEquals(se2MinTimeGoalManager.minCostToGoal(Tensors.vector(-0.5, 2, 2 + 10)), RealScalar.of(51.56620156177409));
+    assertEquals(se2MinTimeGoalManager.minCostToGoal(Tensors.vector(-0.5, 2, 2)), RealScalar.of(1.7));
+    //
+    GlcNode glcNode = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2, 0), Quantity.of(3, "s")), se2MinTimeGoalManager.getGoalInterface());
+    // System.out.println(glcNode.merit());
+    Scalar scalar = se2MinTimeGoalManager.costIncrement( //
+        glcNode, //
+        Arrays.asList(new StateTime(Tensors.vector(1, 2, 3), Quantity.of(10, "s"))), //
+        null);
+    assertEquals(scalar, Quantity.of(7, "s"));
+    assertTrue(ExactScalarQ.of(scalar));
   }
 }

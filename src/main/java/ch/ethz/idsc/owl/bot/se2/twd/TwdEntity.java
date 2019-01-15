@@ -90,7 +90,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = //
-        new Se2ComboRegion(goalRegion, new So2Region(goal.Get(2), goalRadius_theta));
+        new Se2ComboRegion(goalRegion, So2Region.periodic(goal.Get(2), goalRadius_theta));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager( //
         se2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //

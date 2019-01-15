@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 public class So2RegionTest extends TestCase {
   public void testSimple() {
-    So2Region ifr = new So2Region(RealScalar.ONE, RealScalar.ONE);
+    So2Region ifr = So2Region.periodic(RealScalar.ONE, RealScalar.ONE);
     assertEquals(ifr.signedDistance(RealScalar.of(2)), RealScalar.ZERO);
     assertEquals(ifr.signedDistance(RealScalar.of(1)), RealScalar.of(-1));
     assertEquals(ifr.distance(RealScalar.of(1)), RealScalar.ZERO);
@@ -23,7 +23,7 @@ public class So2RegionTest extends TestCase {
   }
 
   public void testSimple2PI() {
-    ImplicitFunctionRegion ifr = new So2Region(RealScalar.ONE, RealScalar.ONE);
+    ImplicitFunctionRegion ifr = So2Region.periodic(RealScalar.ONE, RealScalar.ONE);
     double pi2 = Math.PI * 2;
     assertEquals(ifr.signedDistance(RealScalar.of(2 + pi2)), RealScalar.ZERO);
     assertEquals(ifr.signedDistance(RealScalar.of(1 + pi2)), RealScalar.of(-1));
@@ -33,7 +33,7 @@ public class So2RegionTest extends TestCase {
   }
 
   public void testSimpleN2PI() {
-    ImplicitFunctionRegion ifr = new So2Region(RealScalar.ONE, RealScalar.ONE);
+    ImplicitFunctionRegion ifr = So2Region.periodic(RealScalar.ONE, RealScalar.ONE);
     double pi2 = -Math.PI * 2;
     assertEquals(ifr.signedDistance(RealScalar.of(2 + pi2)), RealScalar.ZERO);
     assertEquals(ifr.signedDistance(RealScalar.of(1 + pi2)), RealScalar.of(-1));
@@ -43,7 +43,7 @@ public class So2RegionTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    So2Region so2Region = new So2Region(RealScalar.ONE, RealScalar.of(0.2));
+    So2Region so2Region = So2Region.periodic(RealScalar.ONE, RealScalar.of(0.2));
     assertEquals(so2Region.center(), RealScalar.ONE);
     assertEquals(so2Region.radius(), RealScalar.of(0.2));
     So2Region copy = Serialization.copy(so2Region);
@@ -60,7 +60,7 @@ public class So2RegionTest extends TestCase {
 
   public void testFail() {
     try {
-      new So2Region(RealScalar.of(2), RealScalar.of(-1));
+      So2Region.periodic(RealScalar.of(2), RealScalar.of(-1));
       fail();
     } catch (Exception exception) {
       // ---

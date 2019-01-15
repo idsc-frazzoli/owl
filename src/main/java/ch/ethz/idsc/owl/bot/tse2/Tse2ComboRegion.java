@@ -25,7 +25,7 @@ public class Tse2ComboRegion extends Se2ComboRegion {
   public static Tse2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new Tse2ComboRegion( //
         new SphericalRegion(Extract2D.FUNCTION.apply(goal), RadiusXY.requireSame(radiusVector)), //
-        new So2Region(goal.Get(2), radiusVector.Get(2)), //
+        So2Region.periodic(goal.Get(2), radiusVector.Get(2)), //
         new LinearRegion(goal.Get(3), radiusVector.Get(3)));
   }
 

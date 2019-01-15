@@ -8,19 +8,27 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** region describes a section of the unit circle */
 public final class So2Region extends ImplicitRegionWithDistance implements Serializable {
-  private final Scalar center;
-  private final Scalar radius;
-  private final Mod mod;
+  /** @param center angular destination
+   * @param radius tolerance */
+  public static So2Region periodic(Scalar center, Scalar radius) {
+    return new So2Region(center, radius, Pi.VALUE);
+  }
 
   /** @param center angular destination
    * @param radius tolerance */
-  public So2Region(Scalar center, Scalar radius) {
-    this(center, radius, Pi.VALUE);
+  public static So2Region covering(Scalar center, Scalar radius) {
+    return new So2Region(center, radius);
   }
+
+  // ---
+  private final Scalar center;
+  private final Scalar radius;
+  private final ScalarUnaryOperator mod;
 
   // constructor exists to test with units
   /* package */ So2Region(Scalar center, Scalar radius, Scalar half_circumference) {
@@ -29,6 +37,13 @@ public final class So2Region extends ImplicitRegionWithDistance implements Seria
     mod = Mod.function( //
         half_circumference.add(half_circumference), // 2*half_circumference
         half_circumference.negate());
+  }
+
+  // constructor exists to test with units
+  private So2Region(Scalar center, Scalar radius) {
+    this.center = Objects.requireNonNull(center);
+    this.radius = Sign.requirePositiveOrZero(radius);
+    mod = scalar -> scalar;
   }
 
   @Override // from SignedDistanceFunction<Tensor>
