@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensor;
     return new ApComboRegion( //
         new LinearRegion(goal.Get(0), radiusVector.Get(0)), //
         new LinearRegion(goal.Get(1), radiusVector.Get(1)), //
-        new So2Region(goal.Get(2), radiusVector.Get(2)));
+        So2Region.periodic(goal.Get(2), radiusVector.Get(2)));
   }
 
   private final LinearRegion zRegion;

@@ -25,7 +25,7 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
   public static Se2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new Se2ComboRegion( //
         new SphericalRegion(Extract2D.FUNCTION.apply(goal), RadiusXY.requireSame(radiusVector)), //
-        new So2Region(goal.Get(2), radiusVector.Get(2)));
+        So2Region.periodic(goal.Get(2), radiusVector.Get(2)));
   }
 
   /** @param goal {px, py, angle}
@@ -35,7 +35,7 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
   public static Se2ComboRegion cone(Tensor goal, Scalar semi, Scalar radius) {
     return new Se2ComboRegion( //
         new ConeRegion(goal, semi), //
-        new So2Region(goal.Get(2), radius));
+        So2Region.periodic(goal.Get(2), radius));
   }
   // ---
 
