@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 enum CharImageDemo {
   ;
@@ -19,6 +19,6 @@ enum CharImageDemo {
     charImage.setFont(new Font(Font.DIALOG, Font.BOLD, 400));
     charImage.draw('a', new Point(-20, 200));
     BufferedImage bufferedImage = charImage.bufferedImage();
-    ImageIO.write(bufferedImage, "png", UserHome.Pictures("circdots.png"));
+    ImageIO.write(bufferedImage, "png", HomeDirectory.Pictures("circdots.png"));
   }
 }

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.api.TrajectoryListener;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.TrajectoryListener;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;

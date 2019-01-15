@@ -19,8 +19,6 @@ import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicIIR2Filter;
@@ -28,6 +26,8 @@ import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
+import ch.ethz.idsc.sophus.group.Se2Utils;
+import ch.ethz.idsc.sophus.planar.Arrowhead;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

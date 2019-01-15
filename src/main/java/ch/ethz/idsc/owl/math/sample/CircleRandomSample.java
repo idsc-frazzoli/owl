@@ -2,10 +2,14 @@
 // formula adapted from users "sigfpe" and "finnw" on stack-overflow
 package ch.ethz.idsc.owl.math.sample;
 
+import java.io.Serializable;
+import java.util.Random;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.lie.AngleVector;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -16,8 +20,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * given center and radius
  * 
  * implementation supports the use of Quantity */
-/* package */ class CircleRandomSample implements RandomSampleInterface {
-  private static final Distribution THETA = UniformDistribution.of(-Math.PI, Math.PI);
+/* package */ class CircleRandomSample implements RandomSampleInterface, Serializable {
+  private static final Distribution THETA = UniformDistribution.of(Pi.VALUE.negate(), Pi.VALUE);
   // ---
   private final Tensor center;
   private final Scalar radius;
@@ -31,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override // from RandomSampleInterface
-  public Tensor randomSample() {
+  public Tensor randomSample(Random random) {
     Scalar theta = RandomVariate.of(THETA);
     Scalar residue = Sqrt.FUNCTION.apply(RandomVariate.of(UniformDistribution.unit()));
     return center.add(AngleVector.of(theta).multiply(radius.multiply(residue)));

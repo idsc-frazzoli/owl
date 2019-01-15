@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
-import ch.ethz.idsc.owl.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;

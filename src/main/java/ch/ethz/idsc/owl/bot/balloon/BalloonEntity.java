@@ -9,23 +9,24 @@ import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.ani.api.AbstractCircularEntity;
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -74,7 +75,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Collection<Flow> controls = BalloonFlows.of(U_MAX, stateSpaceModel).getFlows(FLOWRES);
     BalloonMinTimeGoalManager balloonMinTimeGoalManager = //
-        new BalloonMinTimeGoalManager(goal.extract(0, 2), GOAL_RADIUS, SPEED_MAX);
+        new BalloonMinTimeGoalManager(Extract2D.FUNCTION.apply(goal), GOAL_RADIUS, SPEED_MAX);
     GoalInterface goalInterface = balloonMinTimeGoalManager.getGoalInterface();
     return new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);

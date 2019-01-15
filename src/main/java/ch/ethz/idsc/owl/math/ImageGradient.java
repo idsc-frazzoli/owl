@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.planar.Cross2D;
+import ch.ethz.idsc.sophus.planar.Cross2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;

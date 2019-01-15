@@ -16,7 +16,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.Se2WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.qty.Degree;
 
 /** demo to simulate dubendorf hangar */
 public class GokartxTWaypointFollowingDemo extends GokartDemo {
@@ -42,7 +43,7 @@ public class GokartxTWaypointFollowingDemo extends GokartDemo {
     GokartxTEntity gokartEntity = new GokartxTEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
+        return new ConeRegion(goal, Degree.of(18));
       }
     };
     // ---
@@ -96,8 +97,7 @@ public class GokartxTWaypointFollowingDemo extends GokartDemo {
     // ---
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
-      public void windowClosed(WindowEvent e) {
-        System.out.println("window was closed. terminating...");
+      public void windowClosed(WindowEvent windowEvent) {
         glcWaypointFollowing.flagShutdown();
       }
     });

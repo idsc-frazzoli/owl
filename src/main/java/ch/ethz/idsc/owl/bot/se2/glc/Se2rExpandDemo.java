@@ -8,7 +8,6 @@ import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -31,6 +30,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 /** (x,y,theta) */
@@ -62,17 +62,17 @@ enum Se2rExpandDemo {
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(169, 71);
     owlyFrame.jFrame.setBounds(100, 100, 300, 200);
-    try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("se2r.gif"), 250)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(HomeDirectory.Pictures("se2r.gif"), 250)) {
       GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
       while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
         glcExpand.findAny(1);
         owlyFrame.setGlc(trajectoryPlanner);
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
         Thread.sleep(10);
       }
       int repeatLast = 6;
       while (0 < repeatLast--)
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
     }
     System.out.println("created gif");
   }

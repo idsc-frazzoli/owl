@@ -1,7 +1,8 @@
-// code by bapaden, jph, jl, and ynager
+// code by bapaden, jph, jl, ynager
 package ch.ethz.idsc.owl.glc.std;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -13,6 +14,7 @@ import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.DomainQueue;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.NodeMeritComparator;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.RelabelDecision;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
@@ -33,21 +35,32 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
+  private final RelabelDecision relabelDecision;
   private transient final ControlsIntegrator controlsIntegrator;
-  /** decides if new node is better than existing node
-   * TODO API design not final */
-  public RelabelDecision relabelDecision = SimpleRelabelDecision.INSTANCE;
 
   public StandardTrajectoryPlanner( //
-      StateTimeRaster stateTimeRaster, //
-      StateIntegrator stateIntegrator, //
-      Collection<Flow> controls, //
-      PlannerConstraint plannerConstraint, //
-      GoalInterface goalInterface) {
-    super(stateTimeRaster, goalInterface);
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
+      PlannerConstraint plannerConstraint, GoalInterface goalInterface) {
+    this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, //
+        SimpleRelabelDecision.DEFAULT, NodeMeritComparator.INSTANCE);
+  }
+
+  public StandardTrajectoryPlanner( //
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
+      PlannerConstraint plannerConstraint, GoalInterface goalInterface, RelabelDecision relabelDecision) {
+    this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, //
+        relabelDecision, NodeMeritComparator.INSTANCE);
+  }
+
+  public StandardTrajectoryPlanner( //
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
+      PlannerConstraint plannerConstraint, GoalInterface goalInterface, //
+      RelabelDecision relabelDecision, Comparator<GlcNode> comparator) {
+    super(stateTimeRaster, goalInterface, comparator);
     this.stateIntegrator = stateIntegrator;
     this.plannerConstraint = Objects.requireNonNull(plannerConstraint);
     this.goalInterface = goalInterface;
+    this.relabelDecision = relabelDecision;
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
         () -> controls.stream().parallel(), //
@@ -60,7 +73,7 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
     // ---
     DomainQueueMap domainQueueMap = new DomainQueueMap(); // holds candidates for insertion
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
-      final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
+      final Tensor domainKey = stateTimeRaster().convertToKey(next.stateTime());
       Optional<GlcNode> former = getNode(domainKey);
       if (former.isPresent()) { // is already some node present from previous exploration ?
         if (relabelDecision.doRelabel(next, former.get()))

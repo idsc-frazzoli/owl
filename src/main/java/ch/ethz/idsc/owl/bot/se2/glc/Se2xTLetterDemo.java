@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.Arrays;
 
+import ch.ethz.idsc.owl.bot.r2.CogPoints;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
@@ -19,7 +20,6 @@ import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.map.Se2Family;
-import ch.ethz.idsc.owl.math.planar.CogPoints;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;

@@ -19,23 +19,26 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.symlink.SymGeodesic;
-import ch.ethz.idsc.sophus.symlink.SymLink;
-import ch.ethz.idsc.sophus.symlink.SymLinkBuilder;
-import ch.ethz.idsc.sophus.symlink.SymLinkImages;
-import ch.ethz.idsc.sophus.symlink.SymScalar;
+import ch.ethz.idsc.sophus.sym.SymGeodesic;
+import ch.ethz.idsc.sophus.sym.SymLink;
+import ch.ethz.idsc.sophus.sym.SymLinkBuilder;
+import ch.ethz.idsc.sophus.sym.SymLinkImages;
+import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class MeanFilterAverageDemo extends ControlPointsDemo {
   private final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
 
   MeanFilterAverageDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, false, GeodesicDisplays.ALL);
     // ---
     spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
     spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
     spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
+    // ---
+    setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
   }
 
   @Override
@@ -53,8 +56,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
           GeodesicCenter.of(SymGeodesic.INSTANCE, smoothingKernel);
       Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
       Tensor tensor = tensorUnaryOperator.apply(vector);
-      SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
-      SymLink symLink = symLinkBuilder.build((SymScalar) tensor);
+      SymLink symLink = SymLinkBuilder.of(control, (SymScalar) tensor);
       GeodesicAverageRender.of(geodesicDisplay, symLink).render(geometricLayer, graphics);
       xya = symLink.getPosition(geodesicDisplay.geodesicInterface());
     }

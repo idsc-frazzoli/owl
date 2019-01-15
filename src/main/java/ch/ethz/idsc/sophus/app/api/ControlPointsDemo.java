@@ -4,6 +4,8 @@ package ch.ethz.idsc.sophus.app.api;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -15,14 +17,16 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.planar.CurvatureComb;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
@@ -39,7 +43,7 @@ public abstract class ControlPointsDemo extends AbstractDemo {
   // ---
   private final JButton jButton = new JButton("clear");
   private final JToggleButton jToggleComb = new JToggleButton("comb");
-  protected final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
+  /* package */ final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
   // ---
   private Tensor control = Tensors.of(Array.zeros(3));
   private Tensor mouse = Array.zeros(3);
@@ -52,22 +56,31 @@ public abstract class ControlPointsDemo extends AbstractDemo {
       if (Objects.nonNull(min_index))
         control.set(mouse, min_index);
       if (Objects.isNull(min_index)) {
+        GeodesicDisplay geodesicDisplay = geodesicDisplay();
         Optional<Integer> optional = closest();
         graphics.setColor(optional.isPresent() ? Color.ORANGE : Color.GREEN);
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-        graphics.fill(geometricLayer.toPath2D(geodesicDisplay().shape()));
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
+        graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape()));
         geometricLayer.popMatrix();
       }
     }
   };
+  private final ActionListener actionListener = new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+      min_index = null;
+      control = Tensors.of(Array.zeros(3));
+    }
+  };
 
-  public ControlPointsDemo(boolean clearButton, List<GeodesicDisplay> list) {
+  public ControlPointsDemo(boolean clearButton, boolean curvatureButton, List<GeodesicDisplay> list) {
     if (clearButton) {
-      jButton.addActionListener(actionEvent -> control = Tensors.of(Array.zeros(3)));
+      jButton.addActionListener(actionListener);
       timerFrame.jToolBar.add(jButton);
     }
     jToggleComb.setSelected(true);
-    timerFrame.jToolBar.add(jToggleComb);
+    if (curvatureButton)
+      timerFrame.jToolBar.add(jToggleComb);
     if (!list.isEmpty()) {
       geodesicDisplaySpinner.setList(list);
       geodesicDisplaySpinner.setValue(list.get(0));
@@ -122,15 +135,12 @@ public abstract class ControlPointsDemo extends AbstractDemo {
     return geodesicDisplaySpinner.getValue();
   }
 
+  /** @param control points as matrix of dimensions N x 3 */
   public final void setControl(Tensor control) {
     this.control = MatrixQ.require(control);
     List<Integer> list = Dimensions.of(control);
     if (list.get(1) != 3)
       throw TensorRuntimeException.of(control);
-  }
-
-  public final JToggleButton curvatureButton() {
-    return jToggleComb;
   }
 
   public final Tensor control() {
@@ -141,7 +151,20 @@ public abstract class ControlPointsDemo extends AbstractDemo {
     POINTS_RENDER_0.new Show(geodesicDisplay(), control()).render(geometricLayer, graphics);
   }
 
-  protected final void renderPoints(GeometricLayer geometricLayer, Graphics2D graphics, Tensor refined) {
-    POINTS_RENDER_1.new Show(geodesicDisplay(), refined).render(geometricLayer, graphics);
+  protected final void renderPoints(GeometricLayer geometricLayer, Graphics2D graphics, Tensor points) {
+    POINTS_RENDER_1.new Show(geodesicDisplay(), points).render(geometricLayer, graphics);
+  }
+
+  private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
+  private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
+
+  protected final void renderCurve(Tensor refined, boolean isCyclic, GeometricLayer geometricLayer, Graphics2D graphics) {
+    if (0 < refined.length()) {
+      if (Unprotect.dimension1(refined) != 2)
+        throw TensorRuntimeException.of(refined);
+    }
+    new CurveRender(refined, isCyclic, Color.BLUE, 1.25f).render(geometricLayer, graphics);
+    if (jToggleComb.isSelected())
+      new CurveRender(CurvatureComb.of(refined, COMB_SCALE, isCyclic), isCyclic, COLOR_CURVATURE_COMB, 1f).render(geometricLayer, graphics);
   }
 }

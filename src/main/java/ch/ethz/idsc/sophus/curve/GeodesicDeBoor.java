@@ -2,6 +2,8 @@
 // adapted from https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
 package ch.ethz.idsc.sophus.curve;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -14,7 +16,8 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 /** DeBoor denotes the function that is defined
  * by control points over a sequence of knots. */
 public class GeodesicDeBoor implements ScalarTensorFunction {
-  /** @param knots vector of length degree * 2
+  /** @param geodesicInterface non null
+   * @param knots vector of length degree * 2
    * @param control points of length degree + 1
    * @return
    * @throws Exception if given knots is not a vector */
@@ -22,7 +25,7 @@ public class GeodesicDeBoor implements ScalarTensorFunction {
     int p = knots.length() >> 1;
     if (control.length() != p + 1)
       throw TensorRuntimeException.of(knots, control);
-    return new GeodesicDeBoor(geodesicInterface, p, VectorQ.require(knots), control);
+    return new GeodesicDeBoor(Objects.requireNonNull(geodesicInterface), p, VectorQ.require(knots), control);
   }
 
   // ---

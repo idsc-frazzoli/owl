@@ -4,12 +4,13 @@ package ch.ethz.idsc.owl.glc.adapter;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
+import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
-import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 
+/** TODO JPH class name too generic */
 public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
   private final TrajectoryEntity trajectoryEntity;
   private boolean showCost = false;

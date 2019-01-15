@@ -1,11 +1,15 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Floor;
 import junit.framework.TestCase;
@@ -20,11 +24,18 @@ public class Se2WrapTest extends TestCase {
     assertEquals(res, Tensors.vector(1, 1, 0, 1));
   }
 
-  public void testMod2Pi() {
+  public void testMod2Pi_1() {
     Tensor p = Tensors.vector(20, -43, -2 * Math.PI * 8);
     Tensor q = Tensors.vector(20, -43, +2 * Math.PI + 0.1);
     Tensor distance = Se2Wrap.INSTANCE.difference(p, q);
-    assertTrue(Chop._10.close(distance, Tensors.vector(0, 0, 0.1)));
+    Chop._10.requireClose(distance, Tensors.vector(0, 0, 0.1));
+  }
+
+  public void testMod2Pi_2() {
+    Tensor p = Tensors.vector(0, 0, -2 * Math.PI * 3);
+    Tensor q = Tensors.vector(0, 0, +2 * Math.PI + 0.1);
+    Tensor difference = Se2Wrap.INSTANCE.difference(p, q);
+    Chop._13.requireClose(difference, Tensors.vector(0, 0, 0.1));
   }
 
   public void testMod2PiUnits() {
@@ -34,6 +45,18 @@ public class Se2WrapTest extends TestCase {
     Tensor d1 = Se2Wrap.INSTANCE.difference(p1, q);
     Tensor d2 = Se2Wrap.INSTANCE.difference(p2, q);
     assertTrue(Chop._08.close(d1, d2));
+  }
+
+  public void testEndPoints() {
+    Distribution distribution = NormalDistribution.of(0, 10);
+    for (int index = 0; index < 100; ++index) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Tensor q = RandomVariate.of(distribution, 3);
+      Chop._14.requireClose(p, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO));
+      Tensor r = Se2Geodesic.INSTANCE.split(p, q, RealScalar.ONE);
+      if (!Chop._14.close(q, r))
+        assertTrue(Chop._10.allZero(Se2Wrap.INSTANCE.difference(q, r)));
+    }
   }
 
   public void testFail() {

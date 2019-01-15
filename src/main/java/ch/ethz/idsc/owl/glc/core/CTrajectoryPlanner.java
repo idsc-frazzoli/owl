@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.glc.core;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,22 +20,23 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** base class for classic generalized label correction implementation */
 public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializable {
-  protected final StateTimeRaster stateTimeRaster;
-  private final HeuristicFunction heuristicFunction;
-  // ---
-  // TODO TOP design so that queue is private final
-  // TODO TOP comparator for queue, best, relabel decision
-  public Queue<GlcNode> queue = new PriorityQueue<>(NodeMeritComparator.INSTANCE);
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
+  private final StateTimeRaster stateTimeRaster;
+  private final HeuristicFunction heuristicFunction;
+  private final Queue<GlcNode> queue;
   /** best is a reference to a Node in the goal region,
    * or null if such a node has not been identified
    * use function setBestNull() to reset best to null */
-  protected final NavigableMap<GlcNode, List<StateTime>> best = new TreeMap<>(NodeMeritComparator.INSTANCE);
+  private final NavigableMap<GlcNode, List<StateTime>> best;
+  // ---
   private int replaceCount = 0;
 
-  protected CTrajectoryPlanner(StateTimeRaster stateTimeRaster, HeuristicFunction heuristicFunction) {
+  protected CTrajectoryPlanner( //
+      StateTimeRaster stateTimeRaster, HeuristicFunction heuristicFunction, Comparator<GlcNode> comparator) {
     this.stateTimeRaster = stateTimeRaster;
     this.heuristicFunction = heuristicFunction;
+    queue = new PriorityQueue<>(comparator);
+    best = new TreeMap<>(comparator);
   }
 
   /** @param domain_key
@@ -65,10 +67,10 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
    * 
    * {@link AbstractAnyTrajectoryPlanner} overrides this method
    * 
-   * @param node
+   * @param glcNode
    * @param connector */
-  protected final void offerDestination(GlcNode node, List<StateTime> connector) {
-    best.put(node, connector);
+  protected final void offerDestination(GlcNode glcNode, List<StateTime> connector) {
+    best.put(glcNode, connector);
     if (1 < best.size())
       best.remove(best.lastKey());
   }
@@ -81,6 +83,11 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
 
   protected final Collection<GlcNode> queue() {
     return queue;
+  }
+
+  /** @return */
+  public final StateTimeRaster stateTimeRaster() {
+    return stateTimeRaster;
   }
 
   /***************************************************/

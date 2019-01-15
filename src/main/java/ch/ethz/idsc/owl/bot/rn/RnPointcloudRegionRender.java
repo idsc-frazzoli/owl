@@ -28,10 +28,10 @@ public class RnPointcloudRegionRender implements RenderInterface {
     graphics.setColor(RegionRenders.COLOR);
     for (Tensor center : points) {
       Path2D path2D = geometricLayer.toPath2D(Tensor.of(polygon.stream().map(row -> row.add(center))));
+      path2D.closePath();
       graphics.setColor(RegionRenders.COLOR);
       graphics.fill(path2D);
       graphics.setColor(RegionRenders.BOUNDARY);
-      path2D.closePath();
       graphics.draw(path2D);
     }
   }

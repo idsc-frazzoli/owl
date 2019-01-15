@@ -6,31 +6,28 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.owl.math.planar.SignedCurvature2D;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
-import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -49,7 +46,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
-  private static final boolean BSPLINE4 = false;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = //
       ColorDataLists._097.cyclic().deriveWithAlpha(128 + 64);
   // private static final Tensor DUBILAB = //
@@ -63,11 +59,10 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
-  // ---
-  private boolean printref = false;
+  private final JToggleButton jToggleSymi = new JToggleButton("graph");
 
   CurveSubdivisionDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     Tensor control = null;
     {
       Tensor move = Tensors.fromString( //
@@ -97,11 +92,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     // });
     // timerFrame.jToolBar.add(jButton);
     // }
-    {
-      JButton jButton = new JButton("p-ref");
-      jButton.addActionListener(actionEvent -> printref = true);
-      timerFrame.jToolBar.add(jButton);
-    }
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
@@ -118,6 +108,9 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleCyclic);
+    // ---
+    jToggleSymi.setSelected(true);
+    timerFrame.jToolBar.add(jToggleSymi);
     // ---
     spinnerLabel.setArray(CurveSubdivisionSchemes.values());
     spinnerLabel.setIndex(2);
@@ -146,11 +139,20 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GraphicsUtil.setQualityHigh(graphics);
     final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
+    if (jToggleSymi.isSelected()) {
+      Optional<SymMaskImages> optional = SymMaskImages.get(scheme.name());
+      if (optional.isPresent()) {
+        BufferedImage image0 = optional.get().image0();
+        graphics.drawImage(image0, 0, 0, null);
+        BufferedImage image1 = optional.get().image1();
+        graphics.drawImage(image1, image0.getWidth() + 1, 0, null);
+      }
+    }
+    GraphicsUtil.setQualityHigh(graphics);
     Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    boolean isCyclic = jToggleCyclic.isSelected();
+    final boolean isCyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = control();
     if (jToggleBndy.isSelected() && !isCyclic && 1 < control.length()) {
       switch (scheme) {
@@ -172,13 +174,11 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     renderControlPoints(geometricLayer, graphics);
     {
       CurveSubdivision curveSubdivision = function.apply(geodesicDisplay.geodesicInterface());
-      TensorUnaryOperator tuo = jToggleCyclic.isSelected() //
+      TensorUnaryOperator tensorUnaryOperator = isCyclic //
           ? curveSubdivision::cyclic
           : curveSubdivision::string;
       // ---
-      refined = Nest.of(tuo, control, levels);
-      graphics.setColor(new Color(0, 0, 255, 128));
-      graphics.draw(geometricLayer.toPath2D(refined));
+      refined = Nest.of(tensorUnaryOperator, control, levels);
     }
     if (jToggleLine.isSelected()) {
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface());
@@ -191,27 +191,14 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
         path2d.closePath();
       graphics.draw(path2d);
     }
-    {
-      if (BSPLINE4) {
-        CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(Se2CoveringGeodesic.INSTANCE);
-        // curveSubdivision.string(_control);
-        Tensor refined2 = Nest.of(curveSubdivision::string, control, levels);
-        graphics.setColor(Color.GREEN);
-        Path2D path2d = geometricLayer.toPath2D(refined2);
-        if (isCyclic)
-          path2d.closePath();
-        graphics.setStroke(new BasicStroke(1.25f));
-        graphics.draw(path2d);
-        graphics.setStroke(new BasicStroke(1f));
-      }
-    }
-    new CurveRender(refined, isCyclic, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+    renderCurve(render, isCyclic, geometricLayer, graphics);
     if (jToggleCrvt.isSelected()) {
       graphics.setStroke(new BasicStroke(1.25f));
       Tensor matrix = geometricLayer.getMatrix();
       geometricLayer.pushMatrix(Inverse.of(matrix));
       geometricLayer.pushMatrix(Tensors.fromString("{{1,0,0},{0,-50,100},{0,0,1}}"));
-      Tensor points = Tensor.of(refined.stream().map(Extract2D::of));
+      Tensor points = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
       {
         graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
         Tensor curvature = SignedCurvature2D.string(points);
@@ -242,12 +229,14 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     }
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
-    if (printref) {
-      printref = false;
-      System.out.println(refined);
-    }
   }
 
+  // public static BufferedImage subdiv3a() {
+  // Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
+  // CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(SymGeodesic.INSTANCE);
+  // Tensor tensor = curveSubdivision.string(vector);
+  // return new SymLinkImage((SymScalar) tensor.Get(2)).bufferedImage();
+  // }
   public static void main(String[] args) {
     AbstractDemo abstractDemo = new CurveSubdivisionDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);

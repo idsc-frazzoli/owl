@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2Demo;
 import ch.ethz.idsc.owl.bot.se2.glc.SimpleShadowConstraintCV;
@@ -28,7 +29,6 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
@@ -47,7 +47,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
-import ch.ethz.idsc.subare.util.Stopwatch;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -55,6 +54,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -119,8 +119,8 @@ public class PlanningEvaluation0 extends Se2Demo {
 
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
-    owlyAnimationFrame.addBackground(imgRender);
+    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    owlyAnimationFrame.addBackground(imageRender);
     //
     // IMAGE REGIONS
     Tensor imageCar = STREET_SCENARIO_DATA.imageCar_extrude(10);
@@ -190,12 +190,12 @@ public class PlanningEvaluation0 extends Se2Demo {
     Thread mpw = new Thread(new Runnable() {
       @Override // from Runnable
       public void run() {
-        Stopwatch stopwatch = Stopwatch.started();
+        Timing timing = Timing.started();
         tp.insertRoot(INITIAL);
         GlcExpand glcExpand = new GlcExpand(tp);
         glcExpand.findAny(MAX_STEPS);
-        stopwatch.stop();
-        System.out.println("Planning time: " + stopwatch.display_seconds());
+        timing.stop();
+        System.out.println("Planning time: " + timing.seconds());
         //
         Optional<GlcNode> optional = tp.getBest();
         if (optional.isPresent()) {

@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.sophus.group.HeGeodesic;
 import ch.ethz.idsc.sophus.group.HeGroup;
 import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 public enum He1GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
   // ---
-  private static final Tensor SQUARE = CirclePoints.of(4).multiply(RealScalar.of(.2));
+  private static final Tensor SQUARE = CirclePoints.of(4).multiply(RealScalar.of(0.2));
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
@@ -31,9 +31,9 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
     return Tensors.of(xya.extract(0, 1), xya.extract(1, 2), xya.Get(2));
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor p) {
-    return Tensors.of(p.Get(0, 0), p.Get(1, 0), p.Get(2));
+    return Tensors.of(p.Get(0, 0), p.Get(1, 0));
   }
 
   @Override // from GeodesicDisplay

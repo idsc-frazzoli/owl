@@ -14,15 +14,14 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.LagrangeInterpolation;
-import ch.ethz.idsc.sophus.symlink.SymGeodesic;
-import ch.ethz.idsc.sophus.symlink.SymLinkImage;
-import ch.ethz.idsc.sophus.symlink.SymScalar;
+import ch.ethz.idsc.sophus.sym.SymGeodesic;
+import ch.ethz.idsc.sophus.sym.SymLinkImage;
+import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -40,9 +39,8 @@ import ch.ethz.idsc.tensor.sca.N;
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   LagrangeInterpolationDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     // ---
-    timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
     jToggleSymi.setSelected(true);
@@ -81,7 +79,8 @@ import ch.ethz.idsc.tensor.sca.N;
     int levels = spinnerRefine.getValue();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
     Tensor refined = Subdivide.of(0, control.length() - 1, 1 << levels).map(interpolation::at);
-    new CurveRender(refined, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+    renderCurve(render, false, geometricLayer, graphics);
     {
       Tensor selected = interpolation.at(parameter.multiply(RealScalar.of(control.length() - 1)));
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));

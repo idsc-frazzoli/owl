@@ -4,11 +4,11 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.StateTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,6 +32,7 @@ public class PurePursuitControl extends StateTrajectoryControl {
     return Norm2Squared.ofVector(Se2Wrap.INSTANCE.difference(x, y));
   }
 
+  /** available for visualization */
   PurePursuit purePursuit = null;
 
   @Override // from AbstractEntity

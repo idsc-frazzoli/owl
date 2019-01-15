@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
+import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
@@ -15,12 +15,11 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
@@ -28,6 +27,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Degree;
 
 /** demo to show effect of lexicographic vector cost comparison
  * 1. Cost: Time
@@ -41,7 +41,7 @@ public class GokartVec0Demo extends GokartDemo {
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
+        return new ConeRegion(goal, Degree.of(18));
       }
     };
     // define cost function hierarchy
@@ -62,11 +62,11 @@ public class GokartVec0Demo extends GokartDemo {
     list.add(gokartEntity);
     list.add(new SimpleGlcPlannerCallback(gokartEntity));
     GoalConsumer goalconsumer = new SimpleGoalConsumer(gokartEntity, plannerConstraint, list);
-    try {
-      TimeUnit.SECONDS.sleep(1);
-    } catch (InterruptedException e) {
-      // ---
-    }
+    // try {
+    // TimeUnit.SECONDS.sleep(1);
+    // } catch (InterruptedException e) {
+    // // ---
+    // }
     goalconsumer.accept(Tensors.vector(35, 10, 0));
     MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);
     {

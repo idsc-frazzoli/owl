@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.twd;
 import java.awt.Graphics2D;
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2LateralAcceleration;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
@@ -20,12 +21,12 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.sophus.planar.Arrowhead;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -38,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(6), RealScalar.of(6), Degree.of(10).reciprocal()).unmodifiable();
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
-  static final Tensor SHAPE = Arrowhead.of(.3);
+  static final Tensor SHAPE = Arrowhead.of(0.3);
 
   public static TwdEntity createDuckie(StateTime stateTime) {
     TwdEntity twdEntity = new TwdEntity( //
@@ -82,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   /** @param goal
    * @return */
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-    return new SphericalRegion(goal.extract(0, 2), goalRadius_xy);
+    return new SphericalRegion(Extract2D.FUNCTION.apply(goal), goalRadius_xy);
   }
 
   @Override

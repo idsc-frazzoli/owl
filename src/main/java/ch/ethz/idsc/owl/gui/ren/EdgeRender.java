@@ -14,6 +14,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -21,7 +22,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** renders the edges between nodes
  * 
  * the edges are drawn as straight lines with the color of the cost to root */
-// TODO make similar to TreeRender
 public class EdgeRender {
   private static final int NODE_WIDTH = 2;
   private static final Color CONVEXHULL = new Color(192, 192, 0, 128);
@@ -30,16 +30,16 @@ public class EdgeRender {
   private final int nodeBound;
   private RenderInterface renderInterface = EmptyRender.INSTANCE;
 
-  public EdgeRender() {
-    this(2500);
-  }
-
   public EdgeRender(int nodeBound) {
     this.nodeBound = nodeBound;
   }
 
+  public EdgeRender() {
+    this(TreeRender.DEFAULT_LIMIT);
+  }
+
   public RenderInterface setCollection(Collection<? extends StateCostNode> collection) {
-    return renderInterface = Objects.isNull(collection) //
+    return renderInterface = Objects.isNull(collection) || collection.isEmpty() //
         ? EmptyRender.INSTANCE //
         : new Render(collection);
   }
@@ -56,24 +56,19 @@ public class EdgeRender {
       this.collection = collection;
       polygon = ConvexHull.of(collection.stream() //
           .map(StateCostNode::state) //
-          .map(tensor -> tensor.extract(0, 2)), Chop._10); //
+          .map(Extract2D.FUNCTION), Chop._10); //
     }
 
     @Override // from RenderInterface
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-      Collection<? extends StateCostNode> _collection = collection;
-      if (Objects.isNull(_collection) || _collection.isEmpty())
-        return;
-      long count = _collection.size();
-      if (Objects.nonNull(polygon)) {
-        graphics.setColor(CONVEXHULL);
-        Path2D path2D = geometricLayer.toPath2D(polygon);
-        path2D.closePath();
-        graphics.draw(path2D);
-      }
-      if (count <= nodeBound) { // don't draw tree beyond certain node count
+      graphics.setColor(CONVEXHULL);
+      Path2D path2D = geometricLayer.toPath2D(polygon);
+      path2D.closePath();
+      graphics.draw(path2D);
+      // ---
+      if (collection.size() <= nodeBound) { // don't draw tree beyond certain node count
         graphics.setColor(COLOR_EDGE);
-        for (StateCostNode node : _collection) {
+        for (StateCostNode node : collection) {
           final Point2D p1 = geometricLayer.toPoint2D(node.state());
           graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));
           StateCostNode parent = node.parent();

@@ -37,8 +37,7 @@ public enum DebugUtils {
   }
 
   public static void connectivityCheck(Collection<GlcNode> treeCollection) {
-    Iterator<GlcNode> iterator = treeCollection.iterator();
-    while (iterator.hasNext()) {
+    for (Iterator<GlcNode> iterator = treeCollection.iterator(); iterator.hasNext();) {
       GlcNode node = iterator.next();
       if (!node.isRoot())
         GlobalAssert.that(node.parent().children().contains(node));

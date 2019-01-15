@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.StateTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-/* package */ class R2TrajectoryControl extends StateTrajectoryControl {
+public class R2TrajectoryControl extends StateTrajectoryControl {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
   @Override

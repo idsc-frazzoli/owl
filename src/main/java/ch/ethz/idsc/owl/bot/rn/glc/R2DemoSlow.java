@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.bot.r2.R2Bubbles;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -42,6 +41,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   }
 
   static TrajectoryPlanner simpleR2Bubbles() throws Exception {
-    return simple(CatchyTrajectoryRegionQuery.timeInvariant(new R2Bubbles()));
+    return simple(CatchyTrajectoryRegionQuery.timeInvariant(R2Bubbles.INSTANCE));
   }
 
   static TrajectoryPlanner simpleR2Circle() throws Exception {
@@ -67,8 +67,8 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     // ---
     Tensor eta = Tensors.vector(1.5, 1.5);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
-    R2Flows r2Config = new R2Flows(RealScalar.ONE);
-    Collection<Flow> controls = r2Config.getFlows(6);
+    R2Flows r2Flows = new R2Flows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(6);
     SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     RenderInterface renderInterface = RegionRenders.create(obstacleQuery);
@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
         EtaRaster.state(eta), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-    try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("R2_Slow.gif"), 400)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(HomeDirectory.Pictures("R2_Slow.gif"), 400)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
       owlyFrame.addBackground(renderInterface); // reference to collection
@@ -88,10 +88,10 @@ import ch.ethz.idsc.tensor.sca.Ramp;
           break;
         glcExpand.findAny(1);
         owlyFrame.setGlc(trajectoryPlanner);
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
       }
       for (int i = 0; i < 4; ++i)
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
     }
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {

@@ -30,24 +30,23 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * in particular costs of type {@link VectorScalar} are not supported
  * @see EdgeRender */
 public class TreeRender {
-  private static final int DEFAULT_LIMIT = 2500;
+  public static final int DEFAULT_LIMIT = 2500;
   private static final int NODE_WIDTH = 2;
   private static final Color CONVEX_HULL_COLOR = new Color(192, 192, 0, 128);
   // ---
   private final int nodeBound;
   private RenderInterface renderInterface = EmptyRender.INSTANCE;
-  // ---
-
-  public TreeRender() {
-    this(DEFAULT_LIMIT);
-  }
 
   public TreeRender(int nodeBound) {
     this.nodeBound = nodeBound;
   }
 
+  public TreeRender() {
+    this(DEFAULT_LIMIT);
+  }
+
   public RenderInterface setCollection(Collection<? extends StateCostNode> collection) {
-    return renderInterface = Objects.isNull(collection) //
+    return renderInterface = Objects.isNull(collection) || collection.isEmpty() //
         ? EmptyRender.INSTANCE
         : new Render(collection);
   }
@@ -59,32 +58,35 @@ public class TreeRender {
   private class Render implements RenderInterface {
     private final Collection<? extends StateCostNode> collection;
     private final Tensor polygon;
+    private final TreeColor treeColor;
+    private final double min;
+    private final double max;
+    private final long count;
+    private final double inverse;
 
     public Render(Collection<? extends StateCostNode> collection) {
       this.collection = collection;
-      polygon = ConvexHull.of(collection.stream().map(StateCostNode::state).map(Extract2D::of), Chop._10);
-    }
-
-    @Override // from RenderInterface
-    public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-      TreeColor treeColor = TreeColor.ofDimensions(collection.iterator().next().state().length());
-      DoubleSummaryStatistics dss = collection.stream() //
+      polygon = ConvexHull.of(collection.stream().map(StateCostNode::state).map(Extract2D.FUNCTION), Chop._10);
+      treeColor = TreeColor.ofDimensions(collection.iterator().next().state().length());
+      DoubleSummaryStatistics doubleSummaryStatistics = collection.stream() //
           .map(StateCostNode::costFromRoot) //
           .map(Scalar::number) //
           .mapToDouble(Number::doubleValue) //
           .filter(Double::isFinite) //
           .summaryStatistics();
-      final double min = dss.getMin();
-      final double max = dss.getMax();
-      long count = dss.getCount();
-      if (Objects.nonNull(polygon)) {
-        graphics.setColor(CONVEX_HULL_COLOR);
-        Path2D path2D = geometricLayer.toPath2D(polygon);
-        path2D.closePath();
-        graphics.draw(path2D);
-      }
-      double inverse = (treeColor.nodeColor.length() - 1) / (max - min);
-      // System.out.println("count=" + count + ", inverse=" + inverse);
+      min = doubleSummaryStatistics.getMin();
+      max = doubleSummaryStatistics.getMax();
+      count = doubleSummaryStatistics.getCount();
+      inverse = (treeColor.nodeColor.length() - 1) / (max - min);
+    }
+
+    @Override // from RenderInterface
+    public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+      graphics.setColor(CONVEX_HULL_COLOR);
+      Path2D path2D = geometricLayer.toPath2D(polygon);
+      path2D.closePath();
+      graphics.draw(path2D);
+      // ---
       if (count <= nodeBound) // don't draw tree beyond certain node count
         for (StateCostNode node : collection) {
           double value = node.costFromRoot().number().doubleValue();

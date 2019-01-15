@@ -32,7 +32,7 @@ public class NdDualMapTest extends TestCase {
   private static void _checkCenter(Tensor center, int n, int dim, int dep) {
     NdMap<String> m2 = new NdDualMap<>(Tensors.vector(-2, -1, 0), Tensors.vector(2, 10, 3), dim, dep);
     int index = 0;
-    Distribution b = BernoulliDistribution.of(RealScalar.of(.25));
+    Distribution b = BernoulliDistribution.of(RealScalar.of(0.25));
     Distribution ux = UniformDistribution.of(-2, 2);
     Distribution uy = UniformDistribution.of(-1, 10);
     Distribution uz = UniformDistribution.of(0, 3);
@@ -52,8 +52,8 @@ public class NdDualMapTest extends TestCase {
 
   public void testOne() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3, 1.5), 1, dim, 6);
-      _checkCenter(Tensors.vector(.1, .3, 1), 1, dim, 6);
+      _checkCenter(Tensors.vector(0.3, 0.3, 1.5), 1, dim, 6);
+      _checkCenter(Tensors.vector(0.1, 0.3, 1), 1, dim, 6);
       _checkCenter(Tensors.vector(5, 4.3, 1.5), 1, dim, 10);
       _checkCenter(Tensors.vector(5, -3.3, 2.5), 1, dim, 10);
     }
@@ -61,8 +61,8 @@ public class NdDualMapTest extends TestCase {
 
   public void testFew() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3, 1.5), 3, dim, 7);
-      _checkCenter(Tensors.vector(.1, .3, 1), 3, dim, 7);
+      _checkCenter(Tensors.vector(0.3, 0.3, 1.5), 3, dim, 7);
+      _checkCenter(Tensors.vector(0.1, 0.3, 1), 3, dim, 7);
       _checkCenter(Tensors.vector(5, 4.3, 1.5), 3, dim, 11);
       _checkCenter(Tensors.vector(5, -3.3, 2.5), 3, dim, 11);
     }
@@ -70,8 +70,8 @@ public class NdDualMapTest extends TestCase {
 
   public void testMany() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3, 1.5), 20, dim, 8);
-      _checkCenter(Tensors.vector(.1, .3, 1), 20, dim, 8);
+      _checkCenter(Tensors.vector(0.3, 0.3, 1.5), 20, dim, 8);
+      _checkCenter(Tensors.vector(0.1, 0.3, 1), 20, dim, 8);
       _checkCenter(Tensors.vector(5, 4.3, 1.5), 20, dim, 12);
       _checkCenter(Tensors.vector(5, -3.3, 2.5), 20, dim, 12);
     }
@@ -79,8 +79,8 @@ public class NdDualMapTest extends TestCase {
 
   public void testMost() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3, 1.5), 60, dim, 9);
-      _checkCenter(Tensors.vector(.1, .3, 1), 60, dim, 9);
+      _checkCenter(Tensors.vector(0.3, 0.3, 1.5), 60, dim, 9);
+      _checkCenter(Tensors.vector(0.1, 0.3, 1), 60, dim, 9);
       _checkCenter(Tensors.vector(5, 4.3, 1.5), 60, dim, 13);
       _checkCenter(Tensors.vector(5, -3.3, 2.5), 60, dim, 13);
     }
@@ -88,8 +88,8 @@ public class NdDualMapTest extends TestCase {
 
   public void testAll() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(.3, .3, 1.5), 160, dim, 10);
-      _checkCenter(Tensors.vector(.1, .3, 1), 160, dim, 10);
+      _checkCenter(Tensors.vector(0.3, 0.3, 1.5), 160, dim, 10);
+      _checkCenter(Tensors.vector(0.1, 0.3, 1), 160, dim, 10);
       _checkCenter(Tensors.vector(5, 4.3, 1.5), 160, dim, 14);
       _checkCenter(Tensors.vector(5, -3.3, 2.5), 160, dim, 14);
     }

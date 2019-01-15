@@ -6,6 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.owl.math.noise.ContinuousNoise;
 import ch.ethz.idsc.owl.math.noise.ContinuousNoiseUtils;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -30,6 +31,6 @@ public class R2NoiseRegion implements Region<Tensor>, Serializable {
 
   @Override // from Region
   public boolean isMember(Tensor tensor) {
-    return Scalars.lessThan(threshold, CONTINUOUS_NOISE.apply(tensor.extract(0, 2)));
+    return Scalars.lessThan(threshold, CONTINUOUS_NOISE.apply(Extract2D.FUNCTION.apply(tensor)));
   }
 }

@@ -6,15 +6,15 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 
+import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.Se2WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.qty.Degree;
 
 /** demo to simulate dubendorf hangar
  * 
@@ -39,7 +40,7 @@ public class GokartWaypoint0Demo extends GokartDemo {
     GokartEntity gokartEntity = new GokartEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
+        return new ConeRegion(goal, Degree.of(18));
       }
     };
     // ---
@@ -67,8 +68,7 @@ public class GokartWaypoint0Demo extends GokartDemo {
     // ---
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
-      public void windowClosed(WindowEvent e) {
-        System.out.println("window was closed. terminating...");
+      public void windowClosed(WindowEvent windowEvent) {
         glcWaypointFollowing.flagShutdown();
       }
     });

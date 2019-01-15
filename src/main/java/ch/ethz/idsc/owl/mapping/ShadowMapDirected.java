@@ -93,7 +93,7 @@ public class ShadowMapDirected extends ShadowMapCV {
     // TODO YN use spherical for lanes, carkernel for other obstacles
     // Mat carObs = opencv_imgcodecs.imread(carObsURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
     // IntStream.range(0, NSEGS).parallel() //
-    // .mapToObj(seg -> StaticHelper.dilateSegment(seg, carObs, carKernels, new Point(2, 2), laneMasks, 15)) // TODO magic iteration number
+    // .mapToObj(seg -> StaticHelper.dilateSegment(seg, carObs, carKernels, new Point(2, 2), laneMasks, 15)) // TODO YN magic iteration number
     // .forEach(upimg -> opencv_core.add(obsDilArea, upimg, obsDilArea));
     //
     initArea = new Mat(img.size(), img.type(), opencv_core.Scalar.WHITE);

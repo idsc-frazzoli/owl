@@ -3,17 +3,17 @@ package ch.ethz.idsc.owl.bot.rice;
 
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.ani.adapter.EuclideanTrajectoryControl;
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
+import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

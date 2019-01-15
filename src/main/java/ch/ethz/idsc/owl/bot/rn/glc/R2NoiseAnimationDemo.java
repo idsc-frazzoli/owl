@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.glc;
 
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.r2.R2NoiseRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -15,7 +16,6 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

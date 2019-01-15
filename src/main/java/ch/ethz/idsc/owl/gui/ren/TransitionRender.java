@@ -1,15 +1,20 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.ren;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import java.util.Collection;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
+import ch.ethz.idsc.owl.rrts.core.Transition;
+import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 
 /** renders the edges between nodes
  * 
@@ -18,24 +23,42 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
  * only real-valued costs are supported
  * in particular costs of type {@link VectorScalar} are not supported
  * @see EdgeRender */
-public abstract class TransitionRender implements RenderInterface {
-  private Collection<? extends RrtsNode> collection;
+public class TransitionRender {
+  private static final Scalar DT = RealScalar.of(0.2); // TODO JPH magic const
+  // ---
+  private final TransitionSpace transitionSpace;
+  private RenderInterface renderInterface = EmptyRender.INSTANCE;
 
-  public TransitionRender(Collection<? extends RrtsNode> collection) {
-    setCollection(collection);
+  public TransitionRender(TransitionSpace transitionSpace) {
+    this.transitionSpace = transitionSpace;
   }
 
-  @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Collection<? extends StateCostNode> _collection = collection;
-    if (Objects.isNull(_collection) || _collection.isEmpty())
-      return;
-    // TODO JPH render edges
+  public RenderInterface getRender() {
+    return renderInterface;
   }
 
-  public abstract void render(GeometricLayer geometricLayer, Graphics2D graphics, RrtsNode rrtsNode);
+  public RenderInterface setCollection(Collection<? extends RrtsNode> collection) {
+    return renderInterface = Objects.isNull(collection) || collection.isEmpty() //
+        ? EmptyRender.INSTANCE
+        : new Render(collection);
+  }
 
-  public void setCollection(Collection<? extends RrtsNode> collection) {
-    this.collection = collection;
+  private class Render implements RenderInterface {
+    private final Collection<? extends RrtsNode> collection;
+
+    public Render(Collection<? extends RrtsNode> collection) {
+      this.collection = collection;
+    }
+
+    @Override // from RenderInterface
+    public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+      graphics.setColor(Color.BLUE);
+      for (RrtsNode parent : collection)
+        for (RrtsNode child : parent.children()) {
+          Transition transition = transitionSpace.connect(parent.state(), child.state());
+          Path2D path2d = geometricLayer.toPath2D(transition.sampled(RealScalar.ZERO, DT));
+          graphics.draw(path2d);
+        }
+    }
   }
 }

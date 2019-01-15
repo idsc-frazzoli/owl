@@ -4,10 +4,10 @@ package ch.ethz.idsc.owl.bot.tse2;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.StateTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

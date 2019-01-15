@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.math.sample;
 
+import java.io.Serializable;
+import java.util.Random;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -11,6 +14,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** uniform random samples from the interior of a n-dimensional sphere
@@ -20,9 +24,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * implementation supports the use of Quantity
  * 
  * implementation generalizes {@link UniformRandomSample} and {@link CircleRandomSample} */
-public class SphereRandomSample implements RandomSampleInterface {
+public class SphereRandomSample implements RandomSampleInterface, Serializable {
   public static final int MAX_LENGTH = 10;
-  private static final Distribution UNIFORM = UniformDistribution.of(-1, 1);
+  private static final Distribution UNIFORM = UniformDistribution.of(Clip.absoluteOne());
 
   /** @param center non-empty vector of length less equals to 10
    * @param radius non-negative
@@ -61,9 +65,9 @@ public class SphereRandomSample implements RandomSampleInterface {
   }
 
   @Override // from RandomSampleInterface
-  public Tensor randomSample() {
+  public Tensor randomSample(Random random) {
     while (true) {
-      Tensor vector = RandomVariate.of(UNIFORM, center.length());
+      Tensor vector = RandomVariate.of(UNIFORM, random, center.length());
       if (Scalars.lessEquals(Norm._2.ofVector(vector), RealScalar.ONE))
         return vector.multiply(radius).add(center);
     }

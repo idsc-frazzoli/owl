@@ -21,7 +21,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -30,14 +30,16 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
+import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public final class GeometricComponent {
   private static final Font DEFAULT_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
-  private static final double WHEEL_ANGLE = Math.PI / 12;
+  private static final Scalar WHEEL_ANGLE = Degree.of(15);
   /** initial model to pixel matrix */
   private static final Tensor MODEL2PIXEL_INITIAL = Tensors.matrix(new Number[][] { //
       { 60, 0, 300 }, //
@@ -124,9 +126,8 @@ public final class GeometricComponent {
             if ((mods & mask) == 0) {
               model2pixel.set(scalar -> scalar.add(RealScalar.of(dx)), 0, 2);
               model2pixel.set(scalar -> scalar.add(RealScalar.of(dy)), 1, 2);
-              // System.out.println(Pretty.of(model2pixel.map(Round._3)));
             } else {
-              Tensor t1 = Se2Utils.toSE2Matrix(Tensors.of(center.Get(0).negate(), center.Get(1).negate(), RealScalar.ZERO));
+              Tensor t1 = Se2Utils.toSE2Translation(center.negate());
               Tensor t2 = Se2Utils.toSE2Matrix(center.copy().append(a2.subtract(a1)));
               model2pixel = model2pixel.dot(t2).dot(t1);
             }
@@ -181,7 +182,8 @@ public final class GeometricComponent {
 
   /** @return {px, py, angle} in model space */
   Tensor getMouseSe2State() {
-    return mouseLocation.copy().append(RealScalar.of(mouseWheel * WHEEL_ANGLE));
+    Scalar scalar = RealScalar.of(mouseWheel).multiply(WHEEL_ANGLE);
+    return mouseLocation.copy().append(scalar);
   }
 
   public void addRenderInterfaceBackground(RenderInterface renderInterface) {
@@ -189,14 +191,15 @@ public final class GeometricComponent {
   }
 
   /***************************************************/
-  /** @param model2pixel with dimensions 3 x 3 */
+  /** @param model2pixel with dimensions 3 x 3
+   * @throws Exception if determinant of matrix is positive */
   public void setModel2Pixel(Tensor model2pixel) {
+    this.model2pixel = model2pixel.copy(); // set matrix regardless of conditions
+    // ---
     Scalar det = Det.of(model2pixel);
-    System.out.println(det);
     if (Chop._08.allZero(det))
       System.err.println("model2pixel must not be singular");
-    else
-      this.model2pixel = model2pixel.copy();
+    Sign.requirePositive(det.negate());
   }
 
   public Tensor getModel2Pixel() {

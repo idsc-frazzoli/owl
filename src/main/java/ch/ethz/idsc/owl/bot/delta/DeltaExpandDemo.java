@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -32,6 +31,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** simple animation of small boat driving upstream, or downstream in a river delta
@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Region<Tensor> region = new ImageRegion(obstacleImage, range, true);
     // TrajectoryRegionQuery obstacleQuery = ;
     Scalar maxMove = stateSpaceModel.getLipschitz().add(maxInput);
-    SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(.3));
+    SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(0.3));
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(sphericalRegion, maxMove);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
@@ -71,17 +71,17 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     owlyFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.05)));
     owlyFrame.configCoordinateOffset(33, 416);
     owlyFrame.jFrame.setBounds(100, 100, 620, 475);
-    try (AnimationWriter gsw = AnimationWriter.of(UserHome.Pictures("delta_s.gif"), 250)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(HomeDirectory.Pictures("delta_s.gif"), 250)) {
       GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
       while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
         glcExpand.findAny(40);
         owlyFrame.setGlc(trajectoryPlanner);
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
         Thread.sleep(1);
       }
       int repeatLast = 6;
       while (0 < repeatLast--)
-        gsw.append(owlyFrame.offscreen());
+        animationWriter.append(owlyFrame.offscreen());
     }
     System.out.println("created gif");
   }

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -23,7 +24,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
 public enum SnGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---
-  private static final Scalar PI = RealScalar.of(Math.PI);
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
   @Override // from TensorGeodesic
@@ -31,7 +31,7 @@ public enum SnGeodesic implements GeodesicInterface {
     Scalar a = ArcCos.FUNCTION.apply(p.dot(q).Get()); // complex number if |p.q| > 1
     if (Scalars.isZero(a)) // when p == q
       return scalar -> p.copy();
-    if (PI.equals(a))
+    if (Pi.VALUE.equals(a))
       throw TensorRuntimeException.of(p, q); // when p == -q
     return scalar -> NORMALIZE.apply(Tensors.of( //
         Sin.FUNCTION.apply(a.multiply(RealScalar.ONE.subtract(scalar))), //

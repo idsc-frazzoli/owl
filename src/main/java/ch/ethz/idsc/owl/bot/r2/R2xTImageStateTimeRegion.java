@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.RigidFamily;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -37,7 +38,7 @@ public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterf
 
   @Override // from Region
   public boolean isMember(StateTime stateTime) {
-    Tensor state = stateTime.state().extract(0, 2);
+    Tensor state = Extract2D.FUNCTION.apply(stateTime.state());
     Scalar time = stateTime.time();
     TensorUnaryOperator rev = rigidFamily.inverse(time);
     return imageRegion.isMember(rev.apply(state));

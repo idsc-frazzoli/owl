@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * <p>The goal region underlying the target area as well as the heuristic is
  * {@link SphericalRegion}. */
+// TODO JPH offer solution that does not track matches, i.e. not catchy
 @DontModify
 public class RnMinTimeGoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
   /** @param regionWithDistance

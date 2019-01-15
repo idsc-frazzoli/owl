@@ -62,9 +62,9 @@ public class LidarEmulator implements RenderInterface {
     } else {
       polygon.append(origin);
       Path2D path2D = geometricLayer.toPath2D(polygon);
+      path2D.closePath();
       graphics.setColor(COLOR_FREESPACE_FILL);
       graphics.fill(path2D);
-      path2D.closePath();
       graphics.setColor(COLOR_FREESPACE_DRAW);
       graphics.draw(path2D);
     }

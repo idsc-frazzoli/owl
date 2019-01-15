@@ -23,9 +23,9 @@ public class Se2CarLieIntegratorTest extends TestCase {
       Tensor g = RandomVariate.of(NormalDistribution.standard(), 3);
       Tensor x = RandomVariate.of(NormalDistribution.standard(), 3);
       x.set(RealScalar.ZERO, 1);
-      assertTrue(Chop._10.close( //
+      Chop._10.requireClose( //
           Se2CoveringIntegrator.INSTANCE.spin(g, x), //
-          Se2CarLieIntegrator.INSTANCE.spin(g, x)));
+          Se2CarLieIntegrator.INSTANCE.spin(g, x));
     }
   }
 
@@ -36,7 +36,7 @@ public class Se2CarLieIntegratorTest extends TestCase {
       Scalar speed = RealScalar.of(3.217506); // through experimentation
       Tensor u = Tensors.of(speed, RealScalar.ZERO, ratio.multiply(speed));
       Tensor tensor = Se2CarLieIntegrator.INSTANCE.spin(Array.zeros(3), u);
-      assertTrue(Chop._06.close(tensor.extract(0, 2), lookAhead));
+      Chop._06.requireClose(tensor.extract(0, 2), lookAhead);
     }
   }
 
@@ -50,7 +50,7 @@ public class Se2CarLieIntegratorTest extends TestCase {
       Tensor lookAhead = Se2CarLieIntegrator.INSTANCE.spin(Array.zeros(3), u);
       Optional<Scalar> optional = PurePursuit.ratioPositiveX(lookAhead);
       Scalar scalar = optional.get();
-      assertTrue(Chop._06.close(ratio, scalar));
+      Chop._05.requireClose(ratio, scalar);
     }
   }
 
@@ -61,7 +61,7 @@ public class Se2CarLieIntegratorTest extends TestCase {
       Scalar speed = RealScalar.of(-3.217506); // through experimentation
       Tensor u = Tensors.of(speed, RealScalar.ZERO, ratio.multiply(speed));
       Tensor tensor = Se2CarLieIntegrator.INSTANCE.spin(Array.zeros(3), u);
-      assertTrue(Chop._06.close(tensor.extract(0, 2), lookAhead));
+      Chop._06.requireClose(tensor.extract(0, 2), lookAhead);
     }
   }
 }

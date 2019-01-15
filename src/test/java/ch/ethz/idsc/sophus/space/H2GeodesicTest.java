@@ -11,13 +11,13 @@ import junit.framework.TestCase;
 public class H2GeodesicTest extends TestCase {
   public void testSimple() {
     Tensor split = H2Geodesic.INSTANCE.split(Tensors.vector(1, 1), Tensors.vector(3, 1), RationalScalar.HALF);
-    assertTrue(Chop._12.close(split, Tensors.vector(2, Math.sqrt(2))));
+    Chop._12.requireClose(split, Tensors.vector(2, Math.sqrt(2)));
   }
 
   public void testYAxis() {
     Tensor split = H2Geodesic.INSTANCE.split(Tensors.vector(1, 1), Tensors.vector(1, 3), RationalScalar.HALF);
     assertTrue(ExactScalarQ.of(split.Get(0)));
-    assertTrue(Chop._12.close(split, Tensors.vector(1, 1.7320508075688772)));
+    Chop._12.requireClose(split, Tensors.vector(1, 1.7320508075688772));
   }
 
   public void testNumeric() {

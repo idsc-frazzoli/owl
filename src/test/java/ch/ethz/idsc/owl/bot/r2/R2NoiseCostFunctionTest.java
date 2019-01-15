@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 
 public class R2NoiseCostFunctionTest extends TestCase {
   public void testSimple() {
-    CostFunction costFunction = new R2NoiseCostFunction(RealScalar.of(.2));
+    CostFunction costFunction = new R2NoiseCostFunction(RealScalar.of(0.2));
     assertFalse(HeuristicQ.of(costFunction));
   }
 

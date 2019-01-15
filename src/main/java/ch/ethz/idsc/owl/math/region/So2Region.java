@@ -4,16 +4,14 @@ package ch.ethz.idsc.owl.math.region;
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** region describes a section of the unit circle */
 public final class So2Region extends ImplicitRegionWithDistance implements Serializable {
-  private static final Scalar PI = RealScalar.of(Math.PI);
-  // ---
   private final Scalar center;
   private final Scalar radius;
   private final Mod mod;
@@ -21,7 +19,7 @@ public final class So2Region extends ImplicitRegionWithDistance implements Seria
   /** @param center angular destination
    * @param radius tolerance */
   public So2Region(Scalar center, Scalar radius) {
-    this(center, radius, PI);
+    this(center, radius, Pi.VALUE);
   }
 
   // constructor exists to test with units

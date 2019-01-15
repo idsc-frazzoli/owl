@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.planar.EllipsePoints;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.tensor.Scalar;
@@ -19,13 +20,17 @@ public class EllipseRegionRender implements RenderInterface {
    * @return */
   public static RenderInterface of(EllipsoidRegion ellipsoidRegion) {
     Tensor radius = ellipsoidRegion.radius();
-    return new EllipseRegionRender(ellipsoidRegion.center().extract(0, 2), radius.Get(0), radius.Get(1));
+    return new EllipseRegionRender( //
+        Extract2D.FUNCTION.apply(ellipsoidRegion.center()), //
+        radius.Get(0), radius.Get(1));
   }
 
   /** @param sphericalRegion
    * @return */
   public static RenderInterface of(SphericalRegion sphericalRegion) {
-    return new EllipseRegionRender(sphericalRegion.center().extract(0, 2), sphericalRegion.radius(), sphericalRegion.radius());
+    return new EllipseRegionRender( //
+        Extract2D.FUNCTION.apply(sphericalRegion.center()), //
+        sphericalRegion.radius(), sphericalRegion.radius());
   }
 
   // ---
@@ -37,17 +42,16 @@ public class EllipseRegionRender implements RenderInterface {
    * @param radiusX
    * @param radiusY */
   private EllipseRegionRender(Tensor center, Scalar radiusX, Scalar radiusY) {
-    polygon = Tensor.of(EllipsePoints.of(RESOLUTION, radiusX, radiusY) //
-        .stream().map(row -> row.add(center)));
+    polygon = Tensor.of(EllipsePoints.of(RESOLUTION, radiusX, radiusY).stream().map(center::add));
   }
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Path2D path2D = geometricLayer.toPath2D(polygon);
+    path2D.closePath();
     graphics.setColor(RegionRenders.COLOR);
     graphics.fill(path2D);
     graphics.setColor(RegionRenders.BOUNDARY);
-    path2D.closePath();
     graphics.draw(path2D);
   }
 }

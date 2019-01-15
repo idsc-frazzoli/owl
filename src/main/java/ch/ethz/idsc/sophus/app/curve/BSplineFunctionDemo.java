@@ -16,22 +16,26 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
+import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.LieGroupBSplineInterpolation;
 import ch.ethz.idsc.sophus.group.LieGroup;
-import ch.ethz.idsc.sophus.symlink.SymLinkImage;
-import ch.ethz.idsc.sophus.symlink.SymLinkImages;
+import ch.ethz.idsc.sophus.sym.SymLinkImage;
+import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class BSplineFunctionDemo extends ControlPointsDemo {
@@ -44,9 +48,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   BSplineFunctionDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     // ---
-    timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleItrp);
@@ -90,10 +93,30 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Tensor effective = control;
     if (jToggleItrp.isSelected()) {
       LieGroup lieGroup = geodesicDisplay.lieGroup();
-      GeodesicBSplineInterpolation geodesicBSplineInterpolation = Objects.isNull(lieGroup) //
+      AbstractBSplineInterpolation abstractBSplineInterpolation = Objects.isNull(lieGroup) //
           ? new GeodesicBSplineInterpolation(geodesicDisplay.geodesicInterface(), degree, control)
           : new LieGroupBSplineInterpolation(lieGroup, geodesicDisplay.geodesicInterface(), degree, control);
-      effective = geodesicBSplineInterpolation.untilClose(Chop._08, 100).control();
+      {
+        Tensor tensor = BSplineInterpolationSequence.of(abstractBSplineInterpolation);
+        Tensor shape = CirclePoints.of(9).multiply(RealScalar.of(0.05));
+        graphics.setColor(new Color(64, 64, 64, 64));
+        for (Tensor ctrls : tensor)
+          for (Tensor ctrl : ctrls) {
+            geometricLayer.pushMatrix(geodesicDisplay.matrixLift(ctrl));
+            Path2D path2d = geometricLayer.toPath2D(shape);
+            graphics.fill(path2d);
+            geometricLayer.popMatrix();
+          }
+        graphics.setColor(new Color(64, 64, 64, 192));
+        for (Tensor ctrls : Transpose.of(tensor))
+          graphics.draw(geometricLayer.toPath2D(Tensor.of(ctrls.stream().map(geodesicDisplay::toPoint))));
+      }
+      Iteration iteration = abstractBSplineInterpolation.untilClose(Chop._06, 100);
+      {
+        graphics.setColor(Color.BLACK);
+        graphics.drawString("" + iteration.steps(), 0, 20);
+      }
+      effective = iteration.control();
     }
     GeodesicBSplineFunction geodesicBSplineFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, effective);
@@ -107,9 +130,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
       geometricLayer.popMatrix();
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics); // limit curve
+    renderCurve(render, false, geometricLayer, graphics);
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, render);
+      renderPoints(geometricLayer, graphics, refined);
   }
 
   public static void main(String[] args) {

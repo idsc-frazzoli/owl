@@ -3,7 +3,11 @@ package ch.ethz.idsc.owl.bot.delta;
 
 import java.awt.Graphics2D;
 import java.util.Collection;
+import java.util.List;
 
+import ch.ethz.idsc.owl.ani.api.AbstractCircularEntity;
+import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.GlobalAssert;
@@ -13,16 +17,17 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
+import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -32,7 +37,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** class controls delta using {@link StandardTrajectoryPlanner} */
-/* package */ class DeltaEntity extends AbstractCircularEntity {
+/* package */ class DeltaEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   protected static final Tensor PARTITION_SCALE = Tensors.vector(5, 5).unmodifiable();
   protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = FixedStateIntegrator.create( //
       RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 5), 4);
@@ -43,8 +48,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private static final Scalar U_NORM = RealScalar.of(0.6);
   /** resolution of radial controls */
   private static final int U_SIZE = 15;
-  private static final Scalar GOAL_RADIUS = RealScalar.of(.3);
+  private static final Scalar GOAL_RADIUS = RealScalar.of(0.3);
   /***************************************************/
+  private final TreeRender treeRender = new TreeRender();
   private final ImageGradientInterpolation imageGradientInterpolation;
   private RegionWithDistance<Tensor> goalRegion = null;
 
@@ -67,7 +73,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   /** @param goal
    * @return */
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-    return new SphericalRegion(goal.extract(0, 2), GOAL_RADIUS);
+    return new SphericalRegion(Extract2D.FUNCTION.apply(goal), GOAL_RADIUS);
   }
 
   @Override
@@ -92,5 +98,12 @@ import ch.ethz.idsc.tensor.sca.Chop;
     RegionRenders.draw(geometricLayer, graphics, goalRegion);
     // ---
     super.render(geometricLayer, graphics);
+    // ---
+    treeRender.getRender().render(geometricLayer, graphics);
+  }
+
+  @Override // from GlcPlannerCallback
+  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

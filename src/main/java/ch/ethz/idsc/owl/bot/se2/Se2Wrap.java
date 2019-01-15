@@ -5,6 +5,7 @@ import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** identifies (x,y,theta) === (x,y,theta + 2 pi n) for all n
@@ -18,8 +19,8 @@ public enum Se2Wrap implements CoordinateWrap {
   INSTANCE;
   // ---
   private static final int INDEX_ANGLE = 2;
-  private static final Mod MOD = Mod.function(Math.PI * 2);
-  private static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
+  private static final Mod MOD = Mod.function(Pi.TWO);
+  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   @Override // from CoordinateWrap
   public final Tensor represent(Tensor x) {

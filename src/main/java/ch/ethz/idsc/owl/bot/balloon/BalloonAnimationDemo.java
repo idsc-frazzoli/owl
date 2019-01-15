@@ -1,17 +1,17 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.balloon;
 
+import ch.ethz.idsc.owl.ani.adapter.EuclideanTrajectoryControl;
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.gui.ren.GridRender;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -29,7 +29,7 @@ public class BalloonAnimationDemo implements DemoInterface {
     BalloonEntity balloonEntity = new BalloonEntity(episodeIntegrator, trajectoryControl, balloonStateSpaceModel);
     MouseGoal.simple(owlyAnimationFrame, balloonEntity, plannerConstraint);
     owlyAnimationFrame.add(balloonEntity);
-    owlyAnimationFrame.addBackground(GridRender.INSTANCE);
+    owlyAnimationFrame.addBackground(AxesRender.INSTANCE);
     return owlyAnimationFrame;
   }
 

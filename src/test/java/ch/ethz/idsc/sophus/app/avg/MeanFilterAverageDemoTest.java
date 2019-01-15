@@ -1,11 +1,11 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.avg;
 
-import ch.ethz.idsc.sophus.app.util.DemoHelper;
+import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
 import junit.framework.TestCase;
 
 public class MeanFilterAverageDemoTest extends TestCase {
   public void testSimple() {
-    DemoHelper.brief(new MeanFilterAverageDemo());
+    AbstractDemoHelper.brief(new MeanFilterAverageDemo());
   }
 }

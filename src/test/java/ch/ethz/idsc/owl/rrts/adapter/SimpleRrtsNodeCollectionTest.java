@@ -22,14 +22,14 @@ public class SimpleRrtsNodeCollectionTest extends TestCase {
     RrtsNodeCollection rrtsNodeCollection = new SimpleRrtsNodeCollection(RnTransitionSpace.INSTANCE, Transition::length);
     for (int index = 0; index < 200; ++index)
       rrtsNodeCollection.insert(RrtsNode.createRoot(RandomVariate.of(distribution, 3), RealScalar.of(10)));
-    Tensor center = Tensors.vector(.5, .5, .5);
+    Tensor center = Tensors.vector(0.5, 0.5, 0.5);
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(center, 3)) {
       Scalar scalar = Norm._2.between(center, rrtsNode.state());
-      assertTrue(Scalars.lessThan(scalar, RealScalar.of(.3)));
+      assertTrue(Scalars.lessThan(scalar, RealScalar.of(0.3)));
     }
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(center, 3)) {
       Scalar scalar = Norm._2.between(center, rrtsNode.state());
-      assertTrue(Scalars.lessThan(scalar, RealScalar.of(.3)));
+      assertTrue(Scalars.lessThan(scalar, RealScalar.of(0.3)));
     }
   }
 }

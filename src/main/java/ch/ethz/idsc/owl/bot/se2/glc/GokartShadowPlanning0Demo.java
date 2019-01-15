@@ -2,9 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.StreetScenario;
@@ -14,13 +12,12 @@ import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
@@ -53,7 +50,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 10));
+        return new ConeRegion(goal, Degree.of(18));
       }
     };
     // ---
@@ -66,8 +63,8 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion irLid = new ImageRegion(imageLid, RANGE, false);
     // ---
-    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
-    owlyAnimationFrame.addBackground(imgRender);
+    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    owlyAnimationFrame.addBackground(imageRender);
     owlyAnimationFrame.add(gokartEntity);
     // ---
     TrajectoryRegionQuery lidarRay = SimpleTrajectoryRegionQuery.timeInvariant(irLid);
@@ -98,10 +95,10 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     gokartEntity.setCostVector(Arrays.asList(pedLegalCost), Arrays.asList(0.0));
     gokartEntity.addTimeCost(1, 0.0);
     // ---
-    List<GlcPlannerCallback> callbacks = new ArrayList<>();
+    // List<GlcPlannerCallback> callbacks = new ArrayList<>();
     // ShadowEvaluator evaluator = new ShadowEvaluator(smPedLegal);
     // callbacks.add(evaluator.sectorTimeToReact);
-    MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint, callbacks);
+    MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);
     // ---
   }
 

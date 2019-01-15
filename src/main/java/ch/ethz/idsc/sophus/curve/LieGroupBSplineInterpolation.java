@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
  * in numeric precision.
  * 
  * @see BSplineInterpolation */
-public final class LieGroupBSplineInterpolation extends GeodesicBSplineInterpolation {
+public final class LieGroupBSplineInterpolation extends AbstractBSplineInterpolation {
   private final LieGroup lieGroup;
 
   /** @param lieGroup

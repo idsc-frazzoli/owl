@@ -49,7 +49,7 @@ enum Se2ExpandDemo {
     FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, Degree.of(35));
     Collection<Flow> controls = carFlows.getFlows(10);
     Se2ComboRegion se2ComboRegion = //
-        Se2ComboRegion.spherical(Tensors.vector(2, 1, Math.PI * -1), Tensors.vector(0.1, 0.1, 10 / 180 * Math.PI));//
+        Se2ComboRegion.spherical(Tensors.vector(2, 1, -Math.PI), Tensors.vector(0.1, 0.1, 10 / 180 * Math.PI));//
     Se2MinTimeGoalManager se2MinTimeGoalManager = //
         new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();

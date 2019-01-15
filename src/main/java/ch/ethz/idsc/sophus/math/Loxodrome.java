@@ -13,9 +13,15 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * https://de.wikipedia.org/wiki/Loxodrome */
 public class Loxodrome implements ScalarTensorFunction {
+  /** @param angle */
+  public static ScalarTensorFunction of(Scalar angle) {
+    return new Loxodrome(angle);
+  }
+
+  // ---
   private final Scalar angle;
 
-  public Loxodrome(Scalar angle) {
+  private Loxodrome(Scalar angle) {
     this.angle = angle;
   }
 

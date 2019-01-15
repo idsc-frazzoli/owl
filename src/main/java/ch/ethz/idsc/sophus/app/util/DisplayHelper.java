@@ -8,7 +8,7 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-class DisplayHelper {
+public class DisplayHelper {
   private Rectangle screen = new Rectangle();
 
   public DisplayHelper() {
@@ -24,8 +24,8 @@ class DisplayHelper {
     return new Rectangle(x, y, width, height);
   }
 
-  public Rectangle allVisible(Rectangle myRectangle) {
-    return allVisible(myRectangle.x, myRectangle.y, myRectangle.width, myRectangle.height);
+  public Rectangle allVisible(Rectangle rectangle) {
+    return allVisible(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
   }
 
   public Rectangle getScreenRectangle() {

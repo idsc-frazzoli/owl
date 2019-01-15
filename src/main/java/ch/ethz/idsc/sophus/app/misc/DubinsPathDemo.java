@@ -4,54 +4,84 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.planar.Arrowhead;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.CurveRender;
+import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
+import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.dubins.DubinsPath;
-import ch.ethz.idsc.sophus.dubins.DubinsPathLengthComparator;
+import ch.ethz.idsc.sophus.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.dubins.DubinsPathGenerator;
 import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
+import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.PadLeft;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.red.Nest;
 
 /* package */ class DubinsPathDemo extends AbstractDemo {
-  private static final Tensor ARROWHEAD = Arrowhead.of(.5);
+  private static final Tensor START = Array.zeros(3).unmodifiable();
+  private static final int POINTS = 200;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    final Tensor mouse = geometricLayer.getMouseSe2State();
-    {
-      graphics.setColor(Color.GREEN);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
-      graphics.fill(geometricLayer.toPath2D(ARROWHEAD));
-      geometricLayer.popMatrix();
-    }
+    Tensor mouse = geometricLayer.getMouseSe2State();
     // ---
-    FixedRadiusDubins fixedRadiusDubins = new FixedRadiusDubins(mouse, RealScalar.of(1));
-    graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
-    for (DubinsPath dubinsPath : fixedRadiusDubins.allValid().collect(Collectors.toList()))
-      graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
+    DubinsPathGenerator dubinsPathGenerator = FixedRadiusDubins.of(START, mouse, RealScalar.of(1));
+    List<DubinsPath> list = dubinsPathGenerator.allValid().collect(Collectors.toList());
     {
-      DubinsPath dubinsPath = fixedRadiusDubins.allValid().min(DubinsPathLengthComparator.INSTANCE).get();
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
-      graphics.setStroke(new BasicStroke(1.5f));
-      graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.setStroke(new BasicStroke(1f));
+      for (DubinsPath dubinsPath : list)
+        graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
+    }
+    { // draw shortest path
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
+      graphics.setStroke(new BasicStroke(2f));
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.length()).get();
+      graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
+    }
+    {
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.length()).get();
+      ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(START);
+      Tensor params = PadLeft.zeros(4).apply(dubinsPath.segments());
+      graphics.setColor(new Color(128, 128, 128, 128));
+      // graphics.setColor(COLOR_DATA_INDEXED.getColor(3));
+      Tensor map = params.map(scalarTensorFunction);
+      for (Tensor point : map) {
+        geometricLayer.pushMatrix(Se2CoveringGeodesicDisplay.INSTANCE.matrixLift(point));
+        Path2D path2d = geometricLayer.toPath2D(Se2CoveringGeodesicDisplay.INSTANCE.shape());
+        graphics.fill(path2d);
+        geometricLayer.popMatrix();
+      }
+      BSpline3CurveSubdivision bSpline3CurveSubdivision = //
+          new BSpline3CurveSubdivision(Se2CoveringGeodesic.INSTANCE);
+      Tensor points = Nest.of(bSpline3CurveSubdivision::string, map, 5);
+      // graphics.setStroke(new BasicStroke(2f));
+      new CurveRender(points, false, Color.RED, 2f).render(geometricLayer, graphics);
+    }
+    { // draw least curved path
+      graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
+      graphics.setStroke(new BasicStroke(2f));
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.curvature()).get();
+      graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     }
   }
 
   private static Tensor sample(DubinsPath dubinsPath) {
-    return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), 200) //
-        .map(dubinsPath.sampler(Array.zeros(3)));
+    return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), POINTS).map(dubinsPath.sampler(START));
   }
 
   public static void main(String[] args) {

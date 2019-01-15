@@ -14,11 +14,11 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.curve.BezierFunction;
-import ch.ethz.idsc.sophus.symlink.SymGeodesic;
-import ch.ethz.idsc.sophus.symlink.SymLink;
-import ch.ethz.idsc.sophus.symlink.SymLinkBuilder;
-import ch.ethz.idsc.sophus.symlink.SymLinkImage;
-import ch.ethz.idsc.sophus.symlink.SymScalar;
+import ch.ethz.idsc.sophus.sym.SymGeodesic;
+import ch.ethz.idsc.sophus.sym.SymLink;
+import ch.ethz.idsc.sophus.sym.SymLinkBuilder;
+import ch.ethz.idsc.sophus.sym.SymLinkImage;
+import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -31,15 +31,17 @@ import ch.ethz.idsc.tensor.sca.N;
   private Scalar parameter = RationalScalar.HALF;
 
   BezierFunctionAverageDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, false, GeodesicDisplays.ALL);
     // ---
     JSlider jSlider = new JSlider(0, 1000, 500);
     jSlider.setPreferredSize(new Dimension(500, 28));
     jSlider.addChangeListener(changeEvent -> parameter = RationalScalar.of(jSlider.getValue(), 1000));
     timerFrame.jToolBar.add(jSlider);
+    // ---
+    setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor control = control();
@@ -47,8 +49,8 @@ import ch.ethz.idsc.tensor.sca.N;
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
     SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(N.DOUBLE.apply(parameter));
     graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
-    SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
-    SymLink symLink = symLinkBuilder.build(symScalar);
+    // ---
+    SymLink symLink = SymLinkBuilder.of(control, symScalar);
     // ---
     GraphicsUtil.setQualityHigh(graphics);
     // ---

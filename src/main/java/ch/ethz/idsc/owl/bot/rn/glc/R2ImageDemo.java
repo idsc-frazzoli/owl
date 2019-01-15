@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.bot.r2.ImageRegions;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -36,6 +35,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.io.Timing;
 
 /* package */ enum R2ImageDemo {
   ;
@@ -44,8 +44,8 @@ import ch.ethz.idsc.tensor.alg.Array;
     ImageRegion imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(10, 10), false);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 8), 4);
-    R2Flows r2Config = new R2Flows(RealScalar.ONE);
-    Collection<Flow> controls = r2Config.getFlows(23);
+    R2Flows r2Flows = new R2Flows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(23);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 10), DoubleScalar.of(0.2));
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     PlannerConstraint plannerConstraint = //
@@ -54,10 +54,10 @@ import ch.ethz.idsc.tensor.alg.Array;
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(partitionScale), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
-    Stopwatch stopwatch = Stopwatch.started();
+    Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(10000);
-    System.out.println(glcExpand.getExpandCount() + " " + stopwatch.display_seconds());
+    System.out.println(glcExpand.getExpandCount() + " " + timing.seconds());
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

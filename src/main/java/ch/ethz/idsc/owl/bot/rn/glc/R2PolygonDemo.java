@@ -42,8 +42,8 @@ import ch.ethz.idsc.tensor.alg.Array;
   public static void main(String[] args) {
     Tensor partitionScale = Tensors.vector(5, 5);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 8), 4);
-    R2Flows r2Config = new R2Flows(RealScalar.ONE);
-    Collection<Flow> controls = r2Config.getFlows(20);
+    R2Flows r2Flows = new R2Flows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(20);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 5), DoubleScalar.of(0.2));
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     Region<Tensor> region = PolygonRegions.numeric(R2ExamplePolygons.BULKY_TOP_LEFT);

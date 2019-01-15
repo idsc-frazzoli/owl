@@ -109,8 +109,10 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
 
   @Override // from ExpandInterface
   public final Optional<GlcNode> getBest() {
-    System.out.println(reachingSet.getMinValues());
-    return Optional.ofNullable(reachingSet.isEmpty() ? null : reachingSet.peek());
+    // System.out.println("getBest=" + reachingSet.getMinValues());
+    return Optional.ofNullable(reachingSet.isEmpty() //
+        ? null
+        : reachingSet.peek());
   }
 
   /***************************************************/
