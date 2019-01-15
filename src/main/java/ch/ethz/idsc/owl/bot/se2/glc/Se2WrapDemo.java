@@ -68,21 +68,20 @@ enum Se2WrapDemo {
         Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 6), 5);
     FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.ONE, Degree.of(45));
     Collection<Flow> controls = carFlows.getFlows(6);
-    Tensor GOAL = Tensors.vector(-.5, 0, 0);
+    Tensor goal = Tensors.vector(-.5, 0, 0);
     TensorMetric tensorMetric = new SimpleTensorMetric(coordinateWrap);
-    Se2WrapMinTimeGoalManager se2GoalManager = new Se2WrapMinTimeGoalManager(tensorMetric, GOAL, RealScalar.of(0.25), controls);
+    Se2WrapMinTimeGoalManager se2WrapMinTimeGoalManager = //
+        new Se2WrapMinTimeGoalManager(tensorMetric, goal, RealScalar.of(0.25), controls);
     TrajectoryRegionQuery obstacleQuery = obstacleQuery();
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(coordinateWrap::represent));
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), se2GoalManager.getGoalInterface());
-    // ---
-    trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0, 0), RealScalar.ZERO));
-    return trajectoryPlanner;
+    return new StandardTrajectoryPlanner(stateTimeRaster, stateIntegrator, controls, //
+        new TrajectoryObstacleConstraint(obstacleQuery), se2WrapMinTimeGoalManager.getGoalInterface());
   }
 
   private static void demo(CoordinateWrap coordinateWrap) {
     TrajectoryPlanner trajectoryPlanner = createPlanner(coordinateWrap);
+    trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0, 0), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(4000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();

@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.data.tree.NodesConsistency;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 public enum HeuristicConsistency {
   ;
@@ -37,7 +38,7 @@ public enum HeuristicConsistency {
         System.err.println(String.format("At time %s merit decreased\n %s\n %s", //
             current.stateTime().time(), parent.merit(), current.merit()));
         StateTimeTrajectories.print(GlcNodes.getPathFromRootTo(finalNode.get()));
-        throw new RuntimeException();
+        throw TensorRuntimeException.of(current.merit(), parent.merit());
       }
       // monotonously increasing merit means, that delta(Cost) >= delta(CostToGo)
       // as: Cost(Goal)== Merit(Goal) >= (Cost(Node) + CostToGo(Node)) = Merit (Node)

@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.se2.Se2Controls;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
@@ -21,10 +22,12 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorMetric;
 import ch.ethz.idsc.tensor.sca.Ramp;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** minimizes driving time (=distance, since unit speed)
  * 
  * {@link Se2WrapMinTimeGoalManager} works with {@link Se2Wrap} as well as with {@link TnIdentityWrap} */
+@Deprecated
 /* package */ class Se2WrapMinTimeGoalManager implements Region<Tensor>, CostFunction, Serializable {
   private final TensorMetric tensorMetric;
   private final Tensor center;
@@ -33,25 +36,27 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 
   /** @param tensorMetric
    * @param center consists of x,y,theta
-   * @param radius */
+   * @param radius
+   * @param controls */
   public Se2WrapMinTimeGoalManager(TensorMetric tensorMetric, Tensor center, Scalar radius, Collection<Flow> controls) {
-    this.tensorMetric = tensorMetric;
+    this.tensorMetric = Objects.requireNonNull(tensorMetric);
     this.center = center;
     this.radius = radius;
-    maxSpeed = Se2Controls.maxSpeed(controls);
+    maxSpeed = Sign.requirePositive(Se2Controls.maxSpeed(controls));
   }
 
-  @Override
+  @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     return StateTimeTrajectories.timeIncrement(glcNode, trajectory);
   }
 
-  @Override
+  @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
+    // FIXME JPH wrong implementation! should be more like Se2MinTimeGoalManager
     return Ramp.of(tensorMetric.distance(x, center).subtract(radius)).divide(maxSpeed);
   }
 
-  @Override
+  @Override // from Region
   public boolean isMember(Tensor x) {
     return Scalars.isZero(minCostToGoal(x));
   }
