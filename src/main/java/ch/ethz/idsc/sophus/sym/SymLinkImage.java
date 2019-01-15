@@ -9,10 +9,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ImageCrop;
@@ -25,7 +26,7 @@ public class SymLinkImage {
   /** height also appears in the model2pixel matrix */
   private static final int HEIGHT = 50;
   private static final Tensor MODEL2PIXEL = Tensors.matrix(new Number[][] { //
-      { 100, 0, 80 }, //
+      { 100, 0, WIDTH / 2 }, //
       { 0, -100, HEIGHT + HEIGHT / 2 }, //
       { 0, 0, 1 } });
   private static final TensorUnaryOperator IMAGE_CROP = ImageCrop.color(Tensors.vector(255, 255, 255, 255));
@@ -33,7 +34,6 @@ public class SymLinkImage {
   // ---
   private final BufferedImage bufferedImage;
   private final GeometricLayer geometricLayer = GeometricLayer.of(MODEL2PIXEL);
-  private final Font font;
   private int minx = Integer.MAX_VALUE;
   private int maxx = 0;
 
@@ -42,39 +42,44 @@ public class SymLinkImage {
   }
 
   public SymLinkImage(SymScalar symScalar, Font font) {
+    this(symScalar, font, null);
+  }
+
+  public SymLinkImage(SymScalar symScalar, Font font, Color background) {
     final SymLink root = SymLink.build(symScalar);
     final Tensor vector = SymWeights.of(symScalar);
     final int depth = root.depth();
     // ---
-    bufferedImage = new BufferedImage(100 + WIDTH * vector.length(), 100 + HEIGHT * depth, BufferedImage.TYPE_INT_ARGB);
+    bufferedImage = new BufferedImage(100 + WIDTH * (vector.length() - 1), 100 + HEIGHT * depth, BufferedImage.TYPE_INT_ARGB);
     // ---
-    this.font = font;
     Graphics2D graphics = bufferedImage.createGraphics();
     GraphicsUtil.setQualityHigh(graphics);
     graphics.setFont(font);
-    FontMetrics fontMetrics = graphics.getFontMetrics(font);
-    graphics.setColor(new Color(245, 245, 245));
-    graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+    final FontMetrics fontMetrics = graphics.getFontMetrics(font);
+    if (Objects.nonNull(background)) {
+      graphics.setColor(background);
+      graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+    }
     // ---
     new SymLinkRender(root).render(geometricLayer, graphics);
     // ---
     graphics.setColor(Color.GRAY);
-    for (int index = 0; index < vector.length(); ++index) {
+    for (int index = 0; index < vector.length(); ++index) { // render node values
       Point2D point2d = geometricLayer.toPoint2D(Tensors.vector(index, .2));
-      String string = SymLinkRender.nice(vector.Get(index));
+      String string = SymLinkRender.nice(vector.Get(index), 7);
       int stringWidth = fontMetrics.stringWidth(string);
       int pix = (int) point2d.getX() - stringWidth / 2;
       minx = Math.min(minx, pix);
       maxx = Math.max(maxx, pix + stringWidth);
       graphics.drawString(string, pix, (int) point2d.getY());
     }
-    {
+    { // render title bar
       graphics.setStroke(new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 7 }, 0));
       Point2D point2d = geometricLayer.toPoint2D(Tensors.vector(0, .13));
       graphics.drawLine(minx, (int) point2d.getY(), maxx, (int) point2d.getY());
       graphics.setStroke(new BasicStroke(1f));
     }
-    {
+    { // circle bottom node
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(root.getPosition()));
       Path2D path2d = geometricLayer.toPath2D(SymLinkRender.CIRCLE_END);
       path2d.closePath();
@@ -87,6 +92,7 @@ public class SymLinkImage {
   public void title(String string) {
     Graphics2D graphics = bufferedImage.createGraphics();
     GraphicsUtil.setQualityHigh(graphics);
+    Font font = new Font(Font.SANS_SERIF, Font.BOLD, 15);
     FontMetrics fontMetrics = graphics.getFontMetrics(font);
     int stringWidth = fontMetrics.stringWidth(string);
     graphics.setFont(font);

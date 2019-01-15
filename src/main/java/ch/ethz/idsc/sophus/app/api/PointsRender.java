@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class PointsRender {
+/* package */ class PointsRender {
   private final Color color_fill;
   private final Color color_draw;
 
@@ -33,12 +33,12 @@ public class PointsRender {
       for (Tensor point : points) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(shape);
-        geometricLayer.popMatrix();
         path2d.closePath();
         graphics.setColor(color_fill);
         graphics.fill(path2d);
         graphics.setColor(color_draw);
         graphics.draw(path2d);
+        geometricLayer.popMatrix();
       }
     }
   }

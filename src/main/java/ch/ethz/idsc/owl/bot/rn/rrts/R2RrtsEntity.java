@@ -8,16 +8,17 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
+import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
+import ch.ethz.idsc.owl.ani.api.AbstractRrtsEntity;
+import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.bot.rn.glc.R2TrajectoryControl;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.AbstractRrtsEntity;
-import ch.ethz.idsc.owl.gui.ani.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.state.FallbackControl;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -79,11 +80,12 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public void startPlanner( //
       RrtsPlannerCallback rrtsPlannerCallback, List<TrajectorySample> head, Tensor goal) {
     StateTime tail = Lists.getLast(head).stateTime();
-    NoiseCircleHelper nch = new NoiseCircleHelper(EmptyTransitionRegionQuery.INSTANCE, tail, goal.extract(0, 2));
-    nch.plan(350);
-    if (nch.trajectory != null) {
+    NoiseCircleHelper noiseCircleHelper = //
+        new NoiseCircleHelper(EmptyTransitionRegionQuery.INSTANCE, tail, Extract2D.FUNCTION.apply(goal));
+    noiseCircleHelper.plan(350);
+    if (noiseCircleHelper.trajectory != null) {
       System.out.println("found!");
-      rrtsPlannerCallback.expandResult(head, nch.getRrtsPlanner(), nch.trajectory);
+      rrtsPlannerCallback.expandResult(head, noiseCircleHelper.getRrtsPlanner(), noiseCircleHelper.trajectory);
     }
   }
 }

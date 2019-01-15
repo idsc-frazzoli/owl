@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** identifies (x,z,v,gamma) === (x,z, v,gamma + 2 pi n) for all n */
@@ -10,8 +11,8 @@ import ch.ethz.idsc.tensor.sca.Mod;
   INSTANCE;
   // ---
   private static final int INDEX_ANGLE = 3;
-  private static final Mod MOD = Mod.function(Math.PI * 2);
-  private static final Mod MOD_DISTANCE = Mod.function(Math.PI * 2, -Math.PI);
+  private static final Mod MOD = Mod.function(Pi.TWO);
+  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   @Override // from CoordinateWrap
   public final Tensor represent(Tensor x) {

@@ -10,7 +10,8 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.BijectionFamily;
-import ch.ethz.idsc.owl.math.planar.Polygons;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
+import ch.ethz.idsc.owl.math.region.Polygons;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
@@ -35,7 +36,7 @@ public class R2xTPolygonStateTimeRegion implements Region<StateTime>, RenderInte
 
   @Override // from Region
   public boolean isMember(StateTime stateTime) {
-    Tensor state = stateTime.state().extract(0, 2);
+    Tensor state = Extract2D.FUNCTION.apply(stateTime.state());
     Scalar time = stateTime.time();
     TensorUnaryOperator rev = bijectionFamily.inverse(time);
     return Polygons.isInside(polygon, rev.apply(state));
@@ -46,10 +47,10 @@ public class R2xTPolygonStateTimeRegion implements Region<StateTime>, RenderInte
     Scalar time = supplier.get();
     TensorUnaryOperator forward = bijectionFamily.forward(time);
     Path2D path2D = geometricLayer.toPath2D(Tensor.of(polygon.stream().map(forward)));
+    path2D.closePath();
     graphics.setColor(RegionRenders.COLOR);
     graphics.fill(path2D);
     graphics.setColor(RegionRenders.BOUNDARY);
-    path2D.closePath();
     graphics.draw(path2D);
   }
 }

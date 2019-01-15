@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
+import ch.ethz.idsc.owl.bot.se2.twd.TwdDuckieFlows;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.HeuristicQ;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -41,7 +44,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   }
 
   public void testQuantity() {
-    FlowsInterface carFlows = Se2CarFlows.standard(Quantity.of(1, "m*s^-1"), Quantity.of(.5, "m^-1"));
+    FlowsInterface carFlows = Se2CarFlows.standard(Quantity.of(1, "m*s^-1"), Quantity.of(0.5, "m^-1"));
     Collection<Flow> controls = carFlows.getFlows(3);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical( //
         Tensors.fromString("{1[m], 2[m], 3}"), //
@@ -58,6 +61,31 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
     {
       Scalar minCostToGoal = goalInterface.minCostToGoal(Tensors.fromString("{15[m], 22[m], 3.1}"));
       assertTrue(Chop._10.close(Quantity.of(23.413111231467404, "s"), minCostToGoal));
+    }
+  }
+
+  public void testSimple() {
+    TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1), RealScalar.of(1));
+    Collection<Flow> controls = twdConfig.getFlows(8);
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 0, Math.PI), Tensors.vector(1, 1, 1));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    assertTrue(HeuristicQ.of(se2MinTimeGoalManager));
+    Scalar cost = se2MinTimeGoalManager.minCostToGoal(Tensors.vector(0, 0, 0));
+    assertTrue(Scalars.lessEquals(RealScalar.of(9), cost));
+    assertTrue(se2MinTimeGoalManager.isMember(Tensors.vector(10, 0, Math.PI + 0.9)));
+    assertFalse(se2MinTimeGoalManager.isMember(Tensors.vector(10, 0, Math.PI + 1.1)));
+    assertTrue(se2MinTimeGoalManager.isMember(Tensors.vector(10, 0, Math.PI + 2 * Math.PI + 0.9)));
+    assertFalse(se2MinTimeGoalManager.isMember(Tensors.vector(10, 0, Math.PI + 2 * Math.PI + 1.1)));
+  }
+
+  public void testAllAngles() {
+    TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1), RealScalar.of(1));
+    Collection<Flow> controls = twdConfig.getFlows(8);
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(0, 0, Math.PI), Tensors.vector(1, 1, 4));
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    for (int index = -100; index < 100; ++index) {
+      assertTrue(se2MinTimeGoalManager.isMember(Tensors.vector(0, 0, index)));
+      assertFalse(se2MinTimeGoalManager.isMember(Tensors.vector(2, 0, index)));
     }
   }
 

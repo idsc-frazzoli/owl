@@ -1,6 +1,8 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.2.6`
+Library for motion planning in Java, version `0.2.7`
+
+![owl](https://user-images.githubusercontent.com/4012178/51076099-7a0aa680-1694-11e9-8a2d-61836c634ee3.png)
 
 The library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
@@ -135,7 +137,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.2.6</version>
+        <version>0.2.7</version>
       </dependency>
     </dependencies>
 
@@ -169,9 +171,11 @@ by Sertac Karaman and Emilio Frazzoli,
 
 Library for non-linear geometry computation in Java, version `0.0.1`
 
+![sophus](https://user-images.githubusercontent.com/4012178/51076100-7f67f100-1694-11e9-83d8-f32c99752748.png)
+
 The library was developed with the following objectives in mind
+* trajectory design for autonomous robots
 * suitable for use in safety-critical real-time systems
-* trajectory design for an autonomous vehicle
 * implementation of theoretical concepts with high level of abstraction
 
 <table>
@@ -190,19 +194,41 @@ Smoothing
 
 <td>
 
-![filtering](https://user-images.githubusercontent.com/4012178/47631759-91cb9780-db47-11e8-9dc7-a2631a144ecc.png)
+![dubinspathcurvature](https://user-images.githubusercontent.com/4012178/50681318-5d72cc80-100b-11e9-943e-e168d0463eca.png)
 
-Filtering
+Dubins path curvature
 
 </tr>
 </table>
 
 ## Features
 
-* geodesics in Lie-groups and homogeneous spaces: `Rn`, `SE(2)`, `H2`, `Sn`, ...
+* geodesics in Lie-groups and homogeneous spaces: Euclidean space `R^n`, special Euclidean group `SE(2)`, hyperbolic half-plane `H2`, n-dimensional sphere `S^n`, ...
 * parametric curves defined by control points in non-linear spaces: `GeodesicBSplineFunction`, ...
 * non-linear smoothing of noisy localization data `GeodesicCenterFilter`
 * Dubins path
+
+## Geodesic DeBoor Algorithm
+
+![loops5](https://user-images.githubusercontent.com/4012178/51076078-3c0d8280-1694-11e9-9857-2166598c09b2.png)
+
+B-Spline curves in `SE(2)` produced by DeBoor Algorithm or curve subdivision produce curves in the planar subspace `R^2` with appealing curvature.
+
+## Smoothing using Geodesic Averages
+
+![smoothing](https://user-images.githubusercontent.com/4012178/51090026-283a4d00-1776-11e9-81d3-aae3e34402f1.png)
+
+The sequence of localization estimates of a mobile robot often contains noise.
+Instead of using a complicated extended Kalman filter, geodesic averages based on conventional window functions denoise the uniformly sampled signal of poses in `SE(2)`.
+
+## Visualization of Geodesic Averages
+
+![deboor5](https://user-images.githubusercontent.com/4012178/51075948-ade4cc80-1692-11e9-9c9a-1e75084df796.png)
+
+A geodesic average is the generalization of an affine combination from the Euclidean space to a non-linear space.
+A geodesic average consists of a nested binary averages.
+Generally, an affine combination does not have a unique expression as a geodesic average.
+Instead, several geodesic averages reduce to the same affine combination when applied in Euclidean space. 
 
 ## Contributors
 

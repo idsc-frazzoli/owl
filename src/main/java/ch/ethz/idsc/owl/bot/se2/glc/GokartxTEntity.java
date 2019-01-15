@@ -7,15 +7,15 @@ import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.ani.adapter.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
+import ch.ethz.idsc.owl.glc.adapter.StateTimeCoordinateWrap;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.StateTimeCoordinateWrap;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -48,7 +48,7 @@ class GokartxTEntity extends CarEntity {
     // ---
     super.render(geometricLayer, graphics);
     // ---
-    if (Objects.nonNull(trajectoryWrap)) { // TODO code redundant to AbstractCircularEntity
+    if (Objects.nonNull(trajectoryWrap)) {
       StateTime stateTime = getStateTimeNow();
       Scalar now = stateTime.time();
       if (trajectoryWrap.isDefined(now)) {

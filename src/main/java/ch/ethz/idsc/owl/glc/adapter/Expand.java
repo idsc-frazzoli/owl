@@ -4,12 +4,12 @@ package ch.ethz.idsc.owl.glc.adapter;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.ExpandInterface;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.io.Timing;
 
 /** class contains static functions that operate on instances of {@link ExpandInterface}
  * 
@@ -49,7 +49,7 @@ public enum Expand {
    * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
   public static <T extends StateCostNode> int maxTime(ExpandInterface<T> expandInterface, Scalar timeLimit) {
     System.out.println("*** EXPANDING ***");
-    Stopwatch stopwatch = Stopwatch.started();
+    Timing timing = Timing.started();
     final double time = timeLimit.number().doubleValue();
     int expandCount = 0;
     while (true) {
@@ -61,11 +61,11 @@ public enum Expand {
       expandInterface.expand(next.get());
       ++expandCount;
       if (expandInterface.getBest().isPresent()) { // found node in goal region
-        stopwatch.stop();
-        System.out.println("after " + stopwatch.display_seconds() + "s");
+        timing.stop();
+        System.out.println("after " + timing.seconds() + "s");
         break;
       }
-      if (time < stopwatch.display_seconds()) {
+      if (time < timing.seconds()) {
         System.out.println("*** TimeLimit reached -- No Goal was found ***");
         break;
       }

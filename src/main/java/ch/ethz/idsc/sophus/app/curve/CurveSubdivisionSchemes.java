@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
@@ -17,20 +16,22 @@ import ch.ethz.idsc.sophus.curve.FarSixPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.HormannSabinCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.SixPointCurveSubdivision;
+import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ enum CurveSubdivisionSchemes {
-  BSPLINE1(BSpline1CurveSubdivision::new, 1), //
-  BSPLINE2(BSpline2CurveSubdivision::new, 2), //
-  BSPLINE3(BSpline3CurveSubdivision::new, 3),
+  BSPLINE1(BSpline1CurveSubdivision::new), //
+  BSPLINE2(BSpline2CurveSubdivision::new), //
+  BSPLINE3(BSpline3CurveSubdivision::new),
   /** Dyn/Sharon 2014 that uses 2 binary averages */
-  BSPLINE4(BSpline4CurveSubdivision::of, 4),
+  BSPLINE4(BSpline4CurveSubdivision::of),
   /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */
-  BSPLINE4S2(BSpline4CurveSubdivision::split2, 4), //
+  BSPLINE4S2(BSpline4CurveSubdivision::split2),
   /** Hakenberg 2018 that uses 3 binary averages */
-  BSPLINE4S3(CurveSubdivisionHelper::split3, 4), //
-  BSPLINE5(BSpline5CurveSubdivision::new, 5), //
-  BSPLINE6(BSpline6CurveSubdivision::of, 6), //
+  BSPLINE4S3(CurveSubdivisionHelper::split3), //
+  BSPLINE5(BSpline5CurveSubdivision::new), //
+  BSPLINE6(BSpline6CurveSubdivision::of), //
   DOBSEB(i -> DodgsonSabinCurveSubdivision.INSTANCE), //
   THREEPOINT(HormannSabinCurveSubdivision::of), //
   FOURPOINT(FourPointCurveSubdivision::new), //
@@ -40,16 +41,18 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
   SIXFAR(FarSixPointCurveSubdivision::new), //
   ;
   public final Function<GeodesicInterface, CurveSubdivision> function;
-  public final Optional<Integer> degree;
 
   private CurveSubdivisionSchemes(Function<GeodesicInterface, CurveSubdivision> function) {
-    this(function, -1);
+    this.function = function;
   }
 
-  private CurveSubdivisionSchemes(Function<GeodesicInterface, CurveSubdivision> function, int degree) {
-    this.function = function;
-    this.degree = 0 <= degree //
-        ? Optional.of(degree)
-        : Optional.empty();
+  public boolean isStringSupported() {
+    try {
+      function.apply(RnGeodesic.INSTANCE).string(Tensors.empty());
+      return true;
+    } catch (Exception exception) {
+      // ---
+    }
+    return false;
   }
 }

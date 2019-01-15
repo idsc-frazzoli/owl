@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ch.ethz.idsc.owl.gui.ani.TrajectoryEntity;
+import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;

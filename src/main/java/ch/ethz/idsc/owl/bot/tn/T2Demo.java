@@ -37,8 +37,8 @@ enum T2Demo {
   public static void main(String[] args) {
     Tensor eta = Tensors.vector(4, 5);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 10), 5);
-    R2Flows r2Config = new R2Flows(RealScalar.ONE);
-    Collection<Flow> controls = r2Config.getFlows(36);
+    R2Flows r2Flows = new R2Flows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(36);
     CoordinateWrap coordinateWrap;
     coordinateWrap = new TnWrap(Tensors.vector(5, 7));
     // coordinateWrap = new IdentityWrap();

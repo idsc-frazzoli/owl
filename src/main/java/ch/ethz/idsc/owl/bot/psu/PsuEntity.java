@@ -5,6 +5,10 @@ import java.awt.Graphics2D;
 import java.util.Collection;
 import java.util.List;
 
+import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
+import ch.ethz.idsc.owl.ani.api.AbstractCircularEntity;
+import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -12,19 +16,16 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
-import ch.ethz.idsc.owl.gui.ani.GlcPlannerCallback;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.FallbackControl;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -64,7 +65,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //
-        PsuMetric.INSTANCE, psuWrap.represent(goal.extract(0, 2)), RealScalar.of(0.2));
+        PsuMetric.INSTANCE, psuWrap.represent(Extract2D.FUNCTION.apply(goal)), RealScalar.of(0.2));
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(psuWrap::represent));
     return new StandardTrajectoryPlanner( //

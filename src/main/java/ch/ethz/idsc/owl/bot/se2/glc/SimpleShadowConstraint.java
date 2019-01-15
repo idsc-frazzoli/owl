@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 // TODO YN ideally there should be a demo or tests that still uses this implementation
-class SimpleShadowConstraint extends AbstractShadowConstraint {
+/* package */ class SimpleShadowConstraint extends AbstractShadowConstraint {
   private final ShadowMapArea shadowMap;
   private final Area initArea;
 

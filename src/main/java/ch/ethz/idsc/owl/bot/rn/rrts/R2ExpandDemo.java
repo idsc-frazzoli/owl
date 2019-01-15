@@ -1,9 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn.rrts;
 
+import java.util.Random;
+
 import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
@@ -19,9 +20,12 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum R2ExpandDemo {
   ;
+  private static final Random RANDOM = new Random();
+
   public static void main(String[] args) throws Exception {
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
@@ -33,14 +37,14 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
-    try (AnimationWriter animationWriter = AnimationWriter.of(UserHome.Pictures("r2rrts.gif"), 250)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(HomeDirectory.Pictures("r2rrts.gif"), 250)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.configCoordinateOffset(42, 456);
       owlyFrame.jFrame.setBounds(100, 100, 500, 500);
       int frame = 0;
       while (frame++ < 40 && owlyFrame.jFrame.isVisible()) {
         for (int count = 0; count < 10; ++count)
-          rrts.insertAsNode(randomSampleInterface.randomSample(), 20);
+          rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 20);
         owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
         animationWriter.append(owlyFrame.offscreen());
       }

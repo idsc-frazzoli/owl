@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.PriorityQueue;
 
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.tse2.Tse2CarEntity;
 import ch.ethz.idsc.owl.bot.tse2.Tse2CarFlows;
 import ch.ethz.idsc.owl.bot.tse2.Tse2ComboRegion;
@@ -17,20 +17,18 @@ import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.CustomNodeMeritComparator;
 import ch.ethz.idsc.owl.glc.adapter.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
-import ch.ethz.idsc.owl.glc.core.CTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.DiscretizedLexicographic;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
@@ -65,8 +63,8 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
   }
 
   @Override
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    goal = goal.copy().append(goalVelocity); // FIXME YN What is there to fix?
+  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor _goal) {
+    Tensor goal = VectorQ.requireLength(_goal, 3).copy().append(goalVelocity);
     goalRegion = getGoalRegionWithDistance(goal);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     //  ---
@@ -81,14 +79,10 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
     }
     // ---
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, tse2ComboRegion);
-    CTrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster(), fixedStateIntegrator, controls, plannerConstraint, goalInterface);
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(Tensors.vector(slacks));
-    ((StandardTrajectoryPlanner) trajectoryPlanner).relabelDecision = //
-        new LexicographicRelabelDecision(comparator);
-    Comparator<GlcNode> comparator2 = new CustomNodeMeritComparator(comparator);
-    trajectoryPlanner.queue = new PriorityQueue<>(comparator2);
-    return trajectoryPlanner;
+    return new StandardTrajectoryPlanner( //
+        stateTimeRaster(), fixedStateIntegrator, controls, plannerConstraint, goalInterface, //
+        new LexicographicRelabelDecision(comparator), new CustomNodeMeritComparator(comparator));
   }
 
   /** Sets the cost vector and their respective slacks. Lower indices have higher priority.

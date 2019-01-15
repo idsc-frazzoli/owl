@@ -13,56 +13,56 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 class SpinnerMenu<Type> extends StandardMenu {
-  Map<Type, JMenuItem> myMap = new LinkedHashMap<>();
-  final SpinnerLabel<Type> mySpinnerLabel;
+  private final Map<Type, JMenuItem> map = new LinkedHashMap<>();
+  final SpinnerLabel<Type> spinnerLabel;
   final boolean hover;
 
-  SpinnerMenu(SpinnerLabel<Type> mySpinnerLabel, boolean hover) {
-    this.mySpinnerLabel = mySpinnerLabel;
+  SpinnerMenu(SpinnerLabel<Type> spinnerLabel, boolean hover) {
+    this.spinnerLabel = spinnerLabel;
     this.hover = hover;
   }
 
   @Override
-  protected void design(JPopupMenu myJPopupMenu) {
-    for (Type myType : mySpinnerLabel.list) {
-      JMenuItem myJMenuItem = new JMenuItem(myType.toString());
+  protected void design(JPopupMenu jPopupMenu) {
+    for (Type myType : spinnerLabel.list) {
+      JMenuItem jMenuItem = new JMenuItem(myType.toString());
       if (hover)
-        myJMenuItem.addMouseListener(new MouseAdapter() {
+        jMenuItem.addMouseListener(new MouseAdapter() {
           @Override
-          public void mouseEntered(MouseEvent myMouseEvent) {
+          public void mouseEntered(MouseEvent mouseEvent) {
             setValue(myType);
           }
         });
-      myJMenuItem.addActionListener(myActionEvent -> {
-        if (!myType.equals(mySpinnerLabel.getValue())) // invoke only when different
+      jMenuItem.addActionListener(actionEvent -> {
+        if (!myType.equals(spinnerLabel.getValue())) // invoke only when different
           setValue(myType);
       });
-      myMap.put(myType, myJMenuItem);
-      myJPopupMenu.add(myJMenuItem);
+      map.put(myType, jMenuItem);
+      jPopupMenu.add(jMenuItem);
     }
   }
 
-  private void setValue(Type myType) {
-    mySpinnerLabel.setValueSafe(myType);
-    mySpinnerLabel.reportToAll();
+  private void setValue(Type type) {
+    spinnerLabel.setValueSafe(type);
+    spinnerLabel.reportToAll();
   }
 
-  public void showRight(JLabel myJLabel) {
-    JPopupMenu myJPopupMenu = designShow();
+  public void showRight(JLabel jLabel) {
+    JPopupMenu jPopupMenu = designShow();
     // ---
-    Type myType = mySpinnerLabel.getValue();
+    Type myType = spinnerLabel.getValue();
     if (myType != null) {
       int delta = 2;
-      myMap.get(myType).setBackground(Colors.activeItem); // Colors.gold
-      for (Entry<Type, JMenuItem> myEntry : myMap.entrySet()) {
-        delta += myEntry.getValue().getPreferredSize().height;
-        if (myEntry.getKey().equals(myType)) {
-          delta -= myEntry.getValue().getPreferredSize().height / 2;
+      map.get(myType).setBackground(Colors.ACTIVE_ITEM); // Colors.gold
+      for (Entry<Type, JMenuItem> entry : map.entrySet()) {
+        delta += entry.getValue().getPreferredSize().height;
+        if (entry.getKey().equals(myType)) {
+          delta -= entry.getValue().getPreferredSize().height / 2;
           break;
         }
       }
-      Dimension myDimension = myJLabel.getSize();
-      myJPopupMenu.show(myJLabel, myDimension.width, myDimension.height / 2 - delta);
+      Dimension dimension = jLabel.getSize();
+      jPopupMenu.show(jLabel, dimension.width, dimension.height / 2 - delta);
     }
   }
 }

@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.owl.math.region;
 
 import java.io.IOException;

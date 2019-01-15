@@ -17,6 +17,8 @@ import ch.ethz.idsc.tensor.red.Norm;
  * class is intentionally public */
 public enum RnControls {
   ;
+  /** @param controls
+   * @return max of norm 2 of given controls in R^n */
   public static Scalar maxSpeed(Collection<Flow> controls) {
     return controls.stream() //
         .map(Flow::getU) //

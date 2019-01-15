@@ -40,13 +40,13 @@ class NoiseCircleHelper {
     Tensor orig = tail.state();
     Scalar radius = Norm._2.between(goal, orig).multiply(RealScalar.of(0.5)).add(RealScalar.ONE);
     final Tensor center = Mean.of(Tensors.of(orig, goal));
-    Tensor min = center.map(s -> s.subtract(radius));
-    Tensor max = center.map(s -> s.add(radius));
-    RrtsNodeCollection nc = new RnRrtsNodeCollection(min, max);
+    Tensor min = center.map(scalar -> scalar.subtract(radius));
+    Tensor max = center.map(scalar -> scalar.add(radius));
+    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(min, max);
     // obstacleQuery = StaticHelper.noise1();
     this.obstacleQuery = obstacleQuery;
     // ---
-    Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, obstacleQuery, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(TRANSITION_SPACE, rrtsNodeCollection, obstacleQuery, LengthCostFunction.IDENTITY);
     root = rrts.insertAsNode(orig, 5).get();
     RandomSampleInterface spaceSampler = SphereRandomSample.of(center, radius);
     RandomSampleInterface goalSampler = SphereRandomSample.of(goal, RealScalar.of(0.5));

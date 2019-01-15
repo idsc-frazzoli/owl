@@ -5,13 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.data.Stopwatch;
+import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalar;
-import ch.ethz.idsc.subare.util.GlobalAssert;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Timing;
 import junit.framework.TestCase;
 
 public class RLQueueTest extends TestCase {
@@ -58,9 +58,9 @@ public class RLQueueTest extends TestCase {
       GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
       rlQueue.add(node);
     }
-    Stopwatch sw = Stopwatch.started();
+    Timing timing = Timing.started();
     rlQueue.poll();
-    System.out.println(sw.display_seconds());
+    System.out.println(timing.seconds());
   }
 
   public void testCollectionMin() {

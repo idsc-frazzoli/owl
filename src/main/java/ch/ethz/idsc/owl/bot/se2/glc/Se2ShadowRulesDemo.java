@@ -22,7 +22,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.mapping.ShadowMapDirected;
 import ch.ethz.idsc.owl.mapping.ShadowMapSimulator;
 import ch.ethz.idsc.owl.mapping.ShadowMapSpherical;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
@@ -57,7 +57,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     GokartEntity gokartEntity = new GokartEntity(stateTime) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 6));
+        return new ConeRegion(goal, Degree.of(30));
       }
     };
     // ---
@@ -73,8 +73,8 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     PlannerConstraint regionConstraint = createConstraint(imageRegionCar);
     constraintCollection.add(regionConstraint);
     //
-    ImageRender imgRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
-    owlyAnimationFrame.addBackground(imgRender);
+    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    owlyAnimationFrame.addBackground(imageRender);
     // Lidar
     LidarEmulator lidarEmulator = new LidarEmulator( //
         LIDAR_RAYTRACER, gokartEntity::getStateTimeNow, lidarRay);
@@ -117,8 +117,7 @@ public class Se2ShadowRulesDemo extends Se2CarDemo {
     owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.jFrame.addWindowListener(new WindowAdapter() {
       @Override
-      public void windowClosed(WindowEvent e) {
-        System.out.println("window was closed. terminating...");
+      public void windowClosed(WindowEvent windowEvent) {
         simPedLegal.flagShutdown();
         simPedIllegal.flagShutdown();
         simCarLegal.flagShutdown();

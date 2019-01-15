@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.sophus.group.LieIntegrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -24,7 +25,7 @@ public enum Se2CarLieIntegrator implements LieIntegrator {
     Scalar al = g.Get(2);
     Scalar be = x.Get(2);
     if (Scalars.isZero(be))
-      return g.extract(0, 2).add(RotationMatrix.of(al).dot(x.extract(0, 2))).append(al);
+      return Extract2D.FUNCTION.apply(g).add(RotationMatrix.of(al).dot(Extract2D.FUNCTION.apply(x))).append(al);
     Scalar ra = al.add(be);
     Scalar sd = Sin.FUNCTION.apply(ra).subtract(Sin.FUNCTION.apply(al));
     Scalar cd = Cos.FUNCTION.apply(ra).subtract(Cos.FUNCTION.apply(al));

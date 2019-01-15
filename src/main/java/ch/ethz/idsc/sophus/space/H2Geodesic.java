@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.ArcTanh;
 import ch.ethz.idsc.tensor.sca.Cosh;
@@ -27,13 +28,13 @@ public enum H2Geodesic implements GeodesicInterface {
    * 
    * @throws Exception if input is not valid */
   @Override // from GeodesicInterface
-  public Tensor split(Tensor p, Tensor q, Scalar t) {
+  public Tensor split(Tensor p, Tensor q, Scalar scalar) {
     Scalar p1 = p.Get(0);
     Scalar p2 = Sign.requirePositive(p.Get(1));
     Scalar q1 = q.Get(0);
     Scalar q2 = Sign.requirePositive(q.Get(1));
     if (p1.equals(q1)) // when p == q or p == -q
-      return Tensors.of(p1, height(p2, q2, t));
+      return Tensors.of(p1, height(p2, q2, scalar));
     Scalar pq = p1.subtract(q1);
     Scalar c1 = p.dot(p).subtract(q.dot(q)).Get().divide(pq.add(pq));
     Scalar c2 = Sqrt.FUNCTION.apply(AbsSquared.FUNCTION.apply(p1.subtract(c1)).add(p2.multiply(p2)));
@@ -41,13 +42,18 @@ public enum H2Geodesic implements GeodesicInterface {
     if (NumberQ.of(c3)) {
       Scalar c4 = ArcTanh.FUNCTION.apply(q1.subtract(c1).divide(c2)).subtract(c3);
       return Tensors.of( //
-          c1.add(c2.multiply(Tanh.FUNCTION.apply(c3.add(c4.multiply(t))))), //
-          c2.divide(Cosh.FUNCTION.apply(c3.add(c4.multiply(t)))));
+          c1.add(c2.multiply(Tanh.FUNCTION.apply(c3.add(c4.multiply(scalar))))), //
+          c2.divide(Cosh.FUNCTION.apply(c3.add(c4.multiply(scalar)))));
     }
-    return Tensors.of(RnGeodesic.INSTANCE.split(p1, q1, t), height(p2, q2, t));
+    return Tensors.of(RnGeodesic.INSTANCE.split(p1, q1, scalar), height(p2, q2, scalar));
   }
 
   private static Scalar height(Scalar p2, Scalar q2, Scalar t) {
     return Power.function(t).apply(q2.divide(p2)).multiply(p2);
+  }
+
+  @Override
+  public ScalarTensorFunction curve(Tensor p, Tensor q) {
+    return scalar -> split(p, q, scalar);
   }
 }

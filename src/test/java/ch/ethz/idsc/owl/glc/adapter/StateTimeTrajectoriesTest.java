@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.adapter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,5 +35,14 @@ public class StateTimeTrajectoriesTest extends TestCase {
     Tensor deltaTimes = StateTimeTrajectories.deltaTimes(glcNode, trajectory);
     assertEquals(deltaTimes, Tensors.fromString("{1[s], 3[s]}"));
     assertTrue(ExactScalarQ.all(deltaTimes));
+  }
+
+  public void testDeltatime() {
+    GlcNode glcNode = GlcNode.of(null, new StateTime(Tensors.vector(1, 2), RealScalar.ONE), RealScalar.ZERO, RealScalar.ZERO);
+    List<StateTime> trajectory = new ArrayList<>();
+    trajectory.add(new StateTime(Tensors.vector(0, 5), RealScalar.of(3)));
+    trajectory.add(new StateTime(Tensors.vector(5, 5), RealScalar.of(4)));
+    Tensor dts = StateTimeTrajectories.deltaTimes(glcNode, trajectory);
+    assertEquals(dts, Tensors.vector(2, 1));
   }
 }

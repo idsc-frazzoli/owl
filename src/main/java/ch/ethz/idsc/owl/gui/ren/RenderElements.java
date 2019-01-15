@@ -9,6 +9,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
+import ch.ethz.idsc.owl.glc.core.CTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -21,9 +22,17 @@ public enum RenderElements {
   ;
   public static Collection<RenderInterface> create(TrajectoryPlanner trajectoryPlanner) {
     List<RenderInterface> list = new LinkedList<>();
-    list.add(GridRender.INSTANCE);
-    // list.add(new EtaRender(trajectoryPlanner.getEta()));
-    // list.add(new DomainRender(trajectoryPlanner.getDomainMap(), trajectoryPlanner.getEta()));
+    list.add(AxesRender.INSTANCE);
+    // ---
+    if (trajectoryPlanner instanceof CTrajectoryPlanner) {
+      CTrajectoryPlanner cTrajectoryPlanner = (CTrajectoryPlanner) trajectoryPlanner;
+      StateTimeRaster stateTimeRaster = cTrajectoryPlanner.stateTimeRaster();
+      if (stateTimeRaster instanceof EtaRaster) {
+        EtaRaster etaRaster = (EtaRaster) stateTimeRaster;
+        list.add(new EtaRender(etaRaster.eta()));
+        list.add(new DomainRender(trajectoryPlanner.getDomainMap(), etaRaster.eta()));
+      }
+    }
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
     list.add(new TreeRender().setCollection(trajectoryPlanner.getDomainMap().values()));
     // {
@@ -67,7 +76,7 @@ public enum RenderElements {
   public static Collection<RenderInterface> create( //
       Collection<? extends StateCostNode> collection, TransitionRegionQuery transitionRegionQuery) {
     List<RenderInterface> list = new LinkedList<>();
-    list.add(GridRender.INSTANCE);
+    list.add(AxesRender.INSTANCE);
     if (transitionRegionQuery instanceof StateTimeCollector)
       list.add(new ObstacleRender(((StateTimeCollector) transitionRegionQuery).getMembers()));
     list.add(new TreeRender().setCollection(collection));

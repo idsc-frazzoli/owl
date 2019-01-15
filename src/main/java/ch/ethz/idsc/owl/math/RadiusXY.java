@@ -12,8 +12,9 @@ public enum RadiusXY {
    * @return value
    * @throws Exception if the first two entries of given vector are not the same */
   public static Scalar requireSame(Tensor vector) {
-    if (vector.Get(0).equals(vector.Get(1)))
-      return vector.Get(0);
+    Scalar scalar = vector.Get(0);
+    if (scalar.equals(vector.get(1)))
+      return scalar;
     throw TensorRuntimeException.of(vector);
   }
 }

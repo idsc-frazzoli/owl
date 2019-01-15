@@ -35,18 +35,18 @@ public class Se2ControlsTest extends TestCase {
 
   public void testMaxRate() {
     List<Flow> list = new ArrayList<>();
-    for (Tensor angle : Subdivide.of(RealScalar.of(-.1), RealScalar.of(.3), 5))
+    for (Tensor angle : Subdivide.of(RealScalar.of(-.1), RealScalar.of(0.3), 5))
       list.add(CarHelper.singleton(RealScalar.of(2), angle));
     Scalar maxR = Se2Controls.maxTurning(list);
-    assertEquals(maxR, RealScalar.of(.6));
+    assertEquals(maxR, RealScalar.of(0.6));
   }
 
   public void testMaxRate2() {
     List<Flow> list = new ArrayList<>();
-    for (Tensor angle : Subdivide.of(RealScalar.of(-.3), RealScalar.of(.1), 5))
+    for (Tensor angle : Subdivide.of(RealScalar.of(-.3), RealScalar.of(0.1), 5))
       list.add(CarHelper.singleton(RealScalar.of(2), angle));
     Scalar maxR = Se2Controls.maxTurning(list);
-    assertEquals(maxR, RealScalar.of(.6));
+    assertEquals(maxR, RealScalar.of(0.6));
   }
 
   public void testUnits() {

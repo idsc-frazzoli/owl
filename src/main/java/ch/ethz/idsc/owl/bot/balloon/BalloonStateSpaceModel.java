@@ -50,6 +50,8 @@ import ch.ethz.idsc.tensor.sca.Clip;
     Scalar theta = x.Get(3);
     // System.out.println("theta = " + theta);
     /* TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
+    // <<<<<<< HEAD
+    // System.out.println(u.Get(0));
     // =======
     /* TODO ANDRE change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     /** unknown perturbation due to vertical velocity of wind */

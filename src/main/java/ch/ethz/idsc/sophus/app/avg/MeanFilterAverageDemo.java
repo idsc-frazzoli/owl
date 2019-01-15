@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
 
   MeanFilterAverageDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, false, GeodesicDisplays.ALL);
     // ---
     spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
     spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
@@ -56,8 +56,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
           GeodesicCenter.of(SymGeodesic.INSTANCE, smoothingKernel);
       Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
       Tensor tensor = tensorUnaryOperator.apply(vector);
-      SymLinkBuilder symLinkBuilder = new SymLinkBuilder(control);
-      SymLink symLink = symLinkBuilder.build((SymScalar) tensor);
+      SymLink symLink = SymLinkBuilder.of(control, (SymScalar) tensor);
       GeodesicAverageRender.of(geodesicDisplay, symLink).render(geometricLayer, graphics);
       xya = symLink.getPosition(geodesicDisplay.geodesicInterface());
     }

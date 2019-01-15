@@ -9,10 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.ani.api.PolicyEntity;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
-import ch.ethz.idsc.owl.gui.ani.PolicyEntity;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -45,7 +45,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
       new Color(192, 255, 192), //
       new Color(192, 192, 255) };
   /** modified in constructor */
-  private final Tensor SHAPE = CirclePoints.of(5).multiply(RealScalar.of(.1));
+  private final Tensor SHAPE = CirclePoints.of(5).multiply(RealScalar.of(0.1));
   // ---
   private final Tensor start;
   private final SarsaType sarsaType;
@@ -74,7 +74,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
         Subdivide.of(Degree.of(+50), Degree.of(-50), carDiscreteModel.resolution - 1), //
         Subdivide.of(0, 5, 23));
     lidarEmulator = new LidarEmulator(LidarRaytracer, this::getStateTimeNow, raytraceQuery);
-    SHAPE.set(Tensors.vector(.2, 0), 0);
+    SHAPE.set(Tensors.vector(0.2, 0), 0);
     reset(RealScalar.ZERO);
   }
 
@@ -84,7 +84,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     prev_reward = null;
     if (!episodeLog.isEmpty()) {
       // System.out.println("learn " + episodeLog.size());
-      Sarsa sarsa = sarsaType.supply(carDiscreteModel, learningRate, qsa, sac, policy);
+      Sarsa sarsa = sarsaType.sarsa(carDiscreteModel, learningRate, qsa, sac, policy);
       int nstep = 50;
       Deque<StepInterface> deque = new LinkedList<>(episodeLog.subList(Math.max(1, episodeLog.size() - nstep), episodeLog.size()));
       while (!deque.isEmpty()) {

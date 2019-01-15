@@ -32,6 +32,6 @@ public class Se2ComboRegionTest extends TestCase {
     assertEquals(se2ComboRegion.d_angle(Tensors.vector(0, 0, 1.25)), DoubleScalar.of(0.25));
     assertEquals(se2ComboRegion.d_angle(Tensors.vector(0, 0, -1.5)), DoubleScalar.of(0.5));
     assertEquals(se2ComboRegion.d_xy(Tensors.vector(-1, 0, 0.00)), RealScalar.ONE);
-    assertTrue(Chop._10.close(se2ComboRegion.d_xy(Tensors.vector(0, -1, 0.00)), RealScalar.of(Math.sqrt(0.5))));
+    Chop._10.requireClose(se2ComboRegion.d_xy(Tensors.vector(0, -1, 0.00)), RealScalar.of(Math.sqrt(0.5)));
   }
 }

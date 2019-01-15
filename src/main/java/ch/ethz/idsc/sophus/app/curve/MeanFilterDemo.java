@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -31,7 +30,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   private final JToggleButton jToggleLine = new JToggleButton("line");
 
   MeanFilterDemo() {
-    super(true, GeodesicDisplays.ALL);
+    super(true, true, GeodesicDisplays.ALL);
     {
       Tensor blub = Tensors.fromString("{{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
@@ -66,7 +65,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     Tensor refined = geodesicMeanFilter.apply(control);
     Tensor curve = Nest.of(BSpline4CurveSubdivision.of(geodesicDisplay.geodesicInterface())::string, refined, 7);
     Tensor render = Tensor.of(curve.stream().map(geodesicDisplay::toPoint));
-    new CurveRender(render, false, curvatureButton().isSelected()).render(geometricLayer, graphics);
+    renderCurve(render, false, geometricLayer, graphics);
     renderPoints(geometricLayer, graphics, refined);
   }
 

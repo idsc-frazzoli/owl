@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
@@ -38,7 +38,7 @@ public class Se2Letter3Demo extends Se2CarDemo {
         CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-        return new ConeRegion(goal, RealScalar.of(Math.PI / 6));
+        return new ConeRegion(goal, Degree.of(30));
       }
     };
     carEntity.extraCosts.add(r2ImageRegionWrap.costFunction());

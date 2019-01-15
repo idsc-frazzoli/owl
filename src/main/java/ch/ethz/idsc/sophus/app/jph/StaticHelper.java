@@ -4,14 +4,14 @@ package ch.ethz.idsc.sophus.app.jph;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 
 enum StaticHelper {
   ;
   static void ephemeralDubins(String title, Tensor init, Tensor move) {
-    File dir = UserHome.file("Projects/ephemeral/src/main/resources/geometry/dubins/" + title);
+    File dir = HomeDirectory.file("Projects", "ephemeral", "src", "main", "resources", "geometry", "dubins", title);
     dir.mkdir();
     if (dir.isDirectory())
       try {
@@ -25,7 +25,7 @@ enum StaticHelper {
   }
 
   static void ephemeralSe2(String title, Tensor control) {
-    File dir = UserHome.file("Projects/ephemeral/src/main/resources/geometry/se2");
+    File dir = HomeDirectory.file("Projects", "ephemeral", "src", "main", "resources", "geometry", "se2");
     if (dir.isDirectory())
       try {
         Put.of(new File(dir, title + ".mathematica"), control);

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.owl.math.noise.ContinuousNoise;
 import ch.ethz.idsc.owl.math.noise.ContinuousNoiseUtils;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
@@ -29,7 +30,7 @@ public class R2xTNoiseStateTimeRegion implements Region<StateTime>, Serializable
 
   @Override // from Region
   public boolean isMember(StateTime stateTime) {
-    Tensor tensor = stateTime.state().extract(0, 2).append(stateTime.time());
+    Tensor tensor = Extract2D.FUNCTION.apply(stateTime.state()).append(stateTime.time());
     return Scalars.lessThan(threshold, CONTINUOUS_NOISE.apply(tensor));
   }
 }

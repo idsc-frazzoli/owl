@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.data.Stopwatch;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -37,6 +36,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Timing;
 
 /** position and velocity control in 2D with friction */
 /* package */ enum Rice2dDemo {
@@ -69,12 +69,12 @@ import ch.ethz.idsc.tensor.Tensors;
   // Hint: ensure that goal region contains at least 1 domain etc.
   public static void main(String[] args) {
     TrajectoryPlanner trajectoryPlanner = createInstance();
-    Stopwatch stopwatch = Stopwatch.started();
+    Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);
     // 550 1.6898229210000002 without parallel integration of trajectories
     // 555 1.149214356 with parallel integration of trajectories
-    System.out.println(glcExpand.getExpandCount() + " " + stopwatch.display_seconds());
+    System.out.println(glcExpand.getExpandCount() + " " + timing.seconds());
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     if (optional.isPresent()) {

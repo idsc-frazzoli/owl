@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.RadiusXY;
-import ch.ethz.idsc.owl.math.planar.ConeRegion;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -23,7 +24,7 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
    * @throws Exception if first two entries of radiusVector are different */
   public static Se2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new Se2ComboRegion( //
-        new SphericalRegion(goal.extract(0, 2), RadiusXY.requireSame(radiusVector)), //
+        new SphericalRegion(Extract2D.FUNCTION.apply(goal), RadiusXY.requireSame(radiusVector)), //
         new So2Region(goal.Get(2), radiusVector.Get(2)));
   }
 
@@ -51,7 +52,7 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
    * @param xya == {px, py, angle}
    * @return distance of {px, py} from spherical region */
   public final Scalar d_xy(Tensor xya) {
-    return regionWithDistance.distance(xya.extract(0, 2));
+    return regionWithDistance.distance(Extract2D.FUNCTION.apply(xya));
   }
 
   /** function is used to compute heuristic in {@link Se2MinTimeGoalManager}
@@ -65,6 +66,6 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
   @Override // from Region
   public boolean isMember(Tensor xya) {
     // only the first three entries of xya are considered
-    return regionWithDistance.isMember(xya.extract(0, 2)) && so2Region.isMember(xya.get(2));
+    return regionWithDistance.isMember(Extract2D.FUNCTION.apply(xya)) && so2Region.isMember(xya.get(2));
   }
 }

@@ -16,10 +16,10 @@ public class LexicographicRelabelDecision implements RelabelDecision {
     this.comparator = comparator;
   }
 
-  @Override // from RelabelDecisionInterface
+  @Override // from RelabelDecision
   public boolean doRelabel(GlcNode newNode, GlcNode oldNode) {
     return comparator.compare( //
         VectorScalars.vector(newNode.merit()), //
-        VectorScalars.vector(oldNode.merit())) == -1;
+        VectorScalars.vector(oldNode.merit())) < 0;
   }
 }

@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,7 +34,7 @@ public class GoalRender implements RenderInterface {
     if (Objects.isNull(collection))
       return;
     if (CONVEX) { // draw convex hull of goal points
-      Tensor points = Tensor.of(collection.stream().map(StateTime::state).map(x -> x.extract(0, 2)));
+      Tensor points = Tensor.of(collection.stream().map(StateTime::state).map(Extract2D.FUNCTION));
       if (2 < points.length()) {
         graphics.setColor(COLOR);
         Path2D path2D = geometricLayer.toPath2D(ConvexHull.of(points));

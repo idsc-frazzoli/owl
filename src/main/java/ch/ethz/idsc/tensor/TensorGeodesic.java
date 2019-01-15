@@ -7,6 +7,6 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 public interface TensorGeodesic {
   /** @param p
    * @param q
-   * @return parametric curve that gives p for input 0 and q for intput 1 */
+   * @return parametric curve that gives p for input 0 and q for input 1 */
   ScalarTensorFunction curve(Tensor p, Tensor q);
 }

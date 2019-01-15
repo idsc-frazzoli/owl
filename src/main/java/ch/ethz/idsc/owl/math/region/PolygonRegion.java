@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.math.region;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.owl.math.planar.Polygons;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** check if input tensor is inside a polygon in 2D */
@@ -17,7 +16,7 @@ public class PolygonRegion implements Region<Tensor>, Serializable {
 
   @Override // from Region
   public boolean isMember(Tensor tensor) {
-    // TODO depending on complexity of given polygon, prepend AABB check
+    // LONGTERM depending on complexity of given polygon, prepend AABB check
     return Polygons.isInside(polygon, tensor);
   }
 

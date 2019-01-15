@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.balloon;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.adapter.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
@@ -15,7 +16,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -54,10 +54,6 @@ public class BalloonEntityTest extends TestCase {
   public void testDelayHint() {
     BalloonEntity balloonEntity = createEntity();
     assertEquals(balloonEntity.delayHint(), RealScalar.of(2));
-  }
-
-  public void testRender() {
-    // TODO ANDRE
   }
 
   public void testCreateTrajectoryPlanner() {

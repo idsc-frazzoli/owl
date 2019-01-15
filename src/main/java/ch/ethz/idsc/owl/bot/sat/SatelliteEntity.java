@@ -5,24 +5,25 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Collection;
 
+import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
+import ch.ethz.idsc.owl.ani.api.AbstractCircularEntity;
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ani.AbstractCircularEntity;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
-import ch.ethz.idsc.owl.math.map.Se2Utils;
-import ch.ethz.idsc.owl.math.state.FallbackControl;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
+import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -65,7 +66,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     StateIntegrator stateIntegrator = //
         FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
-    Tensor center = Join.of(goal.extract(0, 2), Array.zeros(2));
+    Tensor center = Join.of(Extract2D.FUNCTION.apply(goal), Array.zeros(2));
     GoalInterface goalInterface = SatelliteGoalManager.create( //
         center, Tensors.vector(0.5, 0.5, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     StateTimeRaster stateTimeRaster = EtaRaster.state(PARTITION_SCALE);

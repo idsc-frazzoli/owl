@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.rn.RnMinTimeGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
@@ -21,7 +22,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.DiscretizedLexicographic;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
-import ch.ethz.idsc.owl.math.state.TrajectoryControl;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -34,22 +34,18 @@ import ch.ethz.idsc.tensor.alg.Array;
   @Override
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     System.out.println("goal=" + goal);
-    Collection<Flow> controls = createControls(); // TODO design no good
+    Collection<Flow> controls = createControls(); // LONGTERM design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface minTimeGoal = RnMinTimeGoalManager.create(goalRegion, controls); //
     List<CostFunction> costs = new ArrayList<>();
     getPrimaryCost().map(costs::add);
     costs.add(minTimeGoal);
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, goalRegion);
-    StandardTrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, //
-        plannerConstraint, goalInterface);
-    //  ---
     Tensor slack = Array.zeros(costs.size()); // slack equal to zero for now
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(slack);
-    trajectoryPlanner.relabelDecision = new LexicographicRelabelDecision(comparator);
-    // ---
-    return trajectoryPlanner;
+    return new StandardTrajectoryPlanner( //
+        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, //
+        plannerConstraint, goalInterface, new LexicographicRelabelDecision(comparator));
   }
 
   public Optional<CostFunction> getPrimaryCost() {

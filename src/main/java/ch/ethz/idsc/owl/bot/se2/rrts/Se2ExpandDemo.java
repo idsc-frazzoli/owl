@@ -1,7 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import ch.ethz.idsc.owl.bot.util.UserHome;
+import java.util.Random;
+
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
@@ -20,21 +21,24 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum Se2ExpandDemo {
   ;
+  private static final Random RANDOM = new Random();
+
   public static void main(String[] args) throws Exception {
     int wid = 7;
     Tensor min = Tensors.vector(0, 0, 0);
     Tensor max = Tensors.vector(wid, wid, 2 * Math.PI);
     TransitionSpace transitionSpace = new Se2TransitionSpace(RealScalar.ONE);
-    RrtsNodeCollection rrtsNodeCollection = new ExhaustiveNodeCollection(transitionSpace);
+    RrtsNodeCollection rrtsNodeCollection = ExhaustiveNodeCollection.of(transitionSpace);
     TransitionRegionQuery transitionRegionQuery = EmptyTransitionRegionQuery.INSTANCE;
     // ---
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(min, max);
-    try (AnimationWriter animationWriter = AnimationWriter.of(UserHome.Pictures("se2rrts.gif"), 250)) {
+    try (AnimationWriter animationWriter = AnimationWriter.of(HomeDirectory.Pictures("se2rrts.gif"), 250)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.configCoordinateOffset(42, 456);
       owlyFrame.jFrame.setBounds(100, 100, 500, 500);
@@ -42,7 +46,7 @@ import ch.ethz.idsc.tensor.io.AnimationWriter;
       int frame = 0;
       while (frame++ < 40 && owlyFrame.jFrame.isVisible()) {
         for (int count = 0; count < 5; ++count)
-          rrts.insertAsNode(randomSampleInterface.randomSample(), 20);
+          rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 20);
         owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
         animationWriter.append(owlyFrame.offscreen());
       }

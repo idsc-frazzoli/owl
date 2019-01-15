@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.owl.math.map.Se2Utils;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;

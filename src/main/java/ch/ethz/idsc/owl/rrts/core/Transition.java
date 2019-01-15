@@ -17,10 +17,6 @@ public interface Transition {
    * @see LengthCostFunction */
   Scalar length();
 
-  /** @param scalar in the interval [0, length()]
-   * @return point on transition at given parameter value */
-  Tensor splitAt(Scalar scalar);
-
   /** @param ofs is non-negative and strictly less than ds
    * @param ds
    * @return */

@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.RadiusXY;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -24,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   // TODO implementation assumes max speed == 1
   public Rice2GoalManager(EllipsoidRegion ellipsoidRegion) {
     super(new TimeInvariantRegion(ellipsoidRegion));
-    center = ellipsoidRegion.center();
+    center = Extract2D.FUNCTION.apply(ellipsoidRegion.center());
     this.radius = RadiusXY.requireSame(ellipsoidRegion.radius()); // x-y radius have to be equal
   }
 
@@ -35,9 +36,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    Tensor pc = x.extract(0, 2);
-    Tensor pd = center.extract(0, 2);
-    Scalar mindist = Ramp.of(Norm._2.between(pc, pd).subtract(radius));
+    Scalar mindist = Ramp.of(Norm._2.between(Extract2D.FUNCTION.apply(x), center).subtract(radius));
     return mindist; // .divide(1 [m/s]), since max velocity == 1 => division is obsolete
   }
 }
