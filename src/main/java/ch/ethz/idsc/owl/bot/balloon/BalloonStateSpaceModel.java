@@ -49,17 +49,16 @@ import ch.ethz.idsc.tensor.sca.Clip;
     // System.out.println("vel = " + vel);
     Scalar theta = x.Get(3);
     // System.out.println("theta = " + theta);
+    /* TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     // <<<<<<< HEAD
     // System.out.println(u.Get(0));
     // =======
     /* TODO ANDRE change to something similar as in the DeltaDemo (imageGradientInterpolation) */
-    // >>>>>>> 2b08fc31f538326c38509d49a7c3e25ce86f853b
     /** unknown perturbation due to vertical velocity of wind */
     Scalar w = RealScalar.ONE.negate();// of( //
     // 2 * SimplexContinuousNoise.at(x1.number().doubleValue(), y.number().doubleValue(), vel.number().doubleValue(), theta.number().doubleValue()));
     /* unknown horizontal movement due to horizontal winds */
-    // System.out.println("w = " + w);
-    Scalar x_dot = RealScalar.ZERO;// verticalWinds(y);
+    Scalar x_dot = horizontalWinds(y);
     /* if stateSpaceModel is instantiated with units w and x_dot are given the necessary units,
      * [x]= m*s^-1 and [w] = m*s^-1 */
     if (hasUnit) {
@@ -69,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
     return Tensors.of( //
         x_dot, //
         vel, //
-        vel.negate().divide(tau2).add(theta.multiply(sigma)).add(w.divide(tau2)), //
+        vel.negate().divide(tau2).add(theta.multiply(sigma)).add(w.divide(tau2)).subtract(RealScalar.of(1)), //
         theta.negate().divide(tau1).add(u.Get(0)));
   }
 
@@ -79,6 +78,14 @@ import ch.ethz.idsc.tensor.sca.Clip;
     return altitude_clip.isInside(y) //
         ? RealScalar.of(5)
         : RealScalar.of(-5);
+  }
+
+  public Scalar horizontalWinds(Scalar y) {
+    Scalar changeOfWindDirection = RealScalar.of(100);
+    Clip altitude_clip = Clip.function(changeOfWindDirection.zero(), changeOfWindDirection);
+    return altitude_clip.isInside(y) //
+        ? y.negate().multiply(RealScalar.of(0.01))
+        : y.multiply(RealScalar.of(0.01));
   }
 
   @Override
