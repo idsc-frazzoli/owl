@@ -3,13 +3,14 @@ package ch.ethz.idsc.sophus.group;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** element of n-dimensional Scaling and Translations group
  * 
- * <p>the neutral element is {{1, ..., 1}, {0, ..., 0}}
+ * <p>the neutral element is {{1}, {0, ..., 0}}
  * 
  * <p>Reference:
  * Bi-invariant Means in Lie Groups.
@@ -17,18 +18,18 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache
  * pages 27-31 */
 public class StGroupElement implements LieGroupElement, Serializable {
-  private final Tensor x;
+  private final Scalar x;
   private final Tensor y;
 
   /** @param xy of the form {{x1, ...., xn}, {y1, ..., yn}} */
   // Fehlt requirement für x grösser 0?
-  public StGroupElement(Tensor xya) {
+  public StGroupElement(Tensor xy) {
     this( //
-        Sign.requirePositive(xya.Get(0)), // Hier stimmt etwas mit dem dimensionen vllt nicht. nur Skalare möglich?
-        xya.Get(1)); //
+        Sign.requirePositive(xy.Get(0)), // Hier stimmt etwas mit dem dimensionen vllt nicht. nur Skalare möglich?
+        xy.Get(1)); //
   }
 
-  private StGroupElement(Tensor x, Tensor y) {
+  private StGroupElement(Scalar x, Tensor y) {
     this.x = x;
     this.y = y;
   }
@@ -36,8 +37,8 @@ public class StGroupElement implements LieGroupElement, Serializable {
   @Override // from LieGroupElement
   public StGroupElement inverse() {
     return new StGroupElement( //
-        x.Get().reciprocal(), //
-        y.negate().divide(x.Get()));
+        x.reciprocal(),//
+        y.negate().pmul(x.map(Scalar::reciprocal)));
   }
 
   @Override // from LieGroupElement
