@@ -1,12 +1,13 @@
 // code by astoll
-package ch.ethz.idsc.owl.math.order;
+package ch.ethz.idsc.owl.bot.jass;
 
-import java.util.Optional;
+import ch.ethz.idsc.owl.math.order.PartialComparator;
+import ch.ethz.idsc.owl.math.order.PartialComparison;
 
 /** Creates a STRICT partial order for cards of deck according to the rules of "Jassen"
  * 
  * @author astoll */
-public enum JassCardsPartialOrdering implements PartialOrdering<JassCards> {
+public enum JassCardPartialComparator implements PartialComparator<JassCard> {
   INSTANCE;
   /** Compares cards according to their value in the traditional Swiss card game of Jassen
    * 
@@ -40,31 +41,29 @@ public enum JassCardsPartialOrdering implements PartialOrdering<JassCards> {
    * </tr>
    * </table> */
   @Override
-  public Optional<Integer> compare(JassCards a, JassCards b) {
-    a.CheatChecker(b);
+  public PartialComparison compare(JassCard a, JassCard b) {
+    a.cheatChecker(b);
     boolean aIsTrumpf = a.isTrumpf;
     boolean bIsTrumpf = b.isTrumpf;
     if (aIsTrumpf && bIsTrumpf) {
-      if (a.cardType.compareTo(b.cardType) > 0) {
-        return Optional.of(1);
-      } else if (a.cardType.compareTo(b.cardType) < 0) {
-        return Optional.of(-1);
-      }
-    } else if (aIsTrumpf ^ bIsTrumpf) {
-      if (aIsTrumpf) {
-        return Optional.of(1); // a > b
-      } else {
-        return Optional.of(-1); // a < b
-      }
-    } else {
-      if (a.color.equals(b.color)) { // comparable
-        if (a.cardType.compareTo(b.cardType) > 0) {
-          return Optional.of(1);
-        } else if (a.cardType.compareTo(b.cardType) < 0) {
-          return Optional.of(-1);
-        }
-      }
+      if (a.type.compareTo(b.type) > 0)
+        return PartialComparison.GREATER_THAN;
+      else //
+      if (a.type.compareTo(b.type) < 0)
+        return PartialComparison.LESS_THAN;
+    } else //
+    if (aIsTrumpf ^ bIsTrumpf) {
+      if (aIsTrumpf)
+        return PartialComparison.GREATER_THAN; // a > b
+      return PartialComparison.LESS_THAN; // a < b
+    } else //
+    if (a.color.equals(b.color)) { // comparable
+      if (a.type.compareTo(b.type) > 0)
+        return PartialComparison.GREATER_THAN;
+      else //
+      if (a.type.compareTo(b.type) < 0)
+        return PartialComparison.LESS_THAN;
     }
-    return Optional.empty(); // incomparable
+    return PartialComparison.INCOMPARABLE; // incomparable
   }
 }
