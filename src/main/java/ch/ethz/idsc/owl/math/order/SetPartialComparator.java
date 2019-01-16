@@ -1,14 +1,14 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
-import java.util.Optional;
 import java.util.Set;
 
 /** Creates partial ordering of sets.
- * <p>For two sets A & B, A < B is satisfied if A is a subset of B.
+ * 
+ * <p>For two sets A and B, A < B is satisfied if A is a subset of B.
  * 
  * @author astoll */
-public enum SetPartialOrdering implements PartialOrdering<Set<?>> {
+public enum SetPartialComparator implements PartialComparator<Set<?>> {
   INSTANCE;
   /** Compares to sets according to their elements
    * 
@@ -35,19 +35,16 @@ public enum SetPartialOrdering implements PartialOrdering<Set<?>> {
    * </tr>
    * </table> */
   @Override
-  public Optional<Integer> compare(Set<?> a, Set<?> b) {
+  public PartialComparison compare(Set<?> a, Set<?> b) {
     boolean aInB = b.containsAll(a);
     boolean bInA = a.containsAll(b);
     boolean aEqualsB = aInB && bInA;
-    if (aEqualsB) {
-      return Optional.of(0);
-    }
-    if (aInB) {
-      return Optional.of(-1);
-    }
-    if (bInA) {
-      return Optional.of(1);
-    }
-    return Optional.empty();
+    if (aEqualsB)
+      return PartialComparison.EQUALS;
+    if (aInB)
+      return PartialComparison.LESS_THAN; // "a is less than b"
+    if (bInA)
+      return PartialComparison.GREATER_THAN;
+    return PartialComparison.INCOMPARABLE;
   }
 }
