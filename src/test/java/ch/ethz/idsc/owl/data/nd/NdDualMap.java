@@ -14,18 +14,18 @@ public class NdDualMap<V> implements NdMap<V> {
     ndListMap = new NdListMap<>();
   }
 
-  @Override
+  @Override // from NdMap
   public void add(Tensor location, V value) {
     ndTreeMap.add(location, value);
     ndListMap.add(location, value);
   }
 
-  @Override
+  @Override // from NdMap
   public int size() {
     return ndTreeMap.size();
   }
 
-  @Override
+  @Override // from NdMap
   public NdCluster<V> buildCluster(NdCenterInterface ndCenter, int limit) {
     NdCluster<V> c1 = ndTreeMap.buildCluster(ndCenter, limit);
     NdCluster<V> c2 = ndListMap.buildCluster(ndCenter, limit);
@@ -41,9 +41,14 @@ public class NdDualMap<V> implements NdMap<V> {
     return c1;
   }
 
-  @Override
+  @Override // from NdMap
   public void clear() {
     ndTreeMap.clear();
     ndListMap.clear();
+  }
+
+  @Override // from NdMap
+  public boolean isEmpty() {
+    return size() == 0;
   }
 }
