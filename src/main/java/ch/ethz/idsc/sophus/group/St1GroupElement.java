@@ -1,12 +1,12 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
-import java.io.Serializable;import ch.ethz.idsc.tensor.RealScalar;
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** element of 1-dimensional Scaling and Translations group
  * 
@@ -17,38 +17,36 @@ import ch.ethz.idsc.tensor.sca.Abs;
  * Application to Left-invariant Polyaffine Transformations.
  * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache
  * pages 27-31 */
-
 public class St1GroupElement implements LieGroupElement, Serializable {
   private final Scalar lambda;
   private final Scalar t;
 
-  /** @param lambdat of the form {lambda, t}} */
-  
-  public St1GroupElement(Tensor lambdat) {
+  /** @param lambda_t of the form {lambda, t}}
+   * @throws Exception if lambda is not positive */
+  public St1GroupElement(Tensor lambda_t) {
     this( //
-        lambdat.Get(0), //
-        lambdat.Get(1)); //
+        lambda_t.Get(0), //
+        lambda_t.Get(1));
   }
-  
+
   private St1GroupElement(Scalar lambda, Scalar t) {
-    this.lambda = lambda;
-    this.t= t;
+    this.lambda = Sign.requirePositive(lambda);
+    this.t = t;
   }
 
   @Override // from LieGroupElement
   public St1GroupElement inverse() {
     return new St1GroupElement( //
-        RealScalar.ONE.divide(lambda),
-//        lambda.reciprocal(),//
-        t.negate().divide(lambda));
+        lambda.reciprocal(), //
+        t.divide(lambda).negate());
   }
 
   @Override // from LieGroupElement
-  public Tensor combine(Tensor lambdat) {
-    St1GroupElement St1GroupElement = new St1GroupElement(lambdat);
+  public Tensor combine(Tensor lambda_t) {
+    St1GroupElement st1GroupElement = new St1GroupElement(lambda_t);
     return Tensors.of( //
-        lambda.multiply(St1GroupElement.lambda), //
-        (lambda.multiply(St1GroupElement.t)).add(t));
+        st1GroupElement.lambda.multiply(lambda), //
+        st1GroupElement.t.multiply(lambda).add(t));
   }
 
   // function for convenience and testing
