@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -17,7 +16,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** cost function that penalizes the switching between forwards and backwards driving */
 // DO NOT MODIFY THIS CLASS SINCE THE FUNCTIONALITY IS USED IN MANY DEMOS
-@DontModify
 public final class Se2ShiftCostFunction implements CostFunction, Serializable {
   private final Scalar shiftPenalty;
 

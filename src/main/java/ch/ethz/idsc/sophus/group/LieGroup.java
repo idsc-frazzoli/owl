@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.group;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** interface maps tensor coordinate to an element of a lie group */
+@FunctionalInterface
 public interface LieGroup {
   /** function produces an instance of a lie group element from a given tensor
    * 

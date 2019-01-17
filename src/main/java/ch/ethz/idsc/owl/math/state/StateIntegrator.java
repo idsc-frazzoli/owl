@@ -5,6 +5,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
 
+@FunctionalInterface
 public interface StateIntegrator {
   /** collects {@link StateTime}s along trajectory from starting point along flow
    * until a stop criterion is met

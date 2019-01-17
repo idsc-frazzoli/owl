@@ -6,6 +6,7 @@ import java.util.List;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 
+@FunctionalInterface
 public interface PlannerConstraint {
   /** parameters as in {@link CostIncrementFunction}
    * 

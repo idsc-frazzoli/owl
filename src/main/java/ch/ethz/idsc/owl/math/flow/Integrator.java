@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** integrator of time-invariant differential constraint */
+@FunctionalInterface
 public interface Integrator {
   /** @param flow
    * @param x
