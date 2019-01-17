@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** parameterized geodesic in a space of tensors */
+@FunctionalInterface
 public interface TensorGeodesic {
   /** @param p
    * @param q

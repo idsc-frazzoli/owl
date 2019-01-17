@@ -8,7 +8,6 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.bot.r2.R2Bubbles;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
-import ch.ethz.idsc.owl.data.DontModify;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
@@ -39,7 +38,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
 /** functionality is used in tests */
-@DontModify
 /* package */ enum R2Demo {
   ;
   static final StateIntegrator STATE_INTEGRATOR = //

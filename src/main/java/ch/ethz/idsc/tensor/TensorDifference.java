@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+@FunctionalInterface
 public interface TensorDifference {
   /** @param p
    * @param q

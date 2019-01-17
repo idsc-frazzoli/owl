@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.data;
 
-@DontModify
 public enum GlobalAssert {
   ;
   /** throws an exception if valid == false

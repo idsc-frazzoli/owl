@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Scalar;
 
+@FunctionalInterface
 public interface ScalarMapper<T> extends Function<Scalar, T>, Serializable {
   // ---
 }

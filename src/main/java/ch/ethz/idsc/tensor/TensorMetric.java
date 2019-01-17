@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor;
 
 /** https://en.wikipedia.org/wiki/Metric_(mathematics) */
+@FunctionalInterface
 public interface TensorMetric {
   /** a metric satisfies the following conditions
    * 

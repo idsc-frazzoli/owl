@@ -11,7 +11,8 @@ public enum GeodesicDisplays {
       Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE, //
       H2GeodesicDisplay.INSTANCE, //
-      He1GeodesicDisplay.INSTANCE);
+      He1GeodesicDisplay.INSTANCE, //
+      St1GeodesicDisplay.INSTANCE);
   // ---
   public static final List<GeodesicDisplay> R2_ONLY = Arrays.asList( //
       R2GeodesicDisplay.INSTANCE);
