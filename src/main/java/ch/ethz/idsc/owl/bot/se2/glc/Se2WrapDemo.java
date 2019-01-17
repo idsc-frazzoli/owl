@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
+import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2CoveringWrap;
+import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
@@ -22,11 +24,12 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
-import ch.ethz.idsc.owl.math.SimpleTensorMetric;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
+import ch.ethz.idsc.owl.math.region.So2Region;
+import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -34,7 +37,6 @@ import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorMetric;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Degree;
 
@@ -62,27 +64,25 @@ enum Se2WrapDemo {
     )));
   }
 
-  static TrajectoryPlanner createPlanner(CoordinateWrap coordinateWrap) {
+  static TrajectoryPlanner createPlanner(CoordinateWrap coordinateWrap, So2Region so2Region) {
     Tensor eta = Tensors.vector(3, 3, 50 / Math.PI);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 6), 5);
     FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.ONE, Degree.of(45));
     Collection<Flow> controls = carFlows.getFlows(6);
-    Tensor GOAL = Tensors.vector(-.5, 0, 0);
-    TensorMetric tensorMetric = new SimpleTensorMetric(coordinateWrap);
-    Se2WrapMinTimeGoalManager se2GoalManager = new Se2WrapMinTimeGoalManager(tensorMetric, GOAL, RealScalar.of(0.25), controls);
+    Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(new Se2ComboRegion( //
+        new SphericalRegion(Tensors.vector(-0.5, 0), RealScalar.of(0.5)), so2Region), //
+        controls);
     TrajectoryRegionQuery obstacleQuery = obstacleQuery();
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(coordinateWrap::represent));
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster, stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), se2GoalManager.getGoalInterface());
-    // ---
-    trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0, 0), RealScalar.ZERO));
-    return trajectoryPlanner;
+    return new StandardTrajectoryPlanner(stateTimeRaster, stateIntegrator, controls, //
+        new TrajectoryObstacleConstraint(obstacleQuery), se2MinTimeGoalManager.getGoalInterface());
   }
 
-  private static void demo(CoordinateWrap coordinateWrap) {
-    TrajectoryPlanner trajectoryPlanner = createPlanner(coordinateWrap);
+  private static void demo(CoordinateWrap coordinateWrap, So2Region so2Region) {
+    TrajectoryPlanner trajectoryPlanner = createPlanner(coordinateWrap, so2Region);
+    trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0, 0), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(4000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
@@ -94,8 +94,7 @@ enum Se2WrapDemo {
   }
 
   public static void main(String[] args) {
-    demo(Se2CoveringWrap.INSTANCE);
-    demo(Se2Wrap.INSTANCE);
-    // demo(IdentityWrap.INSTANCE);
+    demo(Se2CoveringWrap.INSTANCE, So2Region.covering(RealScalar.ZERO, RealScalar.of(0.3)));
+    demo(Se2Wrap.INSTANCE, So2Region.periodic(RealScalar.ZERO, RealScalar.of(0.3)));
   }
 }

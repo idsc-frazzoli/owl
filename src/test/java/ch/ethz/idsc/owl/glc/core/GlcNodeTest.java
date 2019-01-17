@@ -69,8 +69,8 @@ public class GlcNodeTest extends TestCase {
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster, stateIntegrator, controls, plannerConstraint, rnGoal);
+    TrajectoryPlanner trajectoryPlanner = CheckedTrajectoryPlanner.wrap(new StandardTrajectoryPlanner( //
+        stateTimeRaster, stateIntegrator, controls, plannerConstraint, rnGoal));
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     List<GlcNode> nodeList = new ArrayList<>(trajectoryPlanner.getDomainMap().values());
     assertTrue(nodeList.get(0).isRoot());
@@ -81,7 +81,10 @@ public class GlcNodeTest extends TestCase {
     nodeList = new ArrayList<>(trajectoryPlanner.getDomainMap().values());
     GlcNode test = nodeList.get(nodeList.size() - 1);
     assertFalse(test.isRoot());
-    // test.makeRoot();
-    // assertTrue(test.isRoot());
+    HeuristicConsistency.check(trajectoryPlanner);
+    glcExpand.findAny(10);
+    int expandCount = glcExpand.getExpandCount();
+    assertEquals(expandCount, 11);
+    HeuristicConsistency.check(trajectoryPlanner);
   }
 }

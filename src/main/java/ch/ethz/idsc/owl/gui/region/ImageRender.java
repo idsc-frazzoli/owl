@@ -8,14 +8,15 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.group.Se2Utils;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public class ImageRender implements RenderInterface {
   /** @param bufferedImage
-   * @param range */
+   * @param range vector of length 2 */
   public static ImageRender of(BufferedImage bufferedImage, Tensor range) {
     Tensor scale = Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()) //
         .pmul(range.map(Scalar::reciprocal));
@@ -27,15 +28,13 @@ public class ImageRender implements RenderInterface {
   private final Tensor matrix;
 
   /** @param bufferedImage
-   * @param scale */
+   * @param scale vector of length 2 */
   public ImageRender(BufferedImage bufferedImage, Tensor scale) {
     this.bufferedImage = bufferedImage;
-    Tensor invsc = DiagonalMatrix.of( //
-        +scale.Get(0).reciprocal().number().doubleValue(), //
-        -scale.Get(1).reciprocal().number().doubleValue(), 1);
-    Tensor translate = Se2Utils.toSE2Translation( //
-        Tensors.vector(0, -bufferedImage.getHeight()));
-    matrix = invsc.dot(translate);
+    VectorQ.requireLength(scale, 2);
+    Tensor weights = Tensors.of(scale.Get(0).reciprocal(), scale.Get(1).reciprocal().negate(), RealScalar.ONE);
+    Tensor translate = Se2Utils.toSE2Translation(Tensors.vector(0, -bufferedImage.getHeight()));
+    matrix = weights.pmul(translate);
   }
 
   @Override // from RenderInterface

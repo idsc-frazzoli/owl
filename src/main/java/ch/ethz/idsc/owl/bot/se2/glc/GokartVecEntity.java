@@ -38,7 +38,7 @@ public class GokartVecEntity extends GokartEntity {
   @Override
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     goalRegion = getGoalRegionWithDistance(goal);
-    Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, new So2Region(goal.Get(2), goalRadius.Get(2)));
+    Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, So2Region.periodic(goal.Get(2), goalRadius.Get(2)));
     //  ---
     // costs with higher priority come first
     List<CostFunction> costs = new ArrayList<>();
