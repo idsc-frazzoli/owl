@@ -1,7 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.jass;
 
-import ch.ethz.idsc.owl.math.order.PartialComparison;
+import ch.ethz.idsc.owl.math.order.StrictPartialComparison;
 import junit.framework.TestCase;
 
 public class JassCardPartialComparatorTest extends TestCase {
@@ -14,54 +14,43 @@ public class JassCardPartialComparatorTest extends TestCase {
 
   public void testAIsTrumpfBIsNot() {
     // since A is Trumpf and B is not: A > B
-    PartialComparison optional = JassCardPartialComparator.INSTANCE.compare(A, C);
-    assertEquals(optional, PartialComparison.GREATER_THAN);
+    StrictPartialComparison optional = JassCardPartialComparator.INSTANCE.compare(A, C);
+    assertEquals(optional, StrictPartialComparison.GREATER_THAN);
   }
 
   public void testAIsNotTrumpfBIs() {
     // since B is Trumpf and A is not: A < B
-    PartialComparison optional = JassCardPartialComparator.INSTANCE.compare(E, B);
-    assertEquals(optional, PartialComparison.LESS_THAN);
+    StrictPartialComparison optional = JassCardPartialComparator.INSTANCE.compare(E, B);
+    assertEquals(optional, StrictPartialComparison.LESS_THAN);
   }
 
   public void testAHigherThanBBothTrumpf() {
     // A has higher value and both are Trumpf: A > B
-    PartialComparison optional = JassCardPartialComparator.INSTANCE.compare(A, B);
-    assertEquals(optional, PartialComparison.GREATER_THAN);
+    StrictPartialComparison optional = JassCardPartialComparator.INSTANCE.compare(A, B);
+    assertEquals(optional, StrictPartialComparison.GREATER_THAN);
   }
 
   public void testALowerThanBBothTrumpf() {
     // A has lower value and both are Trumpf: A < B
-    PartialComparison optional = JassCardPartialComparator.INSTANCE.compare(B, A);
-    assertEquals(optional, PartialComparison.LESS_THAN);
+    StrictPartialComparison optional = JassCardPartialComparator.INSTANCE.compare(B, A);
+    assertEquals(optional, StrictPartialComparison.LESS_THAN);
   }
 
   public void testAHigherThanBNoneTrumpf() {
     // A has higher value and none are Trumpf: A > B
-    PartialComparison optional = JassCardPartialComparator.INSTANCE.compare(C, D);
-    assertEquals(optional, PartialComparison.GREATER_THAN);
+    StrictPartialComparison optional = JassCardPartialComparator.INSTANCE.compare(C, D);
+    assertEquals(optional, StrictPartialComparison.GREATER_THAN);
   }
 
   public void testALowerThanBNoneTrumpf() {
     // A has lower value and none are Trumpf: A < B
-    PartialComparison optional = JassCardPartialComparator.INSTANCE.compare(D, C);
-    assertEquals(optional, PartialComparison.LESS_THAN);
-  }
-
-  public void testEquals() {
-    // Not same color and none is Trumpf: A & B incomparable
-    try {
-      PartialComparison optional = JassCardPartialComparator.INSTANCE.compare(E, F);
-      assertEquals(optional, PartialComparison.EQUALS);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    StrictPartialComparison optional = JassCardPartialComparator.INSTANCE.compare(D, C);
+    assertEquals(optional, StrictPartialComparison.LESS_THAN);
   }
 
   public void testIncomparable() {
     // Not same color and none is Trumpf: A & B incomparable
-    PartialComparison optional = JassCardPartialComparator.INSTANCE.compare(E, D);
-    assertEquals(optional, PartialComparison.INCOMPARABLE);
+    StrictPartialComparison optional = JassCardPartialComparator.INSTANCE.compare(E, D);
+    assertEquals(optional, StrictPartialComparison.INCOMPARABLE);
   }
 }
