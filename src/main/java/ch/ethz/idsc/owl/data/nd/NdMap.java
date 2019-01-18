@@ -27,7 +27,5 @@ public interface NdMap<V> {
   void clear();
 
   /** @return true if size() == 0 */
-  default boolean isEmpty() {
-    return size() == 0;
-  }
+  boolean isEmpty();
 }

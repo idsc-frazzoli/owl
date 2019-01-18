@@ -58,7 +58,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
 
   /** @param location vector with same length as lbounds and ubounds
    * @param value */
-  @Override
+  @Override // from NdMap
   public void add(Tensor location, V value) {
     VectorQ.requireLength(location, global_lBounds.length());
     add(new NdPair<>(location, value));
@@ -69,23 +69,28 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     ++size;
   }
 
-  @Override
+  @Override // from NdMap
   public int size() {
     return size;
   }
 
-  @Override
+  @Override // from NdMap
   public NdCluster<V> buildCluster(NdCenterInterface ndCenter, int limit) {
     NdCluster<V> cluster = new NdCluster<>(ndCenter, limit);
     root.addToCluster(cluster, new NdBounds(global_lBounds, global_uBounds));
     return cluster;
   }
 
-  @Override
+  @Override // from NdMap
   public synchronized void clear() {
     root = null;
     size = 0;
     root = new Node(maxDepth);
+  }
+
+  @Override // from NdMap
+  public boolean isEmpty() {
+    return size() == 0;
   }
 
   /** function returns the queue size of leaf nodes in the tree.
