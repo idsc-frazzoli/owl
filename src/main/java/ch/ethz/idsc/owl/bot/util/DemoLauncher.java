@@ -61,6 +61,7 @@ public enum DemoLauncher {
           try {
             DemoInterface demoInterface = (DemoInterface) cls.newInstance();
             BaseFrame baseFrame = demoInterface.start();
+            baseFrame.jFrame.setTitle(demoInterface.getClass().getSimpleName());
             baseFrame.jFrame.setVisible(true);
           } catch (Exception exception) {
             exception.printStackTrace();

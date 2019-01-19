@@ -7,6 +7,7 @@ public enum DemoInterfaceHelper {
   ;
   public static void brief(DemoInterface demoInterface, long millis) {
     BaseFrame baseFrame = demoInterface.start();
+    baseFrame.jFrame.setTitle(demoInterface.getClass().getSimpleName());
     baseFrame.jFrame.setVisible(true);
     try {
       Thread.sleep(millis);
