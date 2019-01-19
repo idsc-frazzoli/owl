@@ -79,7 +79,7 @@ public abstract class Tse2Entity extends TrajectoryEntity implements GlcPlannerC
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
     }
     // ---
-    treeRender.getRender().render(geometricLayer, graphics);
+    treeRender.render(geometricLayer, graphics);
   }
 
   @Override

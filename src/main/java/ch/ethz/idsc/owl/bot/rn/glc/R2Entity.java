@@ -107,7 +107,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     // ---
     super.render(geometricLayer, graphics);
     // ---
-    treeRender.getRender().render(geometricLayer, graphics);
+    treeRender.render(geometricLayer, graphics);
   }
 
   @Override

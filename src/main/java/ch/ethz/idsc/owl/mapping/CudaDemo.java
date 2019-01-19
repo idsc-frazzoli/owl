@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.io.Timing;
     filter.apply(src_g, dst_g);
     // opencv_cudaarithm.threshold(src_g, dst_g, 128.0, 255.0, opencv_imgproc.THRESH_BINARY);
     System.out.println("GPU: " + timing.seconds());
-    timing.resetToZero();
+    timing = Timing.started();
     dst_g.download(dst);
     displayMat(dst, "GPU");
     //
