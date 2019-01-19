@@ -16,7 +16,7 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
+import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
@@ -46,6 +46,8 @@ import ch.ethz.idsc.tensor.sca.Round;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   private static final LieDifferences LIE_DIFFERENCES = //
       new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+  private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
+  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
   // ---
   private final SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
@@ -54,6 +56,8 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JToggleButton jToggleWait = new JToggleButton("wait");
+  private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
+  private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   // ---
   private Tensor control = Tensors.of(Array.zeros(3));
 
@@ -107,16 +111,15 @@ import ch.ethz.idsc.tensor.sca.Round;
       return;
     // ---
     if (jToggleData.isSelected()) {
-      final Color color = new Color(255, 128, 128, 255);
       if (jToggleLine.isSelected())
-        new CurveRender(control, false, color).render(geometricLayer, graphics);
+        pathRenderCurve.setCurve(control, false).render(geometricLayer, graphics);
       for (Tensor point : control) {
         geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
         Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
         path2d.closePath();
         graphics.setColor(new Color(255, 128, 128, 64));
         graphics.fill(path2d);
-        graphics.setColor(color);
+        graphics.setColor(COLOR_CURVE);
         graphics.draw(path2d);
         geometricLayer.popMatrix();
       }
@@ -153,15 +156,13 @@ import ch.ethz.idsc.tensor.sca.Round;
       }
     }
     graphics.setStroke(new BasicStroke(1f));
-    int rgb = 128 + 32;
-    final Color color = new Color(rgb, rgb, rgb, 128 + 64);
     if (jToggleLine.isSelected())
-      new CurveRender(refined, false, color).render(geometricLayer, graphics);
+      pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
     for (Tensor point : refined) {
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
       Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
       path2d.closePath();
-      graphics.setColor(color);
+      graphics.setColor(COLOR_SHAPE);
       graphics.fill(path2d);
       graphics.setColor(Color.BLACK);
       graphics.draw(path2d);

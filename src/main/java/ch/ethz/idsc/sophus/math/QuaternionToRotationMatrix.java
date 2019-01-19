@@ -4,8 +4,10 @@ package ch.ethz.idsc.sophus.math;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 
+// TODO TENSOR V068 obsolete
 public enum QuaternionToRotationMatrix {
   ;
   /** @param wxyz vector of length 4, does not have to have unit length
@@ -30,6 +32,8 @@ public enum QuaternionToRotationMatrix {
     double sqz = q_z * q_z;
     // inverse square length is only required if Quaternion is not already normalized
     double inv = 1 / (sqx + sqy + sqz + sqw);
+    if (!Double.isFinite(inv))
+      throw TensorRuntimeException.of(re, im, jm, km);
     double m00 = (+sqx - sqy - sqz + sqw) * inv; // since sqw + sqx + sqy + sqz =1 / inv*inv
     double m11 = (-sqx + sqy - sqz + sqw) * inv;
     double m22 = (-sqx - sqy + sqz + sqw) * inv;

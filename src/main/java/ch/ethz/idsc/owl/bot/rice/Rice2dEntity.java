@@ -84,7 +84,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     super.render(geometricLayer, graphics);
     // ---
-    treeRender.getRender().render(geometricLayer, graphics);
+    treeRender.render(geometricLayer, graphics);
     {
       Tensor xya = geometricLayer.getMouseSe2State();
       geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));

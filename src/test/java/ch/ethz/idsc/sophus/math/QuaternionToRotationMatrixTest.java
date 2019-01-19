@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 import junit.framework.TestCase;
 
+// TODO TENSOR V068 obsolete
 public class QuaternionToRotationMatrixTest extends TestCase {
   private static final Tensor ID3 = IdentityMatrix.of(3);
 
@@ -55,6 +56,15 @@ public class QuaternionToRotationMatrixTest extends TestCase {
       Chop._12.requireClose(Det.of(matrix), RealScalar.ONE);
       Tensor result = matrix.dot(vector);
       assertTrue(Chop._12.close(result, Tensors.of(qvq.im(), qvq.jm(), qvq.km())));
+    }
+  }
+
+  public void testFail() {
+    try {
+      QuaternionToRotationMatrix.of(Tensors.vector(0, 0, 0, 0));
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 }

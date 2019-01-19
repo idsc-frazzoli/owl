@@ -13,10 +13,10 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -34,9 +34,15 @@ import ch.ethz.idsc.tensor.red.Norm;
 /* package */ class SphereFitDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   private static final Tensor CIRCLE = CirclePoints.of(10).multiply(RealScalar.of(3));
+  // ---
+  private final PathRender pathRenderBall = new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f);
+  private final PathRender pathRenderHull = new PathRender(COLOR_DATA_INDEXED.getColor(1), 1.5f);
 
   SphereFitDemo() {
     super(true, false, GeodesicDisplays.R2_ONLY);
+    // ---
+    timerFrame.geometricComponent.addRenderInterface(pathRenderBall);
+    timerFrame.geometricComponent.addRenderInterface(pathRenderHull);
     // ---
     JTextField jTextField = new JTextField(10);
     jTextField.setPreferredSize(new Dimension(100, 28));
@@ -56,13 +62,12 @@ import ch.ethz.idsc.tensor.red.Norm;
       Tensor center = optional.get().center();
       Scalar radius = optional.get().radius();
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(center));
-      new CurveRender(CirclePoints.of(40).multiply(radius), true, COLOR_DATA_INDEXED.getColor(0), 1.5f) //
-          .render(geometricLayer, graphics);
+      pathRenderBall.setCurve(CirclePoints.of(40).multiply(radius), true);
       geometricLayer.popMatrix();
     }
-    new CurveRender(ConvexHull.of(control), true, COLOR_DATA_INDEXED.getColor(1), 1.5f).render(geometricLayer, graphics);
+    pathRenderHull.setCurve(ConvexHull.of(control), true);
     {
-      new CurveRender(CIRCLE, true, Color.GRAY).render(geometricLayer, graphics);
+      new PathRender(Color.GRAY).setCurve(CIRCLE, true).render(geometricLayer, graphics);
       Tensor matrix = Tensors.matrix((i, j) -> //
       Norm._2.between(control.get(i), CIRCLE.get(j)), control.length(), CIRCLE.length());
       HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);

@@ -6,11 +6,12 @@ import java.awt.Color;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class CurveRenderTest extends TestCase {
+public class PathRenderTest extends TestCase {
   public void testFail() {
-    CurveRender curveRender = new CurveRender(Tensors.fromString("{{1,2,3},{4,5,6},{7,8,9}}"), false, Color.BLACK);
+    PathRender pathRender = new PathRender(Color.BLACK);
+    pathRender.setCurve(Tensors.fromString("{{1,2,3},{4,5,6},{7,8,9}}"), false);
     try {
-      curveRender.render(null, null);
+      pathRender.render(null, null);
       fail();
     } catch (Exception exception) {
       // ---

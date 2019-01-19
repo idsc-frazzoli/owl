@@ -49,8 +49,9 @@ public class GeodesicDeBoor implements ScalarTensorFunction {
     Tensor d = control.copy(); // d is modified over the course of the algorithm
     for (int r = 1; r < degree + 1; ++r)
       for (int j = degree; j >= r; --j) {
-        Scalar num = x.subtract(knots.Get(j - 1));
-        Scalar den = knots.Get(j + degree - r).subtract(knots.Get(j - 1));
+        Scalar kj1 = knots.Get(j - 1);
+        Scalar num = x.subtract(kj1);
+        Scalar den = knots.Get(j + degree - r).subtract(kj1);
         Scalar alpha = Scalars.isZero(den) //
             ? RealScalar.ZERO
             : num.divide(den);
