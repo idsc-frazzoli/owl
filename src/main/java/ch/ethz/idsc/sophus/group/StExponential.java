@@ -27,8 +27,7 @@ public enum StExponential implements LieExponential {
     Scalar exp_dl = Exp.FUNCTION.apply(dl);
     return Tensors.of( //
         exp_dl, //
-        
-        //TODO: OB This formula is a guess extrapolated from the ST1 case. I need the ST(n) case to write this down correctly
+        // TODO: OB This formula is a guess extrapolated from the ST1 case. I need the ST(n) case to write this down correctly
         dt.multiply(exp_dl.subtract(RealScalar.ONE)).divide(dl));
   }
 
@@ -41,8 +40,7 @@ public enum StExponential implements LieExponential {
     Scalar log_l = Log.FUNCTION.apply(lambda);
     return Tensors.of( //
         log_l, //
-
-        //TODO: OB This formula is a guess extrapolated from the ST1 case. I need the ST(n) case to write this down correctly
+        // TODO: OB This formula is a guess extrapolated from the ST1 case. I need the ST(n) case to write this down correctly
         t.multiply(log_l).divide(lambda.subtract(RealScalar.ONE)));
   }
 }

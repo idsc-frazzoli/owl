@@ -20,9 +20,9 @@ public class GeodesicIIR3Filter implements TensorUnaryOperator {
   private Tensor p = null;
   private Tensor q = null;
   private Tensor r = null;
-  /**This FIR3 filter uses the following procedure for prediction
-   * [[p,q]_beta, r]_gamma 
-   * **/
+
+  /** This FIR3 filter uses the following procedure for prediction
+   * [[p,q]_beta, r]_gamma **/
   public GeodesicIIR3Filter(GeodesicInterface geodesicInterface, Scalar alpha, Scalar beta) {
     this.geodesicInterface = geodesicInterface;
     this.alpha = alpha;
@@ -36,9 +36,9 @@ public class GeodesicIIR3Filter implements TensorUnaryOperator {
     this.q = q;
     this.r = r;
   }
-  
+
   /** @return extrapolated "best guess" value from the previous predictions */
-  public synchronized Tensor extrapolate() { 
+  public synchronized Tensor extrapolate() {
     System.out.println(gamma);
     if (Objects.isNull(p))
       return q;

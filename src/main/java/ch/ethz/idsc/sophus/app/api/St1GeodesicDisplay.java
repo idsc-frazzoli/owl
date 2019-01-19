@@ -3,8 +3,6 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.Se2Utils;
-import ch.ethz.idsc.sophus.group.St1Geodesic;
-import ch.ethz.idsc.sophus.group.St1Group;
 import ch.ethz.idsc.sophus.group.StGeodesic;
 import ch.ethz.idsc.sophus.group.StGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -20,7 +18,6 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   private static final Tensor PENTAGON = CirclePoints.of(5).multiply(RealScalar.of(0.2));
   // Fehlerhaft, aber zurzeit Probleme mit Ausnahme bei lambda = 0
   private static final ScalarUnaryOperator MAX_X = Max.function(RealScalar.of(0.001));
-
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {

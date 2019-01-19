@@ -21,8 +21,6 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.filter.GeodesicFIR3Filter;
-import ch.ethz.idsc.sophus.filter.GeodesicIIR2Filter;
 import ch.ethz.idsc.sophus.filter.GeodesicIIR3Filter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
@@ -55,7 +53,7 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
   private final JToggleButton jToggleStep = new JToggleButton("step");
   private Tensor control = Tensors.of(Array.zeros(3));
   private Scalar alpha = RationalScalar.HALF;
-  private Scalar beta = RealScalar.of(2/3);
+  private Scalar beta = RealScalar.of(2 / 3);
 
   GeodesicCausalFilterDemo() {
     {
@@ -63,7 +61,7 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
       spinnerLabel.addSpinnerListener(resource -> //
       control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-           .limit(200) //
+          .limit(200) //
           .map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
@@ -129,9 +127,8 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
         geometricLayer.popMatrix();
       }
     }
-    
-//    TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR2Filter(Se2Geodesic.INSTANCE, alpha);
-//    TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    // TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR2Filter(Se2Geodesic.INSTANCE, alpha);
+    // TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
     TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
     final Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
     if (jToggleDiff.isSelected()) {
@@ -191,7 +188,7 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
       });
       timerFrame.jToolBar.add(jSlider);
     }
-    //Only for higher order 3 and higher relevant
+    // Only for higher order 3 and higher relevant
     {
       JSlider jSlider2 = new JSlider(1, 999, 500);
       jSlider2.setPreferredSize(new Dimension(500, 28));
