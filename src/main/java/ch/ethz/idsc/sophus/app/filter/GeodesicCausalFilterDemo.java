@@ -53,7 +53,7 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
   private final JToggleButton jToggleStep = new JToggleButton("step");
   private Tensor control = Tensors.of(Array.zeros(3));
   private Scalar alpha = RationalScalar.HALF;
-  private Scalar beta = RealScalar.of(2 / 3);
+  private Scalar beta = RationalScalar.of(2, 3);
 
   GeodesicCausalFilterDemo() {
     {

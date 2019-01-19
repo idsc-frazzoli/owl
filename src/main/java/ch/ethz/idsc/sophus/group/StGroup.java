@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.Tensor;
@@ -8,7 +8,7 @@ public enum StGroup implements LieGroup {
   INSTANCE;
   // ---
   @Override // from LieGroup
-  public StGroupElement element(Tensor lambdat) {
-    return new StGroupElement(lambdat);
+  public StGroupElement element(Tensor lambda_t) {
+    return new StGroupElement(lambda_t);
   }
 }

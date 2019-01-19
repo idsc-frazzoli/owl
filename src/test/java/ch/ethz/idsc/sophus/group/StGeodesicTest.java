@@ -10,6 +10,33 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import junit.framework.TestCase;
 
 public class StGeodesicTest extends TestCase {
+  public void testSt1Simple() {
+    Tensor split = StGeodesic.INSTANCE.split(Tensors.vector(5, 1), Tensors.vector(10, 0), RealScalar.of(0.7));
+    Chop._13.requireClose(split, Tensors.vector(8.122523963562355, 0.37549520728752905));
+  }
+
+  public void testSt1Zero() {
+    Tensor split = StGeodesic.INSTANCE.split(Tensors.vector(5, 1), Tensors.vector(10, 0), RealScalar.of(0));
+    Chop._13.requireClose(split, Tensors.vector(5, 1));
+  }
+
+  public void testSt1One() {
+    Tensor split = StGeodesic.INSTANCE.split(Tensors.vector(5, 1), Tensors.vector(10, 0), RealScalar.of(1));
+    Chop._13.requireClose(split, Tensors.vector(10, 0));
+  }
+
+  public void testSt1General() {
+    Tensor p = Tensors.vector(3, 6);
+    Tensor q = Tensors.vector(4, 10);
+    Clip clip_l = Clip.function(3, 4);
+    Clip clip_t = Clip.function(6, 10);
+    for (Tensor x : Subdivide.of(0, 1, 20)) {
+      Tensor split = StGeodesic.INSTANCE.split(p, q, x.Get());
+      clip_l.requireInside(split.Get(0));
+      clip_t.requireInside(split.Get(1));
+    }
+  }
+
   public void testSimple() {
     Tensor p = Tensors.of(RealScalar.of(5), Tensors.vector(1, 0, 2));
     Tensor q = Tensors.of(RealScalar.of(10), Tensors.vector(7, -3, 2));

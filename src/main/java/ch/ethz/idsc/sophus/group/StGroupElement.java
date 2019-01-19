@@ -22,7 +22,7 @@ public class StGroupElement implements LieGroupElement, Serializable {
   private final Scalar lambda;
   private final Tensor t;
 
-  /** @param lambda_t of the form {lambda, t}}
+  /** @param lambda_t of the form {lambda, t}
    * @throws Exception if lambda is not positive */
   public StGroupElement(Tensor lambda_t) {
     this( //
