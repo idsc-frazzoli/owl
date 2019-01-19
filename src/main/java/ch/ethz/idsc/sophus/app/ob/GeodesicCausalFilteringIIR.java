@@ -96,18 +96,18 @@ public class GeodesicCausalFilteringIIR {
     }
     return Total.of(errors);
   }
-  // Nur zum Testen von neuen methoden
-  // public static void main(String[] args) {
-  // Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
-  // "0w/20180702T133612_1" + ".csv").stream().map(row -> row.extract(1, 4)));
-  // TensorUnaryOperator geodesicCenterFilter = //
-  // GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 7);
-  // System.out.println(7);
-  // GeodesicCausalFiltering geodesicCausal1Filtering = GeodesicCausalFiltering.se2(control, geodesicCenterFilter.apply(control), 0);
-  // Tensor alpharange = Subdivide.of(0.1, 1, 12);
-  // for (int j = 0; j < alpharange.length(); ++j) {
-  // Scalar alpha = alpharange.Get(j);
-  // System.out.println(geodesicCausal1Filtering.evaluate1ErrorSeperated(alpha));
-  // }
-  // }
+////   Nur zum Testen von neuen methoden
+//   public static void main(String[] args) {
+//   Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
+//   "0w/20180702T133612_1" + ".csv").stream().map(row -> row.extract(1, 4)));
+//   TensorUnaryOperator geodesicCenterFilter = //
+//   GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 7);
+//   System.out.println(7);
+//   GeodesicCausalFiltering geodesicCausal1Filtering = GeodesicCausalFiltering.se2(control, geodesicCenterFilter.apply(control), 0);
+//   Tensor alpharange = Subdivide.of(0.1, 1, 12);
+//   for (int j = 0; j < alpharange.length(); ++j) {
+//   Scalar alpha = alpharange.Get(j);
+//   System.out.println(geodesicCausal1Filtering.evaluate1ErrorSeperated(alpha));
+//   }
+//   }
 }

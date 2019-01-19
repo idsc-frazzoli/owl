@@ -11,8 +11,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import junit.framework.TestCase;
 
 
-//TODO: OB/JH überprüfen ob werte im assertEquals sinnvoll sind.
-public class GeodesicFIR3FilterTest extends TestCase {
+//TODO: OB/JH überprüfen ob werte im asserEquals sinnvoll sind.
+public class GeodesicIIR3FilterTest extends TestCase {
   public void testTranslation() {
     Tensor p = Tensors.vector(0,0,0);
     Tensor q = Tensors.vector(1,1,0);
@@ -22,10 +22,9 @@ public class GeodesicFIR3FilterTest extends TestCase {
 
     Tensor control = Tensors.of(p,q,r);
 
-    TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
     Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
-    assertEquals(refined.get(1), Tensors.vector(0.5, 0.5, 0.0));
-    assertEquals(refined.get(2), Tensors.vector(1.8333333333333333, 1.8333333333333333, 0.0));
+    assertEquals(refined.get(2), Tensors.vector(1.4166666666666665, 1.4166666666666665, 0.0));
   }
   
   public void testRotation() {
@@ -37,10 +36,9 @@ public class GeodesicFIR3FilterTest extends TestCase {
     
     Tensor control = Tensors.of(p,q,r);
 
-    TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
     Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
-    assertEquals(refined.get(1), Tensors.vector(0, 0, 0.5));
-    assertEquals(refined.get(2), Tensors.vector(0, 0, 1.8333333333333333));
+    assertEquals(refined.get(2), Tensors.vector(0,0, 1.4166666666666665));
   }
   
   
@@ -53,9 +51,8 @@ public class GeodesicFIR3FilterTest extends TestCase {
 
     Tensor control = Tensors.of(p,q,r);
 
-    TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
     Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
-    assertEquals(refined.get(1), Tensors.vector(0.6276709606105183, 0.3723290393894818, 0.5));
-    assertEquals(refined.get(2), Tensors.vector(1.4783775279675098, 1.9383316968973154, 1.8333333333333333));
+    assertEquals(refined.get(2), Tensors.vector(1.640245988919491, 1.222086008157701, 1.4166666666666665));
   }
 }

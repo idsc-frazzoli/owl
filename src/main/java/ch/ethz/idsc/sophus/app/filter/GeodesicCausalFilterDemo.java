@@ -21,7 +21,9 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.filter.GeodesicFIR3Filter;
 import ch.ethz.idsc.sophus.filter.GeodesicIIR2Filter;
+import ch.ethz.idsc.sophus.filter.GeodesicIIR3Filter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
@@ -53,6 +55,7 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
   private final JToggleButton jToggleStep = new JToggleButton("step");
   private Tensor control = Tensors.of(Array.zeros(3));
   private Scalar alpha = RationalScalar.HALF;
+  private Scalar beta = RealScalar.of(2/3);
 
   GeodesicCausalFilterDemo() {
     {
@@ -60,7 +63,7 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
       spinnerLabel.addSpinnerListener(resource -> //
       control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          // .limit(2700) //
+           .limit(200) //
           .map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
@@ -126,7 +129,10 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
         geometricLayer.popMatrix();
       }
     }
-    TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR2Filter(Se2Geodesic.INSTANCE, alpha);
+    
+//    TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR2Filter(Se2Geodesic.INSTANCE, alpha);
+//    TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
     final Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;
@@ -184,6 +190,19 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
         }
       });
       timerFrame.jToolBar.add(jSlider);
+    }
+    //Only for higher order 3 and higher relevant
+    {
+      JSlider jSlider2 = new JSlider(1, 999, 500);
+      jSlider2.setPreferredSize(new Dimension(500, 28));
+      jSlider2.addChangeListener(new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent changeEvent) {
+          beta = RationalScalar.of(jSlider2.getValue(), 1000);
+          System.out.println(beta);
+        }
+      });
+      timerFrame.jToolBar.add(jSlider2);
     }
     {
       spinnerRadius.setList(IntStream.range(0, 21).boxed().collect(Collectors.toList()));

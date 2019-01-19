@@ -28,13 +28,7 @@ public class GeodesicIIR2FilterTest extends TestCase {
     assertEquals(res0, vector0);
     Tensor vector1 = Tensors.vector(4, 5, 0.5);
     Tensor res1 = geodesicCausal1Filter.apply(vector1);
-    // System.out.println(res1);
     assertTrue(Chop._10.close(res1, Tensors.vector(2.593872261349412, 3.406127738650588, 0.375)));
-    // Tensor extrapolate = geodesicCausal1Filter.extrapolate();
-    // Tensor expected = Tensors.vector(6.164525387368366, 8.648949142895502, 0.75);
-    // assertTrue(Chop._10.close(extrapolate, expected));
-    // Tensor filtered = geodesicCausal1Filter.apply(expected);
-    // assertTrue(Chop._10.close(filtered, expected));
   }
 
   public void testLinear() {
