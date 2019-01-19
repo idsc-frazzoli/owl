@@ -99,7 +99,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     // ---
     super.render(geometricLayer, graphics);
     // ---
-    treeRender.getRender().render(geometricLayer, graphics);
+    treeRender.render(geometricLayer, graphics);
   }
 
   @Override // from GlcPlannerCallback

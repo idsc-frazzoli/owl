@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.CurveRender;
+import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.dubins.DubinsPath;
@@ -33,6 +33,8 @@ import ch.ethz.idsc.tensor.red.Nest;
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final int POINTS = 200;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
+  // ---
+  private final PathRender pathRender = new PathRender(Color.RED, 2f);
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -70,7 +72,7 @@ import ch.ethz.idsc.tensor.red.Nest;
           new BSpline3CurveSubdivision(Se2CoveringGeodesic.INSTANCE);
       Tensor points = Nest.of(bSpline3CurveSubdivision::string, map, 5);
       // graphics.setStroke(new BasicStroke(2f));
-      new CurveRender(points, false, Color.RED, 2f).render(geometricLayer, graphics);
+      pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     { // draw least curved path
       graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
