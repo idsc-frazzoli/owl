@@ -22,11 +22,11 @@ public enum SetPartialComparator implements PartialComparator<Set<?>> {
    * <td>All elements in A are contained in B and vice versa</td>
    * </tr>
    * <tr>
-   * <td>A &lt; B</td>
+   * <td>A &le; B</td>
    * <td>A is a subset of B</td>
    * </tr>
    * <tr>
-   * <td>A &gt; B</td>
+   * <td>A &ge; B</td>
    * <td>B is a subset of A</td>
    * </tr>
    * <tr>

@@ -1,10 +1,12 @@
-// code by astoll, jph
+// code by astoll
 package ch.ethz.idsc.owl.math.order;
 
 /** Creates an enumeration for a partial ordering.
  * 
  * <p> A partial order is a binary relation between two elements in a set.
- * <p> By definition, a partial order is transitive, reflexive and antisymmetric.
+ * <p> By definition, a partial order is transitive, irreflexive and asymmetric.
+ * 
+ * <p> In contrast to a (non-strict) partial order ({@link PartialComparision} ), an element does not relate to its self.
  * 
  * <table>
  * <tr>
@@ -16,12 +18,8 @@ package ch.ethz.idsc.owl.math.order;
  * <td>LESS_THAN</td>
  * </tr>
  * <tr>
- * <td>A = B</td>
- * <td>EQUALS</td>
- * </tr>
- * <tr>
  * <td>A &ge; B</td>
- * <td>GREATER_THAN</td>
+ * <td>GRETAER_THAN</td>
  * </tr>
  * <tr>
  * <td>A & B are incomparable </td>
@@ -29,9 +27,8 @@ package ch.ethz.idsc.owl.math.order;
  * </tr>
  * </table>
  * @author astoll */
-public enum PartialComparison {
+public enum StrictPartialComparison {
   LESS_THAN, //
-  EQUALS, //
   GREATER_THAN, //
   INCOMPARABLE, //
   ;

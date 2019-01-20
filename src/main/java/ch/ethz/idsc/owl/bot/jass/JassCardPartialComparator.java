@@ -1,13 +1,13 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.jass;
 
-import ch.ethz.idsc.owl.math.order.PartialComparator;
-import ch.ethz.idsc.owl.math.order.PartialComparison;
+import ch.ethz.idsc.owl.math.order.StrictPartialComparator;
+import ch.ethz.idsc.owl.math.order.StrictPartialComparison;
 
 /** Creates a STRICT partial order for cards of deck according to the rules of "Jassen"
  * 
  * @author astoll */
-public enum JassCardPartialComparator implements PartialComparator<JassCard> {
+public enum JassCardPartialComparator implements StrictPartialComparator<JassCard> {
   INSTANCE;
   /** Compares cards according to their value in the traditional Swiss card game of Jassen
    * 
@@ -41,29 +41,29 @@ public enum JassCardPartialComparator implements PartialComparator<JassCard> {
    * </tr>
    * </table> */
   @Override
-  public PartialComparison compare(JassCard a, JassCard b) {
+  public StrictPartialComparison compare(JassCard a, JassCard b) {
     a.cheatChecker(b);
     boolean aIsTrumpf = a.isTrumpf;
     boolean bIsTrumpf = b.isTrumpf;
     if (aIsTrumpf && bIsTrumpf) {
       if (a.type.compareTo(b.type) > 0)
-        return PartialComparison.GREATER_THAN;
+        return StrictPartialComparison.GREATER_THAN;
       else //
       if (a.type.compareTo(b.type) < 0)
-        return PartialComparison.LESS_THAN;
+        return StrictPartialComparison.LESS_THAN;
     } else //
     if (aIsTrumpf ^ bIsTrumpf) {
       if (aIsTrumpf)
-        return PartialComparison.GREATER_THAN; // a > b
-      return PartialComparison.LESS_THAN; // a < b
+        return StrictPartialComparison.GREATER_THAN; // a > b
+      return StrictPartialComparison.LESS_THAN; // a < b
     } else //
     if (a.color.equals(b.color)) { // comparable
       if (a.type.compareTo(b.type) > 0)
-        return PartialComparison.GREATER_THAN;
+        return StrictPartialComparison.GREATER_THAN;
       else //
       if (a.type.compareTo(b.type) < 0)
-        return PartialComparison.LESS_THAN;
+        return StrictPartialComparison.LESS_THAN;
     }
-    return PartialComparison.INCOMPARABLE; // incomparable
+    return StrictPartialComparison.INCOMPARABLE; // incomparable
   }
 }
