@@ -1,7 +1,6 @@
 // code by ynager
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
@@ -11,8 +10,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ren.Se2WaypointRender;
+import ch.ethz.idsc.owl.gui.ren.WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegions;
@@ -57,8 +55,7 @@ public class GokartWaypoint0Demo extends GokartDemo {
     owlyAnimationFrame.addBackground(RegionRenders.create(polygonRegion));
     owlyAnimationFrame.geometricComponent.setModel2Pixel(HelperHangarMap.MODEL2PIXEL);
     // ---
-    RenderInterface renderInterface = new Se2WaypointRender(waypoints, ARROWHEAD, new Color(64, 192, 64, 64));
-    owlyAnimationFrame.addBackground(renderInterface);
+    owlyAnimationFrame.addBackground(new WaypointRender(ARROWHEAD, COLOR_WAYPOINT).setWaypoints(waypoints));
     GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(gokartEntity);
     GlcWaypointFollowing glcWaypointFollowing = new GlcWaypointFollowing( //
         waypoints, RealScalar.of(2), gokartEntity, plannerConstraint, //

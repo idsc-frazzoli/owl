@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,7 +37,13 @@ public class BaseFrame {
     jToolBar.setFloatable(false);
     {
       JButton jButton = new JButton("save2png");
-      jButton.setToolTipText("file is created in Pictures/...");
+      try {
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/icon/camera.gif").getFile());
+        jButton = new JButton(imageIcon);
+      } catch (Exception exception) {
+        // ---
+      }
+      jButton.setToolTipText("snapshot is stored in ~/Pictures/...");
       jButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
