@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.Se2Utils;
-import ch.ethz.idsc.sophus.group.St1Geodesic;
-import ch.ethz.idsc.sophus.group.St1Group;
+import ch.ethz.idsc.sophus.group.StGeodesic;
+import ch.ethz.idsc.sophus.group.StGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,7 +21,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
-    return St1Geodesic.INSTANCE;
+    return StGeodesic.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -48,7 +48,7 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
-    return St1Group.INSTANCE;
+    return StGroup.INSTANCE;
   }
 
   @Override // from Object

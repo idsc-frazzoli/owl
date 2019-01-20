@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.app.ob;
 
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
-import ch.ethz.idsc.sophus.filter.GeodesicFIR3Filter;
+import ch.ethz.idsc.sophus.filter.GeodesicFIR2Filter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
@@ -49,10 +49,10 @@ public class GeodesicCausalFilteringFIR {
   /** @param alpha filter parameter
    * @return filtered signal when using given alpha */
   public Tensor filteredSignal(Scalar alpha) {
-    // return Tensor.of(measurements.stream() //
-    // .map(new GeodesicFIR2Filter(geodesicInterface, alpha)));
     return Tensor.of(measurements.stream() //
-        .map(new GeodesicFIR3Filter(geodesicInterface, alpha)));
+        .map(new GeodesicFIR2Filter(geodesicInterface, alpha)));
+    // return Tensor.of(measurements.stream() //
+    // .map(new GeodesicFIR3Filter(geodesicInterface, alpha)));
   }
 
   /** filter Lie Group elements and perform check

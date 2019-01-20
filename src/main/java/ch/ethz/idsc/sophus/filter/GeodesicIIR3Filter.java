@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
-public class GeodesicFIR3Filter implements TensorUnaryOperator {
+public class GeodesicIIR3Filter implements TensorUnaryOperator {
   // ---
   private final GeodesicInterface geodesicInterface;
   private final Scalar alpha;
@@ -23,14 +23,14 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
 
   /** This FIR3 filter uses the following procedure for prediction
    * [[p,q]_beta, r]_gamma **/
-  public GeodesicFIR3Filter(GeodesicInterface geodesicInterface, Scalar alpha, Scalar beta) {
+  public GeodesicIIR3Filter(GeodesicInterface geodesicInterface, Scalar alpha, Scalar beta) {
     this.geodesicInterface = geodesicInterface;
     this.alpha = alpha;
     this.beta = beta;
     this.gamma = RealScalar.ONE.add((RealScalar.ONE.divide(RealScalar.of(2).subtract(alpha))));
   }
 
-  public GeodesicFIR3Filter(GeodesicInterface geodesicInterface, Scalar alpha, Scalar beta, Tensor p, Tensor q, Tensor r) {
+  public GeodesicIIR3Filter(GeodesicInterface geodesicInterface, Scalar alpha, Scalar beta, Tensor p, Tensor q, Scalar r) {
     this(geodesicInterface, alpha, beta);
     this.p = p;
     this.q = q;
@@ -39,6 +39,7 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
 
   /** @return extrapolated "best guess" value from the previous predictions */
   public synchronized Tensor extrapolate() {
+    System.out.println(gamma);
     if (Objects.isNull(p))
       return q;
     return geodesicInterface.split(geodesicInterface.split(p, q, beta), r, gamma);
@@ -58,7 +59,7 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
     Tensor result = geodesicInterface.split(extrapolate(), tensor, alpha);
     p = q.copy();
     q = r.copy();
-    r = tensor.copy();
+    r = result.copy();
     return result;
   }
 }

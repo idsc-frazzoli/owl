@@ -96,7 +96,7 @@ public class GeodesicCausalFilteringIIR {
     }
     return Total.of(errors);
   }
-  // Nur zum Testen von neuen methoden
+  //// Nur zum Testen von neuen methoden
   // public static void main(String[] args) {
   // Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
   // "0w/20180702T133612_1" + ".csv").stream().map(row -> row.extract(1, 4)));
