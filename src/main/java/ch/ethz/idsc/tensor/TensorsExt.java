@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor;
 
 import java.util.stream.Stream;
 
-// TODO TENSOR V068 obsolete
 public enum TensorsExt {
   ;
   public static Tensor of(Object... objects) {
