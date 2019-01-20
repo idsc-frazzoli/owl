@@ -16,17 +16,15 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.group.Se2Group;
-import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.planar.Arrowhead;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -40,12 +38,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ class GeodesicCenterFilterDemo extends AbstractDemo {
-  private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
-  private static final Tensor ARROWHEAD_LO = Arrowhead.of(0.12);
+/* package */ class GeodesicCenterFilterDemo extends GeodesicDisplayDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
-  private static final LieDifferences LIE_DIFFERENCES = //
-      new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
   // ---
@@ -59,14 +53,16 @@ import ch.ethz.idsc.tensor.sca.Round;
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   // ---
-  private Tensor control = Tensors.of(Array.zeros(3));
+  // /* package */ final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
+  private Tensor _control = Tensors.of(Array.zeros(3));
 
   GeodesicCenterFilterDemo() {
+    super(GeodesicDisplays.SE2_R2);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
       spinnerLabel.addSpinnerListener(resource -> //
-      control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
+      _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
           .limit(300) //
           .map(row -> row.extract(1, 4))));
       spinnerLabel.setList(list);
@@ -99,9 +95,15 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
   }
 
+  public final Tensor control() {
+    return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
+  }
+
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final SmoothingKernel smoothingKernel = spinnerFilter.getValue();
+    final GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));
     GraphicsUtil.setQualityHigh(graphics);
     final int radius = spinnerRadius.getValue();
     if (jToggleSymi.isSelected())
@@ -110,12 +112,13 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (jToggleWait.isSelected())
       return;
     // ---
+    Tensor control2 = control();
     if (jToggleData.isSelected()) {
       if (jToggleLine.isSelected())
-        pathRenderCurve.setCurve(control, false).render(geometricLayer, graphics);
-      for (Tensor point : control) {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-        Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
+        pathRenderCurve.setCurve(control2, false).render(geometricLayer, graphics);
+      for (Tensor point : control2) {
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+        Path2D path2d = geometricLayer.toPath2D(shape);
         path2d.closePath();
         graphics.setColor(new Color(255, 128, 128, 64));
         graphics.fill(path2d);
@@ -125,8 +128,8 @@ import ch.ethz.idsc.tensor.sca.Round;
       }
     }
     TensorUnaryOperator geodesicCenterFilter = //
-        GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel), radius);
-    final Tensor refined = geodesicCenterFilter.apply(control);
+        GeodesicCenterFilter.of(GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel), radius);
+    final Tensor refined = geodesicCenterFilter.apply(control2);
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;
       {
@@ -146,12 +149,17 @@ import ch.ethz.idsc.tensor.sca.Round;
         graphics.drawString("Rotational rate", 0, piy += 15);
       }
       {
-        Tensor speeds = LIE_DIFFERENCES.apply(refined);
-        graphics.setStroke(new BasicStroke(1.3f));
-        for (int index = 0; index < 3; ++index) {
-          graphics.setColor(COLOR_DATA_INDEXED.getColor(index));
-          Path2D path2d = plotFunc(graphics, speeds.get(Tensor.ALL, index).multiply(RealScalar.of(400)), baseline_y);
-          graphics.draw(path2d);
+        LieDifferences lieDifferences = //
+            new LieDifferences(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential());
+        Tensor speeds = lieDifferences.apply(refined);
+        if (0 < speeds.length()) {
+          int dimensions = speeds.get(0).length();
+          graphics.setStroke(new BasicStroke(1.3f));
+          for (int index = 0; index < dimensions; ++index) {
+            graphics.setColor(COLOR_DATA_INDEXED.getColor(index));
+            Path2D path2d = plotFunc(graphics, speeds.get(Tensor.ALL, index).multiply(RealScalar.of(400)), baseline_y);
+            graphics.draw(path2d);
+          }
         }
       }
     }
@@ -159,8 +167,8 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (jToggleLine.isSelected())
       pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
     for (Tensor point : refined) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(point));
-      Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_LO);
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+      Path2D path2d = geometricLayer.toPath2D(shape);
       path2d.closePath();
       graphics.setColor(COLOR_SHAPE);
       graphics.fill(path2d);

@@ -98,9 +98,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
       Point2D point = geometricLayer.toPoint2D(state);
       graphics.setColor(new Color(64, 128, 64, 192));
       graphics.fill(new Ellipse2D.Double(point.getX() - 2, point.getY() - 2, 7, 7));
-      // TODO eliminate horizontal offset of image without hack
       ImageRender imageRender = ImageRender.of(bufferedImage, Tensors.vector(10, 10));
-      // Tensor shift = Tensors.vector(bufferedImage.getWidth(), RealScalar.ZERO);
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(Tensors.vector(-5, 0)));
       geometricLayer.pushMatrix(Se2Utils.toSE2Translation(state));
       imageRender.render(geometricLayer, graphics);
