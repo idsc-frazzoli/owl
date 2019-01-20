@@ -26,7 +26,7 @@ package ch.ethz.idsc.owl.math.order;
  * </tr>
  * </table>
  * @author astoll */
-public enum PreOrderComparison {
+public enum PreorderComparison {
   LESS_EQUALS, //
   GREATER_EQUALS, //
   INCOMPARABLE, //

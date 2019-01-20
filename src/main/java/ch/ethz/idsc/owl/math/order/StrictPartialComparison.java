@@ -18,10 +18,6 @@ package ch.ethz.idsc.owl.math.order;
  * <td>LESS_THAN</td>
  * </tr>
  * <tr>
- * <td>A = B</td>
- * <td>EQUALS</td>
- * </tr>
- * <tr>
  * <td>A &ge; B</td>
  * <td>GRETAER_THAN</td>
  * </tr>
