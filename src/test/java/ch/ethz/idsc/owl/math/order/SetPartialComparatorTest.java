@@ -2,22 +2,22 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
 import junit.framework.TestCase;
 
 public class SetPartialComparatorTest extends TestCase {
-  static Set<Integer> create(Integer... integers) {
+  static Collection<Integer> create(Integer... integers) {
     return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(integers)));
   }
 
-  Set<Integer> A = create(1, 2, 3);
-  Set<Integer> B = create(1, 2, 3);
-  Set<Integer> C = create(1, 2);
-  Set<Integer> D = create(1, 2, 3, 8);
-  Set<Integer> E = create(5, 6, 7);
+  Collection<Integer> A = create(1, 2, 3);
+  Collection<Integer> B = create(1, 2, 3);
+  Collection<Integer> C = create(1, 2);
+  Collection<Integer> D = create(1, 2, 3, 8);
+  Collection<Integer> E = create(5, 6, 7);
 
   public void testEquals() {
     PartialComparison optional = SetPartialComparator.INSTANCE.compare(A, B);
