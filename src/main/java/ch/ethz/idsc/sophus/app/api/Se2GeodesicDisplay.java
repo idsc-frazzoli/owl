@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.group.Se2Utils;
@@ -42,6 +44,11 @@ public enum Se2GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
     return Se2Group.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public LieExponential lieExponential() {
+    return Se2CoveringExponential.INSTANCE;
   }
 
   @Override // from Object

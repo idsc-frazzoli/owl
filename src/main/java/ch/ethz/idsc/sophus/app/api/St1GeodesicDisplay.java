@@ -1,8 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.Se2Utils;
+import ch.ethz.idsc.sophus.group.StExponential;
 import ch.ethz.idsc.sophus.group.StGeodesic;
 import ch.ethz.idsc.sophus.group.StGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -49,6 +51,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
     return StGroup.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public LieExponential lieExponential() {
+    return StExponential.INSTANCE;
   }
 
   @Override // from Object

@@ -19,7 +19,9 @@ import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicIIR3Filter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
@@ -40,7 +42,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-class GeodesicCausalFilterDemo extends AbstractDemo {
+class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
   private static final Tensor ARROWHEAD_HI = Arrowhead.of(0.10);
   private static final Tensor CIRCLE = CirclePoints.of(20).multiply(RealScalar.of(0.01));
   // ---
@@ -56,6 +58,7 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
   private Scalar beta = RationalScalar.of(2, 3);
 
   GeodesicCausalFilterDemo() {
+    super(GeodesicDisplays.SE2_R2);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
@@ -92,13 +95,15 @@ class GeodesicCausalFilterDemo extends AbstractDemo {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     ColorDataIndexed cyclic = ColorDataLists._097.cyclic().deriveWithAlpha(192);
     if (jToggleStep.isSelected()) {
       control = Tensors.of(Array.zeros(3));
       for (int i = 0; i < 300; ++i) {
         if (i < 100) {
           control.append(Tensors.vector(i * 0.01, 0, 0));
-        } else if (i > 200) {
+        } else //
+        if (i > 200) {
           control.append(Tensors.vector(i * 0.01, 0, 0));
         } else {
           control.append(Tensors.vector(i * 0.01, 1, 0));
