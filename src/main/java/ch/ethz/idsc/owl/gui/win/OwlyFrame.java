@@ -1,8 +1,6 @@
 // code by jph and jl
 package ch.ethz.idsc.owl.gui.win;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,8 +9,6 @@ import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.data.tree.Nodes;
@@ -35,56 +31,42 @@ public class OwlyFrame extends BaseFrame {
     {
       JToggleButton jToggleButton = new JToggleButton("Replay");
       jToggleButton.setToolTipText("stops LiveFeed and goes to Replaymode");
-      jToggleButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-          replay = jToggleButton.isSelected();
-        }
-      });
+      jToggleButton.addActionListener(actionEvent -> replay = jToggleButton.isSelected());
       jToolBar.add(jToggleButton);
     }
     {
       JButton jButton = new JButton("<<");
       jButton.setToolTipText("Replay: 1 Step back");
-      jButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-          if (replayIndex > 0) {
-            replayIndex = replayIndex - 1;
-          } else {
-            replayIndex = 0;
-            System.err.println("GUI: Already displaying first Planningstep");
-          }
-          jSlider.setValue(replayIndex);
+      jButton.addActionListener(actionEvent -> {
+        if (replayIndex > 0) {
+          replayIndex = replayIndex - 1;
+        } else {
+          replayIndex = 0;
+          System.err.println("GUI: Already displaying first Planningstep");
         }
+        jSlider.setValue(replayIndex);
       });
       jToolBar.add(jButton);
     }
     {
       JButton jButton = new JButton(">>");
       jButton.setToolTipText("Replay: 1 Step forward");
-      jButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-          if (replayIndex < backup.size() - 1) {
-            replayIndex = replayIndex + 1;
-          } else {
-            replayIndex = backup.size() - 1;
-            System.err.println("GUI: Already displaying latest Planningstep");
-          }
-          jSlider.setValue(replayIndex);
+      jButton.addActionListener(actionEvent -> {
+        if (replayIndex < backup.size() - 1) {
+          replayIndex = replayIndex + 1;
+        } else {
+          replayIndex = backup.size() - 1;
+          System.err.println("GUI: Already displaying latest Planningstep");
         }
+        jSlider.setValue(replayIndex);
       });
       jToolBar.add(jButton);
     }
     {
       jSlider.setOpaque(false);
-      jSlider.addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-          replayIndex = jSlider.getValue();
-          repaint(replayIndex);
-        }
+      jSlider.addChangeListener(changeEvent -> {
+        replayIndex = jSlider.getValue();
+        repaint(replayIndex);
       });
       jToolBar.add(jSlider);
     }

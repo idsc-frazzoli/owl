@@ -9,18 +9,18 @@ import java.util.Comparator;
 public interface PartialComparator<T> {
   /** Compares to elements of a poset.
    * 
-   * For two elements a and b in a poset exactly one of the following holds:
+   * For two elements x and y in a poset exactly one of the following holds:
    * <p>
-   * <tt>a = b</tt>,
-   * <tt>a < b</tt>,
-   * <tt>a > b</tt>, or
-   * <tt>a ~ b</tt>, i.e. a and b are incomparable
-   * @param a left hand side of partial comparison
-   * @param b right hand side of partial comparison
+   * <tt>x = y</tt>,
+   * <tt>x < y</tt>,
+   * <tt>x > y</tt>, or
+   * <tt>x ~ y</tt>, i.e. x and y are incomparable
+   * @param x left hand side of partial comparison
+   * @param y right hand side of partial comparison
    * @return one of the following
-   * PartialComparison.EQUALS if a = b,
-   * PartialComparison.LESS_THAN if a < b,
-   * PartialComparison.GREATER_THAN if a > b or
-   * PartialComparison.INCOMPARABLE if a and b are incomparable */
-  PartialComparison compare(T a, T b);
+   * PartialComparison.EQUALS if x = y,
+   * PartialComparison.LESS_THAN if x < y,
+   * PartialComparison.GREATER_THAN if x > y or
+   * PartialComparison.INCOMPARABLE if x and y are incomparable */
+  PartialComparison compare(T x, T y);
 }

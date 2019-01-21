@@ -13,14 +13,14 @@ public enum PartialOrder {
   public static <T> PartialComparator<T> comparator(BinaryRelation<T> binaryRelation) {
     return new PartialComparator<T>() {
       @Override // from PartialComparator
-      public PartialComparison compare(T a, T b) {
-        boolean a_b = binaryRelation.test(a, b);
-        boolean b_a = binaryRelation.test(b, a);
-        if (a_b && b_a)
+      public PartialComparison compare(T x, T y) {
+        boolean xRy = binaryRelation.test(x, y);
+        boolean yRx = binaryRelation.test(y, x);
+        if (xRy && yRx)
           return PartialComparison.EQUALS;
-        if (a_b)
+        if (xRy)
           return PartialComparison.LESS_THAN;
-        if (b_a)
+        if (yRx)
           return PartialComparison.GREATER_THAN;
         return PartialComparison.INCOMPARABLE;
       }

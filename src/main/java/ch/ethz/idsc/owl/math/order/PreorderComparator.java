@@ -1,3 +1,4 @@
+// code by astoll
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Comparator;
@@ -10,16 +11,16 @@ import java.util.Comparator;
 public interface PreorderComparator<T> {
   /** Compares to elements in a preordered set.
    * 
-   * For two elements a and b in a preordered set one of the following holds:
+   * For two elements x and y in a preordered set one of the following holds:
    * <p>
-   * <tt>a &le b</tt>,
-   * <tt>a &ge b</tt>, or
-   * <tt>a ~ b</tt>, i.e. a and b are incomparable
-   * @param a left hand side of preordered comparison
-   * @param b right hand side of preordered comparison
+   * <tt>x &le y</tt>,
+   * <tt>x &ge y</tt>, or
+   * <tt>x ~ y</tt>, i.e. x and y are incomparable
+   * @param x left hand side of preordered comparison
+   * @param y right hand side of preordered comparison
    * @return one of the following
-   * PreOrderComparison.LESS_EQUALS if <tt>a &le b</tt>,
-   * PreOrder.GREATER_EQUALS if <tt>a &ge b</tt> or
-   * PreOrder.INCOMPARABLE if a and b are incomparable */
-  PreorderComparison compare(T a, T b);
+   * PreOrderComparison.LESS_EQUALS if <tt>x &le y</tt>,
+   * PreOrder.GREATER_EQUALS if <tt>x &ge y</tt>, or
+   * PreOrder.INCOMPARABLE if x and y are incomparable */
+  PreorderComparison compare(T x, T y);
 }
