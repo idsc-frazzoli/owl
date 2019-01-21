@@ -13,12 +13,14 @@ public enum StrictPartialOrder {
   public static <T> StrictPartialComparator<T> comparator(BinaryRelation<T> binaryRelation) {
     return new StrictPartialComparator<T>() {
       @Override // from StrictPartialComparator
-      public StrictPartialComparison compare(T a, T b) {
-        boolean a_b = binaryRelation.test(a, b);
-        boolean b_a = binaryRelation.test(b, a);
-        if (a_b)
+      public StrictPartialComparison compare(T x, T y) {
+        boolean xRy = binaryRelation.test(x, y);
+        boolean yRx = binaryRelation.test(y, x);
+        if (xRy && yRx)
+          throw new RuntimeException("binary relation is not irreflexive!");
+        if (xRy)
           return StrictPartialComparison.LESS_THAN;
-        if (b_a)
+        if (yRx)
           return StrictPartialComparison.GREATER_THAN;
         return StrictPartialComparison.INCOMPARABLE;
       }

@@ -9,16 +9,16 @@ import java.util.Comparator;
 public interface StrictPartialComparator<T> {
   /** Compares to elements of a STRICT poset.
    * 
-   * For two elements a and b in a poset exactly one of the following holds:
+   * For two elements x and y in a poset exactly one of the following holds:
    * <p>
-   * <tt>a &lt b</tt>,
-   * <tt>a > b</tt>, or
-   * <tt>a ~ b</tt>, i.e. a and b are incomparable
-   * @param a left hand side of partial comparison
-   * @param b right hand side of partial comparison
+   * <tt>x &lt y</tt>,
+   * <tt>x > y</tt>, or
+   * <tt>x ~ y</tt>, i.e. x and y are incomparable
+   * @param x left hand side of partial comparison
+   * @param y right hand side of partial comparison
    * @return one of the following
-   * PartialComparison.LESS_THAN if a < b,
-   * PartialComparison.GREATER_THAN if a > b or
-   * PartialComparison.INCOMPARABLE if a and b are incomparable */
-  StrictPartialComparison compare(T a, T b);
+   * PartialComparison.LESS_THAN if x < y,
+   * PartialComparison.GREATER_THAN if x > y or
+   * PartialComparison.INCOMPARABLE if x and y are incomparable */
+  StrictPartialComparison compare(T x, T y);
 }

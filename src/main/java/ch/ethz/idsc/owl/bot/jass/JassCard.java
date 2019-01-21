@@ -24,9 +24,9 @@ package ch.ethz.idsc.owl.bot.jass;
     this.isTrumpf = isTrumpf;
   }
 
-  /** Checks whether the two cards are exactly the same or if two different colors were assigned Trumpf
+  /** checks whether the two cards are exactly the same or if two different colors were assigned Trumpf
    * 
-   * @param jassCard Card to check for eligibility
+   * @param jassCard to check for eligibility
    * @throws RunTimeException */
   public void cheatChecker(JassCard jassCard) {
     if (color.equals(jassCard.color) && type.equals(jassCard.type)) {
@@ -39,25 +39,18 @@ package ch.ethz.idsc.owl.bot.jass;
     }
   }
 
-  /** Checks whether the card is greater (better) than another card.
+  /** checks whether the card is greater (better) than another card.
    * 
    * @param jassCard to be compared to
-   * @return true if object is greater (according to the rules) than the one compared to, false otherwise */
+   * @return true if this card is greater (according to the rules) than the given jassCard, false otherwise */
   public boolean isGreater(JassCard jassCard) {
-    this.cheatChecker(jassCard);
-    if (this.isTrumpf && jassCard.isTrumpf) {
-      if (this.type.compareTo(jassCard.type) > 0) {
+    cheatChecker(jassCard);
+    if (isTrumpf)
+      if (jassCard.isTrumpf) {
+        if (0 < type.compareTo(jassCard.type))
+          return true;
+      } else
         return true;
-      }
-    }
-    if (this.isTrumpf && !jassCard.isTrumpf) {
-      return true;
-    }
-    if (!this.isTrumpf && !jassCard.isTrumpf) {
-      if ((this.color.equals(jassCard.color)) && (this.type.compareTo(jassCard.type) > 0)) {
-        return true;
-      }
-    }
-    return false;
+    return !jassCard.isTrumpf && color.equals(jassCard.color) && 0 < type.compareTo(jassCard.type);
   }
 }

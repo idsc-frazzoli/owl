@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.jass;
 
 import junit.framework.TestCase;
 
-public class JassCardsTest extends TestCase {
+public class JassCardTest extends TestCase {
   public void testIsTrumpf() {
     JassCard card = new JassCard(JassCard.Color.EICHEL, JassCard.Type.ACE, true);
     assertTrue(card.isTrumpf);

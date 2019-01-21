@@ -45,4 +45,13 @@ public class JassCardPartialComparatorTest extends TestCase {
     // Not same color and none is Trumpf: D & E incomparable
     assertEquals(JassCardPartialComparator.INSTANCE.compare(D, E), StrictPartialComparison.INCOMPARABLE);
   }
+
+  public void testEqualsFail() {
+    try {
+      JassCardPartialComparator.INSTANCE.compare(D, D);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

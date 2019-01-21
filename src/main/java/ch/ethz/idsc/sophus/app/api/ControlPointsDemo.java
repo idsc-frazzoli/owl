@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -62,12 +61,9 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       }
     }
   };
-  private final ActionListener actionListener = new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-      min_index = null;
-      control = Tensors.of(Array.zeros(3));
-    }
+  private final ActionListener actionListener = actionEvent -> {
+    min_index = null;
+    control = Tensors.of(Array.zeros(3));
   };
 
   public ControlPointsDemo(boolean clearButton, boolean curvatureButton, List<GeodesicDisplay> list) {
