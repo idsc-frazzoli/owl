@@ -3,10 +3,11 @@ package ch.ethz.idsc.owl.math.order;
 
 /** Creates an enumeration for a partial ordering.
  * 
- * <p> A partial order is a binary relation between two elements in a set.
- * <p> By definition, a partial order is transitive, irreflexive and asymmetric.
+ * <p>A partial order is a binary relation between two elements in a set.
+ * <p>By definition, a partial order is irreflexive, asymmetric, and transitive.
  * 
- * <p> In contrast to a (non-strict) partial order ({@link PartialComparision} ), an element does not relate to its self.
+ * <p>In contrast to a (non-strict) partial order ({@link PartialComparision}),
+ * an element does not relate to its self.
  * 
  * <table>
  * <tr>
