@@ -21,7 +21,7 @@ package ch.ethz.idsc.owl.math.order;
  * </tr>
  * <tr>
  * <td>x &ge; y</td>
- * <td>GRETAER_EQUALS</td>
+ * <td>GREATER_EQUALS</td>
  * </tr>
  * <tr>
  * <td>x & y are incomparable </td>
@@ -30,8 +30,24 @@ package ch.ethz.idsc.owl.math.order;
  * </table>
  * @author astoll */
 public enum PreorderComparison {
-  LESS_EQUALS, //
-  GREATER_EQUALS, //
-  INCOMPARABLE, //
+  ONLY_LESS_EQUALS(true, false), //
+  LESS_AND_GREATER_EQUALS(true, true), //
+  ONLY_GREATER_EQUALS(false, true), //
+  INCOMPARABLE(false, false), //
   ;
+  private final boolean le;
+  private final boolean ge;
+
+  private PreorderComparison(boolean le, boolean ge) {
+    this.le = le;
+    this.ge = ge;
+  }
+
+  public boolean isLessEquals() {
+    return le;
+  }
+
+  public boolean isGreaterEquals() {
+    return ge;
+  }
 }

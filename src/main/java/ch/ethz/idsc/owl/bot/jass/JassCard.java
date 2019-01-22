@@ -29,11 +29,11 @@ package ch.ethz.idsc.owl.bot.jass;
    * @param jassCard to check for eligibility
    * @throws RunTimeException */
   public void cheatChecker(JassCard jassCard) {
-    if (color.equals(jassCard.color) && type.equals(jassCard.type)) {
+    if (this.color.equals(jassCard.color) && this.type.equals(jassCard.type)) {
       System.err.println("There are no duplicate cards in a deck!");
       throw new RuntimeException("cards not from the same deck");
     }
-    if (isTrumpf && jassCard.isTrumpf && !color.equals(jassCard.color)) {
+    if (this.isTrumpf && jassCard.isTrumpf && !this.color.equals(jassCard.color)) {
       System.err.println("Only card color can be assigned Trumpf!");
       throw new RuntimeException("cards not from the same deck");
     }
