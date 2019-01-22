@@ -44,5 +44,5 @@ public enum JassCardPartialComparator {
    * </tr>
    * </table> */
   public static final StrictPartialComparator<JassCard> INSTANCE = //
-      StrictPartialOrder.comparator((x, y) -> y.isGreater(x));
+      StrictPartialOrder.comparator(JassCard::isLess);
 }

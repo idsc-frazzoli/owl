@@ -39,18 +39,25 @@ package ch.ethz.idsc.owl.bot.jass;
     }
   }
 
-  /** checks whether the card is greater (better) than another card.
+  /** checks whether the card is less (worse) than another card.
    * 
    * @param jassCard to be compared to
-   * @return true if this card is greater (according to the rules) than the given jassCard, false otherwise */
-  public boolean isGreater(JassCard jassCard) {
-    cheatChecker(jassCard);
-    if (isTrumpf)
-      if (jassCard.isTrumpf) {
-        if (0 < type.compareTo(jassCard.type))
-          return true;
-      } else
+   * @return true if this card is less (according to the rules) than the given jassCard, false otherwise */
+  public boolean isLess(JassCard jassCard) {
+    this.cheatChecker(jassCard);
+    if (this.isTrumpf && jassCard.isTrumpf) {
+      if (this.type.compareTo(jassCard.type) < 0) {
         return true;
-    return !jassCard.isTrumpf && color.equals(jassCard.color) && 0 < type.compareTo(jassCard.type);
+      }
+    }
+    if (!this.isTrumpf && jassCard.isTrumpf) {
+      return true;
+    }
+    if (!this.isTrumpf && !jassCard.isTrumpf) {
+      if ((this.color.equals(jassCard.color)) && (this.type.compareTo(jassCard.type) < 0)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

@@ -33,11 +33,11 @@ public class JassCardTest extends TestCase {
     JassCard card3 = new JassCard(JassCard.Color.SCHELLE, JassCard.Type.ACE, false);
     JassCard card4 = new JassCard(JassCard.Color.EICHEL, JassCard.Type.SEVEN, false);
     JassCard card5 = new JassCard(JassCard.Color.SCHELLE, JassCard.Type.ACE, false);
-    assertTrue(card1.isGreater(card2));
-    assertFalse(card2.isGreater(card1));
-    assertTrue(card1.isGreater(card4));
-    assertFalse(card3.isGreater(card1));
-    assertFalse(card4.isGreater(card5));
-    assertFalse(card5.isGreater(card4));
+    assertTrue(card2.isLess(card1));
+    assertFalse(card1.isLess(card2));
+    assertTrue(card4.isLess(card1));
+    assertFalse(card1.isLess(card3));
+    assertFalse(card5.isLess(card4));
+    assertFalse(card4.isLess(card5));
   }
 }
