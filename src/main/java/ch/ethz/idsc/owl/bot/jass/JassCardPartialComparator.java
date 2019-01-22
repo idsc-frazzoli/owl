@@ -43,6 +43,5 @@ public enum JassCardPartialComparator {
    * <td>Different colors and neither is "Trumpf"</td>
    * </tr>
    * </table> */
-  public static final StrictPartialComparator<JassCard> INSTANCE = //
-      StrictPartialOrder.comparator((x, y) -> y.isGreater(x));
+  public static final StrictPartialComparator<JassCard> INSTANCE = StrictPartialOrder.comparator(JassCard::isLess);
 }

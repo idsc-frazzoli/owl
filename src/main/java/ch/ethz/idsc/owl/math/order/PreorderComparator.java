@@ -19,8 +19,8 @@ public interface PreorderComparator<T> {
    * @param x left hand side of preordered comparison
    * @param y right hand side of preordered comparison
    * @return one of the following
-   * PreOrderComparison.LESS_EQUALS if <tt>x &le y</tt>,
-   * PreOrder.GREATER_EQUALS if <tt>x &ge y</tt>, or
-   * PreOrder.INCOMPARABLE if x and y are incomparable */
+   * PreorderComparison.LESS_EQUALS if <tt>x &le y</tt>,
+   * Preorder.GREATER_EQUALS if <tt>x &ge y</tt>, or
+   * Preorder.INCOMPARABLE if x and y are incomparable */
   PreorderComparison compare(T x, T y);
 }
