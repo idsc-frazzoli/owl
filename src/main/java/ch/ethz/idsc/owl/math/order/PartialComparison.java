@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.order;
 
 /** Creates an enumeration for a partial ordering.
  * 
+ * TODO REVIEW COMMENT
  * <p>A partial order is a binary relation between two elements in a set.
  * <p>By definition, a partial order is reflexive, antisymmetric, and transitive.
  * 
@@ -12,19 +13,19 @@ package ch.ethz.idsc.owl.math.order;
  * <th>Instance</th>
  * </tr>
  * <tr>
- * <td>A &le; B</td>
+ * <td>x &le; y</td>
  * <td>LESS_THAN</td>
  * </tr>
  * <tr>
- * <td>A = B</td>
+ * <td>x = y</td>
  * <td>EQUALS</td>
  * </tr>
  * <tr>
- * <td>A &ge; B</td>
+ * <td>x &ge; y</td>
  * <td>GREATER_THAN</td>
  * </tr>
  * <tr>
- * <td>A & B are incomparable </td>
+ * <td>x & y are incomparable </td>
  * <td>INCOMPARABLE</td>
  * </tr>
  * </table>

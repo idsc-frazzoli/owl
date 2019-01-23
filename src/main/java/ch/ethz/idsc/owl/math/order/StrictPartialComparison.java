@@ -15,15 +15,15 @@ package ch.ethz.idsc.owl.math.order;
  * <th>Instance</th>
  * </tr>
  * <tr>
- * <td>A &le; B</td>
+ * <td>x &le; y</td>
  * <td>LESS_THAN</td>
  * </tr>
  * <tr>
- * <td>A &ge; B</td>
+ * <td>x &ge; y</td>
  * <td>GRETAER_THAN</td>
  * </tr>
  * <tr>
- * <td>A & B are incomparable </td>
+ * <td>x & y are incomparable </td>
  * <td>INCOMPARABLE</td>
  * </tr>
  * </table>

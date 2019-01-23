@@ -4,9 +4,8 @@ package ch.ethz.idsc.owl.gui.win;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -19,6 +18,7 @@ import javax.swing.WindowConstants;
 
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** base class for {@link OwlyFrame} and {@link OwlyAnimationFrame} */
 public class BaseFrame {
@@ -38,22 +38,18 @@ public class BaseFrame {
     {
       JButton jButton = new JButton("save2png");
       try {
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/icon/camera.gif").getFile());
+        ImageIcon imageIcon = new ImageIcon(ResourceData.bufferedImage("/icon/camera.gif"));
         jButton = new JButton(imageIcon);
       } catch (Exception exception) {
-        // ---
+        System.err.println(exception);
       }
       jButton.setToolTipText("snapshot is stored in ~/Pictures/...");
-      jButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-          try {
-            BufferedImage bufferedImage = offscreen();
-            ImageIO.write(bufferedImage, IMAGE_FORMAT, HomeDirectory.Pictures( //
-                String.format("owl_%d.%s", System.currentTimeMillis(), IMAGE_FORMAT)));
-          } catch (Exception exception) {
-            exception.printStackTrace();
-          }
+      jButton.addActionListener(actionEvent -> {
+        try {
+          File file = HomeDirectory.Pictures(String.format("owl_%d.%s", System.currentTimeMillis(), IMAGE_FORMAT));
+          ImageIO.write(offscreen(), IMAGE_FORMAT, file);
+        } catch (Exception exception) {
+          exception.printStackTrace();
         }
       });
       jToolBar.add(jButton);
