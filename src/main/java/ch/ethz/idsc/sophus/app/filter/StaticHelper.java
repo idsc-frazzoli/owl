@@ -1,11 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.filter;
 
-import java.io.File;
-
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Import;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Degree;
@@ -19,7 +18,7 @@ import ch.ethz.idsc.tensor.red.Mean;
   @SuppressWarnings("unused")
   static void gps() {
     try {
-      Tensor rows = Import.of(new File("/home/datahaki/Documents/datasets/swisstrolley/processed/1.csv"));
+      Tensor rows = Import.of(HomeDirectory.Documents("datasets", "swisstrolley", "processed", "1.csv"));
       Tensor control = Tensors.empty();
       int index = 0;
       for (Tensor row : rows) {

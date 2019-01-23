@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LinearGroup;
 import ch.ethz.idsc.sophus.group.Se3Exponential;
 import ch.ethz.idsc.sophus.group.Se3Geodesic;
-import ch.ethz.idsc.sophus.math.QuaternionToRotationMatrix;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -20,6 +19,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.qty.Quaternion;
+import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
 
 /** the quaternions in the data set have norm of approximately
  * 1.00005... due to the use of float precision */
@@ -36,8 +37,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     Tensor poses = Tensors.empty();
     for (Tensor row : tensor) {
       Tensor p = row.extract(1, 4);
-      Tensor q = row.extract(4, 8);
-      Tensor R = QuaternionToRotationMatrix.of(q);
+      Tensor R = QuaternionToRotationMatrix.of(Quaternion.of(row.Get(4), row.extract(5, 8)));
       Tensor SE3 = Tensors.of( //
           Join.of(R.get(0), p.extract(0, 1)), //
           Join.of(R.get(1), p.extract(1, 2)), //
