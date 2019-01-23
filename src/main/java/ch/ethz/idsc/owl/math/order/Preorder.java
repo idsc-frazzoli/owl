@@ -12,11 +12,11 @@ public enum Preorder {
         boolean xRy = binaryRelation.test(x, y);
         boolean yRx = binaryRelation.test(y, x);
         if (xRy && yRx)
-          return PreorderComparison.LESS_AND_GREATER_EQUALS;
+          return PreorderComparison.LESS_EQUALS_AND_GREATER_EQUALS;
         if (xRy)
-          return PreorderComparison.ONLY_LESS_EQUALS;
+          return PreorderComparison.LESS_EQUALS_ONLY;
         if (yRx)
-          return PreorderComparison.ONLY_GREATER_EQUALS;
+          return PreorderComparison.GREATER_EQUALS_ONLY;
         return PreorderComparison.INCOMPARABLE;
       }
     };
