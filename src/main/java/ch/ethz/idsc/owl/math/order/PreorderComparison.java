@@ -30,9 +30,9 @@ package ch.ethz.idsc.owl.math.order;
  * </table>
  * @author astoll */
 public enum PreorderComparison {
-  ONLY_LESS_EQUALS(true, false), //
-  LESS_AND_GREATER_EQUALS(true, true), //
-  ONLY_GREATER_EQUALS(false, true), //
+  LESS_EQUALS_ONLY(true, false), //
+  LESS_EQUALS_AND_GREATER_EQUALS(true, true), //
+  GREATER_EQUALS_ONLY(false, true), //
   INCOMPARABLE(false, false), //
   ;
   private final boolean le;
