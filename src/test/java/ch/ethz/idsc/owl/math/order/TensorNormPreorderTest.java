@@ -10,7 +10,7 @@ public class TensorNormPreorderTest extends TestCase {
   public void testSimple() {
     TensorNormPreorder tensorNormPreorder = new TensorNormPreorder(Norm.INFINITY);
     PreorderComparator<Tensor> preorderComparator = tensorNormPreorder.comparator();
-    assertEquals(preorderComparator.compare(Tensors.vector(12, 3), Tensors.vector(3, 12)), PreorderComparison.LESS_EQUALS_AND_GREATER_EQUALS);
+    assertEquals(preorderComparator.compare(Tensors.vector(12, 3), Tensors.vector(3, 12)), PreorderComparison.INDIFFERENT);
     assertEquals(preorderComparator.compare(Tensors.vector(1, 3), Tensors.vector(3, 12)), PreorderComparison.LESS_EQUALS_ONLY);
   }
 }
