@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
-// TODO OB for all filters: check and more tests
-// TODO OB for all filters: document oscillations linear case (recommend alpha)
 public class GeodesicFIR2Filter implements TensorUnaryOperator {
   private static final Scalar TWO = RealScalar.of(2);
   // ---

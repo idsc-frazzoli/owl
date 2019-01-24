@@ -23,7 +23,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.filter.GeodesicIIR3Filter;
+import ch.ethz.idsc.sophus.filter.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
@@ -134,7 +134,9 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
     }
     // TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR2Filter(Se2Geodesic.INSTANCE, alpha);
     // TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
-    TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    // TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    Tensor mask = Tensors.of(alpha, beta, RealScalar.of(.4), RealScalar.of(.4), RealScalar.of(.4));
+    TensorUnaryOperator geodesicCenterFilter = new GeodesicFIRnFilter(Se2Geodesic.INSTANCE, mask);
     final Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;
