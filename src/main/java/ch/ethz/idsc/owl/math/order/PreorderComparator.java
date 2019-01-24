@@ -15,7 +15,7 @@ public interface PreorderComparator<T> {
    * <p>
    * <tt>x &le y</tt>,
    * <tt>x &ge y</tt>, or
-   * <tt>x ~ y</tt>, i.e. x and y are incomparable
+   * <tt>x || y</tt>, i.e. x and y are incomparable
    * @param x left hand side of preordered comparison
    * @param y right hand side of preordered comparison
    * @return one of the following

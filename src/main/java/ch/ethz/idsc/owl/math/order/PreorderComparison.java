@@ -17,21 +17,25 @@ package ch.ethz.idsc.owl.math.order;
  * </tr>
  * <tr>
  * <td>x &le; y</td>
- * <td>LESS_EQUALS</td>
+ * <td>LESS_EQUALS_ONLY</td>
  * </tr>
  * <tr>
  * <td>x &ge; y</td>
- * <td>GREATER_EQUALS</td>
+ * <td>GREATER_EQUALS_ONLY</td>
  * </tr>
  * <tr>
- * <td>x & y are incomparable </td>
+ * <td>x ~ y</td>
+ * <td>INDIFFERENT</td>
+ * </tr>
+ * <tr>
+ * <td>x || y</td>
  * <td>INCOMPARABLE</td>
  * </tr>
  * </table>
  * @author astoll */
 public enum PreorderComparison {
   LESS_EQUALS_ONLY(true, false), //
-  LESS_EQUALS_AND_GREATER_EQUALS(true, true), //
+  INDIFFERENT(true, true), //
   GREATER_EQUALS_ONLY(false, true), //
   INCOMPARABLE(false, false), //
   ;
