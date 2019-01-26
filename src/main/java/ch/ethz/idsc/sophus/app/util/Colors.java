@@ -26,15 +26,15 @@ import javax.swing.JProgressBar;
   /** background for items in menus that are selected; not Java official */
   public static final Color ACTIVE_ITEM = new Color(243, 239, 124);
 
-  public static Color alpha064(Color myColor) {
-    return new Color(myColor.getRed(), myColor.getGreen(), myColor.getBlue(), 64);
+  public static Color alpha064(Color color) {
+    return new Color(color.getRed(), color.getGreen(), color.getBlue(), 64);
   }
 
-  public static Color alpha128(Color myColor) {
-    return new Color(myColor.getRed(), myColor.getGreen(), myColor.getBlue(), 128);
+  public static Color alpha128(Color color) {
+    return new Color(color.getRed(), color.getGreen(), color.getBlue(), 128);
   }
 
-  public static Color withAlpha(Color myColor, int alpha) {
-    return new Color(myColor.getRed(), myColor.getGreen(), myColor.getBlue(), alpha);
+  public static Color withAlpha(Color color, int alpha) {
+    return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
   }
 }

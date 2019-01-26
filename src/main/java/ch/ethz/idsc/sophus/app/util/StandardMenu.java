@@ -22,8 +22,8 @@ abstract class StandardMenu {
       public void actionPerformed(ActionEvent actionEvent) {
         long toc = System.nanoTime();
         if (500_000_000L < toc - tic) {
-          StandardMenu myStandardMenu = supplier.get();
-          myStandardMenu.jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
+          StandardMenu standardMenu = supplier.get();
+          standardMenu.jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
               // System.out.println("popupMenuWillBecomeVisible");
@@ -41,7 +41,7 @@ abstract class StandardMenu {
               tic = System.nanoTime();
             }
           });
-          myStandardMenu.south(jButton);
+          standardMenu.south(jButton);
         }
       }
     });
@@ -50,7 +50,7 @@ abstract class StandardMenu {
   // ---
   protected abstract void design(JPopupMenu jPopupMenu);
 
-  private JPopupMenu jPopupMenu = new JPopupMenu();
+  private final JPopupMenu jPopupMenu = new JPopupMenu();
 
   protected final JPopupMenu designShow() {
     design(jPopupMenu);
@@ -79,11 +79,5 @@ abstract class StandardMenu {
     Point myMouse = DisplayHelper.getMouseLocation();
     Point myPoint = jComponent.getLocationOnScreen();
     designShow().show(jComponent, myMouse.x - myPoint.x, myMouse.y - myPoint.y);
-  }
-
-  // does not really work :-(
-  @Deprecated
-  protected static void quickDemo(StandardMenu standardMenu) {
-    // myStandardMenu.atMouse();
   }
 }
