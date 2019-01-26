@@ -8,6 +8,6 @@ public class ClipStrictPartialComparatorTest extends TestCase {
   public void testSimple() {
     StrictPartialComparison strictPartialComparison = //
         ClipStrictPartialComparator.INSTANCE.compare(Clip.function(0, 1), Clip.function(0, 1));
-    assertEquals(strictPartialComparison, PartialComparison.INCOMPARABLE);
+    assertEquals(strictPartialComparison, StrictPartialComparison.INCOMPARABLE);
   }
 }
