@@ -25,12 +25,12 @@ public class JassCardPartialComparatorTest extends TestCase {
 
   public void testAHigherThanBBothTrumpf() {
     // A has higher value and both are Trumpf: A > B
-    assertEquals(JassCardPartialComparator.INSTANCE.compare(A, B), StrictPartialComparison.GREATER_THAN);
+    assertEquals(JassCardPartialComparator.INSTANCE.compare(B, A), StrictPartialComparison.GREATER_THAN);
   }
 
   public void testALowerThanBBothTrumpf() {
     // A has lower value and both are Trumpf: A < B
-    assertEquals(JassCardPartialComparator.INSTANCE.compare(B, A), StrictPartialComparison.LESS_THAN);
+    assertEquals(JassCardPartialComparator.INSTANCE.compare(A, B), StrictPartialComparison.LESS_THAN);
   }
 
   public void testAHigherThanBNoneTrumpf() {
