@@ -74,13 +74,6 @@ public class SpinnerLabel<Type> {
         graphics.setColor(Colors.withAlpha(Color.lightGray, 96));
         graphics.drawLine(0, piy + 1, dimension.width, piy + 1);
       }
-      // Point2D start = new Point2D.Float(0, 0);
-      // Point2D end = new Point2D.Float(0, myDimension.height - 1);
-      // float[] dist = { 0f, (numel() - index) / (float) (numel() + 1), 1f };
-      // Color[] colors = { Colors.alpha064(Color.lightGray),
-      // Colors.alpha128(Color.white), Colors.alpha064(Color.lightGray) };
-      // LinearGradientPaint p = new LinearGradientPaint(start, end, dist, colors);
-      // myGraphics.setPaint(p);
       // ---
       graphics.setColor(insideActive ? Colors.SELECTION : Colors.alpha064(Color.lightGray));
       final int w = 3;
@@ -137,18 +130,12 @@ public class SpinnerLabel<Type> {
   int index = -1;
   List<Type> list;
 
-  // protected boolean isUsingArrows = true;
-  // public void setUsingArrows(boolean myBoolean) {
-  // isUsingArrows = myBoolean;
-  // }
   public boolean isOverArrows(Point myPoint) {
     Dimension dimension = jLabel.getSize();
     return mouseInside && dimension.width - border_width < myPoint.x;
   }
 
   public SpinnerLabel() {
-    // myJLabel.setOpaque(true);
-    // myJLabel.setBackground(background);
     jLabel.setHorizontalAlignment(SwingConstants.CENTER);
     jLabel.setOpaque(false);
     jLabel.addMouseWheelListener(mouseWheelEvent -> {
@@ -157,22 +144,21 @@ public class SpinnerLabel<Type> {
     });
     MouseAdapter mouseAdapter = new MouseAdapter() {
       @Override
-      public void mouseEntered(MouseEvent myMouseEvent) {
+      public void mouseEntered(MouseEvent mouseEvent) {
         mouseInside = true;
-        lastMouse = myMouseEvent.getPoint();
+        lastMouse = mouseEvent.getPoint();
         jLabel.repaint();
       }
 
       @Override
-      public void mouseExited(MouseEvent myMouseEvent) {
+      public void mouseExited(MouseEvent mouseEvent) {
         mouseInside = false;
         jLabel.repaint();
       }
 
       @Override
-      public void mouseMoved(MouseEvent myMouseEvent) {
-        lastMouse = myMouseEvent.getPoint();
-        // if (isUsingArrows)
+      public void mouseMoved(MouseEvent mouseEvent) {
+        lastMouse = mouseEvent.getPoint();
         jLabel.repaint(); // not very efficient
       }
     };
@@ -188,13 +174,13 @@ public class SpinnerLabel<Type> {
     });
   }
 
-  public SpinnerLabel(SpinnerListener<Type> mySpinnerListener) {
+  public SpinnerLabel(SpinnerListener<Type> spinnerListener) {
     this();
-    addSpinnerListener(mySpinnerListener);
+    addSpinnerListener(spinnerListener);
   }
 
-  public void addSpinnerListener(SpinnerListener<Type> mySpinnerListener) {
-    spinnerListeners.add(mySpinnerListener);
+  public void addSpinnerListener(SpinnerListener<Type> spinnerListener) {
+    spinnerListeners.add(spinnerListener);
   }
 
   public void setCyclic(boolean cyclic) {

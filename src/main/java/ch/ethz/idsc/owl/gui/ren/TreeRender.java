@@ -61,7 +61,6 @@ public class TreeRender implements RenderInterface {
     private final Tensor polygon;
     private final TreeColor treeColor;
     private final double min;
-    private final double max;
     private final long count;
     private final double inverse;
 
@@ -76,7 +75,7 @@ public class TreeRender implements RenderInterface {
           .filter(Double::isFinite) //
           .summaryStatistics();
       min = doubleSummaryStatistics.getMin();
-      max = doubleSummaryStatistics.getMax();
+      double max = doubleSummaryStatistics.getMax();
       count = doubleSummaryStatistics.getCount();
       inverse = (treeColor.nodeColor.length() - 1) / (max - min);
     }
