@@ -3,6 +3,8 @@ package ch.ethz.idsc.sophus.dubins;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.dubins.DubinsPath.Type;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -13,8 +15,58 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class DubinsPathTest extends TestCase {
+  public void testFirstTurnRight() {
+    assertFalse(Type.LSR.isFirstTurnRight());
+    assertTrue(Type.RSL.isFirstTurnRight());
+    assertFalse(Type.LSL.isFirstTurnRight());
+    assertTrue(Type.RSR.isFirstTurnRight());
+    assertFalse(Type.LRL.isFirstTurnRight());
+    assertTrue(Type.RLR.isFirstTurnRight());
+  }
+
+  public void testFirstEqualsLast() {
+    assertFalse(Type.LSR.isFirstEqualsLast());
+    assertFalse(Type.RSL.isFirstEqualsLast());
+    assertTrue(Type.LSL.isFirstEqualsLast());
+    assertTrue(Type.RSR.isFirstEqualsLast());
+    assertTrue(Type.LRL.isFirstEqualsLast());
+    assertTrue(Type.RLR.isFirstEqualsLast());
+  }
+
+  public void testTangentUnit() {
+    Tensor tensor = Type.LSR.tangent(2, Quantity.of(10, "m"));
+    assertEquals(tensor.get(0), RealScalar.ONE);
+    assertEquals(tensor.get(1), RealScalar.ZERO);
+    assertEquals(tensor.get(2), Quantity.of(RationalScalar.of(-1, 10), "m^-1"));
+  }
+
+  public void testTangentDimensionless() {
+    Tensor tensor = Type.LSR.tangent(2, RealScalar.of(10));
+    assertEquals(tensor.get(0), RealScalar.ONE);
+    assertEquals(tensor.get(1), RealScalar.ZERO);
+    assertEquals(tensor.get(2), RationalScalar.of(-1, 10));
+  }
+
+  public void testFail() {
+    try {
+      Type.LSR.tangent(2, RealScalar.of(-10));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testAnticipateFail() {
+    try {
+      Type.LSR.tangent(-2, RealScalar.of(10));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testWithoutUnits() {
-    DubinsPath dubinsPath = new DubinsPath(DubinsPathType.LSR, RealScalar.of(2), Tensors.vector(3, 2, 1));
+    DubinsPath dubinsPath = new DubinsPath(Type.LSR, RealScalar.of(2), Tensors.vector(3, 2, 1));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.vector(0, 0, 0));
     assertTrue(Chop._10.close(scalarTensorFunction.apply(RealScalar.of(0.3)), //
         Tensors.fromString("{0.29887626494719843, 0.022457844127915516, 0.15}")));
@@ -25,17 +77,22 @@ public class DubinsPathTest extends TestCase {
   }
 
   public void testUnits() {
-    DubinsPath dubinsPath = new DubinsPath(DubinsPathType.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 10[m], 1[m]}"));
+    DubinsPath dubinsPath = new DubinsPath(Type.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 10[m], 1[m]}"));
     assertEquals(dubinsPath.length(), Quantity.of(12, "m"));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.fromString("{1[m], 2[m], 3}"));
     Tensor tensor = scalarTensorFunction.apply(Quantity.of(0.3, "m"));
     assertTrue(Chop._10.close(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}")));
   }
 
+  public void testMemberFuncs() {
+    DubinsPath dubinsPath = new DubinsPath(Type.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 10[m], 1[m]}"));
+    assertEquals(dubinsPath.type(), Type.LRL);
+  }
+
   public void testSerializable() throws ClassNotFoundException, IOException {
-    DubinsPath path = //
-        new DubinsPath(DubinsPathType.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 8[m], 1[m]}"));
+    DubinsPath path = new DubinsPath(Type.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 8[m], 1[m]}"));
     DubinsPath dubinsPath = Serialization.copy(path);
+    assertEquals(dubinsPath.type(), Type.LRL);
     assertEquals(dubinsPath.length(), Quantity.of(10, "m"));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.fromString("{1[m], 2[m], 3}"));
     Tensor tensor = scalarTensorFunction.apply(Quantity.of(0.3, "m"));
@@ -44,7 +101,7 @@ public class DubinsPathTest extends TestCase {
 
   public void testSignFail() {
     try {
-      new DubinsPath(DubinsPathType.LRL, RealScalar.ONE, Tensors.vector(1, -10, 1));
+      new DubinsPath(Type.LRL, RealScalar.ONE, Tensors.vector(1, -10, 1));
       fail();
     } catch (Exception exception) {
       // ---
@@ -52,7 +109,7 @@ public class DubinsPathTest extends TestCase {
   }
 
   public void testOutsideFail() {
-    DubinsPath dubinsPath = new DubinsPath(DubinsPathType.LRL, RealScalar.ONE, Tensors.vector(1, 10, 1));
+    DubinsPath dubinsPath = new DubinsPath(Type.LRL, RealScalar.ONE, Tensors.vector(1, 10, 1));
     assertEquals(dubinsPath.length(), Quantity.of(12, ""));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.vector(1, 2, 3));
     try {
@@ -80,7 +137,7 @@ public class DubinsPathTest extends TestCase {
 
   public void testVectorFail() {
     try {
-      new DubinsPath(DubinsPathType.RLR, RealScalar.ONE, Tensors.vector(1, 10, 1, 3));
+      new DubinsPath(Type.RLR, RealScalar.ONE, Tensors.vector(1, 10, 1, 3));
       fail();
     } catch (Exception exception) {
       // ---

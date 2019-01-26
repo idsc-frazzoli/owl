@@ -20,16 +20,27 @@ public class GeodesicCenterTest extends TestCase {
 
   public void testSimple() {
     // function generates window to compute mean: all points in window have same weight
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, CONSTANT);
+    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(RnGeodesic.INSTANCE, CONSTANT);
     for (int index = 0; index < 9; ++index) {
-      Tensor apply = geodesicCenter.apply(UnitVector.of(9, index));
+      Tensor apply = tensorUnaryOperator.apply(UnitVector.of(9, index));
       assertEquals(apply, RationalScalar.of(1, 9));
     }
   }
 
+  public void testEvenFail() {
+    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(RnGeodesic.INSTANCE, CONSTANT);
+    for (int index = 0; index < 9; ++index)
+      try {
+        tensorUnaryOperator.apply(Array.zeros(2 * index));
+        fail();
+      } catch (Exception exception) {
+        // ---
+      }
+  }
+
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(Se2CoveringGeodesic.INSTANCE, CONSTANT);
-    Serialization.copy(geodesicCenter);
+    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2CoveringGeodesic.INSTANCE, CONSTANT);
+    Serialization.copy(tensorUnaryOperator);
   }
 
   public void testFail() {

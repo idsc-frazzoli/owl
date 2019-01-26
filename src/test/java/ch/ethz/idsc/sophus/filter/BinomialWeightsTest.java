@@ -22,4 +22,13 @@ public class BinomialWeightsTest extends TestCase {
     Tensor expect = Tensors.fromString("{1/16, 1/4, 3/8, 1/4, 1/16}");
     assertEquals(result, expect);
   }
+
+  public void testFail() {
+    try {
+      BinomialWeights.INSTANCE.apply(-1);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
