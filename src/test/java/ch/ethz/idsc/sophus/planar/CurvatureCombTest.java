@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -55,6 +56,12 @@ public class CurvatureCombTest extends TestCase {
   public void testTwo() {
     Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1,2},{4,5}}"), RealScalar.of(2), false);
     assertEquals(tensor, Tensors.fromString("{{1,2},{4,5}}"));
+  }
+
+  public void testZeros() {
+    Tensor tensor = Array.zeros(10, 2);
+    assertEquals(tensor, CurvatureComb.of(tensor, RealScalar.of(2), false));
+    assertEquals(tensor, CurvatureComb.of(tensor, RealScalar.of(2), true));
   }
 
   public void testFail() {

@@ -91,7 +91,5 @@ enum CatmullClarkSubdivisionExport {
     Put.of(HomeDirectory.file("se2.mathematica"), se2());
     Put.of(HomeDirectory.file("r3s2.mathematica"), r3s2());
     Put.of(HomeDirectory.file("sphere.mathematica"), r3s2_sphere());
-    // Tensor vector = r3s2_sp(RealScalar.of(.2), RealScalar.of(.3));
-    // System.out.println(vector);
   }
 }

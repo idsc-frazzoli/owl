@@ -6,6 +6,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -36,5 +37,12 @@ public class DodgsonSabinCurveSubdivisionTest extends TestCase {
     assertEquals(string.get(6), d);
     assertTrue(Chop._13.close(string.get(3), //
         Tensors.fromString("{2.64619661516195, 0.8388990046231528}")));
+  }
+
+  public void testCyclic() {
+    for (int n = 3; n < 10; ++n)
+      Chop._13.requireClose( //
+          DodgsonSabinCurveSubdivision.INSTANCE.cyclic(CirclePoints.of(n)), //
+          CirclePoints.of(2 * n));
   }
 }

@@ -30,11 +30,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return intersectCircleLine(b, c, r, RealScalar.ZERO);
   }
 
-  // not covered by tests
-  static Tensor midpoint(Tensor b, Tensor c) {
-    return b.add(c).multiply(RationalScalar.HALF);
-  }
-
   static Tensor midpoint(Tensor a, Tensor b, Tensor c, Tensor d) {
     Scalar R = averageCurvature(a, b, c, d);
     Scalar lam = lambda(a, b, c, d, R);
