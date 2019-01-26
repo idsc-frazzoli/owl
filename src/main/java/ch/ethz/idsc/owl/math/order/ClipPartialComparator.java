@@ -11,7 +11,10 @@ import ch.ethz.idsc.tensor.sca.Clip;
  * https://en.wikipedia.org/wiki/Interval_order */
 public enum ClipPartialComparator {
   ;
-  /** reflexive
+  /** binary relation
+   * irreflexive */
+  public static final BinaryRelation<Clip> BINARY_RELATION = (x, y) -> Scalars.lessEquals(x.max(), y.min());
+  /** TODO reflexive
    * antisymmetric */
-  public static final PartialComparator<Clip> INSTANCE = PartialOrder.comparator((x, y) -> Scalars.lessEquals(x.max(), y.min()));
+  public static final PartialComparator<Clip> INSTANCE = PartialOrder.comparator(BINARY_RELATION);
 }

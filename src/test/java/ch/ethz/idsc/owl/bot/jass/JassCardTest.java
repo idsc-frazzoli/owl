@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class JassCardTest extends TestCase {
   public void testIsTrumpf() {
     JassCard card = new JassCard(Color.EICHEL, Type.ACE, true);
-    assertTrue(card.isTrumpf);
+    assertTrue(card.isTrumpf());
   }
 
   public void testCheatChecker() {

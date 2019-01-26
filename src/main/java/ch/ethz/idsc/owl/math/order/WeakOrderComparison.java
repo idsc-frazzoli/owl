@@ -22,12 +22,15 @@ package ch.ethz.idsc.owl.math.order;
  * </tr>
  * <tr>
  * <td>x ~ y</td>
- * <td>LESS_EQUALS_AND_GREATER_EQUALS</td>
+ * <td>INDIFFERENT</td>
  * </tr>
  * </table>
  * @author astoll */
 public enum WeakOrderComparison {
-  LESS_EQUALS_ONLY(true, false), INDIFFERENT(true, true), GREATER_EQUALS_ONLY(false, true),;
+  LESS_EQUALS_ONLY(true, false), //
+  INDIFFERENT(true, true), //
+  GREATER_EQUALS_ONLY(false, true),//
+  ;
   private final boolean le;
   private final boolean ge;
 
