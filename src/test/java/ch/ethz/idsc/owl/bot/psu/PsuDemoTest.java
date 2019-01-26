@@ -27,11 +27,9 @@ public class PsuDemoTest extends TestCase {
     assertFalse(trajectoryPlanner.getBest().isPresent());
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);
-    // System.out.println("expan=" + glcExpand.getExpandCount());
     assertTrue(trajectoryPlanner.getBest().isPresent());
     // TODO JPH the code below is a general consistency check:
     Collection<GlcNode> collection = trajectoryPlanner.getDomainMap().values();
-    // System.out.println("nodes=" + collection.size());
     assertTrue(100 < collection.size());
     long count = collection.stream().map(Node::parent).filter(Objects::isNull).count();
     assertEquals(count, 1);

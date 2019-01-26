@@ -30,7 +30,6 @@ public class ProviderRankTest extends TestCase {
     queue.add(ProviderRank.EMERGENCY);
     queue.add(ProviderRank.FALLBACK);
     queue.add(ProviderRank.GODMODE);
-    // System.out.println(new ArrayList<>(queue));
     assertEquals(queue.poll(), ProviderRank.GODMODE);
   }
 
@@ -53,7 +52,6 @@ public class ProviderRankTest extends TestCase {
     queue.add(ProviderRank.EMERGENCY);
     queue.add(ProviderRank.FALLBACK);
     queue.add(ProviderRank.GODMODE);
-    // System.out.println(new ArrayList<>(queue));
     assertEquals(queue.poll(), ProviderRank.GODMODE);
     assertEquals(queue.poll(), ProviderRank.EMERGENCY);
     assertEquals(queue.poll(), ProviderRank.CALIBRATION);

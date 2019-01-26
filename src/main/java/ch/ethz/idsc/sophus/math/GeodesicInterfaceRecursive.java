@@ -5,6 +5,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorGeodesic;
 
+// TODO JPH/OB
+@Deprecated
 public interface GeodesicInterfaceRecursive extends TensorGeodesic {
   /** @param p
    * @param q

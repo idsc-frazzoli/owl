@@ -32,7 +32,7 @@ public class Tse2CarFlowsTest extends TestCase {
     for (Flow flow : flows) {
       Tensor dx = Tse2StateSpaceModel.INSTANCE.f(x, flow.getU());
       Tensor xp = x.add(dx.multiply(Quantity.of(2, "s")));
-      System.out.println(xp.map(Round._3));
+      assertEquals(xp.extract(0, 2).map(Round._8), Tensors.fromString("{6.24181384[m], -1.04882591[m]}"));
     }
     {
       Scalar maxAcc = Tse2Controls.maxAcc(flows);

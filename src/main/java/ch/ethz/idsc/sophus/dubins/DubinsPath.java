@@ -55,7 +55,6 @@ public class DubinsPath implements Serializable {
     }
 
     public Tensor signatureAbs() {
-      // TODO JPH test
       return signatureAbs;
     }
 
@@ -107,10 +106,9 @@ public class DubinsPath implements Serializable {
     return length;
   }
 
-  /** @return total curvature */
+  /** @return total curvature, return value is non-negative */
   public Scalar curvature() {
-    // TODO JPH test
-    return segLength.dot(type.signatureAbs()).Get().divide(radius);
+    return segLength.dot(type.signatureAbs()).divide(radius).Get();
   }
 
   /** parameterization of Dubins path over the closed interval [length().zero(), length()]

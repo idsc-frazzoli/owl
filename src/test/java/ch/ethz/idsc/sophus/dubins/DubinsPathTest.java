@@ -4,8 +4,10 @@ package ch.ethz.idsc.sophus.dubins;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.dubins.DubinsPath.Type;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -45,6 +47,16 @@ public class DubinsPathTest extends TestCase {
     assertEquals(tensor.get(0), RealScalar.ONE);
     assertEquals(tensor.get(1), RealScalar.ZERO);
     assertEquals(tensor.get(2), RationalScalar.of(-1, 10));
+  }
+
+  public void testSignatureAbs() {
+    assertEquals(Type.LSL.signatureAbs(), Type.LSR.signatureAbs());
+    assertEquals(Type.LSL.signatureAbs(), Type.LSR.signatureAbs());
+    assertEquals(Type.LSL.signatureAbs(), Type.RSR.signatureAbs());
+    assertEquals(Type.LSL.signatureAbs(), Type.RSL.signatureAbs());
+    assertEquals(Type.LSL.signatureAbs(), Tensors.vector(1, 0, 1));
+    assertEquals(Type.LRL.signatureAbs(), Type.RLR.signatureAbs());
+    assertEquals(Type.LRL.signatureAbs(), Tensors.vector(1, 1, 1));
   }
 
   public void testFail() {
@@ -87,6 +99,14 @@ public class DubinsPathTest extends TestCase {
   public void testMemberFuncs() {
     DubinsPath dubinsPath = new DubinsPath(Type.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 10[m], 1[m]}"));
     assertEquals(dubinsPath.type(), Type.LRL);
+    Scalar curvature = dubinsPath.curvature();
+    ExactScalarQ.require(curvature);
+    assertEquals(curvature, RealScalar.of(6));
+  }
+
+  public void testStraight() {
+    DubinsPath dubinsPath = new DubinsPath(Type.LSL, Quantity.of(2, "m"), Tensors.fromString("{0[m], 10[m], 0[m]}"));
+    assertEquals(dubinsPath.curvature(), RealScalar.ZERO);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

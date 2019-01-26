@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
@@ -67,6 +68,17 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
     Tensor refined = curveSubdivision.string(curve);
     assertTrue(Tensors.isEmpty(refined));
     assertTrue(ExactScalarQ.all(refined));
+  }
+
+  public void testCirclePoints() {
+    CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
+    for (int n = 3; n < 10; ++n) {
+      Tensor tensor = curveSubdivision.cyclic(CirclePoints.of(n));
+      Tensor filter = Tensor.of(IntStream.range(0, tensor.length()) //
+          .filter(i -> i % 2 == 0) //
+          .mapToObj(tensor::get));
+      assertEquals(filter, CirclePoints.of(n));
+    }
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
