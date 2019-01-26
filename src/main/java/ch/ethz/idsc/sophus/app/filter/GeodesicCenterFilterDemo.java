@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.swing.JComboBox;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -21,6 +22,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
@@ -55,18 +57,27 @@ import ch.ethz.idsc.tensor.sca.Round;
   // ---
   // /* package */ final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
   private Tensor _control = Tensors.of(Array.zeros(3));
+  private final SpinnerListener<String> spinnerListener = resource -> //
+  _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
+      .limit(300) //
+      .map(row -> row.extract(1, 4)));
 
   GeodesicCenterFilterDemo() {
     super(GeodesicDisplays.SE2_R2);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
-      spinnerLabel.addSpinnerListener(resource -> //
-      _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          .limit(300) //
-          .map(row -> row.extract(1, 4))));
+      spinnerLabel.addSpinnerListener(spinnerListener);
       spinnerLabel.setList(list);
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
+    }
+    {
+      List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
+      JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
+      jComboBox.setLightWeightPopupEnabled(true);
+      jComboBox.setMaximumRowCount(30);
+      jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
+      timerFrame.jToolBar.add(jComboBox);
     }
     // ---
     jToggleData.setSelected(true);

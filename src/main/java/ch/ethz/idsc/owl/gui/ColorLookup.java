@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.gui;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
@@ -19,5 +20,19 @@ public enum ColorLookup {
         .map(hue -> Hsluv.of(hue.Get().number().doubleValue(), 1, lightness, 1)) //
         .map(ColorFormat::toVector));
     return StrictColorDataIndexed.create(tensor);
+  }
+
+  /** @param length
+   * @param colorDataGradient
+   * @return */
+  public static ColorDataIndexed increasing(int length, ColorDataGradient colorDataGradient) {
+    return StrictColorDataIndexed.create(Subdivide.of(0, 1, length - 1).map(colorDataGradient));
+  }
+
+  /** @param length
+   * @param colorDataGradient
+   * @return */
+  public static ColorDataIndexed decreasing(int length, ColorDataGradient colorDataGradient) {
+    return StrictColorDataIndexed.create(Subdivide.of(1, 0, length - 1).map(colorDataGradient));
   }
 }

@@ -12,10 +12,10 @@ public class DisplayHelper {
   private Rectangle screen = new Rectangle();
 
   public DisplayHelper() {
-    GraphicsEnvironment myGraphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    for (GraphicsDevice myGraphicsDevice : myGraphicsEnvironment.getScreenDevices())
-      for (GraphicsConfiguration myGraphicsConfiguration : myGraphicsDevice.getConfigurations())
-        screen = screen.union(myGraphicsConfiguration.getBounds());
+    GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    for (GraphicsDevice graphicsDevice : graphicsEnvironment.getScreenDevices())
+      for (GraphicsConfiguration graphicsConfiguration : graphicsDevice.getConfigurations())
+        screen = screen.union(graphicsConfiguration.getBounds());
   }
 
   public Rectangle allVisible(int x, int y, int width, int height) {

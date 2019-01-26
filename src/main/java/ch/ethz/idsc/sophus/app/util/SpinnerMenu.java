@@ -14,8 +14,8 @@ import javax.swing.JPopupMenu;
 
 class SpinnerMenu<Type> extends StandardMenu {
   private final Map<Type, JMenuItem> map = new LinkedHashMap<>();
-  final SpinnerLabel<Type> spinnerLabel;
-  final boolean hover;
+  private final SpinnerLabel<Type> spinnerLabel;
+  private final boolean hover;
 
   SpinnerMenu(SpinnerLabel<Type> spinnerLabel, boolean hover) {
     this.spinnerLabel = spinnerLabel;
@@ -24,20 +24,20 @@ class SpinnerMenu<Type> extends StandardMenu {
 
   @Override
   protected void design(JPopupMenu jPopupMenu) {
-    for (Type myType : spinnerLabel.list) {
-      JMenuItem jMenuItem = new JMenuItem(myType.toString());
+    for (Type type : spinnerLabel.list) {
+      JMenuItem jMenuItem = new JMenuItem(type.toString());
       if (hover)
         jMenuItem.addMouseListener(new MouseAdapter() {
           @Override
           public void mouseEntered(MouseEvent mouseEvent) {
-            setValue(myType);
+            setValue(type);
           }
         });
       jMenuItem.addActionListener(actionEvent -> {
-        if (!myType.equals(spinnerLabel.getValue())) // invoke only when different
-          setValue(myType);
+        if (!type.equals(spinnerLabel.getValue())) // invoke only when different
+          setValue(type);
       });
-      map.put(myType, jMenuItem);
+      map.put(type, jMenuItem);
       jPopupMenu.add(jMenuItem);
     }
   }
