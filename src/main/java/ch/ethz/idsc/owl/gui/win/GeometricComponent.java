@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 
+import ch.ethz.idsc.owl.data.IntervalClock;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -49,24 +50,23 @@ public final class GeometricComponent {
   /***************************************************/
   /** public access to final JComponent: attach mouse listeners, get/set properties, ... */
   public final JComponent jComponent = new JComponent() {
+    private final IntervalClock intervalClock = new IntervalClock();
+
     @Override
     protected void paintComponent(Graphics graphics) {
       render((Graphics2D) graphics, getSize());
-      { // display frame rate only when rendering in component
-        long period = System.nanoTime() - lastRepaint;
-        lastRepaint = System.nanoTime();
-        graphics.setFont(DEFAULT_FONT);
-        graphics.setColor(Color.LIGHT_GRAY);
-        graphics.drawString(String.format("%4.1f Hz", 1.0e9 / period), 0, 10);
-      }
+      // display frame rate only when rendering in component
+      graphics.setFont(DEFAULT_FONT);
+      graphics.setColor(Color.LIGHT_GRAY);
+      graphics.drawString(String.format("%4.1f Hz", intervalClock.hertz()), 0, 10);
     }
   };
-  // 3x3 affine matrix that maps model to pixel coordinates
-  private Tensor model2pixel = MODEL2PIXEL_INITIAL.copy();
-  private Tensor mouseLocation = Array.zeros(2);
   private final List<RenderInterface> renderBackground = new CopyOnWriteArrayList<>();
   private final List<RenderInterface> renderInterfaces = new CopyOnWriteArrayList<>();
-  private long lastRepaint = System.nanoTime();
+  // ---
+  /** 3x3 affine matrix that maps model to pixel coordinates */
+  private Tensor model2pixel = MODEL2PIXEL_INITIAL.copy();
+  private Tensor mouseLocation = Array.zeros(2);
   private int mouseWheel = 0;
   private boolean isZoomable = true;
   private int buttonDrag = MouseEvent.BUTTON3;
@@ -216,15 +216,12 @@ public final class GeometricComponent {
     graphics.setColor(Color.WHITE);
     graphics.fillRect(0, 0, dimension.width, dimension.height);
     // ---
-    renderBackground.forEach(renderInterface -> renderInterface.render(createLayer(), graphics));
-    renderInterfaces.forEach(renderInterface -> renderInterface.render(createLayer(), graphics));
+    GeometricLayer geometricLayer = new GeometricLayer(model2pixel, getMouseSe2State());
+    renderBackground.forEach(renderInterface -> renderInterface.render(geometricLayer, graphics));
+    renderInterfaces.forEach(renderInterface -> renderInterface.render(geometricLayer, graphics));
   }
 
   /***************************************************/
-  private GeometricLayer createLayer() {
-    return new GeometricLayer(model2pixel, getMouseSe2State());
-  }
-
   /** transforms point in pixel space to coordinates of model space
    * 
    * @param point
