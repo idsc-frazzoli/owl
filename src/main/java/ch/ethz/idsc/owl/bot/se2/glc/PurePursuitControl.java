@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
-public class PurePursuitControl extends StateTrajectoryControl {
+/* package */ class PurePursuitControl extends StateTrajectoryControl {
   private final Clip clip;
   private final Scalar lookAhead;
 

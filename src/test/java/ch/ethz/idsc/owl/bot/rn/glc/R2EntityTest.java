@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.idsc.owl.ani.adapter.EuclideanTrajectoryControl;
-import ch.ethz.idsc.owl.ani.api.AbstractEntity;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -75,7 +74,7 @@ public class R2EntityTest extends TestCase {
         EulerIntegrator.INSTANCE, //
         new StateTime(state, RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
-    AbstractEntity abstractEntity = new R2Entity(episodeIntegrator, trajectoryControl);
+    R2Entity abstractEntity = new R2Entity(episodeIntegrator, trajectoryControl);
     StateTime st = abstractEntity.getStateTimeNow();
     assertEquals(st.state(), state);
     assertEquals(st.time(), RealScalar.ZERO); // <- specific value == 0 is not strictly required
