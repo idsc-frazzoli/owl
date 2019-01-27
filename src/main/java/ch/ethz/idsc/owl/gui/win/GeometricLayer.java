@@ -8,15 +8,14 @@ import java.awt.geom.Point2D;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import ch.ethz.idsc.owl.data.DontModify;
+import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 
-/**
+/** GeometricLayer transforms from model to pixel coordinates
  * 
- */
-@DontModify
+ * @see RenderInterface */
 public class GeometricLayer {
   private static final Tensor ZEROS = Array.zeros(3);
 
