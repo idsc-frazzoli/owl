@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.red.Max;
 
-public enum Se2Controls {
+/* package */ enum Se2Controls {
   ;
   /** @param flows
    * @return max speed with unit "m*s^-1" */
