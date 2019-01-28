@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.order;
 import ch.ethz.idsc.tensor.sca.Clip;
 import junit.framework.TestCase;
 
-public class ClipPartialComparatorTest extends TestCase {
+public class ClipStrictPartialComparatorTest extends TestCase {
   public void testIncomparable() {
     StrictPartialComparison strictPartialComparison1 = ClipStrictPartialComparator.INSTANCE.compare(Clip.function(0, 1), Clip.function(0, 1));
     StrictPartialComparison strictPartialComparison2 = ClipStrictPartialComparator.INSTANCE.compare(Clip.function(-1, 1), Clip.function(0, 2));
