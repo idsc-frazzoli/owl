@@ -102,7 +102,7 @@ public class SpinnerLabel<Type> {
   };
   private boolean isMenuEnabled = true;
   private boolean isMenuHover = false;
-  LazyMouseListener lazyMouseListener = mouseEvent -> {
+  private LazyMouseListener lazyMouseListener = mouseEvent -> {
     if (mouseEvent.getButton() == MouseEvent.BUTTON1 && jLabel.isEnabled()) {
       Dimension myDimension = jLabel.getSize();
       Point myPoint = mouseEvent.getPoint();
@@ -122,10 +122,10 @@ public class SpinnerLabel<Type> {
     this.isMenuHover = hover;
   }
 
-  int value = 0;
-  boolean cyclic = false;
-  JSpinner jSpinner = new JSpinner(new SpinnerNumberModel(value, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
-  int index = -1;
+  private int value = 0;
+  private boolean cyclic = false;
+  private JSpinner jSpinner = new JSpinner(new SpinnerNumberModel(value, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+  private int index = -1;
   List<Type> list;
 
   public boolean isOverArrows(Point myPoint) {

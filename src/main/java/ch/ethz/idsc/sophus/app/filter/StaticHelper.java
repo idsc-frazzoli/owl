@@ -12,6 +12,8 @@ import ch.ethz.idsc.tensor.red.Mean;
 
 /* package */ enum StaticHelper {
   ;
+  static final Tensor HANGAR_MODEL2PIXEL = Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}");
+  // ---
   private static final Scalar DEG2RAD = Degree.of(1);
 
   /** swiss trolley plus */
