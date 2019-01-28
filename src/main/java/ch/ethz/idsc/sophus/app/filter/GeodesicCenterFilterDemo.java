@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.swing.JComboBox;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -64,21 +63,24 @@ import ch.ethz.idsc.tensor.sca.Round;
 
   GeodesicCenterFilterDemo() {
     super(GeodesicDisplays.SE2_R2);
+    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
       spinnerLabel.addSpinnerListener(spinnerListener);
       spinnerLabel.setList(list);
+      spinnerLabel.setIndex(0);
+      spinnerLabel.reportToAll();
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
-    {
-      List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
-      JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
-      jComboBox.setLightWeightPopupEnabled(true);
-      jComboBox.setMaximumRowCount(30);
-      jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
-      timerFrame.jToolBar.add(jComboBox);
-    }
+    // {
+    // List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
+    // JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
+    // jComboBox.setLightWeightPopupEnabled(true);
+    // jComboBox.setMaximumRowCount(30);
+    // jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
+    // timerFrame.jToolBar.add(jComboBox);
+    // }
     // ---
     jToggleData.setSelected(true);
     timerFrame.jToolBar.add(jToggleData);
@@ -202,6 +204,5 @@ import ch.ethz.idsc.tensor.sca.Round;
     AbstractDemo abstractDemo = new GeodesicCenterFilterDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
-    abstractDemo.timerFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
   }
 }
