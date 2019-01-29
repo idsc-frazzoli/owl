@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -21,18 +22,15 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
+import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.group.Se2Utils;
-import ch.ethz.idsc.sophus.planar.Arrowhead;
+import ch.ethz.idsc.sophus.math.SmoothingKernelCausal;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -42,13 +40,12 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
-  // private final SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
+  private final SpinnerLabel<SmoothingKernelCausal> spinnerFilter = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleLine = new JToggleButton("line");
@@ -89,7 +86,12 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
     timerFrame.jToolBar.add(jToggleIIR);
     // ---
     {
-      spinnerRadius.setList(IntStream.range(0, 15).boxed().collect(Collectors.toList()));
+      spinnerFilter.setList(Arrays.asList(SmoothingKernelCausal.values()));
+      spinnerFilter.setValue(SmoothingKernelCausal.GAUSSIAN);
+      spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
+    }
+    {
+      spinnerRadius.setList(IntStream.range(0, 40).boxed().collect(Collectors.toList()));
       spinnerRadius.setValue(9);
       spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     }
@@ -103,6 +105,7 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor control = control();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    final SmoothingKernelCausal smoothingKernelCausal = spinnerFilter.getValue();
     final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));
     if (jToggleStep.isSelected()) {
       control = Tensors.of(Array.zeros(3));
@@ -134,11 +137,7 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
         geometricLayer.popMatrix();
       }
     }
-    // FIXME: JH Was haeltst du von den Funktion Tensors.ones(Scalar... scalars) und Tensors.zeros(Scalar... scalars)
-    // die ein 1er- resp. 0er Matrix ausgeben?
-    // Tensor mask = Tensors.ones(spinnerRadius.getValue());
-    Tensor mask = Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1).extract(0, spinnerRadius.getValue())
-        .divide(RealScalar.of(1 + spinnerRadius.getValue()));
+    Tensor mask = smoothingKernelCausal.apply(spinnerRadius.getValue());
     mask.append(alpha);
     TensorUnaryOperator geodesicCenterFilter;
     if (jToggleIIR.isSelected()) {

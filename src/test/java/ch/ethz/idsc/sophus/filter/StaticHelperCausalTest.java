@@ -1,18 +1,24 @@
 //code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
-import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class StaticHelperCausalTest extends TestCase {
-  public void testSimple() {
-    Tensor mask = Tensors.vector(.2, .4, .9, .5, .5);
-    Tensor correct = Tensors.vector(0.012, 0.003, 0.01, 0.225, 0.25, 0.5);
-    Chop._12.requireClose(correct, StaticHelperCausal.splits(mask));
+  public void testEquivalence() {
+    Tensor linear = Tensors.vector(.2, .3, .5);
+    Tensor geodesic = StaticHelperCausal.splits(linear);
+    Tensor p = RealScalar.ONE;
+    Tensor q = RealScalar.of(4);
+    Tensor r = RealScalar.of(2);
+    Tensor test = Tensors.of(p, q, r);
+    Tensor temp1 = RnGeodesic.INSTANCE.split(p, q, geodesic.Get(0));
+    Tensor temp2 = RnGeodesic.INSTANCE.split(temp1, r, geodesic.Get(1));
+    assertEquals(test, temp2);
   }
 
   public void testScalarFail() {
