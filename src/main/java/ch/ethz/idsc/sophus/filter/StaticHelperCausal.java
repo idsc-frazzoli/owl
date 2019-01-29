@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 
+// TODO OB fail for invalid input
 /* package */ enum StaticHelperCausal {
   ;
   /** @param mask of weights of affine combination [a1, a2, ..., an]
