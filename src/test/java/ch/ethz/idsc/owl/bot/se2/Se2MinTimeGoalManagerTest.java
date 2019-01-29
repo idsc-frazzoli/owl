@@ -121,7 +121,6 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
     assertEquals(se2MinTimeGoalManager.minCostToGoal(Tensors.vector(-0.5, 2, 2)), RealScalar.of(1.7));
     //
     GlcNode glcNode = GlcNodes.createRoot(new StateTime(Tensors.vector(1, 2, 0), Quantity.of(3, "s")), se2MinTimeGoalManager.getGoalInterface());
-    // System.out.println(glcNode.merit());
     Scalar scalar = se2MinTimeGoalManager.costIncrement( //
         glcNode, //
         Arrays.asList(new StateTime(Tensors.vector(1, 2, 3), Quantity.of(10, "s"))), //

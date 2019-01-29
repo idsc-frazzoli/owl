@@ -27,7 +27,7 @@ public class GeodesicIIR1Filter implements TensorUnaryOperator {
    * @param p */
   public GeodesicIIR1Filter(GeodesicInterface geodesicInterface, Scalar alpha, Tensor p) {
     this(geodesicInterface, alpha);
-    this.p = p;
+    this.p = p.copy();
   }
 
   @Override

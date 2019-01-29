@@ -34,12 +34,12 @@ public class GeodesicNeville extends AbstractInterpolation implements ScalarTens
     return d.get(length - 1);
   }
 
-  @Override
+  @Override // from Interpolation
   public Tensor get(Tensor index) {
     return at(VectorQ.requireLength(index, 1).Get(0));
   }
 
-  @Override
+  @Override // from Interpolation
   public Tensor at(Scalar index) {
     return apply(index);
   }

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
@@ -63,6 +64,17 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     assertEquals(n1.get(1), Tensors.fromString("{9/16, -1/8}"));
     assertEquals(n1.get(2), UnitVector.of(2, 0));
     assertEquals(n1.get(3), Tensors.fromString("{9/16, 9/16}"));
+  }
+
+  public void testCyclic() {
+    CurveSubdivision curveSubdivision = new FourPointCurveSubdivision(RnGeodesic.INSTANCE);
+    for (int n = 3; n < 10; ++n) {
+      Tensor tensor = curveSubdivision.cyclic(CirclePoints.of(n));
+      Tensor filter = Tensor.of(IntStream.range(0, tensor.length()) //
+          .filter(i -> i % 2 == 0) //
+          .mapToObj(tensor::get));
+      assertEquals(filter, CirclePoints.of(n));
+    }
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

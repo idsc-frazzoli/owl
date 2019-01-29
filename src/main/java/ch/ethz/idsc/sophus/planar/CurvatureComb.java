@@ -24,13 +24,17 @@ public enum CurvatureComb {
   private static final TensorUnaryOperator NORMALIZE = NormalizeUnlessZero.with(Norm._2);
   private static final Tensor ZEROS = Array.zeros(2);
 
-  /** @param tensor with dimensions n x 2
-   * @param scalar
-   * @return tensor + normal * curvature * scalar */
-  public static Tensor of(Tensor tensor, Scalar scalar, boolean isCyclic) {
+  /** @param tensor with dimensions n x 2 with points of curve
+   * @param scaling
+   * @param cyclic
+   * @return tensor + normal * curvature * scaling */
+  public static Tensor of(Tensor tensor, Scalar scaling, boolean cyclic) {
     if (Tensors.isEmpty(tensor))
       return Tensors.empty();
-    return tensor.add((isCyclic ? cyclic(tensor) : string(tensor)).multiply(scalar));
+    Tensor normal = cyclic //
+        ? cyclic(tensor)
+        : string(tensor);
+    return tensor.add(normal.multiply(scaling));
   }
 
   /** @param tensor of dimension n x 2

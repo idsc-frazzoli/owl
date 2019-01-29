@@ -39,10 +39,10 @@ public class PathRender implements RenderInterface {
     this(color, DEFAULT);
   }
 
-  public RenderInterface setCurve(Tensor points, boolean isCyclic) {
+  public RenderInterface setCurve(Tensor points, boolean cyclic) {
     return renderInterface = Objects.isNull(points) || Tensors.isEmpty(points) //
         ? EmptyRender.INSTANCE
-        : new Render(points, isCyclic);
+        : new Render(points, cyclic);
   }
 
   @Override // from RenderInterface
@@ -52,17 +52,17 @@ public class PathRender implements RenderInterface {
 
   private class Render implements RenderInterface {
     private final Tensor points;
-    private final boolean isCyclic;
+    private final boolean cyclic;
 
-    public Render(Tensor points, boolean isCyclic) {
+    public Render(Tensor points, boolean cyclic) {
       this.points = points;
-      this.isCyclic = isCyclic;
+      this.cyclic = cyclic;
     }
 
     @Override // from RenderInterface
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
       Path2D path2d = geometricLayer.toPath2D(points);
-      if (isCyclic)
+      if (cyclic)
         path2d.closePath();
       graphics.setStroke(stroke);
       graphics.setColor(color);

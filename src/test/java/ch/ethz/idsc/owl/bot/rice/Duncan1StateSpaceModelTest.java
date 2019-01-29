@@ -62,7 +62,6 @@ public class Duncan1StateSpaceModelTest extends TestCase {
     Tensor accel = Tensors.of(Quantity.of(3, "m*s^-2"));
     episodeIntegrator.move(accel, Quantity.of(1, "s"));
     StateTime stateTime = episodeIntegrator.tail();
-    // System.out.println(stateTime.toInfoString());
     assertTrue(Scalars.lessThan(speed.Get(0), stateTime.state().Get(0)));
   }
 

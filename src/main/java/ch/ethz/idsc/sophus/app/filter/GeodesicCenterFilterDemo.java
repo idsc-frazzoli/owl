@@ -21,6 +21,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
@@ -55,19 +56,31 @@ import ch.ethz.idsc.tensor.sca.Round;
   // ---
   // /* package */ final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
   private Tensor _control = Tensors.of(Array.zeros(3));
+  private final SpinnerListener<String> spinnerListener = resource -> //
+  _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
+      .limit(300) //
+      .map(row -> row.extract(1, 4)));
 
   GeodesicCenterFilterDemo() {
     super(GeodesicDisplays.SE2_R2);
+    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
-      spinnerLabel.addSpinnerListener(resource -> //
-      _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          .limit(300) //
-          .map(row -> row.extract(1, 4))));
+      spinnerLabel.addSpinnerListener(spinnerListener);
       spinnerLabel.setList(list);
+      spinnerLabel.setIndex(0);
+      spinnerLabel.reportToAll();
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
+    // {
+    // List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
+    // JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
+    // jComboBox.setLightWeightPopupEnabled(true);
+    // jComboBox.setMaximumRowCount(30);
+    // jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
+    // timerFrame.jToolBar.add(jComboBox);
+    // }
     // ---
     jToggleData.setSelected(true);
     timerFrame.jToolBar.add(jToggleData);
@@ -191,6 +204,5 @@ import ch.ethz.idsc.tensor.sca.Round;
     AbstractDemo abstractDemo = new GeodesicCenterFilterDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
-    abstractDemo.timerFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
   }
 }

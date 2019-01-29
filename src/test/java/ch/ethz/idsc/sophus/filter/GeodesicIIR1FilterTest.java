@@ -66,4 +66,13 @@ public class GeodesicIIR1FilterTest extends TestCase {
     Chop._13.requireClose(acc5, Quantity.of(0.5, "s^-2"));
     // System.out.println(acc5); // 0.5[s^-2]
   }
+
+  public void testNullFail() {
+    try {
+      new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.2), null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

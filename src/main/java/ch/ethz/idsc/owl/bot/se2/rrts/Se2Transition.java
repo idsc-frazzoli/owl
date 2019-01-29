@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-public class Se2Transition extends AbstractTransition {
+/* package */ class Se2Transition extends AbstractTransition {
   private final DubinsPath dubinsPath;
 
   public Se2Transition(Tensor start, Tensor end, Scalar radius) {

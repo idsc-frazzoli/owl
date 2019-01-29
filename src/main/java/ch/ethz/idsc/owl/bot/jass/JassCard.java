@@ -1,8 +1,9 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.jass;
 
-// TODO outsource
 /** Creates a card of the game jassen with the attributes color and card type
+ * 
+ * https://en.wikipedia.org/wiki/Jass
  * 
  * @author astoll */
 /* package */ class JassCard {
@@ -11,17 +12,26 @@ package ch.ethz.idsc.owl.bot.jass;
   }
 
   static enum Type {
-    SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE
+    SIX(1), SEVEN(2), EIGHT(3), NINE(8), TEN(4), JACK(9), QUEEN(5), KING(6), ACE(7),;
+    private final int trumpfOrdering;
+
+    private Type(int trumpfOrdering) {
+      this.trumpfOrdering = trumpfOrdering;
+    }
   }
 
-  final Color color;
-  final Type type;
-  final boolean isTrumpf;
+  private final Color color;
+  private final Type type;
+  private final boolean isTrumpf;
 
   JassCard(Color color, Type type, boolean isTrumpf) {
     this.color = color;
     this.type = type;
     this.isTrumpf = isTrumpf;
+  }
+
+  public boolean isTrumpf() {
+    return isTrumpf;
   }
 
   /** checks whether the two cards are exactly the same or if two different colors were assigned Trumpf
@@ -46,7 +56,7 @@ package ch.ethz.idsc.owl.bot.jass;
   public boolean isLess(JassCard jassCard) {
     this.cheatChecker(jassCard);
     if (this.isTrumpf && jassCard.isTrumpf) {
-      if (this.type.compareTo(jassCard.type) < 0) {
+      if (this.type.trumpfOrdering < jassCard.type.trumpfOrdering) {
         return true;
       }
     }

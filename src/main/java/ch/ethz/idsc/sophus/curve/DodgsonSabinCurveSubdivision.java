@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
 public enum DodgsonSabinCurveSubdivision implements CurveSubdivision {
   INSTANCE;
   // --
-  @Override
+  @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     Tensor curve = Tensors.empty();
     for (int index = 0; index < tensor.length(); ++index) {
@@ -30,7 +30,7 @@ public enum DodgsonSabinCurveSubdivision implements CurveSubdivision {
     return curve;
   }
 
-  @Override
+  @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
     int last = tensor.length() - 1;
     if (last < 2)

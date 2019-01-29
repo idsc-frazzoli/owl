@@ -52,7 +52,7 @@ public enum H2Geodesic implements GeodesicInterface {
     return Power.function(t).apply(q2.divide(p2)).multiply(p2);
   }
 
-  @Override
+  @Override // from TensorGeodesic
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
     return scalar -> split(p, q, scalar);
   }

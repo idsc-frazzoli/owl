@@ -13,9 +13,9 @@ public enum BSplineLimitMask implements IntegerTensorFunction {
   FUNCTION;
   // ---
   @Override
-  public Tensor apply(Integer width) {
-    int odd = 2 * width + 1;
-    return Range.of(width + 1, odd + width + 1) //
+  public Tensor apply(Integer extent) {
+    int odd = 2 * extent + 1;
+    return Range.of(extent + 1, odd + extent + 1) //
         .map(GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, odd, UnitVector.of(2 * odd + 1, odd)));
   }
 }

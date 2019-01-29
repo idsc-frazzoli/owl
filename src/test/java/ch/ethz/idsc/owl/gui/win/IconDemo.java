@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.opt.GaussianMatrix;
 
-enum IconDemo {
+/* package */ enum IconDemo {
   ;
   public static void main(String[] args) throws Exception {
     for (ColorDataGradients colorDataFunction : ColorDataGradients.values()) {

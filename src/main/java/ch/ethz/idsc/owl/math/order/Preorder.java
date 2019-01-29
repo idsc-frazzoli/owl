@@ -12,7 +12,7 @@ public enum Preorder {
         boolean xRy = binaryRelation.test(x, y);
         boolean yRx = binaryRelation.test(y, x);
         if (xRy && yRx)
-          return PreorderComparison.LESS_EQUALS_AND_GREATER_EQUALS;
+          return PreorderComparison.INDIFFERENT;
         if (xRy)
           return PreorderComparison.LESS_EQUALS_ONLY;
         if (yRx)

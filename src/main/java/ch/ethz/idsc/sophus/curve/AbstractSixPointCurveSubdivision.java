@@ -14,14 +14,15 @@ public abstract class AbstractSixPointCurveSubdivision extends FourPointCurveSub
   @Override // from FourPointCurveSubdivision
   public final Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
+    int length = tensor.length();
     Tensor curve = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
-      Tensor p = tensor.get((index - 2 + tensor.length()) % tensor.length());
-      Tensor q = tensor.get((index - 1 + tensor.length()) % tensor.length());
+    for (int index = 0; index < length; ++index) {
+      Tensor p = tensor.get((index - 2 + length) % length);
+      Tensor q = tensor.get((index - 1 + length) % length);
       Tensor r = tensor.get(index);
-      Tensor s = tensor.get((index + 1) % tensor.length());
-      Tensor t = tensor.get((index + 2) % tensor.length());
-      Tensor u = tensor.get((index + 3) % tensor.length());
+      Tensor s = tensor.get((index + 1) % length);
+      Tensor t = tensor.get((index + 2) % length);
+      Tensor u = tensor.get((index + 3) % length);
       curve.append(r).append(center(p, q, r, s, t, u));
     }
     return curve;

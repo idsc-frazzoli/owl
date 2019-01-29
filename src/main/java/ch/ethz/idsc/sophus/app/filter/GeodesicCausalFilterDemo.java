@@ -19,11 +19,13 @@ import javax.swing.event.ChangeListener;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 import ch.ethz.idsc.sophus.filter.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
@@ -56,17 +58,21 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private Tensor _control = Tensors.of(Array.zeros(3));
   private Scalar alpha = RationalScalar.of(3, 4);
+  private final SpinnerListener<String> spinnerListener = resource -> //
+  _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
+      .limit(300) //
+      .map(row -> row.extract(1, 4)));
 
   GeodesicCausalFilterDemo() {
     super(GeodesicDisplays.SE2_R2);
+    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
-      spinnerLabel.addSpinnerListener(resource -> //
-      _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-          .limit(200) //
-          .map(row -> row.extract(1, 4))));
+      spinnerLabel.addSpinnerListener(spinnerListener);
       spinnerLabel.setList(list);
+      spinnerLabel.setIndex(0);
+      spinnerLabel.reportToAll();
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
     JTextField jTextField = new JTextField(10);
@@ -108,15 +114,15 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
     final SmoothingKernelCausal smoothingKernelCausal = spinnerFilter.getValue();
     final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));
     if (jToggleStep.isSelected()) {
-      control = Tensors.of(Array.zeros(3));
+      _control = Tensors.of(Array.zeros(3));
       for (int i = 0; i < 300; ++i) {
         if (i < 100) {
-          control.append(Tensors.vector(i * 0.01, 0, 0));
+          _control.append(Tensors.vector(i * 0.01, 0, 0));
         } else //
         if (i > 200) {
-          control.append(Tensors.vector(i * 0.01, 0, 0));
+          _control.append(Tensors.vector(i * 0.01, 0, 0));
         } else {
-          control.append(Tensors.vector(i * 0.01, 1, 0));
+          _control.append(Tensors.vector(i * 0.01, 1, 0));
         }
       }
     }
@@ -129,6 +135,16 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
       for (Tensor point : control) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(shape);
+        // if (jToggleLine.isSelected()) {
+        // graphics.setColor(cyclic.getColor(0));
+        // graphics.draw(geometricLayer.toPath2D(_control));
+        // }
+        // for (Tensor xya : _control) {
+        // geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
+        // Path2D path2d = geometricLayer.toPath2D(ARROWHEAD_HI);
+        // if (jToggleStep.isSelected()) {
+        // path2d = geometricLayer.toPath2D(CIRCLE);
+        // }
         path2d.closePath();
         graphics.setColor(new Color(255, 128, 128, 64));
         graphics.fill(path2d);
@@ -146,6 +162,12 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
       geodesicCenterFilter = new GeodesicFIRnFilter(geodesicDisplay.geodesicInterface(), mask);
     }
     final Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
+    // // TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR2Filter(Se2Geodesic.INSTANCE, alpha);
+    // // TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    // // TensorUnaryOperator geodesicCenterFilter = new GeodesicIIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
+    // Tensor mask = Tensors.of(alpha, beta, RealScalar.of(.4), RealScalar.of(.4), RealScalar.of(.4));
+    // TensorUnaryOperator geodesicCenterFilter = new GeodesicFIRnFilter(Se2Geodesic.INSTANCE, mask);
+    // final Tensor refined = Tensor.of(_control.stream().map(geodesicCenterFilter));
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;
       {
@@ -214,10 +236,8 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
   }
 
   public static void main(String[] args) {
-    GeodesicCausalFilterDemo geodesicCenterFilterDemo = new GeodesicCausalFilterDemo();
-    geodesicCenterFilterDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
-    geodesicCenterFilterDemo.timerFrame.jFrame.setVisible(true);
-    geodesicCenterFilterDemo.timerFrame.geometricComponent.setModel2Pixel( //
-        Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
+    AbstractDemo abstractDemo = new GeodesicCausalFilterDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

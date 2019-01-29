@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.sophus.dubins.DubinsPath.Type;
 import ch.ethz.idsc.sophus.group.Se2CoveringGroupElement;
 import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.tensor.Scalar;
@@ -39,13 +40,13 @@ public class FixedRadiusDubins implements DubinsPathGenerator, Serializable {
 
   @Override // from DubinsPathGenerator
   public Stream<DubinsPath> allValid() {
-    return Stream.of(DubinsPathType.values()) //
+    return Stream.of(Type.values()) //
         .map(this::create) //
         .filter(Optional::isPresent) //
         .map(Optional::get);
   }
 
-  private Optional<DubinsPath> create(DubinsPathType dubinsPathType) {
+  private Optional<DubinsPath> create(Type dubinsPathType) {
     Tensor center1 = Tensors.of(zero, radius, zero);
     Tensor h = Tensors.of(zero, dubinsPathType.isFirstEqualsLast() ? radius : radius.negate(), zero);
     Tensor gnorm = dubinsPathType.isFirstTurnRight() ? Se2Flip.FUNCTION.apply(xya) : xya;
