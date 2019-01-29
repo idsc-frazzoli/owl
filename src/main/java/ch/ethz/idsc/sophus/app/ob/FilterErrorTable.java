@@ -23,6 +23,7 @@ enum FilterErrorTable {
   ;
   public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
 
+  // TODO OB repair
   public static Tensor process(String name, int width) {
     TableBuilder tableBuilder = new TableBuilder();
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
@@ -38,9 +39,9 @@ enum FilterErrorTable {
       Scalar alpha = alpharange.Get(j);
       // Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0Error(alpha), //
       // geodesicCausal1Filtering.evaluate1Error(alpha));
-      Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0ErrorSeperated(alpha), //
-          geodesicCausal1Filtering.evaluate1ErrorSeperated(alpha));
-      tableBuilder.appendRow(row);
+      // Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0ErrorSeperated(alpha), //
+      // geodesicCausal1Filtering.evaluate1ErrorSeperated(alpha));
+      // tableBuilder.appendRow(row);
     }
     Tensor log = tableBuilder.toTable();
     System.out.println(Pretty.of(log.map(Round._4)));
