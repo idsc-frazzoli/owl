@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.math;
 import ch.ethz.idsc.sophus.filter.GeodesicMean;
 import ch.ethz.idsc.sophus.filter.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
@@ -39,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.win.TukeyWindow;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
-public enum SmoothingKernel implements IntegerTensorFunction {
+public enum SmoothingKernelCausal implements IntegerTensorFunction {
   BARTLETT(BartlettWindow.FUNCTION), //
   BLACKMAN(BlackmanWindow.FUNCTION), //
   BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION), //
@@ -65,7 +64,7 @@ public enum SmoothingKernel implements IntegerTensorFunction {
   private final ScalarUnaryOperator scalarUnaryOperator;
   private final boolean isContinuous;
 
-  private SmoothingKernel(ScalarUnaryOperator scalarUnaryOperator) {
+  private SmoothingKernelCausal(ScalarUnaryOperator scalarUnaryOperator) {
     this.scalarUnaryOperator = scalarUnaryOperator;
     isContinuous = Chop._03.allZero(scalarUnaryOperator.apply(RationalScalar.HALF));
   }
@@ -74,23 +73,18 @@ public enum SmoothingKernel implements IntegerTensorFunction {
     return scalarUnaryOperator;
   }
 
-  @Override // from IntegerTensorFunction
-  public Tensor apply(Integer extent) {
-    if (extent == 0)
+  @Override
+  public Tensor apply(Integer i) {
+    if (i == 0)
       return Tensors.vector(1);
     Tensor vector = isContinuous //
-        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * extent + 2) //
+        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i + 2) //
             .map(scalarUnaryOperator) //
-            .extract(1, 2 * extent + 2)
-        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * extent) //
+            .extract(1, 2 * i + 2)
+        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
             .map(scalarUnaryOperator);
+    // Take only half of the values
+    vector = vector.extract(0, i + 1);
     return NORMALIZE.apply(vector);
-  }
-
-  public static void main(String[] args) {
-    int width = 1;
-    Scalar weight = RationalScalar.of(1, width);
-    Tensor test = SmoothingKernel.BLACKMAN.apply(width);
-    System.out.println(test);
   }
 }

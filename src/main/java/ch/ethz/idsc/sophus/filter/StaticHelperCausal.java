@@ -6,8 +6,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.sca.Power;
 
+// TODO OB fail for invalid input
 /* package */ enum StaticHelperCausal {
   ;
   /** @param mask of weights of affine combination [a1, a2, ..., an]
@@ -16,13 +16,12 @@ import ch.ethz.idsc.tensor.sca.Power;
   public static Tensor splits(Tensor mask) {
     Tensor splits = Tensors.empty();
     Scalar lambda;
-    for (int index = 0; index < mask.length(); ++index) {
-      lambda = index == 0 //
-          ? RealScalar.ONE
-          : mask.Get(index - 1);
-      Scalar sign = Power.of(RealScalar.ONE.negate(), mask.length() - index);
-      for (int subindex = index; subindex < mask.length(); ++subindex)
-        lambda = lambda.multiply(mask.Get(subindex).subtract(RealScalar.ONE)).multiply(sign);
+    for (int index = 0; index <= mask.length() - 3; ++index) {
+      Scalar temp = RealScalar.ZERO;
+      for (int subindex = 0; subindex <= index + 1; ++subindex) {
+        temp = temp.add(mask.Get(subindex));
+      }
+      lambda = mask.Get(index + 1).divide(temp);
       splits.append(lambda);
     }
     splits.append(Last.of(mask));
