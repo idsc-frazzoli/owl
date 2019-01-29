@@ -28,6 +28,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.N;
 
 public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private static final Scalar THRESHOLD = RealScalar.of(0.2);
@@ -125,7 +126,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   }
 
   public final Tensor control() {
-    return Tensor.of(control.stream().map(geodesicDisplay()::project)).unmodifiable();
+    return Tensor.of(control.stream().map(geodesicDisplay()::project).map(N.DOUBLE::of)).unmodifiable();
   }
 
   protected final void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {

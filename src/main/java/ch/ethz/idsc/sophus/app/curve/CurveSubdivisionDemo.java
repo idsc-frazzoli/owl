@@ -127,6 +127,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
       CurveSubdivisionHelper.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000));
       timerFrame.jToolBar.add(jSlider);
     }
+    timerFrame.geometricComponent.addRenderInterfaceBackground(StaticHelper.GRID_RENDER);
   }
 
   @Override
