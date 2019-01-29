@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * a factor of 0 results in the identity operator
  * typically the factor is in the interval [0, 1] */
 public abstract class Regularization2Step implements TensorUnaryOperator {
-  private static final Scalar NUMERIC_HALF = DoubleScalar.of(0.5);
+  private static final Scalar DOUBLE_SCALAR_HALF = DoubleScalar.of(0.5);
 
   /** @param geodesicInterface
    * @param factor */
@@ -40,7 +40,7 @@ public abstract class Regularization2Step implements TensorUnaryOperator {
     this.factor = factor;
     this.half = ExactScalarQ.of(factor) //
         ? RationalScalar.HALF
-        : NUMERIC_HALF;
+        : DOUBLE_SCALAR_HALF;
   }
 
   Tensor average(Tensor prev, Tensor curr, Tensor next) {
