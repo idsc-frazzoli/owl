@@ -37,7 +37,7 @@ public class GeodesicCenter implements TensorUnaryOperator {
     this.function = Objects.requireNonNull(function);
   }
 
-  @Override
+  @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     if (tensor.length() % 2 != 1)
       throw TensorRuntimeException.of(tensor);
