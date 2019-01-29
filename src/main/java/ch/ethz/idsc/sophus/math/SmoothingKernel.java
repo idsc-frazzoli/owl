@@ -73,15 +73,15 @@ public enum SmoothingKernel implements IntegerTensorFunction {
     return scalarUnaryOperator;
   }
 
-  @Override
-  public Tensor apply(Integer i) {
-    if (i == 0)
+  @Override // from IntegerTensorFunction
+  public Tensor apply(Integer extent) {
+    if (extent == 0)
       return Tensors.vector(1);
     Tensor vector = isContinuous //
-        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i + 2) //
+        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * extent + 2) //
             .map(scalarUnaryOperator) //
-            .extract(1, 2 * i + 2)
-        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
+            .extract(1, 2 * extent + 2)
+        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * extent) //
             .map(scalarUnaryOperator);
     return NORMALIZE.apply(vector);
   }
