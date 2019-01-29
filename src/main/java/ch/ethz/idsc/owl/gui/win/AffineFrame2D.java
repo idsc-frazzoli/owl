@@ -52,6 +52,12 @@ import ch.ethz.idsc.tensor.Tensors;
     return new AffineFrame2D(tensor.dot(matrix));
   }
 
+  /** @return determinant of affine transform, for a standard,
+   * right-hand coordinate system, the determinant is negative */
+  public double det() {
+    return m00 * m11 - m10 * m01;
+  }
+
   /** @return 3 x 3 matrix that represents this transformation */
   public Tensor tensor_copy() {
     return tensor.copy();

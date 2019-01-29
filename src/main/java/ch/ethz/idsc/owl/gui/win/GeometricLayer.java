@@ -114,4 +114,10 @@ public class GeometricLayer {
   public Tensor getMouseSe2State() {
     return mouseSe2State;
   }
+
+  /** @param modelWidth
+   * @return */
+  public float model2pixelWidth(double modelWidth) {
+    return (float) (Math.sqrt(Math.abs(deque.peek().det())) * modelWidth);
+  }
 }
