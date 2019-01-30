@@ -19,13 +19,13 @@ public abstract class Regularization2Step implements TensorUnaryOperator {
   private static final Scalar DOUBLE_SCALAR_HALF = DoubleScalar.of(0.5);
 
   /** @param geodesicInterface
-   * @param factor */
+   * @param factor for instance 2/3 */
   public static TensorUnaryOperator cyclic(GeodesicInterface geodesicInterface, Scalar factor) {
     return new Regularization2StepCyclic(geodesicInterface, factor);
   }
 
   /** @param geodesicInterface
-   * @param factor */
+   * @param factor for instance 2/3 */
   public static TensorUnaryOperator string(GeodesicInterface geodesicInterface, Scalar factor) {
     return new Regularization2StepString(geodesicInterface, factor);
   }

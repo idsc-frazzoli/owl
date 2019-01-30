@@ -1,3 +1,4 @@
+// code by ob
 package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
@@ -20,7 +21,6 @@ public class GeodesicIIRnFilterTest extends TestCase {
     assertEquals(refined.get(3), Tensors.vector(3.0, 3.0, 0.0));
   }
 
-  //
   public void testRotation() {
     Tensor p = Tensors.vector(0, 0, 0);
     Tensor q = Tensors.vector(0, 0, 1);
