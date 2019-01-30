@@ -10,7 +10,6 @@ import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -40,18 +39,16 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       Put.of(HomeDirectory.file("gokart_delta.file"), delta);
     }
     {
-      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.GAUSSIAN);
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, centerWindowSampler), 6);
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       Put.of(HomeDirectory.file("gokart_poses_gauss.file"), smooth);
       Tensor delta = LIE_DIFFERENCES.apply(smooth);
       Put.of(HomeDirectory.file("gokart_delta_gauss.file"), delta);
     }
     {
-      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.HAMMING);
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, centerWindowSampler), 6);
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.HAMMING), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       Put.of(HomeDirectory.file("gokart_poses_hammi.file"), smooth);
       Tensor delta = LIE_DIFFERENCES.apply(smooth);

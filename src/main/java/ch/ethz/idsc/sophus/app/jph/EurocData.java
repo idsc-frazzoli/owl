@@ -10,7 +10,6 @@ import ch.ethz.idsc.sophus.group.LinearGroup;
 import ch.ethz.idsc.sophus.group.Se3Exponential;
 import ch.ethz.idsc.sophus.group.Se3Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -57,9 +56,8 @@ import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
     }
     System.out.println("smooth");
     {
-      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.GAUSSIAN);
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, centerWindowSampler), 4 * 3 * 2);
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 4 * 3 * 2);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       System.out.println("store");
       Put.of(HomeDirectory.file("MH_04_difficult_poses_smooth.file"), smooth);

@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** Careful: the implementation only supports sequences with odd number of elements
@@ -13,11 +12,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * Example: if the points are from R^n the center would simply be the mean */
 public enum GeodesicMean {
   ;
-  private static final WindowCenterSampler CENTER_WINDOW_SAMPLER = new WindowCenterSampler(SmoothingKernel.DIRICHLET);
-
   /** @param geodesicInterface
    * @return geodesic center operator with Dirichlet/constant weights */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface) {
-    return GeodesicCenter.of(geodesicInterface, CENTER_WINDOW_SAMPLER);
+    return GeodesicCenter.of(geodesicInterface, SmoothingKernel.DIRICHLET);
   }
 }

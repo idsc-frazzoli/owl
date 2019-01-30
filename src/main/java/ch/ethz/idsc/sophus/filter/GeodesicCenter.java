@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,6 +17,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** GeodesicCenter projects a sequence of points to their geodesic center
  * with each point weighted as provided by an external function.
@@ -30,7 +32,14 @@ public class GeodesicCenter implements TensorUnaryOperator {
    * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameters is null */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
-    return new GeodesicCenter(geodesicInterface, function);
+    return new GeodesicCenter(geodesicInterface, Objects.requireNonNull(function));
+  }
+
+  /** @param geodesicInterface
+   * @param windowFunction
+   * @return */
+  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
+    return new GeodesicCenter(geodesicInterface, new WindowCenterSampler(windowFunction));
   }
 
   // ---
@@ -40,7 +49,7 @@ public class GeodesicCenter implements TensorUnaryOperator {
 
   private GeodesicCenter(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
     this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
-    this.function = Objects.requireNonNull(function);
+    this.function = function;
   }
 
   @Override // from TensorUnaryOperator
