@@ -3,13 +3,8 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.swing.JToggleButton;
 
@@ -17,9 +12,6 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
@@ -28,85 +20,17 @@ import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ class GeodesicCenterFilterDemo extends DatasetFilterDemo {
+/* package */ class GeodesicCenterFilterDemo extends DatasetKernelDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
-  private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
-  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
-  // ---
-  private final SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
-  private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
-  private final JToggleButton jToggleData = new JToggleButton("data");
-  private final JToggleButton jToggleLine = new JToggleButton("line");
-  private final JToggleButton jToggleDiff = new JToggleButton("diff");
-  private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JToggleButton jToggleWait = new JToggleButton("wait");
-  private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
-  private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
-  // ---
-  // /* package */ final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
-  private Tensor _control = Tensors.of(Array.zeros(3));
-  private final SpinnerListener<String> spinnerListener = resource -> //
-  _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-      .limit(300) //
-      .map(row -> row.extract(1, 4)));
 
   GeodesicCenterFilterDemo() {
-    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
-    {
-      SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
-      List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
-      spinnerLabel.addSpinnerListener(spinnerListener);
-      spinnerLabel.setList(list);
-      spinnerLabel.setIndex(0);
-      spinnerLabel.reportToAll();
-      spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
-    }
-    // {
-    // List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
-    // JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
-    // jComboBox.setLightWeightPopupEnabled(true);
-    // jComboBox.setMaximumRowCount(30);
-    // package ch.ethz.idsc.sophus.filter; jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
-    // timerFrame.jToolBar.add(jComboBox);
-    // }
-    // ---
-    jToggleData.setSelected(true);
-    timerFrame.jToolBar.add(jToggleData);
-    // ---
-    jToggleLine.setSelected(true);
-    timerFrame.jToolBar.add(jToggleLine);
-    // ---
-    jToggleDiff.setSelected(true);
-    timerFrame.jToolBar.add(jToggleDiff);
-    // ---
-    timerFrame.jToolBar.add(jToggleSymi);
-    // ---
-    jToggleWait.setSelected(false);
-    timerFrame.jToolBar.add(jToggleWait);
-    // ---
-    {
-      spinnerFilter.setList(Arrays.asList(SmoothingKernel.values()));
-      spinnerFilter.setValue(SmoothingKernel.GAUSSIAN);
-      spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
-    }
-    {
-      spinnerRadius.setList(IntStream.range(0, 21).boxed().collect(Collectors.toList()));
-      spinnerRadius.setValue(6);
-      spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    }
-  }
-
-  public final Tensor control() {
-    return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
   }
 
   @Override // from RenderInterface
@@ -122,11 +46,11 @@ import ch.ethz.idsc.tensor.sca.Round;
     if (jToggleWait.isSelected())
       return;
     // ---
-    Tensor control2 = control();
+    Tensor control = control();
     if (jToggleData.isSelected()) {
       if (jToggleLine.isSelected())
-        pathRenderCurve.setCurve(control2, false).render(geometricLayer, graphics);
-      for (Tensor point : control2) {
+        pathRenderCurve.setCurve(control, false).render(geometricLayer, graphics);
+      for (Tensor point : control) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(shape);
         path2d.closePath();
@@ -139,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
     TensorUnaryOperator geodesicCenterFilter = //
         GeodesicCenterFilter.of(GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel), radius);
-    final Tensor refined = geodesicCenterFilter.apply(control2);
+    final Tensor refined = geodesicCenterFilter.apply(control);
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;
       {
@@ -186,15 +110,6 @@ import ch.ethz.idsc.tensor.sca.Round;
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-  }
-
-  protected Path2D plotFunc(Graphics2D graphics, Tensor tensor, int baseline_y) {
-    Path2D path2d = new Path2D.Double();
-    if (Tensors.nonEmpty(tensor))
-      path2d.moveTo(0, baseline_y - tensor.Get(0).number().doubleValue());
-    for (int pix = 1; pix < tensor.length(); ++pix)
-      path2d.lineTo(pix * 0.5, baseline_y - tensor.Get(pix).number().doubleValue());
-    return path2d;
   }
 
   public static void main(String[] args) {
