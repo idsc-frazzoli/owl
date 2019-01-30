@@ -3,11 +3,8 @@ package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
