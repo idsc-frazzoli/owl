@@ -23,6 +23,7 @@ enum FilterErrorTable {
   public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
 
   // TODO OB repair
+  @SuppressWarnings("unused")
   public static Tensor process(String name, int width) {
     TableBuilder tableBuilder = new TableBuilder();
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //

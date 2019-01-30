@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class LinearVelocity3MinTime {
   private final Scalar v_max;
   private final Scalar a_max;
+  @SuppressWarnings("unused")
   private final Scalar v_tar;
   private final Clip v_range;
 

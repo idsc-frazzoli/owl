@@ -96,6 +96,7 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
   public BaseFrame start() {
     Optional<GlcNode> optional = getBest();
     GlcNode goalNode = optional.get();
+    @SuppressWarnings("unused")
     VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
     // System.out.println(cost);
     // ---

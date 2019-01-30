@@ -2,7 +2,7 @@
 
 Library for motion planning in Java, version `0.3.0`
 
-![owl](https://user-images.githubusercontent.com/4012178/51076099-7a0aa680-1694-11e9-8a2d-61836c634ee3.png)
+![owl](https://user-images.githubusercontent.com/4012178/51979557-bbb99080-248d-11e9-9b33-9a48ed76b038.png)
 
 The library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
@@ -169,9 +169,9 @@ by Sertac Karaman and Emilio Frazzoli,
 
 # ch.ethz.idsc.sophus <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for non-linear geometry computation in Java, version `0.0.1`
+Library for non-linear geometry computation in Java
 
-![sophus](https://user-images.githubusercontent.com/4012178/51076100-7f67f100-1694-11e9-83d8-f32c99752748.png)
+![sophus](https://user-images.githubusercontent.com/4012178/51979608-dc81e600-248d-11e9-8c67-8985732e7aa6.png)
 
 The library was developed with the following objectives in mind
 * trajectory design for autonomous robots

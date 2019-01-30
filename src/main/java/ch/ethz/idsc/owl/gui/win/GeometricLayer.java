@@ -115,8 +115,13 @@ public class GeometricLayer {
     return mouseSe2State;
   }
 
-  /** @param modelWidth
-   * @return */
+  /** function allows to render lines with width defined in model coordinates
+   * <pre>
+   * new BasicStroke(geometricLayer.model2pixelWidth(0.1))
+   * </pre>
+   * 
+   * @param modelWidth
+   * @return non-negative value */
   public float model2pixelWidth(double modelWidth) {
     return (float) (Math.sqrt(Math.abs(deque.peek().det())) * modelWidth);
   }
