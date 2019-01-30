@@ -2,6 +2,9 @@
 package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.WindowSideSampler;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -20,7 +23,14 @@ public class StaticHelperCausalTest extends TestCase {
     Tensor r = RealScalar.of(-2 * Math.random());
     Tensor geodesicavg = RnGeodesic.INSTANCE.split(RnGeodesic.INSTANCE.split(p, q, geodesic.Get(0)), r, geodesic.Get(1));
     Tensor dot = Tensors.of(p, q, r).dot(linear);
-    Chop._12.close(geodesicavg, dot);
+    Chop._12.requireClose(geodesicavg, dot);
+  }
+
+  public void testExact() {
+    WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.HANN);
+    Tensor mask = windowSideSampler.apply(2);
+    Tensor splits = StaticHelperCausal.splits(mask);
+    ExactScalarQ.requireAll(splits);
   }
 
   public void testNonAffineFail() {

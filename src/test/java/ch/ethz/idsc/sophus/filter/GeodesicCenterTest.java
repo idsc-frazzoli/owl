@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class GeodesicCenterTest extends TestCase {
@@ -48,7 +49,13 @@ public class GeodesicCenterTest extends TestCase {
 
   public void testFail() {
     try {
-      GeodesicCenter.of(RnGeodesic.INSTANCE, null);
+      GeodesicCenter.of(RnGeodesic.INSTANCE, (WindowCenterSampler) null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      GeodesicCenter.of(RnGeodesic.INSTANCE, (ScalarUnaryOperator) null);
       fail();
     } catch (Exception exception) {
       // ---

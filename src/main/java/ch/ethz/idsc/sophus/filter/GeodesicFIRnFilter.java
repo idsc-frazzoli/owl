@@ -22,25 +22,22 @@ public class GeodesicFIRnFilter implements TensorUnaryOperator {
   public GeodesicFIRnFilter(GeodesicInterface geodesicInterface, Tensor mask) {
     this.geodesicInterface = geodesicInterface;
     this.boundedLinkedList = new BoundedLinkedList<>(mask.length() + 1);
-    this.splits = StaticHelperCausal.splits(mask.extract(0, mask.length() - 1));
+    splits = StaticHelperCausal.splits(mask.extract(0, mask.length() - 1));
     Scalar temp = RealScalar.ONE;
-    for (int index = 0; index < splits.length(); index++) {
+    for (int index = 0; index < splits.length(); ++index)
       temp = temp.multiply(RealScalar.ONE.subtract(splits.Get(index))).add(RealScalar.ONE);
-    }
-    this.splits.append(temp.add(RealScalar.ONE).divide(temp));
-    this.splits.append(mask.Get(mask.length() - 1));
+    splits.append(temp.add(RealScalar.ONE).divide(temp));
+    splits.append(mask.Get(mask.length() - 1));
   }
 
   @Override
   public synchronized Tensor apply(Tensor tensor) {
     boundedLinkedList.add(tensor);
-    if (boundedLinkedList.size() < splits.length() + 1) {
+    if (boundedLinkedList.size() < splits.length() + 1)
       return tensor;
-    }
     Tensor interpolate = boundedLinkedList.getFirst();
-    for (int index = 0; index < splits.length() - 2; index++) {
+    for (int index = 0; index < splits.length() - 2; ++index)
       interpolate = geodesicInterface.split(interpolate, boundedLinkedList.get(index + 1), splits.Get(index));
-    }
     Tensor extrapolate = geodesicInterface.split(interpolate, boundedLinkedList.get(boundedLinkedList.size() - 2), splits.Get(splits.length() - 2));
     Tensor update = geodesicInterface.split(extrapolate, boundedLinkedList.getLast(), splits.Get(splits.length() - 1));
     return update;

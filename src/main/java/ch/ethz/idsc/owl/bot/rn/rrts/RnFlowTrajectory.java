@@ -38,7 +38,9 @@ import ch.ethz.idsc.tensor.Tensor;
       // System.out.println(node.state());
       Transition transition = transitionSpace.connect(prev.state(), node.state());
       Tensor stateTimes = transition.sampled(ofs, dt);
-      for (Tensor stateTime : stateTimes) {
+      for (@SuppressWarnings("unused")
+      Tensor stateTime : stateTimes) {
+        @SuppressWarnings("unused")
         StateTime orig = Lists.getLast(trajectory).stateTime();
         // Flow flow = between(orig, stateTime);
         // trajectory.add(new TrajectorySample(stateTime, flow));

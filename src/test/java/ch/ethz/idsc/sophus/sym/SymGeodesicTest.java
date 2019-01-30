@@ -5,7 +5,6 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,9 +22,8 @@ public class SymGeodesicTest extends TestCase {
     assertEquals(s3, scalar);
     Scalar evaluate = s3.evaluate();
     assertEquals(evaluate, RationalScalar.of(3, 2));
-    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.DIRICHLET);
     TensorUnaryOperator tensorUnaryOperator = //
-        GeodesicCenter.of(SymGeodesic.INSTANCE, centerWindowSampler);
+        GeodesicCenter.of(SymGeodesic.INSTANCE, SmoothingKernel.DIRICHLET);
     Tensor vector = Tensor.of(IntStream.range(0, 5).mapToObj(SymScalar::leaf));
     Tensor tensor = tensorUnaryOperator.apply(vector);
     assertEquals(tensor.toString(), "{{{0, 1, 1/2}, 2, 1/5}, {{4, 3, 1/2}, 2, 1/5}, 1/2}");

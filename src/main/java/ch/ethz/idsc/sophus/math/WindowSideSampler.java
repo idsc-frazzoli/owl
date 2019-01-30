@@ -2,8 +2,8 @@
 package ch.ethz.idsc.sophus.math;
 
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -13,18 +13,13 @@ public class WindowSideSampler extends WindowBaseSampler {
     super(windowFunction);
   }
 
-  @Override
-  public Tensor apply(Integer i) {
-    if (i == 0)
-      return Tensors.vector(1);
-    Tensor vector = isContinuous //
-        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i + 2) //
+  @Override // from WindowBaseSampler
+  protected Tensor samples(int extent) {
+    return isContinuous //
+        ? Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, extent + 1) //
             .map(windowFunction) //
-            .extract(1, 2 * i + 2)
-        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * i) //
+            .extract(1, extent + 2)
+        : Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, extent) //
             .map(windowFunction);
-    // Take only half of the values
-    vector = vector.extract(0, i + 1);
-    return NORMALIZE.apply(vector);
   }
 }

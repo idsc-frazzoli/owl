@@ -41,6 +41,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
      * y' = vel
      * vel' = (-1 / tau2) * vel + sigma * theta + w / tau2
      * theta' = - theta / tau1 + u */
+    @SuppressWarnings("unused")
     Scalar x1 = x.Get(0);
     // System.out.println("x1 = " + x1);
     Scalar y = x.Get(1); // altitude
@@ -49,8 +50,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
     // System.out.println("vel = " + vel);
     Scalar theta = x.Get(3);
     // System.out.println("theta = " + theta);
-    /* TODO change to something similar as in the DeltaDemo (imageGradientInterpolation) */
-    // <<<<<<< HEAD
     // System.out.println(u.Get(0));
     // =======
     /* TODO ANDRE change to something similar as in the DeltaDemo (imageGradientInterpolation) */

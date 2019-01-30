@@ -89,6 +89,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     CostFunction pedLegalCost = //
         ConstraintViolationCost.of(new SimpleShadowConstraintCV( //
             smPedLegal, irCar, CAR_RADIUS, MAX_A, REACTION_TIME, false), RealScalar.ONE);
+    @SuppressWarnings("unused")
     CostFunction pedIllegalCost = //
         ConstraintViolationCost.of(new SimpleShadowConstraintCV( //
             smPedIllegal, irCar, CAR_RADIUS, MAX_A, REACTION_TIME, false), RealScalar.ONE);

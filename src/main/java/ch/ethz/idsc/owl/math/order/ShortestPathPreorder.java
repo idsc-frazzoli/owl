@@ -10,9 +10,8 @@ public class ShortestPathPreorder implements BinaryRelation<Node> {
   public int totalLengthNode(Node x) {
     if (x.isRoot()) {
       return 0;
-    } else {
-      return 1 + totalLengthNode(x.parent());
     }
+    return 1 + totalLengthNode(x.parent());
   }
 
   @Override // from BinaryRelation
