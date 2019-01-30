@@ -15,8 +15,6 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.util.SpinnerListener;
@@ -31,8 +29,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.N;
 
-// TODO JPH eliminate redundancies with GeodesicCenterFilterDemo
-/* package */ class Regularization2StepDemo extends GeodesicDisplayDemo {
+// TODO JPH/OB eliminate redundancies with GeodesicCenterFilterDemo
+/* package */ class Regularization2StepDemo extends DatasetFilterDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
   // ---
@@ -49,7 +47,6 @@ import ch.ethz.idsc.tensor.sca.N;
       .map(row -> row.extract(1, 4)));
 
   Regularization2StepDemo() {
-    super(GeodesicDisplays.SE2_R2);
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();

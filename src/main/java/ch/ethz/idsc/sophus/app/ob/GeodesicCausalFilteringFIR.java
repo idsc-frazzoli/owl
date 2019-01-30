@@ -13,6 +13,7 @@ import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -110,9 +111,10 @@ public class GeodesicCausalFilteringFIR {
   public static void main(String[] args) {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
         "0w/20180702T133612_1" + ".csv").stream().map(row -> row.extract(1, 4)));
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.GAUSSIAN);
     for (int i = 1; i < 2; i++) {
       TensorUnaryOperator geodesicCenterFilter = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), i);
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, centerWindowSampler), i);
       System.out.println(i);
       GeodesicCausalFilteringFIR geodesicCausal1Filtering = GeodesicCausalFilteringFIR.se2(control, geodesicCenterFilter.apply(control), 0);
       Tensor alpharange = Subdivide.of(0.1, 1, 12);

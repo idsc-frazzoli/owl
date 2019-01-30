@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -29,8 +30,9 @@ enum FilterErrorTable {
         name + ".csv").stream().map(row -> row.extract(1, 4)));
     // Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
     // "2r/20180820T165637_3" + ".csv").stream().map(row -> row.extract(1, 4)));
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.GAUSSIAN);
     TensorUnaryOperator geodesicCenterFilter = //
-        GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), width);
+        GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, centerWindowSampler), width);
     System.out.println(width);
     GeodesicCausalFilteringIIR geodesicCausal1Filtering = GeodesicCausalFilteringIIR.se2(control, geodesicCenterFilter.apply(control), 0);
     Tensor alpharange = Subdivide.of(0.1, 1, 12);

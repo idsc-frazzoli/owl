@@ -21,8 +21,6 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.util.SpinnerListener;
@@ -32,8 +30,8 @@ import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.group.Se2Utils;
-import ch.ethz.idsc.sophus.math.SmoothingKernelCausal;
-import ch.ethz.idsc.sophus.sym.SymLinkImages;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -45,10 +43,10 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
+class GeodesicCausalFilterDemo extends DatasetFilterDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
-  private final SpinnerLabel<SmoothingKernelCausal> spinnerFilter = new SpinnerLabel<>();
+  private final SpinnerLabel<SmoothingKernel> spinnerFilter = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
   private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
   private final JToggleButton jToggleLine = new JToggleButton("line");
@@ -66,7 +64,6 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
       .map(row -> row.extract(1, 4)));
 
   GeodesicCausalFilterDemo() {
-    super(GeodesicDisplays.SE2_R2);
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
@@ -89,7 +86,7 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
     // ---
     jToggleStep.setSelected(false);
     timerFrame.jToolBar.add(jToggleStep);
-    // ---    
+    // ---
     jToggleDiff.setSelected(false);
     timerFrame.jToolBar.add(jToggleDiff);
     // ---
@@ -99,8 +96,8 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
     timerFrame.jToolBar.add(jToggleIIR);
     // ---
     {
-      spinnerFilter.setList(Arrays.asList(SmoothingKernelCausal.values()));
-      spinnerFilter.setValue(SmoothingKernelCausal.GAUSSIAN);
+      spinnerFilter.setList(Arrays.asList(SmoothingKernel.values()));
+      spinnerFilter.setValue(SmoothingKernel.GAUSSIAN);
       spinnerFilter.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
     }
     {
@@ -118,7 +115,7 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor control = control();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    final SmoothingKernelCausal smoothingKernelCausal = spinnerFilter.getValue();
+    final SmoothingKernel smoothingKernel = spinnerFilter.getValue();
     final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));
     final int radius = spinnerRadius.getValue();
     if (jToggleStep.isSelected()) {
@@ -161,8 +158,8 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
         geometricLayer.popMatrix();
       }
     }
-    Tensor mask = smoothingKernelCausal.apply(radius);
-  
+    WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
+    Tensor mask = windowSideSampler.apply(radius);
     mask.append(alpha);
     TensorUnaryOperator geodesicCenterFilter;
     if (jToggleIIR.isSelected()) {

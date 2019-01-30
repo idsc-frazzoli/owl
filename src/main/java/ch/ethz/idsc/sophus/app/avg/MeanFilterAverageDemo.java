@@ -19,6 +19,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLink;
 import ch.ethz.idsc.sophus.sym.SymLinkBuilder;
@@ -52,8 +53,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       int radius = (control.length() - 1) / 2;
       graphics.drawImage(SymLinkImages.smoothingKernel(smoothingKernel, radius).bufferedImage(), 0, 0, null);
       // ---
+      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenter.of(SymGeodesic.INSTANCE, smoothingKernel);
+          GeodesicCenter.of(SymGeodesic.INSTANCE, centerWindowSampler);
       Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
       Tensor tensor = tensorUnaryOperator.apply(vector);
       SymLink symLink = SymLinkBuilder.of(control, (SymScalar) tensor);

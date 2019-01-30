@@ -26,8 +26,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
     }
     sum = sum.add(mask.Get(mask.length() - 1));
     splits.append(Last.of(mask));
-    if(!Chop._12.close(sum, RealScalar.ONE))
-    throw TensorRuntimeException.of(sum);
+    if (!Chop._12.close(sum, RealScalar.ONE))
+      throw TensorRuntimeException.of(sum);
     return splits;
   }
 }
