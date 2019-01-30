@@ -11,15 +11,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.swing.JComboBox;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.util.SpinnerListener;
@@ -27,6 +24,7 @@ import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -40,7 +38,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/* package */ class GeodesicCenterFilterDemo extends GeodesicDisplayDemo {
+/* package */ class GeodesicCenterFilterDemo extends DatasetFilterDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
@@ -63,22 +61,24 @@ import ch.ethz.idsc.tensor.sca.Round;
       .map(row -> row.extract(1, 4)));
 
   GeodesicCenterFilterDemo() {
-    super(GeodesicDisplays.SE2_R2);
+    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
       SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
       spinnerLabel.addSpinnerListener(spinnerListener);
       spinnerLabel.setList(list);
+      spinnerLabel.setIndex(0);
+      spinnerLabel.reportToAll();
       spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
-    {
-      List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
-      JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
-      jComboBox.setLightWeightPopupEnabled(true);
-      jComboBox.setMaximumRowCount(30);
-      jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
-      timerFrame.jToolBar.add(jComboBox);
-    }
+    // {
+    // List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
+    // JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
+    // jComboBox.setLightWeightPopupEnabled(true);
+    // jComboBox.setMaximumRowCount(30);
+    // package ch.ethz.idsc.sophus.filter; jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
+    // timerFrame.jToolBar.add(jComboBox);
+    // }
     // ---
     jToggleData.setSelected(true);
     timerFrame.jToolBar.add(jToggleData);
@@ -138,8 +138,9 @@ import ch.ethz.idsc.tensor.sca.Round;
         geometricLayer.popMatrix();
       }
     }
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
     TensorUnaryOperator geodesicCenterFilter = //
-        GeodesicCenterFilter.of(GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel), radius);
+        GeodesicCenterFilter.of(GeodesicCenter.of(geodesicDisplay.geodesicInterface(), centerWindowSampler), radius);
     final Tensor refined = geodesicCenterFilter.apply(control2);
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;
@@ -202,6 +203,5 @@ import ch.ethz.idsc.tensor.sca.Round;
     AbstractDemo abstractDemo = new GeodesicCenterFilterDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
-    abstractDemo.timerFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{7.5,0,100},{0,-7.5,800},{0,0,1}}"));
   }
 }

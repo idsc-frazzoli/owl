@@ -8,9 +8,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-// TODO: OB TEST
 /** filter blends extrapolated value with measurement */
-public class GeodesicFIRnFilter implements TensorUnaryOperator {
+public class GeodesicIIRnFilter implements TensorUnaryOperator {
   // ---
   private final GeodesicInterface geodesicInterface;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
@@ -19,7 +18,7 @@ public class GeodesicFIRnFilter implements TensorUnaryOperator {
   /** This filter uses the following procedure for prediction
    * [[p,q]_beta, r]_gamma
    * mask input shape [a1, a2, ... , an, alpha] with alpha the "kalman gain equivalent" **/
-  public GeodesicFIRnFilter(GeodesicInterface geodesicInterface, Tensor mask) {
+  public GeodesicIIRnFilter(GeodesicInterface geodesicInterface, Tensor mask) {
     this.geodesicInterface = geodesicInterface;
     this.boundedLinkedList = new BoundedLinkedList<>(mask.length() + 1);
     this.splits = StaticHelperCausal.splits(mask.extract(0, mask.length() - 1));
@@ -43,6 +42,7 @@ public class GeodesicFIRnFilter implements TensorUnaryOperator {
     }
     Tensor extrapolate = geodesicInterface.split(interpolate, boundedLinkedList.get(boundedLinkedList.size() - 2), splits.Get(splits.length() - 2));
     Tensor update = geodesicInterface.split(extrapolate, boundedLinkedList.getLast(), splits.Get(splits.length() - 1));
+    boundedLinkedList.set(boundedLinkedList.size() - 1, update);
     return update;
   }
 }

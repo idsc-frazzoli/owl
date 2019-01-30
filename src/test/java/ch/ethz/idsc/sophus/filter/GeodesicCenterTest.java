@@ -6,8 +6,11 @@ import java.io.IOException;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -52,6 +55,55 @@ public class GeodesicCenterTest extends TestCase {
     }
     try {
       GeodesicCenter.of(null, CONSTANT);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testSplitsMean() {
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.DIRICHLET);
+    {
+      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(1));
+      assertEquals(tensor, Tensors.fromString("{1/3}"));
+    }
+    {
+      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(2));
+      assertEquals(tensor, Tensors.fromString("{1/2, 1/5}"));
+    }
+    {
+      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(3));
+      assertEquals(tensor, Tensors.fromString("{1/2, 1/3, 1/7}"));
+    }
+  }
+
+  public void testSplitsBinomial() {
+    {
+      Tensor tensor = GeodesicCenter.splits(BinomialWeights.INSTANCE.apply(1));
+      assertEquals(tensor, Tensors.fromString("{1/2}"));
+    }
+    {
+      Tensor tensor = GeodesicCenter.splits(BinomialWeights.INSTANCE.apply(2));
+      assertEquals(tensor, Tensors.fromString("{4/5, 3/8}"));
+    }
+    {
+      Tensor tensor = GeodesicCenter.splits(BinomialWeights.INSTANCE.apply(3));
+      assertEquals(tensor, Tensors.fromString("{6/7, 15/22, 5/16}"));
+    }
+  }
+
+  public void testFailEven() {
+    try {
+      GeodesicCenter.splits(Tensors.vector(1, 2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNonSymmetric() {
+    try {
+      GeodesicCenter.splits(Tensors.vector(1, 2, 2));
       fail();
     } catch (Exception exception) {
       // ---

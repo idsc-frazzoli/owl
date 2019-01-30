@@ -25,4 +25,10 @@ public class ClipStrictPartialComparatorTest extends TestCase {
     StrictPartialComparison strictPartialComparison = ClipStrictPartialComparator.INSTANCE.compare(Clip.function(4, 6), Clip.function(0, 1));
     assertTrue(strictPartialComparison.equals(StrictPartialComparison.GREATER_THAN));
   }
+
+  public void testSimple() {
+    StrictPartialComparison strictPartialComparison = //
+        ClipStrictPartialComparator.INSTANCE.compare(Clip.function(0, 1), Clip.function(0, 1));
+    assertEquals(strictPartialComparison, StrictPartialComparison.INCOMPARABLE);
+  }
 }

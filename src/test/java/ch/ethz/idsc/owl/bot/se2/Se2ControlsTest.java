@@ -8,6 +8,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.glc.CarHelper;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
+import ch.ethz.idsc.owl.bot.se2.twd.TwdDuckieFlows;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -61,5 +62,25 @@ public class Se2ControlsTest extends TestCase {
     Scalar maxTurning = Se2Controls.maxTurning(controls);
     assertEquals(QuantityUnit.of(maxTurning), Unit.of("rad*s^-1"));
     assertEquals(maxTurning, Quantity.of(6, "rad*s^-1"));
+  }
+
+  public void testMaxSpeed() {
+    TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(3), RealScalar.of(0.567));
+    Collection<Flow> controls = twdConfig.getFlows(8);
+    Scalar maxSpeed = Se2Controls.maxSpeed(controls);
+    assertEquals(maxSpeed, RealScalar.of(3));
+  }
+
+  public void testUnit() {
+    Scalar ms = Quantity.of(3, "m*s^-1");
+    Scalar sa = Quantity.of(0.567, "m*rad^-1");
+    TwdDuckieFlows twdConfig = new TwdDuckieFlows(ms, sa);
+    Collection<Flow> controls = twdConfig.getFlows(8);
+    Scalar maxSpeed = Se2Controls.maxSpeed(controls);
+    assertEquals(maxSpeed, ms);
+    assertEquals(QuantityUnit.of(maxSpeed), Unit.of("m*s^-1"));
+    Scalar maxTurng = Se2Controls.maxTurning(controls);
+    assertEquals(QuantityUnit.of(maxTurng), Unit.of("rad*s^-1"));
+    assertEquals(maxTurng, ms.divide(sa));
   }
 }

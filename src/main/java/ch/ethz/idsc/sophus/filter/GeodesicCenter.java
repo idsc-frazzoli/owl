@@ -8,9 +8,13 @@ import java.util.Objects;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.SymmetricVectorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** GeodesicCenter projects a sequence of points to their geodesic center
@@ -19,9 +23,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * <p>Careful: the implementation only supports sequences with ODD number of elements!
  * When a sequence of even length is provided an Exception is thrown. */
 public class GeodesicCenter implements TensorUnaryOperator {
+  private static final Scalar TWO = RealScalar.of(2);
+
   /** @param geodesicInterface
-   * @param function
-   * @return
+   * @param function that maps an extent to a weight mask of length == 2 * extent + 1
+   * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameters is null */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
     return new GeodesicCenter(geodesicInterface, function);
@@ -37,14 +43,14 @@ public class GeodesicCenter implements TensorUnaryOperator {
     this.function = Objects.requireNonNull(function);
   }
 
-  @Override
+  @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     if (tensor.length() % 2 != 1)
       throw TensorRuntimeException.of(tensor);
     int radius = (tensor.length() - 1) / 2;
     synchronized (weights) {
       while (weights.size() <= radius)
-        weights.add(StaticHelper.splits(function.apply(weights.size())));
+        weights.add(splits(function.apply(weights.size())));
     }
     Tensor splits = weights.get(radius);
     Tensor pL = tensor.get(0);
@@ -55,5 +61,26 @@ public class GeodesicCenter implements TensorUnaryOperator {
       pR = geodesicInterface.split(pR, tensor.get(2 * radius - index), scalar);
     }
     return geodesicInterface.split(pL, pR, RationalScalar.HALF);
+  }
+
+  /** @param mask symmetric vector of odd length
+   * @return weights of Kalman-style iterative moving average
+   * @throws Exception if mask is not symmetric or has even number of elements */
+  /* package */ static Tensor splits(Tensor mask) {
+    if (mask.length() % 2 == 0)
+      throw TensorRuntimeException.of(mask);
+    SymmetricVectorQ.require(mask);
+    int radius = (mask.length() - 1) / 2;
+    Tensor halfmask = Tensors.vector(i -> i == 0 //
+        ? mask.Get(radius + i)
+        : mask.Get(radius + i).multiply(TWO), radius);
+    Scalar factor = RealScalar.ONE;
+    Tensor splits = Tensors.empty();
+    for (int index = 0; index < radius; ++index) {
+      Scalar lambda = halfmask.Get(index).divide(factor);
+      splits.append(lambda);
+      factor = factor.multiply(RealScalar.ONE.subtract(lambda));
+    }
+    return Reverse.of(splits);
   }
 }

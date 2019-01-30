@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.red.Norm;
  * {@link DoubleIntegratorStateSpaceModel}
  * 
  * class is intentionally public */
-public enum RnControls {
+/* package */ enum RnControls {
   ;
   /** @param controls
    * @return max of norm 2 of given controls in R^n */

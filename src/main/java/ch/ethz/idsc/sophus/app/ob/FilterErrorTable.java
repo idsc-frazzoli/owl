@@ -8,9 +8,9 @@ import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.Pretty;
@@ -23,14 +23,16 @@ enum FilterErrorTable {
   ;
   public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
 
+  // TODO OB repair
   public static Tensor process(String name, int width) {
     TableBuilder tableBuilder = new TableBuilder();
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
         name + ".csv").stream().map(row -> row.extract(1, 4)));
     // Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
     // "2r/20180820T165637_3" + ".csv").stream().map(row -> row.extract(1, 4)));
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.GAUSSIAN);
     TensorUnaryOperator geodesicCenterFilter = //
-        GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), width);
+        GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, centerWindowSampler), width);
     System.out.println(width);
     GeodesicCausalFilteringIIR geodesicCausal1Filtering = GeodesicCausalFilteringIIR.se2(control, geodesicCenterFilter.apply(control), 0);
     Tensor alpharange = Subdivide.of(0.1, 1, 12);
@@ -38,9 +40,9 @@ enum FilterErrorTable {
       Scalar alpha = alpharange.Get(j);
       // Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0Error(alpha), //
       // geodesicCausal1Filtering.evaluate1Error(alpha));
-      Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0ErrorSeperated(alpha), //
-          geodesicCausal1Filtering.evaluate1ErrorSeperated(alpha));
-      tableBuilder.appendRow(row);
+      // Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0ErrorSeperated(alpha), //
+      // geodesicCausal1Filtering.evaluate1ErrorSeperated(alpha));
+      // tableBuilder.appendRow(row);
     }
     Tensor log = tableBuilder.toTable();
     System.out.println(Pretty.of(log.map(Round._4)));

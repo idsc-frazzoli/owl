@@ -4,9 +4,10 @@ package ch.ethz.idsc.sophus.filter;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ enum StaticHelperCausal {
   ;
@@ -15,17 +16,18 @@ import ch.ethz.idsc.tensor.sca.Power;
    * @throws Exception if mask is not a vector, or empty */
   public static Tensor splits(Tensor mask) {
     Tensor splits = Tensors.empty();
-    Scalar lambda;
-    for (int index = 0; index < mask.length(); ++index) {
-      lambda = index == 0 //
-          ? RealScalar.ONE
-          : mask.Get(index - 1);
-      Scalar sign = Power.of(RealScalar.ONE.negate(), mask.length() - index);
-      for (int subindex = index; subindex < mask.length(); ++subindex)
-        lambda = lambda.multiply(mask.Get(subindex).subtract(RealScalar.ONE)).multiply(sign);
+    Scalar factor = mask.Get(0);
+    Scalar sum = mask.Get(0);
+    for (int index = 0; index < mask.length() - 2; ++index) {
+      factor = factor.add(mask.Get(index + 1));
+      Scalar lambda = mask.Get(index + 1).divide(factor);
       splits.append(lambda);
+      sum = sum.add(mask.Get(index + 1));
     }
+    sum = sum.add(mask.Get(mask.length() - 1));
     splits.append(Last.of(mask));
+    if (!Chop._12.close(sum, RealScalar.ONE))
+      throw TensorRuntimeException.of(sum);
     return splits;
   }
 }

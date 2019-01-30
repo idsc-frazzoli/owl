@@ -51,9 +51,9 @@ import ch.ethz.idsc.tensor.sca.N;
     spinnerRefine.setValue(7);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
-      Tensor blub = Tensors.fromString("{{1,0,0},{1,0,2.1}}");
+      Tensor tensor = Tensors.fromString("{{1,0,0},{1,0,2.1}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
+          Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
