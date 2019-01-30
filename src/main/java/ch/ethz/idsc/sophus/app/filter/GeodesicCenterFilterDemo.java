@@ -25,7 +25,7 @@ import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.math.CenterWindowSampler;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -79,7 +79,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     // JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
     // jComboBox.setLightWeightPopupEnabled(true);
     // jComboBox.setMaximumRowCount(30);
-    //package ch.ethz.idsc.sophus.filter; jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
+    // package ch.ethz.idsc.sophus.filter; jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
     // timerFrame.jToolBar.add(jComboBox);
     // }
     // ---
@@ -141,7 +141,7 @@ import ch.ethz.idsc.tensor.sca.Round;
         geometricLayer.popMatrix();
       }
     }
-    CenterWindowSampler centerWindowSampler = new CenterWindowSampler(smoothingKernel);
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
     TensorUnaryOperator geodesicCenterFilter = //
         GeodesicCenterFilter.of(GeodesicCenter.of(geodesicDisplay.geodesicInterface(), centerWindowSampler), radius);
     final Tensor refined = geodesicCenterFilter.apply(control2);

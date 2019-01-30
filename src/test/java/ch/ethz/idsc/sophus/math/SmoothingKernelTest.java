@@ -24,7 +24,7 @@ public class SmoothingKernelTest extends TestCase {
   }
 
   public void testConstant() {
-    CenterWindowSampler centerWindowSampler = new CenterWindowSampler(SmoothingKernel.DIRICHLET);
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.DIRICHLET);
     for (int width = 0; width < 5; ++width) {
       Tensor tensor = centerWindowSampler.apply(width);
       assertEquals(tensor, constant(width));
@@ -34,14 +34,14 @@ public class SmoothingKernelTest extends TestCase {
   }
 
   public void testHann() {
-    CenterWindowSampler centerWindowSampler = new CenterWindowSampler(SmoothingKernel.HANN);
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.HANN);
     assertTrue(ExactScalarQ.all(centerWindowSampler.apply(1)));
     assertTrue(ExactScalarQ.all(centerWindowSampler.apply(2)));
   }
 
   public void testAll() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      CenterWindowSampler centerWindowSampler = new CenterWindowSampler(smoothingKernel);
+      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
       for (int size = 0; size < 5; ++size) {
         Tensor tensor = centerWindowSampler.apply(size);
         SymmetricVectorQ.require(tensor);
@@ -69,7 +69,7 @@ public class SmoothingKernelTest extends TestCase {
       Scalar scalar = smoothingKernel.apply(RationalScalar.HALF);
       String string = smoothingKernel.name().toLowerCase() + "Window[1/2]=" + scalar;
       string.length();
-      CenterWindowSampler centerWindowSampler = new CenterWindowSampler(smoothingKernel);
+      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
       assertEquals(centerWindowSampler.apply(0), Tensors.of(RealScalar.ONE));
       Tensor vector = centerWindowSampler.apply(1);
       assertTrue(Scalars.lessThan(RealScalar.of(1e-3), vector.Get(0).abs()));
@@ -78,7 +78,7 @@ public class SmoothingKernelTest extends TestCase {
 
   public void testAllFail() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      CenterWindowSampler centerWindowSampler = new CenterWindowSampler(smoothingKernel);
+      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
       try {
         centerWindowSampler.apply(-1);
         fail();

@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.math.CenterWindowSampler;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,7 +18,7 @@ public enum SymLinkImages {
   private static final Font FONT_SMALL = new Font(Font.DIALOG, Font.PLAIN, 11);
 
   public static SymLinkImage smoothingKernel(SmoothingKernel smoothingKernel, int radius) {
-    CenterWindowSampler centerWindowSampler = new CenterWindowSampler(smoothingKernel);
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(SymGeodesic.INSTANCE, centerWindowSampler);
     Tensor vector = Tensor.of(IntStream.range(0, 2 * radius + 1).mapToObj(SymScalar::leaf));
     Tensor tensor = tensorUnaryOperator.apply(vector);

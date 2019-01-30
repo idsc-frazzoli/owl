@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
-import ch.ethz.idsc.sophus.math.CenterWindowSampler;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * Example: if the points are from R^n the center would simply be the mean */
 public enum GeodesicMean {
   ;
-  private static final CenterWindowSampler CENTER_WINDOW_SAMPLER = new CenterWindowSampler(SmoothingKernel.DIRICHLET);
+  private static final WindowCenterSampler CENTER_WINDOW_SAMPLER = new WindowCenterSampler(SmoothingKernel.DIRICHLET);
 
   /** @param geodesicInterface
    * @return geodesic center operator with Dirichlet/constant weights */

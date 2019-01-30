@@ -6,7 +6,7 @@ import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.So3Geodesic;
-import ch.ethz.idsc.sophus.math.CenterWindowSampler;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.space.SnGeodesic;
 import ch.ethz.idsc.tensor.ExactScalarQ;
@@ -58,7 +58,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testS2() {
-    CenterWindowSampler centerWindowSampler = new CenterWindowSampler(SmoothingKernel.HANN);
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.HANN);
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(SnGeodesic.INSTANCE, centerWindowSampler);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Distribution distribution = NormalDistribution.standard();
@@ -69,7 +69,7 @@ public class GeodesicCenterFilterTest extends TestCase {
   }
 
   public void testSo3() {
-    CenterWindowSampler centerWindowSampler = new CenterWindowSampler(SmoothingKernel.HAMMING);
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.HAMMING);
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(So3Geodesic.INSTANCE, centerWindowSampler);
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Distribution distribution = UniformDistribution.unit();
@@ -84,7 +84,7 @@ public class GeodesicCenterFilterTest extends TestCase {
     Tensor xyz = Tensor.of(table.stream().map(row -> row.extract(1, 4)));
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      CenterWindowSampler centerWindowSampler = new CenterWindowSampler(smoothingKernel);
+      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
       TensorUnaryOperator tensorUnaryOperator = //
           GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, centerWindowSampler), 3);
       Tensor res = tensorUnaryOperator.apply(xyz);

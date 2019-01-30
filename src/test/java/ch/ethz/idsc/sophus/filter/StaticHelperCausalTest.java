@@ -14,18 +14,18 @@ import junit.framework.TestCase;
 
 public class StaticHelperCausalTest extends TestCase {
   public void testEquivalence() {
-//    Tensor linear = Tensors.vector(.2, .3, .5);
+    // Tensor linear = Tensors.vector(.2, .3, .5);
     Tensor linear = Tensors.vector(Math.random(), Math.random(), Math.random());
     linear = linear.divide(linear.Get(0).add(linear.Get(1).add(linear.Get(2))));
     Tensor geodesic = StaticHelperCausal.splits(linear);
     Tensor p = RealScalar.of(Math.random());
-    Tensor q = RealScalar.of(4*Math.random());
-    Tensor r = RealScalar.of(-2*Math.random());
+    Tensor q = RealScalar.of(4 * Math.random());
+    Tensor r = RealScalar.of(-2 * Math.random());
     Tensor geodesicavg = RnGeodesic.INSTANCE.split(RnGeodesic.INSTANCE.split(p, q, geodesic.Get(0)), r, geodesic.Get(1));
     Tensor dot = Tensors.of(p, q, r).dot(linear);
     Chop._12.close(geodesicavg, dot);
   }
-  
+
   public void testNonAffineFail() {
     try {
       StaticHelperCausal.splits(Tensors.vector(.4, .5, .9));

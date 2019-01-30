@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
-import ch.ethz.idsc.sophus.math.CenterWindowSampler;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.sophus.math.Loxodrome;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.space.SnGeodesic;
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
     tensor = Tensor.of(tensor.stream().map(NORMALIZE));
     Export.of(HomeDirectory.file("loxodrome_noise.csv"), tensor);
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      CenterWindowSampler centerWindowSampler = new CenterWindowSampler(smoothingKernel);
+      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
       TensorUnaryOperator tensorUnaryOperator = //
           GeodesicCenterFilter.of(GeodesicCenter.of(SnGeodesic.INSTANCE, centerWindowSampler), 7);
       Tensor smooth = tensorUnaryOperator.apply(tensor);
