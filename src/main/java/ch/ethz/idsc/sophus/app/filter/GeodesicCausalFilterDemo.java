@@ -33,6 +33,7 @@ import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.sophus.math.SmoothingKernelCausal;
+import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -53,6 +54,7 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleWait = new JToggleButton("wait");
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
+  private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JToggleButton jToggleStep = new JToggleButton("step");
   private final JToggleButton jToggleIIR = new JToggleButton("IIR");
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
@@ -82,13 +84,18 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
     jToggleCtrl.setSelected(true);
     timerFrame.jToolBar.add(jToggleCtrl);
     // ---
-    jToggleLine.setSelected(false);
+    jToggleLine.setSelected(true);
     timerFrame.jToolBar.add(jToggleLine);
     // ---
     jToggleStep.setSelected(false);
     timerFrame.jToolBar.add(jToggleStep);
+    // ---    
+    jToggleDiff.setSelected(false);
+    timerFrame.jToolBar.add(jToggleDiff);
     // ---
-    jToggleIIR.setSelected(false);
+    timerFrame.jToolBar.add(jToggleSymi);
+    // ---
+    jToggleIIR.setSelected(true);
     timerFrame.jToolBar.add(jToggleIIR);
     // ---
     {
@@ -113,6 +120,7 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final SmoothingKernelCausal smoothingKernelCausal = spinnerFilter.getValue();
     final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));
+    final int radius = spinnerRadius.getValue();
     if (jToggleStep.isSelected()) {
       _control = Tensors.of(Array.zeros(3));
       for (int i = 0; i < 300; ++i) {
@@ -153,7 +161,8 @@ class GeodesicCausalFilterDemo extends GeodesicDisplayDemo {
         geometricLayer.popMatrix();
       }
     }
-    Tensor mask = smoothingKernelCausal.apply(spinnerRadius.getValue());
+    Tensor mask = smoothingKernelCausal.apply(radius);
+  
     mask.append(alpha);
     TensorUnaryOperator geodesicCenterFilter;
     if (jToggleIIR.isSelected()) {

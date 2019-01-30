@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     // JComboBox<String> jComboBox = new JComboBox<>(list.toArray(new String[list.size()]));
     // jComboBox.setLightWeightPopupEnabled(true);
     // jComboBox.setMaximumRowCount(30);
-    // jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
+    //package ch.ethz.idsc.sophus.filter; jComboBox.addActionListener(actionEvent -> spinnerListener.actionPerformed(list.get(jComboBox.getSelectedIndex())));
     // timerFrame.jToolBar.add(jComboBox);
     // }
     // ---
