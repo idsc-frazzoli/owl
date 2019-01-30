@@ -25,6 +25,7 @@ import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
+import ch.ethz.idsc.sophus.math.CenterWindowSampler;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -140,8 +141,9 @@ import ch.ethz.idsc.tensor.sca.Round;
         geometricLayer.popMatrix();
       }
     }
+    CenterWindowSampler centerWindowSampler = new CenterWindowSampler(smoothingKernel);
     TensorUnaryOperator geodesicCenterFilter = //
-        GeodesicCenterFilter.of(GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel), radius);
+        GeodesicCenterFilter.of(GeodesicCenter.of(geodesicDisplay.geodesicInterface(), centerWindowSampler), radius);
     final Tensor refined = geodesicCenterFilter.apply(control2);
     if (jToggleDiff.isSelected()) {
       final int baseline_y = 200;

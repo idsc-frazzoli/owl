@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.math.CenterWindowSampler;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -61,16 +62,17 @@ public class GeodesicCenterTest extends TestCase {
   }
 
   public void testSplitsMean() {
+    CenterWindowSampler centerWindowSampler = new CenterWindowSampler(SmoothingKernel.DIRICHLET);
     {
-      Tensor tensor = GeodesicCenter.splits(SmoothingKernel.DIRICHLET.apply(1));
+      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(1));
       assertEquals(tensor, Tensors.fromString("{1/3}"));
     }
     {
-      Tensor tensor = GeodesicCenter.splits(SmoothingKernel.DIRICHLET.apply(2));
+      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(2));
       assertEquals(tensor, Tensors.fromString("{1/2, 1/5}"));
     }
     {
-      Tensor tensor = GeodesicCenter.splits(SmoothingKernel.DIRICHLET.apply(3));
+      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(3));
       assertEquals(tensor, Tensors.fromString("{1/2, 1/3, 1/7}"));
     }
   }
