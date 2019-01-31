@@ -19,6 +19,7 @@ public class NonuniformMaskGenerator {
   // TODO OB: hand over length argument to create boundedlinkedlist dynamically
   // TODO OB: hand over interval argument dynamically
   // TODO OB: hand over argument to choose SmoothingKernel dynamically
+  // TODO OB/JH: stream() statetime
   private static BoundedLinkedList<StateTime> boundedLinkedList = new BoundedLinkedList<>(10);
   private static Scalar interval = RealScalar.of(0.5);
 
