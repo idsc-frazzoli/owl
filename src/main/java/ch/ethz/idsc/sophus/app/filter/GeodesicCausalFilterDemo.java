@@ -50,13 +50,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     SmoothingKernel smoothingKernel = spinnerFilter.getValue();
     int radius = spinnerRadius.getValue();
     WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
-    Tensor mask = windowSideSampler.apply(radius).append(alpha());
+    Tensor mask = windowSideSampler.apply(radius);
+    // TODO OB normalize mask ?!
+    mask.append(alpha());
     TensorUnaryOperator geodesicCenterFilter;
-    if (jToggleIIR.isSelected()) {
-      if (jToggleSymi.isSelected())
-        graphics.drawImage(SymLinkImages.causalIIR(smoothingKernel, radius, alpha()).bufferedImage(), 0, 0, null);
+    if (jToggleSymi.isSelected())
+      graphics.drawImage(SymLinkImages.causalIIR(smoothingKernel, radius, alpha()).bufferedImage(), 0, 0, null);
+    if (jToggleIIR.isSelected())
       geodesicCenterFilter = new GeodesicIIRnFilter(geodesicDisplay.geodesicInterface(), mask);
-    } else
+    else
       geodesicCenterFilter = new GeodesicFIRnFilter(geodesicDisplay.geodesicInterface(), mask);
     return Tensor.of(control().stream().map(geodesicCenterFilter));
   }

@@ -4,17 +4,14 @@ package ch.ethz.idsc.sophus.filter;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.ob.GeodesicCausalFilteringIIR;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
-import ch.ethz.idsc.sophus.group.LieGroupGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.WindowCenterSampler;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -30,13 +27,12 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Round;
 
 public class GeodesicEvaluation {
-  
-  private final LieDifferences lieDifferences;
   public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
+  // ---
+  private final LieDifferences lieDifferences;
 
   GeodesicEvaluation(LieGroup lieGroup, LieExponential lieExponential) {
     this.lieDifferences = new LieDifferences(lieGroup, lieExponential);
-    
   }
 
   public Tensor evaluate0ErrorSeperated(Tensor causal, Tensor center) {
@@ -62,36 +58,34 @@ public class GeodesicEvaluation {
     return Total.of(errors);
   }
 
-  
   public Tensor processErrors(Tensor control, int width) {
     TableBuilder tableBuilder = new TableBuilder();
-    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.GAUSSIAN);
-    TensorUnaryOperator CenterFilter = GeodesicCenter.of(Se2Geodesic.INSTANCE, centerWindowSampler);
+    TensorUnaryOperator CenterFilter = GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
     Tensor refinedCenter = GeodesicCenterFilter.of(CenterFilter, 6).apply(control);
-   
-    
     Tensor alpharange = Subdivide.of(0.1, 1, 12);
+    // TODO OB use WindowSideSampler
+    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.GAUSSIAN);
     for (int index = 0; index < alpharange.length(); index++) {
-      Tensor mask = Normalize.with(Norm._1).apply(centerWindowSampler.apply(width).extract(0, width+1));
+      Tensor mask = Normalize.with(Norm._1).apply(centerWindowSampler.apply(width).extract(0, width + 1));
       mask.append(alpharange.get(index));
-      TensorUnaryOperator CausalFilter = new GeodesicIIRnFilter(Se2Geodesic.INSTANCE, mask);
-      Tensor refinedCausal = Tensor.of(control.stream().map(CausalFilter));
-       Tensor row = Tensors.of(alpharange.Get(index), evaluate0ErrorSeperated(refinedCausal, refinedCenter), //
-           evaluate1ErrorSeperated(refinedCausal, refinedCenter));
-       tableBuilder.appendRow(row);
+      TensorUnaryOperator causalFilter = new GeodesicIIRnFilter(Se2Geodesic.INSTANCE, mask);
+      Tensor refinedCausal = Tensor.of(control.stream().map(causalFilter));
+      Tensor row = Tensors.of(alpharange.Get(index), evaluate0ErrorSeperated(refinedCausal, refinedCenter), //
+          evaluate1ErrorSeperated(refinedCausal, refinedCenter));
+      tableBuilder.appendRow(row);
     }
     Tensor log = tableBuilder.toTable();
     System.out.println(Pretty.of(log.map(Round._4)));
     return log;
   }
 
-  public static void main(String[] args) throws IOException {    
+  public static void main(String[] args) throws IOException {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + "0w/20180702T133612_1" + ".csv").stream() //
         .limit(300) //
-        .map(row -> row.extract(1, 4)));;
+        .map(row -> row.extract(1, 4)));
+    ;
     GeodesicEvaluation geodesicEvaluation = new GeodesicEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
     System.out.println(control.length());
-    
     String dataname = "0w/20180702T133612_1";
     for (int width = 1; width < 12; width++) {
       Tensor log = geodesicEvaluation.processErrors(control, width);

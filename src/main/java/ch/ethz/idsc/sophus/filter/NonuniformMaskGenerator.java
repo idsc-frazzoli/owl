@@ -1,8 +1,6 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
-import java.util.List;
-
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
@@ -12,15 +10,12 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.ResourceData;
 
 public class NonuniformMaskGenerator {
   /** @param time stamp of control sequence
    * @return affine combination used to generate mask
    * @throws Exception if mask is not a vector or empty */
-  
-//TODO OB: TESTS!
-  
+  // TODO OB: TESTS!
   public Tensor fixedLength(BoundedLinkedList<StateTime> boundedLinkedList, Scalar length) {
     Tensor weight = Tensors.empty();
     Scalar delta = boundedLinkedList.getFirst().time().subtract(boundedLinkedList.getLast().time());

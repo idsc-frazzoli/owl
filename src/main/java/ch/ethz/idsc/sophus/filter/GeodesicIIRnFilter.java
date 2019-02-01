@@ -16,7 +16,9 @@ public class GeodesicIIRnFilter implements TensorUnaryOperator {
   private final BoundedLinkedList<Tensor> boundedLinkedList;
   private final Tensor splits;
 
-  /** @param mask input shape [a1, a2, ... , an, alpha] with alpha the "kalman gain equivalent" */
+  /** TODO OB state conditions on mask!
+   * 
+   * @param mask input shape [a1, a2, ..., an, alpha] with alpha the "kalman gain equivalent" */
   public GeodesicIIRnFilter(GeodesicInterface geodesicInterface, Tensor mask) {
     this.geodesicInterface = geodesicInterface;
     this.boundedLinkedList = new BoundedLinkedList<>(mask.length() + 1);

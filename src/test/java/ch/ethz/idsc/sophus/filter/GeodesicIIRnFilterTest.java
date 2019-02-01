@@ -67,4 +67,5 @@ public class GeodesicIIRnFilterTest extends TestCase {
     System.out.println(r1_n);
     // assertEquals(, geodesicIIRnFilter.apply(p0));
   }
+  // TODO OB test for comparison with IIR2
 }
