@@ -10,14 +10,12 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
 public class GeodesicFIRnFilter implements TensorUnaryOperator {
-  // ---
+  // TODO class contains redundancy with GeodesicIIRnFilter -> refactor
   private final GeodesicInterface geodesicInterface;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
   private final Tensor splits;
 
-  /** This filter uses the following procedure for prediction
-   * [[p,q]_beta, r]_gamma
-   * mask input shape [a1, a2, ... , an, alpha] with alpha the "kalman gain equivalent" **/
+  /** @param mask input shape [a1, a2, ... , an, alpha] with alpha the "kalman gain equivalent" */
   public GeodesicFIRnFilter(GeodesicInterface geodesicInterface, Tensor mask) {
     this.geodesicInterface = geodesicInterface;
     this.boundedLinkedList = new BoundedLinkedList<>(mask.length() + 1);
@@ -30,7 +28,7 @@ public class GeodesicFIRnFilter implements TensorUnaryOperator {
   }
 
   @Override
-  public synchronized Tensor apply(Tensor tensor) {
+  public Tensor apply(Tensor tensor) {
     boundedLinkedList.add(tensor);
     if (boundedLinkedList.size() < splits.length() + 1)
       return tensor;

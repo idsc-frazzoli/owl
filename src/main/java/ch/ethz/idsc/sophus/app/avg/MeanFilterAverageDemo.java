@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     // ---
     spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
     spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
-    spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "filter");
+    spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
     // ---
     setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
   }
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     if (control.length() % 2 == 1) {
       SmoothingKernel smoothingKernel = spinnerKernel.getValue();
       int radius = (control.length() - 1) / 2;
-      graphics.drawImage(SymLinkImages.smoothingKernel(smoothingKernel, radius).bufferedImage(), 0, 0, null);
+      graphics.drawImage(SymLinkImages.geodesicCenter(smoothingKernel, radius).bufferedImage(), 0, 0, null);
       // ---
       TensorUnaryOperator tensorUnaryOperator = //
           GeodesicCenter.of(SymGeodesic.INSTANCE, smoothingKernel);

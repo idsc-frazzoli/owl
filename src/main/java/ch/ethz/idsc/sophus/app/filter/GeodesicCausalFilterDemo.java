@@ -14,6 +14,7 @@ import ch.ethz.idsc.sophus.filter.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
+import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -29,7 +30,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final JSlider jSlider = new JSlider(1, 999, 500);
 
   GeodesicCausalFilterDemo() {
-    jToggleStep.setSelected(false);
+    jToggleSymi.setSelected(true);
+    // ---
     timerFrame.jToolBar.add(jToggleStep);
     // ---
     jToggleIIR.setSelected(true);
@@ -48,12 +50,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     SmoothingKernel smoothingKernel = spinnerFilter.getValue();
     int radius = spinnerRadius.getValue();
     WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
-    Tensor mask = windowSideSampler.apply(radius);
-    mask.append(alpha());
+    Tensor mask = windowSideSampler.apply(radius).append(alpha());
     TensorUnaryOperator geodesicCenterFilter;
-    if (jToggleIIR.isSelected())
+    if (jToggleIIR.isSelected()) {
+      if (jToggleSymi.isSelected())
+        graphics.drawImage(SymLinkImages.causalIIR(smoothingKernel, radius, alpha()).bufferedImage(), 0, 0, null);
       geodesicCenterFilter = new GeodesicIIRnFilter(geodesicDisplay.geodesicInterface(), mask);
-    else
+    } else
       geodesicCenterFilter = new GeodesicFIRnFilter(geodesicDisplay.geodesicInterface(), mask);
     return Tensor.of(control().stream().map(geodesicCenterFilter));
   }

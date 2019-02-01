@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     int radius = spinnerRadius.getValue();
     if (jToggleSymi.isSelected())
-      graphics.drawImage(SymLinkImages.smoothingKernel(smoothingKernel, radius).bufferedImage(), 0, 0, null);
+      graphics.drawImage(SymLinkImages.geodesicCenter(smoothingKernel, radius).bufferedImage(), 0, 0, null);
     // ---
     return GeodesicCenterFilter.of(GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel), radius).apply(control());
   }

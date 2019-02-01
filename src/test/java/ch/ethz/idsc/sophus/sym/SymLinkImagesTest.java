@@ -20,6 +20,6 @@ public class SymLinkImagesTest extends TestCase {
   public void testSmoothingKernel() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values())
       for (int radius = 0; radius < 5; ++radius)
-        SymLinkImages.smoothingKernel(smoothingKernel, radius);
+        SymLinkImages.geodesicCenter(smoothingKernel, radius);
   }
 }
