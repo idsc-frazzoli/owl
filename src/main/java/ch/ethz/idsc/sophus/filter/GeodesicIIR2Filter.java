@@ -7,7 +7,6 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
@@ -48,10 +47,5 @@ public class GeodesicIIR2Filter implements TensorUnaryOperator {
     p = q.copy();
     q = result.copy();
     return result;
-  }
-
-  public static void main(String[] args) {
-    Tensor mask = Tensors.vector(.5, .25, .25);
-    System.out.println(StaticHelperCausal.splits(mask));
   }
 }

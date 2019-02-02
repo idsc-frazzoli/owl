@@ -52,7 +52,6 @@ public class GeodesicIIRnFilterTest extends TestCase {
   public void testIIR1() {
     Scalar alpha = RationalScalar.of(1, 3);
     Tensor mask = Tensors.of(alpha, RealScalar.ONE.subtract(alpha), alpha);
-    // mask = Tensors.of(RealScalar.ONE, alpha);
     GeodesicIIR1Filter geodesicIIR1Filter = new GeodesicIIR1Filter(RnGeodesic.INSTANCE, alpha);
     GeodesicIIRnFilter geodesicIIRnFilter = new GeodesicIIRnFilter(RnGeodesic.INSTANCE, mask);
     Tensor p0 = Tensors.vector(1, 2);
@@ -65,7 +64,5 @@ public class GeodesicIIRnFilterTest extends TestCase {
     Tensor r1_n = geodesicIIRnFilter.apply(p1);
     System.out.println(r1_1);
     System.out.println(r1_n);
-    // assertEquals(, geodesicIIRnFilter.apply(p0));
   }
-  // TODO OB test for comparison with IIR2
 }

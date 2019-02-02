@@ -51,8 +51,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     int radius = spinnerRadius.getValue();
     WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
     Tensor mask = windowSideSampler.apply(radius);
-    // TODO OB normalize mask ?!
-    mask.append(alpha());
+    System.err.println(windowSideSampler.apply(radius));
+    mask.append(alpha()); 
     TensorUnaryOperator geodesicCenterFilter;
     if (jToggleSymi.isSelected())
       graphics.drawImage(SymLinkImages.causalIIR(smoothingKernel, radius, alpha()).bufferedImage(), 0, 0, null);
