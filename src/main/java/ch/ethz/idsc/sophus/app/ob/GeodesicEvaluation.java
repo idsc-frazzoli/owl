@@ -1,9 +1,12 @@
 // code by ob
-package ch.ethz.idsc.sophus.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import java.io.File;
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
+import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
@@ -79,7 +82,7 @@ public class GeodesicEvaluation {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + "0w/20180702T133612_2" + ".csv").stream() //
         .limit(300) //
         .map(row -> row.extract(1, 4)));
-    ;
+    // ---
     GeodesicEvaluation geodesicEvaluation = new GeodesicEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
     String dataname = "0w/20180702T133612_2";
     for (int width = 1; width < 12; width++) {

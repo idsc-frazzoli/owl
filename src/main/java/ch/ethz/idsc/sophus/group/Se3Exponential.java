@@ -30,7 +30,7 @@ public enum Se3Exponential implements LieExponential {
     Tensor u = u_w.get(0);
     Tensor w = u_w.get(1);
     Scalar theta = Norm._2.ofVector(w);
-    Tensor wx = Cross.of(w);
+    Tensor wx = Cross.skew3(w);
     Tensor wx2 = wx.dot(wx);
     Se3Numerics se3Numerics = new Se3Numerics(theta);
     Tensor R = ID3.add(wx.multiply(se3Numerics.A)).add(wx2.multiply(se3Numerics.B));
