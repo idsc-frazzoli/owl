@@ -16,6 +16,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
    * @throws Exception if mask is not a vector, or empty, or entries do not add up to 1 */
   public static Tensor splits(Tensor mask) {
     Chop._12.requireClose(Total.of(mask), RealScalar.ONE);
+    if (mask.length() == 0) {
+      return Tensors.vector(0, 1);
+    }
     Tensor splits = Tensors.empty();
     Scalar factor = mask.Get(0);
     for (int index = 1; index < mask.length() - 1; ++index) {

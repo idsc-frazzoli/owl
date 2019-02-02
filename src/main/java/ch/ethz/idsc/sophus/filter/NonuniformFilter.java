@@ -40,8 +40,8 @@ public class NonuniformFilter {
     return splits;
   }
 
-  // maps gaussian window to last 10 samples (FixedLength)
-  public StateTime Filter(StateTime stateTime) {
+  //TODO OB: Analog zu IIRn auteilen in mehrere Funktionen sobald es funktionier!
+  public StateTime apply(StateTime stateTime) {
     boundedLinkedList.add(stateTime);
     if (boundedLinkedList.size() == 1) {
       return stateTime;
@@ -66,13 +66,14 @@ public class NonuniformFilter {
     boundedLinkedList.set(boundedLinkedList.size() - 1, stateTimeUpdate);
     return stateTimeUpdate;
   }
+  
 
   public static void main(String[] args) {
-    // Tensor data = Tensor.of(ResourceData.of("/dubilab/app/pose/0w/20180702T133612_1.csv").stream().map(row -> row.extract(0, 4)));
+     Tensor data = Tensor.of(ResourceData.of("/dubilab/app/pose/0w/20180702T133612_1.csv").stream().map(row -> row.extract(0, 4)));
     // TODO OB: correct
-    Tensor data2 = Tensor.of(ResourceData.of("C:/Users/Oliver/Desktop/MA/duckietown/duckie20180713175124.csv").stream().map(row -> row.extract(0, 4)));
+//    Tensor data2 = Tensor.of(ResourceData.of("C:/Users/Oliver/Desktop/MA/duckietown/duckie20180713175124.csv").stream().map(row -> row.extract(0, 4)));
     Scalar Length = RealScalar.of(5);
-    List<StateTime> list = dataParser(data2, Length);
+    List<StateTime> list = dataParser(data, Length);
     // Apply fixedLength to the list which returns the causally filtered list
   }
 }
