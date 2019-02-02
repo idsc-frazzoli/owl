@@ -39,6 +39,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
+    // ---
+    updateData();
   }
 
   @Override
@@ -47,11 +49,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       _control = Tensor.of(SQUARE.stream().map(geodesicDisplay()::project));
     // ---
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    SmoothingKernel smoothingKernel = spinnerFilter.getValue();
+    SmoothingKernel smoothingKernel = spinnerKernel.getValue();
     int radius = spinnerRadius.getValue();
     WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
     Tensor mask = windowSideSampler.apply(radius);
-    // TODO OB normalize mask ?!
+    System.err.println(windowSideSampler.apply(radius));
     mask.append(alpha());
     TensorUnaryOperator geodesicCenterFilter;
     if (jToggleSymi.isSelected())

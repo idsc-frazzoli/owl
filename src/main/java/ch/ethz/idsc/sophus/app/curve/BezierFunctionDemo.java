@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
     // ---
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control());
     int levels = spinnerRefine.getValue();
-    Tensor refined = Subdivide.of(Clip.unit(), 1 << levels).map(scalarTensorFunction);
+    Tensor refined = Subdivide.increasing(Clip.unit(), 1 << levels).map(scalarTensorFunction);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     renderCurve(render, false, geometricLayer, graphics);
     if (levels < 5)

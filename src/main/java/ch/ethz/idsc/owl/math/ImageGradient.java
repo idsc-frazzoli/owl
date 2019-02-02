@@ -3,13 +3,13 @@ package ch.ethz.idsc.owl.math;
 
 import java.util.List;
 
-import ch.ethz.idsc.sophus.planar.Cross2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.TensorMap;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.lie.Cross;
 
 public enum ImageGradient {
   ;
@@ -33,6 +33,6 @@ public enum ImageGradient {
   /** @param image with rank 2
    * @return tensor of rank 3 with height and width reduced by one */
   public static Tensor rotated(Tensor image) {
-    return TensorMap.of(Cross2D::of, of(image), 2);
+    return TensorMap.of(Cross::of, of(image), 2);
   }
 }

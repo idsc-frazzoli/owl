@@ -1,9 +1,12 @@
 // code by ob
-package ch.ethz.idsc.sophus.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import java.io.File;
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
+import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
@@ -11,20 +14,16 @@ import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowCenterSampler;
+import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.TableBuilder;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Round;
 
 public class GeodesicEvaluation {
   public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
@@ -60,36 +59,35 @@ public class GeodesicEvaluation {
 
   public Tensor processErrors(Tensor control, int width) {
     TableBuilder tableBuilder = new TableBuilder();
-    TensorUnaryOperator CenterFilter = GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
+    SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
+    TensorUnaryOperator CenterFilter = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
     Tensor refinedCenter = GeodesicCenterFilter.of(CenterFilter, 6).apply(control);
-    Tensor alpharange = Subdivide.of(0.1, 1, 12);
-    // TODO OB use WindowSideSampler
-    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.GAUSSIAN);
+    Tensor alpharange = Subdivide.of(0.1, 1, 40);
+    WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
     for (int index = 0; index < alpharange.length(); index++) {
-      Tensor mask = Normalize.with(Norm._1).apply(centerWindowSampler.apply(width).extract(0, width + 1));
+      Tensor refinedCausal = Tensors.empty();
+      Tensor mask = windowSideSampler.apply(width).extract(0, width + 1);
       mask.append(alpharange.get(index));
       TensorUnaryOperator causalFilter = new GeodesicIIRnFilter(Se2Geodesic.INSTANCE, mask);
-      Tensor refinedCausal = Tensor.of(control.stream().map(causalFilter));
+      refinedCausal = Tensor.of(control.stream().map(causalFilter));
       Tensor row = Tensors.of(alpharange.Get(index), evaluate0ErrorSeperated(refinedCausal, refinedCenter), //
           evaluate1ErrorSeperated(refinedCausal, refinedCenter));
       tableBuilder.appendRow(row);
     }
     Tensor log = tableBuilder.toTable();
-    System.out.println(Pretty.of(log.map(Round._4)));
     return log;
   }
 
   public static void main(String[] args) throws IOException {
-    Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + "0w/20180702T133612_1" + ".csv").stream() //
+    Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + "0w/20180702T133612_2" + ".csv").stream() //
         .limit(300) //
         .map(row -> row.extract(1, 4)));
-    ;
+    // ---
     GeodesicEvaluation geodesicEvaluation = new GeodesicEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
-    System.out.println(control.length());
-    String dataname = "0w/20180702T133612_1";
+    String dataname = "0w/20180702T133612_2";
     for (int width = 1; width < 12; width++) {
       Tensor log = geodesicEvaluation.processErrors(control, width);
-      Export.of(new File(ROOT, dataname.replace('/', '_') + "_" + width + ".csv"), log);
+      // Export.of(new File(ROOT, dataname.replace('/', '_') + "_" + width + ".csv"), log);
     }
   }
 }

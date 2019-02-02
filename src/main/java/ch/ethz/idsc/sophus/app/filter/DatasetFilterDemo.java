@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Objects;
 
 import javax.swing.JToggleButton;
@@ -19,7 +19,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -46,12 +45,16 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
   protected Tensor _control = Tensors.of(Array.zeros(3));
-  private final SpinnerListener<String> spinnerListener = resource -> //
-  _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + resource + ".csv").stream() //
-      .limit(300) //
-      .map(row -> row.extract(1, 4)));
+  private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
-  protected Tensor control() {
+  protected void updateData() {
+    _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
+        .limit(spinnerLabelLimit.getValue()) //
+        .map(row -> row.extract(1, 4)));
+  }
+
+  protected final Tensor control() {
     return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
   }
 
@@ -68,13 +71,16 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     jToggleData.setSelected(true);
     timerFrame.jToolBar.add(jToggleData);
     {
-      SpinnerLabel<String> spinnerLabel = new SpinnerLabel<>();
-      List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
-      spinnerLabel.addSpinnerListener(spinnerListener);
-      spinnerLabel.setList(list);
-      spinnerLabel.setIndex(0);
-      spinnerLabel.reportToAll();
-      spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
+      spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.txt"));
+      spinnerLabelString.addSpinnerListener(type -> updateData());
+      spinnerLabelString.setIndex(0);
+      spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
+    }
+    {
+      spinnerLabelLimit.setList(Arrays.asList(250, 500, 1000, 2000, 5000));
+      spinnerLabelLimit.setIndex(0);
+      spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
+      spinnerLabelLimit.addSpinnerListener(type -> updateData());
     }
     timerFrame.jToolBar.addSeparator();
     // ---

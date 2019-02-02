@@ -18,7 +18,8 @@ public class GeodesicIIRnFilter implements TensorUnaryOperator {
 
   /** TODO OB state conditions on mask!
    * 
-   * @param mask input shape [a1, a2, ..., an, alpha] with alpha the "kalman gain equivalent" */
+   * @param mask input shape [a1, a2, ..., an, alpha] with a1, a2, ... ,an a affine combination and
+   * alpha the measurement update gain (0: only measurement, 1: only prediction) */
   public GeodesicIIRnFilter(GeodesicInterface geodesicInterface, Tensor mask) {
     this.geodesicInterface = geodesicInterface;
     this.boundedLinkedList = new BoundedLinkedList<>(mask.length() + 1);
@@ -33,6 +34,9 @@ public class GeodesicIIRnFilter implements TensorUnaryOperator {
   @Override
   public Tensor apply(Tensor tensor) {
     boundedLinkedList.add(tensor);
+    if (boundedLinkedList.size() == 1) {
+      return tensor;
+    }
     if (boundedLinkedList.size() < splits.length() + 1)
       return tensor;
     Tensor sequence = Tensor.of(boundedLinkedList.stream());
@@ -51,8 +55,12 @@ public class GeodesicIIRnFilter implements TensorUnaryOperator {
   }
 
   public Tensor update(Tensor sequence) {
-    if (sequence.length() != splits.length() + 1)
+    if (sequence.length() <= 3) {
+      return sequence.get(sequence.length() - 1);
+    }
+    if (sequence.length() != splits.length() + 1) {
       throw TensorRuntimeException.of(sequence, splits);
+    }
     Tensor interpolate = sequence.get(0);
     for (int index = 0; index < splits.length() - 2; ++index)
       interpolate = geodesicInterface.split(interpolate, sequence.get(index + 1), splits.Get(index));

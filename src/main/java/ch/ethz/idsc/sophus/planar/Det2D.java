@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.lie.Cross;
 
 public enum Det2D {
   ;
@@ -12,6 +13,6 @@ public enum Det2D {
    * @return px * qy - py * qx
    * @throws Exception if p or q is not a vector of length 2 */
   public static Scalar of(Tensor p, Tensor q) {
-    return Cross2D.of(p).dot(q).Get();
+    return Cross.of(p).dot(q).Get();
   }
 }

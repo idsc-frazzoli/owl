@@ -23,7 +23,7 @@ public class NonuniformFilter {
   private GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
 
   // Function that takes tensor of ALL data in CSV (tensor) and a duckiebot number (scalar) and returns the StateTime list of this bot;
-  public static List dataParser(Tensor tensor, Scalar scalar) {
+  public static List<StateTime> dataParser(Tensor tensor, Scalar scalar) {
     // TODO OB
     List<StateTime> list = null;
     return list;
@@ -40,8 +40,8 @@ public class NonuniformFilter {
     return splits;
   }
 
-  // maps gaussian window to last 10 samples (FixedLength)
-  public StateTime Filter(StateTime stateTime) {
+  // TODO OB: Analog zu IIRn auteilen in mehrere Funktionen sobald es funktionier!
+  public StateTime apply(StateTime stateTime) {
     boundedLinkedList.add(stateTime);
     if (boundedLinkedList.size() == 1) {
       return stateTime;
@@ -68,11 +68,12 @@ public class NonuniformFilter {
   }
 
   public static void main(String[] args) {
-    // Tensor data = Tensor.of(ResourceData.of("/dubilab/app/pose/0w/20180702T133612_1.csv").stream().map(row -> row.extract(0, 4)));
+    Tensor data = Tensor.of(ResourceData.of("/dubilab/app/pose/0w/20180702T133612_1.csv").stream().map(row -> row.extract(0, 4)));
     // TODO OB: correct
-    Tensor data2 = Tensor.of(ResourceData.of("C:/Users/Oliver/Desktop/MA/duckietown/duckie20180713175124.csv").stream().map(row -> row.extract(0, 4)));
+    // TODO duckietown data is now in ephemeral, see DuckietownDataDemo
+    // Tensor data2 = Tensor.of(ResourceData.of("C:/Users/Oliver/Desktop/MA/duckietown/duckie20180713175124.csv").stream().map(row -> row.extract(0, 4)));
     Scalar Length = RealScalar.of(5);
-    List<StateTime> list = dataParser(data2, Length);
+    List<StateTime> list = dataParser(data, Length);
     // Apply fixedLength to the list which returns the causally filtered list
   }
 }

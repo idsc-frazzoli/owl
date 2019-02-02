@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
+import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -60,7 +61,7 @@ public enum CurvatureComb {
   private static Tensor normal(Tensor a, Tensor b, Tensor c, Tensor tangent) {
     Optional<Scalar> optional = SignedCurvature2D.of(a, b, c);
     return optional.isPresent() //
-        ? NORMALIZE.apply(Cross2D.of(tangent)).multiply(optional.get())
+        ? NORMALIZE.apply(Cross.of(tangent)).multiply(optional.get())
         : ZEROS;
   }
 }
