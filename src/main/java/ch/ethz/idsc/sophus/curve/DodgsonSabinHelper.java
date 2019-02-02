@@ -2,13 +2,13 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.planar.Cross2D;
 import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.red.Times;
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return Total.of(Tensors.of( //
         b.add(c).multiply(RealScalar.of(0.5)), //
         D.multiply(lam.divide(RealScalar.of(2))), //
-        Cross2D.of(D).multiply(RealScalar.of(r.number().doubleValue() * Math.sqrt(d) * 0.25 * (fa - fb)))));
+        Cross.of(D).multiply(RealScalar.of(r.number().doubleValue() * Math.sqrt(d) * 0.25 * (fa - fb)))));
   }
 
   static Scalar lambda(Tensor a, Tensor b, Tensor c, Tensor d, Scalar r) {

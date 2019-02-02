@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
         }
         {
           int limit = 11;
-          Tensor tensor = Subdivide.of(Clip.unit(), limit).extract(1, limit) //
+          Tensor tensor = Subdivide.increasing(Clip.unit(), limit).extract(1, limit) //
               .map(scalarTensorFunction);
           Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.5));
           graphics.setColor(Color.GRAY);
