@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public class ImageRender implements RenderInterface {
   /** @param bufferedImage
-   * @param range vector of length 2 */
+   * @param range vector of length 2, i.e. the extensions of the image in model coordinates */
   public static ImageRender of(BufferedImage bufferedImage, Tensor range) {
     Tensor scale = Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()) //
         .pmul(range.map(Scalar::reciprocal));
