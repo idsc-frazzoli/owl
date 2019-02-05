@@ -1,10 +1,6 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -26,7 +22,8 @@ public class PreorderMinTrackerTest extends TestCase {
     divisibility.digest(RealScalar.of(3));
     divisibility.digest(RealScalar.of(7));
     divisibility.digest(RealScalar.of(6));
-    List<Scalar> listExpected = new LinkedList<>(Arrays.asList(RealScalar.of(2), RealScalar.of(3), RealScalar.of(7)));
-    assertEquals(listExpected, divisibility.getMinElements());
+    assertTrue(divisibility.getMinElements().contains(RealScalar.of(2)));
+    assertTrue(divisibility.getMinElements().contains(RealScalar.of(3)));
+    assertTrue(divisibility.getMinElements().contains(RealScalar.of(7)));
   }
 }
