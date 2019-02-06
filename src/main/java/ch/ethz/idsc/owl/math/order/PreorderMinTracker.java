@@ -8,6 +8,7 @@ import java.util.List;
 /** Creates a list of minimal elements of a preordered set <tt>X</tt>.
  * <p>An element <tt>a</tt> in a preorder is a minimal element if for all <tt>b</tt> in <tt>X</tt>,
  * <tt>a</tt> &le <tt>b</tt> and NOT <tt>b</tt> &le <tt>a</tt> holds.
+ * TODO new definition of minimal element
  * 
  * @param <T> type of elements to compare */
 public class PreorderMinTracker<T> {
@@ -21,7 +22,7 @@ public class PreorderMinTracker<T> {
 
   /** Compares an element <tt>x</tt> of a preorder to the current set of minimal elements.
    *
-   * <p>The element gets added to the list if it precedes any of the current
+   * <p>The element gets added to the list if it precedes any of the current elements of the set.
    * 
    * @param x Element next up for comparison */
   public void digest(T x) {
