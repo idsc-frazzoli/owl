@@ -15,4 +15,24 @@ public class TensorNormWeakOrderTest extends TestCase {
     assertEquals(weakOrderComparator.compare(Tensors.vector(3, 12), Tensors.vector(3, 12)), WeakOrderComparison.INDIFFERENT);
     assertEquals(weakOrderComparator.compare(Tensors.vector(100, 3), Tensors.vector(3, 12)), WeakOrderComparison.GREATER_EQUALS_ONLY);
   }
+
+  public void testVector() {
+    TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
+    WeakOrderComparison weakOrderComparison = tensorNormWeakOrder.comparator().compare(Tensors.vector(0, 1, 2), Tensors.vector(0, 2, 1));
+    assertEquals(weakOrderComparison, WeakOrderComparison.INDIFFERENT);
+  }
+
+  public void testMatrix() {
+    TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
+    Tensor m1 = Tensors.fromString("{{1,2},{2,3}}");
+    Tensor m2 = Tensors.fromString("{{2,1},{2,3}}");
+    Tensor m3 = Tensors.fromString("{{1,1},{2,3}}");
+    Tensor m4 = Tensors.fromString("{{1,1},{1,3}}");
+    assertEquals(tensorNormWeakOrder.comparator().compare(m1, m2), WeakOrderComparison.INDIFFERENT);
+    assertEquals(tensorNormWeakOrder.comparator().compare(m1, m3), WeakOrderComparison.INDIFFERENT);
+    assertEquals(tensorNormWeakOrder.comparator().compare(m2, m3), WeakOrderComparison.INDIFFERENT);
+    assertEquals(tensorNormWeakOrder.comparator().compare(m1, m4), WeakOrderComparison.GREATER_EQUALS_ONLY);
+    assertEquals(tensorNormWeakOrder.comparator().compare(m2, m4), WeakOrderComparison.GREATER_EQUALS_ONLY);
+    assertEquals(tensorNormWeakOrder.comparator().compare(m3, m4), WeakOrderComparison.GREATER_EQUALS_ONLY);
+  }
 }
