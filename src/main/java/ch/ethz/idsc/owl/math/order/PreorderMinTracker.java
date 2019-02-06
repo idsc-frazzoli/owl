@@ -1,9 +1,10 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 /** Creates a list of minimal elements of a preordered set <tt>X</tt>.
  * <p>An element <tt>a</tt> in a preorder is a minimal element if for all <tt>b</tt> in <tt>X</tt>,
@@ -11,13 +12,13 @@ import java.util.List;
  * TODO new definition of minimal element
  * 
  * @param <T> type of elements to compare */
-public class PreorderMinTracker<T> {
-  public final PreorderComparator<T> comparator;
+public class PreorderMinTracker<T> implements MinTrackerInterface<T> {
+  private final PreorderComparator<T> preorderComparator;
   // FIXME list allows for duplicate elements and ordering within list is crucial maybe switch to Set
-  public final List<T> list = new LinkedList<>();
+  private final Collection<T> collection = new LinkedList<>();
 
-  public PreorderMinTracker(PreorderComparator<T> comparator) {
-    this.comparator = comparator;
+  public PreorderMinTracker(PreorderComparator<T> preorderComparator) {
+    this.preorderComparator = preorderComparator;
   }
 
   /** Compares an element <tt>x</tt> of a preorder to the current set of minimal elements.
@@ -25,22 +26,24 @@ public class PreorderMinTracker<T> {
    * <p>The element gets added to the list if it precedes any of the current elements of the set.
    * 
    * @param x Element next up for comparison */
+  @Override // from MinTrackerInterface
   public void digest(T x) {
-    Iterator<T> iterator = list.iterator();
+    Iterator<T> iterator = collection.iterator();
     while (iterator.hasNext()) {
       T b = iterator.next();
-      PreorderComparison preorderComparison = comparator.compare(x, b);
+      PreorderComparison preorderComparison = preorderComparator.compare(x, b);
       if (preorderComparison.equals(PreorderComparison.LESS_EQUALS_ONLY)) {
         iterator.remove();
       } else if (preorderComparison.equals(PreorderComparison.GREATER_EQUALS_ONLY)) {
         return;
       }
     }
-    list.add(x);
+    collection.add(x);
   }
 
   /** @return Minimal elements of preordered set */
-  public List<T> getMinElements() {
-    return list;
+  @Override // from MinTrackerInterface
+  public Collection<T> getMinElements() {
+    return Collections.unmodifiableCollection(collection);
   }
 }

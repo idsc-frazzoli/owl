@@ -10,32 +10,38 @@ import junit.framework.TestCase;
 public class WeakOrderMinTrackerTest extends TestCase {
   public void testDigestNotEmpty() {
     TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
-    WeakOrderComparator<Tensor> comparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> tensorNorm = new WeakOrderMinTracker<>(comparator);
-    tensorNorm.digest(RealScalar.of(6));
-    assertFalse(tensorNorm.getMinElements().isEmpty());
+    WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
+    WeakOrderMinTracker<Tensor> weakOrderMinTracker = new WeakOrderMinTracker<>(weakOrderComparator);
+    weakOrderMinTracker.digest(RealScalar.of(6));
+    assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
   }
 
   public void testDigestFunction() {
     TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
-    WeakOrderComparator<Tensor> comparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> tensorNorm = new WeakOrderMinTracker<>(comparator);
-    tensorNorm.digest(Tensors.vector(2));
-    tensorNorm.digest(Tensors.vector(0, 2, 2));
-    tensorNorm.digest(Tensors.vector(0, 1, 2));
-    tensorNorm.digest(Tensors.vector(0, 3, 2));
-    assertTrue(tensorNorm.getMinElements().contains(Tensors.vector(2)));
-    assertTrue(tensorNorm.getMinElements().contains(Tensors.vector(0, 2, 2)));
-    assertTrue(tensorNorm.getMinElements().contains(Tensors.vector(0, 1, 2)));
-    assertFalse(tensorNorm.getMinElements().contains(Tensors.vector(0, 3, 2)));
+    WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
+    WeakOrderMinTracker<Tensor> weakOrderMinTracker = new WeakOrderMinTracker<>(weakOrderComparator);
+    weakOrderMinTracker.digest(Tensors.vector(2));
+    weakOrderMinTracker.digest(Tensors.vector(0, 3, 2));
+    assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
+    assertTrue(weakOrderMinTracker.getMinElements().contains(Tensors.vector(2)));
+    weakOrderMinTracker.digest(Tensors.vector(0, 2, 2));
+    assertTrue(weakOrderMinTracker.getMinElements().contains(Tensors.vector(0, 2, 2)));
+    weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
+    assertTrue(weakOrderMinTracker.getMinElements().contains(Tensors.vector(0, 1, 2)));
+    weakOrderMinTracker.digest(Tensors.vector(0, 3, 2));
+    assertTrue(weakOrderMinTracker.getMinElements().contains(Tensors.vector(0, 1, 2)));
+    assertFalse(weakOrderMinTracker.getMinElements().contains(Tensors.vector(0, 3, 2)));
+    assertEquals(weakOrderMinTracker.getMinElements().size(), 3);
   }
 
   public void testDuplicateEntries() {
     TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
-    WeakOrderComparator<Tensor> comparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> tensorNorm = new WeakOrderMinTracker<>(comparator);
-    tensorNorm.digest(Tensors.vector(0, 1, 2));
-    tensorNorm.digest(Tensors.vector(0, 1, 2));
-    assertEquals(tensorNorm.getMinElements().size(), 1);
+    WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
+    WeakOrderMinTracker<Tensor> weakOrderMinTracker = new WeakOrderMinTracker<>(weakOrderComparator);
+    weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
+    weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
+    assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
+    weakOrderMinTracker.digest(Tensors.vector(0, 2, 1));
+    assertEquals(weakOrderMinTracker.getMinElements().size(), 2);
   }
 }
