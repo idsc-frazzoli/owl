@@ -19,8 +19,8 @@ public final class IntervalClock {
 
   private long elapsed() {
     long toc = System.nanoTime();
-    long tac = toc - tic;
+    long elapsed = toc - tic;
     tic = toc;
-    return tac;
+    return elapsed;
   }
 }
