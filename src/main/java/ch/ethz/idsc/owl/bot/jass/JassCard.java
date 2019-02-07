@@ -1,6 +1,8 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.jass;
 
+import java.util.Objects;
+
 /** Creates a card of the game jassen with the attributes color and card type
  * 
  * https://en.wikipedia.org/wiki/Jass
@@ -39,12 +41,12 @@ package ch.ethz.idsc.owl.bot.jass;
    * @param jassCard to check for eligibility
    * @throws RunTimeException */
   public void cheatChecker(JassCard jassCard) {
-    if (this.color.equals(jassCard.color) && this.type.equals(jassCard.type)) {
+    if (this.equals(jassCard)) {
       System.err.println("There are no duplicate cards in a deck!");
       throw new RuntimeException("cards not from the same deck");
     }
     if (this.isTrumpf && jassCard.isTrumpf && !this.color.equals(jassCard.color)) {
-      System.err.println("Only card color can be assigned Trumpf!");
+      System.err.println("Only one card color can be assigned Trumpf!");
       throw new RuntimeException("cards not from the same deck");
     }
   }
@@ -69,5 +71,16 @@ package ch.ethz.idsc.owl.bot.jass;
       }
     }
     return false;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    return object instanceof JassCard //
+        && this.color.equals(((JassCard) object).color) && this.type.equals(((JassCard) object).type) && (this.isTrumpf == ((JassCard) object).isTrumpf);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(color, type, isTrumpf);
   }
 }
