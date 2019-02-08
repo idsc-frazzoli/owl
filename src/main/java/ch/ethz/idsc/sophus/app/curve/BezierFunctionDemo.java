@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.sca.Clip;
 
 /** Bezier function */
 /* package */ class BezierFunctionDemo extends ControlPointsDemo {
@@ -45,9 +44,14 @@ import ch.ethz.idsc.tensor.sca.Clip;
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics);
     // ---
-    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control());
+    Tensor control = control();
+    int n = control.length();
+    ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control);
     int levels = spinnerRefine.getValue();
-    Tensor refined = Subdivide.increasing(Clip.unit(), 1 << levels).map(scalarTensorFunction);
+    Tensor domain = n <= 1 //
+        ? Tensors.vector(0)
+        : Subdivide.of(0, n / (double) (n - 1), 1 << levels);
+    Tensor refined = domain.map(scalarTensorFunction);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     renderCurve(render, false, geometricLayer, graphics);
     if (levels < 5)
