@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -32,7 +33,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     spinnerRefine.setValue(8);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
-      Tensor tensor = Tensors.fromString("{{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2}}");
+      Tensor tensor = Tensors.fromString("{{1, 0, 0}, {2, 0, 2.5708}, {1, 0, 2.1}, {1.5, 0, 0}, {2.3, 0, -1.2}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
@@ -59,8 +60,8 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   }
 
   public static void main(String[] args) {
-    BezierFunctionDemo bezierDemo = new BezierFunctionDemo();
-    bezierDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    bezierDemo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new BezierFunctionDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

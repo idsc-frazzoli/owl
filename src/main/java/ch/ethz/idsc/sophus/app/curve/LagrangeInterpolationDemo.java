@@ -64,7 +64,7 @@ import ch.ethz.idsc.tensor.sca.N;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final Tensor control = control();
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()) //
-        .multiply(RealScalar.of(control.length() - 1 * 0));
+        .multiply(RealScalar.of(control.length()));
     if (jToggleSymi.isSelected()) {
       Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
       ScalarTensorFunction scalarTensorFunction = LagrangeInterpolation.of(SymGeodesic.INSTANCE, vector)::at;
