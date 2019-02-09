@@ -6,11 +6,15 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.sca.Clip;
 
-/** De Casteljau's algorithm for the evaluation of Bezier curves
+/** <a href="https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm">
+ * De Casteljau's algorithm</a> for the evaluation of Bezier curves.
+ *
+ * <p>For parameters in the unit interval [0, 1] the function gives
+ * values "in between" the control points.
  * 
- * https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm
+ * <p>BezierFunction can be used for extrapolation when using
+ * parameters outside the interval.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BezierFunction.html">BezierFunction</a> */
@@ -33,7 +37,6 @@ public class BezierFunction implements ScalarTensorFunction {
 
   @Override // from ScalarTensorFunction
   public Tensor apply(Scalar scalar) {
-    Clip.unit().requireInside(scalar);
     Tensor points = this.control;
     while (1 < points.length()) {
       Tensor tensor = Tensors.empty();

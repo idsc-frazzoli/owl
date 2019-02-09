@@ -20,22 +20,20 @@ import ch.ethz.idsc.sophus.sym.SymLinkBuilder;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.sca.N;
 
 /** visualization of geodesic average along geodesics */
 /* package */ class BezierFunctionAverageDemo extends ControlPointsDemo {
-  private Scalar parameter = RationalScalar.HALF;
+  private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   BezierFunctionAverageDemo() {
     super(true, false, GeodesicDisplays.ALL);
     // ---
-    JSlider jSlider = new JSlider(0, 1000, 500);
     jSlider.setPreferredSize(new Dimension(500, 28));
-    jSlider.addChangeListener(changeEvent -> parameter = RationalScalar.of(jSlider.getValue(), 1000));
     timerFrame.jToolBar.add(jSlider);
     // ---
     setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
@@ -47,7 +45,12 @@ import ch.ethz.idsc.tensor.sca.N;
     Tensor control = control();
     Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(SymGeodesic.INSTANCE, vector);
-    SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(N.DOUBLE.apply(parameter));
+    int n = control.length();
+    Scalar parameter = n <= 1 //
+        ? RealScalar.ZERO
+        : RationalScalar.of(n, n - 1);
+    parameter = parameter.multiply(RationalScalar.of(jSlider.getValue(), 1000));
+    SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(parameter);
     graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
     // ---
     SymLink symLink = SymLinkBuilder.of(control, symScalar);

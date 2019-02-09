@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class BezierFunctionTest extends TestCase {
@@ -42,11 +43,8 @@ public class BezierFunctionTest extends TestCase {
     Tensor control = Tensors.fromString("{{0, 0, 0}, {1, 0, 1/2}, {2, 0.4, 2/5}}");
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(Se2CoveringGeodesic.INSTANCE, control);
     Scalar scalar = RationalScalar.of(-1, 4);
-    try {
-      scalarTensorFunction.apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Tensor tensor = scalarTensorFunction.apply(scalar);
+    Chop._12.requireClose(tensor, Tensors.vector(-0.45359613406197646, 0.22282532025418184, -23 / 80.));
+    ExactScalarQ.require(tensor.Get(2));
   }
 }
