@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-/** Bezier function */
+/** Bezier function with extrapolation */
 /* package */ class BezierFunctionDemo extends ControlPointsDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
