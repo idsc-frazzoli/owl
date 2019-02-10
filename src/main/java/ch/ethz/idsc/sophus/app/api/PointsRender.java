@@ -18,7 +18,6 @@ import ch.ethz.idsc.tensor.Tensor;
     this.color_draw = color_draw;
   }
 
-  // TODO design as WaypointRender
   public class Show implements RenderInterface {
     private final GeodesicDisplay geodesicDisplay;
     private final Tensor points;
