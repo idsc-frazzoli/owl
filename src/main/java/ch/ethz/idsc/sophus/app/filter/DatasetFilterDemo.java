@@ -27,6 +27,7 @@ import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -35,6 +36,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ abstract class DatasetFilterDemo extends GeodesicDisplayDemo {
+  private static final Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
   private static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
@@ -140,16 +142,20 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
-      Tensor speeds = lieDifferences.apply(refined);
-      VisualSet visualSet = new VisualSet();
-      visualSet.setPlotLabel(plotLabel());
-      visualSet.setAxesLabelX("sample no.");
-      Tensor domain = Range.of(0, speeds.length());
-      visualSet.add(domain, speeds.get(Tensor.ALL, 0)).setLabel("tangent velocity [m/s]");
-      visualSet.add(domain, speeds.get(Tensor.ALL, 1)).setLabel("side slip [m/s]");
-      visualSet.add(domain, speeds.get(Tensor.ALL, 2)).setLabel("rotational rate [rad/s]");
-      JFreeChart jFreeChart = ListPlot.of(visualSet);
-      jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 80 + speeds.length(), 400));
+      Tensor speeds = lieDifferences.apply(refined).multiply(SAMPLING_FREQUENCY);
+      if (0 < speeds.length()) {
+        int dimensions = speeds.get(0).length();
+        VisualSet visualSet = new VisualSet();
+        visualSet.setPlotLabel(plotLabel());
+        visualSet.setAxesLabelX("sample no.");
+        Tensor domain = Range.of(0, speeds.length());
+        for (int index = 0; index < dimensions; ++index)
+          visualSet.add(domain, speeds.get(Tensor.ALL, index)); // .setLabel("tangent velocity [m/s]")
+        // visualSet.add(domain, speeds.get(Tensor.ALL, 1)).setLabel("side slip [m/s]");
+        // visualSet.add(domain, speeds.get(Tensor.ALL, 2)).setLabel("rotational rate [rad/s]");
+        JFreeChart jFreeChart = ListPlot.of(visualSet);
+        jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 80 + speeds.length(), 400));
+      }
     }
   }
 }

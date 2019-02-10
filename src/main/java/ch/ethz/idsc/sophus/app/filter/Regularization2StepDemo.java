@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.filter.Regularization2Step;
+import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,16 +22,18 @@ import ch.ethz.idsc.tensor.sca.N;
   Regularization2StepDemo() {
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
+    updateData();
   }
 
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    // TODO JPH
-    // if (jToggleSymi.isSelected())
-    // graphics.drawImage(SymLinkImages.smoothingKernel(smoothingKernel, radius).bufferedImage(), 0, 0, null);
     // ---
-    return Regularization2Step.string(geodesicDisplay.geodesicInterface(), N.DOUBLE.apply(factor())).apply(control());
+    final Scalar factor = factor();
+    if (jToggleSymi.isSelected())
+      graphics.drawImage(SymLinkImages.regularization2Step(factor).bufferedImage(), 0, 0, null);
+    // ---
+    return Regularization2Step.string(geodesicDisplay.geodesicInterface(), N.DOUBLE.apply(factor)).apply(control());
   }
 
   @Override

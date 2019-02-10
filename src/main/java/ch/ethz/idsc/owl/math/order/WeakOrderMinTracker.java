@@ -11,16 +11,14 @@ import java.util.LinkedList;
  * 
  * @param <T> type of elements to compare */
 public class WeakOrderMinTracker<T> implements MinTrackerInterface<T> {
-  
-  
-  public static WeakOrderMinTracker withList(WeakOrderComparator weakOrderComparator) {
-    return new WeakOrderMinTracker(weakOrderComparator, new LinkedList<>());
+  public static <T> WeakOrderMinTracker<T> withList(WeakOrderComparator<T> weakOrderComparator) {
+    return new WeakOrderMinTracker<>(weakOrderComparator, new LinkedList<>());
   }
-  public static WeakOrderMinTracker withSet(WeakOrderComparator weakOrderComparator) {
-      return new WeakOrderMinTracker(weakOrderComparator, new HashSet<>());
-          }
-  
-  
+
+  public static <T> WeakOrderMinTracker<T> withSet(WeakOrderComparator<T> weakOrderComparator) {
+    return new WeakOrderMinTracker<>(weakOrderComparator, new HashSet<>());
+  }
+
   private final WeakOrderComparator<T> weakOrderComparator;
   private final Collection<T> collection;
 
