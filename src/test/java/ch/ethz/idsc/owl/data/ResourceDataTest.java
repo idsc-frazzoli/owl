@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 public class ResourceDataTest extends TestCase {
   public void testSimple() {
-    List<String> list = ResourceData.lines("/dubilab/app/pose/index.txt");
+    List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
     assertTrue(50 < list.size());
   }
 
