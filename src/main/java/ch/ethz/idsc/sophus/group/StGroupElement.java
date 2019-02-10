@@ -9,9 +9,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** element of 1-dimensional Scaling and Translations group
+/** element of (n+1)-dimensional Scaling and Translations group
  * 
- * <p>the neutral element is {1,0}
+ * <p>the neutral element is {1, 0}
  * 
  * <p>Reference:
  * Bi-invariant Means in Lie Groups.
