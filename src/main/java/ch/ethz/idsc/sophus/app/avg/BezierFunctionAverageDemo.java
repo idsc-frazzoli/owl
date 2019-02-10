@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.avg;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.stream.IntStream;
 
@@ -28,6 +29,8 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** visualization of geodesic average along geodesics */
 /* package */ class BezierFunctionAverageDemo extends ControlPointsDemo {
+  private static final Font FONT = new Font(Font.DIALOG, Font.PLAIN, 13);
+  // ---
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   BezierFunctionAverageDemo() {
@@ -51,7 +54,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
         : RationalScalar.of(n, n - 1);
     parameter = parameter.multiply(RationalScalar.of(jSlider.getValue(), 1000));
     SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(parameter);
-    graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
+    graphics.drawImage(new SymLinkImage(symScalar, FONT).bufferedImage(), 0, 0, null);
     // ---
     SymLink symLink = SymLinkBuilder.of(control, symScalar);
     // ---
