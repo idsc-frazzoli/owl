@@ -11,7 +11,7 @@ public class WeakOrderMinTrackerTest extends TestCase {
   public void testDigestNotEmpty() {
     TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
     WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> weakOrderMinTracker = new WeakOrderMinTracker<>(weakOrderComparator);
+    WeakOrderMinTracker<Tensor> weakOrderMinTracker = WeakOrderMinTracker.withList(weakOrderComparator);
     weakOrderMinTracker.digest(RealScalar.of(6));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
   }
@@ -19,7 +19,7 @@ public class WeakOrderMinTrackerTest extends TestCase {
   public void testDigestFunction() {
     TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
     WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> weakOrderMinTracker = new WeakOrderMinTracker<>(weakOrderComparator);
+    WeakOrderMinTracker<Tensor> weakOrderMinTracker = WeakOrderMinTracker.withList(weakOrderComparator);
     weakOrderMinTracker.digest(Tensors.vector(2));
     weakOrderMinTracker.digest(Tensors.vector(0, 3, 2));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
@@ -37,7 +37,7 @@ public class WeakOrderMinTrackerTest extends TestCase {
   public void testDuplicateEntries() {
     TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
     WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> weakOrderMinTracker = new WeakOrderMinTracker<>(weakOrderComparator);
+    WeakOrderMinTracker<Tensor> weakOrderMinTracker = WeakOrderMinTracker.withList(weakOrderComparator);
     weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
     weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 1);

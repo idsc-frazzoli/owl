@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 /** Creates a list of minimal elements of a weakly ordered set <tt>X</tt>.
@@ -10,11 +11,22 @@ import java.util.LinkedList;
  * 
  * @param <T> type of elements to compare */
 public class WeakOrderMinTracker<T> implements MinTrackerInterface<T> {
+  
+  
+  public static WeakOrderMinTracker withList(WeakOrderComparator weakOrderComparator) {
+    return new WeakOrderMinTracker(weakOrderComparator, new LinkedList<>());
+  }
+  public static WeakOrderMinTracker withSet(WeakOrderComparator weakOrderComparator) {
+      return new WeakOrderMinTracker(weakOrderComparator, new HashSet<>());
+          }
+  
+  
   private final WeakOrderComparator<T> weakOrderComparator;
-  private final Collection<T> collection = new LinkedList<>();
+  private final Collection<T> collection;
 
-  public WeakOrderMinTracker(WeakOrderComparator<T> weakOrderComparator) {
+  private WeakOrderMinTracker(WeakOrderComparator<T> weakOrderComparator, Collection<T> collection) {
     this.weakOrderComparator = weakOrderComparator;
+    this.collection = collection;
   }
 
   /** Compares an element <tt>x</tt> of a partial order to the current set of minimal elements.
