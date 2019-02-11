@@ -10,7 +10,12 @@ import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** Reference:
+/** Reference 1:
+ * "Exponential Barycenters of the Canonical Cartan Connection and
+ * Invariant Means on Lie Groups" by Xavier Pennec, Vincent Arsigny
+ * pages 25-28
+ * 
+ * Reference 2:
  * Bi-invariant Means in Lie Groups.
  * Application to Left-invariant Polyaffine Transformations.
  * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache
@@ -27,8 +32,7 @@ public enum StExponential implements LieExponential {
     Scalar exp_dl = Exp.FUNCTION.apply(dl);
     return Tensors.of( //
         exp_dl, //
-        // TODO: OB This formula is a guess extrapolated from the ST1 case. I need the ST(n) case to write this down correctly
-        dt.multiply(exp_dl.subtract(RealScalar.ONE)).divide(dl));
+        dt.multiply(exp_dl.subtract(RealScalar.ONE).divide(dl)));
   }
 
   @Override // from LieExponential
@@ -40,7 +44,7 @@ public enum StExponential implements LieExponential {
     Scalar log_l = Log.FUNCTION.apply(lambda);
     return Tensors.of( //
         log_l, //
-        // TODO: OB This formula is a guess extrapolated from the ST1 case. I need the ST(n) case to write this down correctly
-        t.multiply(log_l).divide(lambda.subtract(RealScalar.ONE)));
+        /* there is a typo in Reference 1 (!) */
+        t.multiply(log_l.divide(lambda.subtract(RealScalar.ONE))));
   }
 }

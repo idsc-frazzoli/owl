@@ -81,7 +81,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
           Tensor tensor = Subdivide.increasing(Clip.unit(), limit).extract(1, limit) //
               .map(scalarTensorFunction);
           Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.5));
-          graphics.setColor(Color.GRAY);
+          graphics.setColor(new Color(64, 128 + 64, 64, 128));
           for (Tensor p : tensor) {
             geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
             Path2D path2d = geometricLayer.toPath2D(shape);

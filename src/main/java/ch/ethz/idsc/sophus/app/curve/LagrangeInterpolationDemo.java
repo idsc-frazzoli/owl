@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.N;
 
-/** Bezier curve */
+/** LagrangeInterpolation with extrapolation */
 /* package */ class LagrangeInterpolationDemo extends ControlPointsDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
@@ -63,11 +63,12 @@ import ch.ethz.idsc.tensor.sca.N;
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final Tensor control = control();
-    final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum());
+    final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()) //
+        .multiply(RealScalar.of(control.length()));
     if (jToggleSymi.isSelected()) {
       Tensor vector = Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf));
       ScalarTensorFunction scalarTensorFunction = LagrangeInterpolation.of(SymGeodesic.INSTANCE, vector)::at;
-      Scalar scalar = N.DOUBLE.apply(parameter.multiply(RealScalar.of(control.length() - 1)));
+      Scalar scalar = N.DOUBLE.apply(parameter);
       SymScalar symScalar = (SymScalar) scalarTensorFunction.apply(scalar);
       graphics.drawImage(new SymLinkImage(symScalar).bufferedImage(), 0, 0, null);
     }
@@ -78,11 +79,11 @@ import ch.ethz.idsc.tensor.sca.N;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     int levels = spinnerRefine.getValue();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
-    Tensor refined = Subdivide.of(0, control.length() - 1, 1 << levels).map(interpolation::at);
+    Tensor refined = Subdivide.of(0, control.length(), 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     renderCurve(render, false, geometricLayer, graphics);
     {
-      Tensor selected = interpolation.at(parameter.multiply(RealScalar.of(control.length() - 1)));
+      Tensor selected = interpolation.at(parameter);
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
       Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       graphics.setColor(Color.DARK_GRAY);

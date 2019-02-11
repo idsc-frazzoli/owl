@@ -108,6 +108,16 @@ public class GeometricLayer {
     return path2d;
   }
 
+  /** @param polygon
+   * @param close
+   * @return path that is closed if given parameter close is true */
+  public Path2D toPath2D(Tensor polygon, boolean close) {
+    Path2D path2d = toPath2D(polygon);
+    if (close)
+      path2d.closePath();
+    return path2d;
+  }
+
   /** Hint: alpha counts rotations!
    * 
    * @return {x, y, alpha} unmodifiable */

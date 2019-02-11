@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
+import ch.ethz.idsc.sophus.filter.Regularization2Step;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.Scalar;
@@ -44,6 +45,15 @@ public enum SymLinkImages {
     Tensor tensor = scalarTensorFunction.apply(scalar);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, FONT_SMALL);
     symLinkImage.title("DeBoor[" + degree + "] at " + scalar);
+    return symLinkImage;
+  }
+
+  public static SymLinkImage regularization2Step(Scalar factor) {
+    TensorUnaryOperator tensorUnaryOperator = Regularization2Step.string(SymGeodesic.INSTANCE, factor);
+    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
+    Tensor tensor = tensorUnaryOperator.apply(vector);
+    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.get(1), FONT_SMALL);
+    symLinkImage.title("Regularization2Step [" + factor + "]");
     return symLinkImage;
   }
 }

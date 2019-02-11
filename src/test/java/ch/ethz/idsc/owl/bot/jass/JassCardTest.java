@@ -42,4 +42,20 @@ public class JassCardTest extends TestCase {
     assertFalse(card5.isLess(card4));
     assertFalse(card4.isLess(card5));
   }
+
+  public void testEquals() {
+    JassCard card1 = new JassCard(Color.EICHEL, Type.ACE, true);
+    JassCard card2 = new JassCard(Color.EICHEL, Type.ACE, true);
+    JassCard card3 = new JassCard(Color.EICHEL, Type.JACK, true);
+    assertTrue(card1.equals(card2));
+    assertFalse(card2.equals(card3));
+  }
+
+  public void testHashCode() {
+    JassCard card1 = new JassCard(Color.EICHEL, Type.ACE, true);
+    JassCard card2 = new JassCard(Color.EICHEL, Type.ACE, true);
+    assertTrue(card1.hashCode() == card2.hashCode());
+    JassCard card3 = new JassCard(Color.EICHEL, Type.JACK, true);
+    assertFalse(card1.hashCode() == card3.hashCode());
+  }
 }

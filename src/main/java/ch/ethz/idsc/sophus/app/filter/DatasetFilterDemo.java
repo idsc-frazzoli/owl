@@ -6,10 +6,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.Objects;
 
 import javax.swing.JToggleButton;
+
+import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
@@ -21,21 +24,22 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.subare.util.plot.ListPlot;
+import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.img.ColorDataIndexed;
-import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ abstract class DatasetFilterDemo extends GeodesicDisplayDemo {
+  private static final Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
-  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   private static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
-  private static final int BASELINE_Y = 200;
   // ---
   private final JToggleButton jToggleWait = new JToggleButton("wait");
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
@@ -71,7 +75,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     jToggleData.setSelected(true);
     timerFrame.jToolBar.add(jToggleData);
     {
-      spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.txt"));
+      spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.vector"));
       spinnerLabelString.addSpinnerListener(type -> updateData());
       spinnerLabelString.setIndex(0);
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
@@ -123,7 +127,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       geometricLayer.popMatrix();
     }
     if (jToggleDiff.isSelected())
-      differences_render(geometricLayer, graphics, geodesicDisplay(), refined);
+      differences_render(graphics, geodesicDisplay(), refined);
   }
 
   /** @param geometricLayer
@@ -134,41 +138,24 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   /** @return */
   protected abstract String plotLabel();
 
-  private void differences_render(GeometricLayer geometricLayer, Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined) {
-    graphics.setColor(Color.BLACK);
-    graphics.drawLine(0, BASELINE_Y, 300, BASELINE_Y);
-    {
-      int piy = 30;
-      graphics.drawString(plotLabel(), 0, piy);
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
-      graphics.drawString("Tangent velocity", 0, piy += 15);
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
-      graphics.drawString("Side slip", 0, piy += 15);
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
-      graphics.drawString("Rotational rate", 0, piy += 15);
-    }
+  private void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined) {
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
-      Tensor speeds = lieDifferences.apply(refined);
+      Tensor speeds = lieDifferences.apply(refined).multiply(SAMPLING_FREQUENCY);
       if (0 < speeds.length()) {
         int dimensions = speeds.get(0).length();
-        graphics.setStroke(new BasicStroke(1.3f));
-        for (int index = 0; index < dimensions; ++index) {
-          graphics.setColor(COLOR_DATA_INDEXED.getColor(index));
-          Path2D path2d = plotFunc(graphics, speeds.get(Tensor.ALL, index).multiply(RealScalar.of(400)), BASELINE_Y);
-          graphics.draw(path2d);
-        }
+        VisualSet visualSet = new VisualSet();
+        visualSet.setPlotLabel(plotLabel());
+        visualSet.setAxesLabelX("sample no.");
+        Tensor domain = Range.of(0, speeds.length());
+        for (int index = 0; index < dimensions; ++index)
+          visualSet.add(domain, speeds.get(Tensor.ALL, index)); // .setLabel("tangent velocity [m/s]")
+        // visualSet.add(domain, speeds.get(Tensor.ALL, 1)).setLabel("side slip [m/s]");
+        // visualSet.add(domain, speeds.get(Tensor.ALL, 2)).setLabel("rotational rate [rad/s]");
+        JFreeChart jFreeChart = ListPlot.of(visualSet);
+        jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 80 + speeds.length(), 400));
       }
     }
-  }
-
-  private static Path2D plotFunc(Graphics2D graphics, Tensor tensor, int baseline_y) {
-    Path2D path2d = new Path2D.Double();
-    if (Tensors.nonEmpty(tensor))
-      path2d.moveTo(0, baseline_y - tensor.Get(0).number().doubleValue());
-    for (int pix = 1; pix < tensor.length(); ++pix)
-      path2d.lineTo(pix, baseline_y - tensor.Get(pix).number().doubleValue());
-    return path2d;
   }
 }
