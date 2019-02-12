@@ -10,9 +10,10 @@ import java.util.stream.IntStream;
 public enum ProductTotalOrder implements PartialComparator<List<Comparable>> {
   INSTANCE,//
   ;
-  @Override
+  @Override // from PartialComparator
   public PartialComparison compare(List<Comparable> x, List<Comparable> y) {
-    Set<Integer> toSet = IntStream.range(0, x.size()).map(index -> x.get(index).compareTo(y.get(index))).boxed().collect(Collectors.toSet());
+    Set<Integer> toSet = IntStream.range(0, x.size()).map(index -> Integer.signum(x.get(index).compareTo(y.get(index)))).boxed().collect(Collectors.toSet());
+    System.out.println(toSet);
     if (toSet.containsAll(Arrays.asList(1, -1))) {
       return PartialComparison.INCOMPARABLE;
     }
