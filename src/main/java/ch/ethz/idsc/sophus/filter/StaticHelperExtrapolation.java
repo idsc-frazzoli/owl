@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-/* package */ enum StaticHelperExtrapolate {
+/* package */ enum StaticHelperExtrapolation {
   ;
   /** @param mask of weights of affine combination [a1, a2, ..., an]
    * @return weights for iterative geodesic averages from left to right

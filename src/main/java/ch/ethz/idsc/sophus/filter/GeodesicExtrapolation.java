@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.filter;
 
 import java.util.ArrayList;
@@ -13,23 +13,23 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-//  TODO OB: Arbeitsversion. Ungetestet!
+//  TODO OB Arbeitsversion. Ungetestet!
 /** GeodesicExtrapolate projects a sequence of points to their next (expected) point
  * with each point weighted as provided by an external function. */
-public class GeodesicExtrapolate implements TensorUnaryOperator {
+public class GeodesicExtrapolation implements TensorUnaryOperator {
   /** @param geodesicInterface
    * @param function that maps an extent to a weight mask of length "sequence.length - 2"
    * @return operator that maps a sequence of number of points to their next (expected) point
    * @throws Exception if either input parameters is null */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
-    return new GeodesicExtrapolate(geodesicInterface, Objects.requireNonNull(function));
+    return new GeodesicExtrapolation(geodesicInterface, Objects.requireNonNull(function));
   }
 
   /** @param geodesicInterface
    * @param windowFunction
    * @return */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicExtrapolate(geodesicInterface, new WindowCenterSampler(windowFunction));
+    return new GeodesicExtrapolation(geodesicInterface, new WindowCenterSampler(windowFunction));
   }
 
   // ---
@@ -37,7 +37,7 @@ public class GeodesicExtrapolate implements TensorUnaryOperator {
   private final IntegerTensorFunction function;
   private final List<Tensor> weights = new ArrayList<>();
 
-  private GeodesicExtrapolate(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
+  private GeodesicExtrapolation(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
     this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
     this.function = function;
   }
@@ -63,7 +63,7 @@ public class GeodesicExtrapolate implements TensorUnaryOperator {
    * @return Tensor [i1, ..., in, e] with i being interpolatory weights and e the extrapolation weight
    * @throws Exception if mask is not affine */
   /* package */ static Tensor splits(Tensor mask) {
-    return StaticHelperExtrapolate.splits(mask);
+    return StaticHelperExtrapolation.splits(mask);
   }
   // //Zum Testen: Sieht sinnvoll aus!
   // public static void main(String[] args) {

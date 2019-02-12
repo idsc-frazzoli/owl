@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
@@ -7,19 +7,19 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class GeodesicExtrapolateFilter implements TensorUnaryOperator {
-  /** @param geodesicCenter
+public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
+  /** @param geodesicExtrapolation
    * @param radius
    * @return */
-  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolate, int radius) {
-    return new GeodesicExtrapolateFilter(geodesicExtrapolate, radius);
+  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, int radius) {
+    return new GeodesicExtrapolationFilter(geodesicExtrapolation, radius);
   }
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolate;
   private final int radius;
 
-  private GeodesicExtrapolateFilter(TensorUnaryOperator geodesicExtrapolate, int radius) {
+  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolate, int radius) {
     this.geodesicExtrapolate = Objects.requireNonNull(geodesicExtrapolate);
     this.radius = radius;
   }

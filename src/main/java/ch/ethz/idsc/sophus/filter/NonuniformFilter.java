@@ -17,8 +17,8 @@ public class NonuniformFilter {
   /** @param time stamp of control sequence
    * @return affine combination used to generate mask
    * @throws Exception if mask is not a vector or empty */
-  // TODO OB: under construction!
-  // TODO OB: Tests
+  // TODO OB under construction!
+  // TODO OB Tests
   private BoundedLinkedList<StateTime> boundedLinkedList = new BoundedLinkedList<>(10);
   private GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
 
@@ -40,7 +40,7 @@ public class NonuniformFilter {
     return splits;
   }
 
-  // TODO OB: Analog zu IIRn auteilen in mehrere Funktionen sobald es funktionier!
+  // TODO OB Analog zu IIRn auteilen in mehrere Funktionen sobald es funktionier!
   public StateTime apply(StateTime stateTime) {
     boundedLinkedList.add(stateTime);
     if (boundedLinkedList.size() == 1) {
@@ -69,7 +69,7 @@ public class NonuniformFilter {
 
   public static void main(String[] args) {
     Tensor data = Tensor.of(ResourceData.of("/dubilab/app/pose/0w/20180702T133612_1.csv").stream().map(row -> row.extract(0, 4)));
-    // TODO OB: correct
+    // TODO OB correct
     // TODO duckietown data is now in ephemeral, see DuckietownDataDemo
     // Tensor data2 = Tensor.of(ResourceData.of("C:/Users/Oliver/Desktop/MA/duckietown/duckie20180713175124.csv").stream().map(row -> row.extract(0, 4)));
     Scalar Length = RealScalar.of(5);
