@@ -43,11 +43,6 @@ public class WeakOrderMinTracker<T> implements MinTrackerInterface<T> {
         return;
       }
     }
-    // TODO ANDRE neater way to check for duplicates
-    // list.contains(x) only uses a.equals(b)
-    // set.contains(x) only uses object.hashCode() and a.equals(b)
-    // ... not sure if API should require types to provide hashCode
-    // -> probably yes so that we can use HashSet instead of LinkedList
     if (!collection.contains(x)) {
       collection.add(x);
     }
