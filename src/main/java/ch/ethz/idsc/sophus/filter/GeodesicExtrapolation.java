@@ -7,10 +7,15 @@ import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
-import ch.ethz.idsc.sophus.math.WindowCenterSampler;
+import ch.ethz.idsc.sophus.math.WindowSideSampler;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 //  TODO OB Arbeitsversion. Ungetestet!
@@ -29,7 +34,7 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
    * @param windowFunction
    * @return */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicExtrapolation(geodesicInterface, new WindowCenterSampler(windowFunction));
+    return new GeodesicExtrapolation(geodesicInterface, new WindowSideSampler(windowFunction));
   }
 
   // ---
@@ -51,39 +56,35 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
     }
     Tensor splits = weights.get(radius);
     Tensor result = tensor.get(0);
-    for (int index = 0; index < radius;) {
-      Scalar scalar = splits.Get(index++);
-      result = geodesicInterface.split(result, tensor.get(index), scalar);
-    }
-    result = geodesicInterface.split(result, tensor.get(tensor.length() - 1), splits.Get(splits.length() - 1));
-    return result;
+    for (int index = 0; index < radius; ++index)
+      result = geodesicInterface.split(result, tensor.get(index + 1), splits.Get(index));
+    // TODO last step is one too many
+    return geodesicInterface.split(result, tensor.get(tensor.length() - 1), splits.Get(splits.length() - 1));
   }
 
   /** @param causal mask
    * @return Tensor [i1, ..., in, e] with i being interpolatory weights and e the extrapolation weight
    * @throws Exception if mask is not affine */
   /* package */ static Tensor splits(Tensor mask) {
-    return StaticHelperExtrapolation.splits(mask);
+    // check for affinity
+    Chop._12.requireClose(Total.of(mask), RealScalar.ONE);
+    // no extrapolation possible
+    if (mask.length() == 1)
+      return Tensors.vector(1);
+    Tensor splits = Tensors.empty();
+    Scalar factor = mask.Get(0);
+    // Calculate interpolation splits
+    for (int index = 1; index < mask.length() - 1; ++index) {
+      factor = factor.add(mask.get(index));
+      Scalar lambda = mask.Get(index).divide(factor);
+      splits.append(lambda);
+    }
+    splits.append(Last.of(mask));
+    // Calculate extrapolation splits
+    Scalar temp = RealScalar.ZERO;
+    for (int index = 0; index < splits.length(); ++index)
+      temp = temp.add(RealScalar.ONE).multiply(RealScalar.ONE.subtract(splits.Get(index)));
+    splits.append(temp.reciprocal().add(RealScalar.ONE));
+    return splits;
   }
-  // //Zum Testen: Sieht sinnvoll aus!
-  // public static void main(String[] args) {
-  //// Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + "0w/20180702T133612_2" + ".csv").stream() //
-  //// .limit(5) //
-  //// .map(row -> row.extract(1, 4)));
-  // Tensor p = Tensors.vector(0,0,0);
-  // Tensor q = Tensors.vector(1,1,1);
-  // Tensor r = q.add(q);
-  // Tensor s = r.add(q);
-  // Tensor t = s.add(q);
-  // Tensor u = t.add(q);
-  // Tensor v = u.add(q);
-  // Tensor control = Tensors.of(p,q,r,s);
-  // GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
-  // WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.GAUSSIAN);
-  // TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolate.of(geodesicInterface, windowSideSampler);
-  // Tensor refined = tensorUnaryOperator.apply(control);
-  // System.out.println(refined);
-  //// Tensor mask = Tensors.vector(.5, .5);
-  //// System.out.println(splits(mask));
-  // }
 }
