@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.Tensors;
       // ---
       GraphicsUtil.setQualityHigh(graphics);
       // ---
-      GeodesicSplitRender.of(geodesicDisplay, symLink).render(geometricLayer, graphics);
+      GeometricSymLinkRender.of(geodesicDisplay, symLink).render(geometricLayer, graphics);
     }
     renderControlPoints(geometricLayer, graphics);
     // ---

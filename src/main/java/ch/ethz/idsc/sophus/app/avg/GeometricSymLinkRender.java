@@ -15,26 +15,24 @@ import ch.ethz.idsc.sophus.sym.SymLink;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.img.ColorDataIndexed;
-import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /** visualization of the geometric geodesic average */
-/* package */ class GeodesicSplitRender {
-  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
+/* package */ class GeometricSymLinkRender {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  private static final int STEPS = 9;
 
   public static RenderInterface of(GeodesicDisplay geodesicDisplay, SymLink symLink) {
-    return new GeodesicSplitRender(geodesicDisplay).new Link(symLink);
+    return new GeometricSymLinkRender(geodesicDisplay).new Link(symLink);
   }
 
   // ---
   private final GeodesicDisplay geodesicDisplay;
   private final GeodesicInterface geodesicInterface;
 
-  private GeodesicSplitRender(GeodesicDisplay geodesicDisplay) {
+  private GeometricSymLinkRender(GeodesicDisplay geodesicDisplay) {
     this.geodesicDisplay = geodesicDisplay;
     geodesicInterface = geodesicDisplay.geodesicInterface();
   }
@@ -77,8 +75,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
           graphics.setStroke(new BasicStroke(1f));
         }
         {
-          int limit = 11;
-          Tensor tensor = Subdivide.increasing(Clip.unit(), limit).extract(1, limit) //
+          Tensor tensor = Subdivide.increasing(Clip.unit(), STEPS).extract(1, STEPS) //
               .map(scalarTensorFunction);
           Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.5));
           graphics.setColor(new Color(64, 128 + 64, 64, 128));
@@ -93,9 +90,9 @@ import ch.ethz.idsc.tensor.sca.Clip;
       }
       // ---
       Tensor p = symLink.getPosition(geodesicInterface);
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
+      graphics.setColor(new Color(0, 0, 255, 192));
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(p));
-      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(.7)));
       path2d.closePath();
       graphics.fill(path2d);
       geometricLayer.popMatrix();
