@@ -45,6 +45,16 @@ public class BezierExtrapolationTest extends TestCase {
     }
   }
 
+  public void testFailScalar() {
+    TensorUnaryOperator tensorUnaryOperator = BezierExtrapolation.of(RnGeodesic.INSTANCE);
+    try {
+      tensorUnaryOperator.apply(RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testFailEmpty() {
     TensorUnaryOperator tensorUnaryOperator = BezierExtrapolation.of(Se2Geodesic.INSTANCE);
     try {

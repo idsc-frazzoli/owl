@@ -87,6 +87,8 @@ public class GeometricLayer {
     return deque.peek().tensor_copy();
   }
 
+  // @Deprecated
+  // TODO JPH name of function also bad, because of toTensor above
   public Shape toVector(Tensor x, Tensor dx) {
     x = x.extract(0, 2);
     dx = dx.extract(0, 2);
