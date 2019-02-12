@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -50,16 +49,17 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     int radius = (tensor.length() - 1);
+    System.out.println(radius);
     synchronized (weights) {
       while (weights.size() <= radius)
         weights.add(splits(function.apply(weights.size())));
     }
     Tensor splits = weights.get(radius);
+    System.out.println(splits.length());
     Tensor result = tensor.get(0);
     for (int index = 0; index < radius; ++index)
       result = geodesicInterface.split(result, tensor.get(index + 1), splits.Get(index));
-    // TODO last step is one too many
-    return geodesicInterface.split(result, tensor.get(tensor.length() - 1), splits.Get(splits.length() - 1));
+    return result;
   }
 
   /** @param causal mask
@@ -79,12 +79,12 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
       Scalar lambda = mask.Get(index).divide(factor);
       splits.append(lambda);
     }
-    splits.append(Last.of(mask));
     // Calculate extrapolation splits
-    Scalar temp = RealScalar.ZERO;
-    for (int index = 0; index < splits.length(); ++index)
-      temp = temp.add(RealScalar.ONE).multiply(RealScalar.ONE.subtract(splits.Get(index)));
-    splits.append(temp.reciprocal().add(RealScalar.ONE));
+    Scalar temp = RealScalar.ONE;
+    for (int index = 0; index < splits.length(); index++) {
+      temp = temp.multiply(RealScalar.ONE.subtract(splits.Get(index))).add(RealScalar.ONE);
+    }
+    splits.append(RealScalar.ONE.add(temp.reciprocal()));
     return splits;
   }
 }

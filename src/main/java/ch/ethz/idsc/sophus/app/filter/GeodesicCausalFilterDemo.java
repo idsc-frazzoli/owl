@@ -53,16 +53,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     int radius = spinnerRadius.getValue();
     WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
     Tensor mask = windowSideSampler.apply(radius);
-    System.err.println(windowSideSampler.apply(radius));
     mask.append(alpha());
-    TensorUnaryOperator geodesicCenterFilter;
+    TensorUnaryOperator geodesicCausalFilter;
     if (jToggleSymi.isSelected())
       graphics.drawImage(SymLinkImages.causalIIR(smoothingKernel, radius, alpha()).bufferedImage(), 0, 0, null);
     if (jToggleIIR.isSelected())
-      geodesicCenterFilter = new GeodesicIIRnFilter(geodesicDisplay.geodesicInterface(), mask);
+      geodesicCausalFilter = new GeodesicIIRnFilter(geodesicDisplay.geodesicInterface(), mask);
     else
-      geodesicCenterFilter = new GeodesicFIRnFilter(geodesicDisplay.geodesicInterface(), mask);
-    return Tensor.of(control().stream().map(geodesicCenterFilter));
+      geodesicCausalFilter = new GeodesicFIRnFilter(geodesicDisplay.geodesicInterface(), mask);
+    return Tensor.of(control().stream().map(geodesicCausalFilter));
   }
 
   @Override
