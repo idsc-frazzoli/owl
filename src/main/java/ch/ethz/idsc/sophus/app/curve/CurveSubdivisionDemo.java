@@ -5,6 +5,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Optional;
@@ -13,6 +15,8 @@ import java.util.stream.Collectors;
 
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
+
+import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -26,7 +30,11 @@ import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
+import ch.ethz.idsc.subare.util.plot.ListPlot;
+import ch.ethz.idsc.subare.util.plot.VisualRow;
+import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -35,20 +43,13 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.img.ColorDataIndexed;
-import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
-  private static final ColorDataIndexed COLOR_DATA_INDEXED = //
-      ColorDataLists._097.cyclic().deriveWithAlpha(128 + 64);
-  // private static final Tensor DUBILAB = //
-  // ResourceData.of("/dubilab/controlpoints/eight/20180603.csv").multiply(RealScalar.of(.4)).unmodifiable();
+  private static final Stroke PLOT_STROKE = new BasicStroke(1.5f);
   // ---
   private final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -175,39 +176,53 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     renderCurve(render, cyclic, geometricLayer, graphics);
-    if (jToggleCrvt.isSelected()) {
-      graphics.setStroke(new BasicStroke(1.25f));
-      Tensor matrix = geometricLayer.getMatrix();
-      geometricLayer.pushMatrix(Inverse.of(matrix));
-      geometricLayer.pushMatrix(Tensors.fromString("{{1,0,0},{0,-50,100},{0,0,1}}"));
+    if (jToggleCrvt.isSelected() && 1 < refined.length()) {
+      VisualSet visualSet = new VisualSet();
       Tensor points = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
       {
-        graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
         Tensor curvature = SignedCurvature2D.string(points);
         Tensor domain = Range.of(0, curvature.length());
-        graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, curvature))));
+        VisualRow visualRow = visualSet.add(domain, curvature);
+        visualRow.setLabel("curvature");
+        visualRow.setStroke(PLOT_STROKE);
       }
-      Tensor diffs = Differences.of(refined.get(Tensor.ALL, 2));
+      Tensor diffs = Differences.of(refined);
       {
-        graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
         Tensor domain = Range.of(0, diffs.length());
-        graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, diffs))));
+        VisualRow visualRow = visualSet.add(domain, Tensor.of(diffs.stream().map(ArcTan2D::of)));
+        visualRow.setLabel("arcTan[dx,dy]");
+        visualRow.setStroke(PLOT_STROKE);
+      }
+      {
+        Tensor domain = Range.of(0, refined.length());
+        VisualRow visualRow = visualSet.add(domain, refined.get(Tensor.ALL, 2));
+        visualRow.setLabel("phase");
+        visualRow.setStroke(PLOT_STROKE);
+      }
+      Tensor phase = diffs.get(Tensor.ALL, 2);
+      {
+        Tensor domain = Range.of(0, phase.length());
+        VisualRow visualRow = visualSet.add(domain, phase);
+        visualRow.setLabel("phase diff");
+        visualRow.setStroke(PLOT_STROKE);
       }
       Tensor arclen = Tensor.of(Differences.of(points).stream().map(Norm._2::ofVector));
       {
-        graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
         Tensor domain = Range.of(0, arclen.length());
-        graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, arclen))));
+        VisualRow visualRow = visualSet.add(domain, arclen);
+        visualRow.setLabel("arclen");
+        visualRow.setStroke(PLOT_STROKE);
       }
       {
-        graphics.setColor(COLOR_DATA_INDEXED.getColor(3));
-        Tensor div = diffs.pmul(arclen.map(InvertUnlessZero.FUNCTION));
+        Tensor div = phase.pmul(arclen.map(InvertUnlessZero.FUNCTION));
         Tensor domain = Range.of(0, div.length());
-        graphics.draw(geometricLayer.toPath2D(Transpose.of(Tensors.of(domain, div.multiply(RealScalar.of(-1))))));
+        Tensor values = div.multiply(RealScalar.of(-1));
+        VisualRow visualRow = visualSet.add(domain, values);
+        visualRow.setLabel("phase/arclen");
+        visualRow.setStroke(PLOT_STROKE);
       }
-      geometricLayer.popMatrix();
-      geometricLayer.popMatrix();
-      graphics.setStroke(new BasicStroke(1f));
+      JFreeChart jFreeChart = ListPlot.of(visualSet);
+      jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 800, 480));
     }
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
