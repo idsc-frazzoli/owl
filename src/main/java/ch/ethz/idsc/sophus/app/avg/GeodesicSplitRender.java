@@ -21,20 +21,20 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /** visualization of the geometric geodesic average */
-/* package */ class GeodesicAverageRender {
+/* package */ class GeodesicSplitRender {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
 
   public static RenderInterface of(GeodesicDisplay geodesicDisplay, SymLink symLink) {
-    return new GeodesicAverageRender(geodesicDisplay).new Link(symLink);
+    return new GeodesicSplitRender(geodesicDisplay).new Link(symLink);
   }
 
   // ---
   private final GeodesicDisplay geodesicDisplay;
   private final GeodesicInterface geodesicInterface;
 
-  private GeodesicAverageRender(GeodesicDisplay geodesicDisplay) {
+  private GeodesicSplitRender(GeodesicDisplay geodesicDisplay) {
     this.geodesicDisplay = geodesicDisplay;
     geodesicInterface = geodesicDisplay.geodesicInterface();
   }
