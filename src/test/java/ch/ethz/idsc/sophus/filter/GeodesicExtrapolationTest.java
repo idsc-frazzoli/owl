@@ -32,10 +32,10 @@ public class GeodesicExtrapolationTest extends TestCase {
     }
   }
 
-  public void testSimple2() {
+  public void testSplits2() {
     Tensor mask = Tensors.vector(.5, .5);
     Tensor result = GeodesicExtrapolation.splits(mask);
-    assertEquals(Tensors.vector(.5, 3.0), result);
+    assertEquals(Tensors.vector(2), result);
   }
 
   public void testElaborate() {
@@ -48,10 +48,11 @@ public class GeodesicExtrapolationTest extends TestCase {
     WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.GAUSSIAN);
     Tensor mask = windowSideSampler.apply(6);
     Tensor result = GeodesicExtrapolation.splits(mask);
+    // System.out.println(result);
     Tensor expect = Tensors.vector( //
-        0.6045315182147757, 0.4610592079176246, 0.3765618899029577, 0.3135075836053491, //
-        0.2603421497384919, 0.21295939875081005, 1.4534443632073355);
-    assertEquals(expect, result);
+        0.6045315182147757, 0.4610592079176246, 0.3765618899029577, //
+        0.3135075836053491, 0.2603421497384919, 1.3568791242517575);
+    Chop._12.requireClose(expect, result);
   }
 
   public void testNoExtrapolation() {

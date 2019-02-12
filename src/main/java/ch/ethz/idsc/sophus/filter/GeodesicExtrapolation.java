@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-//  TODO OB Arbeitsversion. Ungetestet!
 /** GeodesicExtrapolate projects a sequence of points to their next (expected) point
  * with each point weighted as provided by an external function. */
 public class GeodesicExtrapolation implements TensorUnaryOperator {
@@ -49,13 +48,11 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     int radius = (tensor.length() - 1);
-    System.out.println(radius);
     synchronized (weights) {
       while (weights.size() <= radius)
         weights.add(splits(function.apply(weights.size())));
     }
     Tensor splits = weights.get(radius);
-    System.out.println(splits.length());
     Tensor result = tensor.get(0);
     for (int index = 0; index < radius; ++index)
       result = geodesicInterface.split(result, tensor.get(index + 1), splits.Get(index));
