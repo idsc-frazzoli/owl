@@ -6,17 +6,17 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import junit.framework.TestCase;
 
-public class PartialOrderMinTrackerTest extends TestCase {
+public class PartialOrderMinTrackerTest<E> extends TestCase {
   public void testDigestNotEmpty() {
     PartialComparator<Scalar> partialComparator = PartialOrder.comparator(Scalars::divides);
-    PartialOrderMinTracker<Scalar> divisibility = new PartialOrderMinTracker<>(partialComparator);
+    PartialOrderMinTracker<Scalar> divisibility = PartialOrderMinTracker.withList(partialComparator);
     divisibility.digest(RealScalar.of(6));
     assertFalse(divisibility.getMinElements().isEmpty());
   }
 
   public void testDigestFunction() {
     PartialComparator<Scalar> partialComparator = PartialOrder.comparator(Scalars::divides);
-    PartialOrderMinTracker<Scalar> divisibility = new PartialOrderMinTracker<>(partialComparator);
+    PartialOrderMinTracker<Scalar> divisibility = PartialOrderMinTracker.withList(partialComparator);
     divisibility.digest(RealScalar.of(10));
     assertTrue(divisibility.getMinElements().contains(RealScalar.of(10)));
     divisibility.digest(RealScalar.of(2));
@@ -35,10 +35,22 @@ public class PartialOrderMinTrackerTest extends TestCase {
 
   public void testDuplicateEntries() {
     PartialComparator<Scalar> partialComparator = PartialOrder.comparator(Scalars::divides);
-    PartialOrderMinTracker<Scalar> divisibility = new PartialOrderMinTracker<>(partialComparator);
+    PartialOrderMinTracker<Scalar> divisibility = PartialOrderMinTracker.withList(partialComparator);
     divisibility.digest(RealScalar.of(7));
     divisibility.digest(RealScalar.of(7));
     divisibility.digest(RealScalar.of(7));
     assertEquals(divisibility.getMinElements().size(), 1);
   }
+
+  public void testWithSet() {
+    PartialComparator<Scalar> partialComparator = PartialOrder.comparator(Scalars::divides);
+    PartialOrderMinTracker<Scalar> divisibility = PartialOrderMinTracker.withSet(partialComparator);
+    divisibility.digest(RealScalar.of(6));
+    assertFalse(divisibility.getMinElements().isEmpty());
+  }
+  //
+  // // FIXME Andre Does not work
+  // public void testProductTotalOrderMinTracker() {
+  // PartialOrderMinTracker<List<Comparable>> = PartialOrderMinTracker.withList(ProductTotalOrder.INSTANCE);
+  // }
 }

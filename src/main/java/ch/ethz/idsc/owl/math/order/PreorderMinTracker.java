@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -13,12 +14,20 @@ import java.util.LinkedList;
  * 
  * @param <T> type of elements to compare */
 public class PreorderMinTracker<T> implements MinTrackerInterface<T> {
-  private final PreorderComparator<T> preorderComparator;
-  // FIXME list allows for duplicate elements and ordering within list is crucial maybe switch to Set
-  private final Collection<T> collection = new LinkedList<>();
+  public static <T> PreorderMinTracker<T> withList(PreorderComparator<T> preorderComparator) {
+    return new PreorderMinTracker<>(preorderComparator, new LinkedList<>());
+  }
 
-  public PreorderMinTracker(PreorderComparator<T> preorderComparator) {
+  public static <T> PreorderMinTracker<T> withSet(PreorderComparator<T> preorderComparator) {
+    return new PreorderMinTracker<>(preorderComparator, new HashSet<>());
+  }
+
+  private final PreorderComparator<T> preorderComparator;
+  private final Collection<T> collection;
+
+  private PreorderMinTracker(PreorderComparator<T> preorderComparator, Collection<T> collection) {
     this.preorderComparator = preorderComparator;
+    this.collection = collection;
   }
 
   /** Compares an element <tt>x</tt> of a preorder to the current set of minimal elements.
@@ -38,7 +47,9 @@ public class PreorderMinTracker<T> implements MinTrackerInterface<T> {
         return;
       }
     }
-    collection.add(x);
+    if (!collection.contains(x)) {
+      collection.add(x);
+    }
   }
 
   /** @return Minimal elements of preordered set */

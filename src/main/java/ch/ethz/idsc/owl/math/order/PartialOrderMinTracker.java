@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -12,11 +13,20 @@ import java.util.LinkedList;
  * 
  * @param <T> type of elements to compare */
 public class PartialOrderMinTracker<T> implements MinTrackerInterface<T> {
-  private final PartialComparator<T> partialComparator;
-  private final Collection<T> collection = new LinkedList<>();
+  public static <T> PartialOrderMinTracker<T> withList(PartialComparator<T> partialComparator) {
+    return new PartialOrderMinTracker<>(partialComparator, new LinkedList<>());
+  }
 
-  public PartialOrderMinTracker(PartialComparator<T> partialComparator) {
+  public static <T> PartialOrderMinTracker<T> withSet(PartialComparator<T> partialComparator) {
+    return new PartialOrderMinTracker<>(partialComparator, new HashSet<>());
+  }
+
+  private final PartialComparator<T> partialComparator;
+  private final Collection<T> collection;
+
+  private PartialOrderMinTracker(PartialComparator<T> partialComparator, Collection<T> collection) {
     this.partialComparator = partialComparator;
+    this.collection = collection;
   }
 
   /** Compares an element <tt>x</tt> of a partial order to the current set of minimal elements.
@@ -33,8 +43,6 @@ public class PartialOrderMinTracker<T> implements MinTrackerInterface<T> {
       if (partialComparison.equals(PartialComparison.LESS_THAN)) {
         iterator.remove();
       } else if (!partialComparison.equals(PartialComparison.INCOMPARABLE)) {
-        // ALTERNATIVELY
-        // else if (partialComparison.equals(PartialComparison.GREATER_THAN)&&partialComparison.equals(PartialComparison.EQUALS)) {
         return;
       }
     }

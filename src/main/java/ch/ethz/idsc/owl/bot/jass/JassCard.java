@@ -8,12 +8,12 @@ import java.util.Objects;
  * https://en.wikipedia.org/wiki/Jass
  * 
  * @author astoll */
-/* package */ class JassCard {
-  static enum Color {
+public class JassCard {
+  public static enum Color {
     ROSEN, EICHEL, SCHILTEN, SCHELLE
   }
 
-  static enum Type {
+  public static enum Type {
     SIX(1), SEVEN(2), EIGHT(3), NINE(8), TEN(4), JACK(9), QUEEN(5), KING(6), ACE(7),;
     private final int trumpfOrdering;
 
@@ -26,7 +26,7 @@ import java.util.Objects;
   private final Type type;
   private final boolean isTrumpf;
 
-  JassCard(Color color, Type type, boolean isTrumpf) {
+  public JassCard(Color color, Type type, boolean isTrumpf) {
     this.color = color;
     this.type = type;
     this.isTrumpf = isTrumpf;
