@@ -1,12 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Optional;
@@ -16,53 +13,36 @@ import java.util.stream.Collectors;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
-import org.jfree.chart.JFreeChart;
-
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
+import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.planar.ArcTan2D;
-import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
-import ch.ethz.idsc.subare.util.plot.ListPlot;
-import ch.ethz.idsc.subare.util.plot.VisualRow;
-import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
-import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
-/* package */ class CurveSubdivisionDemo extends ControlPointsDemo {
-  private static final Stroke PLOT_STROKE = new BasicStroke(1.5f);
-  // ---
+/* package */ class CurveSubdivisionDemo extends CurveDemo {
   private final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
   private final JToggleButton jToggleBndy = new JToggleButton("bndy");
-  private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final PathRender lineRender = new PathRender(new Color(0, 255, 0, 128));
 
   CurveSubdivisionDemo() {
-    super(true, true, GeodesicDisplays.ALL);
     Tensor control = null;
     {
       Tensor move = Tensors.fromString( //
@@ -90,9 +70,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     // ---
     jToggleBndy.setSelected(true);
     timerFrame.jToolBar.add(jToggleBndy);
-    // ---
-    jToggleCrvt.setSelected(false);
-    timerFrame.jToolBar.add(jToggleCrvt);
     // ---
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
@@ -132,8 +109,11 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   }
 
   @Override
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
+    if (scheme.equals(CurveSubdivisionSchemes.DOBSEB))
+      geodesicDisplaySpinner.setValue(R2GeodesicDisplay.INSTANCE);
+    // ---
     if (jToggleSymi.isSelected()) {
       Optional<SymMaskImages> optional = SymMaskImages.get(scheme.name());
       if (optional.isPresent()) {
@@ -146,6 +126,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     GraphicsUtil.setQualityHigh(graphics);
     Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    // ---
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = control();
     if (jToggleBndy.isSelected() && !cyclic && 1 < control.length()) {
@@ -176,56 +157,9 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     renderCurve(render, cyclic, geometricLayer, graphics);
-    if (jToggleCrvt.isSelected() && 1 < refined.length()) {
-      VisualSet visualSet = new VisualSet();
-      Tensor points = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-      {
-        Tensor curvature = SignedCurvature2D.string(points);
-        Tensor domain = Range.of(0, curvature.length());
-        VisualRow visualRow = visualSet.add(domain, curvature);
-        visualRow.setLabel("curvature");
-        visualRow.setStroke(PLOT_STROKE);
-      }
-      Tensor diffs = Differences.of(refined);
-      {
-        Tensor domain = Range.of(0, diffs.length());
-        VisualRow visualRow = visualSet.add(domain, Tensor.of(diffs.stream().map(ArcTan2D::of)));
-        visualRow.setLabel("arcTan[dx,dy]");
-        visualRow.setStroke(PLOT_STROKE);
-      }
-      {
-        Tensor domain = Range.of(0, refined.length());
-        VisualRow visualRow = visualSet.add(domain, refined.get(Tensor.ALL, 2));
-        visualRow.setLabel("phase");
-        visualRow.setStroke(PLOT_STROKE);
-      }
-      Tensor phase = diffs.get(Tensor.ALL, 2);
-      {
-        Tensor domain = Range.of(0, phase.length());
-        VisualRow visualRow = visualSet.add(domain, phase);
-        visualRow.setLabel("phase diff");
-        visualRow.setStroke(PLOT_STROKE);
-      }
-      Tensor arclen = Tensor.of(Differences.of(points).stream().map(Norm._2::ofVector));
-      {
-        Tensor domain = Range.of(0, arclen.length());
-        VisualRow visualRow = visualSet.add(domain, arclen);
-        visualRow.setLabel("arclen");
-        visualRow.setStroke(PLOT_STROKE);
-      }
-      {
-        Tensor div = phase.pmul(arclen.map(InvertUnlessZero.FUNCTION));
-        Tensor domain = Range.of(0, div.length());
-        Tensor values = div.multiply(RealScalar.of(-1));
-        VisualRow visualRow = visualSet.add(domain, values);
-        visualRow.setLabel("phase/arclen");
-        visualRow.setStroke(PLOT_STROKE);
-      }
-      JFreeChart jFreeChart = ListPlot.of(visualSet);
-      jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 800, 480));
-    }
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
+    return refined;
   }
 
   private static TensorUnaryOperator create(CurveSubdivision curveSubdivision, boolean cyclic) {

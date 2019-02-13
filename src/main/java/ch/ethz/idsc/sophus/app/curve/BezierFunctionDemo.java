@@ -8,10 +8,8 @@ import java.util.Arrays;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,12 +18,10 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** Bezier function with extrapolation */
-/* package */ class BezierFunctionDemo extends ControlPointsDemo {
+/* package */ class BezierFunctionDemo extends CurveDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
   BezierFunctionDemo() {
-    super(true, true, GeodesicDisplays.ALL);
-    // ---
     addButtonDubins();
     // ---
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());
@@ -40,7 +36,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   }
 
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics);
@@ -57,6 +53,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     renderCurve(render, false, geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
+    return refined;
   }
 
   public static void main(String[] args) {
