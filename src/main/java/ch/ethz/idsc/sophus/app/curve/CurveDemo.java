@@ -13,7 +13,6 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
-import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -21,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensor;
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
 
   public CurveDemo() {
-    super(true, true, GeodesicDisplays.ALL);
+    super(true, false, GeodesicDisplays.ALL);
     // ---
     jToggleCrvt.setSelected(false);
     timerFrame.jToolBar.add(jToggleCrvt);
@@ -35,13 +34,10 @@ import ch.ethz.idsc.tensor.Tensor;
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       CurveVisualSet curveVisualSet = new CurveVisualSet(Tensor.of(refined.stream().map(geodesicDisplay::toPoint)));
       curveVisualSet.addCurvature();
-      curveVisualSet.addArcTan();
+      if (2 < refined.get(0).length())
+        curveVisualSet.addArcTan(refined);
       VisualSet visualSet = curveVisualSet.visualSet();
-      if (2 < refined.get(0).length()) {
-        VisualRow visualRow = visualSet.add(curveVisualSet.getArcLength1(), refined.get(Tensor.ALL, 2));
-        visualRow.setLabel("phase");
-        visualRow.setStroke(CurveVisualSet.PLOT_STROKE);
-        // Tensor phase = diffs.get(Tensor.ALL, 2);
+      {
         // {
         // Tensor domain = Range.of(0, phase.length());
         // VisualRow visualRow = visualSet.add(domain, phase);

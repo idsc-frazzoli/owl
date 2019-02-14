@@ -4,12 +4,19 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
@@ -20,16 +27,21 @@ import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.app.util.StandardMenu;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /* package */ class CurveSubdivisionDemo extends CurveDemo {
@@ -52,21 +64,35 @@ import ch.ethz.idsc.tensor.red.Nest;
       control = DubinsGenerator.of(init, move);
     }
     setControl(control);
-    // {
-    // JButton jButton = new JButton("print");
-    // jButton.addActionListener(actionEvent -> {
-    // System.out.println(control);
-    // // long now = System.currentTimeMillis();
-    // File file = UserHome.file("" + jTextField.getText() + ".csv");
-    // // File file = new File("src/main/resources/subdiv/se2", now + ".csv");
-    // try {
-    // Export.of(file, control.map(CsvFormat.strict()));
-    // } catch (Exception exception) {
-    // exception.printStackTrace();
-    // }
-    // });
-    // timerFrame.jToolBar.add(jButton);
-    // }
+    timerFrame.jToolBar.addSeparator();
+    {
+      JButton jButton = new JButton("load");
+      List<String> list = Arrays.asList("ducttape/20180514.csv", "tires/20190116.csv", "tires/20190117.csv");
+      Supplier<StandardMenu> supplier = () -> new StandardMenu() {
+        @Override
+        protected void design(JPopupMenu jPopupMenu) {
+          for (String string : list) {
+            JMenuItem jMenuItem = new JMenuItem(string);
+            jMenuItem.addActionListener(new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent actionEvent) {
+                Tensor tensor = ResourceData.of("/dubilab/controlpoints/" + string);
+                tensor = Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(0.5, 0.5, 1))));
+                Tensor center = Mean.of(tensor);
+                center.set(RealScalar.ZERO, 2);
+                tensor = Tensor.of(tensor.stream().map(row -> row.subtract(center)));
+                geodesicDisplaySpinner.setValue(Se2GeodesicDisplay.INSTANCE);
+                jToggleCyclic.setSelected(true);
+                setControl(tensor);
+              }
+            });
+            jPopupMenu.add(jMenuItem);
+          }
+        }
+      };
+      StandardMenu.bind(jButton, supplier);
+      timerFrame.jToolBar.add(jButton);
+    }
     // ---
     jToggleBndy.setSelected(true);
     timerFrame.jToolBar.add(jToggleBndy);

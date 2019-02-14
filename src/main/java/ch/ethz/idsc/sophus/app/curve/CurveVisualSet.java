@@ -46,11 +46,12 @@ import ch.ethz.idsc.tensor.sca.Mod;
     visualRow.setStroke(PLOT_STROKE);
   }
 
-  public void addArcTan() {
+  public void addArcTan(Tensor refined) {
     Tensor arcTan2D = Tensor.of(differences.stream().map(ArcTan2D::of));
-    arcTan2D = Accumulate.of(Join.of(arcTan2D.extract(0, 1), Differences.of(arcTan2D).map(MOD_DISTANCE)));
-    VisualRow visualRow = visualSet.add(arcLength0, arcTan2D);
-    visualRow.setLabel("arcTan[dx, dy]");
+    Tensor extract = refined.get(Tensor.ALL, 2).extract(0, arcTan2D.length());
+    // Tensor extractfi = extract.map(s -> s.subtract(extract.Get(0)));
+    VisualRow visualRow = visualSet.add(arcLength0, arcTan2D.subtract(extract).map(MOD_DISTANCE));
+    visualRow.setLabel("arcTan[dx, dy] - phase");
     visualRow.setStroke(PLOT_STROKE);
   }
 
