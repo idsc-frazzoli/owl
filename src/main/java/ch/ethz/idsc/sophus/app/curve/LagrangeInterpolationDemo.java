@@ -13,10 +13,8 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.LagrangeInterpolation;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
@@ -33,14 +31,12 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** LagrangeInterpolation with extrapolation */
-/* package */ class LagrangeInterpolationDemo extends ControlPointsDemo {
+/* package */ class LagrangeInterpolationDemo extends CurveDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   LagrangeInterpolationDemo() {
-    super(true, true, GeodesicDisplays.ALL);
-    // ---
     addButtonDubins();
     // ---
     jToggleSymi.setSelected(true);
@@ -61,7 +57,7 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final Tensor control = control();
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()) //
         .multiply(RealScalar.of(control.length()));
@@ -92,6 +88,7 @@ import ch.ethz.idsc.tensor.sca.N;
     }
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
+    return refined;
   }
 
   public static void main(String[] args) {

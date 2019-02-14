@@ -7,7 +7,7 @@ import java.util.List;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 
 public abstract class GeodesicDisplayDemo extends AbstractDemo {
-  /* package */ final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
+  protected final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
 
   public GeodesicDisplayDemo(List<GeodesicDisplay> list) {
     if (!list.isEmpty()) {
