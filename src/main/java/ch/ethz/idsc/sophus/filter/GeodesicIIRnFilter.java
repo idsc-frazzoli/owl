@@ -40,15 +40,6 @@ public class GeodesicIIRnFilter implements TensorUnaryOperator {
     if (boundedLinkedList.size() < splits.length() + 1)
       return tensor;
     Tensor sequence = Tensor.of(boundedLinkedList.stream());
-    // // Tensor interpolate = boundedLinkedList.getFirst();
-    // Tensor interpolate = sequence.get(0);
-    // for (int index = 0; index < splits.length() - 2; ++index)
-    // // interpolate = geodesicInterface.split(interpolate, boundedLinkedList.get(index + 1), splits.Get(index));
-    // interpolate = geodesicInterface.split(interpolate, sequence.get(index + 1), splits.Get(index));
-    // // Tensor extrapolate = geodesicInterface.split(interpolate, boundedLinkedList.get(boundedLinkedList.size() - 2), splits.Get(splits.length() - 2));
-    // Tensor extrapolate = geodesicInterface.split(interpolate, sequence.get(sequence.length() - 2), splits.Get(splits.length() - 2));
-    // // Tensor update = geodesicInterface.split(extrapolate, boundedLinkedList.getLast(), splits.Get(splits.length() - 1));
-    // Tensor update = geodesicInterface.split(extrapolate, Last.of(sequence), splits.Get(splits.length() - 1));
     Tensor update = update(sequence);
     boundedLinkedList.set(boundedLinkedList.size() - 1, update);
     return update;

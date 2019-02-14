@@ -39,12 +39,6 @@ public class GeodesicExtrapolationTest extends TestCase {
   }
 
   public void testElaborate() {
-    // TODO OB remove
-    // try (HtmlUtf8 htmlUtf8 = HtmlUtf8.page(HomeDirectory.Pictures("some.html"))) {
-    // htmlUtf8.appendln("<p>adlshfjga sdfklhj</p>");
-    // String name = "asdf";
-    // htmlUtf8.appendln("<img src='" + name + "' />");
-    // }
     WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.GAUSSIAN);
     Tensor mask = windowSideSampler.apply(6);
     Tensor result = GeodesicExtrapolation.splits(mask);

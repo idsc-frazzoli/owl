@@ -4,29 +4,30 @@ package ch.ethz.idsc.sophus.filter;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
+public class GeodesicFIRnFilterNEW implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
    * @param radius
    * @return */
-  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, int radius) {
-    return new GeodesicExtrapolationFilter(geodesicExtrapolation, radius);
+  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
+    return new GeodesicFIRnFilterNEW(geodesicExtrapolation, geodesicInterface, radius, alpha);
   }
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
-  private final int radius;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
+  private final GeodesicInterface geodesicInterface;
+  private final Scalar alpha;
 
-  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, int radius) {
+  private GeodesicFIRnFilterNEW(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
     this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
-    this.radius = radius;
+    this.geodesicInterface = geodesicInterface;
+    this.alpha = alpha;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 
@@ -42,9 +43,8 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
       // Extrapolation Step
       Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
       // Measurement update step
-      Scalar alpha = RealScalar.of(0.2);
-      temp = Se2Geodesic.INSTANCE.split(temp, tensor.get(index + 1), alpha);
-      boundedLinkedList.add(temp);
+      temp = geodesicInterface.split(temp, tensor.get(index + 1), alpha);
+      boundedLinkedList.add(tensor.get(index + 1));
       result.append(temp);
     }
     return result;
