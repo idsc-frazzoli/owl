@@ -20,7 +20,7 @@ public class GeodesicFIRnFilterNEWTest extends TestCase {
     Tensor control = Tensors.of(p, q, r, s);
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicInterface, SmoothingKernel.GAUSSIAN);
-    Tensor refined = GeodesicFIRnFilterNEW.of(tensorUnaryOperator, geodesicInterface, 2, RealScalar.of(Math.random())).apply(control);
+    Tensor refined = GeodesicFIRnFilter.of(tensorUnaryOperator, geodesicInterface, 2, RealScalar.of(Math.random())).apply(control);
     assertEquals(refined.get(3), Tensors.vector(3.0, 3.0, 0.0));
   }
 
@@ -32,7 +32,7 @@ public class GeodesicFIRnFilterNEWTest extends TestCase {
     Tensor control = Tensors.of(p, q, r, s);
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicInterface, SmoothingKernel.GAUSSIAN);
-    Tensor refined = GeodesicFIRnFilterNEW.of(tensorUnaryOperator, geodesicInterface, 2, RealScalar.of(Math.random())).apply(control);
+    Tensor refined = GeodesicFIRnFilter.of(tensorUnaryOperator, geodesicInterface, 2, RealScalar.of(Math.random())).apply(control);
     assertEquals(refined.get(3), Tensors.vector(0.0, 0.0, 3.0));
   }
 
@@ -44,7 +44,7 @@ public class GeodesicFIRnFilterNEWTest extends TestCase {
     Tensor control = Tensors.of(p, q, r, s);
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicInterface, SmoothingKernel.GAUSSIAN);
-    Tensor refined = GeodesicFIRnFilterNEW.of(tensorUnaryOperator, geodesicInterface, 2, RealScalar.of(.5)).apply(control);
+    Tensor refined = GeodesicFIRnFilter.of(tensorUnaryOperator, geodesicInterface, 2, RealScalar.of(.5)).apply(control);
     System.out.println(refined);
     Chop._12.requireClose(refined.get(3), Tensors.vector(2.3494156605301217, 3.190886645338018, 3.0));
   }

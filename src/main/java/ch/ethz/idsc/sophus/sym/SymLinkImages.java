@@ -7,10 +7,8 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
-import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.filter.Regularization2Step;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
@@ -28,17 +26,17 @@ public enum SymLinkImages {
     symLinkImage.title(smoothingKernel.name() + "[" + (2 * radius + 1) + "]");
     return symLinkImage;
   }
-
-  public static SymLinkImage causalIIR(SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
-    WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
-    Tensor mask = windowSideSampler.apply(radius).append(alpha);
-    GeodesicIIRnFilter tensorUnaryOperator = new GeodesicIIRnFilter(SymGeodesic.INSTANCE, mask);
-    Tensor vector = Tensor.of(IntStream.range(0, radius + 3).mapToObj(SymScalar::leaf));
-    Tensor tensor = tensorUnaryOperator.update(vector);
-    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, FONT_SMALL);
-    symLinkImage.title(smoothingKernel.name() + "[" + (radius + 1) + "]");
-    return symLinkImage;
-  }
+//  TODO OB: adapt for new Filter structure
+//  public static SymLinkImage causalIIR(SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+//    WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
+//    Tensor mask = windowSideSampler.apply(radius).append(alpha);
+//    GeodesicIIRnFilter tensorUnaryOperator = new GeodesicIIRnFilter(SymGeodesic.INSTANCE, mask);
+//    Tensor vector = Tensor.of(IntStream.range(0, radius + 3).mapToObj(SymScalar::leaf));
+//    Tensor tensor = tensorUnaryOperator.update(vector);
+//    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, FONT_SMALL);
+//    symLinkImage.title(smoothingKernel.name() + "[" + (radius + 1) + "]");
+//    return symLinkImage;
+//  }
 
   public static SymLinkImage extrapolation(SmoothingKernel smoothingKernel, int radius) {
     TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(SymGeodesic.INSTANCE, smoothingKernel);
