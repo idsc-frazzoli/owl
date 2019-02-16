@@ -12,7 +12,6 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
-import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -42,9 +41,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    //TODO OB: adapt symLinkImages to new filter structure
-//    if (jToggleSymi.isSelected())
-//      graphics.drawImage(SymLinkImages.causalIIR(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).bufferedImage(), 0, 0, null);
+    // TODO OB: adapt symLinkImages to new filter structure
+    // if (jToggleSymi.isSelected())
+    // graphics.drawImage(SymLinkImages.causalIIR(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).bufferedImage(), 0, 0, null);
     TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
     if (jToggleIIR.isSelected())
       refined = GeodesicIIRnFilter.of(tensorUnaryOperator, geodesicDisplay().geodesicInterface(), spinnerRadius.getValue(), alpha()).apply(control());
