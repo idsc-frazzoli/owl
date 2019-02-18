@@ -14,8 +14,8 @@ public enum LexicographicTotalOrder implements Comparator<List<Comparable>> {
       throw new RuntimeException("Elements to compare not of same size");
     // ---
     int cmp = 0;
-    for (int i = 0; i < x.size() && cmp == 0; ++i)
-      cmp = Integer.signum(x.get(i).compareTo(y.get(i)));
+    for (int index = 0; index < x.size() && cmp == 0; ++index)
+      cmp = Integer.signum(x.get(index).compareTo(y.get(index)));
     return cmp;
   }
 }
