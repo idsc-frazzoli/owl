@@ -30,14 +30,15 @@ public class GeodesicCenter implements TensorUnaryOperator {
   /** @param geodesicInterface
    * @param function that maps an extent to a weight mask of length == 2 * extent + 1
    * @return operator that maps a sequence of odd number of points to their geodesic center
-   * @throws Exception if either input parameters is null */
+   * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
     return new GeodesicCenter(geodesicInterface, Objects.requireNonNull(function));
   }
 
   /** @param geodesicInterface
    * @param windowFunction
-   * @return */
+   * @return
+   * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
     return new GeodesicCenter(geodesicInterface, new WindowCenterSampler(windowFunction));
   }

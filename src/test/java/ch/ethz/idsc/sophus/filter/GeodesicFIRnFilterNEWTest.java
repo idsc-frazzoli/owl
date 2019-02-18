@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
+// TODO OB remove NEW from name
 public class GeodesicFIRnFilterNEWTest extends TestCase {
   public void testTranslation() {
     Tensor p = Tensors.vector(0, 0, 0);

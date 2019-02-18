@@ -17,26 +17,28 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class Regularization2StepDemo extends DatasetFilterDemo {
+  /** regularization parameter in the interval [0, 1] */
   private final JSlider jSlider = new JSlider(0, 1000, 600);
 
   Regularization2StepDemo() {
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
+    // ---
     updateData();
   }
 
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    // ---
     final Scalar factor = factor();
+    // ---
     if (jToggleSymi.isSelected())
       graphics.drawImage(SymLinkImages.regularization2Step(factor).bufferedImage(), 0, 0, null);
     // ---
     return Regularization2Step.string(geodesicDisplay.geodesicInterface(), N.DOUBLE.apply(factor)).apply(control());
   }
 
-  @Override
+  @Override // from DatasetFilterDemo
   protected String plotLabel() {
     return "Regularization2Step " + factor();
   }

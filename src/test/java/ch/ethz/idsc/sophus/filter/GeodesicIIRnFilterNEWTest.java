@@ -1,4 +1,4 @@
-//code by ob
+// code by ob
 package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
+// TODO OB remove NEW from name
 public class GeodesicIIRnFilterNEWTest extends TestCase {
   public void testTranslation() {
     Tensor p = Tensors.vector(0, 0, 0);

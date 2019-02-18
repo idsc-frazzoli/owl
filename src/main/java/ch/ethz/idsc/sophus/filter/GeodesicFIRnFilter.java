@@ -35,11 +35,11 @@ public class GeodesicFIRnFilter implements TensorUnaryOperator {
   public Tensor apply(Tensor tensor) {
     Tensor result = Tensors.empty();
     // Initializing BL up until extrapolation is possible
-    for (int i = 0; i < 2; i++) {
-      boundedLinkedList.add(tensor.get(i));
-      result.append(tensor.get(i));
+    for (int index = 0; index < 2; ++index) {
+      boundedLinkedList.add(tensor.get(index));
+      result.append(tensor.get(index));
     }
-    for (int index = 1; index < tensor.length() - 1; index++) {
+    for (int index = 1; index < tensor.length() - 1; ++index) {
       // Extrapolation Step
       Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
       // Measurement update step
