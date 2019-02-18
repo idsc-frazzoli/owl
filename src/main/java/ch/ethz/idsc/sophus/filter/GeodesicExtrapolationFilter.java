@@ -3,6 +3,10 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.data.BoundedLinkedList;
+import ch.ethz.idsc.sophus.group.Se2Geodesic;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -16,21 +20,32 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
   }
 
   // ---
-  private final TensorUnaryOperator geodesicExtrapolate;
+  private final TensorUnaryOperator geodesicExtrapolation;
   private final int radius;
+  private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolate, int radius) {
-    this.geodesicExtrapolate = Objects.requireNonNull(geodesicExtrapolate);
+  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, int radius) {
+    this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
     this.radius = radius;
+    this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 
   @Override
   public Tensor apply(Tensor tensor) {
     Tensor result = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
-      int lo = Math.max(0, index - radius);
-      int delta = index - lo;
-      result.append(geodesicExtrapolate.apply(tensor.extract(index - delta, index + 1)));
+    // Initializing BL up until extrapolation is possible
+    for (int i = 0; i < 2; i++) {
+      boundedLinkedList.add(tensor.get(i));
+      result.append(tensor.get(i));
+    }
+    for (int index = 1; index < tensor.length() - 1; index++) {
+      // Extrapolation Step
+      Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
+      // Measurement update step
+      Scalar alpha = RealScalar.of(0.2);
+      temp = Se2Geodesic.INSTANCE.split(temp, tensor.get(index + 1), alpha);
+      boundedLinkedList.add(temp);
+      result.append(temp);
     }
     return result;
   }

@@ -59,7 +59,7 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
     return result;
   }
 
-  /** @param causal mask
+  /** @param causal affine mask
    * @return Tensor [i1, ..., in, e] with i being interpolatory weights and e the extrapolation weight
    * @throws Exception if mask is not affine */
   /* package */ static Tensor splits(Tensor mask) {
