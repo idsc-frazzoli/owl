@@ -143,6 +143,10 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private final PathRender pathRenderCurve = new PathRender(Color.BLUE, 1.25f);
   private final PathRender pathRenderCurvature = new PathRender(COLOR_CURVATURE_COMB);
 
+  /** @param refined
+   * @param isCyclic
+   * @param geometricLayer
+   * @param graphics */
   protected final void renderCurve(Tensor refined, boolean isCyclic, GeometricLayer geometricLayer, Graphics2D graphics) {
     if (0 < refined.length())
       if (Unprotect.dimension1(refined) != 2)

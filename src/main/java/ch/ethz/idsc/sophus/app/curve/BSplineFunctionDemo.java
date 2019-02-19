@@ -15,10 +15,8 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
@@ -38,7 +36,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-/* package */ class BSplineFunctionDemo extends ControlPointsDemo {
+/* package */ class BSplineFunctionDemo extends CurveDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
@@ -48,8 +46,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   BSplineFunctionDemo() {
-    super(true, true, GeodesicDisplays.ALL);
-    // ---
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleItrp);
@@ -75,7 +71,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   }
 
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
     final Tensor control = control();
@@ -133,6 +129,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     renderCurve(render, false, geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
+    return refined;
   }
 
   public static void main(String[] args) {
