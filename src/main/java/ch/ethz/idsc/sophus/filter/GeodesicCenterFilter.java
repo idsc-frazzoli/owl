@@ -10,9 +10,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 public class GeodesicCenterFilter implements TensorUnaryOperator {
   /** @param geodesicCenter
    * @param radius
-   * @return */
+   * @return
+   * @throws Exception if given geodesicCenter is null */
   public static TensorUnaryOperator of(TensorUnaryOperator geodesicCenter, int radius) {
-    return new GeodesicCenterFilter(geodesicCenter, radius);
+    return new GeodesicCenterFilter(Objects.requireNonNull(geodesicCenter), radius);
   }
 
   // ---
@@ -20,7 +21,7 @@ public class GeodesicCenterFilter implements TensorUnaryOperator {
   private final int radius;
 
   private GeodesicCenterFilter(TensorUnaryOperator geodesicCenter, int radius) {
-    this.geodesicCenter = Objects.requireNonNull(geodesicCenter);
+    this.geodesicCenter = geodesicCenter;
     this.radius = radius;
   }
 

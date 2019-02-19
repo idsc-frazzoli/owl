@@ -12,7 +12,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class GeodesicFIRnFilter implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
+   * @param geodesicInterface
    * @param radius
+   * @param alpha
    * @return */
   public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
     return new GeodesicFIRnFilter(geodesicExtrapolation, geodesicInterface, radius, alpha);
@@ -26,7 +28,7 @@ public class GeodesicFIRnFilter implements TensorUnaryOperator {
 
   private GeodesicFIRnFilter(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
     this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
-    this.geodesicInterface = geodesicInterface;
+    this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
     this.alpha = alpha;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
