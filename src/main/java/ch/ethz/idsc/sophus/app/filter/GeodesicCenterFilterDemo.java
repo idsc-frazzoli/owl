@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class GeodesicCenterFilterDemo extends DatasetKernelDemo {
+public class GeodesicCenterFilterDemo extends DatasetKernelDemo {
   private Tensor refined = Tensors.empty();
 
   public GeodesicCenterFilterDemo() {

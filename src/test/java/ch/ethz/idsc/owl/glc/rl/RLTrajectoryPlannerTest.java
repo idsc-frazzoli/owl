@@ -1,7 +1,6 @@
 // code by ynager
 package ch.ethz.idsc.owl.glc.rl;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -41,9 +40,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
-import ch.ethz.idsc.tensor.img.ImageResize;
-import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -114,12 +110,10 @@ public class RLTrajectoryPlannerTest extends TestCase {
     Map<Tensor, RLDomainQueue> rlDomainQueueMap = trajectoryPlanner.getRLDomainQueueMap();
     DQMInspection dqmIntrospection = new DQMInspection(rlDomainQueueMap);
     Tensor count = dqmIntrospection.getCount();
-    Tensor image = ArrayPlot.of(count, ColorDataGradients.CLASSIC);
-    try {
-      Export.of(HomeDirectory.Pictures(name + ".png"), ImageResize.nearest(image, 4));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    // Tensor image =
+    ArrayPlot.of(count, ColorDataGradients.CLASSIC);
+    // File file = HomeDirectory.Pictures(name + ".png");
+    // Export.of(file, ImageResize.nearest(image, 4));
     // System.out.println("domain queue map size=" + rlDomainQueueMap.size());
     // rlDomainQueueMap.keySet().forEach(System.out::println);
     return goalNode;

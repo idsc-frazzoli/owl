@@ -4,9 +4,11 @@ package ch.ethz.idsc.sophus.app.api;
 import java.awt.Dimension;
 import java.util.List;
 
+import ch.ethz.idsc.owl.bot.util.DemoInterface;
+import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 
-public abstract class GeodesicDisplayDemo extends AbstractDemo {
+public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoInterface {
   protected final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
 
   public GeodesicDisplayDemo(List<GeodesicDisplay> list) {
@@ -22,5 +24,10 @@ public abstract class GeodesicDisplayDemo extends AbstractDemo {
 
   public final GeodesicDisplay geodesicDisplay() {
     return geodesicDisplaySpinner.getValue();
+  }
+
+  @Override // from DemoInterface
+  public final BaseFrame start() {
+    return timerFrame;
   }
 }

@@ -17,10 +17,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** visualization of geodesic average along geodesics */
-/* package */ class BezierFunctionSplitsDemo extends GeodesicSplitsDemo {
+public class BezierFunctionSplitsDemo extends GeodesicSplitsDemo {
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
-  BezierFunctionSplitsDemo() {
+  public BezierFunctionSplitsDemo() {
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
     // ---

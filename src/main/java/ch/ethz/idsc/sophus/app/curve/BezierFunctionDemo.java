@@ -18,10 +18,10 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** Bezier function with extrapolation */
-/* package */ class BezierFunctionDemo extends CurveDemo {
+public class BezierFunctionDemo extends CurveDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
-  BezierFunctionDemo() {
+  public BezierFunctionDemo() {
     addButtonDubins();
     // ---
     spinnerRefine.addSpinnerListener(value -> timerFrame.geometricComponent.jComponent.repaint());

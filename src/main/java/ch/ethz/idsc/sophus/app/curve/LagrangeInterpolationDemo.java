@@ -31,12 +31,12 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** LagrangeInterpolation with extrapolation */
-/* package */ class LagrangeInterpolationDemo extends CurveDemo {
+public class LagrangeInterpolationDemo extends CurveDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
-  LagrangeInterpolationDemo() {
+  public LagrangeInterpolationDemo() {
     addButtonDubins();
     // ---
     jToggleSymi.setSelected(true);
