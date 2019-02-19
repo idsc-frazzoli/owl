@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Nest;
 
-/* package */ class CurveSubdivisionDemo extends CurveDemo {
+public class CurveSubdivisionDemo extends CurveDemo {
   private final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final PathRender lineRender = new PathRender(new Color(0, 255, 0, 128));
 
-  CurveSubdivisionDemo() {
+  public CurveSubdivisionDemo() {
     Tensor control = null;
     {
       Tensor move = Tensors.fromString( //

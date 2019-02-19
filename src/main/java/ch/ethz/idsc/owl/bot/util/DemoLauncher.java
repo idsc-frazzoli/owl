@@ -37,9 +37,11 @@ public enum DemoLauncher {
     ClassVisitor classVisitor = new ClassVisitor() {
       @Override
       public void classFound(String jarfile, Class<?> cls) {
-        if (DemoInterface.class.isAssignableFrom(cls))
-          if (!Modifier.isAbstract(cls.getModifiers()))
+        if (DemoInterface.class.isAssignableFrom(cls)) {
+          int modifiers = cls.getModifiers();
+          if (Modifier.isPublic(modifiers) && !Modifier.isAbstract(modifiers))
             demos.add(cls);
+        }
       }
     };
     ClassDiscovery.execute(ClassPaths.getDefault(), classVisitor);
@@ -47,9 +49,7 @@ public enum DemoLauncher {
     return demos;
   }
 
-  public static void main(String[] args) {
-    List<Class<?>> demos = detect();
-    // ---
+  public static void build(List<Class<?>> demos) {
     JFrame jFrame = new JFrame();
     jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     JPanel jComponent = new JPanel(new BorderLayout());
@@ -76,5 +76,9 @@ public enum DemoLauncher {
         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
     jFrame.setBounds(1200, 100, 250, Math.min(40 + demos.size() * BUTTON_HEIGHT, 800));
     jFrame.setVisible(true);
+  }
+
+  public static void main(String[] args) {
+    build(detect());
   }
 }

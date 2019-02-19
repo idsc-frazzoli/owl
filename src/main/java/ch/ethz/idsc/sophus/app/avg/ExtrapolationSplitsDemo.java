@@ -9,8 +9,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** visualization of geodesic average along geodesics */
-/* package */ class ExtrapolationSplitsDemo extends KernelSplitsDemo {
-  ExtrapolationSplitsDemo() {
+public class ExtrapolationSplitsDemo extends KernelSplitsDemo {
+  public ExtrapolationSplitsDemo() {
     setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
   }
 

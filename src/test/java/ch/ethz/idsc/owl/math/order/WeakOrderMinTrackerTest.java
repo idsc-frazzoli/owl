@@ -40,8 +40,13 @@ public class WeakOrderMinTrackerTest extends TestCase {
     WeakOrderMinTracker<Tensor> weakOrderMinTracker = WeakOrderMinTracker.withList(weakOrderComparator);
     weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
     weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
+    assertTrue(weakOrderMinTracker.getMinElements().contains(Tensors.vector(0, 1, 2)));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
     weakOrderMinTracker.digest(Tensors.vector(0, 2, 1));
+    assertTrue(weakOrderMinTracker.getMinElements().contains(Tensors.vector(0, 1, 2)));
+    weakOrderMinTracker.digest(Tensors.vector(0, 2, 1));
+    weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
+    assertTrue(weakOrderMinTracker.getMinElements().contains(Tensors.vector(0, 2, 1)));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 2);
   }
 

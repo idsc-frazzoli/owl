@@ -30,7 +30,8 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
 
   /** @param geodesicInterface
    * @param windowFunction
-   * @return */
+   * @return operator that maps a sequence of number of points to their next (expected) point
+   * @throws Exception if either input parameters is null */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
     return new GeodesicExtrapolation(geodesicInterface, new WindowSideSampler(windowFunction));
   }

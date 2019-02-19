@@ -41,4 +41,22 @@ public class LieDifferencesTest extends TestCase {
         new LieDifferences(LinearGroup.INSTANCE, Se3Exponential.INSTANCE);
     assertEquals(Dimensions.of(lieDifferences.apply(tensor)), Arrays.asList(9, 2, 3));
   }
+
+  public void testLieGroupNullFail() {
+    try {
+      new LieDifferences(null, Se2CoveringExponential.INSTANCE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testLieExponentialNullFail() {
+    try {
+      new LieDifferences(Se2Group.INSTANCE, null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

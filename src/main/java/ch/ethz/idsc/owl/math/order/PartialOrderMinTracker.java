@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Objects;
 
 /** Creates a list of minimal elements of a partially ordered set <tt>X</tt>.
  * <p>An element <tt>a</tt> in a partial order is a minimal element if for all <tt>b</tt> in <tt>X</tt>,
@@ -21,11 +22,12 @@ public class PartialOrderMinTracker<T> implements MinTrackerInterface<T> {
     return new PartialOrderMinTracker<>(partialComparator, new HashSet<>());
   }
 
+  // ---
   private final PartialComparator<T> partialComparator;
   private final Collection<T> collection;
 
   private PartialOrderMinTracker(PartialComparator<T> partialComparator, Collection<T> collection) {
-    this.partialComparator = partialComparator;
+    this.partialComparator = Objects.requireNonNull(partialComparator);
     this.collection = collection;
   }
 
@@ -40,11 +42,11 @@ public class PartialOrderMinTracker<T> implements MinTrackerInterface<T> {
     while (iterator.hasNext()) {
       T b = iterator.next();
       PartialComparison partialComparison = partialComparator.compare(x, b);
-      if (partialComparison.equals(PartialComparison.LESS_THAN)) {
+      if (partialComparison.equals(PartialComparison.LESS_THAN))
         iterator.remove();
-      } else if (!partialComparison.equals(PartialComparison.INCOMPARABLE)) {
+      else //
+      if (!partialComparison.equals(PartialComparison.INCOMPARABLE)) // implies "equals", or "greater than"
         return;
-      }
     }
     collection.add(x);
   }

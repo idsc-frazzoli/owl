@@ -2,6 +2,8 @@
 package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
+import ch.ethz.idsc.sophus.group.Se2Geodesic;
+import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -11,6 +13,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Sin;
 import junit.framework.TestCase;
 
 public class GeodesicExtrapolationTest extends TestCase {
@@ -62,6 +66,33 @@ public class GeodesicExtrapolationTest extends TestCase {
       fail();
     } catch (Exception exception) {
       // ----
+    }
+  }
+
+  public void testNullFail1() {
+    try {
+      GeodesicExtrapolation.of(null, Sin.FUNCTION);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNullFailITF() {
+    try {
+      GeodesicExtrapolation.of(Se2Geodesic.INSTANCE, (IntegerTensorFunction) null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNullFailSUO() {
+    try {
+      GeodesicExtrapolation.of(Se2Geodesic.INSTANCE, (ScalarUnaryOperator) null);
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 }

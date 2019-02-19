@@ -3,50 +3,42 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class GeodesicIIRnFilter implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
+   * @param geodesicInterface
    * @param radius
-   * @return */
+   * @param alpha
+   * @return
+   * @throws Exception if either parameter is null */
   public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
-    return new GeodesicIIRnFilter(geodesicExtrapolation, geodesicInterface, radius, alpha);
+    return new GeodesicIIRnFilter( //
+        Objects.requireNonNull(geodesicExtrapolation), //
+        Objects.requireNonNull(geodesicInterface), //
+        radius, //
+        Objects.requireNonNull(alpha));
   }
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
-  private final BoundedLinkedList<Tensor> boundedLinkedList;
   private final GeodesicInterface geodesicInterface;
+  private final int radius;
   private final Scalar alpha;
 
   private GeodesicIIRnFilter(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
-    this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
+    this.geodesicExtrapolation = geodesicExtrapolation;
     this.geodesicInterface = geodesicInterface;
+    this.radius = radius;
     this.alpha = alpha;
-    this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 
   @Override
   public Tensor apply(Tensor tensor) {
-    Tensor result = Tensors.empty();
-    // Initializing BL up until extrapolation is possible
-    for (int i = 0; i < 2; i++) {
-      boundedLinkedList.add(tensor.get(i));
-      result.append(tensor.get(i));
-    }
-    for (int index = 1; index < tensor.length() - 1; index++) {
-      // Extrapolation Step
-      Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
-      // Measurement update step
-      temp = geodesicInterface.split(temp, tensor.get(index + 1), alpha);
-      boundedLinkedList.add(temp);
-      result.append(temp);
-    }
-    return result;
+    return Tensor.of(tensor.stream() //
+        .map(new IIRnFilter(geodesicExtrapolation, geodesicInterface, radius, alpha)));
   }
 }

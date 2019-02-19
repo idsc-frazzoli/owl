@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-/* package */ class BSplineFunctionDemo extends CurveDemo {
+public class BSplineFunctionDemo extends CurveDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
-  BSplineFunctionDemo() {
+  public BSplineFunctionDemo() {
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleItrp);

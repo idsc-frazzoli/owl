@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Objects;
 
 /** Creates a list of minimal elements of a weakly ordered set <tt>X</tt>.
  * TODO definition minimal element
@@ -19,11 +20,12 @@ public class WeakOrderMinTracker<T> implements MinTrackerInterface<T> {
     return new WeakOrderMinTracker<>(weakOrderComparator, new HashSet<>());
   }
 
+  // ---
   private final WeakOrderComparator<T> weakOrderComparator;
   private final Collection<T> collection;
 
   private WeakOrderMinTracker(WeakOrderComparator<T> weakOrderComparator, Collection<T> collection) {
-    this.weakOrderComparator = weakOrderComparator;
+    this.weakOrderComparator = Objects.requireNonNull(weakOrderComparator);
     this.collection = collection;
   }
 
@@ -34,18 +36,22 @@ public class WeakOrderMinTracker<T> implements MinTrackerInterface<T> {
    * @param x Element next up for comparison */
   @Override // from MinTrackerInterface
   public void digest(T x) {
-    if (!collection.isEmpty()) {
-      T anyElement = collection.iterator().next();
-      WeakOrderComparison weakComparison = weakOrderComparator.compare(x, anyElement);
-      if (weakComparison.equals(WeakOrderComparison.LESS_EQUALS_ONLY)) {
-        collection.clear();
-      } else if (weakComparison.equals(WeakOrderComparison.GREATER_EQUALS_ONLY)) {
-        return;
-      }
-    }
-    if (!collection.contains(x)) {
+    if (collection.isEmpty())
       collection.add(x);
-    }
+    else
+      switch (weakOrderComparator.compare(x, collection.iterator().next())) {
+      case LESS_EQUALS_ONLY:
+        collection.clear();
+        collection.add(x);
+        break;
+      case INDIFFERENT:
+        if (!collection.contains(x))
+          collection.add(x);
+        break;
+      case GREATER_EQUALS_ONLY:
+        // <- ignore given x
+        break;
+      }
   }
 
   /** @return Minimal elements of partially ordered set */

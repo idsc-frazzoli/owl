@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,8 +21,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class GeodesicCausalFilterDemo extends DatasetKernelDemo {
   private Tensor refined = Tensors.empty();
-  private final JSlider jSlider = new JSlider(1, 999, 500);
+  /** IIR vs. FIR filter type */
   private final JToggleButton jToggleIIR = new JToggleButton("IIR");
+  /** parameter to blend extrapolation with measurement */
+  private final JSlider jSlider = new JSlider(1, 999, 500);
 
   public GeodesicCausalFilterDemo() {
     jSlider.setPreferredSize(new Dimension(500, 28));
@@ -34,21 +37,16 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     updateData();
   }
 
-  @Override
-  protected void updateData() {
-    super.updateData();
-  }
-
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     // TODO OB: adapt symLinkImages to new filter structure
     // if (jToggleSymi.isSelected())
     // graphics.drawImage(SymLinkImages.causalIIR(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).bufferedImage(), 0, 0, null);
-    TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
-    if (jToggleIIR.isSelected())
-      refined = GeodesicIIRnFilter.of(tensorUnaryOperator, geodesicDisplay().geodesicInterface(), spinnerRadius.getValue(), alpha()).apply(control());
-    else
-      refined = GeodesicFIRnFilter.of(tensorUnaryOperator, geodesicDisplay().geodesicInterface(), spinnerRadius.getValue(), alpha()).apply(control());
+    GeodesicInterface geodesicInterface = geodesicDisplay().geodesicInterface();
+    TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicInterface, spinnerKernel.getValue());
+    refined = jToggleIIR.isSelected() //
+        ? GeodesicIIRnFilter.of(tensorUnaryOperator, geodesicInterface, spinnerRadius.getValue(), alpha()).apply(control())
+        : GeodesicFIRnFilter.of(tensorUnaryOperator, geodesicInterface, spinnerRadius.getValue(), alpha()).apply(control());
     return refined;
   }
 
