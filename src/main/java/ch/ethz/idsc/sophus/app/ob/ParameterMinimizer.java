@@ -99,8 +99,6 @@ public class ParameterMinimizer {
         }
       }
     }
-    // TODO OB: change error into a useful unit
-    // control.length();
     Tensor minimizingAlphas = Tensors.of(alpha_x, alpha_a, alpha_xdot, alpha_adot);
     Tensor minimizingWindows = Tensors.vector(win_x, win_a, win_xdot, win_adot);
     Tensor minimizingKernels = Tensors.vector(smoothingKernel_x.ordinal(), smoothingKernel_a.ordinal(), smoothingKernel_xdot.ordinal(),
