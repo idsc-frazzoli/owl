@@ -54,10 +54,11 @@ public class ParameterMinimizer {
     Tensor alpharange = Subdivide.of(0.1, 1, 50);
     // Iterate over Kernels, then windowsize and then alphas
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+      // SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
       System.out.println(smoothingKernel.toString());
       TensorUnaryOperator causalFilter = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
       // Arbitrary upper limit of windowsize
-      for (int windowSize = 1; windowSize < 20; windowSize++) {
+      for (int windowSize = 1; windowSize < 25; windowSize++) {
         for (int index = 0; index < alpharange.length(); index++) {
           Tensor refinedCausal = Tensors.empty();
           refinedCausal = GeodesicIIRnFilter.of(causalFilter, geodesicInterface, windowSize, alpharange.Get(index)).apply(control);
@@ -98,8 +99,6 @@ public class ParameterMinimizer {
         }
       }
     }
-    // TODO OB: change error into a useful unit
-    // control.length();
     Tensor minimizingAlphas = Tensors.of(alpha_x, alpha_a, alpha_xdot, alpha_adot);
     Tensor minimizingWindows = Tensors.vector(win_x, win_a, win_xdot, win_adot);
     Tensor minimizingKernels = Tensors.vector(smoothingKernel_x.ordinal(), smoothingKernel_a.ordinal(), smoothingKernel_xdot.ordinal(),

@@ -19,6 +19,7 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -47,16 +48,33 @@ public class GeodesicCurveEvaluation {
   public void plotter(Tensor xaxis, Tensor error, String parameter) throws IOException {
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel(parameter + " for " + signalname);
-    visualSet.setAxesLabelX("x-axis");
-    visualSet.setAxesLabelY("Error");
+    Tensor domain = xaxis;
+    Tensor values = error.divide(length());
+    // X-Axis labels
+    if (parameter.contains("alpha"))
+      visualSet.setAxesLabelX("alpha");
+    else
+      visualSet.setAxesLabelX("window size");
+    // Y-Axis label
+    String yaxis = "Error per Measurement: [";
+    // Seperate plots in position and orientation
+    if (parameter.contains("x"))
+      yaxis = yaxis.concat("meter");
+    else
+      yaxis = yaxis.concat("radiants");
+    // seperate plots in 0-order error and 1-order error
+    if (parameter.contains("dot")) {
+      yaxis = yaxis.concat("/second");
+      values.divide(time());
+    }
+    yaxis = yaxis.concat("]");
+    visualSet.setAxesLabelY(yaxis);
     {
-      Tensor domain = xaxis;
-      Tensor values = error;
       VisualRow visualRow = visualSet.add(domain, values);
       visualRow.setLabel(parameter);
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);
-    File file = HomeDirectory.Pictures(GeodesicFilterEvaluation.class.getSimpleName() + signalname.replace('/', '_') + "_" + parameter + ".png");
+    File file = HomeDirectory.Pictures(GeodesicFilterEvaluation.class.getSimpleName() + "_" + signalname.replace('/', '_') + "_" + parameter + ".png");
     ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
   }
 
@@ -64,6 +82,19 @@ public class GeodesicCurveEvaluation {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + signalname + ".csv").stream() //
         .map(row -> row.extract(1, 4)));
     return control;
+  }
+
+  private Scalar time() {
+    Tensor time = Tensor.of(ResourceData.of("/dubilab/app/pose/" + signalname + ".csv").stream() //
+        .map(row -> row.extract(0, 1)));
+    Scalar duration = time.get(time.length() - 1).Get(0).subtract(time.get(0).Get(0));
+    return duration;
+  }
+
+  private Scalar length() {
+    Scalar length = RealScalar.of(Tensor.of(ResourceData.of("/dubilab/app/pose/" + signalname + ".csv").stream() //
+        .map(row -> row.extract(0, 1))).length());
+    return length;
   }
 
   public void windowSizeCurves() throws IOException {
@@ -85,9 +116,9 @@ public class GeodesicCurveEvaluation {
     Tensor result_xdot = Tensors.empty();
     Tensor result_adot = Tensors.empty();
     // this will be our x-axis
-    // Tensor windowRange = Subdivide.of(1, 20, 20);
+    // Tensor windowRange = Subdivide.of(1, 10, 9);
     // Lower for TESTING reasons
-    Tensor windowRange = Subdivide.of(1, 10, 9);
+    Tensor windowRange = Subdivide.of(1, 25, 24);
     // for (int windowSize = 1; windowSize < windowRange.length(); windowSize++) {
     for (int windowSize = 1; windowSize <= windowRange.length(); windowSize++) {
       // pose
@@ -136,7 +167,8 @@ public class GeodesicCurveEvaluation {
     Tensor result_xdot = Tensors.empty();
     Tensor result_adot = Tensors.empty();
     // This will be our x-axis
-    Tensor alpharange = Subdivide.of(0, 1, 50);
+    // Tensor alpharange = Subdivide.of(0.1, 1, 50);
+    Tensor alpharange = Subdivide.of(0.1, 1, 50);
     for (int index = 0; index < alpharange.length(); index++) {
       // pose
       TensorUnaryOperator causalFilter_x = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel_x);
