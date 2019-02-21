@@ -6,6 +6,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
+/** Another reference for ST is "Deep Compositing Using Lie Algebras"
+ * by Tom Duff. The article parameterizes the group differently with
+ * the scaling coefficient alpha := 1 - lambda */
 public enum StGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---

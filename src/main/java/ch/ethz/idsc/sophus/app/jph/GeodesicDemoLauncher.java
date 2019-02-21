@@ -11,18 +11,20 @@ import ch.ethz.idsc.sophus.app.curve.BSplineFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.BezierFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.CurveSubdivisionDemo;
 import ch.ethz.idsc.sophus.app.filter.GeodesicCenterFilterDemo;
+import ch.ethz.idsc.sophus.app.misc.GeodesicDemo;
 
 public enum GeodesicDemoLauncher {
   ;
   public static void main(String[] args) {
     DemoLauncher.build(Arrays.asList( //
+        CurveSubdivisionDemo.class, //
+        GeodesicCenterFilterDemo.class, //
+        GeodesicDemo.class, //
         BezierFunctionSplitsDemo.class, //
         GeodesicCenterSplitsDemo.class, //
         ExtrapolationSplitsDemo.class, //
         BezierFunctionDemo.class, //
-        CurveSubdivisionDemo.class, //
-        BSplineFunctionDemo.class, //
-        GeodesicCenterFilterDemo.class //
+        BSplineFunctionDemo.class //
     ));
   }
 }

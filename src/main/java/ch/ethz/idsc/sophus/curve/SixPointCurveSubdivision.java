@@ -8,9 +8,14 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** Gilles Deslauriers and Serge Dubuc: Symmetric iterative interpolation processes
  * 
- * weights = {3, -25, 150, 150, -25, 3}/256;
- * {(1 - a) (1 - b), a (1 - b), b, b , a (1 - b), (1 - b) (1 - a)}/2
- * Solve[Thread[% == weights]] */
+ * <pre>
+ * weights = {3, -25, 150, 150, -25, 3} / 256
+ * {(1 - a) (1 - b), a (1 - b), b, b , a (1 - b), (1 - b) (1 - a)} / 2
+ * Solve[Thread[% == weights]]
+ * </pre>
+ * 
+ * Another reference by Johannes Wallner:
+ * "On convergent interpolatory subdivision schemes in Riemannian Geometry", p.2 */
 public class SixPointCurveSubdivision extends AbstractSixPointCurveSubdivision {
   private static final Scalar PQ = RationalScalar.of(25, 22);
   private static final Scalar _R = RationalScalar.of(75, 64);

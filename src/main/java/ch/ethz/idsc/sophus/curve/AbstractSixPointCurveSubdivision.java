@@ -17,12 +17,13 @@ public abstract class AbstractSixPointCurveSubdivision extends FourPointCurveSub
     int length = tensor.length();
     Tensor curve = Tensors.empty();
     for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 2 + length) % length);
-      Tensor q = tensor.get((index - 1 + length) % length);
+      int first = Math.floorMod(index - 2, length);
+      Tensor p = tensor.get((first + 0) % length);
+      Tensor q = tensor.get((first + 1) % length);
       Tensor r = tensor.get(index);
-      Tensor s = tensor.get((index + 1) % length);
-      Tensor t = tensor.get((index + 2) % length);
-      Tensor u = tensor.get((index + 3) % length);
+      Tensor s = tensor.get((first + 3) % length);
+      Tensor t = tensor.get((first + 4) % length);
+      Tensor u = tensor.get((first + 5) % length);
       curve.append(r).append(center(p, q, r, s, t, u));
     }
     return curve;

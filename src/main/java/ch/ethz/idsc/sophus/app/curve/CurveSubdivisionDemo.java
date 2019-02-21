@@ -137,7 +137,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
   @Override
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
-    if (scheme.equals(CurveSubdivisionSchemes.DOBSEB))
+    if (scheme.equals(CurveSubdivisionSchemes.DODGSON_SABIN))
       geodesicDisplaySpinner.setValue(R2GeodesicDisplay.INSTANCE);
     // ---
     if (jToggleSymi.isSelected()) {
