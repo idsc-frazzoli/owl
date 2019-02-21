@@ -29,8 +29,6 @@ import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ResourceData;
@@ -48,7 +46,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
-  protected Tensor _control = Tensors.of(Array.zeros(4));
+  // TODO JPH refactor
+  protected Tensor _control = null;
   private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
@@ -104,7 +103,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       return;
     GRID_RENDER.render(geometricLayer, graphics);
     Tensor control = control();
-    System.out.println(control);
+    // System.out.println(control);
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));
