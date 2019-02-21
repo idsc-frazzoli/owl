@@ -1,79 +1,105 @@
-// code by ob
+// code by ob, jph
 package ch.ethz.idsc.sophus.filter;
 
-import java.util.List;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Chop;
 
-public class NonuniformFilter {
-  /** @param time stamp of control sequence
-   * @return affine combination used to generate mask
-   * @throws Exception if mask is not a vector or empty */
-  // TODO OB under construction!
-  // TODO OB Tests
-  private BoundedLinkedList<StateTime> boundedLinkedList = new BoundedLinkedList<>(10);
-  private GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
-
-  // Function that takes tensor of ALL data in CSV (tensor) and a duckiebot number (scalar) and returns the StateTime list of this bot;
-  public static List<StateTime> dataParser(Tensor tensor, Scalar scalar) {
-    // TODO OB
-    List<StateTime> list = null;
-    return list;
+/** input to the operator are the individual elements of the sequence */
+public class NonuniformFilter implements TensorUnaryOperator {
+  /** @param geodesicExtrapolation
+   * @param geodesicInterface
+   * @param radius
+   * @param alpha
+   * @return
+   * @throws Exception if either parameter is null */
+  public static TensorUnaryOperator of( //
+      TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {
+    return new NonuniformFilter( //
+        Objects.requireNonNull(geodesicExtrapolation), //
+        Objects.requireNonNull(geodesicInterface), //
+        length, //
+        Objects.requireNonNull(alpha));
   }
 
-  public Tensor SplitsGenerator(Tensor mask) {
-    Tensor splits = StaticHelperCausal.splits(mask.extract(0, mask.length() - 1));
+  // ---
+  private final TensorUnaryOperator geodesicExtrapolation;
+  private final BoundedLinkedList<StateTime> boundedLinkedList;
+  private final GeodesicInterface geodesicInterface;
+  private final Scalar alpha;
+
+  /* package */ NonuniformFilter( //
+      TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {
+    this.geodesicExtrapolation = geodesicExtrapolation;
+    this.geodesicInterface = geodesicInterface;
+    this.alpha = alpha;
+    // TODO OB: might be not possible with boundelinked list => not always same filterlength...
+    this.boundedLinkedList = new BoundedLinkedList<>(Scalars.intValueExact(length));
+  }
+
+  // Create nonuniformly sampled mask from StateTime bounded linked list using fixed interval method;
+  public Tensor createAffineMask(BoundedLinkedList<StateTime> boundedLinkedList, Scalar interval) {
+    while (true) {
+      if (Scalars.lessEquals(boundedLinkedList.getFirst().time(), boundedLinkedList.getLast().time().subtract(interval)))
+        boundedLinkedList.remove();
+      else
+        break;
+    }
+    if (boundedLinkedList.size() == 1)
+      return Tensors.of(RealScalar.ONE);
+    Tensor weight = Tensors.empty();
+    Scalar delta = interval;
+    for (int index = 0; index < boundedLinkedList.size(); index++) {
+      Scalar conversion = boundedLinkedList.get(index).time().subtract(interval).divide(delta.add(delta)).subtract(RationalScalar.HALF);
+      weight.append(SmoothingKernel.GAUSSIAN.apply(conversion));
+    }
+    return weight;
+  }
+
+  static Tensor splits(Tensor mask) {
+    // check for affinity
+    Chop._12.requireClose(Total.of(mask), RealScalar.ONE);
+    // no extrapolation possible
+    if (mask.length() == 1)
+      return Tensors.vector(1);
+    Tensor splits = Tensors.empty();
+    Scalar factor = mask.Get(0);
+    // Calculate interpolation splits
+    for (int index = 1; index < mask.length() - 1; ++index) {
+      factor = factor.add(mask.get(index));
+      Scalar lambda = mask.Get(index).divide(factor);
+      splits.append(lambda);
+    }
+    // Calculate extrapolation splits
     Scalar temp = RealScalar.ONE;
     for (int index = 0; index < splits.length(); index++) {
       temp = temp.multiply(RealScalar.ONE.subtract(splits.Get(index))).add(RealScalar.ONE);
     }
-    splits.append(temp.add(RealScalar.ONE).divide(temp));
-    splits.append(mask.Get(mask.length() - 1));
+    splits.append(RealScalar.ONE.add(temp.reciprocal()));
     return splits;
   }
 
-  // TODO OB Analog zu IIRn auteilen in mehrere Funktionen sobald es funktionier!
-  public StateTime apply(StateTime stateTime) {
+  @Override
+  public Tensor apply(Tensor tensor) {
+    Tensor affineMask = createAffineMask(boundedLinkedList, RealScalar.of(2));
+    Tensor splits = splits(affineMask);
+    Tensor value = boundedLinkedList.size() < 2 //
+        ? tensor.copy()
+        : geodesicInterface.split(geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream())), tensor, alpha);
+    StateTime stateTime = new StateTime(value, tensor.Get(0));
     boundedLinkedList.add(stateTime);
-    if (boundedLinkedList.size() == 1) {
-      return stateTime;
-    }
-    // Use NonuniformMaskGenerator to get a mask;
-    NonuniformMaskGenerator nonuniformMaskGenerator = new NonuniformMaskGenerator();
-    Tensor mask = nonuniformMaskGenerator.fixedLength(boundedLinkedList, RealScalar.of(5));
-    Scalar alpha = RationalScalar.HALF;
-    mask.append(alpha);
-    // Convert affine mask into geodesic mask;
-    Tensor splits = SplitsGenerator(mask);
-    // Convert affine mask into geodesic mask;
-    // User IIRn filter analogos
-    Tensor interpolate = boundedLinkedList.getFirst().state();
-    for (int index = 0; index < splits.length() - 2; index++) {
-      interpolate = geodesicInterface.split(interpolate, boundedLinkedList.get(index + 1).state(), splits.Get(index));
-    }
-    Tensor extrapolate = geodesicInterface.split(interpolate, boundedLinkedList.get(boundedLinkedList.size() - 2).state(), splits.Get(splits.length() - 2));
-    Tensor update = geodesicInterface.split(extrapolate, boundedLinkedList.getLast().state(), splits.Get(splits.length() - 1));
-    StateTime stateTimeUpdate = new StateTime(update, boundedLinkedList.getLast().time());
-    // The following line is only valid for IIR, for FIR comment it
-    boundedLinkedList.set(boundedLinkedList.size() - 1, stateTimeUpdate);
-    return stateTimeUpdate;
-  }
-
-  public static void main(String[] args) {
-    Tensor data = Tensor.of(ResourceData.of("/dubilab/app/pose/0w/20180702T133612_1.csv").stream().map(row -> row.extract(0, 4)));
-    // TODO OB correct
-    // TODO duckietown data is now in ephemeral, see DuckietownDataDemo
-    // Tensor data2 = Tensor.of(ResourceData.of("C:/Users/Oliver/Desktop/MA/duckietown/duckie20180713175124.csv").stream().map(row -> row.extract(0, 4)));
-    Scalar Length = RealScalar.of(5);
-    List<StateTime> list = dataParser(data, Length);
-    // Apply fixedLength to the list which returns the causally filtered list
+    return value;
   }
 }
