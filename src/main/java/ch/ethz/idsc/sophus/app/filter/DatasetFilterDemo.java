@@ -48,14 +48,21 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
-  protected Tensor _control = Tensors.of(Array.zeros(3));
+  protected Tensor _control = Tensors.of(Array.zeros(4));
   private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
-  protected void updateData() {
+  protected void updateState() {
     _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
         .limit(spinnerLabelLimit.getValue()) //
         .map(row -> row.extract(1, 4)));
+  }
+
+  // Maybe we need this to allow for control data of StateTime format
+  protected void updateStateTime() {
+    _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
+        .limit(spinnerLabelLimit.getValue()) //
+        .map(row -> row.extract(0, 4)));
   }
 
   protected final Tensor control() {
@@ -76,7 +83,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     timerFrame.jToolBar.add(jToggleData);
     {
       spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.vector"));
-      spinnerLabelString.addSpinnerListener(type -> updateData());
+      spinnerLabelString.addSpinnerListener(type -> updateState());
       spinnerLabelString.setIndex(0);
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
@@ -84,7 +91,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelLimit.setList(Arrays.asList(250, 500, 1000, 2000, 5000));
       spinnerLabelLimit.setIndex(0);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
-      spinnerLabelLimit.addSpinnerListener(type -> updateData());
+      spinnerLabelString.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
     // ---
@@ -97,6 +104,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       return;
     GRID_RENDER.render(geometricLayer, graphics);
     Tensor control = control();
+    System.out.println(control);
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));

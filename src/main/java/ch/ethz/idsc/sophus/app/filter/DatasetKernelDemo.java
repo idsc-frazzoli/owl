@@ -18,13 +18,13 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
       spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
       spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
       spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
-      spinnerKernel.addSpinnerListener(value -> updateData());
+      spinnerKernel.addSpinnerListener(value -> updateState());
     }
     {
       spinnerRadius.setList(IntStream.range(0, 21).boxed().collect(Collectors.toList()));
       spinnerRadius.setValue(6);
       spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-      spinnerRadius.addSpinnerListener(value -> updateData());
+      spinnerRadius.addSpinnerListener(value -> updateState());
     }
   }
 
