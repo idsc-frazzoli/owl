@@ -16,12 +16,12 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private Tensor refined = Tensors.empty();
 
   public GeodesicExtrapolationDemo() {
-    updateData();
+    updateState();
   }
 
   @Override
-  protected void updateData() {
-    super.updateData();
+  protected void updateState() {
+    super.updateState();
     // ---
     TensorUnaryOperator tensorUnaryOperator = //
         GeodesicExtrapolation.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());

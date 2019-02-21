@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.N;
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
     // ---
-    updateData();
+    updateState();
   }
 
   @Override // from RenderInterface

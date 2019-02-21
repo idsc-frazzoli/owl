@@ -16,12 +16,12 @@ public class GeodesicCenterFilterDemo extends DatasetKernelDemo {
   private Tensor refined = Tensors.empty();
 
   public GeodesicCenterFilterDemo() {
-    updateData();
+    updateState();
   }
 
   @Override
-  protected void updateData() {
-    super.updateData();
+  protected void updateState() {
+    super.updateState();
     // ---
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
     refined = GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());

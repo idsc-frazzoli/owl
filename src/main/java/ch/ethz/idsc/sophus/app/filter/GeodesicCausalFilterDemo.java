@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     // ---
     timerFrame.jToolBar.add(jSlider);
     // ---
-    updateData();
+    updateState();
   }
 
   @Override // from RenderInterface

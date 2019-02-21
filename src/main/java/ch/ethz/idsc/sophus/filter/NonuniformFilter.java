@@ -1,10 +1,13 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.filter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -13,6 +16,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -26,27 +30,26 @@ public class NonuniformFilter implements TensorUnaryOperator {
    * @return
    * @throws Exception if either parameter is null */
   public static TensorUnaryOperator of( //
-      TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {
+      GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {
     return new NonuniformFilter( //
-        Objects.requireNonNull(geodesicExtrapolation), //
         Objects.requireNonNull(geodesicInterface), //
         length, //
         Objects.requireNonNull(alpha));
   }
 
   // ---
-  private final TensorUnaryOperator geodesicExtrapolation;
   private final BoundedLinkedList<StateTime> boundedLinkedList;
   private final GeodesicInterface geodesicInterface;
   private final Scalar alpha;
+  private final List<Tensor> weights = new ArrayList<>();
+  private final Scalar length;
 
-  /* package */ NonuniformFilter( //
-      TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {
-    this.geodesicExtrapolation = geodesicExtrapolation;
+  /* package */ NonuniformFilter(GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {
     this.geodesicInterface = geodesicInterface;
     this.alpha = alpha;
     // TODO OB: might be not possible with boundelinked list => not always same filterlength...
     this.boundedLinkedList = new BoundedLinkedList<>(Scalars.intValueExact(length));
+    this.length = length;
   }
 
   // Create nonuniformly sampled mask from StateTime bounded linked list using fixed interval method;
@@ -91,15 +94,34 @@ public class NonuniformFilter implements TensorUnaryOperator {
     return splits;
   }
 
+  public Tensor process(Tensor tensor, Tensor splits) {
+    Tensor result = tensor.get(0);
+    for (int index = 0; index < splits.length(); ++index)
+      result = geodesicInterface.split(result, tensor.get(index + 1), splits.Get(index));
+    return result;
+  }
+
   @Override
   public Tensor apply(Tensor tensor) {
-    Tensor affineMask = createAffineMask(boundedLinkedList, RealScalar.of(2));
-    Tensor splits = splits(affineMask);
+    System.out.println(tensor);
+    Tensor splits = Tensors.empty();
+    if (!boundedLinkedList.isEmpty()) {
+      Tensor affineMask = createAffineMask(boundedLinkedList, length);
+      splits = splits(affineMask);
+    }
     Tensor value = boundedLinkedList.size() < 2 //
         ? tensor.copy()
-        : geodesicInterface.split(geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream())), tensor, alpha);
+        : geodesicInterface.split(process(Tensor.of(boundedLinkedList.stream().map(st -> st.state())), splits), tensor, alpha);
+    System.out.println(value);
     StateTime stateTime = new StateTime(value, tensor.Get(0));
     boundedLinkedList.add(stateTime);
     return value;
+  }
+
+  public static void main(String[] args) {
+    Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/2r/20180820T165637_1.csv").stream() //
+        .map(row -> row.extract(0, 4)));
+    NonuniformFilter nonuniformFilter = new NonuniformFilter(Se2Geodesic.INSTANCE, RealScalar.of(4), RealScalar.of(0.4));
+    nonuniformFilter.apply(control);
   }
 }
