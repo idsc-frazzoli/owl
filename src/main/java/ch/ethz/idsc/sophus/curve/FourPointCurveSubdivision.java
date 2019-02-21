@@ -12,6 +12,11 @@ import ch.ethz.idsc.tensor.Tensors;
 /** C1 interpolatory four-point scheme
  * Dubuc 1986, Dyn/Gregory/Levin 1987
  * 
+ * <pre>
+ * weights = {-1, 9, 9, -1} / 16
+ * weights = {-omega, 1/2+omega, 1/2+omega, -omega} (generalized)
+ * </pre>
+ * 
  * Dyn/Sharon 2014 p.14 show that for general omega the contractivity is mu = 4 * omega + 1/2
  * 
  * for the important case omega = 1/16 the contractivity factor is mu = 3/4 */
@@ -38,11 +43,12 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     Tensor curve = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
-      Tensor p = tensor.get((index - 1 + tensor.length()) % tensor.length());
+    int length = tensor.length();
+    for (int index = 0; index < length; ++index) {
+      Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % tensor.length());
-      Tensor s = tensor.get((index + 2) % tensor.length());
+      Tensor r = tensor.get((index + 1) % length);
+      Tensor s = tensor.get((index + 2) % length);
       curve.append(q).append(center(p, q, r, s));
     }
     return curve;

@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.curve.BSpline6CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DodgsonSabinCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DualC2FourPointCurveSubdivision;
+import ch.ethz.idsc.sophus.curve.EightPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.FarSixPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.HormannSabinCurveSubdivision;
@@ -32,13 +33,14 @@ import ch.ethz.idsc.tensor.Tensors;
   BSPLINE4S3(CurveSubdivisionHelper::split3), //
   BSPLINE5(BSpline5CurveSubdivision::new), //
   BSPLINE6(BSpline6CurveSubdivision::of), //
-  DOBSEB(i -> DodgsonSabinCurveSubdivision.INSTANCE), //
+  DODGSON_SABIN(i -> DodgsonSabinCurveSubdivision.INSTANCE), //
   THREEPOINT(HormannSabinCurveSubdivision::of), //
   FOURPOINT(FourPointCurveSubdivision::new), //
   C2CUBIC(DualC2FourPointCurveSubdivision::cubic), //
   C2TIGHT(DualC2FourPointCurveSubdivision::tightest), //
   SIXPOINT(SixPointCurveSubdivision::new), //
   SIXFAR(FarSixPointCurveSubdivision::new), //
+  EIGHTPOINT(EightPointCurveSubdivision::new), //
   ;
   public final Function<GeodesicInterface, CurveSubdivision> function;
 

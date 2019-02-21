@@ -6,11 +6,14 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.List;
 
+import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
+import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
@@ -18,7 +21,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-/* package */ class GeodesicDemo extends AbstractDemo {
+public class GeodesicDemo extends AbstractDemo implements DemoInterface {
   private static final Color COLOR = new Color(128, 128, 128, 128);
   private static final int SPLITS = 20;
   //
@@ -29,7 +32,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     // ---
     List<GeodesicDisplay> list = GeodesicDisplays.ALL;
     geodesicDisplaySpinner.setList(list);
-    geodesicDisplaySpinner.setValue(list.get(0));
+    geodesicDisplaySpinner.setValue(R2GeodesicDisplay.INSTANCE);
     if (1 < list.size()) {
       geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
       timerFrame.jToolBar.addSeparator();
@@ -50,6 +53,11 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape()));
       geometricLayer.popMatrix();
     }
+  }
+
+  @Override // from DemoInterface
+  public BaseFrame start() {
+    return timerFrame;
   }
 
   public static void main(String[] args) {
