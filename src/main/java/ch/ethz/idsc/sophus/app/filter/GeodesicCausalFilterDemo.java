@@ -39,19 +39,28 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    final int radius = spinnerRadius.getValue();
     // TODO OB: adapt symLinkImages to new filter structure
     // if (jToggleSymi.isSelected())
     // graphics.drawImage(SymLinkImages.causalIIR(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).bufferedImage(), 0, 0, null);
-    GeodesicInterface geodesicInterface = geodesicDisplay().geodesicInterface();
-    TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicInterface, spinnerKernel.getValue());
-    refined = jToggleIIR.isSelected() //
-        ? GeodesicIIRnFilter.of(tensorUnaryOperator, geodesicInterface, spinnerRadius.getValue(), alpha()).apply(control())
-        : GeodesicFIRnFilter.of(tensorUnaryOperator, geodesicInterface, spinnerRadius.getValue(), alpha()).apply(control());
-    return refined;
+    if (0 < radius) {
+      GeodesicInterface geodesicInterface = geodesicDisplay().geodesicInterface();
+      TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicInterface, spinnerKernel.getValue());
+      refined = jToggleIIR.isSelected() //
+          ? GeodesicIIRnFilter.of(tensorUnaryOperator, geodesicInterface, radius, alpha()).apply(control())
+          : GeodesicFIRnFilter.of(tensorUnaryOperator, geodesicInterface, radius, alpha()).apply(control());
+      return refined;
+    }
+    return control();
   }
 
   private Scalar alpha() {
     return RationalScalar.of(jSlider.getValue(), 1000);
+  }
+
+  @Override
+  protected String plotLabel() {
+    return super.plotLabel() + " " + alpha();
   }
 
   public static void main(String[] args) {
