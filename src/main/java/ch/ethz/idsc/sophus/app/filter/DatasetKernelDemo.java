@@ -22,7 +22,7 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
     }
     {
       spinnerRadius.setList(IntStream.range(0, 21).boxed().collect(Collectors.toList()));
-      spinnerRadius.setValue(6);
+      spinnerRadius.setValue(0);
       spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
       spinnerRadius.addSpinnerListener(value -> updateState());
     }

@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
 
   public KernelSplitsDemo() {
     spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
-    spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
+    spinnerKernel.setValue(SmoothingKernel.DIRICHLET);
     spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
   }
 }

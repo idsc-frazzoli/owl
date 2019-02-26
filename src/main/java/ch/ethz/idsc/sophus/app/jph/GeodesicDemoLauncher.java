@@ -17,11 +17,11 @@ public enum GeodesicDemoLauncher {
   ;
   public static void main(String[] args) {
     DemoLauncher.build(Arrays.asList( //
-        CurveSubdivisionDemo.class, //
         GeodesicCenterFilterDemo.class, //
+        GeodesicCenterSplitsDemo.class, //
+        CurveSubdivisionDemo.class, //
         GeodesicDemo.class, //
         BezierFunctionSplitsDemo.class, //
-        GeodesicCenterSplitsDemo.class, //
         ExtrapolationSplitsDemo.class, //
         BezierFunctionDemo.class, //
         BSplineFunctionDemo.class //
