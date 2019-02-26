@@ -25,6 +25,7 @@ public class GeodesicAdaptiveCenterFilter implements TensorUnaryOperator {
     this.radius = radius;
   }
 
+  // Hier noch aufteilen in Zeit und nicht-zeit
   @Override
   public Tensor apply(Tensor tensor) {
     Tensor result = Tensors.empty();

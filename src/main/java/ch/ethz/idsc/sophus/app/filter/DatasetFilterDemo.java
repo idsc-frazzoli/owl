@@ -49,17 +49,18 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
   protected Tensor _control = Tensors.of(Array.zeros(4));
+  protected Tensor _stateControl = Tensors.of(Array.zeros(3));
   private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
-  protected void updateState() {
-    _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
+  protected void updateStateOnly() {
+    _stateControl = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
         .limit(spinnerLabelLimit.getValue()) //
         .map(row -> row.extract(1, 4)));
   }
 
   // Maybe we need this to allow for control data of StateTime format
-  protected void updateStateTime() {
+  protected void updateState() {
     _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
         .limit(spinnerLabelLimit.getValue()) //
         .map(row -> row.extract(0, 4)));
@@ -67,6 +68,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 
   protected final Tensor control() {
     return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
+  }
+
+  protected final Tensor stateControl() {
+    return Tensor.of(_stateControl.stream().map(geodesicDisplay()::project)).unmodifiable();
   }
 
   public DatasetFilterDemo() {
@@ -103,8 +108,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     if (jToggleWait.isSelected())
       return;
     GRID_RENDER.render(geometricLayer, graphics);
-    Tensor control = control();
-    System.out.println(control);
+    Tensor control = stateControl();
+    // Tensor stateControl = stateControl();
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));
