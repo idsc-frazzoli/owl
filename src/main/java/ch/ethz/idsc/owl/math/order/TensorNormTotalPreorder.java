@@ -10,10 +10,10 @@ import ch.ethz.idsc.tensor.red.Norm;
  * using Scalars.lessEquals as a binary relation
  * 
  * binary relation that is reflexive and transitive, but not antisymmetric */
-public class TensorNormWeakOrder implements BinaryRelation<Tensor> {
+public class TensorNormTotalPreorder implements BinaryRelation<Tensor> {
   private final Norm norm;
 
-  public TensorNormWeakOrder(Norm norm) {
+  public TensorNormTotalPreorder(Norm norm) {
     this.norm = norm;
   }
 
@@ -22,8 +22,8 @@ public class TensorNormWeakOrder implements BinaryRelation<Tensor> {
     return Scalars.lessEquals(norm.of(x), norm.of(y));
   }
 
-  /** @return preorder comparator that never returns INCOMPARABLE */
-  public WeakOrderComparator<Tensor> comparator() {
-    return WeakOrder.comparator(this);
+  /** @return total preorder comparator that never returns INCOMPARABLE */
+  public TotalPreorderComparator<Tensor> comparator() {
+    return TotalPreorder.comparator(this);
   }
 }

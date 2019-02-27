@@ -24,8 +24,8 @@ public class LexicographicTotalOrderTest extends TestCase {
   @SuppressWarnings("rawtypes")
   public void testLessThan() {
     List<Comparable> x = new LinkedList<>();
-    x.add(false);
-    x.add(1.34);
+    x.add(true);
+    x.add(3.56);
     x.add(2);
     List<Comparable> y = new LinkedList<>();
     y.add(true);

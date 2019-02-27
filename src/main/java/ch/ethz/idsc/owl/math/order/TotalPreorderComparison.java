@@ -26,7 +26,7 @@ package ch.ethz.idsc.owl.math.order;
  * </tr>
  * </table>
  * @author astoll */
-public enum WeakOrderComparison {
+public enum TotalPreorderComparison {
   LESS_EQUALS_ONLY(true, false), //
   INDIFFERENT(true, true), //
   GREATER_EQUALS_ONLY(false, true),//
@@ -34,7 +34,7 @@ public enum WeakOrderComparison {
   private final boolean le;
   private final boolean ge;
 
-  private WeakOrderComparison(boolean le, boolean ge) {
+  private TotalPreorderComparison(boolean le, boolean ge) {
     this.le = le;
     this.ge = ge;
   }

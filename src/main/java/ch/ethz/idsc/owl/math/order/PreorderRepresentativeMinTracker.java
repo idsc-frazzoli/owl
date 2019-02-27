@@ -1,4 +1,3 @@
-// code by astoll
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Collection;
@@ -8,23 +7,23 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Objects;
 
-/** TODO ASTOLL
+/** TODO ASTOLL new definition of minimal element
  * 
  * @param <T> type of elements to compare */
-public class PreorderMinTracker<T> implements MinTrackerInterface<T> {
-  public static <T> PreorderMinTracker<T> withList(PreorderComparator<T> preorderComparator) {
-    return new PreorderMinTracker<>(preorderComparator, new LinkedList<>());
+public class PreorderRepresentativeMinTracker<T> implements MinTrackerInterface<T> {
+  public static <T> PreorderRepresentativeMinTracker<T> withList(PreorderComparator<T> preorderComparator) {
+    return new PreorderRepresentativeMinTracker<>(preorderComparator, new LinkedList<>());
   }
 
-  public static <T> PreorderMinTracker<T> withSet(PreorderComparator<T> preorderComparator) {
-    return new PreorderMinTracker<>(preorderComparator, new HashSet<>());
+  public static <T> PreorderRepresentativeMinTracker<T> withSet(PreorderComparator<T> preorderComparator) {
+    return new PreorderRepresentativeMinTracker<>(preorderComparator, new HashSet<>());
   }
 
   // ---
   private final PreorderComparator<T> preorderComparator;
   private final Collection<T> collection;
 
-  private PreorderMinTracker(PreorderComparator<T> preorderComparator, Collection<T> collection) {
+  private PreorderRepresentativeMinTracker(PreorderComparator<T> preorderComparator, Collection<T> collection) {
     this.preorderComparator = Objects.requireNonNull(preorderComparator);
     this.collection = collection;
   }
@@ -43,7 +42,7 @@ public class PreorderMinTracker<T> implements MinTrackerInterface<T> {
       if (preorderComparison.equals(PreorderComparison.LESS_EQUALS_ONLY))
         iterator.remove();
       else //
-      if (preorderComparison.equals(PreorderComparison.GREATER_EQUALS_ONLY))
+      if (preorderComparison.equals(PreorderComparison.GREATER_EQUALS_ONLY) || preorderComparison.equals(PreorderComparison.INDIFFERENT))
         return;
     }
     if (!collection.contains(x)) {

@@ -7,19 +7,19 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import junit.framework.TestCase;
 
-public class WeakOrderMinTrackerTest extends TestCase {
+public class TotalPreorderMinTrackerTest extends TestCase {
   public void testDigestNotEmpty() {
-    TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
-    WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> weakOrderMinTracker = WeakOrderMinTracker.withList(weakOrderComparator);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
+    TotalPreorderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
+    TotalPreorderMinTracker<Tensor> weakOrderMinTracker = TotalPreorderMinTracker.withList(weakOrderComparator);
     weakOrderMinTracker.digest(RealScalar.of(6));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
   }
 
   public void testDigestFunction() {
-    TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
-    WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> weakOrderMinTracker = WeakOrderMinTracker.withList(weakOrderComparator);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
+    TotalPreorderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
+    TotalPreorderMinTracker<Tensor> weakOrderMinTracker = TotalPreorderMinTracker.withList(weakOrderComparator);
     weakOrderMinTracker.digest(Tensors.vector(2));
     weakOrderMinTracker.digest(Tensors.vector(0, 3, 2));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
@@ -35,9 +35,9 @@ public class WeakOrderMinTrackerTest extends TestCase {
   }
 
   public void testDuplicateEntries() {
-    TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
-    WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> weakOrderMinTracker = WeakOrderMinTracker.withList(weakOrderComparator);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
+    TotalPreorderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
+    TotalPreorderMinTracker<Tensor> weakOrderMinTracker = TotalPreorderMinTracker.withList(weakOrderComparator);
     weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
     weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
     assertTrue(weakOrderMinTracker.getMinElements().contains(Tensors.vector(0, 1, 2)));
@@ -51,9 +51,9 @@ public class WeakOrderMinTrackerTest extends TestCase {
   }
 
   public void testWithSet() {
-    TensorNormWeakOrder tensorNormWeakOrder = new TensorNormWeakOrder(Norm.INFINITY);
-    WeakOrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
-    WeakOrderMinTracker<Tensor> weakOrderMinTracker = WeakOrderMinTracker.withSet(weakOrderComparator);
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
+    TotalPreorderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
+    TotalPreorderMinTracker<Tensor> weakOrderMinTracker = TotalPreorderMinTracker.withSet(weakOrderComparator);
     weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
     weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
