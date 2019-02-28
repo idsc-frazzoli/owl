@@ -12,10 +12,10 @@ public enum Semiorder {
       public StrictPartialComparison compare(T x, T y) {
         Scalar utility_x = utilityFunction.apply(x);
         Scalar utility_y = utilityFunction.apply(y);
-        if (Scalars.lessEquals(utility_x, utility_y.add(slack))) {
+        if (Scalars.lessEquals(utility_x.add(slack), utility_y)) {
           return StrictPartialComparison.LESS_THAN;
         }
-        if (Scalars.lessEquals(utility_y, utility_x.add(slack))) {
+        if (Scalars.lessEquals(utility_y.add(slack), utility_x)) {
           return StrictPartialComparison.GREATER_THAN;
         }
         return StrictPartialComparison.INCOMPARABLE;
