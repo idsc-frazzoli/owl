@@ -7,6 +7,7 @@ import java.util.List;
 public enum GeodesicDisplays {
   ;
   public static final List<GeodesicDisplay> ALL = Arrays.asList( //
+      ClothoidCurveDisplay.INSTANCE, //
       Se2CoveringGeodesicDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE, //
@@ -24,6 +25,7 @@ public enum GeodesicDisplays {
       Se2GeodesicDisplay.INSTANCE);
   // ---
   public static final List<GeodesicDisplay> SE2_R2 = Arrays.asList( //
+      ClothoidCurveDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE);
 }

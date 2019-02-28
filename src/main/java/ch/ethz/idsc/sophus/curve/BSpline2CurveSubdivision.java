@@ -10,11 +10,13 @@ import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** quadratic B-spline
  * Chaikin 1965 */
 public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
+  private static final Scalar _3_4 = RationalScalar.of(3, 4);
   // ---
   private final GeodesicInterface geodesicInterface;
 
@@ -24,10 +26,7 @@ public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable 
 
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
-    Tensor curve = string(tensor);
-    Tensor p = Last.of(tensor);
-    Tensor q = tensor.get(0);
-    return curve.append(lo(p, q)).append(lo(q, p));
+    return refine(string(tensor), Last.of(tensor), tensor.get(0));
   }
 
   // Hint: curve contracts at the sides
@@ -41,13 +40,14 @@ public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable 
     Tensor p = tensor.get(0);
     for (int index = 1; index < length; ++index) {
       Tensor q = tensor.get(index);
-      curve.append(lo(p, q)).append(lo(q, p));
+      refine(curve, p, q);
       p = q;
     }
     return curve;
   }
 
-  private Tensor lo(Tensor p, Tensor q) {
-    return geodesicInterface.split(p, q, _1_4);
+  private Tensor refine(Tensor curve, Tensor p, Tensor q) {
+    ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(p, q);
+    return curve.append(scalarTensorFunction.apply(_1_4)).append(scalarTensorFunction.apply(_3_4));
   }
 }

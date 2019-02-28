@@ -1,0 +1,65 @@
+// code by ureif
+package ch.ethz.idsc.sophus.curve;
+
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.Arg;
+import ch.ethz.idsc.tensor.sca.Exp;
+import ch.ethz.idsc.tensor.sca.Imag;
+import ch.ethz.idsc.tensor.sca.Real;
+
+public enum ClothoidCurve implements GeodesicInterface {
+  INSTANCE;
+  // ---
+  private static final Tensor w = Tensors.vector(5, 8, 5).divide(RealScalar.of(18));
+  private static final Tensor x = Tensors.vector(-1, 0, 1) //
+      .multiply(RealScalar.of(Math.sqrt(3 / 5))) //
+      .map(RealScalar.ONE::add) //
+      .divide(RealScalar.of(2));
+  private static final Scalar _68 = RealScalar.of(68);
+  private static final Scalar _46 = RealScalar.of(46);
+
+  @Override // from GeodesicInterface
+  public ScalarTensorFunction curve(Tensor p, Tensor q) {
+    return t -> split(p, q, t);
+  }
+
+  @Override // from GeodesicInterface
+  public Tensor split(Tensor p, Tensor q, Scalar t) {
+    // TODO optimize since part does not depend on t
+    Scalar p0 = ComplexScalar.of(p.Get(0), p.Get(1));
+    Scalar a0 = p.Get(2);
+    Scalar p1 = ComplexScalar.of(q.Get(0), q.Get(1));
+    Scalar a1 = q.Get(2);
+    // ---
+    Scalar d = p1.subtract(p0);
+    Scalar b0 = Arg.FUNCTION.apply(Exp.FUNCTION.apply(a0.multiply(ComplexScalar.I)).divide(d));
+    Scalar b1 = Arg.FUNCTION.apply(Exp.FUNCTION.apply(a1.multiply(ComplexScalar.I)).divide(d));
+    // ---
+    Scalar f1 = b0.multiply(b0).add(b1.multiply(b1)).divide(_68);
+    Scalar f2 = b0.multiply(b1).divide(_46);
+    Scalar f3 = RationalScalar.of(1, 4);
+    Scalar bm = b0.add(b1).multiply(f1.subtract(f2).subtract(f3));
+    ClothoidQuadratic fE = new ClothoidQuadratic(b0, bm, b1);
+    // ---
+    Scalar _1_t = RealScalar.ONE.subtract(t);
+    Tensor wl = w.multiply(t);
+    Tensor wr = w.multiply(_1_t);
+    Tensor xl = x.multiply(t);
+    Tensor xr = x.multiply(_1_t).map(t::add);
+    Scalar il = wl.dot(xl.map(fE)).Get();
+    Scalar ir = wr.dot(xr.map(fE)).Get();
+    Scalar ret_p = p0.add(il.multiply(d).divide(il.add(ir)));
+    Scalar ret_a = Arg.FUNCTION.apply(fE.apply(t).multiply(d));
+    return Tensors.of( //
+        Real.FUNCTION.apply(ret_p), //
+        Imag.FUNCTION.apply(ret_p), //
+        ret_a);
+  }
+}

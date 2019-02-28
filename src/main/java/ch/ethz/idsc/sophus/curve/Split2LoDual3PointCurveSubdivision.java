@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -18,16 +19,26 @@ public class Split2LoDual3PointCurveSubdivision extends Dual3PointCurveSubdivisi
   // ---
   private final Scalar p_q;
   private final Scalar pq_r;
+  private final Scalar q_r;
+  private final Scalar p_qr;
 
   private Split2LoDual3PointCurveSubdivision(GeodesicInterface geodesicInterface, Scalar p_q, Scalar pq_r) {
     super(geodesicInterface);
     this.p_q = p_q;
     this.pq_r = pq_r;
+    q_r = RealScalar.ONE.subtract(p_q);
+    p_qr = RealScalar.ONE.subtract(pq_r);
   }
 
   @Override // from Dual3PointCurveSubdivision
   protected Tensor lo(Tensor p, Tensor q, Tensor r) {
     Tensor pq = geodesicInterface.split(p, q, p_q);
     return geodesicInterface.split(pq, r, pq_r);
+  }
+
+  @Override // from Dual3PointCurveSubdivision
+  protected Tensor hi(Tensor p, Tensor q, Tensor r) {
+    Tensor qr = geodesicInterface.split(q, r, q_r);
+    return geodesicInterface.split(p, qr, p_qr);
   }
 }

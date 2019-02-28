@@ -19,12 +19,12 @@ public enum GeodesicDemoLauncher {
     DemoLauncher.build(Arrays.asList( //
         GeodesicCenterFilterDemo.class, //
         GeodesicCenterSplitsDemo.class, //
+        BezierFunctionSplitsDemo.class, //
+        BSplineFunctionDemo.class, //
         CurveSubdivisionDemo.class, //
         GeodesicDemo.class, //
-        BezierFunctionSplitsDemo.class, //
         ExtrapolationSplitsDemo.class, //
-        BezierFunctionDemo.class, //
-        BSplineFunctionDemo.class //
+        BezierFunctionDemo.class //
     ));
   }
 }

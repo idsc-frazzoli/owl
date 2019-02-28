@@ -48,7 +48,7 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
     Tensor q = geodesicDisplay.project(xya);
     ScalarTensorFunction scalarTensorFunction = //
         geodesicInterface.curve(geodesicDisplay.project(xya.map(Scalar::zero)), q);
-    for (Tensor split : Subdivide.of(0, 1, SPLITS).map(scalarTensorFunction)) {
+    for (Tensor split : Subdivide.of(-1, 2, SPLITS).map(scalarTensorFunction)) {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(split));
       graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape()));
       geometricLayer.popMatrix();
