@@ -11,20 +11,20 @@ import java.util.Objects;
  * TODO definition minimal element
  * 
  * @param <T> type of elements to compare */
-public class WeakOrderMinTracker<T> implements MinTrackerInterface<T> {
-  public static <T> WeakOrderMinTracker<T> withList(WeakOrderComparator<T> weakOrderComparator) {
-    return new WeakOrderMinTracker<>(weakOrderComparator, new LinkedList<>());
+public class TotalPreorderMinTracker<T> implements MinTrackerInterface<T> {
+  public static <T> TotalPreorderMinTracker<T> withList(TotalPreorderComparator<T> weakOrderComparator) {
+    return new TotalPreorderMinTracker<>(weakOrderComparator, new LinkedList<>());
   }
 
-  public static <T> WeakOrderMinTracker<T> withSet(WeakOrderComparator<T> weakOrderComparator) {
-    return new WeakOrderMinTracker<>(weakOrderComparator, new HashSet<>());
+  public static <T> TotalPreorderMinTracker<T> withSet(TotalPreorderComparator<T> weakOrderComparator) {
+    return new TotalPreorderMinTracker<>(weakOrderComparator, new HashSet<>());
   }
 
   // ---
-  private final WeakOrderComparator<T> weakOrderComparator;
+  private final TotalPreorderComparator<T> weakOrderComparator;
   private final Collection<T> collection;
 
-  private WeakOrderMinTracker(WeakOrderComparator<T> weakOrderComparator, Collection<T> collection) {
+  private TotalPreorderMinTracker(TotalPreorderComparator<T> weakOrderComparator, Collection<T> collection) {
     this.weakOrderComparator = Objects.requireNonNull(weakOrderComparator);
     this.collection = collection;
   }

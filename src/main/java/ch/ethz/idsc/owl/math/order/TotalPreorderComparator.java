@@ -8,7 +8,7 @@ import java.util.Comparator;
  * 
  * https://en.wikipedia.org/wiki/Preorder */
 @FunctionalInterface
-public interface WeakOrderComparator<T> {
+public interface TotalPreorderComparator<T> {
   /** Compares to elements in a weakly ordered set.
    * 
    * For two elements x and y in a weakly ordered set one of the following holds:
@@ -22,5 +22,5 @@ public interface WeakOrderComparator<T> {
    * WeakOrderComparison.LESS_EQUALS_ONLY if <tt>x &le y</tt>,
    * WeakOrder.GREATER_EQUALS_ONLY if <tt>x &ge y</tt>, or
    * WeakOrder.INDIFFERENT if x and y are indifferent (x &le y and x &ge y) */
-  WeakOrderComparison compare(T x, T y);
+  TotalPreorderComparison compare(T x, T y);
 }
