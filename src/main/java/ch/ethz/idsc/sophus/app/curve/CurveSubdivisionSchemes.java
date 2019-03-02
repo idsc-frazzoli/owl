@@ -36,6 +36,7 @@ import ch.ethz.idsc.tensor.Tensors;
   DODGSON_SABIN(i -> DodgsonSabinCurveSubdivision.INSTANCE), //
   THREEPOINT(HormannSabinCurveSubdivision::of), //
   FOURPOINT(FourPointCurveSubdivision::new), //
+  FOURPOINT2(CurveSubdivisionHelper::fps), //
   C2CUBIC(DualC2FourPointCurveSubdivision::cubic), //
   C2TIGHT(DualC2FourPointCurveSubdivision::tightest), //
   SIXPOINT(SixPointCurveSubdivision::new), //

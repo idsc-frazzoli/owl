@@ -26,7 +26,8 @@ public class SymGeodesicTest extends TestCase {
         GeodesicCenter.of(SymGeodesic.INSTANCE, SmoothingKernel.DIRICHLET);
     Tensor vector = Tensor.of(IntStream.range(0, 5).mapToObj(SymScalar::leaf));
     Tensor tensor = tensorUnaryOperator.apply(vector);
-    assertEquals(tensor.toString(), "{{{0, 1, 1/2}, 2, 1/5}, {{4, 3, 1/2}, 2, 1/5}, 1/2}");
+    // System.out.println(tensor.toString());
+    assertEquals(tensor.toString(), "{{{0, 1, 1/2}, 2, 1/5}, {2, {3, 4, 1/2}, 4/5}, 1/2}");
     SymLink root = SymLink.build((SymScalar) tensor);
     Tensor pose = root.getPosition();
     assertEquals(pose, Tensors.vector(2, -1.5));

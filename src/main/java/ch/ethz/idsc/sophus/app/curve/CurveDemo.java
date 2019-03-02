@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensor;
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
 
   public CurveDemo() {
-    super(true, false, GeodesicDisplays.ALL);
+    super(true, GeodesicDisplays.ALL);
     // ---
     jToggleCrvt.setSelected(false);
     timerFrame.jToolBar.add(jToggleCrvt);

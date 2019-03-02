@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensors;
   // ---
 
   public GeodesicSplitsDemo() {
-    super(true, false, GeodesicDisplays.ALL);
+    super(true, GeodesicDisplays.ALL);
   }
 
   @Override // from RenderInterface

@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
 
   BSplineBasisDemo() {
-    super(true, true, GeodesicDisplays.R2_ONLY);
+    super(true, GeodesicDisplays.R2_ONLY);
     // ---
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
         GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
     Tensor refined = Subdivide.of(0, effective.length() - 1, 4 << levels).map(bSplineFunction);
     renderControlPoints(geometricLayer, graphics);
-    renderCurve(refined, false, geometricLayer, graphics);
+    CurveCurvatureRender.of(refined, false, geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

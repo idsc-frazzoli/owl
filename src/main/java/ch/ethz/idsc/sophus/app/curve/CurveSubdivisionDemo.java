@@ -28,6 +28,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.util.StandardMenu;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
@@ -182,7 +183,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
       lineRender.setCurve(Nest.of(tensorUnaryOperator, control, 8), cyclic).render(geometricLayer, graphics);
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    renderCurve(render, cyclic, geometricLayer, graphics);
+    CurveCurvatureRender.of(render, cyclic, geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
     return refined;

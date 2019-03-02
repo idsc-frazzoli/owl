@@ -20,10 +20,10 @@ public class ClothoidQuadratic implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar s) {
-    return Exp.FUNCTION.apply(quad(s).multiply(ComplexScalar.I));
+    return Exp.FUNCTION.apply(angle(s).multiply(ComplexScalar.I));
   }
 
-  /* package */ Scalar quad(Scalar s) {
+  /* package */ Scalar angle(Scalar s) {
     Scalar _s_1 = s.subtract(RealScalar.ONE);
     Scalar _1_s = RealScalar.ONE.subtract(s);
     Scalar _2s_1 = RealScalar.of(2).multiply(s).subtract(RealScalar.ONE);
