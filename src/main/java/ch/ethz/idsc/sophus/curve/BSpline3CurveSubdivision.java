@@ -67,7 +67,7 @@ public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
    * @param q
    * @param r
    * @return reposition of point q */
-  protected final Tensor center(Tensor p, Tensor q, Tensor r) {
+  protected Tensor center(Tensor p, Tensor q, Tensor r) {
     return center( //
         geodesicInterface.split(p, q, _3_4), //
         geodesicInterface.split(q, r, _1_4));

@@ -18,7 +18,7 @@ public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable 
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _3_4 = RationalScalar.of(3, 4);
   // ---
-  private final GeodesicInterface geodesicInterface;
+  protected final GeodesicInterface geodesicInterface;
 
   public BSpline2CurveSubdivision(GeodesicInterface geodesicInterface) {
     this.geodesicInterface = geodesicInterface;
@@ -46,7 +46,7 @@ public class BSpline2CurveSubdivision implements CurveSubdivision, Serializable 
     return curve;
   }
 
-  private Tensor refine(Tensor curve, Tensor p, Tensor q) {
+  Tensor refine(Tensor curve, Tensor p, Tensor q) {
     ScalarTensorFunction scalarTensorFunction = geodesicInterface.curve(p, q);
     return curve.append(scalarTensorFunction.apply(_1_4)).append(scalarTensorFunction.apply(_3_4));
   }

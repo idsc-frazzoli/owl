@@ -5,7 +5,9 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline2CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.BSpline2LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.BSpline3LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline5CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline6CurveSubdivision;
@@ -24,7 +26,9 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ enum CurveSubdivisionSchemes {
   BSPLINE1(BSpline1CurveSubdivision::new), //
   BSPLINE2(BSpline2CurveSubdivision::new), //
-  BSPLINE3(BSpline3CurveSubdivision::new),
+  BSPLINE2LR(BSpline2LRCurveSubdivision::new), //
+  BSPLINE3(BSpline3CurveSubdivision::new), //
+  BSPLINE3LR(BSpline3LRCurveSubdivision::new),
   /** Dyn/Sharon 2014 that uses 2 binary averages */
   BSPLINE4(BSpline4CurveSubdivision::of),
   /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */

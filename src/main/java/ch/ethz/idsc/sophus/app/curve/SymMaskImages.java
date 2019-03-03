@@ -8,7 +8,9 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline2CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.BSpline2LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.BSpline3LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline5CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
@@ -25,7 +27,9 @@ import ch.ethz.idsc.tensor.Tensor;
 /* package */ enum SymMaskImages {
   BSPLINE1(BSpline1CurveSubdivision::new, 2, 0, 1), //
   BSPLINE2(BSpline2CurveSubdivision::new, 2, 0, 1), //
+  BSPLINE2LR(BSpline2LRCurveSubdivision::new, 2, 0, 1), //
   BSPLINE3(BSpline3CurveSubdivision::new, 3, 1, 2), //
+  BSPLINE3LR(BSpline3LRCurveSubdivision::new, 3, 1, 2), //
   BSPLINE4(BSpline4CurveSubdivision::of, 3, 2, 3), //
   BSPLINE4S2(BSpline4CurveSubdivision::split2, 3, 2, 3), //
   BSPLINE4S3(CurveSubdivisionHelper::split3, 3, 2, 3), //
