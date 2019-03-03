@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.curve.BSpline2LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.BSpline4LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline5CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DualC2FourPointCurveSubdivision;
@@ -33,6 +34,7 @@ import ch.ethz.idsc.tensor.Tensor;
   BSPLINE4(BSpline4CurveSubdivision::of, 3, 2, 3), //
   BSPLINE4S2(BSpline4CurveSubdivision::split2, 3, 2, 3), //
   BSPLINE4S3(CurveSubdivisionHelper::split3, 3, 2, 3), //
+  BSPLINE4LR(BSpline4LRCurveSubdivision::new, 3, 2, 3), //
   BSPLINE5(BSpline5CurveSubdivision::new, 4, 2, 3), //
   THREEPOINT(HormannSabinCurveSubdivision::of, 5, 1, 2), //
   FOURPOINT(FourPointCurveSubdivision::new, 6, 0, 3), //

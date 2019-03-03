@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.curve.BSpline2LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.BSpline4LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline5CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline6CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
@@ -30,7 +31,8 @@ import ch.ethz.idsc.tensor.Tensors;
   BSPLINE3(BSpline3CurveSubdivision::new), //
   BSPLINE3LR(BSpline3LRCurveSubdivision::new),
   /** Dyn/Sharon 2014 that uses 2 binary averages */
-  BSPLINE4(BSpline4CurveSubdivision::of),
+  BSPLINE4(BSpline4CurveSubdivision::of), //
+  BSPLINE4LR(BSpline4LRCurveSubdivision::new), //
   /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */
   BSPLINE4S2(BSpline4CurveSubdivision::split2),
   /** Hakenberg 2018 that uses 3 binary averages */
