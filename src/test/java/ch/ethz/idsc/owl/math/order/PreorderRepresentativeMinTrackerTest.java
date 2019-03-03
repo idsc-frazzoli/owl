@@ -1,3 +1,4 @@
+// code by astoll
 package ch.ethz.idsc.owl.math.order;
 
 import junit.framework.TestCase;
@@ -64,7 +65,7 @@ public class PreorderRepresentativeMinTrackerTest extends TestCase {
     assertTrue(digitSumDivisibility.getMinElements().contains(333));
     assertTrue(digitSumDivisibility.getMinElements().size() == 1);
   }
-  
+
   public void testOnlyOneRepresentativeList() {
     PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INSTANCE;
     PreorderRepresentativeMinTracker<Integer> digitSumDivisibility = PreorderRepresentativeMinTracker.withList(preorderComparator);
@@ -78,9 +79,9 @@ public class PreorderRepresentativeMinTrackerTest extends TestCase {
     assertFalse(digitSumDivisibility.getMinElements().contains(1111223));
     digitSumDivisibility.digest(1);
     assertTrue(digitSumDivisibility.getMinElements().contains(1));
-    assertTrue(digitSumDivisibility.getMinElements().size() == 1); 
+    assertTrue(digitSumDivisibility.getMinElements().size() == 1);
   }
-  
+
   public void testOnlyOneRepresentativeSet() {
     PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INSTANCE;
     PreorderRepresentativeMinTracker<Integer> digitSumDivisibility = PreorderRepresentativeMinTracker.withSet(preorderComparator);
@@ -94,6 +95,6 @@ public class PreorderRepresentativeMinTrackerTest extends TestCase {
     assertFalse(digitSumDivisibility.getMinElements().contains(1111223));
     digitSumDivisibility.digest(1);
     assertTrue(digitSumDivisibility.getMinElements().contains(1));
-    assertTrue(digitSumDivisibility.getMinElements().size() == 1); 
+    assertTrue(digitSumDivisibility.getMinElements().size() == 1);
   }
 }
