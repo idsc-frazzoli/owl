@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BSpline3LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline5CurveSubdivision;
@@ -18,6 +17,7 @@ import ch.ethz.idsc.sophus.curve.DualC2FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.HormannSabinCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.LaneRiesenfeld2CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.LaneRiesenfeld3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.SixPointCurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensor;
   BSPLINE2(BSpline2CurveSubdivision::numeric, 2, 0, 1), //
   BSPLINE2LR(LaneRiesenfeld2CurveSubdivision::numeric, 2, 0, 1), //
   BSPLINE3(BSpline3CurveSubdivision::new, 3, 1, 2), //
-  BSPLINE3LR(BSpline3LRCurveSubdivision::new, 3, 1, 2), //
+  BSPLINE3LR(LaneRiesenfeld3CurveSubdivision::new, 3, 1, 2), //
   BSPLINE4(BSpline4CurveSubdivision::of, 3, 2, 3), //
   BSPLINE4S2(BSpline4CurveSubdivision::split2, 3, 2, 3), //
   BSPLINE4S3(CurveSubdivisionHelper::split3, 3, 2, 3), //

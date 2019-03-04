@@ -37,7 +37,7 @@ public class GokartWaypoint2Demo extends GokartDemo {
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     final StateTime initial = new StateTime(Tensors.vector(33.6, 41.5, 0.6), RealScalar.ZERO);
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
-    waypoints = BSpline2CurveSubdivision.exact(Se2Geodesic.INSTANCE).cyclic(waypoints);
+    waypoints = BSpline2CurveSubdivision.of(Se2Geodesic.INSTANCE).cyclic(waypoints);
     CostFunction costFunction = WaypointDistanceCost.of( //
         waypoints, true, RealScalar.ONE, RealScalar.of(7.5), new Dimension(640, 640));
     GokartVecEntity gokartEntity = new GokartVecEntity(initial) {

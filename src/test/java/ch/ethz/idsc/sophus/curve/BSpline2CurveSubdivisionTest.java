@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 
 public class BSpline2CurveSubdivisionTest extends TestCase {
   public void testSimple() {
-    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.exact(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = curveSubdivision.cyclic(tensor);
@@ -31,7 +31,7 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
   }
 
   public void testString() {
-    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.exact(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor string = curveSubdivision.string(Tensors.vector(10, 11.));
     assertEquals(string, Tensors.vector(10.25, 10.75));
     assertFalse(ExactScalarQ.all(string));
@@ -39,7 +39,7 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
 
   public void testStringTwo() {
     Tensor curve = Tensors.vector(0, 1);
-    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.exact(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor refined = curveSubdivision.string(curve);
     assertEquals(refined, Tensors.fromString("{1/4, 3/4}"));
     assertTrue(ExactScalarQ.all(refined));
@@ -47,7 +47,7 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
 
   public void testStringOne() {
     Tensor curve = Tensors.vector(1);
-    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.exact(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor refined = curveSubdivision.string(curve);
     assertEquals(refined, Tensors.fromString("{1}"));
     assertTrue(ExactScalarQ.all(refined));
@@ -55,7 +55,7 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
 
   public void testStringEmpty() {
     Tensor curve = Tensors.vector();
-    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.exact(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor refined = curveSubdivision.string(curve);
     assertTrue(Tensors.isEmpty(refined));
     assertTrue(ExactScalarQ.all(refined));
@@ -64,7 +64,7 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
   public void testStringRange() {
     int length = 9;
     Tensor curve = Range.of(0, length + 1);
-    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.exact(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor refined = curveSubdivision.string(curve);
     Tensor tensor = Subdivide.of(0, length, length * 2).map(scalar -> scalar.add(RationalScalar.of(1, 4)));
     assertEquals(refined, tensor.extract(0, tensor.length() - 1));
@@ -72,13 +72,13 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator fps = BSpline2CurveSubdivision.exact(RnGeodesic.INSTANCE)::cyclic;
+    TensorUnaryOperator fps = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
   }
 
   public void testScalarFail() {
-    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.exact(Se2Geodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.of(Se2Geodesic.INSTANCE);
     try {
       curveSubdivision.string(RealScalar.ONE);
       fail();

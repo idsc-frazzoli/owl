@@ -108,13 +108,14 @@ public class CurveSubdivisionDemo extends CurveDemo {
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();
     // ---
+    // jToggleCyclic.setSelected(true);
     timerFrame.jToolBar.add(jToggleCyclic);
     // ---
     jToggleSymi.setSelected(true);
     timerFrame.jToolBar.add(jToggleSymi);
     // ---
     spinnerLabel.setArray(CurveSubdivisionSchemes.values());
-    spinnerLabel.setIndex(2);
+    spinnerLabel.setIndex(4);
     spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
     // ---
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));

@@ -12,12 +12,12 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * De Rham
  * Chaikin 1965 */
 public class BSpline2CurveSubdivision extends AbstractBSpline2CurveSubdivision {
-  public static CurveSubdivision exact(GeodesicInterface geodesicInterface) {
-    return new BSpline2CurveSubdivision(geodesicInterface, RealScalar.of(0.25), RealScalar.of(0.75));
+  public static CurveSubdivision of(GeodesicInterface geodesicInterface) {
+    return new BSpline2CurveSubdivision(geodesicInterface, RationalScalar.of(1, 4), RationalScalar.of(3, 4));
   }
 
   public static CurveSubdivision numeric(GeodesicInterface geodesicInterface) {
-    return new BSpline2CurveSubdivision(geodesicInterface, RationalScalar.of(1, 4), RationalScalar.of(3, 4));
+    return new BSpline2CurveSubdivision(geodesicInterface, RealScalar.of(0.25), RealScalar.of(0.75));
   }
 
   private final Scalar _1_4;
