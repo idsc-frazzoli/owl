@@ -10,14 +10,13 @@ import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BSpline4LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline5CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.DualC2FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.HormannSabinCurveSubdivision;
-import ch.ethz.idsc.sophus.curve.LaneRiesenfeld2CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.LaneRiesenfeld3CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.SixPointCurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
@@ -28,13 +27,18 @@ import ch.ethz.idsc.tensor.Tensor;
 /* package */ enum SymMaskImages {
   BSPLINE1(BSpline1CurveSubdivision::new, 2, 0, 1), //
   BSPLINE2(BSpline2CurveSubdivision::numeric, 2, 0, 1), //
-  BSPLINE2LR(LaneRiesenfeld2CurveSubdivision::numeric, 2, 0, 1), //
+  // BSPLINE2LR(LaneRiesenfeld2CurveSubdivision::numeric, 2, 0, 1), //
   BSPLINE3(BSpline3CurveSubdivision::new, 3, 1, 2), //
   BSPLINE3LR(LaneRiesenfeld3CurveSubdivision::new, 3, 1, 2), //
+  LR1(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 1), 2, 0, 1), //
+  LR2(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 2), 3, 0, 1), //
+  LR3(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 3), 3, 1, 2), //
+  LR4(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 4), 5, 1, 2), //
+  LR5(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 5), 5, 2, 3), //
   BSPLINE4(BSpline4CurveSubdivision::of, 3, 2, 3), //
   BSPLINE4S2(BSpline4CurveSubdivision::split2, 3, 2, 3), //
   BSPLINE4S3(CurveSubdivisionHelper::split3, 3, 2, 3), //
-  BSPLINE4LR(BSpline4LRCurveSubdivision::new, 3, 2, 3), //
+  // BSPLINE4LR(BSpline4LRCurveSubdivision::new, 3, 2, 3), //
   BSPLINE5(BSpline5CurveSubdivision::new, 4, 2, 3), //
   THREEPOINT(HormannSabinCurveSubdivision::of, 5, 1, 2), //
   FOURPOINT(FourPointCurveSubdivision::new, 6, 0, 3), //

@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.ComplexScalar;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,13 +16,15 @@ import ch.ethz.idsc.tensor.sca.Real;
 public enum ClothoidCurve implements GeodesicInterface {
   INSTANCE;
   // ---
-  private static final Tensor w = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
-  private static final Tensor x = Tensors.vector(-1, 0, 1) //
+  private static final Tensor W = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
+  private static final Tensor X = Tensors.vector(-1, 0, 1) //
       .multiply(RealScalar.of(Math.sqrt(3 / 5))) //
       .map(RealScalar.ONE::add) //
       .divide(RealScalar.of(2));
+  private static final Scalar _1 = RealScalar.of(1.0);
   private static final Scalar _68 = RealScalar.of(68.0);
   private static final Scalar _46 = RealScalar.of(46.0);
+  private static final Scalar _1_4 = RealScalar.of(0.25);
 
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
@@ -38,16 +39,16 @@ public enum ClothoidCurve implements GeodesicInterface {
     // ---
     Scalar f1 = b0.multiply(b0).add(b1.multiply(b1)).divide(_68);
     Scalar f2 = b0.multiply(b1).divide(_46);
-    Scalar f3 = RationalScalar.of(1, 4);
+    Scalar f3 = _1_4;
     Scalar bm = b0.add(b1).multiply(f1.subtract(f2).subtract(f3));
     ClothoidQuadratic fE = new ClothoidQuadratic(b0, bm, b1);
     // ---
     return t -> {
-      Scalar _1_t = RealScalar.ONE.subtract(t);
-      Tensor wl = w.multiply(t);
-      Tensor wr = w.multiply(_1_t);
-      Tensor xl = x.multiply(t);
-      Tensor xr = x.multiply(_1_t).map(t::add);
+      Scalar _1_t = _1.subtract(t);
+      Tensor wl = W.multiply(t);
+      Tensor wr = W.multiply(_1_t);
+      Tensor xl = X.multiply(t);
+      Tensor xr = X.multiply(_1_t).map(t::add);
       Scalar il = wl.dot(xl.map(fE)).Get();
       Scalar ir = wr.dot(xr.map(fE)).Get();
       Scalar ret_p = p0.add(il.multiply(d).divide(il.add(ir)));

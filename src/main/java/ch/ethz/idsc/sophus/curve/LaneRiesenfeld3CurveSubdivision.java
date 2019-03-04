@@ -1,7 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -10,9 +13,11 @@ import ch.ethz.idsc.tensor.alg.Last;
 /** cubic B-spline
  * 
  * Dyn/Sharon 2014 p.16 show that the scheme has a contractivity factor of mu = 1/2 */
-public class LaneRiesenfeld3CurveSubdivision extends BSpline1CurveSubdivision {
+public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serializable {
+  private final GeodesicInterface geodesicInterface;
+
   public LaneRiesenfeld3CurveSubdivision(GeodesicInterface geodesicInterface) {
-    super(geodesicInterface);
+    this.geodesicInterface = geodesicInterface;
   }
 
   @Override // from CurveSubdivision
@@ -67,5 +72,9 @@ public class LaneRiesenfeld3CurveSubdivision extends BSpline1CurveSubdivision {
 
   private Tensor center(Tensor pq, Tensor qr, Tensor q) {
     return center(center(pq, q), center(q, qr));
+  }
+
+  private Tensor center(Tensor p, Tensor q) {
+    return geodesicInterface.split(p, q, RationalScalar.HALF);
   }
 }

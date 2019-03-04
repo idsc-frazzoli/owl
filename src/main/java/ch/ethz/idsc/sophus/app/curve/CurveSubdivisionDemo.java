@@ -165,11 +165,11 @@ public class CurveSubdivisionDemo extends CurveDemo {
     if (jToggleBndy.isSelected() && !cyclic && 1 < control.length()) {
       switch (scheme) {
       case BSPLINE2:
-      case BSPLINE2LR:
       case BSPLINE4:
-      case BSPLINE4LR:
       case BSPLINE4S2:
       case BSPLINE4S3:
+      case LR2:
+      case LR4:
         control = Join.of( //
             control.extract(0, 1), //
             control, //
