@@ -46,6 +46,9 @@ import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Nest;
 
 public class CurveSubdivisionDemo extends CurveDemo {
+  private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] //
+  { { 50, 0, 100 }, { 0, -50, 640 }, { 0, 0, 1 } });
+  // ---
   private final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
@@ -128,12 +131,13 @@ public class CurveSubdivisionDemo extends CurveDemo {
     // ---
     {
       JSlider jSlider = new JSlider(1, 999, 500);
-      jSlider.setPreferredSize(new Dimension(500, 28));
+      jSlider.setPreferredSize(new Dimension(360, 28));
       jSlider.addChangeListener(changeEvent -> //
       CurveSubdivisionHelper.MAGIC_C = RationalScalar.of(jSlider.getValue(), 1000));
       timerFrame.jToolBar.add(jSlider);
     }
-    timerFrame.geometricComponent.addRenderInterfaceBackground(StaticHelper.GRID_RENDER);
+    timerFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);
+    // timerFrame.geometricComponent.addRenderInterfaceBackground(StaticHelper.GRID_RENDER);
   }
 
   @Override
@@ -160,9 +164,11 @@ public class CurveSubdivisionDemo extends CurveDemo {
     if (jToggleBndy.isSelected() && !cyclic && 1 < control.length()) {
       switch (scheme) {
       case BSPLINE2:
+      case BSPLINE2LR:
       case BSPLINE4:
-      case BSPLINE4S3:
+      case BSPLINE4LR:
       case BSPLINE4S2:
+      case BSPLINE4S3:
         control = Join.of( //
             control.extract(0, 1), //
             control, //
@@ -198,7 +204,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
 
   public static void main(String[] args) {
     AbstractDemo abstractDemo = new CurveSubdivisionDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

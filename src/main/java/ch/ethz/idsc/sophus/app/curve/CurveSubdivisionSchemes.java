@@ -5,7 +5,6 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.curve.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline2CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.BSpline2LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline3LRCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
@@ -19,6 +18,7 @@ import ch.ethz.idsc.sophus.curve.EightPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.FarSixPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.curve.HormannSabinCurveSubdivision;
+import ch.ethz.idsc.sophus.curve.LaneRiesenfeld2CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.SixPointCurveSubdivision;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -26,8 +26,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ enum CurveSubdivisionSchemes {
   BSPLINE1(BSpline1CurveSubdivision::new), //
-  BSPLINE2(BSpline2CurveSubdivision::new), //
-  BSPLINE2LR(BSpline2LRCurveSubdivision::new), //
+  BSPLINE2(BSpline2CurveSubdivision::numeric), //
+  BSPLINE2LR(LaneRiesenfeld2CurveSubdivision::numeric), //
   BSPLINE3(BSpline3CurveSubdivision::new), //
   BSPLINE3LR(BSpline3LRCurveSubdivision::new),
   /** Dyn/Sharon 2014 that uses 2 binary averages */

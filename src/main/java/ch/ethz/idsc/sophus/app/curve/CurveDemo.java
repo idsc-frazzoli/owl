@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
@@ -17,12 +18,15 @@ import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ abstract class CurveDemo extends ControlPointsDemo {
+  private static final int WIDTH = 640;
+  private static final int HEIGHT = 360;
+  // ---
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
 
   public CurveDemo() {
     super(true, GeodesicDisplays.ALL);
     // ---
-    jToggleCrvt.setSelected(false);
+    jToggleCrvt.setSelected(true);
     timerFrame.jToolBar.add(jToggleCrvt);
   }
 
@@ -30,12 +34,13 @@ import ch.ethz.idsc.tensor.Tensor;
   public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor refined = protected_render(geometricLayer, graphics);
     // ---
+    Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
     if (jToggleCrvt.isSelected() && 1 < refined.length()) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       CurveVisualSet curveVisualSet = new CurveVisualSet(Tensor.of(refined.stream().map(geodesicDisplay::toPoint)));
       curveVisualSet.addCurvature();
-      if (2 < refined.get(0).length())
-        curveVisualSet.addArcTan(refined);
+      // if (2 < refined.get(0).length())
+      // curveVisualSet.addArcTan(refined);
       VisualSet visualSet = curveVisualSet.visualSet();
       {
         // {
@@ -60,7 +65,7 @@ import ch.ethz.idsc.tensor.Tensor;
         // }
       }
       JFreeChart jFreeChart = ListPlot.of(visualSet);
-      jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 800, 480));
+      jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
     }
   }
 

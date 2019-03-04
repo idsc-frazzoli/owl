@@ -6,7 +6,6 @@ import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 /* package */ enum CurveSubdivisionHelper {
@@ -18,6 +17,6 @@ import ch.ethz.idsc.tensor.Scalar;
   }
 
   static CurveSubdivision fps(GeodesicInterface geodesicInterface) {
-    return new FourPointCurveSubdivision(geodesicInterface, MAGIC_C.multiply(RealScalar.of(0.25)));
+    return new FourPointCurveSubdivision(geodesicInterface, MAGIC_C.multiply(RationalScalar.of(125, 1000)));
   }
 }
