@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.curve;
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class ClothoidQuadratic implements ScalarUnaryOperator {
@@ -20,7 +19,7 @@ public class ClothoidQuadratic implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar s) {
-    return Exp.FUNCTION.apply(angle(s).multiply(ComplexScalar.I));
+    return ComplexScalar.unit(angle(s));
   }
 
   /* package */ Scalar angle(Scalar s) {

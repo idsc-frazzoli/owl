@@ -11,6 +11,7 @@ import ch.ethz.idsc.sophus.app.curve.BSplineFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.BezierFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.CurveSubdivisionDemo;
 import ch.ethz.idsc.sophus.app.filter.GeodesicCenterFilterDemo;
+import ch.ethz.idsc.sophus.app.misc.DubinsPathDemo;
 import ch.ethz.idsc.sophus.app.misc.GeodesicDemo;
 
 public enum GeodesicDemoLauncher {
@@ -23,6 +24,7 @@ public enum GeodesicDemoLauncher {
         BSplineFunctionDemo.class, //
         CurveSubdivisionDemo.class, //
         GeodesicDemo.class, //
+        DubinsPathDemo.class, //
         ExtrapolationSplitsDemo.class, //
         BezierFunctionDemo.class //
     ));

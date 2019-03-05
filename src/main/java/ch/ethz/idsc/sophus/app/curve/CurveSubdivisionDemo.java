@@ -41,6 +41,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Nest;
@@ -115,7 +116,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
     timerFrame.jToolBar.add(jToggleSymi);
     // ---
     spinnerLabel.setArray(CurveSubdivisionSchemes.values());
-    spinnerLabel.setIndex(4);
+    spinnerLabel.setIndex(9);
     spinnerLabel.addToComponentReduced(timerFrame.jToolBar, new Dimension(150, 28), "scheme");
     // ---
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
@@ -157,7 +158,6 @@ public class CurveSubdivisionDemo extends CurveDemo {
       }
     }
     GraphicsUtil.setQualityHigh(graphics);
-    Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
@@ -168,8 +168,6 @@ public class CurveSubdivisionDemo extends CurveDemo {
       case BSPLINE4:
       case BSPLINE4S2:
       case BSPLINE4S3:
-      case LR2:
-      case LR4:
         control = Join.of( //
             control.extract(0, 1), //
             control, //
@@ -183,8 +181,11 @@ public class CurveSubdivisionDemo extends CurveDemo {
     final Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     {
+      Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
       TensorUnaryOperator tensorUnaryOperator = create(function.apply(geodesicDisplay.geodesicInterface()), cyclic);
+      Timing timing = Timing.started();
       refined = Nest.of(tensorUnaryOperator, control, levels);
+      System.out.println(String.format("%8.5f", timing.seconds()));
     }
     if (jToggleLine.isSelected()) {
       TensorUnaryOperator tensorUnaryOperator = create(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface()), cyclic);

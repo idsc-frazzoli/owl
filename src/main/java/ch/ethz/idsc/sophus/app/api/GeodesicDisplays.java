@@ -8,7 +8,6 @@ public enum GeodesicDisplays {
   ;
   public static final List<GeodesicDisplay> ALL = Arrays.asList( //
       ClothoidCurveDisplay.INSTANCE, //
-      // ClothoidCurveDisplay2.INSTANCE, //
       Se2CoveringGeodesicDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE, //
