@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.LagrangeInterpolation;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
@@ -77,7 +78,7 @@ public class LagrangeInterpolationDemo extends CurveDemo {
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
     Tensor refined = Subdivide.of(0, control.length(), 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    renderCurve(render, false, geometricLayer, graphics);
+    CurveCurvatureRender.of(render, false, geometricLayer, graphics);
     {
       Tensor selected = interpolation.at(parameter);
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));

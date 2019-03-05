@@ -39,7 +39,7 @@ public abstract class AbstractSixPointCurveSubdivision extends FourPointCurveSub
       Tensor p = tensor.get(0);
       Tensor q = tensor.get(1);
       Tensor r = tensor.get(2);
-      curve.append(p).append(triple(p, q, r));
+      curve.append(p).append(triple_lo(p, q, r));
       Tensor s = tensor.get(3);
       curve.append(q).append(center(p, q, r, s));
     }
@@ -59,7 +59,7 @@ public abstract class AbstractSixPointCurveSubdivision extends FourPointCurveSub
       Tensor r = tensor.get(last);
       Tensor s = tensor.get(last - 1);
       curve.append(r).append(center(p, q, r, s));
-      curve.append(q).append(triple(p, q, r)).append(p);
+      curve.append(q).append(triple_lo(p, q, r)).append(p);
     }
     return curve;
   }

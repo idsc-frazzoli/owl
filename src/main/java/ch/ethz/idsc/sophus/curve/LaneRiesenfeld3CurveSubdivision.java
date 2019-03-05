@@ -1,35 +1,39 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 
 /** cubic B-spline
  * 
  * Dyn/Sharon 2014 p.16 show that the scheme has a contractivity factor of mu = 1/2 */
-public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
-  private static final Scalar _1_4 = RationalScalar.of(1, 4);
-  private static final Scalar _3_4 = RationalScalar.of(3, 4);
+public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serializable {
+  private final GeodesicInterface geodesicInterface;
 
-  // ---
-  public BSpline3CurveSubdivision(GeodesicInterface geodesicInterface) {
-    super(geodesicInterface);
+  public LaneRiesenfeld3CurveSubdivision(GeodesicInterface geodesicInterface) {
+    this.geodesicInterface = geodesicInterface;
   }
 
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
+    if (tensor.length() < 2)
+      return tensor.copy();
     Tensor curve = Tensors.empty();
     int length = tensor.length();
-    for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 1 + length) % length);
+    Tensor pq = center(Last.of(tensor), tensor.get(0));
+    for (int index = 0; index < length; /* nothing */ ) {
       Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % length);
-      curve.append(center(p, q, r)).append(center(q, r));
+      Tensor r = tensor.get(++index % length);
+      Tensor qr = center(q, r);
+      curve.append(center(pq, qr, q)).append(qr);
+      pq = qr;
     }
     return curve;
   }
@@ -48,28 +52,29 @@ public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
 
   private Tensor refine(Tensor tensor) {
     Tensor curve = Tensors.empty();
+    Tensor pq;
     {
       Tensor q = tensor.get(0);
       Tensor r = tensor.get(1);
-      curve.append(q).append(center(q, r));
+      pq = center(q, r); // notation is deliberate
+      curve.append(q).append(pq);
     }
     int last = tensor.length() - 1;
     for (int index = 1; index < last; /* nothing */ ) {
-      Tensor p = tensor.get(index - 1);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get(++index);
-      curve.append(center(p, q, r)).append(center(q, r));
+      Tensor qr = center(q, r);
+      curve.append(center(pq, qr, q)).append(qr);
+      pq = qr;
     }
     return curve.append(tensor.get(last));
   }
 
-  /** @param p
-   * @param q
-   * @param r
-   * @return reposition of point q */
-  protected Tensor center(Tensor p, Tensor q, Tensor r) {
-    return center( //
-        geodesicInterface.split(p, q, _3_4), //
-        geodesicInterface.split(q, r, _1_4));
+  private Tensor center(Tensor pq, Tensor qr, Tensor q) {
+    return center(center(pq, q), center(q, qr));
+  }
+
+  private Tensor center(Tensor p, Tensor q) {
+    return geodesicInterface.split(p, q, RationalScalar.HALF);
   }
 }

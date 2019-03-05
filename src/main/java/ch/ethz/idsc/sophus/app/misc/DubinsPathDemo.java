@@ -8,12 +8,17 @@ import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.curve.BSpline3CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.ClothoidCurve;
+import ch.ethz.idsc.sophus.curve.CurveSubdivision;
+import ch.ethz.idsc.sophus.curve.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.dubins.DubinsPathGenerator;
@@ -21,6 +26,7 @@ import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.PadLeft;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -29,12 +35,13 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Nest;
 
-/* package */ class DubinsPathDemo extends AbstractDemo {
+public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final int POINTS = 200;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   // ---
   private final PathRender pathRender = new PathRender(Color.RED, 2f);
+  private final PathRender pathRender2 = new PathRender(Color.CYAN, 2f);
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -74,6 +81,11 @@ import ch.ethz.idsc.tensor.red.Nest;
       // graphics.setStroke(new BasicStroke(2f));
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
+    {
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.numeric(ClothoidCurve.INSTANCE, 1);
+      Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
+      pathRender2.setCurve(points, false).render(geometricLayer, graphics);
+    }
     { // draw least curved path
       graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
       graphics.setStroke(new BasicStroke(2f));
@@ -84,6 +96,11 @@ import ch.ethz.idsc.tensor.red.Nest;
 
   private static Tensor sample(DubinsPath dubinsPath) {
     return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), POINTS).map(dubinsPath.sampler(START));
+  }
+
+  @Override // from DemoInterface
+  public BaseFrame start() {
+    return timerFrame;
   }
 
   public static void main(String[] args) {

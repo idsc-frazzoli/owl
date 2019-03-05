@@ -68,7 +68,8 @@ public class GeodesicCenter implements TensorUnaryOperator {
     for (int index = 0; index < radius;) {
       Scalar scalar = splits.Get(index++);
       pL = geodesicInterface.split(pL, tensor.get(index), scalar);
-      pR = geodesicInterface.split(pR, tensor.get(2 * radius - index), scalar);
+      Tensor lR = tensor.get(2 * radius - index);
+      pR = geodesicInterface.split(lR, pR, RealScalar.ONE.subtract(scalar));
     }
     return geodesicInterface.split(pL, pR, RationalScalar.HALF);
   }

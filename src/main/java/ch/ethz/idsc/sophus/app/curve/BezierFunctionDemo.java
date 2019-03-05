@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.tensor.Tensor;
@@ -50,7 +51,7 @@ public class BezierFunctionDemo extends CurveDemo {
         : Subdivide.of(0, n / (double) (n - 1), 1 << levels);
     Tensor refined = domain.map(scalarTensorFunction);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    renderCurve(render, false, geometricLayer, graphics);
+    CurveCurvatureRender.of(render, false, geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geometricLayer, graphics, refined);
     return refined;

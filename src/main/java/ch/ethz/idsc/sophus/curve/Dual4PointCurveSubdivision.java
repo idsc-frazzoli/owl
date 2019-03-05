@@ -5,17 +5,22 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** dual scheme */
 public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializable {
   private final GeodesicInterface geodesicInterface;
-  private final Scalar pq_f;
-  private final Scalar rs_f;
-  private final Scalar pqrs;
+  private final Scalar lo_pq;
+  private final Scalar lo_rs;
+  private final Scalar lo_pqrs;
+  private final Scalar hi_pq;
+  private final Scalar hi_rs;
+  private final Scalar hi_pqrs;
 
   /** @param geodesicInterface non-null
    * @param pq_f
@@ -25,9 +30,12 @@ public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializabl
       GeodesicInterface geodesicInterface, //
       Scalar pq_f, Scalar rs_f, Scalar pqrs) {
     this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
-    this.pq_f = pq_f;
-    this.rs_f = rs_f;
-    this.pqrs = pqrs;
+    this.lo_pq = pq_f;
+    this.lo_rs = rs_f;
+    this.lo_pqrs = pqrs;
+    hi_pq = RealScalar.ONE.subtract(lo_rs);
+    hi_rs = RealScalar.ONE.subtract(lo_pq);
+    hi_pqrs = RealScalar.ONE.subtract(lo_pqrs);
   }
 
   @Override // from CurveSubdivision
@@ -40,7 +48,9 @@ public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializabl
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % length);
       Tensor s = tensor.get((index + 2) % length);
-      curve.append(lo(p, q, r, s)).append(lo(s, r, q, p));
+      ScalarTensorFunction c_pq = geodesicInterface.curve(p, q);
+      ScalarTensorFunction c_rs = geodesicInterface.curve(r, s);
+      curve.append(lo(c_pq, c_rs)).append(hi(c_pq, c_rs));
     }
     return curve;
   }
@@ -51,9 +61,16 @@ public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializabl
   }
 
   // @return point between q and r but more towards q
-  private Tensor lo(Tensor p, Tensor q, Tensor r, Tensor s) {
-    Tensor pq = geodesicInterface.split(p, q, pq_f);
-    Tensor rs = geodesicInterface.split(r, s, rs_f);
-    return geodesicInterface.split(pq, rs, pqrs);
+  private Tensor lo(ScalarTensorFunction c_pq, ScalarTensorFunction c_rs) {
+    Tensor pq = c_pq.apply(lo_pq);
+    Tensor rs = c_rs.apply(lo_rs);
+    return geodesicInterface.split(pq, rs, lo_pqrs);
+  }
+
+  // @return point between q and r but more towards r
+  private Tensor hi(ScalarTensorFunction c_pq, ScalarTensorFunction c_rs) {
+    Tensor pq = c_pq.apply(hi_pq);
+    Tensor rs = c_rs.apply(hi_rs);
+    return geodesicInterface.split(pq, rs, hi_pqrs);
   }
 }

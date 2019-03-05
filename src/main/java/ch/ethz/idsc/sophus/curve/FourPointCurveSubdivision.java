@@ -24,11 +24,15 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
   private final static Scalar P1_16 = RationalScalar.of(1, 16);
   private final static Scalar N1_4 = RationalScalar.of(-1, 4);
   private final static Scalar P1_4 = RationalScalar.of(+1, 4);
+  private final static Scalar P5_4 = RationalScalar.of(+5, 4);
+  private final static Scalar P3_4 = RationalScalar.of(+3, 4);
   // ---
   private final Scalar lambda;
+  private final Scalar _1_lam;
 
   public FourPointCurveSubdivision(GeodesicInterface geodesicInterface, Scalar omega) {
     super(geodesicInterface);
+    _1_lam = omega.add(omega).negate(); // TODO
     lambda = omega.add(omega).add(RealScalar.ONE);
   }
 
@@ -64,7 +68,7 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
       Tensor p = tensor.get(0);
       Tensor q = tensor.get(1);
       Tensor r = tensor.get(2);
-      curve.append(p).append(triple(p, q, r));
+      curve.append(p).append(triple_lo(p, q, r));
     }
     int last = tensor.length() - 2;
     for (int index = 1; index < last; ++index) {
@@ -75,10 +79,10 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
       curve.append(q).append(center(p, q, r, s));
     }
     {
-      Tensor p = tensor.get(last + 1);
+      Tensor p = tensor.get(last - 1);
       Tensor q = tensor.get(last);
-      Tensor r = tensor.get(last - 1);
-      curve.append(q).append(triple(p, q, r)).append(p);
+      Tensor r = tensor.get(last + 1);
+      curve.append(q).append(triple_hi(p, q, r)).append(r);
     }
     return curve;
   }
@@ -91,16 +95,26 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
   Tensor center(Tensor p, Tensor q, Tensor r, Tensor s) {
     return center( //
         geodesicInterface.split(p, q, lambda), //
-        geodesicInterface.split(s, r, lambda));
+        geodesicInterface.split(r, s, _1_lam));
   }
 
   /** @param p
    * @param q
    * @param r
    * @return point between p and q */
-  Tensor triple(Tensor p, Tensor q, Tensor r) {
+  Tensor triple_lo(Tensor p, Tensor q, Tensor r) {
     return center( //
         geodesicInterface.split(p, q, P1_4), //
         geodesicInterface.split(q, r, N1_4));
+  }
+
+  /** @param p
+   * @param q
+   * @param r
+   * @return point between q and r */
+  Tensor triple_hi(Tensor p, Tensor q, Tensor r) {
+    return center( //
+        geodesicInterface.split(p, q, P5_4), //
+        geodesicInterface.split(q, r, P3_4));
   }
 }

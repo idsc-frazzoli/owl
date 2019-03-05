@@ -22,7 +22,7 @@ public class CurveSubdivisionTest extends TestCase {
     for (int length = 0; length < 10; ++length) {
       Tensor tensor = RandomVariate.of(distribution, length, 2);
       _checkSym(new BSpline1CurveSubdivision(RnGeodesic.INSTANCE), tensor);
-      _checkSym(new BSpline2CurveSubdivision(RnGeodesic.INSTANCE), tensor);
+      _checkSym(BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE), tensor);
       _checkSym(new BSpline3CurveSubdivision(RnGeodesic.INSTANCE), tensor);
       _checkSym(BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE), tensor);
       _checkSym(new FourPointCurveSubdivision(RnGeodesic.INSTANCE), tensor);
