@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 public class SymLinkImagesTest extends TestCase {
   public void testDeBoorRational() {
     Scalar parameter = RationalScalar.of(9, 4);
-    SymLinkImage symLinkImage = SymLinkImages.deBoor(4, 20, parameter);
+    SymLinkImage symLinkImage = SymLinkImages.bspline(4, 20, parameter);
     BufferedImage bufferedImage = symLinkImage.bufferedImage();
     assertTrue(300 < bufferedImage.getWidth());
     assertTrue(200 < bufferedImage.getHeight());

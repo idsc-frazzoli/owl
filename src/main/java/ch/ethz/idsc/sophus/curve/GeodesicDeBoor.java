@@ -22,10 +22,10 @@ public class GeodesicDeBoor implements ScalarTensorFunction {
    * @return
    * @throws Exception if given knots is not a vector */
   public static GeodesicDeBoor of(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
-    int p = knots.length() >> 1;
-    if (control.length() != p + 1)
+    int degree = knots.length() / 2;
+    if (control.length() != degree + 1)
       throw TensorRuntimeException.of(knots, control);
-    return new GeodesicDeBoor(Objects.requireNonNull(geodesicInterface), p, VectorQ.require(knots), control);
+    return new GeodesicDeBoor(Objects.requireNonNull(geodesicInterface), degree, VectorQ.require(knots), control);
   }
 
   // ---
@@ -37,7 +37,7 @@ public class GeodesicDeBoor implements ScalarTensorFunction {
   /** @param degree
    * @param knots vector of length degree * 2
    * @param control points of length degree + 1 */
-  GeodesicDeBoor(GeodesicInterface geodesicInterface, int degree, Tensor knots, Tensor control) {
+  /* package */ GeodesicDeBoor(GeodesicInterface geodesicInterface, int degree, Tensor knots, Tensor control) {
     this.geodesicInterface = geodesicInterface;
     this.degree = degree;
     this.knots = knots;

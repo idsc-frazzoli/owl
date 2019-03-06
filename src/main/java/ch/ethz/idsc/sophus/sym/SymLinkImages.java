@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
+import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.Regularization2Step;
@@ -47,12 +48,21 @@ public enum SymLinkImages {
     return symLinkImage;
   }
 
-  public static SymLinkImage deBoor(int degree, int length, Scalar scalar) {
+  public static SymLinkImage bspline(int degree, int length, Scalar scalar) {
     Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
     ScalarTensorFunction scalarTensorFunction = GeodesicBSplineFunction.of(SymGeodesic.INSTANCE, degree, vector);
     Tensor tensor = scalarTensorFunction.apply(scalar);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, FONT_SMALL);
     symLinkImage.title("DeBoor[" + degree + "] at " + scalar);
+    return symLinkImage;
+  }
+
+  public static SymLinkImage deboor(Tensor knots, int length, Scalar scalar) {
+    Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
+    ScalarTensorFunction scalarTensorFunction = GeodesicDeBoor.of(SymGeodesic.INSTANCE, knots, vector);
+    Tensor tensor = scalarTensorFunction.apply(scalar);
+    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, FONT_SMALL);
+    symLinkImage.title("DeBoor" + knots + " at " + scalar);
     return symLinkImage;
   }
 
