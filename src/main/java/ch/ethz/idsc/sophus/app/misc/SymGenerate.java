@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       int degree = 5;
       int upper = 9;
       Scalar parameter = RationalScalar.of(2 * 3 + 2, 3);
-      SymLinkImage symLinkImage = SymLinkImages.deBoor(degree, upper + 1, parameter);
+      SymLinkImage symLinkImage = SymLinkImages.bspline(degree, upper + 1, parameter);
       ImageIO.write(symLinkImage.bufferedImage(), "png", HomeDirectory.Pictures("deboor5.png"));
     }
     // BufferedImage bufferedImage =

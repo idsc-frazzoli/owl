@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.Real;
@@ -45,18 +44,17 @@ public enum ClothoidCurve implements GeodesicInterface {
     Scalar f2 = b0.multiply(b1).divide(_46);
     Scalar f3 = _1_4;
     Scalar bm = b0.add(b1).multiply(f1.subtract(f2).subtract(f3));
-    ClothoidQuadratic fE = new ClothoidQuadratic(b0, bm, b1);
-    // ---
+    ClothoidQuadratic clothoidQuadratic = new ClothoidQuadratic(b0, bm, b1);
     return t -> {
       Scalar _1_t = _1.subtract(t);
       Tensor wl = W.multiply(t);
       Tensor wr = W.multiply(_1_t);
       Tensor xl = X.multiply(t);
       Tensor xr = X.multiply(_1_t).map(t::add);
-      Scalar il = wl.dot(xl.map(fE)).Get();
-      Scalar ir = wr.dot(xr.map(fE)).Get();
+      Scalar il = wl.dot(xl.map(clothoidQuadratic)).Get();
+      Scalar ir = wr.dot(xr.map(clothoidQuadratic)).Get();
       Scalar ret_p = p0.add(il.multiply(d).divide(il.add(ir)));
-      Scalar ret_a = Arg.FUNCTION.apply(fE.apply(t).multiply(d));
+      Scalar ret_a = clothoidQuadratic.angle(t).add(da);
       return Tensors.of( //
           Real.FUNCTION.apply(ret_p), //
           Imag.FUNCTION.apply(ret_p), //
