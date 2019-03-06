@@ -82,7 +82,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.numeric(ClothoidCurve.INSTANCE, 1);
+      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
       pathRender2.setCurve(points, false).render(geometricLayer, graphics);
     }

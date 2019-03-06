@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class BSpline2CurveSubdivisionTest extends TestCase {
-  private static final CurveSubdivision CURVE_SUBDIVISION = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE);
+  private static final CurveSubdivision CURVE_SUBDIVISION = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
 
   public void testCyclic() {
     Tensor cyclic = CURVE_SUBDIVISION.cyclic(Tensors.vector(1, 2, 3, 4));
@@ -73,13 +73,13 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator fps = BSpline2CurveSubdivision.of(RnGeodesic.INSTANCE)::cyclic;
+    TensorUnaryOperator fps = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
   }
 
   public void testScalarFail() {
-    CurveSubdivision curveSubdivision = BSpline2CurveSubdivision.of(Se2Geodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(Se2Geodesic.INSTANCE);
     try {
       curveSubdivision.string(RealScalar.ONE);
       fail();

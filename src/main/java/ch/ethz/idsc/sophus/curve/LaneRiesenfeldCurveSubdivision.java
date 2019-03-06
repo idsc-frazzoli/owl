@@ -5,32 +5,19 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 
 public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Serializable {
-  public static CurveSubdivision of(GeodesicInterface geodesicInterface, int degree) {
-    return new LaneRiesenfeldCurveSubdivision(geodesicInterface, degree, RationalScalar.HALF);
-  }
-
-  public static CurveSubdivision numeric(GeodesicInterface geodesicInterface, int degree) {
-    return new LaneRiesenfeldCurveSubdivision(geodesicInterface, degree, RealScalar.of(0.5));
-  }
-
-  // ---
   private final CurveSubdivision curveSubdivision;
   private final GeodesicInterface geodesicInterface;
   private final int degree;
-  private final Scalar half;
 
-  private LaneRiesenfeldCurveSubdivision(GeodesicInterface geodesicInterface, int degree, Scalar half) {
+  public LaneRiesenfeldCurveSubdivision(GeodesicInterface geodesicInterface, int degree) {
     curveSubdivision = new BSpline1CurveSubdivision(geodesicInterface);
     this.geodesicInterface = geodesicInterface;
     this.degree = degree;
-    this.half = half;
   }
 
   @Override // from CurveSubdivision
@@ -87,6 +74,6 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
   }
 
   protected final Tensor center(Tensor p, Tensor q) {
-    return geodesicInterface.split(p, q, half);
+    return geodesicInterface.split(p, q, RationalScalar.HALF);
   }
 }

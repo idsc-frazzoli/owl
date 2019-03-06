@@ -52,13 +52,13 @@ public class PartialOrderMinTrackerTest<E> extends TestCase {
     divisibility.digest(RealScalar.of(6));
     assertFalse(divisibility.getMinElements().isEmpty());
   }
-  
+
   @SuppressWarnings("rawtypes")
   public void testMinTracker() {
     PartialOrderMinTracker<List<Comparable>> partialOrderMinTracker = PartialOrderMinTracker.withList(ProductTotalOrder.INSTANCE);
     partialOrderMinTracker.digest(Arrays.asList("abc", 123));
     partialOrderMinTracker.digest(Arrays.asList("cde", 930));
     Collection<List<Comparable>> minElements = partialOrderMinTracker.getMinElements();
-    assertTrue(minElements.contains(Arrays.asList("abc",123)));
+    assertTrue(minElements.contains(Arrays.asList("abc", 123)));
   }
 }
