@@ -14,6 +14,7 @@ public class Vertex<T> {
     return label;
   }
 
+  @Override
   public boolean equals(Object object) {
     return object instanceof Vertex<?> //
         && this.label.equals(((Vertex<?>) object).label);

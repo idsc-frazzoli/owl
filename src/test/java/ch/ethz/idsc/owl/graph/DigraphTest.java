@@ -9,5 +9,4 @@ public class DigraphTest extends TestCase {
     digraph.addVertex("1");
     assertEquals(digraph.size(), 1);
   }
-  
 }

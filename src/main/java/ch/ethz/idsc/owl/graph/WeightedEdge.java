@@ -2,11 +2,10 @@
 package ch.ethz.idsc.owl.graph;
 
 public class WeightedEdge<T> {
-  
   public final Vertex<T> start;
   public final Vertex<T> end;
   public final T weight;
-  
+
   public WeightedEdge(Vertex<T> start, Vertex<T> end, T weight) {
     this.start = start;
     this.end = end;
@@ -20,7 +19,7 @@ public class WeightedEdge<T> {
   public Vertex<T> getEnd() {
     return this.end;
   }
-  
+
   public T getWeight() {
     return this.weight;
   }
