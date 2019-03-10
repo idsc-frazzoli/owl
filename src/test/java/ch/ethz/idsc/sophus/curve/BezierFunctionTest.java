@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.curve;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,7 +19,7 @@ public class BezierFunctionTest extends TestCase {
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(RnGeodesic.INSTANCE, control);
     Tensor tensor = scalarTensorFunction.apply(RationalScalar.of(1, 4));
     assertEquals(tensor, Tensors.fromString("{1/2, 5/8}"));
-    assertTrue(ExactScalarQ.all(tensor));
+    ExactTensorQ.require(tensor);
   }
 
   public void testRn() {
@@ -27,7 +28,7 @@ public class BezierFunctionTest extends TestCase {
     Scalar scalar = RationalScalar.of(1, 4);
     Tensor tensor = scalarTensorFunction.apply(scalar);
     assertEquals(tensor, Tensors.fromString("{3/4, 7/16}"));
-    assertTrue(ExactScalarQ.all(tensor));
+    ExactTensorQ.require(tensor);
   }
 
   public void testSe2Covering() {
@@ -36,7 +37,7 @@ public class BezierFunctionTest extends TestCase {
     Scalar scalar = RationalScalar.of(1, 4);
     Tensor tensor = scalarTensorFunction.apply(scalar);
     assertEquals(tensor.Get(2), RationalScalar.of(17, 80));
-    assertTrue(ExactScalarQ.all(tensor.Get(2)));
+    ExactScalarQ.require(tensor.Get(2));
   }
 
   public void testOutsideFail() {

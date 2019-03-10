@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.region;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -83,6 +84,6 @@ public class PolygonClipTest extends TestCase {
         Tensors.vector(3, 3), //
         Tensors.vector(3, 2));
     assertEquals(tensor, Tensors.vector(3, 0));
-    assertTrue(ExactScalarQ.all(tensor));
+    ExactTensorQ.require(tensor);
   }
 }

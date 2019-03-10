@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** compatible with the use of Quantity:
@@ -126,7 +127,7 @@ public class DubinsPath implements Serializable {
     AbsoluteDubinsPath(Tensor g) {
       this.g = g;
       Scalar length = length();
-      clip = Clip.function(length.zero(), length);
+      clip = Clips.interval(length.zero(), length);
     }
 
     /** parameter scalar is of same unit as length() of dubins path */

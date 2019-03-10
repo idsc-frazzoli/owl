@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.surf;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -85,7 +85,7 @@ public class CatmullClarkSubdivisionTest extends TestCase {
     Tensor grid = Tensors.fromString("{{0,1},{0,1},{0,1}}");
     Tensor refine = Nest.of(catmullClarkSubdivision::refine, grid, 2);
     assertEquals(refine, Tensors.vector(i -> Subdivide.of(0, 1, 4), 9));
-    assertTrue(ExactScalarQ.all(refine));
+    ExactTensorQ.require(refine);
   }
 
   public void testRefineY() {
@@ -93,6 +93,6 @@ public class CatmullClarkSubdivisionTest extends TestCase {
     Tensor grid = Tensors.fromString("{{0,0},{1,1},{2,2}}");
     Tensor refine = Nest.of(catmullClarkSubdivision::refine, grid, 2);
     assertEquals(Transpose.of(refine), Tensors.vector(i -> Subdivide.of(0, 2, 8), 5));
-    assertTrue(ExactScalarQ.all(refine));
+    ExactTensorQ.require(refine);
   }
 }

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.glc.rl;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -24,7 +24,7 @@ class DQMInspection {
     min = rlDomainQueueMap.keySet().stream().reduce(Entrywise.min()).get();
     max = rlDomainQueueMap.keySet().stream().reduce(Entrywise.max()).get();
     Tensor width = max.subtract(min).map(Increment.ONE);
-    if (!ExactScalarQ.all(width))
+    if (!ExactTensorQ.of(width))
       throw TensorRuntimeException.of(min, max, width);
     count = Array.zeros(Primitives.toListInteger(width));
     for (Entry<Tensor, RLDomainQueue> entry : rlDomainQueueMap.entrySet()) {

@@ -5,16 +5,16 @@ import java.io.IOException;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.num.Rationalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
-import ch.ethz.idsc.tensor.sca.Rationalize;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -24,7 +24,7 @@ public class HormannSabinCurveSubdivisionTest extends TestCase {
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = Nest.of(curveSubdivision::cyclic, tensor, 1);
-    assertTrue(ExactScalarQ.all(actual));
+    ExactTensorQ.require(actual);
     Tensor p = tensor.get(3);
     Tensor q = tensor.get(0);
     Tensor r = tensor.get(1);
@@ -50,7 +50,7 @@ public class HormannSabinCurveSubdivisionTest extends TestCase {
     Tensor vector = Tensors.vector(0, 1, 2, 3);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Tensors.fromString("{1/4, 3/4, 5/4, 7/4, 9/4, 11/4}"));
-    assertTrue(ExactScalarQ.all(string));
+    ExactTensorQ.require(string);
   }
 
   public void testStringTwo() {
@@ -58,7 +58,7 @@ public class HormannSabinCurveSubdivisionTest extends TestCase {
     Tensor vector = Tensors.vector(0, 1);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Tensors.fromString("{1/4, 3/4}"));
-    assertTrue(ExactScalarQ.all(string));
+    ExactTensorQ.require(string);
   }
 
   public void testStringOne() {
@@ -66,7 +66,7 @@ public class HormannSabinCurveSubdivisionTest extends TestCase {
     Tensor vector = Tensors.vector(3);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Tensors.vector(3));
-    assertTrue(ExactScalarQ.all(string));
+    ExactTensorQ.require(string);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

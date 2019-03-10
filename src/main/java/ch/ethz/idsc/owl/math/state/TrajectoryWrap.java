@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /** wrapper around trajectory for fast search and control query
  * 
@@ -39,7 +40,7 @@ public class TrajectoryWrap {
     navigableMap = trajectory.stream().collect(Collectors.toMap( //
         trajectorySample -> trajectorySample.stateTime().time(), //
         Function.identity(), (u, v) -> null, TreeMap::new));
-    clip = Clip.function(navigableMap.firstKey(), navigableMap.lastKey());
+    clip = Clips.interval(navigableMap.firstKey(), navigableMap.lastKey());
   }
 
   /** @return unmodifiable list */
@@ -76,7 +77,7 @@ public class TrajectoryWrap {
   public TrajectorySample getSample(Scalar now) {
     Entry<Scalar, TrajectorySample> lo = navigableMap.floorEntry(now);
     Entry<Scalar, TrajectorySample> hi = navigableMap.higherEntry(now);
-    Scalar index = Clip.function(lo.getKey(), hi.getKey()).rescale(now);
+    Scalar index = Clips.interval(lo.getKey(), hi.getKey()).rescale(now);
     Interpolation interpolation = LinearInterpolation.of(Tensors.of( //
         lo.getValue().stateTime().state(), //
         hi.getValue().stateTime().state()));

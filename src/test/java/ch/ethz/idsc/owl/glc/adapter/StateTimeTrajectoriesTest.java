@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,7 +35,7 @@ public class StateTimeTrajectoriesTest extends TestCase {
         new StateTime(Tensors.vector(1, 2), Quantity.of(7, "s")));
     Tensor deltaTimes = StateTimeTrajectories.deltaTimes(glcNode, trajectory);
     assertEquals(deltaTimes, Tensors.fromString("{1[s], 3[s]}"));
-    assertTrue(ExactScalarQ.all(deltaTimes));
+    ExactTensorQ.require(deltaTimes);
   }
 
   public void testDeltatime() {

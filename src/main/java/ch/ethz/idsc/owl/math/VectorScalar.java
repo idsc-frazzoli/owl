@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -146,7 +146,7 @@ public class VectorScalar extends AbstractScalar implements //
 
   @Override // from ExactScalarQInterface
   public boolean isExactScalar() {
-    return ExactScalarQ.all(vector);
+    return ExactTensorQ.of(vector);
   }
 
   @Override // from NInterface

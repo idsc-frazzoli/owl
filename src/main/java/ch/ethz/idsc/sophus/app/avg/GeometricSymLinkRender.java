@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /** visualization of the geometric geodesic average */
 /* package */ class GeometricSymLinkRender {
@@ -75,7 +75,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
           graphics.setStroke(new BasicStroke(1f));
         }
         {
-          Tensor tensor = Subdivide.increasing(Clip.unit(), STEPS).extract(1, STEPS) //
+          Tensor tensor = Subdivide.increasing(Clips.unit(), STEPS).extract(1, STEPS) //
               .map(scalarTensorFunction);
           Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.5));
           graphics.setColor(new Color(64, 128 + 64, 64, 128));

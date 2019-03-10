@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.curve;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.RnGroup;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,7 +23,7 @@ public class LieGroupBSplineInterpolationTest extends TestCase {
         new LieGroupBSplineInterpolation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, 2, target);
     Iteration it0 = lieGroupBSplineInterpolation.init();
     Iteration it1 = it0.stepGaussSeidel();
-    assertTrue(ExactScalarQ.all(it1.control()));
+    ExactTensorQ.require(it1.control());
   }
 
   public void testApplyRn() {

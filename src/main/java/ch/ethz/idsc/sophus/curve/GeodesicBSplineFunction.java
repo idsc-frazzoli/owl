@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Floor;
 
 /** The implementation of BSplineFunction in the tensor library
@@ -61,8 +62,8 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
         ? RationalScalar.HALF
         : RealScalar.ZERO;
     last = control.length() - 1;
-    domain = Clip.function(0, last);
-    clip = Clip.function( //
+    domain = Clips.interval(0, last);
+    clip = Clips.interval( //
         domain.min().add(shift), //
         domain.max().add(shift));
   }

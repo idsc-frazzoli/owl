@@ -1,23 +1,31 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.num.IntegerDigits;
+import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Sign;
+
 /** Compares the digit sum of two integers according to divisibility,
  * e.g. the digit sum of of 123 is 6 and the digit sum of 47 is 11,
  * hence 123 and 47 are incomparable. */
 public enum DigitSumDivisibilityPreorderComparator {
   ;
-  static int digitSum(int x) {
-    if (x < 0 || x == 0) {
-      throw new RuntimeException("Only interested in digit sum of postive numbers");
-    }
-    int digitSum = 0;
-    while (x > 0) {
-      digitSum = digitSum + x % 10;
-      x = x / 10;
-    }
-    return digitSum;
+  /** @param x strictly positive
+   * @return */
+  static Scalar totalDigits(Scalar x) {
+    return Total.of(IntegerDigits.of(Sign.requirePositive(x))).Get();
   }
 
-  private static final BinaryRelation<Integer> BINARY_RELATION = (x, y) -> digitSum(y) % digitSum(x) == 0;
-  public static final PreorderComparator<Integer> INSTANCE = Preorder.comparator(BINARY_RELATION);
+  private static final BinaryRelation<Scalar> BINARY_RELATION_SCALAR = //
+      (x, y) -> Scalars.divides(totalDigits(x), totalDigits(y));
+  /** for scalar */
+  public static final PreorderComparator<Scalar> SCALAR = Preorder.comparator(BINARY_RELATION_SCALAR);
+  // ---
+  private static final BinaryRelation<Integer> BINARY_RELATION_INTEGER = //
+      (x, y) -> Scalars.divides(totalDigits(RealScalar.of(x)), totalDigits(RealScalar.of(y)));
+  /** for integers */
+  public static final PreorderComparator<Integer> INTEGER = Preorder.comparator(BINARY_RELATION_INTEGER);
 }

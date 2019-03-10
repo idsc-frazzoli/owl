@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,7 +17,7 @@ public class Regularization2StepStringTest extends TestCase {
   public void testLo() {
     Tensor signal = Tensors.vector(1, 0, 0, 0, 0);
     Tensor tensor = STRING.apply(signal);
-    ExactScalarQ.requireAll(tensor);
+    ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.vector(1, 0.125, 0, 0, 0));
     TensorUnaryOperator tensorUnaryOperator = Regularization2Step.string(RnGeodesic.INSTANCE, RealScalar.of(0.25));
     assertEquals(tensor, tensorUnaryOperator.apply(signal));
@@ -26,7 +26,7 @@ public class Regularization2StepStringTest extends TestCase {
   public void testHi() {
     Tensor signal = Tensors.vector(0, 0, 0, 0, 1);
     Tensor tensor = STRING.apply(signal);
-    ExactScalarQ.requireAll(tensor);
+    ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.vector(0, 0, 0, 0.125, 1));
     TensorUnaryOperator tensorUnaryOperator = Regularization2Step.string(RnGeodesic.INSTANCE, RealScalar.of(0.25));
     assertEquals(tensor, tensorUnaryOperator.apply(signal));
@@ -45,7 +45,7 @@ public class Regularization2StepStringTest extends TestCase {
         Regularization2Step.string(RnGeodesic.INSTANCE, RationalScalar.of(1, 2));
     Tensor signal = Tensors.vector(1, 1, 1, 2, 1, 1, 1, 1, 1, 1);
     Tensor tensor = STRING.apply(signal);
-    ExactScalarQ.requireAll(tensor);
+    ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.fromString("{1, 1, 5/4, 3/2, 5/4, 1, 1, 1, 1, 1}"));
   }
 
@@ -54,14 +54,14 @@ public class Regularization2StepStringTest extends TestCase {
         Regularization2Step.string(RnGeodesic.INSTANCE, RationalScalar.of(1, 2));
     Tensor signal = Tensors.fromString("{{1,2},{2,2},{3,2},{4,2},{3,3}}");
     Tensor tensor = STRING.apply(signal);
-    ExactScalarQ.requireAll(tensor);
+    ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.fromString("{{1, 2}, {2, 2}, {3, 2}, {7/2, 9/4}, {3, 3}}"));
   }
 
   public void testZero() {
     Tensor signal = Tensors.vector(1, 1, 1, 2, 1, 1, 3, 1, 1, 1);
     Tensor tensor = Regularization2Step.string(RnGeodesic.INSTANCE, RealScalar.ZERO).apply(signal);
-    ExactScalarQ.requireAll(tensor);
+    ExactTensorQ.require(tensor);
     assertEquals(tensor, signal);
   }
 }

@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 public class CircleCurveIntersection implements CurveIntersection {
   private final Scalar distance;
@@ -38,7 +39,7 @@ public class CircleCurveIntersection implements CurveIntersection {
         Tensor next = tensor.get(count);
         Scalar hi = Norm._2.of(next); // "hi" may even be less than "lo"
         if (Scalars.lessEquals(lo, distance) && Scalars.lessEquals(distance, hi)) {
-          Clip clip = Clip.function(lo, hi); // lo <= distance <= hi
+          Clip clip = Clips.interval(lo, hi); // lo <= distance <= hi
           Interpolation interpolation = LinearInterpolation.of(Tensors.of(prev, next));
           Scalar lambda = clip.rescale(distance);
           return Optional.of(interpolation.at(lambda));

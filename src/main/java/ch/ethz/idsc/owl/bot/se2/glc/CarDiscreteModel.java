@@ -17,8 +17,8 @@ import ch.ethz.idsc.tensor.alg.Ordering;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.lie.Permutations;
+import ch.ethz.idsc.tensor.num.Rationalize;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Rationalize;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class CarDiscreteModel implements DiscreteModel, TerminalInterface {

@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
 public class StGeodesicTest extends TestCase {
@@ -28,8 +29,8 @@ public class StGeodesicTest extends TestCase {
   public void testSt1General() {
     Tensor p = Tensors.vector(3, 6);
     Tensor q = Tensors.vector(4, 10);
-    Clip clip_l = Clip.function(3, 4);
-    Clip clip_t = Clip.function(6, 10);
+    Clip clip_l = Clips.interval(3, 4);
+    Clip clip_t = Clips.interval(6, 10);
     for (Tensor x : Subdivide.of(0, 1, 20)) {
       Tensor split = StGeodesic.INSTANCE.split(p, q, x.Get());
       clip_l.requireInside(split.Get(0));
@@ -61,9 +62,9 @@ public class StGeodesicTest extends TestCase {
   public void testGeneral() {
     Tensor p = Tensors.of(RealScalar.of(3), Tensors.vector(6, -2));
     Tensor q = Tensors.of(RealScalar.of(4), Tensors.vector(10, 3));
-    Clip clip_l = Clip.function(3, 4);
-    Clip clip_t1 = Clip.function(6, 10);
-    Clip clip_t2 = Clip.function(-2, 3);
+    Clip clip_l = Clips.interval(3, 4);
+    Clip clip_t1 = Clips.interval(6, 10);
+    Clip clip_t2 = Clips.interval(-2, 3);
     for (Tensor x : Subdivide.of(0, 1, 20)) {
       Tensor split = StGeodesic.INSTANCE.split(p, q, x.Get());
       clip_l.requireInside(split.Get(0));

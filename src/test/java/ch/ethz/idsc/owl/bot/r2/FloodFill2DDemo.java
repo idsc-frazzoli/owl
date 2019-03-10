@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 enum FloodFill2DDemo {
@@ -22,7 +23,7 @@ enum FloodFill2DDemo {
   public static final ScalarUnaryOperator GRAYSCALE = new ScalarUnaryOperator() {
     final Scalar scale = RealScalar.of(63.0);
     final Scalar middl = RealScalar.of(128.0);
-    final Clip clip = Clip.function(0, 255);
+    final Clip clip = Clips.interval(0, 255);
 
     @Override // from Function
     public Scalar apply(Scalar scalar) {

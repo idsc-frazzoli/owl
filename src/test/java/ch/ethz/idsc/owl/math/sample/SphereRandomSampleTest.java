@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -43,7 +43,7 @@ public class SphereRandomSampleTest extends TestCase {
     for (int index = 0; index < 100; ++index) {
       Tensor tensor = randomSampleInterface.randomSample(RANDOM);
       VectorQ.requireLength(tensor, 1);
-      Clip.function(12, 18).requireInside(tensor.Get(0));
+      Clips.interval(12, 18).requireInside(tensor.Get(0));
     }
   }
 

@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import java.awt.Dimension;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -27,6 +27,6 @@ public class WaypointDistanceCostTest extends TestCase {
         waypoints, true, RealScalar.ONE, RealScalar.of(10), new Dimension(120, 100));
     Tensor range = imageCostFunction.range();
     assertEquals(range, Tensors.vector(12, 10));
-    assertTrue(ExactScalarQ.all(range));
+    ExactTensorQ.require(range);
   }
 }

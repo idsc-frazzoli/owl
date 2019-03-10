@@ -19,14 +19,14 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 // 3
 /* package */ enum ConvexHullImage {
   ;
   private static Tensor image(int seed) {
     Random random = new Random(seed);
-    Tensor points = RandomVariate.of(NormalDistribution.of(0.5, .28), random, 30, 2).map(Clip.unit());
+    Tensor points = RandomVariate.of(NormalDistribution.of(0.5, .28), random, 30, 2).map(Clips.unit());
     Tensor hull = ConvexHull.of(points);
     GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2);
     BufferedImage bufferedImage = StaticHelper.createWhite();

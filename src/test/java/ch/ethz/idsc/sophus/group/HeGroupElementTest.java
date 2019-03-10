@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -23,7 +23,7 @@ public class HeGroupElementTest extends TestCase {
     HeGroupElement a = new HeGroupElement(a_t);
     Tensor b_t = Tensors.fromString("{{6, 7}, {8, 9}, 10}");
     Tensor ab_t = a.combine(b_t);
-    assertTrue(ExactScalarQ.all(ab_t));
+    ExactTensorQ.require(ab_t);
     assertEquals(ab_t, Tensors.fromString("{{7, 9}, {11, 13}, 41}"));
     HeGroupElement ab = new HeGroupElement(ab_t);
     Tensor a_r = ab.combine(new HeGroupElement(b_t).inverse().toTensor());

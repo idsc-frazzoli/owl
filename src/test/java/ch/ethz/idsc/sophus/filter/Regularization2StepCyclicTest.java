@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -41,7 +41,7 @@ public class Regularization2StepCyclicTest extends TestCase {
   public void testZero() {
     Tensor signal = Tensors.vector(1, 1, 1, 2, 1, 1, 3, 1, 1, 1);
     Tensor tensor = Regularization2Step.cyclic(RnGeodesic.INSTANCE, RealScalar.ZERO).apply(signal);
-    ExactScalarQ.requireAll(tensor);
+    ExactTensorQ.require(tensor);
     assertEquals(tensor, signal);
   }
 }

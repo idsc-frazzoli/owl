@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -38,28 +38,28 @@ public class GeodesicBSplineFunctionTest extends TestCase {
   public void testBasisWeights1a() {
     GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 1, UnitVector.of(3, 1));
     Tensor limitMask = Range.of(1, 2).map(func);
-    assertTrue(ExactScalarQ.all(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1}"));
   }
 
   public void testBasisWeights2() {
     GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 2, UnitVector.of(5, 2));
     Tensor limitMask = Range.of(1, 4).map(func);
-    assertTrue(ExactScalarQ.all(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/8, 3/4, 1/8}"));
   }
 
   public void testBasisWeights3a() {
     GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 3, UnitVector.of(7, 3));
     Tensor limitMask = Range.of(2, 5).map(func);
-    assertTrue(ExactScalarQ.all(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/6, 2/3, 1/6}"));
   }
 
   public void testBasisWeights3b() {
     GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 3, UnitVector.of(5, 2));
     Tensor limitMask = Range.of(1, 4).map(func);
-    assertTrue(ExactScalarQ.all(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/6, 2/3, 1/6}"));
   }
 
@@ -67,7 +67,7 @@ public class GeodesicBSplineFunctionTest extends TestCase {
     GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 4, UnitVector.of(9, 4));
     Tensor limitMask = Range.of(2, 7).map(func);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
-    assertTrue(ExactScalarQ.all(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/384, 19/96, 115/192, 19/96, 1/384}"));
   }
 
@@ -75,7 +75,7 @@ public class GeodesicBSplineFunctionTest extends TestCase {
     GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 5, UnitVector.of(11, 5));
     Tensor limitMask = Range.of(3, 8).map(func);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
-    assertTrue(ExactScalarQ.all(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
   }
 
@@ -83,7 +83,7 @@ public class GeodesicBSplineFunctionTest extends TestCase {
     GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 5, UnitVector.of(9, 4));
     Tensor limitMask = Range.of(2, 7).map(func);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
-    assertTrue(ExactScalarQ.all(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
   }
 
@@ -91,7 +91,7 @@ public class GeodesicBSplineFunctionTest extends TestCase {
     GeodesicBSplineFunction func = GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 5, UnitVector.of(7, 3));
     Tensor limitMask = Range.of(1, 6).map(func);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
-    assertTrue(ExactScalarQ.all(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
   }
 

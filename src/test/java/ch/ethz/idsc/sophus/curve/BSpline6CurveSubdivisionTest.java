@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
@@ -15,6 +15,6 @@ public class BSpline6CurveSubdivisionTest extends TestCase {
     Tensor tensor = curveSubdivision.cyclic(UnitVector.of(5, 0));
     assertEquals(tensor, //
         Tensors.fromString("{35/64, 21/64, 7/64, 1/64, 0, 0, 1/64, 7/64, 21/64, 35/64}"));
-    assertTrue(ExactScalarQ.all(tensor));
+    ExactTensorQ.require(tensor);
   }
 }

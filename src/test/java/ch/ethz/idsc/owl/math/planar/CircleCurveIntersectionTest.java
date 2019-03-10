@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -19,7 +19,7 @@ public class CircleCurveIntersectionTest extends TestCase {
       assertEquals(optional.isPresent(), index != 1);
       if (index != 1) {
         Tensor tensor = optional.get();
-        assertTrue(ExactScalarQ.all(tensor));
+        ExactTensorQ.require(tensor);
         assertEquals(tensor, Tensors.vector(0.5, 0));
       }
     }
@@ -32,7 +32,7 @@ public class CircleCurveIntersectionTest extends TestCase {
       Optional<Tensor> optional = curveIntersection.cyclic(RotateLeft.of(curve, index));
       assertTrue(optional.isPresent());
       Tensor tensor = optional.get();
-      assertTrue(ExactScalarQ.all(tensor));
+      ExactTensorQ.require(tensor);
       assertEquals(tensor, Tensors.vector(0.5, 0));
     }
   }

@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /** region is open
  * coordinates on the boundary are inside */
@@ -19,7 +20,7 @@ public class BoundedBoxRegion implements Region<Tensor>, Serializable {
     Tensor lo = center.subtract(radius);
     Tensor hi = center.add(radius);
     return new BoundedBoxRegion(IntStream.range(0, center.length()) //
-        .mapToObj(index -> Clip.function(lo.Get(index), hi.Get(index))) //
+        .mapToObj(index -> Clips.interval(lo.Get(index), hi.Get(index))) //
         .collect(Collectors.toList()));
   }
 

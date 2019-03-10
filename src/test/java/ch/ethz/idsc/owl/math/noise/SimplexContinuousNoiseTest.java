@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
 public class SimplexContinuousNoiseTest extends TestCase {
@@ -33,7 +34,7 @@ public class SimplexContinuousNoiseTest extends TestCase {
 
   public void testMulti1() {
     Distribution distribution = UniformDistribution.of(-10, 10);
-    Clip clip = Clip.absoluteOne();
+    Clip clip = Clips.absoluteOne();
     for (int index = 0; index < 1000; ++index) {
       double vx = RandomVariate.of(distribution).number().doubleValue();
       double number = SimplexContinuousNoise.FUNCTION.at(vx);
@@ -43,7 +44,7 @@ public class SimplexContinuousNoiseTest extends TestCase {
 
   public void testMulti3() {
     Distribution distribution = UniformDistribution.of(-10, 10);
-    Clip clip = Clip.absoluteOne();
+    Clip clip = Clips.absoluteOne();
     for (int index = 0; index < 1000; ++index) {
       double vx = RandomVariate.of(distribution).number().doubleValue();
       double vy = RandomVariate.of(distribution).number().doubleValue();
@@ -55,7 +56,7 @@ public class SimplexContinuousNoiseTest extends TestCase {
 
   public void testMulti4() {
     Distribution distribution = UniformDistribution.of(-10, 10);
-    Clip clip = Clip.absoluteOne();
+    Clip clip = Clips.absoluteOne();
     for (int index = 0; index < 1000; ++index) {
       double vx = RandomVariate.of(distribution).number().doubleValue();
       double vy = RandomVariate.of(distribution).number().doubleValue();
