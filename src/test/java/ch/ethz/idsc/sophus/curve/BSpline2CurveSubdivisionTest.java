@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -14,8 +14,8 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.num.Rationalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Rationalize;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -31,7 +31,7 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = CURVE_SUBDIVISION.cyclic(tensor);
-    assertTrue(ExactScalarQ.all(actual));
+    ExactTensorQ.require(actual);
     Tensor expected = Tensors.fromString("{{3/4, 1/4}, {1/4, 3/4}, {-1/4, 3/4}, {-3/4, 1/4}, {-3/4, -1/4}, {-1/4, -3/4}, {1/4, -3/4}, {3/4, -1/4}}");
     assertEquals(expected, actual);
   }
@@ -39,28 +39,28 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
   public void testString() {
     Tensor string = CURVE_SUBDIVISION.string(Tensors.vector(10, 11.));
     assertEquals(string, Tensors.vector(10.25, 10.75));
-    assertFalse(ExactScalarQ.all(string));
+    assertFalse(ExactTensorQ.of(string));
   }
 
   public void testStringTwo() {
     Tensor curve = Tensors.vector(0, 1);
     Tensor refined = CURVE_SUBDIVISION.string(curve);
     assertEquals(refined, Tensors.fromString("{1/4, 3/4}"));
-    assertTrue(ExactScalarQ.all(refined));
+    ExactTensorQ.require(refined);
   }
 
   public void testStringOne() {
     Tensor curve = Tensors.vector(1);
     Tensor refined = CURVE_SUBDIVISION.string(curve);
     assertEquals(refined, Tensors.fromString("{1}"));
-    assertTrue(ExactScalarQ.all(refined));
+    ExactTensorQ.require(refined);
   }
 
   public void testStringEmpty() {
     Tensor curve = Tensors.vector();
     Tensor refined = CURVE_SUBDIVISION.string(curve);
     assertTrue(Tensors.isEmpty(refined));
-    assertTrue(ExactScalarQ.all(refined));
+    ExactTensorQ.require(refined);
   }
 
   public void testStringRange() {
@@ -69,7 +69,7 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
     Tensor refined = CURVE_SUBDIVISION.string(curve);
     Tensor tensor = Subdivide.of(0, length, length * 2).map(scalar -> scalar.add(RationalScalar.of(1, 4)));
     assertEquals(refined, tensor.extract(0, tensor.length() - 1));
-    assertTrue(ExactScalarQ.all(refined));
+    ExactTensorQ.require(refined);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

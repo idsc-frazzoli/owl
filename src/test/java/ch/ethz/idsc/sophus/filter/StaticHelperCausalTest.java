@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.filter;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -30,7 +30,7 @@ public class StaticHelperCausalTest extends TestCase {
     WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.HANN);
     Tensor mask = windowSideSampler.apply(2);
     Tensor splits = StaticHelperCausal.splits(mask);
-    ExactScalarQ.requireAll(splits);
+    ExactTensorQ.require(splits);
   }
 
   public void testNonAffineFail() {

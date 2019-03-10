@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
 public class PurePursuitTest extends TestCase {
@@ -90,14 +91,14 @@ public class PurePursuitTest extends TestCase {
   public void testRatioForwardLeftPositiveX() {
     Tensor tensor = Tensors.fromString("{{.2,0},{1,1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(1.0));
-    Clip clip = Clip.function(1.2, 1.5);
+    Clip clip = Clips.interval(1.2, 1.5);
     clip.requireInside(purePursuit.ratio().get());
   }
 
   public void testRatioForwardRightPositiveX() {
     Tensor tensor = Tensors.fromString("{{.2,0},{1,-1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(1.0));
-    Clip clip = Clip.function(-1.5, -1.2);
+    Clip clip = Clips.interval(-1.5, -1.2);
     clip.requireInside(purePursuit.ratio().get());
   }
 

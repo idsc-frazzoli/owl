@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.qty.Degree;
-import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public class PlanningEvaluation0 extends Se2Demo {
@@ -105,7 +105,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   static final int MAX_STEPS = 10000;
   /** node interval == 2/5 */
   static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = FixedStateIntegrator.create( //
-      new Tse2Integrator(Clip.function(MAX_SPEED.zero(), MAX_SPEED)), RationalScalar.of(1, 10), 3);
+      new Tse2Integrator(Clips.interval(MAX_SPEED.zero(), MAX_SPEED)), RationalScalar.of(1, 10), 3);
   final Collection<Flow> controls;
   final Collection<CostFunction> extraCosts = new LinkedList<>();
 

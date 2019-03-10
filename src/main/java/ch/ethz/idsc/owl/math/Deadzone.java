@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class Deadzone implements ScalarUnaryOperator {
@@ -14,11 +15,11 @@ public class Deadzone implements ScalarUnaryOperator {
   }
 
   public static Deadzone of(Scalar min, Scalar max) {
-    return new Deadzone(Clip.function(min, max));
+    return new Deadzone(Clips.interval(min, max));
   }
 
   public static Deadzone of(Number min, Number max) {
-    return new Deadzone(Clip.function(min, max));
+    return new Deadzone(Clips.interval(min, max));
   }
 
   // ---

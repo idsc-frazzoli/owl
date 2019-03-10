@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.So3Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.space.SnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -35,7 +35,7 @@ public class GeodesicCenterFilterTest extends TestCase {
     Tensor linear = Range.of(0, 10);
     Tensor result = geodesicCenterFilter.apply(linear);
     assertEquals(result, linear);
-    assertTrue(ExactScalarQ.all(result));
+    ExactTensorQ.require(result);
   }
 
   public void testKernel3() {
@@ -43,7 +43,7 @@ public class GeodesicCenterFilterTest extends TestCase {
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 3);
     Tensor signal = UnitVector.of(9, 4);
     Tensor result = geodesicCenterFilter.apply(signal);
-    assertTrue(ExactScalarQ.all(result));
+    ExactTensorQ.require(result);
     assertEquals(result, Tensors.fromString("{0, 0, 1/16, 15/64, 5/16, 15/64, 1/16, 0, 0}"));
   }
 
@@ -52,7 +52,7 @@ public class GeodesicCenterFilterTest extends TestCase {
     TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
     Tensor signal = UnitVector.of(5, 2);
     Tensor result = geodesicCenterFilter.apply(signal);
-    assertTrue(ExactScalarQ.all(result));
+    ExactTensorQ.require(result);
     assertEquals(result, Tensors.fromString("{0, 1/4, 1/2, 1/4, 0}"));
   }
 

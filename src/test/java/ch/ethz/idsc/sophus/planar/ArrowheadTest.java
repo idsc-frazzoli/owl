@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.planar;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Mean;
@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 public class ArrowheadTest extends TestCase {
   public void testExact() {
-    assertTrue(ExactScalarQ.all(Arrowhead.of(RealScalar.ONE)));
+    ExactTensorQ.require(Arrowhead.of(RealScalar.ONE));
   }
 
   public void testLength() {

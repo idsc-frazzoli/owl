@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.UnitStep;
 
 enum R2NoisePlot {
@@ -23,7 +24,7 @@ enum R2NoisePlot {
   private static final Tensor RE = Subdivide.of(0, 25, RES - 1);
   private static final Tensor IM = Subdivide.of(0, 25, RES - 1);
   @SuppressWarnings("unused")
-  private static final Clip CLIP = Clip.unit();
+  private static final Clip CLIP = Clips.unit();
 
   private static Scalar function(int x, int y) {
     return UnitStep.of(DoubleScalar.of(NOISE.at( //

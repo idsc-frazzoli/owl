@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -15,9 +15,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.num.Rationalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
-import ch.ethz.idsc.tensor.sca.Rationalize;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -27,7 +27,7 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = Nest.of(curveSubdivision::cyclic, tensor, 1);
-    assertTrue(ExactScalarQ.all(actual));
+    ExactTensorQ.require(actual);
     assertEquals(actual, Tensors.fromString("{{1, 0}, {5/8, 5/8}, {0, 1}, {-5/8, 5/8}, {-1, 0}, {-5/8, -5/8}, {0, -1}, {5/8, -5/8}}"));
   }
 
@@ -36,7 +36,7 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     Tensor vector = Tensors.vector(0, 1, 2, 3);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Subdivide.of(0, 3, 6));
-    assertTrue(ExactScalarQ.all(string));
+    ExactTensorQ.require(string);
   }
 
   public void testStringTwo() {
@@ -44,7 +44,7 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     Tensor vector = Tensors.vector(0, 1);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Subdivide.of(0, 1, 2));
-    assertTrue(ExactScalarQ.all(string));
+    ExactTensorQ.require(string);
   }
 
   public void testStringOne() {
@@ -52,7 +52,7 @@ public class FourPointCurveSubdivisionTest extends TestCase {
     Tensor vector = Tensors.vector(3);
     Tensor string = curveSubdivision.string(vector);
     assertEquals(string, Tensors.vector(3));
-    assertTrue(ExactScalarQ.all(string));
+    ExactTensorQ.require(string);
   }
 
   public void testSimple1() {

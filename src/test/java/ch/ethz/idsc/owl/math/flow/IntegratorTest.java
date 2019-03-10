@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.flow;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,9 +27,9 @@ public class IntegratorTest extends TestCase {
     assertEquals(euler_x1, rk4_x1);
     assertEquals(euler_x1, rk45_x1);
     // ---
-    assertTrue(ExactScalarQ.all(euler_x1));
-    assertTrue(ExactScalarQ.all(mid_x1));
-    assertTrue(ExactScalarQ.all(rk4_x1));
-    assertTrue(ExactScalarQ.all(rk45_x1));
+    ExactTensorQ.require(euler_x1);
+    ExactTensorQ.require(mid_x1);
+    ExactTensorQ.require(rk4_x1);
+    ExactTensorQ.require(rk45_x1);
   }
 }

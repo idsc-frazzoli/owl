@@ -7,6 +7,7 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class LinearRegion extends ImplicitRegionWithDistance implements Serializable {
@@ -38,6 +39,6 @@ public class LinearRegion extends ImplicitRegionWithDistance implements Serializ
 
   /** @return region as clip interval */
   public Clip clip() {
-    return Clip.function(center.subtract(radius), center.add(radius));
+    return Clips.interval(center.subtract(radius), center.add(radius));
   }
 }

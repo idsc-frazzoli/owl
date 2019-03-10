@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
 
@@ -27,9 +28,9 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * @author Andre */
 /* package */ class ApPlannerConstraint implements PlannerConstraint, Serializable {
   private static final Clip CLIP_GAMMA = //
-      Clip.function(ApStateSpaceModel.MAX_DESCENT_GAMMA, ApStateSpaceModel.MAX_DESCENT_GAMMA.zero());
+      Clips.interval(ApStateSpaceModel.MAX_DESCENT_GAMMA, ApStateSpaceModel.MAX_DESCENT_GAMMA.zero());
   private static final Clip CLIP_VELOCITY = //
-      Clip.function(ApStateSpaceModel.STALL_SPEED, ApStateSpaceModel.MAX_SPEED);
+      Clips.interval(ApStateSpaceModel.STALL_SPEED, ApStateSpaceModel.MAX_SPEED);
 
   @Override // from PlannerConstraint
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {

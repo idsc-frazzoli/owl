@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -13,7 +13,7 @@ public class BinomialWeightsTest extends TestCase {
     for (int size = 0; size < 5; ++size) {
       Tensor mask = BinomialWeights.INSTANCE.apply(size);
       assertEquals(Total.of(mask), RealScalar.ONE);
-      assertTrue(ExactScalarQ.all(mask));
+      ExactTensorQ.require(mask);
     }
   }
 

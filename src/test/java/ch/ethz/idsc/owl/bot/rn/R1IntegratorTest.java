@@ -5,7 +5,7 @@ import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -23,6 +23,6 @@ public class R1IntegratorTest extends TestCase {
     Flow flow = StateSpaceModels.createFlow(SingleIntegratorStateSpaceModel.INSTANCE, Tensors.vector(1));
     Tensor tensor = integrator.step(flow, Tensors.vector(10, 2), RationalScalar.HALF);
     assertEquals(tensor, Tensors.fromString("{89/8, 5/2}"));
-    assertTrue(ExactScalarQ.all(tensor));
+    ExactTensorQ.require(tensor);
   }
 }

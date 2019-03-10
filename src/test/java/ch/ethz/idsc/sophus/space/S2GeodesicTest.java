@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.space;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -34,7 +34,7 @@ public class S2GeodesicTest extends TestCase {
     Tensor p = UnitVector.of(3, 2);
     Tensor q = UnitVector.of(3, 2);
     Tensor split = S2Geodesic.INSTANCE.split(p, q, RandomVariate.of(NormalDistribution.standard()));
-    assertTrue(ExactScalarQ.all(split));
+    ExactTensorQ.require(split);
     assertEquals(split, p);
   }
 

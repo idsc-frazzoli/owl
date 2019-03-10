@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 public class RnGeodesicTest extends TestCase {
   public void testSimple() {
     Tensor actual = RnGeodesic.INSTANCE.split(Tensors.vector(10, 1), Tensors.vector(11, 0), RealScalar.of(-1));
-    assertTrue(ExactScalarQ.all(actual));
+    ExactTensorQ.require(actual);
     assertEquals(Tensors.vector(9, 2), actual);
   }
 

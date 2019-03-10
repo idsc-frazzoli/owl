@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.math;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -19,8 +19,8 @@ public class WindowSideSamplerTest extends TestCase {
       Tensor tensor = windowSideSampler.apply(extent);
       Tensor expect = NORMALIZE.apply(windowCenterSampler.apply(extent).extract(0, extent + 1));
       assertEquals(tensor, expect);
-      ExactScalarQ.requireAll(tensor);
-      ExactScalarQ.requireAll(expect);
+      ExactTensorQ.require(tensor);
+      ExactTensorQ.require(expect);
     }
   }
 

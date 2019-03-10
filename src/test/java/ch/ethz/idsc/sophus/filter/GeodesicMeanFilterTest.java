@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -39,7 +39,7 @@ public class GeodesicMeanFilterTest extends TestCase {
       Tensor result = tensorUnaryOperator.apply(tensor);
       Tensor expect = MeanFilter.of(tensor, radius);
       assertEquals(result.Get(radius), expect.Get(radius));
-      assertTrue(ExactScalarQ.all(result));
+      ExactTensorQ.require(result);
     }
   }
 
@@ -50,6 +50,6 @@ public class GeodesicMeanFilterTest extends TestCase {
     Tensor result = tensorUnaryOperator.apply(tensor);
     Tensor expect = MeanFilter.of(tensor, radius);
     assertEquals(result, expect);
-    assertTrue(ExactScalarQ.all(result));
+    ExactTensorQ.require(result);
   }
 }

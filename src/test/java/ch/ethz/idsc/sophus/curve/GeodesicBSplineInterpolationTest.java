@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.curve;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.space.H2Geodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
@@ -37,8 +37,8 @@ public class GeodesicBSplineInterpolationTest extends TestCase {
     Tensor pos0 = geodesicBSplineInterpolation.move(prev, eval, goal);
     Tensor pos1 = pet(prev, eval, goal);
     assertEquals(pos0, pos1);
-    assertTrue(ExactScalarQ.all(pos0));
-    assertTrue(ExactScalarQ.all(pos1));
+    ExactTensorQ.require(pos0);
+    ExactTensorQ.require(pos1);
     Iteration iteration = geodesicBSplineInterpolation.init();
     assertEquals(iteration.steps(), 0);
   }

@@ -1,17 +1,17 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
+import ch.ethz.idsc.tensor.num.IntegerDigits;
 import junit.framework.TestCase;
 
 public class IntegerDigitsTest extends TestCase {
   public void testSimple() {
-    assertEquals(IntegerDigits.of(BigInteger.valueOf(+321)), Arrays.asList(3, 2, 1));
-    assertEquals(IntegerDigits.of(BigInteger.valueOf(-321)), Arrays.asList(3, 2, 1));
-    assertEquals(IntegerDigits.of(BigInteger.valueOf(+123456789)), Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-    assertEquals(IntegerDigits.of(BigInteger.valueOf(-123456789)), Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+    assertEquals(IntegerDigits.of(RealScalar.of(+321)), Tensors.vector(3, 2, 1));
+    assertEquals(IntegerDigits.of(RealScalar.of(-321)), Tensors.vector(3, 2, 1));
+    assertEquals(IntegerDigits.of(RealScalar.of(+123456789)), Tensors.vector(1, 2, 3, 4, 5, 6, 7, 8, 9));
+    assertEquals(IntegerDigits.of(RealScalar.of(-123456789)), Tensors.vector(1, 2, 3, 4, 5, 6, 7, 8, 9));
   }
 
   public void testExact() {

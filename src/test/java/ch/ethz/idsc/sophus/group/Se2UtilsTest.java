@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -96,6 +96,6 @@ public class Se2UtilsTest extends TestCase {
     Tensor xya = Tensors.vector(1, 2, 0);
     Tensor translate = Se2Utils.toSE2Translation(xya.extract(0, 2));
     assertEquals(Se2Utils.toSE2Matrix(xya), translate);
-    assertTrue(ExactScalarQ.all(translate));
+    ExactTensorQ.require(translate);
   }
 }

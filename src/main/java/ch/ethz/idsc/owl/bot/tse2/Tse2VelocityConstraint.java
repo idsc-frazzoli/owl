@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /** Velocity constraint for {@link Tse2StateSpaceModel}
  * 
@@ -26,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
    * @param max allowed velocity greater equals min
    * @throws Exception if min exceeds max */
   public Tse2VelocityConstraint(Scalar min, Scalar max) {
-    this(Clip.function(min, max));
+    this(Clips.interval(min, max));
   }
 
   @Override // from PlannerConstraint

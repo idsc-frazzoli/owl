@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class NdBounds {
   public final Tensor lBounds;
@@ -20,6 +21,6 @@ import ch.ethz.idsc.tensor.sca.Clip;
   }
 
   public Clip clip(int index) {
-    return Clip.function(lBounds.Get(index), uBounds.Get(index));
+    return Clips.interval(lBounds.Get(index), uBounds.Get(index));
   }
 }

@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class BalloonPlannerConstraint implements PlannerConstraint, Serializable {
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final Clip vertSpeed_clip;
 
   public BalloonPlannerConstraint(Scalar vertSpeedMax) {
-    vertSpeed_clip = Clip.function(vertSpeedMax.negate(), vertSpeedMax);
+    vertSpeed_clip = Clips.interval(vertSpeedMax.negate(), vertSpeedMax);
   }
 
   @Override // from PlannerConstraint

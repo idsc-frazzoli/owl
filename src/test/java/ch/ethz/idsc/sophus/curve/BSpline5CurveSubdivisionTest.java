@@ -2,13 +2,14 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
 public class BSpline5CurveSubdivisionTest extends TestCase {
@@ -23,17 +24,17 @@ public class BSpline5CurveSubdivisionTest extends TestCase {
     CurveSubdivision curveSubdivision = new BSpline5CurveSubdivision(RnGeodesic.INSTANCE);
     for (int length = 3; length < 7; ++length) {
       Tensor tensor = curveSubdivision.cyclic(UnitVector.of(length, 2));
-      assertTrue(ExactScalarQ.all(tensor));
+      ExactTensorQ.require(tensor);
       assertEquals(Total.of(tensor), RealScalar.of(2));
     }
   }
 
   public void testTerminal() {
     CurveSubdivision curveSubdivision = new BSpline5CurveSubdivision(RnGeodesic.INSTANCE);
-    Clip clip = Clip.function(1, 2);
+    Clip clip = Clips.interval(1, 2);
     for (int length = 2; length < 7; ++length) {
       Tensor tensor = curveSubdivision.string(UnitVector.of(length, 0));
-      assertTrue(ExactScalarQ.all(tensor));
+      ExactTensorQ.require(tensor);
       clip.requireInside(Total.of(tensor).Get());
     }
   }

@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
@@ -18,7 +18,7 @@ public class GeodesicNevilleTest extends TestCase {
     Tensor domain = Range.of(0, control.length());
     Tensor polynom = domain.map(interpolation::at);
     assertEquals(control, polynom);
-    assertTrue(ExactScalarQ.all(polynom));
+    ExactTensorQ.require(polynom);
   }
 
   public void testFail() {

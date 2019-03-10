@@ -31,6 +31,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** several magic constants are hard-coded in the implementation.
@@ -39,7 +40,7 @@ public class Tse2CarEntity extends Tse2Entity {
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(5), RealScalar.of(5), Degree.of(7).reciprocal(), RealScalar.of(10)).unmodifiable();
   public static final Scalar MAX_SPEED = RealScalar.of(3.0); //
-  public static final Clip v_range = Clip.function(MAX_SPEED.zero(), MAX_SPEED);
+  public static final Clip v_range = Clips.interval(MAX_SPEED.zero(), MAX_SPEED);
   static final Scalar MAX_TURNING_PLAN = Degree.of(45);
   static final Scalar LOOKAHEAD = RealScalar.of(0.5);
   static final Scalar MAX_TURNING_RATE = Degree.of(50); // slightly higher for pure pursuit

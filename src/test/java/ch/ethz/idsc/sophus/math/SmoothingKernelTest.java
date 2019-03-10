@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.math;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -28,15 +28,15 @@ public class SmoothingKernelTest extends TestCase {
     for (int width = 0; width < 5; ++width) {
       Tensor tensor = centerWindowSampler.apply(width);
       assertEquals(tensor, constant(width));
-      assertTrue(ExactScalarQ.all(tensor));
+      ExactTensorQ.require(tensor);
       assertEquals(Total.of(tensor), RealScalar.ONE);
     }
   }
 
   public void testHann() {
     WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.HANN);
-    assertTrue(ExactScalarQ.all(centerWindowSampler.apply(1)));
-    assertTrue(ExactScalarQ.all(centerWindowSampler.apply(2)));
+    ExactTensorQ.require(centerWindowSampler.apply(1));
+    ExactTensorQ.require(centerWindowSampler.apply(2));
   }
 
   public void testAll() {

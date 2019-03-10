@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /** state space model taken from the book
  * "Differentially Flat Systems" Chapter 2.7.2
@@ -73,7 +74,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 
   public Scalar verticalWinds(Scalar y) {
     Scalar changeOfWindDirection = RealScalar.of(10);
-    Clip altitude_clip = Clip.function(changeOfWindDirection.negate(), changeOfWindDirection);
+    Clip altitude_clip = Clips.interval(changeOfWindDirection.negate(), changeOfWindDirection);
     return altitude_clip.isInside(y) //
         ? RealScalar.of(5)
         : RealScalar.of(-5);
@@ -81,7 +82,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 
   public Scalar horizontalWinds(Scalar y) {
     Scalar changeOfWindDirection = RealScalar.of(100);
-    Clip altitude_clip = Clip.function(changeOfWindDirection.zero(), changeOfWindDirection);
+    Clip altitude_clip = Clips.interval(changeOfWindDirection.zero(), changeOfWindDirection);
     return altitude_clip.isInside(y) //
         ? y.negate().multiply(RealScalar.of(0.01))
         : y.multiply(RealScalar.of(0.01));

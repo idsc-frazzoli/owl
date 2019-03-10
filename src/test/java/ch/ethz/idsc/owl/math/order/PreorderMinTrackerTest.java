@@ -5,21 +5,21 @@ import junit.framework.TestCase;
 
 public class PreorderMinTrackerTest extends TestCase {
   public void testDigestNotEmptyList() {
-    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INSTANCE;
+    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INTEGER;
     PreorderMinTracker<Integer> digitSumDivisibility = PreorderMinTracker.withList(preorderComparator);
     digitSumDivisibility.digest(123);
     assertFalse(digitSumDivisibility.getMinElements().isEmpty());
   }
 
   public void testDigestNotEmptySet() {
-    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INSTANCE;
+    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INTEGER;
     PreorderMinTracker<Integer> digitSumDivisibility = PreorderMinTracker.withSet(preorderComparator);
     digitSumDivisibility.digest(123);
     assertFalse(digitSumDivisibility.getMinElements().isEmpty());
   }
 
   public void testWithList() {
-    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INSTANCE;
+    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INTEGER;
     PreorderMinTracker<Integer> digitSumDivisibility = PreorderMinTracker.withList(preorderComparator);
     digitSumDivisibility.digest(123);
     assertTrue(digitSumDivisibility.getMinElements().contains(123));
@@ -34,7 +34,7 @@ public class PreorderMinTrackerTest extends TestCase {
   }
 
   public void testWithSet() {
-    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INSTANCE;
+    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INTEGER;
     PreorderMinTracker<Integer> digitSumDivisibility = PreorderMinTracker.withSet(preorderComparator);
     digitSumDivisibility.digest(123);
     assertTrue(digitSumDivisibility.getMinElements().contains(123));
@@ -49,7 +49,7 @@ public class PreorderMinTrackerTest extends TestCase {
   }
 
   public void testDuplicateEntriesList() {
-    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INSTANCE;
+    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INTEGER;
     PreorderMinTracker<Integer> digitSumDivisibility = PreorderMinTracker.withList(preorderComparator);
     digitSumDivisibility.digest(333);
     digitSumDivisibility.digest(333);
@@ -58,7 +58,7 @@ public class PreorderMinTrackerTest extends TestCase {
   }
 
   public void testDuplicateEntriesSet() {
-    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INSTANCE;
+    PreorderComparator<Integer> preorderComparator = DigitSumDivisibilityPreorderComparator.INTEGER;
     PreorderMinTracker<Integer> digitSumDivisibility = PreorderMinTracker.withSet(preorderComparator);
     digitSumDivisibility.digest(333);
     digitSumDivisibility.digest(333);

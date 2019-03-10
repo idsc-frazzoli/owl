@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -17,7 +17,7 @@ public class EightPointCurveSubdivisionTest extends TestCase {
     CurveSubdivision curveSubdivision = new EightPointCurveSubdivision(RnGeodesic.INSTANCE);
     Tensor cyclic = curveSubdivision.cyclic(UnitVector.of(10, 5));
     assertEquals(Total.of(cyclic), RealScalar.of(2));
-    ExactScalarQ.requireAll(cyclic);
+    ExactTensorQ.require(cyclic);
     Tensor result = Tensors.fromString( //
         "{0, 0, 0, -5/2048, 0, 49/2048, 0, -245/2048, 0, 1225/2048, 1, 1225/2048, 0, -245/2048, 0, 49/2048, 0, -5/2048, 0, 0}");
     assertEquals(cyclic, result);
