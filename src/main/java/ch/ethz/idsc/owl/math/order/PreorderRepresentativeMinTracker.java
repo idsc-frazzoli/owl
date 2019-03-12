@@ -1,3 +1,4 @@
+// code by astoll
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.Objects;
 /** TODO ASTOLL new definition of minimal element
  * 
  * @param <T> type of elements to compare */
+// TODO JPH redundancy with PreorderMinTracker
 public class PreorderRepresentativeMinTracker<T> implements MinTrackerInterface<T> {
   public static <T> PreorderRepresentativeMinTracker<T> withList(PreorderComparator<T> preorderComparator) {
     return new PreorderRepresentativeMinTracker<>(preorderComparator, new LinkedList<>());
@@ -42,7 +44,8 @@ public class PreorderRepresentativeMinTracker<T> implements MinTrackerInterface<
       if (preorderComparison.equals(PreorderComparison.LESS_EQUALS_ONLY))
         iterator.remove();
       else //
-      if (preorderComparison.equals(PreorderComparison.GREATER_EQUALS_ONLY) || preorderComparison.equals(PreorderComparison.INDIFFERENT))
+      if (preorderComparison.equals(PreorderComparison.GREATER_EQUALS_ONLY) || //
+          preorderComparison.equals(PreorderComparison.INDIFFERENT))
         return;
     }
     if (!collection.contains(x)) {
