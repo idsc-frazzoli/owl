@@ -43,7 +43,7 @@ public class StrictPartialOrderMinTracker<T> implements MinTrackerInterface<T> {
       if (strictPartialComparison.equals(StrictPartialComparison.LESS_THAN))
         iterator.remove();
       else //
-      if (!strictPartialComparison.equals(StrictPartialComparison.INCOMPARABLE))
+      if (strictPartialComparison.equals(StrictPartialComparison.GREATER_THAN))
         return;
     }
     collection.add(x);
