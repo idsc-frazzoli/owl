@@ -1,6 +1,7 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -41,13 +42,12 @@ public class UniversalMinTracker<T> implements MinTrackerInterface<T> {
   }
 
   public boolean criterion(UniversalComparison comparison) {
-    // TODO Auto-generated method stub
-    return comparison.equals(UniversalComparison.STRICTLY_PRECEDES) || comparison.equals(UniversalComparison.INDIFFERENT);
+    return comparison.equals(UniversalComparison.STRICTLY_SUCCEDES);
   }
 
-  @Override
+  /** @return Minimal elements of partially ordered set */
+  @Override // from MinTrackerInterface
   public Collection<T> getMinElements() {
-    // TODO Auto-generated method stub
-    return null;
+    return Collections.unmodifiableCollection(collection);
   }
 }

@@ -20,7 +20,7 @@ public class LexicographicSemiorderComparator<T> implements StrictPartialCompara
         return StrictPartialComparison.LESS_THAN;
       } else if (strictPartialComparison.equals(StrictPartialComparison.GREATER_THAN)) {
         return StrictPartialComparison.GREATER_THAN;
-      } 
+      }
     }
     return StrictPartialComparison.INCOMPARABLE;
   }

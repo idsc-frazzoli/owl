@@ -5,7 +5,7 @@ package ch.ethz.idsc.owl.math.order;
  * 
  * <p>An ordered pair is pair of objects <tt>(x,y)</tt> assocaited with an order (binary) relation <tt>R</tt>.
  * 
- * <p>If the ordered pair is in the relation <tt>R</tt>, we write <tt>xRy</tt>. 
+ * <p>If the ordered pair is in the relation <tt>R</tt>, we write <tt>xRy</tt>.
  * 
  * <p>Given two elements <tt>x</tt> and <tt>y</tt> and an order relation <tt>R</tt> we can define four cases:
  * 

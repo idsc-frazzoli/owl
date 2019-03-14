@@ -1,7 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
-public enum UniversalPreorder {
+public enum UniversalOrder {
   ;
   /** @param binaryRelation reflexive and transitive
    * @return */

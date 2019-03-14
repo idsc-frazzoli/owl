@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-/** 
- * 
- * @param <T> type of elements to compare */
+/** @param <T> type of elements to compare */
 public class PreorderMinTracker<T> extends AbstractPreorderMinTracker<T> {
   public static <T> PreorderMinTracker<T> withList(PreorderComparator<T> preorderComparator) {
     return new PreorderMinTracker<>(preorderComparator, new LinkedList<>());
@@ -24,6 +22,6 @@ public class PreorderMinTracker<T> extends AbstractPreorderMinTracker<T> {
   @Override
   public boolean criterion(PreorderComparison preorderComparison) {
     // TODO Auto-generated method stub
-    return preorderComparison.equals(PreorderComparison.GREATER_EQUALS_ONLY) || preorderComparison.equals(PreorderComparison.INDIFFERENT);
+    return preorderComparison.equals(PreorderComparison.GREATER_EQUALS_ONLY);
   }
 }
