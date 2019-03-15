@@ -20,7 +20,7 @@ public class PreorderMinTracker<T> extends AbstractPreorderMinTracker<T> {
   }
 
   @Override
-  public boolean criterion(PreorderComparison preorderComparison) {
+  public boolean discardCriterion(PreorderComparison preorderComparison) {
     // TODO Auto-generated method stub
     return preorderComparison.equals(PreorderComparison.GREATER_EQUALS_ONLY);
   }

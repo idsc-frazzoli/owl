@@ -15,7 +15,13 @@ public abstract class AbstractPreorderMinTracker<T> implements MinTrackerInterfa
     this.collection = collection;
   }
 
-  public abstract boolean criterion(PreorderComparison preorderComparison);
+  /** Depending on whether we only want all indifferent solutions or just a complete set of representatives
+   * set the discarding criterion accordingly
+   * 
+   * @param preorderComparison
+   * @return true or false
+   */
+  protected abstract boolean discardCriterion(PreorderComparison preorderComparison);
 
   /** Compares an element <tt>x</tt> of a preorder to the current set of minimal elements.
    *
@@ -23,7 +29,7 @@ public abstract class AbstractPreorderMinTracker<T> implements MinTrackerInterfa
    * 
    * @param x Element next up for comparison */
   @Override // from MinTrackerInterface
-  public void digest(T x) {
+  public final void digest(T x) {
     Iterator<T> iterator = collection.iterator();
     while (iterator.hasNext()) {
       T b = iterator.next();
@@ -31,7 +37,7 @@ public abstract class AbstractPreorderMinTracker<T> implements MinTrackerInterfa
       if (preorderComparison.equals(PreorderComparison.LESS_EQUALS_ONLY))
         iterator.remove();
       else //
-      if (criterion(preorderComparison))
+      if (discardCriterion(preorderComparison))
         return;
     }
     if (!collection.contains(x)) {
@@ -41,7 +47,7 @@ public abstract class AbstractPreorderMinTracker<T> implements MinTrackerInterfa
 
   /** @return Minimal elements of preordered set */
   @Override // from MinTrackerInterface
-  public Collection<T> getMinElements() {
+  public final Collection<T> getMinElements() {
     return Collections.unmodifiableCollection(collection);
   }
 }
