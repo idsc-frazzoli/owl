@@ -1,3 +1,4 @@
+// code by astoll
 package ch.ethz.idsc.owl.math.order;
 
 public enum IdentityUtilityFunction {

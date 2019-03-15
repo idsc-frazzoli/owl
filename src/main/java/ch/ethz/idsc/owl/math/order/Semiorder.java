@@ -12,12 +12,12 @@ public enum Semiorder {
       public StrictPartialComparison compare(T x, T y) {
         Scalar utility_x = utilityFunction.apply(x);
         Scalar utility_y = utilityFunction.apply(y);
-        if (Scalars.lessEquals(utility_x.add(slack), utility_y)) {
+        // TODO ASTOLL would Scalars.lessThan be an alternative to the Scalars.lessEquals's below?
+        // ... if so, make a 2nd function
+        if (Scalars.lessEquals(utility_x.add(slack), utility_y))
           return StrictPartialComparison.LESS_THAN;
-        }
-        if (Scalars.lessEquals(utility_y.add(slack), utility_x)) {
+        if (Scalars.lessEquals(utility_y.add(slack), utility_x))
           return StrictPartialComparison.GREATER_THAN;
-        }
         return StrictPartialComparison.INCOMPARABLE;
       }
     };
