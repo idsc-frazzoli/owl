@@ -25,6 +25,9 @@ public class SymScalar extends ScalarAdapter {
   public static Scalar leaf(int number) {
     return new SymScalar(RealScalar.of(number));
   }
+  // public static Scalar leaf(Scalar scalar) {
+  // return new SymScalar(scalar);
+  // }
 
   // ---
   private final Tensor tensor;

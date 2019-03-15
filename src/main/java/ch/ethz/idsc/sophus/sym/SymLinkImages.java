@@ -74,4 +74,15 @@ public enum SymLinkImages {
     symLinkImage.title("Regularization2Step [" + factor + "]");
     return symLinkImage;
   }
+
+  public static SymLinkImage deboor(GeodesicDeBoor geodesicDeBoor, int length, Scalar scalar) {
+    Tensor knots = geodesicDeBoor.knots();
+    Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
+    // Tensor vector = knots.map(s->s.subtract(knots.Get(0))).map(SymScalar::leaf);
+    ScalarTensorFunction scalarTensorFunction = GeodesicDeBoor.of(SymGeodesic.INSTANCE, knots, vector);
+    Tensor tensor = scalarTensorFunction.apply(scalar);
+    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, FONT_SMALL);
+    symLinkImage.title("DeBoor at " + scalar);
+    return symLinkImage;
+  }
 }

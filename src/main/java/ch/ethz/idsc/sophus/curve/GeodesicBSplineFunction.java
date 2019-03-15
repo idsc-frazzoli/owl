@@ -100,7 +100,7 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
     return deBoor(scalar).apply(scalar);
   }
 
-  GeodesicDeBoor deBoor(Scalar scalar) {
+  public GeodesicDeBoor deBoor(Scalar scalar) {
     // return deBoor(Floor.FUNCTION.apply(scalar.add(shift)).number().intValue());
     return deBoor(navigableMap.floorEntry(domain.requireInside(scalar)).getValue());
   }
