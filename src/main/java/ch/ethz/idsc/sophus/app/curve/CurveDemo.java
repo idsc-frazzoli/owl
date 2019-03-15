@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 
 import javax.swing.JToggleButton;
 
@@ -24,7 +25,11 @@ import ch.ethz.idsc.tensor.Tensor;
   private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
 
   public CurveDemo() {
-    super(true, GeodesicDisplays.ALL);
+    this(GeodesicDisplays.ALL);
+  }
+
+  public CurveDemo(List<GeodesicDisplay> list) {
+    super(true, list);
     // ---
     jToggleCrvt.setSelected(true);
     timerFrame.jToolBar.add(jToggleCrvt);
