@@ -10,8 +10,7 @@ import junit.framework.TestCase;
 
 public class GeodesicIIR1FilterTest extends TestCase {
   public void testSimple() {
-    GeodesicIIR1Filter geodesicIIR1Filter = //
-        new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.5));
+    GeodesicIIR1Filter geodesicIIR1Filter = new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.5));
     // irc=0.0[s^-2]
     // irc=1.9999999999999996[s^-2]
     // irc=1.0000000000000009[s^-2]
@@ -39,8 +38,8 @@ public class GeodesicIIR1FilterTest extends TestCase {
   }
 
   public void testInitialized() {
-    GeodesicIIR1Filter geodesicIIR1Filter = //
-        new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.5), Quantity.of(0, "s^-2"));
+    GeodesicIIR1Filter geodesicIIR1Filter = new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.5));
+    geodesicIIR1Filter.apply(Quantity.of(0, "s^-2"));
     // irc=0.0[s^-2]
     // irc=1.9999999999999996[s^-2]
     // irc=1.0000000000000009[s^-2]
@@ -68,8 +67,27 @@ public class GeodesicIIR1FilterTest extends TestCase {
   }
 
   public void testNullFail() {
+    GeodesicIIR1Filter geodesicIIR1Filter = new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.2));
     try {
-      new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.2), null);
+      geodesicIIR1Filter.apply(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testZeroFail() {
+    try {
+      new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testLargeFail() {
+    try {
+      new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(1.01));
       fail();
     } catch (Exception exception) {
       // ---

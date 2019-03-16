@@ -30,6 +30,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
 public class KnotsBSplineFunctionDemo extends CurveDemo {
@@ -37,6 +38,7 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  private final JToggleButton jToggleUnif = new JToggleButton("unif");
   // private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
@@ -45,7 +47,7 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
     super(GeodesicDisplays.SE2_R2);
     // addButtonDubins();
     // ---
-    // timerFrame.jToolBar.add(jToggleItrp);
+    timerFrame.jToolBar.add(jToggleUnif);
     // ---
     spinnerDegree.setList(DEGREES);
     spinnerDegree.setValue(3);
@@ -78,7 +80,9 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
     Tensor diffs = Tensors.vector(0);
     for (int index = 1; index < control.length(); ++index)
       diffs.append(geodesicDisplay.parametricDifference(control.get(index - 1), control.get(index)));
-    Tensor knots = Accumulate.of(diffs);
+    Tensor knots = jToggleUnif.isSelected() //
+        ? Range.of(0, control.length())
+        : Accumulate.of(diffs);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---
