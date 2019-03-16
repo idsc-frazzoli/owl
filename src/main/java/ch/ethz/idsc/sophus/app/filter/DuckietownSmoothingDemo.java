@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.misc.DuckietownData;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
@@ -29,7 +31,8 @@ import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
+import ch.ethz.idsc.tensor.io.Import;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public class DuckietownSmoothingDemo extends DatasetKernelDemo {
@@ -60,12 +63,17 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
 
   @Override
   protected void updateState() {
-    // TODO OB: Liste anpassen => neue DatasetKernelDemo fuer duckietown?
-    Tensor tensor = ResourceData.of("/autolab/localization/2018/" + LIST.get(spinnerLabelString.getIndex()));
+    Tensor importedData = Tensors.empty();
+    try {
+      importedData = Import.of(HomeDirectory.file("Desktop/MA/duckietown/duckiebot_0_poses.csv"));
+    } catch (IOException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    Tensor tensor = DuckietownData.states(importedData.extract(1, importedData.length()));
     tensor = tensor.map(xya -> xya);
     _control = Tensor.of(tensor.stream() //
-        .limit(spinnerLabelLimit.getValue()) //
-        .map(row -> row.extract(2, 5)));
+        .limit(spinnerLabelLimit.getValue()));
   }
 
   @Override // from RenderInterface
@@ -92,7 +100,7 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
     {
       Tensor selected = scalarTensorFunction.apply(parameter);
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
-      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(.01)));
+      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(.02)));
       graphics.setColor(Color.DARK_GRAY);
       graphics.fill(path2d);
       geometricLayer.popMatrix();
@@ -100,7 +108,7 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
     return refined;
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     AbstractDemo abstractDemo = new DuckietownSmoothingDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);

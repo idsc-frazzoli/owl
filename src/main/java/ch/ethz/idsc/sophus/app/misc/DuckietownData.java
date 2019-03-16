@@ -48,7 +48,9 @@ public enum DuckietownData {
 
   public static void main(String[] args) throws IOException {
     // TODO EPHEMERAL JPH
-    Tensor states = states(Import.of(HomeDirectory.file("duckiebot_0_poses.csv")));
+    System.out.println(Import.of(HomeDirectory.file("Desktop/MA/duckietown/duckiebot_0_poses.csv")));
+    Tensor states = states(Import.of(HomeDirectory.file("Desktop/MA/duckietown/duckiebot_0_poses.csv")));
+    System.out.println(states);
     System.out.println(states);
   }
 }
