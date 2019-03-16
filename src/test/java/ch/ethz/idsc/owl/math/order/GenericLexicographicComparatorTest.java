@@ -18,12 +18,12 @@ public class GenericLexicographicComparatorTest extends TestCase {
     List<Scalar> list = new LinkedList<>();
     list.add(RealScalar.ONE);
     list.add(RealScalar.of(3));
-    List<UniversalComparator> comparators = Arrays.asList( //
-        UniversalOrder.comparator(Scalars::lessEquals), //
-        UniversalOrder.comparator(Scalars::lessEquals)); //
+    List<OrderComparator> comparators = Arrays.asList( //
+        Order.comparator(Scalars::lessEquals), //
+        Order.comparator(Scalars::lessEquals)); //
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    UniversalComparison universalComparison = genericLexicographicOrder.compare(list, list);
-    assertEquals(universalComparison, UniversalComparison.INDIFFERENT);
+    OrderComparison OrderComparison = genericLexicographicOrder.compare(list, list);
+    assertEquals(OrderComparison, OrderComparison.INDIFFERENT);
   }
 
   public void testMixed() {
@@ -36,25 +36,25 @@ public class GenericLexicographicComparatorTest extends TestCase {
     // Object object = list.get(3);
     BinaryRelation<Integer> relation1 = (x, y) -> x < y;
     BinaryRelation<Collection<?>> relation2 = (x, y) -> y.containsAll(x);
-    List<UniversalComparator> comparators = Arrays.asList( //
-        UniversalOrder.comparator(relation1), //
-        UniversalOrder.comparator(relation2)); //
-    // UniversalOrder.comparator(binaryRelation);
+    List<OrderComparator> comparators = Arrays.asList( //
+        Order.comparator(relation1), //
+        Order.comparator(relation2)); //
+    // Order.comparator(binaryRelation);
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    UniversalComparison universalComparison = genericLexicographicOrder.compare(listX, listY);
-    // System.out.println(universalComparison);
-    assertEquals(universalComparison, UniversalComparison.STRICTLY_SUCCEDES);
+    OrderComparison OrderComparison = genericLexicographicOrder.compare(listX, listY);
+    // System.out.println(OrderComparison);
+    assertEquals(OrderComparison, OrderComparison.STRICTLY_SUCCEEDS);
   }
 
   public void testTensor() {
     Tensor tensorX = Tensors.fromString("{{1,2,3}, 2}");
     Tensor tensorY = Tensors.fromString("{{2,3,4,5},-2}");
     BinaryRelation<Tensor> relation1 = (x, y) -> x.length() <= y.length();
-    List<UniversalComparator> comparators = Arrays.asList( //
-        UniversalOrder.comparator(relation1), //
-        UniversalOrder.comparator(Scalars::lessEquals)); //
+    List<OrderComparator> comparators = Arrays.asList( //
+        Order.comparator(relation1), //
+        Order.comparator(Scalars::lessEquals)); //
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    UniversalComparison universalComparison = genericLexicographicOrder.compare(tensorX, tensorY);
-    assertEquals(universalComparison, UniversalComparison.STRICTLY_PRECEDES);
+    OrderComparison OrderComparison = genericLexicographicOrder.compare(tensorX, tensorY);
+    assertEquals(OrderComparison, OrderComparison.STRICTLY_PRECEDES);
   }
 }

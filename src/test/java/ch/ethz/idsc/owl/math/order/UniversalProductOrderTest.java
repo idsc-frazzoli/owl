@@ -11,13 +11,13 @@ import junit.framework.TestCase;
 
 public class UniversalProductOrderTest extends TestCase {
   public void testTotalProduct() {
-    UniversalComparator<Scalar> comparator1 = UniversalOrder.comparator(Scalars::lessEquals);
-    List<UniversalComparator<Scalar>> comparatorList = new LinkedList<>();
+    OrderComparator<Scalar> comparator1 = Order.comparator(Scalars::lessEquals);
+    List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     // FIXME ASTOLL warnings
-    UniversalProductOrder<Scalar> productOrder = new UniversalProductOrder(comparatorList);
+    ProductOrder<Scalar> productOrder = new ProductOrder(comparatorList);
     List<Scalar> x = new LinkedList<>();
     x.add(RealScalar.of(1));
     x.add(RealScalar.of(2));
@@ -30,8 +30,8 @@ public class UniversalProductOrderTest extends TestCase {
     z.add(RealScalar.of(2));
     z.add(RealScalar.of(2));
     z.add(RealScalar.of(2));
-    assertEquals(UniversalComparison.STRICTLY_PRECEDES, productOrder.compare(x, y));
-    assertEquals(UniversalComparison.STRICTLY_SUCCEDES, productOrder.compare(y, x));
+    assertEquals(OrderComparison.STRICTLY_PRECEDES, productOrder.compare(x, y));
+    assertEquals(OrderComparison.STRICTLY_SUCCEEDS, productOrder.compare(y, x));
     // assertEquals(UniversalComparison.INDIFFERENT, productOrder.compare(y, y));
     // assertEquals(UniversalComparison.INDIFFERENT, productOrder.compare(x, x));
   }
