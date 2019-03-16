@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.group.StGeodesic;
 import ch.ethz.idsc.sophus.group.StGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.red.Max;
@@ -56,6 +57,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public LieExponential lieExponential() {
     return StExponential.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public Scalar parametricDifference(Tensor p, Tensor q) {
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Object

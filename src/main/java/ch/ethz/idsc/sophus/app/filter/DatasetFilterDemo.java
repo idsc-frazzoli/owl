@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   }
 
   public DatasetFilterDemo() {
-    super(GeodesicDisplays.SE2_R2);
+    super(GeodesicDisplays.CLOTH_SE2_R2);
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     // ---
     jToggleWait.setSelected(false);
