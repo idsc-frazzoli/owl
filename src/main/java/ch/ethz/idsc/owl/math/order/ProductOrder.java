@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /** Creates a product order comparator where each elements of two tuples are compared coordinatewise.
- * 
+ * An element x precedes y if it precedes y in all coordinates.
  * @author Andre
  *
  * @param <T> */
