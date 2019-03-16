@@ -15,8 +15,8 @@ public class ProductTotalOrderTest extends TestCase {
     List<Comparable> y = new LinkedList<>();
     y.add(1);
     y.add("zwei");
-    assertTrue(ProductTotalOrder.INSTANCE.compare(x, y).equals(PartialComparison.EQUALS));
-    assertTrue(ProductTotalOrder.INSTANCE.compare(y, x).equals(PartialComparison.EQUALS));
+    assertTrue(ProductTotalOrder.INSTANCE.compare(x, y).equals(OrderComparison.INDIFFERENT));
+    assertTrue(ProductTotalOrder.INSTANCE.compare(y, x).equals(OrderComparison.INDIFFERENT));
   }
 
   @SuppressWarnings("rawtypes")
@@ -27,8 +27,8 @@ public class ProductTotalOrderTest extends TestCase {
     List<Comparable> y = new LinkedList<>();
     y.add(false);
     y.add(3.56);
-    assertTrue(ProductTotalOrder.INSTANCE.compare(x, y).equals(PartialComparison.INCOMPARABLE));
-    assertTrue(ProductTotalOrder.INSTANCE.compare(y, x).equals(PartialComparison.INCOMPARABLE));
+    assertTrue(ProductTotalOrder.INSTANCE.compare(x, y).equals(OrderComparison.INCOMPARABLE));
+    assertTrue(ProductTotalOrder.INSTANCE.compare(y, x).equals(OrderComparison.INCOMPARABLE));
   }
 
   @SuppressWarnings("rawtypes")
@@ -41,8 +41,8 @@ public class ProductTotalOrderTest extends TestCase {
     y.add(true);
     y.add(3.56);
     y.add(3);
-    assertTrue(ProductTotalOrder.INSTANCE.compare(x, y).equals(PartialComparison.LESS_THAN));
-    assertTrue(ProductTotalOrder.INSTANCE.compare(y, x).equals(PartialComparison.GREATER_THAN));
+    assertTrue(ProductTotalOrder.INSTANCE.compare(x, y).equals(OrderComparison.STRICTLY_PRECEDES));
+    assertTrue(ProductTotalOrder.INSTANCE.compare(y, x).equals(OrderComparison.STRICTLY_SUCCEEDS));
   }
 
   @SuppressWarnings("rawtypes")
@@ -53,8 +53,8 @@ public class ProductTotalOrderTest extends TestCase {
     List<Comparable> y = new LinkedList<>();
     y.add("drei");
     y.add('a');
-    assertTrue(ProductTotalOrder.INSTANCE.compare(x, y).equals(PartialComparison.GREATER_THAN));
-    assertTrue(ProductTotalOrder.INSTANCE.compare(y, x).equals(PartialComparison.LESS_THAN));
+    assertTrue(ProductTotalOrder.INSTANCE.compare(x, y).equals(OrderComparison.STRICTLY_SUCCEEDS));
+    assertTrue(ProductTotalOrder.INSTANCE.compare(y, x).equals(OrderComparison.STRICTLY_PRECEDES));
   }
 
   @SuppressWarnings("rawtypes")
