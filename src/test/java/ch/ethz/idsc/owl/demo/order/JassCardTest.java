@@ -1,7 +1,6 @@
 // code by astoll
 package ch.ethz.idsc.owl.demo.order;
 
-import ch.ethz.idsc.owl.demo.order.JassCard;
 import ch.ethz.idsc.owl.demo.order.JassCard.Color;
 import ch.ethz.idsc.owl.demo.order.JassCard.Type;
 import junit.framework.TestCase;

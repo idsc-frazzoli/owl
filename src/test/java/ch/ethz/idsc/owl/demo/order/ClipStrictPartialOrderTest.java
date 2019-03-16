@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.demo.order;
 
-import ch.ethz.idsc.owl.demo.order.ClipStrictPartialOrder;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;

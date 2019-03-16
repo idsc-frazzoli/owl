@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.demo.order;
 
-import ch.ethz.idsc.owl.demo.order.TensorNormTotalPreorder;
 import ch.ethz.idsc.owl.math.order.OrderComparator;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import ch.ethz.idsc.tensor.Tensor;

@@ -21,7 +21,7 @@ public class TransitiveMinTrackerTest extends TestCase {
     digitSumDivisibility.digest(123);
     assertFalse(digitSumDivisibility.getMinElements().isEmpty());
   }
-  
+
   public void testPartial() {
     OrderComparator<Scalar> universalComparator = Order.comparator(Scalars::divides);
     TransitiveMinTracker<Scalar> divisibility = TransitiveMinTracker.withList(universalComparator);

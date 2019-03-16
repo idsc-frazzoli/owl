@@ -70,6 +70,7 @@ public class NegTransitiveMinTracker<T> implements MinTracker<T> {
   protected boolean keepOnlyRepresentatives() {
     return false;
   }
+
   @Override // from MinTrackerInterface
   public final Collection<T> getMinElements() {
     return Collections.unmodifiableCollection(collection);

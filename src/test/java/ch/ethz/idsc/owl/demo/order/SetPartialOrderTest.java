@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-import ch.ethz.idsc.owl.demo.order.SetPartialOrder;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import junit.framework.TestCase;
 
