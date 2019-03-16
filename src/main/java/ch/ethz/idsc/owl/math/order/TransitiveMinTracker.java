@@ -6,15 +6,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Objects;
+
 /** Tracks minimal elements of a transitive ordered set <tt>X</tt>.
  * An element x is said to be minimal if there is no other element y such that yRx.
  * (Strict) Total orders, total preorders and weak orders, preorders, semiorders are all transitive.
- * Be aware that neg. transitive orders are transitive as well and 
+ * Be aware that neg. transitive orders are transitive as well and
  * thus work for this MinTracker but with significant performance losses.
  * @param <T> type of elements to compare */
-public class TransitiveMinTracker<T> implements MinTracker<T>{
-
- 
+public class TransitiveMinTracker<T> implements MinTracker<T> {
   public static <T> TransitiveMinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new TransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }
@@ -47,15 +46,14 @@ public class TransitiveMinTracker<T> implements MinTracker<T>{
       collection.add(x);
     }
   }
-  /**Discards elements which strictly succeed any of the current elements.
+
+  /** Discards elements which strictly succeed any of the current elements.
    * 
    * @param comparison
-   * @return
-   */
+   * @return */
   protected boolean discardCriterion(OrderComparison comparison) {
     return comparison.equals(OrderComparison.STRICTLY_SUCCEEDS);
   }
-
 
   /** @return Minimal elements of partially ordered set */
   @Override // from MinTrackerInterface

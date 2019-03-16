@@ -13,6 +13,7 @@ public class SemiorderTest extends TestCase {
     assertTrue(semiorder.compare(RealScalar.of(2.4), RealScalar.of(1)).equals(OrderComparison.STRICTLY_SUCCEEDS));
     assertTrue(semiorder.compare(RealScalar.of(3), RealScalar.of(4)).equals(OrderComparison.INCOMPARABLE));
   }
+
   public void testString() {
     OrderComparator<String> semiorder = Semiorder.comparator(s -> RealScalar.of(s.length()), RealScalar.ONE);
     assertTrue(semiorder.compare("ewrwer", "ewrwer").equals(OrderComparison.INCOMPARABLE));

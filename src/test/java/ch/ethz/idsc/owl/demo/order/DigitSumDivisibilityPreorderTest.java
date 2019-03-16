@@ -16,6 +16,7 @@ public class DigitSumDivisibilityPreorderTest extends TestCase {
     assertTrue(preorderComparison3.equals(OrderComparison.INDIFFERENT));
     assertTrue(preorderComparison4.equals(OrderComparison.INDIFFERENT));
   }
+
   public void testEqualsScalar() {
     OrderComparison preorderComparison1 = DigitSumDivisibilityPreorder.SCALAR.compare(RealScalar.of(321), RealScalar.of(6));
     assertTrue(preorderComparison1.equals(OrderComparison.INDIFFERENT));

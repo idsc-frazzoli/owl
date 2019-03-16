@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.demo.order;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.demo.order.TypeStrictPartialOrder;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

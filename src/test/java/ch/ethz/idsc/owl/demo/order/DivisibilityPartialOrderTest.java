@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.demo.order;
 
-import ch.ethz.idsc.owl.demo.order.DivisibilityPreorder;
 import ch.ethz.idsc.owl.math.order.OrderComparison;
 import ch.ethz.idsc.tensor.RealScalar;
 import junit.framework.TestCase;
