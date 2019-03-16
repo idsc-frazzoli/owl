@@ -41,7 +41,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Nest;
@@ -183,9 +182,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
     {
       Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
       TensorUnaryOperator tensorUnaryOperator = create(function.apply(geodesicDisplay.geodesicInterface()), cyclic);
-      Timing timing = Timing.started();
       refined = Nest.of(tensorUnaryOperator, control, levels);
-      System.out.println(String.format("%8.5f", timing.seconds()));
     }
     if (jToggleLine.isSelected()) {
       TensorUnaryOperator tensorUnaryOperator = create(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface()), cyclic);

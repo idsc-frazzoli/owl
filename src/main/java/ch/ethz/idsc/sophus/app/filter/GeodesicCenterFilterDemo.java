@@ -23,6 +23,11 @@ public class GeodesicCenterFilterDemo extends DatasetKernelDemo {
   protected void updateState() {
     super.updateState();
     // ---
+    // try {
+    // _control = DuckietownPositions.states(Import.of(HomeDirectory.file("duckiebot_0_poses.csv")));
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // }
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
     refined = GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
   }

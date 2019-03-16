@@ -11,9 +11,11 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -95,9 +97,47 @@ public class GeodesicBSplineFunctionTest extends TestCase {
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
   }
 
+  public void testNonUniformKnots() {
+    Tensor control = RandomVariate.of(DiscreteUniformDistribution.of(2, 102), 10, 4);
+    Tensor domain = RandomVariate.of(UniformDistribution.of(0, 9), 100);
+    for (int degree = 1; degree < 6; ++degree) {
+      Tensor result = domain.map(GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, control));
+      {
+        Tensor vector = Range.of(5, 5 + control.length());
+        Tensor compar = domain.map(RealScalar.of(5)::add) //
+            .map(GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, vector, control));
+        Chop._11.requireClose(result, compar);
+      }
+      {
+        Tensor vector = Range.of(5, 5 + control.length()).map(RealScalar.of(2)::multiply);
+        Tensor compar = domain.map(RealScalar.of(5)::add).map(RealScalar.of(2)::multiply) //
+            .map(GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, vector, control));
+        Chop._11.requireClose(result, compar);
+      }
+    }
+  }
+
   public void testDegreeFail() {
     try {
       GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, -1, UnitVector.of(7, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testKnotsFail() {
+    try {
+      GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 3, Range.of(0, 10), Range.of(0, 11));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testKnotsUnsortedFail() {
+    try {
+      GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 3, Tensors.vector(3, 2, 1), Tensors.vector(1, 2, 3));
       fail();
     } catch (Exception exception) {
       // ---
