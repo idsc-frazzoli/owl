@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +30,6 @@ import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Import;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -65,10 +63,9 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
   protected void updateState() {
     Tensor importedData = Tensors.empty();
     try {
-      importedData = Import.of(HomeDirectory.file("Desktop/MA/duckietown/duckiebot_0_poses.csv"));
-    } catch (IOException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
+      importedData = Import.of(DuckietownData.FILE);
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
     Tensor tensor = DuckietownData.states(importedData.extract(1, importedData.length()));
     tensor = tensor.map(xya -> xya);
@@ -108,7 +105,12 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
     return refined;
   }
 
-  public static void main(String[] args) throws IOException {
+  @Override
+  public Scalar markerScale() {
+    return RealScalar.of(0.01);
+  }
+
+  public static void main(String[] args) {
     AbstractDemo abstractDemo = new DuckietownSmoothingDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);

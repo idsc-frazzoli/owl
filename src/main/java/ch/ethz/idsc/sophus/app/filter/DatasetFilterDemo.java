@@ -80,8 +80,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
     {
-      spinnerLabelLimit.setList(Arrays.asList(10, 50, 100, 250, 500, 1000, 2000, 5000));
-      spinnerLabelLimit.setIndex(0);
+      spinnerLabelLimit.setList(Arrays.asList(10, 20, 50, 100, 250, 500, 1000, 2000, 5000));
+      spinnerLabelLimit.setIndex(4);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
@@ -98,7 +98,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Tensor control = control();
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.01));
+    final Tensor shape = geodesicDisplay.shape().multiply(markerScale());
     if (jToggleData.isSelected()) {
       pathRenderCurve.setCurve(control, false).render(geometricLayer, graphics);
       for (Tensor point : control) {
@@ -127,6 +127,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     }
     if (jToggleDiff.isSelected())
       differences_render(graphics, geodesicDisplay(), refined);
+  }
+
+  public Scalar markerScale() {
+    return RealScalar.of(.3);
   }
 
   /** @param geometricLayer
