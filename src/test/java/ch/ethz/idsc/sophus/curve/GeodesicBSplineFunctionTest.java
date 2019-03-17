@@ -125,4 +125,22 @@ public class GeodesicBSplineFunctionTest extends TestCase {
       // ---
     }
   }
+
+  public void testKnotsFail() {
+    try {
+      GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 3, Range.of(0, 10), Range.of(0, 11));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testKnotsUnsortedFail() {
+    try {
+      GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, 3, Tensors.vector(3, 2, 1), Tensors.vector(1, 2, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

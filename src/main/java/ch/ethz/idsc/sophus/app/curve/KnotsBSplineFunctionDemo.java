@@ -29,26 +29,25 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Accumulate;
-import ch.ethz.idsc.tensor.alg.Differences;
-import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.red.Norm;
 
 public class KnotsBSplineFunctionDemo extends CurveDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  private final JToggleButton jToggleUnif = new JToggleButton("unif");
   // private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   public KnotsBSplineFunctionDemo() {
-    super(GeodesicDisplays.SE2_R2);
+    super(GeodesicDisplays.CLOTH_SE2_R2);
     // addButtonDubins();
     // ---
-    // timerFrame.jToolBar.add(jToggleItrp);
+    timerFrame.jToolBar.add(jToggleUnif);
     // ---
     spinnerDegree.setList(DEGREES);
     spinnerDegree.setValue(3);
@@ -74,14 +73,19 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
+    final GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Tensor control = control();
+    // ---
     Tensor effective = control;
-    Tensor diffs = Differences.of(control);
-    Tensor knots = Accumulate.of(Join.of(Tensors.vector(0), Tensor.of(diffs.stream().map(xya -> xya.extract(0, 2)).map(Norm._2::ofVector))));
+    Tensor diffs = Tensors.vector(0);
+    for (int index = 1; index < control.length(); ++index)
+      diffs.append(geodesicDisplay.parametricDifference(control.get(index - 1), control.get(index)));
+    Tensor knots = jToggleUnif.isSelected() //
+        ? Range.of(0, control.length())
+        : Accumulate.of(diffs);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
     if (jToggleSymi.isSelected()) {

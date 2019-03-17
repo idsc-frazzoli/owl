@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.planar.Arrowhead;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
@@ -49,6 +50,11 @@ public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public LieExponential lieExponential() {
     return Se2CoveringExponential.INSTANCE;
+  }
+
+  @Override // from GeodesicDisplay
+  public Scalar parametricDifference(Tensor p, Tensor q) {
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Object
