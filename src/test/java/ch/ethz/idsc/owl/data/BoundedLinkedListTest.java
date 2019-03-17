@@ -38,4 +38,10 @@ public class BoundedLinkedListTest extends TestCase {
       // ---
     }
   }
+
+  public void testEmpty() {
+    BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(0);
+    assertFalse(boundedLinkedList.add(0));
+    assertFalse(boundedLinkedList.add(1));
+  }
 }

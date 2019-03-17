@@ -48,20 +48,13 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
   // TODO JPH refactor
   protected Tensor _control = null;
-  private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
-  private final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
+  protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
+  protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
   protected void updateState() {
     _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
         .limit(spinnerLabelLimit.getValue()) //
         .map(row -> row.extract(1, 4)));
-  }
-
-  // Maybe we need this to allow for control data of StateTime format
-  protected void updateStateTime() {
-    _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
-        .limit(spinnerLabelLimit.getValue()) //
-        .map(row -> row.extract(0, 4)));
   }
 
   protected final Tensor control() {
@@ -87,10 +80,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
     {
-      spinnerLabelLimit.setList(Arrays.asList(250, 500, 1000, 2000, 5000));
-      spinnerLabelLimit.setIndex(0);
+      spinnerLabelLimit.setList(Arrays.asList(10, 20, 50, 100, 250, 500, 1000, 2000, 5000));
+      spinnerLabelLimit.setIndex(4);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
-      spinnerLabelString.addSpinnerListener(type -> updateState());
+      spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
     // ---
@@ -103,10 +96,9 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       return;
     GRID_RENDER.render(geometricLayer, graphics);
     Tensor control = control();
-    // System.out.println(control);
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.3));
+    final Tensor shape = geodesicDisplay.shape().multiply(markerScale());
     if (jToggleData.isSelected()) {
       pathRenderCurve.setCurve(control, false).render(geometricLayer, graphics);
       for (Tensor point : control) {
@@ -135,6 +127,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     }
     if (jToggleDiff.isSelected())
       differences_render(graphics, geodesicDisplay(), refined);
+  }
+
+  public Scalar markerScale() {
+    return RealScalar.of(.3);
   }
 
   /** @param geometricLayer

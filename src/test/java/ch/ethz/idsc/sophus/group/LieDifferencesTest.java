@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class LieDifferencesTest extends TestCase {
@@ -29,6 +30,19 @@ public class LieDifferencesTest extends TestCase {
     LieDifferences lieDifferences = //
         new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
     assertEquals(Dimensions.of(lieDifferences.apply(tensor)), Arrays.asList(9, 3));
+  }
+
+  public void testSe2antiCommute() {
+    Distribution distribution = UniformDistribution.unit();
+    LieDifferences lieDifferences = //
+        new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+    for (int index = 0; index < 10; ++index) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Tensor q = RandomVariate.of(distribution, 3);
+      Tensor v1 = lieDifferences.pair(p, q);
+      Tensor v2 = lieDifferences.pair(q, p).negate();
+      Chop._12.requireClose(v1, v2);
+    }
   }
 
   public void testSe3() {

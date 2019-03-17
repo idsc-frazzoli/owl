@@ -16,16 +16,17 @@ public class BoundedLinkedList<E> extends LinkedList<E> {
 
   @Override // from LinkedList
   public boolean add(E object) {
-    if (maxSize <= size())
+    super.add(object);
+    if (maxSize < size())
       removeFirst();
-    return super.add(object);
+    return !isEmpty();
   }
 
   @Override // from LinkedList
   public void add(int location, E object) {
-    if (maxSize <= size())
-      removeFirst();
     super.add(location, object);
+    if (maxSize < size())
+      removeFirst();
   }
 
   @Override // from LinkedList
