@@ -57,8 +57,7 @@ public class FrequencyResponsePlot {
     }
     if (string == "PhaseResponse")
       return resultPhase;
-    else
-      return resultAbs;
+    return resultAbs;
   }
 
   public void evaluate() throws IOException {

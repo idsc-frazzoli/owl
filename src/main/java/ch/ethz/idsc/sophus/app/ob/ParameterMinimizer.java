@@ -1,8 +1,6 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import java.io.IOException;
-
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
@@ -25,7 +23,7 @@ public class ParameterMinimizer {
   // ---
   GeodesicErrorEvaluation geodesicErrorEvaluation = new GeodesicErrorEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
 
-  public Tensor minimizer(String data) throws IOException {
+  public Tensor minimizer(String data) {
     Tensor control = control(data);
     // starting values of alpha
     Scalar alpha_x = RealScalar.of(-1);
@@ -107,7 +105,7 @@ public class ParameterMinimizer {
     return Tensors.of(minimizingAlphas, minimizingWindows, minimizingKernels, minimizingErrors);
   }
 
-  private Tensor control(String data) {
+  private static Tensor control(String data) {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + data + ".csv").stream() //
         .map(row -> row.extract(1, 4)));
     return control;
