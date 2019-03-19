@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.misc;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,15 +11,14 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Partition;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
-import ch.ethz.idsc.tensor.io.Import;
-import ch.ethz.idsc.tensor.io.UserName;
+import ch.ethz.idsc.tensor.io.ResourceData;
 
 public enum DuckietownData {
   ;
-  public static final File FILE = UserName.is("datahaki") //
-      ? HomeDirectory.file("duckiebot_0_poses.csv")
-      : HomeDirectory.file("Desktop/MA/duckietown/duckiebot_0_poses.csv");
+  public static final Tensor POSE_20190301_0 = ResourceData.of("/autolab/localization/pose/20190301_0.csv");
+  // File FILE = UserName.is("datahaki") //
+  // ? HomeDirectory.file("duckiebot_0_poses.csv")
+  // : HomeDirectory.file("Desktop/MA/duckietown/duckiebot_0_poses.csv");
   private static final Tensor UNIT3 = UnitVector.of(3, 2).unmodifiable();
 
   /** @param tensor from csv file
@@ -51,10 +48,10 @@ public enum DuckietownData {
     return new StateTime(xy.append(alpha), time);
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     // TODO EPHEMERAL JPH
     // System.out.println(Import.of());
-    Tensor states = states(Import.of(FILE));
+    Tensor states = states(POSE_20190301_0);
     System.out.println(states);
     System.out.println(states);
   }

@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.misc.DuckietownData;
+import ch.ethz.idsc.sophus.app.misc.PolyDuckietownData;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
@@ -30,23 +30,22 @@ import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.Import;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public class DuckietownSmoothingDemo extends DatasetKernelDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  // ---
-  private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
-  private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  private final JSlider jSlider = new JSlider(0, 1000, 500);
-  static final List<String> LIST = Arrays.asList( //
+  public static final List<String> LIST = Arrays.asList( //
       "duckie20180713-175124.csv", //
       "duckie20180713-175420.csv", //
       "duckie20180713-175601.csv", //
       "duckie20180901-152902.csv");
+  // ---
+  private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerDuckiebot = new SpinnerLabel<>();
+  private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   public DuckietownSmoothingDemo() {
-    updateState();
     spinnerDegree.setList(DEGREES);
     spinnerDegree.setValue(2);
     spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
@@ -55,22 +54,33 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
     spinnerRefine.setValue(2);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     //
+    spinnerDuckiebot.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+    spinnerDuckiebot.setValue(1);
+    spinnerDuckiebot.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "Duckiebot");
+    //
+    updateState();
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
   }
 
   @Override
   protected void updateState() {
-    Tensor importedData = Tensors.empty();
-    try {
-      importedData = Import.of(DuckietownData.FILE);
-    } catch (Exception exception) {
-      exception.printStackTrace();
-    }
-    Tensor tensor = DuckietownData.states(importedData.extract(1, importedData.length()));
-    tensor = tensor.map(xya -> xya);
-    _control = Tensor.of(tensor.stream() //
-        .limit(spinnerLabelLimit.getValue()));
+    // Data from "duckie20180713-175124.csv" types.
+    PolyDuckietownData polyDuckietownData = PolyDuckietownData.of("/autolab/localization/2018/" + LIST.get(0));
+    _control = polyDuckietownData.filter(spinnerDuckiebot.getValue());
+    // System.out.println(_control);
+    //
+    // // Data from duckiebot_0_poses
+    // Tensor importedData = Tensors.empty();
+    // try {
+    // importedData = Import.of(DuckietownData.FILE);
+    // } catch (Exception exception) {
+    // exception.printStackTrace();
+    // }
+    // Tensor tensor = DuckietownData.states(importedData.extract(1, importedData.length()));
+    // tensor = tensor.map(xya -> xya);
+    // _control = Tensor.of(tensor.stream() //
+    // .limit(spinnerLabelLimit.getValue()));
   }
 
   @Override // from RenderInterface
