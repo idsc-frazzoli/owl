@@ -1,4 +1,4 @@
-// code by ob
+// code by ob /jph
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.BasicStroke;
@@ -50,11 +50,14 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   protected Tensor _control = null;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
+  protected final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
 
   protected void updateState() {
     _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
         .limit(spinnerLabelLimit.getValue()) //
         .map(row -> row.extract(1, 4)));
+    // Make uniform data artificially non-uniform by randomly leaving out elements
+    // _control = DeuniformData.of(_control, RealScalar.of(0.2));
   }
 
   protected final Tensor control() {
@@ -84,6 +87,12 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelLimit.setIndex(4);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
+    }
+    {
+      spinnerConvolution.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+      spinnerConvolution.setIndex(1);
+      spinnerConvolution.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "convolution");
+      spinnerConvolution.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
     // ---
@@ -146,6 +155,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
       Tensor speeds = lieDifferences.apply(refined).multiply(SAMPLING_FREQUENCY);
+      System.out.println(SAMPLING_FREQUENCY);
       if (0 < speeds.length()) {
         int dimensions = speeds.get(0).length();
         VisualSet visualSet = new VisualSet();

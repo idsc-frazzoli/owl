@@ -1,4 +1,4 @@
-// code by jph
+// code by jph /ob
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Graphics2D;
@@ -29,7 +29,10 @@ public class GeodesicCenterFilterDemo extends DatasetKernelDemo {
     // e.printStackTrace();
     // }
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
-    refined = GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
+    refined = control();
+    for (int index = 0; index < spinnerConvolution.getValue(); index++) {
+      refined = GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(refined);
+    }
   }
 
   @Override // from RenderInterface
