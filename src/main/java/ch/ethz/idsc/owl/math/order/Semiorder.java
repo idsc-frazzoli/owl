@@ -17,7 +17,7 @@ public enum Semiorder {
    * @param slack
    * @return OrderComparison.STRICTLY_PRECEDES if u(x) + sigma less than f(y),
    * OrderComparison.STRICTLY_SUCCEDES if u(y) + sigma less than f(x),
-   * or OrderComparison.INCOMPARABLE if neither of the both. */
+   * or OrderComparison.INDIFFERENT if neither of the both. */
   public static <T> OrderComparator<T> comparator(UtilityFunction<T, Scalar> utilityFunction, Scalar slack) {
     return new OrderComparator<T>() {
       @Override // from OrderComparator
@@ -28,7 +28,7 @@ public enum Semiorder {
           return OrderComparison.STRICTLY_PRECEDES;
         if (Scalars.lessThan(utility_y.add(slack), utility_x))
           return OrderComparison.STRICTLY_SUCCEEDS;
-        return OrderComparison.INCOMPARABLE;
+        return OrderComparison.INDIFFERENT;
       }
     };
   }
@@ -38,7 +38,7 @@ public enum Semiorder {
    * @param slack
    * @return OrderComparison.STRICTLY_PRECEDES if x + sigma less than y,
    * OrderComparison.STRICTLY_SUCCEDES if y + sigma less than x or
-   * or OrderComparison.INCOMPARABLE if neither of the both. */
+   * or OrderComparison.INDIFFERENT if neither of the both. */
   public static OrderComparator<Scalar> comparator(Scalar slack) {
     return new OrderComparator<Scalar>() {
       @Override // from OrderComparator
@@ -47,7 +47,7 @@ public enum Semiorder {
           return OrderComparison.STRICTLY_PRECEDES;
         if (Scalars.lessThan(y.add(slack), x))
           return OrderComparison.STRICTLY_SUCCEEDS;
-        return OrderComparison.INCOMPARABLE;
+        return OrderComparison.INDIFFERENT;
       }
     };
   }
