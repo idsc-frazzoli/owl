@@ -25,8 +25,7 @@ public class SurvivorSet {
 
   public final Collection<Tensor> getSurvivorSet() {
     // Stream to get u_min
-    // Stream to get 
-    
+    // Stream to get
     Collection<Tensor> SurvivorSet = new LinkedList();
     Iterator<Tensor> iterator = feasibleInputs.iterator();
     Tensor first = iterator.next();
