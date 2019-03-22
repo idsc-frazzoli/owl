@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.sym;
 
 import ch.ethz.idsc.tensor.RationalScalar;

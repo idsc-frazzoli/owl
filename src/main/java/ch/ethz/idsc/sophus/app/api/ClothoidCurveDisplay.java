@@ -6,6 +6,7 @@ import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Group;
+import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.group.Se2Utils;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.planar.Arrowhead;
@@ -54,7 +55,8 @@ public enum ClothoidCurveDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Scalar parametricDifference(Tensor p, Tensor q) {
-    throw new UnsupportedOperationException();
+    // TODO JPH temporary solution
+    return Se2ParametricDistance.of(p, q);
   }
 
   @Override // from Object

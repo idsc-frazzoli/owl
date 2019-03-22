@@ -14,11 +14,9 @@ public enum DeuniformData {
    * @return Randomized nonuniform data */
   public static Tensor of(Tensor data, Scalar q) {
     Tensor result = Tensors.empty();
-    for (int index = 0; index < data.length(); index++) {
-      if (Scalars.lessEquals(q, RealScalar.of(Math.random()))) {
+    for (int index = 0; index < data.length(); ++index)
+      if (Scalars.lessEquals(q, RealScalar.of(Math.random())))
         result.append(data.get(index));
-      }
-    }
     return result;
   }
 }

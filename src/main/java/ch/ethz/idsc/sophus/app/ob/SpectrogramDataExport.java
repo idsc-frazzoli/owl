@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class SpectrogramDataExport {
+/* package */ class SpectrogramDataExport {
   protected static Tensor _control = null;
   public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
 
