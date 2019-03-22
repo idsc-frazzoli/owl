@@ -1,4 +1,4 @@
-// code by ob
+// code by ob, jph
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.BasicStroke;
@@ -34,6 +34,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ abstract class DatasetFilterDemo extends GeodesicDisplayDemo {
+  // TODO OB/JPH sampling freq is not generic here
   private static final Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
@@ -55,6 +56,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
         .limit(spinnerLabelLimit.getValue()) //
         .map(row -> row.extract(1, 4)));
+    // Make uniform data artificially non-uniform by randomly leaving out elements
+    // _control = DeuniformData.of(_control, RealScalar.of(0.2));
   }
 
   protected final Tensor control() {
