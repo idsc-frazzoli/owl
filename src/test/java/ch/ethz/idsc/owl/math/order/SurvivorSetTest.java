@@ -29,4 +29,18 @@ public class SurvivorSetTest extends TestCase {
     survivorSet.getSurvivorSetStream(feasibleInputs, 0);
     assertTrue(survivorSet.getSurvivorSetStream(feasibleInputs, 0).contains(x));
   }
+
+  public void testFailNull() {
+    Tensor slack = Tensors.fromString("{1,1,1}");
+    Collection<UtilityFunction<Scalar, Scalar>> utFV = new LinkedList<>();
+    utFV.add(IdentityUtilityFunction.identity());
+    utFV.add(IdentityUtilityFunction.identity());
+    utFV.add(IdentityUtilityFunction.identity());
+    try {
+      new SurvivorSet(null, utFV, slack);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
