@@ -13,7 +13,7 @@ public enum Semiorder {
   ;
   /** Implements the semiorder where the utilityfunction maps from type T to Scalar.
    * 
-   * @param utilityFunction<T,Scalar>
+   * @param utilityFunction<T, Scalar>
    * @param slack
    * @return OrderComparison.STRICTLY_PRECEDES if u(x) + sigma less than f(y),
    * OrderComparison.STRICTLY_SUCCEDES if u(y) + sigma less than f(x),
@@ -33,12 +33,12 @@ public enum Semiorder {
     };
   }
 
-  /** Implements the semiorder where the utility function is the identy mapping on the real numbers.
+  /** Implements the semiorder where the utility function is the identity mapping on the real numbers.
    * 
    * @param slack
-   * @return OrderComparison.STRICTLY_PRECEDES if x + sigma less than y,
-   * OrderComparison.STRICTLY_SUCCEDES if y + sigma less than x or
-   * or OrderComparison.INDIFFERENT if neither of the both. */
+   * @return OrderComparison.STRICTLY_PRECEDES if x + slack less than y,
+   * OrderComparison.STRICTLY_SUCCEDES if y + slack less than x, or
+   * OrderComparison.INDIFFERENT if neither of above. */
   public static OrderComparator<Scalar> comparator(Scalar slack) {
     return new OrderComparator<Scalar>() {
       @Override // from OrderComparator
