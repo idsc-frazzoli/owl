@@ -32,6 +32,7 @@ import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.sca.Power;
 
 public class KnotsBSplineFunctionDemo extends CurveDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -42,6 +43,7 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
   // private final JToggleButton jToggleItrp = new JToggleButton("interp");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
+  private final JSlider jSliderCentripetal = new JSlider(0, 100, 100);
 
   public KnotsBSplineFunctionDemo() {
     super(GeodesicDisplays.CLOTH_SE2_R2);
@@ -62,6 +64,9 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
+    // ---
+    jSliderCentripetal.setPreferredSize(new Dimension(500, 28));
+    timerFrame.jToolBar.add(jSliderCentripetal);
     {
       Tensor dubins = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
       setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
@@ -78,8 +83,10 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
     // ---
     Tensor effective = control;
     Tensor diffs = Tensors.vector(0);
+    // Centripetal method: "B-Spline Interpolation and Approximation Hongxin Zhang and Jieqing Feng"
     for (int index = 1; index < control.length(); ++index)
-      diffs.append(geodesicDisplay.parametricDifference(control.get(index - 1), control.get(index)));
+      diffs.append(
+          Power.of(geodesicDisplay.parametricDifference(control.get(index - 1), control.get(index)), RationalScalar.of(jSliderCentripetal.getValue(), 100)));
     Tensor knots = jToggleUnif.isSelected() //
         ? Range.of(0, control.length())
         : Accumulate.of(diffs);
