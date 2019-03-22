@@ -4,6 +4,8 @@ package ch.ethz.idsc.owl.math.order;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -11,22 +13,45 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public class SurvivorSet {
   private Collection<Tensor> feasibleInputs;
-  private int index;
+  // private int index;
+  private int dim;
   private Collection<UtilityFunction<Scalar, Scalar>> utilityFunctionVector;
   private Tensor slackVector;
-  // private Scalar u_min = RealScalar.of(10000);
 
-  public SurvivorSet(Collection<Tensor> feasibleInputs, int index, Collection<UtilityFunction<Scalar, Scalar>> utilityFunctionVector, Tensor slackVector) {
+  public SurvivorSet(Collection<Tensor> feasibleInputs, Collection<UtilityFunction<Scalar, Scalar>> utilityFunctionVector, Tensor slackVector) {
     this.feasibleInputs = feasibleInputs;
-    this.index = index;
     this.utilityFunctionVector = utilityFunctionVector;
     this.slackVector = slackVector;
+    this.dim = dimChecker();
   }
 
-  public final Collection<Tensor> getSurvivorSet() {
-    // Stream to get u_min
-    // Stream to get
-    Collection<Tensor> SurvivorSet = new LinkedList();
+  public final Collection<Tensor> getSurvivorSetStream(Collection<Tensor> survivorSet, int index) {
+    Scalar u_min = feasibleInputs.stream().map((x -> x.Get(index))).min(Scalars::compare).get();
+    Scalar slack = slackVector.Get(index);
+    Collection<Tensor> Z = survivorSet.stream().filter(x -> !discardTest(x.Get(index), u_min.add(slack))).collect(Collectors.toList());
+    if (index < dim - 1) {
+      int new_index = index + 1;
+      getSurvivorSetStream(Z, new_index);
+    }
+    return Z;
+  }
+
+  public final int dimChecker() {
+    if (feasibleInputs.isEmpty())
+      throw new RuntimeException("Empty Set");
+    Set<Integer> dimSet = feasibleInputs.stream().map(x -> x.length()).collect(Collectors.toSet());
+    if (dimSet.size() != 1) {
+      throw new RuntimeException("Elements to compare not of same size");
+    }
+    return 3;
+  }
+
+  public final boolean discardTest(Scalar x, Scalar u_min) {
+    return Scalars.lessEquals(u_min, x);
+  }
+
+  public final Collection<Tensor> getSurvivorSet(int index) {
+    Collection<Tensor> survivorSet = new LinkedList();
     Iterator<Tensor> iterator = feasibleInputs.iterator();
     Tensor first = iterator.next();
     Scalar u_min = first.Get(index);
@@ -40,16 +65,30 @@ public class SurvivorSet {
       if (isLargerThanMin && !withinSlack) {
         continue;
       } else if (isLargerThanMin && withinSlack) {
-        SurvivorSet.add(x);
+        survivorSet.add(x);
       } else if (isSmallerThanMin && withinSlack) {
         u_min = x.Get(index);
-        // TODO CleanUP
-        SurvivorSet.add(x);
+        CleanUp(survivorSet, u_min, index);
+        survivorSet.add(x);
       } else if (isSmallerThanMin && !withinSlack) {
-        SurvivorSet.clear();
-        SurvivorSet.add(x);
+        survivorSet.clear();
+        survivorSet.add(x);
       }
     }
-    return null;
+    if (index < dim) {
+      return getSurvivorSet(++index);
+    }
+    return survivorSet;
+  }
+
+  private final void CleanUp(Collection<Tensor> survivorSet, Scalar u_min, int index) {
+    Iterator<Tensor> iterator = survivorSet.iterator();
+    while (iterator.hasNext()) {
+      Tensor x = iterator.next();
+      // TODO change threshold to u_min plus slack
+      if (Scalars.lessThan(u_min, x.Get(index))) {
+        iterator.remove();
+      }
+    }
   }
 }
