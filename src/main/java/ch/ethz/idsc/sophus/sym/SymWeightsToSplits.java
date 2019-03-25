@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class SymWeightsToSplits {
   public static Scalar leftWeights = RealScalar.ZERO;
@@ -17,7 +16,8 @@ import ch.ethz.idsc.tensor.red.Norm;
   static Scalar split(Scalar pL, Scalar pR) {
     return pR.divide(pL.add(pR));
   }
-//TODO OB: either work with symLinks => JH, or correct the calculation of weights
+
+  // TODO OB: either work with symLinks => JH, or correct the calculation of weights
   static Tensor recursion(Tensor tree, Tensor weights) {
     if (tree.get(0).length() == -1 && tree.get(1).length() == -1) {
       Scalar pL = weights.Get(Scalars.intValueExact(tree.Get(0)));
