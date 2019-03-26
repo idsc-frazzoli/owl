@@ -1,5 +1,4 @@
 // code by ob
-// adapted from Schafer 2006
 package ch.ethz.idsc.sophus.curve;
 
 import java.util.Objects;
@@ -14,7 +13,13 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** CatmullRom denotes the function that is defined
- * by control points over a sequence of knots. */
+ * by control points over a sequence of knots.
+ * 
+ * Reference:
+ * Freeform Curves on Spheres of Arbitrary Dimension
+ * Scott Schaefer and Ron Goldman
+ * Proceedings of Pacific Graphics 2005, pages 160-162
+ * http://faculty.cs.tamu.edu/schaefer/research/sphereCurves.pdf */
 public class GeodesicCatmullRom implements ScalarTensorFunction {
   // TODO OB: correct input lengths
   /** @param geodesicInterface non null

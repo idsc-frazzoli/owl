@@ -9,16 +9,16 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class SymWeightsToSplits {
-  public static Scalar leftWeights = RealScalar.ZERO;
-  public static Scalar rightWeights = RealScalar.ZERO;
-  public static Tensor result = Tensors.empty();
+  public Scalar leftWeights = RealScalar.ZERO;
+  public Scalar rightWeights = RealScalar.ZERO;
+  public Tensor result = Tensors.empty();
 
-  static Scalar split(Scalar pL, Scalar pR) {
+  private static Scalar split(Scalar pL, Scalar pR) {
     return pR.divide(pL.add(pR));
   }
 
   // TODO OB: either work with symLinks => JH, or correct the calculation of weights
-  static Tensor recursion(Tensor tree, Tensor weights) {
+  Tensor recursion(Tensor tree, Tensor weights) {
     if (tree.get(0).length() == -1 && tree.get(1).length() == -1) {
       Scalar pL = weights.Get(Scalars.intValueExact(tree.Get(0)));
       Scalar pR = weights.Get(Scalars.intValueExact(tree.Get(1)));
@@ -48,7 +48,8 @@ import ch.ethz.idsc.tensor.Tensors;
     // Test output:
     Tensor output = Tensors.of(Tensors.vector(0, 1, 1), Tensors.of(Tensors.vector(2, 3, 3.0 / 5.0), RealScalar.of(4), RationalScalar.of(4, 9)),
         RealScalar.of(0.9));
-    System.out.println(recursion(tree, weights));
+    SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits();
+    System.out.println(symWeightsToSplits.recursion(tree, weights));
     System.err.println(output);
   }
 }
