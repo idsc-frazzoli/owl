@@ -82,13 +82,14 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
     final Tensor control = control();
     // ---
     Tensor effective = control;
-    // TODO OB do not compute diffs in case "uniform" is selected
     Tensor diffs = Tensors.vector(0);
-    // Centripetal method: "B-Spline Interpolation and Approximation Hongxin Zhang and Jieqing Feng"
-    Scalar exponent = RationalScalar.of(jSliderCentripetal.getValue(), 100);
-    for (int index = 1; index < control.length(); ++index) {
-      Scalar scalar = geodesicDisplay.parametricDifference(control.get(index - 1), control.get(index));
-      diffs.append(Power.of(scalar, exponent));
+    if (!jToggleUnif.isSelected()) {
+      // Centripetal method: "B-Spline Interpolation and Approximation Hongxin Zhang and Jieqing Feng"
+      Scalar exponent = RationalScalar.of(jSliderCentripetal.getValue(), 100);
+      for (int index = 1; index < control.length(); ++index) {
+        Scalar scalar = geodesicDisplay.parametricDifference(control.get(index - 1), control.get(index));
+        diffs.append(Power.of(scalar, exponent));
+      }
     }
     Tensor knots = jToggleUnif.isSelected() //
         ? Range.of(0, control.length())
