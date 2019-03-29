@@ -1,55 +1,38 @@
-// code by ob
+// code by ob, jph
 package ch.ethz.idsc.sophus.sym;
 
-import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ class SymWeightsToSplits {
-  public Scalar leftWeights = RealScalar.ZERO;
-  public Scalar rightWeights = RealScalar.ZERO;
-  public Tensor result = Tensors.empty();
+public class SymWeightsToSplits {
+  public final Tensor weights;
+
+  public SymWeightsToSplits(Tensor weights) {
+    // this.weights = weights.unmodifiable();
+    this.weights = weights;
+  }
+
+  private Tensor processedWeights() {
+    // Add function that checks if multiple elements of tree have the same value (e.g. 3 is used in two Averages [2,3] and [3,4])
+    // and then multiply corresponding weights by the reciprocal of the appearance
+    return Tensors.empty();
+  }
+
+  public Tensor recursion(Tensor tree) {
+    final Scalar[] w = new Scalar[2];
+    for (int index = 0; index < 2; ++index) {
+      if (tree.get(index).length() == 2) // incomplete computation
+        tree.set(recursion(tree.get(index)), index);
+      w[index] = ScalarQ.of(tree.get(index))//
+          ? weights.Get(tree.Get(index).number().intValue())
+          : tree.Get(index, 3);
+    }
+    return tree.append(split(w[0], w[1])).append(w[0].add(w[1]));
+  }
 
   private static Scalar split(Scalar pL, Scalar pR) {
     return pR.divide(pL.add(pR));
-  }
-
-  // TODO OB: either work with symLinks => JH, or correct the calculation of weights
-  Tensor recursion(Tensor tree, Tensor weights) {
-    if (tree.get(0).length() == -1 && tree.get(1).length() == -1) {
-      Scalar pL = weights.Get(Scalars.intValueExact(tree.Get(0)));
-      Scalar pR = weights.Get(Scalars.intValueExact(tree.Get(1)));
-      leftWeights = pL.add(pR);
-      rightWeights = pL.add(pR);
-      return Tensors.of(pL, pR, split(pL, pR));
-    } else if (tree.get(0).length() == -1) {
-      // make recursion to the right branch of the tree
-      // calculate rightWeights
-      leftWeights = weights.Get(Scalars.intValueExact(tree.Get(0)));
-      return Tensors.of(tree.get(0), recursion(tree.get(1), weights), split(leftWeights, rightWeights));
-    } else if (tree.get(1).length() == -1) {
-      // make recursion to the left branch of the tree
-      // calculate leftweights
-      rightWeights = weights.Get(Scalars.intValueExact(tree.Get(1)));
-      return Tensors.of(recursion(tree.get(0), weights), tree.get(1), split(leftWeights, rightWeights));
-    } else {
-      // take leftweights and rightweights
-      return Tensors.of(recursion(tree.get(0), weights), recursion(tree.get(1), weights), split(leftWeights, rightWeights));
-    }
-  }
-
-  public static void main(String[] args) {
-    // Test inputs
-    Tensor weights = Tensors.vector(0, 1, 2, 3, 4);
-    Tensor tree = Tensors.of(Tensors.vector(0, 1), Tensors.of(Tensors.vector(2, 3), RealScalar.of(4)));
-    // Test output:
-    Tensor output = Tensors.of(Tensors.vector(0, 1, 1), Tensors.of(Tensors.vector(2, 3, 3.0 / 5.0), RealScalar.of(4), RationalScalar.of(4, 9)),
-        RealScalar.of(0.9));
-    SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits();
-    System.out.println(symWeightsToSplits.recursion(tree, weights));
-    System.err.println(output);
   }
 }
