@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.curve;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
