@@ -43,6 +43,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private final JToggleButton jToggleWait = new JToggleButton("wait");
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
   private final JToggleButton jToggleData = new JToggleButton("data");
+  private final JToggleButton jToggleConv = new JToggleButton("conv");
   // ---
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
@@ -58,6 +59,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
         .map(row -> row.extract(1, 4)));
     // Make uniform data artificially non-uniform by randomly leaving out elements
     // _control = DeuniformData.of(_control, RealScalar.of(0.2));
+    // _control = DuckietownData.states(DuckietownData.POSE_20190325_0);
   }
 
   protected final Tensor control() {
@@ -76,6 +78,9 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     // ---
     jToggleData.setSelected(true);
     timerFrame.jToolBar.add(jToggleData);
+    // ---
+    jToggleConv.setSelected(true);
+    timerFrame.jToolBar.add(jToggleConv);
     {
       spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.vector"));
       spinnerLabelString.addSpinnerListener(type -> updateState());
@@ -117,16 +122,18 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     }
     Tensor refined = protected_render(geometricLayer, graphics);
     graphics.setStroke(new BasicStroke(1f));
-    pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
-    for (Tensor point : refined) {
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
-      Path2D path2d = geometricLayer.toPath2D(shape);
-      path2d.closePath();
-      graphics.setColor(COLOR_SHAPE);
-      graphics.fill(path2d);
-      graphics.setColor(Color.BLACK);
-      graphics.draw(path2d);
-      geometricLayer.popMatrix();
+    if (jToggleConv.isSelected()) {
+      pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
+      for (Tensor point : refined) {
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+        Path2D path2d = geometricLayer.toPath2D(shape);
+        path2d.closePath();
+        graphics.setColor(COLOR_SHAPE);
+        graphics.fill(path2d);
+        graphics.setColor(Color.BLACK);
+        graphics.draw(path2d);
+        geometricLayer.popMatrix();
+      }
     }
     if (jToggleDiff.isSelected())
       differences_render(graphics, geodesicDisplay(), refined);
