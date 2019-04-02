@@ -37,17 +37,14 @@ public class PIDControl extends StateTrajectoryControl {
     Tensor u = trailAhead.get(0).getFlow().get().getU();
     Scalar speed = u.Get(0);
     Tensor state = tail.state();
-    boolean requestControl = true; // TODO change
     Tensor traj = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state));
-    if (requestControl) {
-      PID _pid = new PID(traj, state, lookAhead);
-      Scalar ratePerMeter = _pid.angleOut();
-      if (clip.isInside(ratePerMeter)) {
-        pid = _pid;
-        return Optional.of(CarHelper.singleton(speed, ratePerMeter).getU());
-      }
+    PID _pid = new PID(traj, state, lookAhead);
+    Scalar ratePerMeter = _pid.angleOut();
+    if (clip.isInside(ratePerMeter)) {
+      pid = _pid;
+      return Optional.of(CarHelper.singleton(speed, ratePerMeter).getU());
     }
     pid = null;
     return Optional.empty();

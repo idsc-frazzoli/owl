@@ -7,17 +7,16 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public class PID {
-  Scalar angleOut = RealScalar.of(0.3);
+  private Scalar angleOut;
 
   public PID(Tensor traj, Tensor state, Scalar lookAhead) {
     Tensor closest = traj.get(PIDCurveHelper.closest(traj, state));
     Scalar errorPose = Norm._2.between(state, closest);
-    Scalar Kd = RealScalar.of(100 );
+    Scalar Kd = RealScalar.of(15);
     angleOut = Kd.multiply(errorPose);
   }
 
   public Scalar angleOut() {
-    // TODO Auto-generated method stub
     return angleOut;
   }
 }
