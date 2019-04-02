@@ -33,14 +33,12 @@ public class PIDControl extends StateTrajectoryControl {
   }
 
   @Override // from AbstractEntity
-  protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
-    Tensor u = trailAhead.get(0).getFlow().get().getU();
-    Scalar speed = u.Get(0);
-    Tensor state = tail.state();
+  protected Optional<Tensor> customControl(StateTime stateTime, List<TrajectorySample> trailAhead) {
+    Scalar speed = trailAhead.get(0).getFlow().get().getU().Get(0);
     Tensor traj = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state));
-    PID _pid = new PID(traj, state, lookAhead);
+    PID _pid = new PID(traj, stateTime);
     Scalar ratePerMeter = _pid.angleOut();
     if (clip.isInside(ratePerMeter)) {
       pid = _pid;
