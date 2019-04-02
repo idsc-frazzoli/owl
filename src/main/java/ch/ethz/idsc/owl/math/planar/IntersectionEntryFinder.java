@@ -16,8 +16,7 @@ import java.util.Optional;
   @Override // from TrajectoryEntryFinder
   public Optional<Tensor> apply(Optional<Tensor> waypoints) {
     if (waypoints.isPresent()) {
-      Tensor waypoints_ = Tensors.empty();
-      waypoints.get().forEach(t -> waypoints_.append(t.extract(0, 2)));
+      Tensor waypoints_ = Tensor.of(waypoints.get().stream().map(t -> t.extract(0, 2)));
       return new CircleCurveIntersection(distance).string(waypoints_);
     }
     return Optional.empty();
