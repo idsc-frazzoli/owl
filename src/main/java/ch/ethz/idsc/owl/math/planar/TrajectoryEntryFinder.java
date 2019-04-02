@@ -1,3 +1,4 @@
+// code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
 import ch.ethz.idsc.tensor.Tensor;

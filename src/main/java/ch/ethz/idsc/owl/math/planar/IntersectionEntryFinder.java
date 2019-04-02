@@ -2,7 +2,7 @@ package ch.ethz.idsc.owl.math.planar;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.Tensors;
 
 import java.util.Optional;
 
@@ -16,7 +16,8 @@ import java.util.Optional;
   @Override // from TrajectoryEntryFinder
   public Optional<Tensor> apply(Optional<Tensor> waypoints) {
     if (waypoints.isPresent()) {
-      Tensor waypoints_ = Transpose.of(Transpose.of(waypoints.get()).extract(0, 2));
+      Tensor waypoints_ = Tensors.empty();
+      waypoints.get().forEach(t -> waypoints_.append(t.extract(0, 2)));
       return new CircleCurveIntersection(distance).string(waypoints_);
     }
     return Optional.empty();
