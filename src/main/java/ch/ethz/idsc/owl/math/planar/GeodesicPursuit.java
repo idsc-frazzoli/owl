@@ -1,6 +1,8 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.Optional;
+
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
 import ch.ethz.idsc.tensor.Scalar;
@@ -8,8 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-
-import java.util.Optional;
 
 public class GeodesicPursuit {
   private static final int RESOLUTION = 100;
@@ -46,7 +46,7 @@ public class GeodesicPursuit {
   private Optional<Scalar> ratio(Tensor lookAhead) {
     ScalarTensorFunction geodesic = geodesicInterface.curve(Array.zeros(3), lookAhead);
     Tensor curve = discretization.map(geodesic);
-    Tensor points2D = Tensor.of(curve.stream().map(p -> p.extract(0,2)));
+    Tensor points2D = Tensor.of(curve.stream().map(p -> p.extract(0, 2)));
     Tensor curvature = SignedCurvature2D.string(points2D);
     return Optional.of(curvature.Get(0));
   }

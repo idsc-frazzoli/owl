@@ -1,9 +1,9 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
-import ch.ethz.idsc.tensor.Tensor;
-
 import java.util.Optional;
+
+import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class NaiveEntryFinder implements TrajectoryEntryFinder {
   private final int index;

@@ -1,6 +1,8 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.Optional;
+
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -8,8 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import junit.framework.TestCase;
-
-import java.util.Optional;
 
 public class TrajectoryEntryFinderTest extends TestCase {
   private Optional<Tensor> noWaypoints = Optional.empty();

@@ -1,13 +1,13 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.Optional;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
-
-import java.util.Optional;
 
 /* package */ class InterpolationEntryFinder implements TrajectoryEntryFinder {
   private final double index;

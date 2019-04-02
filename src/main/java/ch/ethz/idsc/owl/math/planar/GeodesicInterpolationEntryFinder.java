@@ -1,17 +1,17 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.Optional;
+
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-
-import java.util.Optional;
 
 /* package */ class GeodesicInterpolationEntryFinder implements TrajectoryEntryFinder {
   private final GeodesicInterface geodesicInterface;
   private final double index;
 
-  public GeodesicInterpolationEntryFinder(GeodesicInterface  geodesicInterface, double index) {
+  public GeodesicInterpolationEntryFinder(GeodesicInterface geodesicInterface, double index) {
     this.geodesicInterface = geodesicInterface;
     this.index = index;
   }
