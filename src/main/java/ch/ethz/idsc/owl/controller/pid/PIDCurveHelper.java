@@ -1,5 +1,5 @@
 //code by mcp
-package ch.ethz.idsc.owl.bot.se2.glc;
+package ch.ethz.idsc.owl.controller.pid;
 
 import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.tensor.Scalar;
