@@ -31,7 +31,7 @@ public class Se2Letter4Demo extends Se2CarDemo {
 
   @Override // from Se2CarDemo
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._2181;
+    R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._0F5C_2182;
     StateTime stateTime = new StateTime(Tensors.vector(7, 5, 1), RealScalar.ZERO);
     CarEntity carEntity = new CarEntity( //
         stateTime, //
