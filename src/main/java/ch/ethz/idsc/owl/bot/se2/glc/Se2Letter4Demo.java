@@ -1,4 +1,5 @@
-// code by jph
+// code by jph 
+// adapted by mcp
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
@@ -16,7 +17,6 @@ import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -51,11 +51,6 @@ public class Se2Letter4Demo extends Se2CarDemo {
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     {
-      RenderInterface renderInterface = new CameraEmulator( //
-          48, RealScalar.of(10), carEntity::getStateTimeNow, trajectoryRegionQuery);
-      owlyAnimationFrame.addBackground(renderInterface);
-    }
-    {
       RenderInterface renderInterface = new LidarEmulator( //
           LIDAR_RAYTRACER, carEntity::getStateTimeNow, trajectoryRegionQuery);
       owlyAnimationFrame.addBackground(renderInterface);
@@ -69,6 +64,6 @@ public class Se2Letter4Demo extends Se2CarDemo {
   }
 
   public static void main(String[] args) {
-    new Se2Letter3Demo().start().jFrame.setVisible(true);
+    new Se2Letter4Demo().start().jFrame.setVisible(true);
   }
 }
