@@ -1,22 +1,26 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.sym;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Normalize;
-import ch.ethz.idsc.tensor.red.VectorTotal;
 
 public class SymWeightsToSplits {
   public final Tensor weights;
 
   public SymWeightsToSplits(Tensor weights) {
-    this.weights = weights.unmodifiable();
+    // this.weights = weights.unmodifiable();
+    this.weights = weights;
   }
 
-  Tensor recursion(Tensor tree) {
+  private Tensor processedWeights() {
+    // Add function that checks if multiple elements of tree have the same value (e.g. 3 is used in two Averages [2,3] and [3,4])
+    // and then multiply corresponding weights by the reciprocal of the appearance
+    return Tensors.empty();
+  }
+
+  public Tensor recursion(Tensor tree) {
     final Scalar[] w = new Scalar[2];
     for (int index = 0; index < 2; ++index) {
       if (tree.get(index).length() == 2) // incomplete computation
@@ -30,19 +34,5 @@ public class SymWeightsToSplits {
 
   private static Scalar split(Scalar pL, Scalar pR) {
     return pR.divide(pL.add(pR));
-  }
-
-  public static void main(String[] args) {
-    // Test inputs
-    Tensor weights = Normalize.with(VectorTotal.FUNCTION).apply(Tensors.vector(2, 1, 2, 3, 4));
-    System.out.println(weights);
-    // // Test output:
-    // Tensor output = Tensors.of(Tensors.vector(0, 1, 1), Tensors.of(Tensors.vector(2, 3, 3.0 / 5.0), RealScalar.of(4), RationalScalar.of(4, 9)),
-    // RealScalar.of(0.9));
-    SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(weights);
-    Tensor tree = Tensors.of(Tensors.vector(0, 1), Tensors.of(Tensors.vector(2, 3), RealScalar.of(4)));
-    symWeightsToSplits.recursion(tree);
-    System.out.println(tree);
-    // System.err.println(output);
   }
 }
