@@ -13,9 +13,8 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from TrajectoryEntryFinder
-  public Optional<Tensor> apply(Optional<Tensor> waypoints) {
-    if (waypoints.isPresent())
-      return Optional.of(waypoints.get().get(Math.floorMod(index, waypoints.get().length())));
-    return Optional.empty();
+  public Optional<Tensor> apply(Tensor waypoints) {
+    // TODO JPH version for string and version for cyclic
+    return Optional.of(waypoints.get().get(Math.floorMod(index, waypoints.get().length())));
   }
 }

@@ -1,3 +1,4 @@
+// code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
@@ -13,11 +14,8 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from TrajectoryEntryFinder
-  public Optional<Tensor> apply(Optional<Tensor> waypoints) {
-    if (waypoints.isPresent()) {
-      Tensor waypoints_ = Tensor.of(waypoints.get().stream().map(t -> t.extract(0, 2)));
-      return new CircleCurveIntersection(distance).string(waypoints_);
-    }
-    return Optional.empty();
+  public Optional<Tensor> apply(Tensor waypoints) {
+    Tensor waypoints_ = Tensor.of(waypoints.get().stream().map(Extract2D.FUNCTION));
+    return new CircleCurveIntersection(distance).string(waypoints_);
   }
 }

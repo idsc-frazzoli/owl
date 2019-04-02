@@ -5,26 +5,32 @@ import java.util.Optional;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.Floor;
 
 /* package */ class GeodesicInterpolationEntryFinder implements TrajectoryEntryFinder {
   private final GeodesicInterface geodesicInterface;
-  private final double index;
+  private final Scalar index;
 
-  public GeodesicInterpolationEntryFinder(GeodesicInterface geodesicInterface, double index) {
+  public GeodesicInterpolationEntryFinder(GeodesicInterface geodesicInterface, Scalar index) {
     this.geodesicInterface = geodesicInterface;
     this.index = index;
   }
 
   @Override // from TrajectoryEntryFinder
-  public Optional<Tensor> apply(Optional<Tensor> waypoints) {
-    int index_ = (int) index;
-    if (waypoints.isPresent())
-      if (index_ >= 0 && index_ < waypoints.get().length())
-        return Optional.of(geodesicInterface.split( //
-            waypoints.get().get(index_), //
-            waypoints.get().get(index_ + 1), //
-            RealScalar.of(index - index_)));
+  public Optional<Tensor> apply(Tensor waypoints) {
+    if (Clips.interval(0, waypoints.length()).isInside(index)) {
+      Scalar floor = Floor.FUNCTION.apply(index);
+      if (floor.equals(RealScalar.of(waypoints.length())))
+        return Optional.of(Last.of(waypoints));
+      return Optional.of(geodesicInterface.split( //
+          waypoints.get(floor.number().intValue()), //
+          waypoints.get(floor.number().intValue() + 1), //
+          index.subtract(floor)));
+    }
     return Optional.empty();
   }
 }

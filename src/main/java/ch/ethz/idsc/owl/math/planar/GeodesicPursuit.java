@@ -12,15 +12,12 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class GeodesicPursuit {
-  private static final int RESOLUTION = 100;
-  // ---
-
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
    * @param tensor waypoints
    * @param entryFinder strategy
    * @return GeodesicPursuit */
   public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder) {
-    Optional<Tensor> lookAhead = entryFinder.apply(Optional.of(tensor));
+    Optional<Tensor> lookAhead = entryFinder.apply(tensor);
     return new GeodesicPursuit(geodesicInterface, lookAhead);
   }
 
@@ -29,7 +26,7 @@ public class GeodesicPursuit {
   private final Optional<Tensor> lookAhead;
   private final Optional<Scalar> ratio;
   // ---
-  private final Tensor discretization = Subdivide.of(0, 1, RESOLUTION);
+  private final Tensor discretization = Subdivide.of(0, 1, 100); // FIXME JG pass 100 as argument
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
    * @param lookAhead trajectory point {px, py, pa} */
@@ -46,7 +43,7 @@ public class GeodesicPursuit {
   private Optional<Scalar> ratio(Tensor lookAhead) {
     ScalarTensorFunction geodesic = geodesicInterface.curve(Array.zeros(3), lookAhead);
     Tensor curve = discretization.map(geodesic);
-    Tensor points2D = Tensor.of(curve.stream().map(p -> p.extract(0, 2)));
+    Tensor points2D = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
     Tensor curvature = SignedCurvature2D.string(points2D);
     return Optional.of(curvature.Get(0));
   }
