@@ -9,22 +9,22 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public class PID {
-  Scalar angleOut;
-  Scalar errorPose;
-  Scalar time;
-  Scalar prop;
-  Scalar deriv = RealScalar.ZERO;
+public class PIDTrajectory {
+  private Scalar angleOut;
+  private Scalar errorPose;
+  private Scalar time;
+  private Scalar prop;
+  private Scalar deriv = RealScalar.ZERO;
 
-  public PID(PID _pid, Tensor traj, StateTime stateTime) {
+  public PIDTrajectory(PIDTrajectory _pid, PIDGains pidGains, Tensor traj, StateTime stateTime) {
     time = stateTime.time();
     Tensor stateXYphi = stateTime.state();
-    Tensor closest = traj.get(PIDCurveHelper.closest(traj, stateXYphi));
+    Tensor closest = traj.get(RnCurveHelper.closest(traj, stateXYphi));
     errorPose = Norm._2.between(stateXYphi, closest);
-    prop = PIDGains.Kp.multiply(errorPose);
+    prop = pidGains.Kp.multiply(errorPose);
     if (Objects.nonNull(_pid)) {
       Scalar dt = time.subtract(_pid.time);
-      deriv = PIDGains.Kd.multiply((errorPose.subtract(_pid.errorPose)).divide(dt));
+      deriv = pidGains.Kd.multiply((errorPose.subtract(_pid.errorPose)).divide(dt));
     }
     angleOut = prop.add(deriv);
   }

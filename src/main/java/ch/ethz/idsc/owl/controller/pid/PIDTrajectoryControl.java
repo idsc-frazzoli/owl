@@ -16,13 +16,14 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /** PID control */
-@SuppressWarnings("serial")
-public class PIDControl extends StateTrajectoryControl {
+public class PIDTrajectoryControl extends StateTrajectoryControl {
   private final Clip clip;
-  PID pid = null;
+  private final PIDGains pidGains;
+  private PIDTrajectory pidTrajectory = null;
 
-  public PIDControl(Scalar maxTurningRate) {
+  public PIDTrajectoryControl(Scalar maxTurningRate, PIDGains pidGains) {
     this.clip = Clips.interval(maxTurningRate.negate(), maxTurningRate);
+    this.pidGains = pidGains;
   }
 
   @Override // from StateTrajectoryControl
@@ -30,16 +31,16 @@ public class PIDControl extends StateTrajectoryControl {
     return Norm2Squared.ofVector(Se2Wrap.INSTANCE.difference(x, y));
   }
 
-  @Override // from AbstractEntity
+  @Override // from StateTrajectoryControl
   protected Optional<Tensor> customControl(StateTime stateTime, List<TrajectorySample> trailAhead) {
     Scalar speed = trailAhead.get(0).getFlow().get().getU().Get(0);
     Tensor traj = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state));
-    PID _pid = new PID(pid, traj, stateTime);
+    PIDTrajectory _pid = new PIDTrajectory(pidTrajectory, pidGains, traj, stateTime);
     Scalar ratePerMeter = _pid.angleOut();
     if (clip.isInside(ratePerMeter)) {
-      pid = _pid;
+      pidTrajectory = _pid;
       return Optional.of(CarHelper.singleton(speed, ratePerMeter).getU());
     }
     return Optional.empty();

@@ -6,7 +6,8 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.controller.pid.PIDControl;
+import ch.ethz.idsc.owl.controller.pid.PIDGains;
+import ch.ethz.idsc.owl.controller.pid.PIDTrajectoryControl;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
@@ -28,6 +29,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 public class Se2Letter4Demo extends Se2CarDemo {
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-90), Degree.of(90), 32), Subdivide.of(0, 5, 30));
+  private static final PIDGains PID_GAINS = new PIDGains(RealScalar.of(20), RealScalar.of(3));
 
   @Override // from Se2CarDemo
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
@@ -35,7 +37,7 @@ public class Se2Letter4Demo extends Se2CarDemo {
     StateTime stateTime = new StateTime(Tensors.vector(7, 5, 1), RealScalar.ZERO);
     CarEntity carEntity = new CarEntity( //
         stateTime, //
-        new PIDControl(CarEntity.MAX_TURNING_RATE), //
+        new PIDTrajectoryControl(CarEntity.MAX_TURNING_RATE, PID_GAINS), //
         CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {

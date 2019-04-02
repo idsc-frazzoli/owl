@@ -1,4 +1,4 @@
-//code by mcp
+// code by mcp
 package ch.ethz.idsc.owl.controller.pid;
 
 import ch.ethz.idsc.sophus.planar.ArcTan2D;
@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.ArgMin;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public enum PIDCurveHelper {
+/* package */ enum RnCurveHelper {
   ;
   /** @param curve
    * @param pose
@@ -21,8 +21,10 @@ public enum PIDCurveHelper {
    * @return angle between two following points of the closest point on the curve to the current pose */
   public static Scalar trajAngle(Tensor curve, Tensor point) {
     int index = closest(curve, point);
+    // TODO JPH/MCP the angle is 3rd entry (=heading) of the control point
+    // return curve.get(index, 2);
     int nextIndex = index + 1;
-    if (nextIndex > curve.length()) // TODO MCP Write this better
+    if (nextIndex >= curve.length()) // TODO MCP Write this better
       nextIndex = 0;
     return ArcTan2D.of(curve.get(nextIndex).subtract(curve.get(index)));
   }
