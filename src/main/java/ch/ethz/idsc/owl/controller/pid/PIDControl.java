@@ -19,11 +19,9 @@ import ch.ethz.idsc.tensor.sca.Clips;
 @SuppressWarnings("serial")
 public class PIDControl extends StateTrajectoryControl {
   private final Clip clip;
-  private final Scalar lookAhead;
   PID pid = null;
 
-  public PIDControl(Scalar lookAhead, Scalar maxTurningRate) {
-    this.lookAhead = lookAhead;
+  public PIDControl(Scalar maxTurningRate) {
     this.clip = Clips.interval(maxTurningRate.negate(), maxTurningRate);
   }
 
