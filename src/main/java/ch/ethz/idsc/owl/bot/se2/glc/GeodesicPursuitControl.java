@@ -1,6 +1,10 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
@@ -10,17 +14,14 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Sign;
-
-import java.util.List;
-import java.util.Optional;
 
 /* package */ class GeodesicPursuitControl extends StateTrajectoryControl {
   private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
@@ -54,23 +55,22 @@ import java.util.Optional;
       beacons.set(Scalar::negate, Tensor.ALL, 0);
     // ---
     // TODO proper rejection/optimization e.g. with bisection
-    Scalar ratio;
-    int index = -1;
-    while (index < beacons.length()) {
-      GeodesicPursuit geodesicPursuit = GeodesicPursuit.fromTrajectory(GEODESIC, beacons, entryFinder, RealScalar.of(index));
-      Optional<Scalar> ratio_ = geodesicPursuit.ratio();
-      if (ratio_.isPresent()) {
-        ratio = ratio_.get();
-        if (staticClip.isInside(ratio) && //
-            (!dynamicClip.isPresent() || dynamicClip.get().isInside(ratio))) {
-          System.out.println(ratio);
-          return Optional.of(CarHelper.singleton(speed, ratio).getU());
-        }
-      }
-      index++;
+    Optional<Tensor> lookAhead = entryFinder.initial(beacons);
+    Function<Scalar, Optional<Tensor>> function = entryFinder.on(beacons);
+    for (int i = 0; i < beacons.length(); i++) {
+      GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead);
+      Optional<Scalar> ratio = geodesicPursuit.ratio();
+      if (ratio.isPresent() && isCompliant(ratio.get()))
+        return Optional.of(CarHelper.singleton(speed, ratio.get()).getU());
+      Scalar next = Increment.ONE.apply(entryFinder.currentVar());
+      lookAhead = function.apply(next);
     }
     System.err.println("no compliant strategy found!");
     return Optional.empty();
+  }
+
+  private boolean isCompliant(Scalar ratio) {
+    return staticClip.isInside(ratio) && (!dynamicClip.isPresent() || dynamicClip.get().isInside(ratio));
   }
 
   private Optional<Clip> dynamicClip(Tensor state, Scalar speed) {

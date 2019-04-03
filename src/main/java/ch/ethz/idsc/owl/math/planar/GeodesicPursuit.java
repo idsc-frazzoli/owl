@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class GeodesicPursuit {
@@ -44,7 +45,7 @@ public class GeodesicPursuit {
     this.geodesicInterface = geodesicInterface;
     this.lookAhead = lookAhead;
     ratio = lookAhead.isPresent() //
-        ? ratio(lookAhead.get()) //
+        ? ratio(VectorQ.requireLength(lookAhead.get(), 3)) //
         : Optional.empty();
   }
 

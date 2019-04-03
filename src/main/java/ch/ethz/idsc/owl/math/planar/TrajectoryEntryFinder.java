@@ -32,8 +32,8 @@ public abstract class TrajectoryEntryFinder {
   }
 
   /** @return last applied variable */
-  public Optional<Scalar> currentVar() {
-    return Optional.of(var);
+  public Scalar currentVar() {
+    return var;
   }
 
   /** @param waypoints of trajectory
