@@ -27,8 +27,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
   // ---
   private final TrajectoryEntryFinder entryFinder;
-  private final Clip staticClip; // turning ratio limits
-  private Optional<Clip> dynamicClip = Optional.empty(); // state dependent turning ratio limits
+  private final Clip staticClip; // turning ratios limits
+  private Optional<Clip> dynamicClip = Optional.empty(); // state dependent turning ratios limits
 
   public GeodesicPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
     this.entryFinder = entryFinder;
@@ -59,9 +59,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(beacons);
     for (int i = 0; i < beacons.length(); i++) {
       GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead);
-      Optional<Scalar> ratio = geodesicPursuit.ratio();
-      if (ratio.isPresent() && isCompliant(ratio.get()))
-        return Optional.of(CarHelper.singleton(speed, ratio.get()).getU());
+      Optional<Tensor> ratios = geodesicPursuit.ratios();
+      if (ratios.isPresent() && ratios.get().stream().allMatch(t -> isCompliant(t.Get())))
+        return Optional.of(CarHelper.singleton(speed, geodesicPursuit.ratio().get()).getU());
       Scalar next = Increment.ONE.apply(entryFinder.currentVar());
       lookAhead = function.apply(next);
     }

@@ -35,7 +35,7 @@ public class GeodesicPursuit {
   // ---
   private final GeodesicInterface geodesicInterface;
   private final Optional<Tensor> lookAhead;
-  private final Optional<Scalar> ratio;
+  private final Optional<Tensor> ratios;
   // ---
   private final Tensor discretization = Subdivide.of(0, 1, 100); // FIXME JG pass 100 as argument
 
@@ -44,26 +44,32 @@ public class GeodesicPursuit {
   public GeodesicPursuit(GeodesicInterface geodesicInterface, Optional<Tensor> lookAhead) {
     this.geodesicInterface = geodesicInterface;
     this.lookAhead = lookAhead;
-    ratio = lookAhead.isPresent() //
-        ? ratio(VectorQ.requireLength(lookAhead.get(), 3)) //
+    ratios = lookAhead.isPresent() //
+        ? ratios(VectorQ.requireLength(lookAhead.get(), 3)) //
         : Optional.empty();
   }
 
   /** @param lookAhead trajectory point {px, py, pa}
-   * @return ratio */
-  private Optional<Scalar> ratio(Tensor lookAhead) {
+   * @return ratios */
+  private Optional<Tensor> ratios(Tensor lookAhead) {
     ScalarTensorFunction geodesic = geodesicInterface.curve(Array.zeros(3), lookAhead);
     Tensor curve = discretization.map(geodesic);
     Tensor points2D = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
-    Tensor curvature = SignedCurvature2D.string(points2D);
-    return Optional.of(curvature.Get(0));
+    Tensor curvature = SignedCurvature2D.string(points2D); // TODO works if negated... okay, but why?
+    return Optional.of(curvature);
   }
 
   public Optional<Tensor> lookAhead() {
     return lookAhead;
   }
 
+  public Optional<Tensor> ratios() {
+    return ratios;
+  }
+
   public Optional<Scalar> ratio() {
-    return ratio;
+    if (ratios.isPresent())
+      return Optional.of(ratios.get().Get(0));
+    return Optional.empty();
   }
 }
