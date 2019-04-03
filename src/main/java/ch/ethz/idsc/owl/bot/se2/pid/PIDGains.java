@@ -1,5 +1,5 @@
 // code by mcp
-package ch.ethz.idsc.owl.controller.pid;
+package ch.ethz.idsc.owl.bot.se2.pid;
 
 import ch.ethz.idsc.tensor.Scalar;
 

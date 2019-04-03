@@ -1,5 +1,5 @@
 // code by mcp
-package ch.ethz.idsc.owl.controller.pid;
+package ch.ethz.idsc.owl.bot.se2.pid;
 
 import java.util.Objects;
 
@@ -20,6 +20,7 @@ public class PIDTrajectory {
     time = stateTime.time();
     Tensor stateXYphi = stateTime.state();
     Tensor closest = traj.get(RnCurveHelper.closest(traj, stateXYphi));
+    // TODO MPC Norm._2 only works when all scalars have same unit: stateXYphi, closest
     errorPose = Norm._2.between(stateXYphi, closest);
     prop = pidGains.Kp.multiply(errorPose);
     if (Objects.nonNull(_pid)) {
