@@ -18,9 +18,19 @@ public class GeodesicPursuit {
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
    * @param tensor waypoints
    * @param entryFinder strategy
+   * @param var
+   * @return GeodesicPursuit */
+  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
+    Optional<Tensor> lookAhead = entryFinder.on(Optional.of(tensor)).apply(var);
+    return new GeodesicPursuit(geodesicInterface, lookAhead);
+  }
+
+  /** @param geodesicInterface type of curve to connect points {px, py, pa}
+   * @param tensor waypoints
+   * @param entryFinder strategy
    * @return GeodesicPursuit */
   public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder) {
-    Optional<Tensor> lookAhead = entryFinder.apply(Optional.of(tensor));
+    Optional<Tensor> lookAhead = entryFinder.initial(Optional.of(tensor));
     return new GeodesicPursuit(geodesicInterface, lookAhead);
   }
 
