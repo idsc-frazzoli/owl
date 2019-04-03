@@ -4,10 +4,10 @@ package ch.ethz.idsc.owl.bot.se2.pid;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm;
 
 public class PIDTrajectory {
   private Scalar angleOut;
@@ -21,7 +21,7 @@ public class PIDTrajectory {
     Tensor stateXYphi = stateTime.state();
     Tensor closest = traj.get(RnCurveHelper.closest(traj, stateXYphi));
     // TODO MPC Norm._2 only works when all scalars have same unit: stateXYphi, closest
-    errorPose = Norm._2.between(stateXYphi, closest);
+    errorPose = Se2ParametricDistance.of(stateXYphi, closest);
     prop = pidGains.Kp.multiply(errorPose);
     if (Objects.nonNull(_pid)) {
       Scalar dt = time.subtract(_pid.time);

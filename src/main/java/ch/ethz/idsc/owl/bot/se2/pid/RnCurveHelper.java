@@ -1,10 +1,10 @@
 // code by mcp
 package ch.ethz.idsc.owl.bot.se2.pid;
 
+import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.ArgMin;
-import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ public enum RnCurveHelper {
   ;
@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.red.Norm;
    * @return position of the closest point on the curve to the current pose */
   public static int closest(Tensor curve, Tensor pose) {
     // TODO MPC Norm._2 only works when all scalars have same unit
-    return ArgMin.of(Tensor.of(curve.stream().map(curvePoint -> Norm._2.between(curvePoint, pose))));
+    return ArgMin.of(Tensor.of(curve.stream().map(curvePoint -> Se2ParametricDistance.of(curvePoint, pose))));
   }
 
   /** @param curve
