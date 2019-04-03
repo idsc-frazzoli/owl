@@ -1,13 +1,13 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.Optional;
+
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
-
-import java.util.Optional;
 
 public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
   private final GeodesicInterface geodesicInterface;

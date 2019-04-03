@@ -1,10 +1,10 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.Optional;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-
-import java.util.Optional;
 
 public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
   public IntersectionEntryFinder(Scalar distance) {

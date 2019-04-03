@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Round;
 import junit.framework.TestCase;
 
-
 public class GeodesicPursuitTest extends TestCase {
   public void test() {
     GeodesicPursuit geodesicPursuit;

@@ -1,11 +1,11 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
-
 import java.util.Optional;
 import java.util.function.Function;
+
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class TrajectoryEntryFinder {
   private final Scalar initialVar;
@@ -18,19 +18,16 @@ public abstract class TrajectoryEntryFinder {
 
   /** @param waypoints of trajectory
    * @return function to be applied on waypoints */
-  public Function<Scalar, Optional<Tensor>> on(Optional<Tensor> waypoints) {
+  public Function<Scalar, Optional<Tensor>> on(Tensor waypoints) {
     return s -> {
-      if (waypoints.isPresent()) {
-        var = correctedVar(waypoints.get(), s);
-        return protected_apply(waypoints.get());
-      } else
-        return Optional.empty();
+      var = correctedVar(waypoints.get(), s);
+      return protected_apply(waypoints.get());
     };
   }
 
   /** @param waypoints of trajectory
    * @return trajectory entry point */
-  public Optional<Tensor> initial(Optional<Tensor> waypoints) {
+  public Optional<Tensor> initial(Tensor waypoints) {
     return on(waypoints).apply(initialVar);
   }
 
