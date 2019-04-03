@@ -14,8 +14,8 @@ public enum Se2ParametricDistance {
   private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
   private static final Scalar HALF = RealScalar.of(0.5);
 
-  /** @param p
-   * @param q
+  /** @param p element in SE2 of the form {px, py, p_heading}
+   * @param q element in SE2 of the form {qx, qy, q_heading}
    * @return length of geodesic between p and q when projected to R^2
    * the projection is a circle segment */
   public static Scalar of(Tensor p, Tensor q) {

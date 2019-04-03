@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   @Override // from TrajectoryEntryFinder
   public Optional<Tensor> apply(Tensor waypoints) {
-    if (Clips.interval(0, waypoints.length()).isInside(index))
+    if (Clips.interval(0, waypoints.length() - 1).isInside(index))
       return Optional.of(LinearInterpolation.of(waypoints).at(index));
     return Optional.empty();
   }
