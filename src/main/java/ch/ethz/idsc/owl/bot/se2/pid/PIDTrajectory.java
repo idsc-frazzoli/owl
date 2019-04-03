@@ -20,7 +20,6 @@ public class PIDTrajectory {
     time = stateTime.time();
     Tensor stateXYphi = stateTime.state();
     Tensor closest = traj.get(RnCurveHelper.closest(traj, stateXYphi));
-    // TODO MPC Norm._2 only works when all scalars have same unit: stateXYphi, closest
     errorPose = Se2ParametricDistance.of(stateXYphi, closest);
     prop = pidGains.Kp.multiply(errorPose);
     if (Objects.nonNull(_pid)) {
