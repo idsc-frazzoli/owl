@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state) //
-//        .map(tensorUnaryOperator)); // TODO change {x, y} -> {x, y, a}
+        // .map(tensorUnaryOperator)); // TODO change {x, y} -> {x, y, a}
         .map(t -> tensorUnaryOperator.apply(t).append(t.Get(2).subtract(state.Get(2))))); // TODO could be part of Se2Bijection
     if (Sign.isNegative(speed))
       beacons.set(Scalar::negate, Tensor.ALL, 0);
@@ -91,5 +91,4 @@ import ch.ethz.idsc.tensor.sca.Sign;
     else
       return Optional.empty();
   }
-
 }

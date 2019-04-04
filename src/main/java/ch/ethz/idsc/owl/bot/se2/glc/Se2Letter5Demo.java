@@ -1,4 +1,4 @@
-// code by jph
+// code by jph, gjoel
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;

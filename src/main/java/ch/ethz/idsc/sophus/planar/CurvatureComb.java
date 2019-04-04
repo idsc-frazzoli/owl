@@ -40,13 +40,13 @@ public enum CurvatureComb {
 
   /** @param tensor of dimension n x 2
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
-  public static Tensor string(Tensor tensor) {
+  /* package */ static Tensor string(Tensor tensor) {
     return SignedCurvature2D.string(tensor).pmul(Normal2D.string(tensor));
   }
 
   /** @param tensor of dimension n x 2
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
-  public static Tensor cyclic(Tensor tensor) {
+  /* package */ static Tensor cyclic(Tensor tensor) {
     Tensor normal = Tensors.empty();
     int length = tensor.length();
     for (int index = 0; index < length; ++index) {

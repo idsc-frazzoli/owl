@@ -19,7 +19,8 @@ public class GeodesicPursuit {
    * @param var
    * @param resolution of geodesic curve
    * @return GeodesicPursuit */
-  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var, int resolution) {
+  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var,
+      int resolution) {
     Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var);
     return new GeodesicPursuit(geodesicInterface, lookAhead, resolution);
   }
@@ -55,10 +56,10 @@ public class GeodesicPursuit {
     ScalarTensorFunction geodesic = geodesicInterface.curve(Array.zeros(3), lookAhead);
     curve = discretization.map(geodesic);
     Tensor points2D = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
-    return SignedCurvature2D.string(points2D).negate(); // SignedCurvature2D uses a switched sign convention
+    return SignedCurvature2D.string(points2D);
   }
 
-  public Optional<Tensor> curve(){
+  public Optional<Tensor> curve() {
     return Optional.of(curve);
   }
 

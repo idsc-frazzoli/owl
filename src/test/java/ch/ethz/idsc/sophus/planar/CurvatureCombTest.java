@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 public class CurvatureCombTest extends TestCase {
   public void testSimple() {
     Tensor points = Tensors.fromString("{{0,0},{1,1},{2,0}}");
-    Tensor tensor = CurvatureComb.of(points, RealScalar.ONE, false);
+    Tensor tensor = CurvatureComb.of(points, RealScalar.ONE.negate(), false);
     String string = "{{-0.7071067811865474, 0.7071067811865474}, {1, 2}, {2.7071067811865475, 0.7071067811865474}}";
     Tensor result = Tensors.fromString(string);
     Chop._12.requireClose(tensor, result);
@@ -32,14 +32,14 @@ public class CurvatureCombTest extends TestCase {
   }
 
   public void testCircle() {
-    Tensor tensor = CurvatureComb.of(CirclePoints.of(4), RationalScalar.ONE, true);
+    Tensor tensor = CurvatureComb.of(CirclePoints.of(4), RationalScalar.ONE.negate(), true);
     assertTrue(Chop._14.close(tensor, CirclePoints.of(4).multiply(RealScalar.of(2))));
   }
 
   public void testString() {
     Tensor tensor = CurvatureComb.string(Tensors.fromString("{{0,0},{1,1},{2,0}}"));
     String format = "{{-0.7071067811865474, 0.7071067811865474}, {0, 1}, {0.7071067811865474, 0.7071067811865474}}";
-    Tensor result = Tensors.fromString(format);
+    Tensor result = Tensors.fromString(format).negate();
     Chop._12.requireClose(tensor, result);
   }
 

@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Unprotect;
 public enum CurveCurvatureRender {
   ;
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
-  private static final Scalar COMB_SCALE = DoubleScalar.of(1); // .5 (1 for presentation)
+  private static final Scalar COMB_SCALE = DoubleScalar.of(-1);
   private static final PathRender PATH_RENDER_CURVE = new PathRender(Color.BLUE, 1.25f);
   private static final PathRender PATH_RENDER_CURVATURE = new PathRender(COLOR_CURVATURE_COMB);
 
