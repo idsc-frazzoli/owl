@@ -27,10 +27,16 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
    * @param alpha = 0: uniform knot vector; alpha = 0.5: centripetal; alpha = 1: chordal
    * @return
    * @throws Exception if given control contains more than 4 points */
+  @Deprecated
   public static GeodesicCatmullRom of(GeodesicInterface geodesicInterface, Tensor control, Scalar alpha) {
     if (control.length() != 4)
       throw TensorRuntimeException.of(control);
     return new GeodesicCatmullRom(Objects.requireNonNull(geodesicInterface), control, alpha);
+  }
+
+  // TODO OB
+  public static GeodesicCatmullRom of(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
+    return null;
   }
 
   // ---
@@ -39,7 +45,7 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
   private final Scalar alpha;
 
   /** @param control points of length 4
-   * @param alpha knot parametrization [0,1] */
+   * @param alpha knot parameterization [0, 1] */
   /* package */ GeodesicCatmullRom(GeodesicInterface geodesicInterface, Tensor control, Scalar alpha) {
     this.geodesicInterface = geodesicInterface;
     this.control = control;
@@ -60,7 +66,7 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
   }
 
   @Override
-  /** t in [t1,t2] */
+  /** t in [t1, t2] */
   public Tensor apply(Scalar t) {
     Tensor knots = knots();
     // TODO OB: these three steps can be merged in one by introducing a second loop
@@ -81,8 +87,7 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
     // Third and final pyramidal layer
     Scalar num = t.subtract(knots.get(1));
     Scalar denum = knots.Get(2).subtract(knots.Get(1));
-    Tensor C = geodesicInterface.split(B.get(0), B.get(1), num.divide(denum));
-    return C;
+    return geodesicInterface.split(B.get(0), B.get(1), num.divide(denum));
   }
 
   public Tensor control() {
