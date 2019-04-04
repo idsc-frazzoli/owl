@@ -27,7 +27,7 @@ public class GeodesicPursuitTest extends TestCase {
     geodesicPursuit = GeodesicPursuit.fromTrajectory(ClothoidCurve.INSTANCE, trajectory2, new NaiveEntryFinder(0), 100);
     // System.out.println("ratios 2 = " + (ratio2.isPresent() ? ratio2.get() : "empty"));
     if (geodesicPursuit.ratios().isPresent())
-      assertEquals(RationalScalar.of(-1, 2), Round._8.apply(geodesicPursuit.ratio().get()));
+      assertEquals(RationalScalar.of(1, 2), Round._8.apply(geodesicPursuit.ratio().get()));
     else
       assert false;
   }
