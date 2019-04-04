@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 public class Se2Letter4Demo extends Se2CarDemo {
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-90), Degree.of(90), 32), Subdivide.of(0, 5, 30));
-  private static final PIDGains PID_GAINS = new PIDGains(RealScalar.of(20), RealScalar.of(3));
+  private static final PIDGains PID_GAINS = new PIDGains(RealScalar.of(30), RealScalar.of(30));
 
   @Override // from Se2CarDemo
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
