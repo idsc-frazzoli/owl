@@ -3,15 +3,12 @@ package ch.ethz.idsc.sophus.curve;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** CatmullRom denotes the function that is defined
@@ -23,70 +20,57 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * Proceedings of Pacific Graphics 2005, pages 160-162
  * http://faculty.cs.tamu.edu/schaefer/research/sphereCurves.pdf */
 public class GeodesicCatmullRom implements ScalarTensorFunction {
-  /** @param geodesicInterface non null
-   * @param alpha = 0: uniform knot vector; alpha = 0.5: centripetal; alpha = 1: chordal
-   * @return
-   * @throws Exception if given control contains more than 4 points */
-  @Deprecated
-  public static GeodesicCatmullRom of(GeodesicInterface geodesicInterface, Tensor control, Scalar alpha) {
-    if (control.length() != 4)
-      throw TensorRuntimeException.of(control);
-    return new GeodesicCatmullRom(Objects.requireNonNull(geodesicInterface), control, alpha);
-  }
-
-  // TODO OB
+  /** @param geodesicInterface non null */
   public static GeodesicCatmullRom of(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
-    return null;
+    return new GeodesicCatmullRom(Objects.requireNonNull(geodesicInterface), VectorQ.require(knots), control);
   }
 
   // ---
   private final GeodesicInterface geodesicInterface;
   private final Tensor control;
-  private final Scalar alpha;
+  private final Tensor knots;
 
   /** @param control points of length 4
    * @param alpha knot parameterization [0, 1] */
-  /* package */ GeodesicCatmullRom(GeodesicInterface geodesicInterface, Tensor control, Scalar alpha) {
+  /* package */ GeodesicCatmullRom(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
     this.geodesicInterface = geodesicInterface;
+    this.knots = knots;
     this.control = control;
-    this.alpha = alpha;
   }
 
-  private static Tensor knots(Tensor sequence, Scalar alpha) {
-    // TODO OB: make geodesic display depending on geod.Interface => suiting parametric distance;
-    Tensor t = Tensors.vector(0);
-    if (sequence.length() != 4)
-      throw TensorRuntimeException.of(sequence);
-    for (int index = 0; index < 3; index++) {
-      t.append(
-          RealScalar.of(Math.pow(Se2ParametricDistance.of(sequence.get(index), sequence.get(index + 1)).number().floatValue(), alpha.number().floatValue()))
-              .add(t.Get(index)));
+  private int getIndex(Scalar t) {
+    int index = 0;
+    while (Scalars.lessThan(t, knots.Get(index))) {
+      index++;
     }
-    return t;
+    return index;
   }
 
   @Override
-  /** t in [t1, t2] */
+  /** applying CRM to a chosen t in the complete knot sequence is [tn-2, tn-1, tn, tn+1] (with tn-1 < t tn)
+   * is constructed from the control points [pn-2, pn-1, pn, pn+1] */
   public Tensor apply(Scalar t) {
-    Tensor knots = knots();
-    // TODO OB: these three steps can be merged in one by introducing a second loop
+    // Since CMR only uses four control points we select the four corresponding to the parameter t
+    int hi = getIndex(t);
+    Tensor selectedKnots = knots.extract(hi - 2, hi + 2);
+    Tensor selectedControl = control.extract(hi - 2, hi + 2);
     // First pyramidal layer
     Tensor A = Tensors.empty();
     for (int index = 0; index < 3; index++) {
-      Scalar num = t.subtract(knots.Get(index));
-      Scalar denum = knots.Get(index + 1).subtract(knots.Get(index));
-      A.append(geodesicInterface.split(control.get(index), control.get(index + 1), num.divide(denum)));
+      Scalar num = t.subtract(selectedKnots.Get(index));
+      Scalar denum = selectedKnots.Get(index + 1).subtract(selectedKnots.Get(index));
+      A.append(geodesicInterface.split(selectedControl.get(index), selectedControl.get(index + 1), num.divide(denum)));
     }
     // Second pyramidal layer
     Tensor B = Tensors.empty();
     for (int index = 0; index < 2; index++) {
-      Scalar num = t.subtract(knots.Get(index));
-      Scalar denum = knots.Get(index + 2).subtract(knots.Get(index));
+      Scalar num = t.subtract(selectedKnots.Get(index));
+      Scalar denum = selectedKnots.Get(index + 2).subtract(selectedKnots.Get(index));
       B.append(geodesicInterface.split(A.get(index), A.get(index + 1), num.divide(denum)));
     }
     // Third and final pyramidal layer
-    Scalar num = t.subtract(knots.get(1));
-    Scalar denum = knots.Get(2).subtract(knots.Get(1));
+    Scalar num = t.subtract(selectedKnots.get(1));
+    Scalar denum = selectedKnots.Get(2).subtract(selectedKnots.Get(1));
     return geodesicInterface.split(B.get(0), B.get(1), num.divide(denum));
   }
 
@@ -95,26 +79,6 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
   }
 
   public Tensor knots() {
-    return knots(control, alpha);
-  }
-
-  public static void main(String[] args) {
-    GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
-    Tensor control = Tensors.empty();
-    control.append(Tensors.vector(0, 0, 0));
-    for (int i = 0; i < 10; i++) {
-      control.append(Tensors.vector(Math.random(), Math.random(), Math.random()).add(control.get(i)));
-    }
-    Scalar alpha = RealScalar.ONE;
-    for (int i = 0; i < control.length() - 4; i++) {
-      GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, control.extract(i, i + 4), alpha);
-      // Control Points
-      System.err.println(control.get(i + 1));
-      Tensor knots = geodesicCatmullRom.knots();
-      // Interpolations
-      for (int j = 0; j < 10; j++) {
-        System.out.println(geodesicCatmullRom.apply(knots.Get(1).add(knots.get(2).subtract(knots.get(1)).multiply(RationalScalar.of(j, 10)))));
-      }
-    }
+    return knots.unmodifiable();
   }
 }

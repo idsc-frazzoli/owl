@@ -1,6 +1,7 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.sym;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
@@ -8,28 +9,58 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class SymWeightsToSplits {
   public final Tensor weights;
+  public final Tensor tree;
+  private Tensor result = Tensors.empty();
 
-  public SymWeightsToSplits(Tensor weights) {
-    // this.weights = weights.unmodifiable();
-    this.weights = weights;
+  public SymWeightsToSplits(Tensor tree, Tensor weights) {
+    this.tree = tree;
+    this.weights = processedWeights(tree, weights);
   }
 
-  private Tensor processedWeights() {
-    // Add function that checks if multiple elements of tree have the same value (e.g. 3 is used in two Averages [2,3] and [3,4])
-    // and then multiply corresponding weights by the reciprocal of the appearance
-    return Tensors.empty();
+  private Tensor treeContent(Tensor tree) {
+    for (int index = 0; index < 2; ++index) {
+      if (tree.get(index).length() == -1) {
+        result.append(tree.get(index));
+      } else
+        treeContent(tree.get(index));
+    }
+    return result;
   }
 
-  public Tensor recursion(Tensor tree) {
+  private Tensor processedWeights(Tensor tree, Tensor weights) {
+    Tensor content = treeContent(tree);
+    Tensor unique = Tensor.of(content.stream().distinct());
+    // TODO OB/JPH: Ich wuerde gerne eine Exception throw machen, falls weights.length =/= unique.length, oder ist das redundant?
+    Tensor multiplicities = Tensors.empty();
+    for (int i = 0; i < unique.length(); ++i) {
+      Scalar counter = RealScalar.ZERO;
+      for (int j = 0; j < content.length(); ++j) {
+        if (unique.get(i).equals(content.get(j)))
+          counter = counter.add(RealScalar.ONE);
+      }
+      multiplicities.append(counter);
+    }
+    Tensor processedWeigths = Tensors.empty();
+    for (int i = 0; i < weights.length(); ++i)
+      processedWeigths.append(weights.get(i).divide(multiplicities.Get(i)));
+    return processedWeigths;
+  }
+
+  private Tensor apply(Tensor tree) {
     final Scalar[] w = new Scalar[2];
     for (int index = 0; index < 2; ++index) {
-      if (tree.get(index).length() == 2) // incomplete computation
-        tree.set(recursion(tree.get(index)), index);
+      if (tree.get(index).length() == 2) { // incomplete computation
+        tree.set(apply(tree.get(index)), index);
+      }
       w[index] = ScalarQ.of(tree.get(index))//
           ? weights.Get(tree.Get(index).number().intValue())
           : tree.Get(index, 3);
     }
     return tree.append(split(w[0], w[1])).append(w[0].add(w[1]));
+  }
+
+  public Tensor splits() {
+    return apply(tree);
   }
 
   private static Scalar split(Scalar pL, Scalar pR) {
