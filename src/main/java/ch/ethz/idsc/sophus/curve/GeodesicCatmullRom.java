@@ -3,8 +3,10 @@ package ch.ethz.idsc.sophus.curve;
 
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -25,10 +27,16 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
    * @param alpha = 0: uniform knot vector; alpha = 0.5: centripetal; alpha = 1: chordal
    * @return
    * @throws Exception if given control contains more than 4 points */
+  @Deprecated
   public static GeodesicCatmullRom of(GeodesicInterface geodesicInterface, Tensor control, Scalar alpha) {
     if (control.length() != 4)
       throw TensorRuntimeException.of(control);
     return new GeodesicCatmullRom(Objects.requireNonNull(geodesicInterface), control, alpha);
+  }
+
+  // TODO OB
+  public static GeodesicCatmullRom of(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
+    return null;
   }
 
   // ---
@@ -36,8 +44,8 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
   private final Tensor control;
   private final Scalar alpha;
 
-  /** @param degree
-   * @param control points of length 4 */
+  /** @param control points of length 4
+   * @param alpha knot parameterization [0, 1] */
   /* package */ GeodesicCatmullRom(GeodesicInterface geodesicInterface, Tensor control, Scalar alpha) {
     this.geodesicInterface = geodesicInterface;
     this.control = control;
@@ -49,16 +57,18 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
     Tensor t = Tensors.vector(0);
     if (sequence.length() != 4)
       throw TensorRuntimeException.of(sequence);
-    for (int index = 0; index < 3; index++)
-      t.append(RealScalar.of(Math.pow(Se2ParametricDistance.of(sequence.get(index), sequence.get(index + 1)).number().intValue(), alpha.number().floatValue()))
-          .add(t.Get(index)));
+    for (int index = 0; index < 3; index++) {
+      t.append(
+          RealScalar.of(Math.pow(Se2ParametricDistance.of(sequence.get(index), sequence.get(index + 1)).number().floatValue(), alpha.number().floatValue()))
+              .add(t.Get(index)));
+    }
     return t;
   }
 
   @Override
+  /** t in [t1, t2] */
   public Tensor apply(Scalar t) {
-    Tensor knots = knots(control, alpha);
-    // System.out.println(knots);
+    Tensor knots = knots();
     // TODO OB: these three steps can be merged in one by introducing a second loop
     // First pyramidal layer
     Tensor A = Tensors.empty();
@@ -77,8 +87,7 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
     // Third and final pyramidal layer
     Scalar num = t.subtract(knots.get(1));
     Scalar denum = knots.Get(2).subtract(knots.Get(1));
-    Tensor C = geodesicInterface.split(B.get(0), B.get(1), num.divide(denum));
-    return C;
+    return geodesicInterface.split(B.get(0), B.get(1), num.divide(denum));
   }
 
   public Tensor control() {
@@ -87,5 +96,25 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
 
   public Tensor knots() {
     return knots(control, alpha);
+  }
+
+  public static void main(String[] args) {
+    GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
+    Tensor control = Tensors.empty();
+    control.append(Tensors.vector(0, 0, 0));
+    for (int i = 0; i < 10; i++) {
+      control.append(Tensors.vector(Math.random(), Math.random(), Math.random()).add(control.get(i)));
+    }
+    Scalar alpha = RealScalar.ONE;
+    for (int i = 0; i < control.length() - 4; i++) {
+      GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, control.extract(i, i + 4), alpha);
+      // Control Points
+      System.err.println(control.get(i + 1));
+      Tensor knots = geodesicCatmullRom.knots();
+      // Interpolations
+      for (int j = 0; j < 10; j++) {
+        System.out.println(geodesicCatmullRom.apply(knots.Get(1).add(knots.get(2).subtract(knots.get(1)).multiply(RationalScalar.of(j, 10)))));
+      }
+    }
   }
 }
