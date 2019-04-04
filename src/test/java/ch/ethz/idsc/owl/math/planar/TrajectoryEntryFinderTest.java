@@ -21,14 +21,17 @@ public class TrajectoryEntryFinderTest extends TestCase {
 
   public void testNaive() {
     TrajectoryEntryFinder finder = new NaiveEntryFinder(0);
-    Optional<Tensor> waypoint = finder.apply(WAYPOINTS);
+    // ---
+    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.ZERO);
+    assertEquals(finder.initial(WAYPOINTS), waypoint);
     assertTrue(waypoint.isPresent());
     assertEquals(Tensors.vector(0, 0, 0), waypoint.get());
   }
 
   public void testInterpolation() {
-    TrajectoryEntryFinder finder = new InterpolationEntryFinder(RealScalar.of(2.5));
-    Optional<Tensor> waypoint = finder.apply(WAYPOINTS);
+    TrajectoryEntryFinder finder = new InterpolationEntryFinder(0);
+    // ---
+    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5));
     assertTrue(waypoint.isPresent());
     assertEquals(Tensors.vector(3, 1, 0), waypoint.get());
   }
@@ -36,7 +39,8 @@ public class TrajectoryEntryFinderTest extends TestCase {
   public void testIntersection() {
     Tensor goal = Tensors.vector(3, 1);
     TrajectoryEntryFinder finder = new IntersectionEntryFinder(Norm._2.of(goal));
-    Optional<Tensor> waypoint = finder.apply(WAYPOINTS);
+    // ---
+    Optional<Tensor> waypoint = finder.initial(WAYPOINTS);
     assertTrue(waypoint.isPresent());
     assertTrue(Scalars.lessThan( //
         Norm._2.between(goal, waypoint.get()), //
@@ -44,8 +48,9 @@ public class TrajectoryEntryFinderTest extends TestCase {
   }
 
   public void testGeodesic() {
-    TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(ClothoidCurve.INSTANCE, RealScalar.of(2.5));
-    Optional<Tensor> waypoint = finder.apply(WAYPOINTS);
+    TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(0, ClothoidCurve.INSTANCE);
+    // ---
+    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5));
     assertTrue(waypoint.isPresent());
     assertEquals(Tensors.vector(3, 1, 0), waypoint.get());
   }

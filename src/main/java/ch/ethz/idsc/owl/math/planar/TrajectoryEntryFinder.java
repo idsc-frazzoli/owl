@@ -2,13 +2,45 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
+import java.util.function.Function;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public interface TrajectoryEntryFinder {
-  /** find trajectory entry point with default variable
-   * 
-   * @param waypoints of reference trajectory
-   * @return tensor point {px, py, pa} where trajectory should be entered again */
-  Optional<Tensor> apply(Tensor waypoints);
+public abstract class TrajectoryEntryFinder {
+  private final Scalar initialVar;
+  protected Scalar var;
+
+  public TrajectoryEntryFinder(Scalar initialVar) {
+    this.initialVar = initialVar;
+    var = initialVar;
+  }
+
+  /** @param waypoints of trajectory
+   * @return function to be applied on waypoints */
+  public Function<Scalar, Optional<Tensor>> on(Tensor waypoints) {
+    return s -> {
+      var = correctedVar(waypoints.get(), s);
+      return protected_apply(waypoints.get());
+    };
+  }
+
+  /** @param waypoints of trajectory
+   * @return trajectory entry point */
+  public Optional<Tensor> initial(Tensor waypoints) {
+    return on(waypoints).apply(initialVar);
+  }
+
+  /** @return last applied variable */
+  public Scalar currentVar() {
+    return var;
+  }
+
+  /** @param waypoints of trajectory
+   * @return of trajectory entry point */
+  abstract Optional<Tensor> protected_apply(Tensor waypoints);
+
+  /** @param var to specify entry point choice
+   * @return actual variable to be used */
+  abstract Scalar correctedVar(Tensor waypoints, Scalar var);
 }

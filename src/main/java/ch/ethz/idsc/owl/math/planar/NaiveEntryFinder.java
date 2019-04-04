@@ -3,18 +3,23 @@ package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
 
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Mod;
 
-/* package */ class NaiveEntryFinder implements TrajectoryEntryFinder {
-  private final int index;
-
-  public NaiveEntryFinder(int index) {
-    this.index = index;
+public final class NaiveEntryFinder extends TrajectoryEntryFinder {
+  public NaiveEntryFinder(int initialIndex) {
+    super(RealScalar.of(initialIndex));
   }
 
   @Override // from TrajectoryEntryFinder
-  public Optional<Tensor> apply(Tensor waypoints) {
-    // TODO JPH version for string and version for cyclic
-    return Optional.of(waypoints.get().get(Math.floorMod(index, waypoints.get().length())));
+  protected Scalar correctedVar(Tensor waypoints, Scalar index) {
+    return Mod.function(waypoints.get().length()).apply(index);
+  }
+
+  @Override // from TrajectoryEntryFinder
+  protected Optional<Tensor> protected_apply(Tensor waypoints) {
+    return Optional.of(waypoints.get().get(var.number().intValue()));
   }
 }
