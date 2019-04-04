@@ -38,8 +38,8 @@ public class GeodesicAverageFilterDemo extends DatasetKernelDemo {
     // TODO OB: Think of a way to create different trees automatically?
     Tensor tree = Tensors.of(Tensors.vector(0, 1), Tensors.of(Tensors.vector(2, 3), RealScalar.of(4)));
     Tensor weights = Normalize.with(VectorTotal.FUNCTION).apply(Tensors.vector(1, 2, 3, 2, 1));
-    SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(weights);
-    TensorUnaryOperator tensorUnaryOperator = GeodesicAverage.of(geodesicDisplay().geodesicInterface(), symWeightsToSplits.recursion(tree));
+    SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(weights, tree);
+    TensorUnaryOperator tensorUnaryOperator = GeodesicAverage.of(geodesicDisplay().geodesicInterface(), symWeightsToSplits.splits());
     refined = GeodesicAverageFilter.of(tensorUnaryOperator, weights.length()).apply(control());
   }
 

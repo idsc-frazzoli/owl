@@ -15,7 +15,7 @@ public class CentripedalKnotSpacing implements TensorUnaryOperator {
   private final ScalarUnaryOperator power;
   private final TensorMetric tensorMetric;
 
-  /** @param exponent
+  /** @param exponent in the interval [0, 1]
    * @param tensorMetric for instance Se2ParametricDistance::of */
   public CentripedalKnotSpacing(Scalar exponent, TensorMetric tensorMetric) {
     power = Power.function(exponent);
