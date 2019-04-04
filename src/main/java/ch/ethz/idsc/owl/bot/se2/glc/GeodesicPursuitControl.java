@@ -27,8 +27,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
   // ---
   private final TrajectoryEntryFinder entryFinder;
-  private final Clip staticClip; // turning ratios limits
-  private Optional<Clip> dynamicClip = Optional.empty(); // state dependent turning ratios limits
+  private final Clip staticClip; // turning ratio limits
+  private Optional<Clip> dynamicClip = Optional.empty(); // state dependent turning ratio limits
 
   public GeodesicPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
     this.entryFinder = entryFinder;
@@ -58,14 +58,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Optional<Tensor> lookAhead = entryFinder.initial(beacons);
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(beacons);
     for (int i = 0; i < beacons.length(); i++) {
-      GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead);
+      GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead, 100); // resolution might better be dynamic
       Optional<Tensor> ratios = geodesicPursuit.ratios();
-      if (ratios.isPresent() && ratios.get().stream().allMatch(t -> isCompliant(t.Get())))
+      if (ratios.isPresent() && ratios.get().stream().map(Tensor::Get).allMatch(this::isCompliant))
         return Optional.of(CarHelper.singleton(speed, geodesicPursuit.ratio().get()).getU());
       Scalar next = Increment.ONE.apply(entryFinder.currentVar());
       lookAhead = function.apply(next);
     }
-    System.err.println("no compliant strategy found!");
+    // System.err.println("no compliant strategy found!");
     return Optional.empty();
   }
 

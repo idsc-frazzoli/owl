@@ -17,32 +17,35 @@ public class GeodesicPursuit {
    * @param tensor waypoints
    * @param entryFinder strategy
    * @param var
+   * @param resolution of geodesic curve
    * @return GeodesicPursuit */
-  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
+  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var, int resolution) {
     Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var);
-    return new GeodesicPursuit(geodesicInterface, lookAhead);
+    return new GeodesicPursuit(geodesicInterface, lookAhead, resolution);
   }
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
    * @param tensor waypoints
    * @param entryFinder strategy
+   * @param resolution of geodesic curve
    * @return GeodesicPursuit */
-  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder) {
+  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, int resolution) {
     Optional<Tensor> lookAhead = entryFinder.initial(tensor);
-    return new GeodesicPursuit(geodesicInterface, lookAhead);
+    return new GeodesicPursuit(geodesicInterface, lookAhead, resolution);
   }
 
   // ---
   private final GeodesicInterface geodesicInterface;
+  private final Tensor discretization;
   private final Optional<Tensor> lookAhead;
   private final Optional<Tensor> ratios;
-  // ---
-  private final Tensor discretization = Subdivide.of(0, 1, 100); // FIXME JG pass 100 as argument
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
-   * @param lookAhead trajectory point {px, py, pa} */
-  public GeodesicPursuit(GeodesicInterface geodesicInterface, Optional<Tensor> lookAhead) {
+   * @param lookAhead trajectory point {px, py, pa}
+   * @param resolution of geodesic curve */
+  public GeodesicPursuit(GeodesicInterface geodesicInterface, Optional<Tensor> lookAhead, int resolution) {
     this.geodesicInterface = geodesicInterface;
+    discretization = Subdivide.of(0, 1, 100);
     this.lookAhead = lookAhead;
     ratios = lookAhead.isPresent() //
         ? ratios(VectorQ.requireLength(lookAhead.get(), 3)) //
@@ -55,7 +58,7 @@ public class GeodesicPursuit {
     ScalarTensorFunction geodesic = geodesicInterface.curve(Array.zeros(3), lookAhead);
     Tensor curve = discretization.map(geodesic);
     Tensor points2D = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
-    Tensor curvature = SignedCurvature2D.string(points2D); // TODO works if negated... okay, but why?
+    Tensor curvature = SignedCurvature2D.string(points2D).negate(); // SignedCurvature2D uses a switched sign convention
     return Optional.of(curvature);
   }
 

@@ -20,11 +20,11 @@ public class GeodesicPursuitTest extends TestCase {
         Tensors.vector(2, 2, Math.PI / 2), //
         Tensors.vector(4, 4, Math.PI / 2));
     // ---
-    geodesicPursuit = GeodesicPursuit.fromTrajectory(ClothoidCurve.INSTANCE, trajectory1, new NaiveEntryFinder(0));
+    geodesicPursuit = GeodesicPursuit.fromTrajectory(ClothoidCurve.INSTANCE, trajectory1, new NaiveEntryFinder(0), 100);
     // System.out.println("ratios 1 = " + (ratio1.isPresent() ? ratio1.get() : "empty"));
     assertEquals(RealScalar.ZERO, geodesicPursuit.ratio().orElse(null));
     // ---
-    geodesicPursuit = GeodesicPursuit.fromTrajectory(ClothoidCurve.INSTANCE, trajectory2, new NaiveEntryFinder(0));
+    geodesicPursuit = GeodesicPursuit.fromTrajectory(ClothoidCurve.INSTANCE, trajectory2, new NaiveEntryFinder(0), 100);
     // System.out.println("ratios 2 = " + (ratio2.isPresent() ? ratio2.get() : "empty"));
     if (geodesicPursuit.ratios().isPresent())
       assertEquals(RationalScalar.of(-1, 2), Round._8.apply(geodesicPursuit.ratio().get()));
