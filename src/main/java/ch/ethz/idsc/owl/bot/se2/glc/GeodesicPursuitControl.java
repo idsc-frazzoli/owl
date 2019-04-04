@@ -1,12 +1,15 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.awt.Shape;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
 import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.GeodesicPursuit;
 import ch.ethz.idsc.owl.math.planar.TrajectoryEntryFinder;
@@ -23,12 +26,14 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/* package */ class GeodesicPursuitControl extends StateTrajectoryControl {
+/* package */ class GeodesicPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
   private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
   // ---
   private final TrajectoryEntryFinder entryFinder;
   private final Clip staticClip; // turning ratio limits
   private Optional<Clip> dynamicClip = Optional.empty(); // state dependent turning ratio limits
+  // ---
+  private GeodesicPursuit geodesicPursuit = null; // for visualization
 
   public GeodesicPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
     this.entryFinder = entryFinder;
@@ -58,13 +63,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Optional<Tensor> lookAhead = entryFinder.initial(beacons);
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(beacons);
     for (int i = 0; i < beacons.length(); i++) {
-      GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead, 100); // resolution might better be dynamic
+      geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead, 100); // resolution might better be dynamic
       Optional<Tensor> ratios = geodesicPursuit.ratios();
       if (ratios.isPresent() && ratios.get().stream().map(Tensor::Get).allMatch(this::isCompliant))
         return Optional.of(CarHelper.singleton(speed, geodesicPursuit.ratio().get()).getU());
       Scalar next = Increment.ONE.apply(entryFinder.currentVar());
       lookAhead = function.apply(next);
     }
+    geodesicPursuit = null;
     // System.err.println("no compliant strategy found!");
     return Optional.empty();
   }
@@ -76,6 +82,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private Optional<Clip> dynamicClip(Tensor state, Scalar speed) {
     // TODO implement this
     return Optional.empty();
+  }
+
+  @Override // fromTrajectoryTargetRender
+  public Optional<Shape> toTarget(GeometricLayer geometricLayer) {
+    if (Objects.nonNull(geodesicPursuit))
+      return geodesicPursuit.curve().map(geometricLayer::toPath2D);
+    else
+      return Optional.empty();
   }
 
 }

@@ -1,17 +1,21 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.awt.Shape;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -19,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
-/* package */ class PurePursuitControl extends StateTrajectoryControl {
+/* package */ class PurePursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
   private final Clip clip;
   private final Scalar lookAhead;
 
@@ -58,5 +62,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
     }
     purePursuit = null;
     return Optional.empty();
+  }
+
+  @Override // from TrajectoryTargetRender
+  public Optional<Shape> toTarget(GeometricLayer geometricLayer) {
+    if (Objects.nonNull(purePursuit) && purePursuit.lookAhead().isPresent())
+      return Optional.of(geometricLayer.toVector(Array.zeros(2), purePursuit.lookAhead().get()));
+    else
+      return Optional.empty();
   }
 }

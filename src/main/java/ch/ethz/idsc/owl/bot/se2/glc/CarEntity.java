@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Collection;
-import java.util.Objects;
 
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
@@ -24,7 +23,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.owl.math.planar.PurePursuit;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
@@ -34,7 +32,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -143,17 +140,13 @@ public class CarEntity extends Se2Entity {
     // ---
     super.render(geometricLayer, graphics);
     // ---
-    if (trajectoryControl instanceof PurePursuitControl) {
-      PurePursuitControl purePursuitControl = (PurePursuitControl) trajectoryControl;
-      PurePursuit _purePursuit = purePursuitControl.purePursuit;
-      if (Objects.nonNull(_purePursuit) && _purePursuit.lookAhead().isPresent()) {
-        StateTime stateTime = getStateTimeNow();
-        Tensor matrix = Se2Utils.toSE2Matrix(stateTime.state());
-        geometricLayer.pushMatrix(matrix);
-        graphics.setColor(Color.RED);
-        graphics.draw(geometricLayer.toVector(Array.zeros(2), _purePursuit.lookAhead().get()));
-        geometricLayer.popMatrix();
-      }
+    if (trajectoryControl instanceof TrajectoryTargetRender) {
+      StateTime stateTime = getStateTimeNow();
+      Tensor matrix = Se2Utils.toSE2Matrix(stateTime.state());
+      geometricLayer.pushMatrix(matrix);
+      graphics.setColor(Color.RED);
+      ((TrajectoryTargetRender) trajectoryControl).toTarget(geometricLayer).ifPresent(graphics::draw);
+      geometricLayer.popMatrix();
     }
   }
 
