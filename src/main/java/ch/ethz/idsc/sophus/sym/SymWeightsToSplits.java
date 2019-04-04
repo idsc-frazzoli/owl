@@ -18,26 +18,26 @@ public class SymWeightsToSplits {
   }
 
   private Tensor treeContent(Tensor tree) {
-    for (int index = 0; index < 2; ++index) {
-      if (tree.get(index).length() == -1) {
+    for (int index = 0; index < 2; ++index)
+      if (tree.get(index).length() == -1)
         result.append(tree.get(index));
-      } else
+      else
         treeContent(tree.get(index));
-    }
     return result;
   }
 
   private Tensor processedWeights(Tensor tree, Tensor weights) {
     Tensor content = treeContent(tree);
     Tensor unique = Tensor.of(content.stream().distinct());
-    // TODO OB/JPH: Ich wuerde gerne eine Exception throw machen, falls weights.length =/= unique.length, oder ist das redundant?
+    // TODO OB the condition below causes SymWeightsToSplitsTest to fail
+    // if (content.length() != unique.length())
+    // throw TensorRuntimeException.of(content, unique);
     Tensor multiplicities = Tensors.empty();
     for (int i = 0; i < unique.length(); ++i) {
       Scalar counter = RealScalar.ZERO;
-      for (int j = 0; j < content.length(); ++j) {
+      for (int j = 0; j < content.length(); ++j)
         if (unique.get(i).equals(content.get(j)))
           counter = counter.add(RealScalar.ONE);
-      }
       multiplicities.append(counter);
     }
     Tensor processedWeigths = Tensors.empty();

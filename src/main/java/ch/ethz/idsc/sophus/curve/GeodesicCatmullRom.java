@@ -30,8 +30,8 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
   private final Tensor control;
   private final Tensor knots;
 
-  /** @param control points of length 4
-   * @param alpha knot parameterization [0, 1] */
+  // TODO OB documentation
+  /** @param control points of length 4 */
   /* package */ GeodesicCatmullRom(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
     this.geodesicInterface = geodesicInterface;
     this.knots = knots;
