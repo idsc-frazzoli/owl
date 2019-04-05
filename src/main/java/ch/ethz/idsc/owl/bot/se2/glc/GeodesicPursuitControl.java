@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Shape;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -30,11 +29,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
   // ---
   private final TrajectoryEntryFinder entryFinder;
-  private final Clip staticClip; // turning ratio limits
-  private Optional<Clip> dynamicClip = Optional.empty(); // state dependent turning ratio limits
+  private final Clip staticClip; // fixed turning ratio limits
+  private Optional<Clip> dynamicClip = Optional.empty(); // state and speed dependent turning ratio limits
   // ---
-  private GeodesicPursuit geodesicPursuit = null; // for visualization
+  private Tensor curve; // for visualization
 
+  /** @param entryFinder strategy
+   * @param maxTurningRate limits = {-maxTurningRate, +maxTurningRate} */
   public GeodesicPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
     this.entryFinder = entryFinder;
     staticClip = Clips.interval(maxTurningRate.negate(), maxTurningRate);
@@ -48,6 +49,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
     Scalar speed = trailAhead.get(0).getFlow().get().getU().Get(0);
+    boolean inReverse = Sign.isNegative(speed);
     Tensor state = tail.state();
     dynamicClip = dynamicClip(state, speed);
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
@@ -56,29 +58,45 @@ import ch.ethz.idsc.tensor.sca.Sign;
         .map(StateTime::state) //
         // .map(tensorUnaryOperator)); // TODO change {x, y} -> {x, y, a}
         .map(t -> tensorUnaryOperator.apply(t).append(t.Get(2).subtract(state.Get(2))))); // TODO could be part of Se2Bijection
-    if (Sign.isNegative(speed))
-      beacons.set(Scalar::negate, Tensor.ALL, 0);
+    if (inReverse)
+      mirrorAndReverse(beacons);
     // ---
     // TODO proper rejection/optimization e.g. with bisection
     Optional<Tensor> lookAhead = entryFinder.initial(beacons);
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(beacons);
     for (int i = 0; i < beacons.length(); i++) {
-      geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead, 100); // resolution might better be dynamic
+      GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead, 100); // resolution might better be dynamic
       Optional<Tensor> ratios = geodesicPursuit.ratios();
-      if (ratios.isPresent() && ratios.get().stream().map(Tensor::Get).allMatch(this::isCompliant))
+      if (ratios.isPresent() && ratios.get().stream().map(Tensor::Get).allMatch(this::isCompliant)) {
+        curve = geodesicPursuit.curve().get();
+        if (inReverse)
+          mirrorAndReverse(curve);
         return Optional.of(CarHelper.singleton(speed, geodesicPursuit.ratio().get()).getU());
+      }
       Scalar next = Increment.ONE.apply(entryFinder.currentVar());
       lookAhead = function.apply(next);
     }
-    geodesicPursuit = null;
+    curve = null;
     // System.err.println("no compliant strategy found!");
     return Optional.empty();
   }
 
+  /** mirror the points along the y axis and invert their orientation
+   * @param se2points curve given by points {x,y,a} */
+  private void mirrorAndReverse(Tensor se2points) {
+    se2points.set(Scalar::negate, Tensor.ALL, 0);
+    se2points.set(Scalar::negate, Tensor.ALL, 2);
+  }
+
+  /** @param ratio
+   * @return whether ratio is compliant with current limits */
   private boolean isCompliant(Scalar ratio) {
     return staticClip.isInside(ratio) && (!dynamicClip.isPresent() || dynamicClip.get().isInside(ratio));
   }
 
+  /** @param state of car
+   * @param speed of car
+   * @return dependent limit on turning ratio*/
   private Optional<Clip> dynamicClip(Tensor state, Scalar speed) {
     // TODO implement this
     return Optional.empty();
@@ -86,9 +104,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // fromTrajectoryTargetRender
   public Optional<Shape> toTarget(GeometricLayer geometricLayer) {
-    if (Objects.nonNull(geodesicPursuit))
-      return geodesicPursuit.curve().map(geometricLayer::toPath2D);
-    else
-      return Optional.empty();
+    return Optional.ofNullable(curve).map(geometricLayer::toPath2D);
   }
 }
