@@ -15,11 +15,11 @@ public final class NaiveEntryFinder extends TrajectoryEntryFinder {
 
   @Override // from TrajectoryEntryFinder
   protected Scalar correctedVar(Tensor waypoints, Scalar index) {
-    return Mod.function(waypoints.get().length()).apply(index);
+    return Mod.function(waypoints.length()).apply(index);
   }
 
   @Override // from TrajectoryEntryFinder
   protected Optional<Tensor> protected_apply(Tensor waypoints) {
-    return Optional.of(waypoints.get().get(var.number().intValue()));
+    return Optional.of(waypoints.get(var.number().intValue()));
   }
 }

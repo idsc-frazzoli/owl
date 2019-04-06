@@ -59,14 +59,21 @@ public class GeodesicPursuit {
     return SignedCurvature2D.string(points2D);
   }
 
+  // TODO JG bad design since function curve() requires call of ratios(lookAhead) beforehand
   public Optional<Tensor> curve() {
     return Optional.of(curve);
   }
 
+  /** TODO JG document
+   * 
+   * @return */
   public Optional<Tensor> ratios() {
     return ratios;
   }
 
+  /** TODO JG document
+   * 
+   * @return */
   public Optional<Scalar> ratio() {
     return ratios.map(vector -> vector.Get(0));
   }

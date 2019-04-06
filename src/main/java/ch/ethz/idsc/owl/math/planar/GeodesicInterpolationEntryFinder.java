@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
+  private static final Mod MOD_UNIT = Mod.function(1);
+  // ---
   private final GeodesicInterface geodesicInterface;
 
   public GeodesicInterpolationEntryFinder(double initialIndex, GeodesicInterface geodesicInterface) {
@@ -25,11 +27,11 @@ public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinde
   @Override // from TrajectoryEntryFinder
   protected Optional<Tensor> protected_apply(Tensor waypoints) {
     int index_ = var.number().intValue();
-    if (index_ >= 0 && index_ < waypoints.get().length())
+    if (index_ >= 0 && index_ < waypoints.length())
       return Optional.of(geodesicInterface.split( //
-          waypoints.get().get(index_), //
-          waypoints.get().get(index_ + 1), //
-          Mod.function(1).apply(var)));
+          waypoints.get(index_), //
+          waypoints.get(index_ + 1), //
+          MOD_UNIT.apply(var)));
     return Optional.empty();
   }
 }

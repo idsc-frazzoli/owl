@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class PurePursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
   private final Clip clip;
   private final Scalar lookAhead;
+  private PurePursuit purePursuit = null;
 
   public PurePursuitControl(Scalar lookAhead, Scalar maxTurningRate) {
     this.lookAhead = lookAhead;
@@ -36,9 +37,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
   protected Scalar pseudoDistance(Tensor x, Tensor y) {
     return Norm2Squared.ofVector(Se2Wrap.INSTANCE.difference(x, y));
   }
-
-  /** available for visualization */
-  PurePursuit purePursuit = null;
 
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
@@ -66,9 +64,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from TrajectoryTargetRender
   public Optional<Shape> toTarget(GeometricLayer geometricLayer) {
-    if (Objects.nonNull(purePursuit) && purePursuit.lookAhead().isPresent())
-      return Optional.of(geometricLayer.toVector(Array.zeros(2), purePursuit.lookAhead().get()));
-    else
-      return Optional.empty();
+    PurePursuit _purePursuit = purePursuit; // copy reference
+    if (Objects.nonNull(_purePursuit) && _purePursuit.lookAhead().isPresent())
+      return Optional.of(geometricLayer.toVector(Array.zeros(2), _purePursuit.lookAhead().get()));
+    return Optional.empty();
   }
 }
