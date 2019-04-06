@@ -29,6 +29,6 @@ public class GeodesicPursuitTest extends TestCase {
     if (geodesicPursuit.ratios().isPresent())
       assertEquals(RationalScalar.of(1, 2), Round._8.apply(geodesicPursuit.ratio().get()));
     else
-      assert false;
+      fail();
   }
 }

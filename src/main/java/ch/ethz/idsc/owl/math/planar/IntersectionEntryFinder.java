@@ -18,7 +18,7 @@ public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
 
   @Override // from TrajectoryEntryFinder
   public Optional<Tensor> protected_apply(Tensor waypoints) {
-    Tensor waypoints_ = Tensor.of(waypoints.get().stream().map(t -> t.extract(0, 2)));
+    Tensor waypoints_ = Tensor.of(waypoints.stream().map(Extract2D.FUNCTION));
     return new CircleCurveIntersection(var).string(waypoints_);
   }
 }

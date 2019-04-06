@@ -19,9 +19,9 @@ public abstract class TrajectoryEntryFinder {
   /** @param waypoints of trajectory
    * @return function to be applied on waypoints */
   public Function<Scalar, Optional<Tensor>> on(Tensor waypoints) {
-    return s -> {
-      var = correctedVar(waypoints.get(), s);
-      return protected_apply(waypoints.get());
+    return scalar -> {
+      var = correctedVar(waypoints, scalar);
+      return protected_apply(waypoints);
     };
   }
 

@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   /** mirror the points along the y axis and invert their orientation
    * @param se2points curve given by points {x,y,a} */
-  private void mirrorAndReverse(Tensor se2points) {
+  private static void mirrorAndReverse(Tensor se2points) {
     se2points.set(Scalar::negate, Tensor.ALL, 0);
     se2points.set(Scalar::negate, Tensor.ALL, 2);
   }
@@ -96,7 +96,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   /** @param state of car
    * @param speed of car
-   * @return dependent limit on turning ratio*/
+   * @return dependent limit on turning ratio */
   private Optional<Clip> dynamicClip(Tensor state, Scalar speed) {
     // TODO implement this
     return Optional.empty();

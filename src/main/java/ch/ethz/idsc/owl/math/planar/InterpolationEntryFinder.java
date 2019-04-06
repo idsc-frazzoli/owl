@@ -12,6 +12,9 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 public final class InterpolationEntryFinder extends TrajectoryEntryFinder {
+  private static final Mod MOD_UNIT = Mod.function(1);
+
+  // ---
   public InterpolationEntryFinder(double initialIndex) {
     super(RealScalar.of(initialIndex));
   }
@@ -24,11 +27,11 @@ public final class InterpolationEntryFinder extends TrajectoryEntryFinder {
   @Override // from TrajectoryEntryFinder
   protected Optional<Tensor> protected_apply(Tensor waypoints) {
     int index_ = var.number().intValue();
-    if (index_ >= 0 && index_ < waypoints.get().length()) {
+    if (index_ >= 0 && index_ < waypoints.length()) {
       Interpolation interpolation = LinearInterpolation.of(Tensors.of( //
-          waypoints.get().get(index_), //
-          waypoints.get().get(index_ + 1)));
-      return Optional.of(interpolation.at(Mod.function(1).apply(var)));
+          waypoints.get(index_), //
+          waypoints.get(index_ + 1)));
+      return Optional.of(interpolation.at(MOD_UNIT.apply(var)));
     }
     return Optional.empty();
   }
