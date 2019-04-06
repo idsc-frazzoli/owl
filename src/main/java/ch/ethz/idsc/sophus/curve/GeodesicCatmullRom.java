@@ -7,6 +7,7 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
@@ -22,6 +23,8 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 public class GeodesicCatmullRom implements ScalarTensorFunction {
   /** @param geodesicInterface non null */
   public static GeodesicCatmullRom of(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
+    if (control.length() < 4)
+      throw TensorRuntimeException.of(control);
     return new GeodesicCatmullRom(Objects.requireNonNull(geodesicInterface), VectorQ.require(knots), control);
   }
 
@@ -39,21 +42,23 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
   }
 
   private int getIndex(Scalar t) {
-    int index = 0;
-    while (Scalars.lessThan(t, knots.Get(index))) {
-      index++;
+    // t in [tn-1, tn), the exclusive tn avoids ambiguity for t = tn
+    for (int index = 0; index < knots.length(); index++) {
+      if (Scalars.lessEquals(knots.Get(index), t) && Scalars.lessThan(t, knots.Get(index + 1))) {
+        return index;
+      }
     }
-    return index;
+    return -1;
   }
 
   @Override
-  /** applying CRM to a chosen t in the complete knot sequence is [tn-2, tn-1, tn, tn+1] (with tn-1 < t tn)
+  /** applying CRM to a chosen t in the complete knot sequence is [tn-2, tn-1, tn, tn+1] [tn-1, tn)
    * is constructed from the control points [pn-2, pn-1, pn, pn+1] */
   public Tensor apply(Scalar t) {
     // Since CMR only uses four control points we select the four corresponding to the parameter t
     int hi = getIndex(t);
-    Tensor selectedKnots = knots.extract(hi - 2, hi + 2);
-    Tensor selectedControl = control.extract(hi - 2, hi + 2);
+    Tensor selectedKnots = knots.extract(hi - 1, hi + 3);
+    Tensor selectedControl = control.extract(hi - 1, hi + 3);
     // First pyramidal layer
     Tensor A = Tensors.empty();
     for (int index = 0; index < 3; index++) {

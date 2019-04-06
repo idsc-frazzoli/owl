@@ -6,36 +6,41 @@ import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.math.CentripedalKnotSpacing;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class GeodesicCatmullRomTest extends TestCase {
   public void testUniformInterpolatory() {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     Tensor control = Tensors.empty();
-    for (int index = 0; index < 4; index++)
+    for (int index = 0; index < 5; index++)
       control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
-    Scalar alpha = RealScalar.ZERO;
-    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(alpha, Se2ParametricDistance::of);
-    GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, centripedalKnotSpacing.apply(control), control);
-    // FIXME OB
-    // Tensor cp1 = geodesicCatmullRom.apply(RealScalar.ONE);
-    // Chop._10.requireClose(cp1, control.get(1));
-    // Chop._10.requireClose(geodesicCatmullRom.apply(RealScalar.of(2)), control.get(2));
+    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(RealScalar.ZERO, Se2ParametricDistance::of);
+    Tensor knots = centripedalKnotSpacing.apply(control);
+    GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, knots, control);
+    // ---
+    Tensor actual1 = geodesicCatmullRom.apply(RealScalar.of(1));
+    Tensor expected1 = control.get(1);
+    // ----
+    Tensor actual2 = geodesicCatmullRom.apply(RealScalar.of(2));
+    Tensor expected2 = control.get(2);
+    // ----
+    Chop._10.requireClose(actual2, expected2);
+    Chop._10.requireClose(actual1, expected1);
   }
 
   public void testCentripetalInterpolatory() {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     Tensor control = Tensors.empty();
-    for (int index = 0; index < 4; index++)
+    for (int index = 0; index < 5; index++)
       control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
-    Scalar alpha = RealScalar.of(Math.random());
-    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(alpha, Se2ParametricDistance::of);
-    GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, centripedalKnotSpacing.apply(control), control);
-    // FIXME OB
-    // Chop._10.requireClose(geodesicCatmullRom.apply(geodesicCatmullRom.knots().Get(1)), control.get(1));
-    // Chop._10.requireClose(geodesicCatmullRom.apply(geodesicCatmullRom.knots().Get(2)), control.get(2));
+    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(RealScalar.of(Math.random()), Se2ParametricDistance::of);
+    Tensor knots = centripedalKnotSpacing.apply(control);
+    GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, knots, control);
+    // ---
+    Chop._10.requireClose(geodesicCatmullRom.apply(geodesicCatmullRom.knots().Get(1)), control.get(1));
+    Chop._10.requireClose(geodesicCatmullRom.apply(geodesicCatmullRom.knots().Get(2)), control.get(2));
   }
 }
