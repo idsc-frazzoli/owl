@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Optional<Tensor> lookAhead = entryFinder.initial(beacons);
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(beacons);
     for (int i = 0; i < beacons.length(); i++) {
-      GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead, 100); // resolution might better be dynamic
+      GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead); // resolution might better be dynamic
       Optional<Tensor> ratios = geodesicPursuit.ratios();
       if (ratios.isPresent() && ratios.get().stream().map(Tensor::Get).allMatch(this::isCompliant)) {
         curve = geodesicPursuit.curve().get();
