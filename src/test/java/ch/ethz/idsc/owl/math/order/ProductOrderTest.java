@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import junit.framework.TestCase;
 
-public class UniversalProductOrderTest extends TestCase {
+public class ProductOrderTest extends TestCase {
   public void testTotalProduct() {
     OrderComparator<Scalar> comparator1 = Order.comparator(Scalars::lessEquals);
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();

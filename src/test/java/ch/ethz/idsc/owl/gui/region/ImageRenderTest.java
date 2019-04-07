@@ -1,9 +1,8 @@
 // code by jph
-package ch.ethz.idsc.owl.gui.ren;
+package ch.ethz.idsc.owl.gui.region;
 
 import java.awt.image.BufferedImage;
 
-import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
