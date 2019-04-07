@@ -13,55 +13,57 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Nest;
 
-public class GeodesicPursuit {
+public class GeodesicPursuit implements GeodesicPursuitInterface {
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
    * @param tensor waypoints
    * @param entryFinder strategy
    * @param var
    * @return GeodesicPursuit */
-  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
+  // TODO JG this function is not used/tested in owl
+  public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
     Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var);
-    return new GeodesicPursuit(geodesicInterface, lookAhead);
+    if (lookAhead.isPresent())
+      return new GeodesicPursuit(geodesicInterface, lookAhead.get());
+    return VoidPursuit.INSTANCE;
   }
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
    * @param tensor waypoints
    * @param entryFinder strategy
    * @return GeodesicPursuit */
-  public static GeodesicPursuit fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder) {
+  public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder) {
     Optional<Tensor> lookAhead = entryFinder.initial(tensor);
-    return new GeodesicPursuit(geodesicInterface, lookAhead);
+    if (lookAhead.isPresent())
+      return new GeodesicPursuit(geodesicInterface, lookAhead.get());
+    return VoidPursuit.INSTANCE;
   }
 
   // ---
   private final Tensor ratios;
-  private Tensor curve = null;
+  private final Tensor curve;
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
    * @param lookAhead trajectory point {px, py, pa} */
-  public GeodesicPursuit(GeodesicInterface geodesicInterface, Optional<Tensor> lookAhead) {
+  public GeodesicPursuit(GeodesicInterface geodesicInterface, Tensor lookAhead) {
+    VectorQ.requireLength(lookAhead, 3);
     // TODO play with/parameterize degree [1, 3, ...] and refinement [4, 5, ...]
     LaneRiesenfeldCurveSubdivision laneRiesenfeldCurveSubdivision = new LaneRiesenfeldCurveSubdivision(geodesicInterface, 1);
-    ratios = lookAhead.map(vector -> VectorQ.requireLength(vector, 3)) //
-        .map(vector -> Tensors.of(Array.zeros(3), vector)).map(tensor -> {
-          curve = Nest.of(laneRiesenfeldCurveSubdivision::string, tensor, 5);
-          Tensor points2D = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
-          return SignedCurvature2D.string(points2D);
-        }).orElse(null);
+    curve = Nest.of(laneRiesenfeldCurveSubdivision::string, Tensors.of(Array.zeros(3), lookAhead), 5);
+    ratios = SignedCurvature2D.string(Tensor.of(curve.stream().map(Extract2D.FUNCTION)));
   }
 
-  /** @return Tensor of planned geodesic curve trajectory */
-  public Optional<Tensor> curve() {
-    return Optional.of(curve);
+  @Override // from GeodesicPursuitInterface
+  public Tensor curve() {
+    return curve;
   }
 
-  /** @return Tensor of turning ratios required to drive the calculated geodesic curve */
-  public Optional<Tensor> ratios() {
-    return Optional.ofNullable(ratios);
+  @Override // from GeodesicPursuitInterface
+  public Tensor ratios() {
+    return ratios;
   }
 
-  /** @return first/current turning ratio required to drive the calculated geodesic curve */
-  public Optional<Scalar> ratio() {
-    return ratios().map(vector -> vector.Get(0));
+  @Override // from GeodesicPursuitInterface
+  public Optional<Scalar> firstRatio() {
+    return Optional.of(ratios.Get(0));
   }
 }

@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.planar.GeodesicPursuit;
+import ch.ethz.idsc.owl.math.planar.GeodesicPursuitInterface;
 import ch.ethz.idsc.owl.math.planar.TrajectoryEntryFinder;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -65,13 +66,15 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Optional<Tensor> lookAhead = entryFinder.initial(beacons);
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(beacons);
     for (int i = 0; i < beacons.length(); i++) {
-      GeodesicPursuit geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead); // resolution might better be dynamic
-      Optional<Tensor> ratios = geodesicPursuit.ratios();
-      if (ratios.isPresent() && ratios.get().stream().map(Tensor::Get).allMatch(this::isCompliant)) {
-        curve = geodesicPursuit.curve().get();
-        if (inReverse)
-          mirrorAndReverse(curve);
-        return Optional.of(CarHelper.singleton(speed, geodesicPursuit.ratio().get()).getU());
+      if (lookAhead.isPresent()) {
+        GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead.get()); // resolution might better be dynamic
+        Tensor ratios = geodesicPursuit.ratios();
+        if (ratios.stream().map(Tensor::Get).allMatch(this::isCompliant)) {
+          curve = geodesicPursuit.curve();
+          if (inReverse)
+            mirrorAndReverse(curve);
+          return Optional.of(CarHelper.singleton(speed, geodesicPursuit.firstRatio().get()).getU());
+        }
       }
       Scalar next = Increment.ONE.apply(entryFinder.currentVar());
       lookAhead = function.apply(next);
