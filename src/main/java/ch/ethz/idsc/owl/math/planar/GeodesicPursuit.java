@@ -36,45 +36,34 @@ public class GeodesicPursuit {
   }
 
   // ---
-  private final GeodesicInterface geodesicInterface;
-  private final Tensor discretization;
-  private final Optional<Tensor> ratios;
+  private final Tensor ratios;
   private Tensor curve = null;
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
    * @param lookAhead trajectory point {px, py, pa}
    * @param resolution of geodesic curve */
   public GeodesicPursuit(GeodesicInterface geodesicInterface, Optional<Tensor> lookAhead, int resolution) {
-    this.geodesicInterface = geodesicInterface;
-    discretization = Subdivide.of(0, 1, resolution);
-    ratios = lookAhead.map(vector -> ratios(VectorQ.requireLength(vector, 3)));
+    Tensor discretization = Subdivide.of(0, 1, resolution);
+    ratios = lookAhead.map(vector -> VectorQ.requireLength(vector, 3)).map(vector -> {
+      ScalarTensorFunction geodesic = geodesicInterface.curve(Array.zeros(3), vector);
+      curve = discretization.map(geodesic);
+      Tensor points2D = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
+      return SignedCurvature2D.string(points2D);
+    }).orElse(null);
   }
 
-  /** @param lookAhead trajectory point {px, py, pa}
-   * @return ratios */
-  private Tensor ratios(Tensor lookAhead) {
-    ScalarTensorFunction geodesic = geodesicInterface.curve(Array.zeros(3), lookAhead);
-    curve = discretization.map(geodesic);
-    Tensor points2D = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
-    return SignedCurvature2D.string(points2D);
-  }
-
-  // TODO JG bad design since function curve() requires call of ratios(lookAhead) beforehand
+  /** @return Tensor of planned geodesic curve trajectory */
   public Optional<Tensor> curve() {
     return Optional.of(curve);
   }
 
-  /** TODO JG document
-   * 
-   * @return */
+  /** @return Tensor of turning ratios required to drive the calculated geodesic curve */
   public Optional<Tensor> ratios() {
-    return ratios;
+    return Optional.ofNullable(ratios);
   }
 
-  /** TODO JG document
-   * 
-   * @return */
+  /** @return first/current turning ratio required to drive the calculated geodesic curve */
   public Optional<Scalar> ratio() {
-    return ratios.map(vector -> vector.Get(0));
+    return ratios().map(vector -> vector.Get(0));
   }
 }
