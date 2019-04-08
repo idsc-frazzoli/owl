@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,7 +14,7 @@ public enum Se2CoveringParametricDistance {
   /** @param p element in SE2 of the form {px, py, p_heading}
    * @param q element in SE2 of the form {qx, qy, q_heading}
    * @return length of geodesic between p and q when projected to R^2
-   * the projection is a circle segment */
+   * the projection is a circle segment without taking the modulo */
   public static Scalar of(Tensor p, Tensor q) {
     Scalar alpha = p.Get(2).subtract(q.get(2)).multiply(HALF);
     return Norm._2.between(p.extract(0, 2), q.extract(0, 2)).divide(Sinc.FUNCTION.apply(alpha));

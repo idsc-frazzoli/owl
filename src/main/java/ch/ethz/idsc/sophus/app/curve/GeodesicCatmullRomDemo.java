@@ -1,4 +1,4 @@
-// code by jph
+// code by ob / jph
 package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.Color;
@@ -39,7 +39,7 @@ public class GeodesicCatmullRomDemo extends CurveDemo {
     // ---
     geodesicDisplaySpinner.setValue(Se2GeodesicDisplay.INSTANCE);
     // ---
-    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30, 50, 100, 200, 500, 1000));
+    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
     spinnerRefine.setValue(5);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
@@ -72,10 +72,9 @@ public class GeodesicCatmullRomDemo extends CurveDemo {
     final Scalar parameter = knots.Get(knots.length() - 2).subtract(knots.get(1)).multiply(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() + 1))
         .add(knots.get(1));
     ScalarTensorFunction scalarTensorFunction = GeodesicCatmullRom.of(geodesicInterface, knots, control);
-    Tensor refined = Subdivide.of(knots.Get(1).number().floatValue(), knots.Get(knots.length() - 2).number().floatValue() - 0.00001, Math.max(1, levels * 2))
+    Tensor refined = Subdivide
+        .of(knots.Get(1).number().floatValue(), knots.Get(knots.length() - 2).number().floatValue() - 0.000001, Math.max(1, levels * control.length()))
         .map(scalarTensorFunction);
-    // System.out.println(GeodesicCatmullRom.of(geodesicInterface, knots, control).ratios(parameter));
-    // System.err.println(scalarTensorFunction.apply(parameter));
     {
       Tensor selected = scalarTensorFunction.apply(parameter);
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
