@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * code based on derivation by Ethan Eade
  * "Lie Groups for 2D and 3D Transformations", p. 16 */
+// TODO Se2CoveringAdjoint ?
 public class Se2Adjoint implements TensorUnaryOperator {
   private final Scalar px;
   private final Scalar py;
