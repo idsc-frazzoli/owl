@@ -4,14 +4,11 @@ package ch.ethz.idsc.sophus.group;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.Sinc;
 
-public enum Se2ParametricDistance {
+public enum Se2CoveringParametricDistance {
   ;
-  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
   private static final Scalar HALF = RealScalar.of(0.5);
 
   /** @param p element in SE2 of the form {px, py, p_heading}

@@ -18,19 +18,15 @@ import ch.ethz.idsc.sophus.app.misc.PolyDuckietownData;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
+import ch.ethz.idsc.sophus.math.CentripedalKnotSpacing;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Accumulate;
-import ch.ethz.idsc.tensor.alg.Differences;
-import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.red.Norm;
 
 public class DuckietownSmoothingDemo extends DatasetKernelDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -65,22 +61,8 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
 
   @Override
   protected void updateState() {
-    // Data from "duckie20180713-175124.csv" types.
     PolyDuckietownData polyDuckietownData = PolyDuckietownData.of("/autolab/localization/2018/" + LIST.get(0));
     _control = polyDuckietownData.filter(spinnerDuckiebot.getValue());
-    // System.out.println(_control);
-    //
-    // // Data from duckiebot_0_poses
-    // Tensor importedData = Tensors.empty();
-    // try {
-    // importedData = Import.of(DuckietownData.FILE);
-    // } catch (Exception exception) {
-    // exception.printStackTrace();
-    // }
-    // Tensor tensor = DuckietownData.states(importedData.extract(1, importedData.length()));
-    // tensor = tensor.map(xya -> xya);
-    // _control = Tensor.of(tensor.stream() //
-    // .limit(spinnerLabelLimit.getValue()));
   }
 
   @Override // from RenderInterface
@@ -89,8 +71,8 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
     final int levels = spinnerRefine.getValue();
     final Tensor control = control();
     Tensor effective = control;
-    Tensor diffs = Differences.of(control);
-    Tensor knots = Accumulate.of(Join.of(Tensors.vector(0), Tensor.of(diffs.stream().map(xya -> xya.extract(0, 2)).map(Norm._2::ofVector))));
+    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(RealScalar.of(.5), geodesicDisplay()::parametricDifference);
+    Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---
