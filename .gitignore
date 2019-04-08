@@ -15,6 +15,10 @@ buildNumber.properties
 testall.sh
 gendocs.sh
 
+# intellij
+.idea/
+*.iml
+
 # data dumping
 export/
 
