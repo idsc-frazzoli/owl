@@ -1,7 +1,6 @@
 // code by ob
-package ch.ethz.idsc.sophus.math;
+package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.sophus.group.Se2CoveringPseudoDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
