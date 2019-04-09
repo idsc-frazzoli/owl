@@ -54,9 +54,9 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
   @Override
   /** applying CRM to a chosen t in the complete knot sequence is [tn-2, tn-1, tn, tn+1] [tn-1, tn)
    * is constructed from the control points [pn-2, pn-1, pn, pn+1] */
-  public Tensor apply(Scalar t) {
+  public synchronized Tensor apply(Scalar t) {
     // Since CMR only uses four control points we select the four corresponding to the parameter t
-    int hi = getIndex(t);
+    int hi = Math.max(getIndex(t), 1);
     Tensor selectedKnots = knots.extract(hi - 1, hi + 3);
     Tensor selectedControl = control.extract(hi - 1, hi + 3);
     // First pyramidal layer
@@ -74,7 +74,7 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
       B.append(geodesicInterface.split(A.get(index), A.get(index + 1), num.divide(denum)));
     }
     // Third and final pyramidal layer
-    Scalar num = t.subtract(selectedKnots.get(1));
+    Scalar num = t.subtract(selectedKnots.Get(1));
     Scalar denum = selectedKnots.Get(2).subtract(selectedKnots.Get(1));
     return geodesicInterface.split(B.get(0), B.get(1), num.divide(denum));
   }
