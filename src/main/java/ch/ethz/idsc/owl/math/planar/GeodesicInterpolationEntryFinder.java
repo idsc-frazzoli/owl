@@ -7,30 +7,31 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.sca.Clips;
-import ch.ethz.idsc.tensor.sca.Floor;
+import ch.ethz.idsc.tensor.sca.Mod;
 
-/* package */ class GeodesicInterpolationEntryFinder implements TrajectoryEntryFinder {
+public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
+  private static final Mod MOD_UNIT = Mod.function(1);
+  // ---
   private final GeodesicInterface geodesicInterface;
-  private final Scalar index;
 
-  public GeodesicInterpolationEntryFinder(GeodesicInterface geodesicInterface, Scalar index) {
+  public GeodesicInterpolationEntryFinder(double initialIndex, GeodesicInterface geodesicInterface) {
+    super(RealScalar.of(initialIndex));
     this.geodesicInterface = geodesicInterface;
-    this.index = index;
   }
 
   @Override // from TrajectoryEntryFinder
-  public Optional<Tensor> apply(Tensor waypoints) {
-    if (Clips.interval(0, waypoints.length()).isInside(index)) {
-      Scalar floor = Floor.FUNCTION.apply(index);
-      if (floor.equals(RealScalar.of(waypoints.length())))
-        return Optional.of(Last.of(waypoints));
+  protected Scalar correctedVar(Tensor waypoints, Scalar index) {
+    return index;
+  }
+
+  @Override // from TrajectoryEntryFinder
+  protected Optional<Tensor> protected_apply(Tensor waypoints) {
+    int index_ = var.number().intValue();
+    if (index_ >= 0 && index_ < waypoints.length())
       return Optional.of(geodesicInterface.split( //
-          waypoints.get(floor.number().intValue()), //
-          waypoints.get(floor.number().intValue() + 1), //
-          index.subtract(floor)));
-    }
+          waypoints.get(index_), //
+          waypoints.get(index_ + 1), //
+          MOD_UNIT.apply(var)));
     return Optional.empty();
   }
 }

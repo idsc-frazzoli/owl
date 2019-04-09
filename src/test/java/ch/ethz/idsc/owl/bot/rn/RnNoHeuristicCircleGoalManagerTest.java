@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class RnSimpleCircleGoalManagerTest extends TestCase {
+public class RnNoHeuristicCircleGoalManagerTest extends TestCase {
   public void testMinCostToGoal1() {
     GoalInterface rnGoal = RnMinDistGoalManager.sperical(Tensors.vector(5, 0), RealScalar.of(2));
     assertEquals(rnGoal.minCostToGoal(Tensors.vector(2, 0)), RealScalar.ONE);

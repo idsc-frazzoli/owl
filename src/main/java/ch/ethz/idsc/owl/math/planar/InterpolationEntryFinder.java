@@ -3,22 +3,36 @@ package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
-import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.Mod;
 
-/* package */ class InterpolationEntryFinder implements TrajectoryEntryFinder {
-  private final Scalar index;
+public final class InterpolationEntryFinder extends TrajectoryEntryFinder {
+  private static final Mod MOD_UNIT = Mod.function(1);
 
-  public InterpolationEntryFinder(Scalar index) {
-    this.index = index;
+  // ---
+  public InterpolationEntryFinder(double initialIndex) {
+    super(RealScalar.of(initialIndex));
   }
 
   @Override // from TrajectoryEntryFinder
-  public Optional<Tensor> apply(Tensor waypoints) {
-    if (Clips.interval(0, waypoints.length() - 1).isInside(index))
-      return Optional.of(LinearInterpolation.of(waypoints).at(index));
+  protected Scalar correctedVar(Tensor waypoints, Scalar index) {
+    return index;
+  }
+
+  @Override // from TrajectoryEntryFinder
+  protected Optional<Tensor> protected_apply(Tensor waypoints) {
+    int index_ = var.number().intValue();
+    if (index_ >= 0 && index_ < waypoints.length()) {
+      Interpolation interpolation = LinearInterpolation.of(Tensors.of( //
+          waypoints.get(index_), //
+          waypoints.get(index_ + 1)));
+      return Optional.of(interpolation.at(MOD_UNIT.apply(var)));
+    }
     return Optional.empty();
   }
 }

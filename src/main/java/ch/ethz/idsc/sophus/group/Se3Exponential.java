@@ -41,7 +41,7 @@ public enum Se3Exponential implements LieExponential {
 
   @Override // from LieExponential
   public Tensor log(Tensor g) {
-    Tensor R = Tensor.of(g.extract(0, 3).stream().map(row -> row.extract(0, 3)));
+    Tensor R = Se3Utils.rotation(g);
     Tensor wx = Rodrigues.logMatrix(R);
     Tensor w = Tensors.of(wx.Get(2, 1), wx.Get(0, 2), wx.Get(1, 0)); // copied from Rodrigues
     Scalar theta = Norm._2.ofVector(w);

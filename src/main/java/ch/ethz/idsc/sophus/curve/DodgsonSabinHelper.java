@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
    * @param d
    * @return point between b and c */
   static Tensor midpoint(Tensor b, Tensor c, Tensor d) {
-    Scalar r = SignedCurvature2D.of(b, c, d).get();
+    Scalar r = SignedCurvature2D.of(d, c, b).get();
     return intersectCircleLine(b, c, r, RealScalar.ZERO);
   }
 
@@ -66,8 +66,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   static Scalar averageCurvature(Tensor a, Tensor b, Tensor c, Tensor d) {
     Scalar ac = Norm._2.between(a, c);
     Scalar bd = Norm._2.between(b, d);
-    return SignedCurvature2D.of(a, b, c).get().multiply(bd).add( //
-        SignedCurvature2D.of(b, c, d).get().multiply(ac)) //
+    return SignedCurvature2D.of(c, b, a).get().multiply(bd).add( //
+        SignedCurvature2D.of(d, c, b).get().multiply(ac)) //
         .divide(bd.add(ac));
   }
 }

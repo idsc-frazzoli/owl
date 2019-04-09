@@ -15,7 +15,7 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     LSMT1.digest(x);
     LSMT2.digest(x);
     LSMT2.digest(x);
-    assertTrue(!LSMT1.getFeasibleInputs().isEmpty() && LSMT1.getFeasibleInputs().size() == 1);
+    assertTrue(!LSMT1.getFeasibleInputs().isEmpty() && LSMT1.getFeasibleInputs().size() > 1);
     assertTrue(!LSMT2.getFeasibleInputs().isEmpty() && LSMT2.getFeasibleInputs().size() == 1);
   }
 
@@ -38,16 +38,26 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     Tensor y = Tensors.fromString("{2,3,1}");
     Tensor z = Tensors.fromString("{3,2,2}");
     Tensor w = Tensors.fromString("{4,1,3}");
+    Tensor u = Tensors.fromString("{1,1,1}");
     LSMT1.digest(x);
     assertTrue(LSMT1.getMinElements().contains(x));
+    LSMT1.digest(y);
+    assertTrue(LSMT1.getMinElements().contains(y));
     LSMT1.digest(z);
     assertFalse(LSMT1.getMinElements().contains(z));
-    LSMT1.digest(y);
-    LSMT1.digest(w);
-    assertTrue(LSMT1.getMinElements().contains(y));
-    Tensor u = Tensors.fromString("{1,1,1}");
+    // LSMT1.digest(w);
     LSMT1.digest(u);
     assertTrue(LSMT1.getMinElements().contains(u));
     assertFalse(LSMT1.getMinElements().contains(y));
   }
+  // public void testPermutations() {
+  // Tensor slackVector = Tensors.fromString("{1,1,1}");
+  // LexicographicSemiorderMinTracker LSMT1 = LexicographicSemiorderMinTracker.withList(slackVector);
+  // Tensor tensor = Permutations.of(Range.of(0, 3));
+  // for (Tensor v : tensor) {
+  // System.out.println(v);
+  // LSMT1.digest(v);
+  // assertTrue(LSMT1.getMinElements().contains(v));
+  // }
+  // }
 }

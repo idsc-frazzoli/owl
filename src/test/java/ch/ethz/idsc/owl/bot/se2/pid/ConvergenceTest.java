@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.se2.pid;
 
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.group.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,13 +23,17 @@ public class ConvergenceTest extends TestCase {
     Tensor traj = //
         Tensors.vector(i -> Tensors.of(Quantity.of(1, "m"), Quantity.of(i, "m"), Pi.HALF), 20);
     System.out.println(Pretty.of(traj));
-    for (int index = 0; index < 100; index++) {
+    for (int index = 0; index < 100; ++index) {
       PIDTrajectory _pidTrajectory = new PIDTrajectory(pidTrajectory, pidGains, traj, stateTime);
       pidTrajectory = _pidTrajectory;
-      //TODO MCP THIS IS NOT WORKING
-      pose = Se2CoveringIntegrator.INSTANCE. //
-          spin(pose, Tensors.of(Quantity.of(.10, "m"), Quantity.of(0, "m"), pidTrajectory.angleOut()));
-      stateTime = new StateTime(pose, stateTime.time().add(RealScalar.of(.1)));
+      // TODO MCP THIS IS NOT WORKING
+      // angleOut has unit [m]: 8.359229471391949[m]
+      Scalar angleOut = pidTrajectory.angleOut();
+      System.out.println(angleOut);
+      break;
+      // pose = Se2CoveringIntegrator.INSTANCE. //
+      // spin(pose, Tensors.of(Quantity.of(.10, "m"), Quantity.of(0, "m"), angleOut));
+      // stateTime = new StateTime(pose, stateTime.time().add(RealScalar.of(.1)));
     }
   }
 }

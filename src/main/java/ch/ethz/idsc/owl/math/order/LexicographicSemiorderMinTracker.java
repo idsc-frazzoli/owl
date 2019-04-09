@@ -1,14 +1,20 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Ordering;
 
 /** Creates minTracker for a lexicographic semiorder.
  * The minimal elements for a lexicographic semiorder is the iteratively constructed set
@@ -44,12 +50,49 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
     return feasibleInputs;
   }
 
+  public void updateFeasibleInputs() {
+    // create tensor of VectorScalars
+    Tensor vector = Tensors.empty();
+    feasibleInputs.stream().forEach(x -> vector.append(VectorScalar.of(x)));
+    // create array of lexicographically sorted indices
+    int[] indices = Ordering.INCREASING.of(vector);
+    System.out.println(vector);
+    List<Integer> indicesList = Arrays.stream(indices).boxed().collect(Collectors.toList());
+    System.out.println(indicesList);
+    // eliminate elements where current value is higher than threshold (e.g. u_min + slack at index)
+    for (int index = 0; index < slackVector.length(); ++index) {
+      Iterator<Integer> iterator = indicesList.iterator();
+      Scalar slack = slackVector.Get(index);
+      // initialize u_min
+      Scalar u_min = ((VectorScalar) vector.get(iterator.next())).at(index);
+      while (iterator.hasNext()) {
+        // get current value
+        Scalar current_u = ((VectorScalar) vector.get(iterator.next())).at(index);
+        // if current is lower then u_min it becomes the new u_min
+        u_min = Scalars.lessEquals(u_min, current_u) ? u_min : current_u;
+        // remove index if current value is bigger then threshold
+        if (!filterCriterion(current_u, u_min.add(slack))) {
+          iterator.remove();
+        }
+      }
+    }
+    // feasibleInputs.clear();
+    // for (int i : indicesList) {
+    // feasibleInputs.add(vector.get(i));
+    // }
+  }
+
   @Override
   public void digest(Tensor x) {
     if (x.length() != slackVector.length())
       throw new RuntimeException("Tensor x has wrong dimension");
-    if (!feasibleInputs.contains(x))
+    if (feasibleInputs.isEmpty()) {
       feasibleInputs.add(x);
+      // System.out.println(x);
+      return;
+    }
+    feasibleInputs.add(x);
+    updateFeasibleInputs();
   }
 
   @Override
