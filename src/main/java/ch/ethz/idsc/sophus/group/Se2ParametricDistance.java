@@ -19,7 +19,8 @@ public enum Se2ParametricDistance {
    * @return length of geodesic between p and q when projected to R^2
    * the projection is a circle segment */
   public static Scalar of(Tensor p, Tensor q) {
-    Scalar alpha = p.Get(2).subtract(q.get(2)).multiply(HALF);
-    return Norm._2.between(p.extract(0, 2), q.extract(0, 2)).divide(Sinc.FUNCTION.apply(alpha));
+    Scalar alpha = MOD_DISTANCE.apply(p.Get(2).subtract(q.get(2))).multiply(HALF);
+    Scalar result = Norm._2.between(p.extract(0, 2), q.extract(0, 2)).divide(Sinc.FUNCTION.apply(alpha));
+    return result;
   }
 }

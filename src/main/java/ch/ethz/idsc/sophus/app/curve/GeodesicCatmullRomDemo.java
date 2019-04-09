@@ -39,7 +39,7 @@ public class GeodesicCatmullRomDemo extends CurveDemo {
     // ---
     geodesicDisplaySpinner.setValue(Se2GeodesicDisplay.INSTANCE);
     // ---
-    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20));
     spinnerRefine.setValue(5);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
