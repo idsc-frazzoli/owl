@@ -14,9 +14,9 @@ import junit.framework.TestCase;
 
 public class ConvergenceTest extends TestCase {
   private Scalar maxTurningRate = Degree.of(50);
-  private PIDGains pidGains = new PIDGains(RealScalar.of(10), RealScalar.of(3));
+  private PIDGains pidGains = new PIDGains(Quantity.of(3.5, "m^-1"), RealScalar.of(3));
   private PIDTrajectory pidTrajectory = null;
-  private Tensor pose = Tensors.fromString("{0.2[m],2.2[m],1}");
+  private Tensor pose = Tensors.fromString("{6.2[m],4.2[m],1}");
   private StateTime stateTime = new StateTime(pose, RealScalar.ZERO);
 
   public void testSimple() {

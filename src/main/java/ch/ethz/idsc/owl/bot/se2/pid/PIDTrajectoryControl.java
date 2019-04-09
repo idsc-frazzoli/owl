@@ -39,10 +39,12 @@ public class PIDTrajectoryControl extends StateTrajectoryControl {
         .map(StateTime::state));
     PIDTrajectory _pid = new PIDTrajectory(pidTrajectory, pidGains, traj, stateTime);
     Scalar ratePerMeter = _pid.angleOut();
+    System.out.println(clip.max());
+    System.out.println(clip.min());
     if (clip.isInside(ratePerMeter)) {
       pidTrajectory = _pid;
       return Optional.of(CarHelper.singleton(speed, ratePerMeter).getU());
     }
-    return Optional.empty();
+    return Optional.of(CarHelper.singleton(speed, clip.max()).getU());
   }
 }
