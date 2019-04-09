@@ -6,30 +6,31 @@ import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
 public class LexicographicSemiorderMinTrackerTest extends TestCase {
-   public void testDigestSimple() {
-   Tensor slackVector = Tensors.fromString("{1,1,1}");
-   LexicographicSemiorderMinTracker LSMT1 = LexicographicSemiorderMinTracker.withList(slackVector);
-   LexicographicSemiorderMinTracker LSMT2 = LexicographicSemiorderMinTracker.withSet(slackVector);
-   Tensor x = Tensors.fromString("{1,2,2}");
-   LSMT1.digest(x);
-   LSMT1.digest(x);
-   LSMT2.digest(x);
-   LSMT2.digest(x);
-   assertTrue(!LSMT1.getFeasibleInputs().isEmpty() && LSMT1.getFeasibleInputs().size() > 1);
-   assertTrue(!LSMT2.getFeasibleInputs().isEmpty() && LSMT2.getFeasibleInputs().size() == 1);
-   }
-  
-   public void testDigestFalseDim() {
-   Tensor slackVector = Tensors.fromString("{1,1,1}");
-   LexicographicSemiorderMinTracker LSMT1 = LexicographicSemiorderMinTracker.withList(slackVector);
-   Tensor x = Tensors.fromString("{1,2,2,3}");
-   try {
-   LSMT1.digest(x);
-   fail();
-   } catch (Exception exception) {
-   // ---
-   }
-   }
+  public void testDigestSimple() {
+    Tensor slackVector = Tensors.fromString("{1,1,1}");
+    LexicographicSemiorderMinTracker LSMT1 = LexicographicSemiorderMinTracker.withList(slackVector);
+    LexicographicSemiorderMinTracker LSMT2 = LexicographicSemiorderMinTracker.withSet(slackVector);
+    Tensor x = Tensors.fromString("{1,2,2}");
+    LSMT1.digest(x);
+    LSMT1.digest(x);
+    LSMT2.digest(x);
+    LSMT2.digest(x);
+    assertTrue(!LSMT1.getFeasibleInputs().isEmpty() && LSMT1.getFeasibleInputs().size() > 1);
+    assertTrue(!LSMT2.getFeasibleInputs().isEmpty() && LSMT2.getFeasibleInputs().size() == 1);
+  }
+
+  public void testDigestFalseDim() {
+    Tensor slackVector = Tensors.fromString("{1,1,1}");
+    LexicographicSemiorderMinTracker LSMT1 = LexicographicSemiorderMinTracker.withList(slackVector);
+    Tensor x = Tensors.fromString("{1,2,2,3}");
+    try {
+      LSMT1.digest(x);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testGetMinElements() {
     Tensor slackVector = Tensors.fromString("{1,1,1}");
     LexicographicSemiorderMinTracker LSMT1 = LexicographicSemiorderMinTracker.withList(slackVector);
