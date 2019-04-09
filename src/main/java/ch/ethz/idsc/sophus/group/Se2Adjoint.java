@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
@@ -16,20 +17,36 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * "Lie Groups for 2D and 3D Transformations", p. 16 */
 // TODO Se2CoveringAdjoint ?
 public class Se2Adjoint implements TensorUnaryOperator {
+  private static final Tensor ORIGIN = Array.zeros(3);
+
+  /** @param xya element from Lie Group SE2 as coordinates {x, y, alpha}
+   * @return */
+  public static TensorUnaryOperator forward(Tensor xya) {
+    return new Se2Adjoint(xya);
+  }
+
+  /** @param xya element from Lie Group SE2 as coordinates {x, y, alpha}
+   * @return */
+  public static TensorUnaryOperator inverse(Tensor xya) {
+    // TODO implementation not ideal
+    return new Se2Adjoint(new Se2GroupElement(xya).inverse().combine(ORIGIN));
+  }
+
+  // ---
   private final Scalar px;
   private final Scalar py;
-  private final Scalar ct;
-  private final Scalar st;
+  private final Scalar ca;
+  private final Scalar sa;
 
   /** @param element from Lie Group SE2 as coordinates {x, y, omega} */
-  public Se2Adjoint(Tensor xya) {
+  private Se2Adjoint(Tensor xya) {
     if (xya.length() != 3)
       throw TensorRuntimeException.of(xya);
     px = xya.Get(0);
     py = xya.Get(1);
-    Scalar th = xya.Get(2);
-    ct = Cos.FUNCTION.apply(th);
-    st = Sin.FUNCTION.apply(th);
+    Scalar al = xya.Get(2);
+    ca = Cos.FUNCTION.apply(al);
+    sa = Sin.FUNCTION.apply(al);
   }
 
   @Override
@@ -38,8 +55,8 @@ public class Se2Adjoint implements TensorUnaryOperator {
     Scalar v = uvw.Get(1);
     Scalar w = uvw.Get(2);
     return Tensors.of( //
-        ct.multiply(u).subtract(st.multiply(v)).add(py.multiply(w)), //
-        st.multiply(u).add(ct.multiply(v)).subtract(px.multiply(w)), //
+        ca.multiply(u).subtract(sa.multiply(v)).add(py.multiply(w)), //
+        sa.multiply(u).add(ca.multiply(v)).subtract(px.multiply(w)), //
         w);
   }
 }
