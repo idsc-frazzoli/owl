@@ -46,19 +46,14 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
     return Scalars.lessEquals(x_i, threshold);
   }
 
-  public Collection<Tensor> getFeasibleInputs() {
-    return feasibleInputs;
-  }
-
+  /** Keeps all points which might minimal in the future */
   public void updateFeasibleInputs() {
     // create tensor of VectorScalars
     Tensor vector = Tensors.empty();
     feasibleInputs.stream().forEach(x -> vector.append(VectorScalar.of(x)));
     // create array of lexicographically sorted indices
     int[] indices = Ordering.INCREASING.of(vector);
-    System.out.println(vector);
     List<Integer> indicesList = Arrays.stream(indices).boxed().collect(Collectors.toList());
-    System.out.println(indicesList);
     // eliminate elements where current value is higher than threshold (e.g. u_min + slack at index)
     for (int index = 0; index < slackVector.length(); ++index) {
       Iterator<Integer> iterator = indicesList.iterator();
@@ -76,10 +71,19 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
         }
       }
     }
-    // feasibleInputs.clear();
-    // for (int i : indicesList) {
-    // feasibleInputs.add(vector.get(i));
-    // }
+    Iterator<Tensor> iteratorFeasible = feasibleInputs.iterator();
+    int feasibleInputsIndex = 0;
+    while (iteratorFeasible.hasNext()) {
+      iteratorFeasible.next();
+      if (!indicesList.contains(feasibleInputsIndex)) {
+        iteratorFeasible.remove();
+      }
+      ++feasibleInputsIndex;
+    }
+  }
+
+  public Collection<Tensor> getFeasibleInputs() {
+    return feasibleInputs;
   }
 
   @Override
