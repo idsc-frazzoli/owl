@@ -19,7 +19,6 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
    * @param entryFinder strategy
    * @param var
    * @return GeodesicPursuit */
-  // TODO JG this function is not used/tested in owl
   public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
     Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var);
     if (lookAhead.isPresent())
