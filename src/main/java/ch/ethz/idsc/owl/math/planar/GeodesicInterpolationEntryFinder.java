@@ -32,8 +32,12 @@ public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinde
           waypoints.get(index_), //
           waypoints.get(index_ + 1), //
           MOD_UNIT.apply(var)));
-    } catch (IndexOutOfBoundsException e) {
-      return Optional.empty();
+    } catch (IndexOutOfBoundsException e1) {
+      try {
+        return Optional.of(waypoints.get(index_));
+      } catch (IndexOutOfBoundsException e2) {
+        return Optional.empty();
+      }
     }
   }
 }
