@@ -2,9 +2,11 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Shape;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
@@ -25,7 +27,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
-import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -33,12 +34,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class GeodesicPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
   private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
   private final static int MAX_LEVEL = 25;
-  // according to https://en.wikipedia.org/wiki/G-force#Horizontal 20g is an acceptable horizontal acceleration for less than 10sec
-  private final static Scalar G_LIMIT = RealScalar.of(20);
   // ---
   private final TrajectoryEntryFinder entryFinder;
   private final Clip staticClip; // fixed turning ratio limits
-  private Optional<Clip> dynamicClip = Optional.empty(); // state and speed dependent turning ratio limits
+  private List<DynamicRatioLimit> dynamicClippers = Collections.emptyList();
+  private List<Clip> dynamicClips = Collections.emptyList();; // state and speed dependent turning ratio limits
   // ---
   private Tensor curve; // for visualization
 
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Scalar speed = trailAhead.get(0).getFlow().get().getU().Get(0);
     boolean inReverse = Sign.isNegative(speed);
     Tensor state = tail.state();
-    dynamicClip = dynamicClip(state, speed);
+    dynamicClips = dynamicClippers.stream().map(c -> c.at(state, speed)).collect(Collectors.toList());
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
@@ -100,18 +100,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
   /** @param ratio
    * @return whether ratio is compliant with current limits */
   private boolean isCompliant(Scalar ratio) {
-    return staticClip.isInside(ratio) && (!dynamicClip.isPresent() || dynamicClip.get().isInside(ratio));
+    return staticClip.isInside(ratio) && dynamicClips.stream().allMatch(c -> c.isInside(ratio));
   }
 
-  /** @param state of car
-   * @param speed of car
-   * @return dependent limit on turning ratio */
-  private Optional<Clip> dynamicClip(Tensor state, Scalar speed) {
-    // mainly intended as an example
-    if (speed.equals(RealScalar.ZERO))
-      return Optional.empty();
-    Scalar limit = Abs.of(G_LIMIT.divide(speed).divide(speed)); // a = v^2/r = v^2 * ratio
-    return Optional.of(Clips.interval(limit.negate(), limit));
+  /** @param dynamicLimit on turning ratio depending on state and speed */
+  public void addDynamicLimit(DynamicRatioLimit dynamicLimit) {
+    dynamicClippers.add(dynamicLimit);
   }
 
   @Override // fromTrajectoryTargetRender
