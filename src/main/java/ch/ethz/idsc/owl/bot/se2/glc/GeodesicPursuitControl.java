@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Shape;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Clip;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class GeodesicPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
@@ -36,9 +36,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final static int MAX_LEVEL = 25;
   // ---
   private final TrajectoryEntryFinder entryFinder;
-  private final Clip staticClip; // fixed turning ratio limits
-  private List<DynamicRatioLimit> dynamicClippers = Collections.emptyList();
-  private List<Clip> dynamicClips = Collections.emptyList();; // state and speed dependent turning ratio limits
+  private List<DynamicRatioLimit> ratioClippers = new ArrayList<>();
+  private List<Clip> ratioClips = Collections.emptyList();; // state and speed dependent turning ratio limits
   // ---
   private Tensor curve; // for visualization
 
@@ -46,7 +45,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
    * @param maxTurningRate limits = {-maxTurningRate, +maxTurningRate} */
   public GeodesicPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
     this.entryFinder = entryFinder;
-    staticClip = Clips.interval(maxTurningRate.negate(), maxTurningRate);
+    addRatioLimit(new StaticRatioLimit(maxTurningRate));
+    ratioClippers.forEach(c -> System.out.println(c.getClass().getSimpleName()));
   }
 
   @Override // from StateTrajectoryControl
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Scalar speed = trailAhead.get(0).getFlow().get().getU().Get(0);
     boolean inReverse = Sign.isNegative(speed);
     Tensor state = tail.state();
-    dynamicClips = dynamicClippers.stream().map(c -> c.at(state, speed)).collect(Collectors.toList());
+    ratioClips = ratioClippers.stream().map(c -> c.at(state, speed)).collect(Collectors.toList());
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
@@ -100,12 +100,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
   /** @param ratio
    * @return whether ratio is compliant with current limits */
   private boolean isCompliant(Scalar ratio) {
-    return staticClip.isInside(ratio) && dynamicClips.stream().allMatch(c -> c.isInside(ratio));
+    return ratioClips.stream().allMatch(c -> c.isInside(ratio));
   }
 
   /** @param dynamicLimit on turning ratio depending on state and speed */
-  public void addDynamicLimit(DynamicRatioLimit dynamicLimit) {
-    dynamicClippers.add(dynamicLimit);
+  public void addRatioLimit(DynamicRatioLimit dynamicLimit) {
+    ratioClippers.add(dynamicLimit);
   }
 
   @Override // fromTrajectoryTargetRender
