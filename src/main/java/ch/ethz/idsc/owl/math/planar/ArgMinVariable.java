@@ -58,7 +58,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
 
   @Override // from Function
   public Scalar apply(Tensor tensor) {
-    insertIfPresent(entryFinder.initial(tensor));
+    entryFinder.initial(tensor).ifPresent(this::insert);
     Scalar initial = entryFinder.currentVar();
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(tensor);
     Tensor tmp = Tensors.empty();
@@ -74,22 +74,22 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
       tmp = pairs.copy();
       update(function, Decrement.ONE.apply(entryFinder.currentVar()));
     }
-    // bisection once goal region has been found
+    // bisect previously determined goal region
     return bisect(function, 0);
   }
 
-  /** calculate and add pair {value, variable} if vector is present
+  /** calculate and add pair {value, variable}
    * @param vector */
-  private void insertIfPresent(Optional<Tensor> vector) {
-    vector.map(mapping).ifPresent(s -> pairs.append(Tensors.of(s, entryFinder.currentVar())));
+  private void insert(Tensor vector) {
+    pairs.append(Tensors.of(mapping.apply(vector), entryFinder.currentVar()));
   }
 
   /** update pairs given variable
    * @param function pre-setup trajectory entry finder
    * @param var */
   private void update(Function<Scalar, Optional<Tensor>> function, Scalar var) {
-    insertIfPresent(function.apply(var));
-    pairs = Sort.of(Tensor.of(pairs.stream().distinct()), comparator);
+    function.apply(var).ifPresent(this::insert);
+    pairs = Sort.of(pairs, comparator);
     if (pairs.length() > 2)
       pairs = pairs.extract(0, 2);
   }
@@ -98,7 +98,6 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
    * @param level current search depth
    * @return best variable */
   private Scalar bisect(Function<Scalar, Optional<Tensor>> function, int level) {
-    System.out.println(pairs);
     Scalar var1 = pairs.Get(0, 1);
     Scalar var2 = pairs.Get(1, 1);
     if (var1.equals(var2) || level == maxLevel)
