@@ -60,6 +60,8 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   public Scalar apply(Tensor tensor) {
     entryFinder.initial(tensor).ifPresent(this::insert);
     Scalar initial = entryFinder.currentVar();
+    if (tensor.length() < 2)
+      return initial; // no bisection possible
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(tensor);
     Tensor tmp = Tensors.empty();
     // search from initial upwards
@@ -70,7 +72,6 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
     // search from initial downwards
     update(function, Decrement.ONE.apply(initial));
     while (!pairs.equals(tmp)) {
-      System.out.println(pairs);
       tmp = pairs.copy();
       update(function, Decrement.ONE.apply(entryFinder.currentVar()));
     }
