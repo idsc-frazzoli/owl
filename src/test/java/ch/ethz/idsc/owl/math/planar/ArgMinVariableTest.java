@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 public class ArgMinVariableTest extends TestCase {
   public void testSimple() {
-    Tensor tensor = Tensors.fromString("{{-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}");
+    Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}");
     TrajectoryEntryFinder entryFinder = new InterpolationEntryFinder(0);
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);

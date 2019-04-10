@@ -6,13 +6,13 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Sort;
-import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.red.Mean;
+import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.sca.Increment;
 
 public class ArgMinVariable implements Function<Tensor, Scalar> {
@@ -59,37 +59,51 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   @Override // from Function
   public Scalar apply(Tensor tensor) {
     insertIfPresent(entryFinder.initial(tensor));
-    // fill in initial pairs
+    Scalar initial = entryFinder.currentVar();
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(tensor);
-    int count = 0;
-    while (pairs.length() < 3) {
-      GlobalAssert.that(count < tensor.length());
-      Scalar next = Increment.ONE.apply(entryFinder.currentVar());
-      insertIfPresent(function.apply(next));
-      count++;
+    Tensor tmp = Tensors.empty();
+    // search from initial upwards
+    while (!pairs.equals(tmp)) {
+      tmp = pairs.copy();
+      update(function, Increment.ONE.apply(entryFinder.currentVar()));
     }
-    // bisection
-    pairs = Sort.of(pairs, comparator);
+    // search from initial downwards
+    update(function, Decrement.ONE.apply(initial));
+    while (!pairs.equals(tmp)) {
+      System.out.println(pairs);
+      tmp = pairs.copy();
+      update(function, Decrement.ONE.apply(entryFinder.currentVar()));
+    }
+    // bisection once goal region has been found
     return bisect(function, 0);
   }
 
-  /** @param tensor to be processed and appended */
-  private void insertIfPresent(Optional<Tensor> tensor) {
-    tensor.map(mapping).ifPresent(s -> pairs.append(Tensors.of(s, entryFinder.currentVar())));
+  /** calculate and add pair {value, variable} if vector is present
+   * @param vector */
+  private void insertIfPresent(Optional<Tensor> vector) {
+    vector.map(mapping).ifPresent(s -> pairs.append(Tensors.of(s, entryFinder.currentVar())));
+  }
+
+  /** update pairs given variable
+   * @param function pre-setup trajectory entry finder
+   * @param var */
+  private void update(Function<Scalar, Optional<Tensor>> function, Scalar var) {
+    insertIfPresent(function.apply(var));
+    pairs = Sort.of(Tensor.of(pairs.stream().distinct()), comparator);
+    if (pairs.length() > 2)
+      pairs = pairs.extract(0, 2);
   }
 
   /** @param function pre-setup trajectory entry finder
    * @param level current search depth
    * @return best variable */
   private Scalar bisect(Function<Scalar, Optional<Tensor>> function, int level) {
+    System.out.println(pairs);
     Scalar var1 = pairs.Get(0, 1);
     Scalar var2 = pairs.Get(1, 1);
     if (var1.equals(var2) || level == maxLevel)
       return var1;
-    Scalar step = Abs.of(var1.subtract(var2)).multiply(RealScalar.of(0.5));
-    pairs.append(Tensors.of(function.apply(var1.subtract(step)).map(mapping).get(), entryFinder.currentVar()));
-    pairs.append(Tensors.of(function.apply(var1.add(step)).map(mapping).get(), entryFinder.currentVar()));
-    pairs = Sort.of(pairs, comparator).extract(0, 3);
+    update(function, Mean.of(Tensors.of(var1, var2)).Get());
     return bisect(function, level + 1);
   }
 }
