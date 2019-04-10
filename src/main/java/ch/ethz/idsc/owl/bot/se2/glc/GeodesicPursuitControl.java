@@ -25,14 +25,16 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class GeodesicPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
   private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
   private final static int MAX_LEVEL = 25;
+  // according to https://en.wikipedia.org/wiki/G-force#Horizontal 20g is an acceptable horizontal acceleration for less than 10sec
+  private final static Scalar G_LIMIT = RealScalar.of(20);
   // ---
   private final TrajectoryEntryFinder entryFinder;
   private final Clip staticClip; // fixed turning ratio limits
@@ -105,8 +107,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
    * @param speed of car
    * @return dependent limit on turning ratio */
   private Optional<Clip> dynamicClip(Tensor state, Scalar speed) {
-    // TODO implement this
-    return Optional.empty();
+    // mainly intended as an example
+    if (speed.equals(RealScalar.ZERO))
+      return Optional.empty();
+    Scalar limit = Abs.of(G_LIMIT.divide(speed).divide(speed)); // a = v^2/r = v^2 * ratio
+    return Optional.of(Clips.interval(limit.negate(), limit));
   }
 
   @Override // fromTrajectoryTargetRender
