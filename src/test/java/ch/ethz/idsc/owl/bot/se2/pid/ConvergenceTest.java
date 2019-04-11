@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 
 public class ConvergenceTest extends TestCase {
   private Scalar maxTurningRate = Degree.of(50);
-  private PIDGains pidGains = new PIDGains(Quantity.of(3.5, "m^-1"), RealScalar.of(3));
+  private PIDGains pidGains = new PIDGains(Quantity.of(30, "m^-1"), RealScalar.of(100));
   private PIDTrajectory pidTrajectory = null;
   private Tensor pose = Tensors.fromString("{6.2[m],4.2[m],1}");
   private StateTime stateTime = new StateTime(pose, RealScalar.ZERO);
@@ -26,8 +26,6 @@ public class ConvergenceTest extends TestCase {
     for (int index = 0; index < 100; ++index) {
       PIDTrajectory _pidTrajectory = new PIDTrajectory(pidTrajectory, pidGains, traj, stateTime);
       pidTrajectory = _pidTrajectory;
-      // TODO MCP THIS IS NOT WORKING
-      // angleOut has unit [m]: 8.359229471391949[m]
       Scalar angleOut = pidTrajectory.angleOut();
       System.out.println(angleOut);
       break;

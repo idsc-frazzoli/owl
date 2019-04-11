@@ -18,6 +18,7 @@ public class PIDTrajectory {
 
   public PIDTrajectory(PIDTrajectory _pid, PIDGains pidGains, Tensor traj, StateTime stateTime) {
     time = stateTime.time();
+    System.out.println(time);
     Tensor stateXYphi = stateTime.state();
     Tensor closest = traj.get(Se2CurveHelper.closest(traj, stateXYphi));
     errorPose = Se2ParametricDistance.of(stateXYphi, closest);
