@@ -23,7 +23,7 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
    * @param var
    * @return GeodesicPursuit */
   public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
-    Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var);
+    Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var).point;
     if (lookAhead.isPresent())
       return new GeodesicPursuit(geodesicInterface, lookAhead.get());
     return VoidPursuit.INSTANCE;
@@ -34,7 +34,7 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
    * @param entryFinder strategy
    * @return GeodesicPursuit */
   public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder) {
-    Optional<Tensor> lookAhead = entryFinder.initial(tensor);
+    Optional<Tensor> lookAhead = entryFinder.initial(tensor).point;
     if (lookAhead.isPresent())
       return new GeodesicPursuit(geodesicInterface, lookAhead.get());
     return VoidPursuit.INSTANCE;

@@ -15,6 +15,6 @@ public class ArgMinVariableTest extends TestCase {
     TrajectoryEntryFinder entryFinder = new InterpolationEntryFinder(0);
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
-    assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).get().map(Chop._06));
+    assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
   }
 }

@@ -73,7 +73,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       return RealScalar.of(Double.MAX_VALUE);
     };
     Scalar var = ArgMinVariable.using(entryFinder, mapping, MAX_LEVEL).apply(beacons);
-    Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var);
+    Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point;
     if (lookAhead.isPresent()) {
       GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead.get());
       curve = geodesicPursuit.curve();
