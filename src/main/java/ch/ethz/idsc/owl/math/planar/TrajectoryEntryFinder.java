@@ -31,6 +31,11 @@ public abstract class TrajectoryEntryFinder {
     return on(waypoints).apply(initialVar);
   }
 
+  /** @return initial variable */
+  public Scalar initialVar() {
+    return initialVar;
+  }
+
   /** @return last applied variable */
   public Scalar currentVar() {
     return var;

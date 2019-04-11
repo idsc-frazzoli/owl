@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,7 +23,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   // ---
   private final Comparator<Tensor> comparator;
   // ---
-  private Tensor pairs = Tensors.empty(); // {{value, variable}, ...}
+  private Tensor pairs; // {{value, variable}, ...}
 
   /** @param entryFinder strategy
    * @param mapping cost function
@@ -40,6 +41,8 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
     this.entryFinder = entryFinder;
     this.mapping = mapping;
     this.maxLevel = maxLevel;
+    Tensor placeholder = Tensors.of(RealScalar.of(Double.MAX_VALUE), entryFinder.initialVar());
+    pairs = Tensors.of(placeholder, placeholder, placeholder);
     comparator = new Comparator<Tensor>() {
       @Override
       public int compare(Tensor t1, Tensor t2) {
@@ -58,9 +61,8 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   @Override // from Function
   public Scalar apply(Tensor tensor) {
     entryFinder.initial(tensor).ifPresent(this::insert);
-    Scalar initial = entryFinder.currentVar();
     if (tensor.length() < 2)
-      return initial; // no bisection possible
+      return entryFinder.initialVar(); // no bisection possible
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(tensor);
     Tensor tmp = Tensors.empty();
     // search from initial upwards
@@ -69,7 +71,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
       update(function, Increment.ONE.apply(entryFinder.currentVar()));
     }
     // search from initial downwards
-    update(function, Decrement.ONE.apply(initial));
+    update(function, Decrement.ONE.apply(entryFinder.initialVar()));
     while (!pairs.equals(tmp)) {
       tmp = pairs.copy();
       update(function, Decrement.ONE.apply(entryFinder.currentVar()));
@@ -81,7 +83,8 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   /** calculate and add pair {value, variable}
    * @param vector */
   private void insert(Tensor vector) {
-    pairs.append(Tensors.of(mapping.apply(vector), entryFinder.currentVar()));
+    pairs.set(Tensors.of(mapping.apply(vector), entryFinder.currentVar()), 2);
+    pairs = Sort.of(pairs, comparator);
   }
 
   /** update pairs given variable
@@ -89,9 +92,6 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
    * @param var */
   private void update(Function<Scalar, Optional<Tensor>> function, Scalar var) {
     function.apply(var).ifPresent(this::insert);
-    pairs = Sort.of(pairs, comparator);
-    if (pairs.length() > 2)
-      pairs = pairs.extract(0, 2);
   }
 
   /** @param function pre-setup trajectory entry finder
