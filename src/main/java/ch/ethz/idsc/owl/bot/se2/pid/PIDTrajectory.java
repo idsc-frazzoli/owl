@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.qty.Quantity;
 
 public class PIDTrajectory {
   private Scalar angleOut;
@@ -17,10 +18,10 @@ public class PIDTrajectory {
   private Scalar deriv = RealScalar.ZERO;
 
   public PIDTrajectory(PIDTrajectory _pid, PIDGains pidGains, Tensor traj, StateTime stateTime) {
-    time = stateTime.time();
-    System.out.println(time);
-    Tensor stateXYphi = stateTime.state();
-    Tensor closest = traj.get(Se2CurveHelper.closest(traj, stateXYphi));
+    time = Quantity.of(stateTime.time(), "s");
+    Tensor trajInMeter = new Se2CurveConverter().toSI(traj);
+    Tensor stateXYphi = new Se2PoseConverter().toSI(stateTime.state());
+    Tensor closest = trajInMeter.get(Se2CurveHelper.closest(trajInMeter, stateXYphi));
     errorPose = Se2ParametricDistance.of(stateXYphi, closest);
     prop = pidGains.Kp.multiply(errorPose);
     if (Objects.nonNull(_pid)) {

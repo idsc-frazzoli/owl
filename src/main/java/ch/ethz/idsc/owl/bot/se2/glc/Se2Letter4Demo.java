@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 public class Se2Letter4Demo extends Se2CarDemo {
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-90), Degree.of(90), 32), Subdivide.of(0, 5, 30));
-  private static final PIDGains PID_GAINS = new PIDGains(Quantity.of(30, "m^-1"), RealScalar.of(10));
+  private static final PIDGains PID_GAINS = new PIDGains(Quantity.of(30, "m^-1"), Quantity.of(10, "s*m^-1"));
 
   @Override // from Se2CarDemo
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
