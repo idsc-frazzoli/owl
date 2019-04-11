@@ -20,18 +20,21 @@ public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinde
   }
 
   @Override // from TrajectoryEntryFinder
-  protected Scalar correctedVar(Tensor waypoints, Scalar index) {
-    return index;
-  }
-
-  @Override // from TrajectoryEntryFinder
-  protected Optional<Tensor> protected_apply(Tensor waypoints) {
-    int index_ = var.number().intValue();
-    if (index_ >= 0 && index_ < waypoints.length())
-      return Optional.of(geodesicInterface.split( //
+  protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar index) {
+    int index_ = index.number().intValue();
+    Optional<Tensor> point = Optional.empty();
+    try {
+      point = Optional.of(geodesicInterface.split( //
           waypoints.get(index_), //
           waypoints.get(index_ + 1), //
-          MOD_UNIT.apply(var)));
-    return Optional.empty();
+          MOD_UNIT.apply(index)));
+    } catch (IndexOutOfBoundsException e1) {
+      try {
+        point = Optional.of(waypoints.get(index_));
+      } catch (IndexOutOfBoundsException e2) {
+        // ---
+      }
+    }
+    return new TrajectoryEntry(point, index);
   }
 }
