@@ -3,12 +3,10 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Shape;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
@@ -29,7 +27,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
-import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class GeodesicPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
@@ -46,7 +43,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
   public GeodesicPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
     this.entryFinder = entryFinder;
     addRatioLimit(new StaticRatioLimit(maxTurningRate));
-    ratioClippers.forEach(c -> System.out.println(c.getClass().getSimpleName()));
   }
 
   @Override // from StateTrajectoryControl

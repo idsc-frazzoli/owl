@@ -8,12 +8,11 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class TrajectoryEntryFinder {
-  private final Scalar initialVar;
+  private final Scalar initialVar; // uncorrected
   protected Scalar var;
 
   public TrajectoryEntryFinder(Scalar initialVar) {
     this.initialVar = initialVar;
-    var = initialVar;
   }
 
   /** @param waypoints of trajectory
@@ -31,8 +30,9 @@ public abstract class TrajectoryEntryFinder {
     return on(waypoints).apply(initialVar);
   }
 
-  /** @return initial variable */
-  public Scalar initialVar() {
+  /** WARNING this might not be the variable actually applied in initial()
+   * @return initial variable */
+  public Scalar uncorrectedInitialVar() {
     return initialVar;
   }
 

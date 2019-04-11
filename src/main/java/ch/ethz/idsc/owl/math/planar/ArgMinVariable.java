@@ -40,7 +40,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
     this.entryFinder = entryFinder;
     this.mapping = mapping;
     this.maxLevel = maxLevel;
-    Tensor placeholder = Tensors.of(RealScalar.of(Double.MAX_VALUE), entryFinder.initialVar());
+    Tensor placeholder = Tensors.of(RealScalar.of(Double.MAX_VALUE), entryFinder.uncorrectedInitialVar());
     pairs = new Tensor[] {placeholder, placeholder, placeholder};
     comparator = new Comparator<Tensor>() {
       @Override
@@ -59,8 +59,9 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   @Override // from Function
   public Scalar apply(Tensor tensor) {
     entryFinder.initial(tensor).ifPresent(this::insert);
+    Scalar initialVar = entryFinder.currentVar();
     if (tensor.length() < 2)
-      return entryFinder.initialVar(); // no bisection possible
+      return initialVar; // no bisection possible
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(tensor);
     Tensor[] tmp = new Tensor[3];
     // search from initial upwards
@@ -69,7 +70,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
       update(function, Increment.ONE.apply(entryFinder.currentVar()));
     }
     // search from initial downwards
-    update(function, Decrement.ONE.apply(entryFinder.initialVar()));
+    update(function, Decrement.ONE.apply(initialVar));
     while (!Arrays.equals(pairs, tmp)) {
       tmp = pairs.clone();
       update(function, Decrement.ONE.apply(entryFinder.currentVar()));
