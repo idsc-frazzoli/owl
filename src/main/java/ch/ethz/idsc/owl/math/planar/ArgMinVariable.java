@@ -40,7 +40,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
     this.mapping = mapping;
     this.maxLevel = maxLevel;
     Tensor placeholder = Tensors.of(RealScalar.of(Double.MAX_VALUE), entryFinder.uncorrectedInitialVar());
-    pairs = new Tensor[] {placeholder, placeholder, placeholder};
+    pairs = new Tensor[] { placeholder, placeholder, placeholder };
     comparator = new Comparator<Tensor>() {
       @Override
       public int compare(Tensor t1, Tensor t2) {
