@@ -33,7 +33,6 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   }
 
   // ---
-
   /** @param entryFinder strategy
    * @param mapping cost function
    * @param maxLevel of search steps */
