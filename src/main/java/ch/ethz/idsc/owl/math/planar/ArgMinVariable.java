@@ -1,17 +1,16 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.sca.Increment;
@@ -23,7 +22,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   // ---
   private final Comparator<Tensor> comparator;
   // ---
-  private Tensor pairs; // {{value, variable}, ...}
+  private final Tensor[] pairs; // [{value, variable}, ...]
 
   /** @param entryFinder strategy
    * @param mapping cost function
@@ -42,7 +41,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
     this.mapping = mapping;
     this.maxLevel = maxLevel;
     Tensor placeholder = Tensors.of(RealScalar.of(Double.MAX_VALUE), entryFinder.initialVar());
-    pairs = Tensors.of(placeholder, placeholder, placeholder);
+    pairs = new Tensor[] {placeholder, placeholder, placeholder};
     comparator = new Comparator<Tensor>() {
       @Override
       public int compare(Tensor t1, Tensor t2) {
@@ -52,7 +51,6 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
           return -1;
         if (Scalars.lessThan(s2, s1))
           return 1;
-        GlobalAssert.that(s1.equals(s2));
         return 0;
       }
     };
@@ -64,16 +62,16 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
     if (tensor.length() < 2)
       return entryFinder.initialVar(); // no bisection possible
     Function<Scalar, Optional<Tensor>> function = entryFinder.on(tensor);
-    Tensor tmp = Tensors.empty();
+    Tensor[] tmp = new Tensor[3];
     // search from initial upwards
-    while (!pairs.equals(tmp)) {
-      tmp = pairs.copy();
+    while (!Arrays.equals(pairs, tmp)) {
+      tmp = pairs.clone();
       update(function, Increment.ONE.apply(entryFinder.currentVar()));
     }
     // search from initial downwards
     update(function, Decrement.ONE.apply(entryFinder.initialVar()));
-    while (!pairs.equals(tmp)) {
-      tmp = pairs.copy();
+    while (!Arrays.equals(pairs, tmp)) {
+      tmp = pairs.clone();
       update(function, Decrement.ONE.apply(entryFinder.currentVar()));
     }
     // bisect previously determined goal region
@@ -83,8 +81,8 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   /** calculate and add pair {value, variable}
    * @param vector */
   private void insert(Tensor vector) {
-    pairs.set(Tensors.of(mapping.apply(vector), entryFinder.currentVar()), 2);
-    pairs = Sort.of(pairs, comparator);
+    pairs[2] = Tensors.of(mapping.apply(vector), entryFinder.currentVar());
+    Arrays.sort(pairs, comparator);
   }
 
   /** update pairs given variable
@@ -98,8 +96,8 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
    * @param level current search depth
    * @return best variable */
   private Scalar bisect(Function<Scalar, Optional<Tensor>> function, int level) {
-    Scalar var1 = pairs.Get(0, 1);
-    Scalar var2 = pairs.Get(1, 1);
+    Scalar var1 = pairs[0].Get(1);
+    Scalar var2 = pairs[1].Get(1);
     if (var1.equals(var2) || level == maxLevel)
       return var1;
     update(function, Mean.of(Tensors.of(var1, var2)).Get());
