@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 public class PIDTrajectoryControl extends StateTrajectoryControl {
   private final Clip clip;
   private final PIDGains pidGains;
-  private PIDTrajectory pidTrajectory = null;
+  private PIDTrajectory pidTrajectory;
 
   public PIDTrajectoryControl(Scalar maxTurningRate, PIDGains pidGains) {
     this.clip = Clips.interval(maxTurningRate.negate(), maxTurningRate);
@@ -37,10 +37,10 @@ public class PIDTrajectoryControl extends StateTrajectoryControl {
     Tensor traj = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state));
-    PIDTrajectory _pid = new PIDTrajectory(pidTrajectory, pidGains, traj, stateTime);
-    Scalar ratePerMeter = _pid.angleOut();
+    PIDTrajectory pid = new PIDTrajectory(pidTrajectory, pidGains, traj, stateTime);
+    Scalar ratePerMeter = pid.angleOut();
     if (clip.isInside(ratePerMeter)) {
-      pidTrajectory = _pid;
+      this.pidTrajectory = pid;
       return Optional.of(CarHelper.singleton(speed, ratePerMeter).getU());
     }
     return Optional.empty();
