@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
@@ -36,8 +37,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final static int MAX_LEVEL = 25;
   // ---
   private final TrajectoryEntryFinder entryFinder;
-  private List<DynamicRatioLimit> ratioClippers = new ArrayList<>();
-  private List<Clip> ratioClips = Collections.emptyList();; // state and speed dependent turning ratio limits
+  private final List<DynamicRatioLimit> ratioClippers = new ArrayList<>();
   // ---
   private Tensor curve; // for visualization
 
@@ -59,7 +59,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Scalar speed = trailAhead.get(0).getFlow().get().getU().Get(0);
     boolean inReverse = Sign.isNegative(speed);
     Tensor state = tail.state();
-    ratioClips = ratioClippers.stream().map(c -> c.at(state, speed)).collect(Collectors.toList());
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
@@ -69,10 +68,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
     if (inReverse)
       mirrorAndReverse(beacons);
     // ---
+    Predicate<Scalar> isCompliant = isCompliant(state, speed);
     Function<Tensor, Scalar> mapping = vector -> { //
       GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, vector);
       Tensor ratios = geodesicPursuit.ratios();
-      if (ratios.stream().map(Tensor::Get).allMatch(this::isCompliant))
+      if (ratios.stream().map(Tensor::Get).allMatch(isCompliant))
         return Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
       return RealScalar.of(Double.MAX_VALUE);
     };
@@ -97,10 +97,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
     se2points.set(Scalar::negate, Tensor.ALL, 2);
   }
 
-  /** @param ratio
-   * @return whether ratio is compliant with current limits */
-  private boolean isCompliant(Scalar ratio) {
-    return ratioClips.stream().allMatch(c -> c.isInside(ratio));
+  /** @param state
+   * @param speed
+   * @return predicate to determine whether ratio is compliant with all posed turning ratio limits */
+  private Predicate<Scalar> isCompliant(Tensor state, Scalar speed) {
+    return ratio -> ratioClippers.stream().map(c -> c.at(state, speed)).allMatch(c -> c.isInside(ratio));
   }
 
   /** @param dynamicLimit on turning ratio depending on state and speed */
