@@ -27,11 +27,17 @@ public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinde
   @Override // from TrajectoryEntryFinder
   protected Optional<Tensor> protected_apply(Tensor waypoints) {
     int index_ = var.number().intValue();
-    if (index_ >= 0 && index_ < waypoints.length())
+    try {
       return Optional.of(geodesicInterface.split( //
           waypoints.get(index_), //
           waypoints.get(index_ + 1), //
           MOD_UNIT.apply(var)));
-    return Optional.empty();
+    } catch (IndexOutOfBoundsException e1) {
+      try {
+        return Optional.of(waypoints.get(index_));
+      } catch (IndexOutOfBoundsException e2) {
+        return Optional.empty();
+      }
+    }
   }
 }

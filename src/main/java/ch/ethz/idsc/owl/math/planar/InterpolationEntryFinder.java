@@ -27,12 +27,17 @@ public final class InterpolationEntryFinder extends TrajectoryEntryFinder {
   @Override // from TrajectoryEntryFinder
   protected Optional<Tensor> protected_apply(Tensor waypoints) {
     int index_ = var.number().intValue();
-    if (index_ >= 0 && index_ < waypoints.length()) {
+    try {
       Interpolation interpolation = LinearInterpolation.of(Tensors.of( //
           waypoints.get(index_), //
           waypoints.get(index_ + 1)));
       return Optional.of(interpolation.at(MOD_UNIT.apply(var)));
+    } catch (IndexOutOfBoundsException e1) {
+      try {
+        return Optional.of(waypoints.get(index_));
+      } catch (IndexOutOfBoundsException e2) {
+        return Optional.empty();
+      }
     }
-    return Optional.empty();
   }
 }
