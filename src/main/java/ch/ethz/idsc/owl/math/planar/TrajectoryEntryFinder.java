@@ -1,46 +1,38 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class TrajectoryEntryFinder {
-  private final Scalar initialVar;
-  protected Scalar var;
+  private final Scalar initialVar; // uncorrected
 
   public TrajectoryEntryFinder(Scalar initialVar) {
     this.initialVar = initialVar;
-    var = initialVar;
   }
 
   /** @param waypoints of trajectory
    * @return function to be applied on waypoints */
-  public Function<Scalar, Optional<Tensor>> on(Tensor waypoints) {
-    return scalar -> {
-      var = correctedVar(waypoints, scalar);
-      return protected_apply(waypoints);
-    };
+  public Function<Scalar, TrajectoryEntry> on(Tensor waypoints) {
+    return scalar -> protected_apply(waypoints, scalar);
   }
 
   /** @param waypoints of trajectory
-   * @return trajectory entry point */
-  public Optional<Tensor> initial(Tensor waypoints) {
+   * @return TrajectoryEntry */
+  public TrajectoryEntry initial(Tensor waypoints) {
     return on(waypoints).apply(initialVar);
   }
 
-  /** @return last applied variable */
-  public Scalar currentVar() {
-    return var;
+  /** WARNING this might not be the variable actually applied in initial()
+   * @return initial variable */
+  public Scalar uncorrectedInitialVar() {
+    return initialVar;
   }
 
   /** @param waypoints of trajectory
-   * @return of trajectory entry point */
-  abstract Optional<Tensor> protected_apply(Tensor waypoints);
-
-  /** @param var to specify entry point choice
-   * @return actual variable to be used */
-  abstract Scalar correctedVar(Tensor waypoints, Scalar var);
+   * @param var to specify entry point choice
+   * @return TrajectoryEntry */
+  abstract TrajectoryEntry protected_apply(Tensor waypoints, Scalar var);
 }

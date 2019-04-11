@@ -3,11 +3,10 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Shape;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
 import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
@@ -28,7 +27,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
-import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class GeodesicPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
@@ -36,8 +34,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final static int MAX_LEVEL = 25;
   // ---
   private final TrajectoryEntryFinder entryFinder;
-  private List<DynamicRatioLimit> ratioClippers = new ArrayList<>();
-  private List<Clip> ratioClips = Collections.emptyList();; // state and speed dependent turning ratio limits
+  private final List<DynamicRatioLimit> ratioClippers = new ArrayList<>();
   // ---
   private Tensor curve; // for visualization
 
@@ -46,7 +43,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
   public GeodesicPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
     this.entryFinder = entryFinder;
     addRatioLimit(new StaticRatioLimit(maxTurningRate));
-    ratioClippers.forEach(c -> System.out.println(c.getClass().getSimpleName()));
   }
 
   @Override // from StateTrajectoryControl
@@ -59,7 +55,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Scalar speed = trailAhead.get(0).getFlow().get().getU().Get(0);
     boolean inReverse = Sign.isNegative(speed);
     Tensor state = tail.state();
-    ratioClips = ratioClippers.stream().map(c -> c.at(state, speed)).collect(Collectors.toList());
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
     Tensor beacons = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
@@ -69,15 +64,16 @@ import ch.ethz.idsc.tensor.sca.Sign;
     if (inReverse)
       mirrorAndReverse(beacons);
     // ---
+    Predicate<Scalar> isCompliant = isCompliant(state, speed);
     Function<Tensor, Scalar> mapping = vector -> { //
       GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, vector);
       Tensor ratios = geodesicPursuit.ratios();
-      if (ratios.stream().map(Tensor::Get).allMatch(this::isCompliant))
+      if (ratios.stream().map(Tensor::Get).allMatch(isCompliant))
         return Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
       return RealScalar.of(Double.MAX_VALUE);
     };
     Scalar var = ArgMinVariable.using(entryFinder, mapping, MAX_LEVEL).apply(beacons);
-    Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var);
+    Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point;
     if (lookAhead.isPresent()) {
       GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead.get());
       curve = geodesicPursuit.curve();
@@ -97,10 +93,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
     se2points.set(Scalar::negate, Tensor.ALL, 2);
   }
 
-  /** @param ratio
-   * @return whether ratio is compliant with current limits */
-  private boolean isCompliant(Scalar ratio) {
-    return ratioClips.stream().allMatch(c -> c.isInside(ratio));
+  /** @param state
+   * @param speed
+   * @return predicate to determine whether ratio is compliant with all posed turning ratio limits */
+  private Predicate<Scalar> isCompliant(Tensor state, Scalar speed) {
+    return ratio -> ratioClippers.stream().map(c -> c.at(state, speed)).allMatch(c -> c.isInside(ratio));
   }
 
   /** @param dynamicLimit on turning ratio depending on state and speed */

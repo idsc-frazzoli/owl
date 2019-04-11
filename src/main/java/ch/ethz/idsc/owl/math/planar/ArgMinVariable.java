@@ -1,16 +1,15 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.function.Function;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.sca.Increment;
@@ -22,7 +21,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   // ---
   private final Comparator<Tensor> comparator;
   // ---
-  private Tensor pairs = Tensors.empty(); // {{value, variable}, ...}
+  private final Tensor[] pairs; // [{value, variable}, ...]
 
   /** @param entryFinder strategy
    * @param mapping cost function
@@ -40,6 +39,8 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
     this.entryFinder = entryFinder;
     this.mapping = mapping;
     this.maxLevel = maxLevel;
+    Tensor placeholder = Tensors.of(RealScalar.of(Double.MAX_VALUE), entryFinder.uncorrectedInitialVar());
+    pairs = new Tensor[] { placeholder, placeholder, placeholder };
     comparator = new Comparator<Tensor>() {
       @Override
       public int compare(Tensor t1, Tensor t2) {
@@ -49,7 +50,6 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
           return -1;
         if (Scalars.lessThan(s2, s1))
           return 1;
-        GlobalAssert.that(s1.equals(s2));
         return 0;
       }
     };
@@ -57,49 +57,53 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
 
   @Override // from Function
   public Scalar apply(Tensor tensor) {
-    entryFinder.initial(tensor).ifPresent(this::insert);
-    Scalar initial = entryFinder.currentVar();
+    TrajectoryEntry initial = entryFinder.initial(tensor);
+    insert(initial);
     if (tensor.length() < 2)
-      return initial; // no bisection possible
-    Function<Scalar, Optional<Tensor>> function = entryFinder.on(tensor);
-    Tensor tmp = Tensors.empty();
+      return initial.variable; // no bisection possible
+    Function<Scalar, TrajectoryEntry> function = entryFinder.on(tensor);
+    Tensor[] tmp = new Tensor[3];
+    TrajectoryEntry entry = initial;
     // search from initial upwards
-    while (!pairs.equals(tmp)) {
-      tmp = pairs.copy();
-      update(function, Increment.ONE.apply(entryFinder.currentVar()));
+    while (!Arrays.equals(pairs, tmp)) {
+      tmp = pairs.clone();
+      entry = update(function, Increment.ONE.apply(entry.variable));
     }
     // search from initial downwards
-    update(function, Decrement.ONE.apply(initial));
-    while (!pairs.equals(tmp)) {
-      tmp = pairs.copy();
-      update(function, Decrement.ONE.apply(entryFinder.currentVar()));
+    entry = update(function, Decrement.ONE.apply(initial.variable));
+    while (!Arrays.equals(pairs, tmp)) {
+      tmp = pairs.clone();
+      entry = update(function, Decrement.ONE.apply(entry.variable));
     }
     // bisect previously determined goal region
     return bisect(function, 0);
   }
 
   /** calculate and add pair {value, variable}
-   * @param vector */
-  private void insert(Tensor vector) {
-    pairs.append(Tensors.of(mapping.apply(vector), entryFinder.currentVar()));
+   * @param entry */
+  private void insert(TrajectoryEntry entry) {
+    entry.point.ifPresent(point -> {
+      pairs[2] = Tensors.of(mapping.apply(point), entry.variable);
+      Arrays.sort(pairs, comparator);
+    });
   }
 
   /** update pairs given variable
    * @param function pre-setup trajectory entry finder
-   * @param var */
-  private void update(Function<Scalar, Optional<Tensor>> function, Scalar var) {
-    function.apply(var).ifPresent(this::insert);
-    pairs = Sort.of(pairs, comparator);
-    if (pairs.length() > 2)
-      pairs = pairs.extract(0, 2);
+   * @param var
+   * @return TrajectoryEntry */
+  private TrajectoryEntry update(Function<Scalar, TrajectoryEntry> function, Scalar var) {
+    TrajectoryEntry entry = function.apply(var);
+    insert(entry);
+    return entry;
   }
 
   /** @param function pre-setup trajectory entry finder
    * @param level current search depth
    * @return best variable */
-  private Scalar bisect(Function<Scalar, Optional<Tensor>> function, int level) {
-    Scalar var1 = pairs.Get(0, 1);
-    Scalar var2 = pairs.Get(1, 1);
+  private Scalar bisect(Function<Scalar, TrajectoryEntry> function, int level) {
+    Scalar var1 = pairs[0].Get(1);
+    Scalar var2 = pairs[1].Get(1);
     if (var1.equals(var2) || level == maxLevel)
       return var1;
     update(function, Mean.of(Tensors.of(var1, var2)).Get());
