@@ -17,20 +17,20 @@ public class GeodesicPursuitTest extends TestCase {
   public void testSimple() {
     GeodesicPursuitInterface geodesicPursuit;
     Tensor trajectory1 = Tensors.of( //
-        Tensors.vector(2, 0, 0), //
-        Tensors.vector(4, 2, Math.PI / 2), //
+        Tensors.vector(0, 0, 0), //
+        Tensors.vector(2, 2, Math.PI / 2), //
         Tensors.vector(4, 4, Math.PI / 2));
     Tensor trajectory2 = Tensors.of( //
         Tensors.vector(2, 2, Math.PI / 2), //
         Tensors.vector(4, 4, Math.PI / 2));
     // ---
-    geodesicPursuit = GeodesicPursuit.fromTrajectory(ClothoidCurve.INSTANCE, trajectory1, new NaiveEntryFinder(0));
-    // System.out.println("ratios 1 = " + (ratio1.isPresent() ? ratio1.get() : "empty"));
-    assertEquals(RealScalar.ZERO, geodesicPursuit.firstRatio().orElse(null));
+    geodesicPursuit = GeodesicPursuit.fromTrajectory(ClothoidCurve.INSTANCE, trajectory1, new NaiveEntryFinder(0), RealScalar.ONE);
+    // System.out.println("ratios 1 = " + (geodesicPursuit.firstRatio().isPresent() ? geodesicPursuit.firstRatio().get() : "empty"));
+    assertEquals(RationalScalar.of(1, 2), Round._8.apply(geodesicPursuit.firstRatio().orElse(null)));
     // ---
     geodesicPursuit = GeodesicPursuit.fromTrajectory(ClothoidCurve.INSTANCE, trajectory2, new NaiveEntryFinder(0));
-    // System.out.println("ratios 2 = " + (ratio2.isPresent() ? ratio2.get() : "empty"));
-    assertEquals(RationalScalar.of(1, 2), Round._8.apply(geodesicPursuit.firstRatio().get()));
+    // System.out.println("ratios 2 = " + (geodesicPursuit.firstRatio().isPresent() ? geodesicPursuit.firstRatio().get() : "empty"));
+    assertEquals(RationalScalar.of(1, 2), Round._8.apply(geodesicPursuit.firstRatio().orElse(null)));
   }
 
   public void testPointRadius1() {

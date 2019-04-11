@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.planar.NaiveEntryFinder;
+import ch.ethz.idsc.owl.math.planar.InterpolationEntryFinder;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -36,7 +36,7 @@ public class Se2Letter5Demo extends Se2CarDemo {
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, 1), RealScalar.ZERO);
     CarEntity carEntity = new CarEntity( //
         stateTime, //
-        new GeodesicPursuitControl(new NaiveEntryFinder(0), CarEntity.MAX_TURNING_RATE), //
+        new GeodesicPursuitControl(new InterpolationEntryFinder(0), CarEntity.MAX_TURNING_RATE), //
         CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
