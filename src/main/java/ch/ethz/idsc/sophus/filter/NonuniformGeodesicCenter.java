@@ -18,35 +18,42 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
 
 public class NonuniformGeodesicCenter implements TensorUnaryOperator {
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Scalar interval) {
-    return new NonuniformGeodesicCenter(Objects.requireNonNull(geodesicInterface), interval);
+  /** @param geodesicInterface
+   * @param function that maps the (temporally) neighborhood of a control point to a weight mask
+   * @return operator that maps a sequence of points to their geodesic center
+   * @throws Exception if either input parameter is null */
+  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Scalar radius, SmoothingKernel smoothingKernel) {
+    return new NonuniformGeodesicCenter(Objects.requireNonNull(geodesicInterface), radius, smoothingKernel);
   }
 
+  // ---
   public final GeodesicInterface geodesicInterface;
-  private final Scalar interval;
+  private final Scalar radius;
+  private final SmoothingKernel smoothingKernel;
 
-  /* package */ NonuniformGeodesicCenter(GeodesicInterface geodesicInterface, Scalar interval) {
+  /* package */ NonuniformGeodesicCenter(GeodesicInterface geodesicInterface, Scalar radius, SmoothingKernel smoothingKernel) {
     this.geodesicInterface = geodesicInterface;
-    this.interval = interval;
+    this.smoothingKernel = smoothingKernel;
+    this.radius = radius;
   }
 
   private Tensor splits(Tensor extracted, Tensor state) {
     Tensor mL = Tensors.empty();
     Tensor mR = Tensors.empty();
     for (int index = 0; index < extracted.length(); ++index) {
-      Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(interval.add(interval));
+      Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(radius.add(radius));
       if (Scalars.lessThan(converted, RealScalar.ZERO))
-        mL.append(SmoothingKernel.GAUSSIAN.apply(converted));
+        mL.append(smoothingKernel.apply(converted));
       else if (converted.equals(RealScalar.ZERO)) {
         // Here is to decide if the middle points weighs one or two
         mL.append(RationalScalar.HALF);
         mR.append(RationalScalar.HALF);
       } else
-        mR.append(SmoothingKernel.GAUSSIAN.apply(converted));
+        mR.append(smoothingKernel.apply(converted));
     }
     Tensor splitsLeft = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(mL));
-    Tensor splitsRight = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(mR));
-    Tensor splitsFinal = Reverse.of(StaticHelperCausal.splits(Normalize.with(Norm._1).apply(Tensors.of(Total.of(mL), Total.of(mR)))));
+    Tensor splitsRight = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(Reverse.of(mR)));
+    Tensor splitsFinal = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(Tensors.of(Total.of(mR), Total.of(mL))));
     return Tensors.of(splitsLeft, splitsFinal, splitsRight);
   }
 
