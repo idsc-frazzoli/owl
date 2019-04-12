@@ -20,6 +20,7 @@ public class PIDTrajectoryControl extends StateTrajectoryControl {
   private final Clip clip;
   private final PIDGains pidGains;
   private PIDTrajectory pidTrajectory;
+  private int pidIndex;
 
   public PIDTrajectoryControl(Scalar maxTurningRate, PIDGains pidGains) {
     this.clip = Clips.interval(maxTurningRate.negate(), maxTurningRate);
@@ -37,12 +38,13 @@ public class PIDTrajectoryControl extends StateTrajectoryControl {
     Tensor traj = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state));
-    PIDTrajectory pid = new PIDTrajectory(pidTrajectory, pidGains, traj, stateTime);
+    PIDTrajectory pid = new PIDTrajectory(pidIndex, pidTrajectory, pidGains, traj, stateTime);
     Scalar ratePerMeter = pid.angleOut();
     if (clip.isInside(ratePerMeter)) {
-      this.pidTrajectory = pid;
       return Optional.of(CarHelper.singleton(speed, ratePerMeter).getU());
     }
+    this.pidTrajectory = pid;
+    pidIndex++;
     return Optional.empty();
   }
 }
