@@ -1,20 +1,16 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.math.VectorScalar;
+import ch.ethz.idsc.owl.demo.order.TensorProductOrder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Ordering;
 
 /** Creates minTracker for a lexicographic semiorder.
  * The minimal elements for a lexicographic semiorder is the iteratively constructed set
@@ -29,12 +25,14 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
     return new LexicographicSemiorderMinTracker(slackVector, new HashSet<>());
   }
 
-  private final Collection<Tensor> feasibleInputs;
+  private final Collection<Tensor> candidateSet;
   private final Tensor slackVector;
+  private final int dim;
 
-  private LexicographicSemiorderMinTracker(Tensor slackVector, Collection<Tensor> feasibleInputs) {
-    this.feasibleInputs = feasibleInputs;
+  private LexicographicSemiorderMinTracker(Tensor slackVector, Collection<Tensor> candidateSet) {
+    this.candidateSet = candidateSet;
     this.slackVector = slackVector;
+    this.dim = slackVector.length();
   }
 
   /** Filters all elements which are within the slack of the "absolute" minimum.
@@ -46,63 +44,54 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
     return Scalars.lessEquals(x_i, threshold);
   }
 
-  /** Keeps all points which might minimal in the future */
-  public void updateFeasibleInputs() {
-    // create tensor of VectorScalars
-    Tensor vector = Tensors.empty();
-    feasibleInputs.stream().forEach(x -> vector.append(VectorScalar.of(x)));
-    // create array of lexicographically sorted indices
-    int[] indices = Ordering.INCREASING.of(vector);
-    List<Integer> indicesList = Arrays.stream(indices).boxed().collect(Collectors.toList());
-    // eliminate elements where current value is higher than threshold (e.g. u_min + slack at index)
-    for (int index = 0; index < slackVector.length(); ++index) {
-      Iterator<Integer> iterator = indicesList.iterator();
-      Scalar slack = slackVector.Get(index);
-      // initialize u_min
-      Scalar u_min = ((VectorScalar) vector.get(iterator.next())).at(index);
-      while (iterator.hasNext()) {
-        // get current value
-        Scalar current_u = ((VectorScalar) vector.get(iterator.next())).at(index);
-        // if current is lower then u_min it becomes the new u_min
-        u_min = Scalars.lessEquals(u_min, current_u) ? u_min : current_u;
-        // remove index if current value is bigger then threshold
-        if (!filterCriterion(current_u, u_min.add(slack))) {
+  /** Updates the set of potential future candidates for the minimal set.
+   * 
+   * An element x is not a candidate if there is an index where one of the current candidates
+   * strictly precedes x and in all indices before are the current one has smaller values.
+   * 
+   * @param x */
+  private void updateCandidateSet(Tensor x) {
+    Iterator<Tensor> iterator = candidateSet.iterator();
+    while (iterator.hasNext()) {
+      Tensor current = iterator.next();
+      for (int index = 0; index < dim; ++index) {
+        OrderComparator<Scalar> semiorderComparator = Semiorder.comparator(slackVector.Get(index));
+        OrderComparison semiorder = semiorderComparator.compare(x.Get(index), current.Get(index));
+        TensorProductOrder tensorProductOrder = TensorProductOrder.createTensorProductOrder(index + 1);
+        OrderComparison productOrder = tensorProductOrder.compare(x.extract(0, index + 1), current.extract(0, index + 1));
+        // if x strictly precedes the current object and it is strictly preceding in every coordinate until now, then the current object will be discarded
+        if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES) && productOrder.equals(OrderComparison.STRICTLY_PRECEDES)) {
           iterator.remove();
+          break;
+        }
+        // if x strictly succeeding the current object and it is strictly succeeding in every coordinate until now, then x will be discarded
+        else if (semiorder.equals(OrderComparison.STRICTLY_SUCCEEDS) && productOrder.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
+          return;
         }
       }
     }
-    Iterator<Tensor> iteratorFeasible = feasibleInputs.iterator();
-    int feasibleInputsIndex = 0;
-    while (iteratorFeasible.hasNext()) {
-      iteratorFeasible.next();
-      if (!indicesList.contains(feasibleInputsIndex)) {
-        iteratorFeasible.remove();
-      }
-      ++feasibleInputsIndex;
-    }
+    candidateSet.add(x);
   }
 
-  public Collection<Tensor> getFeasibleInputs() {
-    return feasibleInputs;
+  public Collection<Tensor> getCandidateSet() {
+    return candidateSet;
   }
 
   @Override
   public void digest(Tensor x) {
-    if (x.length() != slackVector.length())
+    if (x.length() != dim)
       throw new RuntimeException("Tensor x has wrong dimension");
-    if (feasibleInputs.isEmpty()) {
-      feasibleInputs.add(x);
-      // System.out.println(x);
+    if (candidateSet.isEmpty()) {
+      candidateSet.add(x);
       return;
     }
-    feasibleInputs.add(x);
-    updateFeasibleInputs();
+    updateCandidateSet(x);
   }
 
   @Override
   public Collection<Tensor> getMinElements() {
-    Collection<Tensor> minElements = feasibleInputs;
-    for (int i = 0; i < slackVector.length(); ++i) {
+    Collection<Tensor> minElements = candidateSet;
+    for (int i = 0; i < dim; ++i) {
       if (minElements.size() == 1)
         return minElements;
       int index = i;
