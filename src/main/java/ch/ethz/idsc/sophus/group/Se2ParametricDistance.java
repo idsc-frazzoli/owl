@@ -20,7 +20,6 @@ public enum Se2ParametricDistance {
    * the projection is a circle segment */
   public static Scalar of(Tensor p, Tensor q) {
     Scalar alpha = MOD_DISTANCE.apply(p.Get(2).subtract(q.get(2))).multiply(HALF);
-    Scalar result = Norm._2.between(p.extract(0, 2), q.extract(0, 2)).divide(Sinc.FUNCTION.apply(alpha));
-    return result;
+    return Norm._2.between(p.extract(0, 2), q.extract(0, 2)).divide(Sinc.FUNCTION.apply(alpha));
   }
 }

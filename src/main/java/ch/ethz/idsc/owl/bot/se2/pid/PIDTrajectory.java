@@ -6,19 +6,17 @@ import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.qty.Quantity;
 
 public class PIDTrajectory {
+  private final Scalar time;
+  private final Scalar errorPose;
   private Scalar angleOut;
-  private Scalar errorPose;
-  private Scalar time;
   private Scalar deriv = RealScalar.ZERO;
 
   public PIDTrajectory(int pidIndex, PIDTrajectory previousPID, PIDGains pidGains, Tensor traj, StateTime stateTime) {
-    this.time = Quantity.of(stateTime.time(), "s");
-    Tensor trajInMeter = new Se2CurveConverter().toSI(traj);
-    Tensor stateXYphi = new Se2PoseConverter().toSI(stateTime.state());
-    Tensor closest = trajInMeter.get(Se2CurveHelper.closest(trajInMeter, stateXYphi));
+    this.time = stateTime.time();
+    Tensor stateXYphi = stateTime.state();
+    Tensor closest = traj.get(Se2CurveHelper.closest(traj, stateXYphi));
     this.errorPose = Se2ParametricDistance.of(stateXYphi, closest);
     Scalar prop = pidGains.Kp.multiply(errorPose);
     if (pidIndex > 1) {

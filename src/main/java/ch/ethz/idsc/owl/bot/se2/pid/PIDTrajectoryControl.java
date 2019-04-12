@@ -38,13 +38,12 @@ public class PIDTrajectoryControl extends StateTrajectoryControl {
     Tensor traj = Tensor.of(trailAhead.stream() //
         .map(TrajectorySample::stateTime) //
         .map(StateTime::state));
-    PIDTrajectory pid = new PIDTrajectory(pidIndex, pidTrajectory, pidGains, traj, stateTime);
-    Scalar ratePerMeter = pid.angleOut();
-    if (clip.isInside(ratePerMeter)) {
+    PIDTrajectory pidTrajectory = new PIDTrajectory(pidIndex, this.pidTrajectory, pidGains, traj, stateTime);
+    Scalar ratePerMeter = pidTrajectory.angleOut();
+    if (clip.isInside(ratePerMeter))
       return Optional.of(CarHelper.singleton(speed, ratePerMeter).getU());
-    }
-    this.pidTrajectory = pid;
-    pidIndex++;
+    this.pidTrajectory = pidTrajectory;
+    ++pidIndex;
     return Optional.empty();
   }
 }

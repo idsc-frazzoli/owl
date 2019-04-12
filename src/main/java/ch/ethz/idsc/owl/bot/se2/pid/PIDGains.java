@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.pid;
 
 import ch.ethz.idsc.tensor.Scalar;
 
+// TODO MCP the 'I' part is missing
 public class PIDGains {
   public final Scalar Kp;
   public final Scalar Kd;
