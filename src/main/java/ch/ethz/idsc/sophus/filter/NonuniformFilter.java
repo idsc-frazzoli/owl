@@ -47,24 +47,20 @@ public class NonuniformFilter implements TensorUnaryOperator {
   /* package */ NonuniformFilter(GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {
     this.geodesicInterface = geodesicInterface;
     this.alpha = alpha;
-    // TODO OB: might be not possible with boundelinked list => not always same filterlength...
+    // TODO OB: might be not possible with boundedlinked list => not always same filterlength...
     this.boundedLinkedList = new BoundedLinkedList<>(Scalars.intValueExact(length));
     this.length = length;
   }
 
   // Create nonuniformly sampled mask from StateTime bounded linked list using fixed interval method;
   public Tensor createAffineMask(BoundedLinkedList<StateTime> boundedLinkedList, Scalar interval) {
-    while (true) {
-      if (Scalars.lessEquals(boundedLinkedList.getFirst().time(), boundedLinkedList.getLast().time().subtract(interval)))
-        boundedLinkedList.remove();
-      else
-        break;
-    }
+    while (Scalars.lessEquals(boundedLinkedList.getFirst().time(), boundedLinkedList.getLast().time().subtract(interval)))
+      boundedLinkedList.remove();
     if (boundedLinkedList.size() == 1)
       return Tensors.of(RealScalar.ONE);
     Tensor weight = Tensors.empty();
     Scalar delta = interval;
-    for (int index = 0; index < boundedLinkedList.size(); index++) {
+    for (int index = 0; index < boundedLinkedList.size(); ++index) {
       Scalar conversion = boundedLinkedList.get(index).time().subtract(interval).divide(delta.add(delta)).subtract(RationalScalar.HALF);
       weight.append(SmoothingKernel.GAUSSIAN.apply(conversion));
     }
@@ -87,9 +83,8 @@ public class NonuniformFilter implements TensorUnaryOperator {
     }
     // Calculate extrapolation splits
     Scalar temp = RealScalar.ONE;
-    for (int index = 0; index < splits.length(); index++) {
+    for (int index = 0; index < splits.length(); ++index)
       temp = temp.multiply(RealScalar.ONE.subtract(splits.Get(index))).add(RealScalar.ONE);
-    }
     splits.append(RealScalar.ONE.add(temp.reciprocal()));
     return splits;
   }
@@ -105,19 +100,18 @@ public class NonuniformFilter implements TensorUnaryOperator {
   public Tensor apply(Tensor tensor) {
     System.out.println(tensor);
     Tensor splits = Tensors.empty();
-    if (!boundedLinkedList.isEmpty()) {
-      Tensor affineMask = createAffineMask(boundedLinkedList, length);
-      splits = splits(affineMask);
-    }
+    if (!boundedLinkedList.isEmpty())
+      splits = splits(createAffineMask(boundedLinkedList, length));
     Tensor value = boundedLinkedList.size() < 2 //
         ? tensor.copy()
-        : geodesicInterface.split(process(Tensor.of(boundedLinkedList.stream().map(st -> st.state())), splits), tensor, alpha);
+        : geodesicInterface.split(process(Tensor.of(boundedLinkedList.stream().map(StateTime::state)), splits), tensor, alpha);
     System.out.println(value);
     StateTime stateTime = new StateTime(value, tensor.Get(0));
     boundedLinkedList.add(stateTime);
     return value;
   }
 
+  // TODO OB convert main() to test, remove main()
   public static void main(String[] args) {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/2r/20180820T165637_1.csv").stream() //
         .map(row -> row.extract(0, 4)));

@@ -43,6 +43,7 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
       Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
       // Measurement update step
       Scalar alpha = RealScalar.of(0.2);
+      // FIXME OB use of Se2Geodesic is not generic
       temp = Se2Geodesic.INSTANCE.split(temp, tensor.get(index + 1), alpha);
       boundedLinkedList.add(temp);
       result.append(temp);
