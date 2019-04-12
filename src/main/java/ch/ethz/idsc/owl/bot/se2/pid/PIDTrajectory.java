@@ -21,7 +21,6 @@ public class PIDTrajectory {
     Tensor closest = trajInMeter.get(Se2CurveHelper.closest(trajInMeter, stateXYphi));
     this.errorPose = Se2ParametricDistance.of(stateXYphi, closest);
     Scalar prop = pidGains.Kp.multiply(errorPose);
-    System.out.println(pidIndex);
     if (pidIndex>1) {
       Scalar dt = time.subtract(previousPID.time);
       deriv = pidGains.Kd.multiply((errorPose.subtract(previousPID.errorPose)).divide(dt));
