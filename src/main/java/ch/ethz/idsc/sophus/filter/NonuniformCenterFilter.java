@@ -22,9 +22,9 @@ public class NonuniformCenterFilter {
     return new NonuniformCenterFilter(Objects.requireNonNull(geodesicInterface), interval, control);
   }
 
-  public static GeodesicInterface geodesicInterface;
-  private static Scalar interval;
-  private static Tensor control;
+  public GeodesicInterface geodesicInterface;
+  private Scalar interval;
+  private Tensor control;
 
   /* package */ NonuniformCenterFilter(GeodesicInterface geodesicInterface, Scalar interval, Tensor control) {
     this.geodesicInterface = geodesicInterface;
@@ -32,7 +32,7 @@ public class NonuniformCenterFilter {
     this.control = control;
   }
 
-  private static Tensor selection(Tensor state) {
+  private Tensor selection(Tensor state) {
     Tensor extracted = Tensors.empty();
     for (int index = 0; index < control.length(); ++index) {
       // check if t_i - I <= t_index <= t_i + I
@@ -48,7 +48,7 @@ public class NonuniformCenterFilter {
   }
 
   // Create the masks of the extracted
-  private static Tensor splits(Tensor extracted, Tensor state) {
+  private Tensor splits(Tensor extracted, Tensor state) {
     Tensor mL = Tensors.empty();
     Tensor mR = Tensors.empty();
     for (int index = 0; index < extracted.length(); ++index) {
@@ -68,7 +68,7 @@ public class NonuniformCenterFilter {
     return Tensors.of(splitsLeft, splitsFinal, splitsRight);
   }
 
-  private static Tensor apply(Tensor splits, Tensor extracted, Tensor state) {
+  private Tensor apply(Tensor splits, Tensor extracted, Tensor state) {
     Tensor tempL = extracted.get(0).extract(1, 4);
     for (int index = 0; index < splits.get(0).length(); ++index) {
       tempL = geodesicInterface.split(tempL, extracted.get(index).extract(1, 4), splits.get(0).Get(index));
@@ -89,8 +89,8 @@ public class NonuniformCenterFilter {
     Tensor result = Tensors.empty();
     for (int i = 0; i < control.length(); ++i) {
       Tensor state = control.get(i);
-      Tensor extracted = NonuniformCenterFilter.selection(state);
-      Tensor splits = NonuniformCenterFilter.splits(extracted, state);
+      Tensor extracted = nonuniformCenterFilter.selection(state);
+      Tensor splits = nonuniformCenterFilter.splits(extracted, state);
       result.append(nonuniformCenterFilter.apply(splits, extracted, state));
     }
     System.out.println(result);

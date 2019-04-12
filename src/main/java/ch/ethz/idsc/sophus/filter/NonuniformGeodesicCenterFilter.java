@@ -36,7 +36,7 @@ public class NonuniformGeodesicCenterFilter implements TensorUnaryOperator {
   }
 
   // We select all elements of control which are (timewise) within a interval of the given state
-  private Tensor selection(Tensor control, Tensor state, Scalar interval) {
+  private static Tensor selection(Tensor control, Tensor state, Scalar interval) {
     // Make sure that the interval is always symmetric around the current state
     Tensor extracted = Tensors.empty();
     for (int index = 0; index < control.length(); ++index) {
