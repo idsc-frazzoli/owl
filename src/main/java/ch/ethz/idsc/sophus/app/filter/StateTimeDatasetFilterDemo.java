@@ -10,6 +10,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.swing.JToggleButton;
 
@@ -50,22 +51,24 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
-  // TODO JPH refactor
   protected Tensor _control = null;
   protected List<StateTime> _stateTime;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
   protected void updateStateTime() {
-    // _stateTime = Tensor.of(
-    // ResourceData.of("/dubilab/app/pose" + spinnerLabelLimit.getValue() + ".csv").stream().limit(spinnerLabelLimit.getValue()).map(row -> row.extract(0, 4)))
-    // .stream().map(n -> new StateTime(n.extract(1, 4), n.extract(0, 1).Get(0))).collect(Collectors.toList());
+    _stateTime = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250).map(row -> row.extract(0, 4)))
+        .stream().map(n -> new StateTime(n.extract(1, 4), n.extract(0, 1).Get(0))).collect(Collectors.toList());
     _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
         .limit(spinnerLabelLimit.getValue()) //
         .map(row -> row.extract(0, 4)));
   }
 
-  protected final Tensor control() {
+  protected final Tensor controlState() {
+    return Tensor.of(_stateTime.stream().map(st -> st.state()).map(geodesicDisplay()::project)).unmodifiable();
+  }
+
+  protected final Tensor controlStateTime() {
     return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
   }
 
@@ -106,7 +109,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     if (jToggleWait.isSelected())
       return;
     GRID_RENDER.render(geometricLayer, graphics);
-    Tensor control = Tensor.of(control().stream().map(row -> row.extract(1, 4)));
+    Tensor control = controlState();
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Tensor shape = geodesicDisplay.shape().multiply(markerScale());
