@@ -10,5 +10,6 @@ public class PIDGains {
   public PIDGains(Scalar Kp, Scalar Kd) {
     this.Kp = Kp;
     this.Kd = Kd;
+    // TODO JPH how to GlobalAssert.that(Kd and Kd has correct unit); 
   }
 }
