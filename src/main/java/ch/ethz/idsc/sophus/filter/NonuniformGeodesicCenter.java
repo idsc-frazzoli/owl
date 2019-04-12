@@ -22,26 +22,25 @@ public class NonuniformGeodesicCenter implements TensorUnaryOperator {
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Scalar radius, SmoothingKernel smoothingKernel) {
-    return new NonuniformGeodesicCenter(Objects.requireNonNull(geodesicInterface), radius, smoothingKernel);
+  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+    return new NonuniformGeodesicCenter(Objects.requireNonNull(geodesicInterface), smoothingKernel);
   }
 
   // ---
   public final GeodesicInterface geodesicInterface;
-  private final Scalar radius;
   private final SmoothingKernel smoothingKernel;
 
-  /* package */ NonuniformGeodesicCenter(GeodesicInterface geodesicInterface, Scalar radius, SmoothingKernel smoothingKernel) {
+  /* package */ NonuniformGeodesicCenter(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
     this.geodesicInterface = geodesicInterface;
     this.smoothingKernel = smoothingKernel;
-    this.radius = radius;
   }
 
-  private Tensor splits(Tensor extracted, Tensor state) {
+  private Tensor splits(Tensor extracted, Tensor state, Scalar interval) {
     Tensor mL = Tensors.empty();
     Tensor mR = Tensors.empty();
     for (int index = 0; index < extracted.length(); ++index) {
-      Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(radius.add(radius));
+      // FIXME OB: radius is smaller if we're at the beginning of the
+      Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(interval.add(interval));
       if (Scalars.lessThan(converted, RealScalar.ZERO))
         mL.append(smoothingKernel.apply(converted));
       else if (converted.equals(RealScalar.ZERO)) {
@@ -61,8 +60,9 @@ public class NonuniformGeodesicCenter implements TensorUnaryOperator {
   public Tensor apply(Tensor t) {
     Tensor extracted = t.get(0);
     Tensor state = t.get(1);
+    Scalar interval = t.Get(2);
     //
-    Tensor splits = splits(extracted, state);
+    Tensor splits = splits(extracted, state, interval);
     Tensor tempL = extracted.get(0).extract(1, 4);
     for (int index = 0; index < splits.get(0).length(); ++index) {
       tempL = geodesicInterface.split(tempL, extracted.get(index).extract(1, 4), splits.get(0).Get(index));
