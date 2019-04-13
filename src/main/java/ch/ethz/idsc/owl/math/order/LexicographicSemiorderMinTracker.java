@@ -25,6 +25,7 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
     return new LexicographicSemiorderMinTracker(slackVector, new HashSet<>());
   }
 
+  // ---
   private final Collection<Tensor> candidateSet;
   private final Tensor slackVector;
   private final int dim;
@@ -33,15 +34,6 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
     this.candidateSet = candidateSet;
     this.slackVector = slackVector;
     this.dim = slackVector.length();
-  }
-
-  /** Filters all elements which are within the slack of the "absolute" minimum.
-   * 
-   * @param x_i: Coordinate of element x
-   * @param threshold = u_min + slack
-   * @return true or false */
-  public static boolean filterCriterion(Scalar x_i, Scalar threshold) {
-    return Scalars.lessEquals(x_i, threshold);
   }
 
   /** Updates the set of potential future candidates for the minimal set.
@@ -60,12 +52,15 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
         TensorProductOrder tensorProductOrder = TensorProductOrder.createTensorProductOrder(index + 1);
         OrderComparison productOrder = tensorProductOrder.compare(x.extract(0, index + 1), current.extract(0, index + 1));
         // if x strictly precedes the current object and it is strictly preceding in every coordinate until now, then the current object will be discarded
-        if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES) && productOrder.equals(OrderComparison.STRICTLY_PRECEDES)) {
+        if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES) && //
+            productOrder.equals(OrderComparison.STRICTLY_PRECEDES)) {
           iterator.remove();
           break;
         }
         // if x strictly succeeding the current object and it is strictly succeeding in every coordinate until now, then x will be discarded
-        else if (semiorder.equals(OrderComparison.STRICTLY_SUCCEEDS) && productOrder.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
+        else //
+        if (semiorder.equals(OrderComparison.STRICTLY_SUCCEEDS) && //
+            productOrder.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
           return;
         }
       }
@@ -77,7 +72,7 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
     return candidateSet;
   }
 
-  @Override
+  @Override // from MinTracker
   public void digest(Tensor x) {
     if (x.length() != dim)
       throw new RuntimeException("Tensor x has wrong dimension");
@@ -88,19 +83,28 @@ public class LexicographicSemiorderMinTracker implements MinTracker<Tensor> {
     updateCandidateSet(x);
   }
 
-  @Override
+  @Override // from MinTracker
   public Collection<Tensor> getMinElements() {
     Collection<Tensor> minElements = candidateSet;
-    for (int i = 0; i < dim; ++i) {
+    for (int index = 0; index < dim; ++index) {
       if (minElements.size() == 1)
         return minElements;
-      int index = i;
-      Scalar u_min = minElements.stream().map(x -> x.Get(index)).min(Scalars::compare).get();
-      Scalar slack = slackVector.Get(index);
+      int fi = index;
+      Scalar u_min = minElements.stream().map(x -> x.Get(fi)).min(Scalars::compare).get();
+      Scalar slack = slackVector.Get(fi);
       minElements = minElements.stream() //
-          .filter(x -> filterCriterion(x.Get(index), u_min.add(slack))) //
+          .filter(x -> filterCriterion(x.Get(fi), u_min.add(slack))) //
           .collect(Collectors.toList());
     }
     return minElements;
+  }
+
+  /** Filters all elements which are within the slack of the "absolute" minimum.
+   * 
+   * @param x_i: Coordinate of element x
+   * @param threshold = u_min + slack
+   * @return true or false */
+  private static boolean filterCriterion(Scalar x_i, Scalar threshold) {
+    return Scalars.lessEquals(x_i, threshold);
   }
 }

@@ -19,7 +19,7 @@ public class NonuniformMaskGenerator {
   public Tensor fixedLength(BoundedLinkedList<StateTime> boundedLinkedList, Scalar length) {
     Tensor weight = Tensors.empty();
     Scalar delta = boundedLinkedList.getFirst().time().subtract(boundedLinkedList.getLast().time());
-    for (int index = 0; index < boundedLinkedList.size(); index++) {
+    for (int index = 0; index < boundedLinkedList.size(); ++index) {
       Scalar conversion = boundedLinkedList.get(index).time().subtract(boundedLinkedList.getFirst().time()).divide(delta.add(delta))
           .subtract(RationalScalar.HALF);
       weight.append(SmoothingKernel.GAUSSIAN.apply(conversion));
@@ -29,19 +29,13 @@ public class NonuniformMaskGenerator {
 
   // Maps t(n) - I to x = -0.5;
   public Tensor fixedIntervalVariant1(BoundedLinkedList<StateTime> boundedLinkedList, Scalar interval) {
-    while (true) {
-      if (Scalars.lessEquals(boundedLinkedList.getFirst().time(), boundedLinkedList.getLast().time().subtract(interval))) {
-        boundedLinkedList.remove();
-      } else {
-        break;
-      }
-    }
-    if (boundedLinkedList.size() == 1) {
+    while (Scalars.lessEquals(boundedLinkedList.getFirst().time(), boundedLinkedList.getLast().time().subtract(interval)))
+      boundedLinkedList.remove();
+    if (boundedLinkedList.size() == 1)
       return Tensors.of(RealScalar.ONE);
-    }
     Tensor weight = Tensors.empty();
     Scalar delta = interval;
-    for (int index = 0; index < boundedLinkedList.size(); index++) {
+    for (int index = 0; index < boundedLinkedList.size(); ++index) {
       Scalar conversion = boundedLinkedList.get(index).time().subtract(interval).divide(delta.add(delta)).subtract(RationalScalar.HALF);
       weight.append(SmoothingKernel.GAUSSIAN.apply(conversion));
     }
@@ -50,19 +44,13 @@ public class NonuniformMaskGenerator {
 
   // Maps t(n)-t(0) with t(0) smallest element within interval to x = .5
   public Tensor fixedIntervalVariant2(BoundedLinkedList<StateTime> boundedLinkedList, Scalar interval) {
-    while (true) {
-      if (Scalars.lessEquals(boundedLinkedList.getFirst().time(), boundedLinkedList.getLast().time().subtract(interval))) {
-        boundedLinkedList.remove();
-      } else {
-        break;
-      }
-    }
-    if (boundedLinkedList.size() == 1) {
+    while (Scalars.lessEquals(boundedLinkedList.getFirst().time(), boundedLinkedList.getLast().time().subtract(interval)))
+      boundedLinkedList.remove();
+    if (boundedLinkedList.size() == 1)
       return Tensors.of(RealScalar.ONE);
-    }
     Tensor weight = Tensors.empty();
     Scalar delta = boundedLinkedList.getLast().time().subtract(boundedLinkedList.getFirst().time());
-    for (int index = 0; index < boundedLinkedList.size(); index++) {
+    for (int index = 0; index < boundedLinkedList.size(); ++index) {
       Scalar conversion = boundedLinkedList.get(index).time().subtract(interval).divide(delta.add(delta)).subtract(RationalScalar.HALF);
       weight.append(SmoothingKernel.GAUSSIAN.apply(conversion));
     }

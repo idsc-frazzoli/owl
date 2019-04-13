@@ -55,7 +55,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public Scalar parametricDifference(Tensor p, Tensor q) {
+  public Scalar parametricDistance(Tensor p, Tensor q) {
     throw new UnsupportedOperationException();
   }
 

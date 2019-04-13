@@ -54,9 +54,9 @@ public enum ClothoidCurveDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public Scalar parametricDifference(Tensor p, Tensor q) {
+  public Scalar parametricDistance(Tensor p, Tensor q) {
     // TODO JPH temporary solution
-    return Se2ParametricDistance.of(p, q);
+    return Se2ParametricDistance.INSTANCE.distance(p, q);
   }
 
   @Override // from Object

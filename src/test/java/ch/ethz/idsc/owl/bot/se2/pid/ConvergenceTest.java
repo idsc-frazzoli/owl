@@ -19,17 +19,19 @@ public class ConvergenceTest extends TestCase {
   private Tensor pose = Tensors.fromString("{6.2,4.2,1}");
 
   public void testSimple() {
-    Tensor traj = //
-        Tensors.vector(i -> Tensors.of(RealScalar.of(1), RealScalar.of(i), Pi.HALF), 20);
+    Tensor traj = Se2CurveConverter.INSTANCE.toSI( //
+        Tensors.vector(i -> Tensors.of(RealScalar.of(1), RealScalar.of(i), Pi.HALF), 20));
     for (int index = 0; index < 100; ++index) {
-      StateTime stateTime = new StateTime(pose, RealScalar.of(index));
+      StateTime stateTime = new StateTime(Se2PoseConverter.INSTANCE.toSI(pose), Quantity.of(index, "s"));
       PIDTrajectory _pidTrajectory = new PIDTrajectory(index, pidTrajectory, pidGains, traj, stateTime);
       pidTrajectory = _pidTrajectory;
       Scalar angleOut = pidTrajectory.angleOut();
       pose = Se2CoveringIntegrator.INSTANCE. //
-          spin(pose, Tensors.of(RealScalar.of(.10), RealScalar.of(0), angleOut));
-      stateTime = new StateTime(pose, stateTime.time().add(RealScalar.of(.1)));
+          spin(pose, Tensors.of(RealScalar.of(.20), RealScalar.of(0), angleOut));
+      stateTime = new StateTime(pose, stateTime.time().add(Quantity.of(.1, "s")));
+      // FIXME MCP this seems to be unstable
       System.out.println(angleOut);
+      System.out.println(pose);
     }
   }
 }

@@ -87,4 +87,11 @@ public class Se2CoveringGroupElementTest extends TestCase {
     Tensor tensor = element.combine(Tensors.vector(6, 7, 8));
     assertTrue(Sign.isPositive(tensor.Get(2)));
   }
+
+  public void testInverseTensor() {
+    Tensor xya = Tensors.fromString("{1[m],2[m],.34}");
+    Se2CoveringGroupElement element = new Se2CoveringGroupElement(xya);
+    Tensor combine = element.combine(element.inverseTensor());
+    Chop._12.requireClose(combine, Tensors.fromString("{0[m], 0[m], 0}"));
+  }
 }

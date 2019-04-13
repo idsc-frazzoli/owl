@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
    * @param pose {x, y, heading}
    * @return */
   public static int closest(Tensor curve, Tensor pose) {
-    return ArgMin.of(Tensor.of(curve.stream().map(curvePoint -> Se2ParametricDistance.of(curvePoint, pose))));
+    return ArgMin.of(Tensor.of(curve.stream() //
+        .map(curvePoint -> Se2ParametricDistance.INSTANCE.distance(curvePoint, pose))));
   }
 }

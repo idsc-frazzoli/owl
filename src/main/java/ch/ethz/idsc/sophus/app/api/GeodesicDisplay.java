@@ -32,7 +32,10 @@ public interface GeodesicDisplay {
   /** @return lie exponential if the space is a lie group, otherwise null */
   LieExponential lieExponential();
 
-  Scalar parametricDifference(Tensor p, Tensor q);
+  /** @param p control point
+   * @param q control point
+   * @return pseudo difference between given control points p and q */
+  Scalar parametricDistance(Tensor p, Tensor q);
 
   @Override // from Object
   String toString();

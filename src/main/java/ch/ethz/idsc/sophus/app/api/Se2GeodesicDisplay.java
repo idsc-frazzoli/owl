@@ -54,8 +54,8 @@ public enum Se2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public Scalar parametricDifference(Tensor p, Tensor q) {
-    return Se2ParametricDistance.of(p, q);
+  public Scalar parametricDistance(Tensor p, Tensor q) {
+    return Se2ParametricDistance.INSTANCE.distance(p, q);
   }
 
   @Override // from Object

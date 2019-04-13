@@ -14,10 +14,12 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.red.VectorTotal;
 
 public class NonuniformGeodesicCenter implements TensorUnaryOperator {
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorTotal.FUNCTION);
+
   /** @param geodesicInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center
@@ -39,20 +41,21 @@ public class NonuniformGeodesicCenter implements TensorUnaryOperator {
     Tensor mL = Tensors.empty();
     Tensor mR = Tensors.empty();
     for (int index = 0; index < extracted.length(); ++index) {
-      // FIXME OB: radius is smaller if we're at the beginning of the
+      // FIXME OB radius is smaller if we're at the beginning of the
       Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(interval.add(interval));
       if (Scalars.lessThan(converted, RealScalar.ZERO))
         mL.append(smoothingKernel.apply(converted));
-      else if (converted.equals(RealScalar.ZERO)) {
+      else //
+      if (converted.equals(RealScalar.ZERO)) {
         // Here is to decide if the middle points weighs one or two
         mL.append(RationalScalar.HALF);
         mR.append(RationalScalar.HALF);
       } else
         mR.append(smoothingKernel.apply(converted));
     }
-    Tensor splitsLeft = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(mL));
-    Tensor splitsRight = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(Reverse.of(mR)));
-    Tensor splitsFinal = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(Tensors.of(Total.of(mR), Total.of(mL))));
+    Tensor splitsLeft = StaticHelperCausal.splits(NORMALIZE.apply(mL));
+    Tensor splitsRight = StaticHelperCausal.splits(NORMALIZE.apply(Reverse.of(mR)));
+    Tensor splitsFinal = StaticHelperCausal.splits(NORMALIZE.apply(Tensors.of(Total.of(mR), Total.of(mL))));
     return Tensors.of(splitsLeft, splitsFinal, splitsRight);
   }
 

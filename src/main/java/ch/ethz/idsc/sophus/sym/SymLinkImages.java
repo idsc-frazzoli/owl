@@ -27,7 +27,7 @@ public enum SymLinkImages {
     symLinkImage.title(smoothingKernel.name() + "[" + (2 * radius + 1) + "]");
     return symLinkImage;
   }
-  // TODO OB: adapt for new Filter structure
+  // TODO OB adapt for new Filter structure
   // public static SymLinkImage causalIIR(SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
   // WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
   // Tensor mask = windowSideSampler.apply(radius).append(alpha);

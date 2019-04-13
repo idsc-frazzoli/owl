@@ -52,7 +52,7 @@ public class SymWeightsToSplits {
       if (tree.get(index).length() == 2) { // incomplete computation
         tree.set(apply(tree.get(index)), index);
       }
-      w[index] = ScalarQ.of(tree.get(index))//
+      w[index] = ScalarQ.of(tree.get(index)) //
           ? weights.Get(tree.Get(index).number().intValue())
           : tree.Get(index, 3);
     }

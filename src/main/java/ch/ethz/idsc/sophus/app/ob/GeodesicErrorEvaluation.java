@@ -9,16 +9,16 @@ import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
 
-public class GeodesicErrorEvaluation {
-  public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
+/* package */ class GeodesicErrorEvaluation {
+  public static final File ROOT = HomeDirectory.Desktop("MA/owl_export");
   // ---
   private final LieDifferences lieDifferences;
 
-  // TODO OB: change to static?
-  GeodesicErrorEvaluation(LieGroup lieGroup, LieExponential lieExponential) {
+  public GeodesicErrorEvaluation(LieGroup lieGroup, LieExponential lieExponential) {
     this.lieDifferences = new LieDifferences(lieGroup, lieExponential);
   }
 
