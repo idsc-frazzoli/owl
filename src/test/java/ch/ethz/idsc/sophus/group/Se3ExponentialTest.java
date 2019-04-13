@@ -20,6 +20,15 @@ public class Se3ExponentialTest extends TestCase {
     assertTrue(Chop._12.close(input, u_w));
   }
 
+  public void testUnits() {
+    Tensor input = Tensors.of( //
+        Tensors.fromString("{1[m*s^-1], 2[m*s^-1], 3[m*s^-1]}"), //
+        Tensors.vector(.2, .3, -.1));
+    Tensor g = Se3Exponential.INSTANCE.exp(input);
+    Tensor u_w = Se3Exponential.INSTANCE.log(g);
+    assertTrue(Chop._12.close(input, u_w));
+  }
+
   public void testRandom() {
     Distribution distribution = NormalDistribution.of(0, .2);
     for (int index = 0; index < 100; ++index) {

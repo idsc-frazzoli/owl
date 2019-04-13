@@ -63,4 +63,12 @@ public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
   Se2CoveringGroupElement create(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
     return new Se2CoveringGroupElement(px, py, pa, ca, sa);
   }
+
+  /** @return vector of coordinates of inverse */
+  /* package */ final Tensor inverseTensor() {
+    return Tensors.of( //
+        px.multiply(ca).add(py.multiply(sa)).negate(), //
+        px.multiply(sa).subtract(py.multiply(ca)), //
+        pa.negate());
+  }
 }
