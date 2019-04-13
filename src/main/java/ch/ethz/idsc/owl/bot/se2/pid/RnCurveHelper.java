@@ -9,7 +9,7 @@ public enum RnCurveHelper {
   /** @param curve
    * @return appends angle between two following points on the curve */
   public static Tensor addAngleToCurve(Tensor curve) {
-    for (int index = 0; index < curve.length(); index++) { // TODO MCP Write this better (stream)
+    for (int index = 0; index < curve.length(); ++index) { // TODO MCP Write this better (stream)
       int nextIndex = index + 1;
       if (index == curve.length() - 1)
         nextIndex = 0;
@@ -21,6 +21,6 @@ public enum RnCurveHelper {
   /** @param optionalCurve
    * @return if enough elements in curve */
   public static boolean bigEnough(Tensor optionalCurve) {
-    return optionalCurve.length() > 1; // TODO MCP Write this better
+    return 1 < optionalCurve.length(); // TODO MCP Write this better
   }
 }

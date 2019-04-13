@@ -21,12 +21,13 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
-  private final int radius;
+  // private final int radius;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
   private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, int radius) {
     this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
-    this.radius = radius;
+    // TODO OB radius is not used
+    // this.radius = radius;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 
@@ -43,6 +44,7 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
       Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
       // Measurement update step
       Scalar alpha = RealScalar.of(0.2);
+      // FIXME OB use of Se2Geodesic is not generic
       temp = Se2Geodesic.INSTANCE.split(temp, tensor.get(index + 1), alpha);
       boundedLinkedList.add(temp);
       result.append(temp);

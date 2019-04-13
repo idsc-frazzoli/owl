@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.pid;
 
 import ch.ethz.idsc.tensor.Scalar;
 
+// TODO MCP name of class is not appropriate, or the 'I' part is missing
 public class PIDGains {
   public final Scalar Kp;
   public final Scalar Ki;
@@ -12,6 +13,5 @@ public class PIDGains {
     this.Kp = Kp;
     this.Ki = Ki;
     this.Kd = Kd;
-    // TODO JPH how to GlobalAssert.that(Kd and Kd has correct unit); 
   }
 }

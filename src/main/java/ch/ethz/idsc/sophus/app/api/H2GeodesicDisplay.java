@@ -58,7 +58,8 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public Scalar parametricDifference(Tensor p, Tensor q) {
+  public Scalar parametricDistance(Tensor p, Tensor q) {
+    // TODO OB/JPH
     throw new UnsupportedOperationException();
   }
 

@@ -16,15 +16,15 @@ import junit.framework.TestCase;
 public class ConvergenceTest extends TestCase {
   private Scalar maxTurningRate = Pi.HALF; 
   private Clip turningRate = Clips.interval(maxTurningRate.negate(), maxTurningRate);
-  private PIDGains pidGains = new PIDGains(Quantity.of(2, "m^-1"), Quantity.of(1, "s*m^-1"));
+  private PIDGains pidGains = new PIDGains(Quantity.of(2, "m^-1"), RealScalar.ZERO, Quantity.of(1, "s*m^-1"));
   private PIDTrajectory pidTrajectory = null;
   private Tensor pose = Tensors.of(RealScalar.ONE, RealScalar.ZERO, Pi.HALF);
 
   public void testSimple() {
-    Tensor traj = //
-        Tensors.vector(i -> Tensors.of(RealScalar.of(1), RealScalar.of(i), Pi.HALF), 20);
-    for (int index = 0; index < 50; ++index) {
-      StateTime stateTime = new StateTime(pose, RealScalar.of(index));
+    Tensor traj = Se2CurveConverter.INSTANCE.toSI( //
+        Tensors.vector(i -> Tensors.of(RealScalar.of(1), RealScalar.of(i), Pi.HALF), 20));
+    for (int index = 0; index < 100; ++index) {
+      StateTime stateTime = new StateTime(Se2PoseConverter.INSTANCE.toSI(pose), Quantity.of(index, "s"));
       PIDTrajectory _pidTrajectory = new PIDTrajectory(index, pidTrajectory, pidGains, traj, stateTime);
       pidTrajectory = _pidTrajectory;
       Scalar angleOut = pidTrajectory.angleOut();
@@ -32,7 +32,7 @@ public class ConvergenceTest extends TestCase {
         angleOut = RealScalar.ZERO;
       pose = Se2CoveringIntegrator.INSTANCE. //
           spin(pose, Tensors.of(RealScalar.of(0), RealScalar.of(.10), angleOut)); //TODO MCP dont understand this
-      stateTime = new StateTime(pose, stateTime.time().add(RealScalar.of(.1)));
+      stateTime = new StateTime(pose, stateTime.time().add(Quantity.of(.1, "s")));
       System.out.println(pose);
       System.out.println("angle out " + angleOut);
       System.out.println(pidTrajectory.getProp());

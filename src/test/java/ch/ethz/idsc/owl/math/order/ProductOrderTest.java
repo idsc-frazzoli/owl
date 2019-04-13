@@ -17,7 +17,7 @@ public class ProductOrderTest extends TestCase {
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     // FIXME ASTOLL warnings
-    ProductOrder<Scalar> productOrder = new ProductOrder(comparatorList);
+    ProductOrder<Scalar> productOrder = new ProductOrder<>(comparatorList);
     List<Scalar> x = new LinkedList<>();
     x.add(RealScalar.of(1));
     x.add(RealScalar.of(2));

@@ -5,7 +5,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
@@ -17,8 +16,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * "Lie Groups for 2D and 3D Transformations", p. 16 */
 // TODO Se2CoveringAdjoint ?
 public class Se2Adjoint implements TensorUnaryOperator {
-  private static final Tensor ORIGIN = Array.zeros(3);
-
   /** @param xya element from Lie Group SE2 as coordinates {x, y, alpha}
    * @return */
   public static TensorUnaryOperator forward(Tensor xya) {
@@ -28,8 +25,7 @@ public class Se2Adjoint implements TensorUnaryOperator {
   /** @param xya element from Lie Group SE2 as coordinates {x, y, alpha}
    * @return */
   public static TensorUnaryOperator inverse(Tensor xya) {
-    // TODO implementation not ideal
-    return new Se2Adjoint(new Se2GroupElement(xya).inverse().combine(ORIGIN));
+    return new Se2Adjoint(new Se2GroupElement(xya).inverseTensor());
   }
 
   // ---

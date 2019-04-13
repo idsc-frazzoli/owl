@@ -22,8 +22,8 @@ public class GenericLexicographicComparatorTest extends TestCase {
         Order.comparator(Scalars::lessEquals), //
         Order.comparator(Scalars::lessEquals)); //
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    OrderComparison OrderComparison = genericLexicographicOrder.compare(list, list);
-    assertEquals(OrderComparison, OrderComparison.INDIFFERENT);
+    OrderComparison orderComparison = genericLexicographicOrder.compare(list, list);
+    assertEquals(orderComparison, OrderComparison.INDIFFERENT);
   }
 
   public void testMixed() {
@@ -41,9 +41,9 @@ public class GenericLexicographicComparatorTest extends TestCase {
         Order.comparator(relation2)); //
     // Order.comparator(binaryRelation);
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    OrderComparison OrderComparison = genericLexicographicOrder.compare(listX, listY);
+    OrderComparison orderComparison = genericLexicographicOrder.compare(listX, listY);
     // System.out.println(OrderComparison);
-    assertEquals(OrderComparison, OrderComparison.STRICTLY_SUCCEEDS);
+    assertEquals(orderComparison, OrderComparison.STRICTLY_SUCCEEDS);
   }
 
   public void testTensor() {
@@ -54,7 +54,7 @@ public class GenericLexicographicComparatorTest extends TestCase {
         Order.comparator(relation1), //
         Order.comparator(Scalars::lessEquals)); //
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    OrderComparison OrderComparison = genericLexicographicOrder.compare(tensorX, tensorY);
-    assertEquals(OrderComparison, OrderComparison.STRICTLY_PRECEDES);
+    OrderComparison orderComparison = genericLexicographicOrder.compare(tensorX, tensorY);
+    assertEquals(orderComparison, OrderComparison.STRICTLY_PRECEDES);
   }
 }

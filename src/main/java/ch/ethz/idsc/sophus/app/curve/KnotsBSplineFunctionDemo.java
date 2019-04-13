@@ -87,7 +87,7 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
       // Centripetal method: "B-Spline Interpolation and Approximation Hongxin Zhang and Jieqing Feng"
       Scalar exponent = RationalScalar.of(jSliderCentripetal.getValue(), 100);
       for (int index = 1; index < control.length(); ++index) {
-        Scalar scalar = geodesicDisplay.parametricDifference(control.get(index - 1), control.get(index));
+        Scalar scalar = geodesicDisplay.parametricDistance(control.get(index - 1), control.get(index));
         diffs.append(Power.of(scalar, exponent));
       }
     }

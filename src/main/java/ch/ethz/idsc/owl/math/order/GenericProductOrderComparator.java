@@ -11,7 +11,7 @@ public class GenericProductOrderComparator implements OrderComparator<Iterable<?
     this.comparatorList = comparatorList;
   }
 
-  @Override
+  @Override // from OrderComparator
   public OrderComparison compare(Iterable<? extends Object> x, Iterable<? extends Object> y) {
     Iterator<? extends Object> x_iterator = x.iterator();
     Iterator<? extends Object> y_iterator = y.iterator();
@@ -34,16 +34,18 @@ public class GenericProductOrderComparator implements OrderComparator<Iterable<?
     }
   }
 
-  private OrderComparison updateOrderComparison(OrderComparison c1, OrderComparison c2) {
+  private static OrderComparison updateOrderComparison(OrderComparison c1, OrderComparison c2) {
     if (c1.equals(OrderComparison.INDIFFERENT))
       return c2;
     if (c2.equals(OrderComparison.INDIFFERENT))
       return c1;
-    if (c1.equals(OrderComparison.INCOMPARABLE) || c2.equals(OrderComparison.INCOMPARABLE))
+    // ---
+    if (c1.equals(OrderComparison.INCOMPARABLE) || //
+        c2.equals(OrderComparison.INCOMPARABLE))
       return OrderComparison.INCOMPARABLE;
+    // ---
     if (!c1.equals(c2))
       return OrderComparison.INCOMPARABLE;
-    else
-      return c1;
+    return c1;
   }
 }
