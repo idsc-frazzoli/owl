@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -81,18 +80,21 @@ public class NonuniformCenterFilter {
     Tensor result = Tensors.of(state.Get(0), resultState.Get(0), resultState.Get(1), resultState.Get(2));
     return result;
   }
-
-  public static void main(String[] args) {
-    // RawData: time and states with same length
-    Tensor control = Tensors.fromString("{{0,0,0,0},{1,1,0,0},{2,2,0,0},{3,3,3,0},{3.5,4,5,0},{4,6,2,0},{5,3,3,0},{7,9,2,0}}");
-    NonuniformCenterFilter nonuniformCenterFilter = new NonuniformCenterFilter(Se2Geodesic.INSTANCE, RealScalar.of(0.2), control);
-    Tensor result = Tensors.empty();
-    for (int i = 0; i < control.length(); ++i) {
-      Tensor state = control.get(i);
-      Tensor extracted = nonuniformCenterFilter.selection(state);
-      Tensor splits = nonuniformCenterFilter.splits(extracted, state);
-      result.append(nonuniformCenterFilter.apply(splits, extracted, state));
-    }
-    System.out.println(result);
-  }
+  // public static void main(String[] args) {
+  // // RawData: time and states with same length
+  // Tensor control = Tensors.fromString("{{0,0,0,0},{1,1,0,0},{2,2,0,0},{3,3,3,0},{3.5,4,5,0},{4,6,2,0},{5,3,3,0},{7,9,2,0}}");
+  // NonuniformCenterFilter nonuniformCenterFilter = new NonuniformCenterFilter(Se2Geodesic.INSTANCE, RealScalar.of(0.2), control);
+  // Tensor result = Tensors.empty();
+  // for (int i = 0; i < control.length(); ++i) {
+  // Tensor state = control.get(i);
+  // Tensor extracted = nonuniformCenterFilter.selection(state);
+  // if (extracted.length() == 1)
+  // result.append(state);
+  // else {
+  // Tensor splits = nonuniformCenterFilter.splits(extracted, state);
+  // result.append(nonuniformCenterFilter.apply(splits, extracted, state));
+  // }
+  // }
+  // System.out.println(result);
+  // }
 }

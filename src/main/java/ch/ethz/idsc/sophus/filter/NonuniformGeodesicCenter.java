@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
 
@@ -35,12 +36,34 @@ public class NonuniformGeodesicCenter implements TensorUnaryOperator {
     this.smoothingKernel = smoothingKernel;
   }
 
-  private Tensor splits(Tensor extracted, Tensor state, Scalar interval) {
+  // Map t-I of to x = -1/2 of windowfunction
+  private Tensor splitsMethod1(Tensor extracted, Tensor state, Scalar interval) {
     Tensor mL = Tensors.empty();
     Tensor mR = Tensors.empty();
     for (int index = 0; index < extracted.length(); ++index) {
-      // FIXME OB: radius is smaller if we're at the beginning of the
       Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(interval.add(interval));
+      if (Scalars.lessThan(converted, RealScalar.ZERO))
+        mL.append(smoothingKernel.apply(converted));
+      else if (converted.equals(RealScalar.ZERO)) {
+        // Here is to decide if the middle points weighs one or two
+        mL.append(RationalScalar.HALF);
+        mR.append(RationalScalar.HALF);
+      } else
+        mR.append(smoothingKernel.apply(converted));
+    }
+    Tensor splitsLeft = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(mL));
+    Tensor splitsRight = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(Reverse.of(mR)));
+    Tensor splitsFinal = StaticHelperCausal.splits(Normalize.with(Norm._1).apply(Tensors.of(Total.of(mR), Total.of(mL))));
+    return Tensors.of(splitsLeft, splitsFinal, splitsRight);
+  }
+
+  // Map t_min of to x = -1/2 of windowfunction
+  private Tensor splitsMethod2(Tensor extracted, Tensor state, Scalar interval) {
+    Tensor mL = Tensors.empty();
+    Tensor mR = Tensors.empty();
+    Scalar denum = Min.of(interval.add(interval), extracted.get(extracted.length() - 1).Get(0).subtract(extracted.get(0).Get(0)));
+    for (int index = 0; index < extracted.length(); ++index) {
+      Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(denum);
       if (Scalars.lessThan(converted, RealScalar.ZERO))
         mL.append(smoothingKernel.apply(converted));
       else if (converted.equals(RealScalar.ZERO)) {
@@ -62,7 +85,8 @@ public class NonuniformGeodesicCenter implements TensorUnaryOperator {
     Tensor state = t.get(1);
     Scalar interval = t.Get(2);
     //
-    Tensor splits = splits(extracted, state, interval);
+    // Tensor splits = splits(extracted, state, interval);
+    Tensor splits = splitsMethod2(extracted, state, interval);
     Tensor tempL = extracted.get(0).extract(1, 4);
     for (int index = 0; index < splits.get(0).length(); ++index) {
       tempL = geodesicInterface.split(tempL, extracted.get(index).extract(1, 4), splits.get(0).Get(index));
