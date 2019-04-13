@@ -47,7 +47,7 @@ public class NonuniformFilter implements TensorUnaryOperator {
   /* package */ NonuniformFilter(GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {
     this.geodesicInterface = geodesicInterface;
     this.alpha = alpha;
-    // TODO OB: might be not possible with boundedlinked list => not always same filterlength...
+    // TODO OB might be not possible with boundedlinked list => not always same filterlength...
     this.boundedLinkedList = new BoundedLinkedList<>(Scalars.intValueExact(length));
     this.length = length;
   }

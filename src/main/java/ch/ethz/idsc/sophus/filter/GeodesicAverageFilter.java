@@ -8,8 +8,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class GeodesicAverageFilter implements TensorUnaryOperator {
-  /** @param geodesicCenter
-   * @param radius
+  /** @param geodesicAverage
+   * @param weightlength
    * @return
    * @throws Exception if given geodesicCenter is null */
   public static TensorUnaryOperator of(TensorUnaryOperator geodesicAverage, int weightlength) {
@@ -25,16 +25,14 @@ public class GeodesicAverageFilter implements TensorUnaryOperator {
     this.weightlength = weightlength;
   }
 
-  // TODO OB: check if this is correct => make a dependance on causal/smoothing tree
+  // TODO OB check if this is correct => make a dependence on causal/smoothing tree
   @Override
   public Tensor apply(Tensor tensor) {
     Tensor result = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
-      if (index < weightlength || index > (tensor.length() - weightlength))
-        result.append(tensor.get(index));
-      else
-        result.append(geodesicAverage.apply(tensor.extract(index, index + weightlength)));
-    }
+    for (int index = 0; index < tensor.length(); ++index)
+      result.append(tensor.length() - weightlength < index || index < weightlength //
+          ? tensor.get(index)
+          : geodesicAverage.apply(tensor.extract(index, index + weightlength)));
     return result;
   }
 }

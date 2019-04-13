@@ -41,7 +41,7 @@ public class NonuniformGeodesicCenter implements TensorUnaryOperator {
     Tensor mL = Tensors.empty();
     Tensor mR = Tensors.empty();
     for (int index = 0; index < extracted.length(); ++index) {
-      // FIXME OB: radius is smaller if we're at the beginning of the
+      // FIXME OB radius is smaller if we're at the beginning of the
       Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(interval.add(interval));
       if (Scalars.lessThan(converted, RealScalar.ZERO))
         mL.append(smoothingKernel.apply(converted));

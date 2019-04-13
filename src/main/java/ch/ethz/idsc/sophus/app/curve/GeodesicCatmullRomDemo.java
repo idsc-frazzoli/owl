@@ -66,8 +66,9 @@ public class GeodesicCatmullRomDemo extends CurveDemo {
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(RationalScalar.of(jSliderAlpha.getValue(), jSliderAlpha.getMaximum()),
-        geodesicDisplay::parametricDifference);
+    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing( //
+        RationalScalar.of(jSliderAlpha.getValue(), jSliderAlpha.getMaximum()), // exponent
+        geodesicDisplay::parametricDistance);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar parameter = knots.Get(knots.length() - 2).subtract(knots.get(1)).multiply(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() + 1))
         .add(knots.get(1));

@@ -17,7 +17,7 @@ public class PIDTrajectory {
     this.time = stateTime.time();
     Tensor stateXYphi = stateTime.state();
     Tensor closest = traj.get(Se2CurveHelper.closest(traj, stateXYphi));
-    this.errorPose = Se2ParametricDistance.of(stateXYphi, closest);
+    this.errorPose = Se2ParametricDistance.INSTANCE.distance(stateXYphi, closest);
     Scalar prop = pidGains.Kp.multiply(errorPose);
     if (pidIndex > 1) {
       Scalar dt = time.subtract(previousPID.time);

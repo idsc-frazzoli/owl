@@ -43,11 +43,9 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
 
   private int getIndex(Scalar t) {
     // t in [tn-1, tn), the exclusive tn avoids ambiguity for t = tn
-    for (int index = 0; index < knots.length(); index++) {
-      if (Scalars.lessEquals(knots.Get(index), t) && Scalars.lessThan(t, knots.Get(index + 1))) {
+    for (int index = 0; index < knots.length(); index++)
+      if (Scalars.lessEquals(knots.Get(index), t) && Scalars.lessThan(t, knots.Get(index + 1)))
         return index;
-      }
-    }
     return -1;
   }
 

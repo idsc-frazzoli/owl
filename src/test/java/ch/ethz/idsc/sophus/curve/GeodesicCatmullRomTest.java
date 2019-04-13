@@ -17,7 +17,7 @@ public class GeodesicCatmullRomTest extends TestCase {
     Tensor control = Tensors.empty();
     for (int index = 0; index < 5; index++)
       control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
-    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(RealScalar.ZERO, Se2ParametricDistance::of);
+    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(RealScalar.ZERO, Se2ParametricDistance.INSTANCE);
     Tensor knots = centripedalKnotSpacing.apply(control);
     GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, knots, control);
     // ---
@@ -36,7 +36,8 @@ public class GeodesicCatmullRomTest extends TestCase {
     Tensor control = Tensors.empty();
     for (int index = 0; index < 5; index++)
       control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
-    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(RealScalar.of(Math.random()), Se2ParametricDistance::of);
+    CentripedalKnotSpacing centripedalKnotSpacing = //
+        new CentripedalKnotSpacing(RealScalar.of(Math.random()), Se2ParametricDistance.INSTANCE);
     Tensor knots = centripedalKnotSpacing.apply(control);
     GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, knots, control);
     // ---

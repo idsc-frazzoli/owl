@@ -1,16 +1,18 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.util.Arrays;
+
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-//TODO: OB/JH überprüfen ob werte im assertEquals sinnvoll sind.
 public class GeodesicFIR3FilterTest extends TestCase {
   public void testTranslation() {
     Tensor p = Tensors.vector(0, 0, 0);
@@ -21,6 +23,7 @@ public class GeodesicFIR3FilterTest extends TestCase {
     Tensor control = Tensors.of(p, q, r);
     TensorUnaryOperator geodesicCenterFilter = new GeodesicFIR3Filter(Se2Geodesic.INSTANCE, alpha, beta);
     Tensor refined = Tensor.of(control.stream().map(geodesicCenterFilter));
+    assertEquals(Dimensions.of(refined), Arrays.asList(3, 3));
     assertEquals(refined.get(1), Tensors.vector(0.5, 0.5, 0.0));
     Chop._12.requireClose(refined.get(2), Tensors.vector(1.8333333333333333, 1.8333333333333333, 0.0));
   }

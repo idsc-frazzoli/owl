@@ -18,7 +18,8 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.VectorTotal;
 
-public class GeodesicAverageFilterDemo extends DatasetKernelDemo {
+// FIXME OB demo throws an exception
+/* package */ class GeodesicAverageFilterDemo extends DatasetKernelDemo {
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
   private Tensor refined = Tensors.empty();
 
@@ -35,7 +36,7 @@ public class GeodesicAverageFilterDemo extends DatasetKernelDemo {
   @Override
   protected void updateState() {
     super.updateState();
-    // TODO OB: Think of a way to create different trees automatically?
+    // TODO OB Think of a way to create different trees automatically?
     Tensor tree = Tensors.of(Tensors.vector(0, 1), Tensors.of(Tensors.vector(2, 3), RealScalar.of(4)));
     Tensor weights = Normalize.with(VectorTotal.FUNCTION).apply(Tensors.vector(1, 2, 3, 2, 1));
     SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(weights, tree);
@@ -45,7 +46,7 @@ public class GeodesicAverageFilterDemo extends DatasetKernelDemo {
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // TODO OB: display new splits
+    // TODO OB display new splits
     return refined;
   }
 

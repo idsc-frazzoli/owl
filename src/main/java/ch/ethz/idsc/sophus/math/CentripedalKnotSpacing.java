@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-// TODO OB is class name correct?
+// TODO OB is class name correct? if yes, cite source
 public class CentripedalKnotSpacing implements TensorUnaryOperator {
   private final ScalarUnaryOperator power;
   private final TensorMetric tensorMetric;
