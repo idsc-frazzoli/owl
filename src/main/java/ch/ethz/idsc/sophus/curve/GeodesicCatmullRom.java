@@ -58,23 +58,23 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
     Tensor selectedKnots = knots.extract(hi - 1, hi + 3);
     Tensor selectedControl = control.extract(hi - 1, hi + 3);
     // First pyramidal layer
-    Tensor A = Tensors.empty();
+    Tensor a = Tensors.empty();
     for (int index = 0; index < 3; index++) {
       Scalar num = t.subtract(selectedKnots.Get(index));
       Scalar denum = selectedKnots.Get(index + 1).subtract(selectedKnots.Get(index));
-      A.append(geodesicInterface.split(selectedControl.get(index), selectedControl.get(index + 1), num.divide(denum)));
+      a.append(geodesicInterface.split(selectedControl.get(index), selectedControl.get(index + 1), num.divide(denum)));
     }
     // Second pyramidal layer
-    Tensor B = Tensors.empty();
+    Tensor b = Tensors.empty();
     for (int index = 0; index < 2; index++) {
       Scalar num = t.subtract(selectedKnots.Get(index));
       Scalar denum = selectedKnots.Get(index + 2).subtract(selectedKnots.Get(index));
-      B.append(geodesicInterface.split(A.get(index), A.get(index + 1), num.divide(denum)));
+      b.append(geodesicInterface.split(a.get(index), a.get(index + 1), num.divide(denum)));
     }
     // Third and final pyramidal layer
     Scalar num = t.subtract(selectedKnots.Get(1));
     Scalar denum = selectedKnots.Get(2).subtract(selectedKnots.Get(1));
-    return geodesicInterface.split(B.get(0), B.get(1), num.divide(denum));
+    return geodesicInterface.split(b.get(0), b.get(1), num.divide(denum));
   }
 
   public Tensor control() {

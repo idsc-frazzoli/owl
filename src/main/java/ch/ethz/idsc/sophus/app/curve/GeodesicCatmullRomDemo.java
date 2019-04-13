@@ -64,29 +64,32 @@ public class GeodesicCatmullRomDemo extends CurveDemo {
     final Tensor control = control();
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-    CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing( //
-        RationalScalar.of(jSliderAlpha.getValue(), jSliderAlpha.getMaximum()), // exponent
-        geodesicDisplay::parametricDistance);
-    Tensor knots = centripedalKnotSpacing.apply(control);
-    final Scalar parameter = knots.Get(knots.length() - 2).subtract(knots.get(1)).multiply(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() + 1))
-        .add(knots.get(1));
-    ScalarTensorFunction scalarTensorFunction = GeodesicCatmullRom.of(geodesicInterface, knots, control);
-    Tensor refined = Subdivide
-        .of(knots.Get(1).number().floatValue(), knots.Get(knots.length() - 2).number().floatValue() - 0.000001, Math.max(1, levels * control.length()))
-        .map(scalarTensorFunction);
-    {
-      Tensor selected = scalarTensorFunction.apply(parameter);
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
-      Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
-      graphics.setColor(Color.DARK_GRAY);
-      graphics.fill(path2d);
-      geometricLayer.popMatrix();
+    if (4 <= control.length()) {
+      GeodesicDisplay geodesicDisplay = geodesicDisplay();
+      GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+      CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing( //
+          RationalScalar.of(jSliderAlpha.getValue(), jSliderAlpha.getMaximum()), // exponent
+          geodesicDisplay::parametricDistance);
+      Tensor knots = centripedalKnotSpacing.apply(control);
+      final Scalar parameter = knots.Get(knots.length() - 2).subtract(knots.get(1)).multiply(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() + 1))
+          .add(knots.get(1));
+      ScalarTensorFunction scalarTensorFunction = GeodesicCatmullRom.of(geodesicInterface, knots, control);
+      Tensor refined = Subdivide
+          .of(knots.Get(1).number().floatValue(), knots.Get(knots.length() - 2).number().floatValue() - 0.000001, Math.max(1, levels * control.length()))
+          .map(scalarTensorFunction);
+      {
+        Tensor selected = scalarTensorFunction.apply(parameter);
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
+        Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
+        graphics.setColor(Color.DARK_GRAY);
+        graphics.fill(path2d);
+        geometricLayer.popMatrix();
+      }
+      Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+      CurveCurvatureRender.of(render, false, geometricLayer, graphics);
+      return refined;
     }
-    Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    CurveCurvatureRender.of(render, false, geometricLayer, graphics);
-    return refined;
+    return control;
   }
 
   public static void main(String[] args) {
