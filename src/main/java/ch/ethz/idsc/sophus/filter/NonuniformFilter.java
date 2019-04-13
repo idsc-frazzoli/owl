@@ -1,8 +1,6 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.filter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
@@ -41,7 +39,7 @@ public class NonuniformFilter implements TensorUnaryOperator {
   private final BoundedLinkedList<StateTime> boundedLinkedList;
   private final GeodesicInterface geodesicInterface;
   private final Scalar alpha;
-  private final List<Tensor> weights = new ArrayList<>();
+  // private final List<Tensor> weights = new ArrayList<>();
   private final Scalar length;
 
   /* package */ NonuniformFilter(GeodesicInterface geodesicInterface, Scalar length, Scalar alpha) {

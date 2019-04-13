@@ -21,12 +21,13 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
-  private final int radius;
+  // private final int radius;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
   private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, int radius) {
     this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
-    this.radius = radius;
+    // TODO OB radius is not used
+    // this.radius = radius;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 

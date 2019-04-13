@@ -40,7 +40,7 @@ public class FrequencyResponsePlot {
     Scalar b = minimizingAlphas.Get(signal);
     Tensor a = windowSideSampler.apply(Scalars.intValueExact(minimizingFilterlengths.Get(signal)))
         .multiply(RealScalar.ONE.subtract(minimizingAlphas.Get(signal)));
-    String test = "test";
+    // String test = "test";
     Tensor omegaRange = Subdivide.of(0, Math.PI, 200);
     Tensor resultAbs = Tensors.empty();
     Tensor resultPhase = Tensors.empty();
