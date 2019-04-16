@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.math.optimization;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 
 import ch.ethz.idsc.owl.math.order.OrderComparator;
@@ -13,30 +12,33 @@ import ch.ethz.idsc.owl.math.order.OrderComparator;
  *
  * @param <T> type of inputs
  * @param <E> type of objectives */
-public class Optimization<T, E> {
-  // TODO ASTOLL inputs attribute of class or as parameter to function
+public class Optimization<T, E, R> {
   // TODO ASTOLL implement as interface
-  Set<T> inputs;
-  List<Function<T, E>> functionVector;
-  OrderComparator<T> orderComparator;
+  List<T> inputs;
+  List<Function<T, E>> featureFunctionVector;
+  List<Function<E, R>> scoringFunctionVector;
+  OrderComparator<R> orderComparator;
 
-  public Optimization(Set<T> inputs, List<Function<T, E>> functionVector, OrderComparator<T> orderComparator) {
+  public Optimization(List<T> inputs, List<Function<T, E>> featureFunctionVector, List<Function<E, R>> scoringFunctionVector,
+      OrderComparator<R> orderComparator) {
     this.inputs = inputs;
-    this.functionVector = functionVector;
+    this.featureFunctionVector = featureFunctionVector;
     this.orderComparator = orderComparator;
   }
 
   /** Apply constraints to input set
    * @return List of feasible alternatives */
   public List<T> getFeasibleAlternatives() {
+    // TODO ASTOLL
     return null;
   }
 
   /** Map the feasible inputs onto the objective space, e.g. f(X).
    * 
    * @return Image of feasible inputs with respect to cost functional vector */
-  public Set<E> inputsInObjectiveSpace() {
+  public List<E> inputsInObjectiveSpace() {
     // return inputs.stream().map(functionVector).collect(Collectors.toSet());
+    // TODO ASTOLL
     return null;
   }
 
@@ -44,7 +46,8 @@ public class Optimization<T, E> {
    * for the optimization problem <t>min f(X)</t>.
    * 
    * @return Set of optimal solutions of the OP */
-  public Set<E> getOptimalSolutions() {
+  public List<T> getOptimalSolutions() {
+    // TODO ASTOLL
     return null;
   }
 
@@ -52,7 +55,8 @@ public class Optimization<T, E> {
    * for the optimization problem <t>min f(X)</t>.
    * 
    * @return Set of optimal values of the OP */
-  public Set<E> getOptimalValues() {
+  public List<R> getOptimalValues() {
+    // TODO ASTOLL
     return null;
   }
 }
