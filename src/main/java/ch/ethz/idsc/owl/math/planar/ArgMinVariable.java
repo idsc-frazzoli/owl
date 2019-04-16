@@ -97,10 +97,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
    * @return TrajectoryEntry */
   private TrajectoryEntry update(Function<Scalar, TrajectoryEntry> function, Scalar var) {
     TrajectoryEntry entry = function.apply(var);
-    entry.point.ifPresent(p -> {
-      if (Objects.isNull(pairs[2]) || Scalars.lessThan(mapping.apply(p), pairs[2].Get(0)))
-        insert(entry);
-    });
+    entry.point.ifPresent(p -> insert(entry));
     return entry;
   }
 
