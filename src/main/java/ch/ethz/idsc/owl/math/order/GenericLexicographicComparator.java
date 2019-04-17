@@ -22,16 +22,12 @@ public class GenericLexicographicComparator implements OrderComparator<Iterable<
     while (true) {
       if (!x_iterator.hasNext()) {
         if (y_iterator.hasNext())
-          throw new RuntimeException("some"); // TODO ASTOLL message
+          throw new RuntimeException("x and y not of same size!");
         return orderComparison;
       }
       OrderComparison comparison = comparatorList.get(index).compare(x_iterator.next(), y_iterator.next());
-      if (comparison.equals(OrderComparison.STRICTLY_PRECEDES) || //
-          comparison.equals(OrderComparison.STRICTLY_SUCCEEDS))
+      if (!comparison.equals(OrderComparison.INDIFFERENT))
         return comparison;
-      else // TODO JPH/ASTOLL else is probably obsolete
-      if (comparison.equals(OrderComparison.INCOMPARABLE))
-        orderComparison = comparison;
       ++index;
     }
   }
