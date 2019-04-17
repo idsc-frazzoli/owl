@@ -11,8 +11,8 @@ public class TrajectoryEntry {
   public final Optional<Tensor> point;
   public final Scalar variable;
 
-  /** @param point found by the TrajectoryEntrFinder
-   * @param variable used by the TrajectoryEntrFinder */
+  /** @param point found by the TrajectoryEntryFinder
+   * @param variable used by the TrajectoryEntryFinder */
   public TrajectoryEntry(Optional<Tensor> point, Scalar variable) {
     this.point = point;
     this.variable = variable;
