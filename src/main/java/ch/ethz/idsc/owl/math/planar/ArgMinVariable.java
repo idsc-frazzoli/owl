@@ -3,9 +3,9 @@ package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.function.Function;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -39,11 +39,14 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
     this.entryFinder = entryFinder;
     this.mapping = mapping;
     this.maxLevel = maxLevel;
-    Tensor placeholder = Tensors.of(RealScalar.of(Double.MAX_VALUE), entryFinder.uncorrectedInitialVar());
-    pairs = new Tensor[] { placeholder, placeholder, placeholder };
+    pairs = new Tensor[3];
     comparator = new Comparator<Tensor>() {
       @Override
       public int compare(Tensor t1, Tensor t2) {
+        if (Objects.isNull(t1))
+          return 1;
+        if (Objects.isNull(t2))
+          return -1;
         Scalar s1 = t1.Get(0);
         Scalar s2 = t2.Get(0);
         if (Scalars.lessThan(s1, s2))
@@ -94,7 +97,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
    * @return TrajectoryEntry */
   private TrajectoryEntry update(Function<Scalar, TrajectoryEntry> function, Scalar var) {
     TrajectoryEntry entry = function.apply(var);
-    insert(entry);
+    entry.point.ifPresent(p -> insert(entry));
     return entry;
   }
 
