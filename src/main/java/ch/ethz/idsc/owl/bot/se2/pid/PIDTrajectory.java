@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.pid;
 
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
+import ch.ethz.idsc.sophus.group.Se2CoveringParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,7 +20,7 @@ public class PIDTrajectory {
     Tensor trajInMeter = Se2CurveConverter.INSTANCE.toSI(traj);
     Tensor stateXYphi = Se2PoseConverter.INSTANCE.toSI(stateTime.state());
     Tensor closest = trajInMeter.get(Se2CurveHelper.closest(trajInMeter, stateXYphi));
-    this.errorPose = Se2ParametricDistance.INSTANCE.distance(stateXYphi, closest);
+    this.errorPose = Se2CoveringParametricDistance.INSTANCE.distance(stateXYphi, closest);
     prop = pidGains.Kp.multiply(errorPose);
     if (pidIndex > 1) {
       Scalar dt = time.subtract(previousPID.time);
