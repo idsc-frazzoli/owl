@@ -2,10 +2,13 @@
 // adapted from http://www.java2s.com/Code/Android/UI/BoundedLinkedList.htm
 package ch.ethz.idsc.owl.data;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 
-/** @param <E> the type of elements held in this collection */
+/** @param <E> the type of elements held in this collection
+ * 
+ * implements {@link Serializable} */
 public class BoundedLinkedList<E> extends LinkedList<E> {
   private final int maxSize;
 

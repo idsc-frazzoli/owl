@@ -32,4 +32,9 @@ public class LinearGroupElement implements LieGroupElement, Serializable {
   public Tensor combine(Tensor tensor) {
     return matrix.dot(SquareMatrixQ.require(tensor));
   }
+
+  @Override // from LieGroupElement
+  public Tensor adjoint(Tensor tensor) {
+    throw new UnsupportedOperationException();
+  }
 }

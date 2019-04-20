@@ -1,9 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.data;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class BoundedLinkedListTest extends TestCase {
@@ -43,5 +45,17 @@ public class BoundedLinkedListTest extends TestCase {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(0);
     assertFalse(boundedLinkedList.add(0));
     assertFalse(boundedLinkedList.add(1));
+  }
+
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(2);
+    assertTrue(boundedLinkedList.add(3));
+    assertTrue(boundedLinkedList.add(4));
+    BoundedLinkedList<Integer> copy = Serialization.copy(boundedLinkedList);
+    boundedLinkedList.add(1);
+    boundedLinkedList.add(2);
+    assertEquals(copy.size(), 2);
+    assertEquals(copy.get(0).intValue(), 3);
+    assertEquals(copy.get(1).intValue(), 4);
   }
 }

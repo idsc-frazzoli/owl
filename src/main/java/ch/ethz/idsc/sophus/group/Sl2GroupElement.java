@@ -51,6 +51,11 @@ public class Sl2GroupElement implements LieGroupElement {
         b2.multiply(a1).add(b3.multiply(a3)).divide(den));
   }
 
+  @Override // from LieGroupElement
+  public Tensor adjoint(Tensor tensor) {
+    throw new UnsupportedOperationException();
+  }
+
   /* package */ Tensor vector() {
     return Tensors.of(a1, a2, a3);
   }
