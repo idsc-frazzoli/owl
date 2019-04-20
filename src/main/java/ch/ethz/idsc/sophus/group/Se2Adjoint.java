@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * code based on derivation by Ethan Eade
  * "Lie Groups for 2D and 3D Transformations", p. 16 */
-// TODO Se2CoveringAdjoint ?
+// TODO V035 move Se2Adjoint to test area
 public class Se2Adjoint implements TensorUnaryOperator {
   /** @param xya element from Lie Group SE2 as coordinates {x, y, alpha}
    * @return */

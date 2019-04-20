@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.group;
 import junit.framework.TestCase;
 
 public class RnGroupTest extends TestCase {
-  public void testSimple() {
+  public void testFailNull() {
     try {
       RnGroup.INSTANCE.element(null);
       fail();
@@ -12,4 +12,12 @@ public class RnGroupTest extends TestCase {
       // ---
     }
   }
+  // public void testFailMatrix() {
+  // try {
+  // RnGroup.INSTANCE.element(IdentityMatrix.of(3));
+  // fail();
+  // } catch (Exception exception) {
+  // // ---
+  // }
+  // }
 }
