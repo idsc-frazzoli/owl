@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.pid;
 import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ enum RnCurveHelper {
+public enum RnCurveHelper {
   ;
   /** @param curve
    * @return appends angle between two following points on the curve */
