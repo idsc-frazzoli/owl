@@ -5,7 +5,6 @@ import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
@@ -24,6 +23,7 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
@@ -64,7 +64,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       mirrorAndReverse(beacons);
     // ---
     Predicate<Scalar> isCompliant = isCompliant(state, speed);
-    Function<Tensor, Scalar> mapping = vector -> { //
+    TensorScalarFunction mapping = vector -> { //
       GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, vector);
       Tensor ratios = geodesicPursuit.ratios();
       if (ratios.stream().map(Tensor::Get).allMatch(isCompliant))

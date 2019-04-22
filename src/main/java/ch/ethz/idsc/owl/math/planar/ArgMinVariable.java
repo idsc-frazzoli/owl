@@ -10,13 +10,14 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.sca.Increment;
 
-public class ArgMinVariable implements Function<Tensor, Scalar> {
+public class ArgMinVariable implements TensorScalarFunction {
   private final TrajectoryEntryFinder entryFinder;
-  private final Function<Tensor, Scalar> mapping;
+  private final TensorScalarFunction mapping;
   private final int maxLevel;
   // ---
   private final Comparator<Tensor> comparator;
@@ -27,7 +28,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
    * @param mapping cost function
    * @param maxLevel of search steps
    * @return ArgMinVariable */
-  public static ArgMinVariable using(TrajectoryEntryFinder entryFinder, Function<Tensor, Scalar> mapping, int maxLevel) {
+  public static ArgMinVariable using(TrajectoryEntryFinder entryFinder, TensorScalarFunction mapping, int maxLevel) {
     return new ArgMinVariable(entryFinder, mapping, maxLevel);
   }
 
@@ -35,7 +36,7 @@ public class ArgMinVariable implements Function<Tensor, Scalar> {
   /** @param entryFinder strategy
    * @param mapping cost function
    * @param maxLevel of search steps */
-  private ArgMinVariable(TrajectoryEntryFinder entryFinder, Function<Tensor, Scalar> mapping, int maxLevel) {
+  private ArgMinVariable(TrajectoryEntryFinder entryFinder, TensorScalarFunction mapping, int maxLevel) {
     this.entryFinder = entryFinder;
     this.mapping = mapping;
     this.maxLevel = maxLevel;

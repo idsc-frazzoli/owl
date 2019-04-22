@@ -35,7 +35,10 @@ public class PurePursuit {
     return ratioPositiveX(target);
   }
 
-  /** @param tensor of waypoints {{x1, y1}, {x2, y2}, ...}
+  /** function also works with units, for instance if point coordinates and
+   * distance are provided with "m" the ratio will be a quantity with unit "m^-1".
+   * 
+   * @param tensor of waypoints {{x1, y1}, {x2, y2}, ...}
    * @param distance to look ahead
    * @return */
   public static PurePursuit fromTrajectory(Tensor tensor, Scalar distance) {

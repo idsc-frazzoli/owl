@@ -33,7 +33,7 @@ public enum ClothoidCurveDisplay implements GeodesicDisplay {
     return xya;
   }
 
-  @Override
+  @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor p) {
     return p.extract(0, 2);
   }

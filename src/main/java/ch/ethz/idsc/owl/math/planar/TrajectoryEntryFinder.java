@@ -1,12 +1,13 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.io.Serializable;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class TrajectoryEntryFinder {
+public abstract class TrajectoryEntryFinder implements Serializable {
   private final Scalar initialVar; // uncorrected
 
   public TrajectoryEntryFinder(Scalar initialVar) {
