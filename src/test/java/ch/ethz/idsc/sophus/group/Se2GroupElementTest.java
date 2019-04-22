@@ -4,12 +4,14 @@ package ch.ethz.idsc.sophus.group;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -127,6 +129,23 @@ public class Se2GroupElementTest extends TestCase {
     Tensor tensor = se2Adjoint.apply(Tensors.fromString("{7[m*s^-1],-5[m*s^-1],1[s^-1]}"));
     Chop._13.requireClose(tensor, //
         Tensors.fromString("{-5.359517822584925[m*s^-1], -4.029399362837438[m*s^-1], 1[s^-1]}"));
+  }
+
+  public void testLinearGroupSe2() {
+    Distribution distribution = NormalDistribution.standard();
+    for (int count = 0; count < 10; ++count) {
+      Tensor g = RandomVariate.of(distribution, 3);
+      Tensor uvw = RandomVariate.of(distribution, 3);
+      Tensor adjoint = new Se2GroupElement(g).adjoint(uvw);
+      Tensor gM = Se2Utils.toSE2Matrix(g);
+      Tensor X = Tensors.matrix(new Scalar[][] { //
+          { RealScalar.ZERO, uvw.Get(2).negate(), uvw.Get(0) }, //
+          { uvw.Get(2), RealScalar.ZERO, uvw.Get(1) }, //
+          { RealScalar.ZERO, RealScalar.ZERO, RealScalar.ZERO } });
+      Tensor tensor = gM.dot(X).dot(Inverse.of(gM));
+      Tensor xya = Tensors.of(tensor.Get(0, 2), tensor.Get(1, 2), tensor.Get(1, 0));
+      Chop._12.requireClose(adjoint, xya);
+    }
   }
 
   public void testFail() {

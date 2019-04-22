@@ -11,9 +11,14 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
-/** cubic B-spline
+/** subdivision scheme with linear subdivision for mid-point insertion and
+ * LaneRiesenfeldCurveSubdivision with degree 3 for vertex reposition.
  * 
- * Dyn/Sharon 2014 p.16 show that the scheme has a contractivity factor of mu = 1/2 */
+ * the computational complexity of LaneRiesenfeld3CurveSubdivision is
+ * between cubic bspline and LaneRiesenfeldCurveSubdivision with degree 3.
+ * 
+ * LaneRiesenfeldCurveSubdivision with degree 3 produces better curvature for
+ * Clothoid geodesics than LaneRiesenfeld3CurveSubdivision. */
 public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serializable {
   private final GeodesicInterface geodesicInterface;
 

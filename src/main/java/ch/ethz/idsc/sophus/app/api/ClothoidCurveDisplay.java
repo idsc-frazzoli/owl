@@ -24,6 +24,7 @@ public enum ClothoidCurveDisplay implements GeodesicDisplay {
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
   private static final CurveSubdivision CURVE_SUBDIVISION = //
       new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
+  private static final int DEPTH = 3;
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
@@ -62,7 +63,7 @@ public enum ClothoidCurveDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
-    Tensor tensor = Nest.of(CURVE_SUBDIVISION::string, Tensors.of(p, q), 3);
+    Tensor tensor = Nest.of(CURVE_SUBDIVISION::string, Tensors.of(p, q), DEPTH);
     Scalar sum = RealScalar.ZERO;
     Tensor a = tensor.get(0);
     for (int index = 1; index < tensor.length(); ++index)
