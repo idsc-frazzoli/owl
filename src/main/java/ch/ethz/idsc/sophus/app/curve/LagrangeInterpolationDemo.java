@@ -58,7 +58,7 @@ public class LagrangeInterpolationDemo extends CurveDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeodesicDisplay geodesicDisplay, GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final Tensor control = control();
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()) //
         .multiply(RealScalar.of(control.length()));
@@ -74,6 +74,7 @@ public class LagrangeInterpolationDemo extends CurveDemo {
     renderControlPoints(geometricLayer, graphics);
     // ---
     int levels = spinnerRefine.getValue();
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
     Tensor refined = Subdivide.of(0, control.length(), 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
@@ -87,7 +88,7 @@ public class LagrangeInterpolationDemo extends CurveDemo {
       geometricLayer.popMatrix();
     }
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
   }
 

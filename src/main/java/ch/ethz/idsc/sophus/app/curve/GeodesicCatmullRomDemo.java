@@ -37,7 +37,7 @@ public class GeodesicCatmullRomDemo extends CurveDemo {
   public GeodesicCatmullRomDemo() {
     addButtonDubins();
     // ---
-    geodesicDisplaySpinner.setValue(Se2GeodesicDisplay.INSTANCE);
+    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
     // ---
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20));
     spinnerRefine.setValue(5);
@@ -59,12 +59,13 @@ public class GeodesicCatmullRomDemo extends CurveDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeodesicDisplay geodesicDisplay, GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int levels = spinnerRefine.getValue();
     final Tensor control = control();
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics);
     if (4 <= control.length()) {
+      GeodesicDisplay geodesicDisplay = geodesicDisplay();
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
       CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing( //
           RationalScalar.of(jSliderAlpha.getValue(), jSliderAlpha.getMaximum()), // exponent

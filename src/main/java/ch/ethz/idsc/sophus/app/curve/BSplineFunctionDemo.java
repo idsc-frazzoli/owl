@@ -73,7 +73,7 @@ public class BSplineFunctionDemo extends CurveDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeodesicDisplay geodesicDisplay, GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
     final Tensor control = control();
@@ -87,6 +87,7 @@ public class BSplineFunctionDemo extends CurveDemo {
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor effective = control;
     if (jToggleItrp.isSelected()) {
       LieGroup lieGroup = geodesicDisplay.lieGroup();
@@ -129,7 +130,7 @@ public class BSplineFunctionDemo extends CurveDemo {
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, false, geometricLayer, graphics);
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
   }
 

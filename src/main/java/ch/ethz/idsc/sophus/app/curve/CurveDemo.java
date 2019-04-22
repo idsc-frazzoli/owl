@@ -36,9 +36,9 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override
-  public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor refined = protected_render(geodesicDisplay, geometricLayer, graphics);
+    Tensor refined = protected_render(geometricLayer, graphics);
     // ---
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
     if (jToggleCrvt.isSelected() && 1 < refined.length()) {
@@ -75,5 +75,5 @@ import ch.ethz.idsc.tensor.Tensor;
     }
   }
 
-  abstract Tensor protected_render(GeodesicDisplay geodesicDisplay, GeometricLayer geometricLayer, Graphics2D graphics);
+  abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
 }
