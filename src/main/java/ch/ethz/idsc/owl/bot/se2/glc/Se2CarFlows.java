@@ -17,21 +17,21 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public class Se2CarFlows implements FlowsInterface, Serializable {
   /** @param speed with unit [m*s^-1]
-   * @param rate_max with unit [rad*m^-1], i.e. the amount of rotation [rad] performed per distance [m^-1]
+   * @param rate_max with unit [m^-1], i.e. the amount of rotation [] performed per distance [m^-1]
    * @return */
   public static FlowsInterface standard(Scalar speed, Scalar rate_max) {
     return new Se2CarFlows(Tensors.of(speed, speed.negate()), rate_max);
   }
 
   /** @param speed with unit [m*s^-1]
-   * @param rate_max with unit [rad*m^-1], i.e. the amount of rotation [rad] performed per distance [m^-1]
+   * @param rate_max with unit [m^-1], i.e. the amount of rotation [] performed per distance [m^-1]
    * @return */
   public static FlowsInterface forward(Scalar speed, Scalar rate_max) {
     return new Se2CarFlows(Tensors.of(speed), rate_max);
   }
 
   /** @param speeds vector with unit [m*s^-1]
-   * @param rate_max with unit [rad*m^-1], i.e. the amount of rotation [rad] performed per distance [m^-1]
+   * @param rate_max with unit [m^-1], i.e. the amount of rotation [] performed per distance [m^-1]
    * @return */
   public static FlowsInterface of(Tensor speeds, Scalar rate_max) {
     return new Se2CarFlows(speeds, rate_max);

@@ -24,7 +24,7 @@ public enum Se2CarIntegrator implements Integrator {
    * h in R */
   @Override // from Integrator
   public Tensor step(Flow flow, Tensor g, Scalar h) {
-    // u is assumed to be of the form u == {vx[m*s^-1], 0, rate[rad*s^-1]}
+    // u is assumed to be of the form u == {vx[m*s^-1], 0, rate[s^-1]}
     return Se2CarLieIntegrator.INSTANCE.spin(g, flow.getU().multiply(h));
   }
 }

@@ -38,11 +38,11 @@ public class ConvergenceTest extends TestCase {
       pose = Se2CoveringIntegrator.INSTANCE. //
           spin(pose, Tensors.of(RealScalar.of(0), RealScalar.of(0.1), angleOut));
       stateTime = new StateTime(pose, stateTime.time().add(RealScalar.of(.01)));
-      System.out.println(pose);
-      System.out.println("angle out " + angleOut);
-      System.out.println(pidTrajectory.getProp());
-      System.out.println(pidTrajectory.getDeriv());
-      System.out.println("------------------_");
+      // System.out.println(pose);
+      // System.out.println("angle out " + angleOut);
+      // System.out.println(pidTrajectory.getProp());
+      // System.out.println(pidTrajectory.getDeriv());
+      // System.out.println("------------------_");
     }
   }
 

@@ -11,9 +11,9 @@ import ch.ethz.idsc.tensor.sca.N;
   ;
   /** the turning radius of the flow is the reciprocal of the given rate
    * 
-   * @param rate of turning [rad*m^-1]
+   * @param rate of turning [m^-1]
    * @param acceleration [m*s^-2]
-   * @return flow with u == { rate[rad*m^-1], acceleration[m*s^-2]} */
+   * @return flow with u == { rate[m^-1], acceleration[m*s^-2]} */
   public static Flow singleton(Scalar rate, Scalar acceleration) {
     return StateSpaceModels.createFlow( //
         Tse2StateSpaceModel.INSTANCE, N.DOUBLE.of(Tensors.of(rate, acceleration)));

@@ -74,9 +74,9 @@ public class FrequencyResponsePlot {
       Tensor values_xdot = process(ylabel, 2);
       Tensor values_adot = process(ylabel, 3);
       Tensor domain = Subdivide.of(0, Math.PI, values_x.length() - 1);
-      visualSet.setAxesLabelX("omega [rad/s]");
+      visualSet.setAxesLabelX("omega [s^-1]");
       if (i == 0)
-        visualSet.setAxesLabelY("Phase Delay [rad]");
+        visualSet.setAxesLabelY("Phase Delay []");
       else
         visualSet.setAxesLabelY("Magnitude Gain [-]");
       {

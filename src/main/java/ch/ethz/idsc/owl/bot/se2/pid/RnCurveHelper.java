@@ -8,6 +8,7 @@ public enum RnCurveHelper {
   ;
   /** @param curve
    * @return appends angle between two following points on the curve */
+  // TODO JPH/MCP create new curve (instead of modifying given one)
   public static Tensor addAngleToCurve(Tensor curve) {
     for (int index = 0; index < curve.length(); ++index) { // TODO MCP Write this better (stream)
       int nextIndex = index + 1;

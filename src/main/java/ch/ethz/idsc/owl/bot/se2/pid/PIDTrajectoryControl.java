@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /** PID control */
+// TODO implementation does not use I-part
 public class PIDTrajectoryControl extends StateTrajectoryControl {
   private final Clip clip;
   private final PIDGains pidGains;

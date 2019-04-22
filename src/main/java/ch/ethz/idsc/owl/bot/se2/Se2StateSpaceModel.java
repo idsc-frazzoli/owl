@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * The Se2-StateSpaceModel has two control parameters:
  * 1) the tangent velocity [m*s^-1]
- * 2) the angular rate per second [rad*s^-1]
+ * 2) the angular rate per second [s^-1]
  * 
  * for forward-only motion simply disallow negative velocity values
  * 
@@ -35,15 +35,15 @@ public enum Se2StateSpaceModel implements StateSpaceModel {
   @Override
   public Tensor f(Tensor x, Tensor u) {
     // return AngleVector.of(x.Get(2)).multiply(u.Get(0)).append(u.Get(2)); // <- short form
-    // x = {px[m], py[m], theta[rad]}
-    // u = {vx[m*s^-1], vy == 0, rate[rad*s^-1]}
+    // x = {px[m], py[m], theta[]}
+    // u = {vx[m*s^-1], vy == 0, rate[s^-1]}
     // speed: positive for forward motion, or negative for backward motion
-    Scalar angle = x.Get(2); // [rad]
+    Scalar angle = x.Get(2); // []
     Scalar vx = u.Get(0); // [m*s^-1]
     return Tensors.of( //
         Cos.FUNCTION.apply(angle).multiply(vx), // change in px
         Sin.FUNCTION.apply(angle).multiply(vx), // change in py
-        u.Get(2) // angular rate per second [rad*s^-1]
+        u.Get(2) // angular rate per second [s^-1]
     );
   }
 

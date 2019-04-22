@@ -46,7 +46,7 @@ public class CarEntity extends Se2Entity {
   static final Scalar SPEED = RealScalar.of(1.0);
   static final Scalar MAX_TURNING_PLAN = Degree.of(45);
   static final Scalar LOOKAHEAD = RealScalar.of(0.5);
-  /** the pure pursuit controller is permitted a slightly higher turning rate "rad/m"
+  /** the pure pursuit controller is permitted a slightly higher turning rate "m^-1"
    * than the planner, to overcome small imprecisions when following the trajectory */
   static final Scalar MAX_TURNING_RATE = Degree.of(50);
   static final FlowsInterface CARFLOWS = Se2CarFlows.standard(SPEED, MAX_TURNING_PLAN);
