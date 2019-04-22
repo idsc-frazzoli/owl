@@ -66,7 +66,7 @@ public class GeodesicDeBoorDemo extends CurveDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeodesicDisplay geodesicDisplay, GeometricLayer geometricLayer, Graphics2D graphics) {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
     final Tensor control = control();
@@ -81,7 +81,6 @@ public class GeodesicDeBoorDemo extends CurveDemo {
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     ScalarTensorFunction scalarTensorFunction = //
         GeodesicDeBoor.of(geodesicInterface, knots, control);

@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
 /** cubic B-spline
@@ -25,8 +26,8 @@ public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serial
     ScalarQ.thenThrow(tensor);
     if (tensor.length() < 2)
       return tensor.copy();
-    Tensor curve = Tensors.empty();
     int length = tensor.length();
+    Tensor curve = Unprotect.empty(2 * length);
     Tensor pq = center(Last.of(tensor), tensor.get(0));
     for (int index = 0; index < length; /* nothing */ ) {
       Tensor q = tensor.get(index);
@@ -51,7 +52,8 @@ public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serial
   }
 
   private Tensor refine(Tensor tensor) {
-    Tensor curve = Tensors.empty();
+    int length = tensor.length();
+    Tensor curve = Unprotect.empty(2 * length);
     Tensor pq;
     {
       Tensor q = tensor.get(0);
@@ -59,7 +61,7 @@ public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serial
       pq = center(q, r); // notation is deliberate
       curve.append(q).append(pq);
     }
-    int last = tensor.length() - 1;
+    int last = length - 1;
     for (int index = 1; index < last; /* nothing */ ) {
       Tensor q = tensor.get(index);
       Tensor r = tensor.get(++index);

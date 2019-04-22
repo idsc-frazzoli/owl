@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 
 public enum He1GeodesicDisplay implements GeodesicDisplay {
@@ -36,6 +37,8 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor toPoint(Tensor p) {
+    if (VectorQ.of(p))
+      throw new RuntimeException();
     return Tensors.of(p.Get(0, 0), p.Get(1, 0));
   }
 

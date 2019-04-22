@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
 /** base class for B-Spline degree 2 curve subdivision
@@ -30,7 +30,7 @@ public abstract class AbstractBSpline2CurveSubdivision implements CurveSubdivisi
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Tensors.empty();
+    Tensor curve = Unprotect.empty(2 * length);
     Tensor p = tensor.get(0);
     for (int index = 1; index < length; ++index) {
       Tensor q = tensor.get(index);

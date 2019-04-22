@@ -142,7 +142,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
   }
 
   @Override
-  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeodesicDisplay geodesicDisplay, GeometricLayer geometricLayer, Graphics2D graphics) {
     final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
     if (scheme.equals(CurveSubdivisionSchemes.DODGSON_SABIN))
       geodesicDisplaySpinner.setValue(R2GeodesicDisplay.INSTANCE);
@@ -157,7 +157,6 @@ public class CurveSubdivisionDemo extends CurveDemo {
       }
     }
     GraphicsUtil.setQualityHigh(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = control();

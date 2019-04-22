@@ -1,6 +1,6 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.3.4`
+Library for motion planning in Java, version `0.3.5`
 
 ![owl](https://user-images.githubusercontent.com/4012178/51979557-bbb99080-248d-11e9-9b33-9a48ed76b038.png)
 
@@ -137,7 +137,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.3.4</version>
+        <version>0.3.5</version>
       </dependency>
     </dependencies>
 
@@ -247,8 +247,9 @@ by Jan Hakenberg,
 
 ## References
 
-* *Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.*
-by Vincent Arsigny, Xavier Pennec and Nicholas Ayache, 
+* *Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.* by Vincent Arsigny, Xavier Pennec and Nicholas Ayache
+* *Manifold-valued subdivision schemes based on geodesic inductive averaging* by Nira Dyn and Nir Sharon
+* *Lie Groups for 2D and 3D Transformations* by Ethan Eade
 
 ---
 

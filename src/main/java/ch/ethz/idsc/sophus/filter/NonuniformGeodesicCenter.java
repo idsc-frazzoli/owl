@@ -15,10 +15,9 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.red.VectorTotal;
 
 public class NonuniformGeodesicCenter implements TensorUnaryOperator {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorTotal.FUNCTION);
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
 
   /** @param geodesicInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask

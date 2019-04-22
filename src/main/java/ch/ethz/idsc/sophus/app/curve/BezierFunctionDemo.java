@@ -37,8 +37,7 @@ public class BezierFunctionDemo extends CurveDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+  public Tensor protected_render(GeodesicDisplay geodesicDisplay, GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics);
     // ---

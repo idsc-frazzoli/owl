@@ -15,7 +15,7 @@ public interface GeodesicDisplay {
   Tensor shape();
 
   /** @param xya
-   * @return coordinates of control point */
+   * @return control point */
   Tensor project(Tensor xya);
 
   /** @param p control point

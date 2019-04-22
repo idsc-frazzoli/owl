@@ -75,10 +75,9 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public Tensor protected_render(GeodesicDisplay geodesicDisplay, GeometricLayer geometricLayer, Graphics2D graphics) {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
-    final GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Tensor control = control();
     // ---
     Tensor effective = control;
