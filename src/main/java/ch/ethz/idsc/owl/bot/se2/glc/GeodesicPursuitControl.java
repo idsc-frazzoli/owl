@@ -21,7 +21,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.sophus.group.Se2GroupElement;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       Tensor ratios = geodesicPursuit.ratios();
       if (ratios.stream().map(Tensor::Get).allMatch(isCompliant))
         return Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
-      return RealScalar.of(Double.MAX_VALUE);
+      return DoubleScalar.POSITIVE_INFINITY;
     };
     Scalar var = ArgMinVariable.using(entryFinder, mapping, MAX_LEVEL).apply(beacons);
     Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point;
