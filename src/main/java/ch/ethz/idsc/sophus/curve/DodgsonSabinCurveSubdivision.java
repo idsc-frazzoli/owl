@@ -3,7 +3,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 
 /** 2005 Malcolm A. Sabin, Neil A. Dodgson:
  * A Circle-Preserving Variant of the Four-Point Subdivision Scheme
@@ -18,8 +18,9 @@ public enum DodgsonSabinCurveSubdivision implements CurveSubdivision {
   // --
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
-    Tensor curve = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
+    int length = tensor.length();
+    Tensor curve = Unprotect.empty(2 * length);
+    for (int index = 0; index < length; ++index) {
       curve.append(tensor.get(index));
       Tensor a = tensor.get((index - 1 + tensor.length()) % tensor.length());
       Tensor b = tensor.get((index + 0 + tensor.length()) % tensor.length());
@@ -32,11 +33,12 @@ public enum DodgsonSabinCurveSubdivision implements CurveSubdivision {
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
-    int last = tensor.length() - 1;
+    int length = tensor.length();
+    int last = length - 1;
     if (last < 2)
       return DodgsonSabinHelper.BSPLINE3_EUCLIDEAN.string(tensor);
     // ---
-    Tensor curve = Tensors.empty();
+    Tensor curve = Unprotect.empty(2 * length);
     curve.append(tensor.get(0));
     curve.append(DodgsonSabinHelper.midpoint(tensor.get(0), tensor.get(1), tensor.get(2)));
     // ---

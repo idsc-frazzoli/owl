@@ -124,8 +124,8 @@ public final class GeometricComponent {
             final int mods = mouseEvent.getModifiersEx();
             final int mask = MouseWheelEvent.CTRL_DOWN_MASK; // 128 = 2^7
             if ((mods & mask) == 0) {
-              model2pixel.set(scalar -> scalar.add(RealScalar.of(dx)), 0, 2);
-              model2pixel.set(scalar -> scalar.add(RealScalar.of(dy)), 1, 2);
+              model2pixel.set(RealScalar.of(dx)::add, 0, 2);
+              model2pixel.set(RealScalar.of(dy)::add, 1, 2);
             } else {
               Tensor t1 = Se2Utils.toSE2Translation(center.negate());
               Tensor t2 = Se2Utils.toSE2Matrix(center.copy().append(a2.subtract(a1)));

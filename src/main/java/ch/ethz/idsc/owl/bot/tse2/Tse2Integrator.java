@@ -22,8 +22,8 @@ public class Tse2Integrator implements Integrator {
   // ---
   @Override
   public Tensor step(Flow flow, Tensor x, Scalar h) {
-    // x = {px[m], py[m], theta[rad], vx[m*s^-1]}
-    // u_tse2 = {rate[rad*m^-1], ax[m*s^-2]}
+    // x = {px[m], py[m], theta[], vx[m*s^-1]}
+    // u_tse2 = {rate[m^-1], ax[m*s^-2]}
     Scalar vx = x.Get(Tse2StateSpaceModel.STATE_INDEX_VEL);
     Tensor u_tse2 = flow.getU();
     Scalar ax = u_tse2.Get(Tse2StateSpaceModel.CONTROL_INDEX_ACCEL);
@@ -31,7 +31,7 @@ public class Tse2Integrator implements Integrator {
     // movement along geodesic by distance dp
     Scalar dp = r1.Get(0);
     // difference da in orientation between time 0 and h
-    // from rad*m^-1 to rad
+    // from m^-1 to []
     Scalar da = u_tse2.Get(Tse2StateSpaceModel.CONTROL_INDEX_STEER).multiply(dp);
     Tensor shift = Tensors.of(dp, dp.zero(), da);
     return Se2CarLieIntegrator.INSTANCE.spin(x.extract(0, 3), shift) //

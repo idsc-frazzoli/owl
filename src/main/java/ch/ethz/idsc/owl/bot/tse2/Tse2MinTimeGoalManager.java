@@ -30,7 +30,7 @@ public final class Tse2MinTimeGoalManager extends AbstractMinTimeGoalManager {
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
     // units: d_xy [m] / maxSpeed [m/s] -> time [s]
-    // units: d_an [rad] / maxTurning [rad/s] -> time [s]
+    // units: d_an [] / maxTurning [s^-1] -> time [s]
     return Max.of( //
         tse2ComboRegion.d_xy(tensor).divide(maxSpeed), //
         tse2ComboRegion.d_angle(tensor).divide(maxTurning));

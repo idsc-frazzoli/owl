@@ -86,7 +86,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
                 Tensor center = Mean.of(tensor);
                 center.set(RealScalar.ZERO, 2);
                 tensor = Tensor.of(tensor.stream().map(row -> row.subtract(center)));
-                geodesicDisplaySpinner.setValue(Se2GeodesicDisplay.INSTANCE);
+                setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
                 jToggleCyclic.setSelected(true);
                 setControl(tensor);
               }
@@ -145,7 +145,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
     if (scheme.equals(CurveSubdivisionSchemes.DODGSON_SABIN))
-      geodesicDisplaySpinner.setValue(R2GeodesicDisplay.INSTANCE);
+      setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
     // ---
     if (jToggleSymi.isSelected()) {
       Optional<SymMaskImages> optional = SymMaskImages.get(scheme.name());
@@ -157,7 +157,6 @@ public class CurveSubdivisionDemo extends CurveDemo {
       }
     }
     GraphicsUtil.setQualityHigh(graphics);
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     // ---
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = control();
@@ -179,6 +178,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
     int levels = spinnerRefine.getValue();
     final Tensor refined;
     renderControlPoints(geometricLayer, graphics);
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
       Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
       TensorUnaryOperator tensorUnaryOperator = create(function.apply(geodesicDisplay.geodesicInterface()), cyclic);
@@ -191,7 +191,7 @@ public class CurveSubdivisionDemo extends CurveDemo {
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, cyclic, geometricLayer, graphics);
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
   }
 

@@ -78,11 +78,11 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
-    final GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Tensor control = control();
     // ---
     Tensor effective = control;
     Tensor diffs = Tensors.vector(0);
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     if (!jToggleUnif.isSelected()) {
       // Centripetal method: "B-Spline Interpolation and Approximation Hongxin Zhang and Jieqing Feng"
       Scalar exponent = RationalScalar.of(jSliderCentripetal.getValue(), 100);
@@ -119,7 +119,7 @@ public class KnotsBSplineFunctionDemo extends CurveDemo {
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, false, geometricLayer, graphics);
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
   }
 

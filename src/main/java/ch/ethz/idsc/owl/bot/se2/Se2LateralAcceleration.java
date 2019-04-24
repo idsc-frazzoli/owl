@@ -32,9 +32,9 @@ public enum Se2LateralAcceleration implements CostFunction {
     return RealScalar.ZERO; // compatible with quantity addition of any unit
   }
 
-  /** @param u for instance {2.5[m*s^-1], 0.0, 1.0[rad*s^-1]}
+  /** @param u for instance {2.5[m*s^-1], 0.0, 1.0[s^-1]}
    * @param dt for instance 0.5[s]
-   * @return quantity with unit [rad^2*s^-1] */
+   * @return quantity with unit [s^-1] */
   public static Scalar cost(Tensor u, Scalar dt) {
     return AbsSquared.FUNCTION.apply(u.Get(2)).multiply(dt);
   }

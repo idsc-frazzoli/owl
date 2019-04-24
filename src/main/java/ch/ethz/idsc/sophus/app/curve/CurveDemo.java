@@ -36,13 +36,14 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override
-  public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor refined = protected_render(geometricLayer, graphics);
     // ---
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
     if (jToggleCrvt.isSelected() && 1 < refined.length()) {
-      GeodesicDisplay geodesicDisplay = geodesicDisplay();
-      CurveVisualSet curveVisualSet = new CurveVisualSet(Tensor.of(refined.stream().map(geodesicDisplay::toPoint)));
+      Tensor tensor = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
+      CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
       curveVisualSet.addCurvature();
       // if (2 < refined.get(0).length())
       // curveVisualSet.addArcTan(refined);

@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 
 /** cubic B-spline
  * 
@@ -23,8 +24,8 @@ public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
-    Tensor curve = Tensors.empty();
     int length = tensor.length();
+    Tensor curve = Unprotect.empty(2 * length);
     for (int index = 0; index < length; ++index) {
       Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
@@ -47,13 +48,14 @@ public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
   }
 
   private Tensor refine(Tensor tensor) {
-    Tensor curve = Tensors.empty();
+    int length = tensor.length();
+    Tensor curve = Unprotect.empty(2 * length);
     {
       Tensor q = tensor.get(0);
       Tensor r = tensor.get(1);
       curve.append(q).append(center(q, r));
     }
-    int last = tensor.length() - 1;
+    int last = length - 1;
     for (int index = 1; index < last; /* nothing */ ) {
       Tensor p = tensor.get(index - 1);
       Tensor q = tensor.get(index);

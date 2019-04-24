@@ -6,6 +6,7 @@ import java.util.Optional;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.lie.Cross;
@@ -47,8 +48,8 @@ public enum CurvatureComb {
   /** @param tensor of dimension n x 2
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
   /* package */ static Tensor cyclic(Tensor tensor) {
-    Tensor normal = Tensors.empty();
     int length = tensor.length();
+    Tensor normal = Unprotect.empty(length);
     for (int index = 0; index < length; ++index) {
       Tensor a = tensor.get((index - 1 + length) % length);
       Tensor b = tensor.get(index);

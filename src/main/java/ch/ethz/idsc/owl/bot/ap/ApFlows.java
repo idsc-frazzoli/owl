@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class ApFlows implements FlowsInterface, Serializable {
-  /** @param aoa_max with unit [rad]
+  /** @param aoa_max unitless
    * @param thrusts vector with unit [N]
    * @return new ApFlows instance */
   public static FlowsInterface of(Scalar aoa_max, Tensor thrusts) {

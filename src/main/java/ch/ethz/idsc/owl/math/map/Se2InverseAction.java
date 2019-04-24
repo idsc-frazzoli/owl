@@ -11,6 +11,8 @@ import ch.ethz.idsc.tensor.sca.Sin;
 /** Se2InverseAction is a substitute for the operation:
  * Inverse[SE2 matrix] dot point
  * 
+ * Se2InverseAction is the canonic action of SE2 on R^2.
+ * 
  * @see Se2ForwardAction */
 /* package */ class Se2InverseAction implements TensorUnaryOperator {
   private final Scalar px;

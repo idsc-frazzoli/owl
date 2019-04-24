@@ -41,7 +41,7 @@ public final class Tse2ForwardMinTimeGoalManager extends AbstractMinTimeGoalMana
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor tensor) {
     // units: d_xy [m] / maxSpeed [m/s] -> time [s]
-    // units: d_an [rad] / maxTurning [rad/s] -> time [s]
+    // units: d_an [] / maxTurning [s^-1] -> time [s]
     Scalar d_tar = tse2ComboRegion.d_xy(tensor);
     Scalar v_cur = tensor.Get(Tse2StateSpaceModel.STATE_INDEX_VEL);
     return Max.of( //

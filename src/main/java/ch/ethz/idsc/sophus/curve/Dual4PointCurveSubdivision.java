@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** dual scheme */
@@ -41,10 +41,10 @@ public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializabl
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
-    Tensor curve = Tensors.empty();
     int length = tensor.length();
+    Tensor curve = Unprotect.empty(2 * length);
     for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 1 + length) % tensor.length());
+      Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % length);
       Tensor s = tensor.get((index + 2) % length);

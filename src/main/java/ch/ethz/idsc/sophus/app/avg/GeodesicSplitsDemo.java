@@ -27,12 +27,12 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   @Override // from RenderInterface
-  public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+  public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor control = control();
     // ---
     SymScalar symScalar = symScalar(Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf)));
     SymLink symLink = null;
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     if (Objects.nonNull(symScalar)) {
       graphics.drawImage(new SymLinkImage(symScalar, FONT).bufferedImage(), 0, 0, null);
       // ---
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     if (Objects.nonNull(symLink)) {
       Tensor xya = symLink.getPosition(geodesicDisplay.geodesicInterface());
-      renderPoints(geometricLayer, graphics, Tensors.of(xya));
+      renderPoints(geodesicDisplay, Tensors.of(xya), geometricLayer, graphics);
     }
   }
 

@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * Careful: the major difference to {@link Se2StateSpaceModel}
  * is that the rotational component in the control:
- * In Tse2StateSpaceModel the unit is [rad*m^-1], i.e. rotation per meter
+ * In Tse2StateSpaceModel the unit is [m^-1], i.e. rotation per meter
  * 
  * @see Se2CarIntegrator */
 public enum Tse2StateSpaceModel implements StateSpaceModel {
@@ -29,15 +29,15 @@ public enum Tse2StateSpaceModel implements StateSpaceModel {
   // ---
   @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
-    // x = {px[m], py[m], theta[rad], vx[m*s^-1]}
-    // u = {rate[rad*m^-1], ax[m*s^-2]}
+    // x = {px[m], py[m], theta[], vx[m*s^-1]}
+    // u = {rate[m^-1], ax[m*s^-2]}
     // acceleration: positive for forward acceleration, negative for backward acceleration
     Scalar angle = x.Get(2);
     Scalar vx = x.Get(STATE_INDEX_VEL);
     return Tensors.of( //
         Cos.FUNCTION.apply(angle).multiply(vx), // change in px [m*s^-1]
         Sin.FUNCTION.apply(angle).multiply(vx), // change in py [m*s^-1]
-        u.Get(CONTROL_INDEX_STEER).multiply(vx), // change in angule per second [rad*s^-1]
+        u.Get(CONTROL_INDEX_STEER).multiply(vx), // change in angule per second [s^-1]
         u.Get(CONTROL_INDEX_ACCEL) // change in velocity [m*s^-2]
     );
   }

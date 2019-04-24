@@ -73,8 +73,8 @@ public class LagrangeInterpolationDemo extends CurveDemo {
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics);
     // ---
-    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     int levels = spinnerRefine.getValue();
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
     Tensor refined = Subdivide.of(0, control.length(), 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
@@ -88,7 +88,7 @@ public class LagrangeInterpolationDemo extends CurveDemo {
       geometricLayer.popMatrix();
     }
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
   }
 

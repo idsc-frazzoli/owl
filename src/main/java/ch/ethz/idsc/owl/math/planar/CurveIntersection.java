@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-// DEPRECATED !!!
 public interface CurveIntersection {
   /** @param tensor of points on cyclic trail ahead
    * @param distance look ahead
