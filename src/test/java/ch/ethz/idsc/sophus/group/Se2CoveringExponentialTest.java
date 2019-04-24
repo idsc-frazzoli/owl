@@ -17,11 +17,13 @@ public class Se2CoveringExponentialTest extends TestCase {
     assertEquals(y, x);
   }
 
-  public void testSimpleTheta() {
-    Tensor x = Tensors.vector(0, 0, -2).unmodifiable();
-    Tensor g = Se2CoveringExponential.INSTANCE.exp(x);
-    assertEquals(g, x);
-    Tensor y = Se2CoveringExponential.INSTANCE.log(g);
-    assertEquals(y, x);
+  public void testSimpleLinearSubspace() {
+    for (int theta = -10; theta <= 10; ++theta) {
+      Tensor x = Tensors.vector(0, 0, theta).unmodifiable();
+      Tensor g = Se2CoveringExponential.INSTANCE.exp(x);
+      assertEquals(g, x);
+      Tensor y = Se2CoveringExponential.INSTANCE.log(g);
+      assertEquals(y, x);
+    }
   }
 }

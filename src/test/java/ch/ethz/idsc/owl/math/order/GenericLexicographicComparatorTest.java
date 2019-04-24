@@ -22,8 +22,8 @@ public class GenericLexicographicComparatorTest extends TestCase {
         Order.comparator(Scalars::lessEquals), //
         Order.comparator(Scalars::lessEquals)); //
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    OrderComparison OrderComparison = genericLexicographicOrder.compare(list, list);
-    assertEquals(OrderComparison, OrderComparison.INDIFFERENT);
+    OrderComparison orderComparison = genericLexicographicOrder.compare(list, list);
+    assertEquals(orderComparison, OrderComparison.INDIFFERENT);
   }
 
   public void testMixed() {
@@ -33,17 +33,14 @@ public class GenericLexicographicComparatorTest extends TestCase {
     List<Object> listY = new LinkedList<>();
     listY.add(123);
     listY.add(Arrays.asList(3, 4));
-    // Object object = list.get(3);
-    BinaryRelation<Integer> relation1 = (x, y) -> x < y;
+    BinaryRelation<Integer> relation1 = (x, y) -> x <= y;
     BinaryRelation<Collection<?>> relation2 = (x, y) -> y.containsAll(x);
     List<OrderComparator> comparators = Arrays.asList( //
         Order.comparator(relation1), //
         Order.comparator(relation2)); //
-    // Order.comparator(binaryRelation);
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    OrderComparison OrderComparison = genericLexicographicOrder.compare(listX, listY);
-    // System.out.println(OrderComparison);
-    assertEquals(OrderComparison, OrderComparison.STRICTLY_SUCCEEDS);
+    OrderComparison orderComparison = genericLexicographicOrder.compare(listX, listY);
+    assertEquals(orderComparison, OrderComparison.STRICTLY_SUCCEEDS);
   }
 
   public void testTensor() {
@@ -54,7 +51,7 @@ public class GenericLexicographicComparatorTest extends TestCase {
         Order.comparator(relation1), //
         Order.comparator(Scalars::lessEquals)); //
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
-    OrderComparison OrderComparison = genericLexicographicOrder.compare(tensorX, tensorY);
-    assertEquals(OrderComparison, OrderComparison.STRICTLY_PRECEDES);
+    OrderComparison orderComparison = genericLexicographicOrder.compare(tensorX, tensorY);
+    assertEquals(orderComparison, OrderComparison.STRICTLY_PRECEDES);
   }
 }

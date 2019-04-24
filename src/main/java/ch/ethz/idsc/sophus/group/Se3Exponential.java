@@ -27,8 +27,8 @@ public enum Se3Exponential implements LieExponential {
 
   @Override // from LieExponential
   public Tensor exp(Tensor u_w) {
-    Tensor u = u_w.get(0);
-    Tensor w = u_w.get(1);
+    Tensor u = u_w.get(0); // translation
+    Tensor w = u_w.get(1); // rotation
     Scalar theta = Norm._2.ofVector(w);
     Tensor wx = Cross.skew3(w);
     Tensor wx2 = wx.dot(wx);

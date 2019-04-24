@@ -8,15 +8,15 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ abstract class Se2CarDemo extends Se2Demo {
+public abstract class Se2CarDemo extends Se2Demo {
   /** probe coordinates specific for small car */
   private static final Tensor PROBE_X = Tensors.vector(0.2, 0.1, 0, -0.1);
 
-  static Region<Tensor> line(Region<Tensor> region) {
+  public static Region<Tensor> line(Region<Tensor> region) {
     return Se2PointsVsRegions.line(PROBE_X, region);
   }
 
-  static PlannerConstraint createConstraint(Region<Tensor> region) {
+  public static PlannerConstraint createConstraint(Region<Tensor> region) {
     return RegionConstraints.timeInvariant(line(region));
   }
 }

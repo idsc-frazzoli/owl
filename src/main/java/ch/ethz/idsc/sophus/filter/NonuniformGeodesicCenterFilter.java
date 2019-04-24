@@ -41,12 +41,12 @@ public class NonuniformGeodesicCenterFilter implements TensorUnaryOperator {
     Tensor extracted = Tensors.empty();
     for (int index = 0; index < control.length(); ++index) {
       // check if t_i - I <= t_index <= t_i + I
-      if (Scalars.lessEquals(state.Get(0).subtract(interval), control.get(index).Get(0))
-          && Scalars.lessEquals(control.get(index).Get(0), state.Get(0).add(interval))) {
+      if (Scalars.lessEquals(state.Get(0).subtract(interval), control.get(index).Get(0)) && //
+          Scalars.lessEquals(control.get(index).Get(0), state.Get(0).add(interval)))
         extracted.append(control.get(index));
-      }
       // if tensor extracted is non-empty and the previous statement is false, then we passed the range of interest
-      else if (!Tensors.isEmpty(extracted))
+      else //
+      if (Tensors.nonEmpty(extracted))
         break;
     }
     return extracted;
@@ -59,9 +59,11 @@ public class NonuniformGeodesicCenterFilter implements TensorUnaryOperator {
       Tensor state = tensor.get(index);
       Scalar interval = interval(tensor, state);
       Tensor extracted = selection(tensor, state, interval);
-      if (extracted.length() == 1) {
+      if (extracted.length() == 1)
+        // FIXME OB not generic
         result.append(state.extract(1, 4));
-      } else
+      else
+        // FIXME OB not generic
         result.append(tensorUnaryOperator.apply(Tensors.of(extracted, state, interval)).extract(1, 4));
     }
     System.err.println(result);

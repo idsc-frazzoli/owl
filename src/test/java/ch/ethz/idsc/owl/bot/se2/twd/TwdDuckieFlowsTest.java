@@ -14,9 +14,23 @@ import ch.ethz.idsc.tensor.sca.Round;
 import junit.framework.TestCase;
 
 public class TwdDuckieFlowsTest extends TestCase {
-  public void testNoDuplicates() {
+  public void testRadNoDuplicates() {
     Scalar ms = Quantity.of(3, "m*s^-1");
     Scalar sa = Quantity.of(0.567, "m*rad^-1");
+    TwdDuckieFlows twdConfig = new TwdDuckieFlows(ms, sa);
+    for (int res = 3; res <= 8; ++res) {
+      Collection<Flow> controls = twdConfig.getFlows(res);
+      Set<Tensor> set = new HashSet<>();
+      for (Flow flow : controls) {
+        Tensor key = flow.getU().map(Round._3);
+        assertTrue(set.add(key));
+      }
+    }
+  }
+
+  public void testNoDuplicates() {
+    Scalar ms = Quantity.of(3, "m*s^-1");
+    Scalar sa = Quantity.of(0.567, "m");
     TwdDuckieFlows twdConfig = new TwdDuckieFlows(ms, sa);
     for (int res = 3; res <= 8; ++res) {
       Collection<Flow> controls = twdConfig.getFlows(res);

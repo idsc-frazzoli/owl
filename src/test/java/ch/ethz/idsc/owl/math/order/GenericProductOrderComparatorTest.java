@@ -60,16 +60,16 @@ public class GenericProductOrderComparatorTest extends TestCase {
     assertEquals(orderComparison3, OrderComparison.INCOMPARABLE);
     assertEquals(orderComparison4, OrderComparison.INDIFFERENT);
   }
-  
-   public void testTensor() {
-   Tensor tensorX = Tensors.fromString("{{1,2,3}, 10}");
-   Tensor tensorY = Tensors.fromString("{{2,3,4,5},7}");
-   BinaryRelation<Tensor> relation1 = (x, y) -> x.length() <= y.length();
-   List<OrderComparator> comparators = Arrays.asList( //
-   Order.comparator(relation1), //
-   Order.comparator(Scalars::lessEquals)); //
-   GenericProductOrderComparator genericProductOrder = new GenericProductOrderComparator(comparators);
-   OrderComparison orderComparison = genericProductOrder.compare(tensorX, tensorY);
-   assertEquals(orderComparison, OrderComparison.INCOMPARABLE);
-   }
+
+  public void testTensor() {
+    Tensor tensorX = Tensors.fromString("{{1,2,3}, 10}");
+    Tensor tensorY = Tensors.fromString("{{2,3,4,5},7}");
+    BinaryRelation<Tensor> relation1 = (x, y) -> x.length() <= y.length();
+    List<OrderComparator> comparators = Arrays.asList( //
+        Order.comparator(relation1), //
+        Order.comparator(Scalars::lessEquals)); //
+    GenericProductOrderComparator genericProductOrder = new GenericProductOrderComparator(comparators);
+    OrderComparison orderComparison = genericProductOrder.compare(tensorX, tensorY);
+    assertEquals(orderComparison, OrderComparison.INCOMPARABLE);
+  }
 }

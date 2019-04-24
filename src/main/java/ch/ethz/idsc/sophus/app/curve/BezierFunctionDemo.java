@@ -53,7 +53,7 @@ public class BezierFunctionDemo extends CurveDemo {
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, false, geometricLayer, graphics);
     if (levels < 5)
-      renderPoints(geometricLayer, graphics, refined);
+      renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
   }
 

@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int radius = spinnerRadius.getValue();
-    // TODO OB: adapt symLinkImages to new filter structure
+    // TODO OB adapt symLinkImages to new filter structure
     // if (jToggleSymi.isSelected())
     // graphics.drawImage(SymLinkImages.causalIIR(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).bufferedImage(), 0, 0, null);
     if (0 < radius) {

@@ -9,8 +9,8 @@ public enum AbstractDemoHelper {
       if (abstractDemo instanceof ControlPointsDemo) {
         Thread.sleep(200);
         ControlPointsDemo controlPointsDemo = (ControlPointsDemo) abstractDemo;
-        for (int index = 0; index < controlPointsDemo.geodesicDisplaySpinner.numel(); ++index) {
-          controlPointsDemo.geodesicDisplaySpinner.setIndex(index);
+        for (GeodesicDisplay geodesicDisplay : controlPointsDemo.getGeodesicDisplays()) {
+          controlPointsDemo.setGeodesicDisplay(geodesicDisplay);
           Thread.sleep(200);
         }
       } else

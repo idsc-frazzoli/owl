@@ -6,7 +6,6 @@ import java.util.Optional;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Mod;
 
 public final class NaiveEntryFinder extends TrajectoryEntryFinder {
   public NaiveEntryFinder(int initialIndex) {
@@ -15,7 +14,13 @@ public final class NaiveEntryFinder extends TrajectoryEntryFinder {
 
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar var) {
-    Scalar index = Mod.function(waypoints.length()).apply(var);
-    return new TrajectoryEntry(Optional.of(waypoints.get(index.number().intValue())), index);
+    int index = var.number().intValue();
+    Optional<Tensor> point = Optional.empty();
+    try {
+      point = Optional.of(waypoints.get(index));
+    } catch (IndexOutOfBoundsException e) {
+      // ---
+    }
+    return new TrajectoryEntry(point, RealScalar.of(index));
   }
 }

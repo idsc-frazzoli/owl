@@ -5,12 +5,12 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.VectorTotal;
+import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class WindowSideSamplerTest extends TestCase {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorTotal.FUNCTION);
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
 
   public void testExact() {
     WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.HANN);

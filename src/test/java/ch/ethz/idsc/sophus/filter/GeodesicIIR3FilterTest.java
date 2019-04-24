@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import junit.framework.TestCase;
 
-//TODO: OB/JH überprüfen ob werte im asserEquals sinnvoll sind.
+//TODO OB/JH überprüfen ob werte im asserEquals sinnvoll sind.
 public class GeodesicIIR3FilterTest extends TestCase {
   public void testTranslation() {
     Tensor p = Tensors.vector(0, 0, 0);

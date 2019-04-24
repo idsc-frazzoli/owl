@@ -12,6 +12,7 @@ public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
   @Override // from TrajectoryEntryFinder
   public TrajectoryEntry protected_apply(Tensor waypoints, Scalar distance) {
     Tensor waypoints_ = Tensor.of(waypoints.stream().map(Extract2D.FUNCTION));
+    // TODO how to handle heading?
     return new TrajectoryEntry(new CircleCurveIntersection(distance).string(waypoints_), distance);
   }
 }

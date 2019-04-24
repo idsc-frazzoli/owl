@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 public class PurePursuit {
   /** @param lookAhead {x, y, ...} where x is positive
-   * @return rate with interpretation rad*m^-1, or empty if the first coordinate
+   * @return rate with interpretation in [m^-1], or empty if the first coordinate
    * of the look ahead beacon is non-positive
    * @throws Exception if lookAhead has insufficient length */
   public static Optional<Scalar> ratioPositiveX(Tensor lookAhead) {
@@ -26,7 +26,7 @@ public class PurePursuit {
   }
 
   /** @param lookAhead {x, y, ...} where x is negative
-   * @return rate with interpretation rad*m^-1, or empty if the first coordinate
+   * @return rate with interpretation in [m^-1], or empty if the first coordinate
    * of the look ahead beacon is non-positive
    * @throws Exception if lookAhead has insufficient length */
   public static Optional<Scalar> ratioNegativeX(Tensor lookAhead) {
@@ -35,7 +35,10 @@ public class PurePursuit {
     return ratioPositiveX(target);
   }
 
-  /** @param tensor of waypoints {{x1, y1}, {x2, y2}, ...}
+  /** function also works with units, for instance if point coordinates and
+   * distance are provided with "m" the ratio will be a quantity with unit "m^-1".
+   * 
+   * @param tensor of waypoints {{x1, y1}, {x2, y2}, ...}
    * @param distance to look ahead
    * @return */
   public static PurePursuit fromTrajectory(Tensor tensor, Scalar distance) {

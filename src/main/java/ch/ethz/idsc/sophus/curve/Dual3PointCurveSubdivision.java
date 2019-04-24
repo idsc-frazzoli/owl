@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 
 /** dual scheme
  * 
@@ -29,7 +29,7 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
   public final Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
-    Tensor curve = Tensors.empty();
+    Tensor curve = Unprotect.empty(2 * length);
     for (int index = 0; index < length; ++index) {
       Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
@@ -42,19 +42,20 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
   @Override // from CurveSubdivision
   public final Tensor string(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
-    switch (tensor.length()) {
+    int length = tensor.length();
+    switch (length) {
     case 0:
     case 1:
       return tensor.copy();
     }
     // ---
-    Tensor curve = Tensors.empty();
+    Tensor curve = Unprotect.empty(2 * length);
     {
       Tensor p = tensor.get(0);
       Tensor q = tensor.get(1);
       curve.append(lo(p, q)); // Chaikin's rule
     }
-    int last = tensor.length() - 1;
+    int last = length - 1;
     for (int index = 1; index < last; ++index) {
       Tensor p = tensor.get(index - 1);
       Tensor q = tensor.get(index);

@@ -40,7 +40,7 @@ public class FrequencyResponsePlot {
     Scalar b = minimizingAlphas.Get(signal);
     Tensor a = windowSideSampler.apply(Scalars.intValueExact(minimizingFilterlengths.Get(signal)))
         .multiply(RealScalar.ONE.subtract(minimizingAlphas.Get(signal)));
-    String test = "test";
+    // String test = "test";
     Tensor omegaRange = Subdivide.of(0, Math.PI, 200);
     Tensor resultAbs = Tensors.empty();
     Tensor resultPhase = Tensors.empty();
@@ -74,9 +74,9 @@ public class FrequencyResponsePlot {
       Tensor values_xdot = process(ylabel, 2);
       Tensor values_adot = process(ylabel, 3);
       Tensor domain = Subdivide.of(0, Math.PI, values_x.length() - 1);
-      visualSet.setAxesLabelX("omega [rad/s]");
+      visualSet.setAxesLabelX("omega [s^-1]");
       if (i == 0)
-        visualSet.setAxesLabelY("Phase Delay [rad]");
+        visualSet.setAxesLabelY("Phase Delay []");
       else
         visualSet.setAxesLabelY("Magnitude Gain [-]");
       {

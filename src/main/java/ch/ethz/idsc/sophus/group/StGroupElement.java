@@ -50,6 +50,11 @@ public class StGroupElement implements LieGroupElement, Serializable {
         stGroupElement.t.multiply(lambda).add(t));
   }
 
+  @Override // from LieGroupElement
+  public Tensor adjoint(Tensor tensor) {
+    throw new UnsupportedOperationException();
+  }
+
   // function for convenience and testing
   public Tensor toTensor() {
     return Tensors.of(lambda, t);

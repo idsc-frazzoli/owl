@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   }
 
   @Override // from RenderInterface
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+  public synchronized void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     Tensor control = control();
     int radius = spinnerRadius.getValue();
@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     Tensor curve = Nest.of(BSpline4CurveSubdivision.of(geodesicDisplay.geodesicInterface())::string, refined, 7);
     Tensor render = Tensor.of(curve.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, false, geometricLayer, graphics);
-    renderPoints(geometricLayer, graphics, refined);
+    renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.planar;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -13,7 +14,11 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public class CircleCurveIntersection implements CurveIntersection {
+/** intersection with circle centered at (0, 0) and given radius.
+ * 
+ * input to intersection query is either a non-cyclic or cyclic polygon
+ * the output is the coordinate of intersection using linear interpolation. */
+public class CircleCurveIntersection implements CurveIntersection, Serializable {
   private final Scalar distance;
 
   public CircleCurveIntersection(Scalar radius) {

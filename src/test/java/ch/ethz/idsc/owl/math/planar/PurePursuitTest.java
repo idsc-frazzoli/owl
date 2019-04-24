@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -20,6 +21,13 @@ import junit.framework.TestCase;
 
 public class PurePursuitTest extends TestCase {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+
+  public void testRatioForwardLeftPositiveXUnit() {
+    Tensor tensor = Tensors.fromString("{{.2[m],0[m]},{1[m],1[m]}}");
+    PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, Quantity.of(1.0, "m"));
+    Clip clip = Clips.interval(Quantity.of(1.2, "m^-1"), Quantity.of(1.5, "m^-1"));
+    clip.requireInside(purePursuit.ratio().get());
+  }
 
   public void testMatch2() {
     Tensor curve = Tensors.fromString("{{-0.4},{0.6},{1.4},{2.2}}");

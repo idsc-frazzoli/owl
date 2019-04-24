@@ -7,6 +7,7 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
 /** linear B-spline
@@ -30,9 +31,11 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
   public Tensor string(Tensor tensor) {
     if (Tensors.isEmpty(tensor))
       return Tensors.empty();
-    Tensor curve = tensor.extract(0, 1);
+    int length = tensor.length();
+    Tensor curve = Unprotect.empty(2 * length);
     Tensor p = tensor.get(0);
-    for (int index = 1; index < tensor.length(); ++index) {
+    curve.append(p);
+    for (int index = 1; index < length; ++index) {
       Tensor q = tensor.get(index);
       curve.append(center(p, q)).append(p = q);
     }

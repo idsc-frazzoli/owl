@@ -60,7 +60,26 @@ public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
         pa.add(qa));
   }
 
+  @Override // from LieGroupElement
+  public Tensor adjoint(Tensor uvw) {
+    Scalar u = uvw.Get(0);
+    Scalar v = uvw.Get(1);
+    Scalar w = uvw.Get(2);
+    return Tensors.of( //
+        ca.multiply(u).subtract(sa.multiply(v)).add(py.multiply(w)), //
+        sa.multiply(u).add(ca.multiply(v)).subtract(px.multiply(w)), //
+        w);
+  }
+
   Se2CoveringGroupElement create(Scalar px, Scalar py, Scalar pa, Scalar ca, Scalar sa) {
     return new Se2CoveringGroupElement(px, py, pa, ca, sa);
+  }
+
+  /** @return vector of coordinates of inverse */
+  /* package */ final Tensor inverseTensor() {
+    return Tensors.of( //
+        px.multiply(ca).add(py.multiply(sa)).negate(), //
+        px.multiply(sa).subtract(py.multiply(ca)), //
+        pa.negate());
   }
 }

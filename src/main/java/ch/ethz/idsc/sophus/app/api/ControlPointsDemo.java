@@ -129,7 +129,9 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     POINTS_RENDER_0.new Show(geodesicDisplay(), control()).render(geometricLayer, graphics);
   }
 
-  protected final void renderPoints(GeometricLayer geometricLayer, Graphics2D graphics, Tensor points) {
-    POINTS_RENDER_1.new Show(geodesicDisplay(), points).render(geometricLayer, graphics);
+  protected final static void renderPoints( //
+      GeodesicDisplay geodesicDisplay, Tensor points, //
+      GeometricLayer geometricLayer, Graphics2D graphics) {
+    POINTS_RENDER_1.new Show(geodesicDisplay, points).render(geometricLayer, graphics);
   }
 }

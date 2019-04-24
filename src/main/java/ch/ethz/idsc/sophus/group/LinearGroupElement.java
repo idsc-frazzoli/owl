@@ -15,21 +15,33 @@ import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
  * 
  * @see So3Geodesic */
 public class LinearGroupElement implements LieGroupElement, Serializable {
-  private final Tensor matrix;
-
   /** @param matrix square and invertible
-   * @throws Exception if given matrix is not square */
-  public LinearGroupElement(Tensor matrix) {
-    this.matrix = SquareMatrixQ.require(matrix);
+   * @return
+   * @throws Exception if given matrix is not invertible */
+  public static LinearGroupElement of(Tensor matrix) {
+    return new LinearGroupElement(matrix, Inverse.of(matrix));
+  }
+
+  private final Tensor matrix;
+  private final Tensor inverse;
+
+  private LinearGroupElement(Tensor matrix, Tensor inverse) {
+    this.matrix = matrix;
+    this.inverse = inverse;
   }
 
   @Override // from LieGroupElement
   public LinearGroupElement inverse() {
-    return new LinearGroupElement(Inverse.of(matrix));
+    return new LinearGroupElement(inverse, matrix);
   }
 
   @Override // from LieGroupElement
   public Tensor combine(Tensor tensor) {
     return matrix.dot(SquareMatrixQ.require(tensor));
+  }
+
+  @Override // from LieGroupElement
+  public Tensor adjoint(Tensor tensor) {
+    return matrix.dot(SquareMatrixQ.require(tensor)).dot(inverse);
   }
 }
