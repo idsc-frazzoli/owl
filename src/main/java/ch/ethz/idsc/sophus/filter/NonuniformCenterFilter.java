@@ -34,7 +34,7 @@ public class NonuniformCenterFilter {
     this.control = control;
   }
 
-  private Tensor selection(Tensor state) {
+  /* package */ Tensor selection(Tensor state) {
     Tensor extracted = Tensors.empty();
     for (int index = 0; index < control.length(); ++index) {
       // check if t_i - I <= t_index <= t_i + I
@@ -50,7 +50,7 @@ public class NonuniformCenterFilter {
   }
 
   // Create the masks of the extracted
-  private Tensor splits(Tensor extracted, Tensor state) {
+   /* package */ Tensor splits(Tensor extracted, Tensor state) {
     Tensor mL = Tensors.empty();
     Tensor mR = Tensors.empty();
     for (int index = 0; index < extracted.length(); ++index) {
@@ -71,7 +71,7 @@ public class NonuniformCenterFilter {
     return Tensors.of(splitsLeft, splitsFinal, splitsRight);
   }
 
-  private Tensor apply(Tensor splits, Tensor extracted, Tensor state) {
+  public Tensor apply(Tensor splits, Tensor extracted, Tensor state) {
     // FIXME OB not generic
     Tensor tempL = extracted.get(0).extract(1, 4);
     for (int index = 0; index < splits.get(0).length(); ++index)
