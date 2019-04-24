@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -15,19 +16,19 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
    * @param radius
    * @return */
-  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, int radius) {
-    return new GeodesicExtrapolationFilter(geodesicExtrapolation, radius);
+  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius) {
+    return new GeodesicExtrapolationFilter(geodesicExtrapolation, geodesicInterface, radius);
   }
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
+  private final GeodesicInterface geodesicInterface;
   // private final int radius;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, int radius) {
+  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius) {
     this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
-    // TODO OB radius is not used
-    // this.radius = radius;
+    this.geodesicInterface = geodesicInterface;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 
@@ -44,8 +45,7 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
       Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
       // Measurement update step
       Scalar alpha = RealScalar.of(0.2);
-      // FIXME OB use of Se2Geodesic is not generic
-      temp = Se2Geodesic.INSTANCE.split(temp, tensor.get(index + 1), alpha);
+      temp = geodesicInterface.split(temp, tensor.get(index + 1), alpha);
       boundedLinkedList.add(temp);
       result.append(temp);
     }

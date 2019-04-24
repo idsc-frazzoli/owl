@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -14,7 +13,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -96,24 +94,14 @@ public class NonuniformFilter implements TensorUnaryOperator {
 
   @Override
   public Tensor apply(Tensor tensor) {
-    System.out.println(tensor);
     Tensor splits = Tensors.empty();
     if (!boundedLinkedList.isEmpty())
       splits = splits(createAffineMask(boundedLinkedList, length));
     Tensor value = boundedLinkedList.size() < 2 //
         ? tensor.copy()
         : geodesicInterface.split(process(Tensor.of(boundedLinkedList.stream().map(StateTime::state)), splits), tensor, alpha);
-    System.out.println(value);
-    StateTime stateTime = new StateTime(value, tensor.Get(0));
+    StateTime stateTime = new StateTime(value, tensor.get(0).Get(0));
     boundedLinkedList.add(stateTime);
     return value;
-  }
-
-  // TODO OB convert main() to test, remove main()
-  public static void main(String[] args) {
-    Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/2r/20180820T165637_1.csv").stream() //
-        .map(row -> row.extract(0, 4)));
-    NonuniformFilter nonuniformFilter = new NonuniformFilter(Se2Geodesic.INSTANCE, RealScalar.of(4), RealScalar.of(0.4));
-    nonuniformFilter.apply(control);
   }
 }

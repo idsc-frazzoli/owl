@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     // ---
     TensorUnaryOperator tensorUnaryOperator = //
         GeodesicExtrapolation.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
-    refined = GeodesicExtrapolationFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
+    refined = GeodesicExtrapolationFilter.of(tensorUnaryOperator, geodesicDisplay().geodesicInterface(), spinnerRadius.getValue()).apply(control());
   }
 
   @Override // from RenderInterface
