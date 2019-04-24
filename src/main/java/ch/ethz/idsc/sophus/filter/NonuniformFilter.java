@@ -19,8 +19,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /** input to the operator are the individual elements of the sequence */
 public class NonuniformFilter implements TensorUnaryOperator {
-  /** @param geodesicExtrapolation
-   * @param geodesicInterface
+  /** @param geodesicInterface
    * @param radius
    * @param alpha
    * @return

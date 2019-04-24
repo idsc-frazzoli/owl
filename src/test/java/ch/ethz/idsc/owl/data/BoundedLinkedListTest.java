@@ -43,8 +43,10 @@ public class BoundedLinkedListTest extends TestCase {
 
   public void testEmpty() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(0);
+    assertEquals(boundedLinkedList.size(), 0);
     assertFalse(boundedLinkedList.add(0));
     assertFalse(boundedLinkedList.add(1));
+    assertEquals(boundedLinkedList.size(), 0);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

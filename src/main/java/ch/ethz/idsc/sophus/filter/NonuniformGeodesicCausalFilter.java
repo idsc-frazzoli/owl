@@ -39,11 +39,12 @@ public class NonuniformGeodesicCausalFilter implements TensorUnaryOperator {
     Tensor extracted = Tensors.empty();
     for (int index = 0; index < control.length(); ++index) {
       // check if t_i - I <= t_index <= 0
-      if (Scalars.lessEquals(state.Get(0).subtract(interval), control.get(index).Get(0)) && Scalars.lessEquals(control.get(index).Get(0), state.Get(0))) {
+      if (Scalars.lessEquals(state.Get(0).subtract(interval), control.get(index).Get(0)) && //
+          Scalars.lessEquals(control.get(index).Get(0), state.Get(0)))
         extracted.append(control.get(index));
-      }
       // if tensor extracted is non-empty and the previous statement is false, then we passed the range of interest
-      else if (!Tensors.isEmpty(extracted))
+      else //
+      if (!Tensors.isEmpty(extracted))
         break;
     }
     extracted.append(state);

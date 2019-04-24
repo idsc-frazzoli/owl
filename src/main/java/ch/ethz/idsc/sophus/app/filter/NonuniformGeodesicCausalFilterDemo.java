@@ -26,6 +26,7 @@ public class NonuniformGeodesicCausalFilterDemo extends StateTimeDatasetKernelDe
   protected void updateStateTime() {
     super.updateStateTime();
     Scalar interval = RationalScalar.of(spinnerRadius.getValue(), 10);
+    // TODO OB is Se2Geodesic.INSTANCE sufficiently generic here?
     TensorUnaryOperator tensorUnaryOperator = NonuniformGeodesicExtrapolation.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
     refined = Tensor.of(NonuniformGeodesicCausalFilter.of(tensorUnaryOperator, interval).apply(controlStateTime()).stream().map(st -> st.extract(1, 4)));
   }

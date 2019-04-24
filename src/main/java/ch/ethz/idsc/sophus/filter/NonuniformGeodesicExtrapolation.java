@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -46,9 +47,8 @@ public class NonuniformGeodesicExtrapolation implements TensorUnaryOperator {
     }
     // Calculate extrapolation split
     Scalar temp = RealScalar.ONE;
-    for (int index = 0; index < splits.length(); index++) {
+    for (int index = 0; index < splits.length(); ++index)
       temp = temp.multiply(RealScalar.ONE.subtract(splits.Get(index))).add(RealScalar.ONE);
-    }
     // Samplings is the number of sampling frequencies to the next step
     splits.append(samplings.add(temp.reciprocal()));
     return splits;
@@ -57,14 +57,15 @@ public class NonuniformGeodesicExtrapolation implements TensorUnaryOperator {
   private Tensor tensorToSplit(Tensor extracted, Scalar interval, Scalar samplings) {
     // extract times
     Tensor mask = Tensors.empty();
-    Tensor state = extracted.get(extracted.length() - 1);
+    Tensor state = Last.of(extracted);
+    Scalar interval2 = interval.add(interval);
     for (int index = 0; index < extracted.length(); ++index) {
-      Scalar converted = extracted.get(index).Get(0).subtract(state.Get(0)).divide(interval.add(interval));
+      Scalar converted = extracted.Get(index, 0).subtract(state.Get(0)).divide(interval2);
       mask.append(smoothingKernel.apply(converted));
     }
+    // TODO OB possibly use Total::ofVector for normalization, because some kernels contain negative values
     mask = Normalize.with(Norm._1).apply(mask);
-    Tensor splits = maskToSplits(mask, samplings);
-    return splits;
+    return maskToSplits(mask, samplings);
   }
 
   @Override // from TensorUnaryOperator
@@ -73,10 +74,10 @@ public class NonuniformGeodesicExtrapolation implements TensorUnaryOperator {
     Scalar interval = tensor.Get(1);
     Scalar samplings = tensor.Get(2);
     Tensor splits = tensorToSplit(extracted, interval, samplings);
+    // TODO OB not generic, also below
     Tensor result = extracted.get(0).extract(1, 4);
-    for (int index = 0; index < splits.length(); ++index) {
+    for (int index = 0; index < splits.length(); ++index)
       result = geodesicInterface.split(result, extracted.get(index + 1).extract(1, 4), splits.Get(index));
-    }
     return Tensors.of(extracted.get(extracted.length() - 1).Get(0), result.Get(0), result.Get(1), result.Get(2));
   }
 }
