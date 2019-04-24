@@ -8,11 +8,11 @@ import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.Differences;
-import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.FoldList;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
     differencesNorm = Tensor.of(differences.stream().map(Norm._2::ofVector));
     curvature = SignedCurvature2D.string(points);
     arcLength0 = Accumulate.of(differencesNorm);
-    arcLength1 = Join.of(Tensors.vector(0), arcLength0);
+    arcLength1 = FoldList.of(Tensor::add, RealScalar.ZERO, differencesNorm);
   }
 
   public void addCurvature() {
