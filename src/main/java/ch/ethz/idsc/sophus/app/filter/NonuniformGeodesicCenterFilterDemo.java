@@ -20,16 +20,11 @@ public class NonuniformGeodesicCenterFilterDemo extends StateTimeDatasetKernelDe
     updateStateTime();
   }
 
-  @Override
-  protected void updateStateTime() {
-    super.updateStateTime();
+  @Override // from RenderInterface
+  protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Scalar interval = RationalScalar.of(spinnerRadius.getValue(), 10);
     TensorUnaryOperator tensorUnaryOperator = NonuniformGeodesicCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
     refined = NonuniformGeodesicCenterFilter.of(tensorUnaryOperator, interval).apply(controlStateTime());
-  }
-
-  @Override // from RenderInterface
-  protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     return refined;
   }
 
