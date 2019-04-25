@@ -23,7 +23,6 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.Exp;
 
-//TODO OB under construction!
 public class FrequencyResponsePlot {
   private Tensor minimizingAlphas;
   private Tensor minimizingKernels;

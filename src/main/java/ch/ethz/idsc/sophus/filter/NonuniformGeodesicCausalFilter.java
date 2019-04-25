@@ -11,28 +11,26 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Abs;
 
-public class NonuniformGeodesicCenterFilter implements TensorUnaryOperator {
+public class NonuniformGeodesicCausalFilter implements TensorUnaryOperator {
   /** @param geodesicCenter
    * @param (temporal) radius
    * @return
    * @throws Exception if given geodesicCenter is null */
   public static TensorUnaryOperator of(TensorUnaryOperator tensorUnaryOperator, Scalar radius) {
-    return new NonuniformGeodesicCenterFilter(Objects.requireNonNull(tensorUnaryOperator), radius);
+    return new NonuniformGeodesicCausalFilter(Objects.requireNonNull(tensorUnaryOperator), radius);
   }
 
   // ---
   private final TensorUnaryOperator tensorUnaryOperator;
   private final Scalar radius;
 
-  private NonuniformGeodesicCenterFilter(TensorUnaryOperator tensorUnaryOperator, Scalar radius) {
+  private NonuniformGeodesicCausalFilter(TensorUnaryOperator tensorUnaryOperator, Scalar radius) {
     this.tensorUnaryOperator = tensorUnaryOperator;
     this.radius = radius;
   }
 
   private Scalar interval(Tensor control, Tensor state) {
-    Scalar lo = Min.of(Abs.FUNCTION.apply(state.Get(0).subtract(control.get(0).Get(0))), radius);
-    Scalar hi = Min.of(Abs.FUNCTION.apply(state.Get(0).subtract(control.get(control.length() - 1).Get(0))), radius);
-    return Min.of(lo, hi);
+    return Min.of(Abs.FUNCTION.apply(state.Get(0).subtract(control.get(0).Get(0))), radius);
   }
 
   // We select all elements of control which are (timewise) within a interval of the given state
@@ -40,33 +38,37 @@ public class NonuniformGeodesicCenterFilter implements TensorUnaryOperator {
     // Make sure that the interval is always symmetric around the current state
     Tensor extracted = Tensors.empty();
     for (int index = 0; index < control.length(); ++index) {
-      // check if t_i - I <= t_index <= t_i + I
+      // check if t_i - I <= t_index <= 0
       if (Scalars.lessEquals(state.Get(0).subtract(interval), control.get(index).Get(0)) && //
-          Scalars.lessEquals(control.get(index).Get(0), state.Get(0).add(interval)))
+          Scalars.lessEquals(control.get(index).Get(0), state.Get(0)))
         extracted.append(control.get(index));
       // if tensor extracted is non-empty and the previous statement is false, then we passed the range of interest
       else //
-      if (Tensors.nonEmpty(extracted))
+      if (!Tensors.isEmpty(extracted))
         break;
     }
+    extracted.append(state);
     return extracted;
   }
 
   @Override
   public Tensor apply(Tensor tensor) {
-    Tensor result = Tensors.empty();
-    for (int index = 0; index < tensor.length(); ++index) {
+    // FIXME OB: zweiter eintrag ist doppelt
+    // TODO OB: Nach refinement zieht sich control sequence zusammen.
+    Tensor result = tensor.extract(0, 2);
+    for (int index = 1; index < tensor.length() - 2; ++index) {
       Tensor state = tensor.get(index);
-      Scalar interval = interval(tensor, state);
-      Tensor extracted = selection(tensor, state, interval);
-      if (extracted.length() == 1)
-        // FIXME OB not generic
-        result.append(state.extract(1, 4));
-      else
-        // FIXME OB not generic
-        result.append(tensorUnaryOperator.apply(Tensors.of(extracted, state, interval)).extract(1, 4));
+      Scalar interval = interval(result, state);
+      // problem with selection!
+      Tensor extracted = selection(result, state, interval);
+      if (extracted.length() <= 1) {
+        result.append(state);
+      } else {
+        Scalar samplings = tensor.get(index + 1).Get(0).subtract(tensor.get(index).Get(0));
+        Tensor temp = tensorUnaryOperator.apply(Tensors.of(extracted, interval, samplings));
+        result.append(temp);
+      }
     }
-    System.err.println(result);
     return result;
   }
 }

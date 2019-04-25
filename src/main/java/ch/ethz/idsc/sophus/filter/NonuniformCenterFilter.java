@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -35,12 +34,12 @@ public class NonuniformCenterFilter {
     this.control = control;
   }
 
-  private Tensor selection(Tensor state) {
+  /* package */ Tensor selection(Tensor state) {
     Tensor extracted = Tensors.empty();
     for (int index = 0; index < control.length(); ++index) {
       // check if t_i - I <= t_index <= t_i + I
-      if (Scalars.lessEquals(state.Get(0).subtract(interval), control.get(index).Get(0))
-          && Scalars.lessEquals(control.get(index).Get(0), state.Get(0).add(interval)))
+      if (Scalars.lessEquals(state.Get(0).subtract(interval), control.Get(index, 0)) && //
+          Scalars.lessEquals(control.Get(index, 0), state.Get(0).add(interval)))
         extracted.append(control.get(index));
       // if tensor extracted is non-empty and the previous statement is false, then we passed the range of interest
       else //
@@ -51,7 +50,7 @@ public class NonuniformCenterFilter {
   }
 
   // Create the masks of the extracted
-  private Tensor splits(Tensor extracted, Tensor state) {
+  /* package */ Tensor splits(Tensor extracted, Tensor state) {
     Tensor mL = Tensors.empty();
     Tensor mR = Tensors.empty();
     for (int index = 0; index < extracted.length(); ++index) {
@@ -72,7 +71,7 @@ public class NonuniformCenterFilter {
     return Tensors.of(splitsLeft, splitsFinal, splitsRight);
   }
 
-  private Tensor apply(Tensor splits, Tensor extracted, Tensor state) {
+  public Tensor apply(Tensor splits, Tensor extracted, Tensor state) {
     // FIXME OB not generic
     Tensor tempL = extracted.get(0).extract(1, 4);
     for (int index = 0; index < splits.get(0).length(); ++index)
@@ -82,20 +81,5 @@ public class NonuniformCenterFilter {
       tempR = geodesicInterface.split(extracted.get(extracted.length() - 1 - index).extract(1, 4), tempR, RealScalar.ONE.subtract(splits.get(2).Get(index)));
     Tensor resultState = geodesicInterface.split(tempL, tempR, splits.get(1).Get(0));
     return Tensors.of(state.Get(0), resultState.Get(0), resultState.Get(1), resultState.Get(2));
-  }
-
-  // TODO OB convert main() to test, remove main()
-  public static void main(String[] args) {
-    // RawData: time and states with same length
-    Tensor control = Tensors.fromString("{{0,0,0,0},{1,1,0,0},{2,2,0,0},{3,3,3,0},{3.5,4,5,0},{4,6,2,0},{5,3,3,0},{7,9,2,0}}");
-    NonuniformCenterFilter nonuniformCenterFilter = new NonuniformCenterFilter(Se2Geodesic.INSTANCE, RealScalar.of(0.2), control);
-    Tensor result = Tensors.empty();
-    for (int i = 0; i < control.length(); ++i) {
-      Tensor state = control.get(i);
-      Tensor extracted = nonuniformCenterFilter.selection(state);
-      Tensor splits = nonuniformCenterFilter.splits(extracted, state);
-      result.append(nonuniformCenterFilter.apply(splits, extracted, state));
-    }
-    System.out.println(result);
   }
 }
