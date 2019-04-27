@@ -1,10 +1,15 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.util.Arrays;
+import java.util.List;
+
 import ch.ethz.idsc.owl.demo.order.DigitSumDivisibilityPreorder;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
 public class TransitiveMinTrackerTest extends TestCase {
@@ -107,5 +112,17 @@ public class TransitiveMinTrackerTest extends TestCase {
     digitSumDivisibility.digest(333);
     assertTrue(digitSumDivisibility.getMinElements().contains(333));
     assertTrue(digitSumDivisibility.getMinElements().size() == 1);
+  }
+
+  public void testLexicographic() {
+    List<OrderComparator> comparators = Arrays.asList( //
+        Order.comparator(Scalars::lessEquals), Order.comparator(Scalars::lessEquals)); //
+    Tensor tensorX = Tensors.fromString("{1,2}");
+    Tensor tensorY = Tensors.fromString("{2,3}");
+    GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
+    TransitiveMinTracker<Iterable<? extends Object>> lexTracker = TransitiveMinTracker.withSet(genericLexicographicOrder);
+    lexTracker.digest(tensorX);
+    lexTracker.digest(tensorY);
+    assertTrue(lexTracker.getMinElements().contains(tensorX));
   }
 }
