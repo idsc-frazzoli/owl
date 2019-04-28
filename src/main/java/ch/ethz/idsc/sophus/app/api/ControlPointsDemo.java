@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
+/** class is used in other projects outside of owl */
 public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private static final Scalar THRESHOLD = RealScalar.of(0.2);
   /** control points */

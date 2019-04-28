@@ -24,20 +24,20 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
 
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
-    ScalarQ.thenThrow(tensor);
     int length = tensor.length();
-    if (length < 2)
-      return tensor.copy();
-    return stringNonEmpty(tensor).append(center(Last.of(tensor), tensor.get(0)));
+    if (1 < length)
+      return stringNonEmpty(tensor).append(center(Last.of(tensor), tensor.get(0)));
+    ScalarQ.thenThrow(tensor);
+    return tensor.copy();
   }
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
-    ScalarQ.thenThrow(tensor);
     int length = tensor.length();
-    if (length < 2)
-      return tensor.copy();
-    return stringNonEmpty(tensor);
+    if (1 < length)
+      return stringNonEmpty(tensor);
+    ScalarQ.thenThrow(tensor);
+    return tensor.copy();
   }
 
   private Tensor stringNonEmpty(Tensor tensor) {

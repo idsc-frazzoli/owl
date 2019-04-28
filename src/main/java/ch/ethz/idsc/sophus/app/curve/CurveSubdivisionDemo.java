@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Nest;
 
-public class CurveSubdivisionDemo extends CurveDemo {
+public class CurveSubdivisionDemo extends CurvatureDemo {
   private static final Tensor MODEL2PIXEL = Tensors.matrixDouble(new double[][] //
   { { 50, 0, 100 }, { 0, -50, 640 }, { 0, 0, 1 } });
   // ---
