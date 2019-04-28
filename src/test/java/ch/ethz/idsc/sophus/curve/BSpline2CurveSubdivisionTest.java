@@ -63,6 +63,13 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
     ExactTensorQ.require(refined);
   }
 
+  public void testCyclicEmpty() {
+    Tensor curve = Tensors.vector();
+    Tensor refined = CURVE_SUBDIVISION.cyclic(curve);
+    assertTrue(Tensors.isEmpty(refined));
+    ExactTensorQ.require(refined);
+  }
+
   public void testStringRange() {
     int length = 9;
     Tensor curve = Range.of(0, length + 1);
@@ -70,6 +77,12 @@ public class BSpline2CurveSubdivisionTest extends TestCase {
     Tensor tensor = Subdivide.of(0, length, length * 2).map(scalar -> scalar.add(RationalScalar.of(1, 4)));
     assertEquals(refined, tensor.extract(0, tensor.length() - 1));
     ExactTensorQ.require(refined);
+  }
+
+  public void testSingleton() {
+    Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
+    assertEquals(CURVE_SUBDIVISION.cyclic(singleton), singleton);
+    assertEquals(CURVE_SUBDIVISION.string(singleton), singleton);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

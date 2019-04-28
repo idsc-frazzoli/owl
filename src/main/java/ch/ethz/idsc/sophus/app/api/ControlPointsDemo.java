@@ -18,11 +18,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.MatrixQ;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
@@ -38,7 +36,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private final JButton jButton = new JButton("clear");
   // private final JToggleButton jToggleComb = new JToggleButton("comb");
   // ---
-  private Tensor control = Tensors.of(Array.zeros(3));
+  private Tensor control = Tensors.empty();
   private Tensor mouse = Array.zeros(3);
   private Integer min_index = null;
   // ---
@@ -60,7 +58,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   };
   private final ActionListener actionListener = actionEvent -> {
     min_index = null;
-    control = Tensors.of(Array.zeros(3));
+    control = Tensors.empty();
   };
 
   public ControlPointsDemo(boolean clearButton, List<GeodesicDisplay> list) {
@@ -115,10 +113,8 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
 
   /** @param control points as matrix of dimensions N x 3 */
   public final void setControl(Tensor control) {
-    this.control = MatrixQ.require(control);
-    List<Integer> list = Dimensions.of(control);
-    if (list.get(1) != 3)
-      throw TensorRuntimeException.of(control);
+    this.control = Tensor.of(control.stream() //
+        .map(row -> VectorQ.requireLength(row, 3).map(Tensor::copy)));
   }
 
   public final Tensor control() {

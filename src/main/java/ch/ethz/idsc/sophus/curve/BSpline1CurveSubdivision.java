@@ -5,8 +5,8 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
@@ -24,13 +24,23 @@ public class BSpline1CurveSubdivision implements CurveSubdivision, Serializable 
 
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
-    return string(tensor).append(center(Last.of(tensor), tensor.get(0)));
+    ScalarQ.thenThrow(tensor);
+    int length = tensor.length();
+    if (length < 2)
+      return tensor.copy();
+    return stringNonEmpty(tensor).append(center(Last.of(tensor), tensor.get(0)));
   }
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
-    if (Tensors.isEmpty(tensor))
-      return Tensors.empty();
+    ScalarQ.thenThrow(tensor);
+    int length = tensor.length();
+    if (length < 2)
+      return tensor.copy();
+    return stringNonEmpty(tensor);
+  }
+
+  private Tensor stringNonEmpty(Tensor tensor) {
     int length = tensor.length();
     Tensor curve = Unprotect.empty(2 * length);
     Tensor p = tensor.get(0);
