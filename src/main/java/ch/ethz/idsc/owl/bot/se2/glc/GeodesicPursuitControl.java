@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, vector);
       Tensor ratios = geodesicPursuit.ratios();
       if (ratios.stream().map(Tensor::Get).allMatch(isCompliant))
-        return Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
+        return curveLength(geodesicPursuit.curve()); // Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
       return DoubleScalar.POSITIVE_INFINITY;
     };
     Scalar var = ArgMinVariable.using(entryFinder, mapping, MAX_LEVEL).apply(beacons);
@@ -97,6 +97,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
    * @return predicate to determine whether ratio is compliant with all posed turning ratio limits */
   private Predicate<Scalar> isCompliant(Tensor state, Scalar speed) {
     return ratio -> ratioClippers.stream().map(c -> c.at(state, speed)).allMatch(c -> c.isInside(ratio));
+  }
+
+  /** @param curve geodesic
+   * @return approximated length of curve */
+  private static Scalar curveLength(Tensor curve) {
+    Tensor curve_ = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
+    int n = curve_.length();
+    return curve_.extract(1, n).subtract(curve_.extract(0, n - 1)).stream().map(Norm._2::ofVector).reduce(Scalar::add).get();
   }
 
   /** @param dynamicLimit on turning ratio depending on state and speed */

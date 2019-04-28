@@ -24,9 +24,7 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
    * @return GeodesicPursuit */
   public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
     Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var).point;
-    if (lookAhead.isPresent())
-      return new GeodesicPursuit(geodesicInterface, lookAhead.get());
-    return VoidPursuit.INSTANCE;
+    return lookAhead.map(p -> (GeodesicPursuitInterface) new GeodesicPursuit(geodesicInterface, p)).orElse(VoidPursuit.INSTANCE);
   }
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
@@ -35,9 +33,7 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
    * @return GeodesicPursuit */
   public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder) {
     Optional<Tensor> lookAhead = entryFinder.initial(tensor).point;
-    if (lookAhead.isPresent())
-      return new GeodesicPursuit(geodesicInterface, lookAhead.get());
-    return VoidPursuit.INSTANCE;
+    return lookAhead.map(p -> (GeodesicPursuitInterface) new GeodesicPursuit(geodesicInterface, p)).orElse(VoidPursuit.INSTANCE);
   }
 
   // ---
