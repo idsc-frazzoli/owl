@@ -29,6 +29,20 @@ public class BSpline5CurveSubdivisionTest extends TestCase {
     }
   }
 
+  public void testEmpty() {
+    Tensor curve = Tensors.vector();
+    CurveSubdivision curveSubdivision = new BSpline5CurveSubdivision(RnGeodesic.INSTANCE);
+    assertEquals(curveSubdivision.string(curve), Tensors.empty());
+    assertEquals(curveSubdivision.cyclic(curve), Tensors.empty());
+  }
+
+  public void testSingleton() {
+    Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
+    CurveSubdivision curveSubdivision = new BSpline5CurveSubdivision(ClothoidCurve.INSTANCE);
+    assertEquals(curveSubdivision.cyclic(singleton), singleton);
+    assertEquals(curveSubdivision.string(singleton), singleton);
+  }
+
   public void testTerminal() {
     CurveSubdivision curveSubdivision = new BSpline5CurveSubdivision(RnGeodesic.INSTANCE);
     Clip clip = Clips.interval(1, 2);

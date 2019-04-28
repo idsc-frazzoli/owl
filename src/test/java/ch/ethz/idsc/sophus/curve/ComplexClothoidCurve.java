@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.planar.ArcTan2D;
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,7 +14,8 @@ import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.Real;
 
-public enum ClothoidCurve implements GeodesicInterface {
+/** original implementation */
+/* package */ enum ComplexClothoidCurve implements GeodesicInterface {
   INSTANCE;
   // ---
   private static final Tensor W = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
@@ -27,26 +29,17 @@ public enum ClothoidCurve implements GeodesicInterface {
   private static final Scalar _1_4 = RealScalar.of(0.25);
   private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
-  public static Tensor cvmult(Scalar il, Tensor vector) {
-    return Tensors.of( //
-        Real.FUNCTION.apply(il).multiply(vector.Get(0)).subtract(Imag.FUNCTION.apply(il).multiply(vector.Get(1))), //
-        Imag.FUNCTION.apply(il).multiply(vector.Get(0)).add(Real.FUNCTION.apply(il).multiply(vector.Get(1))) //
-    );
-  }
-
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    // Scalar px = p.Get(0);
-    // Scalar py = p.Get(1);
-    Tensor pxy = p.extract(0, 2);
-    Scalar pa = p.Get(2);
-    Tensor qxy = q.extract(0, 2);
-    Scalar qa = q.Get(2);
+    Scalar p0 = ComplexScalar.of(p.Get(0), p.Get(1));
+    Scalar a0 = p.Get(2);
+    Scalar p1 = ComplexScalar.of(q.Get(0), q.Get(1));
+    Scalar a1 = q.Get(2);
     // ---
-    Tensor diff = qxy.subtract(pxy);
-    Scalar da = ArcTan2D.of(diff);
-    Scalar b0 = MOD_DISTANCE.apply(pa.subtract(da));
-    Scalar b1 = MOD_DISTANCE.apply(qa.subtract(da));
+    Scalar d = p1.subtract(p0);
+    Scalar da = ArcTan2D.of(q.subtract(p));
+    Scalar b0 = MOD_DISTANCE.apply(a0.subtract(da));
+    Scalar b1 = MOD_DISTANCE.apply(a1.subtract(da));
     // ---
     Scalar f1 = b0.multiply(b0).add(b1.multiply(b1)).divide(_68);
     Scalar f2 = b0.multiply(b1).divide(_46);
@@ -61,16 +54,11 @@ public enum ClothoidCurve implements GeodesicInterface {
       Tensor xr = X.multiply(_1_t).map(t::add);
       Scalar il = wl.dot(xl.map(clothoidQuadratic)).Get();
       Scalar ir = wr.dot(xr.map(clothoidQuadratic)).Get();
-      Tensor nc = cvmult(il, diff).divide(il.add(ir));
-      Tensor ret_p = pxy.add(nc);
+      Scalar ret_p = p0.add(il.multiply(d).divide(il.add(ir)));
       Scalar ret_a = clothoidQuadratic.angle(t).add(da);
-      Scalar p0r = Real.FUNCTION.apply(ret_p.Get(0));
-      Scalar p1r = Real.FUNCTION.apply(ret_p.Get(1));
-      Scalar p0i = Imag.FUNCTION.apply(ret_p.Get(0));
-      Scalar p1i = Imag.FUNCTION.apply(ret_p.Get(1));
       return Tensors.of( //
-          p0r.subtract(p1i), //
-          p0i.add(p1r), //
+          Real.FUNCTION.apply(ret_p), //
+          Imag.FUNCTION.apply(ret_p), //
           ret_a);
     };
   }

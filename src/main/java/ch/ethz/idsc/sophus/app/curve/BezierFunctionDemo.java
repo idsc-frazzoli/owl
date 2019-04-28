@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** Bezier function with extrapolation */
-public class BezierFunctionDemo extends CurveDemo {
+public class BezierFunctionDemo extends CurvatureDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
   public BezierFunctionDemo() {

@@ -59,4 +59,21 @@ public class LaneRiesenfeldCurveSubdivisionTest extends TestCase {
     assertEquals(curveSubdivisiom.cyclic(tensor), cyclic);
     ExactTensorQ.require(cyclic);
   }
+
+  public void testEmpty() {
+    for (int degree = 1; degree < 4; ++degree) {
+      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, degree);
+      assertEquals(curveSubdivision.cyclic(Tensors.empty()), Tensors.empty());
+      assertEquals(curveSubdivision.string(Tensors.empty()), Tensors.empty());
+    }
+  }
+
+  public void testSingleton() {
+    Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
+    for (int degree = 1; degree < 4; ++degree) {
+      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, degree);
+      assertEquals(curveSubdivision.cyclic(singleton), singleton);
+      assertEquals(curveSubdivision.string(singleton), singleton);
+    }
+  }
 }

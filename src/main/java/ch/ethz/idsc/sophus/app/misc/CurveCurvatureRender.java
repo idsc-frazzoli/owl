@@ -25,10 +25,14 @@ public enum CurveCurvatureRender {
    * @param geometricLayer
    * @param graphics */
   public static void of(Tensor refined, boolean isCyclic, GeometricLayer geometricLayer, Graphics2D graphics) {
+    of(refined, isCyclic, COMB_SCALE, geometricLayer, graphics);
+  }
+
+  public static void of(Tensor refined, boolean isCyclic, Scalar scale, GeometricLayer geometricLayer, Graphics2D graphics) {
     if (0 < refined.length())
       if (Unprotect.dimension1(refined) != 2)
         throw TensorRuntimeException.of(refined);
     PATH_RENDER_CURVE.setCurve(refined, isCyclic).render(geometricLayer, graphics);
-    PATH_RENDER_CURVATURE.setCurve(CurvatureComb.of(refined, COMB_SCALE, isCyclic), isCyclic).render(geometricLayer, graphics);
+    PATH_RENDER_CURVATURE.setCurve(CurvatureComb.of(refined, scale, isCyclic), isCyclic).render(geometricLayer, graphics);
   }
 }

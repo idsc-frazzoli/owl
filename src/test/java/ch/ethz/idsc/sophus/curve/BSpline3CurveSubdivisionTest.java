@@ -58,12 +58,18 @@ public class BSpline3CurveSubdivisionTest extends TestCase {
     ExactTensorQ.require(refined);
   }
 
-  public void testStringEmpty() {
+  public void testEmpty() {
     Tensor curve = Tensors.vector();
     CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(RnGeodesic.INSTANCE);
-    Tensor refined = curveSubdivision.string(curve);
-    assertTrue(Tensors.isEmpty(refined));
-    ExactTensorQ.require(refined);
+    assertEquals(curveSubdivision.string(curve), Tensors.empty());
+    assertEquals(curveSubdivision.cyclic(curve), Tensors.empty());
+  }
+
+  public void testSingleton() {
+    Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
+    CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(ClothoidCurve.INSTANCE);
+    assertEquals(curveSubdivision.cyclic(singleton), singleton);
+    assertEquals(curveSubdivision.string(singleton), singleton);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
