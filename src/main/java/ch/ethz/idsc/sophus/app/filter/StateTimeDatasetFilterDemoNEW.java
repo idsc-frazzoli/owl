@@ -57,9 +57,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 
   protected void updateStateTime() {
     _time = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250).map(row -> row.Get(0)));
-    System.out.println(_time);
     _state = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250)
-        .map(row -> row.extract(1, 4).map(geodesicDisplay()::project)));
+        .map(row -> row.extract(1, row.length()).map(geodesicDisplay()::project)));
   }
 
   protected final NavigableMap<Scalar, Tensor> navigableMapStateTime() {
