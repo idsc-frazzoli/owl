@@ -18,21 +18,23 @@ import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ abstract class CurveDemo extends ControlPointsDemo {
+/** class is used in other projects outside of owl */
+public abstract class CurvatureDemo extends ControlPointsDemo {
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
   // ---
-  private final JToggleButton jToggleCrvt = new JToggleButton("crvt");
+  public final JToggleButton jToggleCurvature = new JToggleButton("crvt");
 
-  public CurveDemo() {
+  public CurvatureDemo() {
     this(GeodesicDisplays.ALL);
   }
 
-  public CurveDemo(List<GeodesicDisplay> list) {
+  public CurvatureDemo(List<GeodesicDisplay> list) {
     super(true, list);
     // ---
-    jToggleCrvt.setSelected(true);
-    timerFrame.jToolBar.add(jToggleCrvt);
+    jToggleCurvature.setSelected(true);
+    jToggleCurvature.setToolTipText("curvature plot");
+    timerFrame.jToolBar.add(jToggleCurvature);
   }
 
   @Override
@@ -41,7 +43,7 @@ import ch.ethz.idsc.tensor.Tensor;
     Tensor refined = protected_render(geometricLayer, graphics);
     // ---
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
-    if (jToggleCrvt.isSelected() && 1 < refined.length()) {
+    if (jToggleCurvature.isSelected() && 1 < refined.length()) {
       Tensor tensor = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
       CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
       curveVisualSet.addCurvature();
@@ -75,5 +77,5 @@ import ch.ethz.idsc.tensor.Tensor;
     }
   }
 
-  abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
+  public abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
 }

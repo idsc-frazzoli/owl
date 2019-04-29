@@ -79,6 +79,20 @@ public class BSpline4CurveSubdivisionTest extends TestCase {
     ExactTensorQ.require(string);
   }
 
+  public void testEmpty() {
+    Tensor curve = Tensors.vector();
+    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE);
+    assertEquals(curveSubdivision.string(curve), Tensors.empty());
+    assertEquals(curveSubdivision.cyclic(curve), Tensors.empty());
+  }
+
+  public void testSingleton() {
+    Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
+    CurveSubdivision curveSubdivision = BSpline4CurveSubdivision.of(ClothoidCurve.INSTANCE);
+    assertEquals(curveSubdivision.cyclic(singleton), singleton);
+    assertEquals(curveSubdivision.string(singleton), singleton);
+  }
+
   public void testSerializable() throws ClassNotFoundException, IOException {
     TensorUnaryOperator fps = BSpline4CurveSubdivision.of(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);

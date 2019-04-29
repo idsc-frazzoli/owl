@@ -29,6 +29,8 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
   public final Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
+    if (length < 2)
+      return tensor.copy();
     Tensor curve = Unprotect.empty(2 * length);
     for (int index = 0; index < length; ++index) {
       Tensor p = tensor.get((index - 1 + length) % length);
@@ -43,12 +45,8 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
   public final Tensor string(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
-    switch (length) {
-    case 0:
-    case 1:
+    if (length < 2)
       return tensor.copy();
-    }
-    // ---
     Tensor curve = Unprotect.empty(2 * length);
     {
       Tensor p = tensor.get(0);

@@ -17,4 +17,16 @@ public class BSpline6CurveSubdivisionTest extends TestCase {
         Tensors.fromString("{35/64, 21/64, 7/64, 1/64, 0, 0, 1/64, 7/64, 21/64, 35/64}"));
     ExactTensorQ.require(tensor);
   }
+
+  public void testEmpty() {
+    Tensor curve = Tensors.vector();
+    CurveSubdivision curveSubdivision = BSpline6CurveSubdivision.of(RnGeodesic.INSTANCE);
+    assertEquals(curveSubdivision.cyclic(curve), Tensors.empty());
+  }
+
+  public void testSingleton() {
+    Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
+    CurveSubdivision curveSubdivision = BSpline6CurveSubdivision.of(ClothoidCurve.INSTANCE);
+    assertEquals(curveSubdivision.cyclic(singleton), singleton);
+  }
 }

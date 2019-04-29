@@ -4,27 +4,29 @@ package ch.ethz.idsc.sophus.curve;
 import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
 public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Serializable {
-  private final GeodesicInterface geodesicInterface;
-  private final int degree;
   /** linear subdivision */
-  private final CurveSubdivision curveSubdivision;
+  private final BSpline1CurveSubdivision bSpline1CurveSubdivision;
+  private final int degree;
 
   public LaneRiesenfeldCurveSubdivision(GeodesicInterface geodesicInterface, int degree) {
-    this.geodesicInterface = geodesicInterface;
+    bSpline1CurveSubdivision = new BSpline1CurveSubdivision(geodesicInterface);
     this.degree = degree;
-    curveSubdivision = new BSpline1CurveSubdivision(geodesicInterface);
   }
 
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
-    Tensor value = curveSubdivision.cyclic(tensor);
+    ScalarQ.thenThrow(tensor);
+    int length = tensor.length();
+    if (length < 2)
+      return tensor.copy();
+    Tensor value = bSpline1CurveSubdivision.cyclic(tensor);
     for (int count = 2; count <= degree; ++count) {
       if (Tensors.isEmpty(value))
         return value;
@@ -34,14 +36,14 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
         Tensor p = Last.of(value);
         for (int index = 0; index < value.length(); ++index) {
           Tensor q = value.get(index);
-          queue.append(center(p, q));
+          queue.append(bSpline1CurveSubdivision.center(p, q));
           p = q;
         }
       } else {
         Tensor p = value.get(0);
         for (int index = 1; index <= value.length(); ++index) {
           Tensor q = value.get(index % value.length());
-          queue.append(center(p, q));
+          queue.append(bSpline1CurveSubdivision.center(p, q));
           p = q;
         }
       }
@@ -53,7 +55,11 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
 
   @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
-    Tensor value = curveSubdivision.string(tensor);
+    ScalarQ.thenThrow(tensor);
+    int length = tensor.length();
+    if (length < 2)
+      return tensor.copy();
+    Tensor value = bSpline1CurveSubdivision.string(tensor);
     for (int count = 2; count <= degree; ++count) {
       if (Tensors.isEmpty(value))
         return value;
@@ -63,16 +69,12 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
         queue.append(tensor.get(0));
       Tensor p = value.get(0);
       for (int index = 1; index < value.length(); ++index)
-        queue.append(center(p, p = value.get(index)));
+        queue.append(bSpline1CurveSubdivision.center(p, p = value.get(index)));
       if (odd)
         queue.append(Last.of(tensor));
       tensor = value;
       value = queue;
     }
     return value;
-  }
-
-  protected final Tensor center(Tensor p, Tensor q) {
-    return geodesicInterface.split(p, q, RationalScalar.HALF);
   }
 }

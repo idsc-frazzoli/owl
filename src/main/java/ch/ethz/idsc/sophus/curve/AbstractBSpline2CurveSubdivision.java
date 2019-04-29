@@ -20,7 +20,11 @@ public abstract class AbstractBSpline2CurveSubdivision implements CurveSubdivisi
 
   @Override // from CurveSubdivision
   public final Tensor cyclic(Tensor tensor) {
-    return refine(string(tensor), Last.of(tensor), tensor.get(0));
+    ScalarQ.thenThrow(tensor);
+    int length = tensor.length();
+    if (length < 2)
+      return tensor.copy();
+    return refine(protected_string(tensor), Last.of(tensor), tensor.get(0));
   }
 
   // Hint: curve contracts at the sides
@@ -30,6 +34,11 @@ public abstract class AbstractBSpline2CurveSubdivision implements CurveSubdivisi
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
+    return protected_string(tensor);
+  }
+
+  private Tensor protected_string(Tensor tensor) {
+    int length = tensor.length();
     Tensor curve = Unprotect.empty(2 * length);
     Tensor p = tensor.get(0);
     for (int index = 1; index < length; ++index) {

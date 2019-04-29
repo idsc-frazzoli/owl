@@ -70,6 +70,14 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
     ExactTensorQ.require(refined);
   }
 
+  public void testCyclicEmpty() {
+    Tensor curve = Tensors.vector();
+    CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
+    Tensor refined = curveSubdivision.cyclic(curve);
+    assertTrue(Tensors.isEmpty(refined));
+    ExactTensorQ.require(refined);
+  }
+
   public void testCirclePoints() {
     CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
     for (int n = 3; n < 10; ++n) {
@@ -79,6 +87,13 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
           .mapToObj(tensor::get));
       assertEquals(filter, CirclePoints.of(n));
     }
+  }
+
+  public void testSingleton() {
+    Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
+    CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(ClothoidCurve.INSTANCE);
+    assertEquals(curveSubdivision.cyclic(singleton), singleton);
+    assertEquals(curveSubdivision.string(singleton), singleton);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

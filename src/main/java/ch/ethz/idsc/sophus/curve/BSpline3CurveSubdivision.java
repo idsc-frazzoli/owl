@@ -25,6 +25,8 @@ public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
+    if (length < 2)
+      return tensor.copy();
     Tensor curve = Unprotect.empty(2 * length);
     for (int index = 0; index < length; ++index) {
       Tensor p = tensor.get((index - 1 + length) % length);
