@@ -7,13 +7,17 @@ import java.util.Objects;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 public class NonuniformGeodesicCenterNEW {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
@@ -34,6 +38,16 @@ public class NonuniformGeodesicCenterNEW {
     this.geodesicInterface = geodesicInterface;
     this.smoothingKernel = smoothingKernel;
   }
+  
+  private Tensor staticHelper(Tensor mask) {
+    Tensor result = Tensors.empty();
+    Scalar factor = mask.Get(0);
+    for(int index = 1; index < mask.length(); ++index) {
+      factor = factor.add(mask.Get(index));
+      result.append(mask.Get(index).divide(factor));
+    }  
+    return result; 
+  }
 
   private Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
     Tensor maskLeft = Tensors.empty();
@@ -47,9 +61,9 @@ public class NonuniformGeodesicCenterNEW {
       } else
         maskRight.append(smoothingKernel.apply(subMapKey.subtract(key).divide(interval.add(interval))));
     }
-    Tensor splitsLeft = StaticHelperCausal.splits(NORMALIZE.apply(maskLeft));
-    Tensor splitsRight = StaticHelperCausal.splits(NORMALIZE.apply(maskRight));
-    Scalar splitsFinal = StaticHelperCausal.splits(NORMALIZE.apply(Tensors.of(Total.of(maskRight), Total.of(maskLeft)))).Get(0);
+    Tensor splitsLeft = staticHelper(maskLeft);
+    Tensor splitsRight = Reverse.of(staticHelper(maskRight));
+    Tensor splitsFinal = staticHelper(Tensors.of(Total.of(maskLeft), Total.of(maskRight))); 
     return Tensors.of(splitsLeft, splitsRight, splitsFinal);
   }
 
@@ -67,7 +81,7 @@ public class NonuniformGeodesicCenterNEW {
       tempR = geodesicInterface.split(subMap.get(tailMapKey), tempR, splits.get(1).Get(index));
       index += 1;
     }
-    Tensor result = geodesicInterface.split(tempL, tempR, splits.Get(2));
+    Tensor result = geodesicInterface.split(tempL, tempR, splits.get(2).Get(0));
     return result;
   }
 }

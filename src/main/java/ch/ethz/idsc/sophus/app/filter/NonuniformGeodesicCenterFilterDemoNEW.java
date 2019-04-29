@@ -21,7 +21,8 @@ public class NonuniformGeodesicCenterFilterDemoNEW extends StateTimeDatasetKerne
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Scalar interval = RationalScalar.of(spinnerRadius.getValue(), 5);
+    // interval manuel gekoppelt an sampling frequency
+    Scalar interval = RationalScalar.of(spinnerRadius.getValue(), 19);
     NonuniformGeodesicCenterNEW nonuniformGeodesicCenterNEW = NonuniformGeodesicCenterNEW.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
     // TODO JPH Frage: gibt es eine effizientere Methode zur conversion von collection to tensor?
     refined = Tensor.of(NonuniformGeodesicCenterFilterNEW.of(nonuniformGeodesicCenterNEW, interval).apply(navigableMapStateTime()).values().stream());
