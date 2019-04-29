@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Nest;
 
@@ -24,7 +23,9 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
    * @return GeodesicPursuit */
   public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
     Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var).point;
-    return lookAhead.map(p -> (GeodesicPursuitInterface) new GeodesicPursuit(geodesicInterface, p)).orElse(VoidPursuit.INSTANCE);
+    return lookAhead.isPresent() //
+        ? new GeodesicPursuit(geodesicInterface, lookAhead.get())
+        : VoidPursuit.INSTANCE;
   }
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
@@ -33,7 +34,9 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
    * @return GeodesicPursuit */
   public static GeodesicPursuitInterface fromTrajectory(GeodesicInterface geodesicInterface, Tensor tensor, TrajectoryEntryFinder entryFinder) {
     Optional<Tensor> lookAhead = entryFinder.initial(tensor).point;
-    return lookAhead.map(p -> (GeodesicPursuitInterface) new GeodesicPursuit(geodesicInterface, p)).orElse(VoidPursuit.INSTANCE);
+    return lookAhead.isPresent() //
+        ? new GeodesicPursuit(geodesicInterface, lookAhead.get())
+        : VoidPursuit.INSTANCE;
   }
 
   // ---
@@ -45,7 +48,7 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
   public GeodesicPursuit(GeodesicInterface geodesicInterface, Tensor lookAhead) {
     VectorQ.requireLength(lookAhead, 3);
     LaneRiesenfeldCurveSubdivision laneRiesenfeldCurveSubdivision = new LaneRiesenfeldCurveSubdivision(geodesicInterface, DEGREE);
-    curve = Nest.of(laneRiesenfeldCurveSubdivision::string, Tensors.of(Array.zeros(3), lookAhead), REFINEMENT);
+    curve = Nest.of(laneRiesenfeldCurveSubdivision::string, Tensors.of(lookAhead.map(Scalar::zero), lookAhead), REFINEMENT);
     ratios = SignedCurvature2D.string(Tensor.of(curve.stream().map(Extract2D.FUNCTION)));
   }
 

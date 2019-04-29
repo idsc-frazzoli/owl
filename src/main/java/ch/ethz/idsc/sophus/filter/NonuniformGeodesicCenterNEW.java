@@ -32,7 +32,8 @@ public class NonuniformGeodesicCenterNEW {
     this.smoothingKernel = smoothingKernel;
   }
 
-  private Tensor staticHelper(Tensor mask) {
+  // TODO choose different function name
+  private static Tensor staticHelper(Tensor mask) {
     Tensor result = Tensors.empty();
     Scalar factor = mask.Get(0);
     for (int index = 1; index < mask.length(); ++index) {
@@ -42,13 +43,19 @@ public class NonuniformGeodesicCenterNEW {
     return result;
   }
 
+  /** @param subMap
+   * @param key TODO OB comment
+   * @param interval TODO OB comment
+   * @return */
   private Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
     for (Scalar subMapKey : subMap.keySet()) {
+      // TODO OB if's are not elegant here, could use headMap etc.
       if (Scalars.lessThan(subMapKey, key))
         maskLeft.append(smoothingKernel.apply(subMapKey.subtract(key).divide(interval.add(interval))));
-      else if (subMapKey.equals(key)) {
+      else //
+      if (subMapKey.equals(key)) {
         maskLeft.append(RationalScalar.HALF);
         maskRight.append(RationalScalar.HALF);
       } else

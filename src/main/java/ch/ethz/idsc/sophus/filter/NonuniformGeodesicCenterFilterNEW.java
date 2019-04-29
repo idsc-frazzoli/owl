@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Min;
 
+// TODO OB extract "fixed radius" functionality to separate class, or extract "fixed interval" to separate class
 public class NonuniformGeodesicCenterFilterNEW implements NavigableMapUnaryOperator {
   /** @param nonuniformGeodesicCenter
    * @param (temporal) interval radius
@@ -22,8 +23,8 @@ public class NonuniformGeodesicCenterFilterNEW implements NavigableMapUnaryOpera
   }
 
   // ---
+  private final NonuniformGeodesicCenterNEW nonuniformGeodesicCenterNEW;
   private Scalar interval;
-  private NonuniformGeodesicCenterNEW nonuniformGeodesicCenterNEW;
 
   private NonuniformGeodesicCenterFilterNEW(NonuniformGeodesicCenterNEW nonuniformGeodesicCenterNEW, Scalar interval) {
     this.nonuniformGeodesicCenterNEW = nonuniformGeodesicCenterNEW;
@@ -46,6 +47,7 @@ public class NonuniformGeodesicCenterFilterNEW implements NavigableMapUnaryOpera
           hiKey = Min.of(hiKey, navigableMap.higherKey(hiKey));
         }
         NavigableMap<Scalar, Tensor> subMap = navigableMap.subMap(loKey, true, hiKey, true);
+        // TODO OB state meaning/purpose of "RealScalar.of(-1)"
         resultMap.put(key, nonuniformGeodesicCenterNEW.apply(subMap, key, RealScalar.of(-1)));
       }
     } else {
