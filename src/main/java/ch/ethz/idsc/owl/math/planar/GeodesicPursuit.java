@@ -40,7 +40,7 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
   }
 
   // ---
-  private final Tensor ratios;
+  private final Tensor ratios; // first and last ratio/curvature in curve
   private final Tensor curve;
 
   /** @param geodesicInterface type of curve to connect points {px, py, pa}
@@ -49,7 +49,12 @@ public class GeodesicPursuit implements GeodesicPursuitInterface {
     VectorQ.requireLength(lookAhead, 3);
     LaneRiesenfeldCurveSubdivision laneRiesenfeldCurveSubdivision = new LaneRiesenfeldCurveSubdivision(geodesicInterface, DEGREE);
     curve = Nest.of(laneRiesenfeldCurveSubdivision::string, Tensors.of(lookAhead.map(Scalar::zero), lookAhead), REFINEMENT);
-    ratios = SignedCurvature2D.string(Tensor.of(curve.stream().map(Extract2D.FUNCTION)));
+    int n = curve.length();
+    Tensor start = Tensor.of(curve.extract(0, 3).stream().map(Extract2D.FUNCTION));
+    Tensor end = Tensor.of(curve.extract(n - 3, n).stream().map(Extract2D.FUNCTION));
+    ratios = Tensors.of( // all other ratios/curvatures lay between these two for reasonable inputs
+        SignedCurvature2D.of(start.get(0), start.get(1), start.get(2)).get(), //
+        SignedCurvature2D.of(end.get(0), end.get(1), end.get(2)).get());
   }
 
   @Override // from GeodesicPursuitInterface
