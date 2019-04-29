@@ -7,21 +7,14 @@ import java.util.Objects;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Chop;
 
 public class NonuniformGeodesicCenterNEW {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
-
   /** @param geodesicInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center
@@ -38,15 +31,15 @@ public class NonuniformGeodesicCenterNEW {
     this.geodesicInterface = geodesicInterface;
     this.smoothingKernel = smoothingKernel;
   }
-  
+
   private Tensor staticHelper(Tensor mask) {
     Tensor result = Tensors.empty();
     Scalar factor = mask.Get(0);
-    for(int index = 1; index < mask.length(); ++index) {
+    for (int index = 1; index < mask.length(); ++index) {
       factor = factor.add(mask.Get(index));
       result.append(mask.Get(index).divide(factor));
-    }  
-    return result; 
+    }
+    return result;
   }
 
   private Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
@@ -63,7 +56,7 @@ public class NonuniformGeodesicCenterNEW {
     }
     Tensor splitsLeft = staticHelper(maskLeft);
     Tensor splitsRight = Reverse.of(staticHelper(maskRight));
-    Tensor splitsFinal = staticHelper(Tensors.of(Total.of(maskLeft), Total.of(maskRight))); 
+    Tensor splitsFinal = staticHelper(Tensors.of(Total.of(maskLeft), Total.of(maskRight)));
     return Tensors.of(splitsLeft, splitsRight, splitsFinal);
   }
 
