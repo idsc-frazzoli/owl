@@ -50,8 +50,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
-  private Tensor _time = null;
-  private Tensor _state = null;
+  protected Tensor _time = null;
+  protected Tensor _state = null;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
