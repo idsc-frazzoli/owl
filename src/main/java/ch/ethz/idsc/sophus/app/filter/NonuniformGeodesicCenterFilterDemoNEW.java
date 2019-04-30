@@ -8,8 +8,9 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.filter.NonuniformFixedIntervalGeodesicCenterFilterNEW;
+import ch.ethz.idsc.sophus.filter.NonuniformFixedIntervalGeodesicCenterNEW;
 import ch.ethz.idsc.sophus.filter.NonuniformFixedRadiusGeodesicCenterFilterNEW;
-import ch.ethz.idsc.sophus.filter.NonuniformGeodesicCenterNEW;
+import ch.ethz.idsc.sophus.filter.NonuniformFixedRadiusGeodesicCenterNEW;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,11 +33,17 @@ public class NonuniformGeodesicCenterFilterDemoNEW extends StateTimeDatasetKerne
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     // interval is either: radius length or muliplicity of sampling frequency - depending on filter choice
     Scalar interval = RealScalar.of(spinnerRadius.getValue());
-    NonuniformGeodesicCenterNEW nonuniformGeodesicCenterNEW = NonuniformGeodesicCenterNEW.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
-    refined = jToggleFixedRadius.isSelected()
-        ? Tensor.of(NonuniformFixedRadiusGeodesicCenterFilterNEW.of(nonuniformGeodesicCenterNEW, interval).apply(navigableMapStateTime()).values().stream())
-        : Tensor.of(NonuniformFixedIntervalGeodesicCenterFilterNEW.of(nonuniformGeodesicCenterNEW, interval.divide(samplingFrequency))
-            .apply(navigableMapStateTime()).values().stream());
+    if (jToggleFixedRadius.isSelected()) {
+      NonuniformFixedRadiusGeodesicCenterNEW nonuniformFixedRadiusGeodesicCenterNEW = NonuniformFixedRadiusGeodesicCenterNEW
+          .of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
+      refined = Tensor.of(
+          NonuniformFixedRadiusGeodesicCenterFilterNEW.of(nonuniformFixedRadiusGeodesicCenterNEW, interval).apply(navigableMapStateTime()).values().stream());
+    } else {
+      NonuniformFixedIntervalGeodesicCenterNEW nonuniformFixedIntervalGeodesicCenterNEW = NonuniformFixedIntervalGeodesicCenterNEW
+          .of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
+      refined = Tensor.of(NonuniformFixedIntervalGeodesicCenterFilterNEW.of(nonuniformFixedIntervalGeodesicCenterNEW, interval.divide(samplingFrequency))
+          .apply(navigableMapStateTime()).values().stream());
+    }
     return refined;
   }
 

@@ -12,6 +12,7 @@ import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import org.jfree.chart.JFreeChart;
@@ -26,18 +27,20 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.sophus.group.RnExponential;
+import ch.ethz.idsc.sophus.group.RnGroup;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ abstract class StateTimeDatasetFilterDemoNEW extends GeodesicDisplayDemo {
-  // TODO OB/JPH sampling freq is not generic here
-  private static final Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
   private static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
@@ -46,12 +49,14 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
   private final JToggleButton jToggleData = new JToggleButton("data");
   private final JToggleButton jToggleConv = new JToggleButton("conv");
+  private final JSlider jSlider = new JSlider(1, 999, 200);
   // ---
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
   protected Tensor _time = null;
   protected Tensor _state = null;
+  protected Tensor _quality = null;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
@@ -59,18 +64,24 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     _time = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250).map(row -> row.Get(0)));
     _state = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250)
         .map(row -> row.extract(1, row.length()).map(geodesicDisplay()::project)));
+    _quality = Tensor
+        .of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream().limit(250).map(row -> row.get(row.length() - 1)));
   }
 
   protected final NavigableMap<Scalar, Tensor> navigableMapStateTime() {
     NavigableMap<Scalar, Tensor> navigableMapStateTime = new TreeMap<>();
     for (int index = 0; index < _time.length(); ++index) {
-      navigableMapStateTime.put(_time.Get(index), _state.get(index));
+      // remove all elements with quality below threshold
+      if (Scalars.lessThan(qualityThreshold(), _quality.Get(index)))
+        navigableMapStateTime.put(_time.Get(index), _state.get(index));
     }
     return navigableMapStateTime;
   }
 
   public StateTimeDatasetFilterDemoNEW() {
     super(GeodesicDisplays.CLOTH_SE2_R2);
+    jSlider.setPreferredSize(new Dimension(500, 28));
+    //
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     // ---
     jToggleWait.setSelected(false);
@@ -99,6 +110,12 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     timerFrame.jToolBar.addSeparator();
     // ---
     timerFrame.jToolBar.add(jToggleSymi);
+    // ---
+    timerFrame.jToolBar.add(jSlider);
+  }
+
+  private Scalar qualityThreshold() {
+    return RationalScalar.of(jSlider.getValue(), 1000);
   }
 
   @Override
@@ -157,7 +174,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
-      Tensor speeds = lieDifferences.apply(refined).multiply(SAMPLING_FREQUENCY);
+      // TODO OB/JPH: This change does not improve the noisy behaviour in the plots. Is this only pseudo accuracy?
+      LieDifferences lieDifferencesTime = new LieDifferences(RnGroup.INSTANCE, RnExponential.INSTANCE);
+      Tensor timeDifference = lieDifferencesTime.apply(Tensor.of(navigableMapStateTime().keySet().stream())).map(x -> x.reciprocal());
+      Tensor speeds = timeDifference.pmul(lieDifferences.apply(refined));
       if (0 < speeds.length()) {
         int dimensions = speeds.get(0).length();
         VisualSet visualSet = new VisualSet();

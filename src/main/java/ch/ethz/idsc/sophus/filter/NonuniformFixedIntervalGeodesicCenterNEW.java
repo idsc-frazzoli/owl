@@ -13,20 +13,20 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.red.Total;
 
-public class NonuniformGeodesicCenterNEW {
+public class NonuniformFixedIntervalGeodesicCenterNEW {
   /** @param geodesicInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static NonuniformGeodesicCenterNEW of(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
-    return new NonuniformGeodesicCenterNEW(Objects.requireNonNull(geodesicInterface), Objects.requireNonNull(smoothingKernel));
+  public static NonuniformFixedIntervalGeodesicCenterNEW of(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+    return new NonuniformFixedIntervalGeodesicCenterNEW(Objects.requireNonNull(geodesicInterface), Objects.requireNonNull(smoothingKernel));
   }
 
   // ---
   public final GeodesicInterface geodesicInterface;
   private final SmoothingKernel smoothingKernel;
 
-  /* package */ NonuniformGeodesicCenterNEW(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+  /* package */ NonuniformFixedIntervalGeodesicCenterNEW(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
     this.geodesicInterface = geodesicInterface;
     this.smoothingKernel = smoothingKernel;
   }

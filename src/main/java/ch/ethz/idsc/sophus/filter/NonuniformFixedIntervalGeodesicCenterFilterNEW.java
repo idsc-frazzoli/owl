@@ -15,16 +15,17 @@ public class NonuniformFixedIntervalGeodesicCenterFilterNEW implements Navigable
    * @param (temporal) interval radius
    * @return
    * @throws Exception if given geodesicCenter is null */
-  public static NonuniformFixedIntervalGeodesicCenterFilterNEW of(NonuniformGeodesicCenterNEW nonuniformGeodesicCenterNEW, Scalar interval) {
-    return new NonuniformFixedIntervalGeodesicCenterFilterNEW(Objects.requireNonNull(nonuniformGeodesicCenterNEW), interval);
+  public static NonuniformFixedIntervalGeodesicCenterFilterNEW of(NonuniformFixedIntervalGeodesicCenterNEW nonuniformFixedIntervalGeodesicCenterNEW,
+      Scalar interval) {
+    return new NonuniformFixedIntervalGeodesicCenterFilterNEW(Objects.requireNonNull(nonuniformFixedIntervalGeodesicCenterNEW), interval);
   }
 
   // ---
-  private final NonuniformGeodesicCenterNEW nonuniformGeodesicCenterNEW;
+  private final NonuniformFixedIntervalGeodesicCenterNEW nonuniformFixedIntervalGeodesicCenterNEW;
   private Scalar interval;
 
-  private NonuniformFixedIntervalGeodesicCenterFilterNEW(NonuniformGeodesicCenterNEW nonuniformGeodesicCenterNEW, Scalar interval) {
-    this.nonuniformGeodesicCenterNEW = nonuniformGeodesicCenterNEW;
+  private NonuniformFixedIntervalGeodesicCenterFilterNEW(NonuniformFixedIntervalGeodesicCenterNEW nonuniformFixedIntervalGeodesicCenterNEW, Scalar interval) {
+    this.nonuniformFixedIntervalGeodesicCenterNEW = nonuniformFixedIntervalGeodesicCenterNEW;
     this.interval = interval;
   }
 
@@ -39,7 +40,7 @@ public class NonuniformFixedIntervalGeodesicCenterFilterNEW implements Navigable
       hi = Min.of(navigableMap.lastKey().subtract(key), interval);
       correctedInterval = Min.of(lo, hi);
       NavigableMap<Scalar, Tensor> subMap = navigableMap.subMap(key.subtract(correctedInterval), true, key.add(correctedInterval), true);
-      resultMap.put(key, nonuniformGeodesicCenterNEW.apply(subMap, key, correctedInterval));
+      resultMap.put(key, nonuniformFixedIntervalGeodesicCenterNEW.apply(subMap, key, correctedInterval));
     }
     return resultMap;
   }
