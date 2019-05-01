@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.TableBuilder;
@@ -23,7 +22,6 @@ enum FilterErrorTable {
   ;
   public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
 
-  // TODO OB repair
   public static Tensor process(String name, int width) {
     TableBuilder tableBuilder = new TableBuilder();
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
@@ -54,7 +52,7 @@ enum FilterErrorTable {
     // String dataname = "0w/20180702T133612_2";
     for (int width = 1; width < 12; width++) {
       Tensor tensor = process(dataname, width);
-      Export.of(new File(ROOT, dataname.replace('/', '_') + "_" + width + ".csv"), tensor);
+      // Export.of(new File(ROOT, dataname.replace('/', '_') + "_" + width + ".csv"), tensor);
     }
   }
 }

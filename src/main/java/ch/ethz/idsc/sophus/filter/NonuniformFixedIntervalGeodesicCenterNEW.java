@@ -8,32 +8,30 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.red.Total;
 
-public class NonuniformGeodesicCenterNEW {
+public class NonuniformFixedIntervalGeodesicCenterNEW {
   /** @param geodesicInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static NonuniformGeodesicCenterNEW of(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
-    return new NonuniformGeodesicCenterNEW(Objects.requireNonNull(geodesicInterface), smoothingKernel);
+  public static NonuniformFixedIntervalGeodesicCenterNEW of(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+    return new NonuniformFixedIntervalGeodesicCenterNEW(Objects.requireNonNull(geodesicInterface), Objects.requireNonNull(smoothingKernel));
   }
 
   // ---
   public final GeodesicInterface geodesicInterface;
   private final SmoothingKernel smoothingKernel;
 
-  /* package */ NonuniformGeodesicCenterNEW(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+  /* package */ NonuniformFixedIntervalGeodesicCenterNEW(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
     this.geodesicInterface = geodesicInterface;
     this.smoothingKernel = smoothingKernel;
   }
 
-  // TODO choose different function name
-  private static Tensor staticHelper(Tensor mask) {
+  private static Tensor maskToSplits(Tensor mask) {
     Tensor result = Tensors.empty();
     Scalar factor = mask.Get(0);
     for (int index = 1; index < mask.length(); ++index) {
@@ -44,26 +42,24 @@ public class NonuniformGeodesicCenterNEW {
   }
 
   /** @param subMap
-   * @param key TODO OB comment
+   * @param key: timestamp to be evaluated
    * @param interval TODO OB comment
    * @return */
   private Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
+    Scalar doubleInterval = interval.add(interval);
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
-    for (Scalar subMapKey : subMap.keySet()) {
-      // TODO OB if's are not elegant here, could use headMap etc.
-      if (Scalars.lessThan(subMapKey, key))
-        maskLeft.append(smoothingKernel.apply(subMapKey.subtract(key).divide(interval.add(interval))));
-      else //
-      if (subMapKey.equals(key)) {
-        maskLeft.append(RationalScalar.HALF);
-        maskRight.append(RationalScalar.HALF);
-      } else
-        maskRight.append(smoothingKernel.apply(subMapKey.subtract(key).divide(interval.add(interval))));
+    for (Scalar headMapKey : subMap.headMap(key, false).keySet()) {
+      maskLeft.append(smoothingKernel.apply(headMapKey.subtract(key).divide(doubleInterval)));
     }
-    Tensor splitsLeft = staticHelper(maskLeft);
-    Tensor splitsRight = Reverse.of(staticHelper(maskRight));
-    Tensor splitsFinal = staticHelper(Tensors.of(Total.of(maskLeft), Total.of(maskRight)));
+    for (Scalar tailMapKey : subMap.tailMap(key, false).descendingKeySet()) {
+      maskRight.append(smoothingKernel.apply(tailMapKey.subtract(key).divide(doubleInterval)));
+    }
+    maskLeft.append(RationalScalar.HALF);
+    maskRight.append(RationalScalar.HALF);
+    Tensor splitsLeft = maskToSplits(maskLeft);
+    Tensor splitsRight = Reverse.of(maskToSplits(maskRight));
+    Tensor splitsFinal = maskToSplits(Tensors.of(Total.of(maskLeft), Total.of(maskRight)));
     return Tensors.of(splitsLeft, splitsRight, splitsFinal);
   }
 
