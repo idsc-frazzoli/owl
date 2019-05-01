@@ -1,7 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.graph;
 
-public class WeightedEdge<T> {
+/* packlage */ class WeightedEdge<T> {
   public final Vertex<T> start;
   public final Vertex<T> end;
   public final T weight;

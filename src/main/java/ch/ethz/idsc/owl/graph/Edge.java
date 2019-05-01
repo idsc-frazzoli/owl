@@ -1,7 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.graph;
 
-public class Edge<T> {
+/* package */ class Edge<T> {
   public final Vertex<T> source;
   public final Vertex<T> target;
 

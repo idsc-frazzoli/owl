@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Digraph<T> {
+/* package */ class Digraph<T> {
   List<Vertex<T>> vertexSet;
   List<Edge<T>> edgeSet;
 

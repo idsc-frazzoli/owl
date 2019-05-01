@@ -17,9 +17,7 @@ import ch.ethz.idsc.owl.math.planar.GeodesicPursuitInterface;
 import ch.ethz.idsc.owl.math.planar.TrajectoryEntryFinder;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.sophus.group.Se2GroupElement;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -30,7 +28,6 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class GeodesicPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
-  private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
   private final static int MAX_LEVEL = 25;
   // ---
   private final TrajectoryEntryFinder entryFinder;
@@ -65,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     // ---
     Predicate<Scalar> isCompliant = isCompliant(state, speed);
     TensorScalarFunction mapping = vector -> { //
-      GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, vector);
+      GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(vector);
       Tensor ratios = geodesicPursuit.ratios();
       if (ratios.stream().map(Tensor::Get).allMatch(isCompliant))
         return curveLength(geodesicPursuit.curve()); // Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
@@ -74,7 +71,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Scalar var = ArgMinVariable.using(entryFinder, mapping, MAX_LEVEL).apply(beacons);
     Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point;
     if (lookAhead.isPresent()) {
-      GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead.get());
+      GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(lookAhead.get());
       curve = geodesicPursuit.curve();
       if (inReverse)
         mirrorAndReverse(curve);
