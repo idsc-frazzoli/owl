@@ -1,22 +1,25 @@
 // code by jph
 package ch.ethz.idsc.owl.math.planar;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
+import ch.ethz.idsc.tensor.QuantityMapper;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** clothoid is tangent at start and end points */
-public class ClothoidTerminalRatios {
+public class ClothoidTerminalRatios implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
       new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
+  private static final QuantityMapper QUANTITY_MAPPER = new QuantityMapper(Scalar::zero, Unit::negate);
   // ---
   /** depth of 10 was determined experimentally, see tests */
   private static final int DEFAULT_DEPTH = 10;
@@ -56,14 +59,8 @@ public class ClothoidTerminalRatios {
         abc.get(0).extract(0, 2), //
         abc.get(1).extract(0, 2), //
         abc.get(2).extract(0, 2));
-    if (optional.isPresent())
-      return optional.get();
-    // ---
-    Scalar scalar = abc.Get(0, 0);
-    if (scalar instanceof Quantity) {
-      Quantity quantity = (Quantity) scalar;
-      return Quantity.of(quantity.value().zero(), quantity.unit().negate());
-    }
-    return scalar.zero();
+    return optional.isPresent() //
+        ? optional.get()
+        : QUANTITY_MAPPER.apply(abc.Get(0, 0));
   }
 }

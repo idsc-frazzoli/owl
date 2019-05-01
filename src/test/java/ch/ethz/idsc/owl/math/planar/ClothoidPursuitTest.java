@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Round;
 import junit.framework.TestCase;
 
@@ -66,6 +67,6 @@ public class ClothoidPursuitTest extends TestCase {
   public void testQuantity() {
     GeodesicPursuitInterface geodesicPursuit = new ClothoidPursuit(Tensors.fromString("{1[m], 1[m], .3}"));
     Optional<Scalar> optional = geodesicPursuit.firstRatio();
-    Chop._10.requireClose(optional.get(), Quantity.of(2.7608296978625315, "m^-1"));
+    Clips.interval(Quantity.of(2.75, "m^-1"), Quantity.of(2.77, "m^-1")).requireInside(optional.get());
   }
 }
