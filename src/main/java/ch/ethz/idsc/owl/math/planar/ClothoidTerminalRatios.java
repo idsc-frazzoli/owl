@@ -18,8 +18,8 @@ public class ClothoidTerminalRatios {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
       new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
   // ---
-  /** depth of 12 was determined experimentally, see tests */
-  private static final int DEFAULT_DEPTH = 12;
+  /** depth of 10 was determined experimentally, see tests */
+  private static final int DEFAULT_DEPTH = 10;
 
   /** @param beg
    * @param end
