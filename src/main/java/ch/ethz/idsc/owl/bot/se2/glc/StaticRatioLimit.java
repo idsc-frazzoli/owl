@@ -1,3 +1,4 @@
+// code by gjoel, jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -5,17 +6,19 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
+/** static turning ratio limit */
 public class StaticRatioLimit implements DynamicRatioLimit {
-  private final Scalar maxTurningRate;
+  private final Clip clipTurningRate;
 
-  /** static turning ratio limit
-   * @param maxTurningRate limits = {-maxTurningRate, +maxTurningRate} */
+  /** @param maxTurningRate limits = {-maxTurningRate, +maxTurningRate} */
   public StaticRatioLimit(Scalar maxTurningRate) {
-    this.maxTurningRate = maxTurningRate;
+    this.clipTurningRate = Clips.interval( //
+        maxTurningRate.negate(), //
+        maxTurningRate);
   }
 
   @Override // from DynamicRatioLimit
   public Clip at(Tensor state, Scalar speed) {
-    return Clips.interval(maxTurningRate.negate(), maxTurningRate);
+    return clipTurningRate;
   }
 }

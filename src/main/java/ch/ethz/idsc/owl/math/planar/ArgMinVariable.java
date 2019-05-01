@@ -46,39 +46,42 @@ public class ArgMinVariable implements TensorScalarFunction {
       return initial.variable; // no bisection possible
     Function<Scalar, TrajectoryEntry> function = entryFinder.on(tensor);
     Tensor[] tmp = new Tensor[3];
-    TrajectoryEntry entry = initial;
+    TrajectoryEntry trajectoryEntry = initial;
     // search from initial upwards
     while (!Arrays.equals(pairs, tmp)) {
       tmp = pairs.clone();
-      entry = update(function, Increment.ONE.apply(entry.variable));
+      trajectoryEntry = update(function, Increment.ONE.apply(trajectoryEntry.variable));
     }
     // search from initial downwards
-    entry = update(function, Decrement.ONE.apply(initial.variable));
+    trajectoryEntry = update(function, Decrement.ONE.apply(initial.variable));
     while (!Arrays.equals(pairs, tmp)) {
       tmp = pairs.clone();
-      entry = update(function, Decrement.ONE.apply(entry.variable));
+      trajectoryEntry = update(function, Decrement.ONE.apply(trajectoryEntry.variable));
     }
     // bisect previously determined goal region
     return bisect(function, 0);
   }
 
   /** calculate and add pair {value, variable}
-   * @param entry */
-  private void insert(TrajectoryEntry entry) {
-    entry.point.ifPresent(point -> {
-      pairs[2] = Tensors.of(mapping.apply(point), entry.variable);
+   * @param trajectoryEntry */
+  private void insert(TrajectoryEntry trajectoryEntry) {
+    if (trajectoryEntry.point.isPresent()) {
+      Scalar cost = mapping.apply(trajectoryEntry.point.get());
+      pairs[2] = Tensors.of(cost, trajectoryEntry.variable);
       Arrays.sort(pairs, ArgMinComparator.INSTANCE);
-    });
+    }
   }
 
   /** update pairs given variable
+   * 
    * @param function pre-setup trajectory entry finder
    * @param var
    * @return TrajectoryEntry */
   private TrajectoryEntry update(Function<Scalar, TrajectoryEntry> function, Scalar var) {
-    TrajectoryEntry entry = function.apply(var);
-    entry.point.ifPresent(p -> insert(entry));
-    return entry;
+    TrajectoryEntry trajectoryEntry = function.apply(var);
+    if (trajectoryEntry.point.isPresent())
+      insert(trajectoryEntry);
+    return trajectoryEntry;
   }
 
   /** @param function pre-setup trajectory entry finder
