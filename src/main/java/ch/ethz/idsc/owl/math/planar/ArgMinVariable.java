@@ -2,12 +2,9 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Objects;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
@@ -19,8 +16,6 @@ public class ArgMinVariable implements TensorScalarFunction {
   private final TrajectoryEntryFinder entryFinder;
   private final TensorScalarFunction mapping;
   private final int maxLevel;
-  // ---
-  private final Comparator<Tensor> comparator;
   // ---
   private final Tensor[] pairs; // [{value, variable}, ...]
 
@@ -41,22 +36,6 @@ public class ArgMinVariable implements TensorScalarFunction {
     this.mapping = mapping;
     this.maxLevel = maxLevel;
     pairs = new Tensor[3];
-    comparator = new Comparator<Tensor>() {
-      @Override
-      public int compare(Tensor t1, Tensor t2) {
-        if (Objects.isNull(t1))
-          return 1;
-        if (Objects.isNull(t2))
-          return -1;
-        Scalar s1 = t1.Get(0);
-        Scalar s2 = t2.Get(0);
-        if (Scalars.lessThan(s1, s2))
-          return -1;
-        if (Scalars.lessThan(s2, s1))
-          return 1;
-        return 0;
-      }
-    };
   }
 
   @Override // from Function
@@ -88,7 +67,7 @@ public class ArgMinVariable implements TensorScalarFunction {
   private void insert(TrajectoryEntry entry) {
     entry.point.ifPresent(point -> {
       pairs[2] = Tensors.of(mapping.apply(point), entry.variable);
-      Arrays.sort(pairs, comparator);
+      Arrays.sort(pairs, ArgMinComparator.INSTANCE);
     });
   }
 

@@ -36,8 +36,6 @@ public enum ClothoidCurve implements GeodesicInterface {
 
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    // Scalar px = p.Get(0);
-    // Scalar py = p.Get(1);
     Tensor pxy = p.extract(0, 2);
     Scalar pa = p.Get(2);
     Tensor qxy = q.extract(0, 2);
