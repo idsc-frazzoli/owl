@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.MatrixForm;
 import ch.ethz.idsc.tensor.io.TableBuilder;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -27,6 +26,15 @@ public class ClothoidTerminalRatiosTest extends TestCase {
     Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+0.9068461106738649));
     // turn right
     Chop._10.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-0.9068461106738649));
+  }
+
+  public void testLeftUniv() {
+    ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of( //
+        Tensors.vector(0, 1, 0), Tensors.vector(2, 2, 0));
+    // turn left
+    Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2190137723033907));
+    // turn right
+    Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2190137715979599));
   }
 
   public void testRight() {
@@ -66,12 +74,12 @@ public class ClothoidTerminalRatiosTest extends TestCase {
 
   public void testPercision() {
     TableBuilder tableBuilder = new TableBuilder();
-    for (int depth = 5; depth < 20; ++depth) {
+    for (int depth = 5; depth < ClothoidTerminalRatios.MAX_ITER; ++depth) {
       ClothoidTerminalRatios clothoidTerminalRatios = //
           new ClothoidTerminalRatios(Tensors.vector(0, 1, 0), Tensors.vector(2, 0, 0), depth);
       tableBuilder.appendRow(RealScalar.of(depth), clothoidTerminalRatios.head().map(Round._8), clothoidTerminalRatios.tail().map(Round._8));
     }
-    System.out.println(MatrixForm.of(tableBuilder.toTable()));
+    // System.out.println(MatrixForm.of(tableBuilder.toTable()));
   }
 
   public void testSame() {
@@ -87,6 +95,32 @@ public class ClothoidTerminalRatiosTest extends TestCase {
         Tensors.fromString("{1[m], 1[m], 1}"), 3);
     assertEquals(clothoidTerminalRatios.head(), Quantity.of(0, "m^-1"));
     assertEquals(clothoidTerminalRatios.tail(), Quantity.of(0, "m^-1"));
+  }
+
+  public void testOpenEnd() {
+    Distribution distribution = NormalDistribution.standard();
+    Chop chop = Chop.below(1e-2);
+    for (int count = 0; count < 10; ++count) {
+      Tensor beg = RandomVariate.of(distribution, 3);
+      Tensor end = RandomVariate.of(distribution, 3);
+      ClothoidTerminalRatios clothoidTerminalRatios1 = ClothoidTerminalRatios.of(beg, end);
+      ClothoidTerminalRatios clothoidTerminalRatios2 = new ClothoidTerminalRatios(beg, end, ClothoidTerminalRatios.MAX_ITER);
+      chop.requireClose(clothoidTerminalRatios1.head(), clothoidTerminalRatios2.head());
+    }
+  }
+
+  public void testOpenEndUnit() {
+    ClothoidTerminalRatios clothoidTerminalRatios1 = ClothoidTerminalRatios.of( //
+        Tensors.fromString("{1[m], 1[m], 1}"), //
+        Tensors.fromString("{2[m], 3[m], 3}"));
+    ClothoidTerminalRatios clothoidTerminalRatios2 = new ClothoidTerminalRatios( //
+        Tensors.fromString("{1[m], 1[m], 1}"), //
+        Tensors.fromString("{2[m], 3[m], 3}"), ClothoidTerminalRatios.MAX_ITER);
+    ClothoidTerminalRatios.CHOP.requireClose(clothoidTerminalRatios1.head(), clothoidTerminalRatios2.head());
+  }
+
+  public void testMaxIter() {
+    assertTrue(ClothoidTerminalRatios.MAX_ITER <= 20);
   }
 
   public void testDepthZeroFail() {

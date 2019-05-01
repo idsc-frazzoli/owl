@@ -12,24 +12,56 @@ import ch.ethz.idsc.tensor.QuantityMapper;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.red.Nest;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /** clothoid is tangent at start and end points */
 public class ClothoidTerminalRatios implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
       new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
+  private static final TensorUnaryOperator HEAD = //
+      value -> CURVE_SUBDIVISION.string(value.extract(0, 2));
+  private static final TensorUnaryOperator TAIL = //
+      value -> CURVE_SUBDIVISION.string(value.extract(value.length() - 2, value.length()));
   private static final QuantityMapper QUANTITY_MAPPER = new QuantityMapper(Scalar::zero, Unit::negate);
-  // ---
-  /** depth of 10 was determined experimentally, see tests */
-  private static final int DEFAULT_DEPTH = 10;
+  static final Chop CHOP = Chop._03;
+  /** typically 13, or 14 iterations are needed to reach precision up 1e-3 */
+  static final int MAX_ITER = 18;
 
-  /** @param beg
-   * @param end
+  /** @param beg of the form {beg_x, beg_y, beg_heading}
+   * @param end of the form {end_x, end_y, end_heading}
    * @return */
-  // TODO LONGTERM iterate until convergence
   public static ClothoidTerminalRatios of(Tensor beg, Tensor end) {
-    return new ClothoidTerminalRatios(beg, end, DEFAULT_DEPTH);
+    final Tensor init = CURVE_SUBDIVISION.string(Tensors.of(beg, end));
+    Scalar head = curvature(init);
+    {
+      Tensor hseq = init;
+      for (int depth = 1; depth < MAX_ITER; ++depth) {
+        hseq = HEAD.apply(hseq);
+        Scalar next = curvature(hseq);
+        if (CHOP.close(head, next)) {
+          head = next;
+          break;
+        }
+        head = next;
+      }
+    }
+    Scalar tail = curvature(init);
+    {
+      Tensor tseq = init;
+      for (int depth = 1; depth < MAX_ITER; ++depth) {
+        tseq = TAIL.apply(tseq);
+        Scalar next = curvature(tseq);
+        if (CHOP.close(tail, next)) {
+          tail = next;
+          break;
+        }
+        tail = next;
+      }
+    }
+    return new ClothoidTerminalRatios(head, tail);
   }
 
   // ---
@@ -40,10 +72,14 @@ public class ClothoidTerminalRatios implements Serializable {
    * @param end
    * @param depth strictly positive */
   public ClothoidTerminalRatios(Tensor beg, Tensor end, int depth) {
-    final Tensor init = CURVE_SUBDIVISION.string(Tensors.of(beg, end));
-    --depth;
-    head = curvature(Nest.of(value -> CURVE_SUBDIVISION.string(value.extract(0, 2)), init, depth));
-    tail = curvature(Nest.of(value -> CURVE_SUBDIVISION.string(value.extract(value.length() - 2, value.length())), init, depth));
+    this( //
+        curvature(Nest.of(HEAD, Tensors.of(beg, end), depth)), //
+        curvature(Nest.of(TAIL, Tensors.of(beg, end), depth)));
+  }
+
+  private ClothoidTerminalRatios(Scalar head, Scalar tail) {
+    this.head = head;
+    this.tail = tail;
   }
 
   public Scalar head() {
