@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
@@ -55,8 +55,8 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
     };
     PriorityQueue<RrtsNode> priorityQueue = new PriorityQueue<>(comparator);
     set.stream().forEach(priorityQueue::add);
-    return IntStream.range(0, k_nearest) //
-        .mapToObj(i -> priorityQueue.poll()) //
+    return Stream.generate(priorityQueue::poll) //
+        .limit(k_nearest) //
         .collect(Collectors.toList());
   }
 
@@ -76,8 +76,8 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
     };
     PriorityQueue<RrtsNode> priorityQueue = new PriorityQueue<>(comparator);
     set.stream().forEach(priorityQueue::add);
-    return IntStream.range(0, k_nearest) //
-        .mapToObj(i -> priorityQueue.poll()) //
+    return Stream.generate(priorityQueue::poll) //
+        .limit(k_nearest) //
         .collect(Collectors.toList());
   }
 }

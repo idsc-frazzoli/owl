@@ -48,7 +48,7 @@ public class NonuniformFixedRadiusGeodesicCenterNEW {
    * @param key: timestamp to be evaluated
    * @param filterradius
    * @return */
-  private Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar radius) {
+  private static Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar radius) {
     Scalar exponent = RealScalar.of(2);
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();

@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -217,9 +218,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   }
 
   private void print(Node node) {
-    String v = IntStream.range(0, root.depth - node.depth) //
-        .mapToObj(i -> " ") //
-        .collect(Collectors.joining());
+    String v = spaces(root.depth - node.depth);
     if (Objects.isNull(node.queue)) {
       System.out.println(v + "<empty>");
       if (Objects.nonNull(node.lChild))
@@ -233,5 +232,10 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       for (NdPair<V> entry : node.queue)
         System.out.println(v + entry.location.toString() + " " + entry.value());
     }
+  }
+
+  // helper function
+  private static String spaces(int level) {
+    return Stream.generate(() -> " ").limit(level).collect(Collectors.joining());
   }
 }

@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 
 /** T is the type of vertex label */
 // TODO JPH/ASTOLL class name is not final
-public class Degraph<T> {
+/* package */ class Degraph<T> {
   private final Collection<Vert<T>> set = new HashSet<>();
 
   public Vert<T> createSingletonVert(T type) {

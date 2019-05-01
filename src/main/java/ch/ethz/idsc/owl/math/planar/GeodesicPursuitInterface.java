@@ -10,8 +10,6 @@ public interface GeodesicPursuitInterface {
   /** @return first/current turning ratio required to drive the calculated geodesic curve */
   Optional<Scalar> firstRatio();
 
+  /** @return */
   Tensor ratios();
-
-  /** @return Tensor of planned geodesic curve trajectory */
-  Tensor curve();
 }

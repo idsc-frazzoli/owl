@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Scalar;
 
 /** T is the type of vertex label */
 // TODO JPH/ASTOLL class name is not final
-public class Vert<T> {
+/* package */ class Vert<T> {
   private final Collection<Vert<T>> parents = new HashSet<>();
   private final Map<Vert<T>, Scalar> children = new HashMap<>();
   private final T label;

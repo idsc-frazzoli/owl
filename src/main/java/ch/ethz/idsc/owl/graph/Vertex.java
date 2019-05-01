@@ -3,8 +3,8 @@ package ch.ethz.idsc.owl.graph;
 
 import java.util.Objects;
 
-public class Vertex<T> {
-  String label;
+/* package */ class Vertex<T> {
+  private final String label;
 
   public Vertex(String label) {
     this.label = label;

@@ -19,9 +19,4 @@ public enum VoidPursuit implements GeodesicPursuitInterface {
   public Tensor ratios() {
     return Tensors.empty();
   }
-
-  @Override // from GeodesicPursuitInterface
-  public Tensor curve() {
-    return Tensors.empty();
-  }
 }

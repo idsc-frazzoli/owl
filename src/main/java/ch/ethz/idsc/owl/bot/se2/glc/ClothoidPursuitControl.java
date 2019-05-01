@@ -11,15 +11,13 @@ import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.planar.ArgMinVariable;
+import ch.ethz.idsc.owl.math.planar.ClothoidPursuit;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.owl.math.planar.GeodesicPursuit;
 import ch.ethz.idsc.owl.math.planar.GeodesicPursuitInterface;
 import ch.ethz.idsc.owl.math.planar.TrajectoryEntryFinder;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.sophus.group.Se2GroupElement;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -29,8 +27,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/* package */ class GeodesicPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
-  private final static GeodesicInterface GEODESIC = ClothoidCurve.INSTANCE;
+/* package */ class ClothoidPursuitControl extends StateTrajectoryControl implements TrajectoryTargetRender {
   private final static int MAX_LEVEL = 25;
   // ---
   private final TrajectoryEntryFinder entryFinder;
@@ -40,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   /** @param entryFinder strategy
    * @param maxTurningRate limits = {-maxTurningRate, +maxTurningRate} */
-  public GeodesicPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
+  public ClothoidPursuitControl(TrajectoryEntryFinder entryFinder, Scalar maxTurningRate) {
     this.entryFinder = entryFinder;
     addRatioLimit(new StaticRatioLimit(maxTurningRate));
   }
@@ -64,21 +61,23 @@ import ch.ethz.idsc.tensor.sca.Sign;
       mirrorAndReverse(beacons);
     // ---
     Predicate<Scalar> isCompliant = isCompliant(state, speed);
-    TensorScalarFunction mapping = vector -> { //
-      GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, vector);
-      Tensor ratios = geodesicPursuit.ratios();
-      if (ratios.stream().map(Tensor::Get).allMatch(isCompliant))
-        return curveLength(geodesicPursuit.curve()); // Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
+    TensorScalarFunction mapping = xya -> { //
+      GeodesicPursuitInterface geodesicPursuitInterface = new ClothoidPursuit(xya);
+      Tensor ratios = geodesicPursuitInterface.ratios();
+      if (ratios.stream().map(Tensor::Get).allMatch(isCompliant)) {
+        return curveLength(ClothoidPursuit.curve(xya, 3)); // Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
+      }
       return DoubleScalar.POSITIVE_INFINITY;
     };
     Scalar var = ArgMinVariable.using(entryFinder, mapping, MAX_LEVEL).apply(beacons);
     Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point;
     if (lookAhead.isPresent()) {
-      GeodesicPursuitInterface geodesicPursuit = new GeodesicPursuit(GEODESIC, lookAhead.get());
-      curve = geodesicPursuit.curve();
+      Tensor xya = lookAhead.get();
+      GeodesicPursuitInterface geodesicPursuitInterface = new ClothoidPursuit(xya);
+      curve = ClothoidPursuit.curve(xya, 2);
       if (inReverse)
         mirrorAndReverse(curve);
-      return Optional.of(CarHelper.singleton(speed, geodesicPursuit.firstRatio().get()).getU());
+      return Optional.of(CarHelper.singleton(speed, geodesicPursuitInterface.firstRatio().get()).getU());
     }
     curve = null;
     // System.err.println("no compliant strategy found!");
