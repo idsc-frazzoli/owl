@@ -117,7 +117,6 @@ public class GeodesicFilterEvaluation {
   }
 
   public static void main(String[] args) throws IOException {
-    // TODO Jan, Sorry, ich weiss nicht wie ich das schöner machen kann :)
     // datanames
     String data1 = "gyro/20181203T184122_1";
     String data2 = "gyro/20181203T184122_2";

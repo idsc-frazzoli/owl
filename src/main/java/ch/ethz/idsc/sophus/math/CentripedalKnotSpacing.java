@@ -11,7 +11,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-// TODO OB is class name correct? if yes, cite source
+// B-Spline Interpolation and Approximation
+// Hongxin Zhang and Jieqing Feng
+// http://www.cad.zju.edu.cn/home/zhx/GM/009/00-bsia.pdf
 public class CentripedalKnotSpacing implements TensorUnaryOperator {
   private final ScalarUnaryOperator power;
   private final TensorMetric tensorMetric;
