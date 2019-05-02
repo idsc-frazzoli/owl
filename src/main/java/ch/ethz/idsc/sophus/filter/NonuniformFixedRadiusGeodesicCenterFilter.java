@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-// TODO OB extract "fixed radius" functionality to separate class, or extract "fixed Radius" to separate class
 public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUnaryOperator {
   /** @param nonuniformFixedRadiusGeodesicCenter
    * @param radius

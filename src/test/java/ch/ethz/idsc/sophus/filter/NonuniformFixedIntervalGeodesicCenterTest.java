@@ -29,7 +29,7 @@ public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
     Chop._09.requireClose(expected, actual);
   }
 
-  public void testUniformXY() {
+  public void testUniform() {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     for (int index = 1; index < 10; ++index) {
       navigableMap.put(RealScalar.of(index), Tensors.of(RealScalar.of(index), RealScalar.of(index), RealScalar.ZERO));
@@ -46,7 +46,7 @@ public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
     // Chop._09.requireClose(expected, actual);
   }
 
-  public void testNonuniformXY() {
+  public void testNonuniformlySpaced() {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     for (int index = 1; index < 10; ++index) {
       navigableMap.put(RealScalar.of(index * index), Tensors.of(RealScalar.of(index * index), RealScalar.of(index * index), RealScalar.ZERO));
@@ -61,7 +61,22 @@ public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
     Assert.assertEquals(actual.get(0), actual.get(1));
   }
 
-  public void testfailY() {
+  public void testNegativeInterval() {
+    NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
+    navigableMap.put(RealScalar.ONE, Tensors.vector(1, 1, 0));
+    NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter = new NonuniformFixedIntervalGeodesicCenter(Se2Geodesic.INSTANCE,
+        SmoothingKernel.GAUSSIAN);
+    Scalar interval = RealScalar.of(-1);
+    Scalar key = RealScalar.of(1);
+    try {
+      nonuniformFixedIntervalGeodesicCenter.apply(navigableMap, key, interval);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testFail() {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     navigableMap.put(RealScalar.ONE, Tensors.vector(1, 1, 0));
     NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter = //
