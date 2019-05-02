@@ -1,4 +1,4 @@
-//code by ob
+// code by ob
 package ch.ethz.idsc.sophus.filter;
 
 import java.util.NavigableMap;

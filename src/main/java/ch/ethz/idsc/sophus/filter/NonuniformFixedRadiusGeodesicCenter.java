@@ -44,17 +44,16 @@ public class NonuniformFixedRadiusGeodesicCenter {
    * @param key: timestamp to be evaluated
    * @param filterradius
    * @return */
+  // TODO OB radius is not used -> remove parameter radius?
   private static Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar radius) {
     Scalar exponent = RealScalar.of(2);
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
     // TODO OB: This does not look right.. aka. not canonical?
-    for (Scalar headMapKey : subMap.headMap(key, false).keySet()) {
+    for (Scalar headMapKey : subMap.headMap(key, false).keySet())
       maskLeft.append(Power.of(RealScalar.ONE.add(key.subtract(headMapKey)).reciprocal(), exponent));
-    }
-    for (Scalar tailMapKey : subMap.tailMap(key, false).descendingKeySet()) {
+    for (Scalar tailMapKey : subMap.tailMap(key, false).descendingKeySet())
       maskRight.append(Power.of(RealScalar.ONE.add(tailMapKey.subtract(key)).reciprocal(), exponent));
-    }
     maskLeft.append(RationalScalar.HALF);
     maskRight.append(RationalScalar.HALF);
     Tensor splitsLeft = maskToSplits(maskLeft);
@@ -74,15 +73,14 @@ public class NonuniformFixedRadiusGeodesicCenter {
     // subMap on the left side: (first_key, key] both excluded
     for (Scalar headMapKey : subMap.subMap(subMap.firstKey(), false, key, true).keySet()) {
       tempL = geodesicInterface.split(tempL, subMap.get(headMapKey), splits.get(0).Get(index));
-      index += 1;
+      ++index;
     }
     index = 0;
     // subMap on the right side: [key, last_key)
     for (Scalar tailMapKey : subMap.subMap(key, true, subMap.lastKey(), false).descendingKeySet()) {
       tempR = geodesicInterface.split(tempR, subMap.get(tailMapKey), splits.get(1).Get(index));
-      index += 1;
+      ++index;
     }
-    Tensor result = geodesicInterface.split(tempL, tempR, splits.get(2).Get(0));
-    return result;
+    return geodesicInterface.split(tempL, tempR, splits.get(2).Get(0));
   }
 }

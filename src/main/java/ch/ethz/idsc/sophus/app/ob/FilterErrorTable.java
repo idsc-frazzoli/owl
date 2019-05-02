@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.TableBuilder;
@@ -20,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 
 enum FilterErrorTable {
   ;
-  public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
+  public static final File ROOT = HomeDirectory.Desktop("MA/owl_export");
 
   public static Tensor process(String name, int width) {
     TableBuilder tableBuilder = new TableBuilder();
