@@ -14,15 +14,15 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-/** intersection with circle centered at (0, 0) and given radius.
+/** intersection of curve with n-dimensional sphere centered at (0, ..., 0) and given radius.
  * 
  * input to intersection query is either a non-cyclic or cyclic polygon
  * the output is the coordinate of intersection using linear interpolation. */
-public class CircleCurveIntersection implements CurveIntersection, Serializable {
-  private final Scalar distance;
+public class SphereCurveIntersection implements CurveIntersection, Serializable {
+  private final Scalar radius;
 
-  public CircleCurveIntersection(Scalar radius) {
-    this.distance = radius;
+  public SphereCurveIntersection(Scalar radius) {
+    this.radius = radius;
   }
 
   @Override // from CurveIntersection
@@ -43,10 +43,10 @@ public class CircleCurveIntersection implements CurveIntersection, Serializable 
       for (int count = first; count < tensor_length; ++count) {
         Tensor next = tensor.get(count);
         Scalar hi = Norm._2.of(next); // "hi" may even be less than "lo"
-        if (Scalars.lessEquals(lo, distance) && Scalars.lessEquals(distance, hi)) {
+        if (Scalars.lessEquals(lo, radius) && Scalars.lessEquals(radius, hi)) {
           Clip clip = Clips.interval(lo, hi); // lo <= distance <= hi
           Interpolation interpolation = LinearInterpolation.of(Tensors.of(prev, next));
-          Scalar lambda = clip.rescale(distance);
+          Scalar lambda = clip.rescale(radius);
           return Optional.of(interpolation.at(lambda));
         }
         prev = next;
