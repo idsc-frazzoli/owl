@@ -14,21 +14,25 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 // TODO OB extract "fixed radius" functionality to separate class, or extract "fixed Radius" to separate class
 public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUnaryOperator {
-  /** @param nonuniformGeodesicCenter
+  /** @param nonuniformFixedRadiusGeodesicCenter
    * @param radius
    * @return
-   * @throws Exception given if nonuniformFixedRadiusGeodesicCenterNEW is null */
-  public static NonuniformFixedRadiusGeodesicCenterFilter of(NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenterNEW, Scalar radius) {
-    return new NonuniformFixedRadiusGeodesicCenterFilter(Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenterNEW), radius);
+   * @throws Exception given if nonuniformFixedRadiusGeodesicCenter is null */
+  public static NonuniformFixedRadiusGeodesicCenterFilter of( //
+      NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, Scalar radius) {
+    return new NonuniformFixedRadiusGeodesicCenterFilter( //
+        Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenter), radius);
   }
 
   // ---
   private final NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter;
-  private Scalar radius;
+  private final Scalar radius;
 
-  private NonuniformFixedRadiusGeodesicCenterFilter(NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenterNEW, Scalar radius) {
-    this.nonuniformFixedRadiusGeodesicCenter = nonuniformFixedRadiusGeodesicCenterNEW;
+  private NonuniformFixedRadiusGeodesicCenterFilter( //
+      NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, Scalar radius) {
+    this.nonuniformFixedRadiusGeodesicCenter = nonuniformFixedRadiusGeodesicCenter;
     this.radius = Sign.requirePositive(radius);
+    // TODO OB if radius is required to be an integer, then use int, or IntegerQ.require(radius);
   }
 
   @Override
