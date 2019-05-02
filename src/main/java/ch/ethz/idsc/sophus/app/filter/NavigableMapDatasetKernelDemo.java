@@ -9,11 +9,11 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 
-/* package */ abstract class StateTimeDatasetKernelDemoNEW extends StateTimeDatasetFilterDemoNEW {
+/* package */ abstract class NavigableMapDatasetKernelDemo extends NavigableMapDatasetFilterDemo {
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
-  public StateTimeDatasetKernelDemoNEW() {
+  public NavigableMapDatasetKernelDemo() {
     {
       spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
       spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);

@@ -7,29 +7,28 @@ import java.util.Objects;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public class NonuniformFixedRadiusGeodesicCenterNEW {
+// code by ob
+public class NonuniformFixedIntervalGeodesicCenter {
   /** @param geodesicInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static NonuniformFixedRadiusGeodesicCenterNEW of(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
-    return new NonuniformFixedRadiusGeodesicCenterNEW(Objects.requireNonNull(geodesicInterface), smoothingKernel);
+  public static NonuniformFixedIntervalGeodesicCenter of(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+    return new NonuniformFixedIntervalGeodesicCenter(Objects.requireNonNull(geodesicInterface), Objects.requireNonNull(smoothingKernel));
   }
 
   // ---
   public final GeodesicInterface geodesicInterface;
   private final SmoothingKernel smoothingKernel;
 
-  /* package */ NonuniformFixedRadiusGeodesicCenterNEW(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+  /* package */ NonuniformFixedIntervalGeodesicCenter(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
     this.geodesicInterface = geodesicInterface;
     this.smoothingKernel = smoothingKernel;
   }
@@ -46,18 +45,17 @@ public class NonuniformFixedRadiusGeodesicCenterNEW {
 
   /** @param subMap
    * @param key: timestamp to be evaluated
-   * @param filterradius
+   * @param interval of considered neighborhood [key - interval, key + interval]
    * @return */
-  private static Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar radius) {
-    Scalar exponent = RealScalar.of(2);
+  private Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
+    Scalar doubleInterval = interval.add(interval);
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
-    // TODO OB: This does not look right.. aka. not canonical?
     for (Scalar headMapKey : subMap.headMap(key, false).keySet()) {
-      maskLeft.append(Power.of(RealScalar.ONE.add(key.subtract(headMapKey)).reciprocal(), exponent));
+      maskLeft.append(smoothingKernel.apply(headMapKey.subtract(key).divide(doubleInterval)));
     }
     for (Scalar tailMapKey : subMap.tailMap(key, false).descendingKeySet()) {
-      maskRight.append(Power.of(RealScalar.ONE.add(tailMapKey.subtract(key)).reciprocal(), exponent));
+      maskRight.append(smoothingKernel.apply(tailMapKey.subtract(key).divide(doubleInterval)));
     }
     maskLeft.append(RationalScalar.HALF);
     maskRight.append(RationalScalar.HALF);
@@ -67,11 +65,13 @@ public class NonuniformFixedRadiusGeodesicCenterNEW {
     return Tensors.of(splitsLeft, splitsRight, splitsFinal);
   }
 
-  public Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar radius) {
-    radius = Sign.requirePositive(radius);
+  // TODO OB/JPH: kann ich das auch als @override umschreiben? Ich moechte ein element fuer die navigableMap returnen
+  public synchronized Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
+    key = Sign.requirePositiveOrZero(key);
+    interval = Sign.requirePositiveOrZero(interval);
     Tensor tempL = subMap.firstEntry().getValue();
     Tensor tempR = subMap.lastEntry().getValue();
-    Tensor splits = splits(subMap, key, radius);
+    Tensor splits = splits(subMap, key, interval);
     int index = 0;
     for (Scalar headMapKey : subMap.headMap(key, false).keySet()) {
       tempL = geodesicInterface.split(tempL, subMap.get(subMap.higherKey(headMapKey)), splits.get(0).Get(index));

@@ -10,22 +10,21 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Min;
 
-public class NonuniformFixedIntervalGeodesicCenterFilterNEW implements NavigableMapUnaryOperator {
+public class NonuniformFixedIntervalGeodesicCenterFilter implements NavigableMapUnaryOperator {
   /** @param nonuniformGeodesicCenter
    * @param (temporal) interval radius
    * @return
    * @throws Exception if given geodesicCenter is null */
-  public static NonuniformFixedIntervalGeodesicCenterFilterNEW of(NonuniformFixedIntervalGeodesicCenterNEW nonuniformFixedIntervalGeodesicCenterNEW,
-      Scalar interval) {
-    return new NonuniformFixedIntervalGeodesicCenterFilterNEW(Objects.requireNonNull(nonuniformFixedIntervalGeodesicCenterNEW), interval);
+  public static NonuniformFixedIntervalGeodesicCenterFilter of(NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter, Scalar interval) {
+    return new NonuniformFixedIntervalGeodesicCenterFilter(Objects.requireNonNull(nonuniformFixedIntervalGeodesicCenter), interval);
   }
 
   // ---
-  private final NonuniformFixedIntervalGeodesicCenterNEW nonuniformFixedIntervalGeodesicCenterNEW;
+  private final NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter;
   private Scalar interval;
 
-  private NonuniformFixedIntervalGeodesicCenterFilterNEW(NonuniformFixedIntervalGeodesicCenterNEW nonuniformFixedIntervalGeodesicCenterNEW, Scalar interval) {
-    this.nonuniformFixedIntervalGeodesicCenterNEW = nonuniformFixedIntervalGeodesicCenterNEW;
+  private NonuniformFixedIntervalGeodesicCenterFilter(NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter, Scalar interval) {
+    this.nonuniformFixedIntervalGeodesicCenter = nonuniformFixedIntervalGeodesicCenter;
     this.interval = interval;
   }
 
@@ -40,7 +39,7 @@ public class NonuniformFixedIntervalGeodesicCenterFilterNEW implements Navigable
       hi = Min.of(navigableMap.lastKey().subtract(key), interval);
       correctedInterval = Min.of(lo, hi);
       NavigableMap<Scalar, Tensor> subMap = navigableMap.subMap(key.subtract(correctedInterval), true, key.add(correctedInterval), true);
-      resultMap.put(key, nonuniformFixedIntervalGeodesicCenterNEW.apply(subMap, key, correctedInterval));
+      resultMap.put(key, nonuniformFixedIntervalGeodesicCenter.apply(subMap, key, correctedInterval));
     }
     return resultMap;
   }

@@ -13,21 +13,21 @@ import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 // TODO OB extract "fixed radius" functionality to separate class, or extract "fixed Radius" to separate class
-public class NonuniformFixedRadiusGeodesicCenterFilterNEW implements NavigableMapUnaryOperator {
+public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUnaryOperator {
   /** @param nonuniformGeodesicCenter
    * @param radius
    * @return
    * @throws Exception given if nonuniformFixedRadiusGeodesicCenterNEW is null */
-  public static NonuniformFixedRadiusGeodesicCenterFilterNEW of(NonuniformFixedRadiusGeodesicCenterNEW nonuniformFixedRadiusGeodesicCenterNEW, Scalar radius) {
-    return new NonuniformFixedRadiusGeodesicCenterFilterNEW(Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenterNEW), radius);
+  public static NonuniformFixedRadiusGeodesicCenterFilter of(NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenterNEW, Scalar radius) {
+    return new NonuniformFixedRadiusGeodesicCenterFilter(Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenterNEW), radius);
   }
 
   // ---
-  private final NonuniformFixedRadiusGeodesicCenterNEW nonuniformFixedRadiusGeodesicCenterNEW;
+  private final NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter;
   private Scalar radius;
 
-  private NonuniformFixedRadiusGeodesicCenterFilterNEW(NonuniformFixedRadiusGeodesicCenterNEW nonuniformFixedRadiusGeodesicCenterNEW, Scalar radius) {
-    this.nonuniformFixedRadiusGeodesicCenterNEW = nonuniformFixedRadiusGeodesicCenterNEW;
+  private NonuniformFixedRadiusGeodesicCenterFilter(NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenterNEW, Scalar radius) {
+    this.nonuniformFixedRadiusGeodesicCenter = nonuniformFixedRadiusGeodesicCenterNEW;
     this.radius = Sign.requirePositive(radius);
   }
 
@@ -44,7 +44,7 @@ public class NonuniformFixedRadiusGeodesicCenterFilterNEW implements NavigableMa
         hiKey = Min.of(navigableMap.higherKey(hiKey), navigableMap.lastKey());
       }
       NavigableMap<Scalar, Tensor> subMap = navigableMap.subMap(loKey, true, hiKey, true);
-      resultMap.put(key, nonuniformFixedRadiusGeodesicCenterNEW.apply(subMap, key, radius));
+      resultMap.put(key, nonuniformFixedRadiusGeodesicCenter.apply(subMap, key, radius));
     }
     return resultMap;
   }
