@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.group;
+package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

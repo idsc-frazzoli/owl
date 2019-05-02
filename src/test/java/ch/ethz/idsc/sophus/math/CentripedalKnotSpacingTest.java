@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.math;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
+import ch.ethz.idsc.sophus.planar.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
