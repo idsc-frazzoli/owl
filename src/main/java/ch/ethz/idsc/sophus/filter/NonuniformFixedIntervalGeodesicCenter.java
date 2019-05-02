@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -60,26 +59,30 @@ public class NonuniformFixedIntervalGeodesicCenter {
     maskLeft.append(RationalScalar.HALF);
     maskRight.append(RationalScalar.HALF);
     Tensor splitsLeft = maskToSplits(maskLeft);
-    Tensor splitsRight = Reverse.of(maskToSplits(maskRight));
+    Tensor splitsRight = maskToSplits(maskRight);
     Tensor splitsFinal = maskToSplits(Tensors.of(Total.of(maskLeft), Total.of(maskRight)));
     return Tensors.of(splitsLeft, splitsRight, splitsFinal);
   }
 
   // TODO OB/JPH: kann ich das auch als @override umschreiben? Ich moechte ein element fuer die navigableMap returnen
   public synchronized Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
+    // TODO OB: require Tensor.length = geodesicInterface."length", also 3 fuer se2?
     key = Sign.requirePositiveOrZero(key);
     interval = Sign.requirePositiveOrZero(interval);
     Tensor tempL = subMap.firstEntry().getValue();
     Tensor tempR = subMap.lastEntry().getValue();
     Tensor splits = splits(subMap, key, interval);
+    // System.out.println(splits);
     int index = 0;
-    for (Scalar headMapKey : subMap.headMap(key, false).keySet()) {
-      tempL = geodesicInterface.split(tempL, subMap.get(subMap.higherKey(headMapKey)), splits.get(0).Get(index));
+    // subMap on the left side: (first_key, key] both excluded
+    for (Scalar headMapKey : subMap.subMap(subMap.firstKey(), false, key, true).keySet()) {
+      tempL = geodesicInterface.split(tempL, subMap.get(headMapKey), splits.get(0).Get(index));
       index += 1;
     }
     index = 0;
-    for (Scalar tailMapKey : subMap.tailMap(key, false).descendingKeySet()) {
-      tempR = geodesicInterface.split(subMap.get(tailMapKey), tempR, splits.get(1).Get(index));
+    // subMap on the right side: [key, last_key)
+    for (Scalar tailMapKey : subMap.subMap(key, true, subMap.lastKey(), false).descendingKeySet()) {
+      tempR = geodesicInterface.split(tempR, subMap.get(tailMapKey), splits.get(1).Get(index));
       index += 1;
     }
     Tensor result = geodesicInterface.split(tempL, tempR, splits.get(2).Get(0));

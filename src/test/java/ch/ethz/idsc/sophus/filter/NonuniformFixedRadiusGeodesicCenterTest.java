@@ -28,7 +28,6 @@ public class NonuniformFixedRadiusGeodesicCenterTest extends TestCase {
   }
 
   public void testUniform() {
-    // TODO OB: there is an error hidden somewhere in NFRGC
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     for (int index = 1; index < 10; ++index) {
       navigableMap.put(RealScalar.of(index), Tensors.of(RealScalar.of(index), RealScalar.of(index), RealScalar.ZERO));
@@ -57,8 +56,7 @@ public class NonuniformFixedRadiusGeodesicCenterTest extends TestCase {
     Assert.assertEquals(actual.get(0), actual.get(1));
   }
 
-  // TODO OB: Does this test make sense? If yes -> translate to NFIGC
-  // This needs no be solved more beatifully
+  // TODO OB: Does this test make sense? rewrite this test more beautiful
   public void testNonuniformlyAbove() {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     navigableMap.put(RealScalar.ZERO, Tensors.vector(0, 0, 0));
@@ -69,11 +67,11 @@ public class NonuniformFixedRadiusGeodesicCenterTest extends TestCase {
     Scalar radius = RealScalar.of(1);
     Scalar key = RealScalar.of(1);
     // ---
-    Tensor actual = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key, radius);
-    Boolean compared = Scalars.lessEquals(actual.Get(0), RealScalar.ONE);
-    Assert.assertEquals(compared, 1);
-  } // TODO OB: Does this test make sense? If yes -> translate to NFIGC
-  // This needs no be solved more beatifully
+    Tensor result = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key, radius);
+    Boolean expected = true;
+    Boolean actual = Scalars.lessThan(result.Get(0), RealScalar.ONE);
+    Assert.assertEquals(expected, actual);
+  }
 
   public void testNegativeTime() {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
