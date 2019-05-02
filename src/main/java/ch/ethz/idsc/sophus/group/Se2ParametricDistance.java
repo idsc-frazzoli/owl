@@ -25,4 +25,8 @@ public enum Se2ParametricDistance implements TensorMetric {
     Scalar alpha = MOD_DISTANCE.apply(p.Get(2).subtract(q.get(2))).multiply(HALF);
     return Norm._2.between(p.extract(0, 2), q.extract(0, 2)).divide(Sinc.FUNCTION.apply(alpha));
   }
+
+  public Scalar norm(Tensor q) {
+    return distance(q.map(Scalar::zero), q);
+  }
 }
