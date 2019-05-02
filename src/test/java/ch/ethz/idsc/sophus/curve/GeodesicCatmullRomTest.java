@@ -2,9 +2,9 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.group.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.math.CentripedalKnotSpacing;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.planar.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

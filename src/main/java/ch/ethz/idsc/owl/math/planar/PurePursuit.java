@@ -42,7 +42,7 @@ public class PurePursuit {
    * @param distance to look ahead
    * @return */
   public static PurePursuit fromTrajectory(Tensor tensor, Scalar distance) {
-    return new PurePursuit(new CircleCurveIntersection(distance).string(tensor));
+    return new PurePursuit(new SphereCurveIntersection(distance).string(tensor));
   }
 
   // ---
