@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** for single integrator state space
@@ -35,7 +36,7 @@ public class R2Flows implements FlowsInterface, Serializable {
     GlobalAssert.that(2 < resolution); // otherwise does not cover plane
     List<Flow> list = new ArrayList<>();
     for (Tensor u : CirclePoints.of(resolution))
-      list.add(StateSpaceModels.createFlow(SINGLE_INTEGRATOR, mapU(u).multiply(speed)));
+      list.add(StateSpaceModels.createFlow(SINGLE_INTEGRATOR, mapU(u).multiply(speed).map(Round.FUNCTION)));
     return list;
   }
 
