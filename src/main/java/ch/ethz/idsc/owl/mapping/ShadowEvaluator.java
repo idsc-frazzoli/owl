@@ -11,6 +11,7 @@ import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_imgproc;
+import org.bytedeco.javacpp.helper.opencv_core.AbstractScalar;
 import org.bytedeco.javacpp.indexer.Indexer;
 
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
@@ -218,9 +219,9 @@ public class ShadowEvaluator {
         .map(shadowMap::state2pixel) // TODO JPH not efficient since converts point -> int{x,y} -> vector -> int[]
         // ... suggestion: use geometricLayer.toVector
         .map(a -> Tensors.vector(a.x(), a.y())));
-    Mat segment = new Mat(mat.size(), mat.type(), opencv_core.Scalar.BLACK);
+    Mat segment = new Mat(mat.size(), mat.type(), AbstractScalar.BLACK);
     // opencv_imgproc.fillPoly(segment, polyPoint, new int[] { 3 }, 1, opencv_core.Scalar.WHITE);
-    opencv_imgproc.fillConvexPoly(segment, polyPoint, 3, opencv_core.Scalar.WHITE);
+    opencv_imgproc.fillConvexPoly(segment, polyPoint, 3, AbstractScalar.WHITE);
     opencv_core.bitwise_and(mat, segment, segment);
     return segment;
   }

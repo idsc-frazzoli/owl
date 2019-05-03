@@ -56,6 +56,10 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
     return replaced;
   }
 
+  protected final GlcNode remove(Tensor domain_key) {
+    return domainMap.remove(domain_key);
+  }
+
   /** @param domain_key
    * @return node in domain or Optional.empty() if domain has not been assigned a node yet */
   protected final Optional<GlcNode> getNode(Tensor domain_key) {
@@ -98,6 +102,9 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
 
   @Override // from ExpandInterface
   public final Optional<GlcNode> pollNext() {
+    // long count = domainMap.values().stream().filter(GlcNode::isLeaf).count();
+    // if (count != queue.size())
+    // System.out.println(count + " " + queue.size());
     // Queue#poll() returns the head of queue, or null if queue is empty
     return Optional.ofNullable(queue.poll());
   }

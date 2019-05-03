@@ -20,6 +20,7 @@ import org.bytedeco.javacpp.opencv_core.Scalar;
 import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacpp.opencv_imgproc;
+import org.bytedeco.javacpp.helper.opencv_core.AbstractScalar;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.data.img.CvHelper;
@@ -96,7 +97,7 @@ public class ShadowMapDirected extends ShadowMapCV {
     // .mapToObj(seg -> StaticHelper.dilateSegment(seg, carObs, carKernels, new Point(2, 2), laneMasks, 15)) // TODO YN magic iteration number
     // .forEach(upimg -> opencv_core.add(obsDilArea, upimg, obsDilArea));
     //
-    initArea = new Mat(img.size(), img.type(), opencv_core.Scalar.WHITE);
+    initArea = new Mat(img.size(), img.type(), AbstractScalar.WHITE);
     opencv_imgproc.erode(initArea, initArea, ellipseKernel, new Point(-1, -1), 1, opencv_core.BORDER_CONSTANT, null);
     opencv_core.subtract(initArea, obsDilArea, initArea);
     this.shadowArea = initArea.clone();
@@ -128,8 +129,8 @@ public class ShadowMapDirected extends ShadowMapCV {
     // tens); // reformat polygon to point
     // ---
     // fill lidar polygon and subtract it from shadow region
-    Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
-    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, opencv_core.Scalar.WHITE);
+    Mat lidarMat = new Mat(initArea.size(), area.type(), AbstractScalar.BLACK);
+    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, AbstractScalar.WHITE);
     opencv_core.subtract(area, lidarMat, area);
     // expand shadow region according to lane direction
     // TODO YN this is a bottleneck

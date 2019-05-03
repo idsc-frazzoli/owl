@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.planar;
 
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -32,7 +31,7 @@ public class CurvatureCombTest extends TestCase {
   }
 
   public void testCircle() {
-    Tensor tensor = CurvatureComb.of(CirclePoints.of(4), RationalScalar.ONE.negate(), true);
+    Tensor tensor = CurvatureComb.of(CirclePoints.of(4), RealScalar.ONE.negate(), true);
     assertTrue(Chop._14.close(tensor, CirclePoints.of(4).multiply(RealScalar.of(2))));
   }
 

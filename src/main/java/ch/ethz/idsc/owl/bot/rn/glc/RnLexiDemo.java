@@ -29,7 +29,6 @@ import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -41,7 +40,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   ;
   private static final StateSpaceModel SINGLE_INTEGRATOR = SingleIntegratorStateSpaceModel.INSTANCE;
   static final StateIntegrator STATE_INTEGRATOR = //
-      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.ONE, 1);
+      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.ONE, 1);
 
   private static TrajectoryPlanner simple() {
     final Tensor stateRoot = Tensors.vector(0, 0);
