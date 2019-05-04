@@ -32,23 +32,4 @@ public enum Semiorder {
       }
     };
   }
-
-  /** Implements the semiorder where the utility function is the identity mapping on the real numbers.
-   * 
-   * @param slack
-   * @return OrderComparison.STRICTLY_PRECEDES if x + slack less than y,
-   * OrderComparison.STRICTLY_SUCCEDES if y + slack less than x, or
-   * OrderComparison.INDIFFERENT if neither of above. */
-  public static OrderComparator<Scalar> comparator(Scalar slack) {
-    return new OrderComparator<Scalar>() {
-      @Override // from OrderComparator
-      public OrderComparison compare(Scalar x, Scalar y) {
-        if (Scalars.lessThan(x.add(slack), y))
-          return OrderComparison.STRICTLY_PRECEDES;
-        if (Scalars.lessThan(y.add(slack), x))
-          return OrderComparison.STRICTLY_SUCCEEDS;
-        return OrderComparison.INDIFFERENT;
-      }
-    };
-  }
 }

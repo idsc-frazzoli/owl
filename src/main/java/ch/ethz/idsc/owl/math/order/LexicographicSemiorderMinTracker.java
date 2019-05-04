@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -30,11 +31,11 @@ class Pair<K> {
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
 public class LexicographicSemiorderMinTracker<K> {
   public static <K> LexicographicSemiorderMinTracker<K> withList(Tensor slackVector) {
-    return new LexicographicSemiorderMinTracker<K> (slackVector, new LinkedList<>());
+    return new LexicographicSemiorderMinTracker<>(slackVector, new LinkedList<>());
   }
 
   public static <K> LexicographicSemiorderMinTracker<K> withSet(Tensor slackVector) {
-    return new LexicographicSemiorderMinTracker<K>(slackVector, new HashSet<>());
+    return new LexicographicSemiorderMinTracker<>(slackVector, new HashSet<>());
   }
 
   // ---
@@ -51,7 +52,7 @@ public class LexicographicSemiorderMinTracker<K> {
     List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
     List<TensorProductOrder> productOrderComparators = new ArrayList<>();
     for (int index = 0; index < dim; ++index) {
-      semiorderComparators.add(Semiorder.comparator(slackVector.Get(index)));
+      semiorderComparators.add(new ScalarSlackSemiorder(slackVector.Get(index)));
       productOrderComparators.add(TensorProductOrder.createTensorProductOrder(index + 1));
     }
     this.semiorderComparators = semiorderComparators;
@@ -98,12 +99,12 @@ public class LexicographicSemiorderMinTracker<K> {
   }
 
   public Collection<K> digest(K key, Tensor x) {
-    Pair<K> applicantPair = new Pair(key, x);
     if (x.length() != dim)
       throw new RuntimeException("Tensor x has wrong dimension");
+    Pair<K> applicantPair = new Pair<>(key, x);
     if (candidateSet.isEmpty()) {
       candidateSet.add(applicantPair);
-      return new ArrayList<K>();
+      return Collections.emptyList();
     }
     return updateCandidateSet(applicantPair);
   }

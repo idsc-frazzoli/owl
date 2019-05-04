@@ -3,8 +3,6 @@ package ch.ethz.idsc.owl.math.order;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.lie.Permutations;
 import junit.framework.TestCase;
 
 public class LexicographicSemiorderMinTrackerTest extends TestCase {

@@ -39,6 +39,7 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -63,6 +64,8 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
     final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(4);
+    for (Flow flow : controls)
+      ExactTensorQ.require(flow.getU());
     RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
     // the 1st cost penalizes distance of path with slack
     CostFunction distanceCost = new CostFunction() {

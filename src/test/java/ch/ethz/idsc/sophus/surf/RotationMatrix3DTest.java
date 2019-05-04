@@ -34,7 +34,7 @@ public class RotationMatrix3DTest extends TestCase {
       Tensor a = NORMALIZE.apply(RandomVariate.of(UNIFORM, 3));
       Tensor b = NORMALIZE.apply(RandomVariate.of(UNIFORM, 3));
       Tensor rotation = RotationMatrix3D.of(a, b);
-      assertTrue(OrthogonalMatrixQ.of(rotation));
+      assertTrue(OrthogonalMatrixQ.of(rotation, Chop._10));
       Chop._08.requireClose(rotation.dot(a), b);
     }
   }
