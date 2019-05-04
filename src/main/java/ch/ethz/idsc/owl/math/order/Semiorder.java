@@ -1,6 +1,8 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.util.function.Function;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 
@@ -18,7 +20,7 @@ public enum Semiorder {
    * @return OrderComparison.STRICTLY_PRECEDES if u(x) + sigma less than f(y),
    * OrderComparison.STRICTLY_SUCCEDES if u(y) + sigma less than f(x),
    * or OrderComparison.INDIFFERENT if neither of the both. */
-  public static <T> OrderComparator<T> comparator(UtilityFunction<T, Scalar> utilityFunction, Scalar slack) {
+  public static <T> OrderComparator<T> comparator(Function<T, Scalar> utilityFunction, Scalar slack) {
     return new OrderComparator<T>() {
       @Override // from OrderComparator
       public OrderComparison compare(T x, T y) {

@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GenericProductOrderComparator implements OrderComparator<Iterable<? extends Object>> {
-  private final List<OrderComparator> comparatorList;
+  private final List<OrderComparator> orderComparators;
 
-  public GenericProductOrderComparator(List<OrderComparator> comparatorList) {
-    this.comparatorList = comparatorList;
+  public GenericProductOrderComparator(List<OrderComparator> orderComparators) {
+    this.orderComparators = orderComparators;
   }
 
   @Override // from OrderComparator
@@ -16,21 +16,21 @@ public class GenericProductOrderComparator implements OrderComparator<Iterable<?
     Iterator<? extends Object> x_iterator = x.iterator();
     Iterator<? extends Object> y_iterator = y.iterator();
     int index = 0;
-    OrderComparison comparison = comparatorList.get(index).compare(x_iterator.next(), y_iterator.next());
+    OrderComparison orderComparison = orderComparators.get(index).compare(x_iterator.next(), y_iterator.next());
     while (true) {
       if (!x_iterator.hasNext()) {
         if (y_iterator.hasNext())
           throw new RuntimeException("Objects not of same size!!");
-        return comparison;
+        return orderComparison;
       }
       ++index;
-      if (comparatorList.size() - 1 < index) {
+      if (orderComparators.size() - 1 < index) {
         throw new RuntimeException("ComparatorList not same size as objects to compare!");
       }
-      OrderComparison nextComparison = comparatorList.get(index).compare(x_iterator.next(), y_iterator.next());
-      comparison = updateOrderComparison(comparison, nextComparison);
-      if (comparison.equals(OrderComparison.INCOMPARABLE))
-        return comparison;
+      OrderComparison nextComparison = orderComparators.get(index).compare(x_iterator.next(), y_iterator.next());
+      orderComparison = updateOrderComparison(orderComparison, nextComparison);
+      if (orderComparison.equals(OrderComparison.INCOMPARABLE))
+        return orderComparison;
     }
   }
 

@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math;
 
 import java.util.Comparator;
 
+import ch.ethz.idsc.owl.math.order.VectorLexicographic;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -45,7 +46,7 @@ public class DiscretizedLexicographic implements Comparator<Tensor> {
     }
     // TODO suggestion by jan is to simply return 0 here
     if (cmp == 0)
-      cmp = Lexicographic.COMPARATOR.compare(t1, t2);
+      cmp = VectorLexicographic.COMPARATOR.compare(t1, t2);
     return cmp;
   }
 }

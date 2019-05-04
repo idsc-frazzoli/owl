@@ -1,13 +1,15 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.util.function.Function;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import junit.framework.TestCase;
 
 public class SemiorderTest extends TestCase {
   public void testIdentity() {
-    OrderComparator<Scalar> semiorder = Semiorder.comparator(IdentityUtilityFunction.identity(), RealScalar.ONE);
+    OrderComparator<Scalar> semiorder = Semiorder.comparator(Function.identity(), RealScalar.ONE);
     assertTrue(semiorder.compare(RealScalar.ONE, RealScalar.of(1.5)).equals(OrderComparison.INDIFFERENT));
     assertTrue(semiorder.compare(RealScalar.of(21), RealScalar.of(21)).equals(OrderComparison.INDIFFERENT));
     assertTrue(semiorder.compare(RealScalar.of(2.4), RealScalar.of(1)).equals(OrderComparison.STRICTLY_SUCCEEDS));

@@ -7,6 +7,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.owl.math.order.VectorLexicographic;
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
@@ -164,7 +165,7 @@ public class VectorScalar extends AbstractScalar implements //
   public int compareTo(Scalar scalar) {
     if (scalar instanceof VectorScalar) {
       VectorScalar vectorScalar = (VectorScalar) scalar;
-      return Lexicographic.COMPARATOR.compare(vector, vectorScalar.vector());
+      return VectorLexicographic.COMPARATOR.compare(vector, vectorScalar.vector());
     }
     throw TensorRuntimeException.of(this, scalar);
   }
