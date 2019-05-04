@@ -17,17 +17,12 @@ public class GenericLexicographicComparator implements OrderComparator<Iterable<
   public OrderComparison compare(Iterable<? extends Object> x, Iterable<? extends Object> y) {
     Iterator<? extends Object> x_iterator = x.iterator();
     Iterator<? extends Object> y_iterator = y.iterator();
-    int index = 0;
-    while (true) {
-      if (!x_iterator.hasNext()) {
-        if (y_iterator.hasNext())
-          throw new RuntimeException("x and y not of same size!");
-        return OrderComparison.INDIFFERENT;
-      }
-      OrderComparison orderComparison = orderComparators.get(index).compare(x_iterator.next(), y_iterator.next());
+    OrderComparison orderComparison = OrderComparison.INDIFFERENT;
+    for (OrderComparator orderComparator : orderComparators) {
+      orderComparison = orderComparator.compare(x_iterator.next(), y_iterator.next());
       if (!orderComparison.equals(OrderComparison.INDIFFERENT))
-        return orderComparison;
-      ++index;
+        break;
     }
+    return orderComparison;
   }
 }

@@ -1,4 +1,4 @@
-// code by andre
+// code by astoll
 package ch.ethz.idsc.owl.math.order;
 
 import ch.ethz.idsc.tensor.Scalar;
