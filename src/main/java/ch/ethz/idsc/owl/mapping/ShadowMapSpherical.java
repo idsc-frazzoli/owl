@@ -17,6 +17,7 @@ import org.bytedeco.javacpp.opencv_cudaarithm;
 import org.bytedeco.javacpp.opencv_cudafilters;
 import org.bytedeco.javacpp.opencv_cudafilters.Filter;
 import org.bytedeco.javacpp.opencv_imgproc;
+import org.bytedeco.javacpp.helper.opencv_core.AbstractScalar;
 
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.data.img.CvHelper;
@@ -52,7 +53,7 @@ public class ShadowMapSpherical extends ShadowMapCV {
     opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV); // TODO magic consts
     //
     Mat obstacleArea = area.clone();
-    initArea = new Mat(obstacleArea.size(), obstacleArea.type(), org.bytedeco.javacpp.opencv_core.Scalar.WHITE);
+    initArea = new Mat(obstacleArea.size(), obstacleArea.type(), AbstractScalar.WHITE);
     opencv_imgproc.erode(initArea, initArea, sphericalKernel, new Point(-1, -1), 1, opencv_core.BORDER_CONSTANT, null);
     // opencv_imgproc.dilate(obstacleArea, obstacleArea, sphericalKernel, new Point(-1, -1), radius2it(rMin), opencv_core.BORDER_CONSTANT, null);
     Mat radPx = new Mat(Scalar.all((rMin) / pixelDim.number().floatValue()));
@@ -100,8 +101,8 @@ public class ShadowMapSpherical extends ShadowMapCV {
     // tens); // reformat polygon to point
     // ---
     // fill lidar polygon and subtract it from shadow region
-    Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
-    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, opencv_core.Scalar.WHITE);
+    Mat lidarMat = new Mat(initArea.size(), area.type(), AbstractScalar.BLACK);
+    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, AbstractScalar.WHITE);
     opencv_core.subtract(area, lidarMat, area);
     //  ---
     // dilate and intersect
@@ -129,8 +130,8 @@ public class ShadowMapSpherical extends ShadowMapCV {
     world2pixelLayer.popMatrix();
     // ---
     // fill lidar polygon and subtract it from shadow region
-    Mat lidarMat = new Mat(initArea.size(), area.type(), opencv_core.Scalar.BLACK);
-    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, opencv_core.Scalar.WHITE);
+    Mat lidarMat = new Mat(initArea.size(), area.type(), AbstractScalar.BLACK);
+    opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, AbstractScalar.WHITE);
     lidarMatGpu.upload(lidarMat);
     int it = radius2it(timeDelta * vMax);
     opencv_cudaarithm.subtract(area, lidarMatGpu, area);

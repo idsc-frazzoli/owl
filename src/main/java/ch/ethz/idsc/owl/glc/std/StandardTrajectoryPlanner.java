@@ -84,6 +84,19 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
     // ---
     domainQueueMap.map.entrySet().stream().parallel() //
         .forEach(entry -> processCandidates(node, connectors, entry.getKey(), entry.getValue()));
+    // GlcNode seed = node;
+    // while (seed.children().isEmpty()) {
+    // GlcNode par = node.parent();
+    // if (Objects.isNull(par))
+    // break;
+    // // System.out.println("stuck at node.");
+    // GlobalAssert.that(seed.isLeaf());
+    // par.removeEdgeTo(seed);
+    // GlcNode remove = remove(stateTimeRaster().convertToKey(seed.stateTime()));
+    // if (remove != seed)
+    // throw new RuntimeException();
+    // seed = par;
+    // }
   }
 
   private void processCandidates( //

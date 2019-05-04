@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.win;
 
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +38,7 @@ public enum MouseGoal {
       @Override
       public void mouseClicked(MouseEvent mouseEvent) {
         final int mods = mouseEvent.getModifiersEx();
-        final int mask = MouseWheelEvent.CTRL_DOWN_MASK; // 128 = 2^7
+        final int mask = InputEvent.CTRL_DOWN_MASK; // 128 = 2^7
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
           if ((mods & mask) == 0) // no ctrl pressed
             goalConsumer.accept(geometricComponent.getMouseSe2State());

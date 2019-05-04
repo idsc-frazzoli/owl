@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
@@ -73,8 +74,8 @@ public enum DemoLauncher {
       jComponent.add(jPanel, BorderLayout.NORTH);
     }
     jFrame.setContentPane(new JScrollPane(jComponent, //
-        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, //
-        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, //
+        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
     jFrame.setBounds(1200, 100, 250, Math.min(40 + demos.size() * BUTTON_HEIGHT, 800));
     jFrame.setVisible(true);
   }

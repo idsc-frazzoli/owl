@@ -40,6 +40,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
@@ -52,7 +53,6 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
   private final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Scalar> spinnerMagicC = new SpinnerLabel<>();
-  private final JToggleButton jToggleBndy = new JToggleButton("bndy");
   private final JToggleButton jToggleLine = new JToggleButton("line");
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
@@ -98,9 +98,6 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
       StandardMenu.bind(jButton, supplier);
       timerFrame.jToolBar.add(jButton);
     }
-    // ---
-    jToggleBndy.setSelected(true);
-    timerFrame.jToolBar.add(jToggleBndy);
     // ---
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
@@ -160,29 +157,25 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
     // ---
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = control();
-    if (jToggleBndy.isSelected() && !cyclic && 1 < control.length()) {
-      switch (scheme) {
-      case BSPLINE2:
-      case BSPLINE4:
-      case BSPLINE4S2:
-      case BSPLINE4S3:
-        control = Join.of( //
-            control.extract(0, 1), //
-            control, //
-            control.extract(control.length() - 1, control.length()));
-        break;
-      default:
-        break;
-      }
-    }
     int levels = spinnerRefine.getValue();
-    final Tensor refined;
+    Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
       Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
       TensorUnaryOperator tensorUnaryOperator = create(function.apply(geodesicDisplay.geodesicInterface()), cyclic);
-      refined = Nest.of(tensorUnaryOperator, control, levels);
+      refined = control;
+      for (int level = 0; level < levels; ++level) {
+        Tensor prev = refined;
+        refined = tensorUnaryOperator.apply(refined);
+        if (CurveSubdivisionHelper.isDual(scheme) && level % 2 == 1 && !cyclic && 1 < control.length()) {
+          refined = Join.of( //
+              Tensors.of(geodesicDisplay.geodesicInterface().split(control.get(0), prev.get(0), RationalScalar.HALF)), //
+              refined, //
+              Tensors.of(geodesicDisplay.geodesicInterface().split(Last.of(prev), Last.of(control), RationalScalar.HALF)) //
+          );
+        }
+      }
     }
     if (jToggleLine.isSelected()) {
       TensorUnaryOperator tensorUnaryOperator = create(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface()), cyclic);

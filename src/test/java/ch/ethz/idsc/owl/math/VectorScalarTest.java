@@ -33,7 +33,7 @@ public class VectorScalarTest extends TestCase {
     a = VectorScalar.of(Tensors.of(RealScalar.ONE, DoubleScalar.NEGATIVE_INFINITY));
     assertFalse(MachineNumberQ.of(a));
     assertFalse(ExactScalarQ.of(a));
-    a = VectorScalar.of(Tensors.of(RealScalar.ONE, DoubleScalar.ONE));
+    a = VectorScalar.of(Tensors.of(RealScalar.ONE, RealScalar.ONE));
     assertTrue(ExactScalarQ.of(a));
     // ---
     Scalar v1 = VectorScalar.of(Tensors.vector(1, 6, 1));

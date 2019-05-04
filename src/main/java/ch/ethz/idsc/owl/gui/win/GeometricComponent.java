@@ -7,10 +7,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +75,7 @@ public final class GeometricComponent {
     jComponent.addMouseWheelListener(event -> {
       final int delta = -event.getWheelRotation(); // either 1 or -1
       final int mods = event.getModifiersEx();
-      final int mask = MouseWheelEvent.CTRL_DOWN_MASK; // 128 = 2^7
+      final int mask = InputEvent.CTRL_DOWN_MASK; // 128 = 2^7
       if ((mods & mask) == 0) { // ctrl pressed?
         mouseWheel += delta;
       } else //
@@ -122,7 +122,7 @@ public final class GeometricComponent {
             // ---
             down = now;
             final int mods = mouseEvent.getModifiersEx();
-            final int mask = MouseWheelEvent.CTRL_DOWN_MASK; // 128 = 2^7
+            final int mask = InputEvent.CTRL_DOWN_MASK; // 128 = 2^7
             if ((mods & mask) == 0) {
               model2pixel.set(RealScalar.of(dx)::add, 0, 2);
               model2pixel.set(RealScalar.of(dy)::add, 1, 2);

@@ -98,6 +98,9 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
 
   @Override // from ExpandInterface
   public final Optional<GlcNode> pollNext() {
+    // long count = domainMap.values().stream().filter(GlcNode::isLeaf).count();
+    // if (count != queue.size())
+    // System.out.println(count + " " + queue.size());
     // Queue#poll() returns the head of queue, or null if queue is empty
     return Optional.ofNullable(queue.poll());
   }
