@@ -31,6 +31,7 @@ public class RepresentativeTransitiveMinTracker<T> extends TransitiveMinTracker<
    * @return true if element to be discarded or false otherwise */
   @Override
   protected boolean discardCriterion(OrderComparison orderComparison) {
-    return orderComparison.equals(OrderComparison.STRICTLY_SUCCEEDS) || orderComparison.equals(OrderComparison.INDIFFERENT);
+    return orderComparison.equals(OrderComparison.STRICTLY_SUCCEEDS) //
+        || orderComparison.equals(OrderComparison.INDIFFERENT);
   }
 }

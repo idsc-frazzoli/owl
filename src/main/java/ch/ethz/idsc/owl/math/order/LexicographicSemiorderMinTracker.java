@@ -43,17 +43,17 @@ public class LexicographicSemiorderMinTracker<K> {
   private final Tensor slackVector;
   private final int dim;
   private final List<OrderComparator<Scalar>> semiorderComparators;
-  private final List<TensorProductOrder> productOrderComparators;
+  private final List<ProductOrderComparator> productOrderComparators;
 
   private LexicographicSemiorderMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet) {
     this.candidateSet = candidateSet;
     this.slackVector = slackVector;
     this.dim = slackVector.length();
     List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
-    List<TensorProductOrder> productOrderComparators = new ArrayList<>();
+    List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
     for (int index = 0; index < dim; ++index) {
       semiorderComparators.add(new ScalarSlackSemiorder(slackVector.Get(index)));
-      productOrderComparators.add(TensorProductOrder.createTensorProductOrder(index + 1));
+      productOrderComparators.add(TensorProductOrder.comparator(index + 1));
     }
     this.semiorderComparators = semiorderComparators;
     this.productOrderComparators = productOrderComparators;

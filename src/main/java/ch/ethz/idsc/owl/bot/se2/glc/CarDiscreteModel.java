@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.math.Lexicographic;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.order.VectorLexicographic;
 import ch.ethz.idsc.subare.core.DiscreteModel;
 import ch.ethz.idsc.subare.core.TerminalInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -72,7 +72,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       return Tensors.of(CarDiscreteModel.COLLISION, RealScalar.ONE);
     Tensor tensor = Tensors.vectorInt(Ordering.DECREASING.of(range));
     Tensor revrse = Reverse.of(tensor);
-    int cmp = Lexicographic.COMPARATOR.compare(tensor, revrse);
+    int cmp = VectorLexicographic.COMPARATOR.compare(tensor, revrse);
     if (1 == cmp)
       return Tensors.of(revrse, RealScalar.ONE.negate());
     return Tensors.of(tensor, RealScalar.ONE);
