@@ -1,15 +1,15 @@
-// code by astoll
+// code by astoll, jph
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Iterator;
 import java.util.List;
 
-/** Creates a product order comparator where each elements of two tuples are compared coordinatewise.
- * An element x precedes y if it precedes y in all coordinates. */
-public class GenericProductOrderComparator implements OrderComparator<Iterable<? extends Object>> {
+/** Creates a lexicographic order where two tuples are compared to each other. An element x precedes another element
+ * y if there is an index where x_i precedes y_i and for all indices j smaller than i x_j is indifferent y_j. */
+public class LexicographicComparator implements OrderComparator<Iterable<? extends Object>> {
   private final List<OrderComparator> orderComparators;
 
-  public GenericProductOrderComparator(List<OrderComparator> orderComparators) {
+  public LexicographicComparator(List<OrderComparator> orderComparators) {
     this.orderComparators = orderComparators;
   }
 
@@ -19,8 +19,8 @@ public class GenericProductOrderComparator implements OrderComparator<Iterable<?
     Iterator<? extends Object> y_iterator = y.iterator();
     OrderComparison orderComparison = OrderComparison.INDIFFERENT;
     for (OrderComparator orderComparator : orderComparators) {
-      orderComparison = ProductOrder.intersect(orderComparison, orderComparator.compare(x_iterator.next(), y_iterator.next()));
-      if (orderComparison.equals(OrderComparison.INCOMPARABLE))
+      orderComparison = orderComparator.compare(x_iterator.next(), y_iterator.next());
+      if (!orderComparison.equals(OrderComparison.INDIFFERENT))
         break;
     }
     return orderComparison;

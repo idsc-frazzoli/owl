@@ -1,24 +1,19 @@
 // code by astoll
 package ch.ethz.idsc.owl.demo.order;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import ch.ethz.idsc.owl.math.order.GenericProductOrderComparator;
-import ch.ethz.idsc.owl.math.order.Order;
-import ch.ethz.idsc.owl.math.order.OrderComparator;
-import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.owl.math.order.ProductOrderComparator;
 
-public class TensorProductOrder extends GenericProductOrderComparator {
-  public TensorProductOrder(List<OrderComparator> comparatorList) {
-    super(comparatorList);
-  }
-
-  public static TensorProductOrder createTensorProductOrder(int dim) {
-    List<OrderComparator> comparators = new LinkedList<>();
-    for (int i = 0; i < dim; ++i) {
-      comparators.add(Order.comparator(Scalars::lessEquals));
-    }
-    return new TensorProductOrder(comparators);
+public enum TensorProductOrder {
+  ;
+  /** @param length
+   * @return */
+  public static ProductOrderComparator comparator(int length) {
+    return new ProductOrderComparator( //
+        Stream.generate(() -> ScalarTotalOrder.INSTANCE) //
+            .limit(length) //
+            .collect(Collectors.toList()));
   }
 }

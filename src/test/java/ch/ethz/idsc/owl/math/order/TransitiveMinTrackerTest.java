@@ -1,10 +1,11 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ch.ethz.idsc.owl.demo.order.DigitSumDivisibilityPreorder;
+import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -115,11 +116,10 @@ public class TransitiveMinTrackerTest extends TestCase {
   }
 
   public void testLexicographic() {
-    List<OrderComparator> comparators = Arrays.asList( //
-        Order.comparator(Scalars::lessEquals), Order.comparator(Scalars::lessEquals)); //
+    List<OrderComparator> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     Tensor tensorX = Tensors.fromString("{1,2}");
     Tensor tensorY = Tensors.fromString("{2,3}");
-    GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
+    LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveMinTracker<Iterable<? extends Object>> lexTracker = TransitiveMinTracker.withSet(genericLexicographicOrder);
     lexTracker.digest(tensorX);
     lexTracker.digest(tensorY);

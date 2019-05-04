@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.owl.math.order.GenericLexicographicComparator;
+import ch.ethz.idsc.owl.math.order.LexicographicComparator;
 import ch.ethz.idsc.owl.math.order.MinTracker;
 import ch.ethz.idsc.owl.math.order.TransitiveMinTracker;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,11 +22,11 @@ public class TransitiveLexicographicOptimization implements OptimizationClass<Te
   final List<Tensor> inputs;
   final List<Function<Tensor, Tensor>> featureFunctionVector;
   private final List<Function<Tensor, Tensor>> scoringFunctionVector;
-  final GenericLexicographicComparator orderComparator;
+  final LexicographicComparator orderComparator;
   private final MinTracker<Iterable<? extends Object>> minTracker;
 
   public TransitiveLexicographicOptimization(List<Tensor> inputs, List<Function<Tensor, Tensor>> featureFunctionVector,
-      List<Function<Tensor, Tensor>> scoringFunctionVector, GenericLexicographicComparator orderComparator) {
+      List<Function<Tensor, Tensor>> scoringFunctionVector, LexicographicComparator orderComparator) {
     this.inputs = inputs;
     this.featureFunctionVector = featureFunctionVector;
     this.scoringFunctionVector = scoringFunctionVector;
