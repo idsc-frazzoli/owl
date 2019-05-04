@@ -2,10 +2,11 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.ethz.idsc.owl.demo.order.IntegerTotalOrder;
+import ch.ethz.idsc.owl.demo.order.SetPartialOrder;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -33,11 +34,9 @@ public class GenericProductOrderComparatorTest extends TestCase {
     List<Object> listY = new LinkedList<>();
     listY.add(123);
     listY.add(Arrays.asList(3, 4));
-    BinaryRelation<Integer> relation1 = (x, y) -> x <= y;
-    BinaryRelation<Collection<?>> relation2 = (x, y) -> y.containsAll(x);
     List<OrderComparator> comparators = Arrays.asList( //
-        Order.comparator(relation1), //
-        Order.comparator(relation2)); //
+        IntegerTotalOrder.INSTANCE, //
+        SetPartialOrder.INSTANCE); //
     GenericProductOrderComparator genericProductOrder = new GenericProductOrderComparator(comparators);
     OrderComparison orderComparison = genericProductOrder.compare(listX, listY);
     assertEquals(orderComparison, OrderComparison.STRICTLY_SUCCEEDS);

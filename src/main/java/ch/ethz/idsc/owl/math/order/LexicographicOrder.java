@@ -15,16 +15,17 @@ public class LexicographicOrder<T> implements OrderComparator<List<T>> {
   public OrderComparison compare(List<T> x, List<T> y) {
     if (x.size() != y.size())
       throw new RuntimeException("Elements to compare not of same size");
-    OrderComparison LexicoComparison = OrderComparison.INDIFFERENT;
+    OrderComparison orderComparison = OrderComparison.INDIFFERENT;
     for (int index = 0; index < x.size(); ++index) {
       OrderComparison stepComparison = comparatorList.get(index).compare(x.get(index), y.get(index));
-      if (stepComparison.equals(OrderComparison.STRICTLY_PRECEDES) || stepComparison.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
+      if (stepComparison.equals(OrderComparison.STRICTLY_PRECEDES) || //
+          stepComparison.equals(OrderComparison.STRICTLY_SUCCEEDS))
         return stepComparison;
-      } else if (stepComparison.equals(OrderComparison.INCOMPARABLE)) {
-        LexicoComparison = stepComparison;
-      }
+      else //
+      if (stepComparison.equals(OrderComparison.INCOMPARABLE))
+        orderComparison = stepComparison;
     }
-    return LexicoComparison;
+    return orderComparison;
   }
   // public boolean qualifiedForComp(List<T> x, List<T> y) {
   // boolean notSameSize = (x.size() != y.size());

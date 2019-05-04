@@ -2,10 +2,11 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.ethz.idsc.owl.demo.order.IntegerTotalOrder;
+import ch.ethz.idsc.owl.demo.order.SetPartialOrder;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -26,18 +27,16 @@ public class GenericLexicographicComparatorTest extends TestCase {
     assertEquals(orderComparison, OrderComparison.INDIFFERENT);
   }
 
-  public void testMixed() {
+  public void testMixed2() {
     List<Object> listX = new LinkedList<>();
     listX.add(123);
     listX.add(Arrays.asList(2, 3, 4));
     List<Object> listY = new LinkedList<>();
     listY.add(123);
     listY.add(Arrays.asList(3, 4));
-    BinaryRelation<Integer> relation1 = (x, y) -> x <= y;
-    BinaryRelation<Collection<?>> relation2 = (x, y) -> y.containsAll(x);
     List<OrderComparator> comparators = Arrays.asList( //
-        Order.comparator(relation1), //
-        Order.comparator(relation2)); //
+        IntegerTotalOrder.INSTANCE, //
+        SetPartialOrder.INSTANCE); //
     GenericLexicographicComparator genericLexicographicOrder = new GenericLexicographicComparator(comparators);
     OrderComparison orderComparison = genericLexicographicOrder.compare(listX, listY);
     assertEquals(orderComparison, OrderComparison.STRICTLY_SUCCEEDS);
