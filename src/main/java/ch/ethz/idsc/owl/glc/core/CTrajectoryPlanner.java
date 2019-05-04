@@ -56,10 +56,6 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
     return replaced;
   }
 
-  protected final GlcNode remove(Tensor domain_key) {
-    return domainMap.remove(domain_key);
-  }
-
   /** @param domain_key
    * @return node in domain or Optional.empty() if domain has not been assigned a node yet */
   protected final Optional<GlcNode> getNode(Tensor domain_key) {

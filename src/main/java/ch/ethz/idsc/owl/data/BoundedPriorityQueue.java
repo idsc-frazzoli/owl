@@ -32,5 +32,8 @@ import java.util.PriorityQueue;
     return false;
   }
 
+  /** @param comparable candidate
+   * @param peek from queue
+   * @return true if comparable candidate strictly precedes than peek */
   protected abstract boolean isFavored(Comparable<T> comparable, T peek);
 }
