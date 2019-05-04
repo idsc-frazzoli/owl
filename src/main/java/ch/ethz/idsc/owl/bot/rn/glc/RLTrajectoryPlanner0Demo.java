@@ -25,6 +25,7 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.rl.RLTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl.StandardRLTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
+import ch.ethz.idsc.owl.gui.ren.EtaRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -38,6 +39,7 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -48,20 +50,22 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 public class RLTrajectoryPlanner0Demo implements DemoInterface {
   private static final StateIntegrator STATE_INTEGRATOR = //
-      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 12), 4);
+      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(4, 7), 1);
   private static final Tensor POLYGON = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
   private static final PolygonRegion POLYGON_REGION = new PolygonRegion(POLYGON);
 
   static Optional<GlcNode> getBest() {
-    Tensor slacks = Tensors.vector(1, 0, 0);
+    Tensor slacks = Tensors.vector(5, 2);
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
     // ---
-    int n = 8;
+    int n = 3;
     Tensor eta = Tensors.vector(n, n);
     final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(4);
+    for (Flow flow : controls)
+      ExactTensorQ.require(flow.getU());
     RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
     // the 1st cost penalizes distance of path with slack
     CostFunction distanceCost = new CostFunction() {
@@ -77,11 +81,11 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
     };
     // the 2nd cost penalizes membership in region
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(POLYGON_REGION);
-    CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, Quantity.of(1, ""));
+    CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, Quantity.of(2, ""));
     // ---
     // the 3rd cost penalizes distance of path
     GoalInterface goalInterface = //
-        new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost, distanceCost), goalRegion);
+        new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost), goalRegion);
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     RLTrajectoryPlanner trajectoryPlanner = new StandardRLTrajectoryPlanner( //
@@ -96,6 +100,8 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
   public BaseFrame start() {
     Optional<GlcNode> optional = getBest();
     GlcNode goalNode = optional.get();
+    System.out.println(goalNode.merit());
+    System.out.println(goalNode.costFromRoot());
     @SuppressWarnings("unused")
     VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
     // System.out.println(cost);
@@ -107,6 +113,8 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
     TrajectoryRender trajectoryRender = new TrajectoryRender();
     trajectoryRender.trajectory(trajectory);
     owlyAnimationFrame.addBackground(trajectoryRender);
+    Tensor eta = Tensors.vector(3, 3);
+    owlyAnimationFrame.addBackground(new EtaRender(eta));
     return owlyAnimationFrame;
   }
 
