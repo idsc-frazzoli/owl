@@ -3,11 +3,8 @@ package ch.ethz.idsc.owl.bot.rice;
 
 import java.awt.Graphics2D;
 import java.util.Collection;
-import java.util.List;
 
 import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
-import ch.ethz.idsc.owl.ani.api.AbstractCircularEntity;
-import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -15,7 +12,6 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
@@ -26,19 +22,16 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-/* package */ class Rice1dEntity extends AbstractCircularEntity implements GlcPlannerCallback {
+/* package */ class Rice1dEntity extends RiceBaseEntity {
   private static final Integrator INTEGRATOR = RungeKutta4Integrator.INSTANCE;
   // ---
-  private final TreeRender treeRender = new TreeRender();
   private final Collection<Flow> controls;
 
   /** @param state initial position of entity */
@@ -48,11 +41,6 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
         trajectoryControl);
     add(new FallbackControl(Array.zeros(1)));
     this.controls = controls;
-  }
-
-  @Override
-  public Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y); // non-negative
   }
 
   @Override
@@ -76,10 +64,5 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     super.render(geometricLayer, graphics);
     // ---
     treeRender.render(geometricLayer, graphics);
-  }
-
-  @Override
-  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     spinnerRefine.setValue(4);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
-    setControl(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}}"));
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}}"));
     // ---
     timerFrame.geometricComponent.addRenderInterfaceBackground(AxesRender.INSTANCE);
   }
@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     GraphicsUtil.setQualityHigh(graphics);
     int degree = spinnerDegree.getValue();
     int levels = spinnerRefine.getValue();
-    Tensor control = control();
+    Tensor control = getGeodesicControlPoints();
     // ---
     Tensor _effective = control;
     // ---

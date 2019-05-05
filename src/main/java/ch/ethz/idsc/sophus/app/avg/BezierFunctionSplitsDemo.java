@@ -24,7 +24,7 @@ public class BezierFunctionSplitsDemo extends GeodesicSplitsDemo {
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
     // ---
-    setControl(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
+    setControlPointsSe2(Tensors.fromString("{{0,0,0},{2,2,1},{5,0,2}}"));
   }
 
   @Override // from GeodesicAverageDemo

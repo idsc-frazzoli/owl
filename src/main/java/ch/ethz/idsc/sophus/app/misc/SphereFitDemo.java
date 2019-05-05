@@ -49,14 +49,14 @@ import ch.ethz.idsc.tensor.red.Norm;
     timerFrame.jToolBar.add(jTextField);
     // ---
     Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-    setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+    setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
         Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
   }
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    Tensor control = control();
+    Tensor control = getGeodesicControlPoints();
     Optional<SphereFit> optional = SphereFit.of(control);
     if (optional.isPresent()) {
       Tensor center = optional.get().center();

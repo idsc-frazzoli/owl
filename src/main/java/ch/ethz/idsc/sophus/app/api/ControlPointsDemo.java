@@ -35,7 +35,6 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       new PointsRender(new Color(160, 160, 160, 128 + 64), Color.BLACK);
   // ---
   private final JButton jButton = new JButton("clear");
-  // private final JToggleButton jToggleComb = new JToggleButton("comb");
   // ---
   private Tensor control = Tensors.empty();
   private Tensor mouse = Array.zeros(3);
@@ -52,7 +51,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         Optional<Integer> optional = closest();
         graphics.setColor(optional.isPresent() ? Color.ORANGE : Color.GREEN);
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
-        graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape()));
+        graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
         geometricLayer.popMatrix();
       }
     }
@@ -68,10 +67,6 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       jButton.addActionListener(actionListener);
       timerFrame.jToolBar.add(jButton);
     }
-    // jToggleComb.setSelected(true);
-    // if (curvatureButton)
-    // timerFrame.jToolBar.add(jToggleComb);
-    // ---
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent mouseEvent) {
@@ -82,12 +77,23 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
               min_index = control.length();
               control.append(mouse);
             }
-          } else
+          } else {
             min_index = null;
+            released();
+          }
         }
       }
     });
     timerFrame.geometricComponent.addRenderInterface(renderInterface);
+  }
+
+  public Tensor getControlPointShape() {
+    return geodesicDisplay().shape();
+  }
+
+  /** function is called when mouse is released */
+  public void released() {
+    // ---
   }
 
   private Optional<Integer> closest() {
@@ -108,27 +114,33 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   public final void addButtonDubins() {
     JButton jButton = new JButton("dubins");
     jButton.setToolTipText("project control points to dubins path");
-    jButton.addActionListener(actionEvent -> setControl(DubinsGenerator.project(control)));
+    jButton.addActionListener(actionEvent -> setControlPointsSe2(DubinsGenerator.project(control)));
     timerFrame.jToolBar.add(jButton);
   }
 
   /** @param control points as matrix of dimensions N x 3 */
-  public final void setControl(Tensor control) {
+  public final void setControlPointsSe2(Tensor control) {
     this.control = Tensor.of(control.stream() //
         .map(row -> VectorQ.requireLength(row, 3).map(Tensor::copy)));
   }
 
-  public final Tensor control() {
-    return Tensor.of(control.stream().map(geodesicDisplay()::project).map(N.DOUBLE::of)).unmodifiable();
+  /** @return control points as matrix of dimensions N x 3 */
+  public final Tensor getControlPointsSe2() {
+    return control.unmodifiable();
+  }
+
+  /** @return control points for selected {@link GeodesicDisplay} */
+  public final Tensor getGeodesicControlPoints() {
+    return Tensor.of(control.stream().map(geodesicDisplay()::project).map(N.DOUBLE::of));
   }
 
   protected final void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {
-    POINTS_RENDER_0.new Show(geodesicDisplay(), control()).render(geometricLayer, graphics);
+    POINTS_RENDER_0.new Show(geodesicDisplay(), getControlPointShape(), getGeodesicControlPoints()).render(geometricLayer, graphics);
   }
 
-  protected final static void renderPoints( //
+  protected final void renderPoints( //
       GeodesicDisplay geodesicDisplay, Tensor points, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
-    POINTS_RENDER_1.new Show(geodesicDisplay, points).render(geometricLayer, graphics);
+    POINTS_RENDER_1.new Show(geodesicDisplay, getControlPointShape(), points).render(geometricLayer, graphics);
   }
 }

@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
 
+// TODO OB reduce redundancy with GeodesicCausalFilteringIIR
 public class GeodesicCausalFilteringFIR {
   public static GeodesicCausalFilteringFIR se2(Tensor measurements, Tensor reference, int order) {
     return new GeodesicCausalFilteringFIR(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, measurements, reference, order);

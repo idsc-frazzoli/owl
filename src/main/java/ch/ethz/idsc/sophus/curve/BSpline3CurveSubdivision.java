@@ -6,13 +6,13 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Last;
 
 /** cubic B-spline
  * 
  * Dyn/Sharon 2014 p.16 show that the scheme has a contractivity factor of mu = 1/2 */
-public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
+public class BSpline3CurveSubdivision extends Abstract3CurveSubdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _3_4 = RationalScalar.of(3, 4);
 
@@ -28,28 +28,18 @@ public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
     if (length < 2)
       return tensor.copy();
     Tensor curve = Unprotect.empty(2 * length);
+    Tensor p = Last.of(tensor);
     for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % length);
       curve.append(center(p, q, r)).append(center(q, r));
+      p = q;
     }
     return curve;
   }
 
-  @Override // from CurveSubdivision
-  public Tensor string(Tensor tensor) {
-    switch (tensor.length()) {
-    case 0:
-      return Tensors.empty();
-    case 1:
-      return tensor.copy();
-    default:
-      return refine(tensor);
-    }
-  }
-
-  private Tensor refine(Tensor tensor) {
+  @Override
+  final Tensor refine(Tensor tensor) {
     int length = tensor.length();
     Tensor curve = Unprotect.empty(2 * length);
     {
@@ -58,11 +48,12 @@ public class BSpline3CurveSubdivision extends BSpline1CurveSubdivision {
       curve.append(q).append(center(q, r));
     }
     int last = length - 1;
+    Tensor p = tensor.get(0);
     for (int index = 1; index < last; /* nothing */ ) {
-      Tensor p = tensor.get(index - 1);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get(++index);
       curve.append(center(p, q, r)).append(center(q, r));
+      p = q;
     }
     return curve.append(tensor.get(last));
   }

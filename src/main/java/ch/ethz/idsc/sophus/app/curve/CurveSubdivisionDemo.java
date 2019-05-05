@@ -68,7 +68,7 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
       control = DubinsGenerator.of(init, move);
       control = Tensors.fromString("{{0,0,0},{1,0,0},{2,0,0},{3,1,0},{4,1,0},{5,0,0},{6,0,0},{7,0,0}}").multiply(RealScalar.of(2));
     }
-    setControl(control);
+    setControlPointsSe2(control);
     timerFrame.jToolBar.addSeparator();
     {
       JButton jButton = new JButton("load");
@@ -88,7 +88,7 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
                 tensor = Tensor.of(tensor.stream().map(row -> row.subtract(center)));
                 setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
                 jToggleCyclic.setSelected(true);
-                setControl(tensor);
+                setControlPointsSe2(tensor);
               }
             });
             jPopupMenu.add(jMenuItem);
@@ -156,7 +156,7 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
     GraphicsUtil.setQualityHigh(graphics);
     // ---
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
-    Tensor control = control();
+    Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();
     Tensor refined;
     renderControlPoints(geometricLayer, graphics);

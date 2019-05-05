@@ -2,14 +2,10 @@
 package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
-import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -18,7 +14,6 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
@@ -38,45 +33,21 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-public class BSplineFunctionDemo extends CurvatureDemo {
-  private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  // ---
-  private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
-  private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+public class BSplineFunctionDemo extends BaseCurvatureDemo {
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
-  private final JToggleButton jToggleSymi = new JToggleButton("graph");
-  private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   public BSplineFunctionDemo() {
     addButtonDubins();
     // ---
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
-    spinnerDegree.setList(DEGREES);
-    spinnerDegree.setValue(3);
-    spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");
-    // ---
-    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-    spinnerRefine.setValue(5);
-    spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    // ---
-    jToggleSymi.setSelected(true);
-    timerFrame.jToolBar.add(jToggleSymi);
-    // ---
-    jSlider.setPreferredSize(new Dimension(500, 28));
-    timerFrame.jToolBar.add(jSlider);
-    {
-      Tensor dubins = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(dubins.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
-    }
+    Tensor dubins = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+    setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+        Tensor.of(dubins.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    final int degree = spinnerDegree.getValue();
-    final int levels = spinnerRefine.getValue();
-    final Tensor control = control();
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     final int upper = control.length() - 1;
     final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
     if (jToggleSymi.isSelected()) {

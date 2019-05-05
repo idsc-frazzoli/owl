@@ -56,7 +56,7 @@ public class LidarEmulator implements RenderInterface {
     if (scan.length() <= MAX_RAYS) {
       graphics.setColor(COLOR_LASER_RAY);
       for (Tensor point : polygon) {
-        Shape shape = geometricLayer.toVector(origin, point);
+        Shape shape = geometricLayer.toLine2D(origin, point);
         graphics.draw(shape);
       }
     } else {

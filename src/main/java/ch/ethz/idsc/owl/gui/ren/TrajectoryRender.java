@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.ani.api.TrajectoryListener;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -43,9 +44,17 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
           Optional<Flow> flow = trajectorySample.getFlow();
           if (flow.isPresent()) {
             Tensor uscaled = flow.get().getU().multiply(U_SCALE);
-            while (uscaled.length() < 2)
+            switch (uscaled.length()) {
+            case 1:
               uscaled.append(RealScalar.ZERO);
-            graphics.draw(geometricLayer.toVector(trajectorySample.stateTime().state(), uscaled));
+              break;
+            case 2:
+              break;
+            default:
+              uscaled = Extract2D.FUNCTION.apply(uscaled);
+            }
+            Tensor p = Extract2D.FUNCTION.apply(trajectorySample.stateTime().state());
+            graphics.draw(geometricLayer.toLine2D(p, p.add(uscaled)));
           }
         }
       }
