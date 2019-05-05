@@ -1,101 +1,41 @@
-// code by ob, jph
+// code by jph, ob
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 
 import javax.swing.JToggleButton;
-
-import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.group.LieGroup;
-import ch.ethz.idsc.subare.util.plot.ListPlot;
-import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ abstract class DatasetFilterDemo extends GeodesicDisplayDemo {
-  // TODO OB/JPH sampling freq is not generic here
-  private static final Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
-  private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
-  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
-  private static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
+  static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
+  static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
+  static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
   // ---
-  private final JToggleButton jToggleWait = new JToggleButton("wait");
-  private final JToggleButton jToggleDiff = new JToggleButton("diff");
-  private final JToggleButton jToggleData = new JToggleButton("data");
-  private final JToggleButton jToggleConv = new JToggleButton("conv");
+  final JToggleButton jToggleWait = new JToggleButton("wait");
+  final JToggleButton jToggleDiff = new JToggleButton("diff");
+  final JToggleButton jToggleData = new JToggleButton("data");
+  final JToggleButton jToggleConv = new JToggleButton("conv");
   // ---
-  private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
-  private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
+  final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
+  final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   protected final JToggleButton jToggleSymi = new JToggleButton("graph");
-  // TODO JPH refactor
-  protected Tensor _control = null;
-  protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
-  protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
-  protected void updateState() {
-    _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
-        .limit(spinnerLabelLimit.getValue()) //
-        .map(row -> row.extract(1, 4)));
-    // Make uniform data artificially non-uniform by randomly leaving out elements
-    // _control = DeuniformData.of(_control, RealScalar.of(0.2));
-    // _control = DuckietownData.states(DuckietownData.POSE_20190325_0);
-  }
-
-  protected final Tensor control() {
-    return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
-  }
-
-  public DatasetFilterDemo() {
-    super(GeodesicDisplays.CLOTH_SE2_R2);
-    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
-    // ---
-    jToggleWait.setSelected(false);
-    timerFrame.jToolBar.add(jToggleWait);
-    // ---
-    jToggleDiff.setSelected(true);
-    timerFrame.jToolBar.add(jToggleDiff);
-    // ---
-    jToggleData.setSelected(true);
-    timerFrame.jToolBar.add(jToggleData);
-    // ---
-    jToggleConv.setSelected(true);
-    timerFrame.jToolBar.add(jToggleConv);
-    {
-      spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.vector"));
-      spinnerLabelString.addSpinnerListener(type -> updateState());
-      spinnerLabelString.setIndex(0);
-      spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
-    }
-    {
-      spinnerLabelLimit.setList(Arrays.asList(10, 20, 50, 100, 250, 500, 1000, 2000, 5000));
-      spinnerLabelLimit.setIndex(4);
-      spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
-      spinnerLabelLimit.addSpinnerListener(type -> updateState());
-    }
-    timerFrame.jToolBar.addSeparator();
-    // ---
-    timerFrame.jToolBar.add(jToggleSymi);
+  public DatasetFilterDemo(List<GeodesicDisplay> list) {
+    super(list);
   }
 
   @Override
@@ -143,32 +83,9 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     return RealScalar.of(.3);
   }
 
-  /** @param geometricLayer
-   * @param graphics
-   * @return */
+  protected abstract Tensor control();
+
   protected abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
 
-  /** @return */
-  protected abstract String plotLabel();
-
-  private void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined) {
-    LieGroup lieGroup = geodesicDisplay.lieGroup();
-    if (Objects.nonNull(lieGroup)) {
-      LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
-      Tensor speeds = lieDifferences.apply(refined).multiply(SAMPLING_FREQUENCY);
-      if (0 < speeds.length()) {
-        int dimensions = speeds.get(0).length();
-        VisualSet visualSet = new VisualSet();
-        visualSet.setPlotLabel(plotLabel());
-        visualSet.setAxesLabelX("sample no.");
-        Tensor domain = Range.of(0, speeds.length());
-        for (int index = 0; index < dimensions; ++index)
-          visualSet.add(domain, speeds.get(Tensor.ALL, index)); // .setLabel("tangent velocity [m/s]")
-        // visualSet.add(domain, speeds.get(Tensor.ALL, 1)).setLabel("side slip [m/s]");
-        // visualSet.add(domain, speeds.get(Tensor.ALL, 2)).setLabel("rotational rate [rad/s]");
-        JFreeChart jFreeChart = ListPlot.of(visualSet);
-        jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 80 + speeds.length(), 400));
-      }
-    }
-  }
+  protected abstract void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined);
 }

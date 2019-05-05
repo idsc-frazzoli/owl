@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.N;
 
-/* package */ class Regularization2StepDemo extends DatasetFilterDemo {
+/* package */ class Regularization2StepDemo extends UniformDatasetFilterDemo {
   /** regularization parameter in the interval [0, 1] */
   private final JSlider jSlider = new JSlider(0, 1000, 600);
 

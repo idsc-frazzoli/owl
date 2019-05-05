@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 
-/* package */ abstract class DatasetKernelDemo extends DatasetFilterDemo {
+/* package */ abstract class DatasetKernelDemo extends UniformDatasetFilterDemo {
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
