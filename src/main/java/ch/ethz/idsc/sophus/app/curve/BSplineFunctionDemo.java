@@ -47,10 +47,7 @@ public class BSplineFunctionDemo extends BaseCurvatureDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    final int degree = spinnerDegree.getValue();
-    final int levels = spinnerRefine.getValue();
-    final Tensor control = getGeodesicControlPoints();
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     final int upper = control.length() - 1;
     final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
     if (jToggleSymi.isSelected()) {

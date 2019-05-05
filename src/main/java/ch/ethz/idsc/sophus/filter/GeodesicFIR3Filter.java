@@ -10,8 +10,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
+// TODO OB redundant to GeodesicIIR3Filter
 public class GeodesicFIR3Filter implements TensorUnaryOperator {
-  // ---
   private final GeodesicInterface geodesicInterface;
   private final Scalar alpha;
   private final Scalar beta;

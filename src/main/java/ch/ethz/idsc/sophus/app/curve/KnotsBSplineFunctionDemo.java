@@ -50,11 +50,7 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    final int degree = spinnerDegree.getValue();
-    final int levels = spinnerRefine.getValue();
-    final Tensor control = getGeodesicControlPoints();
-    // ---
+  protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     Tensor effective = control;
     Tensor diffs = Tensors.vector(0);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();

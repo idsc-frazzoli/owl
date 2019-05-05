@@ -26,6 +26,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * <p>Careful: the implementation only supports sequences with ODD number of elements!
  * When a sequence of even length is provided an Exception is thrown. */
+// TODO OB GeodesicAdaptiveCenterTest is missing
+// TODO OB many redundancies with GeodesicCenter
 public class GeodesicAdaptiveCenter implements TensorUnaryOperator {
   private static final Scalar TWO = RealScalar.of(2);
 

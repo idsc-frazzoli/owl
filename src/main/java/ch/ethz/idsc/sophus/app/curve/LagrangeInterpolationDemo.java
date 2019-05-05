@@ -60,6 +60,8 @@ public class LagrangeInterpolationDemo extends CurvatureDemo {
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final Tensor control = getGeodesicControlPoints();
+    if (Tensors.isEmpty(control))
+      return Tensors.empty();
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()) //
         .multiply(RealScalar.of(control.length()));
     if (jToggleSymi.isSelected()) {

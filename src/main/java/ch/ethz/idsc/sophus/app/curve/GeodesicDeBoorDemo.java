@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
+// TODO JPH demo does not seem correct
 public class GeodesicDeBoorDemo extends BaseCurvatureDemo {
   public GeodesicDeBoorDemo() {
     addButtonDubins();
@@ -37,15 +38,12 @@ public class GeodesicDeBoorDemo extends BaseCurvatureDemo {
   }
 
   @Override // from RenderInterface
-  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    final int degree = spinnerDegree.getValue();
-    final int levels = spinnerRefine.getValue();
-    final Tensor control = getGeodesicControlPoints();
+  public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     final int upper = control.length() - 1;
     final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
-    Tensor knots = Range.of(0, 2 * (control.length() - 1));
+    Tensor knots = Range.of(0, 2 * upper);
     if (jToggleSymi.isSelected()) {
-      SymLinkImage symLinkImage = SymLinkImages.deboor(knots, upper + 1, parameter);
+      SymLinkImage symLinkImage = SymLinkImages.deboor(knots, control.length(), parameter);
       graphics.drawImage(symLinkImage.bufferedImage(), 0, 0, null);
     }
     // ---

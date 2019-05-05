@@ -77,5 +77,5 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
     }
   }
 
-  public abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
+  protected abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
 }

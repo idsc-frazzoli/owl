@@ -1,13 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
@@ -19,11 +15,9 @@ import ch.ethz.idsc.tensor.alg.Last;
  * 
  * LaneRiesenfeldCurveSubdivision with degree 3 produces better curvature for
  * Clothoid geodesics than LaneRiesenfeld3CurveSubdivision. */
-public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serializable {
-  private final GeodesicInterface geodesicInterface;
-
+public class LaneRiesenfeld3CurveSubdivision extends Abstract3CurveSubdivision {
   public LaneRiesenfeld3CurveSubdivision(GeodesicInterface geodesicInterface) {
-    this.geodesicInterface = geodesicInterface;
+    super(geodesicInterface);
   }
 
   @Override // from CurveSubdivision
@@ -38,25 +32,14 @@ public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serial
       Tensor q = tensor.get(index);
       Tensor r = tensor.get(++index % length);
       Tensor qr = center(q, r);
-      curve.append(center(pq, qr, q)).append(qr);
+      curve.append(center(pq, q, qr)).append(qr);
       pq = qr;
     }
     return curve;
   }
 
-  @Override // from CurveSubdivision
-  public Tensor string(Tensor tensor) {
-    switch (tensor.length()) {
-    case 0:
-      return Tensors.empty();
-    case 1:
-      return tensor.copy();
-    default:
-      return refine(tensor);
-    }
-  }
-
-  private Tensor refine(Tensor tensor) {
+  @Override
+  Tensor refine(Tensor tensor) {
     int length = tensor.length();
     Tensor curve = Unprotect.empty(2 * length);
     Tensor pq;
@@ -71,17 +54,13 @@ public class LaneRiesenfeld3CurveSubdivision implements CurveSubdivision, Serial
       Tensor q = tensor.get(index);
       Tensor r = tensor.get(++index);
       Tensor qr = center(q, r);
-      curve.append(center(pq, qr, q)).append(qr);
+      curve.append(center(pq, q, qr)).append(qr);
       pq = qr;
     }
     return curve.append(tensor.get(last));
   }
 
-  private Tensor center(Tensor pq, Tensor qr, Tensor q) {
+  private Tensor center(Tensor pq, Tensor q, Tensor qr) {
     return center(center(pq, q), center(q, qr));
-  }
-
-  private Tensor center(Tensor p, Tensor q) {
-    return geodesicInterface.split(p, q, RationalScalar.HALF);
   }
 }

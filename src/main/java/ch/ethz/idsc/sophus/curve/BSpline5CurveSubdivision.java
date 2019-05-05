@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Last;
 
 /** quintic B-spline is implemented as an extension of
  * cubic B-spline refinement */
@@ -26,13 +27,14 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
     if (length < 2)
       return tensor.copy();
     Tensor curve = Unprotect.empty(2 * length);
+    Tensor p = Last.of(tensor);
     for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % length);
       Tensor s = tensor.get((index + 2) % length);
       curve.append(quinte(p, q, r));
       curve.append(center(p, q, r, s));
+      p = q;
     }
     return curve;
   }
@@ -41,10 +43,10 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
   public Tensor string(Tensor tensor) {
     if (tensor.length() < 4)
       return super.string(tensor); // cubic BSpline3
-    return refine(tensor);
+    return private_refine(tensor);
   }
 
-  private Tensor refine(Tensor tensor) {
+  private Tensor private_refine(Tensor tensor) {
     int length = tensor.length();
     Tensor curve = Unprotect.empty(2 * length);
     {
@@ -53,13 +55,14 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
       curve.append(q);
       curve.append(center(q, r));
     }
+    Tensor p = tensor.get(0);
     for (int index = 1; index < length - 2; ++index) {
-      Tensor p = tensor.get(index - 1);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get(index + 1);
       Tensor s = tensor.get(index + 2);
       curve.append(quinte(p, q, r));
       curve.append(center(p, q, r, s));
+      p = q;
     }
     {
       int last = length - 1;

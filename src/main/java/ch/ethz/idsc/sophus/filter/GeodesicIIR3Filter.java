@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
 public class GeodesicIIR3Filter implements TensorUnaryOperator {
-  // ---
   private final GeodesicInterface geodesicInterface;
   private final Scalar alpha;
   private final Scalar beta;
@@ -39,7 +38,6 @@ public class GeodesicIIR3Filter implements TensorUnaryOperator {
 
   /** @return extrapolated "best guess" value from the previous predictions */
   public synchronized Tensor extrapolate() {
-    System.out.println(gamma);
     if (Objects.isNull(p))
       return q;
     return geodesicInterface.split(geodesicInterface.split(p, q, beta), r, gamma);
