@@ -49,7 +49,7 @@ public class LagrangeInterpolationDemo extends CurvatureDemo {
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
       Tensor tensor = Tensors.fromString("{{1,0,0},{1,0,2.1}}");
-      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+      setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
     // ---
@@ -59,7 +59,7 @@ public class LagrangeInterpolationDemo extends CurvatureDemo {
 
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    final Tensor control = control();
+    final Tensor control = getGeodesicControlPoints();
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()) //
         .multiply(RealScalar.of(control.length()));
     if (jToggleSymi.isSelected()) {
@@ -75,7 +75,7 @@ public class LagrangeInterpolationDemo extends CurvatureDemo {
     // ---
     int levels = spinnerRefine.getValue();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), control());
+    Interpolation interpolation = LagrangeInterpolation.of(geodesicDisplay.geodesicInterface(), getGeodesicControlPoints());
     Tensor refined = Subdivide.of(0, control.length(), 1 << levels).map(interpolation::at);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, false, geometricLayer, graphics);

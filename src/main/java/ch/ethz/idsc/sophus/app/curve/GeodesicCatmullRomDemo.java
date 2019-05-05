@@ -53,7 +53,7 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     timerFrame.jToolBar.add(jSliderAlpha);
     {
       Tensor dubins = Tensors.fromString("{{1,1,0}, {1,2,-1}, {2,1,0.5}}");
-      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
+      setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
           Tensor.of(dubins.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
   }
@@ -61,7 +61,7 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
   @Override // from RenderInterface
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int levels = spinnerRefine.getValue();
-    final Tensor control = control();
+    final Tensor control = getGeodesicControlPoints();
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics);
     if (4 <= control.length()) {

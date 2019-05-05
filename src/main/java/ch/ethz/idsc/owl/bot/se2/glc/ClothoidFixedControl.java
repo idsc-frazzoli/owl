@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.ani.adapter.StateTrajectoryControl;
-import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.planar.ClothoidPursuit;
 import ch.ethz.idsc.owl.math.planar.PseudoSe2CurveIntersection;
@@ -18,26 +16,18 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
-import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
-/* package */ class ClothoidFixedControl extends StateTrajectoryControl implements TrajectoryTargetRender {
-  private final Clip clip;
+/* package */ class ClothoidFixedControl extends Se2TrajectoryControl {
   private final Scalar lookAhead;
   /** for drawing only */
   private Tensor targetLocal = null;
 
   public ClothoidFixedControl(Scalar lookAhead, Scalar maxTurningRate) {
+    super(Clips.interval(maxTurningRate.negate(), maxTurningRate));
     this.lookAhead = lookAhead;
-    this.clip = Clips.interval(maxTurningRate.negate(), maxTurningRate);
-  }
-
-  @Override // from StateTrajectoryControl
-  protected Scalar pseudoDistance(Tensor x, Tensor y) {
-    return Norm2Squared.ofVector(Se2Wrap.INSTANCE.difference(x, y));
   }
 
   @Override // from AbstractEntity
@@ -71,7 +61,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   public Optional<Shape> toTarget(GeometricLayer geometricLayer) {
     Tensor _targetLocal = targetLocal; // copy reference
     if (Objects.nonNull(_targetLocal))
-      return Optional.of(geometricLayer.toVector(Array.zeros(2), _targetLocal));
+      return Optional.of(geometricLayer.toLine2D(Array.zeros(2), _targetLocal));
     return Optional.empty();
   }
 }

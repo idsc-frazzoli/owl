@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override // from RenderInterface
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    Tensor control = control();
+    Tensor control = getGeodesicControlPoints();
     // ---
     SymScalar symScalar = symScalar(Tensor.of(IntStream.range(0, control.length()).mapToObj(SymScalar::leaf)));
     SymLink symLink = null;

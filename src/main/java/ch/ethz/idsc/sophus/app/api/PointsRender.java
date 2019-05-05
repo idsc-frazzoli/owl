@@ -20,16 +20,17 @@ import ch.ethz.idsc.tensor.Tensor;
 
   public class Show implements RenderInterface {
     private final GeodesicDisplay geodesicDisplay;
+    private final Tensor shape;
     private final Tensor points;
 
-    public Show(GeodesicDisplay geodesicDisplay, Tensor points) {
+    public Show(GeodesicDisplay geodesicDisplay, Tensor shape, Tensor points) {
       this.geodesicDisplay = geodesicDisplay;
+      this.shape = shape;
       this.points = points;
     }
 
     @Override
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-      Tensor shape = geodesicDisplay.shape();
       for (Tensor point : points) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(shape);

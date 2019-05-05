@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.win;
 
-import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
@@ -87,12 +86,11 @@ public class GeometricLayer {
     return deque.peek().tensor_copy();
   }
 
-  // @Deprecated
-  // TODO JPH name of function also bad, because of toTensor above
-  public Shape toVector(Tensor x, Tensor dx) {
-    x = x.extract(0, 2);
-    dx = dx.extract(0, 2);
-    return new Line2D.Double(toPoint2D(x), toPoint2D(x.add(dx)));
+  /** @param p
+   * @param q
+   * @return line that connects p and q */
+  public Line2D toLine2D(Tensor p, Tensor q) {
+    return new Line2D.Double(toPoint2D(p), toPoint2D(q));
   }
 
   /** @param polygon

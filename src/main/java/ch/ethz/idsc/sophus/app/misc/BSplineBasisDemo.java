@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
     spinnerRefine.setValue(4);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
-    setControl(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}}"));
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}}"));
   }
 
   @Override // from RenderInterface
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
     GraphicsUtil.setQualityHigh(graphics);
     int degree = spinnerDegree.getValue();
     int levels = spinnerRefine.getValue();
-    Tensor control = control();
+    Tensor control = getGeodesicControlPoints();
     {
       graphics.setStroke(new BasicStroke(1.25f));
       Tensor matrix = geometricLayer.getMatrix();

@@ -32,7 +32,7 @@ public class GeodesicDeBoorDemo extends BaseCurvatureDemo {
     setGeodesicDisplay(Se2CoveringGeodesicDisplay.INSTANCE);
     // ---
     Tensor dubins = Tensors.fromString("{{1,0,0},{2,0,2.5708}}");
-    setControl(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
+    setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
         Tensor.of(dubins.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
   }
 
@@ -40,7 +40,7 @@ public class GeodesicDeBoorDemo extends BaseCurvatureDemo {
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
-    final Tensor control = control();
+    final Tensor control = getGeodesicControlPoints();
     final int upper = control.length() - 1;
     final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
     Tensor knots = Range.of(0, 2 * (control.length() - 1));

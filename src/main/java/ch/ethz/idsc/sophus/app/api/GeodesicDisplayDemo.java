@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Dimension;
-import java.util.Collections;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
@@ -14,14 +13,14 @@ public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoIn
   private final List<GeodesicDisplay> list;
 
   public GeodesicDisplayDemo(List<GeodesicDisplay> list) {
-    this.list = Collections.unmodifiableList(list);
-    if (!list.isEmpty()) {
-      geodesicDisplaySpinner.setList(list);
-      geodesicDisplaySpinner.setValue(list.get(0));
-      if (1 < list.size()) {
-        geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
-        timerFrame.jToolBar.addSeparator();
-      }
+    if (list.isEmpty())
+      throw new RuntimeException();
+    this.list = list;
+    geodesicDisplaySpinner.setList(list);
+    geodesicDisplaySpinner.setValue(list.get(0));
+    if (1 < list.size()) {
+      geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
+      timerFrame.jToolBar.addSeparator();
     }
   }
 

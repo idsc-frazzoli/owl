@@ -31,7 +31,7 @@ public class BezierFunctionDemo extends CurvatureDemo {
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
       Tensor tensor = Tensors.fromString("{{1, 0, 0}, {2, 0, 2.5708}, {1, 0, 2.1}, {1.5, 0, 0}, {2.3, 0, -1.2}}");
-      setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+      setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
   }
@@ -42,7 +42,7 @@ public class BezierFunctionDemo extends CurvatureDemo {
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics);
     // ---
-    Tensor control = control();
+    Tensor control = getGeodesicControlPoints();
     int n = control.length();
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control);
     int levels = spinnerRefine.getValue();

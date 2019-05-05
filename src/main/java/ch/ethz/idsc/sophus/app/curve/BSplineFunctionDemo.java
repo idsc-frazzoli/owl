@@ -42,7 +42,7 @@ public class BSplineFunctionDemo extends BaseCurvatureDemo {
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
     Tensor dubins = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
-    setControl(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
+    setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
         Tensor.of(dubins.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
   }
 
@@ -50,7 +50,7 @@ public class BSplineFunctionDemo extends BaseCurvatureDemo {
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
-    final Tensor control = control();
+    final Tensor control = getGeodesicControlPoints();
     final int upper = control.length() - 1;
     final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
     if (jToggleSymi.isSelected()) {
