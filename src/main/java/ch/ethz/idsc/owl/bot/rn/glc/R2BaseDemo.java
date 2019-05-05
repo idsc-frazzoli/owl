@@ -67,6 +67,7 @@ abstract class R2BaseDemo implements DemoInterface {
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     owlyFrame.addBackground(RegionRenders.create(region));
     owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    owlyFrame.configCoordinateOffset(250, 500);
     return owlyFrame;
   }
 }
