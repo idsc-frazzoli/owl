@@ -30,65 +30,66 @@ public class OwlyAnimationFrame extends TimerFrame {
   // ---
   private final List<AnimationInterface> animationInterfaces = new CopyOnWriteArrayList<>();
   private final JToggleButton jToggleButtonRecord = new JToggleButton("record");
+  private final ActionListener actionListener = new ActionListener() {
+    TimerTask timerTask;
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+      boolean selected = jToggleButtonRecord.isSelected();
+      if (selected) {
+        // TODO implementation not generic
+        TrajectoryEntity abstractEntity = (TrajectoryEntity) animationInterfaces.get(0);
+        File directory = HomeDirectory.Pictures(abstractEntity.getClass().getSimpleName() + "_" + System.currentTimeMillis());
+        directory.mkdir();
+        GlobalAssert.that(directory.isDirectory());
+        timerTask = new TimerTask() {
+          int count = 0;
+          Point2D point = null;
+
+          @Override
+          public void run() {
+            BufferedImage offscreen = offscreen();
+            StateTime stateTime = abstractEntity.getStateTimeNow();
+            GeometricLayer geometricLayer = GeometricLayer.of(geometricComponent.getModel2Pixel());
+            Point2D now = geometricLayer.toPoint2D(stateTime.state());
+            // Point now = geometricComponent.toPixel();
+            if (Objects.isNull(point) || MARGIN < PointUtil.inftyNorm(point, now))
+              point = now;
+            Dimension dimension = RECORDING;
+            BufferedImage bufferedImage = //
+                new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
+            bufferedImage.getGraphics().drawImage(offscreen, //
+                (int) (dimension.width / 2 - point.getX()), //
+                (int) (dimension.height / 2 - point.getY()), null);
+            try {
+              ImageIO.write(bufferedImage, IMAGE_FORMAT, new File(directory, //
+                  String.format("owly_%05d.%s", count++, IMAGE_FORMAT)));
+            } catch (Exception exception) {
+              exception.printStackTrace();
+            }
+          }
+        };
+        timer.schedule(timerTask, 100, 100);
+      } else
+        timerTask.cancel();
+    }
+  };
 
   public OwlyAnimationFrame() {
     { // periodic task for integration
-      final TimerTask timerTask = new TimerTask() {
+      TimerTask timerTask = new TimerTask() {
         TimeKeeper timeKeeper = new TimeKeeper();
 
         @Override
         public void run() {
           Scalar now = timeKeeper.now();
-          animationInterfaces.forEach(ani -> ani.integrate(now));
+          animationInterfaces.forEach(animationInterface -> animationInterface.integrate(now));
         }
       };
       timer.schedule(timerTask, 100, 20);
     }
     {
-      jToggleButtonRecord.addActionListener(new ActionListener() {
-        TimerTask timerTask;
-
-        @Override
-        public void actionPerformed(ActionEvent event) {
-          boolean selected = jToggleButtonRecord.isSelected();
-          if (selected) {
-            // TODO implementation not generic
-            TrajectoryEntity abstractEntity = (TrajectoryEntity) animationInterfaces.get(0);
-            File directory = HomeDirectory.Pictures(abstractEntity.getClass().getSimpleName() + "_" + System.currentTimeMillis());
-            directory.mkdir();
-            GlobalAssert.that(directory.isDirectory());
-            timerTask = new TimerTask() {
-              int count = 0;
-              Point2D point = null;
-
-              @Override
-              public void run() {
-                BufferedImage offscreen = offscreen();
-                StateTime stateTime = abstractEntity.getStateTimeNow();
-                GeometricLayer geometricLayer = GeometricLayer.of(geometricComponent.getModel2Pixel());
-                Point2D now = geometricLayer.toPoint2D(stateTime.state());
-                // Point now = geometricComponent.toPixel();
-                if (Objects.isNull(point) || MARGIN < PointUtil.inftyNorm(point, now))
-                  point = now;
-                Dimension dimension = RECORDING;
-                BufferedImage bufferedImage = //
-                    new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
-                bufferedImage.getGraphics().drawImage(offscreen, //
-                    (int) (dimension.width / 2 - point.getX()), //
-                    (int) (dimension.height / 2 - point.getY()), null);
-                try {
-                  ImageIO.write(bufferedImage, IMAGE_FORMAT, new File(directory, //
-                      String.format("owly_%05d.%s", count++, IMAGE_FORMAT)));
-                } catch (Exception exception) {
-                  exception.printStackTrace();
-                }
-              }
-            };
-            timer.schedule(timerTask, 100, 100);
-          } else
-            timerTask.cancel();
-        }
-      });
+      jToggleButtonRecord.addActionListener(actionListener);
       jToolBar.add(jToggleButtonRecord);
     }
   }
