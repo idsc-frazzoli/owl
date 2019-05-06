@@ -57,6 +57,7 @@ public class GeodesicCenter implements TensorUnaryOperator {
   public Tensor apply(Tensor tensor) {
     if (tensor.length() % 2 != 1)
       throw TensorRuntimeException.of(tensor);
+    // spatial neigborhood we want to consider for centering
     int radius = (tensor.length() - 1) / 2;
     synchronized (weights) {
       while (weights.size() <= radius)

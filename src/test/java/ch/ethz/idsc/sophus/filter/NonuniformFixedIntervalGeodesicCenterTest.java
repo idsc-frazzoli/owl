@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.filter;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
+import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -42,11 +43,25 @@ public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
     // ---
     Tensor actual = nonuniformFixedIntervalGeodesicCenter.apply(navigableMap, key, interval);
     Tensor expected = Tensors.vector(5, 5, 0);
-    // TODO OB: there is an error hidden somewhere in NFIGC
-    // Chop._09.requireClose(expected, actual);
+    Chop._09.requireClose(expected, actual);
   }
 
-  public void testNonuniformlySpaced() {
+  public void testNonuniformlySpacedR2() {
+    NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
+    for (int index = 1; index < 10; ++index) {
+      navigableMap.put(RealScalar.of(index * index), Tensors.of(RealScalar.of(index * index), RealScalar.of(index * index)));
+    }
+    // ---
+    NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter = //
+        new NonuniformFixedIntervalGeodesicCenter(RnGeodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
+    Scalar interval = RealScalar.of(9 * 9 / 2);
+    Scalar key = RealScalar.of(9 * 9 / 2 + 1);
+    // ---
+    Tensor actual = nonuniformFixedIntervalGeodesicCenter.apply(navigableMap, key, interval);
+    Assert.assertEquals(actual.get(0), actual.get(1));
+  }
+
+  public void testNonuniformlySpacedSE2() {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     for (int index = 1; index < 10; ++index) {
       navigableMap.put(RealScalar.of(index * index), Tensors.of(RealScalar.of(index * index), RealScalar.of(index * index), RealScalar.ZERO));

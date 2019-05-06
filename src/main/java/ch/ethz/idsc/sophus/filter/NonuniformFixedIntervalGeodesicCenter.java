@@ -64,7 +64,6 @@ public class NonuniformFixedIntervalGeodesicCenter {
     return Tensors.of(splitsLeft, splitsRight, splitsFinal);
   }
 
-  // TODO OB/JPH: kann ich das auch als @override umschreiben? Ich moechte ein element fuer die navigableMap returnen
   public synchronized Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
     // TODO OB: require Tensor.length = geodesicInterface."length", also 3 fuer se2?
     key = Sign.requirePositiveOrZero(key);

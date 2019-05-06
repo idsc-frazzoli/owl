@@ -29,12 +29,12 @@ enum FilterErrorTable {
         name + ".csv").stream().map(row -> row.extract(1, 4)));
     TensorUnaryOperator geodesicCenterFilter = //
         GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), width);
-    GeodesicCausalFilteringIIR geodesicCausal1Filtering = GeodesicCausalFilteringIIR.se2(control, geodesicCenterFilter.apply(control), 0);
+    GeodesicCausalFilteringEvaluation geodesicCausalFilteringEvaluation = GeodesicCausalFilteringEvaluation.se2(control, geodesicCenterFilter.apply(control));
     Tensor alpharange = Subdivide.of(0.1, 1, 12);
     for (int j = 0; j < alpharange.length(); ++j) {
       Scalar alpha = alpharange.Get(j);
-      Tensor row = Tensors.of(alpha, geodesicCausal1Filtering.evaluate0Error(alpha), //
-          geodesicCausal1Filtering.evaluate1Error(alpha));
+      Tensor row = Tensors.of(alpha, geodesicCausalFilteringEvaluation.evaluate0Error(alpha, true, true), //
+          geodesicCausalFilteringEvaluation.evaluate1Error(alpha, true, true));
       tableBuilder.appendRow(row);
     }
     Tensor log = tableBuilder.toTable();

@@ -18,8 +18,11 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** GeodesicCenter projects a sequence of points to their geodesic center
  * with each point weighted as provided by an external function.
@@ -59,19 +62,31 @@ public class GeodesicAdaptiveCenter implements TensorUnaryOperator {
     this.interval = interval;
   }
 
+  // only adding to GeodesicCenter
+  public int adaptRadius(Tensor control, Scalar interval) {
+    Sign.requirePositive(interval);
+    int mid = (control.length() - 1) / 2;
+    int radius = (control.length() - 1) / 2;
+    while (Scalars.lessEquals(interval, Norm._2.between(control.get(mid).extract(0, 2), control.get(mid - radius).extract(0, 2)))
+        || Scalars.lessEquals(interval, Norm._2.between(control.get(mid).extract(0, 2), control.get(mid + radius).extract(0, 2)))) {
+      radius = radius - 1;
+    }
+    return radius;
+  }
+
+  // TODO JPH refactor to minimize redundancies with GeodesicCenter(Filter(Demo))
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
-    System.out.println(tensor);
     if (tensor.length() % 2 != 1)
       throw TensorRuntimeException.of(tensor);
-    int radius = (tensor.length() - 1) / 2;
-    // Downsizes Filter by removing all elements that are further away than the threshold from the center
-    // Keeps filter symmetric
-    while (Scalars.lessEquals(interval, Norm._2.between(tensor.get(0).extract(0, 2), tensor.get(radius).extract(0, 2)))
-        || Scalars.lessEquals(interval, Norm._2.between(tensor.get(tensor.length() - 1).extract(0, 2), tensor.get(radius).extract(0, 2)))) {
-      radius = radius - 1;
-      tensor = tensor.extract(1, tensor.length() - 1);
-    }
+    // adapt maximum radius to only consider close enough control pointd
+    int radius = adaptRadius(tensor, interval);
+    // respect boundaries
+    int lo = Max.of((tensor.length() - 1) / 2 - radius, 0);
+    int hi = Min.of((tensor.length() - 1) / 2 + radius + 1, tensor.length());
+    if (radius - lo != hi - radius - 1)
+      System.out.println("hello");
+    tensor = tensor.extract(lo, hi);
     synchronized (weights) {
       while (weights.size() <= radius)
         weights.add(splits(function.apply(weights.size())));
