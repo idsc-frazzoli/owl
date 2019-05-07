@@ -9,6 +9,7 @@ import javax.swing.JSlider;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicAdaptiveCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicAdaptiveCenterFilter;
@@ -34,6 +35,7 @@ public class GeodesicAdaptiveCenterFilterDemo extends DatasetKernelDemo {
     // ---
     timerFrame.jToolBar.add(jSlider);
     // ---
+    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
     updateState();
   }
 

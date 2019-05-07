@@ -1,3 +1,4 @@
+// code by ob
 package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -8,15 +9,13 @@ import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcSinh;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Log;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class H2ParametricDistanceTest extends TestCase {
   public void testTrivial() {
     Tensor p = Tensors.vector(-Math.random(), Math.random());
     Scalar actual = H2ParametricDistance.INSTANCE.distance(p, p);
-    Scalar expected = RealScalar.ZERO;
-    Assert.assertEquals(expected, actual);
+    assertEquals(RealScalar.ZERO, actual);
   }
 
   public void testYAxis() {

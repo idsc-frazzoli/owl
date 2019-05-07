@@ -7,6 +7,7 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.filter.NonuniformFixedIntervalGeodesicCenter;
 import ch.ethz.idsc.sophus.filter.NonuniformFixedIntervalGeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.NonuniformFixedRadiusGeodesicCenter;
@@ -24,6 +25,7 @@ public class NonuniformGeodesicCenterFilterDemo extends NavigableMapDatasetKerne
   public NonuniformGeodesicCenterFilterDemo() {
     jToggleFixedRadius.setSelected(true);
     timerFrame.jToolBar.add(jToggleFixedRadius);
+    setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);
     // ---
     updateStateTime();
   }
