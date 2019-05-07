@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.Tensor;
   public final GlcNode poll() {
     GlcNode best = domainMinTracker.getBestKey();
     openSet.remove(best);
-    // FIXME remove from Mintracker
+    // FIXME ANDRE remove from Mintracker
     return best;
   }
 

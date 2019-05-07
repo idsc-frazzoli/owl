@@ -110,7 +110,7 @@ public class LexicographicSemiorderMinTracker<K> {
     return updateCandidateSet(applicantPair);
   }
 
-  public void deleteElement(Pair<K> pair) {
+  private void deleteElement(Pair<K> pair) {
     if (candidateSet.contains(pair)) {
       candidateSet.remove(pair);
     }
@@ -179,20 +179,55 @@ public class LexicographicSemiorderMinTracker<K> {
    * 
    * @return Current absolute best pair */
   public Pair<K> getBest() {
-    // FIXME ANDRE
+    // TODO ANDRE implement Pair<K> in usual Tracker as well and use here
+    // TODO implement with optional
+    if (candidateSet.isEmpty())
+      return null;
     List<Pair<K>> bestElements = new ArrayList<Pair<K>>(getMinElements());
-    Random rand = new Random();
-    return bestElements.get(rand.nextInt(bestElements.size()));
+    for (int index = 0; index < dim; ++index) {
+      if (bestElements.size() == 1)
+        // FIXME JAN is this best way to do it?
+        return bestElements.get(0);
+      int fi = index;
+      Scalar u_min = bestElements.stream().map(x -> x.value.Get(fi)).min(Scalars::compare).get();
+      bestElements = bestElements.stream() //
+          .filter(x -> x.value.Get(fi).equals(u_min)) //
+          .collect(Collectors.toList());
+    }
+    if (bestElements.size() == 1) {
+      return bestElements.get(0);
+    } else {
+      Random rand = new Random();
+      return bestElements.get(rand.nextInt(bestElements.size()));
+    }
+  }
+
+  /** Gives the key of the absolute best element and deletes the best element from
+   * the candidate set
+   * 
+   * @return key of absolute best pair */
+  public K extractBestKey() {
+    Pair<K> p = getBest();
+    deleteElement(p);
+    return p.key;
   }
 
   /** @return key of the current absolute best pair */
   public K getBestKey() {
-    return getBest().key;
+    Pair<K> best = getBest();
+    if (best == null)
+      return null;
+    else
+      return best.key;
   }
 
   /** @return value of the current absolute best pair */
   public Tensor getBestValue() {
-    return getBest().value;
+    Pair<K> best = getBest();
+    if (best == null)
+      return null;
+    else
+      return best.value;
   }
 
   /** @param pairs Collection of pairs
