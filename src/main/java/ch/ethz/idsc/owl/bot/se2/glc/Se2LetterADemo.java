@@ -43,7 +43,6 @@ public abstract class Se2LetterADemo extends Se2CarDemo {
       }
     };
     carEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
-    // se2Entity.extraCosts.add(r2ImageRegionWrap.gradientCostFunction());
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     TrajectoryRegionQuery trajectoryRegionQuery = //

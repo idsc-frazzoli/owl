@@ -37,40 +37,30 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
     List<TrajectorySample> list = trajectory;
     if (Objects.isNull(list))
       return;
-    { // draw detailed trajectory from root to goal/furthestgo
-      { // draw control vectors u along trajectory
-        graphics.setColor(COLOR_FLOW);
-        for (TrajectorySample trajectorySample : list) {
-          Optional<Flow> flow = trajectorySample.getFlow();
-          if (flow.isPresent()) {
-            Tensor uscaled = flow.get().getU().multiply(U_SCALE);
-            switch (uscaled.length()) {
-            case 1:
-              uscaled.append(RealScalar.ZERO);
-              break;
-            case 2:
-              break;
-            default:
-              uscaled = Extract2D.FUNCTION.apply(uscaled);
-            }
-            Tensor p = Extract2D.FUNCTION.apply(trajectorySample.stateTime().state());
-            graphics.draw(geometricLayer.toLine2D(p, p.add(uscaled)));
-          }
+    // draw detailed trajectory from root to goal/furthestgo
+    { // draw control vectors u along trajectory
+      graphics.setColor(COLOR_FLOW);
+      for (TrajectorySample trajectorySample : list) {
+        Optional<Flow> flow = trajectorySample.getFlow();
+        if (flow.isPresent()) {
+          Tensor uscaled = StaticHelper.length2(flow.get().getU().multiply(U_SCALE));
+          Tensor p = Extract2D.FUNCTION.apply(trajectorySample.stateTime().state());
+          graphics.draw(geometricLayer.toLine2D(p, p.add(uscaled)));
         }
       }
-      { // draw trajectory as thick green line with white background
-        Path2D path2d = geometricLayer.toPath2D( //
-            Tensor.of(list.stream() //
-                .map(TrajectorySample::stateTime) //
-                .map(StateTime::state)));
-        graphics.setStroke(new BasicStroke(5.0f));
-        graphics.setColor(COLOR_GROUND);
-        graphics.draw(path2d);
-        graphics.setStroke(new BasicStroke(2.0f));
-        graphics.setColor(color);
-        graphics.draw(path2d);
-        graphics.setStroke(new BasicStroke());
-      }
+    }
+    { // draw trajectory as thick green line with white background
+      Tensor polygon = Tensor.of(list.stream() //
+          .map(TrajectorySample::stateTime) //
+          .map(StateTime::state));
+      Path2D path2d = geometricLayer.toPath2D(polygon);
+      graphics.setStroke(new BasicStroke(5.0f));
+      graphics.setColor(COLOR_GROUND);
+      graphics.draw(path2d);
+      graphics.setStroke(new BasicStroke(2.0f));
+      graphics.setColor(color);
+      graphics.draw(path2d);
+      graphics.setStroke(new BasicStroke());
     }
     { // draw boxes at nodes in path from root to goal
       graphics.setColor(COLOR_NODES);
