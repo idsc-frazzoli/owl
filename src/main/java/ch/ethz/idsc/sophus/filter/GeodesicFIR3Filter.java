@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
-// TODO OB redundant to GeodesicIIR3Filter
 public class GeodesicFIR3Filter implements TensorUnaryOperator {
   private final GeodesicInterface geodesicInterface;
   private final Scalar alpha;
@@ -46,6 +46,8 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
 
   @Override
   public synchronized Tensor apply(Tensor tensor) {
+    BoundedLinkedList<Tensor> originalSignal = new BoundedLinkedList<>(3);
+    originalSignal.add(tensor);
     if (Objects.isNull(r)) {
       if (Objects.isNull(q)) {
         q = tensor.copy();
@@ -56,9 +58,9 @@ public class GeodesicFIR3Filter implements TensorUnaryOperator {
       return r;
     }
     Tensor result = geodesicInterface.split(extrapolate(), tensor, alpha);
-    p = q.copy();
-    q = r.copy();
-    r = tensor.copy();
+    p = originalSignal.get(0);
+    q = originalSignal.get(1);
+    r = originalSignal.get(2);
     return result;
   }
 }

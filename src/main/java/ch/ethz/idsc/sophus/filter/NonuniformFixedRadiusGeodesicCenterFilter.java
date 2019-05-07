@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUnaryOperator {
   /** @param nonuniformFixedRadiusGeodesicCenter
@@ -18,20 +17,19 @@ public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUn
    * @return
    * @throws Exception given if nonuniformFixedRadiusGeodesicCenter is null */
   public static NonuniformFixedRadiusGeodesicCenterFilter of( //
-      NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, Scalar radius) {
+      NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, int radius) {
     return new NonuniformFixedRadiusGeodesicCenterFilter( //
         Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenter), radius);
   }
 
   // ---
   private final NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter;
-  private final Scalar radius;
+  private final int radius;
 
   private NonuniformFixedRadiusGeodesicCenterFilter( //
-      NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, Scalar radius) {
+      NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, int radius) {
     this.nonuniformFixedRadiusGeodesicCenter = nonuniformFixedRadiusGeodesicCenter;
-    this.radius = Sign.requirePositive(radius);
-    // TODO OB if radius is required to be an integer, then use int, or IntegerQ.require(radius);
+    this.radius = radius >= 0 ? radius : null;
   }
 
   @Override
@@ -40,14 +38,14 @@ public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUn
     for (Scalar key : navigableMap.keySet()) {
       Scalar loKey = key;
       Scalar hiKey = key;
-      for (int index = 0; index < radius.number().intValue(); ++index) {
+      for (int index = 0; index < radius; ++index) {
         if (loKey.equals(navigableMap.firstKey()) || hiKey.equals(navigableMap.lastKey()))
           break;
         loKey = Max.of(navigableMap.lowerKey(loKey), navigableMap.firstKey());
         hiKey = Min.of(navigableMap.higherKey(hiKey), navigableMap.lastKey());
       }
       NavigableMap<Scalar, Tensor> subMap = navigableMap.subMap(loKey, true, hiKey, true);
-      resultMap.put(key, nonuniformFixedRadiusGeodesicCenter.apply(subMap, key, radius));
+      resultMap.put(key, nonuniformFixedRadiusGeodesicCenter.apply(subMap, key));
     }
     return resultMap;
   }

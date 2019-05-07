@@ -27,6 +27,7 @@ public class GeodesicCenterFilterDemo extends DatasetKernelDemo {
       spinnerConvolution.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "convolution");
       spinnerConvolution.addSpinnerListener(type -> updateState());
     }
+    // ---
     updateState();
   }
 
@@ -39,14 +40,14 @@ public class GeodesicCenterFilterDemo extends DatasetKernelDemo {
     // } catch (IOException e) {
     // e.printStackTrace();
     // }
-    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
-    refined = Nest.of( //
-        GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
-        control(), spinnerConvolution.getValue());
   }
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
+    refined = Nest.of( //
+        GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
+        control(), spinnerConvolution.getValue());
     if (jToggleSymi.isSelected())
       graphics.drawImage(SymLinkImages.geodesicCenter(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage(), 0, 0, null);
     return refined;

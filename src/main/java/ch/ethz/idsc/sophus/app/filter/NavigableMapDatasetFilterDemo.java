@@ -109,7 +109,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
-      // TODO OB/JPH: This change does not improve the noisy behaviour in the plots. Is this only pseudo accuracy?
       LieDifferences lieDifferencesTime = new LieDifferences(RnGroup.INSTANCE, RnExponential.INSTANCE);
       Tensor timeDifference = lieDifferencesTime.apply(Tensor.of(navigableMapStateTime().keySet().stream())).map(x -> x.reciprocal());
       Tensor speeds = timeDifference.pmul(lieDifferences.apply(refined));
