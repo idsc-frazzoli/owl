@@ -41,23 +41,6 @@ public class NonuniformFixedRadiusGeodesicCenter {
     return result;
   }
 
-  // // This is the crucial part I need to work on sunday
-  // private static Tensor weights(NavigableMap<Scalar, Tensor> navigableMap, Scalar key) {
-  // Tensor result = Tensors.empty();
-  // Scalar keyLeft = key;
-  // Scalar keyRight = key;
-  // Tensor leftWeights = Tensors.empty();
-  // Tensor rightWeights = Tensors.empty();
-  // Scalar remaining = RealScalar.of(1 - Math.E);
-  // for (int index = 1; index < (navigableMap.size() - 1) / 2; ++index) {
-  // keyLeft = navigableMap.lowerKey(keyLeft);
-  // keyRight = navigableMap.higherKey(keyRight);
-  // leftWeights.append(RealScalar.of(Math.exp(-index + 1)));
-  // Math.exp(-index);
-  //
-  // }
-  // return Tensors.empty();
-  // }
   /** @param subMap
    * @param key: timestamp to be evaluated
    * @return */
@@ -65,7 +48,7 @@ public class NonuniformFixedRadiusGeodesicCenter {
     Scalar exponent = RealScalar.of(2);
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
-    // TODO OB: This does not look right.. aka. not canonical?
+    // TODO OB: Inverse distance weights? Or something else?
     for (Scalar headMapKey : subMap.headMap(key, false).keySet())
       maskLeft.append(Power.of(RealScalar.ONE.add(key.subtract(headMapKey)).reciprocal(), exponent));
     for (Scalar tailMapKey : subMap.tailMap(key, false).descendingKeySet())

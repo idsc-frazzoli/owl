@@ -39,6 +39,6 @@ public class GeodesicIIRnFilter implements TensorUnaryOperator {
   @Override
   public Tensor apply(Tensor tensor) {
     return Tensor.of(tensor.stream() //
-        .map(new IIRnFilter(geodesicExtrapolation, geodesicInterface, radius, alpha)));
+        .map(new GeodesicIIRn(geodesicExtrapolation, geodesicInterface, radius, alpha)));
   }
 }
