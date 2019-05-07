@@ -82,6 +82,12 @@ public class RelaxedDomainQueueTest extends TestCase {
     assertTrue(rlQueue.poll() == node4);
     assertTrue(rlQueue.openSet.isEmpty());
   }
+  
+  public void testEmpty() {
+    Tensor slacks = Tensors.vector(3, 3, 3);
+    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.empty(slacks);
+    assertTrue(rlQueue.openSet.isEmpty());
+  }
 
   public void testSpeed() {
     Tensor slacks = Tensors.vector(1, 1, 1);

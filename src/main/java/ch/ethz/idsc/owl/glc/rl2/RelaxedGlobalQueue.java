@@ -9,16 +9,17 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.order.LexicographicSemiorderMinTracker;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RelaxedGlobalQueue implements Iterable<GlcNode> {
   // holds the node which have not yet been expanded
   protected final Set<GlcNode> openSet = new HashSet<>();
-  private final Tensor slack;
+  private final Tensor slacks;
 
-  public RelaxedGlobalQueue(Tensor slack) {
-    this.slack = slack;
+  public RelaxedGlobalQueue(Tensor slacks) {
+    this.slacks = slacks;
   }
 
   public void add(GlcNode glcNode) {
@@ -61,11 +62,11 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   private GlcNode getBest() {
-    LexicographicSemiorderMinTracker<GlcNode> minTracker = LexicographicSemiorderMinTracker.withList(slack);
+    LexicographicSemiorderMinTracker<GlcNode> minTracker = LexicographicSemiorderMinTracker.withList(slacks);
     Iterator<GlcNode> iterator = openSet.iterator();
     while (iterator.hasNext()) {
       GlcNode currentGlcNode = iterator.next();
-      minTracker.digest(currentGlcNode, currentGlcNode.merit());
+      minTracker.digest(currentGlcNode, VectorScalars.vector(currentGlcNode.merit()));
     }
     return minTracker.getBestKey();
   }

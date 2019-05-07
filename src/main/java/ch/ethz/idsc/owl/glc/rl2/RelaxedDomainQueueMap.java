@@ -25,10 +25,10 @@ import ch.ethz.idsc.tensor.Tensor;
    * @param domain_key
    * @param glcNode */
   public void addToDomainMap(Tensor domain_key, GlcNode glcNode) {
-    if (map.containsKey(domain_key)) // has another node has already reached this domain ?
-      map.get(domain_key).add(glcNode); // add node to existing queue
+    if (containsKey(domain_key)) // has another node has already reached this domain ?
+      getQueue(domain_key).add(glcNode); // add node to existing relaxedDomainQueue
     else
-      map.put(domain_key, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new queue with single entry
+      map.put(domain_key, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
   }
 
   public boolean isEmpty() {
