@@ -142,6 +142,8 @@ public class LexicographicSemiorderMinTracker<K> {
 
   /** @return pairs of current minimal elements */
   public Collection<Pair<K>> getMinElements() {
+    if (candidateSet.isEmpty())
+      return Collections.emptyList();
     Collection<Pair<K>> minElements = candidateSet;
     for (int index = 0; index < dim; ++index) {
       if (minElements.size() == 1)
@@ -157,12 +159,16 @@ public class LexicographicSemiorderMinTracker<K> {
   }
 
   /** @return current keys of minimal elements */
-  public Collection<K> getMinimalKeys() {
+  public Collection<K> getMinKeys() {
+    if (candidateSet.isEmpty())
+      return Collections.emptyList();
     return getKeys(getMinElements());
   }
 
   /** @return current values of minimal elements */
-  public Collection<Tensor> getMinimalValues() {
+  public Collection<Tensor> getMinValues() {
+    if (candidateSet.isEmpty())
+      return Collections.emptyList();
     return getValues(getMinElements());
   }
 
