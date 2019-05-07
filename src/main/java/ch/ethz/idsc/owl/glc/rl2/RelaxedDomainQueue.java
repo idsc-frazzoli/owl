@@ -2,10 +2,9 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.order.LexicographicSemiorderMinTracker;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -27,7 +26,6 @@ import ch.ethz.idsc.tensor.Tensor;
     return new RelaxedDomainQueue(slacks);
   }
 
-  // ---
   private RelaxedDomainQueue(Tensor slacks) {
     super(slacks);
     this.domainMinTracker = LexicographicSemiorderMinTracker.withList(slacks);
@@ -35,7 +33,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override // from RelaxedGlobalQueue
   public void add(GlcNode glcNode) {
-    Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, glcNode.merit());
+    Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
     if (!discardedNodes.contains(glcNode))
       openSet.add(glcNode);
     openSet.removeAll(discardedNodes);
@@ -43,9 +41,9 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override // from RelaxedGlobalQueue
   public final GlcNode poll() {
-    GlcNode best = domainMinTracker.getBestKey();
+    // retrieves current best GlcNode and deletes it from the domainMinTracker
+    GlcNode best = domainMinTracker.extractBestKey();
     openSet.remove(best);
-    // FIXME ANDRE remove from Mintracker
     return best;
   }
 
@@ -53,7 +51,4 @@ import ch.ethz.idsc.tensor.Tensor;
   public final GlcNode peek() {
     return domainMinTracker.getBestKey();
   }
-  // /* package */ Optional<Tensor> getMinValues() {
-  // return StaticHelper.entrywiseMin(stream());
-  // }
 }
