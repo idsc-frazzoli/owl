@@ -14,11 +14,11 @@ import ch.ethz.idsc.tensor.Tensor;
   /** map from domain keys to queues of nodes */
   private final Map<Tensor, RelaxedDomainQueue> map = new HashMap<>();
   private final Tensor slacks;
-  
-  
+
   public RelaxedDomainQueueMap(Tensor slacks) {
     this.slacks = slacks;
   }
+
   /** add given glcNode to domain queue at the location determined by domain_key.
    * a new domain queue is allocated if no other nodes were inserted there prior.
    * 
