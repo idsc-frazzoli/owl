@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.demo.order.TensorProductOrder;
@@ -64,7 +65,8 @@ public class LexicographicSemiorderMinTracker<K> {
    * An element x is not a candidate if there is an index where one of the current candidates
    * strictly precedes x and in all indices before are the current one has smaller values.
    * 
-   * @param x */
+   * @param applicantPair new digested element
+   * @return Collection of discarded elements upon update step */
   private Collection<K> updateCandidateSet(Pair<K> applicantPair) {
     Iterator<Pair<K>> iterator = candidateSet.iterator();
     Collection<K> discardedKeys = new ArrayList<>();
@@ -94,10 +96,9 @@ public class LexicographicSemiorderMinTracker<K> {
     return discardedKeys;
   }
 
-  public Collection<Pair<K>> getCandidateSet() {
-    return candidateSet;
-  }
-
+  /** @param key
+   * @param x value, e.g. scores of key
+   * @return Collection of discarded elements upon digestion */
   public Collection<K> digest(K key, Tensor x) {
     if (x.length() != dim)
       throw new RuntimeException("Tensor x has wrong dimension");
@@ -109,7 +110,40 @@ public class LexicographicSemiorderMinTracker<K> {
     return updateCandidateSet(applicantPair);
   }
 
+  private void deleteElement(Pair<K> pair) {
+    if (candidateSet.contains(pair)) {
+      candidateSet.remove(pair);
+    }
+  }
+
+  /** Filters all elements which are within the slack of the "absolute" minimum.
+   * 
+   * @param x_i: Coordinate of element x
+   * @param threshold = u_min + slack
+   * @return true or false */
+  private static boolean filterCriterion(Scalar x_i, Scalar threshold) {
+    return Scalars.lessEquals(x_i, threshold);
+  }
+
+  /** @return current cnadidateSet */
+  public Collection<Pair<K>> getCandidateSet() {
+    return candidateSet;
+  }
+
+  /** @return keys of current candidateSet */
+  public Collection<K> getCandidateKeys() {
+    return getKeys(candidateSet);
+  }
+
+  /** @return values of current candidateSet */
+  public Collection<Tensor> getCandidateValues() {
+    return getValues(candidateSet);
+  }
+
+  /** @return pairs of current minimal elements */
   public Collection<Pair<K>> getMinElements() {
+    if (candidateSet.isEmpty())
+      return Collections.emptyList();
     Collection<Pair<K>> minElements = candidateSet;
     for (int index = 0; index < dim; ++index) {
       if (minElements.size() == 1)
@@ -124,12 +158,97 @@ public class LexicographicSemiorderMinTracker<K> {
     return minElements;
   }
 
-  /** Filters all elements which are within the slack of the "absolute" minimum.
+  /** @return current keys of minimal elements */
+  public Collection<K> getMinKeys() {
+    if (candidateSet.isEmpty())
+      return Collections.emptyList();
+    return getKeys(getMinElements());
+  }
+
+  /** @return current values of minimal elements */
+  public Collection<Tensor> getMinValues() {
+    if (candidateSet.isEmpty())
+      return Collections.emptyList();
+    return getValues(getMinElements());
+  }
+
+  /** When the current minimal set is non-empty and its cardinality larger than one,
+   * we will use the usual lexicographic ordering (without slack) to determine the minimum value.
    * 
-   * @param x_i: Coordinate of element x
-   * @param threshold = u_min + slack
-   * @return true or false */
-  private static boolean filterCriterion(Scalar x_i, Scalar threshold) {
-    return Scalars.lessEquals(x_i, threshold);
+   * If there are still two pairs with the same minimum score we will choose randomly.
+   * 
+   * @return Current absolute best pair */
+  public Pair<K> getBest() {
+    // TODO ANDRE implement Pair<K> in usual Tracker as well and use here
+    // TODO implement with optional
+    if (candidateSet.isEmpty())
+      return null;
+    List<Pair<K>> bestElements = new ArrayList<Pair<K>>(getMinElements());
+    for (int index = 0; index < dim; ++index) {
+      if (bestElements.size() == 1)
+        // FIXME JAN is this best way to do it?
+        return bestElements.get(0);
+      int fi = index;
+      Scalar u_min = bestElements.stream().map(x -> x.value.Get(fi)).min(Scalars::compare).get();
+      bestElements = bestElements.stream() //
+          .filter(x -> x.value.Get(fi).equals(u_min)) //
+          .collect(Collectors.toList());
+    }
+    if (bestElements.size() == 1) {
+      return bestElements.get(0);
+    } else {
+      Random rand = new Random();
+      return bestElements.get(rand.nextInt(bestElements.size()));
+    }
+  }
+
+  /** Gives the key of the absolute best element and deletes the best element from
+   * the candidate set
+   * 
+   * @return key of absolute best pair */
+  public K extractBestKey() {
+    Pair<K> p = getBest();
+    deleteElement(p);
+    return p.key;
+  }
+
+  /** @return key of the current absolute best pair */
+  public K getBestKey() {
+    Pair<K> best = getBest();
+    if (best == null)
+      return null;
+    else
+      return best.key;
+  }
+
+  /** @return value of the current absolute best pair */
+  public Tensor getBestValue() {
+    Pair<K> best = getBest();
+    if (best == null)
+      return null;
+    else
+      return best.value;
+  }
+
+  /** @param pairs Collection of pairs
+   * @return List of key of given pairs */
+  public List<K> getKeys(Collection<Pair<K>> pairs) {
+    Iterator<Pair<K>> iterator = pairs.iterator();
+    List<K> keyList = new ArrayList<>();
+    while (iterator.hasNext()) {
+      keyList.add(iterator.next().key);
+    }
+    return keyList;
+  }
+
+  /** @param pairs Collection of pairs
+   * @return List of values of given pairs */
+  public List<Tensor> getValues(Collection<Pair<K>> pairs) {
+    Iterator<Pair<K>> iterator = pairs.iterator();
+    List<Tensor> valueList = new ArrayList<>();
+    while (iterator.hasNext()) {
+      valueList.add(iterator.next().value);
+    }
+    return valueList;
   }
 }
