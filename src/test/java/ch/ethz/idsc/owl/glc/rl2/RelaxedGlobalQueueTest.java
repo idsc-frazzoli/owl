@@ -105,7 +105,7 @@ public class RelaxedGlobalQueueTest extends TestCase {
     List<GlcNode> removeList = new LinkedList<>();
     removeList.add(node1);
     assertTrue(rlQueue.collection().size() == 5);
-    rlQueue.removeAll(removeList);
+    assertTrue(rlQueue.removeAll(removeList));
     removeList.clear();
     assertTrue(rlQueue.collection().size() == 4);
     assertFalse(rlQueue.collection().contains(node1));
@@ -113,7 +113,18 @@ public class RelaxedGlobalQueueTest extends TestCase {
     removeList.add(node3);
     removeList.add(node4);
     removeList.add(node5);
-    rlQueue.removeAll(removeList);
+    assertTrue(rlQueue.removeAll(removeList));
     assertTrue(rlQueue.collection().isEmpty());
+    assertFalse(rlQueue.removeAll(removeList));
+  }
+
+  // -------------- Test for abstract class RelaxedPriorityQueue --------------------
+  public void testRemove() {
+    Tensor slacks = Tensors.vector(1, 1, 1);
+    RelaxedGlobalQueue rlQueue = new RelaxedGlobalQueue(slacks);
+    GlcNode node1 = GlcNode.of(null, null, VectorScalar.of(1, 1, 2), VectorScalar.of(0, 0, 0));
+    assertFalse(rlQueue.remove(node1));
+    rlQueue.add(node1);
+    assertTrue(rlQueue.remove(node1));
   }
 }

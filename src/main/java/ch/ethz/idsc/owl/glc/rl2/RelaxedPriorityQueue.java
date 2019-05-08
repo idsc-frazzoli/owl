@@ -20,7 +20,7 @@ public abstract class RelaxedPriorityQueue implements Iterable<GlcNode> {
   }
 
   /** @param glcNode */
-  public abstract void add(GlcNode glcNode);
+  public abstract Collection<GlcNode> add(GlcNode glcNode);
 
   /** @return */
   protected abstract GlcNode pollBest();
@@ -34,10 +34,12 @@ public abstract class RelaxedPriorityQueue implements Iterable<GlcNode> {
 
   public final boolean remove(GlcNode glcNode) {
     return openSet.remove(glcNode);
+    // TODO syserr if not exists
   }
 
   public final boolean removeAll(Collection<GlcNode> collection) {
     return openSet.removeAll(collection);
+    // TODO syserr if not exists
   }
 
   public final Collection<GlcNode> collection() {
