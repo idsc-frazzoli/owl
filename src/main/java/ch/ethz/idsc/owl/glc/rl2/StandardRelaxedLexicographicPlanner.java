@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -46,66 +47,32 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
   public void expand(final GlcNode node) {
     Map<GlcNode, List<StateTime>> connectors = controlsIntegrator.from(node);
     // ---
-    RelaxedDomainQueueMap domainQueueMap = new RelaxedDomainQueueMap(slacks); // holds candidates for insertion
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
-      domainQueueMap.addToDomainMap(domainKey, next);
+      final List<StateTime> trajectory = connectors.get(next);
+      // check if planner constraints are satisfied otherwise discard next
+      if (plannerConstraint.isSatisfied(node, trajectory, next.flow())) {
+        // potentially add next to domainMap, internally it gets add to domainMap and save discarded nodes
+        Collection<GlcNode> discardedNodes = addToDomainMap(domainKey, next);
+        // add next to openQueue if accept by domainQueue and insert edge
+        if (!discardedNodes.contains(next)) {
+          addToGlobalQueue(next);
+          node.insertEdgeTo(next);
+          // check if trajectory went through goal region and to goalDomainQueue if so
+          if (goalInterface.firstMember(trajectory).isPresent()) // GOAL check
+            offerDestination(next, trajectory);
+        } else if (!discardedNodes.isEmpty()) {
+          // TODO check if sufficient, criteria here: not next and not empty
+          // remove all discarded nodes from globalQueue
+          removeFromGlobal(discardedNodes);
+          // if any removed, remove edges from parent
+          discardedNodes.stream().forEach(Nodes::disjoinChild);
+        }
+      }
     }
     // TODO ANDRE check if close to other merits see StaticHelper
-    // TODO ANDRE check if former is present
-    // TODO add next to openQueue if not accept by domainQueue
-    // TODO remove all discarded nodes from globalQueue
-    // TODO if any removed, remove edges from parent
-    // ---
-    // domainQueueMap.mapEntrySetStream() //
-    // .parallel() // TODO ANDRE check if all operations are thread safe!
-    // .forEach(entry -> processCandidates(node, connectors, entry.getKey(), entry.getValue()));
   }
 
-  // private void processCandidates( //
-  // GlcNode node, Map<GlcNode, List<StateTime>> connectors, Tensor domainKey, RelaxedDomainQueue domainQueue) {
-  // // iterate over the candidates in DomainQueue
-  // // TODO YN is there any requirement on the ordering of the nodes in the iterator?
-  // for (GlcNode next : domainQueue) {
-  // final List<StateTime> trajectory = connectors.get(next);
-  // if (plannerConstraint.isSatisfied(node, trajectory, next.flow())) {
-  // Optional<RelaxedDomainQueue> former = getDomainQueue(domainKey);
-  // boolean isPresent = former.isPresent();
-  // // ---
-  // synchronized (this) {
-  // if (isPresent) { // are already nodes present from previous exploration ?
-  // RelaxedDomainQueue formerQueue = former.get();
-  // Tensor minValues = formerQueue.getMinValues().get();
-  // Tensor merit = VectorScalars.vector(next.merit());
-  // for (int i = 0; i < slacks.length(); ++i) // find nodes outside of bounds
-  // if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) { // cost lower than prev min?
-  // Scalar margin = merit.Get(i).add(slacks.Get(i));
-  // final int j = i;
-  // List<GlcNode> toRemove = formerQueue.stream() // find nodes to be removed
-  // .filter(n -> Scalars.lessThan( //
-  // margin, // lhs
-  // VectorScalars.at(n.merit(), j) // rhs
-  // )).collect(Collectors.toList());
-  // //
-  // if (!toRemove.isEmpty()) {
-  // boolean removed = queue().removeAll(toRemove); // remove bad nodes from OPEN queue
-  // formerQueue.removeAll(toRemove); // remove bad nodes from domain queue
-  // toRemove.stream().forEach(Nodes::disjoinChild); // remove edges from parent
-  // if (!removed) //
-  // System.err.println("miss - nodes to be removed dont exist " + domainKey);
-  // }
-  // }
-  // }
-  // addToDomainMap(domainKey, next); // insert node to domain queue
-  // node.insertEdgeTo(next);
-  // addToOpen(domainKey, next); // insert node into OPEN
-  // if (goalInterface.firstMember(trajectory).isPresent()) // GOAL check
-  // offerDestination(next, trajectory);
-  // }
-  // break; // as in B. Paden's implementation: leaving loop after first relabel
-  // }
-  // }
-  // }
   @Override // from TrajectoryPlanner
   public final StateIntegrator getStateIntegrator() {
     return stateIntegrator;

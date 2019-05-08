@@ -1,6 +1,7 @@
 // code by astoll, ynager
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +25,12 @@ import ch.ethz.idsc.tensor.Tensor;
    * 
    * @param domain_key
    * @param glcNode */
-  public void addToDomainMap(Tensor domain_key, GlcNode glcNode) {
+  public Collection<GlcNode> addToDomainMap(Tensor domain_key, GlcNode glcNode) {
     if (containsKey(domain_key)) // has another node has already reached this domain ?
-      getQueue(domain_key).add(glcNode); // add node to existing relaxedDomainQueue
+      return getQueue(domain_key).add(glcNode); // add node to existing relaxedDomainQueue
     else
       map.put(domain_key, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
+    return Collections.emptyList();
   }
 
   public boolean isEmpty() {

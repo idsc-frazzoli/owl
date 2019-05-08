@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -15,10 +14,7 @@ import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Serializable {
@@ -49,8 +45,8 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     globalQueue.add(node);
   }
 
-  protected final void addToDomainMap(Tensor domain_key, GlcNode node) {
-    domainMap.addToDomainMap(domain_key, node);
+  protected final Collection<GlcNode> addToDomainMap(Tensor domain_key, GlcNode node) {
+    return domainMap.addToDomainMap(domain_key, node);
   }
 
   /** method is invoked to notify planner that the
@@ -59,29 +55,8 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
    * @param node
    * @param connector */
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
-    Optional<Tensor> optional = goalDomainQueue.getMinValues();
-    if (optional.isPresent()) {
-      // TODO YN code redundant to StdRL.TPlanner#processCandidates -> can simplify?
-      Tensor minValues = optional.get();
-      Tensor merit = VectorScalars.vector(node.merit());
-      for (int i = 0; i < slacks.length(); ++i) {
-        if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
-          Scalar margin = merit.Get(i).add(slacks.Get(i));
-          final int j = i;
-          List<GlcNode> toRemove = goalDomainQueue.collection().stream() // find nodes to be removed
-              .filter(n -> Scalars.lessThan( //
-                  margin, // lhs
-                  VectorScalars.at(n.merit(), j) // rhs
-              )).collect(Collectors.toList());
-          if (!toRemove.isEmpty()) {
-            getUnexpandedNodes().removeAll(toRemove);
-            goalDomainQueue.removeAll(toRemove);
-            // toRemove.stream().forEach(n -> n.parent().removeEdgeTo(n)); // FIXME YN
-          }
-        }
-      }
-    }
     goalDomainQueue.add(node);
+    // TODO ANDRE check if valid
   }
 
   /** @param domain_key
@@ -93,6 +68,10 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   // TODO ANDRE check if obsolete
   protected final RelaxedGlobalQueue getUnexpandedNodes() {
     return globalQueue;
+  }
+
+  protected final void removeFromGlobal(Collection<GlcNode> toRemove) {
+    globalQueue.removeAll(toRemove);
   }
 
   // check if obsolete

@@ -1,6 +1,8 @@
 // code by astoll, ynager
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -15,8 +17,9 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override
-  public void add(GlcNode glcNode) {
+  public Collection<GlcNode> add(GlcNode glcNode) {
     addSingle(glcNode);
+    return Collections.emptyList();
   }
 
   @Override

@@ -35,11 +35,12 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override // from RelaxedGlobalQueue
   // TODO ANDRE return discardedNodes
-  public void add(GlcNode glcNode) {
+  public Collection<GlcNode> add(GlcNode glcNode) {
     Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
     if (!discardedNodes.contains(glcNode))
       addSingle(glcNode);
     removeAll(discardedNodes);
+    return discardedNodes;
   }
 
   @Override
