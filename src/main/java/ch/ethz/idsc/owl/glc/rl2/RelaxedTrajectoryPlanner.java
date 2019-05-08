@@ -68,7 +68,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
         if (Scalars.lessThan(merit.Get(i), minValues.Get(i))) {
           Scalar margin = merit.Get(i).add(slacks.Get(i));
           final int j = i;
-          List<GlcNode> toRemove = goalDomainQueue.stream() // find nodes to be removed
+          List<GlcNode> toRemove = goalDomainQueue.collection().stream() // find nodes to be removed
               .filter(n -> Scalars.lessThan( //
                   margin, // lhs
                   VectorScalars.at(n.merit(), j) // rhs
@@ -83,7 +83,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     }
     goalDomainQueue.add(node);
   }
-  
+
   /** @param domain_key
    * @return RLDomainQueue in domain or Optional.empty() if domain has not been assigned a node yet */
   protected final Optional<RelaxedDomainQueue> getDomainQueue(Tensor domain_key) {
@@ -99,28 +99,29 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   public final Map<Tensor, RelaxedDomainQueue> getRelaxedDomainQueueMap() {
     return domainMap.getMap();
   }
+
   /** Returns most promising unexpanded node. */
   @Override // from ExpandInterface
   public final Optional<GlcNode> pollNext() {
     // returns the head of queue, or null if queue is empty
-    return Optional.ofNullable(globalQueue.poll());
+    return Optional.ofNullable(globalQueue.pollBest());
   }
 
   @Override // from ExpandInterface
   public final Optional<GlcNode> getBest() {
-    return Optional.ofNullable(goalDomainQueue.isEmpty() ? null : goalDomainQueue.peek());
+    return Optional.ofNullable(goalDomainQueue.collection().isEmpty() ? null : goalDomainQueue.peekBest());
   }
 
   /***************************************************/
   @Override // from TrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
-    GlobalAssert.that(globalQueue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
+    GlobalAssert.that(globalQueue.collection().isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
     addToGlobalQueue(GlcNodes.createRoot(stateTime, heuristicFunction));
   }
 
   @Override // from TrajectoryPlanner
   public final Optional<GlcNode> getBestOrElsePeek() {
-    return Optional.ofNullable(getBest().orElse(globalQueue.peek()));
+    return Optional.ofNullable(getBest().orElse(globalQueue.peekBest()));
   }
 
   @Override // from TrajectoryPlanner

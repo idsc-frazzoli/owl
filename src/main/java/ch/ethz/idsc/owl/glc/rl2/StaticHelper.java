@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.red.Entrywise;
   static boolean isEqual(GlcNode next, RelaxedDomainQueue domainQueue) {
     // TODO YN check if close to existing nodes / assert if this is helpful
     Tensor nextMerit = VectorScalars.vector(next.merit());
-    return domainQueue.stream() //
+    return domainQueue.collection().stream() //
         .anyMatch(a -> VectorScalars.vector(a.merit()).subtract(nextMerit).stream() //
             .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(v, MERIT_EPS)));
   }

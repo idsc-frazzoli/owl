@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,11 @@ class Pair<K> {
   public Pair(K key, Tensor value) {
     this.key = key;
     this.value = value;
+  }
+
+  @Override
+  public String toString() {
+    return key + " " + value;
   }
 }
 
@@ -111,9 +117,10 @@ public class LexicographicSemiorderMinTracker<K> {
   }
 
   private void deleteElement(Pair<K> pair) {
-    if (candidateSet.contains(pair)) {
+    if (candidateSet.contains(pair))
       candidateSet.remove(pair);
-    }
+    else
+      System.err.println("warning: could not delete pair " + pair);
   }
 
   /** Filters all elements which are within the slack of the "absolute" minimum.
@@ -172,18 +179,20 @@ public class LexicographicSemiorderMinTracker<K> {
     return getValues(getMinElements());
   }
 
+  private final Random random = new Random();
+
   /** When the current minimal set is non-empty and its cardinality larger than one,
    * we will use the usual lexicographic ordering (without slack) to determine the minimum value.
    * 
    * If there are still two pairs with the same minimum score we will choose randomly.
    * 
-   * @return Current absolute best pair */
+   * @return current absolute best pair, may also be null */
   public Pair<K> getBest() {
     // TODO ANDRE implement Pair<K> in usual Tracker as well and use here
     // TODO implement with optional
     if (candidateSet.isEmpty())
       return null;
-    List<Pair<K>> bestElements = new ArrayList<Pair<K>>(getMinElements());
+    List<Pair<K>> bestElements = new ArrayList<>(getMinElements());
     for (int index = 0; index < dim; ++index) {
       if (bestElements.size() == 1)
         // FIXME JAN is this best way to do it?
@@ -194,40 +203,35 @@ public class LexicographicSemiorderMinTracker<K> {
           .filter(x -> x.value.Get(fi).equals(u_min)) //
           .collect(Collectors.toList());
     }
-    if (bestElements.size() == 1) {
-      return bestElements.get(0);
-    } else {
-      Random rand = new Random();
-      return bestElements.get(rand.nextInt(bestElements.size()));
-    }
+    // if (bestElements.size() == 1)
+    // return bestElements.get(0);
+    return bestElements.get(random.nextInt(bestElements.size()));
   }
 
   /** Gives the key of the absolute best element and deletes the best element from
    * the candidate set
    * 
    * @return key of absolute best pair */
-  public K extractBestKey() {
+  public K pollBestKey() {
     Pair<K> p = getBest();
     deleteElement(p);
     return p.key;
   }
 
   /** @return key of the current absolute best pair */
-  public K getBestKey() {
+  public K peekBestKey() {
     Pair<K> best = getBest();
-    if (best == null)
-      return null;
-    else
-      return best.key;
+    return Objects.isNull(best) //
+        ? null
+        : best.key;
   }
 
   /** @return value of the current absolute best pair */
-  public Tensor getBestValue() {
+  public Tensor peekBestValue() {
     Pair<K> best = getBest();
-    if (best == null)
-      return null;
-    else
-      return best.value;
+    return Objects.isNull(best) //
+        ? null
+        : best.value;
   }
 
   /** @param pairs Collection of pairs
@@ -235,9 +239,8 @@ public class LexicographicSemiorderMinTracker<K> {
   public List<K> getKeys(Collection<Pair<K>> pairs) {
     Iterator<Pair<K>> iterator = pairs.iterator();
     List<K> keyList = new ArrayList<>();
-    while (iterator.hasNext()) {
+    while (iterator.hasNext())
       keyList.add(iterator.next().key);
-    }
     return keyList;
   }
 
@@ -246,9 +249,8 @@ public class LexicographicSemiorderMinTracker<K> {
   public List<Tensor> getValues(Collection<Pair<K>> pairs) {
     Iterator<Pair<K>> iterator = pairs.iterator();
     List<Tensor> valueList = new ArrayList<>();
-    while (iterator.hasNext()) {
+    while (iterator.hasNext())
       valueList.add(iterator.next().value);
-    }
     return valueList;
   }
 }

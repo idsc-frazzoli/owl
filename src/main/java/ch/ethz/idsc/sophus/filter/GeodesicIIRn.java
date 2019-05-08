@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** input to the operator are the individual elements of the sequence */
-public class FIRnFilter implements TensorUnaryOperator {
+public class GeodesicIIRn implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
    * @param geodesicInterface
    * @param radius
@@ -19,7 +19,7 @@ public class FIRnFilter implements TensorUnaryOperator {
    * @throws Exception if either parameter is null */
   public static TensorUnaryOperator of( //
       TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
-    return new FIRnFilter( //
+    return new GeodesicIIRn( //
         Objects.requireNonNull(geodesicExtrapolation), //
         Objects.requireNonNull(geodesicInterface), //
         radius, //
@@ -32,7 +32,7 @@ public class FIRnFilter implements TensorUnaryOperator {
   private final GeodesicInterface geodesicInterface;
   private final Scalar alpha;
 
-  /* package */ FIRnFilter( //
+  /* package */ GeodesicIIRn( //
       TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
     this.geodesicExtrapolation = geodesicExtrapolation;
     this.geodesicInterface = geodesicInterface;
@@ -45,7 +45,7 @@ public class FIRnFilter implements TensorUnaryOperator {
     Tensor value = boundedLinkedList.size() < 2 //
         ? x.copy()
         : geodesicInterface.split(geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream())), x, alpha);
-    boundedLinkedList.add(x);
+    boundedLinkedList.add(value);
     return value;
   }
 }

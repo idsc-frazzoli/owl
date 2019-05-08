@@ -184,20 +184,20 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     Tensor y = Tensors.fromString("{1,1,0}");
     Tensor z = Tensors.fromString("{1.0000001,1,1}");
     assertTrue(LSMT1.getBest() == null);
-    assertTrue(LSMT1.getBestKey() == null);
-    assertTrue(LSMT1.getBestValue() == null);
+    assertTrue(LSMT1.peekBestKey() == null);
+    assertTrue(LSMT1.peekBestValue() == null);
     LSMT1.digest("first", x);
     assertTrue(LSMT1.getBest() != null);
-    assertTrue(LSMT1.getBestKey() == "first");
-    assertTrue(LSMT1.getBestValue() == x);
+    assertTrue(LSMT1.peekBestKey() == "first");
+    assertTrue(LSMT1.peekBestValue() == x);
     LSMT1.digest("second", y);
     assertTrue(LSMT1.getBest() != null);
-    assertTrue(LSMT1.getBestKey() == "second");
-    assertTrue(LSMT1.getBestValue() == y);
+    assertTrue(LSMT1.peekBestKey() == "second");
+    assertTrue(LSMT1.peekBestValue() == y);
     LSMT1.digest("third", z);
     assertTrue(LSMT1.getBest() != null);
-    assertTrue(LSMT1.getBestKey() == "second");
-    assertTrue(LSMT1.getBestValue() == y);
+    assertTrue(LSMT1.peekBestKey() == "second");
+    assertTrue(LSMT1.peekBestValue() == y);
     assertTrue(LSMT1.getMinElements().size() == 3);
   }
 
@@ -209,21 +209,21 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     Tensor z = Tensors.fromString("{1,0,1}");
     LSMT1.digest(1, x);
     assertTrue(LSMT1.getCandidateSet().size() == 1);
-    assertTrue(LSMT1.extractBestKey() == 1);
+    assertTrue(LSMT1.pollBestKey() == 1);
     assertTrue(LSMT1.getCandidateSet().size() == 0);
     LSMT1.digest(1, x);
     LSMT1.digest(2, y);
     assertTrue(LSMT1.getCandidateSet().size() == 2);
-    assertTrue(LSMT1.extractBestKey() == 2);
+    assertTrue(LSMT1.pollBestKey() == 2);
     assertTrue(LSMT1.getCandidateSet().size() == 1);
     LSMT1.digest(2, y);
     LSMT1.digest(3, z);
     assertTrue(LSMT1.getCandidateSet().size() == 3);
-    assertTrue(LSMT1.extractBestKey() == 3);
+    assertTrue(LSMT1.pollBestKey() == 3);
     assertTrue(LSMT1.getCandidateSet().size() == 2);
-    assertTrue(LSMT1.extractBestKey() == 2);
+    assertTrue(LSMT1.pollBestKey() == 2);
     assertTrue(LSMT1.getCandidateSet().size() == 1);
-    assertTrue(LSMT1.extractBestKey() == 1);
+    assertTrue(LSMT1.pollBestKey() == 1);
     assertTrue(LSMT1.getCandidateSet().size() == 0);
   }
 }
