@@ -77,15 +77,15 @@ public class RelaxedGlobalQueueTest extends TestCase {
     rlQueue.add(node4);
     rlQueue.add(node5);
     assertTrue(rlQueue.collection().size() == 5);
-    assertTrue(rlQueue.poll() == node5);
+    assertTrue(rlQueue.pollBest() == node5);
     assertTrue(rlQueue.collection().size() == 4);
-    assertTrue(rlQueue.poll() == node3);
+    assertTrue(rlQueue.pollBest() == node3);
     assertTrue(rlQueue.collection().size() == 3);
-    assertTrue(rlQueue.poll() == node1);
+    assertTrue(rlQueue.pollBest() == node1);
     assertTrue(rlQueue.collection().size() == 2);
-    assertTrue(rlQueue.poll() == node2);
+    assertTrue(rlQueue.pollBest() == node2);
     assertTrue(rlQueue.collection().size() == 1);
-    assertTrue(rlQueue.poll() == node4);
+    assertTrue(rlQueue.pollBest() == node4);
     assertTrue(rlQueue.collection().isEmpty());
   }
 

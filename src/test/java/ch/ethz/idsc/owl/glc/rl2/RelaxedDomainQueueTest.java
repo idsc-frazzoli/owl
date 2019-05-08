@@ -66,20 +66,24 @@ public class RelaxedDomainQueueTest extends TestCase {
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
     RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
+    assertTrue(rlQueue.collection().size() == 1);
     rlQueue.add(node2);
+    assertTrue(rlQueue.collection().size() == 2);
     rlQueue.add(node3);
+    assertTrue(rlQueue.collection().size() == 3);
     rlQueue.add(node4);
+    assertTrue(rlQueue.collection().size() == 4);
     rlQueue.add(node5);
     assertTrue(rlQueue.collection().size() == 5);
-    assertTrue(rlQueue.poll() == node5);
+    assertTrue(rlQueue.pollBest() == node5);
     assertTrue(rlQueue.collection().size() == 4);
-    assertTrue(rlQueue.poll() == node1);
+    assertTrue(rlQueue.pollBest() == node1);
     assertTrue(rlQueue.collection().size() == 3);
-    assertTrue(rlQueue.poll() == node2);
+    assertTrue(rlQueue.pollBest() == node2);
     assertTrue(rlQueue.collection().size() == 2);
-    assertTrue(rlQueue.poll() == node3);
+    assertTrue(rlQueue.pollBest() == node3);
     assertTrue(rlQueue.collection().size() == 1);
-    assertTrue(rlQueue.poll() == node4);
+    assertTrue(rlQueue.pollBest() == node4);
     assertTrue(rlQueue.collection().isEmpty());
   }
 
@@ -103,7 +107,7 @@ public class RelaxedDomainQueueTest extends TestCase {
       rlQueue.add(node);
     }
     Timing timing = Timing.started();
-    rlQueue.poll();
+    rlQueue.pollBest();
     System.out.println(timing.seconds());
   }
 }

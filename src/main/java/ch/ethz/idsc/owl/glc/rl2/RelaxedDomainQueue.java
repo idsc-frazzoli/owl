@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.math.order.LexicographicSemiorderMinTracker;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ class RelaxedDomainQueue extends RelaxedGlobalQueue {
+/* package */ class RelaxedDomainQueue extends RelaxedPriorityQueue {
   /** @param glcNode
    * @param slacks Tensor of slack parameters
    * @return relaxed lexicographic domain queue that contains given GlcNode as single element */
@@ -38,13 +38,15 @@ import ch.ethz.idsc.tensor.Tensors;
   public void add(GlcNode glcNode) {
     Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
     if (!discardedNodes.contains(glcNode))
-      super.add(glcNode);
+      addSingle(glcNode);
     removeAll(discardedNodes);
   }
 
   @Override
-  protected GlcNode getBest() {
-    return domainMinTracker.pollBestKey();
+  protected GlcNode pollBest() {
+    GlcNode glcNode = domainMinTracker.pollBestKey();
+    remove(glcNode);
+    return glcNode;
   }
 
   @Override // from RelaxedGlobalQueue

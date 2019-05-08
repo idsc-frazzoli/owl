@@ -25,6 +25,11 @@ class Pair<K> {
     this.key = key;
     this.value = value;
   }
+
+  @Override
+  public String toString() {
+    return key + " " + value;
+  }
 }
 
 /** Creates minTracker for a lexicographic semiorder.
@@ -112,9 +117,10 @@ public class LexicographicSemiorderMinTracker<K> {
   }
 
   private void deleteElement(Pair<K> pair) {
-    if (candidateSet.contains(pair)) {
+    if (candidateSet.contains(pair))
       candidateSet.remove(pair);
-    }
+    else
+      System.err.println("warning: could not delete pair " + pair);
   }
 
   /** Filters all elements which are within the slack of the "absolute" minimum.
