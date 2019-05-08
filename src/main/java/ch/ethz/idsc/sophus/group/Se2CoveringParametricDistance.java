@@ -24,11 +24,11 @@ public enum Se2CoveringParametricDistance implements TensorMetric {
     // Distance procjected on S2
     Scalar distance = Se2ParametricDistance.INSTANCE.distance(p, q);
     // change of heading w/o modulo
-    Scalar alphaCovering = p.Get(2).subtract(q.get(2)).multiply(HALF);
+    Scalar alphaCovering = q.Get(2).subtract(p.get(2)).multiply(HALF);
     // number of windings
     Scalar windings = Floor.FUNCTION.apply(alphaCovering.divide(RealScalar.of(2 * Math.PI)));
     // alpha from se2ParametricDistance
-    Scalar alpha = MOD_DISTANCE.apply(p.Get(2).subtract(q.get(2))).multiply(HALF);
+    Scalar alpha = MOD_DISTANCE.apply(q.Get(2).subtract(p.get(2))).multiply(HALF);
     // length of one winding
     Scalar circleDistance = alpha.divide(RealScalar.of(2 * Math.PI)).multiply(distance);
     return distance.add(windings.multiply(circleDistance));

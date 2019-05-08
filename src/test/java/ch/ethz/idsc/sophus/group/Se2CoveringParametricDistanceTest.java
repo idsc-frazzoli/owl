@@ -1,6 +1,7 @@
-// code by jph
+// code by jph / ob 
 package ch.ethz.idsc.sophus.group;
 
+import ch.ethz.idsc.sophus.planar.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
@@ -15,12 +16,15 @@ public class Se2CoveringParametricDistanceTest extends TestCase {
   }
 
   public void testHalf() {
-    // Scalar scalar =
-    Se2CoveringParametricDistance.INSTANCE.distance(Tensors.vector(1, 2, 3), Tensors.vector(1, 2 + 2 * 3, 3 + Math.PI));
-    // TODO JPH/OB check what's going on
-    // System.out.println(scalar);
-    // System.out.println(3 * Math.PI);
-    // Chop._14.requireClose(scalar, RealScalar.of(3 * Math.PI));
+    Scalar scalar = Se2CoveringParametricDistance.INSTANCE.distance(Tensors.vector(1, 2, 3), Tensors.vector(1, 2 + 2 * 3, 3 + Math.PI));
+    Chop._14.requireClose(scalar, RealScalar.of(3 * Math.PI));
+  }
+
+  public void testSE2() {
+    double rand = Math.random();
+    Scalar scalarSE2C = Se2CoveringParametricDistance.INSTANCE.distance(Tensors.vector(1, 2, 0), Tensors.vector(1, 2 + 2 * 3, rand * Math.PI));
+    Scalar scalarSE2 = Se2ParametricDistance.INSTANCE.distance(Tensors.vector(1, 2, 0), Tensors.vector(1, 2 + 2 * 3, rand * Math.PI));
+    Chop._14.requireClose(scalarSE2, scalarSE2C);
   }
 
   public void testSimpleUnits() {
