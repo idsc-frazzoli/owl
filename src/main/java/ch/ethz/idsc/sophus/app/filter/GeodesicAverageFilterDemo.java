@@ -38,7 +38,6 @@ import ch.ethz.idsc.tensor.red.Total;
       weights.append(spinnerKernel.getValue().apply( //
           RealScalar.of(index).divide(RealScalar.of(spinnerRadius.getValue())).subtract(RealScalar.of(0.5))));
     weights = NORMALIZE.apply(weights);
-    System.err.println(weights);
     SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(tree, weights);
     TensorUnaryOperator tensorUnaryOperator = GeodesicAverage.of(geodesicDisplay().geodesicInterface(), symWeightsToSplits.splits());
     refined = GeodesicAverageFilter.of(tensorUnaryOperator, weights.length()).apply(control());
