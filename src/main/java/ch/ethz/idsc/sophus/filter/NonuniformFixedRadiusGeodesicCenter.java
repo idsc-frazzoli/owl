@@ -25,7 +25,7 @@ public class NonuniformFixedRadiusGeodesicCenter {
   }
 
   // ---
-  public final GeodesicInterface geodesicInterface;
+  private final GeodesicInterface geodesicInterface;
 
   /* package */ NonuniformFixedRadiusGeodesicCenter(GeodesicInterface geodesicInterface) {
     this.geodesicInterface = geodesicInterface;

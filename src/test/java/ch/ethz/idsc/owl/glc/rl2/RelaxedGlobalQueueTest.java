@@ -14,7 +14,7 @@ public class RelaxedGlobalQueueTest extends TestCase {
   public void testSimple() {
     Tensor slacks = Tensors.vector(3, 3, 3);
     RelaxedGlobalQueue rlQueue = new RelaxedGlobalQueue(slacks);
-    assertTrue(rlQueue.openSet.isEmpty());
+    assertTrue(rlQueue.collection().isEmpty());
   }
 
   public void testAdd() {
@@ -26,20 +26,20 @@ public class RelaxedGlobalQueueTest extends TestCase {
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
     rlQueue.add(node1);
-    assertTrue(rlQueue.size() == 1);
-    assertTrue(rlQueue.openSet.contains(node1));
+    assertTrue(rlQueue.collection().size() == 1);
+    assertTrue(rlQueue.collection().contains(node1));
     rlQueue.add(node2);
-    assertTrue(rlQueue.size() == 2);
-    assertTrue(rlQueue.openSet.contains(node2));
+    assertTrue(rlQueue.collection().size() == 2);
+    assertTrue(rlQueue.collection().contains(node2));
     rlQueue.add(node3);
-    assertTrue(rlQueue.size() == 3);
-    assertTrue(rlQueue.openSet.contains(node3));
+    assertTrue(rlQueue.collection().size() == 3);
+    assertTrue(rlQueue.collection().contains(node3));
     rlQueue.add(node4);
-    assertTrue(rlQueue.size() == 4);
-    assertTrue(rlQueue.openSet.contains(node4));
+    assertTrue(rlQueue.collection().size() == 4);
+    assertTrue(rlQueue.collection().contains(node4));
     rlQueue.add(node5);
-    assertTrue(rlQueue.size() == 5);
-    assertTrue(rlQueue.openSet.contains(node5));
+    assertTrue(rlQueue.collection().size() == 5);
+    assertTrue(rlQueue.collection().contains(node5));
   }
 
   public void testPeek() {
@@ -51,16 +51,16 @@ public class RelaxedGlobalQueueTest extends TestCase {
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
     rlQueue.add(node1);
-    assertTrue(rlQueue.peek() == node1);
+    assertTrue(rlQueue.peekBest() == node1);
     rlQueue.add(node2);
-    assertTrue(rlQueue.peek() == node1);
+    assertTrue(rlQueue.peekBest() == node1);
     rlQueue.add(node3);
-    assertTrue(rlQueue.peek() == node3);
+    assertTrue(rlQueue.peekBest() == node3);
     rlQueue.add(node4);
-    assertTrue(rlQueue.peek() == node3);
+    assertTrue(rlQueue.peekBest() == node3);
     rlQueue.add(node5);
-    assertTrue(rlQueue.peek() == node5);
-    assertTrue(rlQueue.size() == 5);
+    assertTrue(rlQueue.peekBest() == node5);
+    assertTrue(rlQueue.collection().size() == 5);
   }
 
   public void testPoll() {
@@ -76,17 +76,17 @@ public class RelaxedGlobalQueueTest extends TestCase {
     rlQueue.add(node3);
     rlQueue.add(node4);
     rlQueue.add(node5);
-    assertTrue(rlQueue.size() == 5);
+    assertTrue(rlQueue.collection().size() == 5);
     assertTrue(rlQueue.poll() == node5);
-    assertTrue(rlQueue.size() == 4);
+    assertTrue(rlQueue.collection().size() == 4);
     assertTrue(rlQueue.poll() == node3);
-    assertTrue(rlQueue.size() == 3);
+    assertTrue(rlQueue.collection().size() == 3);
     assertTrue(rlQueue.poll() == node1);
-    assertTrue(rlQueue.size() == 2);
+    assertTrue(rlQueue.collection().size() == 2);
     assertTrue(rlQueue.poll() == node2);
-    assertTrue(rlQueue.size() == 1);
+    assertTrue(rlQueue.collection().size() == 1);
     assertTrue(rlQueue.poll() == node4);
-    assertTrue(rlQueue.openSet.isEmpty());
+    assertTrue(rlQueue.collection().isEmpty());
   }
 
   public void testRemoveAll() {
@@ -104,16 +104,16 @@ public class RelaxedGlobalQueueTest extends TestCase {
     rlQueue.add(node5);
     List<GlcNode> removeList = new LinkedList<>();
     removeList.add(node1);
-    assertTrue(rlQueue.size() == 5);
+    assertTrue(rlQueue.collection().size() == 5);
     rlQueue.removeAll(removeList);
     removeList.clear();
-    assertTrue(rlQueue.size() == 4);
-    assertFalse(rlQueue.openSet.contains(node1));
+    assertTrue(rlQueue.collection().size() == 4);
+    assertFalse(rlQueue.collection().contains(node1));
     removeList.add(node2);
     removeList.add(node3);
     removeList.add(node4);
     removeList.add(node5);
     rlQueue.removeAll(removeList);
-    assertTrue(rlQueue.openSet.isEmpty());
+    assertTrue(rlQueue.collection().isEmpty());
   }
 }
