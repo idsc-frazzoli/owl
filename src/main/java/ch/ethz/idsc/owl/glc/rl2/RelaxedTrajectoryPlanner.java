@@ -4,9 +4,12 @@ package ch.ethz.idsc.owl.glc.rl2;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -20,14 +23,12 @@ import ch.ethz.idsc.tensor.Tensor;
 public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Serializable {
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
-  private final Tensor slacks;
   private final RelaxedGlobalQueue globalQueue;
   private final RelaxedDomainQueueMap domainMap;
   private final RelaxedDomainQueue goalDomainQueue;
 
   // ---
   protected RelaxedTrajectoryPlanner(StateTimeRaster stateTimeRaster, HeuristicFunction heuristicFunction, Tensor slacks) {
-    this.slacks = slacks;
     this.stateTimeRaster = stateTimeRaster;
     this.heuristicFunction = heuristicFunction;
     this.globalQueue = new RelaxedGlobalQueue(slacks);
@@ -66,7 +67,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   }
 
   // TODO ANDRE check if obsolete
-  protected final RelaxedGlobalQueue getUnexpandedNodes() {
+  protected final RelaxedGlobalQueue getGlobalQueue() {
     return globalQueue;
   }
 
@@ -74,9 +75,28 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     globalQueue.removeAll(toRemove);
   }
 
+  protected final void removeFromDomainQueue(Tensor domain_key, GlcNode glcNode) {
+    if (!glcNode.isLeaf()) {
+      System.err.println("The node to be removed has children");
+    }
+    domainMap.removeFromDomainMap(domain_key, glcNode);
+  }
+
   // check if obsolete
   public final Map<Tensor, RelaxedDomainQueue> getRelaxedDomainQueueMap() {
     return domainMap.getMap();
+  }
+
+  public final Set<GlcNode> getNodesInDomainQueueMap() {
+    Set<GlcNode> glcNodesInDomainQueueMap = new HashSet<>();
+    Iterator<RelaxedDomainQueue> iterator = domainMap.getMap().values().iterator();
+    while (iterator.hasNext()) {
+      RelaxedDomainQueue current = iterator.next();
+      Collection<GlcNode> nodes = current.collection();
+      int size = nodes.size();
+      glcNodesInDomainQueueMap.addAll(nodes);
+    }
+    return glcNodesInDomainQueueMap;
   }
 
   /** Returns most promising unexpanded node. */
@@ -91,11 +111,17 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     return Optional.ofNullable(goalDomainQueue.collection().isEmpty() ? null : goalDomainQueue.peekBest());
   }
 
+  public final Collection<GlcNode> getAllNodesInGoal() {
+    return Collections.unmodifiableCollection(goalDomainQueue.collection());
+  }
+
   /***************************************************/
   @Override // from TrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(globalQueue.collection().isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
-    addToGlobalQueue(GlcNodes.createRoot(stateTime, heuristicFunction));
+    GlcNode root = GlcNodes.createRoot(stateTime, heuristicFunction);
+    addToGlobalQueue(root);
+    addToDomainMap(stateTimeRaster.convertToKey(stateTime), root);
   }
 
   @Override // from TrajectoryPlanner
@@ -116,6 +142,6 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
 
   @Override // from TrajectoryPlanner
   public final Collection<GlcNode> getQueue() {
-    return Collections.unmodifiableCollection(getUnexpandedNodes().collection());
+    return Collections.unmodifiableCollection(getGlobalQueue().collection());
   }
 }

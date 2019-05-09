@@ -34,7 +34,6 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from RelaxedGlobalQueue
-  // TODO ANDRE return discardedNodes
   public Collection<GlcNode> add(GlcNode glcNode) {
     Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
     if (!discardedNodes.contains(glcNode))

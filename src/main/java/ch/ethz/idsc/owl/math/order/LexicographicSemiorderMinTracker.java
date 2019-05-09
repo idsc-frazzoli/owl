@@ -203,8 +203,8 @@ public class LexicographicSemiorderMinTracker<K> {
           .filter(x -> x.value.Get(fi).equals(u_min)) //
           .collect(Collectors.toList());
     }
-    if (bestElements.size() != 1)
-      System.out.println("random choice");
+    // if (bestElements.size() != 1)
+    // System.out.println("random choice");
     return bestElements.get(random.nextInt(bestElements.size()));
   }
 

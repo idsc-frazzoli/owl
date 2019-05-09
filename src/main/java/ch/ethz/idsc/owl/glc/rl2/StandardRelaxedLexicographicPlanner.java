@@ -2,11 +2,13 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
+import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -45,6 +47,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     Map<GlcNode, List<StateTime>> connectors = controlsIntegrator.from(node);
     // ---
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
+      // TODO ANDRE make "deterministic"
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       final List<StateTime> trajectory = connectors.get(next);
       // check if planner constraints are satisfied otherwise discard next
@@ -60,14 +63,36 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
             offerDestination(next, trajectory);
         } else if (!discardedNodes.isEmpty()) {
           // TODO ANDRE check if sufficient, criteria here: not next and not empty
-          // remove all discarded nodes from globalQueue
-          removeFromGlobal(discardedNodes);
-          // if any removed, remove edges from parent
-          discardedNodes.stream().forEach(Nodes::disjoinChild);
+          // remove all discarded nodes in GlobalQueue from it
+          this.removeChildren(discardedNodes);
+          // removeFromGlobal(discardedNodes);
+          // Iterator<GlcNode> iterator = discardedNodes.iterator();
+          // while (iterator.hasNext()) {
+          // GlcNode currentNode = iterator.next();
+          // }
+          // // if any removed, remove edges from parent
+          // discardedNodes.stream().forEach(Nodes::disjoinChild);
         }
       }
     }
     // TODO ANDRE check if close to other merits see StaticHelper
+  }
+
+  private void removeChildren(Collection<? extends StateCostNode> discardedNodes) {
+    Iterator<? extends StateCostNode> iteratorDiscarded = discardedNodes.iterator();
+    while (iteratorDiscarded.hasNext()) {
+      GlcNode toDiscard = (GlcNode) iteratorDiscarded.next();
+      if (toDiscard.isLeaf()) {
+        // remove from globalQueue
+        final Tensor domainKey = stateTimeRaster.convertToKey(toDiscard.stateTime());
+        getGlobalQueue().remove(toDiscard);
+        removeFromDomainQueue(domainKey, toDiscard);
+        if (!toDiscard.isRoot())
+          Nodes.disjoinChild(toDiscard);
+        // TODO Andre remove from Discarded
+      }
+      removeChildren(toDiscard.children());
+    }
   }
 
   @Override // from TrajectoryPlanner
