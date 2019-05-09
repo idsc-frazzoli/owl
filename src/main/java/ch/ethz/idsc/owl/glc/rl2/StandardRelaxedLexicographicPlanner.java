@@ -22,8 +22,6 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
   private transient final ControlsIntegrator controlsIntegrator;
-  // ---
-  private final Tensor slacks;
 
   public StandardRelaxedLexicographicPlanner(//
       StateTimeRaster stateTimeRaster, //
@@ -33,7 +31,6 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
       GoalInterface goalInterface, //
       Tensor slacks) {
     super(stateTimeRaster, goalInterface, slacks);
-    this.slacks = slacks;
     this.stateIntegrator = stateIntegrator;
     this.plannerConstraint = Objects.requireNonNull(plannerConstraints);
     this.goalInterface = goalInterface;
@@ -62,7 +59,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
           if (goalInterface.firstMember(trajectory).isPresent()) // GOAL check
             offerDestination(next, trajectory);
         } else if (!discardedNodes.isEmpty()) {
-          // TODO check if sufficient, criteria here: not next and not empty
+          // TODO ANDRE check if sufficient, criteria here: not next and not empty
           // remove all discarded nodes from globalQueue
           removeFromGlobal(discardedNodes);
           // if any removed, remove edges from parent
