@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.math.planar.InterpolationEntryFinder;
 public class Se2Letter5Demo extends Se2LetterADemo {
   @Override
   public TrajectoryControl createTrajectoryControl() {
-    return new ClothoidPursuitControl(new InterpolationEntryFinder(0), CarEntity.MAX_TURNING_RATE);
+    return new ClothoidPursuitControl(new InterpolationEntryFinder(), CarEntity.MAX_TURNING_RATE);
   }
 
   public static void main(String[] args) {

@@ -2,6 +2,8 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,8 +16,7 @@ public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinde
   // ---
   private final GeodesicInterface geodesicInterface;
 
-  public GeodesicInterpolationEntryFinder(double initialIndex, GeodesicInterface geodesicInterface) {
-    super(RealScalar.of(initialIndex));
+  public GeodesicInterpolationEntryFinder(GeodesicInterface geodesicInterface) {
     this.geodesicInterface = geodesicInterface;
   }
 
@@ -36,5 +37,10 @@ public final class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinde
       }
     }
     return new TrajectoryEntry(point, index);
+  }
+
+  @Override // from TrajectoryEntryFinder
+  protected Stream<Scalar> sweep_variables(Tensor waypoints) {
+    return IntStream.range(0, waypoints.length()).mapToObj(RealScalar::of);
   }
 }
