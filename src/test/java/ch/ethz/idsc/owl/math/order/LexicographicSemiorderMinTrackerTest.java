@@ -199,6 +199,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     assertTrue(LSMT1.peekBestKey() == "second");
     assertTrue(LSMT1.peekBestValue() == y);
     assertTrue(LSMT1.getMinElements().size() == 3);
+    LSMT1.digest("fourth", y);
+    assertTrue(LSMT1.peekBestValue() == y);
   }
 
   public void testExtractBest() {

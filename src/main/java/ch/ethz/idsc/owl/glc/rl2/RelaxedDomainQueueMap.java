@@ -33,6 +33,13 @@ import ch.ethz.idsc.tensor.Tensor;
     return Collections.emptyList();
   }
 
+  public void removeFromDomainMap(Tensor domain_key, GlcNode glcNode) {
+    if (!containsKey(domain_key)) {
+      throw new RuntimeException("Key does not exists in map!");
+    }
+    getQueue(domain_key).remove(glcNode);
+  }
+
   public boolean isEmpty() {
     return map.isEmpty();
   }
