@@ -19,14 +19,4 @@ public enum ClothoidPursuits {
         ? new ClothoidPursuit(lookAhead.get())
         : VoidPursuit.INSTANCE;
   }
-
-  /** @param tensor waypoints
-   * @param entryFinder strategy
-   * @return GeodesicPursuit */
-  public static GeodesicPursuitInterface fromTrajectory(Tensor tensor, TrajectoryEntryFinder entryFinder) {
-    Optional<Tensor> lookAhead = entryFinder.initial(tensor).point;
-    return lookAhead.isPresent() //
-        ? new ClothoidPursuit(lookAhead.get())
-        : VoidPursuit.INSTANCE;
-  }
 }
