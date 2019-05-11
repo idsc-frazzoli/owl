@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,8 +17,9 @@ import ch.ethz.idsc.owl.demo.order.TensorProductOrder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 
-class Pair<K> {
+class Pair<K> implements Serializable {
   public K key;
   public Tensor value;
 
@@ -36,7 +38,7 @@ class Pair<K> {
  * The minimal elements for a lexicographic semiorder is the iteratively constructed set
  * where all elements are discarded which are not minimal w.r.t the first semiorder. Then from this remaining
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
-public class LexicographicSemiorderMinTracker<K> {
+public class LexicographicSemiorderMinTracker<K> implements Serializable {
   public static <K> LexicographicSemiorderMinTracker<K> withList(Tensor slackVector) {
     return new LexicographicSemiorderMinTracker<>(slackVector, new LinkedList<>());
   }
@@ -54,7 +56,7 @@ public class LexicographicSemiorderMinTracker<K> {
 
   private LexicographicSemiorderMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet) {
     this.candidateSet = candidateSet;
-    this.slackVector = slackVector;
+    this.slackVector = VectorQ.require(slackVector);
     this.dim = slackVector.length();
     List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
     List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
@@ -71,9 +73,11 @@ public class LexicographicSemiorderMinTracker<K> {
    * An element x is not a candidate if there is an index where one of the current candidates
    * strictly precedes x and in all indices before are the current one has smaller values.
    * 
-   * @param applicantPair new digested element
-   * @return Collection of discarded elements upon update step */
-  private Collection<K> updateCandidateSet(Pair<K> applicantPair) {
+   * @param key
+   * @param x value, e.g. scores of key
+   * @return Collection of discarded elements upon digestion */
+  public Collection<K> digest(K key, Tensor x) {
+    Pair<K> applicantPair = new Pair<>(key, VectorQ.requireLength(x, dim));
     Iterator<Pair<K>> iterator = candidateSet.iterator();
     Collection<K> discardedKeys = new ArrayList<>();
     while (iterator.hasNext()) {
@@ -100,20 +104,6 @@ public class LexicographicSemiorderMinTracker<K> {
     }
     candidateSet.add(applicantPair);
     return discardedKeys;
-  }
-
-  /** @param key
-   * @param x value, e.g. scores of key
-   * @return Collection of discarded elements upon digestion */
-  public Collection<K> digest(K key, Tensor x) {
-    if (x.length() != dim)
-      throw new RuntimeException("Tensor x has wrong dimension");
-    Pair<K> applicantPair = new Pair<>(key, x);
-    if (candidateSet.isEmpty()) {
-      candidateSet.add(applicantPair);
-      return Collections.emptyList();
-    }
-    return updateCandidateSet(applicantPair);
   }
 
   private void deleteElement(Pair<K> pair) {
@@ -203,8 +193,8 @@ public class LexicographicSemiorderMinTracker<K> {
           .filter(x -> x.value.Get(fi).equals(u_min)) //
           .collect(Collectors.toList());
     }
-    // if (bestElements.size() == 1)
-    // return bestElements.get(0);
+    // if (bestElements.size() != 1)
+    // System.out.println("random choice");
     return bestElements.get(random.nextInt(bestElements.size()));
   }
 

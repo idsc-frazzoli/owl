@@ -1,12 +1,13 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
 /** Creates a product order comparator where each elements of two tuples are compared coordinatewise.
  * An element x precedes y if it precedes y in all coordinates. */
-public class ProductOrderComparator implements OrderComparator<Iterable<? extends Object>> {
+public class ProductOrderComparator implements OrderComparator<Iterable<? extends Object>>, Serializable {
   private final List<OrderComparator> orderComparators;
 
   public ProductOrderComparator(List<OrderComparator> orderComparators) {

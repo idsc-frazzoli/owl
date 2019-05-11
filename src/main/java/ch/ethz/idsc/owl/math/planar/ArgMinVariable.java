@@ -9,8 +9,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.red.Mean;
-import ch.ethz.idsc.tensor.sca.Decrement;
-import ch.ethz.idsc.tensor.sca.Increment;
 
 public class ArgMinVariable implements TensorScalarFunction {
   private final TrajectoryEntryFinder entryFinder;
@@ -40,26 +38,13 @@ public class ArgMinVariable implements TensorScalarFunction {
 
   @Override // from Function
   public Scalar apply(Tensor tensor) {
-    TrajectoryEntry initial = entryFinder.initial(tensor);
-    insert(initial);
-    if (tensor.length() < 2)
-      return initial.variable; // no bisection possible
-    Function<Scalar, TrajectoryEntry> function = entryFinder.on(tensor);
-    Tensor[] tmp = new Tensor[3];
-    TrajectoryEntry trajectoryEntry = initial;
-    // search from initial upwards
-    while (!Arrays.equals(pairs, tmp)) {
-      tmp = pairs.clone();
-      trajectoryEntry = update(function, Increment.ONE.apply(trajectoryEntry.variable));
+    entryFinder.sweep(tensor).parallel().forEach(this::insert);
+    try {
+      bisect(entryFinder.on(tensor), 0);
+    } catch (NullPointerException e) {
+      // ---
     }
-    // search from initial downwards
-    trajectoryEntry = update(function, Decrement.ONE.apply(initial.variable));
-    while (!Arrays.equals(pairs, tmp)) {
-      tmp = pairs.clone();
-      trajectoryEntry = update(function, Decrement.ONE.apply(trajectoryEntry.variable));
-    }
-    // bisect previously determined goal region
-    return bisect(function, 0);
+    return pairs[0].Get(1);
   }
 
   /** calculate and add pair {value, variable}
@@ -67,8 +52,10 @@ public class ArgMinVariable implements TensorScalarFunction {
   private void insert(TrajectoryEntry trajectoryEntry) {
     if (trajectoryEntry.point.isPresent()) {
       Scalar cost = mapping.apply(trajectoryEntry.point.get());
-      pairs[2] = Tensors.of(cost, trajectoryEntry.variable);
-      Arrays.sort(pairs, ArgMinComparator.INSTANCE);
+      synchronized (pairs) {
+        pairs[2] = Tensors.of(cost, trajectoryEntry.variable);
+        Arrays.sort(pairs, ArgMinComparator.INSTANCE);
+      }
     }
   }
 

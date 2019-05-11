@@ -1,6 +1,7 @@
 // code by astoll, ynager
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,9 +12,9 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class RelaxedDomainQueueMap {
+/* package */ class RelaxedDomainQueueMap implements Serializable {
   /** map from domain keys to queues of nodes */
-  private final Map<Tensor, RelaxedDomainQueue> map = new HashMap<>();
+  private final Map<Tensor, RelaxedPriorityQueue> map = new HashMap<>();
   private final Tensor slacks;
 
   public RelaxedDomainQueueMap(Tensor slacks) {
@@ -28,9 +29,15 @@ import ch.ethz.idsc.tensor.Tensor;
   public Collection<GlcNode> addToDomainMap(Tensor domain_key, GlcNode glcNode) {
     if (containsKey(domain_key)) // has another node has already reached this domain ?
       return getQueue(domain_key).add(glcNode); // add node to existing relaxedDomainQueue
-    else
-      map.put(domain_key, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
+    map.put(domain_key, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
     return Collections.emptyList();
+  }
+
+  public void removeFromDomainMap(Tensor domain_key, GlcNode glcNode) {
+    if (!containsKey(domain_key)) {
+      throw new RuntimeException("Key does not exists in map!");
+    }
+    getQueue(domain_key).remove(glcNode);
   }
 
   public boolean isEmpty() {
@@ -41,15 +48,15 @@ import ch.ethz.idsc.tensor.Tensor;
     return map.containsKey(domain_key);
   }
 
-  public RelaxedDomainQueue getQueue(Tensor domain_key) {
+  public RelaxedPriorityQueue getQueue(Tensor domain_key) {
     return map.get(domain_key);
   }
 
-  public Stream<Entry<Tensor, RelaxedDomainQueue>> mapEntrySetStream() {
+  public Stream<Entry<Tensor, RelaxedPriorityQueue>> mapEntrySetStream() {
     return map.entrySet().stream();
   }
 
-  public Map<Tensor, RelaxedDomainQueue> getMap() {
+  public Map<Tensor, RelaxedPriorityQueue> getMap() {
     return Collections.unmodifiableMap(map);
   }
 }

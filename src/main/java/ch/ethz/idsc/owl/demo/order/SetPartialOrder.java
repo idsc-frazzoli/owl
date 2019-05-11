@@ -37,6 +37,5 @@ public enum SetPartialOrder {
    * <td>Neither set is a subset of the other</td>
    * </tr>
    * </table> */
-  public static final OrderComparator<Collection<?>> INSTANCE = //
-      Order.comparator((x, y) -> y.containsAll(x));
+  public static final OrderComparator<Collection<?>> INSTANCE = new Order<>((x, y) -> y.containsAll(x));
 }

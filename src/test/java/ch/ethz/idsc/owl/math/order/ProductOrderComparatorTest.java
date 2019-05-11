@@ -67,7 +67,7 @@ public class ProductOrderComparatorTest extends TestCase {
   public void testTensor() {
     BinaryRelation<Tensor> relation1 = (x, y) -> x.length() <= y.length();
     List<OrderComparator> comparators = Arrays.asList( //
-        Order.comparator(relation1), //
+        new Order<>(relation1), //
         ScalarTotalOrder.INSTANCE); //
     ProductOrderComparator genericProductOrder = new ProductOrderComparator(comparators);
     Tensor tensorX = Tensors.fromString("{{1,2,3}, 10}");

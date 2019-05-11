@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.io.IOException;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -8,6 +9,7 @@ import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.io.Timing;
 import junit.framework.TestCase;
 
@@ -19,7 +21,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(2, 2, 2), VectorScalar.of(0, 0, 0));
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     assertTrue(rlQueue.collection().contains(node1));
     rlQueue.add(node2);
     assertTrue(rlQueue.collection().contains(node1) && rlQueue.collection().contains(node2));
@@ -40,7 +42,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(2, 2, 2), VectorScalar.of(0, 0, 0));
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     assertTrue(rlQueue.collection().contains(node1));
     assertTrue(rlQueue.peekBest() == node1);
     assertTrue(rlQueue.collection().size() == 1);
@@ -58,14 +60,14 @@ public class RelaxedDomainQueueTest extends TestCase {
     assertTrue(rlQueue.collection().size() == 2);
   }
 
-  public void testPoll() {
+  public void testPoll() throws ClassNotFoundException, IOException {
     Tensor slacks = Tensors.vector(3, 3, 3);
     GlcNode node1 = GlcNode.of(null, null, VectorScalar.of(1, 1, 2), VectorScalar.of(0, 0, 0));
     GlcNode node2 = GlcNode.of(null, null, VectorScalar.of(1, 2, 1), VectorScalar.of(0, 0, 0));
     GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(2, 2, 2), VectorScalar.of(0, 0, 0));
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     assertTrue(rlQueue.collection().size() == 1);
     rlQueue.add(node2);
     assertTrue(rlQueue.collection().size() == 2);
@@ -74,6 +76,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     rlQueue.add(node4);
     assertTrue(rlQueue.collection().size() == 4);
     rlQueue.add(node5);
+    Serialization.copy(rlQueue);
     assertTrue(rlQueue.collection().size() == 5);
     assertTrue(rlQueue.pollBest() == node5);
     assertTrue(rlQueue.collection().size() == 4);
@@ -89,7 +92,7 @@ public class RelaxedDomainQueueTest extends TestCase {
 
   public void testEmpty() {
     Tensor slacks = Tensors.vector(3, 3, 3);
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.empty(slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.empty(slacks);
     assertTrue(rlQueue.collection().isEmpty());
   }
 
@@ -99,7 +102,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
     Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
     GlcNode firstNode = GlcNode.of(null, null, costFromRoot, minCostToGoal);
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(firstNode, slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(firstNode, slacks);
     for (int i = 0; i < 1000; ++i) {
       costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
       minCostToGoal = VectorScalar.of(0, 0, 0);

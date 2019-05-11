@@ -25,10 +25,10 @@ public enum DigitSumDivisibilityPreorder {
   private static final BinaryRelation<Scalar> BINARY_RELATION_SCALAR = //
       (x, y) -> Scalars.divides(totalDigits(x), totalDigits(y));
   /** for scalar */
-  public static final OrderComparator<Scalar> SCALAR = Order.comparator(BINARY_RELATION_SCALAR);
+  public static final OrderComparator<Scalar> SCALAR = new Order<>(BINARY_RELATION_SCALAR);
   // ---
   private static final BinaryRelation<Integer> BINARY_RELATION_INTEGER = //
       (x, y) -> Scalars.divides(totalDigits(RealScalar.of(x)), totalDigits(RealScalar.of(y)));
   /** for integers */
-  public static final OrderComparator<Integer> INTEGER = Order.comparator(BINARY_RELATION_INTEGER);
+  public static final OrderComparator<Integer> INTEGER = new Order<>(BINARY_RELATION_INTEGER);
 }

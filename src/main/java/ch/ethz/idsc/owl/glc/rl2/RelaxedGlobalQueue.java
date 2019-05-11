@@ -16,13 +16,13 @@ import ch.ethz.idsc.tensor.Tensor;
     super(slacks);
   }
 
-  @Override
+  @Override // from RelaxedPriorityQueue
   public Collection<GlcNode> add(GlcNode glcNode) {
     addSingle(glcNode);
     return Collections.emptyList();
   }
 
-  @Override
+  @Override // from RelaxedPriorityQueue
   public GlcNode peekBest() {
     LexicographicSemiorderMinTracker<GlcNode> minTracker = LexicographicSemiorderMinTracker.withList(slacks);
     Iterator<GlcNode> iterator = iterator();
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.Tensor;
     return minTracker.peekBestKey();
   }
 
-  @Override
+  @Override // from RelaxedPriorityQueue
   protected GlcNode pollBest() {
     GlcNode glcNode = peekBest();
     remove(glcNode);

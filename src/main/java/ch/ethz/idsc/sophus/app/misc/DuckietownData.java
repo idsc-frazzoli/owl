@@ -27,6 +27,7 @@ public enum DuckietownData {
   ;
   public static final Tensor POSE_20190301_0 = ResourceData.of("/autolab/localization/pose/20190301_0.csv");
   public static final Tensor POSE_20190325_0 = ResourceData.of("/autolab/localization/pose/20190325_0.csv");
+  public static final Tensor POSE_20190509_0 = ResourceData.of("/autolab/localization/pose/20190509_0.csv");
   // File FILE = UserName.is("datahaki") //
   // ? HomeDirectory.file("duckiebot_0_poses.csv")
   // : HomeDirectory.file("Desktop/MA/duckietown/duckiebot_0_poses.csv");
@@ -61,16 +62,16 @@ public enum DuckietownData {
 
   public static void main(String[] args) throws IOException {
     LieDifferences lieDifferences = new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
-    Tensor states = states(POSE_20190325_0);
+    Tensor states = states(POSE_20190509_0);
     Tensor diffs = lieDifferences.apply(states);
-    Tensor times = Tensor.of(of(POSE_20190325_0).stream().map(StateTime::time));
+    Tensor times = Tensor.of(of(POSE_20190509_0).stream().map(StateTime::time));
     Tensor dtime = Differences.of(times);
     Tensor stime = Accumulate.of(dtime);
     Tensor speeds = Tensor.of(IntStream.range(0, diffs.length()) //
         .mapToObj(index -> Join.of(stime.extract(index, index + 1), diffs.get(index).divide(dtime.Get(index)))));
-    Export.of(HomeDirectory.file("speeds.csv"), speeds);
+    Export.of(HomeDirectory.file("20190509_speeds.csv"), speeds);
     // Tensor states = states(POSE_20190301_0);
-    System.out.println(states);
-    System.out.println(states);
+    // System.out.println(states);
+    // System.out.println(states);
   }
 }

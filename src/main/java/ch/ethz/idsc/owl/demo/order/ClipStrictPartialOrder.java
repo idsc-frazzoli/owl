@@ -19,5 +19,5 @@ public enum ClipStrictPartialOrder {
   /** binary relation
    * irreflexive */
   public static final BinaryRelation<Clip> BINARY_RELATION = (x, y) -> Scalars.lessThan(x.max(), y.min());
-  public static final OrderComparator<Clip> INSTANCE = Order.comparator(BINARY_RELATION);
+  public static final OrderComparator<Clip> INSTANCE = new Order<>(BINARY_RELATION);
 }

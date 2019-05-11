@@ -8,5 +8,5 @@ import ch.ethz.idsc.tensor.Scalars;
 
 public enum ScalarTotalOrder {
   ;
-  public static final OrderComparator<Scalar> INSTANCE = Order.comparator(Scalars::lessEquals);
+  public static final OrderComparator<Scalar> INSTANCE = new Order<>(Scalars::lessEquals);
 }

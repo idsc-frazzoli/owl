@@ -8,5 +8,5 @@ import ch.ethz.idsc.tensor.Scalars;
 
 public enum DivisibilityPreorder {
   ;
-  public static final OrderComparator<Scalar> INSTANCE = Order.comparator(Scalars::divides);
+  public static final OrderComparator<Scalar> INSTANCE = new Order<>(Scalars::divides);
 }

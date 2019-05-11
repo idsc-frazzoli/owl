@@ -48,7 +48,7 @@ public class LexicographicComparatorTest extends TestCase {
   public void testTensorAsIterable() {
     BinaryRelation<Tensor> relation1 = (x, y) -> x.length() <= y.length();
     List<OrderComparator> comparators = Arrays.asList( //
-        Order.comparator(relation1), //
+        new Order<>(relation1), //
         ScalarTotalOrder.INSTANCE); //
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     Tensor tensorX = Tensors.fromString("{{1,2,3}, 2}");
