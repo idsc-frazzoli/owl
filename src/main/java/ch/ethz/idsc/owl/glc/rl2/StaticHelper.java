@@ -39,6 +39,12 @@ import ch.ethz.idsc.tensor.red.Entrywise;
             .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(v, MERIT_EPS)));
   }
 
+  static long numberEquals(RelaxedDomainQueue domainQueue) {
+    Tensor bestMerit = VectorScalars.vector(domainQueue.peekBest().merit());
+    return domainQueue.collection().stream().filter(a -> VectorScalars.vector(a.merit()).subtract(bestMerit).stream() //
+        .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(v.abs(), MERIT_EPS))).count();
+  }
+
   /** @param collection
    * @param dimension
    * @return best node in collection along given dimension

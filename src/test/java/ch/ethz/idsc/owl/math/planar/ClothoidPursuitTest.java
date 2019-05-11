@@ -17,20 +17,13 @@ import junit.framework.TestCase;
 public class ClothoidPursuitTest extends TestCase {
   public void testSimple() {
     GeodesicPursuitInterface geodesicPursuit;
-    Tensor trajectory1 = Tensors.of( //
+    Tensor trajectory = Tensors.of( //
         Tensors.vector(0, 0, 0), //
         Tensors.vector(2, 2, Math.PI / 2), //
         Tensors.vector(4, 4, Math.PI / 2));
-    Tensor trajectory2 = Tensors.of( //
-        Tensors.vector(2, 2, Math.PI / 2), //
-        Tensors.vector(4, 4, Math.PI / 2));
     // ---
-    geodesicPursuit = ClothoidPursuits.fromTrajectory(trajectory1, new NaiveEntryFinder(0), RealScalar.ONE);
+    geodesicPursuit = ClothoidPursuits.fromTrajectory(trajectory, new NaiveEntryFinder(), RealScalar.ONE);
     // System.out.println("ratios 1 = " + (geodesicPursuit.firstRatio().isPresent() ? geodesicPursuit.firstRatio().get() : "empty"));
-    assertEquals(RationalScalar.of(1, 2), Round._8.apply(geodesicPursuit.firstRatio().orElse(null)));
-    // ---
-    geodesicPursuit = ClothoidPursuits.fromTrajectory(trajectory2, new NaiveEntryFinder(0));
-    // System.out.println("ratios 2 = " + (geodesicPursuit.firstRatio().isPresent() ? geodesicPursuit.firstRatio().get() : "empty"));
     assertEquals(RationalScalar.of(1, 2), Round._8.apply(geodesicPursuit.firstRatio().orElse(null)));
   }
 

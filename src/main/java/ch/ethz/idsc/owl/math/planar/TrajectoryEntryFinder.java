@@ -3,17 +3,12 @@ package ch.ethz.idsc.owl.math.planar;
 
 import java.io.Serializable;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class TrajectoryEntryFinder implements Serializable {
-  private final Scalar initialVar; // uncorrected
-
-  public TrajectoryEntryFinder(Scalar initialVar) {
-    this.initialVar = initialVar;
-  }
-
   /** @param waypoints of trajectory
    * @return function to be applied on waypoints */
   public Function<Scalar, TrajectoryEntry> on(Tensor waypoints) {
@@ -21,19 +16,17 @@ public abstract class TrajectoryEntryFinder implements Serializable {
   }
 
   /** @param waypoints of trajectory
-   * @return TrajectoryEntry */
-  public TrajectoryEntry initial(Tensor waypoints) {
-    return on(waypoints).apply(initialVar);
+   * @return stream of coarsely distributed trajectory entries */
+  public Stream<TrajectoryEntry> sweep(Tensor waypoints) {
+    Function<Scalar, TrajectoryEntry> function = on(waypoints);
+    return sweep_variables(waypoints).map(function);
   }
 
-  /** WARNING this might not be the variable actually applied in initial()
-   * @return initial variable */
-  public Scalar uncorrectedInitialVar() {
-    return initialVar;
-  }
+  /** @param waypoints of trajectory */
+  protected abstract Stream<Scalar> sweep_variables(Tensor waypoints);
 
   /** @param waypoints of trajectory
    * @param var to specify entry point choice
    * @return TrajectoryEntry */
-  abstract TrajectoryEntry protected_apply(Tensor waypoints, Scalar var);
+  protected abstract TrajectoryEntry protected_apply(Tensor waypoints, Scalar var);
 }
