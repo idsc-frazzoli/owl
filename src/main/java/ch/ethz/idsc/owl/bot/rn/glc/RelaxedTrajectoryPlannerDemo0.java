@@ -127,7 +127,7 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     // ---
     RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(rlPlanner);
     RelaxedDebugUtils.nodeAmountCompare(rlPlanner);
-    DebugUtils.assertNoLeaves(rlPlanner.getQueue());
+    DebugUtils.assertAllLeaf(rlPlanner.getQueue());
     RelaxedDebugUtils.closeMatchesCheck(rlPlanner);
     return owlyAnimationFrame;
   }

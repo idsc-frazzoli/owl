@@ -38,9 +38,9 @@ public enum DebugUtils {
     }
   }
 
-  public static void assertNoLeaves(Collection<GlcNode> collection) {
-    boolean anyLeaf = collection.stream().anyMatch(GlcNode::isLeaf);
-    if (anyLeaf)
+  public static void assertAllLeaf(Collection<GlcNode> collection) {
+    boolean allLeaf = collection.stream().allMatch(GlcNode::isLeaf);
+    if (!allLeaf)
       throw new RuntimeException("Not all elements in global queue are leafs!");
   }
 
