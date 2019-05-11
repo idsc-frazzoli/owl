@@ -1,5 +1,5 @@
 // code by jl
-package ch.ethz.idsc.owl.glc.rl2;
+package ch.ethz.idsc.owl.glc.adapter;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -17,7 +16,7 @@ import ch.ethz.idsc.tensor.Scalars;
 public enum DebugUtils {
   ;
   // ---
-  static void nodeAmountCompare(GlcNode best, int size) {
+  public static void nodeAmountCompare(GlcNode best, int size) {
     final GlcNode root = Nodes.rootFrom(best);
     if (size != Nodes.ofSubtree(root).size()) {
       System.out.println("****NODE CHECK****");
