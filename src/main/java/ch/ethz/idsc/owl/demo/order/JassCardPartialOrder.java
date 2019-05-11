@@ -43,5 +43,5 @@ public enum JassCardPartialOrder {
    * <td>Different colors and neither is "Trumpf"</td>
    * </tr>
    * </table> */
-  public static final OrderComparator<JassCard> INSTANCE = Order.comparator(JassCard::isLess);
+  public static final OrderComparator<JassCard> INSTANCE = new Order<>(JassCard::isLess);
 }

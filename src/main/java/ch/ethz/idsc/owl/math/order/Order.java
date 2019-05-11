@@ -1,24 +1,27 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
-public enum Order {
-  ;
+import java.io.Serializable;
+
+public class Order<T> implements OrderComparator<T>, Serializable {
+  private final BinaryRelation<T> binaryRelation;
+
   /** @param binaryRelation reflexive and transitive
    * @return */
-  public static <T> OrderComparator<T> comparator(BinaryRelation<T> binaryRelation) {
-    return new OrderComparator<T>() {
-      @Override
-      public OrderComparison compare(T x, T y) {
-        boolean xRy = binaryRelation.test(x, y);
-        boolean yRx = binaryRelation.test(y, x);
-        if (xRy && yRx)
-          return OrderComparison.INDIFFERENT;
-        if (xRy)
-          return OrderComparison.STRICTLY_PRECEDES;
-        if (yRx)
-          return OrderComparison.STRICTLY_SUCCEEDS;
-        return OrderComparison.INCOMPARABLE;
-      }
-    };
+  public Order(BinaryRelation<T> binaryRelation) {
+    this.binaryRelation = binaryRelation;
+  }
+
+  @Override
+  public OrderComparison compare(T x, T y) {
+    boolean xRy = binaryRelation.test(x, y);
+    boolean yRx = binaryRelation.test(y, x);
+    if (xRy && yRx)
+      return OrderComparison.INDIFFERENT;
+    if (xRy)
+      return OrderComparison.STRICTLY_PRECEDES;
+    if (yRx)
+      return OrderComparison.STRICTLY_SUCCEEDS;
+    return OrderComparison.INCOMPARABLE;
   }
 }

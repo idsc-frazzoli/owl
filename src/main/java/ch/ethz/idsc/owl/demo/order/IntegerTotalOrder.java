@@ -6,5 +6,5 @@ import ch.ethz.idsc.owl.math.order.OrderComparator;
 
 public enum IntegerTotalOrder {
   ;
-  public static final OrderComparator<Integer> INSTANCE = Order.comparator((x, y) -> x <= y);
+  public static final OrderComparator<Integer> INSTANCE = new Order<>((x, y) -> x <= y);
 }

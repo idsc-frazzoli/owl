@@ -1,6 +1,7 @@
 // code by astoll, ynager
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class RelaxedDomainQueueMap {
+/* package */ class RelaxedDomainQueueMap implements Serializable {
   /** map from domain keys to queues of nodes */
   private final Map<Tensor, RelaxedPriorityQueue> map = new HashMap<>();
   private final Tensor slacks;

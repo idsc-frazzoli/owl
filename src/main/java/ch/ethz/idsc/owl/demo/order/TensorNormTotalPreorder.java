@@ -27,6 +27,6 @@ public class TensorNormTotalPreorder implements BinaryRelation<Tensor> {
 
   /** @return total preorder comparator that never returns INCOMPARABLE */
   public OrderComparator<Tensor> comparator() {
-    return Order.comparator(this);
+    return new Order<>(this);
   }
 }

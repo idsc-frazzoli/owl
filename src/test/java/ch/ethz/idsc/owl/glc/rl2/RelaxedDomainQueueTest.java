@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.io.IOException;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -8,6 +9,7 @@ import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.io.Timing;
 import junit.framework.TestCase;
 
@@ -58,7 +60,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     assertTrue(rlQueue.collection().size() == 2);
   }
 
-  public void testPoll() {
+  public void testPoll() throws ClassNotFoundException, IOException {
     Tensor slacks = Tensors.vector(3, 3, 3);
     GlcNode node1 = GlcNode.of(null, null, VectorScalar.of(1, 1, 2), VectorScalar.of(0, 0, 0));
     GlcNode node2 = GlcNode.of(null, null, VectorScalar.of(1, 2, 1), VectorScalar.of(0, 0, 0));
@@ -74,6 +76,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     rlQueue.add(node4);
     assertTrue(rlQueue.collection().size() == 4);
     rlQueue.add(node5);
+    Serialization.copy(rlQueue);
     assertTrue(rlQueue.collection().size() == 5);
     assertTrue(rlQueue.pollBest() == node5);
     assertTrue(rlQueue.collection().size() == 4);

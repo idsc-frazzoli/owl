@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
-class Pair<K> {
+class Pair<K> implements Serializable {
   public K key;
   public Tensor value;
 
@@ -37,7 +38,7 @@ class Pair<K> {
  * The minimal elements for a lexicographic semiorder is the iteratively constructed set
  * where all elements are discarded which are not minimal w.r.t the first semiorder. Then from this remaining
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
-public class LexicographicSemiorderMinTracker<K> {
+public class LexicographicSemiorderMinTracker<K> implements Serializable {
   public static <K> LexicographicSemiorderMinTracker<K> withList(Tensor slackVector) {
     return new LexicographicSemiorderMinTracker<>(slackVector, new LinkedList<>());
   }

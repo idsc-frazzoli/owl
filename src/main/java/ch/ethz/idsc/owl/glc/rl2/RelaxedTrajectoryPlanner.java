@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Serializable {
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
-  private final RelaxedGlobalQueue globalQueue;
+  private final RelaxedPriorityQueue globalQueue;
   private final RelaxedDomainQueueMap domainMap;
   private final RelaxedPriorityQueue goalDomainQueue;
 
@@ -67,7 +67,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   }
 
   // TODO ANDRE check if obsolete
-  protected final RelaxedGlobalQueue getGlobalQueue() {
+  protected final RelaxedPriorityQueue getGlobalQueue() {
     return globalQueue;
   }
 
