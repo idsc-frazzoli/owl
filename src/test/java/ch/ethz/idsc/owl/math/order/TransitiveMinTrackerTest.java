@@ -29,7 +29,7 @@ public class TransitiveMinTrackerTest extends TestCase {
   }
 
   public void testPartial() {
-    OrderComparator<Scalar> universalComparator = Order.comparator(Scalars::divides);
+    OrderComparator<Scalar> universalComparator = new Order<>(Scalars::divides);
     TransitiveMinTracker<Scalar> divisibility = TransitiveMinTracker.withList(universalComparator);
     divisibility.digest(RealScalar.of(10));
     assertTrue(divisibility.getMinElements().contains(RealScalar.of(10)));
@@ -48,7 +48,7 @@ public class TransitiveMinTrackerTest extends TestCase {
   }
 
   public void testTotal() {
-    OrderComparator<Scalar> universalComparator = Order.comparator(Scalars::lessEquals);
+    OrderComparator<Scalar> universalComparator = ScalarTotalOrder.INSTANCE;
     TransitiveMinTracker<Scalar> lessEquals = TransitiveMinTracker.withList(universalComparator);
     lessEquals.digest(RealScalar.of(10));
     assertTrue(lessEquals.getMinElements().contains(RealScalar.of(10)));

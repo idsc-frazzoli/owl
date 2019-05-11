@@ -9,5 +9,5 @@ import ch.ethz.idsc.owl.math.order.OrderComparator;
  * https://en.wikipedia.org/wiki/Subtyping */
 public enum TypeStrictPartialOrder {
   ;
-  public static final OrderComparator<Class<?>> INSTANCE = Order.comparator(Class::isAssignableFrom);
+  public static final OrderComparator<Class<?>> INSTANCE = new Order<>(Class::isAssignableFrom);
 }

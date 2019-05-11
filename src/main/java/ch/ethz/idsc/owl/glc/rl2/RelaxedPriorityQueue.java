@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,7 +11,7 @@ import java.util.Set;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class RelaxedPriorityQueue implements Iterable<GlcNode> {
+public abstract class RelaxedPriorityQueue implements Iterable<GlcNode>, Serializable {
   /** holds the node which have not yet been expanded */
   private final Set<GlcNode> openSet = new HashSet<>();
   protected final Tensor slacks;

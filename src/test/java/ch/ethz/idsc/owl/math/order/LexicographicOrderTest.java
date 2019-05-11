@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.order;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -11,7 +12,7 @@ import junit.framework.TestCase;
 
 public class LexicographicOrderTest extends TestCase {
   public void testTotalLexciographic() {
-    OrderComparator<Scalar> comparator1 = Order.comparator(Scalars::lessEquals);
+    OrderComparator<Scalar> comparator1 = ScalarTotalOrder.INSTANCE;
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
@@ -33,7 +34,7 @@ public class LexicographicOrderTest extends TestCase {
   }
 
   public void testPartialLexicographic() {
-    OrderComparator<Scalar> comparator1 = Order.comparator((x, y) -> Scalars.divides(x.abs(), y.abs()));
+    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(x.abs(), y.abs()));
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
@@ -63,7 +64,7 @@ public class LexicographicOrderTest extends TestCase {
 
   @SuppressWarnings("rawtypes")
   public void testException() {
-    OrderComparator<Scalar> comparator1 = Order.comparator((x, y) -> Scalars.divides(x.abs(), y.abs()));
+    OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(x.abs(), y.abs()));
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
