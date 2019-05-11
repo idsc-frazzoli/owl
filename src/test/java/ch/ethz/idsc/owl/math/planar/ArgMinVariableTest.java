@@ -1,6 +1,8 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.stream.IntStream;
+
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -12,8 +14,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
-
-import java.util.stream.IntStream;
 
 public class ArgMinVariableTest extends TestCase {
   public void testNaive() {

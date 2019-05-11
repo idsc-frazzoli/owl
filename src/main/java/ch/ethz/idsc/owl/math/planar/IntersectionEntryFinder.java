@@ -1,6 +1,9 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import ch.ethz.idsc.owl.math.MinMax;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,11 +13,7 @@ import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.red.Norm;
 
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
-
   @Override // from TrajectoryEntryFinder
   public TrajectoryEntry protected_apply(Tensor waypoints, Scalar distance) {
     Tensor waypoints_ = Tensor.of(waypoints.stream().map(Extract2D.FUNCTION));
