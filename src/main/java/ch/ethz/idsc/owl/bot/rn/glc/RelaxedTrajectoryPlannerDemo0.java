@@ -24,6 +24,7 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.rl2.DebugUtils;
+import ch.ethz.idsc.owl.glc.rl2.RelaxedDebugUtils;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
@@ -124,10 +125,10 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
       }
     }
     // ---
-    DebugUtils.globalQueueSubsetOfQueuesInDomainMap(rlPlanner);
-    DebugUtils.nodeAmountCompare(rlPlanner);
-    DebugUtils.noExpandedNodesInGlobalQueueCheck(rlPlanner.getQueue());
-    DebugUtils.closeMatchesCheck(rlPlanner);
+    RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(rlPlanner);
+    RelaxedDebugUtils.nodeAmountCompare(rlPlanner);
+    DebugUtils.assertNoLeaves(rlPlanner.getQueue());
+    RelaxedDebugUtils.closeMatchesCheck(rlPlanner);
     return owlyAnimationFrame;
   }
 
