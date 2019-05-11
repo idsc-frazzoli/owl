@@ -25,7 +25,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   private final HeuristicFunction heuristicFunction;
   private final RelaxedGlobalQueue globalQueue;
   private final RelaxedDomainQueueMap domainMap;
-  private final RelaxedDomainQueue goalDomainQueue;
+  private final RelaxedPriorityQueue goalDomainQueue;
 
   // ---
   protected RelaxedTrajectoryPlanner(StateTimeRaster stateTimeRaster, HeuristicFunction heuristicFunction, Tensor slacks) {
@@ -62,7 +62,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
 
   /** @param domain_key
    * @return RLDomainQueue in domain or Optional.empty() if domain has not been assigned a node yet */
-  protected final Optional<RelaxedDomainQueue> getDomainQueue(Tensor domain_key) {
+  protected final Optional<RelaxedPriorityQueue> getDomainQueue(Tensor domain_key) {
     return Optional.ofNullable(domainMap.getQueue(domain_key));
   }
 
@@ -83,15 +83,15 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   }
 
   // check if obsolete
-  public final Map<Tensor, RelaxedDomainQueue> getRelaxedDomainQueueMap() {
+  public final Map<Tensor, RelaxedPriorityQueue> getRelaxedDomainQueueMap() {
     return domainMap.getMap();
   }
 
   public final Set<GlcNode> getNodesInDomainQueueMap() {
     Set<GlcNode> glcNodesInDomainQueueMap = new HashSet<>();
-    Iterator<RelaxedDomainQueue> iterator = domainMap.getMap().values().iterator();
+    Iterator<RelaxedPriorityQueue> iterator = domainMap.getMap().values().iterator();
     while (iterator.hasNext()) {
-      RelaxedDomainQueue current = iterator.next();
+      RelaxedPriorityQueue current = iterator.next();
       Collection<GlcNode> nodes = current.collection();
       int size = nodes.size();
       glcNodesInDomainQueueMap.addAll(nodes);

@@ -13,15 +13,15 @@ import ch.ethz.idsc.tensor.Tensor;
   /** @param glcNode
    * @param slacks Tensor of slack parameters
    * @return relaxed lexicographic domain queue that contains given GlcNode as single element */
-  public static RelaxedDomainQueue singleton(GlcNode glcNode, Tensor slacks) {
-    RelaxedDomainQueue domainQueue = new RelaxedDomainQueue(slacks);
-    domainQueue.add(glcNode);
-    return domainQueue;
+  public static RelaxedPriorityQueue singleton(GlcNode glcNode, Tensor slacks) {
+    RelaxedPriorityQueue relaxedPriorityQueue = new RelaxedDomainQueue(slacks);
+    relaxedPriorityQueue.add(glcNode);
+    return relaxedPriorityQueue;
   }
 
   /** @param slacks Tensor of slack parameters
    * @return empty queue of nodes */
-  public static RelaxedDomainQueue empty(Tensor slacks) {
+  public static RelaxedPriorityQueue empty(Tensor slacks) {
     return new RelaxedDomainQueue(slacks);
   }
 
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.Tensor;
     this.domainMinTracker = LexicographicSemiorderMinTracker.withList(slacks);
   }
 
-  @Override // from RelaxedGlobalQueue
+  @Override // from RelaxedPriorityQueue
   public Collection<GlcNode> add(GlcNode glcNode) {
     Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
     if (!discardedNodes.contains(glcNode))
@@ -42,18 +42,19 @@ import ch.ethz.idsc.tensor.Tensor;
     return discardedNodes;
   }
 
-  @Override
+  @Override // from RelaxedPriorityQueue
   protected GlcNode pollBest() {
     GlcNode glcNode = domainMinTracker.pollBestKey();
     remove(glcNode);
     return glcNode;
   }
 
-  @Override // from RelaxedGlobalQueue
+  @Override // from RelaxedPriorityQueue
   public final GlcNode peekBest() {
     return domainMinTracker.peekBestKey();
   }
 
+  // TODO function is not used
   /* package */ Optional<Tensor> getMinValues() {
     return StaticHelper.entrywiseMin(collection().stream());
   }

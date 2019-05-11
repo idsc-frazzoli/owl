@@ -19,7 +19,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(2, 2, 2), VectorScalar.of(0, 0, 0));
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     assertTrue(rlQueue.collection().contains(node1));
     rlQueue.add(node2);
     assertTrue(rlQueue.collection().contains(node1) && rlQueue.collection().contains(node2));
@@ -40,7 +40,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(2, 2, 2), VectorScalar.of(0, 0, 0));
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     assertTrue(rlQueue.collection().contains(node1));
     assertTrue(rlQueue.peekBest() == node1);
     assertTrue(rlQueue.collection().size() == 1);
@@ -65,7 +65,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(2, 2, 2), VectorScalar.of(0, 0, 0));
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     assertTrue(rlQueue.collection().size() == 1);
     rlQueue.add(node2);
     assertTrue(rlQueue.collection().size() == 2);
@@ -89,7 +89,7 @@ public class RelaxedDomainQueueTest extends TestCase {
 
   public void testEmpty() {
     Tensor slacks = Tensors.vector(3, 3, 3);
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.empty(slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.empty(slacks);
     assertTrue(rlQueue.collection().isEmpty());
   }
 
@@ -99,7 +99,7 @@ public class RelaxedDomainQueueTest extends TestCase {
     Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
     Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
     GlcNode firstNode = GlcNode.of(null, null, costFromRoot, minCostToGoal);
-    RelaxedDomainQueue rlQueue = RelaxedDomainQueue.singleton(firstNode, slacks);
+    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(firstNode, slacks);
     for (int i = 0; i < 1000; ++i) {
       costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
       minCostToGoal = VectorScalar.of(0, 0, 0);

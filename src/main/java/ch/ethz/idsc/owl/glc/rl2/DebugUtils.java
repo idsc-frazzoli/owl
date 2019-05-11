@@ -59,9 +59,9 @@ public enum DebugUtils {
   }
 
   public static final void closeMatchesCheck(RelaxedTrajectoryPlanner rlPlanner) {
-    Iterator<RelaxedDomainQueue> iterator = rlPlanner.getRelaxedDomainQueueMap().values().iterator();
+    Iterator<RelaxedPriorityQueue> iterator = rlPlanner.getRelaxedDomainQueueMap().values().iterator();
     while (iterator.hasNext()) {
-      RelaxedDomainQueue rlDomainQueue = iterator.next();
+      RelaxedPriorityQueue rlDomainQueue = iterator.next();
       System.out.println(System.getProperty("line.separator"));
       System.out.println("Number of elements in domain queue: " + rlDomainQueue.collection().size());
       rlDomainQueue.collection().stream().forEach(x -> System.out.println(x.merit()));

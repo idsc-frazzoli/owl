@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RelaxedDomainQueueMap {
   /** map from domain keys to queues of nodes */
-  private final Map<Tensor, RelaxedDomainQueue> map = new HashMap<>();
+  private final Map<Tensor, RelaxedPriorityQueue> map = new HashMap<>();
   private final Tensor slacks;
 
   public RelaxedDomainQueueMap(Tensor slacks) {
@@ -28,8 +28,7 @@ import ch.ethz.idsc.tensor.Tensor;
   public Collection<GlcNode> addToDomainMap(Tensor domain_key, GlcNode glcNode) {
     if (containsKey(domain_key)) // has another node has already reached this domain ?
       return getQueue(domain_key).add(glcNode); // add node to existing relaxedDomainQueue
-    else
-      map.put(domain_key, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
+    map.put(domain_key, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
     return Collections.emptyList();
   }
 
@@ -48,15 +47,15 @@ import ch.ethz.idsc.tensor.Tensor;
     return map.containsKey(domain_key);
   }
 
-  public RelaxedDomainQueue getQueue(Tensor domain_key) {
+  public RelaxedPriorityQueue getQueue(Tensor domain_key) {
     return map.get(domain_key);
   }
 
-  public Stream<Entry<Tensor, RelaxedDomainQueue>> mapEntrySetStream() {
+  public Stream<Entry<Tensor, RelaxedPriorityQueue>> mapEntrySetStream() {
     return map.entrySet().stream();
   }
 
-  public Map<Tensor, RelaxedDomainQueue> getMap() {
+  public Map<Tensor, RelaxedPriorityQueue> getMap() {
     return Collections.unmodifiableMap(map);
   }
 }
