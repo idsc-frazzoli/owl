@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ import java.util.Objects;
  * For non-strict neg. transitive orders the indifference constitutes equivalence classes and for strict neg. trans. orders incomparability.
  * 
  * @param <T> type of elements to compare */
-public class NegTransitiveMinTracker<T> implements MinTracker<T> {
+public class NegTransitiveMinTracker<T> implements MinTracker<T>, Serializable {
   public static <T> NegTransitiveMinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new NegTransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }

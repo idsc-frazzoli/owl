@@ -19,13 +19,21 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
-class Pair<K> implements Serializable {
-  public K key;
-  public Tensor value;
+/* package */ class Pair<K> implements Serializable {
+  private final K key;
+  private final Tensor value;
 
   public Pair(K key, Tensor value) {
     this.key = key;
     this.value = value;
+  }
+
+  public K key() {
+    return key;
+  }
+
+  public Tensor value() {
+    return value;
   }
 
   @Override
@@ -51,21 +59,17 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
   private final Collection<Pair<K>> candidateSet;
   private final Tensor slackVector;
   private final int dim;
-  private final List<OrderComparator<Scalar>> semiorderComparators;
-  private final List<ProductOrderComparator> productOrderComparators;
+  private final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
+  private final List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
 
   private LexicographicSemiorderMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet) {
     this.candidateSet = candidateSet;
     this.slackVector = VectorQ.require(slackVector);
     this.dim = slackVector.length();
-    List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
-    List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
     for (int index = 0; index < dim; ++index) {
       semiorderComparators.add(new ScalarSlackSemiorder(slackVector.Get(index)));
       productOrderComparators.add(TensorProductOrder.comparator(index + 1));
     }
-    this.semiorderComparators = semiorderComparators;
-    this.productOrderComparators = productOrderComparators;
   }
 
   /** Updates the set of potential future candidates for the minimal set.
@@ -83,13 +87,13 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
     while (iterator.hasNext()) {
       Pair<K> currentPair = iterator.next();
       for (int index = 0; index < dim; ++index) {
-        OrderComparison semiorder = semiorderComparators.get(index).compare(applicantPair.value.Get(index), currentPair.value.Get(index));
-        OrderComparison productOrder = productOrderComparators.get(index).compare(applicantPair.value.extract(0, index + 1),
-            currentPair.value.extract(0, index + 1));
+        OrderComparison semiorder = semiorderComparators.get(index).compare(applicantPair.value().Get(index), currentPair.value().Get(index));
+        OrderComparison productOrder = productOrderComparators.get(index).compare(applicantPair.value().extract(0, index + 1),
+            currentPair.value().extract(0, index + 1));
         // if x strictly precedes the current object and it is strictly preceding in every coordinate until now, then the current object will be discarded
         if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES) && //
             productOrder.equals(OrderComparison.STRICTLY_PRECEDES)) {
-          discardedKeys.add(currentPair.key);
+          discardedKeys.add(currentPair.key());
           iterator.remove();
           break;
         }
@@ -97,20 +101,13 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
         else //
         if (semiorder.equals(OrderComparison.STRICTLY_SUCCEEDS) && //
             productOrder.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
-          discardedKeys.add(applicantPair.key);
+          discardedKeys.add(applicantPair.key());
           return discardedKeys;
         }
       }
     }
     candidateSet.add(applicantPair);
     return discardedKeys;
-  }
-
-  private void deleteElement(Pair<K> pair) {
-    if (candidateSet.contains(pair))
-      candidateSet.remove(pair);
-    else
-      System.err.println("warning: could not delete pair " + pair);
   }
 
   /** Filters all elements which are within the slack of the "absolute" minimum.
@@ -122,34 +119,38 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
     return Scalars.lessEquals(x_i, threshold);
   }
 
-  /** @return current cnadidateSet */
-  public Collection<Pair<K>> getCandidateSet() {
+  /** Hint: only for testing
+   * 
+   * @return current candidateSet */
+  /* package */ Collection<Pair<K>> getCandidateSet() {
     return candidateSet;
   }
 
   /** @return keys of current candidateSet */
   public Collection<K> getCandidateKeys() {
-    return getKeys(candidateSet);
+    return candidateSet.stream().map(Pair::key).collect(Collectors.toList());
   }
 
   /** @return values of current candidateSet */
   public Collection<Tensor> getCandidateValues() {
-    return getValues(candidateSet);
+    return candidateSet.stream().map(Pair::value).collect(Collectors.toList());
   }
 
-  /** @return pairs of current minimal elements */
-  public Collection<Pair<K>> getMinElements() {
+  /** Hint: only for testing
+   * 
+   * @return pairs of current minimal elements */
+  /* package */ Collection<Pair<K>> getMinElements() {
     if (candidateSet.isEmpty())
       return Collections.emptyList();
     Collection<Pair<K>> minElements = candidateSet;
     for (int index = 0; index < dim; ++index) {
-      if (minElements.size() == 1)
-        return minElements;
       int fi = index;
-      Scalar u_min = minElements.stream().map(x -> x.value.Get(fi)).min(Scalars::compare).get();
+      Scalar u_min = minElements.stream() //
+          .map(pair -> pair.value().Get(fi)) //
+          .min(Scalars::compare).get();
       Scalar slack = slackVector.Get(fi);
       minElements = minElements.stream() //
-          .filter(x -> filterCriterion(x.value.Get(fi), u_min.add(slack))) //
+          .filter(pair -> filterCriterion(pair.value().Get(fi), u_min.add(slack))) //
           .collect(Collectors.toList());
     }
     return minElements;
@@ -157,16 +158,12 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
 
   /** @return current keys of minimal elements */
   public Collection<K> getMinKeys() {
-    if (candidateSet.isEmpty())
-      return Collections.emptyList();
-    return getKeys(getMinElements());
+    return getMinElements().stream().map(Pair::key).collect(Collectors.toList());
   }
 
   /** @return current values of minimal elements */
   public Collection<Tensor> getMinValues() {
-    if (candidateSet.isEmpty())
-      return Collections.emptyList();
-    return getValues(getMinElements());
+    return getMinElements().stream().map(Pair::value).collect(Collectors.toList());
   }
 
   private final Random random = new Random();
@@ -177,20 +174,19 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
    * If there are still two pairs with the same minimum score we will choose randomly.
    * 
    * @return current absolute best pair, may also be null */
-  public Pair<K> getBest() {
+  /* package */ Pair<K> getBest() {
     // TODO ANDRE implement Pair<K> in usual Tracker as well and use here
     // TODO implement with optional
     if (candidateSet.isEmpty())
       return null;
     List<Pair<K>> bestElements = new ArrayList<>(getMinElements());
     for (int index = 0; index < dim; ++index) {
-      if (bestElements.size() == 1)
-        // FIXME JAN is this best way to do it?
-        return bestElements.get(0);
       int fi = index;
-      Scalar u_min = bestElements.stream().map(x -> x.value.Get(fi)).min(Scalars::compare).get();
+      Scalar u_min = bestElements.stream() //
+          .map(pair -> pair.value().Get(fi)) //
+          .min(Scalars::compare).get();
       bestElements = bestElements.stream() //
-          .filter(x -> x.value.Get(fi).equals(u_min)) //
+          .filter(pair -> pair.value().Get(fi).equals(u_min)) //
           .collect(Collectors.toList());
     }
     // if (bestElements.size() != 1)
@@ -201,11 +197,14 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
   /** Gives the key of the absolute best element and deletes the best element from
    * the candidate set
    * 
-   * @return key of absolute best pair */
+   * @return key of absolute best pair
+   * @throws Exception if min set is empty */
   public K pollBestKey() {
-    Pair<K> p = getBest();
-    deleteElement(p);
-    return p.key;
+    Pair<K> pair = getBest();
+    boolean removed = candidateSet.remove(pair);
+    if (!removed)
+      System.err.println("could not remove pair=" + pair);
+    return pair.key();
   }
 
   /** @return key of the current absolute best pair */
@@ -213,7 +212,7 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
     Pair<K> best = getBest();
     return Objects.isNull(best) //
         ? null
-        : best.key;
+        : best.key();
   }
 
   /** @return value of the current absolute best pair */
@@ -221,26 +220,6 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
     Pair<K> best = getBest();
     return Objects.isNull(best) //
         ? null
-        : best.value;
-  }
-
-  /** @param pairs Collection of pairs
-   * @return List of key of given pairs */
-  public List<K> getKeys(Collection<Pair<K>> pairs) {
-    Iterator<Pair<K>> iterator = pairs.iterator();
-    List<K> keyList = new ArrayList<>();
-    while (iterator.hasNext())
-      keyList.add(iterator.next().key);
-    return keyList;
-  }
-
-  /** @param pairs Collection of pairs
-   * @return List of values of given pairs */
-  public List<Tensor> getValues(Collection<Pair<K>> pairs) {
-    Iterator<Pair<K>> iterator = pairs.iterator();
-    List<Tensor> valueList = new ArrayList<>();
-    while (iterator.hasNext())
-      valueList.add(iterator.next().value);
-    return valueList;
+        : best.value();
   }
 }

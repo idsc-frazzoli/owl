@@ -20,8 +20,10 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     LSMT1.digest(2, x);
     LSMT2.digest(1, x);
     LSMT2.digest(1, x);
-    assertTrue(!LSMT1.getCandidateSet().isEmpty() && LSMT1.getCandidateSet().size() > 1);
-    assertTrue(!LSMT2.getCandidateSet().isEmpty() && LSMT2.getCandidateSet().size() > 1);
+    assertFalse(LSMT1.getCandidateSet().isEmpty());
+    assertTrue(LSMT1.getCandidateSet().size() > 1);
+    assertFalse(LSMT2.getCandidateSet().isEmpty());
+    assertTrue(LSMT2.getCandidateSet().size() > 1);
   }
 
   public void testDigest() {
