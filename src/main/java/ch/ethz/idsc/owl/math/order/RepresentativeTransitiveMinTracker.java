@@ -21,6 +21,7 @@ public class RepresentativeTransitiveMinTracker<T> extends TransitiveMinTracker<
     return new RepresentativeTransitiveMinTracker<>(orderComparator, new HashSet<>());
   }
 
+  // ---
   private RepresentativeTransitiveMinTracker(OrderComparator<T> orderComparator, Collection<T> collection) {
     super(orderComparator, collection);
   }
@@ -29,7 +30,7 @@ public class RepresentativeTransitiveMinTracker<T> extends TransitiveMinTracker<
    * 
    * @param comparison
    * @return true if element to be discarded or false otherwise */
-  @Override
+  @Override // from TransitiveMinTracker
   protected boolean discardCriterion(OrderComparison orderComparison) {
     return orderComparison.equals(OrderComparison.STRICTLY_SUCCEEDS) //
         || orderComparison.equals(OrderComparison.INDIFFERENT);

@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -14,7 +15,7 @@ import java.util.Objects;
  * Be aware that neg. transitive orders are transitive as well and
  * thus work for this MinTracker but with significant performance losses.
  * @param <T> type of elements to compare */
-public class TransitiveMinTracker<T> implements MinTracker<T> {
+public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
   public static <T> TransitiveMinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new TransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }
@@ -31,7 +32,7 @@ public class TransitiveMinTracker<T> implements MinTracker<T> {
     this.collection = collection;
   }
 
-  @Override
+  @Override // from MinTracker
   public final void digest(T x) {
     Iterator<T> iterator = collection.iterator();
     while (iterator.hasNext()) {
@@ -43,9 +44,8 @@ public class TransitiveMinTracker<T> implements MinTracker<T> {
       if (discardCriterion(comparison))
         return;
     }
-    if (!collection.contains(x)) {
+    if (!collection.contains(x))
       collection.add(x);
-    }
   }
 
   /** Discards elements which strictly succeed any of the current elements.
@@ -57,8 +57,8 @@ public class TransitiveMinTracker<T> implements MinTracker<T> {
   }
 
   /** @return Minimal elements of partially ordered set */
-  @Override // from MinTrackerInterface
-  public Collection<T> getMinElements() {
+  @Override // from MinTracker
+  public final Collection<T> getMinElements() {
     return Collections.unmodifiableCollection(collection);
   }
 }
