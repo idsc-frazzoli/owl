@@ -1,10 +1,13 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.owl.demo.order.TensorNormTotalPreorder;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.red.Norm;
 import junit.framework.TestCase;
 
@@ -60,5 +63,12 @@ public class NegTransitiveMinTrackerTest extends TestCase {
     assertEquals(weakOrderMinTracker.getMinElements().size(), 1);
     weakOrderMinTracker.digest(Tensors.vector(0, 2, 1));
     assertEquals(weakOrderMinTracker.getMinElements().size(), 2);
+  }
+
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
+    OrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
+    NegTransitiveMinTracker<Tensor> weakOrderMinTracker = Serialization.copy(NegTransitiveMinTracker.withSet(weakOrderComparator));
+    weakOrderMinTracker.digest(Tensors.vector(0, 1, 2));
   }
 }

@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class TransitiveMinTrackerTest extends TestCase {
@@ -97,9 +99,10 @@ public class TransitiveMinTrackerTest extends TestCase {
     assertTrue(digitSumDivisibility.getMinElements().size() == 1);
   }
 
-  public void testDuplicateEntriesList() {
+  public void testDuplicateEntriesList() throws ClassNotFoundException, IOException {
     OrderComparator<Integer> orderComparator = DigitSumDivisibilityPreorder.INTEGER;
-    TransitiveMinTracker<Integer> digitSumDivisibility = TransitiveMinTracker.withList(orderComparator);
+    TransitiveMinTracker<Integer> digitSumDivisibility = //
+        Serialization.copy(TransitiveMinTracker.withList(orderComparator));
     digitSumDivisibility.digest(333);
     digitSumDivisibility.digest(333);
     assertTrue(digitSumDivisibility.getMinElements().contains(333));
@@ -115,12 +118,13 @@ public class TransitiveMinTrackerTest extends TestCase {
     assertTrue(digitSumDivisibility.getMinElements().size() == 1);
   }
 
-  public void testLexicographic() {
+  public void testLexicographic() throws ClassNotFoundException, IOException {
     List<OrderComparator> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     Tensor tensorX = Tensors.fromString("{1,2}");
     Tensor tensorY = Tensors.fromString("{2,3}");
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
-    TransitiveMinTracker<Iterable<? extends Object>> lexTracker = TransitiveMinTracker.withSet(genericLexicographicOrder);
+    TransitiveMinTracker<Iterable<? extends Object>> lexTracker = //
+        Serialization.copy(TransitiveMinTracker.withSet(genericLexicographicOrder));
     lexTracker.digest(tensorX);
     lexTracker.digest(tensorY);
     assertTrue(lexTracker.getMinElements().contains(tensorX));

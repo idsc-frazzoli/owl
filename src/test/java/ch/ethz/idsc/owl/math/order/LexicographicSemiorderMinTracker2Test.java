@@ -11,6 +11,8 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -40,6 +42,36 @@ public class LexicographicSemiorderMinTracker2Test extends TestCase {
       }
       Collection<Integer> minKeys2 = lsmtc.getMinKeys();
       assertEquals(minKeys1, new HashSet<>(minKeys2));
+    }
+  }
+
+  public void testEmptyPollFail() {
+    Tensor slackVector = Tensors.vector(1, 2, 0.5);
+    LexicographicSemiorderMinTracker<Integer> lexicographicSemiorderMinTracker = //
+        LexicographicSemiorderMinTracker.withSet(slackVector);
+    try {
+      lexicographicSemiorderMinTracker.pollBestKey();
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testMatrixSlackFail() {
+    try {
+      LexicographicSemiorderMinTracker.withSet(HilbertMatrix.of(3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testScalarSlackFail() {
+    try {
+      LexicographicSemiorderMinTracker.withSet(Pi.VALUE);
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 }
