@@ -26,12 +26,17 @@ public class RelaxedDomainQueueTest extends TestCase {
     rlQueue.add(node2);
     assertTrue(rlQueue.collection().contains(node1) && rlQueue.collection().contains(node2));
     rlQueue.add(node3);
-    assertTrue(rlQueue.collection().contains(node1) && rlQueue.collection().contains(node2) && rlQueue.collection().contains(node3));
+    assertTrue(rlQueue.collection().contains(node1));
+    assertTrue(rlQueue.collection().contains(node2));
+    assertTrue(rlQueue.collection().contains(node3));
     rlQueue.add(node4);
-    assertTrue(rlQueue.collection().contains(node1) && rlQueue.collection().contains(node2) && rlQueue.collection().contains(node3));
+    assertTrue(rlQueue.collection().contains(node1));
+    assertTrue(rlQueue.collection().contains(node2));
+    assertTrue(rlQueue.collection().contains(node3));
     assertFalse(rlQueue.collection().contains(node4));
     rlQueue.add(node5);
-    assertTrue(rlQueue.collection().contains(node5) && rlQueue.collection().contains(node2));
+    assertTrue(rlQueue.collection().contains(node5));
+    assertTrue(rlQueue.collection().contains(node2));
     assertFalse(rlQueue.collection().contains(node1) && rlQueue.collection().contains(node3) && rlQueue.collection().contains(node4));
   }
 

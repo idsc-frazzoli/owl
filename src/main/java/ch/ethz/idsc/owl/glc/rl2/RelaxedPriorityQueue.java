@@ -24,11 +24,13 @@ public abstract class RelaxedPriorityQueue implements Iterable<GlcNode>, Seriali
   public abstract Collection<GlcNode> add(GlcNode glcNode);
 
   /** Polls the GlcNode with current best merit from the queue.
-   * @return GlcNode with currently best merit */
+   * 
+   * @return GlcNode with currently best merit
+   * @throws Exception if this queue is empty */
   protected abstract GlcNode pollBest();
 
-  /** Returns the GlcNode with current best merit without polling it from the queue.
-   * @return GlcNode with currently best merit */
+  /** @return GlcNode with current best merit without polling it from the queue, or
+   * null if this queue is empty */
   protected abstract GlcNode peekBest();
 
   /** Adds a single node to the queue.

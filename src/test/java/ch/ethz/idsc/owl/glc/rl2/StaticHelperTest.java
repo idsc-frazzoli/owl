@@ -14,7 +14,7 @@ public class StaticHelperTest extends TestCase {
     RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     GlcNode node2 = GlcNode.of(null, null, VectorScalar.of(1, 1, 2.1), VectorScalar.of(0, 0, 0));
     GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(1, 1, 1.9), VectorScalar.of(0, 0, 0));
-    assertTrue(StaticHelper.isNonBeneficial(node2, rlQueue));
+    assertFalse(StaticHelper.isNonBeneficial(node2, rlQueue));
     assertFalse(StaticHelper.isNonBeneficial(node3, rlQueue));
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(1.5, 0.5, 1.9), VectorScalar.of(0, 0, 0));
     assertFalse(StaticHelper.isNonBeneficial(node4, rlQueue));
@@ -22,9 +22,10 @@ public class StaticHelperTest extends TestCase {
     assertTrue(rlQueue.collection().contains(node4));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(1.6, 0.5, 2), VectorScalar.of(0, 0, 0));
     GlcNode node6 = GlcNode.of(null, null, VectorScalar.of(1.6, 0.4, 1.9), VectorScalar.of(0, 0, 0));
-    assertTrue(StaticHelper.isNonBeneficial(node5, rlQueue));
+    assertFalse(StaticHelper.isNonBeneficial(node5, rlQueue));
     assertFalse(StaticHelper.isNonBeneficial(node6, rlQueue));
   }
+
   public void testNumberEquals() {
     Tensor slacks = Tensors.vector(1, 1, 1);
     GlcNode node1 = GlcNode.of(null, null, VectorScalar.of(1, 1, 2), VectorScalar.of(0, 0, 0));
@@ -35,7 +36,7 @@ public class StaticHelperTest extends TestCase {
     rlQueue.add(node2);
     rlQueue.add(node3);
     rlQueue.add(node4);
-    assertEquals(StaticHelper.numberEquals(rlQueue), 3);
+    assertEquals(StaticHelper.numberEquals(rlQueue), 1);
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 0.5, 2), VectorScalar.of(0, 0, 0));
     GlcNode node6 = GlcNode.of(null, null, VectorScalar.of(0, 0.4999, 1.9), VectorScalar.of(0, 0, 0));
     rlQueue.add(node5);
