@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalars;
@@ -38,6 +39,9 @@ import ch.ethz.idsc.tensor.Tensor;
    * @return empty nodes which were discarded due to insertion of glcNode */
   @Override // from RelaxedPriorityQueue
   public Collection<GlcNode> add(GlcNode glcNode) {
+    if (StaticHelper.isNonBeneficial(glcNode, this)) {
+      return Collections.singleton(glcNode);
+    }
     Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
     if (!discardedNodes.contains(glcNode))
       addSingle(glcNode);
