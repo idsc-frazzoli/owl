@@ -46,40 +46,53 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     globalQueue.add(node);
   }
 
-  protected final Collection<GlcNode> addToDomainMap(Tensor domain_key, GlcNode node) {
-    return domainMap.addToDomainMap(domain_key, node);
+  /** Passes a node to the corresponding domain queue. The domain queue checks whether
+   * the node will be added or not and if any other nodes have to be discarded
+   * as a consequence.
+   * 
+   * @param domainKey
+   * @param node
+   * @return Collection of discarded nodes */
+  protected final Collection<GlcNode> addToDomainMap(Tensor domainKey, GlcNode node) {
+    return domainMap.addToDomainMap(domainKey, node);
   }
 
-  /** method is invoked to notify planner that the
-   * intersection of the goal interface and the connector is non-empty
+  /** Method is invoked to notify planner that the
+   * intersection of the goal interface and the connector is non-empty and
+   * the corresponding node will be added to the goal domain queue.
    * 
    * @param node
    * @param connector */
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
     goalDomainQueue.add(node);
-    // TODO ANDRE check if valid
   }
 
-  /** @param domain_key
+  /** @param domainKey
    * @return RLDomainQueue in domain or Optional.empty() if domain has not been assigned a node yet */
-  protected final Optional<RelaxedPriorityQueue> getDomainQueue(Tensor domain_key) {
-    return Optional.ofNullable(domainMap.getQueue(domain_key));
+  protected final Optional<RelaxedPriorityQueue> getDomainQueue(Tensor domainKey) {
+    return Optional.ofNullable(domainMap.getQueue(domainKey));
   }
 
-  // TODO ANDRE check if obsolete
   protected final RelaxedPriorityQueue getGlobalQueue() {
     return globalQueue;
   }
 
+  /** Removes all nodes in the collection from th global queue.
+   * 
+   * @param toRemove */
   protected final void removeFromGlobal(Collection<GlcNode> toRemove) {
     globalQueue.removeAll(toRemove);
   }
 
-  protected final void removeFromDomainQueue(Tensor domain_key, GlcNode glcNode) {
+  /** Removes the node from the corresponding domain queue in the domain map.
+   * 
+   * @param domainKey
+   * @param glcNode */
+  protected final void removeFromDomainQueue(Tensor domainKey, GlcNode glcNode) {
     if (!glcNode.isLeaf()) {
       System.err.println("The node to be removed has children");
     }
-    domainMap.removeFromDomainMap(domain_key, glcNode);
+    domainMap.removeFromDomainMap(domainKey, glcNode);
   }
 
   // check if obsolete
@@ -87,30 +100,36 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     return domainMap.getMap();
   }
 
-  public final Set<GlcNode> getNodesInDomainQueueMap() {
+  /** Returns an unmodifiable view of the nodes in the domain queues of the domain map.
+   * 
+   * @return unmodifiableCollection of GlcNodes */
+  public final Collection<GlcNode> getNodesInDomainQueueMap() {
     Set<GlcNode> glcNodesInDomainQueueMap = new HashSet<>();
     Iterator<RelaxedPriorityQueue> iterator = domainMap.getMap().values().iterator();
     while (iterator.hasNext()) {
       RelaxedPriorityQueue current = iterator.next();
       Collection<GlcNode> nodes = current.collection();
-      int size = nodes.size();
       glcNodesInDomainQueueMap.addAll(nodes);
     }
-    return glcNodesInDomainQueueMap;
+    return Collections.unmodifiableCollection(glcNodesInDomainQueueMap);
   }
 
-  /** Returns most promising unexpanded node. */
+  /** Polls most promising unexpanded node from the global queue. */
   @Override // from ExpandInterface
   public final Optional<GlcNode> pollNext() {
     // returns the head of queue, or null if queue is empty
     return Optional.ofNullable(globalQueue.pollBest());
   }
 
+  /** Returns most promising unexpanded node without polling it from the global queue. */
   @Override // from ExpandInterface
   public final Optional<GlcNode> getBest() {
     return Optional.ofNullable(goalDomainQueue.collection().isEmpty() ? null : goalDomainQueue.peekBest());
   }
 
+  /** Returns an unmodifiable view of the nodes in the goal domain queue.
+   * 
+   * @return unmodifiableCollection of GlcNodes */
   public final Collection<GlcNode> getAllNodesInGoal() {
     return Collections.unmodifiableCollection(goalDomainQueue.collection());
   }
