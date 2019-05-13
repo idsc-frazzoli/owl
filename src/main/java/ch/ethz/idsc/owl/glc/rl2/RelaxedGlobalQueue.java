@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
     super(slacks);
   }
 
+  /** Adds single node to global queue. */
   @Override // from RelaxedPriorityQueue
   public Collection<GlcNode> add(GlcNode glcNode) {
     addSingle(glcNode);
