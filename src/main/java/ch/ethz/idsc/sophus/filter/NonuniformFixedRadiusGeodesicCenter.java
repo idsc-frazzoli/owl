@@ -5,7 +5,6 @@ import java.util.NavigableMap;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -41,20 +40,35 @@ public class NonuniformFixedRadiusGeodesicCenter {
     return result;
   }
 
+  public static Tensor weights(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
+    Scalar startingWeight = RealScalar.of(1);
+    // ---
+    Tensor maskLeft = Tensors.vector(startingWeight.number().floatValue() / 2);
+    Tensor maskRight = Tensors.vector(startingWeight.number().floatValue() / 2);
+    // ---
+    Scalar delta;
+    Scalar prevKey = key;
+    Scalar nextKey = key;
+    // ---
+    for (int index = 0; index < (subMap.size() - 1) / 2; ++index) {
+      prevKey = subMap.lowerKey(prevKey);
+      nextKey = subMap.higherKey(nextKey);
+      delta = nextKey.subtract(prevKey);
+      // TODO OB: make a good choice for exponent
+      maskLeft.append(Power.of(key.subtract(prevKey).divide(delta), RealScalar.ONE));
+      maskRight.append(Power.of(nextKey.subtract(key).divide(delta), RealScalar.ONE));
+    }
+    return Tensors.of(maskLeft, maskRight);
+  }
+
   /** @param subMap
    * @param key: timestamp to be evaluated
    * @return */
   private static Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
-    Scalar exponent = RealScalar.of(2);
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
-    // TODO OB: Inverse distance weights? Or something else?
-    for (Scalar headMapKey : subMap.headMap(key, false).keySet())
-      maskLeft.append(Power.of(RealScalar.ONE.add(key.subtract(headMapKey)).reciprocal(), exponent));
-    for (Scalar tailMapKey : subMap.tailMap(key, false).descendingKeySet())
-      maskRight.append(Power.of(RealScalar.ONE.add(tailMapKey.subtract(key)).reciprocal(), exponent));
-    maskLeft.append(RationalScalar.HALF);
-    maskRight.append(RationalScalar.HALF);
+    maskLeft = weights(subMap, key).get(0);
+    maskRight = weights(subMap, key).get(1);
     Tensor splitsLeft = maskToSplits(maskLeft);
     Tensor splitsRight = maskToSplits(maskRight);
     Tensor splitsFinal = maskToSplits(Tensors.of(Total.of(maskLeft), Total.of(maskRight)));
@@ -62,8 +76,6 @@ public class NonuniformFixedRadiusGeodesicCenter {
   }
 
   public Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
-    // TODO OB: require Tensor.length = geodesicInterface."length", also 3 fuer se2?
-    // Check that submap is of symmetric length around the given key: TODO OB/JPH how can I solve this more beautiful?
     Scalars.isZero(Abs.FUNCTION.apply(RealScalar.of(subMap.headMap(key, false).size() - subMap.tailMap(key, false).size())));
     // ---
     key = Sign.requirePositiveOrZero(key);
@@ -72,13 +84,13 @@ public class NonuniformFixedRadiusGeodesicCenter {
     Tensor splits = splits(subMap, key);
     int index = 0;
     // subMap on the left side: (first_key, key]
-    for (Scalar headMapKey : subMap.subMap(subMap.firstKey(), false, key, true).keySet()) {
+    for (Scalar headMapKey : subMap.subMap(subMap.firstKey(), false, key, true).descendingKeySet()) {
       tempL = geodesicInterface.split(tempL, subMap.get(headMapKey), splits.get(0).Get(index));
       ++index;
     }
     index = 0;
     // subMap on the right side: [key, last_key)
-    for (Scalar tailMapKey : subMap.subMap(key, true, subMap.lastKey(), false).descendingKeySet()) {
+    for (Scalar tailMapKey : subMap.subMap(key, true, subMap.lastKey(), false).keySet()) {
       tempR = geodesicInterface.split(tempR, subMap.get(tailMapKey), splits.get(1).Get(index));
       ++index;
     }
