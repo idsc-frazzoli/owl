@@ -2,6 +2,8 @@
 package ch.ethz.idsc.sophus.app.ob;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.subare.util.HtmlUtf8;
@@ -117,66 +119,15 @@ public class GeodesicFilterEvaluation {
   }
 
   public static void main(String[] args) throws IOException {
-    // datanames
-    String data1 = "gyro/20181203T184122_1";
-    String data2 = "gyro/20181203T184122_2";
-    String data3 = "gyro/20181203T184122_3";
-    String data4 = "2r/20180820T165637_1";
-    String data5 = "2r/20180820T165637_2";
-    String data6 = "2r/20180820T165637_3";
-    String data7 = "0w/20180702T133612_2";
-    String data8 = "0w/20180702T133612_2";
-    String data9 = "3az/20180827T175941_3";
-    String data10 = "3az/20180827T170643_3";
-    String data11 = "4o/20181008T183011_6";
-    String data12 = "4o/20181008T183011_7";
-    String data13 = "5m/20190204T185052_03";
-    String data14 = "5m/20190204T185052_09";
-    // Minimizing each dataset
-    Tensor minimizer1 = GeodesicFilterEvaluation.process(data1);
-    GeodesicFilterEvaluation.htmlWriter(data1, minimizer1);
-    Tensor minimizer2 = GeodesicFilterEvaluation.process(data2);
-    GeodesicFilterEvaluation.htmlWriter(data2, minimizer2);
-    Tensor minimizer3 = GeodesicFilterEvaluation.process(data3);
-    GeodesicFilterEvaluation.htmlWriter(data3, minimizer3);
-    Tensor minimizer4 = GeodesicFilterEvaluation.process(data4);
-    GeodesicFilterEvaluation.htmlWriter(data4, minimizer4);
-    Tensor minimizer5 = GeodesicFilterEvaluation.process(data5);
-    GeodesicFilterEvaluation.htmlWriter(data5, minimizer5);
-    Tensor minimizer6 = GeodesicFilterEvaluation.process(data6);
-    GeodesicFilterEvaluation.htmlWriter(data6, minimizer6);
-    Tensor minimizer7 = GeodesicFilterEvaluation.process(data7);
-    GeodesicFilterEvaluation.htmlWriter(data7, minimizer7);
-    Tensor minimizer8 = GeodesicFilterEvaluation.process(data8);
-    GeodesicFilterEvaluation.htmlWriter(data8, minimizer8);
-    Tensor minimizer9 = GeodesicFilterEvaluation.process(data9);
-    GeodesicFilterEvaluation.htmlWriter(data9, minimizer9);
-    Tensor minimizer10 = GeodesicFilterEvaluation.process(data10);
-    GeodesicFilterEvaluation.htmlWriter(data10, minimizer10);
-    Tensor minimizer11 = GeodesicFilterEvaluation.process(data11);
-    GeodesicFilterEvaluation.htmlWriter(data11, minimizer11);
-    Tensor minimizer12 = GeodesicFilterEvaluation.process(data12);
-    GeodesicFilterEvaluation.htmlWriter(data12, minimizer12);
-    Tensor minimizer13 = GeodesicFilterEvaluation.process(data13);
-    GeodesicFilterEvaluation.htmlWriter(data13, minimizer13);
-    Tensor minimizer14 = GeodesicFilterEvaluation.process(data14);
-    GeodesicFilterEvaluation.htmlWriter(data14, minimizer14);
-    // add data to collection
-    try (HtmlUtf8 htmlUtf8 = HtmlUtf8.page(HomeDirectory.Pictures("ComparisonTest.html"))) {
-      htmlComparison(data1, minimizer1, htmlUtf8);
-      htmlComparison(data2, minimizer2, htmlUtf8);
-      htmlComparison(data3, minimizer3, htmlUtf8);
-      htmlComparison(data4, minimizer4, htmlUtf8);
-      htmlComparison(data5, minimizer5, htmlUtf8);
-      htmlComparison(data6, minimizer6, htmlUtf8);
-      htmlComparison(data7, minimizer7, htmlUtf8);
-      htmlComparison(data8, minimizer8, htmlUtf8);
-      htmlComparison(data9, minimizer9, htmlUtf8);
-      htmlComparison(data10, minimizer10, htmlUtf8);
-      htmlComparison(data11, minimizer11, htmlUtf8);
-      htmlComparison(data12, minimizer12, htmlUtf8);
-      htmlComparison(data13, minimizer13, htmlUtf8);
-      htmlComparison(data14, minimizer14, htmlUtf8);
+    List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
+    Iterator<String> iterator = list.iterator();
+    while (iterator.hasNext()) {
+      String data = iterator.next();
+      Tensor minimizer = GeodesicFilterEvaluation.process(data);
+      GeodesicFilterEvaluation.htmlWriter(data, minimizer);
+      try (HtmlUtf8 htmlUtf8 = HtmlUtf8.page(HomeDirectory.Pictures("ComparisonTest.html"))) {
+        htmlComparison(data, minimizer, htmlUtf8);
+      }
     }
   }
 }
