@@ -52,26 +52,20 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
       final List<StateTime> trajectory = connectors.get(next);
       // check if planner constraints are satisfied otherwise discard next
       if (plannerConstraint.isSatisfied(node, trajectory, next.flow())) {
-        // potentially add next to domainMap, internally it gets add to domainMap and save discarded nodes
+        // potentially add next to domainMap and save eventual discarded nodes
         Collection<GlcNode> discardedNodes = addToDomainMap(domainKey, next);
-        // add next to openQueue if accept by domainQueue and insert edge
+        // add next to global queue if accept by domainQueue and insert edge
         if (!discardedNodes.contains(next)) {
           addToGlobalQueue(next);
           node.insertEdgeTo(next);
           // check if trajectory went through goal region and to goalDomainQueue if so
           if (goalInterface.firstMember(trajectory).isPresent()) // GOAL check
             offerDestination(next, trajectory);
-        } else if (!discardedNodes.isEmpty()) {
+        }
+        if (!discardedNodes.isEmpty() && !discardedNodes.contains(next)) {
           // TODO ANDRE check if sufficient, criteria here: not next and not empty
           // remove all discarded nodes in GlobalQueue from it
           this.removeChildren(discardedNodes);
-          // removeFromGlobal(discardedNodes);
-          // Iterator<GlcNode> iterator = discardedNodes.iterator();
-          // while (iterator.hasNext()) {
-          // GlcNode currentNode = iterator.next();
-          // }
-          // // if any removed, remove edges from parent
-          // discardedNodes.stream().forEach(Nodes::disjoinChild);
         }
       }
     }
@@ -79,6 +73,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
   }
 
   private void removeChildren(Collection<? extends StateCostNode> discardedNodes) {
+    // TODO TEST
     Iterator<? extends StateCostNode> iteratorDiscarded = discardedNodes.iterator();
     while (iteratorDiscarded.hasNext()) {
       GlcNode toDiscard = (GlcNode) iteratorDiscarded.next();

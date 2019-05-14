@@ -6,8 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,41 +19,47 @@ import ch.ethz.idsc.tensor.Tensor;
     this.slacks = slacks;
   }
 
-  /** add given glcNode to domain queue at the location determined by domain_key.
-   * a new domain queue is allocated if no other nodes were inserted there prior.
+  /** Add given glcNode to domain queue at the location determined by domainKey.
+   * A new domain queue is allocated if no other nodes were inserted there prior.
    * 
-   * @param domain_key
-   * @param glcNode */
-  public Collection<GlcNode> addToDomainMap(Tensor domain_key, GlcNode glcNode) {
-    if (containsKey(domain_key)) // has another node has already reached this domain ?
-      return getQueue(domain_key).add(glcNode); // add node to existing relaxedDomainQueue
-    map.put(domain_key, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
+   * @param domainKey
+   * @param glcNode
+   * @return Collection of discarded nodes */
+  public Collection<GlcNode> addToDomainMap(Tensor domainKey, GlcNode glcNode) {
+    if (containsKey(domainKey)) // has another node has already reached this domain ?
+      return getQueue(domainKey).add(glcNode); // potentially add node to existing relaxedDomainQueue
+    map.put(domainKey, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
     return Collections.emptyList();
   }
 
-  public void removeFromDomainMap(Tensor domain_key, GlcNode glcNode) {
-    if (!containsKey(domain_key)) {
+  /** Removes given glcNode from domain queue at the location determined by domainKey.
+   * @throws RunTimeException if domain queue does not exist at the location determined by domainKey
+   * @param domainKey
+   * @param glcNode
+   * @return Collection of discarded nodes */
+  public void removeFromDomainMap(Tensor domainKey, GlcNode glcNode) {
+    if (!containsKey(domainKey)) {
       throw new RuntimeException("Key does not exists in map!");
     }
-    getQueue(domain_key).remove(glcNode);
+    getQueue(domainKey).remove(glcNode);
   }
 
+  /** @return True if map is empty */
   public boolean isEmpty() {
     return map.isEmpty();
   }
 
-  public boolean containsKey(Tensor domain_key) {
-    return map.containsKey(domain_key);
+  /** @return True if domainKey is contained in domain map */
+  public boolean containsKey(Tensor domainKey) {
+    return map.containsKey(domainKey);
   }
 
-  public RelaxedPriorityQueue getQueue(Tensor domain_key) {
-    return map.get(domain_key);
+  /** @return Domain queue at the location determined by domainKey */
+  public RelaxedPriorityQueue getQueue(Tensor domainKey) {
+    return map.get(domainKey);
   }
 
-  public Stream<Entry<Tensor, RelaxedPriorityQueue>> mapEntrySetStream() {
-    return map.entrySet().stream();
-  }
-
+  /** @return Unmodifiable view of domain map */
   public Map<Tensor, RelaxedPriorityQueue> getMap() {
     return Collections.unmodifiableMap(map);
   }

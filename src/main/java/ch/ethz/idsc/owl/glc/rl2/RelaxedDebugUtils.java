@@ -12,8 +12,9 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public enum RelaxedDebugUtils {
   ;
-  // ---
-  // function for convenience
+  /** Throws an exception if the number of nodes in the trajectory planner is not the same as the number of nodes in the domain queues of the domain map.
+   * 
+   * @param rlTrajectoryPlanner */
   public static void nodeAmountCompare(RelaxedTrajectoryPlanner rlTrajectoryPlanner) {
     if (!rlTrajectoryPlanner.getBestOrElsePeek().isPresent())
       throw new RuntimeException("Queue is emtpy");
@@ -22,6 +23,9 @@ public enum RelaxedDebugUtils {
         rlTrajectoryPlanner.getNodesInDomainQueueMap().size());
   }
 
+  /** Checks how many elements within one domain queue are similiar to numerically similar (merit of nodes) to each other.
+   * 
+   * @param rlPlanner */
   public static void closeMatchesCheck(RelaxedTrajectoryPlanner rlPlanner) {
     Iterator<RelaxedPriorityQueue> iterator = rlPlanner.getRelaxedDomainQueueMap().values().iterator();
     while (iterator.hasNext()) {
@@ -36,6 +40,9 @@ public enum RelaxedDebugUtils {
     }
   }
 
+  /** Checks if all nodes of the global queue are contained in any queue of the domain map.
+   * 
+   * @param rlTrajectoryPlanner */
   public static void globalQueueSubsetOfQueuesInDomainMap(RelaxedTrajectoryPlanner rlTrajectoryPlanner) {
     Collection<GlcNode> globalUnexpandedNodes = rlTrajectoryPlanner.getQueue();
     Collection<GlcNode> nodesInDomainMapQueues = rlTrajectoryPlanner.getNodesInDomainQueueMap();

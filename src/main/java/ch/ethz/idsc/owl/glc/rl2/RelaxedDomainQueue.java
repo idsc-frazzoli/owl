@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.util.Collection;
-import java.util.Optional;
+import java.util.Collections;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalars;
@@ -33,8 +33,15 @@ import ch.ethz.idsc.tensor.Tensor;
     this.domainMinTracker = LexicographicSemiorderMinTracker.withList(slacks);
   }
 
+  /** Checks whether glcNode's merit precedes or is equally good than any other. If yes, it wil be added to the domain map and all
+   * nodes whose merits is preceded by the glcNode's merit will be discarded.
+   * @param glcNode node which is potentially add
+   * @return empty nodes which were discarded due to insertion of glcNode */
   @Override // from RelaxedPriorityQueue
   public Collection<GlcNode> add(GlcNode glcNode) {
+    if (StaticHelper.isNonBeneficial(glcNode, this))
+      return Collections.singleton(glcNode);
+    // ---
     Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
     if (!discardedNodes.contains(glcNode))
       addSingle(glcNode);
@@ -52,10 +59,5 @@ import ch.ethz.idsc.tensor.Tensor;
   @Override // from RelaxedPriorityQueue
   public final GlcNode peekBest() {
     return domainMinTracker.peekBestKey();
-  }
-
-  // TODO function is not used
-  /* package */ Optional<Tensor> getMinValues() {
-    return StaticHelper.entrywiseMin(collection().stream());
   }
 }
