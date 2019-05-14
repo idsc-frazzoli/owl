@@ -88,12 +88,15 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
     Collection<K> discardedKeys = new ArrayList<>();
     while (iterator.hasNext()) {
       Pair<K> currentPair = iterator.next();
+      // if we are only interested in beneficial elements
       if (onlyBeneficialElements) {
         OrderComparison productOrder = productOrderComparators.get(dim - 1).compare(applicantPair.value(), currentPair.value());
+        // if applicantPair is better in all dimensions remove currentPair
         if (productOrder.equals(OrderComparison.STRICTLY_PRECEDES)) {
           discardedKeys.add(currentPair.key());
           iterator.remove();
           continue;
+          // if applicantPair is indifferent or worse in all dimension discard applicantPair
         } else if (!productOrder.equals(OrderComparison.INCOMPARABLE)) {
           discardedKeys.add(applicantPair.key());
           return discardedKeys;
