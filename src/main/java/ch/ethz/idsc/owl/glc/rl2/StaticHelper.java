@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
    * @param next
    * @param domainQueue
    * @return true if any match for closeness */
-  static boolean isNonBeneficial(GlcNode next, RelaxedPriorityQueue domainQueue) {
+  static boolean isSimilar(GlcNode next, RelaxedPriorityQueue domainQueue) {
     return domainQueue.collection().stream() //
         .anyMatch(glcNode -> CHOP.close(glcNode.merit(), next.merit())); //
     // Tensor nextMerit = VectorScalars.vector(next.merit());

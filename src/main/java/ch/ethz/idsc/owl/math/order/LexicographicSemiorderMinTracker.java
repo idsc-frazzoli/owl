@@ -48,11 +48,11 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
 public class LexicographicSemiorderMinTracker<K> implements Serializable {
   public static <K> LexicographicSemiorderMinTracker<K> withList(Tensor slackVector) {
-    return new LexicographicSemiorderMinTracker<>(slackVector, new LinkedList<>());
+    return new LexicographicSemiorderMinTracker<>(slackVector, new LinkedList<>(), false);
   }
 
   public static <K> LexicographicSemiorderMinTracker<K> withSet(Tensor slackVector) {
-    return new LexicographicSemiorderMinTracker<>(slackVector, new HashSet<>());
+    return new LexicographicSemiorderMinTracker<>(slackVector, new HashSet<>(), false);
   }
 
   // ---
@@ -61,11 +61,13 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
   private final int dim;
   private final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
   private final List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
+  private final boolean onlyBeneficialElements;
 
-  private LexicographicSemiorderMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet) {
+  protected LexicographicSemiorderMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet, boolean onlyBeneficialElements) {
     this.candidateSet = candidateSet;
     this.slackVector = VectorQ.require(slackVector);
     this.dim = slackVector.length();
+    this.onlyBeneficialElements = onlyBeneficialElements;
     for (int index = 0; index < dim; ++index) {
       semiorderComparators.add(new ScalarSlackSemiorder(slackVector.Get(index)));
       productOrderComparators.add(TensorProductOrder.comparator(index + 1));
@@ -86,6 +88,17 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
     Collection<K> discardedKeys = new ArrayList<>();
     while (iterator.hasNext()) {
       Pair<K> currentPair = iterator.next();
+      if (onlyBeneficialElements) {
+        OrderComparison productOrder = productOrderComparators.get(dim - 1).compare(applicantPair.value(), currentPair.value());
+        if (productOrder.equals(OrderComparison.STRICTLY_PRECEDES)) {
+          discardedKeys.add(currentPair.key());
+          iterator.remove();
+          continue;
+        } else if (!productOrder.equals(OrderComparison.INCOMPARABLE)) {
+          discardedKeys.add(applicantPair.key());
+          return discardedKeys;
+        }
+      }
       for (int index = 0; index < dim; ++index) {
         OrderComparison semiorder = semiorderComparators.get(index).compare(applicantPair.value().Get(index), currentPair.value().Get(index));
         OrderComparison productOrder = productOrderComparators.get(index).compare(applicantPair.value().extract(0, index + 1),
@@ -176,7 +189,7 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
    * @return current absolute best pair, may also be null */
   /* package */ Pair<K> getBest() {
     // TODO ANDRE implement Pair<K> in usual Tracker as well and use here
-    // TODO implement with optional
+    // TODO ANDRE implement with optional
     if (candidateSet.isEmpty())
       return null;
     List<Pair<K>> bestElements = new ArrayList<>(getMinElements());

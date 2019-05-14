@@ -8,22 +8,22 @@ import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
 public class StaticHelperTest extends TestCase {
-  public void testIsNonBeneficial() {
+  public void testIsSimilar() {
     Tensor slacks = Tensors.vector(1, 1, 1);
     GlcNode node1 = GlcNode.of(null, null, VectorScalar.of(1, 1, 2), VectorScalar.of(0, 0, 0));
     RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     GlcNode node2 = GlcNode.of(null, null, VectorScalar.of(1, 1, 2.1), VectorScalar.of(0, 0, 0));
     GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(1, 1, 1.9), VectorScalar.of(0, 0, 0));
-    assertFalse(StaticHelper.isNonBeneficial(node2, rlQueue));
-    assertFalse(StaticHelper.isNonBeneficial(node3, rlQueue));
+    assertFalse(StaticHelper.isSimilar(node2, rlQueue));
+    assertFalse(StaticHelper.isSimilar(node3, rlQueue));
     GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(1.5, 0.5, 1.9), VectorScalar.of(0, 0, 0));
-    assertFalse(StaticHelper.isNonBeneficial(node4, rlQueue));
+    assertFalse(StaticHelper.isSimilar(node4, rlQueue));
     rlQueue.add(node4);
     assertTrue(rlQueue.collection().contains(node4));
     GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(1.6, 0.5, 2), VectorScalar.of(0, 0, 0));
-    GlcNode node6 = GlcNode.of(null, null, VectorScalar.of(1.6, 0.4, 1.9), VectorScalar.of(0, 0, 0));
-    assertFalse(StaticHelper.isNonBeneficial(node5, rlQueue));
-    assertFalse(StaticHelper.isNonBeneficial(node6, rlQueue));
+    GlcNode node6 = GlcNode.of(null, null, VectorScalar.of(1.6, 0, 1.9), VectorScalar.of(0, 0, 0));
+    assertFalse(StaticHelper.isSimilar(node5, rlQueue));
+    assertFalse(StaticHelper.isSimilar(node6, rlQueue));
   }
 
   public void testNumberEquals() {
