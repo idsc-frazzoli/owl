@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ abstract class UniformDatasetFilterDemo extends DatasetFilterDemo {
-  // TODO OB/JPH sampling freq is not generic here
+  // TODO OB/JPH sampling freq is not generic here; OB: It is for uniform demo, isn't it?
   private static final Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
   // ---
   // TODO JPH refactor

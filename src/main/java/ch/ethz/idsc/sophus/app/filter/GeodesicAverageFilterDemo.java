@@ -27,8 +27,7 @@ import ch.ethz.idsc.tensor.red.Total;
   @Override
   protected void updateState() {
     super.updateState();
-    // TODO OB Currently tree and weights are staticly defined here since I don't know how do define a tree depending on size
-    // TODO OB check consistency of radius and tree shape?
+    // TODO OB: Make tree generation more flexible than these three static tree shapes
     // left seeded tree
     Tensor tree = Tensors.vector(0, 1);
     for (int index = 2; index <= spinnerRadius.getValue(); ++index) {
@@ -39,7 +38,7 @@ import ch.ethz.idsc.tensor.red.Total;
     for (int index = spinnerRadius.getValue(); index >= 2; --index) {
       tree2 = Tensors.of(RealScalar.of(index - 2), tree2);
     }
-    // balanced tree TODO OB: erroneous
+    // balanced tree
     Tensor tree3 = Tensors.empty();
     Tensor subtree3 = Tensors.empty();
     for (int index = 0; index < spinnerRadius.getValue(); ++index)
@@ -51,13 +50,14 @@ import ch.ethz.idsc.tensor.red.Total;
       tree3 = subtree3;
       subtree3 = Tensors.empty();
     }
+    tree3 = tree3.get(0);
     // ---
     Tensor weights = Tensors.empty();
     for (int index = 0; index < spinnerRadius.getValue() + 1; ++index)
       weights.append(spinnerKernel.getValue().apply( //
           RealScalar.of(index).divide(RealScalar.of(spinnerRadius.getValue())).subtract(RealScalar.of(0.5))));
     weights = NORMALIZE.apply(weights);
-    SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(tree2, weights);
+    SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(tree, weights);
     System.out.println(symWeightsToSplits.splits());
     TensorUnaryOperator tensorUnaryOperator = GeodesicAverage.of(geodesicDisplay().geodesicInterface(), symWeightsToSplits.splits());
     refined = GeodesicAverageFilter.of(tensorUnaryOperator, weights.length()).apply(control());
