@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   public Tse2PurePursuitControl(Scalar lookAhead, Scalar maxTurningRate) {
     this.lookAhead = lookAhead;
-    this.clip = Clips.interval(maxTurningRate.negate(), maxTurningRate);
+    this.clip = Clips.absolute(maxTurningRate);
   }
 
   @Override // from StateTrajectoryControl

@@ -105,7 +105,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   static final int MAX_STEPS = 10000;
   /** node interval == 2/5 */
   static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = FixedStateIntegrator.create( //
-      new Tse2Integrator(Clips.interval(MAX_SPEED.zero(), MAX_SPEED)), RationalScalar.of(1, 10), 3);
+      new Tse2Integrator(Clips.positive(MAX_SPEED)), RationalScalar.of(1, 10), 3);
   final Collection<Flow> controls;
   final Collection<CostFunction> extraCosts = new LinkedList<>();
 
