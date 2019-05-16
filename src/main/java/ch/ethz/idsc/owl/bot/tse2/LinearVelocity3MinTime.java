@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     this.v_max = Sign.requirePositive(v_max);
     this.a_max = Sign.requirePositive(a_max);
     this.v_tar = Sign.requirePositiveOrZero(v_tar);
-    v_range = Clips.interval(v_max.negate(), v_max);
+    v_range = Clips.absolute(v_max);
   }
 
   /** @param d_tar

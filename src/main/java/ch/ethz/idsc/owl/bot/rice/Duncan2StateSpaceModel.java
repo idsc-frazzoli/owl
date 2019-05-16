@@ -32,6 +32,6 @@ public class Duncan2StateSpaceModel implements StateSpaceModel, Serializable {
   @Override
   public Scalar getLipschitz() {
     // how about when lambda is Quantity?
-    return Hypot.BIFUNCTION.apply(RealScalar.ONE, lambda);
+    return Hypot.of(RealScalar.ONE, lambda);
   }
 }
