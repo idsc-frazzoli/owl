@@ -6,7 +6,7 @@ import java.util.Collections;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalars;
-import ch.ethz.idsc.owl.math.order.LexicographicSemiorderMinTracker;
+import ch.ethz.idsc.owl.math.order.DMLexSemiMinTracker;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RelaxedDomainQueue extends RelaxedPriorityQueue {
@@ -26,20 +26,20 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   // ---
-  private final LexicographicSemiorderMinTracker<GlcNode> domainMinTracker;
+  private final DMLexSemiMinTracker<GlcNode> domainMinTracker;
 
   private RelaxedDomainQueue(Tensor slacks) {
     super(slacks);
-    this.domainMinTracker = LexicographicSemiorderMinTracker.withList(slacks);
+    this.domainMinTracker = DMLexSemiMinTracker.withList(slacks);
   }
 
-  /** Checks whether glcNode's merit precedes or is equally good than any other. If yes, it wil be added to the domain map and all
+  /** Checks whether glcNode's merit precedes or is equally good than any other. If yes, it will be added to the domain map and all
    * nodes whose merits is preceded by the glcNode's merit will be discarded.
    * @param glcNode node which is potentially add
    * @return empty nodes which were discarded due to insertion of glcNode */
   @Override // from RelaxedPriorityQueue
   public Collection<GlcNode> add(GlcNode glcNode) {
-    if (StaticHelper.isNonBeneficial(glcNode, this))
+    if (StaticHelper.isSimilar(glcNode, this))
       return Collections.singleton(glcNode);
     // ---
     Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
