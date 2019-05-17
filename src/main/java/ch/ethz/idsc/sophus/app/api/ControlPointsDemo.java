@@ -14,13 +14,16 @@ import javax.swing.JButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.red.ArgMin;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
@@ -46,7 +49,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       mouse = geometricLayer.getMouseSe2State();
       if (Objects.nonNull(min_index))
         control.set(mouse, min_index);
-      if (Objects.isNull(min_index)) {
+      else {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
         Optional<Integer> optional = closest();
         graphics.setColor(optional.isPresent() ? Color.ORANGE : Color.GREEN);
@@ -74,8 +77,18 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           if (Objects.isNull(min_index)) {
             min_index = closest().orElse(null);
             if (Objects.isNull(min_index)) {
-              min_index = control.length();
-              control.append(mouse);
+              Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+              min_index = ArgMin.of(mouse_dist);
+              if (min_index == control.length() - 1) {
+                min_index = control.length();
+                control = control.append(mouse);
+              } else if (min_index == 0)
+                control = Join.of(Tensors.of(mouse), control);
+              else {
+                if (Scalars.lessThan(mouse_dist.Get(min_index + 1), mouse_dist.Get(min_index - 1)))
+                  min_index++;
+                control = Join.of(control.extract(0, min_index).append(mouse), control.extract(min_index, control.length()));
+              }
             }
           } else {
             min_index = null;
