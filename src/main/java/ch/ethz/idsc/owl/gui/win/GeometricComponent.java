@@ -69,6 +69,7 @@ public final class GeometricComponent {
   private Tensor mouseLocation = Array.zeros(2);
   private int mouseWheel = 0;
   private boolean isZoomable = true;
+  private boolean isRotatable = true;
   private int buttonDrag = MouseEvent.BUTTON3;
 
   public GeometricComponent() {
@@ -123,7 +124,7 @@ public final class GeometricComponent {
             down = now;
             final int mods = mouseEvent.getModifiersEx();
             final int mask = InputEvent.CTRL_DOWN_MASK; // 128 = 2^7
-            if ((mods & mask) == 0) {
+            if ((mods & mask) == 0 || !isRotatable) {
               model2pixel.set(RealScalar.of(dx)::add, 0, 2);
               model2pixel.set(RealScalar.of(dy)::add, 1, 2);
             } else {
@@ -155,6 +156,13 @@ public final class GeometricComponent {
     }
   }
 
+  /** determines if mouseDragged + ctrl allows rotation
+   * 
+   * @param isRotatable */
+  public void setRotatable(boolean isRotatable) {
+    this.isRotatable = isRotatable;
+  }
+  
   /** determines if mouse wheel + ctrl change magnification
    * 
    * @param isZoomable */
