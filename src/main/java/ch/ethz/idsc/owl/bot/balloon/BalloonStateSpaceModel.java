@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   public Scalar verticalWinds(Scalar y) {
     Scalar changeOfWindDirection = RealScalar.of(10);
-    Clip altitude_clip = Clips.interval(changeOfWindDirection.negate(), changeOfWindDirection);
+    Clip altitude_clip = Clips.absolute(changeOfWindDirection);
     return altitude_clip.isInside(y) //
         ? RealScalar.of(5)
         : RealScalar.of(-5);
@@ -82,7 +82,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   public Scalar horizontalWinds(Scalar y) {
     Scalar changeOfWindDirection = RealScalar.of(100);
-    Clip altitude_clip = Clips.interval(changeOfWindDirection.zero(), changeOfWindDirection);
+    Clip altitude_clip = Clips.positive(changeOfWindDirection);
     return altitude_clip.isInside(y) //
         ? y.negate().multiply(RealScalar.of(0.01))
         : y.multiply(RealScalar.of(0.01));

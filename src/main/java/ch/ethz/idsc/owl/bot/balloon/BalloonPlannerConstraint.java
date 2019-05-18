@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final Clip vertSpeed_clip;
 
   public BalloonPlannerConstraint(Scalar vertSpeedMax) {
-    vertSpeed_clip = Clips.interval(vertSpeedMax.negate(), vertSpeedMax);
+    vertSpeed_clip = Clips.absolute(vertSpeedMax);
   }
 
   @Override // from PlannerConstraint

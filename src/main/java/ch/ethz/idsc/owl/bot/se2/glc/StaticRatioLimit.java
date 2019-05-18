@@ -12,9 +12,7 @@ public class StaticRatioLimit implements DynamicRatioLimit {
 
   /** @param maxTurningRate limits = {-maxTurningRate, +maxTurningRate} */
   public StaticRatioLimit(Scalar maxTurningRate) {
-    this.clipTurningRate = Clips.interval( //
-        maxTurningRate.negate(), //
-        maxTurningRate);
+    this.clipTurningRate = Clips.absolute(maxTurningRate);
   }
 
   @Override // from DynamicRatioLimit

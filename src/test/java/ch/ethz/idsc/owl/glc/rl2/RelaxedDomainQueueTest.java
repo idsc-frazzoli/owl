@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -25,16 +26,16 @@ public class RelaxedDomainQueueTest extends TestCase {
     assertTrue(rlQueue.collection().contains(node1));
     rlQueue.add(node2);
     assertTrue(rlQueue.collection().contains(node1) && rlQueue.collection().contains(node2));
-    rlQueue.add(node3);
+    assertTrue(rlQueue.add(node3).contains(node3));
     assertTrue(rlQueue.collection().contains(node1));
     assertTrue(rlQueue.collection().contains(node2));
-    assertTrue(rlQueue.collection().contains(node3));
-    rlQueue.add(node4);
+    assertFalse(rlQueue.collection().contains(node3));
+    assertTrue(rlQueue.add(node4).contains(node4));
     assertTrue(rlQueue.collection().contains(node1));
     assertTrue(rlQueue.collection().contains(node2));
-    assertTrue(rlQueue.collection().contains(node3));
+    assertFalse(rlQueue.collection().contains(node3));
     assertFalse(rlQueue.collection().contains(node4));
-    rlQueue.add(node5);
+    assertTrue(rlQueue.add(node5).contains(node1));
     assertTrue(rlQueue.collection().contains(node5));
     assertTrue(rlQueue.collection().contains(node2));
     assertFalse(rlQueue.collection().contains(node1) && rlQueue.collection().contains(node3) && rlQueue.collection().contains(node4));
@@ -56,10 +57,10 @@ public class RelaxedDomainQueueTest extends TestCase {
     assertTrue(rlQueue.collection().size() == 2);
     rlQueue.add(node3);
     assertTrue(rlQueue.peekBest() == node2);
-    assertTrue(rlQueue.collection().size() == 3);
+    assertTrue(rlQueue.collection().size() == 2);
     rlQueue.add(node4);
     assertTrue(rlQueue.peekBest() == node2);
-    assertTrue(rlQueue.collection().size() == 3);
+    assertTrue(rlQueue.collection().size() == 2);
     rlQueue.add(node5);
     assertTrue(rlQueue.peekBest() == node5);
     assertTrue(rlQueue.collection().size() == 2);
@@ -69,9 +70,9 @@ public class RelaxedDomainQueueTest extends TestCase {
     Tensor slacks = Tensors.vector(3, 3, 3);
     GlcNode node1 = GlcNode.of(null, null, VectorScalar.of(1, 1, 2), VectorScalar.of(0, 0, 0));
     GlcNode node2 = GlcNode.of(null, null, VectorScalar.of(1, 2, 1), VectorScalar.of(0, 0, 0));
-    GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(2, 2, 2), VectorScalar.of(0, 0, 0));
-    GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(2, 3, 2), VectorScalar.of(0, 0, 0));
-    GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0, 2, 2), VectorScalar.of(0, 0, 0));
+    GlcNode node3 = GlcNode.of(null, null, VectorScalar.of(1.5, 1.2, 1.5), VectorScalar.of(0, 0, 0));
+    GlcNode node4 = GlcNode.of(null, null, VectorScalar.of(0.5, 1.5, 1.5), VectorScalar.of(0, 0, 0));
+    GlcNode node5 = GlcNode.of(null, null, VectorScalar.of(0.5, 1.6, 1.4), VectorScalar.of(0, 0, 0));
     RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(node1, slacks);
     assertTrue(rlQueue.collection().size() == 1);
     rlQueue.add(node2);
@@ -83,15 +84,15 @@ public class RelaxedDomainQueueTest extends TestCase {
     rlQueue.add(node5);
     Serialization.copy(rlQueue);
     assertTrue(rlQueue.collection().size() == 5);
-    assertTrue(rlQueue.pollBest() == node5);
-    assertTrue(rlQueue.collection().size() == 4);
-    assertTrue(rlQueue.pollBest() == node1);
-    assertTrue(rlQueue.collection().size() == 3);
-    assertTrue(rlQueue.pollBest() == node2);
-    assertTrue(rlQueue.collection().size() == 2);
-    assertTrue(rlQueue.pollBest() == node3);
-    assertTrue(rlQueue.collection().size() == 1);
     assertTrue(rlQueue.pollBest() == node4);
+    assertTrue(rlQueue.collection().size() == 4);
+    assertTrue(rlQueue.pollBest() == node5);
+    assertTrue(rlQueue.collection().size() == 3);
+    assertTrue(rlQueue.pollBest() == node1);
+    assertTrue(rlQueue.collection().size() == 2);
+    assertTrue(rlQueue.pollBest() == node2);
+    assertTrue(rlQueue.collection().size() == 1);
+    assertTrue(rlQueue.pollBest() == node3);
     assertTrue(rlQueue.collection().isEmpty());
   }
 
@@ -106,15 +107,14 @@ public class RelaxedDomainQueueTest extends TestCase {
     Random random = new Random();
     Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
     Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
+    Timing timing = Timing.started();
     GlcNode firstNode = GlcNode.of(null, null, costFromRoot, minCostToGoal);
     RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(firstNode, slacks);
     for (int i = 0; i < 1000; ++i) {
       costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
-      minCostToGoal = VectorScalar.of(0, 0, 0);
       GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
       rlQueue.add(node);
     }
-    Timing timing = Timing.started();
     rlQueue.pollBest();
     System.out.println(timing.seconds());
   }

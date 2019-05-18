@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private Tensor targetLocal = null;
 
   public ClothoidFixedControl(Scalar lookAhead, Scalar maxTurningRate) {
-    super(Clips.interval(maxTurningRate.negate(), maxTurningRate));
+    super(Clips.absolute(maxTurningRate));
     this.lookAhead = lookAhead;
   }
 

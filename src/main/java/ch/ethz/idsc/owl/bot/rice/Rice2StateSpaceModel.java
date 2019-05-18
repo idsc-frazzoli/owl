@@ -50,6 +50,6 @@ public class Rice2StateSpaceModel implements StateSpaceModel, Serializable {
     // 0 0 0 L
     // where L == -lambda
     // confirmed with mathematica
-    return Hypot.BIFUNCTION.apply(RealScalar.ONE, lambda);
+    return Hypot.of(RealScalar.ONE, lambda);
   }
 }
