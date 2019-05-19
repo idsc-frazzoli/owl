@@ -162,7 +162,7 @@ public final class GeometricComponent {
   public void setRotatable(boolean isRotatable) {
     this.isRotatable = isRotatable;
   }
-  
+
   /** determines if mouse wheel + ctrl change magnification
    * 
    * @param isZoomable */

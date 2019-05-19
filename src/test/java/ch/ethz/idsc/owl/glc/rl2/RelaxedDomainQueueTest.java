@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
