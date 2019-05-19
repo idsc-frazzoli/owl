@@ -29,7 +29,8 @@ public class SymWeightsToSplits {
   private Tensor processedWeights(Tensor tree, Tensor weights) {
     Tensor content = treeContent(tree);
     Tensor unique = Tensor.of(content.stream().distinct());
-    // TODO OB the condition below causes SymWeightsToSplitsTest to fail
+    // TODO OB the condition below causes SymWeightsToSplitsTest to fail:
+    // TODO JPH: How is this condition useful?
     // if (content.length() != unique.length())
     // throw TensorRuntimeException.of(content, unique);
     Tensor multiplicities = Tensors.empty();

@@ -19,7 +19,7 @@ public class GeodesicCatmullRomTest extends TestCase {
       control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
     CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing(RealScalar.ZERO, Se2ParametricDistance.INSTANCE);
     Tensor knots = centripedalKnotSpacing.apply(control);
-    GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, knots, control);
+    GeodesicCatmullRom geodesicCatmullRom = GeodesicCatmullRom.of(geodesicInterface, knots, control);
     // ---
     Tensor actual1 = geodesicCatmullRom.apply(RealScalar.of(1));
     Tensor expected1 = control.get(1);
@@ -39,7 +39,7 @@ public class GeodesicCatmullRomTest extends TestCase {
     CentripedalKnotSpacing centripedalKnotSpacing = //
         new CentripedalKnotSpacing(RealScalar.of(Math.random()), Se2ParametricDistance.INSTANCE);
     Tensor knots = centripedalKnotSpacing.apply(control);
-    GeodesicCatmullRom geodesicCatmullRom = new GeodesicCatmullRom(geodesicInterface, knots, control);
+    GeodesicCatmullRom geodesicCatmullRom = GeodesicCatmullRom.of(geodesicInterface, knots, control);
     // ---
     Chop._10.requireClose(geodesicCatmullRom.apply(geodesicCatmullRom.knots().Get(1)), control.get(1));
     Chop._10.requireClose(geodesicCatmullRom.apply(geodesicCatmullRom.knots().Get(2)), control.get(2));

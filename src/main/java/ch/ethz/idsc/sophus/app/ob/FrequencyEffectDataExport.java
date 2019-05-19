@@ -20,7 +20,7 @@ public class FrequencyEffectDataExport {
   private static final int radius = 6;
 
   private static void export(Tensor tensor, String name, int index) throws IOException {
-    FileWriter writer = new FileWriter("190510" + name + index + ".csv");
+    FileWriter writer = new FileWriter("190514" + name + index + ".csv");
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < tensor.length(); i++) {
       sb.append(tensor.get(i).Get(0).toString());
@@ -59,7 +59,7 @@ public class FrequencyEffectDataExport {
     List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
     Iterator<String> iterator = list.iterator();
     int index = 0;
-    while (iterator.hasNext()) {
+    while (iterator.hasNext() && index < 120) {
       Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
           iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
       index++;
