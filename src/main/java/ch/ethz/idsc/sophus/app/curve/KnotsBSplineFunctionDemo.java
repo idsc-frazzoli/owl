@@ -19,7 +19,8 @@ import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
-import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
+import ch.ethz.idsc.sophus.math.CentripetalKnotSpacingHelper;
+import ch.ethz.idsc.sophus.math.KnotSpacingSchemes;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -31,13 +32,13 @@ import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
 public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
-  private final SpinnerLabel<String> spinnerKnotSpacing = new SpinnerLabel<>();
+  private final SpinnerLabel<KnotSpacingSchemes> spinnerKnotSpacing = new SpinnerLabel<>();
   private final JSlider jSliderCentripetalExponent = new JSlider(0, 100, 100);
 
   public KnotsBSplineFunctionDemo() {
     super(GeodesicDisplays.CLOTH_SE2_R2);
-    spinnerKnotSpacing.setList(Arrays.asList("uniform", "chordal", "centripetal"));
-    spinnerKnotSpacing.setValue("centripetal");
+    spinnerKnotSpacing.setList(Arrays.asList(KnotSpacingSchemes.values()));
+    spinnerKnotSpacing.setValue(KnotSpacingSchemes.CHORDAL);
     spinnerKnotSpacing.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "knot spacing");
     // ---
     jSliderCentripetalExponent.setPreferredSize(new Dimension(500, 28));
@@ -51,20 +52,19 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Scalar exponent = RealScalar.ONE;
+    Tensor knots = null;
     switch (spinnerKnotSpacing.getValue()) {
-    case "uniform":
-      exponent = RealScalar.ZERO;
+    case UNIFORM:
+      knots = CentripetalKnotSpacingHelper.uniform(geodesicDisplay::parametricDistance).apply(control);
       break;
-    case "centripetal":
-      exponent = RationalScalar.of(jSliderCentripetalExponent.getValue(), jSliderCentripetalExponent.getMaximum());
+    case CHORDAL:
+      knots = CentripetalKnotSpacingHelper.chordal(geodesicDisplay::parametricDistance).apply(control);
       break;
-    case "chordal":
-      exponent = RealScalar.ONE;
+    default:
+      // TODO
+      knots = CentripetalKnotSpacingHelper.centripetal(geodesicDisplay::parametricDistance, RealScalar.of(0.5)).apply(control);
       break;
     }
-    CentripetalKnotSpacing centripetalKnotSpacing = new CentripetalKnotSpacing(exponent, geodesicDisplay::parametricDistance);
-    Tensor knots = centripetalKnotSpacing.apply(control);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---
