@@ -5,9 +5,12 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 
+import javax.swing.JToggleButton;
+
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterTangentSpace;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
@@ -19,6 +22,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo {
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
   private Tensor refined = Tensors.empty();
+  final JToggleButton jToggleTS = new JToggleButton("TangentSpace");
 
   public GeodesicCenterTangentSpaceFilterDemo() {
     {
@@ -27,6 +31,8 @@ public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo {
       spinnerConvolution.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "convolution");
       spinnerConvolution.addSpinnerListener(type -> updateState());
     }
+    jToggleTS.setSelected(false);
+    timerFrame.jToolBar.add(jToggleTS);
     // ---
     updateState();
   }
@@ -44,10 +50,17 @@ public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo {
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    TensorUnaryOperator tensorUnaryOperator = GeodesicCenterTangentSpace.of(geodesicDisplay().lieExponential(), spinnerKernel.getValue());
-    refined = Nest.of( //
-        GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
-        control(), spinnerConvolution.getValue());
+    if (jToggleTS.isSelected()) {
+      TensorUnaryOperator tensorUnaryOperator = GeodesicCenterTangentSpace.of(geodesicDisplay().lieExponential(), spinnerKernel.getValue());
+      refined = Nest.of( //
+          GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
+          control(), spinnerConvolution.getValue());
+    } else {
+      TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
+      refined = Nest.of( //
+          GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
+          control(), spinnerConvolution.getValue());
+    }
     if (jToggleSymi.isSelected())
       graphics.drawImage(SymLinkImages.geodesicCenter(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage(), 0, 0, null);
     return refined;
