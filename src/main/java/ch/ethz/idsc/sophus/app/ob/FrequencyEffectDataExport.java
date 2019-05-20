@@ -9,33 +9,36 @@ import java.util.List;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterTangentSpace;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class FrequencyEffectDataExport {
-  private static final SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
+  private static final SmoothingKernel SMOOTHING_KERNEL = SmoothingKernel.GAUSSIAN;
 
   private static void export(Tensor tensor, String name, int index, int radius) throws IOException {
-    FileWriter writer = new FileWriter("200519" + "GCF" + radius + name + index + ".csv");
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < tensor.length(); i++) {
-      sb.append(tensor.get(i).Get(0).toString());
-      sb.append(",");
-      sb.append(tensor.get(i).Get(1).toString());
-      sb.append(",");
-      sb.append(tensor.get(i).Get(2).toString());
-      sb.append("\n");
+    // TODO OB use Export
+    try (FileWriter writer = new FileWriter("200519" + "GCF" + radius + name + index + ".csv")) {
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < tensor.length(); i++) {
+        sb.append(tensor.get(i).Get(0).toString());
+        sb.append(",");
+        sb.append(tensor.get(i).Get(1).toString());
+        sb.append(",");
+        sb.append(tensor.get(i).Get(2).toString());
+        sb.append("\n");
+      }
+      writer.write(sb.toString());
     }
-    writer.write(sb.toString());
-    writer.close();
   }
 
   public static void process(Tensor control, int index, int radius) {
     // process data and map to se2
     // TensorUnaryOperator geodesicCenter = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
-    TensorUnaryOperator geodesicCenterTangentSpace = GeodesicCenterTangentSpace.of(Se2CoveringExponential.INSTANCE, smoothingKernel);
+    TensorUnaryOperator geodesicCenterTangentSpace = GeodesicCenterTangentSpace.of( //
+        Se2CoveringGroup.INSTANCE, Se2CoveringExponential.INSTANCE, SMOOTHING_KERNEL);
     Tensor groupSmoothed = GeodesicCenterFilter.of(geodesicCenterTangentSpace, radius).apply(control);
     Tensor groupRaw = control;
     Tensor algebraSmoothed = Tensor.of(groupSmoothed.stream().map(xya -> Se2CoveringExponential.INSTANCE.log(xya)));
@@ -49,7 +52,6 @@ public class FrequencyEffectDataExport {
       export(groupSmoothed, "GroupSmoothed", index, radius);
       export(groupRaw, "GroupRaw", index, radius);
     } catch (IOException e) {
-      // // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

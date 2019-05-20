@@ -51,7 +51,8 @@ public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo {
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (jToggleTS.isSelected()) {
-      TensorUnaryOperator tensorUnaryOperator = GeodesicCenterTangentSpace.of(geodesicDisplay().lieExponential(), spinnerKernel.getValue());
+      TensorUnaryOperator tensorUnaryOperator = GeodesicCenterTangentSpace.of( //
+          geodesicDisplay().lieGroup(), geodesicDisplay().lieExponential(), spinnerKernel.getValue());
       refined = Nest.of( //
           GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
           control(), spinnerConvolution.getValue());
