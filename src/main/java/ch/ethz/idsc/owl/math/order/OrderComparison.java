@@ -33,24 +33,9 @@ package ch.ethz.idsc.owl.math.order;
  * </table>
  * @author astoll */
 public enum OrderComparison {
-  STRICTLY_PRECEDES(true, false), //
-  INDIFFERENT(true, true), //
-  STRICTLY_SUCCEEDS(false, true), //
-  INCOMPARABLE(false, false), //
+  STRICTLY_PRECEDES, //
+  INDIFFERENT, //
+  STRICTLY_SUCCEEDS, //
+  INCOMPARABLE, //
   ;
-  private final boolean le;
-  private final boolean ge;
-
-  private OrderComparison(boolean le, boolean ge) {
-    this.le = le;
-    this.ge = ge;
-  }
-
-  public boolean isLessEquals() {
-    return le;
-  }
-
-  public boolean isGreaterEquals() {
-    return ge;
-  }
 }

@@ -58,7 +58,6 @@ public class LexicographicComparatorTest extends TestCase {
   }
 
   public void testEquality() {
-    // BinaryRelation<Tensor> relation1 = (x, y) -> x.length() <= y.length();
     List<OrderComparator> comparators = Arrays.asList( //
         IntegerTotalOrder.INSTANCE, //
         ScalarTotalOrder.INSTANCE, //

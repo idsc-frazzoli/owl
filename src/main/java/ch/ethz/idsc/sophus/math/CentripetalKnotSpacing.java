@@ -14,13 +14,13 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 // B-Spline Interpolation and Approximation
 // Hongxin Zhang and Jieqing Feng
 // http://www.cad.zju.edu.cn/home/zhx/GM/009/00-bsia.pdf
-public class CentripedalKnotSpacing implements TensorUnaryOperator {
+public class CentripetalKnotSpacing implements TensorUnaryOperator {
   private final ScalarUnaryOperator power;
   private final TensorMetric tensorMetric;
 
   /** @param exponent in the interval [0, 1]
    * @param tensorMetric for instance Se2ParametricDistance::of */
-  public CentripedalKnotSpacing(Scalar exponent, TensorMetric tensorMetric) {
+  public CentripetalKnotSpacing(Scalar exponent, TensorMetric tensorMetric) {
     power = Power.function(exponent);
     this.tensorMetric = tensorMetric;
   }

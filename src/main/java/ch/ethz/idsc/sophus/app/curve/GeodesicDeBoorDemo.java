@@ -56,7 +56,6 @@ public class GeodesicDeBoorDemo extends BaseCurvatureDemo {
         GeodesicDeBoor.of(geodesicInterface, knots, control);
     GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, control);
     Scalar center = RationalScalar.of(control.length() - 1, 2);
-    // System.out.println(center);
     Tensor refined = Subdivide.of( //
         center.subtract(RationalScalar.HALF), //
         center.add(RationalScalar.HALF), //

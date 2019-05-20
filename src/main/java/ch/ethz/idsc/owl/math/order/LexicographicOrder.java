@@ -1,15 +1,16 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class LexicographicOrder<T> implements OrderComparator<List<T>> {
+public class LexicographicOrder<T> implements OrderComparator<List<T>>, Serializable {
+  private final List<OrderComparator<T>> comparatorList;
+
+  // FIXME ASTOLL needs to work for tensor as well i.e. any type of iterable
   public LexicographicOrder(List<OrderComparator<T>> comparatorList) {
     this.comparatorList = comparatorList;
   }
-
-  private final List<OrderComparator<T>> comparatorList;
-  // FIXME ASTOLL needs to work for tensor as well i.e. any type of iterable
 
   @Override // from UniversalComparator
   public OrderComparison compare(List<T> x, List<T> y) {
@@ -21,9 +22,9 @@ public class LexicographicOrder<T> implements OrderComparator<List<T>> {
       if (stepComparison.equals(OrderComparison.STRICTLY_PRECEDES) || //
           stepComparison.equals(OrderComparison.STRICTLY_SUCCEEDS))
         return stepComparison;
-      else //
+      // else //
       if (stepComparison.equals(OrderComparison.INCOMPARABLE))
-        orderComparison = stepComparison;
+        orderComparison = OrderComparison.INCOMPARABLE;
     }
     return orderComparison;
   }

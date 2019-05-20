@@ -19,9 +19,10 @@ import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicCatmullRom;
-import ch.ethz.idsc.sophus.math.CentripedalKnotSpacing;
+import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -30,6 +31,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class GeodesicCatmullRomDemo extends CurvatureDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  private final SpinnerLabel<String> spinnerKnotSpacing = new SpinnerLabel<>();
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
   private final JSlider jSliderAlpha = new JSlider(0, 1000, 500);
@@ -42,6 +44,10 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20));
     spinnerRefine.setValue(5);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    // ---
+    spinnerKnotSpacing.setList(Arrays.asList("uniform", "chordal", "centripetal"));
+    spinnerKnotSpacing.setValue("centripetal");
+    spinnerKnotSpacing.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "knot spacing");
     // ---
     jToggleSymi.setSelected(true);
     timerFrame.jToolBar.add(jToggleSymi);
@@ -67,10 +73,20 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     if (4 <= control.length()) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-      CentripedalKnotSpacing centripedalKnotSpacing = new CentripedalKnotSpacing( //
-          RationalScalar.of(jSliderAlpha.getValue(), jSliderAlpha.getMaximum()), // exponent
-          geodesicDisplay::parametricDistance);
-      Tensor knots = centripedalKnotSpacing.apply(control);
+      Scalar exponent = RealScalar.ONE;
+      switch (spinnerKnotSpacing.getValue()) {
+      case "uniform":
+        exponent = RealScalar.ZERO;
+        break;
+      case "centripetal":
+        exponent = RationalScalar.of(jSliderAlpha.getValue(), jSliderAlpha.getMaximum());
+        break;
+      case "chordal":
+        exponent = RealScalar.ONE;
+        break;
+      }
+      CentripetalKnotSpacing centripetalKnotSpacing = new CentripetalKnotSpacing(exponent, geodesicDisplay::parametricDistance);
+      Tensor knots = centripetalKnotSpacing.apply(control);
       final Scalar parameter = knots.Get(knots.length() - 2).subtract(knots.get(1)).multiply(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() + 1))
           .add(knots.get(1));
       ScalarTensorFunction scalarTensorFunction = GeodesicCatmullRom.of(geodesicInterface, knots, control);
