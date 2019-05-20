@@ -19,9 +19,11 @@ import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicCatmullRom;
+import ch.ethz.idsc.sophus.math.CentripetalKnotSpacingHelper;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.KnotSpacingSchemes;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -72,7 +74,19 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     if (4 <= control.length()) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-      Tensor knots = spinnerKnotSpacing.getValue().function.apply(geodesicDisplay::parametricDistance).apply(control);
+      Tensor knots = null;
+      switch (spinnerKnotSpacing.getValue()) {
+      case UNIFORM:
+        knots = CentripetalKnotSpacingHelper.uniform(geodesicDisplay::parametricDistance).apply(control);
+        break;
+      case CHORDAL:
+        knots = CentripetalKnotSpacingHelper.chordal(geodesicDisplay::parametricDistance).apply(control);
+        break;
+      default:
+        // TODO
+        knots = CentripetalKnotSpacingHelper.centripetal(geodesicDisplay::parametricDistance, RealScalar.of(0.5)).apply(control);
+        break;
+      }
       final Scalar parameter = knots.Get(knots.length() - 2).subtract(knots.get(1)).multiply(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() + 1))
           .add(knots.get(1));
       ScalarTensorFunction scalarTensorFunction = GeodesicCatmullRom.of(geodesicInterface, knots, control);

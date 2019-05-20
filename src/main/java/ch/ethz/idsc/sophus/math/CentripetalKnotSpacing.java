@@ -1,6 +1,8 @@
 // code by ob
 package ch.ethz.idsc.sophus.math;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorMetric;
@@ -13,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 // B-Spline Interpolation and Approximation
 // Hongxin Zhang and Jieqing Feng
 // http://www.cad.zju.edu.cn/home/zhx/GM/009/00-bsia.pdf
-public class CentripetalKnotSpacing {
+public class CentripetalKnotSpacing implements Serializable {
   private final ScalarUnaryOperator power;
   private final TensorMetric tensorMetric;
 
