@@ -17,10 +17,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class FrequencyEffectDataExport {
   private static final SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-  private static final int radius = 6;
 
-  private static void export(Tensor tensor, String name, int index) throws IOException {
-    FileWriter writer = new FileWriter("190514" + name + index + ".csv");
+  private static void export(Tensor tensor, String name, int index, int radius) throws IOException {
+    FileWriter writer = new FileWriter("190519" + "GCF" + radius + name + index + ".csv");
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < tensor.length(); i++) {
       sb.append(tensor.get(i).Get(0).toString());
@@ -34,7 +33,7 @@ public class FrequencyEffectDataExport {
     writer.close();
   }
 
-  public static void process(Tensor control, int index) {
+  public static void process(Tensor control, int index, int radius) {
     // process data and map to se2
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
     Tensor groupSmoothed = GeodesicCenterFilter.of(geodesicCenter, radius).apply(control);
@@ -44,11 +43,11 @@ public class FrequencyEffectDataExport {
     // export data to .txt
     try {
       // lie Algebra
-      export(algebraSmoothed, "AlgebraSmoothed", index);
-      export(algebraRaw, "AlgebraRaw", index);
+      export(algebraSmoothed, "AlgebraSmoothed", index, radius);
+      export(algebraRaw, "AlgebraRaw", index, radius);
       // lie Group
-      export(groupSmoothed, "GroupSmoothed", index);
-      export(groupRaw, "GroupRaw", index);
+      export(groupSmoothed, "GroupSmoothed", index, radius);
+      export(groupRaw, "GroupRaw", index, radius);
     } catch (IOException e) {
       // // TODO Auto-generated catch block
       e.printStackTrace();
@@ -56,14 +55,17 @@ public class FrequencyEffectDataExport {
   }
 
   public static void main(String[] args) {
+    for(int radius = 1; radius < 11; ++radius) {
     List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
     Iterator<String> iterator = list.iterator();
     int index = 0;
     while (iterator.hasNext() && index < 120) {
       Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
           iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
-      index++;
-      process(control, index);
+      System.out.println(radius + " " + index);
+        index++;
+        process(control, index, radius);
+      }
     }
   }
 }
