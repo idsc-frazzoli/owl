@@ -1,6 +1,9 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.util.Objects;
+
+/** symmetric in the arguments intersect(a, b) == intersect(b, a) */
 public enum ProductOrder {
   ;
   /** @param c1
@@ -8,7 +11,7 @@ public enum ProductOrder {
    * @return */
   public static OrderComparison intersect(OrderComparison c1, OrderComparison c2) {
     if (c1.equals(OrderComparison.INDIFFERENT))
-      return c2;
+      return Objects.requireNonNull(c2);
     if (c2.equals(OrderComparison.INDIFFERENT))
       return c1;
     // ---

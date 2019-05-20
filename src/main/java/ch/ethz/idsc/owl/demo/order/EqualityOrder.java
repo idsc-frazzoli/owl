@@ -12,5 +12,5 @@ import ch.ethz.idsc.owl.math.order.OrderComparator;
 public enum EqualityOrder {
   ;
   public static final OrderComparator<Object> INSTANCE = //
-      new Order<Object>((x, y) -> x.equals(Objects.requireNonNull(y)));
+      new Order<>((x, y) -> x.equals(Objects.requireNonNull(y)));
 }

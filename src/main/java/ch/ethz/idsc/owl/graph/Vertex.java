@@ -5,6 +5,7 @@ import java.util.Objects;
 
 /* package */ class Vertex<T> {
   private final String label;
+  public T value;
 
   public Vertex(String label) {
     this.label = label;
