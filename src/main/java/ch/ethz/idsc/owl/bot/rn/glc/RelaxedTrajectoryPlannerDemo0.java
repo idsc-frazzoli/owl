@@ -15,7 +15,6 @@ import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
-import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
@@ -25,6 +24,7 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedDebugUtils;
+import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
@@ -103,21 +103,22 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     RelaxedTrajectoryPlanner rlPlanner = setupPlanner();
     final Tensor stateRoot = Tensors.vector(0, 0);
     rlPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
-    GlcExpand glcExpand = new GlcExpand(rlPlanner);
+    RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(rlPlanner);
     Timing timing = Timing.started();
-    glcExpand.findAny(1000);
-    // glcExpand.isOptimal();
-    System.out.println(timing.seconds());
+    // glcExpand.findAny(1000);
+    glcExpand.untilOptimal(1000);
+    System.out.println("Execution Time: " + timing.seconds());
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.addBackground(new PolygonRegionRender(POLYGON_REGION));
     owlyAnimationFrame.addBackground(new EtaRender(eta));
     Optional<GlcNode> optional = rlPlanner.getBest();
     if (optional.isPresent()) {
+      System.out.println(optional.get().merit());
       Iterator<GlcNode> bestGoalNodes = rlPlanner.getAllNodesInGoal().iterator();
       while (bestGoalNodes.hasNext()) {
         GlcNode goalNode = bestGoalNodes.next();
         System.out.println(goalNode.merit());
-        System.out.println(goalNode.costFromRoot());
+        // System.out.println(goalNode.costFromRoot());
         List<TrajectorySample> trajectory = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, goalNode);
         TrajectoryRender trajectoryRender = new TrajectoryRender();
         trajectoryRender.trajectory(trajectory);
@@ -128,7 +129,7 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(rlPlanner);
     RelaxedDebugUtils.nodeAmountCompare(rlPlanner);
     DebugUtils.assertAllLeaf(rlPlanner.getQueue());
-    RelaxedDebugUtils.closeMatchesCheck(rlPlanner);
+    // RelaxedDebugUtils.closeMatchesCheck(rlPlanner);
     return owlyAnimationFrame;
   }
 
