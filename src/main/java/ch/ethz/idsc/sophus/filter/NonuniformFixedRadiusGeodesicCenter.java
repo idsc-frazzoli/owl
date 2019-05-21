@@ -5,11 +5,13 @@ import java.util.NavigableMap;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -41,28 +43,39 @@ public class NonuniformFixedRadiusGeodesicCenter {
   }
 
   public static Tensor weights(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
-    Scalar startingWeight = RealScalar.of(1);
+    // TODO OB Magic Constant which defines the distribution => Test for suitable choice, or keep as a parameter
+    Scalar startingWeight = RealScalar.of(0.5);
     // ---
-    Tensor maskLeft = Tensors.vector(startingWeight.number().floatValue() / 2);
-    Tensor maskRight = Tensors.vector(startingWeight.number().floatValue() / 2);
+    Tensor maskLeft = Tensors.empty();
+    Tensor maskRight = Tensors.empty();
     // ---
-    Scalar delta;
+    Tensor remain = Tensors.empty();
+    remain.append(startingWeight);
+    for (int index = 1; index <= (subMap.size() - 1) / 2; ++index) {
+      remain.append(Power.of(startingWeight, index + 1));
+    }
+    remain = remain.divide(Total.ofVector(remain));
+    maskLeft.append(remain.Get(0).multiply(RationalScalar.HALF));
+    maskRight.append(remain.Get(0).multiply(RationalScalar.HALF));
+    // ---
     Scalar prevKey = key;
     Scalar nextKey = key;
     // ---
     for (int index = 0; index < (subMap.size() - 1) / 2; ++index) {
       prevKey = subMap.lowerKey(prevKey);
       nextKey = subMap.higherKey(nextKey);
-      delta = nextKey.subtract(prevKey);
-      // TODO OB: make a good choice for exponent
-      maskLeft.append(Power.of(key.subtract(prevKey).divide(delta), RealScalar.ONE));
-      maskRight.append(Power.of(nextKey.subtract(key).divide(delta), RealScalar.ONE));
+      Scalar delta = nextKey.subtract(prevKey);
+      Scalar lW = delta.reciprocal().multiply(nextKey.subtract(key)).multiply(remain.Get(index + 1));
+      Scalar rW = delta.reciprocal().multiply(key.subtract(prevKey)).multiply(remain.Get(index + 1));
+      maskLeft.append(lW);
+      maskRight.append(rW);
     }
-    return Tensors.of(maskLeft, maskRight);
+    return Tensors.of(Reverse.of(maskLeft), Reverse.of(maskRight));
   }
 
   /** @param subMap
-   * @param key: timestamp to be evaluated
+   * @param key: timestamp to be evaluated, needs to be EXACT in the center
+   * only for odd sequences
    * @return */
   private static Tensor splits(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
     Tensor maskLeft = Tensors.empty();
@@ -83,14 +96,12 @@ public class NonuniformFixedRadiusGeodesicCenter {
     Tensor tempR = subMap.lastEntry().getValue();
     Tensor splits = splits(subMap, key);
     int index = 0;
-    // subMap on the left side: (first_key, key]
-    for (Scalar headMapKey : subMap.subMap(subMap.firstKey(), false, key, true).descendingKeySet()) {
+    for (Scalar headMapKey : subMap.subMap(subMap.firstKey(), false, key, true).keySet()) {
       tempL = geodesicInterface.split(tempL, subMap.get(headMapKey), splits.get(0).Get(index));
       ++index;
     }
     index = 0;
-    // subMap on the right side: [key, last_key)
-    for (Scalar tailMapKey : subMap.subMap(key, true, subMap.lastKey(), false).keySet()) {
+    for (Scalar tailMapKey : subMap.subMap(key, true, subMap.lastKey(), false).descendingKeySet()) {
       tempR = geodesicInterface.split(tempR, subMap.get(tailMapKey), splits.get(1).Get(index));
       ++index;
     }

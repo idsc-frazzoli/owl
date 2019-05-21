@@ -8,7 +8,6 @@ import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -31,7 +30,9 @@ public class NonuniformFixedRadiusGeodesicCenterTest extends TestCase {
   public void testUniform() {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     for (int index = 1; index < 10; ++index) {
-      navigableMap.put(RealScalar.of(index), Tensors.of(RealScalar.of(index), RealScalar.of(index), RealScalar.ZERO));
+      Scalar key = RealScalar.of(index);
+      Tensor tensor = Tensors.of(RealScalar.of(index), RealScalar.of(index), RealScalar.ZERO);
+      navigableMap.put(key, tensor);
     }
     // ---
     NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = new NonuniformFixedRadiusGeodesicCenter(Se2Geodesic.INSTANCE);
@@ -39,7 +40,7 @@ public class NonuniformFixedRadiusGeodesicCenterTest extends TestCase {
     // ---
     Tensor actual = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key);
     Tensor expected = Tensors.vector(5, 5, 0);
-    Chop._09.requireClose(expected, actual);
+    Assert.assertEquals(expected, actual);
   }
 
   public void testNonuniformlySpacedR2() {
@@ -49,11 +50,9 @@ public class NonuniformFixedRadiusGeodesicCenterTest extends TestCase {
     }
     // ---
     NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = new NonuniformFixedRadiusGeodesicCenter(RnGeodesic.INSTANCE);
-    Scalar key = RealScalar.of(9 * 9 / 2 + 1);
-    // ---
-    // FIXME OB
-    // Tensor actual = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key);
-    // Assert.assertEquals(actual.get(0), actual.get(1));
+    Scalar key = RealScalar.of(25);
+    Tensor actual = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key);
+    Assert.assertEquals(actual.get(0), actual.get(1));
   }
 
   public void testNonuniformlySpacedSE2() {
@@ -63,27 +62,24 @@ public class NonuniformFixedRadiusGeodesicCenterTest extends TestCase {
     }
     // ---
     NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = new NonuniformFixedRadiusGeodesicCenter(Se2Geodesic.INSTANCE);
-    Scalar key = RealScalar.of(9 * 9 / 2 + 1);
-    // ---
-    // FIXME OB
-    // Tensor actual = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key);
-    // Assert.assertEquals(actual.get(0), actual.get(1));
+    Scalar key = RealScalar.of(25);
+    Tensor actual = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key);
+    System.out.println(actual);
+    Assert.assertEquals(actual.get(0), actual.get(1));
   }
 
-  // TODO OB: Does this test make sense? rewrite this test more beautiful
-  public void testNonuniformlyAbove() {
+  public void testAffineButDifferentlySpaced() {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     navigableMap.put(RealScalar.ZERO, Tensors.vector(0, 0, 0));
     navigableMap.put(RealScalar.ONE, Tensors.vector(1, 0, 0));
-    navigableMap.put(RealScalar.of(10), Tensors.vector(2, 0, 0));
+    navigableMap.put(RealScalar.of(100), Tensors.vector(100, 0, 0));
     // ---
     NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = new NonuniformFixedRadiusGeodesicCenter(Se2Geodesic.INSTANCE);
     Scalar key = RealScalar.of(1);
     // ---
-    Tensor result = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key);
-    boolean actual = Scalars.lessThan(result.Get(0), RealScalar.ONE);
-    // FIXME OB
-    // assertTrue(actual);
+    Tensor actual = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key);
+    Tensor expected = Tensors.vector(1, 0, 0);
+    Chop._09.requireClose(actual, expected);
   }
 
   public void testNegativeTime() {
