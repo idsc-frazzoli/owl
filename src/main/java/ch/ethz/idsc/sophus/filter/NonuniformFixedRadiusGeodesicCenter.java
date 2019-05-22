@@ -44,7 +44,8 @@ public class NonuniformFixedRadiusGeodesicCenter {
 
   public static Tensor weights(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
     // TODO OB Magic Constant which defines the distribution => Test for suitable choice, or keep as a parameter
-    Scalar startingWeight = RealScalar.of(0.5);
+    // 1 corresponds to DIRICHLET
+    Scalar startingWeight = RealScalar.of(1);
     // ---
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
