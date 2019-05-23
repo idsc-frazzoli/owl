@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * 
  * code based on derivation by Ethan Eade
  * "Lie Groups for 2D and 3D Transformations", p. 11 */
-public class Se3Adjoint implements TensorUnaryOperator {
+/* package */ class Se3Adjoint implements TensorUnaryOperator {
   /** @param g element from Lie Group SE3 as 4x4 affine matrix
    * @return */
   public static TensorUnaryOperator forward(Tensor g) {

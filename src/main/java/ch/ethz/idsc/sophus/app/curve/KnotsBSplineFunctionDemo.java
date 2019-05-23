@@ -61,8 +61,9 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
       knots = CentripetalKnotSpacingHelper.chordal(geodesicDisplay::parametricDistance).apply(control);
       break;
     default:
-      // TODO
-      knots = CentripetalKnotSpacingHelper.centripetal(geodesicDisplay::parametricDistance, RealScalar.of(0.5)).apply(control);
+      knots = CentripetalKnotSpacingHelper.centripetal(//
+          geodesicDisplay::parametricDistance, RationalScalar.of(jSliderCentripetalExponent.getValue(), jSliderCentripetalExponent.getMaximum()))
+          .apply(control);
       break;
     }
     final Scalar upper = (Scalar) Last.of(knots);
