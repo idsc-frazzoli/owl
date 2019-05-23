@@ -15,10 +15,10 @@ import ch.ethz.idsc.tensor.sca.Sin;
 /** @param sequence of (x,y,a) points in SE(2)and weights non-negative and normalized
  * rotation angles ai have to satisfy: sup (i,j) |ai- aj| <= pi - C
  * 
- * @return associated biinvariant meanb which is the solution to the barycentric equation
- * Despite no existing biinvariant for general rigid motion for the 2D case an explicit soluvtion exists
- * Source: "Bi-invariant Means in Lie Groups. Application toLeft-invariant Polyaffine Transformations." p38
- * Vincent Arsigny — Xavier Pennec — Nicholas Ayache
+ * @return associated biinvariant mean which is the solution to the barycentric equation
+ * Despite no existing biinvariant metric for general rigid motion for the 2D case an explicit solution exists
+ * Source: "Bi-invariant means in Lie Groups. Application to Left-invariant Polyaffine Transformations." p38
+ * Vincent Arsigny - Xavier Pennec - Nicholas Ayache
  * Source for Constant C: https://hal.inria.fr/inria-00073318/
  * Xavier Pennec. */
 public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
@@ -35,6 +35,7 @@ public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
         { m12, m11 } });
   }
 
+  @Override
   public Tensor mean(Tensor sequence, Tensor weights) {
     Tensor R1 = RotationMatrix.of(sequence.get(0).Get(2));
     Tensor Rmean = R1.dot(So2Exponential.INSTANCE.exp(weights.dot(Tensor.of(//

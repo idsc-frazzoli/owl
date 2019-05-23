@@ -18,6 +18,7 @@ public enum HeBiinvariantMean implements BiinvariantMeanInterface {
   // ---
   private final static Scalar TWO = RealScalar.of(2);
 
+  @Override
   public Tensor mean(Tensor sequence, Tensor weights) {
     VectorQ.requireLength(sequence.get(0), 3);
     Scalar xMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(0))));

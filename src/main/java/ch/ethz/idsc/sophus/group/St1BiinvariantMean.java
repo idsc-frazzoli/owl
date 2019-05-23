@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.sca.Log;
 public enum St1BiinvariantMean implements BiinvariantMeanInterface {
   INSTANCE;
   // ---
+  @Override
   public Tensor mean(Tensor sequence, Tensor weights) {
     Scalar lambdaMean = Exp.FUNCTION.apply((Scalar) Tensor.of(sequence.stream().map(lambda_t -> Log.FUNCTION.apply(lambda_t.Get(0)))).dot(weights));
     // ---
