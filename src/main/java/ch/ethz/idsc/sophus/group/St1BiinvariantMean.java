@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.group;
 
+import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -12,10 +13,10 @@ import ch.ethz.idsc.tensor.sca.Log;
  * @return associated biinvariant meanb which is the solution to the barycentric equation
  * Source: "Bi-invariant Means in Lie Groups. Application toLeft-invariant Polyaffine Transformations." p29
  * Vincent Arsigny — Xavier Pennec — Nicholas Ayache */
-public enum St1BiinvariantMean {
+public enum St1BiinvariantMean implements BiinvariantMeanInterface {
   INSTANCE;
   // ---
-  public static Tensor mean(Tensor sequence, Tensor weights) {
+  public Tensor mean(Tensor sequence, Tensor weights) {
     Scalar lambdaMean = Exp.FUNCTION.apply((Scalar) Tensor.of(sequence.stream().map(lambda_t -> Log.FUNCTION.apply(lambda_t.Get(0)))).dot(weights));
     // ---
     Tensor alpha = Tensor.of(sequence.stream().map(//

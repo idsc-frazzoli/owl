@@ -1,8 +1,9 @@
-// code by jph
+// code by jph / ob
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -21,5 +22,12 @@ public class So3ExponentialTest extends TestCase {
     Tensor matrix = So3Exponential.INSTANCE.exp(vector);
     Tensor result = So3Exponential.INSTANCE.log(matrix);
     assertEquals(result, vector);
+  }
+
+  public void testTranspose() {
+    Tensor vector = Tensors.vector(Math.random(), Math.random(), -Math.random());
+    Tensor m1 = So3Exponential.INSTANCE.exp(vector);
+    Tensor m2 = Transpose.of(So3Exponential.INSTANCE.exp(vector));
+    Chop._12.requireClose(IdentityMatrix.of(3), m1.dot(m2));
   }
 }
