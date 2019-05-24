@@ -70,6 +70,7 @@ public final class GeometricComponent {
   private int mouseWheel = 0;
   private boolean isZoomable = true;
   private boolean isRotatable = true;
+  private boolean printPositionOnClick = true;
   private int buttonDrag = MouseEvent.BUTTON3;
 
   public GeometricComponent() {
@@ -149,7 +150,9 @@ public final class GeometricComponent {
       MouseListener mouseListener = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-          System.out.println(getMouseSe2State().map(Round._3));
+          if (printPositionOnClick) {
+            System.out.println(getMouseSe2State().map(Round._3));
+          }
         }
       };
       jComponent.addMouseListener(mouseListener);
@@ -168,6 +171,14 @@ public final class GeometricComponent {
    * @param isZoomable */
   public void setZoomable(boolean isZoomable) {
     this.isZoomable = isZoomable;
+  }
+
+  /** the Position of the mouse should be printed to the console when the right
+   * mouse button is clicked
+   * 
+   * @param printPositionOnClick */
+  public void setPrintPositionOnClick(boolean printPositionOnClick) {
+    this.printPositionOnClick = printPositionOnClick;
   }
 
   /** @param button for instance MouseEvent.BUTTON1 */
