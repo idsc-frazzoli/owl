@@ -8,8 +8,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * an element of the algebra so(2) is represented as 'vector' of length 1
  * (Actually a scalar, but LieExponential requires a vector) */
-// TODO JPH/OB SO(2) as R mod 2pi with offset -pi
-// Isn't this trivial?
 public enum So2Exponential implements LieExponential {
   INSTANCE;
   // ---

@@ -19,21 +19,19 @@ public enum HeBiinvariantMean implements BiinvariantMeanInterface {
 
   @Override
   public Tensor mean(Tensor sequence, Tensor weights) {
-    int dim = sequence.get(0).get(0).length();
-    if (dim == -1) {
+    if (sequence.get(0).get(0) instanceof Scalar) {
       Scalar xMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(0))));
       Scalar yMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(1))));
       Scalar zMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(2))));
       Scalar xyMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(0).multiply(xyz.Get(1)))));
       zMean = zMean.add(xMean.multiply(yMean).subtract(xyMean).divide(TWO));
       return Tensors.of(xMean, yMean, zMean);
-    } else {
-      Tensor xMean = weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.get(0))));
-      Tensor yMean = weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.get(1))));
-      Scalar zMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(2))));
-      Scalar xyMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.get(0).dot(xyz.get(1)))));
-      zMean = zMean.add(xMean.dot(yMean).subtract(xyMean).divide(TWO));
-      return Tensors.of(xMean, yMean, zMean);
     }
+    Tensor xMean = weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.get(0))));
+    Tensor yMean = weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.get(1))));
+    Scalar zMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(2))));
+    Scalar xyMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.get(0).dot(xyz.get(1)))));
+    zMean = zMean.add(xMean.dot(yMean).subtract(xyMean).divide(TWO));
+    return Tensors.of(xMean, yMean, zMean);
   }
 }

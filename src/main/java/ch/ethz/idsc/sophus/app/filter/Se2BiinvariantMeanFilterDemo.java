@@ -4,9 +4,8 @@ package ch.ethz.idsc.sophus.app.filter;
 import java.awt.Graphics2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.filter.Se2BiinvariantMeanFilter;
 import ch.ethz.idsc.sophus.filter.Se2BiinvariantMeanCenter;
+import ch.ethz.idsc.sophus.filter.Se2BiinvariantMeanFilter;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -33,8 +32,8 @@ public class Se2BiinvariantMeanFilterDemo extends DatasetKernelDemo {
   }
 
   public static void main(String[] args) {
-//    AbstractDemo abstractDemo = new Se2BiinvariantMeanFilterDemo();
-//    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-//    abstractDemo.timerFrame.jFrame.setVisible(true);
+    // AbstractDemo abstractDemo = new Se2BiinvariantMeanFilterDemo();
+    // abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
+    // abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }

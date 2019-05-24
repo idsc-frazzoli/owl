@@ -6,8 +6,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class Se2BiinvariantMeanTest extends TestCase {
@@ -41,6 +41,6 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Double denom = 1 + Math.PI / 4 * (Math.sqrt(2) / (2 - Math.sqrt(2)));
     Tensor expected = Tensors.vector(nom / denom, 0, 0);
     Tensor actual = Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
-    Assert.assertEquals(expected, actual);
+    Chop._14.requireClose(expected, actual);
   }
 }

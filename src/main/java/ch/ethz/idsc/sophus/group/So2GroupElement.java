@@ -1,4 +1,4 @@
-// code by ob /jph
+// code by ob
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -7,8 +7,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 public class So2GroupElement implements LieGroupElement {
-  private final Scalar alpha;
   private static final Mod MOD_ANGLE = Mod.function(Pi.TWO, Pi.VALUE.negate());
+  private final Scalar alpha;
 
   public So2GroupElement(Scalar alpha) {
     this.alpha = MOD_ANGLE.apply(alpha);
@@ -21,11 +21,11 @@ public class So2GroupElement implements LieGroupElement {
 
   @Override // from LieGroupElement
   public Scalar combine(Tensor tensor) {
-    return MOD_ANGLE.apply(alpha.subtract((Scalar) tensor));
+    return MOD_ANGLE.apply(alpha.subtract(tensor));
   }
 
   @Override // from LieGroupElement
   public Scalar adjoint(Tensor tensor) {
-    return MOD_ANGLE.apply(alpha.add((Scalar) tensor));
+    return MOD_ANGLE.apply(alpha.add(tensor));
   }
 }
