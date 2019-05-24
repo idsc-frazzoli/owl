@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.group;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.RotationMatrix;
+import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 
 /** a group element SO(2) is represented as a 2x2 orthogonal matrix
@@ -21,6 +22,7 @@ public enum So2Exponential implements LieExponential {
 
   @Override // from LieExponential
   public Tensor log(Tensor matrix) {
+    OrthogonalMatrixQ.require(matrix);
     return Tensors.of(ArcCos.FUNCTION.apply(matrix.get(0).Get(0)));
   }
 }

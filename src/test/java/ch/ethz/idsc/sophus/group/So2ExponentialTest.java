@@ -1,9 +1,11 @@
 // code by ob
 package ch.ethz.idsc.sophus.group;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.lie.RotationMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -33,5 +35,15 @@ public class So2ExponentialTest extends TestCase {
     Tensor m1 = So2Exponential.INSTANCE.exp(vector);
     Tensor m2 = Transpose.of(So2Exponential.INSTANCE.exp(vector));
     Chop._12.requireClose(IdentityMatrix.of(2), m1.dot(m2));
+  }
+
+  public void testFail() {
+    try {
+      Tensor notOrthogonal = RotationMatrix.of(0.5).multiply(RealScalar.of(1.1));
+      So2Exponential.INSTANCE.log(notOrthogonal);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }
