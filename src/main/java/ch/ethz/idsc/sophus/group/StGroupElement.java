@@ -52,7 +52,9 @@ public class StGroupElement implements LieGroupElement, Serializable {
 
   @Override // from LieGroupElement
   public Tensor adjoint(Tensor tensor) {
-    throw new UnsupportedOperationException();
+    return Tensors.of(//
+        tensor.get(0), //
+        t.negate().dot(tensor.get(1)).add(lambda.dot(tensor.get(1))));
   }
 
   // function for convenience and testing

@@ -15,10 +15,10 @@ import ch.ethz.idsc.tensor.sca.Sin;
 /** @param sequence of (x,y,a) points in SE(2)and weights non-negative and normalized
  * rotation angles ai have to satisfy: sup (i,j) |ai- aj| <= pi - C
  * 
- * @return associated biinvariant mean which is the solution to the barycentric equation
- * Despite no existing biinvariant metric for general rigid motion for the 2D case an explicit solution exists
- * Source: "Bi-invariant means in Lie Groups. Application to Left-invariant Polyaffine Transformations." p38
- * Vincent Arsigny - Xavier Pennec - Nicholas Ayache
+ * @return associated biinvariant meanb which is the solution to the barycentric equation
+ * Despite no existing biinvariant for general rigid motion for the 2D case an explicit soluvtion exists
+ * Source: "Bi-invariant Means in Lie Groups. Application toLeft-invariant Polyaffine Transformations." p38
+ * Vincent Arsigny — Xavier Pennec — Nicholas Ayache
  * Source for Constant C: https://hal.inria.fr/inria-00073318/
  * Xavier Pennec. */
 public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
@@ -46,7 +46,7 @@ public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
     // // --- Calculation of Tmean version 1: fewer lines
     // ==================================
     Tensor Z = weights.dot(Tensor.of(sequence.stream().map(xya -> M(So2Exponential.INSTANCE.log(Rmean.dot(Transpose.of(RotationMatrix.of(xya.Get(2)))))))));
-    Tensor temp1 = Tensor.of(sequence.stream().map(xya -> M(So2Exponential.INSTANCE.log(Rmean.dot(RotationMatrix.of(xya.Get(2)))))
+    Tensor temp1 = Tensor.of(sequence.stream().map(xya -> M(So2Exponential.INSTANCE.log(Rmean.dot(Transpose.of(RotationMatrix.of(xya.Get(2))))))
         .dot(Transpose.of(RotationMatrix.of(xya.Get(2)))).dot(xya.extract(0, 2))));
     Tensor Tmean1 = weights.dot(temp1.dot(Inverse.of(Z)));
     // ==================================

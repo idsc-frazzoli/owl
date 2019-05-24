@@ -8,7 +8,8 @@ import ch.ethz.idsc.tensor.sca.ArcCos;
 
 /** a group element SO(2) is represented as a 2x2 orthogonal matrix
  * 
- * an element of the algebra so(2) is represented as 'vector' of length 1 */
+ * an element of the algebra so(2) is represented as 'vector' of length 1
+ * (Actually a scalar, but LieExponential requires a vector) */
 // TODO JPH/OB SO(2) as R mod 2pi with offset -pi
 public enum So2Exponential implements LieExponential {
   INSTANCE;

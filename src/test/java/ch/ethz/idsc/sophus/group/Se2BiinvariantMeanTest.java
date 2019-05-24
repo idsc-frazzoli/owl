@@ -8,10 +8,10 @@ import junit.framework.TestCase;
 
 public class Se2BiinvariantMeanTest extends TestCase {
   public void testSimple() {
-    Double root = Math.sqrt(2) / 2;
-    Tensor p = Tensors.vector(-root, root, Math.PI / 4);
-    Tensor q = Tensors.vector(0, 2 * root, 0);
-    Tensor r = Tensors.vector(-root, -root, -Math.PI / 4);
+    Double root = Math.sqrt(2);
+    Tensor p = Tensors.vector(-root / 2, root / 2, Math.PI / 4);
+    Tensor q = Tensors.vector(0, root, 0);
+    Tensor r = Tensors.vector(-root / 2, -root / 3, -Math.PI / 4);
     Tensor sequence = Tensors.of(p, q, r);
     Tensor weights = Tensors.vector(1, 1, 1).divide(RealScalar.of(3));
     // ---
