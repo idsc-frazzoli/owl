@@ -2,13 +2,11 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -72,21 +70,16 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     // TODO ANDRE check if close to other merits see StaticHelper
   }
 
-  private void removeChildren(Collection<? extends StateCostNode> discardedNodes) {
+  private void removeChildren(Collection<GlcNode> collection) {
     // TODO TEST
-    Iterator<? extends StateCostNode> iteratorDiscarded = discardedNodes.iterator();
-    while (iteratorDiscarded.hasNext()) {
-      GlcNode toDiscard = (GlcNode) iteratorDiscarded.next();
-      if (toDiscard.isLeaf()) {
-        // remove from globalQueue
-        final Tensor domainKey = stateTimeRaster.convertToKey(toDiscard.stateTime());
-        getGlobalQueue().remove(toDiscard);
-        removeFromDomainQueue(domainKey, toDiscard);
-        if (!toDiscard.isRoot())
-          Nodes.disjoinChild(toDiscard);
-        // TODO Andre remove from Discarded
-      }
-      removeChildren(toDiscard.children());
+    for (GlcNode glcNode : collection) {
+      removeChildren(glcNode.children()); // recursive call to remove all children
+      Nodes.disjoinChild(glcNode); // disconnect from parent
+      Tensor domainKey = stateTimeRaster.convertToKey(glcNode.stateTime());
+      boolean removed = getGlobalQueue().remove(glcNode); // remove from globalQueue
+      if (!removed)
+        System.err.println("warning, node not removed");
+      removeFromDomainQueue(domainKey, glcNode);
     }
   }
 

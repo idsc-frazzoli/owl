@@ -1,6 +1,8 @@
 // code by jph and jl
 package ch.ethz.idsc.owl.glc.core;
 
+import java.util.Collection;
+
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -34,4 +36,7 @@ public interface GlcNode extends StateCostNode {
 
   /** @return cost from root plus min cost to goal */
   Scalar merit();
+
+  @Override // from StateCostNode
+  Collection<GlcNode> children();
 }
