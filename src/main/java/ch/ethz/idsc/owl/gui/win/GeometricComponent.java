@@ -78,9 +78,9 @@ public final class GeometricComponent {
       final int delta = -event.getWheelRotation(); // either 1 or -1
       final int mods = event.getModifiersEx();
       final int mask = InputEvent.CTRL_DOWN_MASK; // 128 = 2^7
-      if ((mods & mask) == 0) { // ctrl pressed?
+      if ((mods & mask) == 0) // ctrl pressed?
         mouseWheel += delta;
-      } else //
+      else //
       if (isZoomable) {
         Scalar factor = Power.of(RealScalar.of(2), delta);
         Tensor scale = DiagonalMatrix.of(factor, factor, RealScalar.ONE);
@@ -150,9 +150,8 @@ public final class GeometricComponent {
       MouseListener mouseListener = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-          if (printPositionOnClick) {
+          if (printPositionOnClick)
             System.out.println(getMouseSe2State().map(Round._3));
-          }
         }
       };
       jComponent.addMouseListener(mouseListener);

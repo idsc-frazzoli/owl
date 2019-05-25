@@ -8,16 +8,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.ArgMin;
-import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -27,45 +26,22 @@ public class QuadTree {
   // ---
   private final QuadNode top;
 
-  /** @param dimensions tensor {minX, maxX, minY, maxY}
+  /** @param clipX
+   * @param clipY
    * @param capacity of single cell */
-  public QuadTree(Tensor dimensions, int capacity) {
-    this(dimensions, DEFAULT_LEVELS, capacity);
+  public QuadTree(Clip clipX, Clip clipY, int capacity) {
+    this(clipX, clipY, capacity, DEFAULT_LEVELS);
   }
 
-  /** @param minX
-   * @param maxX
-   * @param minY
-   * @param maxY
-   * @param capacity of single cell */
-  public QuadTree(Scalar minX, Scalar maxX, Scalar minY, Scalar maxY, int capacity) {
-    this(minX, maxX, minY, maxY, DEFAULT_LEVELS, capacity);
-  }
-
-  /** @param minX
-   * @param maxX
-   * @param minY
-   * @param maxY
-   * @param levels max depth
-   * @param capacity of single cell */
-  public QuadTree(Scalar minX, Scalar maxX, Scalar minY, Scalar maxY, int levels, int capacity) {
-    this(Tensors.of(minX, maxX, minY, maxY), levels, capacity);
-  }
-
-  /** @param dimensions tensor {minX, maxX, minY, maxY}
-   * @param levels max depth
-   * @param capacity of single cell */
-  public QuadTree(Tensor dimensions, int levels, int capacity) {
-    if (Scalars.lessEquals(dimensions.Get(1), dimensions.Get(0)) || //
-        Scalars.lessEquals(dimensions.Get(3), dimensions.Get(2)))
-      throw TensorRuntimeException.of(dimensions);
+  /** @param clipX
+   * @param clipY
+   * @param capacity of single cell
+   * @param levels max depth */
+  public QuadTree(Clip clipX, Clip clipY, int capacity, int levels) {
     Tensor center = Tensors.of( //
-        Mean.of(dimensions.extract(0, 2)), //
-        Mean.of(dimensions.extract(2, 4)));
-    Tensor size = Tensors.of( //
-        dimensions.Get(1).subtract(dimensions.Get(0)), //
-        dimensions.Get(3).subtract(dimensions.Get(2)));
-    top = new QuadNode(center, size, 0, levels, capacity);
+        clipX.min().add(clipX.width().multiply(RationalScalar.HALF)), //
+        clipY.min().add(clipY.width().multiply(RationalScalar.HALF)));
+    top = new QuadNode(center, Tensors.of(clipX.width(), clipY.width()), 0, levels, capacity);
   }
 
   /** @param vector
@@ -78,15 +54,11 @@ public class QuadTree {
     if (contains(vector))
       top.insert(vector);
     else
-      System.err.println(vector + " is not inside " + this.toString());
+      throw TensorRuntimeException.of(vector);
   }
 
-  public void insertAll(Tensor... vectors) {
-    insertAll(Tensors.of(vectors));
-  }
-
-  public void insertAll(Tensor tensor) {
-    tensor.stream().forEach(this::insert);
+  public void insert(Tensor... vectors) {
+    Stream.of(vectors).forEach(this::insert);
   }
 
   /** @param vector reference
@@ -107,7 +79,7 @@ public class QuadTree {
 }
 
 /* package */ class QuadNode {
-  private static final Tensor LOCATIONS = Tensors.fromString("{{.5,.5},{.5,-.5},{-.5,.5},{-.5,-.5}}");
+  private static final Tensor LOCATIONS = Tensors.fromString("{{1/2, 1/2}, {1/2, -1/2},{-1/2, 1/2},{-1/2, -1/2}}");
   // ---
   private final Tensor center;
   private final Clip clipX;
@@ -115,8 +87,8 @@ public class QuadTree {
   private final int level;
   private final int maxLevel;
   private final int capacity;
-  private QuadNode[] children = new QuadNode[4];
-  private Set<Tensor> points = new HashSet<>();
+  private final QuadNode[] children = new QuadNode[4];
+  private final Set<Tensor> points = new HashSet<>();
   private boolean empty = true;
 
   /** @param center of cell
@@ -139,13 +111,9 @@ public class QuadTree {
     return empty;
   }
 
-  public boolean nonEmpty() {
-    return !empty;
-  }
-
   public boolean contains(Tensor vector) {
-    VectorQ.require(vector);
-    return clipX.isInside(vector.Get(0)) && clipY.isInside(vector.Get(1));
+    return clipX.isInside(vector.Get(0)) //
+        && clipY.isInside(vector.Get(1));
   }
 
   public void insert(Tensor vector) {
@@ -156,7 +124,7 @@ public class QuadTree {
           child.insert(vector);
       } else {
         points.add(vector);
-        if (points.size() > capacity && level < maxLevel)
+        if (capacity < points.size() && level < maxLevel)
           split();
       }
     }
@@ -168,7 +136,7 @@ public class QuadTree {
         center.Get(1).subtract(clipY.min()));
     AtomicInteger count = new AtomicInteger();
     LOCATIONS.stream().map(size::pmul).map(center::add).forEach(center -> //
-        children[count.getAndIncrement()] = new QuadNode(center, size, level + 1, maxLevel, capacity));
+    children[count.getAndIncrement()] = new QuadNode(center, size, level + 1, maxLevel, capacity));
     // ---
     for (QuadNode child : children)
       points.forEach(child::insert);
@@ -191,13 +159,13 @@ public class QuadTree {
   /* package */ Tensor closest(Tensor vector, boolean exact) {
     Tensor neighbours = Tensors.empty();
     if (points.isEmpty())
-      neighbours = Tensor.of(Arrays.stream(children).filter(node -> node.contains(vector) && node.nonEmpty()).map(node -> node.closest(vector, exact)));
+      neighbours = Tensor.of(Arrays.stream(children).filter(node -> node.contains(vector) && !node.isEmpty()).map(node -> node.closest(vector, exact)));
     if (Tensors.isEmpty(neighbours))
       neighbours = Tensor.of(points().stream());
     if (exact) {
       int idx = ArgMin.of(Tensor.of(neighbours.stream().map(vector::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector)));
       return neighbours.get(idx);
-    } else
-      return center;
+    }
+    return center;
   }
 }

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
@@ -72,11 +71,11 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     // TODO ANDRE check if close to other merits see StaticHelper
   }
 
-  private void removeChildren(Collection<? extends StateCostNode> discardedNodes) {
+  private void removeChildren(Collection<GlcNode> discardedNodes) {
     // TODO TEST
-    Iterator<? extends StateCostNode> iteratorDiscarded = discardedNodes.iterator();
+    Iterator<GlcNode> iteratorDiscarded = discardedNodes.iterator();
     while (iteratorDiscarded.hasNext()) {
-      GlcNode toDiscard = (GlcNode) iteratorDiscarded.next();
+      GlcNode toDiscard = iteratorDiscarded.next();
       if (toDiscard.isLeaf()) {
         // remove from globalQueue
         final Tensor domainKey = stateTimeRaster.convertToKey(toDiscard.stateTime());
