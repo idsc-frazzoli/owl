@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class Coordinates implements Tensor {
+/* package */ class Coordinates implements Tensor {
   public static Coordinates of(Tensor vector) {
     return vector instanceof Coordinates ? (Coordinates) vector : of(vector, CoordinateSystem.DEFAULT);
   }

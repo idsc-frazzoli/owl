@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.crd;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-public class CompatibleSystemQ {
+/* package */ class CompatibleSystemQ {
   public static CompatibleSystemQ to(CoordinateSystem system) {
     return new CompatibleSystemQ(system);
   }

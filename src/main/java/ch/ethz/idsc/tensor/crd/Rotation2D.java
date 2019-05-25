@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.lie.RotationMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class Rotation2D extends CoordinateTransform {
+/* package */ class Rotation2D extends CoordinateTransform {
   public static Rotation2D of(Number angle, CoordinateSystem from, CoordinateSystem to) {
     return of(RealScalar.of(angle), from, to);
   }
@@ -23,6 +23,7 @@ public class Rotation2D extends CoordinateTransform {
     this.angle = angle;
   }
 
+  @Override
   protected TensorUnaryOperator inverseTensorUnaryOperator() {
     return RotationMatrix.of(angle.negate())::dot;
   }

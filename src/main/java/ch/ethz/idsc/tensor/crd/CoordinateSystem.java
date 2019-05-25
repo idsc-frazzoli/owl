@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.crd;
 
 import ch.ethz.idsc.tensor.alg.Array;
 
-public class CoordinateSystem {
+/* package */ class CoordinateSystem {
   static final char CS_OPENING_BRACKET = '(';
   static final char CS_CLOSING_BRACKET = ')';
   public static final CoordinateSystem DEFAULT = new CoordinateSystem("");
@@ -28,7 +28,7 @@ public class CoordinateSystem {
   }
 
   public Coordinates origin(int dimensions) {
-    return UnmodifiableCoordinates.of(Array.zeros(dimensions), this);
+    return Coordinates.of(Array.zeros(dimensions), this);
   }
 
   @Override // from Object
@@ -39,5 +39,10 @@ public class CoordinateSystem {
   @Override // from Object
   public String toString() {
     return CS_OPENING_BRACKET + name + CS_CLOSING_BRACKET;
+  }
+
+  @Override
+  public int hashCode() {
+    return name.hashCode();
   }
 }

@@ -42,8 +42,8 @@ public class CoordinatesTest extends TestCase {
 
   public void testOperations() {
     Coordinates coords = Coordinates.of(VECTOR, CS);
-    Coordinates coordsX2 = (Coordinates) coords.add(coords);
-    assertEquals(VECTOR.negate(), ((Coordinates) coords.negate()).values()); // negate
+    Coordinates coordsX2 = coords.add(coords);
+    assertEquals(VECTOR.negate(), coords.negate().values()); // negate
     assertEquals(VECTOR.multiply(RealScalar.of(2)), coordsX2.values()); // add
     assertEquals(CS.origin(), coords.subtract(coords)); // subtract
     assertEquals(coordsX2, coords.multiply(RealScalar.of(2))); // multiply
