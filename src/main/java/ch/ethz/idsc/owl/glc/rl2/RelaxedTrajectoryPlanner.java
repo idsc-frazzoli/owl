@@ -114,6 +114,11 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     return Collections.unmodifiableCollection(glcNodesInDomainQueueMap);
   }
 
+  /** @return current most promising node in queue, i.d best merit */
+  public final GlcNode peekBestFromGlobal() {
+    return globalQueue.peekBest();
+  }
+
   /** Polls most promising unexpanded node from the global queue. */
   @Override // from ExpandInterface
   public final Optional<GlcNode> pollNext() {
