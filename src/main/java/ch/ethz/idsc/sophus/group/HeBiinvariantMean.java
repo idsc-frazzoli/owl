@@ -6,6 +6,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** @param sequence of (x,y,z) points in He(n) of shape ((x1, ... , xm),(y1, ... , ym),z)
  * @param normalized non negative weights
@@ -17,8 +19,15 @@ public enum HeBiinvariantMean implements BiinvariantMeanInterface {
   // ---
   private final static Scalar TWO = RealScalar.of(2);
 
+  private static void checkAffinity(Tensor weights) {
+    if (!Total.of(weights).equals(RealScalar.ONE))
+      System.out.println("Application of Biinvariant mean not valid! (sum of weights not 1");
+    weights.stream().map(w -> Sign.requirePositiveOrZero((Scalar) w));
+  }
+
   @Override
   public Tensor mean(Tensor sequence, Tensor weights) {
+    checkAffinity(weights);
     if (sequence.get(0).get(0) instanceof Scalar) {
       Scalar xMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(0))));
       Scalar yMean = (Scalar) weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.Get(1))));

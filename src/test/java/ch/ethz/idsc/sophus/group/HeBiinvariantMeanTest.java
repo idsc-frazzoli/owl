@@ -9,6 +9,13 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class HeBiinvariantMeanTest extends TestCase {
+  public void testTrivial() {
+    Tensor sequence = Tensors.of(Tensors.vector(1, 1, 1));
+    Tensor weights = Tensors.vector(1);
+    Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
+    Assert.assertEquals(sequence.get(0), actual);
+  }
+
   public void testTrivialHe3() {
     Tensor element = Tensors.vector(1, 1, 1);
     // TODO OB: not nice to have a tensor of a tensor..
