@@ -2,20 +2,21 @@
 package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.owl.math.planar.ClothoidTerminalRatios;
+import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
-import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.LaneRiesenfeldCurveSubdivision;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorMetric;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Nest;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public enum AnalyticClothoidDistance implements TensorMetric {
   INSTANCE;
+
+  private static final LaneRiesenfeldCurveSubdivision SUBDIVISION = new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
 
   /** @param p element in SE2 of the form {px, py, p_heading}
    * @param q element in SE2 of the form {qx, qy, q_heading}
@@ -23,10 +24,17 @@ public enum AnalyticClothoidDistance implements TensorMetric {
    * the projection is a circle segment */
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
-    // TODO treat singularity
-    // TODO investigate
+    if (p.Get(2).equals(q.Get(2))) {
+      Tensor m = SUBDIVISION.string(Tensors.of(p, q)).get(1);
+      if (p.Get(2).equals(m.Get(2)))
+        return Norm._2.ofVector(Extract2D.FUNCTION.apply(q.subtract(p)));
+      Scalar half_dist = distance(p, m);
+      return half_dist.add(half_dist);
+    }
+    // TODO investigate "direction"
     ClothoidTerminalRatios ratios = ClothoidTerminalRatios.of(p, q);
-    Scalar num = RealScalar.of(2).multiply(q.Get(2).subtract(p.Get(2)));
+    Scalar half_num = q.Get(2).subtract(p.Get(2));
+    Scalar num = half_num.add(half_num);
     Scalar den = AbsSquared.FUNCTION.apply(ratios.tail()).subtract(AbsSquared.FUNCTION.apply(ratios.head()));
     Scalar a = Sqrt.FUNCTION.apply(num.divide(den));
     return AbsSquared.FUNCTION.apply(a).multiply(ratios.tail().subtract(ratios.head()));
