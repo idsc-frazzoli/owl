@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.owl.data.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,7 +22,8 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public class QuadTree {
+/** @see NdTreeMap */
+class QuadTree {
   private final static int DEFAULT_LEVELS = 10;
   // ---
   private final QuadNode top;
