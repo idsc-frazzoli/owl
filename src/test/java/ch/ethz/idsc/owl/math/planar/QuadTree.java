@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.owl.data.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,7 +22,8 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public class QuadTree {
+/** @see NdTreeMap */
+class QuadTree {
   private final static int DEFAULT_LEVELS = 10;
   // ---
   private final QuadNode top;
@@ -63,17 +65,18 @@ public class QuadTree {
 
   /** @param vector reference
    * @return closest point to reference point */
+  // TODO GJOEL function should also work with only two coordinates provided
   public Optional<Tensor> closest(Tensor vector) {
     return closest(vector, true);
   }
 
   /** @param vector reference
-   * @param exact wheter to use exact point or cell center
+   * @param exact whether to use exact point or cell center
    * @return closest point to reference point */
   public Optional<Tensor> closest(Tensor vector, boolean exact) {
     if (contains(vector))
       return Optional.of(top.closest(vector, exact));
-    System.err.println(vector + " is not inside " + this.toString());
+    System.err.println(vector + " is not inside " + toString());
     return Optional.empty();
   }
 }
@@ -154,7 +157,7 @@ public class QuadTree {
   }
 
   /** @param vector reference
-   * @param exact wheter to use exact point or cell center
+   * @param exact whether to use exact point or cell center
    * @return closest point to reference point */
   /* package */ Tensor closest(Tensor vector, boolean exact) {
     Tensor neighbours = Tensors.empty();
