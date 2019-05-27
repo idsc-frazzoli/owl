@@ -63,17 +63,18 @@ public class QuadTree {
 
   /** @param vector reference
    * @return closest point to reference point */
+  // TODO GJOEL function should also work with only two coordinates provided
   public Optional<Tensor> closest(Tensor vector) {
     return closest(vector, true);
   }
 
   /** @param vector reference
-   * @param exact wheter to use exact point or cell center
+   * @param exact whether to use exact point or cell center
    * @return closest point to reference point */
   public Optional<Tensor> closest(Tensor vector, boolean exact) {
     if (contains(vector))
       return Optional.of(top.closest(vector, exact));
-    System.err.println(vector + " is not inside " + this.toString());
+    System.err.println(vector + " is not inside " + toString());
     return Optional.empty();
   }
 }
@@ -154,7 +155,7 @@ public class QuadTree {
   }
 
   /** @param vector reference
-   * @param exact wheter to use exact point or cell center
+   * @param exact whether to use exact point or cell center
    * @return closest point to reference point */
   /* package */ Tensor closest(Tensor vector, boolean exact) {
     Tensor neighbours = Tensors.empty();
