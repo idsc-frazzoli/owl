@@ -1,29 +1,35 @@
-// code by jph
+// code by ob, jph
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 
 public class So3GroupElement implements LieGroupElement {
-  private final Tensor R;
+  public static So3GroupElement of(Tensor matrix) {
+    return new So3GroupElement(OrthogonalMatrixQ.require(matrix));
+  }
 
-  public So3GroupElement(Tensor R) {
-    this.R = R;
+  // ---
+  private final Tensor matrix;
+
+  public So3GroupElement(Tensor matrix) {
+    this.matrix = matrix;
   }
 
   @Override // from LieGroupElement
   public So3GroupElement inverse() {
-    // TODO: JPH suggestion OB: is Transpose faster than inverse? (micro optimization)
-    return new So3GroupElement(Transpose.of(R));
+    return new So3GroupElement(Transpose.of(matrix));
   }
 
   @Override // from LieGroupElement
   public Tensor combine(Tensor tensor) {
-    return R.dot(tensor);
+    return matrix.dot(OrthogonalMatrixQ.require(tensor));
   }
 
   @Override // from LieGroupElement
   public Tensor adjoint(Tensor tensor) {
-    return R.dot(tensor);
+    // TODO OB provide reference
+    return matrix.dot(tensor);
   }
 }
