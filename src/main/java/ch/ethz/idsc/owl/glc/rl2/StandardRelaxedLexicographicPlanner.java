@@ -67,6 +67,10 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
         }
       }
     }
+    System.out.println("expanded");
+    RelaxedDebugUtils.closeMatchesCheck(this);
+    RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(this);
+    RelaxedDebugUtils.nodeAmountCompare(this);
     // TODO ANDRE check if close to other merits see StaticHelper
   }
 

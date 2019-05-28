@@ -1,71 +1,75 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
-import ch.ethz.idsc.owl.data.GlobalAssert;
+import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
+import ch.ethz.idsc.owl.math.region.PolygonRegion;
+import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Degree;
 
 public class GokartRelaxedEntity extends GokartEntity {
+  public static GokartRelaxedEntity createRelaxedGokartEntity(StateTime stateTime, Tensor slack) {
+    GokartRelaxedEntity entity = new GokartRelaxedEntity(stateTime);
+    entity.slacks = slack;
+    return entity;
+  }
+
   public GokartRelaxedEntity(StateTime stateTime) {
     super(stateTime);
   }
 
-  private List<CostFunction> costVector = new ArrayList<>();
-  private Tensor slackVector;
-  // ---
-  private Optional<Integer> timeCostPriority = Optional.empty();
-  private Optional<Scalar> timeCostSlack = Optional.empty();
+  private Tensor slacks;
 
   @Override
   public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+    // define goal region
     goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, So2Region.periodic(goal.Get(2), goalRadius.Get(2)));
-    //  ---
-    // costs with higher priority come first
-    List<CostFunction> costs = new ArrayList<>();
-    costs.addAll(costVector);
-    Tensor slacks = this.slackVector;
-    // ---
-    if (timeCostPriority.isPresent() && timeCostSlack.isPresent()) {
-      Tensor slackWithTime = slacks.extract(0, timeCostPriority.get())
-          .append(timeCostSlack.get().append(slacks.extract(timeCostPriority.get(), slacks.length() + 1)));
-      slacks = slackWithTime;
-      costs.add(timeCostPriority.get(), new Se2MinTimeGoalManager(se2ComboRegion, controls));
-    }
-    // ---
-    GoalInterface goalInterface = new VectorCostGoalAdapter(costs, se2ComboRegion);
+    // define region costs
+    Tensor polygon = Tensors.matrixFloat(new float[][] { { 3, 10 }, { 3, 0 }, { 10, 0 }, { 10, 15 } });
+    PolygonRegion polygonRegion = new PolygonRegion(polygon);
+    PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
+    CostFunction regionCost = ConstraintViolationCost.of(regionConstraint, RealScalar.ONE);
+    // define Se2MinTimeGoalManager
+    Se2MinTimeGoalManager timeCosts = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    // cost vector
+    List<CostFunction> costVector = Arrays.asList(timeCosts, regionCost);
+    GoalInterface goalInterface = new VectorCostGoalAdapter(costVector, se2ComboRegion);
     return new StandardRelaxedLexicographicPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface, slacks);
   }
 
-  /** Sets the cost vector and their respective slacks. Lower indices have higher priority.
-   * @param costVector
-   * @param slackVector */
-  public void setCostVector(List<CostFunction> costVector, Tensor slackVector) {
-    GlobalAssert.that(costVector.size() == slackVector.length());
-    this.costVector = costVector;
-    this.slackVector = slackVector;
+  @Override
+  public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
+    return new ConeRegion(goal, Degree.of(18));
   }
 
-  /** Add time cost to the cost vector insert in slack vector according to priority, where highest priority is 0
-   * @param priority
-   * @param slack */
-  public void addTimeCost(int priority, Scalar slack) {
-    this.timeCostPriority = Optional.of(priority);
-    this.timeCostSlack = Optional.of(slack);
+  public Tensor getSlack() {
+    return this.slacks;
+  }
+
+  @Override
+  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    // ANDRE FIXME
+    // System.out.println(trajectoryPlanner.getQueue());
+    getEdgeRender().setCollection(trajectoryPlanner.getQueue());
   }
 }
