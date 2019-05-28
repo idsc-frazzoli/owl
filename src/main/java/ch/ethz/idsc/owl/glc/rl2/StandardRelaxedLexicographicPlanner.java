@@ -71,7 +71,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
   }
 
   private void removeChildren(Collection<GlcNode> collection) {
-    // TODO TEST
+    // TODO ANDRE TEST
     for (GlcNode glcNode : collection) {
       removeChildren(glcNode.children()); // recursive call to remove all children
       Nodes.disjoinChild(glcNode); // disconnect from parent
