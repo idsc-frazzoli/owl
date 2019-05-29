@@ -90,6 +90,11 @@ public class ClothoidTerminalRatios implements Serializable {
     return tail;
   }
 
+  /** @return tail - head */
+  public Scalar difference() {
+    return tail.subtract(head);
+  }
+
   /* package for testing */ static Scalar curvature(Tensor abc) {
     Optional<Scalar> optional = SignedCurvature2D.of( //
         abc.get(0).extract(0, 2), //
