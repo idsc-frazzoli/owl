@@ -36,10 +36,10 @@ public class ParameterMinimizer {
     int win_xdot = -1;
     int win_adot = -1;
     // starting values of errors
-    Scalar err_x = RealScalar.of(10000);
-    Scalar err_a = RealScalar.of(10000);
-    Scalar err_xdot = RealScalar.of(10000);
-    Scalar err_adot = RealScalar.of(10000);
+    Scalar err_x = RealScalar.of(10_000);
+    Scalar err_a = RealScalar.of(10_000);
+    Scalar err_xdot = RealScalar.of(10_000);
+    Scalar err_adot = RealScalar.of(10_000);
     // starting values of kernels
     SmoothingKernel smoothingKernel_x = SmoothingKernel.DIRICHLET;
     SmoothingKernel smoothingKernel_a = SmoothingKernel.DIRICHLET;

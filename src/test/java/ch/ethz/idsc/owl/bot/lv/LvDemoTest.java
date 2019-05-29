@@ -44,7 +44,7 @@ public class LvDemoTest extends TestCase {
       // trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);
       trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
       GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-      glcExpand.findAny(10000);
+      glcExpand.findAny(10_000);
       if (glcExpand.getExpandCount() < 9800) {
         HeuristicConsistency.check(trajectoryPlanner);
         // TrajectoryPlannerConsistency.check(trajectoryPlanner);
