@@ -9,9 +9,12 @@ import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.io.UserName;
 
 public enum RelaxedDebugUtils {
   ;
+  private static final boolean PRINT = !UserName.is("travis");
+
   /** Throws an exception if the number of nodes in the trajectory planner is not the same as the number of nodes in the domain queues of the domain map.
    * 
    * @param rlTrajectoryPlanner */
@@ -30,11 +33,14 @@ public enum RelaxedDebugUtils {
     Iterator<RelaxedPriorityQueue> iterator = rlPlanner.getRelaxedDomainQueueMap().values().iterator();
     while (iterator.hasNext()) {
       RelaxedPriorityQueue rlDomainQueue = iterator.next();
-      System.out.println(System.getProperty("line.separator"));
-      System.out.println("Number of elements in domain queue: " + rlDomainQueue.collection().size());
+      if (PRINT) {
+        System.out.println(System.getProperty("line.separator"));
+        System.out.println("Number of elements in domain queue: " + rlDomainQueue.collection().size());
+      }
       rlDomainQueue.collection().stream().forEach(x -> System.out.println(x.merit()));
       Tensor bestMerit = VectorScalars.vector(rlDomainQueue.peekBest().merit());
-      System.out.println("Number of elements similar to best: " + StaticHelper.numberEquals(rlDomainQueue));
+      if (PRINT)
+        System.out.println("Number of elements similar to best: " + StaticHelper.numberEquals(rlDomainQueue));
       // rlDomainQueue.collection().stream().filter(a -> VectorScalars.vector(a.merit()).subtract(bestMerit).stream() //
       // .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(v.abs(), RationalScalar.of(1, 100)))).forEach(x -> System.out.println(x.merit()));
     }
@@ -49,8 +55,10 @@ public enum RelaxedDebugUtils {
     if (!nodesInDomainMapQueues.containsAll(globalUnexpandedNodes)) {
       throw new RuntimeException("Some nodes in global queue are not present in queues of domain map!");
     }
-    System.out.println("All nodes in global queue are contained within domain map queues.");
-    System.out.println("Nodes in global queue: " + globalUnexpandedNodes.size());
-    System.out.println("Nodes in queues of domain map: " + nodesInDomainMapQueues.size());
+    if (PRINT) {
+      System.out.println("All nodes in global queue are contained within domain map queues.");
+      System.out.println("Nodes in global queue: " + globalUnexpandedNodes.size());
+      System.out.println("Nodes in queues of domain map: " + nodesInDomainMapQueues.size());
+    }
   }
 }

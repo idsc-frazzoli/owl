@@ -23,6 +23,6 @@ public class GokartRelaxedEntityTest extends TestCase {
     planner.insertRoot(initial);
     RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(planner);
     glcExpand.findAny(1000);
-   // assertTrue(planner.getBest().isPresent());
+    // assertTrue(planner.getBest().isPresent());
   }
 }

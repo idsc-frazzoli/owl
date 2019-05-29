@@ -10,7 +10,6 @@ import java.util.List;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
-import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
@@ -57,7 +56,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     int ttl = 15;
     R2ImageRegionWrap r2ImageRegionWrap = new R2ImageRegionWrap(image, range, ttl);
     // R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    Tensor slack = Tensors.vector(0,0);
+    Tensor slack = Tensors.vector(0, 0);
     StateTime initial = new StateTime(Tensors.vector(1.7, 2.2, 0), RealScalar.ZERO);
     Tensor goal1 = Tensors.vector(4.3, 4.2, 1.517);
     Tensor goal2 = Tensors.vector(6.35, 6.233, 0);
@@ -78,9 +77,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     list.add(carRelaxedEntity);
     list.add(new SimpleGlcPlannerCallback(carRelaxedEntity));
     GoalConsumer goalconsumer = new SimpleGoalConsumer(carRelaxedEntity, plannerConstraint, list);
-
     goalconsumer.accept(goal2);
-
     MouseGoal.simple(owlyAnimationFrame, carRelaxedEntity, plannerConstraint);
     {
       RenderInterface renderInterface = new CameraEmulator( //
