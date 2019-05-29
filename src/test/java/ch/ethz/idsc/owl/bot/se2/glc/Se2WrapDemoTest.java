@@ -34,7 +34,7 @@ public class Se2WrapDemoTest extends TestCase {
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(20);
     assertEquals(glcExpand.getExpandCount(), 20);
-    glcExpand.findAny(10000);
+    glcExpand.findAny(10_000);
     assertTrue(glcExpand.getExpandCount() < 2000);
     assertTrue(trajectoryPlanner.getBest().isPresent());
     HeuristicConsistency.check(trajectoryPlanner);

@@ -3,10 +3,10 @@ package ch.ethz.idsc.owl.math;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.TensorDifference;
+import ch.ethz.idsc.sophus.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorDifference;
-import ch.ethz.idsc.tensor.TensorMetric;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public class SimpleTensorMetric implements TensorMetric, Serializable {

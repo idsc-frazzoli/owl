@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.order.LexicographicSemiorderMinTracker;
+import ch.ethz.idsc.sophus.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RelaxedGlobalQueue extends RelaxedPriorityQueue {

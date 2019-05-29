@@ -102,7 +102,7 @@ public class PlanningEvaluation0 extends Se2Demo {
   static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 40, 120));
   //
-  static final int MAX_STEPS = 10000;
+  static final int MAX_STEPS = 10_000;
   /** node interval == 2/5 */
   static final FixedStateIntegrator FIXEDSTATEINTEGRATOR = FixedStateIntegrator.create( //
       new Tse2Integrator(Clips.positive(MAX_SPEED)), RationalScalar.of(1, 10), 3);
