@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
@@ -13,8 +14,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** GeodesicExtrapolate projects a sequence of points to their next (expected) point
@@ -65,7 +64,7 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
    * @throws Exception if mask is not affine */
   /* package */ static Tensor splits(Tensor mask) {
     // check for affinity
-    Chop._12.requireClose(Total.of(mask), RealScalar.ONE);
+    AffineQ.require(mask);
     // no extrapolation possible
     if (mask.length() == 1)
       return Tensors.vector(1);

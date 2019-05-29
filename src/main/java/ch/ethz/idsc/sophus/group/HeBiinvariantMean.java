@@ -1,7 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.sophus.math.AffinityQ;
+import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -20,7 +20,7 @@ public enum HeBiinvariantMean implements BiinvariantMeanInterface {
 
   @Override // from BiinvariantMeanInterface
   public Tensor mean(Tensor sequence, Tensor weights) {
-    AffinityQ.requirePositive(weights);
+    AffineQ.requirePositive(weights);
     // ---
     Tensor x = sequence.get(Tensor.ALL, 0);
     Tensor y = sequence.get(Tensor.ALL, 1);
