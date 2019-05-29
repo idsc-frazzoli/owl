@@ -55,10 +55,10 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
   // -------- slacks --------
   final Tensor slacks = Tensors.vector(2, 0);
   // -------- stateTimeRaster --------
-  int n = 2;
+  int n = 4;
   final Tensor eta = Tensors.vector(n, n);
   // -------- StateIntegrator --------
-  final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(4, 7), 1);
+  final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(3, 7), 1);
   // -------- GoalInterface --------
   final Tensor stateGoal = Tensors.vector(5, 0);
   final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
@@ -70,7 +70,7 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     // -------- controls --------
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
-    Collection<Flow> controls = r2Flows.getFlows(4);
+    Collection<Flow> controls = r2Flows.getFlows(7);
     for (Flow flow : controls)
       ExactTensorQ.require(flow.getU());
     // -------- GoalInterface --------
