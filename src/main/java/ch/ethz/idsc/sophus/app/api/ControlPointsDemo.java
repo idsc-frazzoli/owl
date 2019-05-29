@@ -1,4 +1,4 @@
-// code by jph
+// code by jph, gjoel
 package ch.ethz.idsc.sophus.app.api;
 
 import java.awt.Color;
@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.sophus.planar.R2OneTimeClosest;
+import ch.ethz.idsc.sophus.ArgMinValue;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -24,14 +24,12 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.red.ArgMin;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** class is used in other projects outside of owl */
 public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private static final Scalar THRESHOLD = RealScalar.of(0.2);
-  private static final R2OneTimeClosest R2_ONE_TIME_CLOSEST = new R2OneTimeClosest(THRESHOLD);
   /** control points */
   private static final PointsRender POINTS_RENDER_0 = //
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
@@ -55,8 +53,10 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         control.set(mouse, min_index);
       else {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
-        Optional<Integer> optional = R2_ONE_TIME_CLOSEST.index(control, mouse);
-        graphics.setColor(optional.isPresent() && isPositioningEnabled() ? Color.ORANGE : Color.GREEN);
+        Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+        ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+        Optional<Scalar> value = argMinValue.value(THRESHOLD);
+        graphics.setColor(value.isPresent() && isPositioningEnabled() ? Color.ORANGE : Color.GREEN);
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
         graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
         geometricLayer.popMatrix();
@@ -77,16 +77,21 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton() == 1 && mousePositioning) {
+        if (!mousePositioning)
+          return;
+        switch (mouseEvent.getButton()) {
+        case MouseEvent.BUTTON1: // insert point
           if (Objects.isNull(min_index)) {
-            min_index = R2_ONE_TIME_CLOSEST.index(control, mouse).orElse(null);
+            Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+            ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+            min_index = argMinValue.index(THRESHOLD).orElse(null);
             if (Objects.isNull(min_index)) {
-              Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
-              min_index = ArgMin.of(mouse_dist);
+              min_index = argMinValue.index();
               if (min_index == control.length() - 1) {
                 min_index = control.length();
                 control = control.append(mouse);
-              } else if (min_index == 0)
+              } else //
+              if (min_index == 0)
                 control = Join.of(Tensors.of(mouse), control);
               else {
                 if (Scalars.lessThan(mouse_dist.Get(min_index + 1), mouse_dist.Get(min_index - 1)))
@@ -98,6 +103,18 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
             min_index = null;
             released();
           }
+          break;
+        case MouseEvent.BUTTON3: // remove point
+          if (Objects.isNull(min_index)) {
+            Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+            ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+            min_index = argMinValue.index(THRESHOLD).orElse(null);
+          }
+          if (Objects.nonNull(min_index)) {
+            control = Join.of(control.extract(0, min_index), control.extract(min_index + 1, control.length()));
+            min_index = null;
+          }
+          break;
         }
       }
     });
