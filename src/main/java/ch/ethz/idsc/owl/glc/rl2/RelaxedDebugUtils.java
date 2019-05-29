@@ -7,7 +7,7 @@ import java.util.Iterator;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.VectorScalars;
+import ch.ethz.idsc.sophus.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public enum RelaxedDebugUtils {

@@ -41,6 +41,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   // ---
   private Tensor control = Tensors.empty();
   private Tensor mouse = Array.zeros(3);
+  /** min_index is non-null while the user drags a control points */
   private Integer min_index = null;
   private boolean mousePositioning = true;
   // ---

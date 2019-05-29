@@ -2,9 +2,9 @@
 package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.owl.math.planar.ClothoidTerminalRatios;
+import ch.ethz.idsc.sophus.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorMetric;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Sqrt;

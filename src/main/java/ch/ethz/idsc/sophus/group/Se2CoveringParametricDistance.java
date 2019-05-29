@@ -1,11 +1,11 @@
 // code by ob
 package ch.ethz.idsc.sophus.group;
 
+import ch.ethz.idsc.sophus.TensorMetric;
 import ch.ethz.idsc.sophus.planar.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorMetric;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Mod;

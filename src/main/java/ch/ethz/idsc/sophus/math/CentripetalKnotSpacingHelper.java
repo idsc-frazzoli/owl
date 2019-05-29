@@ -1,9 +1,9 @@
 // code by ob
 package ch.ethz.idsc.sophus.math;
 
+import ch.ethz.idsc.sophus.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.TensorMetric;
 
 public enum CentripetalKnotSpacingHelper {
   ;
