@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.group;
 
+import ch.ethz.idsc.sophus.math.AffinityQ;
 import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -18,19 +19,26 @@ public enum St1BiinvariantMean implements BiinvariantMeanInterface {
   // ---
   @Override
   public Tensor mean(Tensor sequence, Tensor weights) {
+    AffinityQ.requirePositive(weights);
+    // ---
     Scalar lambdaMean = Exp.FUNCTION.apply((Scalar) Tensor.of(sequence.stream().map(lambda_t -> Log.FUNCTION.apply(lambda_t.Get(0)))).dot(weights));
-    // ---
-    Tensor alpha = Tensor.of(sequence.stream().map( //
-        lambda -> Log.FUNCTION.apply(lambda.Get(0).divide(lambdaMean)).divide(lambda.Get(0).divide(lambdaMean).subtract(RealScalar.ONE))));
-    // ---
-    Scalar Z = (Scalar) alpha.dot(weights);
+    Tensor alpha = Tensors.empty();
+    // if is necessary for case lambda = lambdaMean (unspecific in paper)
+    for (int index = 0; index < sequence.length(); ++index) {
+      Scalar lambda = sequence.get(index).Get(0);
+      Scalar a = lambda.equals(lambdaMean) //
+          ? RealScalar.ONE//
+          : Log.FUNCTION.apply(lambda.divide(lambdaMean)).divide(lambda.divide(lambdaMean).subtract(RealScalar.ONE));
+      alpha.append(a);
+    }
+    Scalar Z = ((Scalar) alpha.dot(weights)).reciprocal();
     // ---
     Scalar sum = RealScalar.ZERO;
     for (int index = 0; index < sequence.length(); ++index) {
       Scalar t = sequence.get(index).Get(1);
       sum = sum.add(t.multiply(weights.Get(index).multiply(alpha.Get(index))));
     }
-    Scalar tMean = Z.reciprocal().multiply(sum);
+    Scalar tMean = Z.multiply(sum);
     return Tensors.of(lambdaMean, tMean);
   }
 }
