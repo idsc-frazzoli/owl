@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
+import ch.ethz.idsc.sophus.planar.R2OneTimeClosest;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -30,6 +31,7 @@ import ch.ethz.idsc.tensor.sca.N;
 /** class is used in other projects outside of owl */
 public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private static final Scalar THRESHOLD = RealScalar.of(0.2);
+  private static final R2OneTimeClosest R2_ONE_TIME_CLOSEST = new R2OneTimeClosest(THRESHOLD);
   /** control points */
   private static final PointsRender POINTS_RENDER_0 = //
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
@@ -53,7 +55,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         control.set(mouse, min_index);
       else {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
-        Optional<Integer> optional = closest();
+        Optional<Integer> optional = R2_ONE_TIME_CLOSEST.index(control, mouse);
         graphics.setColor(optional.isPresent() && isPositioningEnabled() ? Color.ORANGE : Color.GREEN);
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
         graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
@@ -77,7 +79,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       public void mousePressed(MouseEvent mouseEvent) {
         if (mouseEvent.getButton() == 1 && mousePositioning) {
           if (Objects.isNull(min_index)) {
-            min_index = closest().orElse(null);
+            min_index = R2_ONE_TIME_CLOSEST.index(control, mouse).orElse(null);
             if (Objects.isNull(min_index)) {
               Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
               min_index = ArgMin.of(mouse_dist);
@@ -119,21 +121,6 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
 
   public boolean isPositioningEnabled() {
     return mousePositioning;
-  }
-
-  private Optional<Integer> closest() {
-    Scalar cmp = THRESHOLD;
-    int index = 0;
-    Integer min_index = null;
-    for (Tensor point : control) {
-      Scalar distance = Norm._2.between(point.extract(0, 2), mouse.extract(0, 2));
-      if (Scalars.lessThan(distance, cmp)) {
-        cmp = distance;
-        min_index = index;
-      }
-      ++index;
-    }
-    return Optional.ofNullable(min_index);
   }
 
   public final void addButtonDubins() {
