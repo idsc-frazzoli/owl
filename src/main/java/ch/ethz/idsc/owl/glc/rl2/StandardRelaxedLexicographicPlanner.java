@@ -63,15 +63,19 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
         if (!discardedNodes.isEmpty() && !discardedNodes.contains(next)) {
           // TODO ANDRE check if sufficient, criteria here: not next and not empty
           // remove all discarded nodes in GlobalQueue from it
-          this.removeChildren(discardedNodes);
+          removeChildren(discardedNodes);
         }
       }
     }
+    System.out.println("expanded");
+    RelaxedDebugUtils.closeMatchesCheck(this);
+    RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(this);
+    RelaxedDebugUtils.nodeAmountCompare(this);
     // TODO ANDRE check if close to other merits see StaticHelper
   }
 
   private void removeChildren(Collection<GlcNode> collection) {
-    // TODO TEST
+    // TODO ANDRE TEST
     for (GlcNode glcNode : collection) {
       removeChildren(glcNode.children()); // recursive call to remove all children
       Nodes.disjoinChild(glcNode); // disconnect from parent
