@@ -3,20 +3,22 @@ package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.owl.math.planar.ClothoidTerminalRatios;
 import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.sophus.curve.ClothoidCurve;
-import ch.ethz.idsc.sophus.curve.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorMetric;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public enum AnalyticClothoidDistance implements TensorMetric {
-  INSTANCE;
+  LR1(ClothoidLR1Midpoint.INSTANCE), //
+  LR3(ClothoidLR3Midpoint.INSTANCE), //
+  ;
+  private final MidpointInterface midpointInterface;
 
-  private static final LaneRiesenfeldCurveSubdivision SUBDIVISION = new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
+  private AnalyticClothoidDistance(MidpointInterface midpointInterface) {
+    this.midpointInterface = midpointInterface;
+  }
 
   /** @param p element in SE2 of the form {px, py, p_heading}
    * @param q element in SE2 of the form {qx, qy, q_heading}
@@ -25,7 +27,7 @@ public enum AnalyticClothoidDistance implements TensorMetric {
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
     if (p.Get(2).equals(q.Get(2))) {
-      Tensor m = SUBDIVISION.string(Tensors.of(p, q)).get(1);
+      Tensor m = midpointInterface.midpoint(p, q);
       if (p.Get(2).equals(m.Get(2)))
         return Norm._2.ofVector(Extract2D.FUNCTION.apply(q.subtract(p)));
       Scalar half_dist = distance(p, m);
