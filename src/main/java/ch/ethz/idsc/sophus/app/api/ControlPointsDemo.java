@@ -42,6 +42,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private Tensor control = Tensors.empty();
   private Tensor mouse = Array.zeros(3);
   private Integer min_index = null;
+  private boolean mousePositioning = true;
   // ---
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
@@ -52,7 +53,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       else {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
         Optional<Integer> optional = closest();
-        graphics.setColor(optional.isPresent() ? Color.ORANGE : Color.GREEN);
+        graphics.setColor(optional.isPresent() && isPositioningEnabled() ? Color.ORANGE : Color.GREEN);
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
         graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
         geometricLayer.popMatrix();
@@ -73,7 +74,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton() == 1) {
+        if (mouseEvent.getButton() == 1 && mousePositioning) {
           if (Objects.isNull(min_index)) {
             min_index = closest().orElse(null);
             if (Objects.isNull(min_index)) {
@@ -107,6 +108,16 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   /** function is called when mouse is released */
   public void released() {
     // ---
+  }
+
+  public void setPositioningEnabled(boolean enabled) {
+    if (!enabled)
+      min_index = null;
+    this.mousePositioning = enabled;
+  }
+
+  public boolean isPositioningEnabled() {
+    return mousePositioning;
   }
 
   private Optional<Integer> closest() {
