@@ -1,3 +1,4 @@
+// code by astoll
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.ArrayList;
@@ -28,13 +29,12 @@ public class GokartRLVec0Demo extends GokartDemo {
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     // initial state time
     final StateTime initial = new StateTime(Tensors.vector(0, 10, 0), RealScalar.ZERO);
-    // slacks
-    Tensor slacks = Tensors.vector(0.2, 0);
     // goal
     Tensor goal = Tensors.vector(25, 10, 0);
+    // slacks
+    Tensor slacks = Tensors.vector(0, 0);
     // set up relaxed gokart entity
     GokartRelaxedEntity gokartEntity = GokartRelaxedEntity.createRelaxedGokartEntity(initial, slacks);
-    //
     // ---
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---

@@ -55,10 +55,10 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
   // -------- slacks --------
   final Tensor slacks = Tensors.vector(2, 0);
   // -------- stateTimeRaster --------
-  int n = 4;
+  int n = 2;
   final Tensor eta = Tensors.vector(n, n);
   // -------- StateIntegrator --------
-  final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(3, 7), 1);
+  final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(4, 7), 1);
   // -------- GoalInterface --------
   final Tensor stateGoal = Tensors.vector(5, 0);
   final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
