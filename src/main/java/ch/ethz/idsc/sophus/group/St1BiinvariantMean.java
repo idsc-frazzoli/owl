@@ -1,15 +1,14 @@
 // code by ob
 package ch.ethz.idsc.sophus.group;
 
+import ch.ethz.idsc.sophus.math.AffinityQ;
 import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 /** @param sequence of (lambda_i, t_i) points in ST(1) and weights non-negative and normalized
  * @return associated biinvariant meanb which is the solution to the barycentric equation
@@ -18,21 +17,16 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public enum St1BiinvariantMean implements BiinvariantMeanInterface {
   INSTANCE;
   // ---
-  private static void checkAffinity(Tensor weights) {
-    if (!Total.of(weights).equals(RealScalar.ONE))
-      System.out.println("Application of Biinvariant mean not valid! (sum of weights not 1");
-    weights.stream().map(w -> Sign.requirePositiveOrZero((Scalar) w));
-  }
-
   @Override
   public Tensor mean(Tensor sequence, Tensor weights) {
-    checkAffinity(weights);
+    AffinityQ.requirePositive(weights);
+    // ---
     Scalar lambdaMean = Exp.FUNCTION.apply((Scalar) Tensor.of(sequence.stream().map(lambda_t -> Log.FUNCTION.apply(lambda_t.Get(0)))).dot(weights));
     Tensor alpha = Tensors.empty();
     // if is necessary for case lambda = lambdaMean (unspecific in paper)
     for (int index = 0; index < sequence.length(); ++index) {
       Scalar lambda = sequence.get(index).Get(0);
-      Scalar a = lambda.equals(lambdaMean)//
+      Scalar a = lambda.equals(lambdaMean) //
           ? RealScalar.ONE//
           : Log.FUNCTION.apply(lambda.divide(lambdaMean)).divide(lambda.divide(lambdaMean).subtract(RealScalar.ONE));
       alpha.append(a);

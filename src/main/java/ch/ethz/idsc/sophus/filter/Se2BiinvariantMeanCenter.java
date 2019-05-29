@@ -33,10 +33,10 @@ public class Se2BiinvariantMeanCenter implements TensorUnaryOperator {
   }
 
   private Tensor weights(int radius) {
+    // TODO OB use WindowCenterSampler
     Tensor weights = Tensors.empty();
-    for (int index = -radius; index < (radius + 1); ++index) {
-      weights.append(smoothingKernel.apply(RationalScalar.of(index, (2 * radius))));
-    }
+    for (int index = -radius; index <= radius; ++index)
+      weights.append(smoothingKernel.apply(RationalScalar.of(index, 2 * radius)));
     return weights.divide(Total.ofVector(weights));
   }
 
