@@ -73,7 +73,7 @@ public class GokartEntity extends CarEntity {
 
   @Override
   public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
-    System.out.println(trajectoryPlanner.getDomainMap().values());
+    // System.out.println(trajectoryPlanner.getDomainMap().values().size());
     edgeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 

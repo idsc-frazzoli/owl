@@ -63,7 +63,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
         if (!discardedNodes.isEmpty() && !discardedNodes.contains(next)) {
           // TODO ANDRE check if sufficient, criteria here: not next and not empty
           // remove all discarded nodes in GlobalQueue from it
-          this.removeChildren(discardedNodes);
+          removeChildren(discardedNodes);
         }
       }
     }

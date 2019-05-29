@@ -36,8 +36,8 @@ public enum RelaxedDebugUtils {
       if (PRINT) {
         System.out.println(System.getProperty("line.separator"));
         System.out.println("Number of elements in domain queue: " + rlDomainQueue.collection().size());
+        rlDomainQueue.collection().stream().forEach(x -> System.out.println(x.merit()));
       }
-      rlDomainQueue.collection().stream().forEach(x -> System.out.println(x.merit()));
       Tensor bestMerit = VectorScalars.vector(rlDomainQueue.peekBest().merit());
       if (PRINT)
         System.out.println("Number of elements similar to best: " + StaticHelper.numberEquals(rlDomainQueue));
