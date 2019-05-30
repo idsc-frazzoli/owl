@@ -12,9 +12,12 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.io.UserName;
 
 public enum DebugUtils {
   ;
+  private static final boolean PRINT = !UserName.is("travis");
+
   // ---
   public static void nodeAmountCompare(GlcNode best, int size) {
     final GlcNode root = Nodes.rootFrom(best);
@@ -24,8 +27,10 @@ public enum DebugUtils {
       System.out.println("Nodes in SubTree from Node: " + Nodes.ofSubtree(best).size());
       throw new RuntimeException();
     }
-    System.out.println("Nodes in DomainMap: " + size);
-    System.out.println("Nodes in SubTree from Node: " + Nodes.ofSubtree(best).size());
+    if (PRINT) {
+      System.out.println("Nodes in DomainMap: " + size);
+      System.out.println("Nodes in SubTree from Node: " + Nodes.ofSubtree(best).size());
+    }
   }
 
   public static void connectivityCheck(Collection<GlcNode> treeCollection) {

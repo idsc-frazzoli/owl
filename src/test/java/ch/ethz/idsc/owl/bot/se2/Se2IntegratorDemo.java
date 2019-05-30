@@ -25,7 +25,7 @@ enum Se2IntegratorDemo {
     Timing s4 = Timing.stopped();
     Timing s2 = Timing.stopped();
     Timing s3 = Timing.stopped();
-    for (int count = 0; count < 10000; ++count) {
+    for (int count = 0; count < 10_000; ++count) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), 3);
       Scalar h = RandomVariate.of(NormalDistribution.standard());
       s1.start();

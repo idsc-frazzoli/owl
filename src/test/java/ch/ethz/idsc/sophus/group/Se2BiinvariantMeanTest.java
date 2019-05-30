@@ -43,4 +43,71 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor actual = Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
     Chop._14.requireClose(expected, actual);
   }
+
+  // FIXME OB: Something seems to be wrong with our implementation
+  public void testTrivial() {
+    Tensor p = Tensors.of(Tensors.vector(1, 9, -1));
+    Tensor weights = Tensors.vector(1);
+    Tensor actual = Se2BiinvariantMean.INSTANCE.mean(p, weights);
+    System.out.println(actual);
+    // Chop._14.requireClose(Tensors.vector(3,3,0), actual);
+  }
+
+  public void testTranslation() {
+    Tensor sequence = Tensors.empty();
+    Tensor p = Tensors.vector(1, 1, 0);
+    for (int index = 0; index < 7; ++index)
+      sequence.append(p.multiply(RealScalar.of(index)));
+    Tensor weights = Tensors.vector(0.05, 0.1, 0.2, 0.3, 0.2, 0.1, 0.05);
+    Tensor actual = Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
+    Chop._14.requireClose(Tensors.vector(3, 3, 0), actual);
+  }
+
+  public void testRotation() {
+    Tensor sequence = Tensors.empty();
+    Tensor p = Tensors.vector(0, 0, 0.2);
+    for (int index = 0; index < 7; ++index)
+      sequence.append(p.multiply(RealScalar.of(index)));
+    Tensor weights = Tensors.vector(0.05, 0.1, 0.2, 0.3, 0.2, 0.1, 0.05);
+    Tensor actual = Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
+    Chop._14.requireClose(Tensors.vector(0, 0, 0.6), actual);
+  }
+
+  public void testCombined() {
+    Tensor sequence = Tensors.empty();
+    Tensor p = Tensors.vector(1, 1, 0.1);
+    for (int index = 0; index < 7; ++index)
+      sequence.append(p.multiply(RealScalar.of(index)));
+    Tensor weights = Tensors.vector(0.05, 0.1, 0.2, 0.3, 0.2, 0.1, 0.05);
+    Tensor actual = Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
+    Tensor expected = Tensors.fromString("{3.821972363980379, 1.8478784319308044, 0.3}");
+    Chop._14.requireClose(expected, actual);
+  }
+  // TODO OB: implement Exceptions
+  // public void testFail() {
+  // Tensor p = Tensors.vector(0, 0, 0);
+  // Tensor sequence = Tensors.of(p, p, p);
+  // try {
+  // Tensor weights = Tensors.vector(1, 1, 1);
+  // Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
+  // fail();
+  // } catch (Exception exception) {
+  // // ---
+  // }
+  // try {
+  // Tensor weights = Tensors.vector(-0.2, 1.4, -0.2);
+  // Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
+  // fail();
+  // } catch (Exception exception) {
+  // // ---
+  // }
+  // try {
+  // Tensor q = Tensors.vector(1, 1, Math.PI / 2);
+  // Tensor r = Tensors.vector(2, 2, Math.PI);
+  // Tensor weights = Tensors.vector(1, 1, 1).divide(RealScalar.of(3));
+  // Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
+  // fail();
+  // } catch (Exception exception) {
+  // }
+  // }
 }

@@ -2,21 +2,23 @@
 package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.owl.math.planar.ClothoidTerminalRatios;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.sophus.curve.ClothoidCurve;
-import ch.ethz.idsc.sophus.curve.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorMetric;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public enum AnalyticClothoidDistance implements TensorMetric {
-  INSTANCE;
+  LR1(ClothoidLR1Midpoint.INSTANCE), //
+  LR3(ClothoidLR3Midpoint.INSTANCE), //
+  ;
+  // ---
+  private final MidpointInterface midpointInterface;
 
-  private static final LaneRiesenfeldCurveSubdivision SUBDIVISION = new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
+  private AnalyticClothoidDistance(MidpointInterface midpointInterface) {
+    this.midpointInterface = midpointInterface;
+  }
 
   /** @param p element in SE2 of the form {px, py, p_heading}
    * @param q element in SE2 of the form {qx, qy, q_heading}
@@ -24,20 +26,22 @@ public enum AnalyticClothoidDistance implements TensorMetric {
    * the projection is a circle segment */
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
-    if (p.Get(2).equals(q.Get(2))) {
-      Tensor m = SUBDIVISION.string(Tensors.of(p, q)).get(1);
-      if (p.Get(2).equals(m.Get(2)))
-        return Norm._2.ofVector(Extract2D.FUNCTION.apply(q.subtract(p)));
-      Scalar half_dist = distance(p, m);
-      return half_dist.add(half_dist);
+    Scalar pa = p.Get(2);
+    Scalar qa = q.Get(2);
+    if (pa.equals(qa)) {
+      Tensor midpoint = midpointInterface.midpoint(p, q);
+      if (pa.equals(midpoint.Get(2)))
+        return Norm._2.between(p.extract(0, 2), q.extract(0, 2));
+      Scalar half_dist = distance(p, midpoint);
+      return half_dist.add(half_dist); // 2 * half_dist
     }
     // TODO investigate "direction"
-    ClothoidTerminalRatios ratios = ClothoidTerminalRatios.of(p, q);
-    Scalar half_num = q.Get(2).subtract(p.Get(2));
-    Scalar num = half_num.add(half_num);
-    Scalar den = AbsSquared.FUNCTION.apply(ratios.tail()).subtract(AbsSquared.FUNCTION.apply(ratios.head()));
+    ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(p, q);
+    Scalar half_num = qa.subtract(pa);
+    Scalar num = half_num.add(half_num); // 2 * half_num
+    Scalar den = AbsSquared.FUNCTION.apply(clothoidTerminalRatios.tail()).subtract(AbsSquared.FUNCTION.apply(clothoidTerminalRatios.head()));
     Scalar a = Sqrt.FUNCTION.apply(num.divide(den));
-    return AbsSquared.FUNCTION.apply(a).multiply(ratios.tail().subtract(ratios.head()));
+    return AbsSquared.FUNCTION.apply(a).multiply(clothoidTerminalRatios.difference());
   }
 
   public Scalar norm(Tensor q) {

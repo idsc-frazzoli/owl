@@ -27,13 +27,13 @@ public class Se2BiinvariantMeanFilterDemo extends DatasetKernelDemo {
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     TensorUnaryOperator tensorUnaryOperator = Se2BiinvariantMeanCenter.of(SmoothingKernel.GAUSSIAN);
-    refined = Se2BiinvariantMeanFilter.of(tensorUnaryOperator, 4).apply(control());
+    refined = Se2BiinvariantMeanFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
     return refined;
   }
-
-  public static void main(String[] args) {
-    // AbstractDemo abstractDemo = new Se2BiinvariantMeanFilterDemo();
-    // abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    // abstractDemo.timerFrame.jFrame.setVisible(true);
-  }
+  // FIXME OB: Fehler mit Mod[2*Pi]?
+  // public static void main(String[] args) {
+  // AbstractDemo abstractDemo = new Se2BiinvariantMeanFilterDemo();
+  // abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
+  // abstractDemo.timerFrame.jFrame.setVisible(true);
+  // }
 }

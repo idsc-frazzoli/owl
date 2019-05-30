@@ -65,7 +65,7 @@ public class BalloonEntityTest extends TestCase {
     assertTrue(trajectoryPlanner instanceof StandardTrajectoryPlanner);
     trajectoryPlanner.insertRoot(START);
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-    glcExpand.findAny(10000);
+    glcExpand.findAny(10_000);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());
     if (optional.isPresent()) {
