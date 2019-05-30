@@ -88,7 +88,6 @@ public class CarRelaxedEntity extends CarEntity {
     // FIXME ANDRE does this make sense
     // System.out.println(trajectoryPlanner.getQueue());
     // edgeRender.setCollection(trajectoryPlanner.getQueue());
-    ;
   }
 
   @Override
@@ -96,6 +95,5 @@ public class CarRelaxedEntity extends CarEntity {
     edgeRender.getRender().render(geometricLayer, graphics);
     // ---
     super.render(geometricLayer, graphics);
-    ;
   }
 }

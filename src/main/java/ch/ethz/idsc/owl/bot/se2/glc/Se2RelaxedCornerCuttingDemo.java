@@ -42,29 +42,28 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
   @Override // from Se2CarDemo
   protected final void configure(OwlyAnimationFrame owlyAnimationFrame) {
     // TODO Change to something simple
-    BufferedImage bufferedImage = new BufferedImage(640, 640, BufferedImage.TYPE_BYTE_GRAY);
+    BufferedImage bufferedImage = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_GRAY);
     Graphics graphics = bufferedImage.getGraphics();
     graphics.setColor(Color.WHITE);
-    graphics.fillRect(0, 0, 640, 640);
+    graphics.fillRect(0, 0, 32, 32);
     graphics.setColor(Color.BLACK);
-    graphics.fillRect(500, 70, 70, 200);
-    graphics.fillRect(270, 200, 230, 70);
-    graphics.fillRect(270, 270, 70, 200);
-    graphics.fillRect(70, 400, 200, 70);
+    graphics.fillRect(24, 3, 4, 10);
+    graphics.fillRect(13, 10, 15, 4);
+    graphics.fillRect(13, 13, 4, 10);
+    graphics.fillRect(4, 20, 13, 4);
     Tensor image = Transpose.of(ImageFormat.from(bufferedImage));
     Tensor range = Tensors.vector(12, 12);
     int ttl = 15;
     R2ImageRegionWrap r2ImageRegionWrap = new R2ImageRegionWrap(image, range, ttl);
-    // R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     Tensor slack = Tensors.vector(0, 0);
     StateTime initial = new StateTime(Tensors.vector(1.7, 2.2, 0), RealScalar.ZERO);
     Tensor goal1 = Tensors.vector(4.3, 4.2, 1.517);
     Tensor goal2 = Tensors.vector(6.35, 6.233, 0);
     Tensor goal3 = Tensors.vector(8.23, 8.51, 1.517);
     TrajectoryControl tc = createTrajectoryControl();
-    Tensor partitionScale = CarRelaxedEntity.PARTITIONSCALE;
-    FlowsInterface flowsInterface = CarRelaxedEntity.CARFLOWS;
-    Tensor shape = CarRelaxedEntity.SHAPE;
+    Tensor partitionScale = CarEntity.PARTITIONSCALE;
+    FlowsInterface flowsInterface = CarEntity.CARFLOWS;
+    Tensor shape = CarEntity.SHAPE;
     CarRelaxedEntity carRelaxedEntity = CarRelaxedEntity.createRelaxedCarEntity(initial, tc, partitionScale, flowsInterface, shape, slack);
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
