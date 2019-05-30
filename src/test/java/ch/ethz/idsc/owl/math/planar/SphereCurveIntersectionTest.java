@@ -1,8 +1,7 @@
-// code by jph
+// code by jph, gjoel
 package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -10,8 +9,12 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
+import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.io.UserName;
+import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
@@ -93,21 +96,20 @@ public class SphereCurveIntersectionTest extends TestCase {
   }
 
   public void testAssisted() {
-    Tensor base = Tensors.vector(1, 0, 0);
-    Tensor curve = Tensor.of(IntStream.range(0, 500).mapToObj(RealScalar::of).map(base::multiply)).unmodifiable();
+    Tensor base = UnitVector.of(3, 0);
+    Tensor curve = TensorProduct.of(Range.of(0, 500), base);
+    Timing timing1 = Timing.started();
     {
-      // Timing timing = Timing.started();
       for (int index = 0; index < curve.length() - 1; index += 5) {
         Scalar radius = RealScalar.of(index + 1.5);
         AssistedCurveIntersection curveIntersection = new SphereCurveIntersection(radius);
         Optional<Tensor> optional = curveIntersection.string(curve);
         assertEquals(base.multiply(radius), optional.get());
       }
-      // timing.stop();
-      // System.out.println(timing.seconds());
+      timing1.stop();
     }
+    Timing timing2 = Timing.started();
     {
-      // Timing timing = Timing.started();
       int prevIdx = 0;
       for (int index = 0; index < curve.length() - 1; index += 5) {
         Scalar radius = RealScalar.of(index + 1.5);
@@ -117,8 +119,12 @@ public class SphereCurveIntersectionTest extends TestCase {
         assertEquals(radius.number().intValue(), prevIdx);
         assertEquals(base.multiply(radius), optional.get().getTensor());
       }
-      // timing.stop();
-      // System.out.println(timing.seconds());
+      timing2.stop();
     }
+    if (!UserName.is("travis")) {
+      System.out.println(timing1.seconds());
+      System.out.println(timing2.seconds());
+    }
+    assertTrue(timing2.seconds() < timing1.seconds());
   }
 }

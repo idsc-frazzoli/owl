@@ -1,4 +1,4 @@
-// code by jph
+// code by gjoel
 package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;

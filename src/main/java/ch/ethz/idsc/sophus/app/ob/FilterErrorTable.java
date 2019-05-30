@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.ob;
 
 import java.io.File;
-import java.io.IOException;
 
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
@@ -43,7 +42,7 @@ enum FilterErrorTable {
     return log;
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     // String dataname = "gyro/20181203T184122_1";
     // String dataname = "gyro/20181203T184122_2";
     // String dataname = "gyro/20181203T184122_3";

@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -32,7 +31,10 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Seri
     return universal(tensor, 1).map(CurvePoint::getTensor);
   }
 
-  protected Optional<CurvePoint> universal(Tensor tensor, final int first) {
+  /** @param tensor
+   * @param first typically 0 or 1
+   * @return */
+  protected final Optional<CurvePoint> universal(Tensor tensor, int first) {
     int tensor_length = tensor.length();
     if (1 < tensor_length) { // tensor is required to contain at least two entries
       Tensor prev = tensor.get((first + tensor_length - 1) % tensor_length);
@@ -51,7 +53,13 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Seri
     return Optional.empty();
   }
 
+  /** @param tensor
+   * @return distance to given tensor */
   protected abstract Scalar distance(Tensor tensor);
 
+  /** @param prev
+   * @param next
+   * @param scalar
+   * @return */
   protected abstract Tensor split(Tensor prev, Tensor next, Scalar scalar);
 }
