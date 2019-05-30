@@ -97,7 +97,8 @@ public class LexicographicSemiorderMinTracker<K> implements Serializable {
           iterator.remove();
           continue;
           // if applicantPair is indifferent or worse in all dimension discard applicantPair
-        } else if (!productOrder.equals(OrderComparison.INCOMPARABLE)) {
+        } else //
+        if (!productOrder.equals(OrderComparison.INCOMPARABLE)) {
           discardedKeys.add(applicantPair.key());
           return discardedKeys;
         }

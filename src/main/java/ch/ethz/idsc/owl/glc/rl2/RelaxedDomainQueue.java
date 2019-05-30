@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.math.order.DMLexSemiMinTracker;
 import ch.ethz.idsc.sophus.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class RelaxedDomainQueue extends RelaxedPriorityQueue {
+/* package */ class RelaxedDomainQueue extends RelaxedPollingQueue {
   /** @param glcNode
    * @param slacks Tensor of slack parameters
    * @return relaxed lexicographic domain queue that contains given GlcNode as single element */
@@ -50,14 +50,12 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from RelaxedPriorityQueue
-  protected GlcNode pollBest() {
-    GlcNode glcNode = domainMinTracker.pollBestKey();
-    remove(glcNode);
-    return glcNode;
-  }
-
-  @Override // from RelaxedPriorityQueue
   public final GlcNode peekBest() {
     return domainMinTracker.peekBestKey();
+  }
+
+  @Override // from RelaxedBaseQueue
+  protected GlcNode getNodeToPoll() {
+    return domainMinTracker.pollBestKey();
   }
 }

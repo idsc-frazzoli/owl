@@ -1,3 +1,4 @@
+// code by astoll
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Collection;
@@ -11,7 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * compared to any existing element in the tracker will be discarded regardless whether or not they
  * are within the threshold.
  * 
- *
  * @param <K> key type */
 public class DMLexSemiMinTracker<K> extends LexicographicSemiorderMinTracker<K> {
   public static <K> DMLexSemiMinTracker<K> withList(Tensor slackVector) {
@@ -22,6 +22,7 @@ public class DMLexSemiMinTracker<K> extends LexicographicSemiorderMinTracker<K> 
     return new DMLexSemiMinTracker<>(slackVector, new HashSet<>());
   }
 
+  // ---
   private DMLexSemiMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet) {
     super(slackVector, candidateSet, true);
   }
