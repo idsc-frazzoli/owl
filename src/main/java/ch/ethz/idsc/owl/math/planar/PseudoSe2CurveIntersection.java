@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** DO NOT USE THIS ON A REAL ROBOT */
-public class PseudoSe2CurveIntersection extends SimpleCurveIntersection {
+public class PseudoSe2CurveIntersection extends AssistedCurveIntersection {
   public PseudoSe2CurveIntersection(Scalar radius) {
     super(radius);
   }
