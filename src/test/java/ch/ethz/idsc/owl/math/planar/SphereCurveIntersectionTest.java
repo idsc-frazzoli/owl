@@ -2,12 +2,16 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
@@ -85,6 +89,36 @@ public class SphereCurveIntersectionTest extends TestCase {
       Tensor tensor = optional.get();
       ExactTensorQ.require(tensor);
       assertEquals(tensor, Tensors.vector(0.5, 0, 0));
+    }
+  }
+
+  public void testAssisted() {
+    Tensor base = Tensors.vector(1, 0, 0);
+    Tensor curve = Tensor.of(IntStream.range(0, 500).mapToObj(RealScalar::of).map(base::multiply)).unmodifiable();
+    {
+      // Timing timing = Timing.started();
+      for (int index = 0; index < curve.length() - 1; index += 5) {
+        Scalar radius = RealScalar.of(index + 1.5);
+        AssistedCurveIntersection curveIntersection = new SphereCurveIntersection(radius);
+        Optional<Tensor> optional = curveIntersection.string(curve);
+        assertEquals(base.multiply(radius), optional.get());
+      }
+      // timing.stop();
+      // System.out.println(timing.seconds());
+    }
+    {
+      // Timing timing = Timing.started();
+      int prevIdx = 0;
+      for (int index = 0; index < curve.length() - 1; index += 5) {
+        Scalar radius = RealScalar.of(index + 1.5);
+        AssistedCurveIntersection curveIntersection = new SphereCurveIntersection(radius);
+        Optional<CurvePoint> optional = curveIntersection.string(curve, prevIdx);
+        prevIdx = optional.get().getIndex();
+        assertEquals(radius.number().intValue(), prevIdx);
+        assertEquals(base.multiply(radius), optional.get().getTensor());
+      }
+      // timing.stop();
+      // System.out.println(timing.seconds());
     }
   }
 }
