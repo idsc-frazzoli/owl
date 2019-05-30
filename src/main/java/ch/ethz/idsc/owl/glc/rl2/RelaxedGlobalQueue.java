@@ -10,8 +10,9 @@ import ch.ethz.idsc.owl.math.order.LexicographicSemiorderMinTracker;
 import ch.ethz.idsc.sophus.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class RelaxedGlobalQueue extends RelaxedPriorityQueue {
-  /** holds the node which have not yet been expanded */
+/** holds the node which have not yet been expanded */
+/* package */ class RelaxedGlobalQueue extends RelaxedPollingQueue {
+  /** @param slacks */
   public RelaxedGlobalQueue(Tensor slacks) {
     super(slacks);
   }
@@ -34,10 +35,8 @@ import ch.ethz.idsc.tensor.Tensor;
     return minTracker.peekBestKey();
   }
 
-  @Override // from RelaxedPriorityQueue
-  protected GlcNode pollBest() {
-    GlcNode glcNode = peekBest();
-    remove(glcNode);
-    return glcNode;
+  @Override // from RelaxedPollingQueue
+  protected GlcNode getNodeToPoll() {
+    return peekBest();
   }
 }

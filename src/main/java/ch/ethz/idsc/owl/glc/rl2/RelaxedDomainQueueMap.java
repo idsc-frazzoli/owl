@@ -6,11 +6,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class RelaxedDomainQueueMap implements Serializable {
+/* package */ final class RelaxedDomainQueueMap implements Serializable {
   /** map from domain keys to queues of nodes */
   private final Map<Tensor, RelaxedPriorityQueue> map = new HashMap<>();
   private final Tensor slacks;
@@ -26,8 +27,9 @@ import ch.ethz.idsc.tensor.Tensor;
    * @param glcNode
    * @return Collection of discarded nodes */
   public Collection<GlcNode> addToDomainMap(Tensor domainKey, GlcNode glcNode) {
-    if (containsKey(domainKey)) // has another node has already reached this domain ?
-      return getQueue(domainKey).add(glcNode); // potentially add node to existing relaxedDomainQueue
+    RelaxedPriorityQueue relaxedPriorityQueue = getQueue(domainKey);
+    if (Objects.nonNull(relaxedPriorityQueue)) // has another node has already reached this domain ?
+      return relaxedPriorityQueue.add(glcNode); // potentially add node to existing relaxedDomainQueue
     map.put(domainKey, RelaxedDomainQueue.singleton(glcNode, slacks)); // create a new domain queue with single entry
     return Collections.emptyList();
   }
@@ -36,12 +38,11 @@ import ch.ethz.idsc.tensor.Tensor;
    * @throws RunTimeException if domain queue does not exist at the location determined by domainKey
    * @param domainKey
    * @param glcNode
-   * @return Collection of discarded nodes */
-  public void removeFromDomainMap(Tensor domainKey, GlcNode glcNode) {
-    if (!containsKey(domainKey)) {
-      throw new RuntimeException("Key does not exists in map!");
-    }
-    getQueue(domainKey).remove(glcNode);
+   * @return Collection of discarded nodes
+   * @throws NullPointerException if domainKey is not associated to any queue */
+  public boolean removeFromDomainMap(Tensor domainKey, GlcNode glcNode) {
+    RelaxedPriorityQueue relaxedPriorityQueue = getQueue(domainKey);
+    return relaxedPriorityQueue.remove(glcNode);
   }
 
   /** @return True if map is empty */
@@ -49,12 +50,8 @@ import ch.ethz.idsc.tensor.Tensor;
     return map.isEmpty();
   }
 
-  /** @return True if domainKey is contained in domain map */
-  public boolean containsKey(Tensor domainKey) {
-    return map.containsKey(domainKey);
-  }
-
-  /** @return Domain queue at the location determined by domainKey */
+  /** @return domain queue at the location determined by domainKey,
+   * or null if given domain key is not associated to a queue */
   public RelaxedPriorityQueue getQueue(Tensor domainKey) {
     return map.get(domainKey);
   }

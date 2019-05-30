@@ -4,12 +4,9 @@ package ch.ethz.idsc.owl.glc.rl2;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -99,20 +96,6 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   // check if obsolete
   public final Map<Tensor, RelaxedPriorityQueue> getRelaxedDomainQueueMap() {
     return domainMap.getMap();
-  }
-
-  /** Returns an unmodifiable view of the nodes in the domain queues of the domain map.
-   * 
-   * @return unmodifiableCollection of GlcNodes */
-  public final Collection<GlcNode> getNodesInDomainQueueMap() {
-    Set<GlcNode> glcNodesInDomainQueueMap = new HashSet<>();
-    Iterator<RelaxedPriorityQueue> iterator = domainMap.getMap().values().iterator();
-    while (iterator.hasNext()) {
-      RelaxedPriorityQueue current = iterator.next();
-      Collection<GlcNode> nodes = current.collection();
-      glcNodesInDomainQueueMap.addAll(nodes);
-    }
-    return Collections.unmodifiableCollection(glcNodesInDomainQueueMap);
   }
 
   /** @return current most promising node in queue, i.d best merit */

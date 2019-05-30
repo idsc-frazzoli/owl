@@ -82,28 +82,28 @@ public class StandardRelaxedLexicographicPlannerTest extends TestCase {
   }
 
   public void testSimple() {
-    RelaxedTrajectoryPlanner rlPlanner = setupPlanner();
-    assertTrue(rlPlanner.getStateIntegrator() != null);
-    assertTrue(rlPlanner.getQueue().isEmpty());
-    assertTrue(rlPlanner.getBest() != null);
-    assertTrue(rlPlanner.getNodesInDomainQueueMap().isEmpty());
+    RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = setupPlanner();
+    assertTrue(relaxedTrajectoryPlanner.getStateIntegrator() != null);
+    assertTrue(relaxedTrajectoryPlanner.getQueue().isEmpty());
+    assertTrue(relaxedTrajectoryPlanner.getBest() != null);
+    assertTrue(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).isEmpty());
     final Tensor stateRoot = Tensors.vector(0, 0);
-    rlPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
-    assertFalse(rlPlanner.getQueue().isEmpty());
-    System.out.println(rlPlanner.getNodesInDomainQueueMap().size());
-    rlPlanner.pollNext();
-    assertTrue(rlPlanner.getQueue().isEmpty());
-    assertFalse(rlPlanner.getNodesInDomainQueueMap().isEmpty());
+    relaxedTrajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
+    assertFalse(relaxedTrajectoryPlanner.getQueue().isEmpty());
+    System.out.println(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).size());
+    relaxedTrajectoryPlanner.pollNext();
+    assertTrue(relaxedTrajectoryPlanner.getQueue().isEmpty());
+    assertFalse(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).isEmpty());
   }
 
   public void testAddToGlobal() {
-    RelaxedTrajectoryPlanner rlPlanner = setupPlanner();
+    RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = setupPlanner();
     final Tensor state = Tensors.vector(10, 10);
     GlcNode node1 = GlcNode.of(null, new StateTime(state, RealScalar.ZERO), VectorScalar.of(1, 2), VectorScalar.of(0, 0));
     GlcNode node2 = GlcNode.of(null, new StateTime(state, RealScalar.ZERO), VectorScalar.of(2, 1), VectorScalar.of(0, 0));
-    rlPlanner.addToGlobalQueue(node1);
-    rlPlanner.addToGlobalQueue(node2);
-    assertTrue(rlPlanner.getQueue().contains(node1));
-    assertTrue(rlPlanner.getQueue().contains(node2));
+    relaxedTrajectoryPlanner.addToGlobalQueue(node1);
+    relaxedTrajectoryPlanner.addToGlobalQueue(node2);
+    assertTrue(relaxedTrajectoryPlanner.getQueue().contains(node1));
+    assertTrue(relaxedTrajectoryPlanner.getQueue().contains(node2));
   }
 }
