@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
-import java.util.List;
-
 import ch.ethz.idsc.tensor.alg.Join;
 
 /** inspired by
@@ -27,10 +25,6 @@ public enum Insert {
    * @throws Exception if tensor is unmodifiable
    * @throws Exception if index is not from the set {0, 1, ..., tensor.length()} */
   public static void inplace(Tensor tensor, Tensor element, int index) {
-    tensor.append(element);
-    List<Tensor> list = Unprotect.list(tensor);
-    for (int count = tensor.length() - 1; index < count; --count)
-      list.set(count, list.get(count - 1));
-    tensor.set(element, index);
+    Unprotect.list(tensor).add(index, element.copy());
   }
 }
