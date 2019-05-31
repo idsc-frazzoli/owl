@@ -6,6 +6,7 @@ import java.util.Collections;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.order.DMLexSemiMinTracker;
+import ch.ethz.idsc.owl.math.order.LexSemiMinTracker;
 import ch.ethz.idsc.sophus.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -26,10 +27,9 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   // ---
-  private final DMLexSemiMinTracker<GlcNode> domainMinTracker;
+  private final LexSemiMinTracker<GlcNode> domainMinTracker;
 
   private RelaxedDomainQueue(Tensor slacks) {
-    super(slacks);
     this.domainMinTracker = DMLexSemiMinTracker.withList(slacks);
   }
 

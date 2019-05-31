@@ -9,17 +9,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.tensor.Tensor;
 
 /** all implemented methods are final */
 public abstract class RelaxedPriorityQueue implements Iterable<GlcNode>, Serializable {
   /** holds the node which have not yet been expanded */
   private final Set<GlcNode> openSet = new HashSet<>();
-  protected final Tensor slacks;
-
-  protected RelaxedPriorityQueue(Tensor slacks) {
-    this.slacks = slacks;
-  }
 
   /** @param glcNode */
   public abstract Collection<GlcNode> add(GlcNode glcNode);

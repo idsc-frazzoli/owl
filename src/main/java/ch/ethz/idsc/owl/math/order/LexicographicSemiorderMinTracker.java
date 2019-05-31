@@ -15,17 +15,21 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * where all elements are discarded which are not minimal w.r.t the first semiorder. Then from this remaining
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
 public class LexicographicSemiorderMinTracker<K> extends AbstractLexSemiMinTracker<K> {
-  public static <K> LexicographicSemiorderMinTracker<K> withList(Tensor slackVector) {
-    return new LexicographicSemiorderMinTracker<>(slackVector, new LinkedList<>());
+  /** @param slacks
+   * @return */
+  public static <K> LexSemiMinTracker<K> withList(Tensor slacks) {
+    return new LexicographicSemiorderMinTracker<>(slacks, new LinkedList<>());
   }
 
-  public static <K> LexicographicSemiorderMinTracker<K> withSet(Tensor slackVector) {
-    return new LexicographicSemiorderMinTracker<>(slackVector, new HashSet<>());
+  /** @param slacks
+   * @return */
+  public static <K> LexSemiMinTracker<K> withSet(Tensor slacks) {
+    return new LexicographicSemiorderMinTracker<>(slacks, new HashSet<>());
   }
 
   // ---
-  protected LexicographicSemiorderMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet) {
-    super(slackVector, candidateSet);
+  protected LexicographicSemiorderMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+    super(slacks, candidateSet);
   }
 
   @Override // from AbstractLexSemiMinTracker

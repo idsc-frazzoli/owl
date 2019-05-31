@@ -22,7 +22,7 @@ public class LexicographicOrderTest extends TestCase {
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     // FIXME ASTOLL warnings
-    LexicographicOrder<Scalar> lexicographicOrder = new LexicographicOrder(comparatorList);
+    LexicographicOrder<Scalar> lexicographicOrder = new LexicographicOrder<>(comparatorList);
     List<Scalar> x = new LinkedList<>();
     x.add(RealScalar.of(1));
     x.add(RealScalar.of(2));
@@ -43,7 +43,7 @@ public class LexicographicOrderTest extends TestCase {
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
-    LexicographicOrder<Scalar> lexicographicOrder = new LexicographicOrder(comparatorList);
+    LexicographicOrder<Scalar> lexicographicOrder = new LexicographicOrder<>(comparatorList);
     List<Scalar> x = new LinkedList<>();
     x.add(RealScalar.of(2));
     x.add(RealScalar.of(-5));
@@ -66,14 +66,13 @@ public class LexicographicOrderTest extends TestCase {
     assertEquals(OrderComparison.INCOMPARABLE, lexicographicOrder.compare(z, y));
   }
 
-  @SuppressWarnings("rawtypes")
   public void testException() {
     OrderComparator<Scalar> comparator1 = new Order<>((x, y) -> Scalars.divides(x.abs(), y.abs()));
     List<OrderComparator<Scalar>> comparatorList = new LinkedList<>();
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
-    LexicographicOrder<Scalar> lexicographicOrder = new LexicographicOrder(comparatorList);
+    LexicographicOrder<Scalar> lexicographicOrder = new LexicographicOrder<>(comparatorList);
     List<Scalar> x = Tensors.vector(2, -5, 2).stream().map(Scalar.class::cast).collect(Collectors.toList());
     List<Scalar> y = Tensors.vector(6, 2).stream().map(Scalar.class::cast).collect(Collectors.toList());
     assertEquals(OrderComparison.INDIFFERENT, lexicographicOrder.compare(x, x));
@@ -98,7 +97,7 @@ public class LexicographicOrderTest extends TestCase {
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
-    LexicographicOrder<Scalar> lexicographicOrder = Serialization.copy(new LexicographicOrder(comparatorList));
+    LexicographicOrder<Scalar> lexicographicOrder = Serialization.copy(new LexicographicOrder<>(comparatorList));
     List<Scalar> x = Tensors.vector(2, -5, 2).stream().map(Scalar.class::cast).collect(Collectors.toList());
     List<Scalar> y = Tensors.vector(6, 2).stream().map(Scalar.class::cast).collect(Collectors.toList());
     assertEquals(OrderComparison.INDIFFERENT, lexicographicOrder.compare(x, x));

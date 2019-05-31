@@ -79,6 +79,7 @@ public class GokartRelaxedEntity extends GokartEntity {
     TIME_COSTS, REGION_COSTS, CORNER_CUTTING_COSTS,
   }
 
+  // TODO ASTOLL function is not used (yet?)
   private List<CostFunction> createCostFunctionList(List<Objectives> objectives, Tensor goal) {
     List<CostFunction> costFunction = new ArrayList<>();
     Iterator<Objectives> iterator = objectives.iterator();
