@@ -29,7 +29,6 @@ import ch.ethz.idsc.tensor.Tensor;
   private final DMLexSemiMinTracker<GlcNode> domainMinTracker;
 
   private RelaxedDomainQueue(Tensor slacks) {
-    super(slacks);
     this.domainMinTracker = DMLexSemiMinTracker.withList(slacks);
   }
 

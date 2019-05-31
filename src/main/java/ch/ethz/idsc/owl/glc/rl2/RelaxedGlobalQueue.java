@@ -12,9 +12,11 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** holds the node which have not yet been expanded */
 /* package */ class RelaxedGlobalQueue extends RelaxedPollingQueue {
+  private final Tensor slacks;
+
   /** @param slacks */
   public RelaxedGlobalQueue(Tensor slacks) {
-    super(slacks);
+    this.slacks = slacks;
   }
 
   /** Adds single node to global queue. */

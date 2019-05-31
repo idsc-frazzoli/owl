@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.glc.rl2;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.r2.R2RationalFlows;
@@ -69,9 +70,9 @@ public class StandardRelaxedLexicographicPlannerTest extends TestCase {
       }
     };
     // --
-    final Tensor POLYGON = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
-    final PolygonRegion POLYGON_REGION = new PolygonRegion(POLYGON);
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(POLYGON_REGION);
+    Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
+    PolygonRegion polygonRegion = new PolygonRegion(polygon);
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, Quantity.of(2, ""));
     // ---
     GoalInterface goalInterface = //
@@ -83,14 +84,14 @@ public class StandardRelaxedLexicographicPlannerTest extends TestCase {
 
   public void testSimple() {
     RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = setupPlanner();
-    assertTrue(relaxedTrajectoryPlanner.getStateIntegrator() != null);
+    Objects.requireNonNull(relaxedTrajectoryPlanner.getStateIntegrator());
     assertTrue(relaxedTrajectoryPlanner.getQueue().isEmpty());
-    assertTrue(relaxedTrajectoryPlanner.getBest() != null);
-    assertTrue(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).isEmpty());
-    final Tensor stateRoot = Tensors.vector(0, 0);
+    Objects.requireNonNull(relaxedTrajectoryPlanner.getBest());
+    assertTrue(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().isEmpty());
+    Tensor stateRoot = Tensors.vector(0, 0);
     relaxedTrajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     assertFalse(relaxedTrajectoryPlanner.getQueue().isEmpty());
-    System.out.println(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).size());
+    assertEquals(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).size(), 1);
     relaxedTrajectoryPlanner.pollNext();
     assertTrue(relaxedTrajectoryPlanner.getQueue().isEmpty());
     assertFalse(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).isEmpty());
@@ -98,7 +99,7 @@ public class StandardRelaxedLexicographicPlannerTest extends TestCase {
 
   public void testAddToGlobal() {
     RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = setupPlanner();
-    final Tensor state = Tensors.vector(10, 10);
+    Tensor state = Tensors.vector(10, 10);
     GlcNode node1 = GlcNode.of(null, new StateTime(state, RealScalar.ZERO), VectorScalar.of(1, 2), VectorScalar.of(0, 0));
     GlcNode node2 = GlcNode.of(null, new StateTime(state, RealScalar.ZERO), VectorScalar.of(2, 1), VectorScalar.of(0, 0));
     relaxedTrajectoryPlanner.addToGlobalQueue(node1);
