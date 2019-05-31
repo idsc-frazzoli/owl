@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.math;
 
+import ch.ethz.idsc.sophus.TensorGeodesic;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorGeodesic;
 
 public interface GeodesicInterface extends TensorGeodesic {
   /** @param p

@@ -18,7 +18,6 @@ public class HeBiinvariantMeanTest extends TestCase {
 
   public void testTrivialHe3() {
     Tensor element = Tensors.vector(1, 1, 1);
-    // TODO OB: not nice to have a tensor of a tensor..
     Tensor sequence = Tensors.of(element);
     Tensor weights = Tensors.vector(1);
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);

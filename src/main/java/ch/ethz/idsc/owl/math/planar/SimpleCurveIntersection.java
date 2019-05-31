@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * the point that is the result of (linear-)interpolation is the
  * result of the intersection. */
 public abstract class SimpleCurveIntersection implements CurveIntersection, Serializable {
-  private final Scalar radius;
+  protected final Scalar radius;
 
   protected SimpleCurveIntersection(Scalar radius) {
     this.radius = radius;
@@ -23,15 +23,18 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Seri
 
   @Override // from CurveIntersection
   public final Optional<Tensor> cyclic(Tensor tensor) {
-    return universal(tensor, 0);
+    return universal(tensor, 0).map(CurvePoint::getTensor);
   }
 
   @Override // from CurveIntersection
   public final Optional<Tensor> string(Tensor tensor) {
-    return universal(tensor, 1);
+    return universal(tensor, 1).map(CurvePoint::getTensor);
   }
 
-  private Optional<Tensor> universal(Tensor tensor, final int first) {
+  /** @param tensor
+   * @param first typically 0 or 1
+   * @return */
+  protected final Optional<CurvePoint> universal(Tensor tensor, int first) {
     int tensor_length = tensor.length();
     if (1 < tensor_length) { // tensor is required to contain at least two entries
       Tensor prev = tensor.get((first + tensor_length - 1) % tensor_length);
@@ -41,7 +44,7 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Seri
         Scalar hi = distance(next); // "hi" may even be less than "lo"
         if (Scalars.lessEquals(lo, radius) && Scalars.lessEquals(radius, hi)) {
           Clip clip = Clips.interval(lo, hi); // lo <= distance <= hi
-          return Optional.of(split(prev, next, clip.rescale(radius)));
+          return Optional.of(new CurvePoint((count - 1) % tensor_length, split(prev, next, clip.rescale(radius))));
         }
         prev = next;
         lo = hi;
@@ -50,7 +53,13 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Seri
     return Optional.empty();
   }
 
+  /** @param tensor
+   * @return distance to given tensor */
   protected abstract Scalar distance(Tensor tensor);
 
+  /** @param prev
+   * @param next
+   * @param scalar
+   * @return */
   protected abstract Tensor split(Tensor prev, Tensor next, Scalar scalar);
 }

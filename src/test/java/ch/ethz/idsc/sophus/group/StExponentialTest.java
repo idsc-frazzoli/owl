@@ -36,7 +36,7 @@ public class StExponentialTest extends TestCase {
       Tensor inp = RandomVariate.of(distribution, 2);
       Tensor xy = StExponential.INSTANCE.exp(inp);
       Tensor uv = StExponential.INSTANCE.log(xy);
-      Chop._12.requireClose(inp, uv);
+      Chop._10.requireClose(inp, uv);
     }
   }
 
@@ -53,7 +53,7 @@ public class StExponentialTest extends TestCase {
     Tensor inp = Tensors.of(u, v);
     Tensor xy = StExponential.INSTANCE.exp(inp);
     Tensor uv = StExponential.INSTANCE.log(xy);
-    Chop._12.requireClose(inp, uv);
+    Chop._10.requireClose(inp, uv);
   }
 
   public void testLogExp() {
@@ -62,7 +62,7 @@ public class StExponentialTest extends TestCase {
     Tensor inp = Tensors.of(u, v);
     Tensor uv = StExponential.INSTANCE.log(inp);
     Tensor xy = StExponential.INSTANCE.exp(uv);
-    Chop._12.requireClose(inp, xy);
+    Chop._10.requireClose(inp, xy);
   }
 
   public void testSingular() {
@@ -70,6 +70,6 @@ public class StExponentialTest extends TestCase {
     Tensor inp = Tensors.of(RealScalar.ZERO, v);
     Tensor xy = StExponential.INSTANCE.exp(inp);
     Tensor uv = StExponential.INSTANCE.log(xy);
-    Chop._12.requireClose(inp, uv);
+    Chop._10.requireClose(inp, uv);
   }
 }

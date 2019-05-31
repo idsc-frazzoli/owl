@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.RelabelDecision;
-import ch.ethz.idsc.owl.math.VectorScalars;
+import ch.ethz.idsc.sophus.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** class is used for motion planning on the gokart */

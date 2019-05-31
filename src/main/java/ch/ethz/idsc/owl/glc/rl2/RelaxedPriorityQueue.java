@@ -9,16 +9,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.tensor.Tensor;
 
+/** all implemented methods are final */
 public abstract class RelaxedPriorityQueue implements Iterable<GlcNode>, Serializable {
   /** holds the node which have not yet been expanded */
   private final Set<GlcNode> openSet = new HashSet<>();
-  protected final Tensor slacks;
-
-  protected RelaxedPriorityQueue(Tensor slacks) {
-    this.slacks = slacks;
-  }
 
   /** @param glcNode */
   public abstract Collection<GlcNode> add(GlcNode glcNode);
@@ -39,13 +34,12 @@ public abstract class RelaxedPriorityQueue implements Iterable<GlcNode>, Seriali
     openSet.add(glcNode);
   }
 
-  /** Removes the GlcNode from the queue, if it exists.
+  /** removes the GlcNode from the queue, if it exists.
    * 
    * @param glcNode
-   * @return True if glcNode was removed. */
+   * @return whether glcNode was removed */
   public final boolean remove(GlcNode glcNode) {
     return openSet.remove(glcNode);
-    // TODO syserr if not exists
   }
 
   /** Any glcNode contained in the collection will be removed from the queue if it is element of the queue.

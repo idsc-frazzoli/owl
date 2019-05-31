@@ -57,6 +57,7 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
   private final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final PathRender lineRender = new PathRender(new Color(0, 255, 0, 128));
+  private final JToggleButton jToggleTest = new JToggleButton("active");
 
   public CurveSubdivisionDemo() {
     Tensor control = null;
@@ -101,6 +102,10 @@ public class CurveSubdivisionDemo extends CurvatureDemo {
     // ---
     jToggleLine.setSelected(false);
     timerFrame.jToolBar.add(jToggleLine);
+    // ---
+    jToggleTest.setSelected(isPositioningEnabled());
+    jToggleTest.addActionListener(actionEvent -> setPositioningEnabled(jToggleTest.isSelected()));
+    timerFrame.jToolBar.add(jToggleTest);
     // ---
     timerFrame.jToolBar.addSeparator();
     addButtonDubins();

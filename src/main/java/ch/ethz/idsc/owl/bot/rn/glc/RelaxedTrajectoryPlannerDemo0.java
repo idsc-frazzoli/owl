@@ -70,7 +70,7 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     // -------- controls --------
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
-    Collection<Flow> controls = r2Flows.getFlows(4);
+    Collection<Flow> controls = r2Flows.getFlows(7);
     for (Flow flow : controls)
       ExactTensorQ.require(flow.getU());
     // -------- GoalInterface --------

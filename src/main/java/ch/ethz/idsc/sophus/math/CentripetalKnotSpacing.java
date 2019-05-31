@@ -3,9 +3,9 @@ package ch.ethz.idsc.sophus.math;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorMetric;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Accumulate;

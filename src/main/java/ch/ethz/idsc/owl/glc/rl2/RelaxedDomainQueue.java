@@ -5,11 +5,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.order.DMLexSemiMinTracker;
+import ch.ethz.idsc.owl.math.order.LexSemiMinTracker;
+import ch.ethz.idsc.sophus.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class RelaxedDomainQueue extends RelaxedPriorityQueue {
+/* package */ class RelaxedDomainQueue extends RelaxedPollingQueue {
   /** @param glcNode
    * @param slacks Tensor of slack parameters
    * @return relaxed lexicographic domain queue that contains given GlcNode as single element */
@@ -26,10 +27,9 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   // ---
-  private final DMLexSemiMinTracker<GlcNode> domainMinTracker;
+  private final LexSemiMinTracker<GlcNode> domainMinTracker;
 
   private RelaxedDomainQueue(Tensor slacks) {
-    super(slacks);
     this.domainMinTracker = DMLexSemiMinTracker.withList(slacks);
   }
 
@@ -50,14 +50,12 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from RelaxedPriorityQueue
-  protected GlcNode pollBest() {
-    GlcNode glcNode = domainMinTracker.pollBestKey();
-    remove(glcNode);
-    return glcNode;
-  }
-
-  @Override // from RelaxedPriorityQueue
   public final GlcNode peekBest() {
     return domainMinTracker.peekBestKey();
+  }
+
+  @Override // from RelaxedBaseQueue
+  protected GlcNode getNodeToPoll() {
+    return domainMinTracker.pollBestKey();
   }
 }

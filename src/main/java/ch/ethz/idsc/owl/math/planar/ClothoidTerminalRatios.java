@@ -4,11 +4,11 @@ package ch.ethz.idsc.owl.math.planar;
 import java.io.Serializable;
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.QuantityMapper;
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
-import ch.ethz.idsc.tensor.QuantityMapper;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -88,6 +88,11 @@ public class ClothoidTerminalRatios implements Serializable {
 
   public Scalar tail() {
     return tail;
+  }
+
+  /** @return tail - head */
+  public Scalar difference() {
+    return tail.subtract(head);
   }
 
   /* package for testing */ static Scalar curvature(Tensor abc) {
