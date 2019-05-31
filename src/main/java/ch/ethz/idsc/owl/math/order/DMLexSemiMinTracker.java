@@ -32,8 +32,8 @@ public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
   }
 
   // ---
-  private DMLexSemiMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet) {
-    super(slackVector, candidateSet);
+  private DMLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+    super(slacks, candidateSet);
   }
 
   @Override // from AbstractLexSemiMinTracker

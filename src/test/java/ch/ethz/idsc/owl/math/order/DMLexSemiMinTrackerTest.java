@@ -6,15 +6,16 @@ import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
 public class DMLexSemiMinTrackerTest extends TestCase {
-  public void testDigestSimple() {
-    Tensor slacks = Tensors.vector(1, 1, 1);
-    AbstractLexSemiMinTracker<Integer> LSMT1 = (AbstractLexSemiMinTracker) DMLexSemiMinTracker.withList(slacks);
-    AbstractLexSemiMinTracker<Integer> LSMT2 = (AbstractLexSemiMinTracker) DMLexSemiMinTracker.withSet(slacks);
+  private static void _checkSimple(AbstractLexSemiMinTracker<Integer> LSMT1) {
     Tensor x = Tensors.fromString("{1,2,2}");
     LSMT1.digest(1, x);
-    LSMT2.digest(1, x);
     assertFalse(LSMT1.getCandidateSet().isEmpty());
-    assertFalse(LSMT2.getCandidateSet().isEmpty());
+  }
+
+  public void testDigestSimple() {
+    Tensor slacks = Tensors.vector(1, 1, 1);
+    _checkSimple((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withList(slacks));
+    _checkSimple((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withSet(slacks));
   }
 
   /***************************************************/
@@ -34,8 +35,8 @@ public class DMLexSemiMinTrackerTest extends TestCase {
 
   public void testDigest() {
     Tensor slacks = Tensors.fromString("{2}");
-    _checkDigest((AbstractLexSemiMinTracker) DMLexSemiMinTracker.withList(slacks));
-    _checkDigest((AbstractLexSemiMinTracker) DMLexSemiMinTracker.withSet(slacks));
+    _checkDigest((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withList(slacks));
+    _checkDigest((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withSet(slacks));
   }
 
   /***************************************************/
@@ -67,8 +68,8 @@ public class DMLexSemiMinTrackerTest extends TestCase {
 
   public void testCandidateSet() {
     Tensor slacks = Tensors.vector(2, 2, 2);
-    _checkCS((AbstractLexSemiMinTracker) DMLexSemiMinTracker.withList(slacks));
-    _checkCS((AbstractLexSemiMinTracker) DMLexSemiMinTracker.withSet(slacks));
+    _checkCS((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withList(slacks));
+    _checkCS((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withSet(slacks));
   }
 
   public void testFailNull() {

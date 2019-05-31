@@ -46,17 +46,17 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<K>, Serializable {
   private static final Random RANDOM = new Random();
   protected final Collection<Pair<K>> candidateSet;
-  private final Tensor slackVector;
+  private final Tensor slacks;
   protected final int dim;
   protected final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
   protected final List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
 
-  protected AbstractLexSemiMinTracker(Tensor slackVector, Collection<Pair<K>> candidateSet) {
+  protected AbstractLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     this.candidateSet = candidateSet;
-    this.slackVector = VectorQ.require(slackVector);
-    this.dim = slackVector.length();
+    this.slacks = VectorQ.require(slacks);
+    this.dim = slacks.length();
     for (int index = 0; index < dim; ++index) {
-      semiorderComparators.add(new ScalarSlackSemiorder(slackVector.Get(index)));
+      semiorderComparators.add(new ScalarSlackSemiorder(slacks.Get(index)));
       productOrderComparators.add(TensorProductOrder.comparator(index + 1));
     }
   }
@@ -99,7 +99,7 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
       Scalar u_min = minElements.stream() //
           .map(pair -> pair.value().Get(fi)) //
           .min(Scalars::compare).get();
-      Scalar slack = slackVector.Get(fi);
+      Scalar slack = slacks.Get(fi);
       minElements = minElements.stream() //
           .filter(pair -> filterCriterion(pair.value().Get(fi), u_min.add(slack))) //
           .collect(Collectors.toList());
