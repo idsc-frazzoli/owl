@@ -15,11 +15,11 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * where all elements are discarded which are not minimal w.r.t the first semiorder. Then from this remaining
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
 public class LexicographicSemiorderMinTracker<K> extends AbstractLexSemiMinTracker<K> {
-  public static <K> LexicographicSemiorderMinTracker<K> withList(Tensor slackVector) {
+  public static <K> LexSemiMinTracker<K> withList(Tensor slackVector) {
     return new LexicographicSemiorderMinTracker<>(slackVector, new LinkedList<>());
   }
 
-  public static <K> LexicographicSemiorderMinTracker<K> withSet(Tensor slackVector) {
+  public static <K> LexSemiMinTracker<K> withSet(Tensor slackVector) {
     return new LexicographicSemiorderMinTracker<>(slackVector, new HashSet<>());
   }
 

@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * The minimal elements for a lexicographic semiorder is the iteratively constructed set
  * where all elements are discarded which are not minimal w.r.t the first semiorder. Then from this remaining
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
-public abstract class AbstractLexSemiMinTracker<K> implements Serializable {
+public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<K>, Serializable {
   private static final Random RANDOM = new Random();
   protected final Collection<Pair<K>> candidateSet;
   private final Tensor slackVector;
@@ -60,16 +60,6 @@ public abstract class AbstractLexSemiMinTracker<K> implements Serializable {
       productOrderComparators.add(TensorProductOrder.comparator(index + 1));
     }
   }
-
-  /** Updates the set of potential future candidates for the minimal set.
-   * 
-   * An element x is not a candidate if there is an index where one of the current candidates
-   * strictly precedes x and in all indices before are the current one has smaller values.
-   * 
-   * @param key
-   * @param x value, e.g. scores of key
-   * @return collection of discarded elements upon digestion */
-  public abstract Collection<K> digest(K key, Tensor x);
 
   /** Filters all elements which are within the slack of the "absolute" minimum.
    * 
@@ -88,12 +78,12 @@ public abstract class AbstractLexSemiMinTracker<K> implements Serializable {
   }
 
   /** @return keys of current candidateSet */
-  public final Collection<K> getCandidateKeys() {
+  protected final Collection<K> getCandidateKeys() {
     return candidateSet.stream().map(Pair::key).collect(Collectors.toList());
   }
 
   /** @return values of current candidateSet */
-  public final Collection<Tensor> getCandidateValues() {
+  protected final Collection<Tensor> getCandidateValues() {
     return candidateSet.stream().map(Pair::value).collect(Collectors.toList());
   }
 
@@ -118,12 +108,12 @@ public abstract class AbstractLexSemiMinTracker<K> implements Serializable {
   }
 
   /** @return current keys of minimal elements */
-  public final Collection<K> getMinKeys() {
+  protected final Collection<K> getMinKeys() {
     return getMinElements().stream().map(Pair::key).collect(Collectors.toList());
   }
 
   /** @return current values of minimal elements */
-  public final Collection<Tensor> getMinValues() {
+  protected final Collection<Tensor> getMinValues() {
     return getMinElements().stream().map(Pair::value).collect(Collectors.toList());
   }
 
@@ -153,11 +143,7 @@ public abstract class AbstractLexSemiMinTracker<K> implements Serializable {
     return bestElements.get(RANDOM.nextInt(bestElements.size()));
   }
 
-  /** Gives the key of the absolute best element and deletes the best element from
-   * the candidate set
-   * 
-   * @return key of absolute best pair
-   * @throws Exception if min set is empty */
+  @Override
   public final K pollBestKey() {
     Pair<K> pair = getBest();
     boolean removed = candidateSet.remove(pair);
@@ -166,7 +152,7 @@ public abstract class AbstractLexSemiMinTracker<K> implements Serializable {
     return pair.key();
   }
 
-  /** @return key of the current absolute best pair */
+  @Override
   public final K peekBestKey() {
     Pair<K> best = getBest();
     return Objects.isNull(best) //
@@ -175,7 +161,7 @@ public abstract class AbstractLexSemiMinTracker<K> implements Serializable {
   }
 
   /** @return value of the current absolute best pair */
-  public final Tensor peekBestValue() {
+  protected final Tensor peekBestValue() {
     Pair<K> best = getBest();
     return Objects.isNull(best) //
         ? null

@@ -26,7 +26,7 @@ public class LexicographicSemiorderMinTracker2Test extends TestCase {
     final Set<Integer> minKeys1;
     {
       LexicographicSemiorderMinTracker<Integer> lexicographicSemiorderMinTracker = //
-          LexicographicSemiorderMinTracker.withSet(slackVector);
+          (LexicographicSemiorderMinTracker) LexicographicSemiorderMinTracker.withSet(slackVector);
       for (int index = 0; index < values.length(); ++index)
         lexicographicSemiorderMinTracker.digest(index, values.get(index));
       minKeys1 = new HashSet<>(lexicographicSemiorderMinTracker.getMinKeys());
@@ -35,7 +35,7 @@ public class LexicographicSemiorderMinTracker2Test extends TestCase {
     for (int round = 0; round < 10; ++round) {
       Collections.shuffle(list);
       LexicographicSemiorderMinTracker<Integer> lsmtc = //
-          LexicographicSemiorderMinTracker.withSet(slackVector);
+          (LexicographicSemiorderMinTracker) LexicographicSemiorderMinTracker.withSet(slackVector);
       for (int index = 0; index < values.length(); ++index) {
         int count = list.get(index);
         lsmtc.digest(count, values.get(count));
@@ -48,7 +48,7 @@ public class LexicographicSemiorderMinTracker2Test extends TestCase {
   public void testEmptyPollFail() {
     Tensor slackVector = Tensors.vector(1, 2, 0.5);
     LexicographicSemiorderMinTracker<Integer> lexicographicSemiorderMinTracker = //
-        LexicographicSemiorderMinTracker.withSet(slackVector);
+        (LexicographicSemiorderMinTracker) LexicographicSemiorderMinTracker.withSet(slackVector);
     try {
       lexicographicSemiorderMinTracker.pollBestKey();
       fail();

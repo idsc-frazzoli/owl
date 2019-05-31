@@ -17,12 +17,18 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * 
  * @param <K> key type */
 public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
-  public static <K> DMLexSemiMinTracker<K> withList(Tensor slackVector) {
-    return new DMLexSemiMinTracker<>(slackVector, new LinkedList<>());
+  /** @param slacks
+   * @return
+   * @throws Exception if given slacks is null */
+  public static <K> LexSemiMinTracker<K> withList(Tensor slacks) {
+    return new DMLexSemiMinTracker<>(slacks, new LinkedList<>());
   }
 
-  public static <K> DMLexSemiMinTracker<K> withSet(Tensor slackVector) {
-    return new DMLexSemiMinTracker<>(slackVector, new HashSet<>());
+  /** @param slacks
+   * @return
+   * @throws Exception if given slacks is null */
+  public static <K> LexSemiMinTracker<K> withSet(Tensor slacks) {
+    return new DMLexSemiMinTracker<>(slacks, new HashSet<>());
   }
 
   // ---
