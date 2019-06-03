@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 
 public class TemporalTrajectoryControlTest extends TestCase {
   public void testFallback() {
-    EntityControl entityControl = new FallbackControl(Tensors.vector(1, 2));
+    EntityControl entityControl = FallbackControl.of(Tensors.vector(1, 2));
     Tensor control = entityControl.control(new StateTime(Tensors.vector(3, 4), RealScalar.of(2)), RealScalar.of(3)).get();
     assertEquals(control, Tensors.vector(1, 2));
   }

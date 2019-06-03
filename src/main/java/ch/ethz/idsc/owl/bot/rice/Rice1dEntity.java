@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     super( //
         new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);
-    add(new FallbackControl(Array.zeros(1)));
+    add(FallbackControl.of(Array.zeros(1)));
     this.controls = controls;
   }
 

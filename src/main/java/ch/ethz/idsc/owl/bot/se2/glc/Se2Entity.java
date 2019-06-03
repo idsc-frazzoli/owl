@@ -49,7 +49,7 @@ public abstract class Se2Entity extends TrajectoryEntity implements GlcPlannerCa
             Se2Integrator.INSTANCE, // for simulation we allow slip to the sides
             stateTime), //
         trajectoryControl);
-    add(new FallbackControl(Array.zeros(3)));
+    add(FallbackControl.of(Array.zeros(3)));
   }
 
   protected abstract StateTimeRaster stateTimeRaster();

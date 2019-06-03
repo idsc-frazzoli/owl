@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /** @param state initial position of entity */
   public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
     super(episodeIntegrator, trajectoryControl);
-    add(new FallbackControl(Array.zeros(1)));
+    add(FallbackControl.of(Array.zeros(1)));
     this.controls = controls;
   }
 

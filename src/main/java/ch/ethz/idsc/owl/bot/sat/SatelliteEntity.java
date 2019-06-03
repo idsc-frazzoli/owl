@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     super( //
         new SimpleEpisodeIntegrator(SATELLITE_MODEL, INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);
-    add(new FallbackControl(Array.zeros(2)));
+    add(FallbackControl.of(Array.zeros(2)));
     this.controls = controls;
   }
 
