@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
@@ -17,11 +18,11 @@ public enum RelaxedDebugUtils {
 
   /** @param collection of RelaxedPriorityQueue's
    * @return collection of all GlcNodes managed by the given collection of RelaxedPriorityQueue's */
-  public static Collection<GlcNode> allNodes(Collection<RelaxedPriorityQueue> collection) {
+  public static List<GlcNode> allNodes(Collection<RelaxedPriorityQueue> collection) {
     return collection.stream() //
         .map(RelaxedPriorityQueue::collection) //
         .flatMap(Collection::stream) //
-        .collect(Collectors.toSet());
+        .collect(Collectors.toList());
   }
 
   /** Throws an exception if the number of nodes in the trajectory planner is not
@@ -33,7 +34,7 @@ public enum RelaxedDebugUtils {
       throw new RuntimeException("Queue is emtpy");
     DebugUtils.nodeAmountCompare( //
         Nodes.rootFrom(relaxedTrajectoryPlanner.getBestOrElsePeek().get()), //
-        RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).size());
+        allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).size());
   }
 
   /** Checks how many elements within one domain queue are similar to numerically
@@ -60,7 +61,7 @@ public enum RelaxedDebugUtils {
    * @param relaxedTrajectoryPlanner */
   public static void globalQueueSubsetOfQueuesInDomainMap(RelaxedTrajectoryPlanner relaxedTrajectoryPlanner) {
     Collection<GlcNode> globalUnexpandedNodes = relaxedTrajectoryPlanner.getQueue();
-    Collection<GlcNode> nodesInDomainMapQueues = RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values());
+    Collection<GlcNode> nodesInDomainMapQueues = allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values());
     if (!nodesInDomainMapQueues.containsAll(globalUnexpandedNodes))
       throw new RuntimeException("Some nodes in global queue are not present in queues of domain map!");
     if (PRINT) {

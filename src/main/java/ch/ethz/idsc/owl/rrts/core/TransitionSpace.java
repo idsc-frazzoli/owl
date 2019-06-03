@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.rrts.core;
 
 import ch.ethz.idsc.tensor.Tensor;
 
+@FunctionalInterface
 public interface TransitionSpace {
   /** @param start state
    * @param end state

@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** for single integrator state space
  * use with {@link EulerIntegrator} */
 public class R2Flows implements FlowsInterface, Serializable {
-  private static final StateSpaceModel SINGLE_INTEGRATOR = SingleIntegratorStateSpaceModel.INSTANCE;
+  private static final StateSpaceModel STATE_SPACE_MODEL = SingleIntegratorStateSpaceModel.INSTANCE;
   // ---
   private final Scalar speed;
 
@@ -35,12 +35,12 @@ public class R2Flows implements FlowsInterface, Serializable {
     GlobalAssert.that(2 < resolution); // otherwise does not cover plane
     List<Flow> list = new ArrayList<>();
     for (Tensor u : CirclePoints.of(resolution))
-      list.add(StateSpaceModels.createFlow(SINGLE_INTEGRATOR, mapU(u).multiply(speed)));
+      list.add(StateSpaceModels.createFlow(STATE_SPACE_MODEL, mapU(u).multiply(speed)));
     return list;
   }
 
   public Flow stayPut() {
-    return StateSpaceModels.createFlow(SINGLE_INTEGRATOR, Array.zeros(2));
+    return StateSpaceModels.createFlow(STATE_SPACE_MODEL, Array.zeros(2));
   }
 
   protected Tensor mapU(Tensor u) {
