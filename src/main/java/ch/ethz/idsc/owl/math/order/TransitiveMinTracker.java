@@ -16,11 +16,11 @@ import java.util.Objects;
  * thus work for this MinTracker but with significant performance losses.
  * @param <T> type of elements to compare */
 public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
-  public static <T> TransitiveMinTracker<T> withList(OrderComparator<T> orderComparator) {
+  public static <T> MinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new TransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }
 
-  public static <T> TransitiveMinTracker<T> withSet(OrderComparator<T> orderComparator) {
+  public static <T> MinTracker<T> withSet(OrderComparator<T> orderComparator) {
     return new TransitiveMinTracker<>(orderComparator, new HashSet<>());
   }
 

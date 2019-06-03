@@ -46,7 +46,7 @@ public enum RelaxedDebugUtils {
       if (PRINT) {
         System.out.println(System.getProperty("line.separator"));
         System.out.println("Number of elements in domain queue: " + relaxedPriorityQueue.collection().size());
-        relaxedPriorityQueue.collection().stream().forEach(glcNode -> System.out.println(glcNode.merit()));
+        relaxedPriorityQueue.collection().stream().forEach(glcNode -> System.out.println("merit=" + glcNode.merit()));
       }
       Tensor bestMerit = VectorScalars.vector(relaxedPriorityQueue.peekBest().merit());
       if (PRINT)

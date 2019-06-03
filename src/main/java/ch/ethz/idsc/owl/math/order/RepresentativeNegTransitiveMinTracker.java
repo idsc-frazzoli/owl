@@ -13,24 +13,26 @@ import java.util.LinkedList;
  * @param <T> type of elements to compare
  * @return complete set of representatives of the minimal equivalence classes */
 public class RepresentativeNegTransitiveMinTracker<T> extends NegTransitiveMinTracker<T> {
-  public static <T> RepresentativeNegTransitiveMinTracker<T> withList(OrderComparator<T> orderComparator) {
+  public static <T> MinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new RepresentativeNegTransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }
 
-  public static <T> RepresentativeNegTransitiveMinTracker<T> withSet(OrderComparator<T> orderComparator) {
+  public static <T> MinTracker<T> withSet(OrderComparator<T> orderComparator) {
     return new RepresentativeNegTransitiveMinTracker<>(orderComparator, new HashSet<>());
   }
 
+  // ---
   private RepresentativeNegTransitiveMinTracker(OrderComparator<T> orderComparator, Collection<T> collection) {
     super(orderComparator, collection);
   }
 
-  /** Sets wether or not indifferent or incomparable elements shall be kept as well.
+  /** Sets whether or not indifferent or incomparable elements shall be kept as well.
    * 
    * @param comparison
    * @return true if element to be discarded or false otherwise */
   @Override
   protected boolean keepOnlyRepresentatives() {
+    // FIXME ASTOLL this is the same as super.keepOnlyRepresentatives()
     return false;
   }
 }

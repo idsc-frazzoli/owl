@@ -75,21 +75,19 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     return globalQueue;
   }
 
-  /** Removes all nodes in the collection from th global queue.
-   * 
-   * @param toRemove */
-  protected final void removeFromGlobal(Collection<GlcNode> toRemove) {
-    globalQueue.removeAll(toRemove);
-  }
-
+  // /** Removes all nodes in the collection from the global queue.
+  // *
+  // * @param toRemove */
+  // protected final void removeFromGlobal(Collection<GlcNode> toRemove) {
+  // globalQueue.removeAll(toRemove);
+  // }
   /** Removes the node from the corresponding domain queue in the domain map.
    * 
    * @param domainKey
    * @param glcNode */
   protected final void removeFromDomainQueue(Tensor domainKey, GlcNode glcNode) {
-    if (!glcNode.isLeaf()) {
+    if (!glcNode.isLeaf())
       System.err.println("The node to be removed has children");
-    }
     domainMap.removeFromDomainMap(domainKey, glcNode);
   }
 
@@ -150,6 +148,6 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
 
   @Override // from TrajectoryPlanner
   public final Collection<GlcNode> getQueue() {
-    return Collections.unmodifiableCollection(getGlobalQueue().collection());
+    return Collections.unmodifiableCollection(globalQueue.collection());
   }
 }
