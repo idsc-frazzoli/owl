@@ -1,12 +1,16 @@
 // code by jph
 package ch.ethz.idsc.owl.math.order;
 
+import java.io.IOException;
+
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class ScalarSlackSemiorderTest extends TestCase {
-  public void testSimple() {
-    ScalarSlackSemiorder scalarSlackSemiorder = new ScalarSlackSemiorder(Quantity.of(2, "s"));
+  public void testSimple() throws ClassNotFoundException, IOException {
+    OrderComparator<Scalar> scalarSlackSemiorder = Serialization.copy(new ScalarSlackSemiorder(Quantity.of(2, "s")));
     assertEquals(scalarSlackSemiorder.compare(Quantity.of(2, "s"), Quantity.of(5, "s")), OrderComparison.STRICTLY_PRECEDES);
     assertEquals(scalarSlackSemiorder.compare(Quantity.of(2, "s"), Quantity.of(1, "s")), OrderComparison.INDIFFERENT);
     assertEquals(scalarSlackSemiorder.compare(Quantity.of(2, "s"), Quantity.of(-2, "s")), OrderComparison.STRICTLY_SUCCEEDS);

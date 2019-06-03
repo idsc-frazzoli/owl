@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
+/** immutable */
 /* package */ class Pair<K> implements Serializable {
   private final K key;
   private final Tensor value;
@@ -35,7 +36,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
   @Override
   public String toString() {
-    return key + " " + value;
+    return "Pair[" + key + " -> " + value + "]";
   }
 }
 
@@ -45,11 +46,12 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
 public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<K>, Serializable {
   private static final Random RANDOM = new Random();
-  protected final Collection<Pair<K>> candidateSet;
+  // ---
+  private final Collection<Pair<K>> candidateSet;
   private final Tensor slacks;
   protected final int dim;
   protected final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
-  protected final List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
+  private final List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
 
   protected AbstractLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     this.candidateSet = candidateSet;
@@ -59,6 +61,11 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
       semiorderComparators.add(new ScalarSlackSemiorder(slacks.Get(index)));
       productOrderComparators.add(TensorProductOrder.comparator(index + 1));
     }
+  }
+
+  protected final OrderComparison productComparison(Pair<K> applicantPair, Pair<K> currentPair, int index) {
+    return productOrderComparators.get(index) //
+        .compare(applicantPair.value().extract(0, index + 1), currentPair.value().extract(0, index + 1));
   }
 
   /** Filters all elements which are within the slack of the "absolute" minimum.
@@ -97,7 +104,8 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
     for (int index = 0; index < dim; ++index) {
       int fi = index;
       Scalar u_min = minElements.stream() //
-          .map(pair -> pair.value().Get(fi)) //
+          .map(Pair::value) //
+          .map(vector -> vector.Get(fi)) //
           .min(Scalars::compare).get();
       Scalar slack = slacks.Get(fi);
       minElements = minElements.stream() //
@@ -132,7 +140,8 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
     for (int index = 0; index < dim; ++index) {
       int fi = index;
       Scalar u_min = bestElements.stream() //
-          .map(pair -> pair.value().Get(fi)) //
+          .map(Pair::value) //
+          .map(pair -> pair.Get(fi)) //
           .min(Scalars::compare).get();
       bestElements = bestElements.stream() //
           .filter(pair -> pair.value().Get(fi).equals(u_min)) //
@@ -143,28 +152,32 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
     return bestElements.get(RANDOM.nextInt(bestElements.size()));
   }
 
-  @Override
+  @Override // from LexSemiMinTracker
+  public final Collection<K> digest(K key, Tensor x) {
+    Collection<K> discardedKeys = new ArrayList<>();
+    trim(new Pair<>(key, VectorQ.requireLength(x, dim)), candidateSet, discardedKeys);
+    return discardedKeys;
+  }
+
+  /** @param applicantPair
+   * @param candidateSet
+   * @param discardedKeys */
+  protected abstract void trim(Pair<K> applicantPair, Collection<Pair<K>> candidateSet, Collection<K> discardedKeys);
+
+  @Override // from LexSemiMinTracker
   public final K pollBestKey() {
     Pair<K> pair = getBest();
     boolean removed = candidateSet.remove(pair);
     if (!removed)
-      System.err.println("could not remove pair=" + pair);
+      System.err.println("could not remove " + pair);
     return pair.key();
   }
 
-  @Override
+  @Override // from LexSemiMinTracker
   public final K peekBestKey() {
     Pair<K> best = getBest();
     return Objects.isNull(best) //
         ? null
         : best.key();
-  }
-
-  /** @return value of the current absolute best pair */
-  protected final Tensor peekBestValue() {
-    Pair<K> best = getBest();
-    return Objects.isNull(best) //
-        ? null
-        : best.value();
   }
 }

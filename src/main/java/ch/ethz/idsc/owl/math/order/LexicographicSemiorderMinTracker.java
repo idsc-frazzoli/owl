@@ -1,14 +1,12 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** Creates minTracker for a lexicographic semiorder.
  * The minimal elements for a lexicographic semiorder is the iteratively constructed set
@@ -28,38 +26,36 @@ public class LexicographicSemiorderMinTracker<K> extends AbstractLexSemiMinTrack
   }
 
   // ---
-  protected LexicographicSemiorderMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+  private LexicographicSemiorderMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     super(slacks, candidateSet);
   }
 
   @Override // from AbstractLexSemiMinTracker
-  public Collection<K> digest(K key, Tensor x) {
-    Pair<K> applicantPair = new Pair<>(key, VectorQ.requireLength(x, dim));
+  protected void trim(Pair<K> applicantPair, Collection<Pair<K>> candidateSet, Collection<K> discardedKeys) {
     Iterator<Pair<K>> iterator = candidateSet.iterator();
-    Collection<K> discardedKeys = new ArrayList<>();
     while (iterator.hasNext()) {
       Pair<K> currentPair = iterator.next();
       for (int index = 0; index < dim; ++index) {
         OrderComparison semiorder = semiorderComparators.get(index).compare(applicantPair.value().Get(index), currentPair.value().Get(index));
-        OrderComparison productOrder = productOrderComparators.get(index).compare(applicantPair.value().extract(0, index + 1),
-            currentPair.value().extract(0, index + 1));
-        // if x strictly precedes the current object and it is strictly preceding in every coordinate until now, then the current object will be discarded
-        if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES) && //
-            productOrder.equals(OrderComparison.STRICTLY_PRECEDES)) {
-          discardedKeys.add(currentPair.key());
-          iterator.remove();
-          break;
-        }
-        // if x strictly succeeding the current object and it is strictly succeeding in every coordinate until now, then x will be discarded
-        else //
-        if (semiorder.equals(OrderComparison.STRICTLY_SUCCEEDS) && //
-            productOrder.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
-          discardedKeys.add(applicantPair.key());
-          return discardedKeys;
+        // if x strictly precedes the current object and it is strictly preceding
+        // in every coordinate until now, then the current object will be discarded
+        if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES)) { //
+          if (productComparison(applicantPair, currentPair, index).equals(OrderComparison.STRICTLY_PRECEDES)) {
+            discardedKeys.add(currentPair.key());
+            iterator.remove();
+            break; // leave for loop, continue with while loop
+          }
+        } else //
+        // if x strictly succeeding the current object and it is strictly succeeding
+        // in every coordinate until now, then x will be discarded
+        if (semiorder.equals(OrderComparison.STRICTLY_SUCCEEDS)) { //
+          if (productComparison(applicantPair, currentPair, index).equals(OrderComparison.STRICTLY_SUCCEEDS)) {
+            discardedKeys.add(applicantPair.key());
+            return;
+          }
         }
       }
     }
     candidateSet.add(applicantPair);
-    return discardedKeys;
   }
 }
