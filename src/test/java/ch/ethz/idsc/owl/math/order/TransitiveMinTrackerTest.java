@@ -2,8 +2,10 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.demo.order.DigitSumDivisibilityPreorder;
 import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
@@ -12,7 +14,11 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import junit.framework.TestCase;
 
 public class TransitiveMinTrackerTest extends TestCase {
@@ -128,5 +134,34 @@ public class TransitiveMinTrackerTest extends TestCase {
     lexTracker.digest(tensorX);
     lexTracker.digest(tensorY);
     assertTrue(lexTracker.getMinElements().contains(tensorX));
+  }
+
+  private static void _checkPermutations(Supplier<MinTracker<Scalar>> supplier) {
+    Distribution distribution = DiscreteUniformDistribution.of(0, 10000);
+    Tensor tensor = RandomVariate.of(distribution, 100);
+    List<Tensor> list = Unprotect.list(tensor.copy());
+    Collection<Scalar> collection1;
+    {
+      Collections.shuffle(list);
+      MinTracker<Scalar> minTracker = supplier.get();
+      list.stream().map(Scalar.class::cast).forEach(minTracker::digest);
+      collection1 = minTracker.getMinElements();
+      assertTrue(0 < collection1.size());
+    }
+    Collection<Scalar> collection2;
+    {
+      Collections.shuffle(list);
+      MinTracker<Scalar> minTracker = supplier.get();
+      list.stream().map(Scalar.class::cast).forEach(minTracker::digest);
+      collection2 = minTracker.getMinElements();
+      assertTrue(0 < collection2.size());
+    }
+    assertTrue(collection1.containsAll(collection2));
+    assertTrue(collection2.containsAll(collection1));
+  }
+
+  public void testPermutations() {
+    _checkPermutations(() -> TransitiveMinTracker.withSet(DigitSumDivisibilityPreorder.SCALAR));
+    _checkPermutations(() -> TransitiveMinTracker.withList(DigitSumDivisibilityPreorder.SCALAR));
   }
 }

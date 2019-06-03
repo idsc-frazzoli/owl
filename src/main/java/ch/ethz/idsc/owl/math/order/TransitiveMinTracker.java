@@ -12,8 +12,9 @@ import java.util.Objects;
 /** Tracks minimal elements of a transitive ordered set <tt>X</tt>.
  * An element x is said to be minimal if there is no other element y such that yRx.
  * (Strict) Total orders, total preorders and weak orders, preorders, semiorders are all transitive.
- * Be aware that neg. transitive orders are transitive as well and
+ * Be aware that negatively transitive orders are transitive as well and
  * thus work for this MinTracker but with significant performance losses.
+ * 
  * @param <T> type of elements to compare */
 public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
   public static <T> MinTracker<T> withList(OrderComparator<T> orderComparator) {
@@ -24,11 +25,12 @@ public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
     return new TransitiveMinTracker<>(orderComparator, new HashSet<>());
   }
 
-  private final OrderComparator<T> comparator;
+  // ---
+  private final OrderComparator<T> orderComparator;
   private final Collection<T> collection;
 
-  protected TransitiveMinTracker(OrderComparator<T> comparator, Collection<T> collection) {
-    this.comparator = Objects.requireNonNull(comparator);
+  protected TransitiveMinTracker(OrderComparator<T> orderComparator, Collection<T> collection) {
+    this.orderComparator = Objects.requireNonNull(orderComparator);
     this.collection = collection;
   }
 
@@ -37,11 +39,11 @@ public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
     Iterator<T> iterator = collection.iterator();
     while (iterator.hasNext()) {
       T b = iterator.next();
-      OrderComparison comparison = comparator.compare(x, b);
-      if (comparison.equals(OrderComparison.STRICTLY_PRECEDES))
+      OrderComparison orderComparison = orderComparator.compare(x, b);
+      if (orderComparison.equals(OrderComparison.STRICTLY_PRECEDES))
         iterator.remove();
       else //
-      if (discardCriterion(comparison))
+      if (discardCriterion(orderComparison))
         return;
     }
     if (!collection.contains(x))
@@ -50,10 +52,10 @@ public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
 
   /** Discards elements which strictly succeed any of the current elements.
    * 
-   * @param comparison
+   * @param orderComparison
    * @return */
-  protected boolean discardCriterion(OrderComparison comparison) {
-    return comparison.equals(OrderComparison.STRICTLY_SUCCEEDS);
+  protected boolean discardCriterion(OrderComparison orderComparison) {
+    return orderComparison.equals(OrderComparison.STRICTLY_SUCCEEDS);
   }
 
   /** @return Minimal elements of partially ordered set */

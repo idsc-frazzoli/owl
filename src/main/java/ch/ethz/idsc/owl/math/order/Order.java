@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.io.Serializable;
 
-public class Order<T> implements OrderComparator<T>, Serializable {
+public final class Order<T> implements OrderComparator<T>, Serializable {
   private final BinaryRelation<T> binaryRelation;
 
   /** @param binaryRelation reflexive and transitive

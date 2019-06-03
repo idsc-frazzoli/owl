@@ -8,16 +8,17 @@ import java.util.LinkedList;
 /** Tracks minimal elements of a transitive ordered set <tt>X</tt>.
  * An element x is said to be minimal if there is no other element y such that yRx.
  * (Strict) Total orders, total preorders and weak orders, preorders, semiorders are all transitive.
- * Be aware that neg. transitive orders are transitive as well and
+ * Be aware that negatively transitive orders are transitive as well and
  * thus work for this MinTracker but with significant performance losses.
+ * 
  * @param <T> type of elements to compare
  * @return complete set of representatives of the minimal equivalence classes */
 public class RepresentativeTransitiveMinTracker<T> extends TransitiveMinTracker<T> {
-  public static <T> RepresentativeTransitiveMinTracker<T> withList(OrderComparator<T> orderComparator) {
+  public static <T> MinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new RepresentativeTransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }
 
-  public static <T> RepresentativeTransitiveMinTracker<T> withSet(OrderComparator<T> orderComparator) {
+  public static <T> MinTracker<T> withSet(OrderComparator<T> orderComparator) {
     return new RepresentativeTransitiveMinTracker<>(orderComparator, new HashSet<>());
   }
 
