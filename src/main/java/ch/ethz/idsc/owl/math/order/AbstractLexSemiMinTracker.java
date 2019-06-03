@@ -47,15 +47,15 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<K>, Serializable {
   private static final Random RANDOM = new Random();
   // ---
-  private final Collection<Pair<K>> candidateSet;
   private final Tensor slacks;
+  private final Collection<Pair<K>> candidateSet;
   protected final int dim;
   protected final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
   private final List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
 
   protected AbstractLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
-    this.candidateSet = candidateSet;
     this.slacks = VectorQ.require(slacks);
+    this.candidateSet = candidateSet;
     this.dim = slacks.length();
     for (int index = 0; index < dim; ++index) {
       semiorderComparators.add(new ScalarSlackSemiorder(slacks.Get(index)));
@@ -66,15 +66,6 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
   protected final OrderComparison productComparison(Pair<K> applicantPair, Pair<K> currentPair, int index) {
     return productOrderComparators.get(index) //
         .compare(applicantPair.value().extract(0, index + 1), currentPair.value().extract(0, index + 1));
-  }
-
-  /** Filters all elements which are within the slack of the "absolute" minimum.
-   * 
-   * @param x_i: Coordinate of element x
-   * @param threshold = u_min + slack
-   * @return true or false */
-  private static boolean filterCriterion(Scalar x_i, Scalar threshold) {
-    return Scalars.lessEquals(x_i, threshold);
   }
 
   /** Hint: only for testing
@@ -107,9 +98,9 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
           .map(Pair::value) //
           .map(vector -> vector.Get(fi)) //
           .min(Scalars::compare).get();
-      Scalar slack = slacks.Get(fi);
+      Scalar threshold = u_min.add(slacks.Get(fi));
       minElements = minElements.stream() //
-          .filter(pair -> filterCriterion(pair.value().Get(fi), u_min.add(slack))) //
+          .filter(pair -> Scalars.lessEquals(pair.value().Get(fi), threshold)) //
           .collect(Collectors.toList());
     }
     return minElements;
@@ -169,7 +160,7 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
     Pair<K> pair = getBest();
     boolean removed = candidateSet.remove(pair);
     if (!removed)
-      System.err.println("could not remove " + pair);
+      throw new RuntimeException("could not remove " + pair);
     return pair.key();
   }
 

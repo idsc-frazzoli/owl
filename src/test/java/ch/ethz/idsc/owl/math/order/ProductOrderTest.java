@@ -19,15 +19,15 @@ public class ProductOrderTest extends TestCase {
   }
 
   public void testNullFail() {
-    for (OrderComparison oc : OrderComparison.values()) {
+    for (OrderComparison orderComparison : OrderComparison.values()) {
       try {
-        ProductOrder.intersect(oc, null);
+        ProductOrder.intersect(orderComparison, null);
         fail();
       } catch (Exception exception) {
         // ---
       }
       try {
-        ProductOrder.intersect(null, oc);
+        ProductOrder.intersect(null, orderComparison);
         fail();
       } catch (Exception exception) {
         // ---
