@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** Creates minTracker for a lexicographic semiorder.
@@ -35,12 +37,16 @@ public class LexicographicSemiorderMinTracker<K> extends AbstractLexSemiMinTrack
     Iterator<Pair<K>> iterator = candidateSet.iterator();
     while (iterator.hasNext()) {
       Pair<K> currentPair = iterator.next();
+      ProductOrderTracker<Scalar> productOrderTracker = new ProductOrderTracker<>(ScalarTotalOrder.INSTANCE);
       for (int index = 0; index < dim; ++index) {
-        OrderComparison semiorder = semiorderComparators.get(index).compare(applicantPair.value().Get(index), currentPair.value().Get(index));
+        Scalar x = applicantPair.value().Get(index);
+        Scalar y = currentPair.value().Get(index);
+        OrderComparison semiorder = semiorderComparators.get(index).compare(x, y);
+        OrderComparison productorder = productOrderTracker.digest(x, y);
         // if x strictly precedes the current object and it is strictly preceding
         // in every coordinate until now, then the current object will be discarded
         if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES)) { //
-          if (productComparison(applicantPair, currentPair, index).equals(OrderComparison.STRICTLY_PRECEDES)) {
+          if (productorder.equals(OrderComparison.STRICTLY_PRECEDES)) {
             discardedKeys.add(currentPair.key());
             iterator.remove();
             break; // leave for loop, continue with while loop
@@ -49,7 +55,7 @@ public class LexicographicSemiorderMinTracker<K> extends AbstractLexSemiMinTrack
         // if x strictly succeeding the current object and it is strictly succeeding
         // in every coordinate until now, then x will be discarded
         if (semiorder.equals(OrderComparison.STRICTLY_SUCCEEDS)) { //
-          if (productComparison(applicantPair, currentPair, index).equals(OrderComparison.STRICTLY_SUCCEEDS)) {
+          if (productorder.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
             discardedKeys.add(applicantPair.key());
             return;
           }

@@ -15,7 +15,7 @@ public class ProductOrderComparator implements OrderComparator<Iterable<? extend
   }
 
   @Override // from OrderComparator
-  public OrderComparison compare(Iterable<? extends Object> x, Iterable<? extends Object> y) {
+  public final OrderComparison compare(Iterable<? extends Object> x, Iterable<? extends Object> y) {
     Iterator<? extends Object> x_iterator = x.iterator();
     Iterator<? extends Object> y_iterator = y.iterator();
     OrderComparison orderComparison = OrderComparison.INDIFFERENT;

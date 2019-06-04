@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.demo.order.TensorProductOrder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -51,21 +50,13 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
   private final Collection<Pair<K>> candidateSet;
   protected final int dim;
   protected final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
-  private final List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
 
   protected AbstractLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     this.slacks = VectorQ.require(slacks);
     this.candidateSet = candidateSet;
     this.dim = slacks.length();
-    for (int index = 0; index < dim; ++index) {
+    for (int index = 0; index < dim; ++index)
       semiorderComparators.add(new ScalarSlackSemiorder(slacks.Get(index)));
-      productOrderComparators.add(TensorProductOrder.comparator(index + 1));
-    }
-  }
-
-  protected final OrderComparison productComparison(Pair<K> applicantPair, Pair<K> currentPair, int index) {
-    return productOrderComparators.get(index) //
-        .compare(applicantPair.value().extract(0, index + 1), currentPair.value().extract(0, index + 1));
   }
 
   /** Hint: only for testing

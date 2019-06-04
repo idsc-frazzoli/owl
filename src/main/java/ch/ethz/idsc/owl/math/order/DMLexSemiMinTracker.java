@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
+import ch.ethz.idsc.owl.demo.order.TensorProductOrder;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** Adapted version of the LexicographicSemiorderMinTracker which only tracks elements that
@@ -30,8 +33,11 @@ public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
   }
 
   // ---
+  private final ProductOrderComparator productOrderComparator;
+
   private DMLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     super(slacks, candidateSet);
+    productOrderComparator = TensorProductOrder.comparator(dim);
   }
 
   @Override // from AbstractLexSemiMinTracker
@@ -40,7 +46,7 @@ public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
     while (iterator.hasNext()) {
       Pair<K> currentPair = iterator.next();
       { // we are only interested in beneficial elements
-        OrderComparison productComparison = productComparison(applicantPair, currentPair, dim - 1);
+        OrderComparison productComparison = productOrderComparator.compare(applicantPair.value(), currentPair.value());
         // if applicantPair is better in all dimensions remove currentPair
         if (productComparison.equals(OrderComparison.STRICTLY_PRECEDES)) {
           discardedKeys.add(currentPair.key());
@@ -54,12 +60,16 @@ public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
         }
       }
       // the code below is identical to LexicographicSemiorderMinTracker::digest
+      ProductOrderTracker<Scalar> productOrderTracker = new ProductOrderTracker<>(ScalarTotalOrder.INSTANCE);
       for (int index = 0; index < dim; ++index) {
-        OrderComparison semiorder = semiorderComparators.get(index).compare(applicantPair.value().Get(index), currentPair.value().Get(index));
+        Scalar x = applicantPair.value().Get(index);
+        Scalar y = currentPair.value().Get(index);
+        OrderComparison semiorder = semiorderComparators.get(index).compare(x, y);
+        OrderComparison productorder = productOrderTracker.digest(x, y);
         // if x strictly precedes the current object and it is strictly preceding
         // in every coordinate until now, then the current object will be discarded
         if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES)) {
-          if (productComparison(applicantPair, currentPair, index).equals(OrderComparison.STRICTLY_PRECEDES)) {
+          if (productorder.equals(OrderComparison.STRICTLY_PRECEDES)) {
             discardedKeys.add(currentPair.key());
             iterator.remove();
             break; // leave for loop, continue with while loop
@@ -68,7 +78,7 @@ public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
         // if x strictly succeeding the current object and it is strictly succeeding
         // in every coordinate until now, then x will be discarded
         if (semiorder.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
-          if (productComparison(applicantPair, currentPair, index).equals(OrderComparison.STRICTLY_SUCCEEDS)) {
+          if (productorder.equals(OrderComparison.STRICTLY_SUCCEEDS)) {
             discardedKeys.add(applicantPair.key());
             return;
           }
