@@ -24,7 +24,7 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     featureFunctionVector.add(x -> x.Get(0));
     featureFunctionVector.add(x -> x.Get(1));
     List<Function<Tensor, Tensor>> scoringFunctionVector = Arrays.asList(x -> x);
-    List<OrderComparator> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
+    List<OrderComparator<? extends Object>> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
         genericLexicographicOrder);
@@ -41,7 +41,7 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     featureFunctionVector.add(x -> x.Get(0).abs());
     featureFunctionVector.add(x -> x.Get(1));
     List<Function<Tensor, Tensor>> scoringFunctionVector = Arrays.asList(x -> x);
-    List<OrderComparator> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
+    List<OrderComparator<? extends Object>> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
         genericLexicographicOrder);
@@ -57,7 +57,7 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     featureFunctionVector.add(x -> x.Get(0).abs());
     featureFunctionVector.add(x -> x.Get(1));
     List<Function<Tensor, Tensor>> scoringFunctionVector = Arrays.asList(x -> x);
-    List<OrderComparator> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
+    List<OrderComparator<? extends Object>> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
         genericLexicographicOrder);
@@ -72,7 +72,7 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     featureFunctionVector.add(x -> x.Get(0).abs());
     featureFunctionVector.add(x -> x.Get(1));
     List<Function<Tensor, Tensor>> scoringFunctionVector = Arrays.asList(x -> x.Get(0).add(RealScalar.ONE), x -> x.Get(1).add(RealScalar.ONE));
-    List<OrderComparator> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
+    List<OrderComparator<? extends Object>> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
         genericLexicographicOrder);
@@ -88,7 +88,7 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     featureFunctionVector.add(x -> x.Get(0).abs());
     featureFunctionVector.add(x -> x.Get(1));
     List<Function<Tensor, Tensor>> scoringFunctionVector = Arrays.asList(x -> x.Get(0).add(RealScalar.ONE), x -> x.Get(1).add(RealScalar.ONE));
-    List<OrderComparator> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
+    List<OrderComparator<? extends Object>> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
         genericLexicographicOrder);
@@ -103,7 +103,7 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     featureFunctionVector.add(x -> x.Get(0).abs());
     featureFunctionVector.add(x -> x.Get(1));
     List<Function<Tensor, Tensor>> scoringFunctionVector = Arrays.asList(x -> x.Get(0).add(RealScalar.ONE), x -> x.Get(1).add(RealScalar.ONE));
-    List<OrderComparator> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
+    List<OrderComparator<? extends Object>> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
         genericLexicographicOrder);

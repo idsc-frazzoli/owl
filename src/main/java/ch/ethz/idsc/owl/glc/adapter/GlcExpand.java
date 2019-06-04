@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.adapter;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -16,7 +17,7 @@ public class GlcExpand {
   private int expandCount = 0;
 
   public GlcExpand(TrajectoryPlanner trajectoryPlanner) {
-    this.trajectoryPlanner = trajectoryPlanner;
+    this.trajectoryPlanner = Objects.requireNonNull(trajectoryPlanner);
   }
 
   /** @return number of expand operations */
@@ -59,12 +60,16 @@ public class GlcExpand {
   }
 
   /** @return true if no node in queue can achieve a lower cost than best node in goal region */
-  public boolean isOptimal() {
+  public final boolean isOptimal() {
     Optional<GlcNode> best = trajectoryPlanner.getBest();
     return best.isPresent() //
-        && Scalars.lessEquals( //
-            best.get().costFromRoot(), //
-            // in the current implementation the best node is guaranteed in queue
-            trajectoryPlanner.getQueue().iterator().next().merit());
+        && isOptimal(best.get());
+  }
+
+  public boolean isOptimal(GlcNode best) {
+    return Scalars.lessEquals( //
+        best.costFromRoot(), //
+        // in the current implementation the best node is guaranteed in queue
+        trajectoryPlanner.getQueue().iterator().next().merit());
   }
 }

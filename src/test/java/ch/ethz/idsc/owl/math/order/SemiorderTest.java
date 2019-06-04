@@ -17,7 +17,7 @@ public class SemiorderTest extends TestCase {
   }
 
   public void testString() {
-    OrderComparator<String> semiorder = Semiorder.comparator(s -> RealScalar.of(s.length()), RealScalar.ONE);
+    OrderComparator<String> semiorder = Semiorder.comparator(string -> RealScalar.of(string.length()), RealScalar.ONE);
     assertTrue(semiorder.compare("ewrwer", "ewrwer").equals(OrderComparison.INDIFFERENT));
     assertTrue(semiorder.compare("ewrwerr", "ewrwer").equals(OrderComparison.INDIFFERENT));
     assertTrue(semiorder.compare("ewrwerrrrrrr", "ewrwer").equals(OrderComparison.STRICTLY_SUCCEEDS));

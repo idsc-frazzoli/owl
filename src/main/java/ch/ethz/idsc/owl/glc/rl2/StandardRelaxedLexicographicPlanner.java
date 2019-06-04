@@ -16,8 +16,11 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.io.UserName;
 
 public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanner {
+  private static final boolean PRINT = !(UserName.is("travis") || UserName.is("datahaki"));
+  // ---
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
@@ -67,7 +70,8 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
         }
       }
     }
-    System.out.println("expanded");
+    if (PRINT)
+      System.out.println("expanded");
     RelaxedDebugUtils.closeMatchesCheck(this);
     RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(this);
     RelaxedDebugUtils.nodeAmountCompare(this);

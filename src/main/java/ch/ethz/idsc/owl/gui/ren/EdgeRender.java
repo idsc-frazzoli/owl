@@ -28,10 +28,16 @@ public class EdgeRender {
   private static final Color COLOR_EDGE = new Color(128, 128, 255, 64);
   // ---
   private final int nodeBound;
+  private final Color color;
   private RenderInterface renderInterface = EmptyRender.INSTANCE;
 
-  public EdgeRender(int nodeBound) {
+  public EdgeRender(int nodeBound, Color color) {
     this.nodeBound = nodeBound;
+    this.color = color;
+  }
+
+  public EdgeRender(int nodeBound) {
+    this(nodeBound, COLOR_EDGE);
   }
 
   public EdgeRender() {
@@ -67,7 +73,7 @@ public class EdgeRender {
       graphics.draw(path2D);
       // ---
       if (collection.size() <= nodeBound) { // don't draw tree beyond certain node count
-        graphics.setColor(COLOR_EDGE);
+        graphics.setColor(color);
         for (StateCostNode node : collection) {
           final Point2D p1 = geometricLayer.toPoint2D(node.state());
           graphics.fill(new Rectangle2D.Double(p1.getX(), p1.getY(), NODE_WIDTH, NODE_WIDTH));

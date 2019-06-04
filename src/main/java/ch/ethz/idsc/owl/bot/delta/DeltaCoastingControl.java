@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     this.u_norm = u_norm;
   }
 
-  @Override
+  @Override // from EntityControl
   public Optional<Tensor> control(StateTime tail, Scalar now) {
     Tensor u = imageGradientInterpolation.get(tail.state());
     Scalar norm = Norm._2.ofVector(u);
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     return Optional.of(u.negate());
   }
 
-  @Override
+  @Override // from EntityControl
   public ProviderRank getProviderRank() {
     return ProviderRank.FALLBACK;
   }

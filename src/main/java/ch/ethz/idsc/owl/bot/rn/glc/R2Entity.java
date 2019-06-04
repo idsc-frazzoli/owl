@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /** @param state initial position of entity */
   public R2Entity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
-    add(new FallbackControl(Array.zeros(2)));
+    add(FallbackControl.of(Array.zeros(2)));
   }
 
   @Override

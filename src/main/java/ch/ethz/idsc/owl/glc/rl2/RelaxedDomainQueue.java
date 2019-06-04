@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RelaxedDomainQueue extends RelaxedPollingQueue {
   /** @param glcNode
-   * @param slacks Tensor of slack parameters
+   * @param slacks vector of slack parameters
    * @return relaxed lexicographic domain queue that contains given GlcNode as single element */
   public static RelaxedPriorityQueue singleton(GlcNode glcNode, Tensor slacks) {
     RelaxedPriorityQueue relaxedPriorityQueue = new RelaxedDomainQueue(slacks);

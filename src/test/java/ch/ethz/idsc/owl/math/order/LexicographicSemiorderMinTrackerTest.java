@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.tensor.Tensor;
@@ -54,19 +55,32 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     Tensor z = Tensors.fromString("{1.5,4,4}");
     Tensor w = Tensors.fromString("{-1.5,10,10}");
     assertTrue(LSMT1.getCandidateSet().isEmpty());
-    LSMT1.digest(1, x);
+    {
+      Collection<Integer> collection = LSMT1.digest(1, x);
+      assertTrue(collection.isEmpty());
+    }
     assertTrue(LSMT1.getCandidateSet().size() == 1);
     assertTrue(LSMT1.getCandidateKeys().contains(1));
     assertTrue(LSMT1.getCandidateValues().contains(x));
-    LSMT1.digest(2, y);
+    {
+      Collection<Integer> collection = LSMT1.digest(2, y);
+      assertTrue(collection.isEmpty());
+    }
     assertTrue(LSMT1.getCandidateSet().size() == 2);
     assertTrue(LSMT1.getCandidateKeys().contains(2));
     assertTrue(LSMT1.getCandidateValues().contains(y));
-    LSMT1.digest(3, z);
+    {
+      Collection<Integer> collection = LSMT1.digest(3, z);
+      assertTrue(collection.isEmpty());
+    }
     assertTrue(LSMT1.getCandidateSet().size() == 3);
     assertTrue(LSMT1.getCandidateKeys().contains(1) && LSMT1.getCandidateKeys().contains(3));
     assertTrue(LSMT1.getCandidateValues().contains(x) && LSMT1.getCandidateValues().contains(y) && LSMT1.getCandidateValues().contains(z));
-    LSMT1.digest(4, w);
+    {
+      Collection<Integer> collection = LSMT1.digest(4, w);
+      assertTrue(collection.containsAll(Arrays.asList(1, 2, 3)));
+      assertEquals(collection.size(), 3);
+    }
     assertTrue(LSMT1.getCandidateSet().size() == 1);
     assertTrue(LSMT1.getCandidateKeys().contains(4));
     assertFalse(LSMT1.getCandidateKeys().contains(1) && LSMT1.getCandidateKeys().contains(1) && LSMT1.getCandidateKeys().contains(3));
@@ -94,9 +108,16 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     assertTrue(LSMT1.getMinElements().isEmpty());
     LSMT1.digest(1, x);
     assertTrue(LSMT1.getMinElements().size() == 1);
-    LSMT1.digest(2, y);
+    {
+      Collection<Integer> collection = LSMT1.digest(2, y);
+      assertTrue(collection.contains(2));
+      assertEquals(collection.size(), 1);
+    }
     assertTrue(LSMT1.getMinElements().size() == 1);
-    LSMT1.digest(3, z);
+    {
+      Collection<Integer> collection = LSMT1.digest(3, z);
+      assertTrue(collection.isEmpty());
+    }
     assertTrue(LSMT1.getMinElements().size() == 2);
   }
 
@@ -110,7 +131,11 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     assertTrue(LSMT1.getMinKeys().isEmpty());
     LSMT1.digest(1, x);
     assertTrue(LSMT1.getMinKeys().contains(1));
-    LSMT1.digest(2, y);
+    {
+      Collection<Integer> collection = LSMT1.digest(2, y);
+      assertTrue(collection.contains(2));
+      assertEquals(collection.size(), 1);
+    }
     assertFalse(LSMT1.getMinKeys().contains(2));
     LSMT1.digest(3, z);
     assertTrue(LSMT1.getMinKeys().contains(3) && LSMT1.getMinKeys().contains(1));
@@ -198,22 +223,22 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     Tensor z = Tensors.fromString("{1.0000001,1,1}");
     assertTrue(LSMT1.getBest() == null);
     assertTrue(LSMT1.peekBestKey() == null);
-    assertTrue(LSMT1.peekBestValue() == null);
+    // assertTrue(LSMT1.peekBestValue() == null);
     LSMT1.digest("first", x);
     assertTrue(LSMT1.getBest() != null);
     assertTrue(LSMT1.peekBestKey() == "first");
-    assertTrue(LSMT1.peekBestValue() == x);
+    // assertTrue(LSMT1.peekBestValue() == x);
     LSMT1.digest("second", y);
     assertTrue(LSMT1.getBest() != null);
     assertTrue(LSMT1.peekBestKey() == "second");
-    assertTrue(LSMT1.peekBestValue() == y);
+    // assertTrue(LSMT1.peekBestValue() == y);
     LSMT1.digest("third", z);
     assertTrue(LSMT1.getBest() != null);
     assertTrue(LSMT1.peekBestKey() == "second");
-    assertTrue(LSMT1.peekBestValue() == y);
+    // assertTrue(LSMT1.peekBestValue() == y);
     assertTrue(LSMT1.getMinElements().size() == 3);
     LSMT1.digest("fourth", y);
-    assertTrue(LSMT1.peekBestValue() == y);
+    // assertTrue(LSMT1.peekBestValue() == y);
   }
 
   public void testExtractBest() {
