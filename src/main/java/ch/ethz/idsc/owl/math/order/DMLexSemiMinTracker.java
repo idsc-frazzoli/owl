@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
-import ch.ethz.idsc.owl.demo.order.TensorProductOrder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -51,7 +50,7 @@ public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
         if (productComparison.equals(OrderComparison.STRICTLY_PRECEDES)) {
           discardedKeys.add(currentPair.key());
           iterator.remove();
-          continue;
+          continue; // continue with while loop
           // if applicantPair is indifferent or worse in all dimension discard applicantPair
         } else //
         if (!productComparison.equals(OrderComparison.INCOMPARABLE)) {
@@ -64,8 +63,8 @@ public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
       for (int index = 0; index < dim; ++index) {
         Scalar x = applicantPair.value().Get(index);
         Scalar y = currentPair.value().Get(index);
-        OrderComparison semiorder = semiorderComparators.get(index).compare(x, y);
-        OrderComparison productorder = productOrderTracker.digest(x, y);
+        OrderComparison semiorder = semiorderComparators.get(index).compare(x, y); // uses ScalarSlackSemiorder
+        OrderComparison productorder = productOrderTracker.digest(x, y); // uses ScalarTotalOrder
         // if x strictly precedes the current object and it is strictly preceding
         // in every coordinate until now, then the current object will be discarded
         if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES)) {

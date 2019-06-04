@@ -41,8 +41,8 @@ public class LexicographicSemiorderMinTracker<K> extends AbstractLexSemiMinTrack
       for (int index = 0; index < dim; ++index) {
         Scalar x = applicantPair.value().Get(index);
         Scalar y = currentPair.value().Get(index);
-        OrderComparison semiorder = semiorderComparators.get(index).compare(x, y);
-        OrderComparison productorder = productOrderTracker.digest(x, y);
+        OrderComparison semiorder = semiorderComparators.get(index).compare(x, y); // uses ScalarSlackSemiorder
+        OrderComparison productorder = productOrderTracker.digest(x, y); // uses ScalarTotalOrder
         // if x strictly precedes the current object and it is strictly preceding
         // in every coordinate until now, then the current object will be discarded
         if (semiorder.equals(OrderComparison.STRICTLY_PRECEDES)) { //
