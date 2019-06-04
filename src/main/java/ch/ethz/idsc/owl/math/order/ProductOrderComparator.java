@@ -8,12 +8,13 @@ import java.util.List;
 /** Creates a product order comparator where each elements of two tuples are compared coordinatewise.
  * An element x precedes y if it precedes y in all coordinates. */
 public class ProductOrderComparator implements OrderComparator<Iterable<? extends Object>>, Serializable {
-  private final List<OrderComparator> orderComparators;
+  private final List<OrderComparator<? extends Object>> orderComparators;
 
-  public ProductOrderComparator(List<OrderComparator> orderComparators) {
+  public ProductOrderComparator(List<OrderComparator<? extends Object>> orderComparators) {
     this.orderComparators = orderComparators;
   }
 
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override // from OrderComparator
   public final OrderComparison compare(Iterable<? extends Object> x, Iterable<? extends Object> y) {
     Iterator<? extends Object> x_iterator = x.iterator();

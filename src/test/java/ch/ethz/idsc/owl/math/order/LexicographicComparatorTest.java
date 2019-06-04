@@ -16,14 +16,13 @@ import junit.framework.TestCase;
 
 public class LexicographicComparatorTest extends TestCase {
   public void testEmpty() {
-    List<OrderComparator> comparators = Arrays.asList(); //
-    LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
+    LexicographicComparator genericLexicographicOrder = new LexicographicComparator(Arrays.asList());
     List<Scalar> list = Arrays.asList();
     assertEquals(genericLexicographicOrder.compare(list, list), OrderComparison.INDIFFERENT);
   }
 
   public void testSimple() {
-    List<OrderComparator> comparators = Arrays.asList( //
+    List<OrderComparator<? extends Object>> comparators = Arrays.asList( //
         ScalarTotalOrder.INSTANCE, //
         ScalarTotalOrder.INSTANCE); //
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
@@ -33,7 +32,7 @@ public class LexicographicComparatorTest extends TestCase {
   }
 
   public void testMixed2() {
-    List<OrderComparator> comparators = Arrays.asList( //
+    List<OrderComparator<? extends Object>> comparators = Arrays.asList( //
         IntegerTotalOrder.INSTANCE, //
         SetPartialOrder.INSTANCE); //
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
@@ -47,7 +46,7 @@ public class LexicographicComparatorTest extends TestCase {
 
   public void testTensorAsIterable() {
     BinaryRelation<Tensor> relation1 = (x, y) -> x.length() <= y.length();
-    List<OrderComparator> comparators = Arrays.asList( //
+    List<OrderComparator<? extends Object>> comparators = Arrays.asList( //
         new Order<>(relation1), //
         ScalarTotalOrder.INSTANCE); //
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
@@ -58,7 +57,7 @@ public class LexicographicComparatorTest extends TestCase {
   }
 
   public void testEquality() {
-    List<OrderComparator> comparators = Arrays.asList( //
+    List<OrderComparator<? extends Object>> comparators = Arrays.asList( //
         IntegerTotalOrder.INSTANCE, //
         ScalarTotalOrder.INSTANCE, //
         EqualityOrder.INSTANCE); //

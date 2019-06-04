@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 public class ProductOrderComparatorTest extends TestCase {
   public void testSimple() {
-    List<OrderComparator> comparators = Arrays.asList( //
+    List<OrderComparator<? extends Object>> comparators = Arrays.asList( //
         ScalarTotalOrder.INSTANCE, //
         ScalarTotalOrder.INSTANCE); //
     ProductOrderComparator productOrderComparator = new ProductOrderComparator(comparators);
@@ -26,7 +26,7 @@ public class ProductOrderComparatorTest extends TestCase {
   }
 
   public void testMixed() {
-    List<OrderComparator> comparators = Arrays.asList( //
+    List<OrderComparator<? extends Object>> comparators = Arrays.asList( //
         IntegerTotalOrder.INSTANCE, //
         SetPartialOrder.INSTANCE, //
         EqualityOrder.INSTANCE); //
@@ -47,7 +47,7 @@ public class ProductOrderComparatorTest extends TestCase {
 
   public void testTensor() {
     BinaryRelation<Tensor> relation1 = (x, y) -> x.length() <= y.length();
-    List<OrderComparator> comparators = Arrays.asList( //
+    List<OrderComparator<? extends Object>> comparators = Arrays.asList( //
         new Order<>(relation1), //
         ScalarTotalOrder.INSTANCE); //
     ProductOrderComparator genericProductOrder = new ProductOrderComparator(comparators);
