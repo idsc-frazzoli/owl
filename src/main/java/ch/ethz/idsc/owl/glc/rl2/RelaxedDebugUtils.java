@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.io.UserName;
 
 public enum RelaxedDebugUtils {
   ;
-  private static final boolean PRINT = !UserName.is("travis");
+  private static final boolean PRINT = !(UserName.is("travis") || UserName.is("datahaki"));
 
   /** @param collection of RelaxedPriorityQueue's
    * @return collection of all GlcNodes managed by the given collection of RelaxedPriorityQueue's */
