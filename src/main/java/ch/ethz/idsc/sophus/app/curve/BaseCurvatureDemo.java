@@ -51,9 +51,12 @@ abstract class BaseCurvatureDemo extends CurvatureDemo {
     Tensor control = getGeodesicControlPoints();
     if (Tensors.isEmpty(control))
       return Tensors.empty();
+    // if (jToggleSymi.isSelected())
+    // graphics.drawImage(symLinkImage().bufferedImage(), 0, 0, null);
     return protected_render(geometricLayer, graphics, spinnerDegree.getValue(), spinnerRefine.getValue(), control);
   }
 
   protected abstract Tensor protected_render( //
       GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control);
+  // protected abstract SymLinkImage symLinkImage();
 }

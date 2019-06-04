@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import javax.swing.JSlider;
@@ -13,7 +14,6 @@ import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicAdaptiveCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicAdaptiveCenterFilter;
-import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -57,9 +57,12 @@ public class GeodesicAdaptiveCenterFilterDemo extends DatasetKernelDemo {
     refined = Nest.of( //
         GeodesicAdaptiveCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
         control(), spinnerConvolution.getValue());
-    if (jToggleSymi.isSelected())
-      graphics.drawImage(SymLinkImages.geodesicCenter(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage(), 0, 0, null);
     return refined;
+  }
+
+  @Override
+  protected BufferedImage symLinkImage() {
+    return GeodesicCenterFilterDemo.symLinkImage(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage();
   }
 
   public static void main(String[] args) {

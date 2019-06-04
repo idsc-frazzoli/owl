@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import javax.swing.JSlider;
 
@@ -21,8 +22,10 @@ import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
 import ch.ethz.idsc.sophus.math.CentripetalKnotSpacingHelper;
 import ch.ethz.idsc.sophus.math.KnotSpacingSchemes;
+import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
+import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -30,6 +33,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
   private final SpinnerLabel<KnotSpacingSchemes> spinnerKnotSpacing = new SpinnerLabel<>();
@@ -73,7 +77,7 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, control);
     if (jToggleSymi.isSelected()) {
       GeodesicDeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
-      SymLinkImage symLinkImage = SymLinkImages.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
+      SymLinkImage symLinkImage = KnotsBSplineFunctionDemo.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
       graphics.drawImage(symLinkImage.bufferedImage(), 0, 0, null);
     }
     // ---
@@ -93,6 +97,17 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
     if (levels < 5)
       renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
+  }
+
+  public static SymLinkImage deboor(GeodesicDeBoor geodesicDeBoor, int length, Scalar scalar) {
+    Tensor knots = geodesicDeBoor.knots();
+    Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
+    // Tensor vector = knots.map(s->s.subtract(knots.Get(0))).map(SymScalar::leaf);
+    ScalarTensorFunction scalarTensorFunction = GeodesicDeBoor.of(SymGeodesic.INSTANCE, knots, vector);
+    Tensor tensor = scalarTensorFunction.apply(scalar);
+    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, SymLinkImages.FONT_SMALL);
+    symLinkImage.title("DeBoor at " + scalar);
+    return symLinkImage;
   }
 
   public static void main(String[] args) {

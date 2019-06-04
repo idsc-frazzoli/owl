@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
@@ -61,6 +62,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   @Override
   protected String plotLabel() {
     return super.plotLabel() + " " + alpha();
+  }
+
+  @Override
+  protected BufferedImage symLinkImage() {
+    return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
   }
 
   public static void main(String[] args) {

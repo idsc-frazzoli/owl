@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,13 +15,13 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.curve.KnotsBSplineFunctionDemo;
 import ch.ethz.idsc.sophus.app.misc.PolyDuckietownData;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
 import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
-import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -79,11 +80,6 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
-    if (jToggleSymi.isSelected()) {
-      GeodesicDeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
-      SymLinkImage symLinkImage = SymLinkImages.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
-      graphics.drawImage(symLinkImage.bufferedImage(), 0, 0, null);
-    }
     GraphicsUtil.setQualityHigh(graphics);
     Tensor refined = Subdivide.of(RealScalar.ZERO, upper, Math.max(1, control.length() * (1 << levels))).map(scalarTensorFunction);
     {
@@ -106,5 +102,23 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
     AbstractDemo abstractDemo = new DuckietownSmoothingDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
+  }
+
+  @Override
+  protected BufferedImage symLinkImage() {
+    final int degree = spinnerDegree.getValue();
+    final int levels = spinnerRefine.getValue();
+    final Tensor control = control();
+    Tensor effective = control;
+    CentripetalKnotSpacing centripedalKnotSpacing = new CentripetalKnotSpacing(geodesicDisplay()::parametricDistance, RealScalar.of(.5));
+    Tensor knots = centripedalKnotSpacing.apply(control);
+    final Scalar upper = (Scalar) Last.of(knots);
+    final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    GeodesicBSplineFunction scalarTensorFunction = //
+        GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
+    GeodesicDeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
+    SymLinkImage symLinkImage = KnotsBSplineFunctionDemo.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
+    return symLinkImage.bufferedImage();
   }
 }

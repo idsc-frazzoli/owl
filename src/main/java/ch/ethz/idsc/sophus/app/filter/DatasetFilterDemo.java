@@ -5,6 +5,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import javax.swing.JToggleButton;
@@ -32,7 +33,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   // ---
   final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
-  protected final JToggleButton jToggleSymi = new JToggleButton("graph");
+  final JToggleButton jToggleSymi = new JToggleButton("graph");
 
   public DatasetFilterDemo(List<GeodesicDisplay> list) {
     super(list);
@@ -61,6 +62,10 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
       }
     }
     Tensor refined = protected_render(geometricLayer, graphics);
+    // ---
+    if (jToggleSymi.isSelected())
+      graphics.drawImage(symLinkImage(), 0, 0, null);
+    // ---
     graphics.setStroke(new BasicStroke(1f));
     if (jToggleConv.isSelected()) {
       pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
@@ -88,4 +93,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   protected abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
 
   protected abstract void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined);
+
+  protected abstract BufferedImage symLinkImage();
 }

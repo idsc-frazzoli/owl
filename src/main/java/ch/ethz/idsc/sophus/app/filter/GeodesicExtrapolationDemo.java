@@ -2,12 +2,17 @@
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolationFilter;
-import ch.ethz.idsc.sophus.sym.SymLinkImages;
+import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.sym.SymGeodesic;
+import ch.ethz.idsc.sophus.sym.SymLinkImage;
+import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -17,6 +22,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   public GeodesicExtrapolationDemo() {
     updateState();
+    jToggleSymi.setSelected(true);
   }
 
   @Override
@@ -30,9 +36,19 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (jToggleSymi.isSelected())
-      graphics.drawImage(SymLinkImages.extrapolation(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage(), 0, 0, null);
     return refined;
+  }
+
+  @Override
+  protected BufferedImage symLinkImage() {
+    SmoothingKernel smoothingKernel = spinnerKernel.getValue();
+    int radius = spinnerRadius.getValue();
+    TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(SymGeodesic.INSTANCE, smoothingKernel);
+    Tensor vector = Tensor.of(IntStream.range(0, radius + 1).mapToObj(SymScalar::leaf));
+    Tensor tensor = tensorUnaryOperator.apply(vector);
+    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, SymLinkImage.FONT_SMALL);
+    symLinkImage.title(smoothingKernel.name() + "[" + (radius + 1) + "]");
+    return symLinkImage.bufferedImage();
   }
 
   public static void main(String[] args) {

@@ -3,6 +3,8 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.stream.IntStream;
 
 import javax.swing.JSlider;
 
@@ -10,10 +12,14 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.filter.Regularization2Step;
+import ch.ethz.idsc.sophus.sym.SymGeodesic;
+import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
+import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class Regularization2StepDemo extends UniformDatasetFilterDemo {
@@ -32,9 +38,6 @@ import ch.ethz.idsc.tensor.sca.N;
     final GeodesicDisplay geodesicDisplay = geodesicDisplay();
     final Scalar factor = factor();
     // ---
-    if (jToggleSymi.isSelected())
-      graphics.drawImage(SymLinkImages.regularization2Step(factor).bufferedImage(), 0, 0, null);
-    // ---
     return Regularization2Step.string(geodesicDisplay.geodesicInterface(), N.DOUBLE.apply(factor)).apply(control());
   }
 
@@ -45,6 +48,17 @@ import ch.ethz.idsc.tensor.sca.N;
 
   private Scalar factor() {
     return RationalScalar.of(jSlider.getValue(), jSlider.getMaximum());
+  }
+
+  @Override
+  protected BufferedImage symLinkImage() {
+    Scalar factor = factor();
+    TensorUnaryOperator tensorUnaryOperator = Regularization2Step.string(SymGeodesic.INSTANCE, factor);
+    Tensor vector = Tensor.of(IntStream.range(0, 3).mapToObj(SymScalar::leaf));
+    Tensor tensor = tensorUnaryOperator.apply(vector);
+    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor.get(1), SymLinkImages.FONT_SMALL);
+    symLinkImage.title("Regularization2Step [" + factor + "]");
+    return symLinkImage.bufferedImage();
   }
 
   public static void main(String[] args) {
