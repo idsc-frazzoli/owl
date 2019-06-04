@@ -1,6 +1,7 @@
 // code by astoll, ynager
 package ch.ethz.idsc.owl.bot.rn.glc;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,7 +29,10 @@ import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
+import ch.ethz.idsc.owl.gui.ren.DomainRender;
+import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.ren.EtaRender;
+import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -58,14 +62,16 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
   int n = 2;
   final Tensor eta = Tensors.vector(n, n);
   // -------- StateIntegrator --------
-  final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(4, 7), 1);
+  final Scalar timeStep = RationalScalar.of(4, 7);
+  final StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, timeStep, 1);
   // -------- GoalInterface --------
   final Tensor stateGoal = Tensors.vector(5, 0);
   final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
-  private final Tensor POLYGON = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
-  private final PolygonRegion POLYGON_REGION = new PolygonRegion(POLYGON);
+  final RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
+  private final Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
+  private final PolygonRegion polygonRegion = new PolygonRegion(polygon);
 
-  public StandardRelaxedLexicographicPlanner setupPlanner() {
+  public StandardRelaxedLexicographicPlanner createPlanner() {
     // -------- stateTimeRaster --------
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     // -------- controls --------
@@ -74,11 +80,12 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     for (Flow flow : controls)
       ExactTensorQ.require(flow.getU());
     // -------- GoalInterface --------
-    RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
     // --
     CostFunction distanceCost = new CostFunction() {
       @Override // from CostIncrementFunction
       public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+        // System.out.println(Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()));
+        // return timeStep; <- not possible for
         return Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()); // ||x_prev - x_next||
       }
 
@@ -88,47 +95,57 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
       }
     };
     // --
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(POLYGON_REGION);
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, Quantity.of(2, ""));
     // ---
     GoalInterface goalInterface = //
         new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost), goalRegion);
     // -------------------------------
     return new StandardRelaxedLexicographicPlanner( //
-        stateTimeRaster, STATE_INTEGRATOR, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
+        stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
   }
 
   @Override // from DemoInterface
   public BaseFrame start() {
-    RelaxedTrajectoryPlanner rlPlanner = setupPlanner();
-    final Tensor stateRoot = Tensors.vector(0, 0);
-    rlPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
-    RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(rlPlanner);
+    RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = createPlanner();
+    final Tensor stateRoot = Tensors.vector(0.1, 0.1);
+    relaxedTrajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
+    RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(relaxedTrajectoryPlanner);
     Timing timing = Timing.started();
     // glcExpand.findAny(1000);
     glcExpand.untilOptimal(1000);
     System.out.println("Execution Time: " + timing.seconds());
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
-    owlyAnimationFrame.addBackground(new PolygonRegionRender(POLYGON_REGION));
+    owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
     owlyAnimationFrame.addBackground(new EtaRender(eta));
-    Optional<GlcNode> optional = rlPlanner.getBest();
+    owlyAnimationFrame.addBackground(new DomainRender(relaxedTrajectoryPlanner.getDomainMap(), eta));
+    owlyAnimationFrame.addBackground(new SphericalRegionRender((SphericalRegion) goalRegion));
+    {
+      EdgeRender treeRender = new EdgeRender(1000, Color.BLUE);
+      Collection<GlcNode> collection;
+      collection = relaxedTrajectoryPlanner.getDomainMap().values();
+      collection = RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner);
+      treeRender.setCollection(collection);
+      owlyAnimationFrame.addBackground(treeRender.getRender());
+    }
+    Optional<GlcNode> optional = relaxedTrajectoryPlanner.getBest();
     if (optional.isPresent()) {
       System.out.println(optional.get().merit());
-      Iterator<GlcNode> bestGoalNodes = rlPlanner.getAllNodesInGoal().iterator();
+      Iterator<GlcNode> bestGoalNodes = relaxedTrajectoryPlanner.getAllNodesInGoal().iterator();
       while (bestGoalNodes.hasNext()) {
         GlcNode goalNode = bestGoalNodes.next();
         System.out.println(goalNode.merit());
         // System.out.println(goalNode.costFromRoot());
-        List<TrajectorySample> trajectory = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, goalNode);
+        List<TrajectorySample> trajectory = GlcTrajectories.detailedTrajectoryTo(stateIntegrator, goalNode);
         TrajectoryRender trajectoryRender = new TrajectoryRender();
         trajectoryRender.trajectory(trajectory);
         owlyAnimationFrame.addBackground(trajectoryRender);
       }
     }
     // ---
-    RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(rlPlanner);
-    RelaxedDebugUtils.nodeAmountCompare(rlPlanner);
-    DebugUtils.assertAllLeaf(rlPlanner.getQueue());
+    RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(relaxedTrajectoryPlanner);
+    RelaxedDebugUtils.nodeAmountCompare(relaxedTrajectoryPlanner);
+    DebugUtils.assertAllLeaf(relaxedTrajectoryPlanner.getQueue());
     // RelaxedDebugUtils.closeMatchesCheck(rlPlanner);
     return owlyAnimationFrame;
   }

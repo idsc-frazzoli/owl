@@ -44,7 +44,7 @@ public enum TestHelper {
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     // -------- StateIntegrator --------
     Scalar timeStep = RationalScalar.of(4, 7);
-    final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, timeStep, 1);
+    final StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, timeStep, 1);
     // -------- controls --------
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(4);
@@ -77,6 +77,6 @@ public enum TestHelper {
         new VectorCostGoalAdapter(Arrays.asList(distanceCost, regionCost), goalRegion);
     // -------------------------------
     return new StandardRelaxedLexicographicPlanner( //
-        stateTimeRaster, STATE_INTEGRATOR, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
+        stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface, slacks);
   }
 }

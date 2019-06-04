@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -142,8 +144,8 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
 
   @Override // from TrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
-    // LONGTERM investigate unified design
-    throw new UnsupportedOperationException();
+    return domainMap.getMap().entrySet().stream() //
+        .collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().peekBest()));
   }
 
   @Override // from TrajectoryPlanner

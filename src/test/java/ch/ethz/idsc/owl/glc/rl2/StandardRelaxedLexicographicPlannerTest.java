@@ -21,10 +21,10 @@ public class StandardRelaxedLexicographicPlannerTest extends TestCase {
     Tensor stateRoot = Tensors.vector(0, 0);
     relaxedTrajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     assertFalse(relaxedTrajectoryPlanner.getQueue().isEmpty());
-    assertEquals(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).size(), 1);
+    assertEquals(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner).size(), 1);
     relaxedTrajectoryPlanner.pollNext();
     assertTrue(relaxedTrajectoryPlanner.getQueue().isEmpty());
-    assertFalse(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()).isEmpty());
+    assertFalse(RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner).isEmpty());
   }
 
   public void testAddToGlobal() {
