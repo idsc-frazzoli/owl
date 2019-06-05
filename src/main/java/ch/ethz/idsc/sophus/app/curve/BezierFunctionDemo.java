@@ -44,6 +44,8 @@ public class BezierFunctionDemo extends CurvatureDemo {
     // ---
     Tensor control = getGeodesicControlPoints();
     int n = control.length();
+    if (0 == n)
+      return Tensors.empty();
     ScalarTensorFunction scalarTensorFunction = BezierFunction.of(geodesicDisplay.geodesicInterface(), control);
     int levels = spinnerRefine.getValue();
     Tensor domain = n <= 1 //
