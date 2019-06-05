@@ -68,8 +68,8 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
     Tensor pR = tensor.get(radius);
     for (int index = 0; index < radius;) {
       Scalar scalar = splits.Get(index++);
-      pL = geodesicInterface.split(tensor.get(radius - index), pL, RealScalar.ONE.subtract(scalar));
-      pR = geodesicInterface.split(pR, tensor.get(radius + index), scalar);
+      pL = geodesicInterface.split(tensor.get(radius - index), pL, scalar);
+      pR = geodesicInterface.split(pR, tensor.get(radius + index), RealScalar.ONE.subtract(scalar));
     }
     return geodesicInterface.split(pL, pR, RationalScalar.HALF);
   }
@@ -82,12 +82,12 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
       throw TensorRuntimeException.of(mask);
     SymmetricVectorQ.require(mask);
     int radius = (mask.length() - 1) / 2;
-    Tensor halfmask = Tensors.vector(i -> i == 0 //
-        ? mask.Get(radius + i).divide(TWO)
-        : mask.Get(radius + i), radius + 1);
-    Scalar factor = halfmask.Get(0);
+    Tensor halfmask = Tensors.vector(i -> i == radius //
+        ? mask.Get(i).divide(TWO)
+        : mask.Get(i), radius + 1);
+    Scalar factor = halfmask.Get(radius);
     Tensor splits = Tensors.empty();
-    for (int index = 1; index <= radius; ++index) {
+    for (int index = radius - 1; index >= 0; --index) {
       Scalar lambda = factor.divide(factor.add(halfmask.Get(index)));
       factor = factor.add(halfmask.Get(index));
       splits.append(lambda);
