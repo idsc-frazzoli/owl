@@ -3,23 +3,24 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterTangentSpace;
-import ch.ethz.idsc.sophus.sym.SymLinkImages;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
-public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo {
+public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo implements BufferedImageSupplier {
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
   private Tensor refined = Tensors.empty();
   final JToggleButton jToggleTS = new JToggleButton("TangentSpace");
@@ -62,9 +63,12 @@ public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo {
           GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
           control(), spinnerConvolution.getValue());
     }
-    if (jToggleSymi.isSelected())
-      graphics.drawImage(SymLinkImages.geodesicCenter(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage(), 0, 0, null);
     return refined;
+  }
+
+  @Override // from BufferedImageSupplier
+  public BufferedImage bufferedImage() {
+    return GeodesicCenterFilterDemo.symLinkImage(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage();
   }
 
   public static void main(String[] args) {

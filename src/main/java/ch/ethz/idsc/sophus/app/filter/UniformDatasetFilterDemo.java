@@ -48,18 +48,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   public UniformDatasetFilterDemo() {
     super(GeodesicDisplays.CLOTH_SE2_R2);
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
-    // ---
-    jToggleWait.setSelected(false);
-    timerFrame.jToolBar.add(jToggleWait);
-    // ---
-    jToggleDiff.setSelected(true);
-    timerFrame.jToolBar.add(jToggleDiff);
-    // ---
-    jToggleData.setSelected(true);
-    timerFrame.jToolBar.add(jToggleData);
-    // ---
-    jToggleConv.setSelected(true);
-    timerFrame.jToolBar.add(jToggleConv);
     {
       spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.vector"));
       spinnerLabelString.addSpinnerListener(type -> updateState());
@@ -72,9 +60,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
-    timerFrame.jToolBar.addSeparator();
-    // ---
-    timerFrame.jToolBar.add(jToggleSymi);
   }
 
   /** @return */
