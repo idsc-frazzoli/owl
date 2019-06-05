@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -68,11 +67,6 @@ import ch.ethz.idsc.tensor.red.Total;
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     // TODO OB display new splits
     return refined;
-  }
-
-  @Override
-  protected BufferedImage symLinkImage() {
-    return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
   }
 
   public static void main(String[] args) {

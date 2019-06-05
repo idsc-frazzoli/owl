@@ -10,6 +10,7 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
@@ -19,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
-public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo {
+public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo implements BufferedImageSupplier {
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
   private Tensor refined = Tensors.empty();
   final JToggleButton jToggleTS = new JToggleButton("TangentSpace");
@@ -65,8 +66,8 @@ public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo {
     return refined;
   }
 
-  @Override
-  protected BufferedImage symLinkImage() {
+  @Override // from BufferedImageSupplier
+  public BufferedImage bufferedImage() {
     return GeodesicCenterFilterDemo.symLinkImage(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage();
   }
 

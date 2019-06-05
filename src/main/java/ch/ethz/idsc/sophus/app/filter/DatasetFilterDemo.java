@@ -5,7 +5,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 import javax.swing.JToggleButton;
@@ -13,6 +12,7 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
@@ -22,27 +22,38 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
 /* package */ abstract class DatasetFilterDemo extends GeodesicDisplayDemo {
-  static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
-  static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
-  static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
+  private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
+  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
+  private static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
   // ---
-  final JToggleButton jToggleWait = new JToggleButton("wait");
-  final JToggleButton jToggleDiff = new JToggleButton("diff");
-  final JToggleButton jToggleData = new JToggleButton("data");
-  final JToggleButton jToggleConv = new JToggleButton("conv");
+  private final JToggleButton jToggleDiff = new JToggleButton("diff");
+  private final JToggleButton jToggleData = new JToggleButton("data");
+  private final JToggleButton jToggleConv = new JToggleButton("conv");
   // ---
-  final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
-  final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
-  final JToggleButton jToggleSymi = new JToggleButton("graph");
+  private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
+  private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
+  private final JToggleButton jToggleSymi = new JToggleButton("graph");
 
   public DatasetFilterDemo(List<GeodesicDisplay> list) {
     super(list);
+    // ---
+    jToggleDiff.setSelected(true);
+    timerFrame.jToolBar.add(jToggleDiff);
+    // ---
+    jToggleData.setSelected(true);
+    timerFrame.jToolBar.add(jToggleData);
+    // ---
+    jToggleConv.setSelected(true);
+    timerFrame.jToolBar.add(jToggleConv);
+    // ---
+    if (this instanceof BufferedImageSupplier) {
+      jToggleSymi.setSelected(true);
+      timerFrame.jToolBar.add(jToggleSymi);
+    }
   }
 
   @Override
   public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (jToggleWait.isSelected())
-      return;
     GRID_RENDER.render(geometricLayer, graphics);
     Tensor control = control();
     GraphicsUtil.setQualityHigh(graphics);
@@ -63,8 +74,11 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     }
     Tensor refined = protected_render(geometricLayer, graphics);
     // ---
-    if (jToggleSymi.isSelected())
-      graphics.drawImage(symLinkImage(), 0, 0, null);
+    if (this instanceof BufferedImageSupplier && //
+        jToggleSymi.isSelected()) {
+      BufferedImageSupplier bufferedImageSupplier = (BufferedImageSupplier) this;
+      graphics.drawImage(bufferedImageSupplier.bufferedImage(), 0, 0, null);
+    }
     // ---
     graphics.setStroke(new BasicStroke(1f));
     if (jToggleConv.isSelected()) {
@@ -93,6 +107,4 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   protected abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
 
   protected abstract void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined);
-
-  protected abstract BufferedImage symLinkImage();
 }

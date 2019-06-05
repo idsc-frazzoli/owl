@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JToggleButton;
 
@@ -52,10 +51,5 @@ public class NonuniformGeodesicCenterFilterDemo extends NavigableMapDatasetKerne
     AbstractDemo abstractDemo = new NonuniformGeodesicCenterFilterDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
-  }
-
-  @Override
-  protected BufferedImage symLinkImage() {
-    return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
   }
 }

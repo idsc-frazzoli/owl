@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolationFilter;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
@@ -17,12 +18,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class GeodesicExtrapolationDemo extends DatasetKernelDemo {
+/* package */ class GeodesicExtrapolationDemo extends DatasetKernelDemo implements BufferedImageSupplier {
   private Tensor refined = Tensors.empty();
 
   public GeodesicExtrapolationDemo() {
     updateState();
-    jToggleSymi.setSelected(true);
   }
 
   @Override
@@ -39,8 +39,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     return refined;
   }
 
-  @Override
-  protected BufferedImage symLinkImage() {
+  @Override // from BufferedImageSupplier
+  public BufferedImage bufferedImage() {
     SmoothingKernel smoothingKernel = spinnerKernel.getValue();
     int radius = spinnerRadius.getValue();
     TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(SymGeodesic.INSTANCE, smoothingKernel);

@@ -14,6 +14,7 @@ import javax.swing.JSlider;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.curve.KnotsBSplineFunctionDemo;
 import ch.ethz.idsc.sophus.app.misc.PolyDuckietownData;
@@ -29,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
-public class DuckietownSmoothingDemo extends DatasetKernelDemo {
+public class DuckietownSmoothingDemo extends DatasetKernelDemo implements BufferedImageSupplier {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   public static final List<String> LIST = Arrays.asList( //
       "duckie20180713-175124.csv", //
@@ -105,7 +106,7 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo {
   }
 
   @Override
-  protected BufferedImage symLinkImage() {
+  public BufferedImage bufferedImage() {
     final int degree = spinnerDegree.getValue();
     final int levels = spinnerRefine.getValue();
     final Tensor control = control();

@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.filter.Se2BiinvariantMeanCenter;
@@ -30,11 +29,6 @@ public class Se2BiinvariantMeanFilterDemo extends DatasetKernelDemo {
     TensorUnaryOperator tensorUnaryOperator = Se2BiinvariantMeanCenter.of(SmoothingKernel.GAUSSIAN);
     refined = Se2BiinvariantMeanFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
     return refined;
-  }
-
-  @Override
-  protected BufferedImage symLinkImage() {
-    return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
   }
   // FIXME OB: Fehler mit Mod[2*Pi]?
   // public static void main(String[] args) {
