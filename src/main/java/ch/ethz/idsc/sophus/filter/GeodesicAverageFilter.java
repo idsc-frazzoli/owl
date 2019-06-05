@@ -25,7 +25,6 @@ public class GeodesicAverageFilter implements TensorUnaryOperator {
     this.weightlength = weightlength;
   }
 
-  // TODO OB check if this is correct => make a dependence on causal/smoothing tree
   @Override
   public Tensor apply(Tensor tensor) {
     Tensor result = Tensors.empty();

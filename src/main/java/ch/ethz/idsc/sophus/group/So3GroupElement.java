@@ -27,9 +27,9 @@ public class So3GroupElement implements LieGroupElement {
     return matrix.dot(OrthogonalMatrixQ.require(tensor));
   }
 
+  // Source: http://ethaneade.com/lie.pdf
   @Override // from LieGroupElement
   public Tensor adjoint(Tensor tensor) {
-    // TODO OB provide reference
     return matrix.dot(tensor);
   }
 }
