@@ -31,6 +31,8 @@ import ch.ethz.idsc.tensor.sca.Tan;
 public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
   INSTANCE;
   // ---
+  private static final Scalar ZERO = RealScalar.ZERO;
+
   private static Tensor M(Scalar angle) {
     if (Scalars.isZero(angle))
       return IdentityMatrix.of(2);
@@ -45,21 +47,33 @@ public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
   @Override // from BiinvariantMeanInterface
   public Tensor mean(Tensor sequence, Tensor weights) {
     // TODO OB: interestingly the filtering performance is lowered when checking this condition
-    // try {
-    // checkValidity(sequence);
-    // } catch (Exception exception) {
-    // return sequence.get((sequence.length()-1)/2);
-    // }
+    // because the spots where the condition actually fails are filtered well
+    try {
+      checkValidity(sequence);
+      // FIXME OB: This is a ugly fix to make the data exportable. Using the assumption that the angles are all close
+    } catch (Exception exception) {
+      Scalar a1 = sequence.get(0).Get(2);
+      Se2GroupElement preTransfer = new Se2GroupElement(Tensors.of(ZERO, ZERO, Pi.VALUE));
+      Tensor sequencePreTransfered = Tensor.of(sequence.stream().map(xya -> preTransfer.inverse().combine(xya)));
+      Scalar amean = a1.add(weights.dot(Tensor.of(sequencePreTransfered.stream().map(xya -> a1.negate().add(xya.Get(2))))));
+      // make transformation s.t. mean rotation is zero and retransformation after taking mean
+      Se2GroupElement transfer = new Se2GroupElement(Tensors.of(ZERO, ZERO, amean));
+      Tensor sequenceTransferred = Tensor.of(sequencePreTransfered.stream().map(xya -> transfer.inverse().combine(xya)));
+      Tensor invZ = Inverse.of(weights.dot(Tensor.of(sequenceTransferred.stream().map(xya -> M(xya.Get(2).negate())))));
+      Tensor tmean = weights.dot(Tensor.of(sequenceTransferred.stream().map( //
+          xya -> invZ.dot(M(xya.Get(2).negate()).dot(RotationMatrix.of(xya.Get(2).negate()).dot(xya.extract(0, 2)))))));
+      return preTransfer.combine(transfer.combine(tmean.append(ZERO)));
+    }
     AffineQ.requirePositive(weights);
-    // transfer middle element to the identity element and retransfer it after calculation of the mean
-    Se2GroupElement transfer = new Se2GroupElement(sequence.get((sequence.length() - 1) / 2));
+    Scalar a1 = sequence.get(0).Get(2);
+    Scalar amean = a1.add(weights.dot(Tensor.of(sequence.stream().map(xya -> a1.negate().add(xya.Get(2))))));
+    // make transformation s.t. mean rotation is zero and retransformation after taking mean
+    Se2GroupElement transfer = new Se2GroupElement(Tensors.of(ZERO, ZERO, amean));
     Tensor sequenceTransferred = Tensor.of(sequence.stream().map(xya -> transfer.inverse().combine(xya)));
-    Scalar a1 = sequenceTransferred.get(0).Get(2);
-    Scalar amean = a1.add(weights.dot(Tensor.of(sequenceTransferred.stream().map(xya -> a1.negate().add(xya.Get(2))))));
-    Tensor invZ = Inverse.of(weights.dot(Tensor.of(sequenceTransferred.stream().map(xya -> M(amean.subtract(xya.Get(2)))))));
+    Tensor invZ = Inverse.of(weights.dot(Tensor.of(sequenceTransferred.stream().map(xya -> M(xya.Get(2).negate())))));
     Tensor tmean = weights.dot(Tensor.of(sequenceTransferred.stream().map( //
-        xya -> invZ.dot(M(amean.subtract(xya.get(2))).dot(RotationMatrix.of(xya.Get(2).negate()).dot(xya.extract(0, 2)))))));
-    return transfer.combine(tmean.append(amean));
+        xya -> invZ.dot(M(xya.Get(2).negate()).dot(RotationMatrix.of(xya.Get(2).negate()).dot(xya.extract(0, 2)))))));
+    return transfer.combine(tmean.append(ZERO));
   }
 
   /** @param sequence of elements in SE(2) of shape (x,y,heading)
@@ -72,6 +86,7 @@ public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
     Scalar minAngle = angles.stream().reduce(Min::of).get().Get();
     Scalar maxAngle = angles.stream().reduce(Max::of).get().Get();
     if (Scalars.lessThan(supremum, Abs.FUNCTION.apply(minAngle.subtract(maxAngle)))) {
+      // System.out.println(minAngle + " " + maxAngle);
       throw TensorRuntimeException.of(supremum, minAngle, maxAngle);
     }
   }

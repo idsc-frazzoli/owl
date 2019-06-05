@@ -6,21 +6,20 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterTangentSpace;
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
+import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class FrequencyEffectDataExport {
-  private static final SmoothingKernel SMOOTHING_KERNEL = SmoothingKernel.GAUSSIAN;
-
-  private static void export(Tensor tensor, String name, int index, int radius) throws IOException {
+  // private final static SmoothingKernel SMOOTHING_KERNEL = SmoothingKernel.GAUSSIAN;
+  private static void export(Tensor tensor, String filterType, int index, int radius, SmoothingKernel smoothingKernel) throws IOException {
     // TODO OB use Export
-    try (FileWriter writer = new FileWriter("200519" + "GCF" + radius + name + index + ".csv")) {
+    try (FileWriter writer = new FileWriter("030619_" + filterType + "_" + smoothingKernel.toString() + "_" + radius + "_" + index + ".csv")) {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < tensor.length(); i++) {
         sb.append(tensor.get(i).Get(0).toString());
@@ -34,39 +33,44 @@ public class FrequencyEffectDataExport {
     }
   }
 
-  public static void process(Tensor control, int index, int radius) {
-    // process data and map to se2
-    // TensorUnaryOperator geodesicCenter = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
-    TensorUnaryOperator geodesicCenterTangentSpace = GeodesicCenterTangentSpace.of( //
-        Se2CoveringGroup.INSTANCE, Se2CoveringExponential.INSTANCE, SMOOTHING_KERNEL);
-    Tensor groupSmoothed = GeodesicCenterFilter.of(geodesicCenterTangentSpace, radius).apply(control);
-    Tensor groupRaw = control;
-    Tensor algebraSmoothed = Tensor.of(groupSmoothed.stream().map(xya -> Se2CoveringExponential.INSTANCE.log(xya)));
-    Tensor algebraRaw = Tensor.of(control.stream().map(xya -> Se2CoveringExponential.INSTANCE.log(xya)));
-    // export data to .txt
+  public static void processFilterComparison(Tensor control, int index, int radius, SmoothingKernel smoothingKernel) {
+    // ==================== GeodesicCenter(Lefteeded) (Normal) ===========
+    TensorUnaryOperator geodesicLeftSeeded = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
+    Tensor groupSmoothedGCL = GeodesicCenterFilter.of(geodesicLeftSeeded, radius).apply(control);
+    // ==================== GeodesicCenter(MidSeeded) ====================
+    TensorUnaryOperator geodesicMidSeeded = GeodesicCenterMidSeeded.of(Se2Geodesic.INSTANCE, smoothingKernel);
+    Tensor groupSmoothedGCM = GeodesicCenterFilter.of(geodesicMidSeeded, radius).apply(control);
+    // ==================== TangentSpaceFiltering ====================
+    // TensorUnaryOperator geodesicCenterTangentSpace = GeodesicCenterTangentSpace.of( //
+    // Se2CoveringGroup.INSTANCE, Se2CoveringExponential.INSTANCE, smoothingKernel);
+    // Tensor groupSmoothedGCTS = GeodesicCenterFilter.of(geodesicCenterTangentSpace, radius).apply(control);
+    // // ==================== BiinvariantMeanFilter =================
+    // TensorUnaryOperator geodesicBiinvariantMean = Se2BiinvariantMeanCenter.of(smoothingKernel);
+    // Tensor groupSmoothedGBM = Se2BiinvariantMeanFilter.of(geodesicBiinvariantMean, radius).apply(control);
     try {
-      // lie Algebra
-      export(algebraSmoothed, "AlgebraSmoothed", index, radius);
-      export(algebraRaw, "AlgebraRaw", index, radius);
-      // lie Group
-      export(groupSmoothed, "GroupSmoothed", index, radius);
-      export(groupRaw, "GroupRaw", index, radius);
+      export(groupSmoothedGCL, "GCLeftSeeded", index, radius, smoothingKernel);
+      export(groupSmoothedGCM, "GCMidSeeded", index, radius, smoothingKernel);
+      // export(groupSmoothedGCTS, "TangentSpace", index, radius, smoothingKernel);
+      // export(groupSmoothedGBM, "Biinvariant", index, radius, smoothingKernel);
+      // export(control, "GroupRaw", index, radius, smoothingKernel);
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   public static void main(String[] args) {
-    for (int radius = 1; radius < 11; ++radius) {
+    for (int radius = 1; radius < 20; ++radius) {
       List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
       Iterator<String> iterator = list.iterator();
       int index = 0;
-      while (iterator.hasNext() && index < 120) {
-        Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
-            iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
-        System.out.println(radius + " " + index);
-        index++;
-        process(control, index, radius);
+      for (SmoothingKernel sk : SmoothingKernel.values()) {
+        while (iterator.hasNext() && index < 200) {
+          Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
+              iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
+          index++;
+          System.out.println(radius + " " + sk + " " + index);
+          processFilterComparison(control, index, radius, sk);
+        }
       }
     }
   }
