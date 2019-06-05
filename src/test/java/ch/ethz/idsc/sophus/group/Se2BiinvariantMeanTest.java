@@ -1,8 +1,6 @@
 // code by ob
 package ch.ethz.idsc.sophus.group;
 
-import java.util.stream.IntStream;
-
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -97,10 +95,6 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Chop._14.requireClose(actual1, actual3);
   }
 
-  private static Tensor order(Tensor tensor, int[] index) {
-    return Tensor.of(IntStream.of(index).mapToObj(tensor::get));
-  }
-
   public void testOrderInvariance2() {
     Tensor p = Tensors.vector(4.9, 4.9, 0.9);
     Tensor q = Tensors.vector(5.0, 5.0, 1.0);
@@ -112,7 +106,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Chop._12.requireClose(solution, Tensors.vector(4.911144632104387, 5.064995814659804, 1.1));
     for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
       int[] index = Primitives.toIntArray(perm);
-      Tensor result = Se2BiinvariantMean.INSTANCE.mean(order(sequence, index), order(weights, index));
+      Tensor result = Se2BiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
       Chop._12.requireClose(result, solution);
     }
   }
@@ -128,7 +122,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Chop._12.requireClose(solution, Tensors.fromString("{4.911144632104387[m], 5.064995814659804[m], 1.1}"));
     for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
       int[] index = Primitives.toIntArray(perm);
-      Tensor result = Se2BiinvariantMean.INSTANCE.mean(order(sequence, index), order(weights, index));
+      Tensor result = Se2BiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
       Chop._12.requireClose(result, solution);
     }
   }
@@ -146,7 +140,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Chop._12.requireClose(solution, Tensors.vector(14.83619642851975, -5.043678108261259, -1.466370614359171));
     for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
       int[] index = Primitives.toIntArray(perm);
-      Tensor result = Se2BiinvariantMean.INSTANCE.mean(order(sequence, index), order(weights, index));
+      Tensor result = Se2BiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
       Chop._12.requireClose(result, solution);
     }
   }

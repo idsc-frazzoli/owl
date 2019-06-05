@@ -3,11 +3,11 @@ package ch.ethz.idsc.sophus.math;
 
 import ch.ethz.idsc.tensor.Tensor;
 
+/** Biinvariant Mean is invariant under reordering of the input points and weights */
 @FunctionalInterface
 public interface BiinvariantMeanInterface {
-  /** @param sequence of Lie Group elements
-   * @param corresponding non-negative, affine weights
+  /** @param points in Lie Group
+   * @param weights affine, typically non-negative
    * @return biinvariant mean */
-  Tensor mean(Tensor sequence, Tensor weights);
-  // TODO OB: require weights to be positive & Total(weights) = 1;
+  Tensor mean(Tensor points, Tensor weights);
 }
