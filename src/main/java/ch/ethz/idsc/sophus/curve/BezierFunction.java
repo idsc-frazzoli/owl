@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.curve;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
@@ -20,9 +21,12 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * <a href="https://reference.wolfram.com/language/ref/BezierFunction.html">BezierFunction</a> */
 public class BezierFunction implements ScalarTensorFunction {
   /** @param geodesicInterface
-   * @param control
-   * @return function parameterized by the interval [0, 1] */
+   * @param control non-empty tensor
+   * @return function parameterized by the interval [0, 1]
+   * @throws Exception if given control tensor is empty or a scalar */
   public static ScalarTensorFunction of(GeodesicInterface geodesicInterface, Tensor control) {
+    if (control.length() < 1)
+      throw TensorRuntimeException.of(control);
     return new BezierFunction(geodesicInterface, control);
   }
 

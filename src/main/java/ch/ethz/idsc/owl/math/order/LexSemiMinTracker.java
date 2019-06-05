@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import ch.ethz.idsc.tensor.Tensor;
 
+// TODO JPH rename to LexSemiMinMapper
 public interface LexSemiMinTracker<K> {
   /** Updates the set of potential future candidates for the minimal set.
    * 

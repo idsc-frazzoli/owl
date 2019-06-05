@@ -49,7 +49,7 @@ public abstract class Tse2Entity extends TrajectoryEntity implements GlcPlannerC
     fixedStateIntegrator = // node interval == 3/10
         FixedStateIntegrator.create(new Tse2Integrator(v_range), RationalScalar.of(1, 10), 3);
     // TODO JPH use tse2 fallback control
-    add(new FallbackControl(Array.zeros(2)));
+    add(FallbackControl.of(Array.zeros(2)));
   }
 
   protected abstract StateTimeRaster stateTimeRaster();

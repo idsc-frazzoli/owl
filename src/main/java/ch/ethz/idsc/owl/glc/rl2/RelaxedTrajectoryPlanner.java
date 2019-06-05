@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -75,21 +77,19 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     return globalQueue;
   }
 
-  /** Removes all nodes in the collection from th global queue.
-   * 
-   * @param toRemove */
-  protected final void removeFromGlobal(Collection<GlcNode> toRemove) {
-    globalQueue.removeAll(toRemove);
-  }
-
+  // /** Removes all nodes in the collection from the global queue.
+  // *
+  // * @param toRemove */
+  // protected final void removeFromGlobal(Collection<GlcNode> toRemove) {
+  // globalQueue.removeAll(toRemove);
+  // }
   /** Removes the node from the corresponding domain queue in the domain map.
    * 
    * @param domainKey
    * @param glcNode */
   protected final void removeFromDomainQueue(Tensor domainKey, GlcNode glcNode) {
-    if (!glcNode.isLeaf()) {
+    if (!glcNode.isLeaf())
       System.err.println("The node to be removed has children");
-    }
     domainMap.removeFromDomainMap(domainKey, glcNode);
   }
 
@@ -144,12 +144,12 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
 
   @Override // from TrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
-    // LONGTERM investigate unified design
-    throw new UnsupportedOperationException();
+    return domainMap.getMap().entrySet().stream() //
+        .collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().peekBest()));
   }
 
   @Override // from TrajectoryPlanner
   public final Collection<GlcNode> getQueue() {
-    return Collections.unmodifiableCollection(getGlobalQueue().collection());
+    return Collections.unmodifiableCollection(globalQueue.collection());
   }
 }

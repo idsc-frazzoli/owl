@@ -5,9 +5,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** @author Andre
- *
- * Searches a totally ordered set for its minimal or maximal element */
+/** Searches a totally ordered set for its minimal or maximal element */
 /* package */ enum TotalOrderMinMax {
   ;
   /** @param Totally ordered, non-empty set to be searched for minimal element

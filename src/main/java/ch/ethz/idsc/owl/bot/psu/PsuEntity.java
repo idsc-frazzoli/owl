@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 
   public PsuEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
-    add(new FallbackControl(Array.zeros(1)));
+    add(FallbackControl.of(Array.zeros(1)));
   }
 
   @Override // from TensorMetric

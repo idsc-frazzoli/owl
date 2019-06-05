@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -28,20 +29,20 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class GokartRelaxedEntity extends GokartEntity {
-  public static GokartRelaxedEntity createRelaxedGokartEntity(StateTime stateTime, Tensor slack) {
-    GokartRelaxedEntity entity = new GokartRelaxedEntity(stateTime);
-    entity.slacks = slack;
-    return entity;
+  public static GokartRelaxedEntity createRelaxedGokartEntity(StateTime stateTime, Tensor slacks) {
+    return new GokartRelaxedEntity(stateTime, slacks);
   }
 
-  public GokartRelaxedEntity(StateTime stateTime) {
+  // ---
+  private final Tensor slacks;
+
+  private GokartRelaxedEntity(StateTime stateTime, Tensor slacks) {
     super(stateTime);
+    this.slacks = slacks;
   }
-
-  private Tensor slacks;
 
   @Override
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final RelaxedTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     // define goal region
     goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, So2Region.periodic(goal.Get(2), goalRadius.Get(2)));

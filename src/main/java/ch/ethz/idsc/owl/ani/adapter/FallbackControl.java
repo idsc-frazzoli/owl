@@ -12,11 +12,16 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.N;
 
 public class FallbackControl implements EntityControl, Serializable {
+  /** @param fallback control */
+  public static EntityControl of(Tensor fallback) {
+    return new FallbackControl(N.DOUBLE.of(fallback).unmodifiable());
+  }
+
+  // ---
   private final Tensor fallback;
 
-  /** @param fallback control */
-  public FallbackControl(Tensor fallback) {
-    this.fallback = N.DOUBLE.of(fallback).unmodifiable();
+  private FallbackControl(Tensor fallback) {
+    this.fallback = fallback;
   }
 
   @Override // from EntityControl

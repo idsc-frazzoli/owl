@@ -10,12 +10,12 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.demo.order.TensorProductOrder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
+/** immutable */
 /* package */ class Pair<K> implements Serializable {
   private final K key;
   private final Tensor value;
@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
   @Override
   public String toString() {
-    return key + " " + value;
+    return "Pair[" + key + " -> " + value + "]";
   }
 }
 
@@ -45,29 +45,18 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
 public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<K>, Serializable {
   private static final Random RANDOM = new Random();
-  protected final Collection<Pair<K>> candidateSet;
+  // ---
   private final Tensor slacks;
+  private final Collection<Pair<K>> candidateSet;
   protected final int dim;
   protected final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
-  protected final List<ProductOrderComparator> productOrderComparators = new ArrayList<>();
 
   protected AbstractLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
-    this.candidateSet = candidateSet;
     this.slacks = VectorQ.require(slacks);
+    this.candidateSet = candidateSet;
     this.dim = slacks.length();
-    for (int index = 0; index < dim; ++index) {
+    for (int index = 0; index < dim; ++index)
       semiorderComparators.add(new ScalarSlackSemiorder(slacks.Get(index)));
-      productOrderComparators.add(TensorProductOrder.comparator(index + 1));
-    }
-  }
-
-  /** Filters all elements which are within the slack of the "absolute" minimum.
-   * 
-   * @param x_i: Coordinate of element x
-   * @param threshold = u_min + slack
-   * @return true or false */
-  private static boolean filterCriterion(Scalar x_i, Scalar threshold) {
-    return Scalars.lessEquals(x_i, threshold);
   }
 
   /** Hint: only for testing
@@ -97,11 +86,12 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
     for (int index = 0; index < dim; ++index) {
       int fi = index;
       Scalar u_min = minElements.stream() //
-          .map(pair -> pair.value().Get(fi)) //
+          .map(Pair::value) //
+          .map(vector -> vector.Get(fi)) //
           .min(Scalars::compare).get();
-      Scalar slack = slacks.Get(fi);
+      Scalar threshold = u_min.add(slacks.Get(fi));
       minElements = minElements.stream() //
-          .filter(pair -> filterCriterion(pair.value().Get(fi), u_min.add(slack))) //
+          .filter(pair -> Scalars.lessEquals(pair.value().Get(fi), threshold)) //
           .collect(Collectors.toList());
     }
     return minElements;
@@ -132,7 +122,8 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
     for (int index = 0; index < dim; ++index) {
       int fi = index;
       Scalar u_min = bestElements.stream() //
-          .map(pair -> pair.value().Get(fi)) //
+          .map(Pair::value) //
+          .map(pair -> pair.Get(fi)) //
           .min(Scalars::compare).get();
       bestElements = bestElements.stream() //
           .filter(pair -> pair.value().Get(fi).equals(u_min)) //
@@ -143,28 +134,32 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
     return bestElements.get(RANDOM.nextInt(bestElements.size()));
   }
 
-  @Override
+  @Override // from LexSemiMinTracker
+  public final Collection<K> digest(K key, Tensor x) {
+    Collection<K> discardedKeys = new ArrayList<>();
+    trim(new Pair<>(key, VectorQ.requireLength(x, dim)), candidateSet, discardedKeys);
+    return discardedKeys;
+  }
+
+  /** @param applicantPair
+   * @param candidateSet
+   * @param discardedKeys */
+  protected abstract void trim(Pair<K> applicantPair, Collection<Pair<K>> candidateSet, Collection<K> discardedKeys);
+
+  @Override // from LexSemiMinTracker
   public final K pollBestKey() {
     Pair<K> pair = getBest();
     boolean removed = candidateSet.remove(pair);
     if (!removed)
-      System.err.println("could not remove pair=" + pair);
+      throw new RuntimeException("could not remove " + pair);
     return pair.key();
   }
 
-  @Override
+  @Override // from LexSemiMinTracker
   public final K peekBestKey() {
     Pair<K> best = getBest();
     return Objects.isNull(best) //
         ? null
         : best.key();
-  }
-
-  /** @return value of the current absolute best pair */
-  protected final Tensor peekBestValue() {
-    Pair<K> best = getBest();
-    return Objects.isNull(best) //
-        ? null
-        : best.value();
   }
 }

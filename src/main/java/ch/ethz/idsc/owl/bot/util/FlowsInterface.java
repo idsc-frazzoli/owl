@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
 
+@FunctionalInterface
 public interface FlowsInterface {
   /** Example:
    * The interface is implemented by classes in order to provide

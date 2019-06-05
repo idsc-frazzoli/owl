@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** used in demos */
 public class SymLinkImage {
+  public static final Font FONT_SMALL = new Font(Font.DIALOG, Font.PLAIN, 11);
   private static final int WIDTH = 100;
   /** height also appears in the model2pixel matrix */
   private static final int HEIGHT = 50;

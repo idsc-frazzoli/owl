@@ -11,15 +11,16 @@ import java.util.Objects;
 /** Tracks minimal elements of a negatively transitive ordered set <tt>X</tt>.
  * An element x is said to be minimal if there is no other element y such that yRx.
  * (Strict) Total orders, total preorders and weak orders are all negatively transitive.
- * For non-strict neg. transitive orders the indifference constitutes equivalence classes and for strict neg. trans. orders incomparability.
+ * For non-strict negatively transitive orders the indifference constitutes equivalence
+ * classes, and for strict negatively transitive orders incomparability.
  * 
  * @param <T> type of elements to compare */
 public class NegTransitiveMinTracker<T> implements MinTracker<T>, Serializable {
-  public static <T> NegTransitiveMinTracker<T> withList(OrderComparator<T> orderComparator) {
+  public static <T> MinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new NegTransitiveMinTracker<>(orderComparator, new LinkedList<>());
   }
 
-  public static <T> NegTransitiveMinTracker<T> withSet(OrderComparator<T> orderComparator) {
+  public static <T> MinTracker<T> withSet(OrderComparator<T> orderComparator) {
     return new NegTransitiveMinTracker<>(orderComparator, new HashSet<>());
   }
 
@@ -38,6 +39,7 @@ public class NegTransitiveMinTracker<T> implements MinTracker<T>, Serializable {
    * the element gets added to the list.
    * 
    * @param x Element next up for comparison */
+  // TODO ASTOLL cases in function are not fully covered by tests
   @Override // from MinTrackerInterface
   public final void digest(T x) {
     if (collection.isEmpty())

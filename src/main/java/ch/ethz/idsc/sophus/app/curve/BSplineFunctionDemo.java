@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 import javax.swing.JToggleButton;
 
@@ -20,8 +21,10 @@ import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation;
 import ch.ethz.idsc.sophus.curve.LieGroupBSplineInterpolation;
 import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
+import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -50,10 +53,8 @@ public class BSplineFunctionDemo extends BaseCurvatureDemo {
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     final int upper = control.length() - 1;
     final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
-    if (jToggleSymi.isSelected()) {
-      SymLinkImage symLinkImage = SymLinkImages.bspline(degree, upper + 1, parameter);
-      graphics.drawImage(symLinkImage.bufferedImage(), 0, 0, null);
-    }
+    if (jToggleSymi.isSelected())
+      graphics.drawImage(symLinkImage(degree, upper + 1, parameter).bufferedImage(), 0, 0, null);
     // ---
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
@@ -103,6 +104,15 @@ public class BSplineFunctionDemo extends BaseCurvatureDemo {
     if (levels < 5)
       renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
+  }
+
+  /* package */ static SymLinkImage symLinkImage(int degree, int length, Scalar scalar) {
+    Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
+    ScalarTensorFunction scalarTensorFunction = GeodesicBSplineFunction.of(SymGeodesic.INSTANCE, degree, vector);
+    Tensor tensor = scalarTensorFunction.apply(scalar);
+    SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, SymLinkImages.FONT_SMALL);
+    symLinkImage.title("DeBoor[" + degree + "] at " + scalar);
+    return symLinkImage;
   }
 
   public static void main(String[] args) {

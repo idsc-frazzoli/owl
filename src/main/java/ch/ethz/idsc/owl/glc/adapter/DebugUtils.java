@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.io.UserName;
 
 public enum DebugUtils {
   ;
-  private static final boolean PRINT = !UserName.is("travis");
+  private static final boolean PRINT = !(UserName.is("travis") || UserName.is("datahaki"));
 
   // ---
   public static void nodeAmountCompare(GlcNode best, int size) {

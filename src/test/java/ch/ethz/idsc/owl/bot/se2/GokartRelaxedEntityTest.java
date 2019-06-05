@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2;
 import ch.ethz.idsc.owl.bot.se2.glc.GokartRelaxedEntity;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
-import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
+import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,12 +16,12 @@ public class GokartRelaxedEntityTest extends TestCase {
     // define region costs
     // define slack vector
     Tensor slacks = Tensors.vector(0, 0);
-    GokartRelaxedEntity entity = GokartRelaxedEntity.createRelaxedGokartEntity(initial, slacks);
+    GokartRelaxedEntity gokartRelaxedEntity = GokartRelaxedEntity.createRelaxedGokartEntity(initial, slacks);
     Tensor goal = Tensors.vector(0, 25, 0);
-    StandardRelaxedLexicographicPlanner planner = (StandardRelaxedLexicographicPlanner) entity.createTrajectoryPlanner(EmptyObstacleConstraint.INSTANCE, goal);
-    assertEquals(entity.getSlack(), slacks);
-    planner.insertRoot(initial);
-    RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(planner);
+    RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = gokartRelaxedEntity.createTrajectoryPlanner(EmptyObstacleConstraint.INSTANCE, goal);
+    assertEquals(gokartRelaxedEntity.getSlack(), slacks);
+    relaxedTrajectoryPlanner.insertRoot(initial);
+    RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(relaxedTrajectoryPlanner);
     glcExpand.findAny(1000);
     // assertTrue(planner.getBest().isPresent());
   }

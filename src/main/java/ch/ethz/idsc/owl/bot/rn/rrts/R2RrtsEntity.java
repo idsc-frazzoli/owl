@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
         EulerIntegrator.INSTANCE, //
         new StateTime(state, RealScalar.ZERO)), //
         new R2TrajectoryControl());
-    add(new FallbackControl(Array.zeros(2)));
+    add(FallbackControl.of(Array.zeros(2)));
   }
 
   @Override

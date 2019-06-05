@@ -58,21 +58,10 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 
   public NavigableMapDatasetFilterDemo() {
     super(GeodesicDisplays.CLOTH_SE2_R2);
+    // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
     //
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
-    // ---
-    jToggleWait.setSelected(false);
-    timerFrame.jToolBar.add(jToggleWait);
-    // ---
-    jToggleDiff.setSelected(true);
-    timerFrame.jToolBar.add(jToggleDiff);
-    // ---
-    jToggleData.setSelected(true);
-    timerFrame.jToolBar.add(jToggleData);
-    // ---
-    jToggleConv.setSelected(true);
-    timerFrame.jToolBar.add(jToggleConv);
     {
       spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.vector"));
       spinnerLabelString.addSpinnerListener(type -> updateStateTime());
@@ -86,8 +75,6 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelLimit.addSpinnerListener(type -> updateStateTime());
     }
     timerFrame.jToolBar.addSeparator();
-    // ---
-    timerFrame.jToolBar.add(jToggleSymi);
     // ---
     timerFrame.jToolBar.add(jSlider);
   }
