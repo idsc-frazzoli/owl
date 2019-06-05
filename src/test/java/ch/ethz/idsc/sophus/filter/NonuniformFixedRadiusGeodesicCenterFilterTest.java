@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class NonuniformFixedRadiusGeodesicCenterFilterTest extends TestCase {
@@ -24,7 +23,7 @@ public class NonuniformFixedRadiusGeodesicCenterFilterTest extends TestCase {
     NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
     Tensor actual = Tensor.of(NonuniformFixedRadiusGeodesicCenterFilter.of(nonuniformFixedRadiusGeodesicCenter, radius).apply(navigableMap).values().stream());
     Tensor expected = Tensors.of(Tensors.vector(1, 1, 1));
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   public void testUniform() {
@@ -39,7 +38,7 @@ public class NonuniformFixedRadiusGeodesicCenterFilterTest extends TestCase {
     NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
     Tensor actual = Tensor.of(NonuniformFixedRadiusGeodesicCenterFilter.of(nonuniformFixedRadiusGeodesicCenter, radius).apply(navigableMap).values().stream());
     Tensor expected = Tensor.of(navigableMap.values().stream());
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   public void testNonuniform() {
@@ -56,6 +55,6 @@ public class NonuniformFixedRadiusGeodesicCenterFilterTest extends TestCase {
     System.out.println(actual);
     Tensor expected = Tensors.fromString(
         "{{0.0, 0.0, 0.0}, {1.2557148460542482, 0.7442851539457515, 1.0}, {3.1242087383516894, 1.3354843829315397, 2.1666666666666665}, {3.2553808967607205, 2.7446191032392786, 3.0}, {4.0, 4.0, 4.0}}");
-    // Assert.assertEquals(expected, actual);
+    // assertEquals(expected, actual);
   }
 }
