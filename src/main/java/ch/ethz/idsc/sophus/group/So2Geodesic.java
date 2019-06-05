@@ -11,7 +11,6 @@ public enum So2Geodesic implements GeodesicInterface {
   // ---
   @Override
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    // TODO OB: Is this correct?
     Tensor log = So2Exponential.INSTANCE.log(q.subtract(p));
     return scalar -> p.add(So2Exponential.INSTANCE.exp(log.multiply(scalar)));
   }

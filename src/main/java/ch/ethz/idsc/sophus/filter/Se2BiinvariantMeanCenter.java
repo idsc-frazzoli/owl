@@ -5,9 +5,8 @@ import java.util.Objects;
 
 import ch.ethz.idsc.sophus.group.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
 
@@ -32,23 +31,17 @@ public class Se2BiinvariantMeanCenter implements TensorUnaryOperator {
     this.smoothingKernel = smoothingKernel;
   }
 
-  private Tensor weights(int radius) {
-    // TODO OB use WindowCenterSampler
-    Tensor weights = Tensors.empty();
-    for (int index = -radius; index <= radius; ++index)
-      weights.append(smoothingKernel.apply(RationalScalar.of(index, 2 * radius)));
-    return weights.divide(Total.ofVector(weights));
-  }
-
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     int radius = (tensor.length() - 1) / 2;
+    WindowCenterSampler windowCenterSampler = new WindowCenterSampler(smoothingKernel);
     if (tensor.get(0).length() == -1) {
       return tensor;
     } else if (radius == 0) {
       return tensor.get(0);
     } else {
-      Tensor weights = weights(radius);
+      Tensor weights = windowCenterSampler.apply(radius);
+      weights = weights.divide(Total.ofVector(weights));
       return Se2BiinvariantMean.INSTANCE.mean(tensor, weights);
     }
   }

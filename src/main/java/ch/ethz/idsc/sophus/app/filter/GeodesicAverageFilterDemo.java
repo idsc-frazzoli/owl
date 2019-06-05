@@ -27,7 +27,6 @@ import ch.ethz.idsc.tensor.red.Total;
   @Override
   protected void updateState() {
     super.updateState();
-    // TODO OB: Make tree generation more flexible than these three static tree shapes
     // left seeded tree
     Tensor tree = Tensors.vector(0, 1);
     for (int index = 2; index <= spinnerRadius.getValue(); ++index) {

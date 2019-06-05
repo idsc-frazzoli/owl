@@ -9,5 +9,4 @@ public interface BiinvariantMeanInterface {
    * @param corresponding non-negative, affine weights
    * @return biinvariant mean */
   Tensor mean(Tensor sequence, Tensor weights);
-  // TODO OB: require weights to be positive & Total(weights) = 1;
 }

@@ -65,7 +65,6 @@ public class NonuniformFixedIntervalGeodesicCenter {
   }
 
   public synchronized Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
-    // TODO OB: require Tensor.length = geodesicInterface."length", also 3 fuer se2?
     key = Sign.requirePositiveOrZero(key);
     interval = Sign.requirePositiveOrZero(interval);
     Tensor tempL = subMap.firstEntry().getValue();

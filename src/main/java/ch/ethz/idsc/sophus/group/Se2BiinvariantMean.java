@@ -46,8 +46,6 @@ public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
 
   @Override // from BiinvariantMeanInterface
   public Tensor mean(Tensor sequence, Tensor weights) {
-    // TODO OB: interestingly the filtering performance is lowered when checking this condition
-    // because the spots where the condition actually fails are filtered well
     try {
       checkValidity(sequence);
       // FIXME OB: This is a ugly fix to make the data exportable. Using the assumption that the angles are all close
