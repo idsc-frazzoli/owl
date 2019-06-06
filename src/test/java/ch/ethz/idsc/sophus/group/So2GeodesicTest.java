@@ -1,4 +1,4 @@
-// code by ob
+// code by ob, jph
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
@@ -19,7 +19,6 @@ public class So2GeodesicTest extends TestCase {
     Scalar split = So2Geodesic.INSTANCE.split(p, q, RationalScalar.HALF);
     assertEquals(split, RationalScalar.of(3, 2));
     ExactScalarQ.require(split);
-    // assertTrue(OrthogonalMatrixQ.of(split, Chop._14));
   }
 
   public void testEndPoints() {
@@ -28,6 +27,7 @@ public class So2GeodesicTest extends TestCase {
       Tensor p = So2Exponential.INSTANCE.exp(RandomVariate.of(distribution));
       Tensor q = So2Exponential.INSTANCE.exp(RandomVariate.of(distribution));
       Chop._12.requireClose(p, So2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO));
+      Chop._12.requireClose(q, So2Geodesic.INSTANCE.split(p, q, RealScalar.ONE));
     }
   }
 }

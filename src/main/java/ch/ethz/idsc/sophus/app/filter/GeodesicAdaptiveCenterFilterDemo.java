@@ -13,8 +13,8 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicAdaptiveCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicAdaptiveCenterFilter;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -56,7 +56,7 @@ public class GeodesicAdaptiveCenterFilterDemo extends DatasetKernelDemo implemen
     TensorUnaryOperator tensorUnaryOperator = GeodesicAdaptiveCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue(),
         RationalScalar.of(jSlider.getValue(), 100));
     refined = Nest.of( //
-        GeodesicAdaptiveCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
+        CenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
         control(), spinnerConvolution.getValue());
     return refined;
   }

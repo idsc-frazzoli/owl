@@ -5,7 +5,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class HeBiinvariantMeanTest extends TestCase {
@@ -13,7 +12,7 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor sequence = Tensors.of(Tensors.vector(1, 1, 1));
     Tensor weights = Tensors.vector(1);
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
-    Assert.assertEquals(sequence.get(0), actual);
+    assertEquals(sequence.get(0), actual);
   }
 
   public void testTrivialHe3() {
@@ -21,7 +20,7 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor sequence = Tensors.of(element);
     Tensor weights = Tensors.vector(1);
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
-    Assert.assertEquals(element, actual);
+    assertEquals(element, actual);
   }
 
   public void testTrivialHe5() {
@@ -30,7 +29,7 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor sequence = Tensors.of(element);
     Tensor weights = Tensors.vector(1);
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
-    Assert.assertEquals(element, actual);
+    assertEquals(element, actual);
   }
 
   public void testSimpleHe3() {
@@ -39,7 +38,7 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor weights = Tensors.vector(0.2, 0.6, 0.2);
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
     Tensor expected = Tensors.vector(2, 2, 1.8);
-    Assert.assertEquals(actual.get(0), actual.get(1));
+    assertEquals(actual.get(0), actual.get(1));
     Chop._12.requireClose(actual, expected);
   }
 
@@ -50,7 +49,7 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor weights = Tensors.vector(0.2, 0.6, 0.2);
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
     Tensor expected = Tensors.fromString("{{2.0, 4.0}, {2.0, 4.0}, 1.0}");
-    Assert.assertEquals(actual.get(0), actual.get(1));
+    assertEquals(actual.get(0), actual.get(1));
     Chop._12.requireClose(actual, expected);
   }
 
@@ -62,6 +61,6 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor weights = Tensors.vector(0.5, 0.5);
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
     Tensor identity = Tensors.fromString("{{0, 0}, {0, 0}, 0}");
-    Assert.assertEquals(identity, actual);
+    assertEquals(identity, actual);
   }
 }

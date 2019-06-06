@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class GeodesicCausalFilteringFIRTest extends TestCase {
@@ -23,7 +22,7 @@ public class GeodesicCausalFilteringFIRTest extends TestCase {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicInterface, SmoothingKernel.GAUSSIAN);
     Tensor actual = GeodesicFIRnFilter.of(tensorUnaryOperator, geodesicInterface, radius, alpha).apply(control);
-    Assert.assertEquals(control, actual);
+    assertEquals(control, actual);
   }
 
   public void testOnlyMeasurement() {

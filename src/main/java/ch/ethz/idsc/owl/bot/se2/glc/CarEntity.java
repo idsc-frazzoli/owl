@@ -62,10 +62,14 @@ public class CarEntity extends Se2Entity {
           { -.1, +.07 } //
       }).unmodifiable();
 
+  public static TrajectoryControl createPurePursuitControl() {
+    return new PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE);
+  }
+
   // ---
   public static CarEntity createDefault(StateTime stateTime) {
     return new CarEntity(stateTime, //
-        new PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
+        createPurePursuitControl(), //
         PARTITIONSCALE, CARFLOWS, SHAPE);
   }
 

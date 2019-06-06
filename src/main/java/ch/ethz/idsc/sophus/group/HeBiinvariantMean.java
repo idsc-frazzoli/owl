@@ -20,7 +20,7 @@ public enum HeBiinvariantMean implements BiinvariantMeanInterface {
 
   @Override // from BiinvariantMeanInterface
   public Tensor mean(Tensor sequence, Tensor weights) {
-    AffineQ.requirePositive(weights);
+    AffineQ.require(weights);
     // ---
     Tensor x = sequence.get(Tensor.ALL, 0);
     Tensor y = sequence.get(Tensor.ALL, 1);

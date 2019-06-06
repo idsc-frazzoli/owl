@@ -6,7 +6,7 @@ import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 public class Se2Letter3Demo extends Se2LetterADemo {
   @Override // from Se2LetterADemo
   public TrajectoryControl createTrajectoryControl() {
-    return new PurePursuitControl(CarEntity.LOOKAHEAD, CarEntity.MAX_TURNING_RATE);
+    return CarEntity.createPurePursuitControl();
   }
 
   public static void main(String[] args) {

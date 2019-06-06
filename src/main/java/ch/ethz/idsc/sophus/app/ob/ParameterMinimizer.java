@@ -1,8 +1,8 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
+import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
@@ -48,7 +48,7 @@ public class ParameterMinimizer {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     // define our 'truth' signal
     TensorUnaryOperator centerFilter = GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
-    Tensor refinedCenter = GeodesicCenterFilter.of(centerFilter, 6).apply(control);
+    Tensor refinedCenter = CenterFilter.of(centerFilter, 6).apply(control);
     Tensor alpharange = Subdivide.of(0.1, 1, 50);
     // Iterate over Kernels, then windowsize and then alphas
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {

@@ -57,9 +57,7 @@ public class GokartEntity extends CarEntity {
   };
 
   public GokartEntity(StateTime stateTime) {
-    super(stateTime, //
-        new PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
-        PARTITIONSCALE, CARFLOWS, SHAPE);
+    super(stateTime, createPurePursuitControl(), PARTITIONSCALE, CARFLOWS, SHAPE);
     // ---
     add(localizationFeedback);
   }
