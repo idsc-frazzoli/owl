@@ -18,7 +18,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 public class FrequencyEffectDataExport {
   // private final static SmoothingKernel SMOOTHING_KERNEL = SmoothingKernel.GAUSSIAN;
   private static void export(Tensor tensor, String filterType, int index, int radius, SmoothingKernel smoothingKernel) throws IOException {
-    // TODO OB use Export
     try (FileWriter writer = new FileWriter("030619_" + filterType + "_" + smoothingKernel.toString() + "_" + radius + "_" + index + ".csv")) {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < tensor.length(); i++) {
