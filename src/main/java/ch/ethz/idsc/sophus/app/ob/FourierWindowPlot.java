@@ -61,12 +61,11 @@ import ch.ethz.idsc.tensor.sca.Abs;
   }
 
   private static void plot(Tensor yData) throws IOException {
-    // make signal symmetric around 0
-    Tensor yAxis = Tensor.of(yData.stream().map(x -> Abs.FUNCTION.apply((Scalar) x)));
+    Tensor yAxisAsymm = Tensor.of(yData.stream().map(x -> Abs.FUNCTION.apply((Scalar) x)));
+    Tensor yAxis = Tensor.of(yAxisAsymm.append(yAxisAsymm).flatten(1)).extract(yData.length() / 2, yData.length() * 3 / 2);
     Tensor xAxis = Tensors.empty();
-    for (int index = 0; index < yAxis.length(); ++index) {
+    for (int index = -yData.length() / 2; index < yData.length() / 2; ++index)
       xAxis.append(RealScalar.of((double) index * SAMPLING_FREQUENCY / yData.length()));
-    }
     // ---
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Frequence response");
@@ -74,10 +73,9 @@ import ch.ethz.idsc.tensor.sca.Abs;
     visualSet.setAxesLabelY("Magniture");
     {
       VisualRow visualRow = visualSet.add(xAxis, yAxis);
-      visualRow.setLabel("x");
+      visualRow.setLabel("Filter Gain for x-component");
     }
     // TODO OB: Does logarithmic plot exist?
-    // FIXME: OB plot cuts off the negative part of the list
     JFreeChart jFreeChart = ListPlot.of(visualSet);
     File file = HomeDirectory.Pictures("test.png");
     ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
@@ -86,7 +84,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
   private static void process(List<String> list, TensorUnaryOperator tensorUnaryOperator, int signal) throws IOException {
     Tensor results = Tensors.empty();
     Iterator<String> iterator = list.iterator();
-    int limit = 2;
+    int limit = 15;
     for (int index = 0; index < limit; ++index) {
       Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
           iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
@@ -100,6 +98,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
     FourierWindowPlot fwp = new FourierWindowPlot();
     List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
-    FourierWindowPlot.process(list, tensorUnaryOperator, 0);
+    FourierWindowPlot.process(list, tensorUnaryOperator, 2);
   }
 }
