@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
@@ -36,10 +36,10 @@ public class FrequencyEffectDataExport {
   public static void processFilterComparison(Tensor control, int index, int radius, SmoothingKernel smoothingKernel) {
     // ==================== GeodesicCenter(Lefteeded) (Normal) ===========
     TensorUnaryOperator geodesicLeftSeeded = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
-    Tensor groupSmoothedGCL = GeodesicCenterFilter.of(geodesicLeftSeeded, radius).apply(control);
+    Tensor groupSmoothedGCL = CenterFilter.of(geodesicLeftSeeded, radius).apply(control);
     // ==================== GeodesicCenter(MidSeeded) ====================
     TensorUnaryOperator geodesicMidSeeded = GeodesicCenterMidSeeded.of(Se2Geodesic.INSTANCE, smoothingKernel);
-    Tensor groupSmoothedGCM = GeodesicCenterFilter.of(geodesicMidSeeded, radius).apply(control);
+    Tensor groupSmoothedGCM = CenterFilter.of(geodesicMidSeeded, radius).apply(control);
     // ==================== TangentSpaceFiltering ====================
     // TensorUnaryOperator geodesicCenterTangentSpace = GeodesicCenterTangentSpace.of( //
     // Se2CoveringGroup.INSTANCE, Se2CoveringExponential.INSTANCE, smoothingKernel);

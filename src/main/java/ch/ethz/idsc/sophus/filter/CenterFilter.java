@@ -1,4 +1,4 @@
-// code by jph /ob
+// code by jph
 package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
@@ -7,21 +7,24 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class Se2BiinvariantMeanFilter implements TensorUnaryOperator {
-  /** @param seBiinvariantMeanCenter
+/** Hint: the following center operators are typically used
+ * {@link GeodesicCenter}
+ * {@link BiinvariantMeanCenter} */
+public class CenterFilter implements TensorUnaryOperator {
+  /** @param geodesicCenter
    * @param radius
    * @return
    * @throws Exception if given geodesicCenter is null */
-  public static TensorUnaryOperator of(TensorUnaryOperator seBiinvariantMeanCenter, int radius) {
-    return new Se2BiinvariantMeanFilter(Objects.requireNonNull(seBiinvariantMeanCenter), radius);
+  public static TensorUnaryOperator of(TensorUnaryOperator geodesicCenter, int radius) {
+    return new CenterFilter(Objects.requireNonNull(geodesicCenter), radius);
   }
 
   // ---
-  private final TensorUnaryOperator seBiinvariantMeanCenter;
+  private final TensorUnaryOperator geodesicCenter;
   private final int radius;
 
-  private Se2BiinvariantMeanFilter(TensorUnaryOperator seBiinvariantMeanCenter, int radius) {
-    this.seBiinvariantMeanCenter = seBiinvariantMeanCenter;
+  private CenterFilter(TensorUnaryOperator geodesicCenter, int radius) {
+    this.geodesicCenter = geodesicCenter;
     this.radius = radius;
   }
 
@@ -32,7 +35,7 @@ public class Se2BiinvariantMeanFilter implements TensorUnaryOperator {
       int lo = Math.max(0, index - radius);
       int hi = Math.min(index + radius, tensor.length() - 1);
       int delta = Math.min(index - lo, hi - index);
-      result.append(seBiinvariantMeanCenter.apply(tensor.extract(index - delta, index + delta + 1)));
+      result.append(geodesicCenter.apply(tensor.extract(index - delta, index + delta + 1)));
     }
     return result;
   }

@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.LieDifferences;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     }
     {
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 6);
+          CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       Put.of(HomeDirectory.file("gokart_poses_gauss.file"), smooth);
       Tensor delta = LIE_DIFFERENCES.apply(smooth);
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     }
     {
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.HAMMING), 6);
+          CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.HAMMING), 6);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       Put.of(HomeDirectory.file("gokart_poses_hammi.file"), smooth);
       Tensor delta = LIE_DIFFERENCES.apply(smooth);
