@@ -12,12 +12,10 @@ public enum Se2PseudoDistance implements PseudoDistance {
   INSTANCE;
   // ---
   private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
-  private static final LieDifferences LIE_DIFFERENCES = //
-      new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
 
   @Override
   public Tensor pseudoDistance(Tensor p, Tensor q) {
-    Tensor tensor = LIE_DIFFERENCES.pair(p, q);
+    Tensor tensor = Se2Differences.INSTANCE.pair(p, q);
     return Tensors.of( //
         Norm._2.ofVector(tensor.extract(0, 2)), //
         MOD_DISTANCE.apply(tensor.Get(2).abs()));

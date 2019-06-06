@@ -5,20 +5,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.group.LieGroup;
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.group.Se2Differences;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -52,14 +47,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   private static Tensor speeds(Tensor refined) {
-    LieGroup lieGroup = Se2Group.INSTANCE;
-    Tensor speeds = Tensors.empty();
-    if (Objects.nonNull(lieGroup)) {
-      LieDifferences lieDifferences = new LieDifferences(lieGroup, Se2CoveringExponential.INSTANCE);
-      Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
-      speeds = lieDifferences.apply(refined).multiply(SAMPLING_FREQUENCY);
-    }
-    return speeds;
+    Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
+    return Se2Differences.INSTANCE.apply(refined).multiply(SAMPLING_FREQUENCY);
   }
 
   public static void main(String[] args) throws IOException {
