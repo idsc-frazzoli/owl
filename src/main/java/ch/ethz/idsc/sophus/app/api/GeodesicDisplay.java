@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,6 +37,10 @@ public interface GeodesicDisplay {
    * @param q control point
    * @return pseudo difference between given control points p and q */
   Scalar parametricDistance(Tensor p, Tensor q);
+
+  /** @return biinvariantMeanInterface
+   * @throws Exception if geodesic space does not support the computation of an biinvariant mean */
+  BiinvariantMeanInterface biinvariantMeanInterface();
 
   @Override // from Object
   String toString();

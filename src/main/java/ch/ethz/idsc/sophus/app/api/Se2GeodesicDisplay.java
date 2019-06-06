@@ -3,10 +3,12 @@ package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.sophus.group.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.group.Se2Utils;
+import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.planar.Arrowhead;
 import ch.ethz.idsc.sophus.planar.Se2ParametricDistance;
@@ -56,6 +58,11 @@ public enum Se2GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
     return Se2ParametricDistance.INSTANCE.distance(p, q);
+  }
+
+  @Override // from GeodesicDisplay
+  public BiinvariantMeanInterface biinvariantMeanInterface() {
+    return Se2BiinvariantMean.INSTANCE;
   }
 
   @Override // from Object

@@ -1,12 +1,14 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.group.HeBiinvariantMean;
 import ch.ethz.idsc.sophus.group.HeExponential;
 import ch.ethz.idsc.sophus.group.HeGeodesic;
 import ch.ethz.idsc.sophus.group.HeGroup;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.Se2Utils;
+import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -60,6 +62,11 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
     throw new UnsupportedOperationException();
+  }
+
+  @Override // from GeodesicDisplay
+  public BiinvariantMeanInterface biinvariantMeanInterface() {
+    return HeBiinvariantMean.INSTANCE;
   }
 
   @Override

@@ -4,9 +4,11 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.Se2Utils;
+import ch.ethz.idsc.sophus.group.StBiinvariantMean;
 import ch.ethz.idsc.sophus.group.StExponential;
 import ch.ethz.idsc.sophus.group.StGeodesic;
 import ch.ethz.idsc.sophus.group.StGroup;
+import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -63,6 +65,11 @@ public enum St1GeodesicDisplay implements GeodesicDisplay {
   @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
     throw new UnsupportedOperationException();
+  }
+
+  @Override // from GeodesicDisplay
+  public BiinvariantMeanInterface biinvariantMeanInterface() {
+    return StBiinvariantMean.INSTANCE;
   }
 
   @Override // from Object
