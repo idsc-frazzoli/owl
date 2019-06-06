@@ -14,8 +14,9 @@ public enum AffineQ {
 
   /** @param vector
    * @throws Exception if scalar entries of given mask do not add up to one */
-  public static void require(Tensor vector) {
+  public static Tensor require(Tensor vector) {
     CHOP.requireClose(Total.of(vector), RealScalar.ONE);
+    return vector;
   }
 
   /** @param vector

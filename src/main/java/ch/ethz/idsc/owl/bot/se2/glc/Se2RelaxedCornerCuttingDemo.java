@@ -32,6 +32,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.img.ImageResize;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.qty.Degree;
 
@@ -51,11 +52,11 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     graphics.fillRect(13, 10, 15, 4);
     graphics.fillRect(13, 13, 4, 10);
     graphics.fillRect(4, 20, 13, 4);
-    Tensor image = Transpose.of(ImageFormat.from(bufferedImage));
+    Tensor image = ImageResize.nearest(Transpose.of(ImageFormat.from(bufferedImage)), 3);
     Tensor range = Tensors.vector(12, 12);
     int ttl = 15;
     R2ImageRegionWrap r2ImageRegionWrap = new R2ImageRegionWrap(image, range, ttl);
-    Tensor slack = Tensors.vector(0, 0);
+    Tensor slack = Tensors.vector(2, 0);
     StateTime initial = new StateTime(Tensors.vector(1.7, 2.2, 0), RealScalar.ZERO);
     Tensor goal1 = Tensors.vector(4.3, 4.2, 1.517);
     Tensor goal2 = Tensors.vector(6.35, 6.233, 0);
