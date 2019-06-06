@@ -33,6 +33,23 @@ public class So2BiinvariantMeanTest extends TestCase {
     }
   }
 
+  // TODO OB/JPH Es gibt einige Faelle wo der unterschied signifikant ist. Zulaessig oder nicht?
+  public void testArsigny() {
+    for (int length = 1; length < 6; ++length) {
+      Distribution distribution = UniformDistribution.of(Clips.absolute(Math.PI));
+      Tensor sequence = RandomVariate.of(distribution, length);
+      Tensor weights = RandomVariate.of(UniformDistribution.unit(), length);
+      weights = weights.divide(Total.ofVector(weights));
+      Tensor actual = So2BiinvariantMean.INSTANCE.mean(sequence, weights);
+      // ---
+      Tensor R1 = sequence.get(0);
+      Tensor expected = R1.add(weights.dot(Tensor.of(sequence.stream().map(R -> R1.negate().add(R)))));
+      System.out.println(expected);
+      System.err.println(actual);
+      // Chop._12.close(actual, expected);
+    }
+  }
+
   public void testNonAffineFail() {
     try {
       So2BiinvariantMean.INSTANCE.mean(Tensors.vector(1, 1, 1), Tensors.vector(1, 1, 1));
