@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.Serializable;
 import java.util.NavigableMap;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 // TODO OB reduce redundancy with NonuniformFixedRadiusGeodesicCenter
-public class NonuniformFixedIntervalGeodesicCenter {
+public class NonuniformFixedIntervalGeodesicCenter implements Serializable {
   /** @param geodesicInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center

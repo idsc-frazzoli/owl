@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.IOException;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
@@ -11,10 +12,11 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class NonuniformFixedIntervalGeodesicCenterFilterTest extends TestCase {
-  public void testTrivial() {
+  public void testTrivial() throws ClassNotFoundException, IOException {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     navigableMap.put(RealScalar.ONE, Tensors.vector(1, 1, 1));
     // ---
@@ -24,8 +26,9 @@ public class NonuniformFixedIntervalGeodesicCenterFilterTest extends TestCase {
     Scalar samplingFrequency = RealScalar.ONE;
     // ---
     NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter = NonuniformFixedIntervalGeodesicCenter.of(geodesicInterface, smoothingKernel);
-    Tensor actual = Tensor.of(NonuniformFixedIntervalGeodesicCenterFilter.of(nonuniformFixedIntervalGeodesicCenter, interval.divide(samplingFrequency))
-        .apply(navigableMap).values().stream());
+    NonuniformFixedIntervalGeodesicCenterFilter nonuniformFixedIntervalGeodesicCenterFilter = //
+        Serialization.copy(NonuniformFixedIntervalGeodesicCenterFilter.of(nonuniformFixedIntervalGeodesicCenter, interval.divide(samplingFrequency)));
+    Tensor actual = Tensor.of(nonuniformFixedIntervalGeodesicCenterFilter.apply(navigableMap).values().stream());
     Tensor expected = Tensors.of(Tensors.vector(1, 1, 1));
     assertEquals(expected, actual);
   }

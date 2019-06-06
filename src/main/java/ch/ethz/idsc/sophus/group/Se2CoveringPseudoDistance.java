@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 public enum Se2CoveringPseudoDistance implements PseudoDistance {
   INSTANCE;
   // ---
-  @Override
+  @Override // from PseudoDistance
   public Tensor pseudoDistance(Tensor p, Tensor q) {
     Tensor tensor = Se2Differences.INSTANCE.pair(p, q);
     return Tensors.of( //

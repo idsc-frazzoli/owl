@@ -13,7 +13,7 @@ public enum Se2PseudoDistance implements PseudoDistance {
   // ---
   private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
-  @Override
+  @Override // from PseudoDistance
   public Tensor pseudoDistance(Tensor p, Tensor q) {
     Tensor tensor = Se2Differences.INSTANCE.pair(p, q);
     return Tensors.of( //

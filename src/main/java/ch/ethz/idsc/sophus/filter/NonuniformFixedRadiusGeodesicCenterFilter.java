@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.Serializable;
 import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -11,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 
-public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUnaryOperator {
+public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUnaryOperator, Serializable {
   /** @param nonuniformFixedRadiusGeodesicCenter
    * @param radius
    * @return
