@@ -1,10 +1,10 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class GeodesicAverageFilter implements TensorUnaryOperator {
@@ -27,7 +27,7 @@ public class GeodesicAverageFilter implements TensorUnaryOperator {
 
   @Override
   public Tensor apply(Tensor tensor) {
-    Tensor result = Tensors.empty();
+    Tensor result = Unprotect.empty(tensor.length());
     for (int index = 0; index < tensor.length(); ++index)
       result.append(tensor.length() - weightlength < index || index < weightlength //
           ? tensor.get(index)

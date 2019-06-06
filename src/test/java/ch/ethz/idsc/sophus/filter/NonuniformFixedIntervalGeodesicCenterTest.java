@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
@@ -26,7 +25,7 @@ public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
     // --
     Tensor actual = nonuniformFixedIntervalGeodesicCenter.apply(navigableMap, key, interval);
     Tensor expected = Tensors.vector(1, 1, 0);
-    Assert.assertEquals(actual.get(0), actual.get(1));
+    assertEquals(actual.get(0), actual.get(1));
     Chop._09.requireClose(expected, actual);
   }
 
@@ -58,7 +57,7 @@ public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
     Scalar key = RealScalar.of(9 * 9 / 2 + 1);
     // ---
     Tensor actual = nonuniformFixedIntervalGeodesicCenter.apply(navigableMap, key, interval);
-    Assert.assertEquals(actual.get(0), actual.get(1));
+    assertEquals(actual.get(0), actual.get(1));
   }
 
   public void testNonuniformlySpacedSE2() {
@@ -73,7 +72,7 @@ public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
     Scalar key = RealScalar.of(9 * 9 / 2 + 1);
     // ---
     Tensor actual = nonuniformFixedIntervalGeodesicCenter.apply(navigableMap, key, interval);
-    Assert.assertEquals(actual.get(0), actual.get(1));
+    assertEquals(actual.get(0), actual.get(1));
   }
 
   public void testNegativeInterval() {

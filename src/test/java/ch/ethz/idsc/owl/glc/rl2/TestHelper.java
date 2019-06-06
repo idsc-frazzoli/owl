@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 
-public enum TestHelper {
+/* package */ enum TestHelper {
   ;
   /* package */ static RelaxedTrajectoryPlanner createPlanner() {
     // -------- slacks --------

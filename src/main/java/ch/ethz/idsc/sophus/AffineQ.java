@@ -1,4 +1,4 @@
-// code by ob
+// code by ob, jph
 package ch.ethz.idsc.sophus;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -12,15 +12,22 @@ public enum AffineQ {
   ;
   private static final Chop CHOP = Chop._12;
 
-  public static void require(Tensor mask) {
-    CHOP.requireClose(Total.of(mask), RealScalar.ONE);
+  /** @param vector
+   * @throws Exception if scalar entries of given mask do not add up to one */
+  public static Tensor require(Tensor vector) {
+    CHOP.requireClose(Total.of(vector), RealScalar.ONE);
+    return vector;
   }
 
-  public static void requirePositive(Tensor mask) {
-    Scalar sum = mask.stream() //
+  /** @param vector
+   * @throws Exception if scalar entries of given vector do not add up to one
+   * @throws Exception if either scalar entry in given vector is negative */
+  public static Tensor requirePositive(Tensor vector) {
+    Scalar sum = vector.stream() //
         .map(Scalar.class::cast) //
         .map(Sign::requirePositiveOrZero) //
         .reduce(Scalar::add).get();
     CHOP.requireClose(sum, RealScalar.ONE);
+    return vector;
   }
 }

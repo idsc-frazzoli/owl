@@ -9,10 +9,10 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 public enum So2Geodesic implements GeodesicInterface {
   INSTANCE;
   // ---
-  @Override
+  @Override // from TensorGeodesic
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    Tensor log = So2Exponential.INSTANCE.log(q.subtract(p));
-    return scalar -> p.add(So2Exponential.INSTANCE.exp(log.multiply(scalar)));
+    Tensor log = q.subtract(p);
+    return scalar -> p.add(log.multiply(scalar));
   }
 
   /** p and q are orthogonal matrices with dimension 2 x 2 */

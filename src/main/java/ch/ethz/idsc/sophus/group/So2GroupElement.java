@@ -6,12 +6,15 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 
+/** Ethan Eade:
+ * "Because rotations in the plane commute, the adjoint of SO(2) is the identity function." */
 public class So2GroupElement implements LieGroupElement {
   private static final Mod MOD_ANGLE = Mod.function(Pi.TWO, Pi.VALUE.negate());
+  // ---
   private final Scalar alpha;
 
   public So2GroupElement(Scalar alpha) {
-    this.alpha = MOD_ANGLE.apply(alpha);
+    this.alpha = alpha;
   }
 
   @Override // from LieGroupElement
@@ -21,11 +24,11 @@ public class So2GroupElement implements LieGroupElement {
 
   @Override // from LieGroupElement
   public Scalar combine(Tensor tensor) {
-    return MOD_ANGLE.apply(alpha.subtract(tensor));
+    return MOD_ANGLE.apply(alpha.add(tensor));
   }
 
   @Override // from LieGroupElement
   public Scalar adjoint(Tensor tensor) {
-    return MOD_ANGLE.apply(alpha.add(tensor));
+    return tensor.Get();
   }
 }

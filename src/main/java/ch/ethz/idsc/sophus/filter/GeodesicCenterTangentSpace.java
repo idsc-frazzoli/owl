@@ -2,12 +2,14 @@
 package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.LieGroupElement;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
+import ch.ethz.idsc.sophus.math.MemoFunction;
 import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -24,7 +26,7 @@ public class GeodesicCenterTangentSpace implements TensorUnaryOperator {
    * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, IntegerTensorFunction function) {
-    return new GeodesicCenterTangentSpace(lieGroup, lieExponential, Objects.requireNonNull(function));
+    return new GeodesicCenterTangentSpace(lieGroup, lieExponential, MemoFunction.wrap(function));
   }
 
   /** @param geodesicInterface
@@ -38,9 +40,9 @@ public class GeodesicCenterTangentSpace implements TensorUnaryOperator {
   // ---
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
-  private final IntegerTensorFunction function;
+  private final Function<Integer, Tensor> function;
 
-  private GeodesicCenterTangentSpace(LieGroup lieGroup, LieExponential lieExponential, IntegerTensorFunction function) {
+  private GeodesicCenterTangentSpace(LieGroup lieGroup, LieExponential lieExponential, Function<Integer, Tensor> function) {
     this.lieGroup = lieGroup;
     this.lieExponential = Objects.requireNonNull(lieExponential);
     this.function = function;
@@ -51,7 +53,6 @@ public class GeodesicCenterTangentSpace implements TensorUnaryOperator {
     int radius = (tensor.length() - 1) / 2;
     LieGroupElement center = lieGroup.element(tensor.get(radius));
     LieGroupElement reference = center.inverse();
-    // TODO memo function
     Tensor tangentTensor = Tensor.of(tensor.stream().map(reference::combine).map(lieExponential::log));
     Tensor mask = SymmetricVectorQ.require(function.apply(radius));
     return center.combine(lieExponential.exp(mask.dot(tangentTensor)));
