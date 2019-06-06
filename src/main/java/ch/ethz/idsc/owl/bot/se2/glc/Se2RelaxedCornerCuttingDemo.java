@@ -61,11 +61,11 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     Tensor goal1 = Tensors.vector(4.3, 4.2, 1.517);
     Tensor goal2 = Tensors.vector(6.35, 6.233, 0);
     Tensor goal3 = Tensors.vector(8.23, 8.51, 1.517);
-    TrajectoryControl tc = createTrajectoryControl();
+    TrajectoryControl trajectoryControl = CarEntity.createPurePursuitControl();
     Tensor partitionScale = CarEntity.PARTITIONSCALE;
     FlowsInterface flowsInterface = CarEntity.CARFLOWS;
     Tensor shape = CarEntity.SHAPE;
-    CarRelaxedEntity carRelaxedEntity = CarRelaxedEntity.createRelaxedCarEntity(initial, tc, partitionScale, flowsInterface, shape, slack);
+    CarRelaxedEntity carRelaxedEntity = CarRelaxedEntity.createRelaxedCarEntity(initial, trajectoryControl, partitionScale, flowsInterface, shape, slack);
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     TrajectoryRegionQuery trajectoryRegionQuery = //
@@ -76,8 +76,8 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     List<GlcPlannerCallback> list = new ArrayList<>();
     list.add(carRelaxedEntity);
     list.add(new SimpleGlcPlannerCallback(carRelaxedEntity));
-    GoalConsumer goalconsumer = new SimpleGoalConsumer(carRelaxedEntity, plannerConstraint, list);
-    goalconsumer.accept(goal2);
+    GoalConsumer goalConsumer = new SimpleGoalConsumer(carRelaxedEntity, plannerConstraint, list);
+    goalConsumer.accept(goal2);
     MouseGoal.simple(owlyAnimationFrame, carRelaxedEntity, plannerConstraint);
     {
       RenderInterface renderInterface = new CameraEmulator( //
@@ -95,10 +95,6 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
           CarEntity.SHAPE, () -> carRelaxedEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }
-  }
-
-  public TrajectoryControl createTrajectoryControl() {
-    return new PurePursuitControl(CarEntity.LOOKAHEAD, CarEntity.MAX_TURNING_RATE);
   }
 
   public static void main(String[] args) {

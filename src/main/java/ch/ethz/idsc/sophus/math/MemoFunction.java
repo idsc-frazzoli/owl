@@ -12,7 +12,7 @@ import java.util.function.Function;
  * but instead a lookup using the map is performed */
 public class MemoFunction<K, V> implements Function<K, V>, Serializable {
   public static <K, V> Function<K, V> wrap(Function<K, V> function) {
-    return new MemoFunction<>(function);
+    return new MemoFunction<>(Objects.requireNonNull(function));
   }
 
   // ---

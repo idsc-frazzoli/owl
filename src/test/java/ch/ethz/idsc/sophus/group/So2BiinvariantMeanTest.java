@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
 public class So2BiinvariantMeanTest extends TestCase {
-  public void testSimple() {
+  public void testPermutations() {
     for (int length = 1; length < 6; ++length) {
       Distribution distribution = UniformDistribution.of(Clips.absolute(Math.PI));
       // here, we hope that no antipodal points are generated

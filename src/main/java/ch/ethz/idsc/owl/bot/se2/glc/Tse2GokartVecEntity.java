@@ -48,7 +48,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
 
   public static Tse2GokartVecEntity createDefault(StateTime stateTime) {
     return new Tse2GokartVecEntity(stateTime, //
-        new PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
+        CarEntity.createPurePursuitControl(), //
         PARTITIONSCALE, //
         CARFLOWS, //
         SHAPE);

@@ -10,8 +10,12 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 import junit.framework.TestCase;
 
@@ -134,6 +138,22 @@ public class Se2BiinvariantMeanTest extends TestCase {
       int[] index = Primitives.toIntArray(perm);
       Tensor result = Se2BiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
       Chop._12.requireClose(result, solution);
+    }
+  }
+
+  public void testPermutations() {
+    for (int length = 1; length < 6; ++length) {
+      Distribution distribution = UniformDistribution.of(Clips.absolute(Math.PI));
+      // here, we hope that no antipodal points are generated
+      Tensor sequence = RandomVariate.of(distribution, length, 3);
+      Tensor weights = RandomVariate.of(UniformDistribution.unit(), length);
+      weights = weights.divide(Total.ofVector(weights));
+      Tensor solution = Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
+      for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
+        int[] index = Primitives.toIntArray(perm);
+        Tensor result = Se2BiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
+        Chop._12.requireClose(result, solution);
+      }
     }
   }
 

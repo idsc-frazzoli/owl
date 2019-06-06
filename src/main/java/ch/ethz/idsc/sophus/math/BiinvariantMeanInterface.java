@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public interface BiinvariantMeanInterface {
   /** @param sequence of points in Lie Group
    * @param weights vector affine, typically non-negative
-   * @return biinvariant mean */
+   * @return biinvariant mean
+   * @throws Exception if weights do not add up to one */
   Tensor mean(Tensor sequence, Tensor weights);
 }
