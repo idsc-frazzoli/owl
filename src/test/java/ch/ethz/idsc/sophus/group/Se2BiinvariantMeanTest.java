@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 import junit.framework.TestCase;
 
 public class Se2BiinvariantMeanTest extends TestCase {
@@ -21,24 +21,14 @@ public class Se2BiinvariantMeanTest extends TestCase {
   public void testArsignyPennec() {
     Scalar TWO = RealScalar.of(2);
     Scalar ZERO = RealScalar.ZERO;
-    Scalar rootOfTwo = Power.of(2, 0.5);
-    Scalar rootOfTwoHalf = Power.of(2, -0.5);
+    Scalar rootOfTwo = Sqrt.of(TWO);
+    Scalar rootOfTwoHalf = rootOfTwo.reciprocal();
     Scalar piFourth = Pi.HALF.divide(TWO);
     // ---
-    Tensor p = Tensors.of(//
-        rootOfTwoHalf.negate(), //
-        rootOfTwoHalf, //
-        piFourth);
+    Tensor p = Tensors.of(rootOfTwoHalf.negate(), rootOfTwoHalf, piFourth);
+    Tensor q = Tensors.of(rootOfTwo, ZERO, ZERO);
+    Tensor r = Tensors.of(rootOfTwoHalf.negate(), rootOfTwoHalf.negate(), piFourth.negate());
     // ---
-    Tensor q = Tensors.of(//
-        rootOfTwo, //
-        ZERO, //
-        ZERO);
-    // ---
-    Tensor r = Tensors.of(//
-        rootOfTwoHalf.negate(), //
-        rootOfTwoHalf.negate(), //
-        piFourth.negate());
     Tensor sequence = Tensors.of(p, q, r);
     Tensor sequenceUnordered = Tensors.of(p, r, q);
     Tensor weights = Tensors.vector(1, 1, 1).divide(RealScalar.of(3));
@@ -119,7 +109,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor sequence = Tensors.of(p, q, r, s);
     Tensor weights = Tensors.vector(3, 2, 1, 4).divide(RealScalar.of(10));
     Tensor solution = Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
-    System.out.println(solution);
+    // System.out.println(solution);
     // Chop._12.requireClose(solution, Tensors.fromString("{4.911144632104387[m], 5.064995814659804[m], 1.1}"));
     Chop._12.requireClose(solution, Tensors.fromString("{4.911658712738642[m], 5.064497410160735[m], 1.0998987355880372}"));
     for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
@@ -138,7 +128,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor mask = Tensors.vector(3, 2, -1, 4);
     Tensor weights = mask.divide(Total.ofVector(mask));
     Tensor solution = Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
-    System.out.println(solution);
+    // System.out.println(solution);
     // Chop._12.requireClose(solution, Tensors.vector(14.83619642851975, -5.043678108261259, -1.466370614359171));
     for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
       int[] index = Primitives.toIntArray(perm);
@@ -167,24 +157,13 @@ public class Se2BiinvariantMeanTest extends TestCase {
   public void testFail() {
     Tensor p = Tensors.vector(0, 0, 0);
     Tensor sequence = Tensors.of(p, p, p);
+    Tensor weights = Tensors.vector(1, 1, 1);
     try {
       // non-normalized weights fail
-      Tensor weights = Tensors.vector(1, 1, 1);
       Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
       fail();
     } catch (Exception exception) {
       // ---
     }
-    // TODO OB: revise this test as soon as a nice se2biinvariantmean exists
-    // try {
-    // // antipodal/cut locus check: max angle difference >= pi-C
-    // Tensor q = Tensors.vector(1, 1, Math.PI / 2);
-    // Tensor r = Tensors.vector(2, 2, Math.PI);
-    // sequence = Tensors.of(p, q, r);
-    // Tensor weights = Tensors.vector(1, 1, 1).divide(RealScalar.of(3));
-    // Se2BiinvariantMean.INSTANCE.mean(sequence, weights);
-    // fail();
-    // } catch (Exception exception) {
-    // }
   }
 }

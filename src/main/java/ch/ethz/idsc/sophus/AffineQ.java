@@ -22,11 +22,12 @@ public enum AffineQ {
   /** @param vector
    * @throws Exception if scalar entries of given vector do not add up to one
    * @throws Exception if either scalar entry in given vector is negative */
-  public static void requirePositive(Tensor vector) {
+  public static Tensor requirePositive(Tensor vector) {
     Scalar sum = vector.stream() //
         .map(Scalar.class::cast) //
         .map(Sign::requirePositiveOrZero) //
         .reduce(Scalar::add).get();
     CHOP.requireClose(sum, RealScalar.ONE);
+    return vector;
   }
 }

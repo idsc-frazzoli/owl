@@ -1,4 +1,4 @@
-// code by ob
+// code by ob, jph
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.sca.Tan;
  * Vincent Arsigny, Xavier Pennec, Nicholas Ayache
  * Source for Constant C: https://hal.inria.fr/inria-00073318/
  * Xavier Pennec */
-// TODO JPH simplify
 public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
   INSTANCE;
   // ---

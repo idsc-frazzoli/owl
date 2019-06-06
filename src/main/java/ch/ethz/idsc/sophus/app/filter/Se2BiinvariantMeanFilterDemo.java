@@ -5,8 +5,9 @@ import java.awt.Graphics2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.filter.Se2BiinvariantMeanCenter;
+import ch.ethz.idsc.sophus.filter.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.filter.Se2BiinvariantMeanFilter;
+import ch.ethz.idsc.sophus.group.Se2BiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -26,7 +27,7 @@ public class Se2BiinvariantMeanFilterDemo extends DatasetKernelDemo {
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    TensorUnaryOperator tensorUnaryOperator = Se2BiinvariantMeanCenter.of(spinnerKernel.getValue());
+    TensorUnaryOperator tensorUnaryOperator = BiinvariantMeanCenter.of(Se2BiinvariantMean.INSTANCE, spinnerKernel.getValue());
     refined = Se2BiinvariantMeanFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
     return refined;
   }
