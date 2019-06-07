@@ -21,14 +21,12 @@ import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
-import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ class FourierWindowPlot {
   private static final int WINDOW_DURATION = 2;
@@ -36,15 +34,17 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
   // TODO OB/JH, ist das so loesbar oder eher unschoen?
   enum Filter {
-    GEODESIC_CENTER, GEODESIC_CENTER_MIDSEEDED, TANGENT_SPACE_CENTER, BIINVARIANT_CENTER;
+    GEODESIC_CENTER, //
+    GEODESIC_CENTER_MIDSEEDED, //
+    TANGENT_SPACE_CENTER, //
+    BIINVARIANT_CENTER;
   }
 
   // TODO OB: make logPlot (standard)
   private static void plot(Tensor data) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data) {
-      Tensor temp = Tensor.of(meanData.stream().map(x -> Abs.FUNCTION.apply((Scalar) x)));
-      yData.append(temp);
+      yData.append(TransferFunctionSpecifications.MagnitudeResponse(data));
     }
     // ---
     Tensor xAxis = Tensors.empty();
@@ -96,6 +96,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
     List<String> listData = ResourceData.lines("/dubilab/app/pose/index.vector");
     int radius = 7;
     // signal cases: 0:x , 1:y, 2;heading
-    FourierWindowPlot.process(listData, listOperator, radius, 2);
+    FourierWindowPlot.process(listData, listOperator, radius, 1);
   }
 }
