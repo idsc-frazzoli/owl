@@ -35,7 +35,8 @@ public class GokartRelaxedEntity extends GokartEntity {
     super(stateTime);
     this.slacks = slacks;
   }
-
+  
+  // FIXME ANDRE has to work with multiple cost functions
   /** @param costFunction for instance, corner cutting costs */
   public void setAdditionalCostFunction(CostFunction costFunction) {
     this.costFunction = Objects.requireNonNull(costFunction);
