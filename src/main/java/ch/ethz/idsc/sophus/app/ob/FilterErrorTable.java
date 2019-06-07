@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.ob;
 
 import java.io.File;
 
-import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
@@ -27,7 +27,7 @@ enum FilterErrorTable {
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + //
         name + ".csv").stream().map(row -> row.extract(1, 4)));
     TensorUnaryOperator geodesicCenterFilter = //
-        CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), width);
+        GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), width);
     GeodesicCausalFilteringEvaluation geodesicCausalFilteringEvaluation = GeodesicCausalFilteringEvaluation.se2(control, geodesicCenterFilter.apply(control));
     Tensor alpharange = Subdivide.of(0.1, 1, 12);
     for (int j = 0; j < alpharange.length(); ++j) {

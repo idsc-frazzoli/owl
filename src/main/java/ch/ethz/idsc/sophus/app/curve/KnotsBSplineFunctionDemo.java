@@ -20,7 +20,7 @@ import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
-import ch.ethz.idsc.sophus.math.CentripetalKnotSpacingHelper;
+import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
 import ch.ethz.idsc.sophus.math.KnotSpacingSchemes;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
@@ -45,7 +45,7 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
     spinnerKnotSpacing.setValue(KnotSpacingSchemes.CHORDAL);
     spinnerKnotSpacing.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "knot spacing");
     // ---
-    jSliderCentripetalExponent.setPreferredSize(new Dimension(500, 28));
+    jSliderCentripetalExponent.setPreferredSize(new Dimension(200, 28));
     timerFrame.jToolBar.add(jSliderCentripetalExponent, "CentripetalExponent");
     // ---
     Tensor dubins = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
@@ -59,13 +59,13 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
     Tensor knots = null;
     switch (spinnerKnotSpacing.getValue()) {
     case UNIFORM:
-      knots = CentripetalKnotSpacingHelper.uniform(geodesicDisplay::parametricDistance).apply(control);
+      knots = CentripetalKnotSpacing.uniform(geodesicDisplay::parametricDistance).apply(control);
       break;
     case CHORDAL:
-      knots = CentripetalKnotSpacingHelper.chordal(geodesicDisplay::parametricDistance).apply(control);
+      knots = CentripetalKnotSpacing.chordal(geodesicDisplay::parametricDistance).apply(control);
       break;
     default:
-      knots = CentripetalKnotSpacingHelper.centripetal(//
+      knots = CentripetalKnotSpacing.of(//
           geodesicDisplay::parametricDistance, RationalScalar.of(jSliderCentripetalExponent.getValue(), jSliderCentripetalExponent.getMaximum()))
           .apply(control);
       break;

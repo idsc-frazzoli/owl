@@ -18,8 +18,8 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
   // Make more generic for any type of filter
   private static Tensor transferFunction(Tensor control, TensorUnaryOperator tensorUnaryOperator, int signal) {
-    Tensor refined = CenterFilter.of(tensorUnaryOperator, 8).apply(control);
+    Tensor refined = GeodesicCenterFilter.of(tensorUnaryOperator, 8).apply(control);
     // ---
     Tensor diffRefined = Tensor.of(Differences.of(refined).stream().map(xya -> xya.Get(signal)));
     Tensor diffRaw = Tensor.of(Differences.of(control).stream().map(xya -> xya.Get(signal)));

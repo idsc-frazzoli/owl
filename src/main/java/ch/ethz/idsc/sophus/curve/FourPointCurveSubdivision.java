@@ -32,8 +32,9 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
 
   public FourPointCurveSubdivision(GeodesicInterface geodesicInterface, Scalar omega) {
     super(geodesicInterface);
-    _1_lam = omega.add(omega).negate(); // TODO
-    lambda = omega.add(omega).add(RealScalar.ONE);
+    Scalar two_omega = omega.add(omega);
+    _1_lam = two_omega.negate();
+    lambda = two_omega.add(RealScalar.ONE);
   }
 
   /** standard four point scheme with omega = 1/16

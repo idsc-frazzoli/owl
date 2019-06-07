@@ -8,27 +8,28 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class CentripetalKnotSpacingTest extends TestCase {
   public void testSimple() {
-    CentripetalKnotSpacing centripetalKnotSpacing = //
-        new CentripetalKnotSpacing(Se2ParametricDistance.INSTANCE, RealScalar.of(0.5));
+    TensorUnaryOperator centripetalKnotSpacing = //
+        CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, RealScalar.of(0.5));
     Tensor knots = centripetalKnotSpacing.apply(Tensors.fromString("{{1,2,3},{4,5,6},{8,9,11}}"));
     Chop._12.requireClose(knots, Tensors.vector(0, 2.525854879647931, 4.988462479155103));
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    CentripetalKnotSpacing centripetalKnotSpacing = //
-        Serialization.copy(new CentripetalKnotSpacing(Se2ParametricDistance.INSTANCE, RealScalar.of(0.5)));
+    TensorUnaryOperator centripetalKnotSpacing = //
+        Serialization.copy(CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, RealScalar.of(0.5)));
     Tensor knots = centripetalKnotSpacing.apply(Tensors.fromString("{{1,2,3},{4,5,6},{8,9,11}}"));
     Chop._12.requireClose(knots, Tensors.vector(0, 2.525854879647931, 4.988462479155103));
   }
 
   public void testEmpty() {
-    CentripetalKnotSpacing centripetalKnotSpacing = //
-        new CentripetalKnotSpacing(Se2ParametricDistance.INSTANCE, RealScalar.of(0.75));
+    TensorUnaryOperator centripetalKnotSpacing = //
+        CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, RealScalar.of(0.75));
     try {
       centripetalKnotSpacing.apply(Tensors.empty());
       fail();
@@ -39,8 +40,8 @@ public class CentripetalKnotSpacingTest extends TestCase {
   }
 
   public void testScalarFail() {
-    CentripetalKnotSpacing centripetalKnotSpacing = //
-        new CentripetalKnotSpacing(Se2ParametricDistance.INSTANCE, RealScalar.of(0.25));
+    TensorUnaryOperator centripetalKnotSpacing = //
+        CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, RealScalar.of(0.25));
     try {
       centripetalKnotSpacing.apply(RealScalar.ONE);
       fail();

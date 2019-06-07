@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.Se3Differences;
 import ch.ethz.idsc.sophus.group.Se3Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
     System.out.println("smooth");
     {
       TensorUnaryOperator tensorUnaryOperator = //
-          CenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 4 * 3 * 2);
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 4 * 3 * 2);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       System.out.println("store");
       Put.of(HomeDirectory.file("MH_04_difficult_poses_smooth.file"), smooth);
