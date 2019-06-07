@@ -7,7 +7,10 @@ import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.img.StrictColorDataIndexed;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.Clips;
 
+/** @see ColorDataIndexed */
 public enum ColorLookup {
   ;
   /** precompute lookup table of hsluv colors for given lightness and alpha
@@ -16,7 +19,7 @@ public enum ColorLookup {
    * @param lightness
    * @return strict color data table with given length number of colors */
   public static ColorDataIndexed hsluv_lightness(int length, double lightness) {
-    Tensor tensor = Tensor.of(Subdivide.of(0, 1, length - 1).stream() //
+    Tensor tensor = Tensor.of(Subdivide.increasing(Clips.unit(), length - 1).stream() //
         .map(hue -> Hsluv.of(hue.Get().number().doubleValue(), 1, lightness, 1)) //
         .map(ColorFormat::toVector));
     return StrictColorDataIndexed.create(tensor);
@@ -24,15 +27,17 @@ public enum ColorLookup {
 
   /** @param length
    * @param colorDataGradient
-   * @return */
-  public static ColorDataIndexed increasing(int length, ColorDataGradient colorDataGradient) {
-    return StrictColorDataIndexed.create(Subdivide.of(0, 1, length - 1).map(colorDataGradient));
+   * @return
+   * @see ColorDataGradient */
+  public static ColorDataIndexed increasing(int length, ScalarTensorFunction colorDataGradient) {
+    return StrictColorDataIndexed.create(Subdivide.increasing(Clips.unit(), length - 1).map(colorDataGradient));
   }
 
   /** @param length
    * @param colorDataGradient
-   * @return */
-  public static ColorDataIndexed decreasing(int length, ColorDataGradient colorDataGradient) {
-    return StrictColorDataIndexed.create(Subdivide.of(1, 0, length - 1).map(colorDataGradient));
+   * @return
+   * @see ColorDataGradient */
+  public static ColorDataIndexed decreasing(int length, ScalarTensorFunction colorDataGradient) {
+    return StrictColorDataIndexed.create(Subdivide.decreasing(Clips.unit(), length - 1).map(colorDataGradient));
   }
 }

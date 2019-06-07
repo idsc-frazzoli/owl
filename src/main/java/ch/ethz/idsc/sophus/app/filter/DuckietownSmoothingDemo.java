@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class DuckietownSmoothingDemo extends DatasetKernelDemo implements BufferedImageSupplier {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -73,7 +74,8 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
     final int levels = spinnerRefine.getValue();
     final Tensor control = control();
     Tensor effective = control;
-    CentripetalKnotSpacing centripedalKnotSpacing = new CentripetalKnotSpacing(geodesicDisplay()::parametricDistance, RealScalar.of(.5));
+    TensorUnaryOperator centripedalKnotSpacing = //
+        CentripetalKnotSpacing.of(geodesicDisplay()::parametricDistance, 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
@@ -108,10 +110,12 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
   @Override
   public BufferedImage bufferedImage() {
     final int degree = spinnerDegree.getValue();
-    final int levels = spinnerRefine.getValue();
+    // final int levels =
+    spinnerRefine.getValue();
     final Tensor control = control();
     Tensor effective = control;
-    CentripetalKnotSpacing centripedalKnotSpacing = new CentripetalKnotSpacing(geodesicDisplay()::parametricDistance, RealScalar.of(.5));
+    TensorUnaryOperator centripedalKnotSpacing = //
+        CentripetalKnotSpacing.of(geodesicDisplay()::parametricDistance, 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);

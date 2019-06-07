@@ -8,8 +8,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2Group;
+import ch.ethz.idsc.sophus.group.Se2Differences;
 import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.sophus.surf.RotationMatrix3D;
 import ch.ethz.idsc.tensor.Scalar;
@@ -61,7 +60,7 @@ public enum DuckietownData {
   }
 
   public static void main(String[] args) throws IOException {
-    LieDifferences lieDifferences = new LieDifferences(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+    LieDifferences lieDifferences = Se2Differences.INSTANCE;
     Tensor states = states(POSE_20190509_0);
     Tensor diffs = lieDifferences.apply(states);
     Tensor times = Tensor.of(of(POSE_20190509_0).stream().map(StateTime::time));

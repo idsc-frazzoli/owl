@@ -81,6 +81,7 @@ public class GokartRelaxedEntity extends GokartEntity {
   }
 
   // TODO ASTOLL function is not used (yet?)
+  @SuppressWarnings("unused")
   private List<CostFunction> createCostFunctionList(List<Objectives> objectives, Tensor goal) {
     List<CostFunction> costFunction = new ArrayList<>();
     Iterator<Objectives> iterator = objectives.iterator();
@@ -95,6 +96,8 @@ public class GokartRelaxedEntity extends GokartEntity {
         PolygonRegion polygonRegion = new PolygonRegion(polygon);
         PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
         CostFunction regionCost = ConstraintViolationCost.of(regionConstraint, RealScalar.ONE);
+      default:
+        break;
       }
     }
     return costFunction;

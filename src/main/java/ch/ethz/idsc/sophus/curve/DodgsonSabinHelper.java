@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   ;
   static final CurveSubdivision BSPLINE3_EUCLIDEAN = new BSpline3CurveSubdivision(RnGeodesic.INSTANCE);
   private static final Scalar TWO = RealScalar.of(2);
+  private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
 
   /** @param b
@@ -44,8 +45,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     double fa = 1 / (1 + Math.sqrt(1 - R2 * d * 0.25));
     double fb = l2 / (1 + Math.sqrt(1 - l2 * R2 * d * 0.25));
     return Total.of(Tensors.of( //
-        b.add(c).multiply(RealScalar.of(0.5)), //
-        D.multiply(lam.divide(RealScalar.of(2))), //
+        b.add(c).multiply(HALF), //
+        D.multiply(lam.multiply(HALF)), //
         Cross.of(D).multiply(RealScalar.of(r.number().doubleValue() * Math.sqrt(d) * 0.25 * (fa - fb)))));
   }
 

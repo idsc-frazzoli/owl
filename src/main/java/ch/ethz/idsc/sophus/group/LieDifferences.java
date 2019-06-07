@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.group;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
@@ -27,7 +27,7 @@ public class LieDifferences implements TensorUnaryOperator {
 
   @Override
   public Tensor apply(Tensor tensor) {
-    Tensor result = Tensors.empty();
+    Tensor result = Unprotect.empty(tensor.length() - 1);
     Tensor prev = tensor.get(0);
     for (int index = 1; index < tensor.length(); ++index) {
       Tensor next = tensor.get(index);

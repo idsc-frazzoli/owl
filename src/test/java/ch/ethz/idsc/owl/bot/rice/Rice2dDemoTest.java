@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
-import ch.ethz.idsc.owl.glc.core.HeuristicConsistency;
+import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
@@ -33,7 +33,7 @@ public class Rice2dDemoTest extends TestCase {
     trajectoryRender.trajectory(samples);
     owlyFrame.addBackground(trajectoryRender);
     owlyFrame.addBackground(RegionRenders.create(Rice2dDemo.ELLIPSOID_REGION));
-    HeuristicConsistency.check(trajectoryPlanner);
+    HeuristicAssert.check(trajectoryPlanner);
     // TrajectoryPlannerConsistency.check(trajectoryPlanner);
     Thread.sleep(120);
     owlyFrame.jFrame.setVisible(false);
@@ -54,7 +54,7 @@ public class Rice2dDemoTest extends TestCase {
     trajectoryRender.trajectory(samples);
     owlyFrame.addBackground(trajectoryRender);
     owlyFrame.addBackground(RegionRenders.create(Rice2dDemo.ELLIPSOID_REGION));
-    HeuristicConsistency.check(trajectoryPlanner);
+    HeuristicAssert.check(trajectoryPlanner);
     // TrajectoryPlannerConsistency.check(trajectoryPlanner);
     Thread.sleep(120);
     owlyFrame.jFrame.setVisible(false);

@@ -7,8 +7,8 @@ import java.io.IOException;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
-import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
@@ -99,7 +99,7 @@ public class GeodesicCurveEvaluation {
 
   public void windowSizeCurves() throws IOException {
     TensorUnaryOperator centerFilter = GeodesicCenter.of(geodesicInterface, SmoothingKernel.GAUSSIAN);
-    Tensor refinedCenter = CenterFilter.of(centerFilter, 6).apply(control());
+    Tensor refinedCenter = GeodesicCenterFilter.of(centerFilter, 6).apply(control());
     // optimal windowsize for each parameter
     Scalar alpha_x = minimizingAlphas.Get(0);
     Scalar alpha_a = minimizingAlphas.Get(1);
@@ -150,7 +150,7 @@ public class GeodesicCurveEvaluation {
 
   public void alphaCurves() throws IOException {
     TensorUnaryOperator centerFilter = GeodesicCenter.of(geodesicInterface, SmoothingKernel.GAUSSIAN);
-    Tensor refinedCenter = CenterFilter.of(centerFilter, 6).apply(control());
+    Tensor refinedCenter = GeodesicCenterFilter.of(centerFilter, 6).apply(control());
     // optimal windowsize for each parameter
     int win_x = Scalars.intValueExact(minimizingWindowSize.Get(0));
     int win_a = Scalars.intValueExact(minimizingWindowSize.Get(1));

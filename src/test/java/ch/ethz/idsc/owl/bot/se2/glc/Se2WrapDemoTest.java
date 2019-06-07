@@ -5,7 +5,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2CoveringWrap;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.CheckedTrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.core.HeuristicConsistency;
+import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -24,7 +24,7 @@ public class Se2WrapDemoTest extends TestCase {
     glcExpand.findAny(200);
     assertTrue(glcExpand.getExpandCount() < 100);
     assertTrue(trajectoryPlanner.getBest().isPresent());
-    HeuristicConsistency.check(trajectoryPlanner);
+    HeuristicAssert.check(trajectoryPlanner);
   }
 
   public void testSe2CoveringWrap() {
@@ -37,6 +37,6 @@ public class Se2WrapDemoTest extends TestCase {
     glcExpand.findAny(10_000);
     assertTrue(glcExpand.getExpandCount() < 2000);
     assertTrue(trajectoryPlanner.getBest().isPresent());
-    HeuristicConsistency.check(trajectoryPlanner);
+    HeuristicAssert.check(trajectoryPlanner);
   }
 }

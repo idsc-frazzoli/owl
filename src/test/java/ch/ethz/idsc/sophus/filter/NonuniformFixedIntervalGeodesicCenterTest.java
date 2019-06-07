@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.IOException;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
@@ -11,15 +12,16 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class NonuniformFixedIntervalGeodesicCenterTest extends TestCase {
-  public void testTrivial() {
+  public void testTrivial() throws ClassNotFoundException, IOException {
     NavigableMap<Scalar, Tensor> navigableMap = new TreeMap<>();
     navigableMap.put(RealScalar.ONE, Tensors.vector(1, 1, 0));
     NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter = //
-        new NonuniformFixedIntervalGeodesicCenter(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
+        Serialization.copy(new NonuniformFixedIntervalGeodesicCenter(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN));
     Scalar interval = RealScalar.of(Math.random());
     Scalar key = RealScalar.of(1);
     // --

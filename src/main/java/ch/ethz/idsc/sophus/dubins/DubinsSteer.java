@@ -6,6 +6,7 @@ import java.util.Optional;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
+@FunctionalInterface
 /* package */ interface DubinsSteer {
   /** @param dist_tr non-negative
    * @param th_tr in the interval [0, 2*pi)

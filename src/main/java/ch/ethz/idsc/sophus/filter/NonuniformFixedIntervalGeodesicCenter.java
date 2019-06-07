@@ -1,35 +1,36 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.Serializable;
 import java.util.NavigableMap;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 // TODO OB reduce redundancy with NonuniformFixedRadiusGeodesicCenter
-public class NonuniformFixedIntervalGeodesicCenter {
+public class NonuniformFixedIntervalGeodesicCenter implements Serializable {
   /** @param geodesicInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static NonuniformFixedIntervalGeodesicCenter of(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+  public static NonuniformFixedIntervalGeodesicCenter of(GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel) {
     return new NonuniformFixedIntervalGeodesicCenter(Objects.requireNonNull(geodesicInterface), Objects.requireNonNull(smoothingKernel));
   }
 
   // ---
   public final GeodesicInterface geodesicInterface;
-  private final SmoothingKernel smoothingKernel;
+  private final ScalarUnaryOperator windowFunction;
 
-  /* package */ NonuniformFixedIntervalGeodesicCenter(GeodesicInterface geodesicInterface, SmoothingKernel smoothingKernel) {
+  /* package */ NonuniformFixedIntervalGeodesicCenter(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
     this.geodesicInterface = geodesicInterface;
-    this.smoothingKernel = smoothingKernel;
+    this.windowFunction = windowFunction;
   }
 
   private static Tensor maskToSplits(Tensor mask) {
@@ -51,10 +52,10 @@ public class NonuniformFixedIntervalGeodesicCenter {
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
     for (Scalar headMapKey : subMap.headMap(key, false).keySet()) {
-      maskLeft.append(smoothingKernel.apply(headMapKey.subtract(key).divide(doubleInterval)));
+      maskLeft.append(windowFunction.apply(headMapKey.subtract(key).divide(doubleInterval)));
     }
     for (Scalar tailMapKey : subMap.tailMap(key, false).descendingKeySet()) {
-      maskRight.append(smoothingKernel.apply(tailMapKey.subtract(key).divide(doubleInterval)));
+      maskRight.append(windowFunction.apply(tailMapKey.subtract(key).divide(doubleInterval)));
     }
     maskLeft.append(RationalScalar.HALF);
     maskRight.append(RationalScalar.HALF);

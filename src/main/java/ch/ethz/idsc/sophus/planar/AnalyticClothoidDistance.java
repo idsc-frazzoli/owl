@@ -3,13 +3,14 @@ package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.owl.math.planar.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.TensorMetric;
+import ch.ethz.idsc.sophus.TensorNorm;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-public enum AnalyticClothoidDistance implements TensorMetric {
+public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
   LR1(ClothoidLR1Midpoint.INSTANCE), //
   LR3(ClothoidLR3Midpoint.INSTANCE), //
   ;
@@ -44,7 +45,8 @@ public enum AnalyticClothoidDistance implements TensorMetric {
     return AbsSquared.FUNCTION.apply(a).multiply(clothoidTerminalRatios.difference());
   }
 
-  public Scalar norm(Tensor q) {
-    return distance(q.map(Scalar::zero), q);
+  @Override // from TensorNorm
+  public Scalar norm(Tensor xya) {
+    return distance(xya.map(Scalar::zero), xya);
   }
 }
