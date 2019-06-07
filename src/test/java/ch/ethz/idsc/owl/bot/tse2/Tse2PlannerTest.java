@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.glc.core.HeuristicConsistency;
+import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
@@ -63,7 +63,7 @@ public class Tse2PlannerTest extends TestCase {
     GlcNode glcNode = optional.get();
     List<TrajectorySample> trajectory = GlcTrajectories.detailedTrajectoryTo(stateIntegrator, glcNode);
     assertTrue(20 < trajectory.size());
-    HeuristicConsistency.check(trajectoryPlanner);
+    HeuristicAssert.check(trajectoryPlanner);
     // TrajectoryPlannerConsistency.check(trajectoryPlanner);
   }
 
@@ -98,7 +98,7 @@ public class Tse2PlannerTest extends TestCase {
     System.out.println(expandCount);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     System.out.println(optional.isPresent());
-    HeuristicConsistency.check(trajectoryPlanner);
+    HeuristicAssert.check(trajectoryPlanner);
     // TrajectoryPlannerConsistency.check(trajectoryPlanner);
   }
 }

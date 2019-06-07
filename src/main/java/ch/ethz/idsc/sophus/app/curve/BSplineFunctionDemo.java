@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -12,6 +13,7 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
@@ -36,8 +38,9 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-public class BSplineFunctionDemo extends BaseCurvatureDemo {
+public class BSplineFunctionDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
   private final JToggleButton jToggleItrp = new JToggleButton("interp");
+  private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
   public BSplineFunctionDemo() {
     addButtonDubins();
@@ -53,8 +56,7 @@ public class BSplineFunctionDemo extends BaseCurvatureDemo {
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     final int upper = control.length() - 1;
     final Scalar parameter = RationalScalar.of(jSlider.getValue() * upper, jSlider.getMaximum());
-    if (jToggleSymi.isSelected())
-      graphics.drawImage(symLinkImage(degree, upper + 1, parameter).bufferedImage(), 0, 0, null);
+    bufferedImage = symLinkImage(degree, upper + 1, parameter).bufferedImage();
     // ---
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
@@ -104,6 +106,11 @@ public class BSplineFunctionDemo extends BaseCurvatureDemo {
     if (levels < 5)
       renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
+  }
+
+  @Override
+  public BufferedImage bufferedImage() {
+    return bufferedImage;
   }
 
   /* package */ static SymLinkImage symLinkImage(int degree, int length, Scalar scalar) {

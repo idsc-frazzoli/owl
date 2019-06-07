@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.filter.BiinvariantMeanCenter;
-import ch.ethz.idsc.sophus.filter.CenterFilter;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
@@ -21,7 +21,7 @@ public class BiinvariantMeanFilterDemo extends DatasetKernelDemo {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     TensorUnaryOperator tensorUnaryOperator = //
         BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMeanInterface(), spinnerKernel.getValue());
-    return CenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
+    return GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
   }
 
   public static void main(String[] args) {

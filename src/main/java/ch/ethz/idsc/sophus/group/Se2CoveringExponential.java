@@ -16,6 +16,8 @@ import ch.ethz.idsc.tensor.sca.Tan;
 public enum Se2CoveringExponential implements LieExponential {
   INSTANCE;
   // ---
+  private static final Scalar HALF = RealScalar.of(0.5);
+
   /** maps a vector x from the Lie-algebra se2 to a vector of the Lie-group SE2
    * 
    * @param x element in the se2 Lie-algebra of the form {vx, vy, beta}
@@ -44,7 +46,7 @@ public enum Se2CoveringExponential implements LieExponential {
       return g.copy();
     Scalar x = g.Get(0);
     Scalar y = g.Get(1);
-    Scalar be2 = be.divide(RealScalar.of(2));
+    Scalar be2 = be.multiply(HALF);
     Scalar tan = Tan.FUNCTION.apply(be2);
     return Tensors.of( //
         y.add(x.divide(tan)).multiply(be2), //

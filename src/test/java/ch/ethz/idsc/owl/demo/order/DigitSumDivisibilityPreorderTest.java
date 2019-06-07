@@ -57,13 +57,13 @@ public class DigitSumDivisibilityPreorderTest extends TestCase {
 
   public void testNegativeAndZeroCase() {
     try {
-      OrderComparison preorderComparison1 = DigitSumDivisibilityPreorder.INTEGER.compare(0, 3);
+      DigitSumDivisibilityPreorder.INTEGER.compare(0, 3);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      OrderComparison preorderComparison1 = DigitSumDivisibilityPreorder.INTEGER.compare(-3, 3);
+      DigitSumDivisibilityPreorder.INTEGER.compare(-3, 3);
       fail();
     } catch (Exception exception) {
       // ---

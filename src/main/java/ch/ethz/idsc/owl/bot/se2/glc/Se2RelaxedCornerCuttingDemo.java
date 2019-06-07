@@ -61,23 +61,22 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = createResLo();
     carRelaxedEntity.set2ndCostFunction(r2ImageRegionWrap.costFunction());
-    // --
+    // ---
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     TrajectoryRegionQuery trajectoryRegionQuery = //
         SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
-    // --
-    owlyAnimationFrame.add(carRelaxedEntity);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     // owlyAnimationFrame.addBackground(RegionRenders.create(testImageRegion));
     List<GlcPlannerCallback> list = new ArrayList<>();
     list.add(carRelaxedEntity);
     list.add(new SimpleGlcPlannerCallback(carRelaxedEntity));
-    // --
+    // ---
     GoalConsumer goalConsumer = new SimpleGoalConsumer(carRelaxedEntity, plannerConstraint, list);
     Tensor goal = Tensors.vector(4.3, 4.2, 1.517);
     goalConsumer.accept(goal);
-    // --
+    // ---
+    owlyAnimationFrame.add(carRelaxedEntity);
+    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     MouseGoal.simple(owlyAnimationFrame, carRelaxedEntity, plannerConstraint);
     {
       RenderInterface renderInterface = new CameraEmulator( //

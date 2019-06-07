@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.sophus.TensorMetric;
+import ch.ethz.idsc.sophus.TensorNorm;
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.sophus.curve.CurveSubdivision;
 import ch.ethz.idsc.sophus.curve.LaneRiesenfeldCurveSubdivision;
@@ -12,7 +13,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** implementation is only an approximation of the clothoid length */
-public enum ClothoidDistance implements TensorMetric {
+// TODO OWL 044 JPH rename to PseudoClothoidDistance
+public enum ClothoidDistance implements TensorMetric, TensorNorm {
   INSTANCE;
   // ---
   private static final CurveSubdivision CURVE_SUBDIVISION = //
@@ -33,7 +35,10 @@ public enum ClothoidDistance implements TensorMetric {
     return sum;
   }
 
-  public Scalar norm(Tensor q) {
-    return distance(q.map(Scalar::zero), q);
+  /** @param xya element in SE(2) of the form {x, y, angle}
+   * @return length of clothoid from origin to given element xya */
+  @Override // from TensorNorm
+  public Scalar norm(Tensor xya) {
+    return distance(xya.map(Scalar::zero), xya);
   }
 }

@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.Serializable;
 import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -10,7 +11,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Min;
 
-public class NonuniformFixedIntervalGeodesicCenterFilter implements NavigableMapUnaryOperator {
+public class NonuniformFixedIntervalGeodesicCenterFilter implements NavigableMapUnaryOperator, Serializable {
   /** @param nonuniformGeodesicCenter
    * @param (temporal) interval radius
    * @return
@@ -28,7 +29,7 @@ public class NonuniformFixedIntervalGeodesicCenterFilter implements NavigableMap
     this.interval = interval;
   }
 
-  @Override
+  @Override // from NavigableMapUnaryOperator
   public NavigableMap<Scalar, Tensor> apply(NavigableMap<Scalar, Tensor> navigableMap) {
     NavigableMap<Scalar, Tensor> resultMap = new TreeMap<>();
     Scalar lo;

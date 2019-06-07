@@ -18,7 +18,8 @@ import ch.ethz.idsc.tensor.qty.Boole;
 
 /** DeBoor denotes the function that is defined
  * by control points over a sequence of knots. */
-class CoxDeBoor implements ScalarTensorFunction {
+// TODO JPH not used
+/* package */ class CoxDeBoor implements ScalarTensorFunction {
   /** @param knots vector of length degree * 2
    * @param control points of length degree + 1
    * @return
@@ -91,7 +92,7 @@ class CoxDeBoor implements ScalarTensorFunction {
     set.add(index);
     if (!status)
       System.err.println("warning=" + index);
-    return status//
+    return status //
         ? knots.Get(index)
         : RealScalar.ZERO;
   }

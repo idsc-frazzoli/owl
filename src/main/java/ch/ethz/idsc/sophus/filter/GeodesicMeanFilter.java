@@ -7,6 +7,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 public enum GeodesicMeanFilter {
   ;
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, int radius) {
-    return CenterFilter.of(GeodesicMean.of(geodesicInterface), radius);
+    return GeodesicCenterFilter.of(GeodesicMean.of(geodesicInterface), radius);
   }
 }

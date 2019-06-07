@@ -2,14 +2,13 @@
 package ch.ethz.idsc.owl.bot.psu;
 
 import java.util.Collection;
-import java.util.Objects;
 
-import ch.ethz.idsc.owl.data.tree.Node;
+import ch.ethz.idsc.owl.data.tree.NodesAssert;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.CheckedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.glc.core.HeuristicConsistency;
+import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,17 +21,16 @@ public class PsuDemoTest extends TestCase {
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, Tensors.vector(Math.PI * 0.7, 0.5), RealScalar.of(0.3));
     TrajectoryPlanner trajectoryPlanner = CheckedTrajectoryPlanner.wrap(PsuDemo.raw(goalInterface));
+    HeuristicAssert.check(trajectoryPlanner);
     assertFalse(trajectoryPlanner.getBest().isPresent());
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
     assertFalse(trajectoryPlanner.getBest().isPresent());
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);
+    HeuristicAssert.check(trajectoryPlanner);
     assertTrue(trajectoryPlanner.getBest().isPresent());
-    // TODO JPH the code below is a general consistency check:
     Collection<GlcNode> collection = trajectoryPlanner.getDomainMap().values();
     assertTrue(100 < collection.size());
-    long count = collection.stream().map(Node::parent).filter(Objects::isNull).count();
-    assertEquals(count, 1);
-    HeuristicConsistency.check(trajectoryPlanner);
+    NodesAssert.containsOneRoot(collection);
   }
 }

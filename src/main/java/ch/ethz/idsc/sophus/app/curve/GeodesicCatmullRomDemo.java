@@ -8,7 +8,6 @@ import java.awt.geom.Path2D;
 import java.util.Arrays;
 
 import javax.swing.JSlider;
-import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -19,23 +18,24 @@ import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicCatmullRom;
-import ch.ethz.idsc.sophus.math.CentripetalKnotSpacingHelper;
+import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.KnotSpacingSchemes;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 public class GeodesicCatmullRomDemo extends CurvatureDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  private final SpinnerLabel<KnotSpacingSchemes> spinnerKnotSpacing = new SpinnerLabel<>();
-  private final JToggleButton jToggleSymi = new JToggleButton("graph");
   private final JSlider jSlider = new JSlider(0, 1000, 500);
-  private final JSlider jSliderAlpha = new JSlider(0, 1000, 500);
+  private final JSlider jSliderExponent = new JSlider(0, 1000, 500);
 
   public GeodesicCatmullRomDemo() {
     addButtonDubins();
@@ -46,18 +46,13 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     spinnerRefine.setValue(5);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
-    spinnerKnotSpacing.setList(Arrays.asList(KnotSpacingSchemes.values()));
-    spinnerKnotSpacing.setValue(KnotSpacingSchemes.CHORDAL);
-    spinnerKnotSpacing.addToComponentReduced(timerFrame.jToolBar, new Dimension(100, 28), "knot spacing");
-    // ---
-    jToggleSymi.setSelected(true);
-    timerFrame.jToolBar.add(jToggleSymi);
-    // ---
-    jSlider.setPreferredSize(new Dimension(500, 28));
+    jSlider.setPreferredSize(new Dimension(300, 28));
+    jSlider.setToolTipText("evaluation parameter");
     timerFrame.jToolBar.add(jSlider);
     // ---
-    jSliderAlpha.setPreferredSize(new Dimension(500, 28));
-    timerFrame.jToolBar.add(jSliderAlpha);
+    jSliderExponent.setPreferredSize(new Dimension(200, 28));
+    jSliderExponent.setToolTipText("centripetal exponent");
+    timerFrame.jToolBar.add(jSliderExponent);
     {
       Tensor dubins = Tensors.fromString("{{1,1,0}, {1,2,-1}, {2,1,0.5}}");
       setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
@@ -74,25 +69,17 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     if (4 <= control.length()) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-      Tensor knots = null;
-      switch (spinnerKnotSpacing.getValue()) {
-      case UNIFORM:
-        knots = CentripetalKnotSpacingHelper.uniform(geodesicDisplay::parametricDistance).apply(control);
-        break;
-      case CHORDAL:
-        knots = CentripetalKnotSpacingHelper.chordal(geodesicDisplay::parametricDistance).apply(control);
-        break;
-      default:
-        // TODO
-        knots = CentripetalKnotSpacingHelper.centripetal(geodesicDisplay::parametricDistance, RealScalar.of(0.5)).apply(control);
-        break;
-      }
-      final Scalar parameter = knots.Get(knots.length() - 2).subtract(knots.get(1)).multiply(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() + 1))
-          .add(knots.get(1));
+      Scalar exponent = RationalScalar.of(2 * jSliderExponent.getValue(), jSliderExponent.getMaximum());
+      TensorUnaryOperator centripetalKnotSpacing = //
+          CentripetalKnotSpacing.of(geodesicDisplay::parametricDistance, exponent);
+      Tensor knots = centripetalKnotSpacing.apply(control);
+      Scalar lo = knots.Get(1);
+      Scalar hi = knots.Get(knots.length() - 2);
+      hi = DoubleScalar.of(Math.nextDown(hi.number().doubleValue()));
+      Clip interval = Clips.interval(lo, hi);
+      Scalar parameter = LinearInterpolation.of(Tensors.of(lo, hi)).At(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()));
       ScalarTensorFunction scalarTensorFunction = GeodesicCatmullRom.of(geodesicInterface, knots, control);
-      Tensor refined = Subdivide
-          .of(knots.Get(1).number().floatValue(), knots.Get(knots.length() - 2).number().floatValue() - 0.000001, Math.max(1, levels * control.length()))
-          .map(scalarTensorFunction);
+      Tensor refined = Subdivide.increasing(interval, Math.max(1, levels * control.length())).map(scalarTensorFunction);
       {
         Tensor selected = scalarTensorFunction.apply(parameter);
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(selected));
