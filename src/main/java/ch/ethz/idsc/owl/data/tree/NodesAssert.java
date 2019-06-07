@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import ch.ethz.idsc.owl.data.GlobalAssert;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 
 public enum NodesAssert {
   ;
@@ -38,8 +37,8 @@ public enum NodesAssert {
       throw new RuntimeException("root count=" + count);
   }
 
-  public static void allLeaf(Collection<GlcNode> collection) {
-    boolean allLeaf = collection.stream().allMatch(GlcNode::isLeaf);
+  public static <T extends Node> void allLeaf(Collection<T> collection) {
+    boolean allLeaf = collection.stream().allMatch(Node::isLeaf);
     if (!allLeaf)
       throw new RuntimeException("Not all elements in global queue are leafs!");
   }

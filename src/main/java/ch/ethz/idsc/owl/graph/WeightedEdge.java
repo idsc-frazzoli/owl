@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.graph;
 
+// TODO JPH remove if not needed
 /* packlage */ class WeightedEdge<T> {
   public final Vertex<T> start;
   public final Vertex<T> end;

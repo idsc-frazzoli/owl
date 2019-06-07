@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO JPH remove if not needed
 /* package */ abstract class CoordinateTransform implements Function<Coordinates, Coordinates> {
   protected final TensorUnaryOperator tensorUnaryOperator;
   protected final CoordinateSystem from;

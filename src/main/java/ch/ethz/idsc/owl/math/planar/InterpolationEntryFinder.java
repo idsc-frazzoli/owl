@@ -14,7 +14,14 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 public final class InterpolationEntryFinder extends TrajectoryEntryFinder {
+  public static final TrajectoryEntryFinder INSTANCE = new InterpolationEntryFinder();
+  // ---
   private static final Mod MOD_UNIT = Mod.function(1);
+
+  // TODO OWL 044 JPH make constructor private
+  public InterpolationEntryFinder() {
+    // ---
+  }
 
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar index) {
