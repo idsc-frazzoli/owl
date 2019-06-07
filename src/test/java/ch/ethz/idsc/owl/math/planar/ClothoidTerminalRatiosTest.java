@@ -99,7 +99,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
 
   public void testOpenEnd() {
     Distribution distribution = NormalDistribution.standard();
-    Chop chop = Chop.below(1e-2);
+    Chop chop = Chop._02;
     int failCount = 0;
     for (int count = 0; count < 20; ++count) {
       Tensor beg = RandomVariate.of(distribution, 3);

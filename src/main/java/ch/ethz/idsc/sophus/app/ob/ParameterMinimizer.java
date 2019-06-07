@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class ParameterMinimizer {
   // ---
-  GeodesicErrorEvaluation geodesicErrorEvaluation = new GeodesicErrorEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+  private static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = new GeodesicErrorEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
 
   public Tensor minimizer(String data) {
     Tensor control = control(data);
@@ -60,8 +60,8 @@ public class ParameterMinimizer {
         for (int index = 0; index < alpharange.length(); index++) {
           Tensor refinedCausal = Tensors.empty();
           refinedCausal = GeodesicIIRnFilter.of(causalFilter, geodesicInterface, windowSize, alpharange.Get(index)).apply(control);
-          Tensor error0 = geodesicErrorEvaluation.evaluate0ErrorSeperated(refinedCausal, refinedCenter);
-          Tensor error1 = geodesicErrorEvaluation.evaluate1ErrorSeperated(refinedCausal, refinedCenter);
+          Tensor error0 = GEODESIC_ERROR_EVALUATION.evaluate0ErrorSeperated(refinedCausal, refinedCenter);
+          Tensor error1 = GEODESIC_ERROR_EVALUATION.evaluate1ErrorSeperated(refinedCausal, refinedCenter);
           // xy-error update
           if (Scalars.lessEquals(error0.Get(0), err_x)) {
             alpha_x = alpharange.Get(index);
