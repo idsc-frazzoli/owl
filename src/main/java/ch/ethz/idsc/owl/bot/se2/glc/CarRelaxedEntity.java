@@ -65,8 +65,10 @@ public class CarRelaxedEntity extends CarEntity {
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, So2Region.periodic(goal.Get(2), goalRadius.Get(2)));
     // define Se2MinTimeGoalManager
     Se2MinTimeGoalManager timeCosts = new Se2MinTimeGoalManager(se2ComboRegion, controls);
+    // set up cost vector with eventual other costs
     List<CostFunction> costVector = Arrays.asList(timeCosts, costFunction);
     GoalInterface goalInterface = new VectorCostGoalAdapter(costVector, se2ComboRegion);
+    // --
     return new StandardRelaxedLexicographicPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface, slacks);
   }

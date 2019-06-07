@@ -1,6 +1,7 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.owl.bot.se2.glc.GokartRelaxedEntity;
+import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
@@ -17,12 +18,13 @@ public class GokartRelaxedEntityTest extends TestCase {
     // define slack vector
     Tensor slacks = Tensors.vector(0, 0);
     GokartRelaxedEntity gokartRelaxedEntity = GokartRelaxedEntity.createRelaxedGokartEntity(initial, slacks);
+    gokartRelaxedEntity.setAdditionalCostFunction(ConstraintViolationCost.of(EmptyObstacleConstraint.INSTANCE, RealScalar.ONE));
     Tensor goal = Tensors.vector(0, 25, 0);
     RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = gokartRelaxedEntity.createTrajectoryPlanner(EmptyObstacleConstraint.INSTANCE, goal);
     assertEquals(gokartRelaxedEntity.getSlack(), slacks);
     relaxedTrajectoryPlanner.insertRoot(initial);
     RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(relaxedTrajectoryPlanner);
     glcExpand.findAny(1000);
-    // assertTrue(planner.getBest().isPresent());
+    assertTrue(relaxedTrajectoryPlanner.getBest().isPresent());
   }
 }

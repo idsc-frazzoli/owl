@@ -56,11 +56,12 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
   @Override // from Se2CarDemo
   protected final void configure(OwlyAnimationFrame owlyAnimationFrame) {
     StateTime stateTime = new StateTime(Tensors.vector(1.7, 2.2, 0), RealScalar.ZERO);
-    Tensor slacks = Tensors.vector(2, 0);
+    Tensor slacks = Tensors.vector(1.5, 0);
     CarRelaxedEntity carRelaxedEntity = CarRelaxedEntity.createDefault(stateTime, slacks);
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = createResLo();
     carRelaxedEntity.set2ndCostFunction(r2ImageRegionWrap.costFunction());
+    // ---
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);
     TrajectoryRegionQuery trajectoryRegionQuery = //
@@ -69,12 +70,10 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     List<GlcPlannerCallback> list = new ArrayList<>();
     list.add(carRelaxedEntity);
     list.add(new SimpleGlcPlannerCallback(carRelaxedEntity));
+    // ---
     GoalConsumer goalConsumer = new SimpleGoalConsumer(carRelaxedEntity, plannerConstraint, list);
-    // Tensor goal1 = Tensors.vector(4.3, 4.2, 1.517);
-    // Tensor goal2 = Tensors.vector(6.35, 6.233, 0);
-    // Tensor goal3 = Tensors.vector(8.23, 8.51, 1.517);
-    Tensor goal4 = Tensors.vector(4.183, 5.017, 1.571);
-    goalConsumer.accept(goal4);
+    Tensor goal = Tensors.vector(4.3, 4.2, 1.517);
+    goalConsumer.accept(goal);
     // ---
     owlyAnimationFrame.add(carRelaxedEntity);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));

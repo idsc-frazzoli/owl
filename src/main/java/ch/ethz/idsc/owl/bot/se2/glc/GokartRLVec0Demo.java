@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
+import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
+import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
+import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
@@ -32,16 +35,20 @@ public class GokartRLVec0Demo extends GokartDemo {
     // goal
     Tensor goal = Tensors.vector(25, 10, 0);
     // slacks
-    Tensor slacks = Tensors.vector(0, 0);
+    Tensor slacks = Tensors.vector(0.5, 0);
+    // polygon region as cost function
+    Tensor polygon = Tensors.matrixFloat(new float[][] { { 3, 10 }, { 3, 0 }, { 10, 0 }, { 10, 15 } });
+    PolygonRegion polygonRegion = new PolygonRegion(polygon);
+    PlannerConstraint regionConstraint = RegionConstraints.timeInvariant(polygonRegion);
+    CostFunction regionCosts = ConstraintViolationCost.of(regionConstraint, RealScalar.ONE);
     // set up relaxed gokart entity
     GokartRelaxedEntity gokartEntity = GokartRelaxedEntity.createRelaxedGokartEntity(initial, slacks);
+    gokartEntity.setAdditionalCostFunction(regionCosts);
     // ---
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---
     owlyAnimationFrame.add(gokartEntity);
     owlyAnimationFrame.geometricComponent.setModel2Pixel(MODEL2PIXEL);
-    Tensor polygon = Tensors.matrixFloat(new float[][] { { 3, 10 }, { 3, 0 }, { 10, 0 }, { 10, 15 } });
-    PolygonRegion polygonRegion = new PolygonRegion(polygon);
     owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
     // ---
     List<GlcPlannerCallback> list = new ArrayList<>();
