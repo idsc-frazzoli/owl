@@ -81,10 +81,10 @@ public class GlcNodeTest extends TestCase {
     nodeList = new ArrayList<>(trajectoryPlanner.getDomainMap().values());
     GlcNode test = nodeList.get(nodeList.size() - 1);
     assertFalse(test.isRoot());
-    HeuristicConsistency.check(trajectoryPlanner);
+    HeuristicAssert.check(trajectoryPlanner);
     glcExpand.findAny(10);
     int expandCount = glcExpand.getExpandCount();
     assertEquals(expandCount, 11);
-    HeuristicConsistency.check(trajectoryPlanner);
+    HeuristicAssert.check(trajectoryPlanner);
   }
 }

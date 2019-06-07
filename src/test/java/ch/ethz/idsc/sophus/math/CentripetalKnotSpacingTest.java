@@ -15,24 +15,23 @@ import junit.framework.TestCase;
 
 public class CentripetalKnotSpacingTest extends TestCase {
   public void testSimple() {
-    TensorUnaryOperator centripetalKnotSpacing = //
-        CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, 0.5);
+    TensorUnaryOperator centripetalKnotSpacing = CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, 0.5);
     Tensor knots = centripetalKnotSpacing.apply(Tensors.fromString("{{1,2,3},{4,5,6},{8,9,11}}"));
     Chop._12.requireClose(knots, Tensors.vector(0, 2.525854879647931, 4.988462479155103));
   }
 
   public void testUniform() {
-    TensorUnaryOperator centripetalKnotSpacing = //
-        CentripetalKnotSpacing.uniform(Se2ParametricDistance.INSTANCE);
-    Tensor knots = centripetalKnotSpacing.apply(Tensors.fromString("{{1,2,3},{4,5,6},{8,9,11}}"));
+    TensorUnaryOperator uniform = CentripetalKnotSpacing.uniform(Se2ParametricDistance.INSTANCE);
+    TensorUnaryOperator power_0 = CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, 0);
+    Tensor control = Tensors.fromString("{{1,2,3},{4,5,6},{8,9,11}}");
+    Tensor knots = uniform.apply(control);
     assertEquals(knots, Range.of(0, 3));
+    assertEquals(knots, power_0.apply(control));
   }
 
   public void testChordal() {
-    TensorUnaryOperator chordal = //
-        CentripetalKnotSpacing.chordal(Se2ParametricDistance.INSTANCE);
-    TensorUnaryOperator power_1 = //
-        CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, 1);
+    TensorUnaryOperator chordal = CentripetalKnotSpacing.chordal(Se2ParametricDistance.INSTANCE);
+    TensorUnaryOperator power_1 = CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, 1);
     Tensor control = Tensors.fromString("{{1,2,3},{4,5,6},{8,9,11}}");
     assertEquals(chordal.apply(control), power_1.apply(control));
   }

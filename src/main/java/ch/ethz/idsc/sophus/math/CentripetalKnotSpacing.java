@@ -20,12 +20,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * http://www.cad.zju.edu.cn/home/zhx/GM/009/00-bsia.pdf */
 public class CentripetalKnotSpacing implements TensorUnaryOperator {
   /** @param tensorMetric for instance Se2ParametricDistance::of
-   * @param exponent in the interval [0, 1] */
+   * @param exponent typically in the interval [0, 1] */
   public static TensorUnaryOperator of(TensorMetric tensorMetric, Scalar exponent) {
     return new CentripetalKnotSpacing(Objects.requireNonNull(tensorMetric), Power.function(exponent));
   }
 
-  /** @param tensorMetric for instance Se2ParametricDistance::of
+  /** @param tensorMetric for instance Se2ParametricDistance.INSTANCE
    * @param exponent in the interval [0, 1] */
   public static TensorUnaryOperator of(TensorMetric tensorMetric, Number exponent) {
     return of(tensorMetric, RealScalar.of(exponent));

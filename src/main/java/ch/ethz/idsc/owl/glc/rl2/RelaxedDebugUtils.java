@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
+import ch.ethz.idsc.owl.data.tree.NodesAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.sophus.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,7 +36,7 @@ public enum RelaxedDebugUtils {
   public static void nodeAmountCompare(RelaxedTrajectoryPlanner relaxedTrajectoryPlanner) {
     if (!relaxedTrajectoryPlanner.getBestOrElsePeek().isPresent())
       throw new RuntimeException("Queue is emtpy");
-    DebugUtils.nodeAmountCompare( //
+    NodesAssert.check( //
         Nodes.rootFrom(relaxedTrajectoryPlanner.getBestOrElsePeek().get()), //
         allNodes(relaxedTrajectoryPlanner).size());
   }

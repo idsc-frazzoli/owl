@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 import java.util.stream.IntStream;
 
 import javax.swing.JSlider;
@@ -12,6 +13,7 @@ import javax.swing.JSlider;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -32,8 +34,9 @@ import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
+public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements BufferedImageSupplier {
   private final JSlider jSliderExponent = new JSlider(0, 100, 100);
+  private BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
   public KnotsBSplineFunctionDemo() {
     super(GeodesicDisplays.CLOTH_SE2_R2);
@@ -57,10 +60,10 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
     // ---
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, control);
-    if (jToggleSymi.isSelected()) {
+    {
       GeodesicDeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
       SymLinkImage symLinkImage = KnotsBSplineFunctionDemo.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
-      graphics.drawImage(symLinkImage.bufferedImage(), 0, 0, null);
+      bufferedImage = symLinkImage.bufferedImage();
     }
     // ---
     GraphicsUtil.setQualityHigh(graphics);
@@ -79,6 +82,11 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo {
     if (levels < 5)
       renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
+  }
+
+  @Override
+  public BufferedImage bufferedImage() {
+    return bufferedImage;
   }
 
   public static SymLinkImage deboor(GeodesicDeBoor geodesicDeBoor, int length, Scalar scalar) {
