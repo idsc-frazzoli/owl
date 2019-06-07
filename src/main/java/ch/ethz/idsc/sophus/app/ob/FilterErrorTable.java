@@ -51,7 +51,8 @@ enum FilterErrorTable {
     String dataname = "2r/20180820T165637_3";
     // String dataname = "0w/20180702T133612_2";
     for (int width = 1; width < 12; width++) {
-      Tensor tensor = process(dataname, width);
+      // Tensor tensor =
+      process(dataname, width);
       // Export.of(new File(ROOT, dataname.replace('/', '_') + "_" + width + ".csv"), tensor);
     }
   }

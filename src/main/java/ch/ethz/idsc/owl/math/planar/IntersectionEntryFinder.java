@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.red.Norm;
 
-// TODO GJOEL how to handle heading? maybe provide 2 separate classes: this one is R2IntersectionEntryFinder
+// TODO GJOEL how to handle heading? maybe provide 2 separate classes for Rn and SE(2)?
 public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
   public static final TrajectoryEntryFinder INSTANCE = new IntersectionEntryFinder();
 

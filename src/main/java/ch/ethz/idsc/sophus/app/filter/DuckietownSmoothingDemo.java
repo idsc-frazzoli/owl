@@ -110,7 +110,8 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
   @Override
   public BufferedImage bufferedImage() {
     final int degree = spinnerDegree.getValue();
-    final int levels = spinnerRefine.getValue();
+    // final int levels =
+    spinnerRefine.getValue();
     final Tensor control = control();
     Tensor effective = control;
     TensorUnaryOperator centripedalKnotSpacing = //

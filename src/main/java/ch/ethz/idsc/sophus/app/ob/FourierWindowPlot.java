@@ -100,7 +100,8 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
   public static void main(String[] args) throws IOException {
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
-    FourierWindowPlot fwp = new FourierWindowPlot();
+    // FourierWindowPlot fwp =
+    new FourierWindowPlot();
     List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
     // signal cases: 0:x , 1:y, 2;heading
     FourierWindowPlot.process(list, tensorUnaryOperator, 0);
