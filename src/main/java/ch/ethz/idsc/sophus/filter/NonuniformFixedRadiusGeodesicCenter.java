@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.Serializable;
 import java.util.NavigableMap;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public class NonuniformFixedRadiusGeodesicCenter {
+public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
   /** @param geodesicInterface
    * @return operator that maps a chronological, symmetric sequence of points to their geodesic center
    * @throws Exception if geodesicInterface is null */

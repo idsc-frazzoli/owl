@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -10,6 +11,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class TrajectoryEntryFinderTest extends TestCase {
@@ -20,7 +22,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
       Tensors.vector(4, 1, 0));
 
   public void testNaive() {
-    TrajectoryEntryFinder finder = new NaiveEntryFinder();
+    TrajectoryEntryFinder finder = NaiveEntryFinder.INSTANCE;
     // ---
     Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(0.3)).point;
     assertTrue(waypoint.isPresent());
@@ -28,7 +30,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
   }
 
   public void testInterpolation() {
-    TrajectoryEntryFinder finder = new InterpolationEntryFinder();
+    TrajectoryEntryFinder finder = InterpolationEntryFinder.INSTANCE;
     // ---
     Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point;
     assertTrue(waypoint.isPresent());
@@ -37,7 +39,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
 
   public void testIntersection() {
     Tensor goal = Tensors.vector(3, 1);
-    TrajectoryEntryFinder finder = new IntersectionEntryFinder();
+    TrajectoryEntryFinder finder = IntersectionEntryFinder.INSTANCE;
     // ---
     Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(Norm._2.of(goal)).point;
     assertTrue(waypoint.isPresent());
@@ -52,5 +54,19 @@ public class TrajectoryEntryFinderTest extends TestCase {
     Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point;
     assertTrue(waypoint.isPresent());
     assertEquals(Tensors.vector(3, 1, 0), waypoint.get());
+  }
+
+  // ---
+  private static int INIT = 0;
+
+  private static ScalarUnaryOperator func(Tensor tensor) {
+    ++INIT;
+    return s -> s;
+  }
+
+  public void testOnce() {
+    long count = IntStream.range(0, 10).mapToObj(RealScalar::of).map(func(null)).count();
+    assertEquals(count, 10);
+    assertEquals(INIT, 1);
   }
 }

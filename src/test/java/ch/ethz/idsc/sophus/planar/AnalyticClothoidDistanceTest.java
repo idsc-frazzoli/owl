@@ -16,4 +16,9 @@ public class AnalyticClothoidDistanceTest extends TestCase {
     assertEquals(scalar, RealScalar.of(8));
     ExactScalarQ.require(scalar);
   }
+
+  public void testOrigin() {
+    assertEquals(AnalyticClothoidDistance.LR1.norm(Tensors.vector(0, 0, 0)), RealScalar.of(0));
+    assertEquals(AnalyticClothoidDistance.LR3.norm(Tensors.vector(0, 0, 0)), RealScalar.of(0));
+  }
 }

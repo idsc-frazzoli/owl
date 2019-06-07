@@ -11,18 +11,19 @@ import ch.ethz.idsc.tensor.Tensor;
 public abstract class TrajectoryEntryFinder implements Serializable {
   /** @param waypoints of trajectory
    * @return function to be applied on waypoints */
-  public Function<Scalar, TrajectoryEntry> on(Tensor waypoints) {
+  public final Function<Scalar, TrajectoryEntry> on(Tensor waypoints) {
     return scalar -> protected_apply(waypoints, scalar);
   }
 
   /** @param waypoints of trajectory
    * @return stream of coarsely distributed trajectory entries */
-  public Stream<TrajectoryEntry> sweep(Tensor waypoints) {
+  public final Stream<TrajectoryEntry> sweep(Tensor waypoints) {
     Function<Scalar, TrajectoryEntry> function = on(waypoints);
     return sweep_variables(waypoints).map(function);
   }
 
-  /** @param waypoints of trajectory */
+  /** @param waypoints of trajectory
+   * @return stream of indices for given waypoints to visit */
   protected abstract Stream<Scalar> sweep_variables(Tensor waypoints);
 
   /** @param waypoints of trajectory

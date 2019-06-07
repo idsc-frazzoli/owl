@@ -53,7 +53,8 @@ public class NonuniformFixedRadiusGeodesicCenterFilterTest extends TestCase {
     NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
     Tensor actual = Tensor.of(NonuniformFixedRadiusGeodesicCenterFilter.of(nonuniformFixedRadiusGeodesicCenter, radius).apply(navigableMap).values().stream());
     System.out.println(actual);
-    Tensor expected = Tensors.fromString(
+    // Tensor expected =
+    Tensors.fromString(
         "{{0.0, 0.0, 0.0}, {1.2557148460542482, 0.7442851539457515, 1.0}, {3.1242087383516894, 1.3354843829315397, 2.1666666666666665}, {3.2553808967607205, 2.7446191032392786, 3.0}, {4.0, 4.0, 4.0}}");
     // assertEquals(expected, actual);
   }

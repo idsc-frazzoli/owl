@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO OB adapt symLinkImages to new filter structure, see use of BufferedImageSupplier
 /* package */ class GeodesicCausalFilterDemo extends DatasetKernelDemo {
   private Tensor refined = Tensors.empty();
   /** IIR vs. FIR filter type */
@@ -40,9 +41,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final int radius = spinnerRadius.getValue();
-    // TODO OB adapt symLinkImages to new filter structure
-    // if (jToggleSymi.isSelected())
-    // graphics.drawImage(SymLinkImages.causalIIR(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).bufferedImage(), 0, 0, null);
     if (0 < radius) {
       GeodesicInterface geodesicInterface = geodesicDisplay().geodesicInterface();
       TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(geodesicInterface, spinnerKernel.getValue());

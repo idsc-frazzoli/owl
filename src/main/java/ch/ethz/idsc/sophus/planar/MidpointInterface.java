@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.planar;
 
 import ch.ethz.idsc.tensor.Tensor;
 
+@FunctionalInterface
 public interface MidpointInterface {
   /** @param p
    * @param q

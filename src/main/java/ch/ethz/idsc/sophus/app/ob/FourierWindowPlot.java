@@ -95,6 +95,10 @@ import ch.ethz.idsc.tensor.red.Mean;
     listOperator.add(BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMeanInterface(), smoothingKernel));
     List<String> listData = ResourceData.lines("/dubilab/app/pose/index.vector");
     int radius = 7;
+    // TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
+    // // FourierWindowPlot fwp =
+    // new FourierWindowPlot();
+    // List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
     // signal cases: 0:x , 1:y, 2;heading
     FourierWindowPlot.process(listData, listOperator, radius, 1);
   }

@@ -10,6 +10,14 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public final class NaiveEntryFinder extends TrajectoryEntryFinder {
+  public static final TrajectoryEntryFinder INSTANCE = new NaiveEntryFinder();
+
+  // ---
+  // TODO OWL 044 JPH make constructor private
+  public NaiveEntryFinder() {
+    // ---
+  }
+
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar var) {
     int index = var.number().intValue();

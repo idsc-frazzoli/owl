@@ -29,4 +29,8 @@ public class Se2ParametricDistanceTest extends TestCase {
     Scalar scalar = Se2ParametricDistance.INSTANCE.distance(Tensors.fromString("{1[m], 2[m], 3}"), Tensors.fromString("{4[m], 6[m], 3.3}"));
     Chop._12.close(scalar, Quantity.of(5.018799335788676, "m"));
   }
+
+  public void testOrigin() {
+    assertEquals(Se2ParametricDistance.INSTANCE.norm(Tensors.vector(0, 0, 0)), RealScalar.of(0));
+  }
 }

@@ -3,11 +3,9 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.group.LinearGroup;
-import ch.ethz.idsc.sophus.group.Se3Exponential;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
+import ch.ethz.idsc.sophus.group.Se3Differences;
 import ch.ethz.idsc.sophus.group.Se3Geodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
@@ -26,9 +24,6 @@ import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
  * 1.00005... due to the use of float precision */
 /* package */ enum EurocData {
   ;
-  private static final LieDifferences LIE_DIFFERENCES = //
-      new LieDifferences(LinearGroup.INSTANCE, Se3Exponential.INSTANCE);
-
   public static void main(String[] args) throws IOException {
     System.out.println("here");
     Tensor tensor = ResourceData.of("/3rdparty/app/pose/euroc/MH_04_difficult.csv");
@@ -51,18 +46,18 @@ import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
     Put.of(HomeDirectory.file("MH_04_difficult_poses.file"), poses);
     System.out.println("differences");
     {
-      Tensor delta = LIE_DIFFERENCES.apply(poses);
+      Tensor delta = Se3Differences.INSTANCE.apply(poses);
       Put.of(HomeDirectory.file("MH_04_difficult_delta.file"), delta);
     }
     System.out.println("smooth");
     {
       TensorUnaryOperator tensorUnaryOperator = //
-          CenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 4 * 3 * 2);
+          GeodesicCenterFilter.of(GeodesicCenter.of(Se3Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), 4 * 3 * 2);
       Tensor smooth = tensorUnaryOperator.apply(poses);
       System.out.println("store");
       Put.of(HomeDirectory.file("MH_04_difficult_poses_smooth.file"), smooth);
       System.out.println("differences");
-      Tensor delta = LIE_DIFFERENCES.apply(smooth);
+      Tensor delta = Se3Differences.INSTANCE.apply(smooth);
       System.out.println("store");
       Put.of(HomeDirectory.file("MH_04_difficult_delta_smooth.file"), delta);
     }

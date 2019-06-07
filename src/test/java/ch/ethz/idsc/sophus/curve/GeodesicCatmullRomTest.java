@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.planar.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -17,7 +18,8 @@ public class GeodesicCatmullRomTest extends TestCase {
     Tensor control = Tensors.empty();
     for (int index = 0; index < 5; index++)
       control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
-    CentripetalKnotSpacing centripedalKnotSpacing = new CentripetalKnotSpacing(Se2ParametricDistance.INSTANCE, RealScalar.ZERO);
+    TensorUnaryOperator centripedalKnotSpacing = //
+        CentripetalKnotSpacing.uniform(Se2ParametricDistance.INSTANCE);
     Tensor knots = centripedalKnotSpacing.apply(control);
     GeodesicCatmullRom geodesicCatmullRom = GeodesicCatmullRom.of(geodesicInterface, knots, control);
     // ---
@@ -36,8 +38,8 @@ public class GeodesicCatmullRomTest extends TestCase {
     Tensor control = Tensors.empty();
     for (int index = 0; index < 5; index++)
       control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
-    CentripetalKnotSpacing centripedalKnotSpacing = //
-        new CentripetalKnotSpacing(Se2ParametricDistance.INSTANCE, RealScalar.of(Math.random()));
+    TensorUnaryOperator centripedalKnotSpacing = //
+        CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, RealScalar.of(Math.random()));
     Tensor knots = centripedalKnotSpacing.apply(control);
     GeodesicCatmullRom geodesicCatmullRom = GeodesicCatmullRom.of(geodesicInterface, knots, control);
     // ---

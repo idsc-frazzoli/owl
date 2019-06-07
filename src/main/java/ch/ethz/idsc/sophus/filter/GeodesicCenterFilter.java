@@ -7,7 +7,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class CenterFilter implements TensorUnaryOperator {
+// TODO OWL 044 JPH rename to CenterFilter
+public class GeodesicCenterFilter implements TensorUnaryOperator {
   /** Hint: the following tensorUnaryOperator are typically used
    * {@link GeodesicCenter}, and {@link BiinvariantMeanCenter}
    * 
@@ -16,19 +17,19 @@ public class CenterFilter implements TensorUnaryOperator {
    * @return
    * @throws Exception if given tensorUnaryOperator is null */
   public static TensorUnaryOperator of(TensorUnaryOperator tensorUnaryOperator, int radius) {
-    return new CenterFilter(Objects.requireNonNull(tensorUnaryOperator), radius);
+    return new GeodesicCenterFilter(Objects.requireNonNull(tensorUnaryOperator), radius);
   }
 
   // ---
   private final TensorUnaryOperator tensorUnaryOperator;
   private final int radius;
 
-  private CenterFilter(TensorUnaryOperator tensorUnaryOperator, int radius) {
+  private GeodesicCenterFilter(TensorUnaryOperator tensorUnaryOperator, int radius) {
     this.tensorUnaryOperator = tensorUnaryOperator;
     this.radius = radius;
   }
 
-  @Override
+  @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     Tensor result = Unprotect.empty(tensor.length());
     for (int index = 0; index < tensor.length(); ++index) {

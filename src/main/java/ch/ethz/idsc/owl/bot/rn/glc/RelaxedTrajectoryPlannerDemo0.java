@@ -12,8 +12,8 @@ import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.r2.R2RationalFlows;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.data.tree.NodesAssert;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
-import ch.ethz.idsc.owl.glc.adapter.DebugUtils;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
@@ -145,7 +145,7 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     // ---
     RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(relaxedTrajectoryPlanner);
     RelaxedDebugUtils.nodeAmountCompare(relaxedTrajectoryPlanner);
-    DebugUtils.assertAllLeaf(relaxedTrajectoryPlanner.getQueue());
+    NodesAssert.allLeaf(relaxedTrajectoryPlanner.getQueue());
     // RelaxedDebugUtils.closeMatchesCheck(rlPlanner);
     return owlyAnimationFrame;
   }

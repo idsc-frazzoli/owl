@@ -1,7 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.sophus.filter.CenterFilter;
+import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
@@ -25,7 +25,7 @@ public enum SpectrogramAnaglogous {
   // Make more generic for any type of filter
   public static Tensor transferFunction(Tensor control, int radius, TensorUnaryOperator tensorUnaryOperator, int signal, int windowDuration,
       int samplingFrequency) {
-    Tensor refined = CenterFilter.of(tensorUnaryOperator, radius).apply(control);
+    Tensor refined = GeodesicCenterFilter.of(tensorUnaryOperator, radius).apply(control);
     // ---
     Tensor diffRefined = Tensor.of(Differences.of(refined).stream().map(xya -> xya.Get(signal)));
     Tensor diffRaw = Tensor.of(Differences.of(control).stream().map(xya -> xya.Get(signal)));

@@ -11,6 +11,7 @@ import javax.swing.JToggleButton;
 import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -23,6 +24,7 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
   // ---
+  private final JToggleButton jToggleSymi = new JToggleButton("graph");
   public final JToggleButton jToggleCurvature = new JToggleButton("crvt");
 
   public CurvatureDemo() {
@@ -35,12 +37,21 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
     jToggleCurvature.setSelected(true);
     jToggleCurvature.setToolTipText("curvature plot");
     timerFrame.jToolBar.add(jToggleCurvature);
+    // ---
+    if (this instanceof BufferedImageSupplier) {
+      jToggleSymi.setSelected(true);
+      timerFrame.jToolBar.add(jToggleSymi);
+    }
   }
 
   @Override
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Tensor refined = protected_render(geometricLayer, graphics);
+    if (this instanceof BufferedImageSupplier && jToggleSymi.isSelected()) {
+      BufferedImageSupplier bufferedImageSupplier = (BufferedImageSupplier) this;
+      graphics.drawImage(bufferedImageSupplier.bufferedImage(), 0, 0, null);
+    }
     // ---
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
     if (jToggleCurvature.isSelected() && 1 < refined.length()) {
