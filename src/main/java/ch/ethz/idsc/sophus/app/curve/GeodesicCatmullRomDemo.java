@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 public class GeodesicCatmullRomDemo extends CurvatureDemo {
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JSlider jSlider = new JSlider(0, 1000, 500);
-  private final JSlider jSliderAlpha = new JSlider(0, 1000, 500);
+  private final JSlider jSliderExponent = new JSlider(0, 1000, 500);
 
   public GeodesicCatmullRomDemo() {
     addButtonDubins();
@@ -49,9 +49,9 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     jSlider.setToolTipText("evaluation parameter");
     timerFrame.jToolBar.add(jSlider);
     // ---
-    jSliderAlpha.setPreferredSize(new Dimension(200, 28));
-    jSliderAlpha.setToolTipText("centripetal exponent");
-    timerFrame.jToolBar.add(jSliderAlpha);
+    jSliderExponent.setPreferredSize(new Dimension(200, 28));
+    jSliderExponent.setToolTipText("centripetal exponent");
+    timerFrame.jToolBar.add(jSliderExponent);
     {
       Tensor dubins = Tensors.fromString("{{1,1,0}, {1,2,-1}, {2,1,0.5}}");
       setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
@@ -68,7 +68,7 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     if (4 <= control.length()) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-      Scalar exponent = RationalScalar.of(jSliderAlpha.getValue(), jSliderAlpha.getMaximum());
+      Scalar exponent = RationalScalar.of(jSliderExponent.getValue(), jSliderExponent.getMaximum());
       TensorUnaryOperator centripetalKnotSpacing = CentripetalKnotSpacing.of(geodesicDisplay::parametricDistance, exponent);
       Tensor knots = centripetalKnotSpacing.apply(control);
       final Scalar parameter = knots.Get(knots.length() - 2).subtract(knots.get(1)).multiply(RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() + 1))

@@ -9,8 +9,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.FoldList;
+import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -22,24 +22,34 @@ public class CentripetalKnotSpacing implements TensorUnaryOperator {
   /** @param tensorMetric for instance Se2ParametricDistance::of
    * @param exponent in the interval [0, 1] */
   public static TensorUnaryOperator of(TensorMetric tensorMetric, Scalar exponent) {
-    return new CentripetalKnotSpacing(Objects.requireNonNull(tensorMetric), Clips.unit().requireInside(exponent));
+    return new CentripetalKnotSpacing(Objects.requireNonNull(tensorMetric), Power.function(exponent));
   }
 
+  /** @param tensorMetric for instance Se2ParametricDistance::of
+   * @param exponent in the interval [0, 1] */
+  public static TensorUnaryOperator of(TensorMetric tensorMetric, Number exponent) {
+    return of(tensorMetric, RealScalar.of(exponent));
+  }
+
+  /** @param tensorMetric
+   * @return */
   public static TensorUnaryOperator uniform(TensorMetric tensorMetric) {
-    return of(tensorMetric, RealScalar.ZERO);
+    return tensor -> Range.of(0, tensor.length());
   }
 
+  /** @param tensorMetric
+   * @return */
   public static TensorUnaryOperator chordal(TensorMetric tensorMetric) {
-    return of(tensorMetric, RealScalar.ONE);
+    return new CentripetalKnotSpacing(tensorMetric, scalar -> scalar);
   }
 
   // ---
-  private final ScalarUnaryOperator power;
   private final TensorMetric tensorMetric;
+  private final ScalarUnaryOperator power;
 
-  private CentripetalKnotSpacing(TensorMetric tensorMetric, Scalar exponent) {
+  private CentripetalKnotSpacing(TensorMetric tensorMetric, ScalarUnaryOperator power) {
     this.tensorMetric = tensorMetric;
-    power = Power.function(exponent);
+    this.power = power;
   }
 
   @Override // from TensorUnaryOperator
