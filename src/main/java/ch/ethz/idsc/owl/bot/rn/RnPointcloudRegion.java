@@ -14,15 +14,17 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public class RnPointcloudRegion implements Region<Tensor>, Serializable {
   /** Example:
    * The points of a point cloud in the 2-dimensional plane are encoded as a N x 2 matrix.
    * 
    * @param points, matrix with dimensions N x D
-   * @param radius
+   * @param radius non-negative
    * @return */
   public static Region<Tensor> of(Tensor points, Scalar radius) {
+    Sign.requirePositiveOrZero(radius);
     return Tensors.isEmpty(points) //
         ? Regions.emptyRegion()
         : new RnPointcloudRegion(points, radius);

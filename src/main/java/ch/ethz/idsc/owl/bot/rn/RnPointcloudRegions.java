@@ -30,15 +30,13 @@ public enum RnPointcloudRegions {
   /** extrusion of non-zero pixels in given image by fixed radius
    * 
    * @param imageRegion
-   * @param radius
+   * @param radius non-negative
    * @return */
   public static Region<Tensor> from(ImageRegion imageRegion, Scalar radius) {
-    Tensor points = from(imageRegion);
-    System.out.println(Dimensions.of(points));
-    return RnPointcloudRegion.of(points, radius);
+    return RnPointcloudRegion.of(points(imageRegion), radius);
   }
 
-  public static Tensor from(ImageRegion imageRegion) {
+  /* package */ static Tensor points(ImageRegion imageRegion) {
     Tensor inverse = N.DOUBLE.of(imageRegion.scale().map(Scalar::reciprocal));
     Tensor tensor = imageRegion.image();
     List<Integer> dimensions = Dimensions.of(tensor);

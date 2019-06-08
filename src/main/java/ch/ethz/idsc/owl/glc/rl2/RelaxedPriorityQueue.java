@@ -14,7 +14,8 @@ public abstract class RelaxedPriorityQueue implements Iterable<GlcNode>, Seriali
   /** holds the node which have not yet been expanded */
   private final Collection<GlcNode> collection = new HashSet<>();
 
-  /** @param glcNode */
+  /** @param glcNode
+   * @return collection of nodes that were removed from this queue subsequent to the addition of given glcNode */
   public abstract Collection<GlcNode> add(GlcNode glcNode);
 
   /** Polls the GlcNode with current best merit from the queue.
@@ -56,6 +57,10 @@ public abstract class RelaxedPriorityQueue implements Iterable<GlcNode>, Seriali
    * @return unmodifiable set of GlcNodes */
   public final Collection<GlcNode> collection() {
     return Collections.unmodifiableCollection(collection);
+  }
+
+  public final int size() {
+    return collection.size();
   }
 
   @Override // from Iterable

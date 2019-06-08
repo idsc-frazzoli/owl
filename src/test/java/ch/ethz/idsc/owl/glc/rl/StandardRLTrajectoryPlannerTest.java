@@ -44,7 +44,7 @@ import junit.framework.TestCase;
 
 public class StandardRLTrajectoryPlannerTest extends TestCase {
   private static GlcNode _withSlack(Tensor slacks) {
-    System.out.println("---slacks=" + slacks);
+    // System.out.println("---slacks=" + slacks);
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
     // ---
@@ -89,20 +89,21 @@ public class StandardRLTrajectoryPlannerTest extends TestCase {
     assertTrue(optional.isPresent()); // guarantee optimal solution exists
     GlcNode goalNode = optional.get();
     VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
-    System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
+    // System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
     Scalar lowerBound = goalRegion.distance(stateRoot);
-    System.out.println("lowerBound=" + lowerBound);
+    // System.out.println("lowerBound=" + lowerBound);
     Scalar marginDist = cost.vector().Get(0).subtract(lowerBound);
-    System.out.println("marginDist=" + marginDist);
+    // System.out.println("marginDist=" + marginDist);
     Sign.requirePositiveOrZero(marginDist);
     // ---
     GlcNode minCostNode = StaticHelper.getMin(trajectoryPlanner.reachingSet.collection(), 0);
     Tensor minComp = VectorScalars.vector(minCostNode.merit()); // min cost component in goal
-    System.out.println("minComp=" + minComp);
+    // System.out.println("minComp=" + minComp);
     Scalar upperBound = minComp.Get(0).add(slacks.Get(0));
     assertTrue(Scalars.lessEquals(cost.vector().Get(0), upperBound));
-    List<StateTime> pathFromRootTo = GlcNodes.getPathFromRootTo(goalNode);
-    pathFromRootTo.stream().map(StateTime::toInfoString).forEach(System.out::println);
+    // List<StateTime> pathFromRootTo =
+    GlcNodes.getPathFromRootTo(goalNode);
+    // pathFromRootTo.stream().map(StateTime::toInfoString).forEach(System.out::println);
     return goalNode;
   }
 

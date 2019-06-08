@@ -13,14 +13,12 @@ import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Increment;
 
-class DQMInspection {
-  // private final Map<Tensor, RLDomainQueue> rlDomainQueueMap;
+/* package */ class DQMInspection {
   private final Tensor min;
   private final Tensor max;
   private final Tensor count;
 
   public DQMInspection(Map<Tensor, RLDomainQueue> rlDomainQueueMap) {
-    // this.rlDomainQueueMap = rlDomainQueueMap;
     min = rlDomainQueueMap.keySet().stream().reduce(Entrywise.min()).get();
     max = rlDomainQueueMap.keySet().stream().reduce(Entrywise.max()).get();
     Tensor width = max.subtract(min).map(Increment.ONE);
