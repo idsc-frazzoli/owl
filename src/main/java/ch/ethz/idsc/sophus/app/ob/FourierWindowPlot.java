@@ -19,25 +19,27 @@ import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterTangentSpace;
-import ch.ethz.idsc.sophus.math.FourierWindow;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.SpectrogramAnalogous;
+import ch.ethz.idsc.sophus.math.SpectrogramArray;
 import ch.ethz.idsc.sophus.math.TransferFunctionResponse;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
 
 /* package */ class FourierWindowPlot {
-  private static final int WINDOW_DURATION = 2;
-  private static final int SAMPLING_FREQUENCY = 20;
-  private static final TensorUnaryOperator FOURIER_WINDOW = FourierWindow.of(WINDOW_DURATION, SAMPLING_FREQUENCY);
+  private static final Scalar WINDOW_DURATION = Quantity.of(2, "s");
+  private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
+  private static final TensorUnaryOperator FOURIER_WINDOW = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
 
   private static enum Filter {
     GEODESIC, //
@@ -54,7 +56,7 @@ import ch.ethz.idsc.tensor.red.Mean;
     // ---
     Tensor xAxis = Tensors.empty();
     for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index)
-      xAxis.append(RealScalar.of((double) index * SAMPLING_FREQUENCY / yData.get(0).length()));
+      xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Filter Gain");
     visualSet.setAxesLabelX("Frequency [Hz]");
