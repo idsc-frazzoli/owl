@@ -19,8 +19,9 @@ import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterTangentSpace;
+import ch.ethz.idsc.sophus.group.Se2Differences;
+import ch.ethz.idsc.sophus.math.FilterResponse;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.SpectrogramAnalogous;
 import ch.ethz.idsc.sophus.math.SpectrogramArray;
 import ch.ethz.idsc.sophus.math.TransferFunctionResponse;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
@@ -37,9 +38,9 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
 
 /* package */ class FourierWindowPlot {
-  private static final Scalar WINDOW_DURATION = Quantity.of(2, "s");
+  private static final Scalar WINDOW_DURATION = Quantity.of(1, "s");
   private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
-  private static final TensorUnaryOperator FOURIER_WINDOW = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
+  private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
 
   private static enum Filter {
     GEODESIC, //
@@ -55,6 +56,7 @@ import ch.ethz.idsc.tensor.red.Mean;
       yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
     // ---
     Tensor xAxis = Tensors.empty();
+    // FIXME OB shouldn't the freq. labels also depend on WINDOW_DURATION?
     for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index)
       xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
     VisualSet visualSet = new VisualSet();
@@ -77,15 +79,22 @@ import ch.ethz.idsc.tensor.red.Mean;
     ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
   }
 
-  private static void process(List<String> listData, Map<Filter, TensorUnaryOperator> map, int radius, int signal) throws IOException {
+  private static void process(List<String> listData, Map<Filter, TensorUnaryOperator> map, int radius) throws IOException {
     Tensor smoothed = Tensors.empty();
     Iterator<String> iterator = listData.iterator();
     int limit = 2;
     for (int index = 0; index < limit; ++index) {
       Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
       Tensor temp = Tensors.empty();
-      for (TensorUnaryOperator tensorUnaryOperator : map.values())
-        temp.append(SpectrogramAnalogous.of(control, GeodesicCenterFilter.of(tensorUnaryOperator, radius), signal, FOURIER_WINDOW));
+      for (TensorUnaryOperator tensorUnaryOperator : map.values()) {
+        TensorUnaryOperator unaryOperator = GeodesicCenterFilter.of(tensorUnaryOperator, radius);
+        Tensor smoothd = unaryOperator.apply(control);
+        Tensor rawVec = Se2Differences.INSTANCE.apply(control);
+        Tensor smdVec = Se2Differences.INSTANCE.apply(smoothd);
+        // signal cases: 0:x , 1:y, 2;heading
+        int signal = 2;
+        temp.append(FilterResponse.of(smdVec.get(Tensor.ALL, signal), rawVec.get(Tensor.ALL, signal), SPECTROGRAM_ARRAY));
+      }
       smoothed.append(temp);
     }
     plot(Mean.of(smoothed));
@@ -100,12 +109,7 @@ import ch.ethz.idsc.tensor.red.Mean;
     map.put(Filter.TANGENT_SPACE, GeodesicCenterTangentSpace.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), smoothingKernel));
     map.put(Filter.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMeanInterface(), smoothingKernel));
     List<String> listData = ResourceData.lines("/dubilab/app/pose/index.vector");
-    int radius = 7;
-    // TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
-    // // FourierWindowPlot fwp =
-    // new FourierWindowPlot();
-    // List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
-    // signal cases: 0:x , 1:y, 2;heading
-    process(listData, map, radius, 1);
+    int radius = 5;
+    process(listData, map, radius);
   }
 }

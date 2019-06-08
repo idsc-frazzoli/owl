@@ -37,14 +37,14 @@ public class SpectrogramArray implements TensorUnaryOperator {
    * @param offset positive
    * @return */
   public static TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, int offset) {
-    return of(Scalars.intValueExact(windowDuration.multiply(samplingFrequency)), offset);
+    return of(Scalars.intValueExact(Round.FUNCTION.apply(windowDuration.multiply(samplingFrequency))), offset);
   }
 
   /** @param windowLength
    * @param offset positive and not greater than windowLength
    * @return */
   public static TensorUnaryOperator of(int windowLength, int offset) {
-    if (offset <= 0 || windowLength <= 0 || windowLength < offset)
+    if (offset <= 0 || windowLength < offset)
       throw new RuntimeException(windowLength + " " + offset);
     return new SpectrogramArray(windowLength, offset);
   }
