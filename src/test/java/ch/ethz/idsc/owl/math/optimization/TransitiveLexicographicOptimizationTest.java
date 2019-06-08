@@ -26,17 +26,18 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     List<Function<Tensor, Tensor>> scoringFunctionVector = Arrays.asList(x -> x);
     List<OrderComparator<? extends Object>> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
-    TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
-        genericLexicographicOrder);
-    assertEquals(inputList, opt.inputs);
-    assertEquals(featureFunctionVector, opt.featureFunctionVector);
-    assertEquals(genericLexicographicOrder, opt.orderComparator);
+    new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector, genericLexicographicOrder);
+    // assertEquals(inputList, opt.inputs);
+    // assertEquals(featureFunctionVector, opt.featureFunctionVector);
+    // assertEquals(genericLexicographicOrder, opt.orderComparator);
   }
 
   public void testGetElementInObjectiveSpace() {
     List<Tensor> inputList = new LinkedList<>();
-    inputList.add(Tensors.fromString("{1,2}"));
-    inputList.add(Tensors.fromString("{-2,2}"));
+    Tensor inp1 = Tensors.fromString("{1,2}");
+    Tensor inp2 = Tensors.fromString("{-2,2}");
+    inputList.add(inp1);
+    inputList.add(inp2);
     List<Function<Tensor, Tensor>> featureFunctionVector = new LinkedList<>();
     featureFunctionVector.add(x -> x.Get(0).abs());
     featureFunctionVector.add(x -> x.Get(1));
@@ -45,8 +46,8 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
         genericLexicographicOrder);
-    assertEquals(Tensors.fromString("{1,2}"), opt.getElementInObjectiveSpace(opt.inputs.get(0)));
-    assertEquals(Tensors.fromString("{2,2}"), opt.getElementInObjectiveSpace(opt.inputs.get(1)));
+    assertEquals(Tensors.fromString("{1,2}"), opt.getElementInObjectiveSpace(inp1));
+    assertEquals(Tensors.fromString("{2,2}"), opt.getElementInObjectiveSpace(inp2));
   }
 
   public void testInputsInObjectiveSpace() {
@@ -66,8 +67,10 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
 
   public void testGetScore() {
     List<Tensor> inputList = new LinkedList<>();
-    inputList.add(Tensors.fromString("{1,2}"));
-    inputList.add(Tensors.fromString("{-2,2}"));
+    Tensor inp1 = Tensors.fromString("{1,2}");
+    Tensor inp2 = Tensors.fromString("{-2,2}");
+    inputList.add(inp1);
+    inputList.add(inp2);
     List<Function<Tensor, Tensor>> featureFunctionVector = new LinkedList<>();
     featureFunctionVector.add(x -> x.Get(0).abs());
     featureFunctionVector.add(x -> x.Get(1));
@@ -76,8 +79,8 @@ public class TransitiveLexicographicOptimizationTest extends TestCase {
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     TransitiveLexicographicOptimization opt = new TransitiveLexicographicOptimization(inputList, featureFunctionVector, scoringFunctionVector,
         genericLexicographicOrder);
-    assertEquals(Tensors.fromString("{2,3}"), opt.getScoreOfObjectives(opt.getElementInObjectiveSpace(opt.inputs.get(0))));
-    assertEquals(Tensors.fromString("{3,3}"), opt.getScoreOfObjectives(opt.getElementInObjectiveSpace(opt.inputs.get(1))));
+    assertEquals(Tensors.fromString("{2,3}"), opt.getScoreOfObjectives(opt.getElementInObjectiveSpace(inp1)));
+    assertEquals(Tensors.fromString("{3,3}"), opt.getScoreOfObjectives(opt.getElementInObjectiveSpace(inp2)));
   }
 
   public void testGetOptimalSolutions() {
