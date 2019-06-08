@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -82,19 +83,24 @@ public class ClothoidTerminalRatiosTest extends TestCase {
     // System.out.println(MatrixForm.of(tableBuilder.toTable()));
   }
 
-  public void testSame() {
-    ClothoidTerminalRatios clothoidTerminalRatios = //
-        new ClothoidTerminalRatios(Tensors.vector(1, 1, 1), Tensors.vector(1, 1, 1), 3);
-    assertEquals(clothoidTerminalRatios.head(), RealScalar.ZERO);
-    assertEquals(clothoidTerminalRatios.tail(), RealScalar.ZERO);
+  private static void _checkZero(Tensor pose, Scalar zero) {
+    {
+      ClothoidTerminalRatios clothoidTerminalRatios = new ClothoidTerminalRatios(pose, pose, 3);
+      assertEquals(clothoidTerminalRatios.head(), zero);
+      assertEquals(clothoidTerminalRatios.tail(), zero);
+    }
+    {
+      ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(pose, pose);
+      assertEquals(clothoidTerminalRatios.head(), zero);
+      assertEquals(clothoidTerminalRatios.tail(), zero);
+    }
   }
 
-  public void testSameUnits() {
-    ClothoidTerminalRatios clothoidTerminalRatios = new ClothoidTerminalRatios( //
-        Tensors.fromString("{1[m], 1[m], 1}"), //
-        Tensors.fromString("{1[m], 1[m], 1}"), 3);
-    assertEquals(clothoidTerminalRatios.head(), Quantity.of(0, "m^-1"));
-    assertEquals(clothoidTerminalRatios.tail(), Quantity.of(0, "m^-1"));
+  public void testSame() {
+    _checkZero(Tensors.vector(1, 1, 1), RealScalar.ZERO);
+    _checkZero(Tensors.fromString("{1[m], 1[m], 1}"), Quantity.of(0, "m^-1"));
+    _checkZero(RandomVariate.of(UniformDistribution.unit(), 3), Quantity.of(0, ""));
+    _checkZero(Tensors.fromString("{1.1[m], 1.2[m], 1.3}"), Quantity.of(0, "m^-1"));
   }
 
   public void testOpenEnd() {
