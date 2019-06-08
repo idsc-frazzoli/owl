@@ -27,7 +27,7 @@ public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
   public TrajectoryEntry protected_apply(Tensor waypoints, Scalar variable) {
     AssistedCurveIntersection intersection = waypoints.stream().allMatch(t -> VectorQ.ofLength(t, 2)) ? //
         new SphereCurveIntersection(variable) : //
-        new PseudoSe2CurveIntersection(variable);
+        new SphereSe2CurveIntersection(variable);
     return new TrajectoryEntry(intersection.string(waypoints), variable);
   }
 

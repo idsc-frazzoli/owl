@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
-import ch.ethz.idsc.sophus.planar.ClothoidDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -39,13 +38,13 @@ public class TrajectoryEntryFinderTest extends TestCase {
 
   public void testIntersection() {
     Tensor goalSE2 = Tensors.vector(3, 1, 0);
+    Tensor goal2D = Extract2D.FUNCTION.apply(goalSE2);
     TrajectoryEntryFinder finder = IntersectionEntryFinder.INSTANCE;
-    // 2D
-    Optional<Tensor> waypointSE2 = finder.on(WAYPOINTS).apply(ClothoidDistance.INSTANCE.norm(goalSE2)).point;
+    // SE2
+    Optional<Tensor> waypointSE2 = finder.on(WAYPOINTS).apply(Norm._2.of(goal2D)).point;
     assertTrue(waypointSE2.isPresent());
     Chop._01.requireClose(goalSE2, waypointSE2.get());
-    // SE2
-    Tensor goal2D = Extract2D.FUNCTION.apply(goalSE2);
+    // 2D
     Tensor waypoints = Tensor.of(WAYPOINTS.stream().map(Extract2D.FUNCTION));
     Optional<Tensor> waypoint2D = finder.on(waypoints).apply(Norm._2.of(goal2D)).point;
     assertTrue(waypoint2D.isPresent());

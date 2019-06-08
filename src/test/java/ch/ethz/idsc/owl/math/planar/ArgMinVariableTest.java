@@ -33,7 +33,7 @@ public class ArgMinVariableTest extends TestCase {
     TrajectoryEntryFinder entryFinder = IntersectionEntryFinder.INSTANCE;
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
-    assertEquals(Tensors.vector(1, 0), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
+    assertEquals(Tensors.vector(1, 0, 0), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
   }
 
   public void testGeodesic() {
@@ -56,9 +56,7 @@ public class ArgMinVariableTest extends TestCase {
       Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
       timing.append(RealScalar.of(System.currentTimeMillis() - time));
       assertEquals(Dimensions.of(tensor), Arrays.asList(200, 3));
-      // FIXME GJOEL because of JPH evil edits, the return value has changed from Array.zeros(3) to Array.zeros(2) !!!
-      // JPH does not know why and requests a review
-      assertEquals(Array.zeros(2), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
+      assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
     }
     System.out.println(N.DOUBLE.of(Mean.of(timing)));
   }
