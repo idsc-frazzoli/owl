@@ -41,10 +41,4 @@ public enum Tse2StateSpaceModel implements StateSpaceModel {
         u.Get(CONTROL_INDEX_ACCEL) // change in velocity [m*s^-2]
     );
   }
-
-  /** | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 | */
-  @Override
-  public Scalar getLipschitz() {
-    throw new UnsupportedOperationException();
-  }
 }

@@ -74,9 +74,4 @@ import ch.ethz.idsc.tensor.sca.Sin;
     double value = (1.25 + 4.2 * u2.number().doubleValue());
     return Times.of(RealScalar.of(68.6 * value), x3, x3);
   }
-
-  @Override
-  public Scalar getLipschitz() {
-    throw new UnsupportedOperationException();
-  }
 }

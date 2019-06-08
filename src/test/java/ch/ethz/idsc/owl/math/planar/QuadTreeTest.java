@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.data.nd.NdEntry;
 import ch.ethz.idsc.owl.data.nd.NdTreeMap;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
@@ -72,9 +73,11 @@ public class QuadTreeTest extends TestCase {
         assertEquals(tensor.extract(0, 2), ndEntry.location());
         assertEquals(tensor.Get(2), ndEntry.value());
       } else {
-        System.out.println("nd=" + ndEntry.distance());
-        System.out.println("qt=" + Norm._2.between(tensor.extract(0, 2), ref));
-        System.out.println("---");
+        boolean lessEquals = Scalars.lessEquals(ndEntry.distance(), Norm._2.between(tensor.extract(0, 2), ref));
+        assertTrue(lessEquals);
+        // System.out.println("nd=" + ndEntry.distance());
+        // System.out.println("qt=" + Norm._2.between(tensor.extract(0, 2), ref));
+        // System.out.println("---");
       }
     }
   }

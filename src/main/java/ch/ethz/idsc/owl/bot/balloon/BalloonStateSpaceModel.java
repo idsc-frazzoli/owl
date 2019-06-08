@@ -87,9 +87,4 @@ import ch.ethz.idsc.tensor.sca.Clips;
         ? y.negate().multiply(RealScalar.of(0.01))
         : y.multiply(RealScalar.of(0.01));
   }
-
-  @Override
-  public Scalar getLipschitz() {
-    throw new UnsupportedOperationException();
-  }
 }

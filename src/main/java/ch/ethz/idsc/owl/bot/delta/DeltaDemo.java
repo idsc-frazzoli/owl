@@ -53,12 +53,13 @@ import ch.ethz.idsc.tensor.io.ResourceData;
         ImageGradientInterpolation.linear(ResourceData.of("/io/delta_uxy.png"), range, amp);
     Scalar maxInput = RealScalar.ONE;
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
+    Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, maxInput).getFlows(25);
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     Region<Tensor> region = new ImageRegion(obstacleImage, range, true);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
-    Scalar maxMove = stateSpaceModel.getLipschitz().add(maxInput);
+    Scalar maxMove = maxNormGradient.add(maxInput);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(0.3));
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(sphericalRegion, maxMove);
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);

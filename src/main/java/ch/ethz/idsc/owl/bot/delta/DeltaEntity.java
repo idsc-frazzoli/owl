@@ -82,7 +82,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, U_NORM).getFlows(U_SIZE);
     Scalar u_norm = DeltaControls.maxSpeed(controls);
     GlobalAssert.that(Chop._10.close(u_norm, U_NORM));
-    Scalar maxMove = stateSpaceModel.getLipschitz().add(u_norm);
+    Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();
+    Scalar maxMove = maxNormGradient.add(u_norm);
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(goalRegion, maxMove);
     return new StandardTrajectoryPlanner( //

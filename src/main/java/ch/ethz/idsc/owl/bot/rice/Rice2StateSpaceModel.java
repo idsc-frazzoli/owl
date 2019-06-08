@@ -4,11 +4,9 @@ package ch.ethz.idsc.owl.bot.rice;
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -18,6 +16,17 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * double integrator with friction
  * Rice2StateSpaceModel is unit less.
+ *
+ * | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
+ * theory tells that:
+ * lipschitz const is 2-norm of 4x4 state space matrix
+ * 0 0 1 0
+ * 0 0 0 1
+ * 0 0 L 0
+ * 0 0 0 L
+ * where L == -lambda
+ * confirmed with mathematica
+ * Lipschitz L == Hypot.of(RealScalar.ONE, lambda);
  * 
  * implementation for n-dimensional position and velocity */
 public class Rice2StateSpaceModel implements StateSpaceModel, Serializable {
@@ -37,19 +46,5 @@ public class Rice2StateSpaceModel implements StateSpaceModel, Serializable {
   public Tensor f(Tensor x, Tensor u) {
     Tensor v = x.extract(u.length(), x.length());
     return Join.of(v, u.subtract(v).multiply(lambda));
-  }
-
-  /** | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 | */
-  @Override
-  public Scalar getLipschitz() {
-    // theory tells that:
-    // lipschitz const is 2-norm of 4x4 state space matrix
-    // 0 0 1 0
-    // 0 0 0 1
-    // 0 0 L 0
-    // 0 0 0 L
-    // where L == -lambda
-    // confirmed with mathematica
-    return Hypot.of(RealScalar.ONE, lambda);
   }
 }

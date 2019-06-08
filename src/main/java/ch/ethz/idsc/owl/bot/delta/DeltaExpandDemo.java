@@ -54,7 +54,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Tensor obstacleImage = ResourceData.of("/io/delta_free.png"); //
     Region<Tensor> region = new ImageRegion(obstacleImage, range, true);
     // TrajectoryRegionQuery obstacleQuery = ;
-    Scalar maxMove = stateSpaceModel.getLipschitz().add(maxInput);
+    Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();
+    Scalar maxMove = maxNormGradient.add(maxInput);
     SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(0.3));
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(sphericalRegion, maxMove);
     PlannerConstraint plannerConstraint = //
