@@ -5,12 +5,11 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.curve.ClothoidCurve;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -38,14 +37,18 @@ public class TrajectoryEntryFinderTest extends TestCase {
   }
 
   public void testIntersection() {
-    Tensor goal = Tensors.vector(3, 1);
+    Tensor goalSE2 = Tensors.vector(3, 1, 0);
+    Tensor goal2D = Extract2D.FUNCTION.apply(goalSE2);
     TrajectoryEntryFinder finder = IntersectionEntryFinder.INSTANCE;
-    // ---
-    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(Norm._2.of(goal)).point;
-    assertTrue(waypoint.isPresent());
-    assertTrue(Scalars.lessThan( //
-        Norm._2.between(goal, waypoint.get()), //
-        Norm._2.of(goal).multiply(RationalScalar.of(1, 100))));
+    // SE2
+    Optional<Tensor> waypointSE2 = finder.on(WAYPOINTS).apply(Norm._2.of(goal2D)).point;
+    assertTrue(waypointSE2.isPresent());
+    Chop._01.requireClose(goalSE2, waypointSE2.get());
+    // 2D
+    Tensor waypoints = Tensor.of(WAYPOINTS.stream().map(Extract2D.FUNCTION));
+    Optional<Tensor> waypoint2D = finder.on(waypoints).apply(Norm._2.of(goal2D)).point;
+    assertTrue(waypoint2D.isPresent());
+    Chop._01.requireClose(goal2D, waypoint2D.get());
   }
 
   public void testGeodesic() {
