@@ -23,8 +23,7 @@ public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
 
   /** @param p element in SE2 of the form {px, py, p_heading}
    * @param q element in SE2 of the form {qx, qy, q_heading}
-   * @return length of geodesic between p and q when projected to R^2
-   * the projection is a circle segment */
+   * @return length of clothoid between p and q when projected to R^2 */
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
     Scalar pa = p.Get(2);
@@ -33,16 +32,18 @@ public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
       Tensor midpoint = midpointInterface.midpoint(p, q);
       if (pa.equals(midpoint.Get(2)))
         return Norm._2.between(p.extract(0, 2), q.extract(0, 2));
-      Scalar half_dist = distance(p, midpoint);
+      Scalar half_dist = distance(p, midpoint); // == distance(midpoint, q)
       return half_dist.add(half_dist); // 2 * half_dist
     }
-    // TODO investigate "direction"
+    // TODO GJOEL investigate "direction"
     ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(p, q);
     Scalar half_num = qa.subtract(pa);
     Scalar num = half_num.add(half_num); // 2 * half_num
     Scalar den = AbsSquared.FUNCTION.apply(clothoidTerminalRatios.tail()).subtract(AbsSquared.FUNCTION.apply(clothoidTerminalRatios.head()));
     Scalar a = Sqrt.FUNCTION.apply(num.divide(den));
-    return AbsSquared.FUNCTION.apply(a).multiply(clothoidTerminalRatios.difference());
+    // TODO GJOEL simplify implementation? because |sqrt(a)|^2 => |a|
+    // TODO GJOEL REVIEW: jph inserted abs() to difference() below to make "distance" always positive
+    return AbsSquared.FUNCTION.apply(a).multiply(clothoidTerminalRatios.difference().abs());
   }
 
   @Override // from TensorNorm

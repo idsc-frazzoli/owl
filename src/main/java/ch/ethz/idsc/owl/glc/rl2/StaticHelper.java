@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /* package */ enum StaticHelper {
   ;
   private static final Scalar MERIT_EPS = RationalScalar.of(1, 100);
-  private static final Chop CHOP = Chop.below(0.01);
+  private static final Chop CHOP = Chop._02;
   // FIXME ASTOLL make as small as possible
 
   /** Checks whether the merit of node next is numerically close any merit of any other node within the domain queue.

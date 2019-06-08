@@ -1,13 +1,26 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.util.List;
+
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import junit.framework.TestCase;
 
 public class RelaxedPriorityQueueTest extends TestCase {
   public void testPeekNull() {
     RelaxedPriorityQueue relaxedPriorityQueue = RelaxedDomainQueue.empty(Tensors.vector(1, 2, 3));
     assertNull(relaxedPriorityQueue.peekBest());
+  }
+
+  public void testDimensionsChengQiLu() {
+    Tensor matrix = Array.zeros(300, 300);
+    List<Integer> list = Dimensions.of(matrix);
+    assertEquals(list.get(0), list.get(1));
+    SquareMatrixQ.require(matrix);
   }
 
   public void testPollThrows() {

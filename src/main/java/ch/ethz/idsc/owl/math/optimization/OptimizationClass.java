@@ -1,9 +1,16 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.optimization;
 
+/** TODO ASTOLL document template arguments
+ * 
+ * @param <T>
+ * @param <E>
+ * @param <R> */
 public interface OptimizationClass<T, E, R> {
   /** Apply constraints to input set
+   * 
    * @return List of feasible alternatives */
+  // TODO ASTOLL function never called
   Iterable<T> getFeasibleAlternatives();
 
   /** Map the feasible inputs onto the objective space, e.g. f(X).

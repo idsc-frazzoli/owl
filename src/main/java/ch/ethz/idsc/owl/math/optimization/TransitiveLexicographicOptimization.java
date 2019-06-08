@@ -7,34 +7,39 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.owl.math.order.LexicographicComparator;
 import ch.ethz.idsc.owl.math.order.MinTracker;
+import ch.ethz.idsc.owl.math.order.OrderComparator;
 import ch.ethz.idsc.owl.math.order.TransitiveMinTracker;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** Creates an optimization problem with a given cost functional vector
  * which map the feasible inputs onto an objective space,
- * where they can be evaluated according to a given OrderComparator.
- *
- * @param <T> type of inputs
- * @param <E> type of objectives */
-public class TransitiveLexicographicOptimization implements OptimizationClass<Tensor, Tensor, Tensor> {
-  final List<Tensor> inputs;
-  final List<Function<Tensor, Tensor>> featureFunctionVector;
+ * where they can be evaluated according to a given OrderComparator. */
+public final class TransitiveLexicographicOptimization implements OptimizationClass<Tensor, Tensor, Tensor> {
+  private final List<Tensor> inputs;
+  private final List<Function<Tensor, Tensor>> featureFunctionVector;
   private final List<Function<Tensor, Tensor>> scoringFunctionVector;
-  final LexicographicComparator orderComparator;
   private final MinTracker<Iterable<? extends Object>> minTracker;
 
-  public TransitiveLexicographicOptimization(List<Tensor> inputs, List<Function<Tensor, Tensor>> featureFunctionVector,
-      List<Function<Tensor, Tensor>> scoringFunctionVector, LexicographicComparator orderComparator) {
+  /** TODO ASTOLL document
+   * 
+   * @param inputs
+   * @param featureFunctionVector
+   * @param scoringFunctionVector
+   * @param orderComparator */
+  public TransitiveLexicographicOptimization( //
+      List<Tensor> inputs, //
+      List<Function<Tensor, Tensor>> featureFunctionVector, //
+      List<Function<Tensor, Tensor>> scoringFunctionVector, //
+      OrderComparator<Iterable<? extends Object>> orderComparator) {
     this.inputs = inputs;
     this.featureFunctionVector = featureFunctionVector;
     this.scoringFunctionVector = scoringFunctionVector;
-    this.orderComparator = orderComparator;
-    this.minTracker = TransitiveMinTracker.withList(orderComparator);
+    this.minTracker = TransitiveMinTracker.withSet(orderComparator);
   }
 
   /** Apply constraints to input set
+   * 
    * @return List of feasible alternatives */
   @Override
   public Iterable<Tensor> getFeasibleAlternatives() {
@@ -44,10 +49,9 @@ public class TransitiveLexicographicOptimization implements OptimizationClass<Te
   /** Maps the input element x into the objective space
    * 
    * @param x
-   * @return Tensor x in Objectve space */
-  public Tensor getElementInObjectiveSpace(Tensor x) {
-    Stream<? extends Tensor> stream = featureFunctionVector.stream().map(index -> index.apply(x));
-    return Tensor.of(stream);
+   * @return Tensor x in Objective space */
+  /* package */ Tensor getElementInObjectiveSpace(Tensor x) {
+    return Tensor.of(featureFunctionVector.stream().map(function -> function.apply(x)));
   }
 
   /** Map the feasible inputs onto the objective space, e.g. f(X).
@@ -56,18 +60,19 @@ public class TransitiveLexicographicOptimization implements OptimizationClass<Te
   @Override
   public Set<Tensor> inputsInObjectiveSpace() {
     // return inputs.stream().map(functionVector).collect(Collectors.toSet());
-    return inputs.stream().map(x -> getElementInObjectiveSpace(x)).collect(Collectors.toSet());
+    return inputs.stream() //
+        .map(this::getElementInObjectiveSpace) //
+        .collect(Collectors.toSet());
   }
 
-  public Tensor getScoreOfObjectives(Tensor o) {
-    Stream<? extends Tensor> stream = scoringFunctionVector.stream().map(index -> index.apply(o));
-    return Tensor.of(stream);
+  /* package */ Tensor getScoreOfObjectives(Tensor x) {
+    return Tensor.of(scoringFunctionVector.stream().map(index -> index.apply(x)));
   }
 
   /** Map the feasible inputs onto the objective space, e.g. f(X).
    * 
    * @return Image of feasible inputs with respect to cost functional vector */
-  public Stream<Tensor> scoresOfElements() {
+  private Stream<Tensor> scoresOfElements() {
     // return inputs.stream().map(functionVector).collect(Collectors.toSet());
     return inputsInObjectiveSpace().stream() //
         .map(this::getScoreOfObjectives);
