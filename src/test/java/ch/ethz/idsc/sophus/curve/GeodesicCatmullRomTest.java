@@ -9,15 +9,15 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class GeodesicCatmullRomTest extends TestCase {
   public void testUniformInterpolatory() {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
-    Tensor control = Tensors.empty();
-    for (int index = 0; index < 5; index++)
-      control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
+    Tensor control = RandomVariate.of(UniformDistribution.unit(), 5, 3);
     TensorUnaryOperator centripedalKnotSpacing = //
         CentripetalKnotSpacing.uniform(Se2ParametricDistance.INSTANCE);
     Tensor knots = centripedalKnotSpacing.apply(control);

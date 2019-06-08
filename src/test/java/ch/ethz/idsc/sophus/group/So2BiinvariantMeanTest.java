@@ -36,7 +36,7 @@ public class So2BiinvariantMeanTest extends TestCase {
   // TODO OB/JPH Es gibt einige Faelle wo der unterschied signifikant ist. Zulaessig oder nicht?
   public void testArsigny() {
     for (int length = 1; length < 6; ++length) {
-      Distribution distribution = UniformDistribution.of(Clips.absolute(Math.PI));
+      Distribution distribution = UniformDistribution.of(Clips.absolute(Math.PI / 2));
       Tensor sequence = RandomVariate.of(distribution, length);
       Tensor weights = RandomVariate.of(UniformDistribution.unit(), length);
       weights = weights.divide(Total.ofVector(weights));

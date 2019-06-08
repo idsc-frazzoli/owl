@@ -40,16 +40,16 @@ public class CentripetalKnotSpacing implements TensorUnaryOperator {
   /** @param tensorMetric
    * @return */
   public static TensorUnaryOperator chordal(TensorMetric tensorMetric) {
-    return new CentripetalKnotSpacing(tensorMetric, scalar -> scalar);
+    return new CentripetalKnotSpacing(Objects.requireNonNull(tensorMetric), scalar -> scalar);
   }
 
   // ---
   private final TensorMetric tensorMetric;
-  private final ScalarUnaryOperator power;
+  private final ScalarUnaryOperator distanceFunction;
 
-  private CentripetalKnotSpacing(TensorMetric tensorMetric, ScalarUnaryOperator power) {
+  private CentripetalKnotSpacing(TensorMetric tensorMetric, ScalarUnaryOperator distanceFunction) {
     this.tensorMetric = tensorMetric;
-    this.power = power;
+    this.distanceFunction = distanceFunction;
   }
 
   @Override // from TensorUnaryOperator
@@ -57,7 +57,7 @@ public class CentripetalKnotSpacing implements TensorUnaryOperator {
     Tensor knots = Unprotect.empty(control.length() - 1);
     Tensor prev = control.get(0);
     for (int index = 1; index < control.length(); ++index)
-      knots.append(power.apply(tensorMetric.distance(prev, prev = control.get(index))));
+      knots.append(distanceFunction.apply(tensorMetric.distance(prev, prev = control.get(index))));
     return FoldList.of(Tensor::add, RealScalar.ZERO, knots);
   }
 }

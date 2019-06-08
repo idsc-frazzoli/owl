@@ -63,4 +63,13 @@ public class CentripetalKnotSpacingTest extends TestCase {
       // ---
     }
   }
+
+  public void testChordalFail() {
+    try {
+      CentripetalKnotSpacing.chordal(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

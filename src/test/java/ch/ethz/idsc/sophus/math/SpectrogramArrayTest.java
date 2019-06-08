@@ -43,8 +43,11 @@ public class SpectrogramArrayTest extends TestCase {
   public void testHighestOneBit() {
     int highestOneBit = Integer.highestOneBit(64 + 3);
     assertEquals(highestOneBit, 64);
+  }
+
+  public void testIterate() {
     List<Integer> list = IntStream.iterate(0, i -> i + 10).limit(10).boxed().collect(Collectors.toList());
-    System.out.println(list);
+    assertEquals(list, Arrays.asList(0, 10, 20, 30, 40, 50, 60, 70, 80, 90));
   }
 
   public void testFailWindowLength() {

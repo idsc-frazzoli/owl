@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     goalRadius_theta = SQRT2.divide(eta.Get(2));
   }
 
-  @Override
+  @Override // from TensorMetric
   public Scalar distance(Tensor x, Tensor y) {
     return Norm._2.ofVector(Se2Wrap.INSTANCE.difference(x, y)); // non-negative
   }

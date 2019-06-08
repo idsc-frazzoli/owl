@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     add(FallbackControl.of(Array.zeros(2)));
   }
 
-  @Override
+  @Override // from TensorMetrix
   public Scalar distance(Tensor x, Tensor y) {
     return Norm2Squared.between(x, y); // non-negative
   }
