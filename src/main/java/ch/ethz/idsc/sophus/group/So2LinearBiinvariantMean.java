@@ -3,11 +3,8 @@ package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.opt.Pi;
-import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** Hint:
@@ -16,22 +13,14 @@ import ch.ethz.idsc.tensor.sca.Mod;
  * Source for Constant C: https://hal.inria.fr/inria-00073318/
  * Xavier Pennec
  * TODO OB cite title, page no., and quote statement */
-public enum So2LinearBiinvariantMean implements So2BiinvariantMean {
+public enum So2LinearBiinvariantMean implements ScalarBiinvariantMean {
   INSTANCE;
   // ---
   private static final Mod MOD = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
-  @Override // from So2BiinvariantMean
+  @Override // from ScalarBiinvariantMean
   public Scalar mean(Tensor sequence, Tensor weights) {
-    AffineQ.require(weights);
     Scalar a0 = sequence.Get(0);
-    Tensor shifted = sequence.map(a0::subtract).map(MOD);
-    ScalarSummaryStatistics scalarSummaryStatistics = shifted.stream() //
-        .map(Scalar.class::cast) //
-        .collect(ScalarSummaryStatistics.collector());
-    Scalar width = scalarSummaryStatistics.getMax().subtract(scalarSummaryStatistics.getMin());
-    if (Scalars.lessEquals(Pi.VALUE, width))
-      throw TensorRuntimeException.of(sequence);
-    return MOD.apply(a0.subtract(weights.dot(shifted)));
+    return MOD.apply(a0.subtract(AffineQ.require(weights).dot(So2Helper.rangeQ(sequence.map(a0::subtract).map(MOD)))));
   }
 }

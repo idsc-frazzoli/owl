@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.opt.Pi;
@@ -200,12 +199,6 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor actual = Se2BiinvariantMean.GLOBAL.mean(sequence, weights);
     Tensor expected = Tensors.fromString("{3.105184243650884, 2.8948157563491153, 0.3}");
     Chop._14.requireClose(expected, actual);
-  }
-
-  public void testFunctionM() {
-    Tensor m1 = Se2BiinvariantMean.M(RealScalar.of(-.1));
-    Tensor m2 = Se2BiinvariantMean.M(RealScalar.of(+.1));
-    Chop._10.requireClose(m1, Transpose.of(m2));
   }
 
   public void testFail() {

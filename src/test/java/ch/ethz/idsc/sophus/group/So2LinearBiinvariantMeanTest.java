@@ -25,7 +25,7 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
   private static final Clip CLIP = Clips.absolute(Pi.VALUE);
   private static final Mod MOD = Mod.function(Pi.TWO, Pi.VALUE.negate());
-  private static final So2BiinvariantMean[] SO2_BIINVARIANT_MEANS = { //
+  private static final ScalarBiinvariantMean[] SCALAR_BIINVARIANT_MEANS = { //
       So2GlobalBiinvariantMean.INSTANCE, //
       So2LinearBiinvariantMean.INSTANCE };
 
@@ -34,7 +34,7 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
     for (int length = 1; length < 6; ++length) {
       Tensor sequence = RandomVariate.of(distribution, length);
       Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.unit(), length));
-      for (So2BiinvariantMean so2BiinvariantMean : SO2_BIINVARIANT_MEANS) {
+      for (ScalarBiinvariantMean so2BiinvariantMean : SCALAR_BIINVARIANT_MEANS) {
         Scalar solution = so2BiinvariantMean.mean(sequence, weights);
         for (int count = 0; count < 10; ++count) {
           Scalar shift = RandomVariate.of(distribution);

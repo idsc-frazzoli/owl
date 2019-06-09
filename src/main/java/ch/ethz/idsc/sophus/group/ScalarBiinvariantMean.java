@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 @FunctionalInterface
-/* package */ interface So2BiinvariantMean extends BiinvariantMean {
+/* package */ interface ScalarBiinvariantMean extends BiinvariantMean {
   @Override
   Scalar mean(Tensor sequence, Tensor weights);
 }
