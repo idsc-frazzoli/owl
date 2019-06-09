@@ -1,6 +1,8 @@
 //code by ob
 package ch.ethz.idsc.sophus.filter;
 
+import java.util.function.Function;
+
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
@@ -27,7 +29,7 @@ public class StaticHelperCausalTest extends TestCase {
   }
 
   public void testExact() {
-    WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.HANN);
+    Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.HANN);
     Tensor mask = windowSideSampler.apply(2);
     Tensor splits = StaticHelperCausal.splits(mask);
     ExactTensorQ.require(splits);

@@ -4,9 +4,9 @@ package ch.ethz.idsc.sophus;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-/** parameterized geodesic in a space of tensors */
+/** parameterized curve/geodesic in a space of tensors */
 @FunctionalInterface
-public interface TensorGeodesic {
+public interface ParametricCurve {
   /** @param p
    * @param q
    * @return parametric curve that for input 0 gives p and for input 1 gives q */

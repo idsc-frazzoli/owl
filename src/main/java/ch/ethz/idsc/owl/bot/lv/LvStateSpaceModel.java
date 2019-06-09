@@ -44,9 +44,4 @@ import ch.ethz.idsc.tensor.Tensors;
         x.Get(1).multiply(f1.subtract(x.Get(0))) //
     );
   }
-
-  @Override
-  public Scalar getLipschitz() {
-    throw new RuntimeException();
-  }
 }

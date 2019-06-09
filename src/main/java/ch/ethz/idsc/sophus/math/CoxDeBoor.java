@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.qty.Boole;
 
 /** DeBoor denotes the function that is defined
  * by control points over a sequence of knots. */
-// TODO JPH not used
+// TODO JPH implementation is not used
 /* package */ class CoxDeBoor implements ScalarTensorFunction {
   /** @param knots vector of length degree * 2
    * @param control points of length degree + 1
@@ -45,8 +45,8 @@ import ch.ethz.idsc.tensor.qty.Boole;
     this.knots = knots;
     this.control = control;
     n = knots.length() - degree - 1;
-    System.out.println("D=" + degree);
-    System.out.println("n=" + n);
+    // System.out.println("D=" + degree);
+    // System.out.println("n=" + n);
     if (n != control.length())
       System.err.println("control length!?");
     if (!(n >= degree + 1 && control.length() >= n))

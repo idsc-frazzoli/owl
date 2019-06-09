@@ -47,10 +47,4 @@ import ch.ethz.idsc.tensor.sca.Sin;
         .divide(l.multiply(Mpmsasa));
     return Tensors.of(v, vd, w, wd);
   }
-
-  @Override
-  public Scalar getLipschitz() {
-    // LONGTERM linearize in Mathematica
-    return null;
-  }
 }

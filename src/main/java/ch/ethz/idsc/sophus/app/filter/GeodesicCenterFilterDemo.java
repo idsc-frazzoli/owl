@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
@@ -40,7 +41,9 @@ public class GeodesicCenterFilterDemo extends DatasetKernelDemo implements Buffe
 
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay().geodesicInterface(), spinnerKernel.getValue());
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    // geodesic center
+    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(geodesicDisplay.geodesicInterface(), spinnerKernel.getValue());
     refined = Nest.of( //
         GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
         control(), spinnerConvolution.getValue());

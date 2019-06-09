@@ -2,24 +2,23 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.KnotSpacing;
 import ch.ethz.idsc.sophus.planar.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class GeodesicCatmullRomTest extends TestCase {
   public void testUniformInterpolatory() {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
-    Tensor control = Tensors.empty();
-    for (int index = 0; index < 5; index++)
-      control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
-    TensorUnaryOperator centripedalKnotSpacing = //
-        CentripetalKnotSpacing.uniform(Se2ParametricDistance.INSTANCE);
+    Tensor control = RandomVariate.of(UniformDistribution.unit(), 5, 3);
+    TensorUnaryOperator centripedalKnotSpacing = KnotSpacing.uniform();
     Tensor knots = centripedalKnotSpacing.apply(control);
     GeodesicCatmullRom geodesicCatmullRom = GeodesicCatmullRom.of(geodesicInterface, knots, control);
     // ---
@@ -39,7 +38,7 @@ public class GeodesicCatmullRomTest extends TestCase {
     for (int index = 0; index < 5; index++)
       control.append(Tensors.vector(Math.random(), Math.random(), Math.random()));
     TensorUnaryOperator centripedalKnotSpacing = //
-        CentripetalKnotSpacing.of(Se2ParametricDistance.INSTANCE, RealScalar.of(Math.random()));
+        KnotSpacing.centripetal(Se2ParametricDistance.INSTANCE, RealScalar.of(Math.random()));
     Tensor knots = centripedalKnotSpacing.apply(control);
     GeodesicCatmullRom geodesicCatmullRom = GeodesicCatmullRom.of(geodesicInterface, knots, control);
     // ---

@@ -18,13 +18,14 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 public class R2TrajectoryControl extends StateTrajectoryControl {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
+  private static final Scalar THRESHOLD = RealScalar.of(0.2);
 
   @Override
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
     Tensor state = tail.state();
     for (TrajectorySample trajectorySample : trailAhead) {
       Tensor diff = trajectorySample.stateTime().state().subtract(state);
-      if (Scalars.lessThan(RealScalar.of(0.2), Norm._2.ofVector(diff))) // magic const
+      if (Scalars.lessThan(THRESHOLD, Norm._2.ofVector(diff)))
         return Optional.of(NORMALIZE.apply(diff));
     }
     // System.out.println("fail custom control");

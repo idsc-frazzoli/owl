@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.group.RnExponential;
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.RnGroup;
 import ch.ethz.idsc.sophus.group.Se2Utils;
-import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
+import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -63,7 +63,7 @@ public enum R2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public BiinvariantMeanInterface biinvariantMeanInterface() {
+  public BiinvariantMean biinvariantMean() {
     return RnBiinvariantMean.INSTANCE;
   }
 

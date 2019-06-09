@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -106,15 +107,29 @@ public class RelaxedDomainQueueTest extends TestCase {
     Random random = new Random();
     Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
     Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
-    Timing timing = Timing.started();
     GlcNode firstNode = GlcNode.of(null, null, costFromRoot, minCostToGoal);
-    RelaxedPriorityQueue rlQueue = RelaxedDomainQueue.singleton(firstNode, slacks);
-    for (int i = 0; i < 1000; ++i) {
-      costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
-      GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
-      rlQueue.add(node);
+    RelaxedPriorityQueue relaxedPriorityQueue = RelaxedDomainQueue.singleton(firstNode, slacks);
+    {
+      Timing timing = Timing.started();
+      int removed = 0;
+      int limit = 1000;
+      for (int count = 0; count < limit; ++count) {
+        costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
+        GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
+        Collection<GlcNode> collection = relaxedPriorityQueue.add(node);
+        removed += collection.size();
+      }
+      double seconds = timing.seconds(); // 0.11995163700000001
+      // System.out.println(seconds);
+      assertTrue(seconds < 0.5);
+      assertEquals(relaxedPriorityQueue.size() + removed, limit + 1);
     }
-    rlQueue.pollBest();
-    System.out.println(timing.seconds());
+    {
+      Timing timing = Timing.started();
+      relaxedPriorityQueue.pollBest();
+      double seconds = timing.seconds(); // 4.99146E-4
+      // System.out.println(seconds);
+      assertTrue(seconds < 0.01);
+    }
   }
 }

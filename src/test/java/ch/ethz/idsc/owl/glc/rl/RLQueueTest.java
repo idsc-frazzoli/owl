@@ -49,21 +49,32 @@ public class RLQueueTest extends TestCase {
   }
 
   public void testSpeed() {
-    Tensor slack = Tensors.vector(1, 0, 0);
+    Tensor slack = Tensors.vector(1, 1, 1);
     RLQueue rlQueue = new RLQueue(slack);
     Random random = new Random();
-    for (int i = 0; i < 1000; ++i) {
-      Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
-      Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
-      GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
-      rlQueue.add(node);
+    Scalar minCostToGoal = VectorScalar.of(0, 0, 0);
+    {
+      Timing timing = Timing.started();
+      for (int i = 0; i < 1000; ++i) {
+        Scalar costFromRoot = VectorScalar.of(Tensors.vectorDouble(random.doubles(3, 1, 2).toArray()));
+        GlcNode node = GlcNode.of(null, null, costFromRoot, minCostToGoal);
+        boolean added = rlQueue.add(node);
+        assertTrue(added);
+      }
+      double seconds = timing.seconds(); // 0.045515109000000005
+      // System.out.println(seconds);
+      assertTrue(seconds < 0.1);
     }
-    Timing timing = Timing.started();
-    rlQueue.poll();
-    System.out.println(timing.seconds());
+    {
+      Timing timing = Timing.started();
+      rlQueue.poll();
+      double seconds = timing.seconds(); // 0.007376575000000001
+      // System.out.println(seconds);
+      assertTrue(seconds < 0.05);
+    }
   }
 
-  public void testCollectionMin() {
+  public void testFailCollectionsMinEmpty() {
     try {
       Collections.min(Arrays.asList());
       fail();

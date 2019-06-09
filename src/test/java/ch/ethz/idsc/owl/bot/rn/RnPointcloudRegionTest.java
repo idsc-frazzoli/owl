@@ -38,6 +38,16 @@ public class RnPointcloudRegionTest extends TestCase {
     assertFalse(rn.isMember(Tensors.vector(8, 2)));
   }
 
+  public void testRadiusFail() {
+    RnPointcloudRegion.of(Tensors.empty(), RealScalar.of(1.0));
+    try {
+      RnPointcloudRegion.of(Tensors.empty(), RealScalar.of(-1.0));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testNonMatrix() {
     try {
       RnPointcloudRegion.of(LieAlgebras.sl2(), RealScalar.of(1.0));

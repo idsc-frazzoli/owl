@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.ob;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Function;
 
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
@@ -35,7 +36,7 @@ public class FrequencyResponsePlot {
   }
 
   private Tensor process(String string, int signal) {
-    WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(signal))]);
+    Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.values()[Scalars.intValueExact(minimizingKernels.Get(signal))]);
     Scalar b = minimizingAlphas.Get(signal);
     Tensor a = windowSideSampler.apply(Scalars.intValueExact(minimizingFilterlengths.Get(signal)))
         .multiply(RealScalar.ONE.subtract(minimizingAlphas.Get(signal)));

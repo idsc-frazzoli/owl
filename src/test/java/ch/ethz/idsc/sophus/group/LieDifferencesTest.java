@@ -1,12 +1,14 @@
 // code by jph
 package ch.ethz.idsc.sophus.group;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -16,11 +18,11 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class LieDifferencesTest extends TestCase {
-  public void testSimple() {
+  public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = UniformDistribution.unit();
     Tensor tensor = RandomVariate.of(distribution, 10, 4);
     LieDifferences lieDifferences = //
-        new LieDifferences(RnGroup.INSTANCE, RnExponential.INSTANCE);
+        Serialization.copy(new LieDifferences(RnGroup.INSTANCE, RnExponential.INSTANCE));
     assertEquals(lieDifferences.apply(tensor), Differences.of(tensor));
   }
 

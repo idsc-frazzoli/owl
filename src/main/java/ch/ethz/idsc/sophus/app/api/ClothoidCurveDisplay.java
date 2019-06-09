@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.group.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.group.Se2Group;
 import ch.ethz.idsc.sophus.group.Se2Utils;
-import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
+import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.planar.Arrowhead;
 import ch.ethz.idsc.sophus.planar.ClothoidDistance;
@@ -61,8 +61,8 @@ public enum ClothoidCurveDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public BiinvariantMeanInterface biinvariantMeanInterface() {
-    return Se2BiinvariantMean.INSTANCE;
+  public BiinvariantMean biinvariantMean() {
+    return Se2BiinvariantMean.LINEAR;
   }
 
   @Override // from Object

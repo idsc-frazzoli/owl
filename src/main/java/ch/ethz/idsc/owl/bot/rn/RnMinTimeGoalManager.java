@@ -4,13 +4,13 @@ package ch.ethz.idsc.owl.bot.rn;
 import java.util.Collection;
 import java.util.List;
 
-import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.Scalar;
@@ -25,8 +25,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * <p>The goal region underlying the target area as well as the heuristic is
  * {@link SphericalRegion}. */
-// TODO JPH offer solution that does not track matches, i.e. not catchy
-public class RnMinTimeGoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
+public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   /** @param regionWithDistance
    * @param controls */
   public static GoalInterface create(RegionWithDistance<Tensor> regionWithDistance, Collection<Flow> controls) {

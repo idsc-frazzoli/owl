@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.se2;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.se2.twd.TwdFlows;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -23,12 +22,16 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * since the se2 state space model is parameter free,
  * the access to the model is via a singleton instance
+ * 
+ * | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
+ * Lipschitz L == 1
  *
  * @see Se2CarFlows
  * @see TwdFlows
  * @see Se2CarIntegrator */
 public enum Se2StateSpaceModel implements StateSpaceModel {
   INSTANCE;
+  // ---
   public static final int CONTROL_INDEX_VEL = 0;
 
   // ---
@@ -45,11 +48,5 @@ public enum Se2StateSpaceModel implements StateSpaceModel {
         Sin.FUNCTION.apply(angle).multiply(vx), // change in py
         u.Get(2) // angular rate per second [s^-1]
     );
-  }
-
-  /** | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 | */
-  @Override
-  public Scalar getLipschitz() {
-    return RealScalar.ONE;
   }
 }

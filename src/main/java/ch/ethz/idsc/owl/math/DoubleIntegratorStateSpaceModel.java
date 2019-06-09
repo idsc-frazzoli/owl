@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Join;
@@ -12,7 +10,9 @@ import ch.ethz.idsc.tensor.alg.Join;
  * 
  * implementation for linear coordinate system R^n
  * 
- * see also {@link SingleIntegratorStateSpaceModel} */
+ * see also {@link SingleIntegratorStateSpaceModel}
+ * 
+ * Lipschitz L == 1 */
 public enum DoubleIntegratorStateSpaceModel implements StateSpaceModel {
   INSTANCE;
   // ---
@@ -23,10 +23,5 @@ public enum DoubleIntegratorStateSpaceModel implements StateSpaceModel {
       throw TensorRuntimeException.of(x, u);
     Tensor v = x.extract(u.length(), x.length());
     return Join.of(v, u);
-  }
-
-  @Override
-  public Scalar getLipschitz() {
-    return RealScalar.ONE;
   }
 }

@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.curve.BezierFunction;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -47,8 +46,7 @@ public class BezierExtrapolation implements TensorUnaryOperator {
    * </pre>
    * 
    * @param n
-   * @return weight mask of length n with entries that sum up to 1
-   * @see IntegerTensorFunction */
+   * @return weight mask of length n with entries that sum up to 1 */
   public static Tensor mask(int n) {
     Scalar p = RationalScalar.of(n, n - 1);
     Scalar o_p = RealScalar.ONE.subtract(p);

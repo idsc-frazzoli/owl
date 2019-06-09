@@ -8,17 +8,13 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** DO NOT USE THIS ON A REAL ROBOT */
 public class PseudoSe2CurveIntersection extends AssistedCurveIntersection {
+  /** @param radius non-negative */
   public PseudoSe2CurveIntersection(Scalar radius) {
-    super(radius);
+    super(radius, Se2Geodesic.INSTANCE);
   }
 
   @Override // from SimpleCurveIntersection
   protected Scalar distance(Tensor tensor) {
     return ClothoidDistance.INSTANCE.norm(tensor);
-  }
-
-  @Override // from SimpleCurveIntersection
-  protected Tensor split(Tensor prev, Tensor next, Scalar scalar) {
-    return Se2Geodesic.INSTANCE.split(prev, next, scalar);
   }
 }

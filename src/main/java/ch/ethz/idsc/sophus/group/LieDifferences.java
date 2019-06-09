@@ -26,21 +26,18 @@ public class LieDifferences implements TensorUnaryOperator {
   }
 
   @Override
-  public Tensor apply(Tensor tensor) {
+  public final Tensor apply(Tensor tensor) {
     Tensor result = Unprotect.empty(tensor.length() - 1);
     Tensor prev = tensor.get(0);
-    for (int index = 1; index < tensor.length(); ++index) {
-      Tensor next = tensor.get(index);
-      result.append(pair(prev, next));
-      prev = next;
-    }
+    for (int index = 1; index < tensor.length(); ++index)
+      result.append(pair(prev, prev = tensor.get(index)));
     return result;
   }
 
   /** @param p element of the lie group
    * @param q element of the lie group
    * @return vector == log(p^-1 . q) so that exp(vector) == p^-1 . q */
-  public Tensor pair(Tensor p, Tensor q) {
+  public final Tensor pair(Tensor p, Tensor q) {
     return lieExponential.log(lieGroup.element(p).inverse().combine(q));
   }
 }

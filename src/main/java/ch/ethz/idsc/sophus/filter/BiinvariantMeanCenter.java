@@ -2,9 +2,10 @@
 package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
+import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
-import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
+import ch.ethz.idsc.sophus.math.BiinvariantMean;
+import ch.ethz.idsc.sophus.math.MemoFunction;
 import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -16,28 +17,34 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <p>Careful: the implementation only supports sequences with ODD number of elements!
  * When a sequence of even length is provided an Exception is thrown. */
 public class BiinvariantMeanCenter implements TensorUnaryOperator {
-  /** @param biinvariantMeanInterface non-null
+  /** @param biinvariantMean non-null
+   * @param function non-null
+   * @return operator that maps a sequence of odd number of points to their barycenter
+   * @throws Exception if either input parameter is null */
+  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, Function<Integer, Tensor> function) {
+    return new BiinvariantMeanCenter(Objects.requireNonNull(biinvariantMean), MemoFunction.wrap(function));
+  }
+
+  /** @param biinvariantMean non-null
    * @param windowFunction non-null
    * @return operator that maps a sequence of odd number of points to their barycenter
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(BiinvariantMeanInterface biinvariantMeanInterface, ScalarUnaryOperator windowFunction) {
-    return new BiinvariantMeanCenter( //
-        Objects.requireNonNull(biinvariantMeanInterface), //
-        new WindowCenterSampler(windowFunction));
+  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, ScalarUnaryOperator windowFunction) {
+    return new BiinvariantMeanCenter(Objects.requireNonNull(biinvariantMean), WindowCenterSampler.of(windowFunction));
   }
 
   // ---
-  private final BiinvariantMeanInterface biinvariantMeanInterface;
-  private final IntegerTensorFunction integerTensorFunction;
+  private final BiinvariantMean biinvariantMean;
+  private final Function<Integer, Tensor> function;
 
-  private BiinvariantMeanCenter(BiinvariantMeanInterface biinvariantMeanInterface, IntegerTensorFunction integerTensorFunction) {
-    this.biinvariantMeanInterface = biinvariantMeanInterface;
-    this.integerTensorFunction = integerTensorFunction;
+  private BiinvariantMeanCenter(BiinvariantMean biinvariantMean, Function<Integer, Tensor> function) {
+    this.biinvariantMean = biinvariantMean;
+    this.function = function;
   }
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     int extent = (tensor.length() - 1) / 2;
-    return biinvariantMeanInterface.mean(tensor, integerTensorFunction.apply(extent));
+    return biinvariantMean.mean(tensor, function.apply(extent));
   }
 }

@@ -26,20 +26,18 @@ public class CatchyTrajectoryRegionQuery extends SimpleTrajectoryRegionQuery imp
   public static TrajectoryRegionQuery timeDependent(Region<Tensor> region) {
     return new CatchyTrajectoryRegionQuery(new TimeDependentRegion(region));
   }
+
+  public static TrajectoryRegionQuery wrap(Region<StateTime> region) {
+    return new CatchyTrajectoryRegionQuery(region);
+  }
   // ---
 
   private final StateTimeRegionCallback stateTimeRegionCallback;
 
   /** @param region */
-  public CatchyTrajectoryRegionQuery(Region<StateTime> region) {
-    this(region, new SparseStateTimeRegionMembers());
-  }
-
-  /** @param region
-   * @param stateTimeRegionCallback */
-  public CatchyTrajectoryRegionQuery(Region<StateTime> region, StateTimeRegionCallback stateTimeRegionCallback) {
+  private CatchyTrajectoryRegionQuery(Region<StateTime> region) {
     super(region);
-    this.stateTimeRegionCallback = stateTimeRegionCallback;
+    this.stateTimeRegionCallback = new SparseStateTimeRegionMembers();
   }
 
   @Override // from TrajectoryRegionQuery

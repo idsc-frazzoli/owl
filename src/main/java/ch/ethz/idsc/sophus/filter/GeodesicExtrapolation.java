@@ -4,10 +4,10 @@ package ch.ethz.idsc.sophus.filter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,7 +23,7 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
    * @param function that maps an extent to a weight mask of length "sequence.length - 2"
    * @return operator that maps a sequence of number of points to their next (expected) point
    * @throws Exception if either input parameters is null */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
+  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
     return new GeodesicExtrapolation(geodesicInterface, Objects.requireNonNull(function));
   }
 
@@ -32,15 +32,15 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
    * @return operator that maps a sequence of number of points to their next (expected) point
    * @throws Exception if either input parameters is null */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicExtrapolation(geodesicInterface, new WindowSideSampler(windowFunction));
+    return new GeodesicExtrapolation(geodesicInterface, WindowSideSampler.of(windowFunction));
   }
 
   // ---
   private final GeodesicInterface geodesicInterface;
-  private final IntegerTensorFunction function;
+  private final Function<Integer, Tensor> function;
   private final List<Tensor> weights = new ArrayList<>();
 
-  private GeodesicExtrapolation(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
+  private GeodesicExtrapolation(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
     this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
     this.function = function;
   }

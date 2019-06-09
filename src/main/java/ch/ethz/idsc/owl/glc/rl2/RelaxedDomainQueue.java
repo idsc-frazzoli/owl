@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensor;
   private final LexSemiMinTracker<GlcNode> domainMinTracker;
 
   private RelaxedDomainQueue(Tensor slacks) {
-    this.domainMinTracker = DMLexSemiMinTracker.withList(slacks);
+    this.domainMinTracker = DMLexSemiMinTracker.withSet(slacks);
   }
 
   /** Checks whether glcNode's merit precedes or is equally good than any other. If yes, it will be added to the domain map and all

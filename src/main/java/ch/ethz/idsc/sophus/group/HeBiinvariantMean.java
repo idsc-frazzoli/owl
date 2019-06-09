@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.sophus.AffineQ;
-import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
+import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * @return associated biinvariant mean which is the solution to the barycentric equation
  * Source: "Bi-invariant Means in Lie Groups. Application toLeft-invariant Polyaffine Transformations." p32
  * Vincent Arsigny - Xavier Pennec - Nicholas Ayache */
-public enum HeBiinvariantMean implements BiinvariantMeanInterface {
+public enum HeBiinvariantMean implements BiinvariantMean {
   INSTANCE;
   // ---
   private final static Scalar TWO = RealScalar.of(2);

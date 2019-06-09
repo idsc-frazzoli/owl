@@ -11,17 +11,13 @@ import ch.ethz.idsc.tensor.red.Norm;
  * input to intersection query is either a non-cyclic or cyclic polygon
  * the output is the coordinate of intersection using linear interpolation. */
 public class SphereCurveIntersection extends AssistedCurveIntersection {
+  /** @param radius non-negative */
   public SphereCurveIntersection(Scalar radius) {
-    super(radius);
+    super(radius, RnGeodesic.INSTANCE);
   }
 
   @Override // from SimpleCurveIntersection
   protected final Scalar distance(Tensor tensor) {
     return Norm._2.ofVector(tensor);
-  }
-
-  @Override // from SimpleCurveIntersection
-  protected final Tensor split(Tensor p, Tensor q, Scalar scalar) {
-    return RnGeodesic.INSTANCE.split(p, q, scalar);
   }
 }

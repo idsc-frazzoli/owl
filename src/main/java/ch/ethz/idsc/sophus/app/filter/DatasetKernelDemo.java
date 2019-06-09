@@ -3,9 +3,12 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Dimension;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 
@@ -13,7 +16,12 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
-  public DatasetKernelDemo() {
+  protected DatasetKernelDemo() {
+    this(GeodesicDisplays.CLOTH_SE2_R2);
+  }
+
+  protected DatasetKernelDemo(List<GeodesicDisplay> list) {
+    super(list);
     {
       spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
       spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
