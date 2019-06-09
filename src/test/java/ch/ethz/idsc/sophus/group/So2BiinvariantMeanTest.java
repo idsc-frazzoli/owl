@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 
 public class So2BiinvariantMeanTest extends TestCase {
   private static final So2BiinvariantMean[] SO2_BIINVARIANT_MEANS = { //
-      So2DefaultBiinvariantMean.INSTANCE, //
-      So2ArsignyBiinvariantMean.INSTANCE };
+      So2GlobalBiinvariantMean.INSTANCE, //
+      So2LinearBiinvariantMean.INSTANCE };
 
   public void testEmptyFail() {
     for (So2BiinvariantMean so2BiinvariantMean : SO2_BIINVARIANT_MEANS)

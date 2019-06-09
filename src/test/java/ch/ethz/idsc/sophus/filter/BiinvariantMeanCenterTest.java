@@ -20,7 +20,7 @@ public class BiinvariantMeanCenterTest extends TestCase {
   public void testSe2() throws ClassNotFoundException, IOException {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
-          Serialization.copy(BiinvariantMeanCenter.of(Se2BiinvariantMean.DEFAULT, smoothingKernel));
+          Serialization.copy(BiinvariantMeanCenter.of(Se2BiinvariantMean.GLOBAL, smoothingKernel));
       Distribution distribution = UniformDistribution.unit();
       Tensor sequence = RandomVariate.of(distribution, 7, 3);
       Tensor tensor = tensorUnaryOperator.apply(sequence);
@@ -30,7 +30,7 @@ public class BiinvariantMeanCenterTest extends TestCase {
 
   public void testFailNull() {
     try {
-      BiinvariantMeanCenter.of(Se2BiinvariantMean.DEFAULT, (ScalarUnaryOperator) null);
+      BiinvariantMeanCenter.of(Se2BiinvariantMean.GLOBAL, (ScalarUnaryOperator) null);
       fail();
     } catch (Exception exception) {
       // ---

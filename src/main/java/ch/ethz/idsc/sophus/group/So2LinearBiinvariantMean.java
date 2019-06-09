@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
  * Source for Constant C: https://hal.inria.fr/inria-00073318/
  * Xavier Pennec
  * TODO OB cite title, page no., and quote statement */
-public enum So2ArsignyBiinvariantMean implements So2BiinvariantMean {
+public enum So2LinearBiinvariantMean implements So2BiinvariantMean {
   INSTANCE;
   // ---
   private static final Mod MOD = Mod.function(Pi.TWO, Pi.VALUE.negate());

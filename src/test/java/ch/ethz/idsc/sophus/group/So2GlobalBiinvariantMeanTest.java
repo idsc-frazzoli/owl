@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
-public class So2DefaultBiinvariantMeanTest extends TestCase {
+public class So2GlobalBiinvariantMeanTest extends TestCase {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
 
   public void testPermutations() {
@@ -25,10 +25,10 @@ public class So2DefaultBiinvariantMeanTest extends TestCase {
       // here, we hope that no antipodal points are generated
       Tensor sequence = RandomVariate.of(distribution, length);
       Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.unit(), length));
-      Scalar solution = So2DefaultBiinvariantMean.INSTANCE.mean(sequence, weights);
+      Scalar solution = So2GlobalBiinvariantMean.INSTANCE.mean(sequence, weights);
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = So2DefaultBiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
+        Tensor result = So2GlobalBiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
     }

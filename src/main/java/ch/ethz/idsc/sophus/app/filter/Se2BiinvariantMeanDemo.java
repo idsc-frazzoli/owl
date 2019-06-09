@@ -26,7 +26,7 @@ public class Se2BiinvariantMeanDemo extends DatasetKernelDemo {
     {
       spinnerFilters.setArray(Se2BiinvariantMean.values());
       spinnerFilters.setIndex(0);
-      spinnerFilters.addToComponentReduced(timerFrame.jToolBar, new Dimension(120, 28), "se2 biinvariant mean");
+      spinnerFilters.addToComponentReduced(timerFrame.jToolBar, new Dimension(90, 28), "se2 biinvariant mean");
       spinnerFilters.addSpinnerListener(type -> updateState());
     }
     {

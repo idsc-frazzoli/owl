@@ -164,10 +164,10 @@ public class Se2BiinvariantMeanTest extends TestCase {
       Tensor sequence = RandomVariate.of(distribution, length, 3);
       Tensor weights = RandomVariate.of(UniformDistribution.unit(), length);
       weights = weights.divide(Total.ofVector(weights));
-      Tensor solution = Se2BiinvariantMean.DEFAULT.mean(sequence, weights);
+      Tensor solution = Se2BiinvariantMean.GLOBAL.mean(sequence, weights);
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = Se2BiinvariantMean.DEFAULT.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
+        Tensor result = Se2BiinvariantMean.GLOBAL.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
     }
@@ -197,7 +197,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
     for (int index = 0; index < 7; ++index)
       sequence.append(p.multiply(RealScalar.of(index)));
     Tensor weights = Tensors.vector(0.05, 0.1, 0.2, 0.3, 0.2, 0.1, 0.05);
-    Tensor actual = Se2BiinvariantMean.DEFAULT.mean(sequence, weights);
+    Tensor actual = Se2BiinvariantMean.GLOBAL.mean(sequence, weights);
     Tensor expected = Tensors.fromString("{3.105184243650884, 2.8948157563491153, 0.3}");
     Chop._14.requireClose(expected, actual);
   }

@@ -62,7 +62,8 @@ public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
-    return Se2BiinvariantMean.DEFAULT;
+    // TODO should create Se2CoveringBiinvariantMean
+    return Se2BiinvariantMean.LINEAR;
   }
 
   @Override // from Object

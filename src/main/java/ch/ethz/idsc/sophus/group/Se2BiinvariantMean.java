@@ -24,11 +24,11 @@ import ch.ethz.idsc.tensor.sca.Tan;
  * "Bi-invariant Means in Lie Groups. Application to left-invariant Polyaffine Transformations." p.38
  * Vincent Arsigny, Xavier Pennec, Nicholas Ayache */
 public enum Se2BiinvariantMean implements BiinvariantMean {
-  /** default-formula is defined globally for arbitrary angles and weights */
-  DEFAULT(So2DefaultBiinvariantMean.INSTANCE), //
   /** Arsigny-formula yields better results in BiinvariantMeanCenter
    * however, the operation domain is reduced compared to the default-formula */
-  ARSIGNY(So2ArsignyBiinvariantMean.INSTANCE), //
+  LINEAR(So2LinearBiinvariantMean.INSTANCE), //
+  /** default-formula is defined globally for arbitrary angles and weights */
+  GLOBAL(So2GlobalBiinvariantMean.INSTANCE), //
   ;
   // ---
   private static final Scalar ZERO = RealScalar.ZERO;

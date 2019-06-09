@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
  * invariant under simultaneous permutation of control point sequence and weight vector
  * 
  * elements of SO(2) are represented as scalars */
-public enum So2DefaultBiinvariantMean implements So2BiinvariantMean {
+public enum So2GlobalBiinvariantMean implements So2BiinvariantMean {
   INSTANCE;
   // ---
   @Override // from So2BiinvariantMean
