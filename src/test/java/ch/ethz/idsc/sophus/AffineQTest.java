@@ -17,14 +17,14 @@ public class AffineQTest extends TestCase {
   }
 
   public void testRequirePositive() {
-    AffineQ.requirePositive(Tensors.vector(0.5, 0.5));
-    AffineQ.requirePositive(Tensors.vector(0.25, 0.25, 0.25, 0.25));
-    AffineQ.requirePositive(Tensors.vector(1, 0));
+    AffineQ.requirePositiveOrZero(Tensors.vector(0.5, 0.5));
+    AffineQ.requirePositiveOrZero(Tensors.vector(0.25, 0.25, 0.25, 0.25));
+    AffineQ.requirePositiveOrZero(Tensors.vector(1, 0));
   }
 
   public void testFail() {
     try {
-      AffineQ.requirePositive(Tensors.vector(2, -1));
+      AffineQ.requirePositiveOrZero(Tensors.vector(2, -1));
       fail();
     } catch (Exception exception) {
       // ---
@@ -33,7 +33,7 @@ public class AffineQTest extends TestCase {
 
   public void testFail2() {
     try {
-      AffineQ.requirePositive(Tensors.vector(1, 1));
+      AffineQ.requirePositiveOrZero(Tensors.vector(1, 1));
       fail();
     } catch (Exception exception) {
       // ---
@@ -48,7 +48,7 @@ public class AffineQTest extends TestCase {
       // ---
     }
     try {
-      AffineQ.requirePositive(RealScalar.ONE);
+      AffineQ.requirePositiveOrZero(RealScalar.ONE);
       fail();
     } catch (Exception exception) {
       // ---
@@ -63,7 +63,7 @@ public class AffineQTest extends TestCase {
       // ---
     }
     try {
-      AffineQ.requirePositive(HilbertMatrix.of(3));
+      AffineQ.requirePositiveOrZero(HilbertMatrix.of(3));
       fail();
     } catch (Exception exception) {
       // ---

@@ -13,16 +13,11 @@ import ch.ethz.idsc.tensor.red.Norm;
 public class SphereCurveIntersection extends AssistedCurveIntersection {
   /** @param radius non-negative */
   public SphereCurveIntersection(Scalar radius) {
-    super(radius);
+    super(radius, RnGeodesic.INSTANCE);
   }
 
   @Override // from SimpleCurveIntersection
   protected final Scalar distance(Tensor tensor) {
     return Norm._2.ofVector(tensor);
-  }
-
-  @Override // from SimpleCurveIntersection
-  public final Tensor split(Tensor p, Tensor q, Scalar scalar) {
-    return RnGeodesic.INSTANCE.split(p, q, scalar);
   }
 }

@@ -13,6 +13,7 @@ public enum AffineQ {
   private static final Chop CHOP = Chop._12;
 
   /** @param vector
+   * @return given vector
    * @throws Exception if scalar entries of given mask do not add up to one */
   public static Tensor require(Tensor vector) {
     CHOP.requireClose(Total.of(vector), RealScalar.ONE);
@@ -20,9 +21,10 @@ public enum AffineQ {
   }
 
   /** @param vector
+   * @return given vector
    * @throws Exception if scalar entries of given vector do not add up to one
    * @throws Exception if either scalar entry in given vector is negative */
-  public static Tensor requirePositive(Tensor vector) {
+  public static Tensor requirePositiveOrZero(Tensor vector) {
     Scalar sum = vector.stream() //
         .map(Scalar.class::cast) //
         .map(Sign::requirePositiveOrZero) //

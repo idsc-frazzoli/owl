@@ -17,28 +17,39 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Mod;
 import junit.framework.TestCase;
 
 public class So2ArsignyBiinvariantMeanTest extends TestCase {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
+  private static final Clip CLIP = Clips.absolute(Pi.VALUE);
   private static final Mod MOD = Mod.function(Pi.TWO, Pi.VALUE.negate());
+  private static final So2BiinvariantMean[] SO2_BIINVARIANT_MEANS = { //
+      So2DefaultBiinvariantMean.INSTANCE, //
+      So2ArsignyBiinvariantMean.INSTANCE };
 
   public void testPermutations() {
     Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.HALF));
-    for (int length = 1; length < 6; ++length)
-      for (int count = 0; count < 10; ++count) {
-        Scalar shift = RandomVariate.of(NormalDistribution.standard());
-        Tensor sequence = RandomVariate.of(distribution, length).map(shift::add);
-        Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.unit(), length));
-        Scalar solution = So2ArsignyBiinvariantMean.INSTANCE.mean(sequence, weights);
-        for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
-          int[] index = Primitives.toIntArray(perm);
-          Tensor result = So2ArsignyBiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
-          Chop._12.requireClose(result, solution);
+    for (int length = 1; length < 6; ++length) {
+      Tensor sequence = RandomVariate.of(distribution, length);
+      Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.unit(), length));
+      for (So2BiinvariantMean so2BiinvariantMean : SO2_BIINVARIANT_MEANS) {
+        Scalar solution = so2BiinvariantMean.mean(sequence, weights);
+        for (int count = 0; count < 10; ++count) {
+          Scalar shift = RandomVariate.of(NormalDistribution.standard());
+          for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
+            int[] index = Primitives.toIntArray(perm);
+            Scalar result = so2BiinvariantMean.mean( //
+                TestHelper.order(sequence.map(shift::add), index), //
+                TestHelper.order(weights, index));
+            CLIP.requireInside(result);
+            Chop._12.requireClose(MOD.apply(result.subtract(shift).subtract(solution)), RealScalar.ZERO);
+          }
         }
       }
+    }
   }
 
   public void testSpecific() {
@@ -54,15 +65,16 @@ public class So2ArsignyBiinvariantMeanTest extends TestCase {
   public void testComparison() {
     Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.HALF));
     Chop chop = Chop.below(0.7);
-    for (int length = 1; length < 10; ++length)
+    for (int length = 1; length < 10; ++length) {
+      final Tensor sequence = RandomVariate.of(distribution, length);
+      final Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.of(1, 2), length));
       for (int count = 0; count < 10; ++count) {
         Scalar shift = RandomVariate.of(NormalDistribution.standard());
-        Tensor sequence = RandomVariate.of(distribution, length).map(shift::add);
-        Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.of(1, 2), length));
-        Scalar val1 = So2DefaultBiinvariantMean.INSTANCE.mean(sequence, weights);
-        Tensor val2 = So2ArsignyBiinvariantMean.INSTANCE.mean(sequence, weights);
+        Scalar val1 = So2DefaultBiinvariantMean.INSTANCE.mean(sequence.map(shift::add), weights);
+        Tensor val2 = So2ArsignyBiinvariantMean.INSTANCE.mean(sequence.map(shift::add), weights);
         chop.requireClose(val1, val2);
       }
+    }
   }
 
   public void testFailAntipodal() {

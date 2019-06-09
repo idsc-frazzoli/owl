@@ -4,11 +4,11 @@ package ch.ethz.idsc.owl.bot.rn;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * path length is measured in Euclidean distance
  * 
  * functionality for testing purpose only */
-public class RnNoHeuristicCircleGoalManager extends CatchyTrajectoryRegionQuery implements GoalInterface {
+public class RnNoHeuristicCircleGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   /** constructor creates a spherical region in R^n with given center and radius.
    * distance measure is Euclidean distance.
    * 

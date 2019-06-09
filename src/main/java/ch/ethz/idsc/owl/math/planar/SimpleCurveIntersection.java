@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.planar;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.sophus.math.SplitInterface;
@@ -16,12 +17,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * if two successive points have a distance that crosses radius
  * the point that is the result of (linear-)interpolation is the
  * result of the intersection. */
-public abstract class SimpleCurveIntersection implements CurveIntersection, SplitInterface, Serializable {
+public abstract class SimpleCurveIntersection implements CurveIntersection, Serializable {
   private final Scalar radius;
+  private final SplitInterface splitInterface;
 
   /** @param radius non-negative */
-  protected SimpleCurveIntersection(Scalar radius) {
+  protected SimpleCurveIntersection(Scalar radius, SplitInterface splitInterface) {
     this.radius = Sign.requirePositiveOrZero(radius);
+    this.splitInterface = Objects.requireNonNull(splitInterface);
   }
 
   @Override // from CurveIntersection
@@ -47,7 +50,8 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Spli
         Scalar hi = distance(next); // "hi" may even be less than "lo"
         if (Scalars.lessEquals(lo, radius) && Scalars.lessEquals(radius, hi)) {
           Clip clip = Clips.interval(lo, hi); // lo <= distance <= hi
-          return Optional.of(new CurvePoint((count - 1) % tensor_length, split(prev, next, clip.rescale(radius))));
+          Tensor split = splitInterface.split(prev, next, clip.rescale(radius));
+          return Optional.of(new CurvePoint((count - 1) % tensor_length, split));
         }
         prev = next;
         lo = hi;
