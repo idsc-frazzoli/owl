@@ -8,13 +8,11 @@ import ch.ethz.idsc.sophus.curve.ClothoidCurve;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class TrajectoryEntryFinderTest extends TestCase {
-  private static final Tensor WAYPOINTS = Tensors.of( //
+  /* package */ static final Tensor WAYPOINTS = Tensors.of( //
       Tensors.vector(0, 0, 0), //
       Tensors.vector(1, 0.5, Math.PI / 4), //
       Tensors.vector(2, 1, 0), //
@@ -37,18 +35,9 @@ public class TrajectoryEntryFinderTest extends TestCase {
   }
 
   public void testIntersection() {
-    Tensor goalSE2 = Tensors.vector(3, 1, 0);
-    Tensor goal2D = Extract2D.FUNCTION.apply(goalSE2);
-    TrajectoryEntryFinder finder = IntersectionEntryFinder.INSTANCE;
-    // SE2
-    Optional<Tensor> waypointSE2 = finder.on(WAYPOINTS).apply(Norm._2.of(goal2D)).point;
-    assertTrue(waypointSE2.isPresent());
-    Chop._01.requireClose(goalSE2, waypointSE2.get());
-    // 2D
-    Tensor waypoints = Tensor.of(WAYPOINTS.stream().map(Extract2D.FUNCTION));
-    Optional<Tensor> waypoint2D = finder.on(waypoints).apply(Norm._2.of(goal2D)).point;
-    assertTrue(waypoint2D.isPresent());
-    Chop._01.requireClose(goal2D, waypoint2D.get());
+    IntersectionEntryFinderTest test = new IntersectionEntryFinderTest();
+    test.testSE2();
+    test.test2D();
   }
 
   public void testGeodesic() {

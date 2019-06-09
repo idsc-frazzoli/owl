@@ -7,8 +7,8 @@ import ch.ethz.idsc.sophus.TensorNorm;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
-import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
   LR1(ClothoidLR1Midpoint.INSTANCE), //
@@ -17,7 +17,7 @@ public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
   // ---
   private final MidpointInterface midpointInterface;
 
-  private AnalyticClothoidDistance(MidpointInterface midpointInterface) {
+  AnalyticClothoidDistance(MidpointInterface midpointInterface) {
     this.midpointInterface = midpointInterface;
   }
 
@@ -40,10 +40,8 @@ public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
     Scalar half_num = qa.subtract(pa);
     Scalar num = half_num.add(half_num); // 2 * half_num
     Scalar den = AbsSquared.FUNCTION.apply(clothoidTerminalRatios.tail()).subtract(AbsSquared.FUNCTION.apply(clothoidTerminalRatios.head()));
-    Scalar a = Sqrt.FUNCTION.apply(num.divide(den));
-    // TODO GJOEL simplify implementation? because |sqrt(a)|^2 => |a|
-    // TODO GJOEL REVIEW: jph inserted abs() to difference() below to make "distance" always positive
-    return AbsSquared.FUNCTION.apply(a).multiply(clothoidTerminalRatios.difference().abs());
+    Scalar a_squared = Abs.of(num.divide(den));
+    return a_squared.multiply(clothoidTerminalRatios.difference().abs());
   }
 
   @Override // from TensorNorm

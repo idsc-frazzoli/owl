@@ -35,8 +35,8 @@ public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
   protected Stream<Scalar> sweep_variables(Tensor waypoints) {
     MinMax minmax = MinMax.of(Tensor.of(waypoints.stream().map(Extract2D.FUNCTION).map(Norm._2::ofVector)));
     Interpolation interpolation = LinearInterpolation.of(Tensors.of(minmax.min(), minmax.max()));
-    return IntStream.range(0, waypoints.length() + 1) //
-        .mapToObj(i -> RationalScalar.of(i, waypoints.length())) //
+    return IntStream.range(0, waypoints.length()) //
+        .mapToObj(i -> RationalScalar.of(i, waypoints.length() - 1)) //
         .map(interpolation::At);
   }
 }
