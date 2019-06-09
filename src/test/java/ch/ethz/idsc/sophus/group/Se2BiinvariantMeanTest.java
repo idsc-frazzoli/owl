@@ -36,8 +36,8 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor sequenceUnordered = Tensors.of(p, r, q);
     Tensor weights = Tensors.vector(1, 1, 1).divide(RealScalar.of(3));
     // ---
-    Double nom = Math.sqrt(2) - Math.PI / 4;
-    Double denom = 1 + Math.PI / 4 * (Math.sqrt(2) / (2 - Math.sqrt(2)));
+    double nom = Math.sqrt(2) - Math.PI / 4;
+    double denom = 1 + Math.PI / 4 * (Math.sqrt(2) / (2 - Math.sqrt(2)));
     Tensor expected = Tensors.vector(nom / denom, 0, 0);
     for (Se2BiinvariantMean se2BiinvariantMean : Se2BiinvariantMean.values()) {
       Tensor actual = se2BiinvariantMean.mean(sequence, weights);

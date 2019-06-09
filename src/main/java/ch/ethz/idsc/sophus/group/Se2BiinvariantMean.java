@@ -7,8 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.RotationMatrix;
-import ch.ethz.idsc.tensor.mat.Inverse;
+import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 /** @param sequence of (x, y, a) points in SE(2) and weights non-negative and normalized
  * rotation angles a_i have to satisfy: sup (i,j) |ai-aj| <= pi - C
@@ -42,9 +41,9 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
     // make transformation s.t. mean rotation is zero and retransformation after taking mean
     Se2GroupElement transfer = new Se2GroupElement(Tensors.of(ZERO, ZERO, amean));
     Tensor transferred = Tensor.of(sequence.stream().map(transfer.inverse()::combine));
-    Tensor invZ = Inverse.of(weights.dot(transferred.get(Tensor.ALL, 2).negate().map(So2Skew::of)));
-    Tensor tmean = weights.dot(Tensor.of(transferred.stream().map( //
-        xya -> invZ.dot(So2Skew.of(xya.Get(2).negate()).dot(RotationMatrix.of(xya.Get(2).negate()).dot(xya.extract(0, 2)))))));
+    Tensor tmean = LinearSolve.of( //
+        weights.dot(transferred.get(Tensor.ALL, 2).negate().map(So2Skew::of)), //
+        weights.dot(Tensor.of(transferred.stream().map(Se2Skew.FUNCTION))));
     return transfer.combine(tmean.append(ZERO));
   }
 }
