@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.math;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -34,6 +35,23 @@ public class WindowSideSamplerTest extends TestCase {
         Tensor tensor = windowSideSampler.apply(extent);
         Tensor expect = NORMALIZE.apply(windowCenterSampler.apply(extent).extract(0, extent + 1));
         Chop._12.requireClose(tensor, expect);
+      }
+    }
+  }
+
+  public void testMemo() {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+      Function<Integer, Tensor> function = WindowSideSampler.of(smoothingKernel);
+      for (int count = 0; count < 5; ++count) {
+        Tensor val1 = function.apply(count);
+        Tensor val2 = function.apply(count);
+        assertTrue(val1 == val2); // equal by reference
+        try {
+          val1.set(RealScalar.ZERO, 0);
+          fail();
+        } catch (Exception exception) {
+          // ---
+        }
       }
     }
   }

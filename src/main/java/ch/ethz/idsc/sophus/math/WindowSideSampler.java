@@ -10,12 +10,12 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class WindowSideSampler extends WindowBaseSampler {
+  /** @param windowFunction for evaluation in the interval [-1/2, +1/2] */
   public static Function<Integer, Tensor> of(ScalarUnaryOperator windowFunction) {
     return MemoFunction.wrap(new WindowSideSampler(windowFunction));
   }
 
   // ---
-  /** @param windowFunction for evaluation in the interval [-1/2, +1/2] */
   private WindowSideSampler(ScalarUnaryOperator windowFunction) {
     super(windowFunction);
   }

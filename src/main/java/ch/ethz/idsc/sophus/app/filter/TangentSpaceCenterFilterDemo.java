@@ -3,29 +3,27 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterTangentSpace;
+import ch.ethz.idsc.sophus.filter.TangentSpaceCenter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
-public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo implements BufferedImageSupplier {
+public class TangentSpaceCenterFilterDemo extends DatasetKernelDemo {
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
   private Tensor refined = Tensors.empty();
   final JToggleButton jToggleTS = new JToggleButton("TangentSpace");
 
-  public GeodesicCenterTangentSpaceFilterDemo() {
+  public TangentSpaceCenterFilterDemo() {
     {
       spinnerConvolution.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
       spinnerConvolution.setIndex(0);
@@ -52,7 +50,7 @@ public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo impl
   @Override // from RenderInterface
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (jToggleTS.isSelected()) {
-      TensorUnaryOperator tensorUnaryOperator = GeodesicCenterTangentSpace.of( //
+      TensorUnaryOperator tensorUnaryOperator = TangentSpaceCenter.of( //
           geodesicDisplay().lieGroup(), geodesicDisplay().lieExponential(), spinnerKernel.getValue());
       refined = Nest.of( //
           GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
@@ -66,13 +64,8 @@ public class GeodesicCenterTangentSpaceFilterDemo extends DatasetKernelDemo impl
     return refined;
   }
 
-  @Override // from BufferedImageSupplier
-  public BufferedImage bufferedImage() {
-    return GeodesicCenterFilterDemo.symLinkImage(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage();
-  }
-
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new GeodesicCenterTangentSpaceFilterDemo();
+    AbstractDemo abstractDemo = new TangentSpaceCenterFilterDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

@@ -11,6 +11,8 @@ import java.util.function.Function;
  * so that function is not evaluated a second time
  * but instead a lookup using the map is performed */
 public class MemoFunction<K, V> implements Function<K, V>, Serializable {
+  /** @param function non-null
+   * @return */
   public static <K, V> Function<K, V> wrap(Function<K, V> function) {
     return new MemoFunction<>(Objects.requireNonNull(function));
   }

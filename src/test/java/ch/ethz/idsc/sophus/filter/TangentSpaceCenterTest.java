@@ -18,9 +18,9 @@ import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class GeodesicCenterTangentSpaceTest extends TestCase {
+public class TangentSpaceCenterTest extends TestCase {
   public void testSimple() {
-    TensorUnaryOperator tensorUnaryOperator = GeodesicCenterTangentSpace.of( //
+    TensorUnaryOperator tensorUnaryOperator = TangentSpaceCenter.of( //
         Se2CoveringGroup.INSTANCE, Se2CoveringExponential.INSTANCE, SmoothingKernel.GAUSSIAN);
     Tensor p0 = Tensors.vector(1, 2, 0);
     Tensor p1 = Se2CoveringIntegrator.INSTANCE.spin(p0, Tensors.vector(1, .2, .3));
@@ -34,7 +34,7 @@ public class GeodesicCenterTangentSpaceTest extends TestCase {
     Tensor tensor = Range.of(4, 11).unmodifiable();
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
-          Serialization.copy(GeodesicCenterTangentSpace.of(RnGroup.INSTANCE, RnExponential.INSTANCE, smoothingKernel));
+          Serialization.copy(TangentSpaceCenter.of(RnGroup.INSTANCE, RnExponential.INSTANCE, smoothingKernel));
       Chop._12.requireClose(tensorUnaryOperator.apply(tensor), Mean.of(tensor));
     }
   }
