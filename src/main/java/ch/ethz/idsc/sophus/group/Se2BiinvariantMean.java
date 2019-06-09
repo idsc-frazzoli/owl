@@ -1,7 +1,7 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
+import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Tan;
  * Reference:
  * "Bi-invariant Means in Lie Groups. Application to left-invariant Polyaffine Transformations." p.38
  * Vincent Arsigny, Xavier Pennec, Nicholas Ayache */
-public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
+public enum Se2BiinvariantMean implements BiinvariantMean {
   DEFAULT(So2DefaultBiinvariantMean.INSTANCE), //
   ARSIGNY(So2ArsignyBiinvariantMean.INSTANCE), //
   ;

@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.sophus.AffineQ;
-import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
+import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * Reference:
  * "Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations." p.29
  * Vincent Arsigny - Xavier Pennec - Nicholas Ayache */
-public enum StBiinvariantMean implements BiinvariantMeanInterface {
+public enum StBiinvariantMean implements BiinvariantMean {
   INSTANCE;
   // ---
   private static class Quotient implements ScalarUnaryOperator {

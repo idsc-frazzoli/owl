@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.BiinvariantMeanInterface;
+import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,17 +20,17 @@ public class BiinvariantMeanCenter implements TensorUnaryOperator {
    * @param windowFunction non-null
    * @return operator that maps a sequence of odd number of points to their barycenter
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(BiinvariantMeanInterface biinvariantMeanInterface, ScalarUnaryOperator windowFunction) {
+  public static TensorUnaryOperator of(BiinvariantMean biinvariantMeanInterface, ScalarUnaryOperator windowFunction) {
     return new BiinvariantMeanCenter( //
         Objects.requireNonNull(biinvariantMeanInterface), //
         new WindowCenterSampler(windowFunction));
   }
 
   // ---
-  private final BiinvariantMeanInterface biinvariantMeanInterface;
+  private final BiinvariantMean biinvariantMeanInterface;
   private final IntegerTensorFunction integerTensorFunction;
 
-  private BiinvariantMeanCenter(BiinvariantMeanInterface biinvariantMeanInterface, IntegerTensorFunction integerTensorFunction) {
+  private BiinvariantMeanCenter(BiinvariantMean biinvariantMeanInterface, IntegerTensorFunction integerTensorFunction) {
     this.biinvariantMeanInterface = biinvariantMeanInterface;
     this.integerTensorFunction = integerTensorFunction;
   }

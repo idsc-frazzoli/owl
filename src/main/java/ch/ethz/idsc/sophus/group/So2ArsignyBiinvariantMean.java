@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /** Hint:
- * angles are required to lie on a half-circle
+ * angles are required to lie on a half-circle which is not necessarily centered at the origin
  * 
  * Source for Constant C: https://hal.inria.fr/inria-00073318/
  * Xavier Pennec */
