@@ -8,7 +8,6 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -24,7 +23,7 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
    * @param function that maps an extent to a weight mask of length "sequence.length - 2"
    * @return operator that maps a sequence of number of points to their next (expected) point
    * @throws Exception if either input parameters is null */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, IntegerTensorFunction function) {
+  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
     return new GeodesicExtrapolation(geodesicInterface, Objects.requireNonNull(function));
   }
 

@@ -8,7 +8,6 @@ import ch.ethz.idsc.sophus.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.LieGroupElement;
-import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.MemoFunction;
 import ch.ethz.idsc.sophus.math.WindowCenterSampler;
 import ch.ethz.idsc.tensor.Tensor;
@@ -25,7 +24,7 @@ public class GeodesicCenterTangentSpace implements TensorUnaryOperator {
    * @param function that maps an extent to a weight mask of length == 2 * extent + 1
    * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, IntegerTensorFunction function) {
+  public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, Function<Integer, Tensor> function) {
     return new GeodesicCenterTangentSpace(lieGroup, lieExponential, MemoFunction.wrap(function));
   }
 

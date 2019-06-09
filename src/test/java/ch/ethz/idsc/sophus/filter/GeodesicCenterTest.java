@@ -2,10 +2,12 @@
 package ch.ethz.idsc.sophus.filter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.WindowCenterSampler;
@@ -13,9 +15,13 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -29,6 +35,17 @@ public class GeodesicCenterTest extends TestCase {
     for (int index = 0; index < 9; ++index) {
       Tensor apply = tensorUnaryOperator.apply(UnitVector.of(9, index));
       assertEquals(apply, RationalScalar.of(1, 9));
+    }
+  }
+
+  public void testSe2() throws ClassNotFoundException, IOException {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+      TensorUnaryOperator tensorUnaryOperator = //
+          Serialization.copy(GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel));
+      Distribution distribution = UniformDistribution.unit();
+      Tensor sequence = RandomVariate.of(distribution, 7, 3);
+      Tensor tensor = tensorUnaryOperator.apply(sequence);
+      assertEquals(Dimensions.of(tensor), Arrays.asList(3));
     }
   }
 

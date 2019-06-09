@@ -1,15 +1,16 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
+import java.util.function.Function;
+
 import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 
 /** Example:
  * for width == 1 the limit mask is {1/6, 2/3, 1/6} */
-public enum BSplineLimitMask implements IntegerTensorFunction {
+public enum BSplineLimitMask implements Function<Integer, Tensor> {
   FUNCTION;
   // ---
   @Override
