@@ -21,7 +21,7 @@ public class SphereCurveIntersection extends AssistedCurveIntersection {
   }
 
   @Override // from SimpleCurveIntersection
-  protected final Tensor split(Tensor p, Tensor q, Scalar scalar) {
+  public final Tensor split(Tensor p, Tensor q, Scalar scalar) {
     return RnGeodesic.INSTANCE.split(p, q, scalar);
   }
 }

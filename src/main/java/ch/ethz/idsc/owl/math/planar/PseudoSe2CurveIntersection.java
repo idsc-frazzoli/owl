@@ -18,7 +18,7 @@ public class PseudoSe2CurveIntersection extends AssistedCurveIntersection {
   }
 
   @Override // from SimpleCurveIntersection
-  protected Tensor split(Tensor prev, Tensor next, Scalar scalar) {
+  public Tensor split(Tensor prev, Tensor next, Scalar scalar) {
     return Se2Geodesic.INSTANCE.split(prev, next, scalar);
   }
 }

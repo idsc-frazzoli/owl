@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.planar;
 import java.io.Serializable;
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -14,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * if two successive points have a distance that crosses radius
  * the point that is the result of (linear-)interpolation is the
  * result of the intersection. */
-public abstract class SimpleCurveIntersection implements CurveIntersection, Serializable {
+public abstract class SimpleCurveIntersection implements CurveIntersection, SplitInterface, Serializable {
   protected final Scalar radius;
 
   protected SimpleCurveIntersection(Scalar radius) {
@@ -56,10 +57,4 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Seri
   /** @param tensor
    * @return distance to given tensor */
   protected abstract Scalar distance(Tensor tensor);
-
-  /** @param prev
-   * @param next
-   * @param scalar
-   * @return */
-  protected abstract Tensor split(Tensor prev, Tensor next, Scalar scalar);
 }
