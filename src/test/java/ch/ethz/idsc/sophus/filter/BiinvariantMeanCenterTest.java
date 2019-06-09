@@ -17,7 +17,7 @@ public class BiinvariantMeanCenterTest extends TestCase {
   public void testSe2() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
-          BiinvariantMeanCenter.of(Se2BiinvariantMean.INSTANCE, smoothingKernel);
+          BiinvariantMeanCenter.of(Se2BiinvariantMean.DEFAULT, smoothingKernel);
       Distribution distribution = UniformDistribution.unit();
       Tensor sequence = RandomVariate.of(distribution, 7, 3);
       Tensor tensor = tensorUnaryOperator.apply(sequence);
@@ -27,7 +27,7 @@ public class BiinvariantMeanCenterTest extends TestCase {
 
   public void testFailNull() {
     try {
-      BiinvariantMeanCenter.of(Se2BiinvariantMean.INSTANCE, null);
+      BiinvariantMeanCenter.of(Se2BiinvariantMean.DEFAULT, null);
       fail();
     } catch (Exception exception) {
       // ---

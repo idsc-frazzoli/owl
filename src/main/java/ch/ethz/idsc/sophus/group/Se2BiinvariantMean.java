@@ -21,13 +21,19 @@ import ch.ethz.idsc.tensor.sca.Tan;
  * 
  * Reference:
  * "Bi-invariant Means in Lie Groups. Application to left-invariant Polyaffine Transformations." p.38
- * Vincent Arsigny, Xavier Pennec, Nicholas Ayache
- * Source for Constant C: https://hal.inria.fr/inria-00073318/
- * Xavier Pennec */
+ * Vincent Arsigny, Xavier Pennec, Nicholas Ayache */
 public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
-  INSTANCE;
+  DEFAULT(So2DefaultBiinvariantMean.INSTANCE), //
+  ARSIGNY(So2ArsignyBiinvariantMean.INSTANCE), //
+  ;
   // ---
   private static final Scalar ZERO = RealScalar.ZERO;
+  // ---
+  private final So2BiinvariantMean so2BiinvariantMean;
+
+  private Se2BiinvariantMean(So2BiinvariantMean so2BiinvariantMean) {
+    this.so2BiinvariantMean = so2BiinvariantMean;
+  }
 
   /** @param angle
    * @return matrix of dimensions 2 x 2 */
@@ -45,7 +51,7 @@ public enum Se2BiinvariantMean implements BiinvariantMeanInterface {
   @Override // from BiinvariantMeanInterface
   public Tensor mean(Tensor sequence, Tensor weights) {
     // AffineQ is checked in So2BiinvariantMean
-    Scalar amean = So2BiinvariantMean.INSTANCE.mean(sequence.get(Tensor.ALL, 2), weights).Get();
+    Scalar amean = so2BiinvariantMean.mean(sequence.get(Tensor.ALL, 2), weights);
     // make transformation s.t. mean rotation is zero and retransformation after taking mean
     Se2GroupElement transfer = new Se2GroupElement(Tensors.of(ZERO, ZERO, amean));
     Tensor transferred = Tensor.of(sequence.stream().map(transfer.inverse()::combine));

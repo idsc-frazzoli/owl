@@ -62,7 +62,7 @@ public enum Se2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMeanInterface biinvariantMeanInterface() {
-    return Se2BiinvariantMean.INSTANCE;
+    return Se2BiinvariantMean.DEFAULT;
   }
 
   @Override // from Object
