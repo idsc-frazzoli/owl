@@ -1,15 +1,12 @@
 // code by jph
 package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.lie.Permutations;
-import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -34,33 +31,6 @@ public class So2DefaultBiinvariantMeanTest extends TestCase {
         Tensor result = So2DefaultBiinvariantMean.INSTANCE.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
-    }
-  }
-
-  public void testNonAffineFail() {
-    try {
-      So2DefaultBiinvariantMean.INSTANCE.mean(Tensors.vector(1, 1, 1), Tensors.vector(1, 1, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testEmptyFail() {
-    try {
-      So2DefaultBiinvariantMean.INSTANCE.mean(Tensors.empty(), Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testMatrixFail() {
-    try {
-      So2DefaultBiinvariantMean.INSTANCE.mean(HilbertMatrix.of(3), Tensors.vector(1, 1, 1).divide(RealScalar.of(3)));
-      fail();
-    } catch (Exception exception) {
-      // ---
     }
   }
 }

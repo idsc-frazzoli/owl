@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.group;
 
-import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.planar.ArcTan2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,6 +16,6 @@ public enum So2DefaultBiinvariantMean implements So2BiinvariantMean {
   // ---
   @Override // from So2BiinvariantMean
   public Scalar mean(Tensor sequence, Tensor weights) {
-    return ArcTan2D.of(AffineQ.require(weights).dot(sequence.map(AngleVector::of)));
+    return ArcTan2D.of(weights.dot(sequence.map(AngleVector::of)));
   }
 }

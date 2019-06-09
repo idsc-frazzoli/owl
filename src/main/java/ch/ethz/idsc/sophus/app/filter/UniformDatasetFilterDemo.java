@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import org.jfree.chart.JFreeChart;
@@ -23,7 +24,7 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ abstract class UniformDatasetFilterDemo extends DatasetFilterDemo {
-  // TODO OB/JPH sampling freq is not generic here; OB: It is for uniform demo, isn't it?
+  // TODO OB/JPH sampling freq is not generic here (because datasets may have other sampling rate)
   private static final Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
   // ---
   // TODO JPH refactor
@@ -31,22 +32,12 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
 
-  protected void updateState() {
-    _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
-        .limit(spinnerLabelLimit.getValue()) //
-        .map(row -> row.extract(1, 4)));
-    // Make uniform data artificially non-uniform by randomly leaving out elements
-    // _control = DeuniformData.of(_control, RealScalar.of(0.2));
-    // _control = DuckietownData.states(DuckietownData.POSE_20190325_0);
+  protected UniformDatasetFilterDemo() {
+    this(GeodesicDisplays.CLOTH_SE2_R2);
   }
 
-  @Override
-  protected final Tensor control() {
-    return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
-  }
-
-  public UniformDatasetFilterDemo() {
-    super(GeodesicDisplays.CLOTH_SE2_R2);
+  protected UniformDatasetFilterDemo(List<GeodesicDisplay> list) {
+    super(list);
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
       spinnerLabelString.setList(ResourceData.lines("/dubilab/app/pose/index.vector"));
@@ -60,6 +51,20 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
+  }
+
+  protected void updateState() {
+    _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
+        .limit(spinnerLabelLimit.getValue()) //
+        .map(row -> row.extract(1, 4)));
+    // Make uniform data artificially non-uniform by randomly leaving out elements
+    // _control = DeuniformData.of(_control, RealScalar.of(0.2));
+    // _control = DuckietownData.states(DuckietownData.POSE_20190325_0);
+  }
+
+  @Override
+  protected final Tensor control() {
+    return Tensor.of(_control.stream().map(geodesicDisplay()::project)).unmodifiable();
   }
 
   /** @return */

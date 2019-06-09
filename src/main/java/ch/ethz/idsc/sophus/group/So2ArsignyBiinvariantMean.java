@@ -1,4 +1,4 @@
-// code by jph
+// code by ob, jph
 package ch.ethz.idsc.sophus.group;
 
 import ch.ethz.idsc.sophus.AffineQ;
@@ -14,7 +14,8 @@ import ch.ethz.idsc.tensor.sca.Mod;
  * angles are required to lie on a half-circle which is not necessarily centered at the origin
  * 
  * Source for Constant C: https://hal.inria.fr/inria-00073318/
- * Xavier Pennec */
+ * Xavier Pennec
+ * TODO OB cite title, page no., and quote statement */
 public enum So2ArsignyBiinvariantMean implements So2BiinvariantMean {
   INSTANCE;
   // ---

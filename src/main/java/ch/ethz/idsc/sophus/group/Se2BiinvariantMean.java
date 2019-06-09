@@ -1,6 +1,7 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.group;
 
+import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -23,7 +24,10 @@ import ch.ethz.idsc.tensor.sca.Tan;
  * "Bi-invariant Means in Lie Groups. Application to left-invariant Polyaffine Transformations." p.38
  * Vincent Arsigny, Xavier Pennec, Nicholas Ayache */
 public enum Se2BiinvariantMean implements BiinvariantMean {
+  /** default-formula is defined globally for arbitrary angles and weights */
   DEFAULT(So2DefaultBiinvariantMean.INSTANCE), //
+  /** Arsigny-formula yields better results in BiinvariantMeanCenter
+   * however, the operation domain is reduced compared to the default-formula */
   ARSIGNY(So2ArsignyBiinvariantMean.INSTANCE), //
   ;
   // ---
@@ -50,7 +54,7 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
 
   @Override // from BiinvariantMeanInterface
   public Tensor mean(Tensor sequence, Tensor weights) {
-    // AffineQ is checked in So2BiinvariantMean
+    AffineQ.require(weights);
     Scalar amean = so2BiinvariantMean.mean(sequence.get(Tensor.ALL, 2), weights);
     // make transformation s.t. mean rotation is zero and retransformation after taking mean
     Se2GroupElement transfer = new Se2GroupElement(Tensors.of(ZERO, ZERO, amean));

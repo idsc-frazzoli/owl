@@ -72,8 +72,17 @@ public class So2ArsignyBiinvariantMeanTest extends TestCase {
         Scalar shift = RandomVariate.of(NormalDistribution.standard());
         Scalar val1 = So2DefaultBiinvariantMean.INSTANCE.mean(sequence.map(shift::add), weights);
         Tensor val2 = So2ArsignyBiinvariantMean.INSTANCE.mean(sequence.map(shift::add), weights);
-        chop.requireClose(val1, val2);
+        chop.requireClose(MOD.apply(val1.subtract(val2)), RealScalar.ZERO);
       }
+    }
+  }
+
+  public void testNonAffineFail() {
+    try {
+      So2ArsignyBiinvariantMean.INSTANCE.mean(Tensors.vector(1, 1, 1), Tensors.vector(1, 1, 1));
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 
