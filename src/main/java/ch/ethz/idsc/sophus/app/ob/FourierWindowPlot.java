@@ -107,7 +107,7 @@ import ch.ethz.idsc.tensor.red.Mean;
     map.put(Filter.GEODESIC, GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
     map.put(Filter.GEODESIC_MID_SEEDED, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
     map.put(Filter.TANGENT_SPACE, GeodesicCenterTangentSpace.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), smoothingKernel));
-    map.put(Filter.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMeanInterface(), smoothingKernel));
+    map.put(Filter.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
     List<String> listData = ResourceData.lines("/dubilab/app/pose/index.vector");
     int radius = 5;
     process(listData, map, radius);

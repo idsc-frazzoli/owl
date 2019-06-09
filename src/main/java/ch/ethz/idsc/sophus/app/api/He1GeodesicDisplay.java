@@ -65,7 +65,7 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public BiinvariantMean biinvariantMeanInterface() {
+  public BiinvariantMean biinvariantMean() {
     return HeBiinvariantMean.INSTANCE;
   }
 

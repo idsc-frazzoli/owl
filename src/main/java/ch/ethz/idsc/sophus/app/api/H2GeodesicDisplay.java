@@ -65,7 +65,7 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public BiinvariantMean biinvariantMeanInterface() {
+  public BiinvariantMean biinvariantMean() {
     throw new UnsupportedOperationException();
   }
 

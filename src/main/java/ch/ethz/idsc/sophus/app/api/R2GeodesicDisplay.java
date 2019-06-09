@@ -63,7 +63,7 @@ public enum R2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public BiinvariantMean biinvariantMeanInterface() {
+  public BiinvariantMean biinvariantMean() {
     return RnBiinvariantMean.INSTANCE;
   }
 

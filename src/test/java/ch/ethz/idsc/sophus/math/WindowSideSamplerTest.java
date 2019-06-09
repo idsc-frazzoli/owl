@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.math;
 
+import java.util.function.Function;
+
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
@@ -13,8 +15,8 @@ public class WindowSideSamplerTest extends TestCase {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
 
   public void testExact() {
-    WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.HANN);
-    WindowCenterSampler windowCenterSampler = new WindowCenterSampler(SmoothingKernel.HANN);
+    Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.HANN);
+    Function<Integer, Tensor> windowCenterSampler = WindowCenterSampler.of(SmoothingKernel.HANN);
     for (int extent = 0; extent < 3; ++extent) {
       Tensor tensor = windowSideSampler.apply(extent);
       Tensor expect = NORMALIZE.apply(windowCenterSampler.apply(extent).extract(0, extent + 1));
@@ -26,8 +28,8 @@ public class WindowSideSamplerTest extends TestCase {
 
   public void testNumeric() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      WindowSideSampler windowSideSampler = new WindowSideSampler(smoothingKernel);
-      WindowCenterSampler windowCenterSampler = new WindowCenterSampler(smoothingKernel);
+      Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(smoothingKernel);
+      Function<Integer, Tensor> windowCenterSampler = WindowCenterSampler.of(smoothingKernel);
       for (int extent = 0; extent < 7; ++extent) {
         Tensor tensor = windowSideSampler.apply(extent);
         Tensor expect = NORMALIZE.apply(windowCenterSampler.apply(extent).extract(0, extent + 1));

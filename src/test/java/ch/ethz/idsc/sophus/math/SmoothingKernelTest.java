@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.math;
 
+import java.util.function.Function;
+
 import ch.ethz.idsc.sophus.SymmetricVectorQ;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -24,7 +26,7 @@ public class SmoothingKernelTest extends TestCase {
   }
 
   public void testConstant() {
-    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.DIRICHLET);
+    Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(SmoothingKernel.DIRICHLET);
     for (int width = 0; width < 5; ++width) {
       Tensor tensor = centerWindowSampler.apply(width);
       assertEquals(tensor, constant(width));
@@ -34,14 +36,14 @@ public class SmoothingKernelTest extends TestCase {
   }
 
   public void testHann() {
-    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.HANN);
+    Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(SmoothingKernel.HANN);
     ExactTensorQ.require(centerWindowSampler.apply(1));
     ExactTensorQ.require(centerWindowSampler.apply(2));
   }
 
   public void testAll() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
+      Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(smoothingKernel);
       for (int size = 0; size < 5; ++size) {
         Tensor tensor = centerWindowSampler.apply(size);
         SymmetricVectorQ.require(tensor);
@@ -69,7 +71,7 @@ public class SmoothingKernelTest extends TestCase {
       Scalar scalar = smoothingKernel.apply(RationalScalar.HALF);
       String string = smoothingKernel.name().toLowerCase() + "Window[1/2]=" + scalar;
       string.length();
-      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
+      Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(smoothingKernel);
       assertEquals(centerWindowSampler.apply(0), Tensors.of(RealScalar.ONE));
       Tensor vector = centerWindowSampler.apply(1);
       assertTrue(Scalars.lessThan(RealScalar.of(1e-3), vector.Get(0).abs()));
@@ -78,7 +80,7 @@ public class SmoothingKernelTest extends TestCase {
 
   public void testAllFail() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      WindowCenterSampler centerWindowSampler = new WindowCenterSampler(smoothingKernel);
+      Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(smoothingKernel);
       try {
         centerWindowSampler.apply(-1);
         fail();

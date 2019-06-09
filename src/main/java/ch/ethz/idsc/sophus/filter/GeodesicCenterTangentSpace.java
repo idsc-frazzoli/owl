@@ -34,7 +34,7 @@ public class GeodesicCenterTangentSpace implements TensorUnaryOperator {
    * @return
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, ScalarUnaryOperator windowFunction) {
-    return new GeodesicCenterTangentSpace(lieGroup, lieExponential, new WindowCenterSampler(windowFunction));
+    return new GeodesicCenterTangentSpace(lieGroup, lieExponential, WindowCenterSampler.of(windowFunction));
   }
 
   // ---

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.filter;
 
 import java.io.IOException;
+import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2CoveringGeodesic;
@@ -69,7 +70,7 @@ public class GeodesicCenterTest extends TestCase {
   }
 
   public void testSplitsMean() {
-    WindowCenterSampler centerWindowSampler = new WindowCenterSampler(SmoothingKernel.DIRICHLET);
+    Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(SmoothingKernel.DIRICHLET);
     {
       Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(1));
       assertEquals(tensor, Tensors.fromString("{1/3}"));

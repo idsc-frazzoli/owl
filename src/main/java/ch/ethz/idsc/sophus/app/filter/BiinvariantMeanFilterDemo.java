@@ -20,7 +20,7 @@ public class BiinvariantMeanFilterDemo extends DatasetKernelDemo {
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     TensorUnaryOperator tensorUnaryOperator = //
-        BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMeanInterface(), spinnerKernel.getValue());
+        BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), spinnerKernel.getValue());
     return GeodesicCenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()).apply(control());
   }
 

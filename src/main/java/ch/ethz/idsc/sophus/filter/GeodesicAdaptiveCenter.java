@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.filter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
@@ -47,16 +48,16 @@ public class GeodesicAdaptiveCenter implements TensorUnaryOperator {
    * @return
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction, Scalar interval) {
-    return new GeodesicAdaptiveCenter(geodesicInterface, new WindowCenterSampler(windowFunction), interval);
+    return new GeodesicAdaptiveCenter(geodesicInterface, WindowCenterSampler.of(windowFunction), interval);
   }
 
   // ---
   private final GeodesicInterface geodesicInterface;
-  private final IntegerTensorFunction function;
+  private final Function<Integer, Tensor> function;
   private final List<Tensor> weights = new ArrayList<>();
   private final Scalar interval;
 
-  private GeodesicAdaptiveCenter(GeodesicInterface geodesicInterface, IntegerTensorFunction function, Scalar interval) {
+  private GeodesicAdaptiveCenter(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function, Scalar interval) {
     this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
     this.function = function;
     this.interval = interval;

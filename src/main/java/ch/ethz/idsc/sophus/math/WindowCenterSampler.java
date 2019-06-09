@@ -1,14 +1,21 @@
 // code by jph
 package ch.ethz.idsc.sophus.math;
 
+import java.util.function.Function;
+
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class WindowCenterSampler extends WindowBaseSampler {
+  public static Function<Integer, Tensor> of(ScalarUnaryOperator windowFunction) {
+    return MemoFunction.wrap(new WindowCenterSampler(windowFunction));
+  }
+
+  // ---
   /** @param windowFunction for evaluation in the interval [-1/2, +1/2] */
-  public WindowCenterSampler(ScalarUnaryOperator windowFunction) {
+  private WindowCenterSampler(ScalarUnaryOperator windowFunction) {
     super(windowFunction);
   }
 

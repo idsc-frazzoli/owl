@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
+import java.util.function.Function;
+
 import ch.ethz.idsc.sophus.group.RnGeodesic;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
@@ -43,7 +45,7 @@ public class GeodesicExtrapolationTest extends TestCase {
   }
 
   public void testElaborate() {
-    WindowSideSampler windowSideSampler = new WindowSideSampler(SmoothingKernel.GAUSSIAN);
+    Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.GAUSSIAN);
     Tensor mask = windowSideSampler.apply(6);
     Tensor result = GeodesicExtrapolation.splits(mask);
     // System.out.println(result);

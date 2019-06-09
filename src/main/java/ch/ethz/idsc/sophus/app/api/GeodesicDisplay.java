@@ -38,9 +38,9 @@ public interface GeodesicDisplay {
    * @return pseudo difference between given control points p and q */
   Scalar parametricDistance(Tensor p, Tensor q);
 
-  /** @return biinvariantMeanInterface
+  /** @return biinvariantMean
    * @throws Exception if geodesic space does not support the computation of an biinvariant mean */
-  BiinvariantMean biinvariantMeanInterface();
+  BiinvariantMean biinvariantMean();
 
   @Override // from Object
   String toString();

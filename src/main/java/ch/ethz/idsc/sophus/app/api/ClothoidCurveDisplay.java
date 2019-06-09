@@ -61,7 +61,7 @@ public enum ClothoidCurveDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public BiinvariantMean biinvariantMeanInterface() {
+  public BiinvariantMean biinvariantMean() {
     return Se2BiinvariantMean.DEFAULT;
   }
 
