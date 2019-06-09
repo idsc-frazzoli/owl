@@ -18,8 +18,8 @@ import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicCatmullRom;
-import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.KnotSpacing;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -71,7 +71,7 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
       GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
       Scalar exponent = RationalScalar.of(2 * jSliderExponent.getValue(), jSliderExponent.getMaximum());
       TensorUnaryOperator centripetalKnotSpacing = //
-          CentripetalKnotSpacing.of(geodesicDisplay::parametricDistance, exponent);
+          KnotSpacing.centripetal(geodesicDisplay::parametricDistance, exponent);
       Tensor knots = centripetalKnotSpacing.apply(control);
       Scalar lo = knots.Get(1);
       Scalar hi = knots.Get(knots.length() - 2);

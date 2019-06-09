@@ -20,7 +20,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
-import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
+import ch.ethz.idsc.sophus.math.KnotSpacing;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;
@@ -54,7 +54,7 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements Buffe
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Scalar exponent = RationalScalar.of(jSliderExponent.getValue(), jSliderExponent.getMaximum());
-    Tensor knots = CentripetalKnotSpacing.of(geodesicDisplay::parametricDistance, exponent).apply(control);
+    Tensor knots = KnotSpacing.centripetal(geodesicDisplay::parametricDistance, exponent).apply(control);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---

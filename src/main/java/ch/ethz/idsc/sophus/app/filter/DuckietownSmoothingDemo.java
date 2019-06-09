@@ -21,7 +21,7 @@ import ch.ethz.idsc.sophus.app.misc.PolyDuckietownData;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
 import ch.ethz.idsc.sophus.curve.GeodesicDeBoor;
-import ch.ethz.idsc.sophus.math.CentripetalKnotSpacing;
+import ch.ethz.idsc.sophus.math.KnotSpacing;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -75,7 +75,7 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
     final Tensor control = control();
     Tensor effective = control;
     TensorUnaryOperator centripedalKnotSpacing = //
-        CentripetalKnotSpacing.of(geodesicDisplay()::parametricDistance, 0.5);
+        KnotSpacing.centripetal(geodesicDisplay()::parametricDistance, 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
@@ -115,7 +115,7 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
     final Tensor control = control();
     Tensor effective = control;
     TensorUnaryOperator centripedalKnotSpacing = //
-        CentripetalKnotSpacing.of(geodesicDisplay()::parametricDistance, 0.5);
+        KnotSpacing.centripetal(geodesicDisplay()::parametricDistance, 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
     final Scalar upper = (Scalar) Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
