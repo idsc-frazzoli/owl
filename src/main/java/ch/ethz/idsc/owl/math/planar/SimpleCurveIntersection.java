@@ -10,16 +10,18 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** evaluates distance of points in given curve to origin
  * if two successive points have a distance that crosses radius
  * the point that is the result of (linear-)interpolation is the
  * result of the intersection. */
 public abstract class SimpleCurveIntersection implements CurveIntersection, SplitInterface, Serializable {
-  protected final Scalar radius;
+  private final Scalar radius;
 
+  /** @param radius non-negative */
   protected SimpleCurveIntersection(Scalar radius) {
-    this.radius = radius;
+    this.radius = Sign.requirePositiveOrZero(radius);
   }
 
   @Override // from CurveIntersection

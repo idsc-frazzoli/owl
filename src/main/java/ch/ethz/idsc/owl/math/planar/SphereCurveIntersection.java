@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.red.Norm;
  * input to intersection query is either a non-cyclic or cyclic polygon
  * the output is the coordinate of intersection using linear interpolation. */
 public class SphereCurveIntersection extends AssistedCurveIntersection {
+  /** @param radius non-negative */
   public SphereCurveIntersection(Scalar radius) {
     super(radius);
   }
