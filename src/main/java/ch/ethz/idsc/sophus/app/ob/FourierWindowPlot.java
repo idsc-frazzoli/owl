@@ -18,6 +18,7 @@ import ch.ethz.idsc.sophus.filter.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
+import ch.ethz.idsc.sophus.filter.LieGroupFilters;
 import ch.ethz.idsc.sophus.filter.TangentSpaceCenter;
 import ch.ethz.idsc.sophus.group.Se2Differences;
 import ch.ethz.idsc.sophus.math.FilterResponse;
@@ -42,13 +43,6 @@ import ch.ethz.idsc.tensor.red.Mean;
   private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
   private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
 
-  private static enum Filter {
-    GEODESIC, //
-    GEODESIC_MID_SEEDED, //
-    TANGENT_SPACE, //
-    BIINVARIANT_MEAN;
-  }
-
   // TODO OB: make logPlot (standard)
   private static void plot(Tensor data) throws IOException {
     Tensor yData = Tensors.empty();
@@ -68,7 +62,7 @@ import ch.ethz.idsc.tensor.red.Mean;
       VisualRow visualRow = visualSet.add( //
           xAxis, //
           Tensor.of(yAxis.append(yAxis).flatten(1)).extract(xAxis.length() / 2, xAxis.length() * 3 / 2));
-      visualRow.setLabel(Filter.values()[index].toString());
+      visualRow.setLabel(LieGroupFilters.values()[index].toString());
       ++index;
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);
@@ -79,7 +73,7 @@ import ch.ethz.idsc.tensor.red.Mean;
     ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
   }
 
-  private static void process(List<String> listData, Map<Filter, TensorUnaryOperator> map, int radius) throws IOException {
+  private static void process(List<String> listData, Map<LieGroupFilters, TensorUnaryOperator> map, int radius) throws IOException {
     Tensor smoothed = Tensors.empty();
     Iterator<String> iterator = listData.iterator();
     int limit = 2;
@@ -103,11 +97,11 @@ import ch.ethz.idsc.tensor.red.Mean;
   public static void main(String[] args) throws IOException {
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    Map<Filter, TensorUnaryOperator> map = new EnumMap<>(Filter.class);
-    map.put(Filter.GEODESIC, GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
-    map.put(Filter.GEODESIC_MID_SEEDED, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
-    map.put(Filter.TANGENT_SPACE, TangentSpaceCenter.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), smoothingKernel));
-    map.put(Filter.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
+    Map<LieGroupFilters, TensorUnaryOperator> map = new EnumMap<>(LieGroupFilters.class);
+    map.put(LieGroupFilters.GEODESIC, GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
+    map.put(LieGroupFilters.GEODESIC_MID, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
+    map.put(LieGroupFilters.TANGENT_SPACE, TangentSpaceCenter.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), smoothingKernel));
+    map.put(LieGroupFilters.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
     List<String> listData = ResourceData.lines("/dubilab/app/pose/index.vector");
     int radius = 5;
     process(listData, map, radius);

@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class BiinvariantMeanCenterTest extends TestCase {
@@ -29,7 +30,7 @@ public class BiinvariantMeanCenterTest extends TestCase {
 
   public void testFailNull() {
     try {
-      BiinvariantMeanCenter.of(Se2BiinvariantMean.DEFAULT, null);
+      BiinvariantMeanCenter.of(Se2BiinvariantMean.DEFAULT, (ScalarUnaryOperator) null);
       fail();
     } catch (Exception exception) {
       // ---
