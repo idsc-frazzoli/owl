@@ -21,6 +21,12 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
    * However, the operation domain is reduced
    * rotation angles a_i have to satisfy: sup (i,j) |ai-aj| < pi */
   LINEAR(So2LinearBiinvariantMean.INSTANCE), //
+  /** Careful:
+   * FILTER is NOT invariant under permutation of input parameters!
+   * 
+   * FILTER is the generalization of LINEAR to arbitrary angles
+   * FILTER is suitable for use in center filters */
+  FILTER(So2FilterBiinvariantMean.INSTANCE), //
   /** global formula is defined globally for arbitrary angles and weights */
   GLOBAL(So2GlobalBiinvariantMean.INSTANCE), //
   ;
@@ -29,6 +35,7 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
   // ---
   private final ScalarBiinvariantMean scalarBiinvariantMean;
 
+  /** @param scalarBiinvariantMean */
   private Se2BiinvariantMean(ScalarBiinvariantMean scalarBiinvariantMean) {
     this.scalarBiinvariantMean = scalarBiinvariantMean;
   }
