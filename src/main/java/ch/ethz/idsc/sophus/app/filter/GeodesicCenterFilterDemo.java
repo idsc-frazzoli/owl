@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
+// TODO JPH demo obsolete once sym link image is supported by LieGroupFiltersDemo
 public class GeodesicCenterFilterDemo extends DatasetKernelDemo implements BufferedImageSupplier {
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
   private Tensor refined = Tensors.empty();

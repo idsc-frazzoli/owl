@@ -1,13 +1,14 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.group;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 /** @param sequence of (x, y, a) points in SE(2) and weights non-negative and normalized
  * rotation angles a_i have to satisfy: sup (i,j) |ai-aj| <= pi - C
@@ -40,10 +41,17 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
     Scalar amean = scalarBiinvariantMean.mean(sequence.get(Tensor.ALL, 2), weights);
     // make transformation s.t. mean rotation is zero and retransformation after taking mean
     Se2GroupElement transfer = new Se2GroupElement(Tensors.of(ZERO, ZERO, amean));
-    Tensor transferred = Tensor.of(sequence.stream().map(transfer.inverse()::combine));
-    Tensor tmean = LinearSolve.of( //
-        weights.dot(transferred.get(Tensor.ALL, 2).negate().map(So2Skew::of)), //
-        weights.dot(Tensor.of(transferred.stream().map(Se2Skew.FUNCTION))));
+    // Tensor transferred = Tensor.of(sequence.stream().map(transfer.inverse()::combine));
+    // Tensor tmean = LinearSolve.of( //
+    // weights.dot(transferred.get(Tensor.ALL, 2).negate().map(So2Skew::of)), //
+    // weights.dot(Tensor.of(transferred.stream().map(Se2Skew.FUNCTION))));
+    // return transfer.combine(tmean.append(ZERO));
+    AtomicInteger index = new AtomicInteger(-1);
+    Tensor tmean = sequence.stream() //
+        .map(transfer.inverse()::combine) //
+        .map(xya -> Se2Decomp.of(xya, weights.Get(index.incrementAndGet()))) //
+        .reduce(Se2Decomp::add) //
+        .get().solve();
     return transfer.combine(tmean.append(ZERO));
   }
 }

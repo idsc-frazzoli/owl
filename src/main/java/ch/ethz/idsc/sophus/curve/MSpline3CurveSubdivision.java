@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.curve;
 
+import java.util.stream.Stream;
+
 import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,11 +23,11 @@ public final class MSpline3CurveSubdivision extends RefiningBSpline3CurveSubdivi
 
   @Override
   protected Tensor center(Tensor q, Tensor r) {
-    return biinvariantMean.mean(Tensors.of(q, r), MASKD);
+    return biinvariantMean.mean(Tensor.of(Stream.of(q, r)), MASKD);
   }
 
   @Override
   protected Tensor center(Tensor p, Tensor q, Tensor r) {
-    return biinvariantMean.mean(Tensors.of(p, q, r), MASKC);
+    return biinvariantMean.mean(Tensor.of(Stream.of(p, q, r)), MASKC);
   }
 }
