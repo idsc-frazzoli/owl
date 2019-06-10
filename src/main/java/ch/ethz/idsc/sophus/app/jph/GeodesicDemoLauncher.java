@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.app.curve.BSplineFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.BezierFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.BiinvariantMeanSubdivisionDemo;
 import ch.ethz.idsc.sophus.app.curve.CurveSubdivisionDemo;
-import ch.ethz.idsc.sophus.app.filter.LieGroupFiltersDemo;
+import ch.ethz.idsc.sophus.app.filter.LieGroupFiltersDatasetDemo;
 import ch.ethz.idsc.sophus.app.misc.DubinsPathDemo;
 import ch.ethz.idsc.sophus.app.misc.GeodesicDemo;
 
@@ -19,7 +19,7 @@ public enum GeodesicDemoLauncher {
   ;
   public static void main(String[] args) {
     DemoLauncher.build(Arrays.asList( //
-        LieGroupFiltersDemo.class, //
+        LieGroupFiltersDatasetDemo.class, //
         GeodesicCenterSplitsDemo.class, //
         BezierFunctionSplitsDemo.class, //
         BSplineFunctionDemo.class, //

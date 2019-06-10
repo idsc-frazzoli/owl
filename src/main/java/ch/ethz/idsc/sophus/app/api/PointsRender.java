@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class PointsRender {
+public class PointsRender {
   private final Color color_fill;
   private final Color color_draw;
 

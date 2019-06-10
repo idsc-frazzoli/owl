@@ -21,7 +21,7 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
     {
       spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
       spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
-      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
+      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "smoothing kernel");
       spinnerKernel.addSpinnerListener(value -> updateState());
     }
     {
