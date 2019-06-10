@@ -9,7 +9,9 @@ import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/** TODO OB state reference for terminology and references */
+/** Rafaello d'Andrea: Signals and Systems lecture:
+ * https://www.ethz.ch/content/dam/ethz/special-interest/mavt/dynamic-systems-n-control/idsc-dam/Lectures/Signals-and-Systems/Lectures/Fall2018/Lecture%20Notes%204.pdf
+ * page 2: Fourier Spectra & p6: Frequency Response of LTI systems */
 public enum TransferFunctionResponse implements TensorUnaryOperator {
   MAGNITUDE(Abs.FUNCTION), //
   FREQUENCY(Arg.FUNCTION), //
