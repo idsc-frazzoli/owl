@@ -39,13 +39,13 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
   public Tensor mean(Tensor sequence, Tensor weights) {
     Scalar amean = scalarBiinvariantMean.mean(sequence.get(Tensor.ALL, 2), weights);
     // make transformation s.t. mean rotation is zero and retransformation after taking mean
-    Se2GroupElement transfer = new Se2GroupElement(Tensors.of(ZERO, ZERO, amean));
+    LieGroupElement lieGroupElement = new Se2GroupElement(Tensors.of(ZERO, ZERO, amean));
     AtomicInteger index = new AtomicInteger(-1);
     Tensor tmean = sequence.stream() //
-        .map(transfer.inverse()::combine) //
+        .map(lieGroupElement.inverse()::combine) //
         .map(xya -> Se2Skew.of(xya, weights.Get(index.incrementAndGet()))) //
         .reduce(Se2Skew::add) //
         .get().solve();
-    return transfer.combine(tmean.append(ZERO));
+    return lieGroupElement.combine(tmean.append(ZERO));
   }
 }
