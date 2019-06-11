@@ -30,7 +30,6 @@ import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.util.StandardMenu;
 import ch.ethz.idsc.sophus.curve.MSpline3CurveSubdivision;
-import ch.ethz.idsc.sophus.group.Se2BiinvariantMean;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -57,7 +56,7 @@ public class BiinvariantMeanSubdivisionDemo extends CurvatureDemo {
   private final JToggleButton jToggleTest = new JToggleButton("active");
 
   public BiinvariantMeanSubdivisionDemo() {
-    super(GeodesicDisplays.SE2_ONLY);
+    super(GeodesicDisplays.SE2C_SE2_R2);
     Tensor control = null;
     {
       Tensor move = Tensors.fromString( //
@@ -165,8 +164,7 @@ public class BiinvariantMeanSubdivisionDemo extends CurvatureDemo {
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
-      // Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
-      TensorUnaryOperator tensorUnaryOperator = new MSpline3CurveSubdivision(Se2BiinvariantMean.LINEAR)::string;
+      TensorUnaryOperator tensorUnaryOperator = new MSpline3CurveSubdivision(geodesicDisplay.biinvariantMean())::string;
       // create(function.apply(geodesicDisplay.geodesicInterface()), cyclic);
       refined = control;
       for (int level = 0; level < levels; ++level) {
