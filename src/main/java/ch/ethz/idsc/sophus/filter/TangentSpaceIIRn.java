@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.filter;
 import java.util.Objects;
 import java.util.function.Function;
 
-import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -13,6 +12,7 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
+import ch.ethz.idsc.sophus.util.BoundedLinkedList;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

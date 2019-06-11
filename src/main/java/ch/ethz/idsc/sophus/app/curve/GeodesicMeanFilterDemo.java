@@ -21,10 +21,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
-/* package */ class MeanFilterDemo extends ControlPointsDemo {
+/* package */ class GeodesicMeanFilterDemo extends ControlPointsDemo {
   private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
-  MeanFilterDemo() {
+  GeodesicMeanFilterDemo() {
     super(true, GeodesicDisplays.ALL);
     {
       Tensor tensor = Tensors.fromString("{{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}");
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new MeanFilterDemo();
+    AbstractDemo abstractDemo = new GeodesicMeanFilterDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

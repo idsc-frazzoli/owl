@@ -1,6 +1,6 @@
 // code by jph
 // adapted from http://www.java2s.com/Code/Android/UI/BoundedLinkedList.htm
-package ch.ethz.idsc.owl.data;
+package ch.ethz.idsc.sophus.util;
 
 import java.io.Serializable;
 import java.util.Collection;

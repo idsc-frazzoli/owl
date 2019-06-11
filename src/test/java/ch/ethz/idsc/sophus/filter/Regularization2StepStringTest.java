@@ -1,12 +1,15 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import junit.framework.TestCase;
 
@@ -14,9 +17,9 @@ public class Regularization2StepStringTest extends TestCase {
   private static final TensorUnaryOperator STRING = //
       Regularization2Step.string(RnGeodesic.INSTANCE, RationalScalar.of(1, 4));
 
-  public void testLo() {
+  public void testLo() throws ClassNotFoundException, IOException {
     Tensor signal = Tensors.vector(1, 0, 0, 0, 0);
-    Tensor tensor = STRING.apply(signal);
+    Tensor tensor = Serialization.copy(STRING).apply(signal);
     ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.vector(1, 0.125, 0, 0, 0));
     TensorUnaryOperator tensorUnaryOperator = Regularization2Step.string(RnGeodesic.INSTANCE, RealScalar.of(0.25));

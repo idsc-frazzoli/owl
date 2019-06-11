@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.data;
+package ch.ethz.idsc.sophus.util;
 
 import java.io.IOException;
 import java.util.Arrays;

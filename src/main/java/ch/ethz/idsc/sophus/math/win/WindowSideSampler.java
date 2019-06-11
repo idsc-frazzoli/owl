@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.math.win;
 
 import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.math;
+package ch.ethz.idsc.owl.math;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;

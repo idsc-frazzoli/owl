@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.math.pursuit;
+package ch.ethz.idsc.sophus.crv.clothoid;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurve;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.RealScalar;

@@ -3,12 +3,12 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
+import ch.ethz.idsc.sophus.util.BoundedLinkedList;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

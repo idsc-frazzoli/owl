@@ -14,12 +14,12 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.LieGroupFilters;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.filter.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
-import ch.ethz.idsc.sophus.filter.LieGroupFilters;
 import ch.ethz.idsc.sophus.filter.TangentSpaceCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.math.FilterResponse;

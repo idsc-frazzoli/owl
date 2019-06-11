@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.util.BoundedLinkedList;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

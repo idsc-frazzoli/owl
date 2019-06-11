@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.glc.rl2;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.sophus.math.VectorScalars;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

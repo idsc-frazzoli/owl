@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.io.Serializable;
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

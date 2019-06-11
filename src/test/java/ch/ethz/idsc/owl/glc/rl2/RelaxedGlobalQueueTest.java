@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.sophus.math.VectorScalar;
+import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;

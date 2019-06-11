@@ -1,7 +1,6 @@
 // code by gjoel
 package ch.ethz.idsc.sophus.crv.clothoid;
 
-import ch.ethz.idsc.owl.math.pursuit.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.TensorNorm;

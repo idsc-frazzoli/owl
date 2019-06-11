@@ -5,8 +5,10 @@ import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.img.MeanFilter;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+/** @see MeanFilter */
 public class CenterFilter implements TensorUnaryOperator {
   /** Hint: the following tensorUnaryOperator are typically used
    * {@link GeodesicCenter}, and {@link BiinvariantMeanCenter}

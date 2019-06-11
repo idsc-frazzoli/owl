@@ -1,5 +1,5 @@
 // code by ynager
-package ch.ethz.idsc.sophus.math;
+package ch.ethz.idsc.owl.math;
 
 import java.io.Serializable;
 import java.math.MathContext;

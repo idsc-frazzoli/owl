@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.api;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.filter.LieGroupFilters;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;

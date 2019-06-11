@@ -1,13 +1,11 @@
 // code by jph
-package ch.ethz.idsc.sophus.filter;
+package ch.ethz.idsc.sophus.app.api;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
