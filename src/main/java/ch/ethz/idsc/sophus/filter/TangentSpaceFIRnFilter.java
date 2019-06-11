@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.BiinvariantMean;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,8 +16,9 @@ public class TangentSpaceFIRnFilter implements TensorUnaryOperator {
    * @param alpha
    * @return
    * @throws Exception if either parameter is null */
-  public static TensorUnaryOperator of(SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+  public static TensorUnaryOperator of(GeodesicDisplay geodesicDisplay, SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
     return new TangentSpaceFIRnFilter( //
+        Objects.requireNonNull(geodesicDisplay), //
         Objects.requireNonNull(smoothingKernel), //
         radius, //
         Objects.requireNonNull(alpha));
@@ -27,8 +28,10 @@ public class TangentSpaceFIRnFilter implements TensorUnaryOperator {
   private final SmoothingKernel smoothingKernel;
   private final int radius;
   private final Scalar alpha;
+  private final GeodesicDisplay geodesicDisplay;
 
-  private TangentSpaceFIRnFilter(SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+  private TangentSpaceFIRnFilter(GeodesicDisplay geodesicDisplay, SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+    this.geodesicDisplay = geodesicDisplay;
     this.smoothingKernel = smoothingKernel;
     this.radius = radius;
     this.alpha = alpha;
@@ -37,6 +40,6 @@ public class TangentSpaceFIRnFilter implements TensorUnaryOperator {
   @Override
   public Tensor apply(Tensor tensor) {
     return Tensor.of(tensor.stream() //
-        .map(new TangentSpaceIIRn(smoothingKernel, radius, alpha)));
+        .map(new TangentSpaceFIRn(geodesicDisplay, smoothingKernel, radius, alpha)));
   }
 }

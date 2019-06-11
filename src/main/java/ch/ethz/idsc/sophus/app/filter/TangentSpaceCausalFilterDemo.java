@@ -14,30 +14,22 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.TangentSpaceFIRnFilter;
 import ch.ethz.idsc.sophus.filter.TangentSpaceIIRnFilter;
-import ch.ethz.idsc.sophus.group.Se2BiinvariantMean;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 // TODO OB adapt symLinkImages to new filter structure, see use of BufferedImageSupplier
-/* package */ class Se2TangentSpaceCausalFilterDemo extends DatasetKernelDemo {
+/* package */ class TangentSpaceCausalFilterDemo extends DatasetKernelDemo {
   private Tensor refined = Tensors.empty();
   /** IIR vs. FIR filter type */
   private final JToggleButton jToggleIIR = new JToggleButton("IIR");
-  private final SpinnerLabel<Se2BiinvariantMean> spinnerFilters = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
   /** parameter to blend extrapolation with measurement */
   private final JSlider jSlider = new JSlider(1, 999, 500);
 
-  public Se2TangentSpaceCausalFilterDemo() {
-    super(GeodesicDisplays.SE2_ONLY);
-    {
-      spinnerFilters.setArray(Se2BiinvariantMean.values());
-      spinnerFilters.setIndex(0);
-      spinnerFilters.addToComponentReduced(timerFrame.jToolBar, new Dimension(90, 28), "se2 biinvariant mean");
-      spinnerFilters.addSpinnerListener(type -> updateState());
-    }
+  public TangentSpaceCausalFilterDemo() {
+    super(GeodesicDisplays.SE2_R2);
     {
       spinnerConvolution.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
       spinnerConvolution.setIndex(0);
@@ -65,9 +57,9 @@ import ch.ethz.idsc.tensor.Tensors;
     final int radius = spinnerRadius.getValue();
     if (0 < radius) {
       if (jToggleIIR.isSelected()) {
-        refined = TangentSpaceIIRnFilter.of(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).apply(control());
+        refined = TangentSpaceIIRnFilter.of(geodesicDisplay(), spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).apply(control());
       } else {
-        refined = TangentSpaceFIRnFilter.of(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).apply(control());
+        refined = TangentSpaceFIRnFilter.of(geodesicDisplay(), spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).apply(control());
       }
       return refined;
     }
@@ -84,7 +76,7 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new Se2TangentSpaceCausalFilterDemo();
+    AbstractDemo abstractDemo = new TangentSpaceCausalFilterDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }
