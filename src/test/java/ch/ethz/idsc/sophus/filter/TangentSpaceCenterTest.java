@@ -3,12 +3,12 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.group.RnExponential;
-import ch.ethz.idsc.sophus.group.RnGroup;
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2CoveringGroup;
-import ch.ethz.idsc.sophus.group.Se2CoveringIntegrator;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.lie.rn.RnExponential;
+import ch.ethz.idsc.sophus.lie.rn.RnGroup;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringIntegrator;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;

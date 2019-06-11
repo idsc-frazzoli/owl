@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;

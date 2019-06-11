@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.filter;
 import java.io.IOException;
 import java.util.Arrays;
 
-import ch.ethz.idsc.sophus.group.Se2BiinvariantMean;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.Serialization;

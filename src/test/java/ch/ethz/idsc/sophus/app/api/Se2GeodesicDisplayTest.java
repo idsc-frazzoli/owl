@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.group.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import junit.framework.TestCase;
 
 public class Se2GeodesicDisplayTest extends TestCase {

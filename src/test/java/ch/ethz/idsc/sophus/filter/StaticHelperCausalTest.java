@@ -3,9 +3,9 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowSideSampler;
+import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

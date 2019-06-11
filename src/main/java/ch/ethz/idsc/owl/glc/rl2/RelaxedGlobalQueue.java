@@ -8,7 +8,7 @@ import java.util.Iterator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.order.LexSemiMinTracker;
 import ch.ethz.idsc.owl.math.order.LexicographicSemiorderMinTracker;
-import ch.ethz.idsc.sophus.VectorScalars;
+import ch.ethz.idsc.sophus.math.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** holds the node which have not yet been expanded */

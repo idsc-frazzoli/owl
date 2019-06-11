@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.sophus.VectorScalar;
-import ch.ethz.idsc.sophus.VectorScalars;
+import ch.ethz.idsc.sophus.math.VectorScalar;
+import ch.ethz.idsc.sophus.math.VectorScalars;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

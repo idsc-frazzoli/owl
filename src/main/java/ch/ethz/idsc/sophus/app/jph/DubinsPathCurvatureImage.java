@@ -4,9 +4,9 @@ package ch.ethz.idsc.sophus.app.jph;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.dubins.DubinsPath;
-import ch.ethz.idsc.sophus.dubins.DubinsPathComparator;
-import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

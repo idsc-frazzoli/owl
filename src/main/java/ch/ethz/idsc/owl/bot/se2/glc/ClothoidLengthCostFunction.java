@@ -3,9 +3,9 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.util.function.Predicate;
 
-import ch.ethz.idsc.owl.math.planar.ClothoidPursuit;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
-import ch.ethz.idsc.owl.math.planar.GeodesicPursuitInterface;
+import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuit;
+import ch.ethz.idsc.owl.math.pursuit.GeodesicPursuitInterface;
+import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

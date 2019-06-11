@@ -7,11 +7,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.planar.ClothoidPursuit;
-import ch.ethz.idsc.owl.math.planar.PseudoSe2CurveIntersection;
+import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuit;
+import ch.ethz.idsc.owl.math.pursuit.PseudoSe2CurveIntersection;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.sophus.group.Se2GroupElement;
+import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;

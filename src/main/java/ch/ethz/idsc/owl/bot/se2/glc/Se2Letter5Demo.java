@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
-import ch.ethz.idsc.owl.math.planar.InterpolationEntryFinder;
+import ch.ethz.idsc.owl.math.pursuit.InterpolationEntryFinder;
 
 public class Se2Letter5Demo extends Se2LetterADemo {
   @Override

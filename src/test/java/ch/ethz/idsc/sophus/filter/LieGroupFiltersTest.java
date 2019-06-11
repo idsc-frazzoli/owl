@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.data.GokartPoseData;
-import ch.ethz.idsc.sophus.group.LieExponential;
-import ch.ethz.idsc.sophus.group.LieGroup;
-import ch.ethz.idsc.sophus.math.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.Pi;
@@ -39,7 +39,7 @@ public class LieGroupFiltersTest extends TestCase {
     for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
           lieGroupFilters.supply(geodesicInterface, smoothingKernel, lieGroup, lieExponential, biinvariantMean);
-      Tensor filtered = GeodesicCenterFilter.of(tensorUnaryOperator, radius).apply(control);
+      Tensor filtered = CenterFilter.of(tensorUnaryOperator, radius).apply(control);
       map.put(lieGroupFilters, filtered);
     }
     for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {

@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.filter;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

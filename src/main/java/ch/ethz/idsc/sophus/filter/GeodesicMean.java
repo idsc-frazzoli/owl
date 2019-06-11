@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.filter;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** Careful: the implementation only supports sequences with odd number of elements

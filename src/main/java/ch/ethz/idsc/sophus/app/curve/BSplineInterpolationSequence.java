@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
-import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
-import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
+import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation;
+import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation.Iteration;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 

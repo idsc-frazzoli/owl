@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.WindowSideSampler;
+import ch.ethz.idsc.sophus.math.win.AffineQ;
+import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

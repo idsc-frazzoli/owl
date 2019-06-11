@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.sophus.filter.LieGroupFilters;
-import ch.ethz.idsc.sophus.group.LieExponential;
-import ch.ethz.idsc.sophus.group.LieGroup;
-import ch.ethz.idsc.sophus.math.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public enum GeodesicDisplays {

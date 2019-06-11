@@ -3,11 +3,10 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowSideSampler;
+import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
+import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -82,7 +81,7 @@ public class GeodesicExtrapolationTest extends TestCase {
 
   public void testNullFailITF() {
     try {
-      GeodesicExtrapolation.of(Se2Geodesic.INSTANCE, (IntegerTensorFunction) null);
+      GeodesicExtrapolation.of(Se2Geodesic.INSTANCE, (Function<Integer, Tensor>) null);
       fail();
     } catch (Exception exception) {
       // ---

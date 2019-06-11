@@ -1,13 +1,14 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
-import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
+import java.util.function.Function;
+
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Binomial;
 import ch.ethz.idsc.tensor.sca.Power;
 
-public enum BinomialWeights implements IntegerTensorFunction {
+public enum BinomialWeights implements Function<Integer, Tensor> {
   INSTANCE;
   // ---
   @Override

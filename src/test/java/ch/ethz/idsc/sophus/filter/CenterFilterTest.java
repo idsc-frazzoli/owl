@@ -1,13 +1,15 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
-import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.group.So3Geodesic;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.space.SnGeodesic;
+import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
+import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
+import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -19,6 +21,7 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -29,9 +32,9 @@ import ch.ethz.idsc.tensor.red.Norm;
 import junit.framework.TestCase;
 
 public class CenterFilterTest extends TestCase {
-  public void testSimple() {
-    TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, BinomialWeights.INSTANCE);
-    TensorUnaryOperator centerFilter = GeodesicCenterFilter.of(geodesicCenter, 3);
+  public void testSimple() throws ClassNotFoundException, IOException {
+    TensorUnaryOperator geodesicCenter = Serialization.copy(GeodesicCenter.of(RnGeodesic.INSTANCE, BinomialWeights.INSTANCE));
+    TensorUnaryOperator centerFilter = Serialization.copy(CenterFilter.of(geodesicCenter, 3));
     Tensor linear = Range.of(0, 10);
     Tensor result = centerFilter.apply(linear);
     assertEquals(result, linear);
@@ -40,7 +43,7 @@ public class CenterFilterTest extends TestCase {
 
   public void testKernel3() {
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, BinomialWeights.INSTANCE);
-    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 3);
+    TensorUnaryOperator geodesicCenterFilter = CenterFilter.of(geodesicCenter, 3);
     Tensor signal = UnitVector.of(9, 4);
     Tensor result = geodesicCenterFilter.apply(signal);
     ExactTensorQ.require(result);
@@ -49,7 +52,7 @@ public class CenterFilterTest extends TestCase {
 
   public void testKernel1() {
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(RnGeodesic.INSTANCE, BinomialWeights.INSTANCE);
-    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
+    TensorUnaryOperator geodesicCenterFilter = CenterFilter.of(geodesicCenter, 1);
     Tensor signal = UnitVector.of(5, 2);
     Tensor result = geodesicCenterFilter.apply(signal);
     ExactTensorQ.require(result);
@@ -58,7 +61,7 @@ public class CenterFilterTest extends TestCase {
 
   public void testS2() {
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(SnGeodesic.INSTANCE, SmoothingKernel.HANN);
-    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
+    TensorUnaryOperator geodesicCenterFilter = CenterFilter.of(geodesicCenter, 1);
     Distribution distribution = NormalDistribution.standard();
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Norm._2);
     Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(tensorUnaryOperator));
@@ -68,7 +71,7 @@ public class CenterFilterTest extends TestCase {
 
   public void testSo3() {
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(So3Geodesic.INSTANCE, SmoothingKernel.HAMMING);
-    TensorUnaryOperator geodesicCenterFilter = GeodesicCenterFilter.of(geodesicCenter, 1);
+    TensorUnaryOperator geodesicCenterFilter = CenterFilter.of(geodesicCenter, 1);
     Distribution distribution = UniformDistribution.unit();
     Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(Rodrigues::exp));
     Tensor result = geodesicCenterFilter.apply(tensor);
@@ -82,7 +85,7 @@ public class CenterFilterTest extends TestCase {
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel), 3);
+          CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel), 3);
       Tensor res = tensorUnaryOperator.apply(xyz);
       Tensor xy = Tensor.of(xyz.stream().map(geodesicDisplay::toPoint));
       Tensor uv = Tensor.of(res.stream().map(geodesicDisplay::toPoint));
@@ -93,7 +96,7 @@ public class CenterFilterTest extends TestCase {
 
   public void testFail() {
     try {
-      GeodesicCenterFilter.of(null, 1);
+      CenterFilter.of(null, 1);
       fail();
     } catch (Exception exception) {
       // ---

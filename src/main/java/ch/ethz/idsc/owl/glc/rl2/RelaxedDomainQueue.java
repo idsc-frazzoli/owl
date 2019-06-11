@@ -7,7 +7,7 @@ import java.util.Collections;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.order.DMLexSemiMinTracker;
 import ch.ethz.idsc.owl.math.order.LexSemiMinTracker;
-import ch.ethz.idsc.sophus.VectorScalars;
+import ch.ethz.idsc.sophus.math.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RelaxedDomainQueue extends RelaxedPollingQueue {

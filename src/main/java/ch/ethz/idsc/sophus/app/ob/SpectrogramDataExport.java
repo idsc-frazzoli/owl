@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.app.data.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
-import ch.ethz.idsc.sophus.group.Se2Differences;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
+import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
         for (int radius = 0; radius < 15; radius++) {
           // Create new Geod. Center
-          Tensor refined = GeodesicCenterFilter.of(tensorUnaryOperator, radius).apply(_control);
+          Tensor refined = CenterFilter.of(tensorUnaryOperator, radius).apply(_control);
           System.out.println(data + smoothingKernel.toString() + radius);
           System.err.println(speeds(refined));
           // export velocities

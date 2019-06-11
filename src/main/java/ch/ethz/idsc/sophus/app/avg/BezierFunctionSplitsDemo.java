@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JSlider;
 
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.curve.BezierFunction;
+import ch.ethz.idsc.sophus.crv.spline.BezierFunction;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.RationalScalar;

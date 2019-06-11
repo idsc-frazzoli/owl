@@ -4,9 +4,9 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.util.EnumSet;
 import java.util.Set;
 
-import ch.ethz.idsc.sophus.curve.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.CurveSubdivision;
-import ch.ethz.idsc.sophus.curve.FourPointCurveSubdivision;
+import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
+import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
+import ch.ethz.idsc.sophus.crv.subdiv.FourPointCurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;

@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.group.Se2Differences;
-import ch.ethz.idsc.sophus.planar.ArcTan2D;
-import ch.ethz.idsc.sophus.surf.RotationMatrix3D;
+import ch.ethz.idsc.sophus.hs.sn.RotationMatrix3D;
+import ch.ethz.idsc.sophus.lie.LieDifferences;
+import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
+import ch.ethz.idsc.sophus.math.ArcTan2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Accumulate;

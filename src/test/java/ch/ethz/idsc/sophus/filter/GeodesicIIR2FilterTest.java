@@ -1,11 +1,11 @@
 // code by ob and jph
 package ch.ethz.idsc.sophus.filter;
 
-import ch.ethz.idsc.sophus.group.LieGroupGeodesic;
-import ch.ethz.idsc.sophus.group.RnExponential;
-import ch.ethz.idsc.sophus.group.RnGroup;
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2Group;
+import ch.ethz.idsc.sophus.lie.LieGroupGeodesic;
+import ch.ethz.idsc.sophus.lie.rn.RnExponential;
+import ch.ethz.idsc.sophus.lie.rn.RnGroup;
+import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;

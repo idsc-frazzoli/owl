@@ -6,13 +6,13 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.math.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.ShepardInterpolation;
+import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.math.win.InverseDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
@@ -28,8 +28,7 @@ public class ShepardInterpolationDemo extends ControlPointsDemo {
     Tensor controlPointsSe2 = getControlPointsSe2();
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    ShepardInterpolation shepardInterpolation = //
-        new ShepardInterpolation(Norm2Squared::between, geodesicDisplay.biinvariantMean());
+    InverseDistance shepardInterpolation = new InverseDistance(Norm2Squared::between);
     Tensor domain = Tensor.of(controlPointsSe2.stream().map(Extract2D.FUNCTION));
     Tensor point = geometricLayer.getMouseSe2State().extract(0, 2);
     if (0 < controlPointsSe2.length()) {

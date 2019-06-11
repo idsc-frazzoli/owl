@@ -3,11 +3,11 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
-import ch.ethz.idsc.sophus.math.Loxodrome;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.space.SnGeodesic;
+import ch.ethz.idsc.sophus.hs.sn.Loxodrome;
+import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
     Export.of(HomeDirectory.file("loxodrome_noise.csv"), tensor);
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = //
-          GeodesicCenterFilter.of(GeodesicCenter.of(SnGeodesic.INSTANCE, smoothingKernel), 7);
+          CenterFilter.of(GeodesicCenter.of(SnGeodesic.INSTANCE, smoothingKernel), 7);
       Tensor smooth = tensorUnaryOperator.apply(tensor);
       Export.of(HomeDirectory.file("loxodrome_" + smoothingKernel.name().toLowerCase() + ".csv"), smooth);
     }
