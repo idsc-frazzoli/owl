@@ -16,7 +16,7 @@ public enum RelaxedDebugUtils {
   private static final boolean PRINT = !(UserName.is("travis") || UserName.is("datahaki"));
 
   public static List<GlcNode> allNodes(RelaxedTrajectoryPlanner relaxedTrajectoryPlanner) {
-    return allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values());
+    return allNodes(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().getMap().values());
   }
 
   /** @param collection of RelaxedPriorityQueue's
@@ -45,7 +45,7 @@ public enum RelaxedDebugUtils {
    * 
    * @param relaxedTrajectoryPlanner */
   public static void closeMatchesCheck(RelaxedTrajectoryPlanner relaxedTrajectoryPlanner) {
-    for (RelaxedPriorityQueue relaxedPriorityQueue : relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().values()) {
+    for (RelaxedPriorityQueue relaxedPriorityQueue : relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().getMap().values()) {
       if (PRINT) {
         System.out.println(System.getProperty("line.separator"));
         System.out.println("Number of elements in domain queue: " + relaxedPriorityQueue.collection().size());

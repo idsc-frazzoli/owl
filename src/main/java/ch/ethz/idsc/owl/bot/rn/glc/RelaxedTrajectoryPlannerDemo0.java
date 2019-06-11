@@ -29,7 +29,7 @@ import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
-import ch.ethz.idsc.owl.gui.ren.DomainRender;
+import ch.ethz.idsc.owl.gui.ren.DomainQueueMapRender;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.ren.EtaRender;
 import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
@@ -118,7 +118,7 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
     owlyAnimationFrame.addBackground(new EtaRender(eta));
-    owlyAnimationFrame.addBackground(new DomainRender(relaxedTrajectoryPlanner.getDomainMap(), eta));
+    owlyAnimationFrame.addBackground(new DomainQueueMapRender(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().getMap(), eta));
     owlyAnimationFrame.addBackground(new SphericalRegionRender((SphericalRegion) goalRegion));
     {
       EdgeRender treeRender = new EdgeRender(1000, Color.BLUE);

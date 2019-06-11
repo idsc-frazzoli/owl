@@ -23,7 +23,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   private final RelaxedPriorityQueue globalQueue;
-  private final RelaxedDomainQueueMap domainMap;
+  private final RelaxedDomainQueueMap domainQueueMap;
   private final RelaxedPriorityQueue goalDomainQueue;
 
   // ---
@@ -32,7 +32,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     this.stateTimeRaster = stateTimeRaster;
     this.heuristicFunction = heuristicFunction;
     this.globalQueue = new RelaxedGlobalQueue(slacks);
-    this.domainMap = new RelaxedDomainQueueMap(slacks);
+    this.domainQueueMap = new RelaxedDomainQueueMap(slacks);
     this.goalDomainQueue = RelaxedDomainQueue.empty(slacks);
   }
 
@@ -54,7 +54,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
    * @param node
    * @return Collection of discarded nodes */
   protected final Collection<GlcNode> addToDomainMap(Tensor domainKey, GlcNode node) {
-    return domainMap.addToDomainMap(domainKey, node);
+    return domainQueueMap.addToDomainMap(domainKey, node);
   }
 
   /** Method is invoked to notify planner that the
@@ -70,7 +70,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   /** @param domainKey
    * @return RLDomainQueue in domain or Optional.empty() if domain has not been assigned a node yet */
   protected final Optional<RelaxedPriorityQueue> getDomainQueue(Tensor domainKey) {
-    return Optional.ofNullable(domainMap.getQueue(domainKey));
+    return Optional.ofNullable(domainQueueMap.getQueue(domainKey));
   }
 
   protected final RelaxedPriorityQueue getGlobalQueue() {
@@ -90,12 +90,12 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   protected final void removeFromDomainQueue(Tensor domainKey, GlcNode glcNode) {
     if (!glcNode.isLeaf())
       System.err.println("The node to be removed has children");
-    domainMap.removeFromDomainMap(domainKey, glcNode);
+    domainQueueMap.removeFromDomainMap(domainKey, glcNode);
   }
 
   // check if obsolete
-  public final Map<Tensor, RelaxedPriorityQueue> getRelaxedDomainQueueMap() {
-    return domainMap.getMap();
+  public final RelaxedDomainQueueMap getRelaxedDomainQueueMap() {
+    return domainQueueMap;
   }
 
   /** @return current most promising node in queue, i.d best merit */
@@ -126,7 +126,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   /***************************************************/
   @Override // from TrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
-    GlobalAssert.that(globalQueue.collection().isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
+    GlobalAssert.that(globalQueue.collection().isEmpty() && domainQueueMap.isEmpty()); // root insertion requires empty planner
     GlcNode root = GlcNodes.createRoot(stateTime, heuristicFunction);
     addToGlobalQueue(root);
     addToDomainMap(stateTimeRaster.convertToKey(stateTime), root);
@@ -144,7 +144,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
 
   @Override // from TrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
-    return domainMap.getMap().entrySet().stream() //
+    return domainQueueMap.getMap().entrySet().stream() //
         .collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().peekBest()));
   }
 

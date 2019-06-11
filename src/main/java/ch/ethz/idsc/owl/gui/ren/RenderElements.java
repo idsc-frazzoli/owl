@@ -30,7 +30,7 @@ public enum RenderElements {
       if (stateTimeRaster instanceof EtaRaster) {
         EtaRaster etaRaster = (EtaRaster) stateTimeRaster;
         list.add(new EtaRender(etaRaster.eta()));
-        list.add(new DomainRender(trajectoryPlanner.getDomainMap(), etaRaster.eta()));
+        list.add(new DomainRender(trajectoryPlanner.getDomainMap().keySet(), etaRaster.eta()));
       }
     }
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
