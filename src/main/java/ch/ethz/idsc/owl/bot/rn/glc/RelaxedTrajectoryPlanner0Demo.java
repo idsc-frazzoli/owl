@@ -10,8 +10,8 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.r2.R2RationalFlows;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.NodesAssert;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
@@ -53,9 +53,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.red.Norm;
 
-public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
+public class RelaxedTrajectoryPlanner0Demo implements DemoInterface {
   // -------- slacks --------
   final Tensor slacks = Tensors.vector(2, 0);
   // -------- stateTimeRaster --------
@@ -81,19 +80,7 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
       ExactTensorQ.require(flow.getU());
     // -------- GoalInterface --------
     // --
-    CostFunction distanceCost = new CostFunction() {
-      @Override // from CostIncrementFunction
-      public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-        // System.out.println(Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()));
-        // return timeStep; <- not possible for
-        return Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()); // ||x_prev - x_next||
-      }
-
-      @Override // from HeuristicFunction
-      public Scalar minCostToGoal(Tensor x) {
-        return goalRegion.distance(x);
-      }
-    };
+    CostFunction distanceCost = new RnMinDistGoalManager(goalRegion);
     // --
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, Quantity.of(2, ""));
@@ -151,6 +138,6 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
   }
 
   public static void main(String[] args) {
-    new RelaxedTrajectoryPlannerDemo0().start().jFrame.setVisible(true);
+    new RelaxedTrajectoryPlanner0Demo().start().jFrame.setVisible(true);
   }
 }

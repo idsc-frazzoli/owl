@@ -17,13 +17,18 @@ import ch.ethz.idsc.tensor.Tensors;
 public class DomainRender implements RenderInterface {
   private static final Color INTERIOR = new Color(192, 192, 192, 64);
   private static final Color BOUNDARY = Color.WHITE;
+
+  public static RenderInterface of(Set<Tensor> map, Tensor eta) {
+    return new DomainRender(Tensor.of(map.stream().map(Extract2D.FUNCTION).distinct()), eta);
+  }
+
   // ---
   private final Tensor keys;
   private final Tensor eta_invert;
   private final Tensor ratios;
 
-  public DomainRender(Set<Tensor> map, Tensor eta) {
-    this.keys = Tensor.of(map.stream().map(Extract2D.FUNCTION).distinct());
+  DomainRender(Tensor keys, Tensor eta) {
+    this.keys = keys;
     eta_invert = Extract2D.FUNCTION.apply(eta).map(Scalar::reciprocal);
     int lo = 0;
     int hi = 1;
@@ -40,10 +45,14 @@ public class DomainRender implements RenderInterface {
       Tensor x = key.pmul(eta_invert);
       Path2D path2d = geometricLayer.toPath2D(Tensor.of(ratios.stream().map(x::add)));
       path2d.closePath();
-      graphics.setColor(INTERIOR);
+      graphics.setColor(color(key));
       graphics.fill(path2d);
       graphics.setColor(BOUNDARY);
       graphics.draw(path2d);
     }
+  }
+
+  public Color color(Tensor key) {
+    return INTERIOR;
   }
 }
