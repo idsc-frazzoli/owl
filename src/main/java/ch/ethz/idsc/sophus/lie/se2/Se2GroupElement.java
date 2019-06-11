@@ -2,15 +2,13 @@
 package ch.ethz.idsc.sophus.lie.se2;
 
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroupElement;
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.Pi;
-import ch.ethz.idsc.tensor.sca.Mod;
 
 /** SE(2) is parameterized by R^2 x [-pi,+pi) */
 public class Se2GroupElement extends Se2CoveringGroupElement {
   private static final int MOD_INDEX = 2;
-  private static final Mod MOD_ANGLE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   // ---
   /** @param xya == {px, py, angle} as member of Lie group SE2 */
@@ -27,7 +25,7 @@ public class Se2GroupElement extends Se2CoveringGroupElement {
   @Override // from Se2CoveringGroupElement
   public Tensor combine(Tensor tensor) {
     Tensor xya = super.combine(tensor);
-    xya.set(MOD_ANGLE, MOD_INDEX);
+    xya.set(So2.MOD, MOD_INDEX);
     return xya;
   }
 

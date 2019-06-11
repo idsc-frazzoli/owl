@@ -2,19 +2,17 @@
 package ch.ethz.idsc.sophus.lie.se2c;
 
 import ch.ethz.idsc.sophus.lie.se2.Se2ParametricDistance;
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Floor;
-import ch.ethz.idsc.tensor.sca.Mod;
 
 public enum Se2CoveringParametricDistance implements TensorMetric {
   INSTANCE;
   // ---
   private static final Scalar HALF = RealScalar.of(0.5);
-  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   /** @param p element in SE2 of the form {px, py, p_heading}
    * @param q element in SE2 of the form {qx, qy, q_heading}
@@ -28,7 +26,7 @@ public enum Se2CoveringParametricDistance implements TensorMetric {
     // number of windings
     Scalar windings = Floor.FUNCTION.apply(alphaCovering.divide(RealScalar.of(2 * Math.PI)));
     // alpha from se2ParametricDistance
-    Scalar alpha = MOD_DISTANCE.apply(q.Get(2).subtract(p.get(2))).multiply(HALF);
+    Scalar alpha = So2.MOD.apply(q.Get(2).subtract(p.get(2))).multiply(HALF);
     // length of one winding
     Scalar circleDistance = alpha.divide(RealScalar.of(2 * Math.PI)).multiply(distance);
     return distance.add(windings.multiply(circleDistance));

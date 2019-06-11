@@ -1,6 +1,7 @@
 // code by ureif
 package ch.ethz.idsc.sophus.crv.clothoid;
 
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.ArcTan2D;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.ComplexScalar;
@@ -8,10 +9,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Imag;
-import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.Real;
 
 /** original implementation */
@@ -27,7 +26,6 @@ import ch.ethz.idsc.tensor.sca.Real;
   private static final Scalar _68 = RealScalar.of(68.0);
   private static final Scalar _46 = RealScalar.of(46.0);
   private static final Scalar _1_4 = RealScalar.of(0.25);
-  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
@@ -38,8 +36,8 @@ import ch.ethz.idsc.tensor.sca.Real;
     // ---
     Scalar d = p1.subtract(p0);
     Scalar da = ArcTan2D.of(q.subtract(p));
-    Scalar b0 = MOD_DISTANCE.apply(a0.subtract(da));
-    Scalar b1 = MOD_DISTANCE.apply(a1.subtract(da));
+    Scalar b0 = So2.MOD.apply(a0.subtract(da));
+    Scalar b1 = So2.MOD.apply(a1.subtract(da));
     // ---
     Scalar f1 = b0.multiply(b0).add(b1.multiply(b1)).divide(_68);
     Scalar f2 = b0.multiply(b1).divide(_46);

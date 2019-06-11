@@ -20,13 +20,11 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
-import ch.ethz.idsc.tensor.sca.Mod;
 import junit.framework.TestCase;
 
 public class So2LinearBiinvariantMeanTest extends TestCase {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
   private static final Clip CLIP = Clips.absolute(Pi.VALUE);
-  private static final Mod MOD = Mod.function(Pi.TWO, Pi.VALUE.negate());
   private static final ScalarBiinvariantMean[] SCALAR_BIINVARIANT_MEANS = { //
       So2GlobalBiinvariantMean.INSTANCE, //
       So2LinearBiinvariantMean.INSTANCE };
@@ -46,7 +44,7 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
                 BiinvariantMeanTests.order(sequence.map(shift::add), index), //
                 BiinvariantMeanTests.order(weights, index));
             CLIP.requireInside(result);
-            Chop._12.requireClose(MOD.apply(result.subtract(shift).subtract(solution)), RealScalar.ZERO);
+            Chop._12.requireClose(So2.MOD.apply(result.subtract(shift).subtract(solution)), RealScalar.ZERO);
           }
         }
       }
@@ -60,7 +58,7 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
 
   public void testSame() {
     Scalar mean = So2LinearBiinvariantMean.INSTANCE.mean(Tensors.of(Pi.VALUE, Pi.VALUE.negate()), Tensors.vector(0.6, 0.4));
-    Chop._12.requireClose(MOD.apply(mean.subtract(Pi.VALUE)), RealScalar.ZERO);
+    Chop._12.requireClose(So2.MOD.apply(mean.subtract(Pi.VALUE)), RealScalar.ZERO);
   }
 
   public void testComparison() {
@@ -73,7 +71,7 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
         Scalar shift = RandomVariate.of(distribution);
         Scalar val1 = So2GlobalBiinvariantMean.INSTANCE.mean(sequence.map(shift::add), weights);
         Tensor val2 = So2LinearBiinvariantMean.INSTANCE.mean(sequence.map(shift::add), weights);
-        chop.requireClose(MOD.apply(val1.subtract(val2)), RealScalar.ZERO);
+        chop.requireClose(So2.MOD.apply(val1.subtract(val2)), RealScalar.ZERO);
       }
     }
   }

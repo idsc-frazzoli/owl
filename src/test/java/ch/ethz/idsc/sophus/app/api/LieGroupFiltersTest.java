@@ -9,20 +9,17 @@ import ch.ethz.idsc.sophus.filter.CenterFilter;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Mod;
 import junit.framework.TestCase;
 
 public class LieGroupFiltersTest extends TestCase {
-  private static final Mod MOD = Mod.function(Pi.TWO, Pi.VALUE.negate());
-
   public void testSimple() {
     List<String> lines = GokartPoseData.INSTANCE.list();
     Tensor control = GokartPoseData.getPose(lines.get(0), 250);
@@ -42,7 +39,7 @@ public class LieGroupFiltersTest extends TestCase {
     }
     for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
       Tensor diff = map.get(lieGroupFilters).subtract(map.get(LieGroupFilters.BIINVARIANT_MEAN));
-      diff.set(MOD, Tensor.ALL, 2);
+      diff.set(So2.MOD, Tensor.ALL, 2);
       Scalar norm = Norm.INFINITY.ofMatrix(diff);
       assertTrue(Chop._02.allZero(norm));
     }
