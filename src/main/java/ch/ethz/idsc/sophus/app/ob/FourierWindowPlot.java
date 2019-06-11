@@ -45,15 +45,18 @@ import ch.ethz.idsc.tensor.red.Mean;
   private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
 
   // TODO OB: make logPlot (standard)
-  private static void plot(Tensor data) throws IOException {
+  private static void plot(Tensor data, int radius, int signal) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
       yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
     // ---
     Tensor xAxis = Tensors.empty();
     // FIXME OB shouldn't the freq. labels also depend on WINDOW_DURATION?
-    for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index)
+    // FIXME JPH: The WINDOW_DURATION is implicitly given by the yData.length, also higher resolution would require higher sampling frequency (nyquist
+    // criterion) (DELETE ME)
+    for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index) {
       xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
+    }
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Filter Gain");
     visualSet.setAxesLabelX("Frequency [Hz]");
@@ -69,12 +72,13 @@ import ch.ethz.idsc.tensor.red.Mean;
     JFreeChart jFreeChart = ListPlot.of(visualSet);
     jFreeChart.setBackgroundPaint(Color.WHITE);
     // Exportable as SVG?
-    File file = HomeDirectory.Pictures("FilterGain.png");
+    String fileName = "FilterGain_" + radius + "_" + signal + ".png";
+    File file = HomeDirectory.Pictures(fileName);
     // impove DPI?
     ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
   }
 
-  private static void process(List<String> listData, Map<LieGroupFilters, TensorUnaryOperator> map, int radius) throws IOException {
+  private static void process(List<String> listData, Map<LieGroupFilters, TensorUnaryOperator> map, int radius, int signal) throws IOException {
     Tensor smoothed = Tensors.empty();
     Iterator<String> iterator = listData.iterator();
     int limit = 2;
@@ -86,13 +90,11 @@ import ch.ethz.idsc.tensor.red.Mean;
         Tensor smoothd = unaryOperator.apply(control);
         Tensor rawVec = Se2Differences.INSTANCE.apply(control);
         Tensor smdVec = Se2Differences.INSTANCE.apply(smoothd);
-        // signal cases: 0:x , 1:y, 2;heading
-        int signal = 2;
         temp.append(FilterResponse.of(smdVec.get(Tensor.ALL, signal), rawVec.get(Tensor.ALL, signal), SPECTROGRAM_ARRAY));
       }
       smoothed.append(temp);
     }
-    plot(Mean.of(smoothed));
+    plot(Mean.of(smoothed), radius, signal);
   }
 
   public static void main(String[] args) throws IOException {
@@ -103,8 +105,11 @@ import ch.ethz.idsc.tensor.red.Mean;
     map.put(LieGroupFilters.GEODESIC_MID, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
     map.put(LieGroupFilters.TANGENT_SPACE, TangentSpaceCenter.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), smoothingKernel));
     map.put(LieGroupFilters.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
+    // signal cases: 0:x , 1:y, 2;heading
     List<String> listData = GokartPoseData.INSTANCE.list();
-    int radius = 5;
-    process(listData, map, radius);
+    int radius = 8;
+    int signal = 1;
+    // TODO OB it would be computationally beneficial to not filter again for each signal
+    process(listData, map, radius, signal);
   }
 }
