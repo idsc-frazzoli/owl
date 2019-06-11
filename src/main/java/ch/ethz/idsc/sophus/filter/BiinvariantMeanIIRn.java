@@ -7,13 +7,13 @@ import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.group.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** BiinvariantMeanCenter projects a uniform sequence of points to their extrapolate
  * with each point weighted as provided by an external function. */
@@ -22,7 +22,7 @@ public class BiinvariantMeanIIRn implements TensorUnaryOperator {
    * @param function non-null
    * @return operator that maps a sequence of odd number of points to their barycenter
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
     return new BiinvariantMeanIIRn(//
         Objects.requireNonNull(biinvariantMean), //
         Objects.requireNonNull(smoothingKernel), radius, //
@@ -31,11 +31,11 @@ public class BiinvariantMeanIIRn implements TensorUnaryOperator {
 
   // ---
   private final BiinvariantMean biinvariantMean;
-  private final SmoothingKernel smoothingKernel;
+  private final ScalarUnaryOperator smoothingKernel;
   private final Scalar alpha;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  /* package */ BiinvariantMeanIIRn(BiinvariantMean biinvariantMean, SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+  /* package */ BiinvariantMeanIIRn(BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
     this.biinvariantMean = biinvariantMean;
     this.smoothingKernel = smoothingKernel;
     this.alpha = alpha;
@@ -61,9 +61,9 @@ public class BiinvariantMeanIIRn implements TensorUnaryOperator {
   public Tensor apply(Tensor x) {
     Tensor value = boundedLinkedList.size() < 2 //
         ? x.copy()
-        : biinvariantMean.mean(Tensor.of(boundedLinkedList.stream()),
-            extrapolatoryWeights(WindowSideSampler.of(smoothingKernel).apply(boundedLinkedList.size() - 1)));
-    boundedLinkedList.add(Se2Geodesic.INSTANCE.split(value, x, alpha));
+        : Se2Geodesic.INSTANCE.split(biinvariantMean.mean(Tensor.of(boundedLinkedList.stream()),
+            extrapolatoryWeights(WindowSideSampler.of(smoothingKernel).apply(boundedLinkedList.size() - 1))), x, alpha);
+    boundedLinkedList.add(value);
     return value;
   }
 }
