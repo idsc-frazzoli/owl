@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.lie.se2c;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Skew;
-import ch.ethz.idsc.sophus.lie.so2.So2CoveringBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.so2c.So2CoveringBiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

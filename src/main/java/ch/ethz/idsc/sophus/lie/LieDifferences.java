@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** LieDifferences is the generalization of {@link Differences}
+ * The input are elements from the Lie group.
+ * The return sequence consists of elements from the Lie algebra.
  * 
  * <pre>
  * LieDifferences[{a, b, c, d, e}] == {log a^-1.b, log b^-1.c, log c^-1.d, log d^-1.e}

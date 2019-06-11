@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie.so2;
+package ch.ethz.idsc.sophus.lie.so2c;
 
 import ch.ethz.idsc.sophus.lie.ScalarBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;

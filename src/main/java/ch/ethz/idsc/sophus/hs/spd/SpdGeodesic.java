@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie;
+package ch.ethz.idsc.sophus.hs.spd;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;

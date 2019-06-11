@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.lie.se2;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.ethz.idsc.sophus.lie.LieGroupElement;
-import ch.ethz.idsc.sophus.lie.so2.So2Skew;
+import ch.ethz.idsc.sophus.lie.so2c.So2CoveringSkew;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,7 +27,7 @@ public class Se2Skew {
    * @return */
   public static Se2Skew of(Tensor xya, Scalar weight) {
     Scalar angle = xya.Get(2).negate();
-    Tensor so2Skew = So2Skew.of(angle, weight);
+    Tensor so2Skew = So2CoveringSkew.of(angle, weight);
     return new Se2Skew(so2Skew, so2Skew.dot(RotationMatrix.of(angle).dot(xya.extract(0, 2))));
   }
 

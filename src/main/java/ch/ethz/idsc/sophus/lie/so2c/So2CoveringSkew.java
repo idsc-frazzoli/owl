@@ -1,5 +1,5 @@
 // code by ob, jph
-package ch.ethz.idsc.sophus.lie.so2;
+package ch.ethz.idsc.sophus.lie.so2c;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Tan;
 
-public enum So2Skew {
+public enum So2CoveringSkew {
   ;
   public static Tensor of(Scalar angle) {
     return of(angle, RealScalar.ONE);

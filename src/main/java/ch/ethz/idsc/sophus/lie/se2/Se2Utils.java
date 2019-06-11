@@ -51,7 +51,7 @@ public enum Se2Utils {
   /** maps a matrix from the group SE2 to a vector in the group SE2
    * 
    * @param matrix
-   * @return */
+   * @return {px, py, angle} */
   public static Tensor fromSE2Matrix(Tensor matrix) { // only used in tests
     SquareMatrixQ.require(matrix);
     return Tensors.of(matrix.Get(0, 2), matrix.Get(1, 2), //

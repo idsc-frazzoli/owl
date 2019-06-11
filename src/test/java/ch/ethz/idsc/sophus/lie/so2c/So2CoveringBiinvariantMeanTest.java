@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie.so2;
+package ch.ethz.idsc.sophus.lie.so2c;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMeanTests;
 import ch.ethz.idsc.tensor.RealScalar;
