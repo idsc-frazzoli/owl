@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 
   @Override
   public BufferedImage bufferedImage() {
-    return GeodesicCenterFilterDemo.symLinkImage(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage();
+    return GeodesicCenterSymLinkImage.of(spinnerKernel.getValue(), spinnerRadius.getValue()).bufferedImage();
   }
 
   public static void main(String[] args) {

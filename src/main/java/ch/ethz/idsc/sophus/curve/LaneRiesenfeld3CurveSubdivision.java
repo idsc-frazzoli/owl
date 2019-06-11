@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.curve;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
@@ -15,9 +16,11 @@ import ch.ethz.idsc.tensor.alg.Last;
  * 
  * LaneRiesenfeldCurveSubdivision with degree 3 produces better curvature for
  * Clothoid geodesics than LaneRiesenfeld3CurveSubdivision. */
-public class LaneRiesenfeld3CurveSubdivision extends Abstract3CurveSubdivision {
+public final class LaneRiesenfeld3CurveSubdivision extends AbstractBSpline3CurveSubdivision {
+  private final GeodesicInterface geodesicInterface;
+
   public LaneRiesenfeld3CurveSubdivision(GeodesicInterface geodesicInterface) {
-    super(geodesicInterface);
+    this.geodesicInterface = geodesicInterface;
   }
 
   @Override // from CurveSubdivision
@@ -38,8 +41,8 @@ public class LaneRiesenfeld3CurveSubdivision extends Abstract3CurveSubdivision {
     return curve;
   }
 
-  @Override
-  Tensor refine(Tensor tensor) {
+  @Override // from AbstractBSpline3CurveSubdivision
+  protected Tensor refine(Tensor tensor) {
     int length = tensor.length();
     Tensor curve = Unprotect.empty(2 * length);
     Tensor pq;
@@ -60,7 +63,13 @@ public class LaneRiesenfeld3CurveSubdivision extends Abstract3CurveSubdivision {
     return curve.append(tensor.get(last));
   }
 
-  private Tensor center(Tensor pq, Tensor q, Tensor qr) {
+  @Override // from AbstractBSpline3CurveSubdivision
+  protected Tensor center(Tensor pq, Tensor q, Tensor qr) {
     return center(center(pq, q), center(q, qr));
+  }
+
+  @Override // from AbstractBSpline1CurveSubdivision
+  protected Tensor center(Tensor p, Tensor q) {
+    return geodesicInterface.split(p, q, RationalScalar.HALF);
   }
 }

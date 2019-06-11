@@ -14,6 +14,7 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.data.GokartPoseData;
 import ch.ethz.idsc.sophus.filter.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
@@ -104,10 +105,11 @@ import ch.ethz.idsc.tensor.red.Mean;
     map.put(LieGroupFilters.GEODESIC_MID, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
     map.put(LieGroupFilters.TANGENT_SPACE, TangentSpaceCenter.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), smoothingKernel));
     map.put(LieGroupFilters.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
-    List<String> listData = ResourceData.lines("/dubilab/app/pose/index.vector");
-    int radius = 8;
     // signal cases: 0:x , 1:y, 2;heading
+    List<String> listData = GokartPoseData.INSTANCE.list();
+    int radius = 8;
     int signal = 1;
+    // TODO OB it would be computationally beneficial to not filter again for each signal
     process(listData, map, radius, signal);
   }
 };

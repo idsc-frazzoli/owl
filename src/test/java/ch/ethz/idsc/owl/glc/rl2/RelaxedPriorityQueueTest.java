@@ -1,18 +1,20 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.io.IOException;
 import java.util.List;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import junit.framework.TestCase;
 
 public class RelaxedPriorityQueueTest extends TestCase {
-  public void testPeekNull() {
-    RelaxedPriorityQueue relaxedPriorityQueue = RelaxedDomainQueue.empty(Tensors.vector(1, 2, 3));
+  public void testPeekNull() throws ClassNotFoundException, IOException {
+    RelaxedPriorityQueue relaxedPriorityQueue = Serialization.copy(RelaxedDomainQueue.empty(Tensors.vector(1, 2, 3)));
     assertNull(relaxedPriorityQueue.peekBest());
   }
 

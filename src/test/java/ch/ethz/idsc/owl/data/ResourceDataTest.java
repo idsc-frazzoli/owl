@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.data;
 import java.util.List;
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.app.data.GokartPoseData;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayQ;
 import ch.ethz.idsc.tensor.io.ResourceData;
@@ -11,7 +12,7 @@ import junit.framework.TestCase;
 
 public class ResourceDataTest extends TestCase {
   public void testSimple() {
-    List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
+    List<String> list = GokartPoseData.INSTANCE.list();
     assertTrue(50 < list.size());
   }
 

@@ -52,8 +52,8 @@ public class TangentSpaceCenter implements TensorUnaryOperator {
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     int radius = (tensor.length() - 1) / 2;
-    LieGroupElement center = lieGroup.element(tensor.get(radius));
-    Tensor tangents = Tensor.of(tensor.stream().map(center.inverse()::combine).map(lieExponential::log));
-    return center.combine(lieExponential.exp(function.apply(radius).dot(tangents)));
+    LieGroupElement lieGroupElement = lieGroup.element(tensor.get(radius));
+    Tensor tangents = Tensor.of(tensor.stream().map(lieGroupElement.inverse()::combine).map(lieExponential::log));
+    return lieGroupElement.combine(lieExponential.exp(function.apply(radius).dot(tangents)));
   }
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.ethz.idsc.sophus.app.data.GokartPoseData;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.group.Se2Differences;
@@ -23,7 +24,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
 
   private static void process() throws IOException {
-    List<String> dataSource = ResourceData.lines("/dubilab/app/pose/index.vector");
+    List<String> dataSource = GokartPoseData.INSTANCE.list();
     List<SmoothingKernel> kernel = Arrays.asList(SmoothingKernel.GAUSSIAN, SmoothingKernel.HAMMING, SmoothingKernel.BLACKMAN);
     // iterate over data
     for (String data : dataSource) {

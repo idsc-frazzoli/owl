@@ -5,9 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -26,29 +23,14 @@ import ch.ethz.idsc.tensor.red.Nest;
 
 /* package */ class MeanFilterDemo extends ControlPointsDemo {
   private final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
-  private final JToggleButton jToggleCtrl = new JToggleButton("ctrl");
-  private final JToggleButton jToggleBndy = new JToggleButton("bndy");
-  private final JToggleButton jToggleLine = new JToggleButton("line");
 
   MeanFilterDemo() {
     super(true, GeodesicDisplays.ALL);
     {
-      Tensor blub = Tensors.fromString("{{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}");
+      Tensor tensor = Tensors.fromString("{{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0}}");
       setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-          Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
+          Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }
-    JTextField jTextField = new JTextField(10);
-    jTextField.setPreferredSize(new Dimension(100, 28));
-    timerFrame.jToolBar.add(jTextField);
-    // ---
-    jToggleCtrl.setSelected(true);
-    timerFrame.jToolBar.add(jToggleCtrl);
-    // ---
-    jToggleBndy.setSelected(true);
-    timerFrame.jToolBar.add(jToggleBndy);
-    // ---
-    jToggleLine.setSelected(false);
-    timerFrame.jToolBar.add(jToggleLine);
     // ---
     spinnerRadius.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
     spinnerRadius.setValue(9);

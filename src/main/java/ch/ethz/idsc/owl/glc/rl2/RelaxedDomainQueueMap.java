@@ -11,7 +11,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ final class RelaxedDomainQueueMap implements Serializable {
+public final class RelaxedDomainQueueMap implements Serializable {
   /** map from domain keys to queues of nodes */
   private final Map<Tensor, RelaxedPriorityQueue> map = new HashMap<>();
   private final Tensor slacks;

@@ -1,17 +1,20 @@
 // code by jph
 package ch.ethz.idsc.owl.math.region;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class SphericalRegionTest extends TestCase {
-  public void testSimple() {
-    Region<Tensor> region = new SphericalRegion(Tensors.vector(1, 1), RealScalar.ONE);
+  public void testSimple() throws ClassNotFoundException, IOException {
+    Region<Tensor> region = Serialization.copy(new SphericalRegion(Tensors.vector(1, 1), RealScalar.ONE));
     assertTrue(region.isMember(Tensors.vector(1, 0)));
     assertTrue(region.isMember(Tensors.vector(0, 1)));
     assertFalse(region.isMember(Tensors.vector(2, 0)));

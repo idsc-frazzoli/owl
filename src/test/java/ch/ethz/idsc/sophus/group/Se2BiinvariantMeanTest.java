@@ -36,8 +36,8 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor sequenceUnordered = Tensors.of(p, r, q);
     Tensor weights = Tensors.vector(1, 1, 1).divide(RealScalar.of(3));
     // ---
-    Double nom = Math.sqrt(2) - Math.PI / 4;
-    Double denom = 1 + Math.PI / 4 * (Math.sqrt(2) / (2 - Math.sqrt(2)));
+    double nom = Math.sqrt(2) - Math.PI / 4;
+    double denom = 1 + Math.PI / 4 * (Math.sqrt(2) / (2 - Math.sqrt(2)));
     Tensor expected = Tensors.vector(nom / denom, 0, 0);
     for (Se2BiinvariantMean se2BiinvariantMean : Se2BiinvariantMean.values()) {
       Tensor actual = se2BiinvariantMean.mean(sequence, weights);
@@ -162,13 +162,26 @@ public class Se2BiinvariantMeanTest extends TestCase {
       // here, we hope that no antipodal points are generated
       Tensor sequence = RandomVariate.of(distribution, length, 3);
       Tensor weights = RandomVariate.of(UniformDistribution.unit(), length);
-      weights = weights.divide(Total.ofVector(weights));
+      // weights = weights.divide(Total.ofVector(weights));
       Tensor solution = Se2BiinvariantMean.GLOBAL.mean(sequence, weights);
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
         Tensor result = Se2BiinvariantMean.GLOBAL.mean(TestHelper.order(sequence, index), TestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
+    }
+  }
+
+  public void testGlobalHomogeneous() {
+    for (int length = 1; length < 6; ++length) {
+      Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.VALUE));
+      // here, we hope that no antipodal points are generated
+      Tensor sequence = RandomVariate.of(distribution, length, 3);
+      Tensor weights = RandomVariate.of(UniformDistribution.unit(), length);
+      Tensor sol1 = Se2BiinvariantMean.GLOBAL.mean(sequence, weights);
+      Scalar scaling = RandomVariate.of(UniformDistribution.of(1, 2));
+      Tensor sol2 = Se2BiinvariantMean.GLOBAL.mean(sequence, weights.multiply(scaling));
+      Chop._12.requireClose(sol1, sol2);
     }
   }
 
@@ -205,13 +218,11 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor p = Tensors.vector(0, 0, 0);
     Tensor sequence = Tensors.of(p, p, p);
     Tensor weights = Tensors.vector(1, 1, 1);
-    for (Se2BiinvariantMean se2BiinvariantMean : Se2BiinvariantMean.values())
-      try {
-        // non-normalized weights fail
-        se2BiinvariantMean.mean(sequence, weights);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+    try {
+      Se2BiinvariantMean.LINEAR.mean(sequence, weights); // non-normalized weights fail
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

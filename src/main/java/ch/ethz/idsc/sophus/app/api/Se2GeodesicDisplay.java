@@ -62,7 +62,7 @@ public enum Se2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public BiinvariantMean biinvariantMean() {
-    return Se2BiinvariantMean.LINEAR;
+    return Se2BiinvariantMean.FILTER;
   }
 
   @Override // from Object
