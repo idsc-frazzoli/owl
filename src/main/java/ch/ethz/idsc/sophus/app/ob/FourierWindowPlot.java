@@ -112,4 +112,4 @@ import ch.ethz.idsc.tensor.red.Mean;
     // TODO OB it would be computationally beneficial to not filter again for each signal
     process(listData, map, radius, signal);
   }
-};
+}
