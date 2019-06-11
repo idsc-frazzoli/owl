@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -9,11 +10,12 @@ import ch.ethz.idsc.sophus.VectorScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class StandardRelaxedLexicographicPlannerTest extends TestCase {
-  public void testSimple() {
-    RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = TestHelper.createPlanner();
+  public void testSimple() throws ClassNotFoundException, IOException {
+    RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = Serialization.copy(TestHelper.createPlanner());
     Objects.requireNonNull(relaxedTrajectoryPlanner.getStateIntegrator());
     assertTrue(relaxedTrajectoryPlanner.getQueue().isEmpty());
     Objects.requireNonNull(relaxedTrajectoryPlanner.getBest());

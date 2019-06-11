@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn;
 
+import java.io.IOException;
 import java.util.Collections;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -11,12 +12,13 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class RnMinDistGoalManagerTest extends TestCase {
-  public void testSimple() {
-    GoalInterface goalInterface = RnMinDistGoalManager.sperical(Tensors.vector(10, 10, 10), RealScalar.of(2));
+  public void testSimple() throws ClassNotFoundException, IOException {
+    GoalInterface goalInterface = Serialization.copy(RnMinDistGoalManager.sperical(Tensors.vector(10, 10, 10), RealScalar.of(2)));
     Scalar scalar = goalInterface.minCostToGoal(Tensors.vector(10, 0, 10));
     assertEquals(scalar, RealScalar.of(8));
   }

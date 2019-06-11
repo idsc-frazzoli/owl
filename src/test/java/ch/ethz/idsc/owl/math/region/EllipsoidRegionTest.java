@@ -10,8 +10,8 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class EllipsoidRegionTest extends TestCase {
-  public void testSimple() {
-    Region<Tensor> region = new EllipsoidRegion(Tensors.vector(10, 5), Tensors.vector(1, 1));
+  public void testSimple() throws ClassNotFoundException, IOException {
+    Region<Tensor> region = Serialization.copy(new EllipsoidRegion(Tensors.vector(10, 5), Tensors.vector(1, 1)));
     assertTrue(region.isMember(Tensors.vector(10, 5)));
     assertTrue(region.isMember(Tensors.vector(10, 5.5)));
     assertTrue(region.isMember(Tensors.vector(10, 6)));
