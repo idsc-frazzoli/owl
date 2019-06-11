@@ -1,7 +1,6 @@
 // code by astoll, ynager
 package ch.ethz.idsc.owl.bot.rn.glc;
 
-import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -30,7 +29,7 @@ import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
 import ch.ethz.idsc.owl.gui.ren.DomainQueueMapRender;
-import ch.ethz.idsc.owl.gui.ren.EdgeRender;
+import ch.ethz.idsc.owl.gui.ren.EdgeRenders;
 import ch.ethz.idsc.owl.gui.ren.EtaRender;
 import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
@@ -105,16 +104,9 @@ public class RelaxedTrajectoryPlanner0Demo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
     owlyAnimationFrame.addBackground(new EtaRender(eta));
-    owlyAnimationFrame.addBackground(new DomainQueueMapRender(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().getMap(), eta));
+    owlyAnimationFrame.addBackground(DomainQueueMapRender.of(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().getMap(), eta));
     owlyAnimationFrame.addBackground(new SphericalRegionRender((SphericalRegion) goalRegion));
-    {
-      EdgeRender treeRender = new EdgeRender(1000, Color.BLUE);
-      Collection<GlcNode> collection;
-      collection = relaxedTrajectoryPlanner.getDomainMap().values();
-      collection = RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner);
-      treeRender.setCollection(collection);
-      owlyAnimationFrame.addBackground(treeRender.getRender());
-    }
+    owlyAnimationFrame.addBackground(EdgeRenders.of(relaxedTrajectoryPlanner));
     Optional<GlcNode> optional = relaxedTrajectoryPlanner.getBest();
     if (optional.isPresent()) {
       System.out.println(optional.get().merit());

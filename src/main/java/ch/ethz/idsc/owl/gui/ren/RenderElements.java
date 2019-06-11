@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.glc.core.CTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -34,7 +35,20 @@ public enum RenderElements {
       }
     }
     list.add(new QueueRender(trajectoryPlanner.getQueue()));
-    list.add(new TreeRender().setCollection(trajectoryPlanner.getDomainMap().values()));
+    if (trajectoryPlanner instanceof CTrajectoryPlanner)
+      list.add(new TreeRender().setCollection(trajectoryPlanner.getDomainMap().values()));
+    if (trajectoryPlanner instanceof RelaxedTrajectoryPlanner) {
+      RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = (RelaxedTrajectoryPlanner) trajectoryPlanner;
+      // EdgeRender edgeRender = new EdgeRender();
+      StateTimeRaster stateTimeRaster = relaxedTrajectoryPlanner.stateTimeRaster();
+      if (stateTimeRaster instanceof EtaRaster) {
+        EtaRaster etaRaster = (EtaRaster) stateTimeRaster;
+        list.add(DomainQueueMapRender.of(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().getMap(), etaRaster.eta()));
+      }
+      list.add(EdgeRenders.of(relaxedTrajectoryPlanner));
+      // edgeRender.setCollection(relaxedTrajectoryPlanner.getBestOrElsePeek());
+      // list.add(new TreeRender().setCollection(trajectoryPlanner.getDomainMap().values()));
+    }
     // {
     // TrajectoryRegionQuery trq = trajectoryPlanner.getHeuristicFunction();
     // if (trq instanceof StateTimeCollector)

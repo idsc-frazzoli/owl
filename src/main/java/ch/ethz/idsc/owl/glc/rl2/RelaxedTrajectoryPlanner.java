@@ -152,4 +152,8 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   public final Collection<GlcNode> getQueue() {
     return Collections.unmodifiableCollection(globalQueue.collection());
   }
+
+  public StateTimeRaster stateTimeRaster() {
+    return stateTimeRaster;
+  }
 }
