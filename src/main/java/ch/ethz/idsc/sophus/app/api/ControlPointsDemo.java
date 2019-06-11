@@ -68,6 +68,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     control = Tensors.empty();
   };
 
+  // TODO JPH use clearButton flag to prevent deletion of points
   public ControlPointsDemo(boolean clearButton, List<GeodesicDisplay> list) {
     super(list);
     if (clearButton) {
