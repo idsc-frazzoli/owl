@@ -6,12 +6,11 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
 import ch.ethz.idsc.sophus.AffineQ;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.group.LieExponential;
 import ch.ethz.idsc.sophus.group.LieGroup;
 import ch.ethz.idsc.sophus.group.LieGroupElement;
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.group.Se2Group;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.WindowSideSampler;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -22,26 +21,32 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** BiinvariantMeanCenter projects a uniform sequence of points to their extrapolate
  * with each point weighted as provided by an external function. */
-public class TangentSpaceIIRn implements TensorUnaryOperator {
+public class TangentSpaceFIRnNEW implements TensorUnaryOperator {
   /** @param biinvariantMean non-null
    * @param function non-null
    * @return operator that maps a sequence of odd number of points to their barycenter
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-    return new TangentSpaceIIRn(//
-        Objects.requireNonNull(smoothingKernel), radius, //
+  public static TensorUnaryOperator of(GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
+    return new TangentSpaceFIRnNEW(//
+        Objects.requireNonNull(geodesicDisplay), Objects.requireNonNull(smoothingKernel), radius, //
         Objects.requireNonNull(alpha));
   }
 
   // ---
   private final ScalarUnaryOperator smoothingKernel;
+  private final LieGroup lieGroup;
+  private final GeodesicInterface geodesicInterface;
+  private final LieExponential lieExponential;
   private final Scalar alpha;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  /* package */ TangentSpaceIIRn(ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
+  /* package */ TangentSpaceFIRnNEW(GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
     this.smoothingKernel = smoothingKernel;
     this.alpha = alpha;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
+    this.lieGroup = geodesicDisplay.lieGroup();
+    this.geodesicInterface = geodesicDisplay.geodesicInterface();
+    this.lieExponential = geodesicDisplay.lieExponential();
   }
 
   // Assumes uniformly sampled signal!
@@ -60,8 +65,6 @@ public class TangentSpaceIIRn implements TensorUnaryOperator {
   }
 
   private Tensor process(Tensor tensor) {
-    LieGroup lieGroup = Se2Group.INSTANCE;
-    LieExponential lieExponential = Se2CoveringExponential.INSTANCE;
     Function<Integer, Tensor> function = WindowSideSampler.of(smoothingKernel);
     int length = tensor.length();
     Tensor extrapolatoryWeights = extrapolatoryWeights(function.apply(length - 1));
@@ -74,8 +77,8 @@ public class TangentSpaceIIRn implements TensorUnaryOperator {
   public Tensor apply(Tensor x) {
     Tensor value = boundedLinkedList.size() < 2 //
         ? x.copy()
-        : Se2Geodesic.INSTANCE.split(process(Tensor.of(boundedLinkedList.stream())), x, alpha);
-    boundedLinkedList.add(value);
+        : geodesicInterface.split(process(Tensor.of(boundedLinkedList.stream())), x, alpha);
+    boundedLinkedList.add(x);
     return value;
   }
 }

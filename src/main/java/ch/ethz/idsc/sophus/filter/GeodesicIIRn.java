@@ -29,8 +29,8 @@ public class GeodesicIIRn implements TensorUnaryOperator {
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
-  private final GeodesicInterface geodesicInterface;
   private final Scalar alpha;
+  private final GeodesicInterface geodesicInterface;
 
   /* package */ GeodesicIIRn( //
       TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
