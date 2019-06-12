@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
-import ch.ethz.idsc.sophus.TensorMetric;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 

@@ -22,7 +22,7 @@ import javax.swing.event.MouseInputListener;
 
 import ch.ethz.idsc.owl.data.IntervalClock;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.sophus.group.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

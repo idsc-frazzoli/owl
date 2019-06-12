@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.psu;
 
 import ch.ethz.idsc.owl.math.CoordinateWrap;
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Pi;
@@ -12,7 +13,6 @@ import ch.ethz.idsc.tensor.sca.Mod;
   INSTANCE;
   // ---
   private static final Mod MOD = Mod.function(Pi.TWO);
-  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   @Override // from CoordinateWrap
   public Tensor represent(Tensor x) {
@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
   @Override // from TensorDifference
   public Tensor difference(Tensor p, Tensor q) {
     Tensor d = p.subtract(q);
-    d.set(MOD_DISTANCE, 0);
+    d.set(So2.MOD, 0);
     return d;
   }
 }

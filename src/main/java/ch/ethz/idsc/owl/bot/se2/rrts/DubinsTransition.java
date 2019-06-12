@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import ch.ethz.idsc.sophus.dubins.DubinsPath;
-import ch.ethz.idsc.sophus.dubins.DubinsPathComparator;
-import ch.ethz.idsc.sophus.dubins.FixedRadiusDubins;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
+import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;

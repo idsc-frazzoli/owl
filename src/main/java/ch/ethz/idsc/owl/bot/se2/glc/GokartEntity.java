@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.sophus.TensorsExt;
+import ch.ethz.idsc.sophus.math.TensorsExt;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

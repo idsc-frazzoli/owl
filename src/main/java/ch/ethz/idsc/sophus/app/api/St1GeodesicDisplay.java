@@ -1,14 +1,14 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.group.LieExponential;
-import ch.ethz.idsc.sophus.group.LieGroup;
-import ch.ethz.idsc.sophus.group.Se2Utils;
-import ch.ethz.idsc.sophus.group.StBiinvariantMean;
-import ch.ethz.idsc.sophus.group.StExponential;
-import ch.ethz.idsc.sophus.group.StGeodesic;
-import ch.ethz.idsc.sophus.group.StGroup;
-import ch.ethz.idsc.sophus.math.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.st.StBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.st.StExponential;
+import ch.ethz.idsc.sophus.lie.st.StGeodesic;
+import ch.ethz.idsc.sophus.lie.st.StGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

@@ -3,9 +3,9 @@ package ch.ethz.idsc.sophus.app.ob;
 
 import java.io.File;
 
-import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.group.LieExponential;
-import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieDifferences;
+import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

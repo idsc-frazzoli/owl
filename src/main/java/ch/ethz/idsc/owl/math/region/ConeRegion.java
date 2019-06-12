@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.region;
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
-import ch.ethz.idsc.sophus.planar.ArcTan2D;
+import ch.ethz.idsc.sophus.math.ArcTan2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

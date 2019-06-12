@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.sym;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   @Override // from SymLink
-  public Tensor getPosition(GeodesicInterface geodesicInterface) {
+  public Tensor getPosition(SplitInterface splitInterface) {
     return position;
   }
 }

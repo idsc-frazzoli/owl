@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.app.data.GokartPoseData;
-import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
-import ch.ethz.idsc.sophus.group.Se2Geodesic;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.filter.CenterFilter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicCenterMidSeeded;
+import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -36,10 +36,10 @@ public class FrequencyEffectDataExport {
   public static void processFilterComparison(Tensor control, int index, int radius, SmoothingKernel smoothingKernel) {
     // ==================== GeodesicCenter(Lefteeded) (Normal) ===========
     TensorUnaryOperator geodesicLeftSeeded = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
-    Tensor groupSmoothedGCL = GeodesicCenterFilter.of(geodesicLeftSeeded, radius).apply(control);
+    Tensor groupSmoothedGCL = CenterFilter.of(geodesicLeftSeeded, radius).apply(control);
     // ==================== GeodesicCenter(MidSeeded) ====================
     TensorUnaryOperator geodesicMidSeeded = GeodesicCenterMidSeeded.of(Se2Geodesic.INSTANCE, smoothingKernel);
-    Tensor groupSmoothedGCM = GeodesicCenterFilter.of(geodesicMidSeeded, radius).apply(control);
+    Tensor groupSmoothedGCM = CenterFilter.of(geodesicMidSeeded, radius).apply(control);
     // ==================== TangentSpaceFiltering ====================
     // TensorUnaryOperator geodesicCenterTangentSpace = GeodesicCenterTangentSpace.of( //
     // Se2CoveringGroup.INSTANCE, Se2CoveringExponential.INSTANCE, smoothingKernel);

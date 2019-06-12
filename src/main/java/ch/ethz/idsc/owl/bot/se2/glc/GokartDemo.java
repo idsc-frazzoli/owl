@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Color;
 
-import ch.ethz.idsc.sophus.planar.Arrowhead;
+import ch.ethz.idsc.sophus.math.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 
 abstract class GokartDemo extends Se2Demo {

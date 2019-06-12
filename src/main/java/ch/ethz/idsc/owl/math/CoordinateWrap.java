@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math;
 
-import ch.ethz.idsc.sophus.TensorDifference;
+import ch.ethz.idsc.sophus.math.TensorDifference;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** functionality used in {@code TrajectoryPlanner} to map state coordinates to

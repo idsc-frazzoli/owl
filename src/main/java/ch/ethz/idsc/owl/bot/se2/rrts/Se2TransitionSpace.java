@@ -22,16 +22,16 @@ public class Se2TransitionSpace<T extends Se2Transition> implements TransitionSp
     try {
       Constructor<T> constructor;
       switch (vars.length) {
-        case 0:
-          constructor = transition.getConstructor(Tensor.class, Tensor.class);
-          return constructor.newInstance(start, end);
-        case 1:
-          constructor = transition.getConstructor(Tensor.class, Tensor.class, Scalar.class);
-          return constructor.newInstance(start, end, vars[0]);
-        default:
-          constructor = transition.getConstructor(Tensor.class, Tensor.class, Scalar[].class);
-          return constructor.newInstance(start, end, vars);
-        }
+      case 0:
+        constructor = transition.getConstructor(Tensor.class, Tensor.class);
+        return constructor.newInstance(start, end);
+      case 1:
+        constructor = transition.getConstructor(Tensor.class, Tensor.class, Scalar.class);
+        return constructor.newInstance(start, end, vars[0]);
+      default:
+        constructor = transition.getConstructor(Tensor.class, Tensor.class, Scalar[].class);
+        return constructor.newInstance(start, end, vars);
+      }
     } catch (Exception e) {
       e.printStackTrace();
       return null;

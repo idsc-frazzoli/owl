@@ -1,8 +1,8 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import ch.ethz.idsc.sophus.curve.ClothoidCurve;
-import ch.ethz.idsc.sophus.planar.ClothoidDistance;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurve;
+import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
   @Override // from Transition
   public Scalar length() {
-    return ClothoidDistance.INSTANCE.distance(start(), end());
+    return PseudoClothoidDistance.INSTANCE.distance(start(), end());
   }
 
   @Override // from Transition

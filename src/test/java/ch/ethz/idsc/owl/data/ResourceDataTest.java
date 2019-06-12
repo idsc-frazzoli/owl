@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.data;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.app.data.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ArrayQ;
 import ch.ethz.idsc.tensor.io.ResourceData;

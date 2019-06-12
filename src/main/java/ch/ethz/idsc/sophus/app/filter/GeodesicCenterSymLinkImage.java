@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.filter;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymLinkImages;

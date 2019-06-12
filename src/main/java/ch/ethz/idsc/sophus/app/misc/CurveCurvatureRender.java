@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.planar.CurvatureComb;
+import ch.ethz.idsc.sophus.math.CurvatureComb;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

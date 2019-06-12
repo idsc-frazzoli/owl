@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.tse2;
 
 import ch.ethz.idsc.owl.math.CoordinateWrap;
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
@@ -12,7 +13,6 @@ public enum Tse2Wrap implements CoordinateWrap {
   // ---
   private static final int INDEX_ANGLE = 2;
   private static final Mod MOD = Mod.function(Pi.TWO);
-  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
 
   @Override // from CoordinateWrap
   public final Tensor represent(Tensor x) {
@@ -24,7 +24,7 @@ public enum Tse2Wrap implements CoordinateWrap {
   @Override // from TensorDifference
   public Tensor difference(Tensor p, Tensor q) {
     Tensor tensor = q.subtract(p);
-    tensor.set(MOD_DISTANCE, INDEX_ANGLE);
+    tensor.set(So2.MOD, INDEX_ANGLE);
     return tensor;
   }
 }
