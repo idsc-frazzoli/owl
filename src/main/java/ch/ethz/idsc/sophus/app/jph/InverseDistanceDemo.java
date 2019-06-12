@@ -17,8 +17,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-public class ShepardInterpolationDemo extends ControlPointsDemo {
-  public ShepardInterpolationDemo() {
+public class InverseDistanceDemo extends ControlPointsDemo {
+  public InverseDistanceDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_R2);
   }
 
@@ -28,11 +28,11 @@ public class ShepardInterpolationDemo extends ControlPointsDemo {
     Tensor controlPointsSe2 = getControlPointsSe2();
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    InverseDistance shepardInterpolation = new InverseDistance(Norm2Squared::between);
+    InverseDistance inverseDistance = new InverseDistance(Norm2Squared::between);
     Tensor domain = Tensor.of(controlPointsSe2.stream().map(Extract2D.FUNCTION));
     Tensor point = geometricLayer.getMouseSe2State().extract(0, 2);
     if (0 < controlPointsSe2.length()) {
-      Tensor weights = shepardInterpolation.weights(domain, point);
+      Tensor weights = inverseDistance.weights(domain, point);
       // geodesicDisplay.project(xya);
       Tensor mean = biinvariantMean.mean(getGeodesicControlPoints(), weights);
       // System.out.println(mean);
@@ -46,7 +46,7 @@ public class ShepardInterpolationDemo extends ControlPointsDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new ShepardInterpolationDemo();
+    AbstractDemo abstractDemo = new InverseDistanceDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 600);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

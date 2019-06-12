@@ -9,12 +9,6 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 public enum Barycentric implements TensorMetric {
-  DISCRETE_HARMONIC() {
-    @Override
-    public Scalar distance(Tensor p, Tensor q) {
-      return RealScalar.ZERO;
-    }
-  }, //
   WACHSPRESS() {
     private final Scalar TWO = RealScalar.of(2);
 
@@ -30,5 +24,12 @@ public enum Barycentric implements TensorMetric {
       Scalar norm = Sqrt.FUNCTION.apply(norm2);
       return norm2.subtract(norm.add(norm));
     }
-  };
+  }, //
+  DISCRETE_HARMONIC() {
+    @Override
+    public Scalar distance(Tensor p, Tensor q) {
+      return RealScalar.ZERO;
+    }
+  }, //
+  ;
 }

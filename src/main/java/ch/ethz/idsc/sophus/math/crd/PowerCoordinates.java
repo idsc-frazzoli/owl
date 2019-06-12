@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.math.crd;
 
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -19,6 +20,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * Barycentric Coordinates on Convex Polytopes
  * Reference:
  * Max Budninskiy, Beibei Liu, Yiying Tong, Mathieu Desbrun, 2016 */
+// FIXME JPH investigate numerical instabilities
+// TODO JPH optimize implementation
 public class PowerCoordinates {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
   private static final TensorUnaryOperator NORMALIZE2 = Normalize.with(Norm._2);
