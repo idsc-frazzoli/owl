@@ -18,7 +18,7 @@ public enum HeBiinvariantMean implements BiinvariantMean {
   // ---
   private final static Scalar TWO = RealScalar.of(2);
 
-  @Override // from BiinvariantMeanInterface
+  @Override // from BiinvariantMean
   public Tensor mean(Tensor sequence, Tensor weights) {
     AffineQ.require(weights);
     // ---

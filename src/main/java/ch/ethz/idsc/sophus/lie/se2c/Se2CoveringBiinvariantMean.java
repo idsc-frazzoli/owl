@@ -18,7 +18,7 @@ public enum Se2CoveringBiinvariantMean implements BiinvariantMean {
   private static final Scalar ZERO = RealScalar.ZERO;
   // ---
 
-  @Override // from BiinvariantMeanInterface
+  @Override // from BiinvariantMean
   public Tensor mean(Tensor sequence, Tensor weights) {
     Scalar amean = So2CoveringBiinvariantMean.INSTANCE.mean(sequence.get(Tensor.ALL, 2), weights);
     // make transformation s.t. mean rotation is zero and retransformation after taking mean

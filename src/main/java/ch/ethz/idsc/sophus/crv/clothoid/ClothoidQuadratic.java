@@ -10,8 +10,8 @@ public class ClothoidQuadratic implements ScalarUnaryOperator {
   private static final Scalar N4 = RealScalar.of(-4);
   // ---
   private final Scalar b0;
-  private final Scalar b1;
   private final Scalar bm;
+  private final Scalar b1;
 
   public ClothoidQuadratic(Scalar b0, Scalar bm, Scalar b1) {
     this.b0 = b0;

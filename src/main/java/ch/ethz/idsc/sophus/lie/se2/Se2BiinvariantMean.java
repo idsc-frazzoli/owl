@@ -44,7 +44,7 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
     this.scalarBiinvariantMean = scalarBiinvariantMean;
   }
 
-  @Override // from BiinvariantMeanInterface
+  @Override // from BiinvariantMean
   public Tensor mean(Tensor sequence, Tensor weights) {
     Scalar amean = scalarBiinvariantMean.mean(sequence.get(Tensor.ALL, 2), weights);
     return Se2Skew.mean(new Se2GroupElement(Tensors.of(ZERO, ZERO, amean)), sequence, weights);

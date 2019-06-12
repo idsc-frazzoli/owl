@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -71,5 +72,16 @@ public class StGeodesicTest extends TestCase {
       clip_t1.requireInside((split.get(1)).Get(0));
       clip_t2.requireInside(split.get(1).Get(1));
     }
+  }
+
+  public void testBiinvariantMean() {
+    Tensor p = Tensors.fromString("{1, {2, 3}}");
+    Tensor q = Tensors.fromString("{2, {3, 1}}");
+    Tensor domain = Subdivide.of(0, 1, 10);
+    Tensor st1 = domain.map(StGeodesic.INSTANCE.curve(p, q));
+    ScalarTensorFunction mean = //
+        w -> StBiinvariantMean.INSTANCE.mean(Tensors.of(p, q), Tensors.of(RealScalar.ONE.subtract(w), w));
+    Tensor st2 = domain.map(mean);
+    Chop._10.requireClose(st1, st2);
   }
 }
