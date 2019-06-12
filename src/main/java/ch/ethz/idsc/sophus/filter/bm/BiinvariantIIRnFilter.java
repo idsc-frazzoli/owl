@@ -4,10 +4,10 @@ package ch.ethz.idsc.sophus.filter.bm;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public class BiinvariantIIRnFilter implements TensorUnaryOperator {
   /** @param geodesicDisply non-null
@@ -16,7 +16,7 @@ public class BiinvariantIIRnFilter implements TensorUnaryOperator {
    * @param alpha
    * @return
    * @throws Exception if either parameter is null */
-  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
     return new BiinvariantIIRnFilter( //
         Objects.requireNonNull(biinvariantMean), //
         Objects.requireNonNull(smoothingKernel), //
@@ -26,11 +26,11 @@ public class BiinvariantIIRnFilter implements TensorUnaryOperator {
 
   // ---
   private final BiinvariantMean biinvariantMean;
-  private final SmoothingKernel smoothingKernel;
+  private final ScalarUnaryOperator smoothingKernel;
   private final int radius;
   private final Scalar alpha;
 
-  private BiinvariantIIRnFilter(BiinvariantMean biinvariantMean, SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+  private BiinvariantIIRnFilter(BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
     this.biinvariantMean = biinvariantMean;
     this.smoothingKernel = smoothingKernel;
     this.radius = radius;

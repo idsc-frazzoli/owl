@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final JSlider jSlider = new JSlider(1, 999, 500);
 
   public TangentSpaceCausalFilterDemo() {
-    super(GeodesicDisplays.SE2_R2);
+    super(GeodesicDisplays.SE2_ONLY);
     {
       spinnerConvolution.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
       spinnerConvolution.setIndex(0);
@@ -57,9 +57,9 @@ import ch.ethz.idsc.tensor.Tensors;
     final int radius = spinnerRadius.getValue();
     if (0 < radius) {
       if (jToggleIIR.isSelected()) {
-        refined = TangentSpaceIIRnFilter.of(geodesicDisplay(), spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).apply(control());
+        refined = TangentSpaceIIRnFilter.of(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).apply(control());
       } else {
-        refined = TangentSpaceFIRnFilter.of(geodesicDisplay(), spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).apply(control());
+        refined = TangentSpaceFIRnFilter.of(spinnerKernel.getValue(), spinnerRadius.getValue(), alpha()).apply(control());
       }
       return refined;
     }

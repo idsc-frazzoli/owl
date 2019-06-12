@@ -6,7 +6,6 @@ import java.util.Objects;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.win.AffineQ;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
 import ch.ethz.idsc.sophus.util.BoundedLinkedList;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,6 +13,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** BiinvariantMeanCenter projects a uniform sequence of points to their extrapolate
  * with each point weighted as provided by an external function. */
@@ -22,7 +22,7 @@ public class BiinvariantMeanFIRn implements TensorUnaryOperator {
    * @param function non-null
    * @return operator that maps a sequence of odd number of points to their barycenter
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
     return new BiinvariantMeanFIRn(//
         Objects.requireNonNull(biinvariantMean), //
         Objects.requireNonNull(smoothingKernel), radius, //
@@ -31,11 +31,11 @@ public class BiinvariantMeanFIRn implements TensorUnaryOperator {
 
   // ---
   private final BiinvariantMean biinvariantMean;
-  private final SmoothingKernel smoothingKernel;
+  private final ScalarUnaryOperator smoothingKernel;
   private final Scalar alpha;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  /* package */ BiinvariantMeanFIRn(BiinvariantMean biinvariantMean, SmoothingKernel smoothingKernel, int radius, Scalar alpha) {
+  /* package */ BiinvariantMeanFIRn(BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
     this.biinvariantMean = biinvariantMean;
     this.smoothingKernel = smoothingKernel;
     this.alpha = alpha;
