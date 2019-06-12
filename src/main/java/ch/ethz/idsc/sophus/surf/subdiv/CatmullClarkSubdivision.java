@@ -3,25 +3,25 @@ package ch.ethz.idsc.sophus.surf.subdiv;
 
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 
 public class CatmullClarkSubdivision {
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final CurveSubdivision curveSubdivision;
 
-  public CatmullClarkSubdivision(GeodesicInterface geodesicInterface) {
-    this.geodesicInterface = geodesicInterface;
-    curveSubdivision = new BSpline3CurveSubdivision(geodesicInterface);
+  public CatmullClarkSubdivision(SplitInterface splitInterface) {
+    this.splitInterface = splitInterface;
+    curveSubdivision = new BSpline3CurveSubdivision(splitInterface);
   }
 
   public Tensor quad(Tensor a1, Tensor a2, Tensor b1, Tensor b2) {
-    Tensor c1 = geodesicInterface.split(a1, a2, RationalScalar.HALF);
-    Tensor c2 = geodesicInterface.split(b1, b2, RationalScalar.HALF);
-    return geodesicInterface.split(c1, c2, RationalScalar.HALF);
+    Tensor c1 = splitInterface.split(a1, a2, RationalScalar.HALF);
+    Tensor c2 = splitInterface.split(b1, b2, RationalScalar.HALF);
+    return splitInterface.split(c1, c2, RationalScalar.HALF);
   }
 
   public Tensor refine(Tensor grid) {
@@ -78,8 +78,8 @@ public class CatmullClarkSubdivision {
             array.get(pix + 0, piy - 1), //
             array.get(pix + 0, piy + 1));
         Tensor cen = array.get(pix, piy);
-        Tensor mid = geodesicInterface.split(mds, //
-            geodesicInterface.split(eds, cen, RationalScalar.of(1, 5)), //
+        Tensor mid = splitInterface.split(mds, //
+            splitInterface.split(eds, cen, RationalScalar.of(1, 5)), //
             RationalScalar.of(5, 4));
         array.set(mid, pix, piy);
       }

@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.filter.ga;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.util.BoundedLinkedList;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -12,16 +12,16 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 /** input to the operator are the individual elements of the sequence */
 public class GeodesicFIRn implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
-   * @param geodesicInterface
+   * @param splitInterface
    * @param radius
    * @param alpha
    * @return
    * @throws Exception if either parameter is null */
   public static TensorUnaryOperator of( //
-      TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
+      TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
     return new GeodesicFIRn( //
         Objects.requireNonNull(geodesicExtrapolation), //
-        Objects.requireNonNull(geodesicInterface), //
+        Objects.requireNonNull(splitInterface), //
         radius, //
         Objects.requireNonNull(alpha));
   }
@@ -29,13 +29,13 @@ public class GeodesicFIRn implements TensorUnaryOperator {
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final Scalar alpha;
 
   /* package */ GeodesicFIRn( //
-      TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
+      TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
     this.geodesicExtrapolation = geodesicExtrapolation;
-    this.geodesicInterface = geodesicInterface;
+    this.splitInterface = splitInterface;
     this.alpha = alpha;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
@@ -44,7 +44,7 @@ public class GeodesicFIRn implements TensorUnaryOperator {
   public Tensor apply(Tensor x) {
     Tensor value = boundedLinkedList.size() < 2 //
         ? x.copy()
-        : geodesicInterface.split(geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream())), x, alpha);
+        : splitInterface.split(geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream())), x, alpha);
     boundedLinkedList.add(x);
     return value;
   }

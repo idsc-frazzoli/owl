@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.spline;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -20,22 +20,22 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BezierFunction.html">BezierFunction</a> */
 public class BezierFunction implements ScalarTensorFunction {
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @param control non-empty tensor
    * @return function parameterized by the interval [0, 1]
    * @throws Exception if given control tensor is empty or a scalar */
-  public static ScalarTensorFunction of(GeodesicInterface geodesicInterface, Tensor control) {
+  public static ScalarTensorFunction of(SplitInterface splitInterface, Tensor control) {
     if (control.length() < 1)
       throw TensorRuntimeException.of(control);
-    return new BezierFunction(geodesicInterface, control);
+    return new BezierFunction(splitInterface, control);
   }
 
   // ---
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final Tensor control;
 
-  private BezierFunction(GeodesicInterface geodesicInterface, Tensor control) {
-    this.geodesicInterface = geodesicInterface;
+  private BezierFunction(SplitInterface splitInterface, Tensor control) {
+    this.splitInterface = splitInterface;
     this.control = control;
   }
 
@@ -47,7 +47,7 @@ public class BezierFunction implements ScalarTensorFunction {
       Tensor p = points.get(0);
       for (int index = 1; index < points.length(); ++index) {
         Tensor q = points.get(index);
-        tensor.append(geodesicInterface.split(p, q, scalar));
+        tensor.append(splitInterface.split(p, q, scalar));
         p = q;
       }
       points = tensor;

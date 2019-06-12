@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.crv.spline;
 
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
 
@@ -19,10 +19,10 @@ public final class LieGroupBSplineInterpolation extends AbstractBSplineInterpola
   private final LieGroup lieGroup;
 
   /** @param lieGroup
-   * @param geodesicInterface corresponding to lie group
+   * @param splitInterface corresponding to lie group
    * @param degree of underlying b-spline */
-  public LieGroupBSplineInterpolation(LieGroup lieGroup, GeodesicInterface geodesicInterface, int degree, Tensor target) {
-    super(geodesicInterface, degree, target);
+  public LieGroupBSplineInterpolation(LieGroup lieGroup, SplitInterface splitInterface, int degree, Tensor target) {
+    super(splitInterface, degree, target);
     this.lieGroup = lieGroup;
   }
 

@@ -35,6 +35,6 @@ public class LaneRiesenfeld2CurveSubdivision extends AbstractBSpline2CurveSubdiv
   }
 
   private final Tensor center(Tensor p, Tensor q) {
-    return geodesicInterface.split(p, q, half);
+    return parametricCurve.curve(p, q).apply(half);
   }
 }

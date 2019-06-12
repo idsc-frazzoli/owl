@@ -1,14 +1,14 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 public abstract class AbstractSixPointCurveSubdivision extends FourPointCurveSubdivision {
-  public AbstractSixPointCurveSubdivision(GeodesicInterface geodesicInterface) {
-    super(geodesicInterface);
+  public AbstractSixPointCurveSubdivision(SplitInterface splitInterface) {
+    super(splitInterface);
   }
 
   @Override // from FourPointCurveSubdivision

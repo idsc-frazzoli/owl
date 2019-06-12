@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitParametricCurve;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,7 +25,7 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
-    return H2Geodesic.INSTANCE;
+    return new SplitParametricCurve(H2Geodesic.INSTANCE);
   }
 
   @Override // from GeodesicDisplay

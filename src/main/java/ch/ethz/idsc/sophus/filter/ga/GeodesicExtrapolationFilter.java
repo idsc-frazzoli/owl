@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.filter.ga;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.util.BoundedLinkedList;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -15,19 +15,19 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
    * @param radius
    * @return */
-  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius) {
-    return new GeodesicExtrapolationFilter(geodesicExtrapolation, geodesicInterface, radius);
+  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius) {
+    return new GeodesicExtrapolationFilter(geodesicExtrapolation, splitInterface, radius);
   }
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   // private final int radius;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius) {
+  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius) {
     this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
-    this.geodesicInterface = geodesicInterface;
+    this.splitInterface = splitInterface;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 
@@ -44,7 +44,7 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
       Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
       // Measurement update step
       Scalar alpha = RealScalar.of(0.2);
-      temp = geodesicInterface.split(temp, tensor.get(index + 1), alpha);
+      temp = splitInterface.split(temp, tensor.get(index + 1), alpha);
       boundedLinkedList.add(temp);
       result.append(temp);
     }

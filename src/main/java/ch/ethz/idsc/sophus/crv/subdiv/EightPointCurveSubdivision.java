@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
@@ -14,8 +14,8 @@ public class EightPointCurveSubdivision extends BSpline1CurveSubdivision {
   private static final Scalar _S = RationalScalar.of(1225, 1024);
   // ---
 
-  public EightPointCurveSubdivision(GeodesicInterface geodesicInterface) {
-    super(geodesicInterface);
+  public EightPointCurveSubdivision(SplitInterface splitInterface) {
+    super(splitInterface);
   }
 
   @Override // from CurveSubdivision
@@ -39,13 +39,13 @@ public class EightPointCurveSubdivision extends BSpline1CurveSubdivision {
   }
 
   private Tensor center(Tensor p, Tensor q, Tensor r, Tensor s, Tensor t, Tensor u, Tensor v, Tensor w) {
-    Tensor pq = geodesicInterface.split(p, q, PQ);
-    Tensor _r = geodesicInterface.split(pq, r, _R);
-    Tensor _s = geodesicInterface.split(_r, s, _S);
+    Tensor pq = splitInterface.split(p, q, PQ);
+    Tensor _r = splitInterface.split(pq, r, _R);
+    Tensor _s = splitInterface.split(_r, s, _S);
     // ---
-    Tensor wv = geodesicInterface.split(w, v, PQ);
-    Tensor _u = geodesicInterface.split(wv, u, _R);
-    Tensor _t = geodesicInterface.split(_u, t, _S);
+    Tensor wv = splitInterface.split(w, v, PQ);
+    Tensor _u = splitInterface.split(wv, u, _R);
+    Tensor _t = splitInterface.split(_u, t, _S);
     return midpoint(_s, _t);
   }
 

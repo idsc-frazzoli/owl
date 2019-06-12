@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.crv.spline;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -16,29 +16,30 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 /** DeBoor denotes the function that is defined
  * by control points over a sequence of knots. */
 public class GeodesicDeBoor implements ScalarTensorFunction {
-  /** @param geodesicInterface non null
+  /** @param splitInterface non null
    * @param knots vector of length degree * 2
    * @param control points of length degree + 1
    * @return
    * @throws Exception if given knots is not a vector */
-  public static GeodesicDeBoor of(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
+  public static GeodesicDeBoor of(SplitInterface splitInterface, Tensor knots, Tensor control) {
     int degree = knots.length() / 2;
     if (control.length() != degree + 1)
       throw TensorRuntimeException.of(knots, control);
-    return new GeodesicDeBoor(Objects.requireNonNull(geodesicInterface), degree, VectorQ.require(knots), control);
+    return new GeodesicDeBoor(Objects.requireNonNull(splitInterface), degree, VectorQ.require(knots), control);
   }
 
   // ---
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final int degree;
   private final Tensor knots;
   private final Tensor control;
 
-  /** @param degree
+  /** @param splitInterface
+   * @param degree
    * @param knots vector of length degree * 2
    * @param control points of length degree + 1 */
-  /* package */ GeodesicDeBoor(GeodesicInterface geodesicInterface, int degree, Tensor knots, Tensor control) {
-    this.geodesicInterface = geodesicInterface;
+  /* package */ GeodesicDeBoor(SplitInterface splitInterface, int degree, Tensor knots, Tensor control) {
+    this.splitInterface = splitInterface;
     this.degree = degree;
     this.knots = knots;
     this.control = control;
@@ -56,7 +57,7 @@ public class GeodesicDeBoor implements ScalarTensorFunction {
             ? RealScalar.ZERO
             : num.divide(den);
         Tensor a0 = d.get(j - 1);
-        d.set(dj -> geodesicInterface.split(a0, dj, alpha), j);
+        d.set(dj -> splitInterface.split(a0, dj, alpha), j);
       }
     return d.get(degree);
   }

@@ -2,10 +2,10 @@
 package ch.ethz.idsc.sophus.math.crd;
 
 import ch.ethz.idsc.sophus.math.TensorMetric;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.Cross;
@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * Barycentric Coordinates on Convex Polytopes
  * Reference:
  * Max Budninskiy, Beibei Liu, Yiying Tong, Mathieu Desbrun, 2016 */
-// FIXME JPH investigate numerical instabilities
+// FIXME JPH guard from singularities: x in P
 // TODO JPH optimize implementation
 public class PowerCoordinates {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
@@ -32,6 +32,7 @@ public class PowerCoordinates {
     this.tensorMetric = tensorMetric;
   }
 
+  // usually wi == 0
   static Scalar dij(Tensor xi, Tensor xj, Scalar wi, Scalar wj) {
     Scalar norm2 = Norm2Squared.between(xi, xj);
     Scalar norm = Sqrt.FUNCTION.apply(norm2);
@@ -51,30 +52,32 @@ public class PowerCoordinates {
     return p1.add(n1.multiply(sol.Get(0)));
   }
 
+  Tensor aux(Tensor xi, Tensor xj) {
+    Scalar wj = tensorMetric.distance(xi, xj);
+    return aux(xi, xj, wj.zero(), wj);
+  }
+
   Tensor getDual(Tensor P, Tensor x) {
-    Tensor tensor = Tensor.of(P.stream().map(p -> aux(x, p, RealScalar.ZERO, tensorMetric.distance(x, p))));
-    Tensor result = Tensors.empty();
+    Tensor tensor = Tensor.of(P.stream().map(p -> aux(x, p)));
+    Tensor result = Unprotect.empty(P.length());
     for (int index = 0; index < tensor.length(); ++index) {
       int _prev = Math.floorMod(index - 1, P.length());
       Tensor p1 = tensor.get(_prev, 0);
       Tensor n1 = tensor.get(_prev, 1);
       Tensor p2 = tensor.get(index, 0);
       Tensor n2 = tensor.get(index, 1);
-      Tensor point = intersect(p1, n1, p2, n2);
-      result.append(point);
+      result.append(intersect(p1, n1, p2, n2));
     }
     return result;
   }
 
   Tensor hDual(Tensor P, Tensor x) {
     Tensor tensor = getDual(P, x);
-    Tensor result = Tensors.empty();
+    Tensor result = Unprotect.empty(P.length());
     for (int index = 0; index < tensor.length(); ++index) {
-      int next = Math.floorMod(index + 1, P.length());
-      Tensor p = tensor.get(index);
-      Tensor xj = tensor.get(next);
-      Scalar scalar = Norm._2.between(p, xj).divide(Norm._2.between(P.get(index), x));
-      result.append(scalar);
+      Scalar num = Norm._2.between(tensor.get(index), tensor.get(Math.floorMod(index + 1, P.length())));
+      Scalar den = Norm._2.between(P.get(index), x);
+      result.append(num.divide(den));
     }
     return result;
   }

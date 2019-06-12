@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -21,22 +21,22 @@ public enum BSpline4CurveSubdivision {
    * 
    * @param geodesicInterface
    * @return */
-  public static CurveSubdivision of(GeodesicInterface geodesicInterface) {
-    return Split2LoDual3PointCurveSubdivision.of(geodesicInterface, P2_3, P1_16);
+  public static CurveSubdivision of(SplitInterface splitInterface) {
+    return Split2LoDual3PointCurveSubdivision.of(splitInterface, P2_3, P1_16);
   }
 
   /** @param geodesicInterface
    * @return */
-  public static CurveSubdivision split2(GeodesicInterface geodesicInterface) {
-    return Split2HiDual3PointCurveSubdivision.of(geodesicInterface, P11_16, P1_11);
+  public static CurveSubdivision split2(SplitInterface splitInterface) {
+    return Split2HiDual3PointCurveSubdivision.of(splitInterface, P11_16, P1_11);
   }
 
   /** geodesic split suggested by Hakenberg 2018
    * 
    * @param geodesicInterface
    * @return */
-  public static CurveSubdivision split3(GeodesicInterface geodesicInterface) {
-    return split3(geodesicInterface, RationalScalar.HALF);
+  public static CurveSubdivision split3(SplitInterface splitInterface) {
+    return split3(splitInterface, RationalScalar.HALF);
   }
 
   /** function generalizes all variants above with {1/16, 1/2, 11/16}
@@ -44,8 +44,8 @@ public enum BSpline4CurveSubdivision {
    * @param geodesicInterface
    * @param value in the interval [1/16, 11/16] give the best results
    * @return */
-  public static CurveSubdivision split3(GeodesicInterface geodesicInterface, Scalar value) {
-    return Split3Dual3PointCurveSubdivision.of(geodesicInterface, //
+  public static CurveSubdivision split3(SplitInterface splitInterface, Scalar value) {
+    return Split3Dual3PointCurveSubdivision.of(splitInterface, //
         P5.divide(P16.multiply(value.subtract(RealScalar.ONE))).add(RealScalar.ONE), //
         value.multiply(P16).reciprocal(), value);
   }

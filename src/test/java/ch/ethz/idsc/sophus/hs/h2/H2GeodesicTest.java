@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -33,8 +32,7 @@ public class H2GeodesicTest extends TestCase {
     Tensor e = Tensors.vector(0.9999999999999999, 2.010051514185878);
     Tensor t = Tensors.vector(1.0, 2.0);
     Tensor split = H2Geodesic.INSTANCE.split(e, t, RealScalar.of(.2));
-    ScalarTensorFunction curve = H2Geodesic.INSTANCE.curve(e, t);
-    assertEquals(split, curve.apply(RealScalar.of(.2)));
+    assertEquals(split, H2Geodesic.INSTANCE.split(e, t, RealScalar.of(.2)));
   }
 
   public void testSingularityExact() {

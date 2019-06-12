@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -15,8 +15,8 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
   private final BSpline1CurveSubdivision bSpline1CurveSubdivision;
   private final int degree;
 
-  public LaneRiesenfeldCurveSubdivision(GeodesicInterface geodesicInterface, int degree) {
-    bSpline1CurveSubdivision = new BSpline1CurveSubdivision(geodesicInterface);
+  public LaneRiesenfeldCurveSubdivision(SplitInterface splitInterface, int degree) {
+    bSpline1CurveSubdivision = new BSpline1CurveSubdivision(splitInterface);
     this.degree = degree;
   }
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.math.win.WindowCenterSampler;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -28,29 +28,29 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
   private static final Scalar TWO = RealScalar.of(2);
 
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @param function that maps an extent to a weight mask of length == 2 * extent + 1
    * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
-    return new GeodesicCenterMidSeeded(geodesicInterface, Objects.requireNonNull(function));
+  public static TensorUnaryOperator of(SplitInterface splitInterface, Function<Integer, Tensor> function) {
+    return new GeodesicCenterMidSeeded(splitInterface, Objects.requireNonNull(function));
   }
 
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @param windowFunction
    * @return
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicCenterMidSeeded(geodesicInterface, WindowCenterSampler.of(windowFunction));
+  public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
+    return new GeodesicCenterMidSeeded(splitInterface, WindowCenterSampler.of(windowFunction));
   }
 
   // ---
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface geodesicInterface;
   private final Function<Integer, Tensor> function;
   private final List<Tensor> weights = new ArrayList<>();
 
-  private GeodesicCenterMidSeeded(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
-    this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
+  private GeodesicCenterMidSeeded(SplitInterface splitInterface, Function<Integer, Tensor> function) {
+    this.geodesicInterface = Objects.requireNonNull(splitInterface);
     this.function = function;
   }
 

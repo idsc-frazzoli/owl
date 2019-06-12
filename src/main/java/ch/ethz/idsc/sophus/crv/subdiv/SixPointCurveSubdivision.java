@@ -27,10 +27,10 @@ public class SixPointCurveSubdivision extends AbstractSixPointCurveSubdivision {
 
   @Override // from AbstractSixPointCurveSubdivision
   protected Tensor center(Tensor p, Tensor q, Tensor r, Tensor s, Tensor t, Tensor u) {
-    Tensor pq = geodesicInterface.split(p, q, PQ);
-    Tensor _r = geodesicInterface.split(pq, r, _R);
-    Tensor ut = geodesicInterface.split(u, t, PQ);
-    Tensor _s = geodesicInterface.split(ut, s, _R);
+    Tensor pq = splitInterface.split(p, q, PQ);
+    Tensor _r = splitInterface.split(pq, r, _R);
+    Tensor ut = splitInterface.split(u, t, PQ);
+    Tensor _s = splitInterface.split(ut, s, _R);
     return midpoint(_r, _s);
   }
 }

@@ -2,12 +2,11 @@
 package ch.ethz.idsc.sophus.hs.h2;
 
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.ArcTanh;
 import ch.ethz.idsc.tensor.sca.Cosh;
@@ -21,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Tanh;
  * half-plane coordinates are of the form {x, y} with y strictly positive
  * 
  * Tomasz Popiel, Lyle Noakes - Bézier Curves and C^2 interpolation in Riemannian manifolds */
-public enum H2Geodesic implements GeodesicInterface {
+public enum H2Geodesic implements SplitInterface {
   INSTANCE;
   // ---
   /** p and q are vectors of length 2 with the second entry positive
@@ -50,10 +49,5 @@ public enum H2Geodesic implements GeodesicInterface {
 
   private static Scalar height(Scalar p2, Scalar q2, Scalar t) {
     return Power.function(t).apply(q2.divide(p2)).multiply(p2);
-  }
-
-  @Override // from TensorGeodesic
-  public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    return scalar -> split(p, q, scalar);
   }
 }

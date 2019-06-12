@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -30,8 +30,8 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
   private final Scalar lambda;
   private final Scalar _1_lam;
 
-  public FourPointCurveSubdivision(GeodesicInterface geodesicInterface, Scalar omega) {
-    super(geodesicInterface);
+  public FourPointCurveSubdivision(SplitInterface splitInterface, Scalar omega) {
+    super(splitInterface);
     Scalar two_omega = omega.add(omega);
     _1_lam = two_omega.negate();
     lambda = two_omega.add(RealScalar.ONE);
@@ -39,9 +39,9 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
 
   /** standard four point scheme with omega = 1/16
    * 
-   * @param geodesicInterface */
-  public FourPointCurveSubdivision(GeodesicInterface geodesicInterface) {
-    this(geodesicInterface, P1_16);
+   * @param splitInterface */
+  public FourPointCurveSubdivision(SplitInterface splitInterface) {
+    this(splitInterface, P1_16);
   }
 
   @Override // from CurveSubdivision
@@ -63,7 +63,7 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
   public Tensor string(Tensor tensor) {
     int length = tensor.length();
     if (length < 3)
-      return new BSpline3CurveSubdivision(geodesicInterface).string(tensor);
+      return new BSpline3CurveSubdivision(splitInterface).string(tensor);
     // ---
     Tensor curve = Unprotect.empty(2 * length);
     {
@@ -96,8 +96,8 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
    * @return point between q and r */
   Tensor center(Tensor p, Tensor q, Tensor r, Tensor s) {
     return midpoint( //
-        geodesicInterface.split(p, q, lambda), //
-        geodesicInterface.split(r, s, _1_lam));
+        splitInterface.split(p, q, lambda), //
+        splitInterface.split(r, s, _1_lam));
   }
 
   /** @param p
@@ -106,8 +106,8 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
    * @return point between p and q */
   Tensor triple_lo(Tensor p, Tensor q, Tensor r) {
     return midpoint( //
-        geodesicInterface.split(p, q, P1_4), //
-        geodesicInterface.split(q, r, N1_4));
+        splitInterface.split(p, q, P1_4), //
+        splitInterface.split(q, r, N1_4));
   }
 
   /** @param p
@@ -116,7 +116,7 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
    * @return point between q and r */
   Tensor triple_hi(Tensor p, Tensor q, Tensor r) {
     return midpoint( //
-        geodesicInterface.split(p, q, P5_4), //
-        geodesicInterface.split(q, r, P3_4));
+        splitInterface.split(p, q, P5_4), //
+        splitInterface.split(q, r, P3_4));
   }
 }

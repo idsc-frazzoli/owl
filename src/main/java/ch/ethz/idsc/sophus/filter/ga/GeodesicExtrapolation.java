@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -19,29 +19,29 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /** GeodesicExtrapolate projects a sequence of points to their next (expected) point
  * with each point weighted as provided by an external function. */
 public class GeodesicExtrapolation implements TensorUnaryOperator {
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @param function that maps an extent to a weight mask of length "sequence.length - 2"
    * @return operator that maps a sequence of number of points to their next (expected) point
    * @throws Exception if either input parameters is null */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
-    return new GeodesicExtrapolation(geodesicInterface, Objects.requireNonNull(function));
+  public static TensorUnaryOperator of(SplitInterface splitInterface, Function<Integer, Tensor> function) {
+    return new GeodesicExtrapolation(splitInterface, Objects.requireNonNull(function));
   }
 
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @param windowFunction
    * @return operator that maps a sequence of number of points to their next (expected) point
    * @throws Exception if either input parameters is null */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicExtrapolation(geodesicInterface, WindowSideSampler.of(windowFunction));
+  public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
+    return new GeodesicExtrapolation(splitInterface, WindowSideSampler.of(windowFunction));
   }
 
   // ---
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final Function<Integer, Tensor> function;
   private final List<Tensor> weights = new ArrayList<>();
 
-  private GeodesicExtrapolation(GeodesicInterface geodesicInterface, Function<Integer, Tensor> function) {
-    this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
+  private GeodesicExtrapolation(SplitInterface splitInterface, Function<Integer, Tensor> function) {
+    this.splitInterface = Objects.requireNonNull(splitInterface);
     this.function = function;
   }
 
@@ -55,7 +55,7 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
     Tensor splits = weights.get(radius);
     Tensor result = tensor.get(0);
     for (int index = 0; index < radius; ++index)
-      result = geodesicInterface.split(result, tensor.get(index + 1), splits.Get(index));
+      result = splitInterface.split(result, tensor.get(index + 1), splits.Get(index));
     return result;
   }
 

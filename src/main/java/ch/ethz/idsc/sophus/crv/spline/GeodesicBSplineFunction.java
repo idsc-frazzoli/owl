@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -40,29 +40,29 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
    * @param degree of polynomial basis function, non-negative integer
    * @param control points with at least one element
    * @return */
-  public static GeodesicBSplineFunction of(GeodesicInterface geodesicInterface, int degree, Tensor control) {
-    return of(geodesicInterface, degree, Range.of(0, control.length()), control);
+  public static GeodesicBSplineFunction of(SplitInterface splitInterface, int degree, Tensor control) {
+    return of(splitInterface, degree, Range.of(0, control.length()), control);
   }
 
   /** the control point are stored by reference, i.e. modifications to
    * given tensor alter the behavior of this BSplineFunction instance.
    * 
-   * @param geodesicInterface
+   * @param splitInterface
    * @param degree of polynomial basis function, non-negative integer
    * @param knots vector of the same length as control
    * @param control points with at least one element
    * @return
    * @throws Exception */
-  public static GeodesicBSplineFunction of(GeodesicInterface geodesicInterface, int degree, Tensor knots, Tensor control) {
+  public static GeodesicBSplineFunction of(SplitInterface splitInterface, int degree, Tensor knots, Tensor control) {
     if (degree < 0)
       throw new IllegalArgumentException(Integer.toString(degree));
     if (!Sort.of(knots).equals(knots))
       throw TensorRuntimeException.of(knots);
-    return new GeodesicBSplineFunction(geodesicInterface, degree, VectorQ.requireLength(knots, control.length()), control);
+    return new GeodesicBSplineFunction(splitInterface, degree, VectorQ.requireLength(knots, control.length()), control);
   }
 
   // ---
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final int degree;
   private final Tensor control;
   /** half == degree / 2 */
@@ -74,8 +74,8 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
   private final NavigableMap<Scalar, Integer> navigableMap;
   private final Tensor samples;
 
-  private GeodesicBSplineFunction(GeodesicInterface geodesicInterface, int degree, Tensor knots, Tensor control) {
-    this.geodesicInterface = geodesicInterface;
+  private GeodesicBSplineFunction(SplitInterface splitInterface, int degree, Tensor knots, Tensor control) {
+    this.splitInterface = splitInterface;
     this.degree = degree;
     this.control = control;
     half = degree / 2;
@@ -117,7 +117,7 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
    * @return */
   public GeodesicDeBoor deBoor(int k) {
     int hi = degree + 1 + k;
-    return new GeodesicDeBoor(geodesicInterface, degree, //
+    return new GeodesicDeBoor(splitInterface, degree, //
         samples.extract(k, k + 2 * degree), //
         Tensor.of(IntStream.range(k - half, hi - half) // control
             .map(this::bound) //

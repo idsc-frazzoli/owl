@@ -40,6 +40,6 @@ public class BSpline4LRCurveSubdivision extends Dual3PointCurveSubdivision {
   }
 
   protected final Tensor center(Tensor p, Tensor q) {
-    return geodesicInterface.split(p, q, RationalScalar.HALF);
+    return splitInterface.split(p, q, RationalScalar.HALF);
   }
 }

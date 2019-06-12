@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
@@ -16,8 +16,8 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
   private static final Scalar _15_16 = RationalScalar.of(15, 16);
 
   // ---
-  public BSpline5CurveSubdivision(GeodesicInterface geodesicInterface) {
-    super(geodesicInterface);
+  public BSpline5CurveSubdivision(SplitInterface splitInterface) {
+    super(splitInterface);
   }
 
   @Override // from CurveSubdivision
@@ -79,14 +79,14 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
   // reposition of point q
   private Tensor quinte(Tensor p, Tensor q, Tensor r) {
     return midpoint( //
-        geodesicInterface.split(p, q, _5_8), //
-        geodesicInterface.split(r, q, _5_8));
+        splitInterface.split(p, q, _5_8), //
+        splitInterface.split(r, q, _5_8));
   }
 
   // insertion between points q and r
   private Tensor center(Tensor p, Tensor q, Tensor r, Tensor s) {
     return midpoint( //
-        geodesicInterface.split(p, q, _15_16), //
-        geodesicInterface.split(s, r, _15_16));
+        splitInterface.split(p, q, _15_16), //
+        splitInterface.split(s, r, _15_16));
   }
 }

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter.ga;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
@@ -14,7 +14,7 @@ public enum GeodesicMean {
   ;
   /** @param geodesicInterface
    * @return geodesic center operator with Dirichlet/constant weights */
-  public static TensorUnaryOperator of(GeodesicInterface geodesicInterface) {
-    return GeodesicCenter.of(geodesicInterface, SmoothingKernel.DIRICHLET);
+  public static TensorUnaryOperator of(SplitInterface splitInterface) {
+    return GeodesicCenter.of(splitInterface, SmoothingKernel.DIRICHLET);
   }
 }

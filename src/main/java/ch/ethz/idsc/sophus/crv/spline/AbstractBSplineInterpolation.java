@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.crv.spline;
 import java.io.Serializable;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
@@ -15,15 +15,15 @@ public abstract class AbstractBSplineInterpolation implements Serializable {
   private static final Chop CHOP_DEFAULT = Chop._12;
   private static final int MAXITER = 500;
   // ---
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final int degree;
   private final Tensor target;
 
-  /** @param geodesicInterface corresponding to lie group
+  /** @param splitInterface corresponding to lie group
    * @param degree of underlying b-spline
    * @param target points to interpolate */
-  public AbstractBSplineInterpolation(GeodesicInterface geodesicInterface, int degree, Tensor target) {
-    this.geodesicInterface = geodesicInterface;
+  public AbstractBSplineInterpolation(SplitInterface splitInterface, int degree, Tensor target) {
+    this.splitInterface = splitInterface;
     this.degree = degree;
     this.target = target;
   }
@@ -93,7 +93,7 @@ public abstract class AbstractBSplineInterpolation implements Serializable {
   }
 
   private GeodesicBSplineFunction geodesicBSplineFunction(Tensor control) {
-    return GeodesicBSplineFunction.of(geodesicInterface, degree, control);
+    return GeodesicBSplineFunction.of(splitInterface, degree, control);
   }
 
   /** @param p previous control point position

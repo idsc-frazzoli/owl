@@ -5,7 +5,7 @@ import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -18,23 +18,23 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * by Scott Schaefer and Ron Goldman in Proceedings of Pacific Graphics 2005, pages 160-162
  * http://faculty.cs.tamu.edu/schaefer/research/sphereCurves.pdf */
 public class GeodesicCatmullRom implements ScalarTensorFunction {
-  /** @param geodesicInterface non null
+  /** @param splitInterface non null
    * @param knots
    * @param control points of length >= 4 */
-  public static GeodesicCatmullRom of(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
+  public static GeodesicCatmullRom of(SplitInterface splitInterface, Tensor knots, Tensor control) {
     if (control.length() < 4)
       throw TensorRuntimeException.of(control);
-    return new GeodesicCatmullRom(Objects.requireNonNull(geodesicInterface), VectorQ.require(knots), control);
+    return new GeodesicCatmullRom(Objects.requireNonNull(splitInterface), VectorQ.require(knots), control);
   }
 
   // ---
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final Tensor control;
   private final Tensor knots;
   private final NavigableMap<Scalar, Integer> navigableMap = new TreeMap<>();
 
-  private GeodesicCatmullRom(GeodesicInterface geodesicInterface, Tensor knots, Tensor control) {
-    this.geodesicInterface = geodesicInterface;
+  private GeodesicCatmullRom(SplitInterface splitInterface, Tensor knots, Tensor control) {
+    this.splitInterface = splitInterface;
     int index = -1;
     for (Tensor knot : knots)
       navigableMap.put(knot.Get(), ++index);
@@ -55,19 +55,19 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
     // First pyramidal layer
     Tensor[] a = new Tensor[3];
     for (int index = 0; index < 3; ++index)
-      a[index] = geodesicInterface.split( //
+      a[index] = splitInterface.split( //
           selectedControl.get(index), //
           selectedControl.get(index + 1), //
           interp(selectedKnots.Get(index), selectedKnots.Get(index + 1), scalar));
     // Second pyramidal layer
     Tensor[] b = new Tensor[2];
     for (int index = 0; index < 2; ++index)
-      b[index] = geodesicInterface.split( //
+      b[index] = splitInterface.split( //
           a[index], //
           a[index + 1], //
           interp(selectedKnots.Get(index), selectedKnots.Get(index + 2), scalar));
     // Third and final pyramidal layer
-    return geodesicInterface.split( //
+    return splitInterface.split( //
         b[0], //
         b[1], //
         interp(selectedKnots.Get(1), selectedKnots.Get(2), scalar));

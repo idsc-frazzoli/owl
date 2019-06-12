@@ -28,10 +28,10 @@ public class FarSixPointCurveSubdivision extends AbstractSixPointCurveSubdivisio
 
   @Override // from AbstractSixPointCurveSubdivision
   protected Tensor center(Tensor p, Tensor q, Tensor r, Tensor s, Tensor t, Tensor u) {
-    Tensor pr = geodesicInterface.split(p, r, PR);
-    Tensor q_ = geodesicInterface.split(q, pr, Q_);
-    Tensor us = geodesicInterface.split(u, s, PR);
-    Tensor t_ = geodesicInterface.split(t, us, Q_);
-    return geodesicInterface.split(q_, t_, RationalScalar.HALF);
+    Tensor pr = splitInterface.split(p, r, PR);
+    Tensor q_ = splitInterface.split(q, pr, Q_);
+    Tensor us = splitInterface.split(u, s, PR);
+    Tensor t_ = splitInterface.split(t, us, Q_);
+    return splitInterface.split(q_, t_, RationalScalar.HALF);
   }
 }
