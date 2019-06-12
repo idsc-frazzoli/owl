@@ -12,8 +12,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.filter.BiinvariantFIRnFilter;
-import ch.ethz.idsc.sophus.filter.BiinvariantIIRnFilter;
 import ch.ethz.idsc.sophus.group.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -67,11 +65,11 @@ import ch.ethz.idsc.tensor.Tensors;
     if (0 < radius) {
       SmoothingKernel smoothingKernel = spinnerKernel.getValue();
       Se2BiinvariantMean se2BiinvariantMean = spinnerFilters.getValue();
-      if (jToggleIIR.isSelected()) {
-        refined = BiinvariantIIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
-      } else {
-        refined = BiinvariantFIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
-      }
+      // if (jToggleIIR.isSelected()) {
+      // refined = BiinvariantIIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+      // } else {
+      // refined = BiinvariantFIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+      // }
       return refined;
     }
     return control();

@@ -4,13 +4,15 @@ package ch.ethz.idsc.sophus.filter;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.BoundedLinkedList;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** input to the operator are the individual elements of the sequence */
-public class GeodesicFIRn implements TensorUnaryOperator {
+public class GeodesicIIRnNEW implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
    * @param geodesicInterface
    * @param radius
@@ -18,10 +20,10 @@ public class GeodesicFIRn implements TensorUnaryOperator {
    * @return
    * @throws Exception if either parameter is null */
   public static TensorUnaryOperator of( //
-      TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
-    return new GeodesicFIRn( //
-        Objects.requireNonNull(geodesicExtrapolation), //
-        Objects.requireNonNull(geodesicInterface), //
+      GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
+    return new GeodesicIIRnNEW( //
+        Objects.requireNonNull(geodesicDisplay), //
+        Objects.requireNonNull(smoothingKernel), //
         radius, //
         Objects.requireNonNull(alpha));
   }
@@ -32,10 +34,10 @@ public class GeodesicFIRn implements TensorUnaryOperator {
   private final Scalar alpha;
   private final GeodesicInterface geodesicInterface;
 
-  /* package */ GeodesicFIRn( //
-      TensorUnaryOperator geodesicExtrapolation, GeodesicInterface geodesicInterface, int radius, Scalar alpha) {
-    this.geodesicExtrapolation = geodesicExtrapolation;
-    this.geodesicInterface = geodesicInterface;
+  /* package */ GeodesicIIRnNEW( //
+      GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
+    this.geodesicInterface = geodesicDisplay.geodesicInterface();
+    this.geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
     this.alpha = alpha;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
@@ -45,7 +47,7 @@ public class GeodesicFIRn implements TensorUnaryOperator {
     Tensor value = boundedLinkedList.size() < 2 //
         ? x.copy()
         : geodesicInterface.split(geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream())), x, alpha);
-    boundedLinkedList.add(x);
+    boundedLinkedList.add(value);
     return value;
   }
 }
