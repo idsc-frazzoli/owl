@@ -1,10 +1,10 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.filter.BiinvariantMeanCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
-import ch.ethz.idsc.sophus.filter.TangentSpaceCenter;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanCenter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicCenterMidSeeded;
+import ch.ethz.idsc.sophus.filter.ts.TangentSpaceCenter;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;

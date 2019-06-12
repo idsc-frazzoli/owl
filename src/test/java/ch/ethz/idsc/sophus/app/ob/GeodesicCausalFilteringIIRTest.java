@@ -1,7 +1,7 @@
 package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
-import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;

@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.jph;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.filter.CenterFilter;
-import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se3.Se3Differences;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;

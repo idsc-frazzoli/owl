@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.math.win;
 
-import ch.ethz.idsc.sophus.filter.GeodesicMean;
-import ch.ethz.idsc.sophus.filter.GeodesicMeanFilter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicMean;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.win.BartlettWindow;

@@ -9,9 +9,9 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
-import ch.ethz.idsc.sophus.filter.GeodesicFIRnFilter;
-import ch.ethz.idsc.sophus.filter.GeodesicIIRnFilter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRnFilter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;

@@ -3,6 +3,8 @@ package ch.ethz.idsc.sophus.filter;
 
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanCenter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.img.MeanFilter;

@@ -5,8 +5,8 @@ import java.awt.Graphics2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.filter.GeodesicAverage;
-import ch.ethz.idsc.sophus.filter.GeodesicAverageFilter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicAverage;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicAverageFilter;
 import ch.ethz.idsc.sophus.sym.SymWeightsToSplits;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

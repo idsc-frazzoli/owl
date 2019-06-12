@@ -1,8 +1,8 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.sophus.filter.GeodesicExtrapolation;
-import ch.ethz.idsc.sophus.filter.GeodesicFIRnFilter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
