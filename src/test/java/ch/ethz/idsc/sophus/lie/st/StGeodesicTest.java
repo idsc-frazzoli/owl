@@ -82,6 +82,6 @@ public class StGeodesicTest extends TestCase {
     ScalarTensorFunction mean = //
         w -> StBiinvariantMean.INSTANCE.mean(Tensors.of(p, q), Tensors.of(RealScalar.ONE.subtract(w), w));
     Tensor st2 = domain.map(mean);
-    Chop._10.requireClose(st1, st2);
+    Chop._12.requireClose(st1, st2);
   }
 }
