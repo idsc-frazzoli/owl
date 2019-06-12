@@ -16,16 +16,12 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
-  protected DatasetKernelDemo() {
-    this(GeodesicDisplays.CLOTH_SE2_R2);
-  }
-
   protected DatasetKernelDemo(List<GeodesicDisplay> list) {
     super(list);
     {
       spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
       spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
-      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "filter");
+      spinnerKernel.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "smoothing kernel");
       spinnerKernel.addSpinnerListener(value -> updateState());
     }
     {
@@ -34,6 +30,10 @@ import ch.ethz.idsc.sophus.math.SmoothingKernel;
       spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
       spinnerRadius.addSpinnerListener(value -> updateState());
     }
+  }
+
+  protected DatasetKernelDemo() {
+    this(GeodesicDisplays.CLOTH_SE2_R2);
   }
 
   @Override // from DatasetFilterDemo

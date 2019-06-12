@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.ethz.idsc.sophus.app.data.GokartPoseData;
 import ch.ethz.idsc.sophus.math.SmoothingKernel;
 import ch.ethz.idsc.subare.util.HtmlUtf8;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -119,7 +120,7 @@ public class GeodesicFilterEvaluation {
   }
 
   public static void main(String[] args) throws IOException {
-    List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
+    List<String> list = GokartPoseData.INSTANCE.list();
     Iterator<String> iterator = list.iterator();
     while (iterator.hasNext()) {
       String data = iterator.next();

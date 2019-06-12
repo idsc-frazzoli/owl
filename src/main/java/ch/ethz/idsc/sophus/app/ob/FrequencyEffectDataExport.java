@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.ethz.idsc.sophus.app.data.GokartPoseData;
 import ch.ethz.idsc.sophus.filter.GeodesicCenter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterFilter;
 import ch.ethz.idsc.sophus.filter.GeodesicCenterMidSeeded;
@@ -59,7 +60,7 @@ public class FrequencyEffectDataExport {
 
   public static void main(String[] args) {
     for (int radius = 1; radius < 20; ++radius) {
-      List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
+      List<String> list = GokartPoseData.INSTANCE.list();
       Iterator<String> iterator = list.iterator();
       int index = 0;
       for (SmoothingKernel sk : SmoothingKernel.values()) {

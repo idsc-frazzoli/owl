@@ -5,6 +5,7 @@ import ch.ethz.idsc.sophus.AffineQ;
 import ch.ethz.idsc.sophus.math.BiinvariantMean;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** The weights are required to be affine. */
 public enum RnBiinvariantMean implements BiinvariantMean {
   INSTANCE;
   // ---

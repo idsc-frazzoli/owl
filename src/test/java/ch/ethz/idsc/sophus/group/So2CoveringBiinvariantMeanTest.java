@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.lie.Permutations;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -56,18 +57,19 @@ public class So2CoveringBiinvariantMeanTest extends TestCase {
     }
   }
 
-  public void testFailAntipodal() {
-    try {
-      So2CoveringBiinvariantMean.INSTANCE.mean(Tensors.of(Pi.HALF, Pi.HALF.negate()), Tensors.vector(0.6, 0.4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testAntipodal() {
+    Scalar mean = So2CoveringBiinvariantMean.INSTANCE.mean(Tensors.of(Pi.HALF, Pi.HALF.negate()), Tensors.vector(0.6, 0.4));
+    Chop._12.requireClose(mean, RealScalar.of(0.3141592653589793));
   }
 
   public void testFailFar() {
+    Scalar mean = So2CoveringBiinvariantMean.INSTANCE.mean(Tensors.of(Pi.VALUE, Pi.VALUE.negate()), Tensors.vector(0.6, 0.4));
+    Chop._12.requireClose(mean, RealScalar.of(0.6283185307179586));
+  }
+
+  public void testFailTensor() {
     try {
-      So2CoveringBiinvariantMean.INSTANCE.mean(Tensors.of(Pi.VALUE, Pi.VALUE.negate()), Tensors.vector(0.6, 0.4));
+      So2CoveringBiinvariantMean.INSTANCE.mean(HilbertMatrix.of(3), NORMALIZE.apply(Tensors.vector(1, 1, 1)));
       fail();
     } catch (Exception exception) {
       // ---

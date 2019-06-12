@@ -1,7 +1,6 @@
 // code by astoll, ynager
 package ch.ethz.idsc.owl.bot.rn.glc;
 
-import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -10,8 +9,8 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.bot.r2.R2RationalFlows;
+import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.NodesAssert;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
@@ -29,8 +28,8 @@ import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
-import ch.ethz.idsc.owl.gui.ren.DomainRender;
-import ch.ethz.idsc.owl.gui.ren.EdgeRender;
+import ch.ethz.idsc.owl.gui.ren.DomainQueueMapRender;
+import ch.ethz.idsc.owl.gui.ren.EdgeRenders;
 import ch.ethz.idsc.owl.gui.ren.EtaRender;
 import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
@@ -53,9 +52,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.red.Norm;
 
-public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
+public class RelaxedTrajectoryPlanner0Demo implements DemoInterface {
   // -------- slacks --------
   final Tensor slacks = Tensors.vector(2, 0);
   // -------- stateTimeRaster --------
@@ -81,19 +79,7 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
       ExactTensorQ.require(flow.getU());
     // -------- GoalInterface --------
     // --
-    CostFunction distanceCost = new CostFunction() {
-      @Override // from CostIncrementFunction
-      public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-        // System.out.println(Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()));
-        // return timeStep; <- not possible for
-        return Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()); // ||x_prev - x_next||
-      }
-
-      @Override // from HeuristicFunction
-      public Scalar minCostToGoal(Tensor x) {
-        return goalRegion.distance(x);
-      }
-    };
+    CostFunction distanceCost = new RnMinDistGoalManager(goalRegion);
     // --
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(polygonRegion);
     CostFunction regionCost = ConstraintViolationCost.of(plannerConstraint, Quantity.of(2, ""));
@@ -118,16 +104,9 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
     owlyAnimationFrame.addBackground(new EtaRender(eta));
-    owlyAnimationFrame.addBackground(new DomainRender(relaxedTrajectoryPlanner.getDomainMap(), eta));
+    owlyAnimationFrame.addBackground(DomainQueueMapRender.of(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().getMap(), eta));
     owlyAnimationFrame.addBackground(new SphericalRegionRender((SphericalRegion) goalRegion));
-    {
-      EdgeRender treeRender = new EdgeRender(1000, Color.BLUE);
-      Collection<GlcNode> collection;
-      collection = relaxedTrajectoryPlanner.getDomainMap().values();
-      collection = RelaxedDebugUtils.allNodes(relaxedTrajectoryPlanner);
-      treeRender.setCollection(collection);
-      owlyAnimationFrame.addBackground(treeRender.getRender());
-    }
+    owlyAnimationFrame.addBackground(EdgeRenders.of(relaxedTrajectoryPlanner));
     Optional<GlcNode> optional = relaxedTrajectoryPlanner.getBest();
     if (optional.isPresent()) {
       System.out.println(optional.get().merit());
@@ -151,6 +130,6 @@ public class RelaxedTrajectoryPlannerDemo0 implements DemoInterface {
   }
 
   public static void main(String[] args) {
-    new RelaxedTrajectoryPlannerDemo0().start().jFrame.setVisible(true);
+    new RelaxedTrajectoryPlanner0Demo().start().jFrame.setVisible(true);
   }
 }
