@@ -52,4 +52,13 @@ public class MSpline3CurveSubdivisionTest extends TestCase {
     assertEquals(curveSubdivision.string(curve), Tensors.empty());
     assertEquals(curveSubdivision.cyclic(curve), Tensors.empty());
   }
+
+  public void testNullFail() {
+    try {
+      new MSpline3CurveSubdivision(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

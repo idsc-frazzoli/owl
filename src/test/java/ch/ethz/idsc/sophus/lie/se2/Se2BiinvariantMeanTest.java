@@ -214,16 +214,4 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor expected = Tensors.fromString("{3.105184243650884, 2.8948157563491153, 0.3}");
     Chop._14.requireClose(expected, actual);
   }
-
-  public void testFail() {
-    Tensor p = Tensors.vector(0, 0, 0);
-    Tensor sequence = Tensors.of(p, p, p);
-    Tensor weights = Tensors.vector(1, 1, 1);
-    try {
-      Se2BiinvariantMean.LINEAR.mean(sequence, weights); // non-normalized weights fail
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
 }

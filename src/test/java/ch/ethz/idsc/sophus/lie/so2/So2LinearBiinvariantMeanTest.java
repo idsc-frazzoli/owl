@@ -76,15 +76,6 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
     }
   }
 
-  public void testNonAffineFail() {
-    try {
-      So2LinearBiinvariantMean.INSTANCE.mean(Tensors.vector(1, 1, 1), Tensors.vector(1, 1, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
   public void testFailAntipodal() {
     try {
       So2LinearBiinvariantMean.INSTANCE.mean(Tensors.of(Pi.HALF, Pi.HALF.negate()), Tensors.vector(0.6, 0.4));

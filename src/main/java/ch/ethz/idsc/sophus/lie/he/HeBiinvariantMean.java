@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.lie.he;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -23,7 +22,7 @@ public enum HeBiinvariantMean implements BiinvariantMean {
   // ---
   @Override // from BiinvariantMean
   public Tensor mean(Tensor sequence, Tensor weights) {
-    Tensor ws = AffineQ.require(weights).dot(sequence);
+    Tensor ws = weights.dot(sequence);
     Tensor xMean = ws.get(0);
     Tensor yMean = ws.get(1);
     Tensor xyMean = weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.get(0).dot(xyz.get(1)))));
