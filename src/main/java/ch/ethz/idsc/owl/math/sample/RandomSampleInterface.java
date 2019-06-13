@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariateInterface;
  * 
  * RandomSampleInterface produces tensors from a multi-variate probability distribution.
  * 
- * Examples: {@link BoxRandomSample}, {@link CircleRandomSample} */
+ * Examples: {@link BoxRandomSample}, {@link DiskRandomSample} */
 @FunctionalInterface
 public interface RandomSampleInterface {
   /** @return random sample from continuous or discrete set */

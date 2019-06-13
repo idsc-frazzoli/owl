@@ -51,7 +51,7 @@ public class SphereRandomSampleTest extends TestCase {
     Tensor center = Tensors.vector(10, 20);
     Scalar radius = RealScalar.of(2);
     RandomSampleInterface rsi = SphereRandomSample.of(center, radius);
-    assertTrue(rsi instanceof CircleRandomSample);
+    assertTrue(rsi instanceof DiskRandomSample);
   }
 
   public void test3DZeroRadius() {
