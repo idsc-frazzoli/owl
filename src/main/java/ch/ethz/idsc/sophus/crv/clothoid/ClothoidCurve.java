@@ -16,16 +16,7 @@ import ch.ethz.idsc.tensor.sca.Real;
 public enum ClothoidCurve implements GeodesicInterface {
   INSTANCE;
   // ---
-  /** Wikipedia: Gaussian quadrature
-   * 3-point Gauss Legendre on interval [0, 1] */
-  // private static final Tensor W1 = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
-  // private static final Tensor X1 = Tensors.vector(-1, 0, 1) //
-  // .multiply(RealScalar.of(Math.sqrt(3 / 5))) //
-  // .map(RealScalar.ONE::add) //
-  // .divide(RealScalar.of(2));
-  /** Wikipedia: Gaussian quadrature
-   * 2-point Gauss Legendre on interval [0, 1] */
-  // private static final Tensor W = Tensors.vector(1, 1).divide(RealScalar.of(2.0));
+  /** 2-point Gauss Legendre quadrature on interval [0, 1] */
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Tensor X = Tensors.vector(-1, 1) //
       .multiply(RealScalar.of(Math.sqrt(1 / 3))) //
@@ -61,12 +52,6 @@ public enum ClothoidCurve implements GeodesicInterface {
     Scalar bm = b0.add(b1).multiply(f1.subtract(f2).subtract(f3));
     ClothoidQuadratic clothoidQuadratic = new ClothoidQuadratic(b0, bm, b1);
     return t -> {
-      // Tensor xl = X.multiply(t);
-      // Scalar il = W.dot(xl.map(clothoidQuadratic)).Get().multiply(t);
-      // // ---
-      // Scalar _1_t = _1.subtract(t);
-      // Tensor xr = X.multiply(_1_t).map(t::add);
-      // Scalar ir = W.dot(xr.map(clothoidQuadratic)).Get().multiply(_1_t);
       Tensor xl = X.multiply(t);
       Scalar il = Total.ofVector(xl.map(clothoidQuadratic)).multiply(HALF).multiply(t);
       // ---

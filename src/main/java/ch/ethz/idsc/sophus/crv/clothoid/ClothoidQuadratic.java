@@ -8,6 +8,10 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
+/** quadratic polynom that interpolates given values at parameters 0, 1/2, 1:
+ * p[0/2] == b0
+ * p[1/2] == bm
+ * p[2/2] == b1 */
 /* package */ class ClothoidQuadratic implements ScalarUnaryOperator {
   private static final Scalar _3 = RealScalar.of(+3);
   // ---

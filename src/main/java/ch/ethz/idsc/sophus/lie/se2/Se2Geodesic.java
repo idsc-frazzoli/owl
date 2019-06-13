@@ -9,7 +9,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-/** References:
+/** Hint:
+ * The angular coordinate is not automatically mapped to [-pi, pi).
+ * 
+ * References:
  * http://vixra.org/abs/1807.0463
  * https://www.youtube.com/watch?v=2vDciaUgL4E */
 public enum Se2Geodesic implements GeodesicInterface {
