@@ -1,8 +1,9 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie;
+package ch.ethz.idsc.sophus.lie.gl;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.lie.LieGroupElement;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
@@ -23,6 +24,7 @@ public class LinearGroupElement implements LieGroupElement, Serializable {
     return new LinearGroupElement(matrix, Inverse.of(matrix));
   }
 
+  // ---
   private final Tensor matrix;
   private final Tensor inverse;
 

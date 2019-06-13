@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.lie.st;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,11 +25,11 @@ public class StGroupElementTest extends TestCase {
   }
 
   public void testInverse() {
+    Tensor id = Tensors.of(RealScalar.ONE, Tensors.vector(0, 0, 0, 0));
     for (int count = 0; count < 100; ++count) {
       Scalar lambda = RealScalar.of(Math.random() + 0.001);
       Tensor t = Tensors.vector(Math.random(), 32 * Math.random(), -Math.random(), -17 * Math.random());
       Tensor p = Tensors.of(lambda, t);
-      Tensor id = Tensors.of(RealScalar.ONE, Tensors.vector(0, 0, 0, 0));
       StGroupElement pE = new StGroupElement(p);
       Chop._11.requireClose(pE.inverse().combine(p), id);
     }
@@ -45,6 +46,13 @@ public class StGroupElementTest extends TestCase {
     assertEquals(pE.combine(q), Tensors.of(RealScalar.of(4), Tensors.vector(4, 7, 6)));
   }
 
+  public void testAdjoint() {
+    StGroupElement pE = new StGroupElement(Tensors.fromString("{4,{1,2,3}}"));
+    Tensor adjoint = pE.adjoint(Tensors.fromString("{2,{5,7,8}}"));
+    assertEquals(adjoint, Tensors.fromString("{2, {18, 24, 26}}"));
+    ExactTensorQ.require(adjoint);
+  }
+
   // checks that lambda is required to be positive
   public void testLambdaNonPositiveFail() {
     try {
@@ -55,6 +63,22 @@ public class StGroupElementTest extends TestCase {
     }
     try {
       new StGroupElement(Tensors.vector(-1, 5));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testCombineFail() {
+    StGroupElement pE = new StGroupElement(Tensors.fromString("{4,{1,2,3}}"));
+    try {
+      pE.combine(Tensors.fromString("{0,{1,2,3}}"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      pE.combine(Tensors.fromString("{1,{1,2,3,4}}"));
       fail();
     } catch (Exception exception) {
       // ---

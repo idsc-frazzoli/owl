@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.lie.se3;
 
 import ch.ethz.idsc.sophus.lie.LieGroupElement;
-import ch.ethz.idsc.sophus.lie.LinearGroup;
+import ch.ethz.idsc.sophus.lie.gl.LinearGroup;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
