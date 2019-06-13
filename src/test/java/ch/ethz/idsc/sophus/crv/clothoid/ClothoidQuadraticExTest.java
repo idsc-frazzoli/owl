@@ -7,10 +7,10 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import junit.framework.TestCase;
 
-public class ClothoidQuadraticTest extends TestCase {
+public class ClothoidQuadraticExTest extends TestCase {
   public void testSimple() {
-    ClothoidQuadratic clothoidQuadratic = //
-        new ClothoidQuadratic(RealScalar.of(2), RealScalar.of(-3), RealScalar.of(7));
+    ClothoidQuadraticEx clothoidQuadratic = //
+        new ClothoidQuadraticEx(RealScalar.of(2), RealScalar.of(-3), RealScalar.of(7));
     Scalar p0 = clothoidQuadratic.angle(RealScalar.ZERO);
     Scalar pm = clothoidQuadratic.angle(RationalScalar.of(1, 2));
     Scalar p1 = clothoidQuadratic.angle(RealScalar.ONE);
@@ -20,8 +20,8 @@ public class ClothoidQuadraticTest extends TestCase {
   }
 
   public void testExamples() {
-    ClothoidQuadratic clothoidQuadratic = //
-        new ClothoidQuadratic(RealScalar.of(5), RealScalar.of(7), RealScalar.of(13));
+    ClothoidQuadraticEx clothoidQuadratic = //
+        new ClothoidQuadraticEx(RealScalar.of(5), RealScalar.of(7), RealScalar.of(13));
     Scalar angle = clothoidQuadratic.angle(RealScalar.of(11));
     assertEquals(ExactScalarQ.require(angle), RealScalar.of(973));
   }

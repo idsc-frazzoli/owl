@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie;
+package ch.ethz.idsc.sophus.lie.gl;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
