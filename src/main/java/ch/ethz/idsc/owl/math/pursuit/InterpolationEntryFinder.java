@@ -25,18 +25,13 @@ public final class InterpolationEntryFinder extends TrajectoryEntryFinder {
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar index) {
     int index_ = index.number().intValue();
-    try {
+    if (index_ >= 0 && index_ < waypoints.length() - 1) {
       Interpolation interpolation = LinearInterpolation.of(Tensors.of( //
           waypoints.get(index_), //
           waypoints.get(index_ + 1)));
       return new TrajectoryEntry(Optional.of(interpolation.at(MOD_UNIT.apply(index))), index);
-    } catch (IndexOutOfBoundsException e1) {
-      try {
-        return new TrajectoryEntry(Optional.of(waypoints.get(index_)), index);
-      } catch (IndexOutOfBoundsException e2) {
-        // ---
-      }
-    }
+    } else if (index_ == waypoints.length() - 1)
+      return new TrajectoryEntry(Optional.of(waypoints.get(index_)), index);
     return new TrajectoryEntry(Optional.empty(), index);
   }
 
