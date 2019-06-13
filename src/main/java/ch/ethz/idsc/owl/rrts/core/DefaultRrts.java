@@ -22,6 +22,9 @@ public class DefaultRrts implements Rrts {
   private final TransitionRegionQuery obstacleQuery;
   private final TransitionCostFunction transitionCostFunction;
   private int rewireCount = 0;
+  // ---
+  private RrtsNode parent = null;
+  private Scalar costFromRoot = null;
 
   public DefaultRrts( //
       TransitionSpace transitionSpace, //
@@ -60,8 +63,9 @@ public class DefaultRrts implements Rrts {
   }
 
   private RrtsNode connectAlongMinimumCost(Tensor state, int k_nearest) {
-    RrtsNode parent = null;
-    Scalar costFromRoot = null;
+    parent = null;
+    costFromRoot = null;
+    /*
     for (RrtsNode node : nodeCollection.nearTo(state, k_nearest)) {
       Transition transition = transitionSpace.connect(node.state(), state);
       Scalar cost = transitionCostFunction.cost(transition);
@@ -72,12 +76,28 @@ public class DefaultRrts implements Rrts {
           costFromRoot = compare;
         }
     }
+    */
+    nodeCollection.nearFrom(state, k_nearest).stream().parallel().forEach(node -> {
+      Transition transition = transitionSpace.connect(node.state(), state);
+      Scalar cost = transitionCostFunction.cost(transition);
+      Scalar compare = node.costFromRoot().add(cost);
+      update(node, transition, compare);
+    });
     // FIXME RRTS what if costFromRoot == null, or parent == null
     return parent.connectTo(state, costFromRoot);
   }
 
+  private synchronized void update(RrtsNode node, Transition transition, Scalar cost) {
+    if (Objects.isNull(costFromRoot) || Scalars.lessThan(cost, costFromRoot))
+      if (isCollisionFree(transition)) {
+        parent = node;
+        costFromRoot = cost;
+      }
+  }
+
   @Override // from Rrts
   public void rewireAround(RrtsNode parent, int k_nearest) {
+    // TODO speeding this part up brings up to 30% (determined with parallel stream that sometimes fails)
     for (RrtsNode node : nodeCollection.nearFrom(parent.state(), k_nearest)) {
       Transition transition = transitionSpace.connect(parent.state(), node.state());
       Scalar costFromParent = transitionCostFunction.cost(transition);
