@@ -27,7 +27,7 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
         Tensor result = Se2CoveringBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
-        Chop._12.requireClose(result, solution);
+        Chop._08.requireClose(result, solution);
       }
     }
   }
@@ -43,7 +43,7 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
         Tensor result = Se2CoveringBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
-        Chop._12.requireClose(result, solution);
+        Chop._08.requireClose(result, solution);
         Tensor rnmean = RnBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
         Chop._08.requireClose(result, rnmean);
       }

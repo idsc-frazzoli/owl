@@ -7,9 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Normalize;
-import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.Cross;
-import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
@@ -46,12 +44,6 @@ public class PowerCoordinates {
         Cross.of(nrm));
   }
 
-  static Tensor intersect(Tensor p1, Tensor n1, Tensor p2, Tensor n2) {
-    Tensor matrix = Transpose.of(Tensors.of(n1, n2));
-    Tensor sol = LinearSolve.of(matrix, p2.subtract(p1));
-    return p1.add(n1.multiply(sol.Get(0)));
-  }
-
   Tensor aux(Tensor xi, Tensor xj) {
     Scalar wj = tensorMetric.distance(xi, xj);
     return aux(xi, xj, wj.zero(), wj);
@@ -66,7 +58,7 @@ public class PowerCoordinates {
       Tensor n1 = tensor.get(_prev, 1);
       Tensor p2 = tensor.get(index, 0);
       Tensor n2 = tensor.get(index, 1);
-      result.append(intersect(p1, n1, p2, n2));
+      result.append(Intersection2D.of(p1, n1, p2, n2));
     }
     return result;
   }

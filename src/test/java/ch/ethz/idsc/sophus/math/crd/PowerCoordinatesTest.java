@@ -20,13 +20,6 @@ public class PowerCoordinatesTest extends TestCase {
     Chop._10.requireClose(aux, exp);
   }
 
-  public void testIntersect() {
-    Tensor aux1 = PowerCoordinates.aux(Tensors.vector(1, 2), Tensors.vector(3, 4), RealScalar.of(.2), RealScalar.of(.4));
-    Tensor aux2 = PowerCoordinates.aux(Tensors.vector(3, 4), Tensors.vector(5, 2.5), RealScalar.of(.4), RealScalar.of(.8));
-    Tensor inter = PowerCoordinates.intersect(aux1.get(0), aux1.get(1), aux2.get(0), aux2.get(1));
-    Chop._10.requireClose(inter, Tensors.vector(2.957142857142857, 1.9928571428571429));
-  }
-
   public void testGetDual() {
     PowerCoordinates powerCoordinates = new PowerCoordinates(Barycentric.WACHSPRESS);
     Tensor P = Tensors.fromString("{{1, 1}, {5, 1}, {3, 5}, {2, 5}}");

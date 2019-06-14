@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.Real;
     Scalar f2 = b0.multiply(b1).divide(_46);
     Scalar f3 = _1_4;
     Scalar bm = b0.add(b1).multiply(f1.subtract(f2).subtract(f3));
-    ClothoidQuadratic clothoidQuadratic = new ClothoidQuadratic(b0, bm, b1);
+    ClothoidQuadraticEx clothoidQuadratic = new ClothoidQuadraticEx(b0, bm, b1);
     return t -> {
       Scalar _1_t = _1.subtract(t);
       Tensor wl = W.multiply(t);
