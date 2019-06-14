@@ -27,13 +27,6 @@ public enum ClothoidCurve implements GeodesicInterface {
   private static final Scalar _46 = RealScalar.of(46.0);
   private static final Scalar _1_4 = RealScalar.of(0.25);
 
-  public static Tensor cvmult(Scalar il, Tensor vector) {
-    return Tensors.of( //
-        Real.FUNCTION.apply(il).multiply(vector.Get(0)).subtract(Imag.FUNCTION.apply(il).multiply(vector.Get(1))), //
-        Imag.FUNCTION.apply(il).multiply(vector.Get(0)).add(Real.FUNCTION.apply(il).multiply(vector.Get(1))) //
-    );
-  }
-
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
     Tensor pxy = p.extract(0, 2);
@@ -59,7 +52,7 @@ public enum ClothoidCurve implements GeodesicInterface {
       Tensor xr = X.multiply(_1_t).map(t::add);
       Scalar ir = Total.ofVector(xr.map(clothoidQuadratic)).multiply(HALF).multiply(_1_t);
       // ---
-      Tensor nc = cvmult(il, diff).divide(il.add(ir));
+      Tensor nc = StaticHelper.prod(il, diff).divide(il.add(ir));
       Tensor ret_p = pxy.add(nc);
       Scalar ret_a = clothoidQuadratic.angle(t).add(da);
       Scalar p0r = Real.FUNCTION.apply(ret_p.Get(0));

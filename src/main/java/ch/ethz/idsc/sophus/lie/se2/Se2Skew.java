@@ -13,10 +13,10 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 public class Se2Skew {
   public static Tensor mean(LieGroupElement lieGroupElement, Tensor sequence, Tensor weights) {
-    AtomicInteger index = new AtomicInteger(-1);
+    AtomicInteger atomicInteger = new AtomicInteger();
     Tensor tmean = sequence.stream() //
         .map(lieGroupElement.inverse()::combine) //
-        .map(xya -> of(xya, weights.Get(index.incrementAndGet()))) //
+        .map(xya -> of(xya, weights.Get(atomicInteger.getAndIncrement()))) //
         .reduce(Se2Skew::add) //
         .get().solve();
     return lieGroupElement.combine(tmean.append(RealScalar.ZERO));
@@ -48,5 +48,13 @@ public class Se2Skew {
 
   public Tensor solve() {
     return LinearSolve.of(lhs, rhs);
+  }
+
+  public Tensor diff(Tensor xy) {
+    return lhs.dot(xy).subtract(rhs);
+  }
+
+  public Tensor rhs() {
+    return rhs.copy();
   }
 }
