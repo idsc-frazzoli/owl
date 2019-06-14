@@ -25,14 +25,17 @@ public class Se2CoveringBarycenter implements TensorUnaryOperator {
     this.sequence = sequence;
   }
 
+  public Tensor matrix(Tensor mean) {
+    return Tensor.of(sequence.stream() //
+        .map(new Se2CoveringGroupElement(mean).inverse()::combine) //
+        .map(xya -> Se2Skew.of(xya, RealScalar.ONE).rhs() //
+            .append(xya.Get(2)) // biinvariant mean of angles
+            .append(RealScalar.ONE) // weights are affine
+    ));
+  }
+
   @Override
   public Tensor apply(Tensor mean) {
-    return LinearSolve.of(Transpose.of( //
-        Tensor.of(sequence.stream() //
-            .map(new Se2CoveringGroupElement(mean).inverse()::combine) //
-            .map(xya -> Se2Skew.of(xya, RealScalar.ONE).rhs() //
-                .append(xya.Get(2)) // biinvariant mean of angles
-                .append(RealScalar.ONE) // weights are affine
-        ))), RHS);
+    return LinearSolve.of(Transpose.of(matrix(mean)), RHS);
   }
 }
