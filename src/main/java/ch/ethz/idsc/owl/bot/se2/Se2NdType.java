@@ -23,14 +23,13 @@ import ch.ethz.idsc.tensor.Tensor;
       return NdCenterInterface.clothoid(convert(tensor));
     }
   };
-
   /** @param tensor
    * @return tensor in right format */
   public Tensor convert(Tensor tensor) {
     return tensor;
   }
 
-  /**@param tensor
+  /** @param tensor
    * @return */
   public abstract NdCenterInterface getNdCenterInterface(Tensor tensor);
 }
