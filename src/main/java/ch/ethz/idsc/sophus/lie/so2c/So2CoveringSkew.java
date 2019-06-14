@@ -16,6 +16,8 @@ import ch.ethz.idsc.tensor.sca.Tan;
  * (1 - Cos[t]) / Sin[t] == Tan[t/2] */
 public enum So2CoveringSkew {
   ;
+  /** @param angle
+   * @return matrix of dimensions 2 x 2 */
   public static Tensor of(Scalar angle) {
     return of(angle, RealScalar.ONE);
   }
@@ -25,6 +27,7 @@ public enum So2CoveringSkew {
    * which evaluates to zero for t == pi/2 + z pi where z is any integer
    * 
    * @param angle
+   * @param weight
    * @return matrix of dimensions 2 x 2 */
   public static Tensor of(Scalar angle, Scalar weight) {
     Scalar angle_half = angle.multiply(RationalScalar.HALF);

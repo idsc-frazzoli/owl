@@ -49,15 +49,6 @@ public class So2CoveringBiinvariantMeanTest extends TestCase {
     Chop._12.requireClose(scalar, RealScalar.of(3.5));
   }
 
-  public void testNonAffineFail() {
-    try {
-      So2CoveringBiinvariantMean.INSTANCE.mean(Tensors.vector(1, 1, 1), Tensors.vector(1, 1, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
   public void testAntipodal() {
     Scalar mean = So2CoveringBiinvariantMean.INSTANCE.mean(Tensors.of(Pi.HALF, Pi.HALF.negate()), Tensors.vector(0.6, 0.4));
     Chop._12.requireClose(mean, RealScalar.of(0.3141592653589793));

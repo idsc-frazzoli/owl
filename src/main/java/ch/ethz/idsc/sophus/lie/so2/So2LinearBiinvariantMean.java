@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.lie.so2;
 
 import ch.ethz.idsc.sophus.lie.ScalarBiinvariantMean;
-import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -18,6 +17,6 @@ public enum So2LinearBiinvariantMean implements ScalarBiinvariantMean {
   @Override // from ScalarBiinvariantMean
   public Scalar mean(Tensor sequence, Tensor weights) {
     Scalar a0 = sequence.Get(0);
-    return So2.MOD.apply(a0.subtract(AffineQ.require(weights).dot(So2Helper.rangeQ(sequence.map(a0::subtract).map(So2.MOD)))));
+    return So2.MOD.apply(a0.subtract(weights.dot(So2Helper.rangeQ(sequence.map(a0::subtract).map(So2.MOD)))));
   }
 }
