@@ -49,10 +49,14 @@ public class DefaultRrts implements Rrts {
     }
     if (isInsertPlausible(state)) {
       k_nearest = Math.min(Math.max(1, k_nearest), size);
-      RrtsNode rrtsNode = connectAlongMinimumCost(state, k_nearest);
-      rewireAround(rrtsNode, k_nearest);
-      nodeCollection.insert(rrtsNode);
-      return Optional.of(rrtsNode);
+      Optional<RrtsNode> optional = connectAlongMinimumCost(state, k_nearest);
+      if (optional.isPresent()) {
+        RrtsNode rrtsNode = optional.get();
+        rewireAround(rrtsNode, k_nearest);
+        nodeCollection.insert(rrtsNode);
+        return Optional.of(rrtsNode);
+      }
+      System.err.println("Unable to connect " + state);
     }
     return Optional.empty();
   }
@@ -62,7 +66,7 @@ public class DefaultRrts implements Rrts {
     return isCollisionFree(transitionSpace.connect(nearest, state));
   }
 
-  private RrtsNode connectAlongMinimumCost(Tensor state, int k_nearest) {
+  private Optional<RrtsNode> connectAlongMinimumCost(Tensor state, int k_nearest) {
     parent = null;
     costFromRoot = null;
     /*
@@ -83,8 +87,9 @@ public class DefaultRrts implements Rrts {
       Scalar compare = node.costFromRoot().add(cost);
       update(node, transition, compare);
     });
-    // FIXME RRTS what if costFromRoot == null, or parent == null
-    return parent.connectTo(state, costFromRoot);
+    if (Objects.nonNull(parent))
+      return Optional.of(parent.connectTo(state, costFromRoot));
+    return Optional.empty();
   }
 
   private synchronized void update(RrtsNode node, Transition transition, Scalar cost) {
