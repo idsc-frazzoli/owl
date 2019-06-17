@@ -10,6 +10,9 @@ import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 
 /* package */ enum So2Helper {
   ;
+  /** @param sequence
+   * @return given sequence
+   * @throws Exception if span of entries exceeds or equals pi */
   static Tensor rangeQ(Tensor sequence) {
     ScalarSummaryStatistics scalarSummaryStatistics = sequence.stream() //
         .map(Scalar.class::cast) //

@@ -26,7 +26,8 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
    * rotation angles a_i have to satisfy: sup (i,j) |ai-aj| < pi */
   LINEAR(So2LinearBiinvariantMean.INSTANCE), //
   /** Careful:
-   * FILTER is NOT invariant under permutation of input parameters!
+   * FILTER is NOT invariant under permutation of input parameters
+   * for sequences of length 3 or greater.
    * 
    * FILTER is the generalization of LINEAR to arbitrary angles
    * FILTER is suitable for use in center filters */
@@ -44,7 +45,7 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
     this.scalarBiinvariantMean = scalarBiinvariantMean;
   }
 
-  @Override // from BiinvariantMeanInterface
+  @Override // from BiinvariantMean
   public Tensor mean(Tensor sequence, Tensor weights) {
     Scalar amean = scalarBiinvariantMean.mean(sequence.get(Tensor.ALL, 2), weights);
     return Se2Skew.mean(new Se2GroupElement(Tensors.of(ZERO, ZERO, amean)), sequence, weights);

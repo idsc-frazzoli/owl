@@ -4,19 +4,30 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public class ClothoidQuadratic implements ScalarUnaryOperator {
-  private static final Scalar N4 = RealScalar.of(-4);
+/* package */ class ClothoidQuadratic implements ScalarUnaryOperator {
+  private static final Scalar _3 = RealScalar.of(+3);
   // ---
-  private final Scalar b0;
-  private final Scalar b1;
-  private final Scalar bm;
+  private final ScalarUnaryOperator series;
 
+  /** quadratic polynomial that interpolates given values at parameters 0, 1/2, 1:
+   * <pre>
+   * p[0/2] == b0
+   * p[1/2] == bm
+   * p[2/2] == b1
+   * </pre>
+   * 
+   * @param b0
+   * @param bm
+   * @param b1 */
   public ClothoidQuadratic(Scalar b0, Scalar bm, Scalar b1) {
-    this.b0 = b0;
-    this.bm = bm;
-    this.b1 = b1;
+    Scalar b2 = bm.add(bm);
+    Scalar c1 = b2.add(b2).subtract(b0.multiply(_3).add(b1));
+    Scalar c2 = b0.add(b1).subtract(b2);
+    series = Series.of(Tensors.of(b0, c1, c2.add(c2)));
   }
 
   @Override
@@ -24,12 +35,7 @@ public class ClothoidQuadratic implements ScalarUnaryOperator {
     return ComplexScalar.unit(angle(s));
   }
 
-  /* package */ Scalar angle(Scalar s) {
-    Scalar _s_1 = s.subtract(RealScalar.ONE);
-    Scalar _2s_1 = s.add(_s_1);
-    Scalar t1 = b0.multiply(_s_1).multiply(_2s_1);
-    Scalar t2 = bm.multiply(N4).multiply(s).multiply(_s_1);
-    Scalar t3 = b1.multiply(s).multiply(_2s_1);
-    return t1.add(t2).add(t3);
+  public Scalar angle(Scalar s) {
+    return series.apply(s);
   }
 }

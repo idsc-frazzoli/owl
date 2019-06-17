@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /* package */ class ClothoidTransition extends Se2Transition {
-  public ClothoidTransition(Tensor start, Tensor end, Scalar radius) {
+  public ClothoidTransition(Tensor start, Tensor end) {
     super(start, end);
   }
 

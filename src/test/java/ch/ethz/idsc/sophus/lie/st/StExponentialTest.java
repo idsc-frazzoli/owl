@@ -48,21 +48,25 @@ public class StExponentialTest extends TestCase {
   }
 
   public void testExpLog() {
-    Scalar u = RealScalar.of(Math.random());
-    Tensor v = Tensors.vector(Math.random(), 3 * Math.random(), -Math.random(), -4 * Math.random());
-    Tensor inp = Tensors.of(u, v);
-    Tensor xy = StExponential.INSTANCE.exp(inp);
-    Tensor uv = StExponential.INSTANCE.log(xy);
-    Chop._10.requireClose(inp, uv);
+    for (int count = 0; count < 10; ++count) {
+      Scalar u = RealScalar.of(Math.random());
+      Tensor v = Tensors.vector(Math.random(), 3 * Math.random(), -Math.random(), -4 * Math.random());
+      Tensor inp = Tensors.of(u, v);
+      Tensor xy = StExponential.INSTANCE.exp(inp);
+      Tensor uv = StExponential.INSTANCE.log(xy);
+      Chop._10.requireClose(inp, uv);
+    }
   }
 
   public void testLogExp() {
-    Scalar u = RealScalar.of(Math.random());
-    Tensor v = Tensors.vector(Math.random(), 3 * Math.random(), -Math.random(), -4 * Math.random());
-    Tensor inp = Tensors.of(u, v);
-    Tensor uv = StExponential.INSTANCE.log(inp);
-    Tensor xy = StExponential.INSTANCE.exp(uv);
-    Chop._10.requireClose(inp, xy);
+    for (int count = 0; count < 10; ++count) {
+      Scalar u = RealScalar.of(Math.random());
+      Tensor v = Tensors.vector(Math.random(), 3 * Math.random(), -Math.random(), -4 * Math.random());
+      Tensor inp = Tensors.of(u, v);
+      Tensor uv = StExponential.INSTANCE.log(inp);
+      Tensor xy = StExponential.INSTANCE.exp(uv);
+      Chop._10.requireClose(inp, xy);
+    }
   }
 
   public void testSingular() {

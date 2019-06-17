@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * implementation supports the use of Quantity
  * 
- * implementation generalizes {@link UniformRandomSample} and {@link CircleRandomSample} */
+ * implementation generalizes {@link UniformRandomSample} and {@link DiskRandomSample} */
 public class SphereRandomSample implements RandomSampleInterface, Serializable {
   public static final int MAX_LENGTH = 10;
   private static final Distribution UNIFORM = UniformDistribution.of(Clips.absoluteOne());
@@ -45,7 +45,7 @@ public class SphereRandomSample implements RandomSampleInterface, Serializable {
       return UniformRandomSample.of(distribution, 1);
     }
     case 2:
-      return new CircleRandomSample(center, radius);
+      return new DiskRandomSample(center, radius);
     }
     VectorQ.require(center);
     return Scalars.isZero(radius) //

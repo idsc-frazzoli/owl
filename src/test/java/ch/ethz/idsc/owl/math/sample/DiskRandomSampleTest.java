@@ -14,21 +14,21 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
-public class CircleRandomSampleTest extends TestCase {
+public class DiskRandomSampleTest extends TestCase {
   private static final Random RANDOM = new Random();
 
   public void testSimple() {
-    CircleRandomSample circleRandomSample = new CircleRandomSample(Tensors.vector(0, 0), RealScalar.ONE);
+    DiskRandomSample diskRandomSample = new DiskRandomSample(Tensors.vector(0, 0), RealScalar.ONE);
     for (int count = 0; count < 100; ++count) {
-      Tensor loc = circleRandomSample.randomSample(RANDOM);
+      Tensor loc = diskRandomSample.randomSample(RANDOM);
       Scalar rad = Norm._2.ofVector(loc);
       assertTrue(Scalars.lessEquals(rad, RealScalar.ONE));
     }
   }
 
   public void testQuantity() {
-    CircleRandomSample circleRandomSample = new CircleRandomSample(Tensors.fromString("{10[m],20[m]}"), Quantity.of(2, "m"));
-    Tensor tensor = circleRandomSample.randomSample(RANDOM);
+    DiskRandomSample diskRandomSample = new DiskRandomSample(Tensors.fromString("{10[m],20[m]}"), Quantity.of(2, "m"));
+    Tensor tensor = diskRandomSample.randomSample(RANDOM);
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("m");
     tensor.map(scalarUnaryOperator);
   }

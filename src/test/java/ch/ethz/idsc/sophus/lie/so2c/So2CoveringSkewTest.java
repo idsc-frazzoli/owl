@@ -27,7 +27,12 @@ public class So2CoveringSkewTest extends TestCase {
     }
   }
 
-  public void testSingularity() {
+  public void testSingularity0() {
+    Tensor tensor = So2CoveringSkew.of(RealScalar.of(Double.MIN_VALUE));
+    Chop._40.requireClose(tensor, IdentityMatrix.of(2));
+  }
+
+  public void testSingularityPi() {
     Tensor tensor = So2CoveringSkew.of(Pi.VALUE);
     Tensor matrix = Tensors.matrix(new Scalar[][] { { RealScalar.ZERO, Pi.HALF }, { Pi.HALF.negate(), RealScalar.ZERO } });
     Chop._14.requireClose(tensor, matrix);

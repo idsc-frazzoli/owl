@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.lie;
 import java.io.IOException;
 import java.util.Arrays;
 
+import ch.ethz.idsc.sophus.lie.gl.LinearGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;

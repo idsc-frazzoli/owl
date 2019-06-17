@@ -32,6 +32,24 @@ public class HeGroupElementTest extends TestCase {
     assertEquals(b_t, b_r);
   }
 
+  public void testAdjoint1() {
+    Tensor a_t = Tensors.fromString("{{1, 2}, {3, 4}, 5}");
+    Tensor b_t = Tensors.fromString("{{6, 7}, {0, 0}, 10}");
+    HeGroupElement a = new HeGroupElement(a_t);
+    Tensor tensor = a.adjoint(b_t);
+    assertEquals(tensor, Tensors.fromString("{{6, 7}, {0, 0}, -3*6-4*7+10}"));
+    ExactTensorQ.require(tensor);
+  }
+
+  public void testAdjoint2() {
+    Tensor a_t = Tensors.fromString("{{1, 2}, {3, 4}, 5}");
+    Tensor b_t = Tensors.fromString("{{0, 0}, {6, 7}, 9}");
+    HeGroupElement a = new HeGroupElement(a_t);
+    Tensor tensor = a.adjoint(b_t);
+    assertEquals(tensor, Tensors.fromString("{{0, 0}, {6, 7}, 1*6+2*7+9}"));
+    ExactTensorQ.require(tensor);
+  }
+
   public void testFail() {
     try {
       new HeGroupElement(Tensors.of(HilbertMatrix.of(3), Tensors.vector(1, 2, 3), RealScalar.ONE));

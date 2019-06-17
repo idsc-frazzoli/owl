@@ -5,6 +5,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -32,5 +35,18 @@ public class Se2CoveringGeodesicTest extends TestCase {
     // {2.260334367029097, -0.0014728825470118057, 0.9817477042468103}
     assertTrue(Chop._14.close(tensor, //
         Tensors.fromString("{2.260334367029097, -0.0014728825470118057, 0.9817477042468103}")));
+  }
+
+  public void testBiinvariantMean() {
+    Distribution distribution = UniformDistribution.of(-3, 8);
+    Distribution wd = UniformDistribution.unit();
+    for (int count = 0; count < 10; ++count) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Tensor q = RandomVariate.of(distribution, 3);
+      Scalar w = RandomVariate.of(wd);
+      Tensor mean = Se2CoveringBiinvariantMean.INSTANCE.mean(Tensors.of(p, q), Tensors.of(RealScalar.ONE.subtract(w), w));
+      Tensor splt = Se2CoveringGeodesic.INSTANCE.split(p, q, w);
+      Chop._12.requireClose(mean, splt);
+    }
   }
 }
