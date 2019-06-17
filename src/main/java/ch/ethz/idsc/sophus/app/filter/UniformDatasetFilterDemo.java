@@ -12,10 +12,10 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.data.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.group.LieDifferences;
-import ch.ethz.idsc.sophus.group.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieDifferences;
+import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;

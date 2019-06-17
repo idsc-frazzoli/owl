@@ -11,10 +11,10 @@ import javax.swing.JToggleButton;
 import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensor;

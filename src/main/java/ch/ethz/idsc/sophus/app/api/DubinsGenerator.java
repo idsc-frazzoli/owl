@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.group.Se2CoveringDifferences;
-import ch.ethz.idsc.sophus.group.Se2CoveringIntegrator;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringDifferences;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

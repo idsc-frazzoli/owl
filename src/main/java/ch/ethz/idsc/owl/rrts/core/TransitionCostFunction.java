@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.rrts.core;
 
 import ch.ethz.idsc.tensor.Scalar;
 
+@FunctionalInterface
 public interface TransitionCostFunction {
   /** @param transition
    * @return cost of given transition */

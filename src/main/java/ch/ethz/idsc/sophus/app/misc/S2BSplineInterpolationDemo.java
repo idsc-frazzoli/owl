@@ -3,11 +3,11 @@ package ch.ethz.idsc.sophus.app.misc;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation;
-import ch.ethz.idsc.sophus.curve.AbstractBSplineInterpolation.Iteration;
-import ch.ethz.idsc.sophus.curve.GeodesicBSplineFunction;
-import ch.ethz.idsc.sophus.curve.GeodesicBSplineInterpolation;
-import ch.ethz.idsc.sophus.space.SnGeodesic;
+import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation;
+import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation.Iteration;
+import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
+import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineInterpolation;
+import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.MatrixQ;

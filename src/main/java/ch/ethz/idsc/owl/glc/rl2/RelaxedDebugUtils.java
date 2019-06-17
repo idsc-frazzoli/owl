@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.data.tree.NodesAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.sophus.VectorScalars;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.tensor.io.UserName;
 
 public enum RelaxedDebugUtils {

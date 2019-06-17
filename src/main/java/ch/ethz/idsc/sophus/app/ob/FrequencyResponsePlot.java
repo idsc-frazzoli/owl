@@ -8,8 +8,8 @@ import java.util.function.Function;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
-import ch.ethz.idsc.sophus.math.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.WindowSideSampler;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
+import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;

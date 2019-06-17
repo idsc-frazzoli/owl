@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.curve.LagrangeInterpolation;
+import ch.ethz.idsc.sophus.crv.spline.LagrangeInterpolation;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.sophus.sym.SymScalar;

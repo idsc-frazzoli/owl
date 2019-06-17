@@ -111,7 +111,7 @@ public class RepresentativeTransitiveMinTrackerTest extends TestCase {
   }
 
   private static void _checkPermutations(Supplier<MinTracker<Scalar>> supplier) {
-    Distribution distribution = DiscreteUniformDistribution.of(0, 10000);
+    Distribution distribution = DiscreteUniformDistribution.of(1, 10000);
     Tensor tensor = RandomVariate.of(distribution, 100);
     List<Tensor> list = Unprotect.list(tensor.copy());
     Collection<Scalar> collection1;

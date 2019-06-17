@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
-import ch.ethz.idsc.owl.math.planar.PurePursuit;
+import ch.ethz.idsc.owl.math.pursuit.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;

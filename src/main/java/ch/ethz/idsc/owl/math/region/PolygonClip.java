@@ -2,7 +2,7 @@
 // inspired by https://rosettacode.org/wiki/Sutherland-Hodgman_polygon_clipping#Java
 package ch.ethz.idsc.owl.math.region;
 
-import ch.ethz.idsc.sophus.planar.Det2D;
+import ch.ethz.idsc.sophus.math.Det2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;

@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.glc.adapter;
 import java.util.Comparator;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.sophus.VectorScalar;
-import ch.ethz.idsc.sophus.VectorScalars;
+import ch.ethz.idsc.owl.math.VectorScalar;
+import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** compare two nodes based on {@link GlcNode#merit()}

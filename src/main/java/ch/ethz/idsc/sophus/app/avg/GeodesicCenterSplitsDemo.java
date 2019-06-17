@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.app.avg;
 
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.filter.GeodesicCenter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.Tensor;

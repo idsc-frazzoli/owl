@@ -3,8 +3,8 @@ package ch.ethz.idsc.owl.math.sample;
 
 import java.util.Random;
 
-import ch.ethz.idsc.sophus.surf.R3S2Geodesic;
-import ch.ethz.idsc.sophus.surf.RotationMatrix3D;
+import ch.ethz.idsc.sophus.hs.r3s2.R3S2Geodesic;
+import ch.ethz.idsc.sophus.hs.sn.RotationMatrix3D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -51,7 +51,7 @@ public class SphereRandomSampleTest extends TestCase {
     Tensor center = Tensors.vector(10, 20);
     Scalar radius = RealScalar.of(2);
     RandomSampleInterface rsi = SphereRandomSample.of(center, radius);
-    assertTrue(rsi instanceof CircleRandomSample);
+    assertTrue(rsi instanceof DiskRandomSample);
   }
 
   public void test3DZeroRadius() {

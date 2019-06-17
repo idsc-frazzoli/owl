@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
-import ch.ethz.idsc.sophus.TensorMetric;
-import ch.ethz.idsc.sophus.group.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.group.Se2CoveringGroupElement;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroupElement;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;

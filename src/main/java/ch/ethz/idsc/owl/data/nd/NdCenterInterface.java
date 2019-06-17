@@ -11,6 +11,12 @@ public interface NdCenterInterface extends VectorNormInterface {
     return new EuclideanNdCenter(center);
   }
 
+  /** @param center
+   * @return */
+  static NdCenterInterface clothoid(Tensor center) {
+    return new ClothoidNdCenter(center);
+  }
+
   /** @return center */
   Tensor center();
 }

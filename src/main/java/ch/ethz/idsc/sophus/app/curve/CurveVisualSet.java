@@ -4,8 +4,9 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-import ch.ethz.idsc.sophus.planar.ArcTan2D;
-import ch.ethz.idsc.sophus.planar.SignedCurvature2D;
+import ch.ethz.idsc.sophus.lie.so2.So2;
+import ch.ethz.idsc.sophus.math.ArcTan2D;
+import ch.ethz.idsc.sophus.math.SignedCurvature2D;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,12 +15,9 @@ import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.FoldList;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Mod;
 
 /* package */ class CurveVisualSet {
-  private static final Mod MOD_DISTANCE = Mod.function(Pi.TWO, Pi.VALUE.negate());
   static final Stroke PLOT_STROKE = new BasicStroke(1.5f);
   // ---
   private final VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
@@ -47,7 +45,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
   public void addArcTan(Tensor refined) {
     Tensor arcTan2D = Tensor.of(differences.stream().map(ArcTan2D::of));
     Tensor extract = refined.get(Tensor.ALL, 2).extract(0, arcTan2D.length());
-    VisualRow visualRow = visualSet.add(arcLength0, arcTan2D.subtract(extract).map(MOD_DISTANCE));
+    VisualRow visualRow = visualSet.add(arcLength0, arcTan2D.subtract(extract).map(So2.MOD));
     visualRow.setLabel("arcTan[dx, dy] - phase");
     visualRow.setStroke(PLOT_STROKE);
   }

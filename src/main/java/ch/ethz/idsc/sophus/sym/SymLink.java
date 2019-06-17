@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.sym;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.group.RnGeodesic;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -54,10 +54,10 @@ public class SymLink {
         Min.of(posP.Get(1), posQ.Get(1)).subtract(SHIFT_Y));
   }
 
-  public Tensor getPosition(GeodesicInterface geodesicInterface) {
-    return geodesicInterface.split( //
-        lP.getPosition(geodesicInterface), //
-        lQ.getPosition(geodesicInterface), //
+  public Tensor getPosition(SplitInterface splitInterface) {
+    return splitInterface.split( //
+        lP.getPosition(splitInterface), //
+        lQ.getPosition(splitInterface), //
         lambda);
   }
 }

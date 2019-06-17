@@ -5,12 +5,12 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.RadiusXY;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 

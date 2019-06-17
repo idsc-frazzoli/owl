@@ -7,10 +7,10 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.planar.EllipsePoints;
-import ch.ethz.idsc.owl.math.planar.Extract2D;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.sophus.math.EllipsePoints;
+import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 

@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
-import ch.ethz.idsc.sophus.TensorsExt;
+import ch.ethz.idsc.sophus.math.TensorsExt;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.math.DiscretizedLexicographic;
+import ch.ethz.idsc.owl.math.order.DiscretizedLexicographic;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
