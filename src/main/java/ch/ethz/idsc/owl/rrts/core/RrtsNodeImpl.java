@@ -40,6 +40,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   }
 
   private static void _propagate(RrtsNode node, Scalar nodeCostFromRoot) {
+    /*
     for (RrtsNode _child : node.children()) {
       RrtsNodeImpl child = (RrtsNodeImpl) _child;
       final Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
@@ -47,6 +48,13 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
       _propagate(child, newCostFromRoot);
       child.costFromRoot = newCostFromRoot;
     }
+    */
+    node.children().stream().parallel().forEach(child -> {
+      final Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
+      Scalar newCostFromRoot = nodeCostFromRoot.add(costFromParent);
+      _propagate(child, newCostFromRoot);
+      ((RrtsNodeImpl) child).costFromRoot = newCostFromRoot;
+    });
   }
 
   @Override

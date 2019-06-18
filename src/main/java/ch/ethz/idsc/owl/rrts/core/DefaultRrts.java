@@ -102,7 +102,7 @@ public class DefaultRrts implements Rrts {
 
   @Override // from Rrts
   public void rewireAround(RrtsNode parent, int k_nearest) {
-    // TODO speeding this part up brings up to 30% (determined with parallel stream that sometimes fails)
+    /*
     for (RrtsNode node : nodeCollection.nearFrom(parent.state(), k_nearest)) {
       Transition transition = transitionSpace.connect(parent.state(), node.state());
       Scalar costFromParent = transitionCostFunction.cost(transition);
@@ -113,6 +113,19 @@ public class DefaultRrts implements Rrts {
         }
       }
     }
+    */
+    nodeCollection.nearFrom(parent.state(), k_nearest).stream().parallel().forEach(node -> {
+      Transition transition = transitionSpace.connect(parent.state(), node.state());
+      Scalar costFromParent = transitionCostFunction.cost(transition);
+      synchronized (parent) {
+        if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
+          if (isCollisionFree(transition)) {
+            parent.rewireTo(node, costFromParent);
+            ++rewireCount;
+          }
+        }
+      }
+    });
   }
 
   @Override // from Rrts
