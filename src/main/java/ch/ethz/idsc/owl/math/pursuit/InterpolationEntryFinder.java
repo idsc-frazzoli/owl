@@ -24,6 +24,10 @@ public final class InterpolationEntryFinder extends TrajectoryEntryFinder {
 
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar index) {
+    // TODO GJOEL test simpler version below:
+    // Clip clip = Clips.positive(waypoints.length() - 1);
+    // if (clip.isInside(index))
+    // return new TrajectoryEntry(Optional.of(LinearInterpolation.of(waypoints).at(index)), index);
     int index_ = index.number().intValue();
     if (index_ >= 0 && index_ < waypoints.length() - 1) {
       Interpolation interpolation = LinearInterpolation.of(Tensors.of( //

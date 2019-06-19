@@ -1,6 +1,6 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.4.3`
+Library for motion planning in Java, version `0.4.4`
 
 ![owl](https://user-images.githubusercontent.com/4012178/57274601-0e61a480-709c-11e9-9b9a-904ce21d394e.png)
 
@@ -137,7 +137,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.4.3</version>
+        <version>0.4.4</version>
       </dependency>
     </dependencies>
 
@@ -247,9 +247,11 @@ by Jan Hakenberg,
 
 ## References
 
-* *Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.* by Vincent Arsigny, Xavier Pennec and Nicholas Ayache
-* *Manifold-valued subdivision schemes based on geodesic inductive averaging* by Nira Dyn and Nir Sharon
+* *Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.* by Vincent Arsigny, Xavier Pennec, Nicholas Ayache
+* *Exponential Barycenters of the Canonical Cartan Connection and Invariant Means on Lie Groups* by Xavier Pennec, Vincent Arsigny
 * *Lie Groups for 2D and 3D Transformations* by Ethan Eade
+* *Manifold-valued subdivision schemes based on geodesic inductive averaging* by Nira Dyn, Nir Sharon
+* *Power Coordinates: A Geometric Construction of Barycentric Coordinates on Convex Polytopes* by Max Budninskiy, Beibei Liu, Yiying Tong, Mathieu Desbrun
 
 ---
 

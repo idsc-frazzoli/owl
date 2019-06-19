@@ -14,8 +14,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/** Power Coordinates: A Geometric Construction of
- * Barycentric Coordinates on Convex Polytopes
+/** Power Coordinates: A Geometric Construction of Barycentric Coordinates on Convex Polytopes
  * Reference:
  * Max Budninskiy, Beibei Liu, Yiying Tong, Mathieu Desbrun, 2016 */
 // FIXME JPH guard from singularities: x in P
