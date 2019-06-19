@@ -1,14 +1,15 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import java.awt.Color;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
+import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.jfree.graphics2d.svg.SVGUtils;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
@@ -30,11 +31,11 @@ import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.SpectrogramArray;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -42,7 +43,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/* package */ class FourierWindowCausalPlot {
+/* package */ class FourierWindowCausalofAlphaPlot {
   private static final Scalar WINDOW_DURATION = Quantity.of(1, "s");
   private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
   private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
@@ -50,17 +51,15 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static void plot(Tensor data, int radius, String signal, Scalar alpha) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
-      yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
+      yData.append(TransferFunctionResponse.FREQUENCY.apply(meanData));
     // ---
     Tensor xAxis = Tensors.empty();
     for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index) {
       xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
     }
     VisualSet visualSet = new VisualSet();
-    // visualSet.setPlotLabel("Causal IIR Filters: length = "+radius+" Magnitude Response - $" + signal + "$");
-    // visualSet.setPlotLabel("Causal IIR Filters: length = "+radius+" Phase Response - $" + signal + "$");
-    visualSet.setPlotLabel("Causal FIR Filters: length = " + radius + "  Magnitude Response - $" + signal + "$");
-    // visualSet.setPlotLabel("Causal FIR Filters: length = "+radius+" Phase Response - $" + signal + "$");
+    // visualSet.setPlotLabel("Causal Filters: length = "+radius+", $\\alpha = " + alpha.number()+ "$ Magnitude Response - $" + signal + "$");
+    visualSet.setPlotLabel("Causal Filters: length = " + radius + ", $\\alpha = " + alpha.number() + "$  Phase Response - $" + signal + "$");
     visualSet.setAxesLabelX("Frequency $[Hz]$");
     visualSet.setAxesLabelY("Phase $H(\\Omega)$");
     // visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
@@ -73,13 +72,14 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       ++index;
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);
-    jFreeChart.setBackgroundPaint(Color.WHITE);
-    // Exportable as SVG?
-    String fileName = "Causal_Magnitude" + radius + "_" + signal + ".png";
-    // String fileName = "Causal_Phase_" + radius + "_" + signal + ".png";
-    File file = HomeDirectory.Pictures(fileName);
-    // impove DPI?
-    ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
+    String fileNameSVG = "MagnitudeResponse_FIR_" + radius + "_" + signal + "_" + alpha.number() + ".svg";
+    SVGGraphics2D svg = new SVGGraphics2D(600, 400);
+    Rectangle rectangle = new Rectangle(0, 0, 600, 400);
+    jFreeChart.draw(svg, rectangle);
+    // String fileNameSVG = "Geodesic Center Filter("+radius+") Magnitude" + signal + ".svg";
+    // String fileNameSVG = "Geodesic Center Filter("+radius+") Phase" + signal + ".svg";
+    File fileSVG = HomeDirectory.Pictures(fileNameSVG);
+    SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
 
   private static void process(List<String> listData, ScalarUnaryOperator smoothingKernel, int radius, int limit, Scalar alpha) throws IOException {
@@ -128,6 +128,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       smoothedY.append(tempY);
       smoothedA.append(tempA);
     }
+    System.out.println(Dimensions.of(Mean.of(smoothedX)));
     plot(Mean.of(smoothedX), radius, "x", alpha);
     plot(Mean.of(smoothedY), radius, "y", alpha);
     plot(Mean.of(smoothedA), radius, "a", alpha);
@@ -136,9 +137,18 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public static void main(String[] args) throws IOException {
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
     List<String> listData = GokartPoseData.INSTANCE.list();
-    int radius = 7;
+    int radius = 3;
     int limit = 5;
-    Scalar alpha = RealScalar.of(0.8);
-    process(listData, smoothingKernel, radius, limit, alpha);
+    for (int index = 1; index < 5; ++index) {
+      Scalar alpha = RationalScalar.of(index, 5);
+      System.out.println(alpha.number());
+      process(listData, smoothingKernel, radius, limit, alpha);
+    }
+    radius = 7;
+    for (int index = 0; index < 5; ++index) {
+      Scalar alpha = RationalScalar.of(index, 5);
+      System.out.println(alpha);
+      process(listData, smoothingKernel, radius, limit, alpha);
+    }
   }
 }
