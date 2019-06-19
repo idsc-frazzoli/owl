@@ -5,6 +5,9 @@ import ch.ethz.idsc.sophus.lie.BiinvariantMeanTests;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.lie.Permutations;
@@ -48,5 +51,20 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
         Chop._08.requireClose(result, rnmean);
       }
     }
+  }
+
+  public void testBiinvariantMeanNotTangentSpace() {
+    Distribution distribution = UniformDistribution.of(-2, 2);
+    Tensor vectors = RandomVariate.of(distribution, 3, 3);
+    // System.out.println(Pretty.of(vectors.map(Round._4)));
+    Tensor weights = RandomVariate.of(distribution, 3);
+    Tensor exp = Se2CoveringExponential.INSTANCE.exp(weights.dot(vectors));
+    // ---
+    Tensor sequence = Join.of( //
+        Array.zeros(1, 3), //
+        Tensor.of(vectors.stream().map(Se2CoveringExponential.INSTANCE::exp)));
+    Tensor mean = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, //
+        Join.of(Tensors.of(RealScalar.ONE.subtract(Total.ofVector(weights))), weights));
+    assertFalse(Chop._08.close(exp, mean));
   }
 }
