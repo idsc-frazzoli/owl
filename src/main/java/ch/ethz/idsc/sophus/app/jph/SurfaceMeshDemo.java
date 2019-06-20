@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 
 public class SurfaceMeshDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_DRAW = ColorDataLists._097.cyclic().deriveWithAlpha(192);
-  private static final ColorDataIndexed COLOR_DATA_INDEXED_FILL = ColorDataLists._097.cyclic().deriveWithAlpha(182);
+  private static final ColorDataIndexed COLOR_DATA_INDEXED_FILL = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   // ---
   private final JToggleButton axes = new JToggleButton("axes");
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();

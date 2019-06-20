@@ -8,11 +8,10 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.io.Primitives;
 
 public class SurfaceMesh {
-  public Tensor ind = Tensors.empty();
+  public final Tensor ind = Tensors.empty();
   public Tensor vrt = Tensors.empty();
 
   public int addVert(Tensor vector) {
@@ -26,10 +25,8 @@ public class SurfaceMesh {
   }
 
   public Tensor polygons() {
-    Tensor tensor = Unprotect.empty(ind.length());
-    for (Tensor face : ind)
-      tensor.append(Tensor.of(IntStream.of(Primitives.toIntArray(face)).mapToObj(vrt::get)));
-    return tensor;
+    return Tensor.of(ind.stream() //
+        .map(face -> Tensor.of(IntStream.of(Primitives.toIntArray(face)).mapToObj(vrt::get))));
   }
 
   /** @return vert to face index */

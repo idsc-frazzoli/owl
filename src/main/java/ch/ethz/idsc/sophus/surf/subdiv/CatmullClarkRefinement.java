@@ -7,12 +7,11 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 
 public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializable {
   /** @param biinvariantMean non-null
@@ -30,32 +29,24 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
     linearMeshSubdivision = new LinearMeshRefinement(biinvariantMean);
   }
 
-  private static int position(Tensor vector, Scalar elem) {
-    return IntStream.range(0, vector.length()) //
-        .filter(index -> vector.get(index).equals(elem)) //
-        .findFirst().getAsInt();
-  }
-
-  @Override
+  @Override // from SurfaceMeshRefinement
   public SurfaceMesh refine(SurfaceMesh surfaceMesh) {
     SurfaceMesh out = linearMeshSubdivision.refine(surfaceMesh);
-    surfaceMesh = null;
     int vix = 0;
     Tensor cpy = out.vrt.copy();
     for (List<Integer> list : out.vertToFace()) {
       int n = list.size();
       if (2 < n) {
-        Tensor sequence = Tensors.empty();
-        Tensor weights = Tensors.empty();
+        // TODO identify boundary
+        Tensor sequence = Unprotect.empty(2 * n + 1);
+        Tensor weights = Unprotect.empty(2 * n + 1);
         Scalar ga = RationalScalar.of(1, 4);
         Scalar al = RationalScalar.of(1, 4 * n);
         Scalar be = RationalScalar.of(1, 2 * n);
         for (int fix : list) {
           int pos = position(out.ind.get(fix), RealScalar.of(vix));
-          int _p1 = Math.floorMod(pos + 1, 4);
-          int _p2 = Math.floorMod(pos + 2, 4);
-          int p1 = out.ind.Get(fix, _p1).number().intValue();
-          int p2 = out.ind.Get(fix, _p2).number().intValue();
+          int p1 = out.ind.Get(fix, (pos + 1) % 4).number().intValue();
+          int p2 = out.ind.Get(fix, (pos + 2) % 4).number().intValue();
           sequence.append(out.vrt.get(p1));
           sequence.append(out.vrt.get(p2));
           weights.append(be);
@@ -64,15 +55,17 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
         Tensor interp = out.vrt.get(vix);
         sequence.append(interp);
         weights.append(ga);
-        AffineQ.require(weights);
-        // System.out.println(Total.ofVector(weights));
-        Tensor mean = biinvariantMean.mean(sequence, weights);
-        // mean = interp;
-        cpy.set(mean, vix);
+        cpy.set(biinvariantMean.mean(sequence, weights), vix);
       }
       ++vix;
     }
     out.vrt = cpy;
     return out;
+  }
+
+  private static int position(Tensor vector, Scalar elem) {
+    return IntStream.range(0, vector.length()) //
+        .filter(index -> vector.get(index).equals(elem)) //
+        .findFirst().getAsInt();
   }
 }

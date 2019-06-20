@@ -3,7 +3,8 @@ package ch.ethz.idsc.sophus.surf.subdiv;
 
 import ch.ethz.idsc.tensor.Tensors;
 
-/** Hint: exists only for evaluation purposes
+/** Hint:
+ * implementation exists only for evaluation purposes
  * class may be removed in future releases */
 public enum SurfaceMeshExamples {
   ;
