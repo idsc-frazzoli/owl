@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
@@ -15,13 +16,14 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.Primitives;
 
-public class LinearMeshSubdivision {
+public class LinearMeshRefinement implements SurfaceMeshRefinement {
   private final BiinvariantMean biinvariantMean;
 
-  public LinearMeshSubdivision(BiinvariantMean biinvariantMean) {
-    this.biinvariantMean = biinvariantMean;
+  public LinearMeshRefinement(BiinvariantMean biinvariantMean) {
+    this.biinvariantMean = Objects.requireNonNull(biinvariantMean);
   }
 
+  @Override
   public SurfaceMesh refine(SurfaceMesh surfaceMesh) {
     SurfaceMesh out = new SurfaceMesh();
     out.vrt = surfaceMesh.vrt.copy(); // interpolation

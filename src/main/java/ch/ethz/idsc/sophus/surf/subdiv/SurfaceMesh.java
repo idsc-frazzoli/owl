@@ -2,9 +2,8 @@
 package ch.ethz.idsc.sophus.surf.subdiv;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,18 +32,19 @@ public class SurfaceMesh {
     return tensor;
   }
 
-  public Tensor vertRings() {
-    Map<Integer, List<Integer>> map = new HashMap<>();
+  /** @return vert to face index */
+  public List<List<Integer>> vertToFace() {
+    @SuppressWarnings("unused")
+    List<List<Integer>> list = IntStream.range(0, vrt.length()) //
+        .mapToObj(i -> new ArrayList<Integer>()) //
+        .collect(Collectors.toList());
+    // ---
     int index = 0;
     for (Tensor face : ind) {
-      int[] values = Primitives.toIntArray(face);
-      for (int value : values) {
-        if (!map.containsKey(value))
-          map.put(value, new ArrayList<>());
-        map.get(value).add(index);
-      }
+      for (int value : Primitives.toIntArray(face))
+        list.get(value).add(index);
       ++index;
     }
-    return null;
+    return list;
   }
 }
