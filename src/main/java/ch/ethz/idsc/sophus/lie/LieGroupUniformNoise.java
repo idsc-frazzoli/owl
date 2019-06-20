@@ -35,15 +35,15 @@ public class LieGroupUniformNoise {
     return upperLimits.subtract(lowerLimits).divide(RealScalar.of(Math.sqrt(12)));
   }
 
-  private Tensor whiteNoise() {
+  private Tensor noise() {
     return Array.of(l -> RealScalar.of(Math.random())).pmul(lowerLimits.subtract(upperLimits)).add(lowerLimits);
   }
 
   public final Tensor leftNoise(Tensor tensor) {
-    return geodesicDisplay.lieGroup().element(lieExponential.exp(whiteNoise())).combine(tensor);
+    return geodesicDisplay.lieGroup().element(lieExponential.exp(noise())).combine(tensor);
   }
 
   public final Tensor rightNoise(Tensor tensor) {
-    return geodesicDisplay.lieGroup().element(tensor).combine(lieExponential.exp(whiteNoise()));
+    return geodesicDisplay.lieGroup().element(tensor).combine(lieExponential.exp(noise()));
   }
 }

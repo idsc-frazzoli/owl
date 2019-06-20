@@ -25,19 +25,27 @@ public class LieGroupGaussianNoise {
     this.geodesicDisplay = geodesicDisplay;
     this.lieExponential = geodesicDisplay.lieExponential();
     this.mean = mean;
-    this.stdDeviation = stdDeviation; 
+    this.stdDeviation = stdDeviation;
   }
 
-  private Tensor whiteNoise() {
+  public Tensor getMean() {
+    return mean;
+  }
+
+  public Tensor getStandardDeviation() {
+    return stdDeviation;
+  }
+
+  private Tensor noise() {
     Random rand = new Random();
     return Array.of(l -> RealScalar.of(rand.nextGaussian()), mean.length()).pmul(stdDeviation).add(mean);
   }
 
   public final Tensor leftNoise(Tensor tensor) {
-    return geodesicDisplay.lieGroup().element(lieExponential.exp(whiteNoise())).combine(tensor);
+    return geodesicDisplay.lieGroup().element(lieExponential.exp(noise())).combine(tensor);
   }
 
   public final Tensor rightNoise(Tensor tensor) {
-    return geodesicDisplay.lieGroup().element(tensor).combine(lieExponential.exp(whiteNoise()));
+    return geodesicDisplay.lieGroup().element(tensor).combine(lieExponential.exp(noise()));
   }
 }

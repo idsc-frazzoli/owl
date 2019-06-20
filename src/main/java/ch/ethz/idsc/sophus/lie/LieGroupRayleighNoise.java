@@ -26,20 +26,24 @@ public class LieGroupRayleighNoise {
     this.stdDeviation = stdDeviation;
   }
 
-// gives the mean of the function given the stdDeviation
+  // gives the mean of the function given the stdDeviation
   public Tensor getMean() {
     return stdDeviation.multiply(Sqrt.of(RealScalar.of(Math.PI / 2)));
   }
 
-  private Tensor whiteNoise() {
+  public Tensor getStandardDeviation() {
+    return stdDeviation;
+  }
+
+  private Tensor noise() {
     return Array.of(l -> Sqrt.FUNCTION.apply(Log.of(RealScalar.of(-2 * Math.random())))).pmul(stdDeviation);
   }
 
   public final Tensor leftNoise(Tensor tensor) {
-    return geodesicDisplay.lieGroup().element(lieExponential.exp(whiteNoise())).combine(tensor);
+    return geodesicDisplay.lieGroup().element(lieExponential.exp(noise())).combine(tensor);
   }
 
   public final Tensor rightNoise(Tensor tensor) {
-    return geodesicDisplay.lieGroup().element(tensor).combine(lieExponential.exp(whiteNoise()));
+    return geodesicDisplay.lieGroup().element(tensor).combine(lieExponential.exp(noise()));
   }
 }
