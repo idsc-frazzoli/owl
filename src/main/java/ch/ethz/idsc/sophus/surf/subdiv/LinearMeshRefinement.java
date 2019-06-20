@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.surf.subdiv;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +17,18 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.Primitives;
 
-public class LinearMeshRefinement implements SurfaceMeshRefinement {
+public class LinearMeshRefinement implements SurfaceMeshRefinement, Serializable {
+  /** @param biinvariantMean non-null
+   * @return */
+  public static SurfaceMeshRefinement of(BiinvariantMean biinvariantMean) {
+    return new LinearMeshRefinement(Objects.requireNonNull(biinvariantMean));
+  }
+
+  // ---
   private final BiinvariantMean biinvariantMean;
 
-  public LinearMeshRefinement(BiinvariantMean biinvariantMean) {
-    this.biinvariantMean = Objects.requireNonNull(biinvariantMean);
+  /* package */ LinearMeshRefinement(BiinvariantMean biinvariantMean) {
+    this.biinvariantMean = biinvariantMean;
   }
 
   @Override

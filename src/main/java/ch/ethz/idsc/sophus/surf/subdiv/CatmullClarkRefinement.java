@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.surf.subdiv;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
@@ -12,9 +14,11 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class CatmullClarkRefinement implements SurfaceMeshRefinement {
+public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializable {
+  /** @param biinvariantMean non-null
+   * @return */
   public static SurfaceMeshRefinement of(BiinvariantMean biinvariantMean) {
-    return new CatmullClarkRefinement(biinvariantMean);
+    return new CatmullClarkRefinement(Objects.requireNonNull(biinvariantMean));
   }
 
   // ---

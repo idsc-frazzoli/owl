@@ -33,6 +33,7 @@ import ch.ethz.idsc.tensor.red.Total;
 public class Se2BarycenterDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_DRAW = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final ColorDataIndexed COLOR_DATA_INDEXED_FILL = ColorDataLists._097.cyclic().deriveWithAlpha(182);
+  // ---
   private final JToggleButton axes = new JToggleButton("axes");
 
   public Se2BarycenterDemo() {

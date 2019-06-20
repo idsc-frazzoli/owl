@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import javax.swing.JToggleButton;
 
+import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -18,8 +19,8 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.surf.subdiv.CatmullClarkRefinement;
 import ch.ethz.idsc.sophus.surf.subdiv.SurfaceMesh;
+import ch.ethz.idsc.sophus.surf.subdiv.SurfaceMeshExamples;
 import ch.ethz.idsc.sophus.surf.subdiv.SurfaceMeshRefinement;
-import ch.ethz.idsc.sophus.surf.subdiv.SurfaceMeshes;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -31,7 +32,7 @@ public class SurfaceMeshDemo extends ControlPointsDemo {
   // ---
   private final JToggleButton axes = new JToggleButton("axes");
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  private final SurfaceMesh surfaceMesh = SurfaceMeshes.quads6();
+  private final SurfaceMesh surfaceMesh = SurfaceMeshExamples.quads6();
 
   public SurfaceMeshDemo() {
     super(false, GeodesicDisplays.SE2C_R2);
@@ -48,6 +49,7 @@ public class SurfaceMeshDemo extends ControlPointsDemo {
     if (axes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     surfaceMesh.vrt = getControlPointsSe2();
+    GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     SurfaceMeshRefinement surfaceMeshRefinement = //
         CatmullClarkRefinement.of(geodesicDisplay.biinvariantMean());

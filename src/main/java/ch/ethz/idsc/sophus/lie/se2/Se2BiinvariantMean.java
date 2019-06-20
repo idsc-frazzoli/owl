@@ -17,8 +17,8 @@ import ch.ethz.idsc.tensor.Tensors;
  * For the rigid motion in 2D an explicit solution for the biinvariant mean exists.
  * 
  * Reference:
- * "Bi-invariant Means in Lie Groups. Application to left-invariant Polyaffine Transformations." p.38
- * Vincent Arsigny, Xavier Pennec, Nicholas Ayache */
+ * "Bi-invariant Means in Lie Groups. Application to left-invariant Polyaffine Transformations."
+ * Vincent Arsigny, Xavier Pennec, Nicholas Ayache; p.38, 2006 */
 public enum Se2BiinvariantMean implements BiinvariantMean {
   /** The Arsigny-formula which treats SO(2) locally as a vector space yields
    * better results in BiinvariantMeanCenter compared to the global formula.

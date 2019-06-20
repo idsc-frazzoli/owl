@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * 
  * Reference 1:
  * "Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations."
- * Vincent Arsigny, Xavier Pennec, Nicholas Ayache, p. 32
+ * Vincent Arsigny, Xavier Pennec, Nicholas Ayache, p. 32, 2006
  * 
  * Reference 2:
  * "Exponential Barycenters of the Canonical Cartan Connection and Invariant Means on Lie Groups"
