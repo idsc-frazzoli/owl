@@ -34,10 +34,11 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 public class Se2BulkMeanDemo extends ControlPointsDemo {
-  private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
-  private static final ColorDataIndexed COLOR_DATA_INDEXED2 = ColorDataLists._097.cyclic().deriveWithAlpha(182);
+  private static final ColorDataIndexed COLOR_DATA_INDEXED_DRAW = ColorDataLists._097.cyclic().deriveWithAlpha(192);
+  private static final ColorDataIndexed COLOR_DATA_INDEXED_FILL = ColorDataLists._097.cyclic().deriveWithAlpha(182);
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  // ---
   private final JToggleButton axes = new JToggleButton("axes");
 
   public Se2BulkMeanDemo() {
@@ -75,9 +76,9 @@ public class Se2BulkMeanDemo extends ControlPointsDemo {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mean));
       Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(0.5));
       path2d.closePath();
-      graphics.setColor(COLOR_DATA_INDEXED2.getColor(0));
+      graphics.setColor(COLOR_DATA_INDEXED_FILL.getColor(0));
       graphics.fill(path2d);
-      graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
+      graphics.setColor(COLOR_DATA_INDEXED_DRAW.getColor(0));
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
