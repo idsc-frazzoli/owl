@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     // ---
-    TransitionSpace transitionSpace = new Se2TransitionSpace<>(ClothoidTransition.class);
+    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
