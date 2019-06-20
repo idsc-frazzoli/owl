@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 
+// TODO rename class
 public class CatmullClarkSubdivision {
   private final SplitInterface splitInterface;
   private final CurveSubdivision curveSubdivision;
