@@ -4,9 +4,9 @@ package ch.ethz.idsc.sophus.surf.subdiv;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.tensor.FirstPosition;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -22,7 +22,7 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
 
   // ---
   private final BiinvariantMean biinvariantMean;
-  private final LinearMeshRefinement linearMeshSubdivision;
+  private final SurfaceMeshRefinement linearMeshSubdivision;
 
   private CatmullClarkRefinement(BiinvariantMean biinvariantMean) {
     this.biinvariantMean = biinvariantMean;
@@ -43,8 +43,9 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
         Scalar ga = RationalScalar.of(1, 4);
         Scalar al = RationalScalar.of(1, 4 * n);
         Scalar be = RationalScalar.of(1, 2 * n);
+        Scalar elem = RealScalar.of(vix);
         for (int fix : list) {
-          int pos = position(out.ind.get(fix), RealScalar.of(vix));
+          int pos = FirstPosition.of(out.ind.get(fix), elem);
           int p1 = out.ind.Get(fix, (pos + 1) % 4).number().intValue();
           int p2 = out.ind.Get(fix, (pos + 2) % 4).number().intValue();
           sequence.append(out.vrt.get(p1));
@@ -61,11 +62,5 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
     }
     out.vrt = cpy;
     return out;
-  }
-
-  private static int position(Tensor vector, Scalar elem) {
-    return IntStream.range(0, vector.length()) //
-        .filter(index -> vector.get(index).equals(elem)) //
-        .findFirst().getAsInt();
   }
 }
