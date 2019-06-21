@@ -15,11 +15,11 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * 
  * <p>Reference 1:
  * Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.
- * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache, pp 31-32
+ * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache, pp 31-32, 2006
  * 
  * Reference 2:
  * "Exponential Barycenters of the Canonical Cartan Connection and Invariant Means on Lie Groups"
- * by Xavier Pennec, Vincent Arsigny, p.29, Section 4.2 */
+ * by Xavier Pennec, Vincent Arsigny, p.29, Section 4.2, 2012 */
 public class HeGroupElement implements LieGroupElement, Serializable {
   private final Tensor x;
   private final Tensor y;

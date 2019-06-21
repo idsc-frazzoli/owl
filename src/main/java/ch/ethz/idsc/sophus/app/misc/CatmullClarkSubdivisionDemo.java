@@ -16,7 +16,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.math.Arrowhead;
-import ch.ethz.idsc.sophus.surf.subdiv.CatmullClarkSubdivision;
+import ch.ethz.idsc.sophus.surf.subdiv.GeodesicCatmullClarkSubdivision;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -44,8 +44,8 @@ import ch.ethz.idsc.tensor.red.Nest;
     renderControlPoints(geometricLayer, graphics);
     Tensor control = getGeodesicControlPoints();
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    CatmullClarkSubdivision catmullClarkSubdivision = //
-        new CatmullClarkSubdivision(Se2CoveringGeodesic.INSTANCE);
+    GeodesicCatmullClarkSubdivision catmullClarkSubdivision = //
+        new GeodesicCatmullClarkSubdivision(Se2CoveringGeodesic.INSTANCE);
     Tensor refined = Nest.of( //
         catmullClarkSubdivision::refine, //
         ArrayReshape.of(control, 2, 3, 3), //
