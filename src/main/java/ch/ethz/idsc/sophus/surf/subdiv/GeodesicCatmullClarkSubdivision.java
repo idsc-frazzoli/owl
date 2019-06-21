@@ -11,6 +11,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 
+/** Reference:
+ * "Recursively generated B-spline surfaces on arbitrary topological meshes"
+ * by Catmull, Clark; Computer-Aided Design 16(6), 1978 */
 public class GeodesicCatmullClarkSubdivision {
   private final SplitInterface splitInterface;
   private final CurveSubdivision curveSubdivision;

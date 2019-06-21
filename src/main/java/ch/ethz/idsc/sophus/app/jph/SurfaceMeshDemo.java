@@ -44,7 +44,7 @@ public class SurfaceMeshDemo extends ControlPointsDemo {
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     if (axes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);

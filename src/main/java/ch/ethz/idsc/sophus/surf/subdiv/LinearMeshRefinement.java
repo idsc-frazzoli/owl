@@ -27,6 +27,16 @@ public class LinearMeshRefinement implements SurfaceMeshRefinement, Serializable
     return new LinearMeshRefinement(Objects.requireNonNull(biinvariantMean));
   }
 
+  private static Tensor weights(int n) {
+    Tensor weights = MAP.get(n);
+    if (Objects.isNull(weights)) {
+      Scalar ratio = RationalScalar.of(1, n);
+      weights = Array.of(l -> ratio, n);
+      MAP.put(n, weights);
+    }
+    return weights;
+  }
+
   // ---
   private final BiinvariantMean biinvariantMean;
 
@@ -34,21 +44,14 @@ public class LinearMeshRefinement implements SurfaceMeshRefinement, Serializable
     this.biinvariantMean = biinvariantMean;
   }
 
-  @Override
+  @Override // from SurfaceMeshRefinement
   public SurfaceMesh refine(SurfaceMesh surfaceMesh) {
     SurfaceMesh out = new SurfaceMesh();
     out.vrt = surfaceMesh.vrt.copy(); // interpolation
     int nV = surfaceMesh.vrt.length();
     for (Tensor face : surfaceMesh.ind) { // midpoint
       Tensor sequence = Tensor.of(IntStream.of(Primitives.toIntArray(face)).mapToObj(surfaceMesh.vrt::get));
-      int n = sequence.length();
-      Tensor weights = MAP.get(n);
-      if (Objects.isNull(weights)) {
-        Scalar ratio = RationalScalar.of(1, n);
-        weights = Array.of(l -> ratio, n);
-        MAP.put(n, weights);
-      }
-      out.addVert(biinvariantMean.mean(sequence, weights));
+      out.addVert(biinvariantMean.mean(sequence, weights(sequence.length())));
     }
     Map<Tensor, Integer> edges = new HashMap<>();
     int faceInd = nV;

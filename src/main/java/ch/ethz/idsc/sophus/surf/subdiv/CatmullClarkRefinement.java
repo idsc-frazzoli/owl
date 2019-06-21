@@ -13,6 +13,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 
+/** Reference:
+ * "Recursively generated B-spline surfaces on arbitrary topological meshes"
+ * by Catmull, Clark; Computer-Aided Design 16(6), 1978 */
 public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializable {
   /** @param biinvariantMean non-null
    * @return */
@@ -22,16 +25,16 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
 
   // ---
   private final BiinvariantMean biinvariantMean;
-  private final SurfaceMeshRefinement linearMeshSubdivision;
+  private final SurfaceMeshRefinement surfaceMeshRefinement;
 
   private CatmullClarkRefinement(BiinvariantMean biinvariantMean) {
     this.biinvariantMean = biinvariantMean;
-    linearMeshSubdivision = new LinearMeshRefinement(biinvariantMean);
+    surfaceMeshRefinement = new LinearMeshRefinement(biinvariantMean);
   }
 
   @Override // from SurfaceMeshRefinement
   public SurfaceMesh refine(SurfaceMesh surfaceMesh) {
-    SurfaceMesh out = linearMeshSubdivision.refine(surfaceMesh);
+    SurfaceMesh out = surfaceMeshRefinement.refine(surfaceMesh);
     int vix = 0;
     Tensor cpy = out.vrt.copy();
     for (List<Integer> list : out.vertToFace()) {
@@ -44,8 +47,8 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
         Scalar al = RationalScalar.of(1, 4 * n);
         Scalar be = RationalScalar.of(1, 2 * n);
         Scalar elem = RealScalar.of(vix);
-        for (int fix : list) {
-          int pos = FirstPosition.of(out.ind.get(fix), elem);
+        for (int fix : list) { // edges from vertex ring (unordered)
+          int pos = FirstPosition.of(out.ind.get(fix), elem).getAsInt();
           int p1 = out.ind.Get(fix, (pos + 1) % 4).number().intValue();
           int p2 = out.ind.Get(fix, (pos + 2) % 4).number().intValue();
           sequence.append(out.vrt.get(p1));
