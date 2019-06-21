@@ -15,10 +15,10 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * <p>Reference:
  * Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.
- * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache, pp. 27-31
+ * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache, pp. 27-31, 2006
  * 
  * "Exponential Barycenters of the Canonical Cartan Connection and Invariant Means on Lie Groups"
- * by Xavier Pennec, Vincent Arsigny, p.27, Section 4.1:
+ * by Xavier Pennec, Vincent Arsigny, p.27, Section 4.1, 2012:
  * 
  * @see StGroup */
 public class StGroupElement implements LieGroupElement, Serializable {
