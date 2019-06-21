@@ -69,7 +69,7 @@ public class TangentSpaceFIRn implements TensorUnaryOperator {
     Tensor extrapolatoryWeights = Tensors.empty();
     for (int index = 0; index < weights.length() - 1; ++index)
       extrapolatoryWeights.append(weights.Get(index).negate().multiply(l));
-    extrapolatoryWeights.append(RealScalar.ONE.add(l).subtract(l.multiply(weights.Get(weights.length()-1))));
+    extrapolatoryWeights.append(RealScalar.ONE.add(l).subtract(l.multiply(weights.Get(weights.length() - 1))));
     return extrapolatoryWeights;
   }
 
