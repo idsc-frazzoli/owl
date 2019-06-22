@@ -32,7 +32,7 @@ public class GeodesicAverage implements TensorUnaryOperator {
     return recursion(splits, sequence);
   }
 
-  public Tensor recursion(Tensor splits, Tensor sequence) {
+  private Tensor recursion(Tensor splits, Tensor sequence) {
     Tensor left = splits.get(0);
     Tensor right = splits.get(1);
     Scalar alpha = splits.Get(2);

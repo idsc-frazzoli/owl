@@ -1,4 +1,4 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.filter.ga;
 
 import java.util.Objects;
@@ -7,6 +7,7 @@ import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanCenter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO OB class is not used
 public class GeodesicCausalFilter implements TensorUnaryOperator {
   /** Hint: the following tensorUnaryOperator are typically used
    * {@link GeodesicCenter}, and {@link BiinvariantMeanCenter}
@@ -27,6 +28,6 @@ public class GeodesicCausalFilter implements TensorUnaryOperator {
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
-    return Tensor.of(tensor.stream().map(xya -> tensorUnaryOperator.apply(xya)));
+    return Tensor.of(tensor.stream().map(tensorUnaryOperator));
   }
 }
