@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class SpectrogramAnalogousTest extends TestCase {
+public class FilterResponseTest extends TestCase {
   // implementation only for testing
   static Tensor pdiv(Tensor num, Tensor den) {
     Tensor result = Tensors.empty();

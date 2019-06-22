@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class Se2RelaxedCornerCuttingTest extends TestCase {
+public class Se2RelaxedCornerCuttingDemoTest extends TestCase {
   public void testSimple() {
     StateTime stateTime = new StateTime(Tensors.vector(1.7, 2.2, 0), RealScalar.ZERO);
     Tensor slacks = Tensors.vector(2, 0);

@@ -1,13 +1,14 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie.so2;
+package ch.ethz.idsc.sophus.lie;
 
-import ch.ethz.idsc.sophus.lie.ScalarBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.so2.So2GlobalBiinvariantMean;
+import ch.ethz.idsc.sophus.lie.so2.So2LinearBiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import junit.framework.TestCase;
 
-public class So2BiinvariantMeanTest extends TestCase {
+public class ScalarBiinvariantMeanTest extends TestCase {
   private static final ScalarBiinvariantMean[] SO2_BIINVARIANT_MEANS = { //
       So2GlobalBiinvariantMean.INSTANCE, //
       So2LinearBiinvariantMean.INSTANCE };

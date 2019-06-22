@@ -1,8 +1,6 @@
 // code by jph
-package ch.ethz.idsc.owl.demo.order;
+package ch.ethz.idsc.owl.math.order;
 
-import ch.ethz.idsc.owl.math.order.InverseOrderComparison;
-import ch.ethz.idsc.owl.math.order.OrderComparison;
 import junit.framework.TestCase;
 
 public class InverseOrderComparisonTest extends TestCase {

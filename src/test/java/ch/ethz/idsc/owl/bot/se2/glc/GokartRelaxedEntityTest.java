@@ -1,6 +1,5 @@
-package ch.ethz.idsc.owl.bot.se2;
+package ch.ethz.idsc.owl.bot.se2.glc;
 
-import ch.ethz.idsc.owl.bot.se2.glc.GokartRelaxedEntity;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
