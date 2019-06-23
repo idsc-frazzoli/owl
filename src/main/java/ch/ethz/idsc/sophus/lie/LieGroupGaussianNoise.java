@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.lie;
 
 import java.util.Random;
 
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -19,8 +18,8 @@ public class LieGroupGaussianNoise extends LieGroupAbstractNoise {
   private final Tensor mean;
   private final Tensor stdDeviation;
 
-  private LieGroupGaussianNoise(GeodesicDisplay geodesicDisplay, Tensor mean, Tensor stdDeviation) {
-    super(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential());
+  private LieGroupGaussianNoise(LieGroup lieGroup, LieExponential lieExponential, Tensor mean, Tensor stdDeviation) {
+    super(lieGroup, lieExponential);
     this.mean = mean;
     this.stdDeviation = stdDeviation;
   }

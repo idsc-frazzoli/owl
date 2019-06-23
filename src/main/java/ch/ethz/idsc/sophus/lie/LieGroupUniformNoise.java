@@ -1,7 +1,6 @@
 // code by ob
 package ch.ethz.idsc.sophus.lie;
 
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,8 +17,8 @@ public class LieGroupUniformNoise extends LieGroupAbstractNoise {
   private final Tensor lowerLimits;
   private final Tensor upperLimits;
 
-  private LieGroupUniformNoise(GeodesicDisplay geodesicDisplay, Tensor lowerLimits, Tensor upperLimits) {
-    super(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential());
+  private LieGroupUniformNoise(LieGroup lieGroup, LieExponential lieExponential, Tensor lowerLimits, Tensor upperLimits) {
+    super(lieGroup, lieExponential);
     this.lowerLimits = lowerLimits;
     this.upperLimits = upperLimits;
   }

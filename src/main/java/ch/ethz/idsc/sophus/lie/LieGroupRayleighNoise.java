@@ -1,7 +1,6 @@
 // code by ob
 package ch.ethz.idsc.sophus.lie;
 
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -18,8 +17,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 public class LieGroupRayleighNoise extends LieGroupAbstractNoise {
   private final Tensor stdDeviation;
 
-  private LieGroupRayleighNoise(GeodesicDisplay geodesicDisplay, Tensor stdDeviation) {
-    super(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()); // TODO
+  private LieGroupRayleighNoise(LieGroup lieGroup, LieExponential lieExponential, Tensor stdDeviation) {
+    super(lieGroup, lieExponential);
     this.stdDeviation = stdDeviation;
   }
 
