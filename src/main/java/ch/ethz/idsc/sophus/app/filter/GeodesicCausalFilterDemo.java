@@ -75,10 +75,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         refined = TangentSpaceIIRnFilter.of(smoothingKernel, radius, alpha()).apply(control());
         break;
       case BIINVARIANT_MEAN_FIR:
-        refined = BiinvariantFIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+        refined = BiinvariantFIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
         break;
       case BIINVARIANT_MEAN_IIR:
-        refined = BiinvariantIIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+        refined = BiinvariantIIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
         break;
       }
       return refined;

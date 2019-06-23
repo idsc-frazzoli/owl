@@ -2,9 +2,10 @@
 package ch.ethz.idsc.sophus.filter.bm;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
 import ch.ethz.idsc.sophus.util.BoundedLinkedList;
@@ -22,22 +23,27 @@ public class BiinvariantMeanFIRn implements TensorUnaryOperator {
    * @param function non-null
    * @return operator that maps a sequence of odd number of points to their barycenter
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-    return new BiinvariantMeanFIRn(//
+  public static TensorUnaryOperator of( //
+      SplitInterface splitInterface, BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
+    return new BiinvariantMeanFIRn( //
+        splitInterface, //
         Objects.requireNonNull(biinvariantMean), //
         Objects.requireNonNull(smoothingKernel), radius, //
         Objects.requireNonNull(alpha));
   }
 
   // ---
+  private final SplitInterface splitInterface;
   private final BiinvariantMean biinvariantMean;
-  private final ScalarUnaryOperator smoothingKernel;
+  private final Function<Integer, Tensor> windowSideSampler;
   private final Scalar alpha;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  /* package */ BiinvariantMeanFIRn(BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
+  /* package */ BiinvariantMeanFIRn( //
+      SplitInterface splitInterface, BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
+    this.splitInterface = splitInterface;
     this.biinvariantMean = biinvariantMean;
-    this.smoothingKernel = smoothingKernel;
+    windowSideSampler = WindowSideSampler.of(smoothingKernel);
     this.alpha = alpha;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
@@ -61,9 +67,8 @@ public class BiinvariantMeanFIRn implements TensorUnaryOperator {
   public Tensor apply(Tensor x) {
     Tensor value = boundedLinkedList.size() < 2 //
         ? x.copy()
-        : biinvariantMean.mean(Tensor.of(boundedLinkedList.stream()),
-            extrapolatoryWeights(WindowSideSampler.of(smoothingKernel).apply(boundedLinkedList.size() - 1)));
+        : biinvariantMean.mean(Tensor.of(boundedLinkedList.stream()), extrapolatoryWeights(windowSideSampler.apply(boundedLinkedList.size() - 1)));
     boundedLinkedList.add(x);
-    return Se2Geodesic.INSTANCE.split(value, x, alpha);
+    return splitInterface.split(value, x, alpha);
   }
 }

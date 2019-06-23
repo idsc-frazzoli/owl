@@ -112,10 +112,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           smoothd = TangentSpaceIIRnFilter.of(smoothingKernel, radius, alpha).apply(control);
           break;
         case BIINVARIANT_MEAN_FIR:
-          smoothd = BiinvariantFIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
+          smoothd = BiinvariantFIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
           break;
         case BIINVARIANT_MEAN_IIR:
-          smoothd = BiinvariantIIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
+          smoothd = BiinvariantIIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
           break;
         }
         Tensor rawVec = Se2Differences.INSTANCE.apply(control);

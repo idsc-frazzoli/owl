@@ -1,8 +1,8 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnNEW;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnNEW;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRn;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRn;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRn;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRn;
@@ -50,14 +50,18 @@ public enum LieGroupCausalFilters {
     @Override
     public TensorUnaryOperator supply( //
         GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-      return BiinvariantMeanFIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha);
+      return BiinvariantMeanFIRn.of( //
+          geodesicDisplay.geodesicInterface(), //
+          geodesicDisplay.biinvariantMean(), smoothingKernel, radius, alpha);
     }
   }, //
   BIINVARIANT_MEAN_IIR {
     @Override
     public TensorUnaryOperator supply( //
         GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-      return BiinvariantMeanIIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha);
+      return BiinvariantMeanIIRn.of( //
+          geodesicDisplay.geodesicInterface(), //
+          geodesicDisplay.biinvariantMean(), smoothingKernel, radius, alpha);
     }
   }, //
   ;
