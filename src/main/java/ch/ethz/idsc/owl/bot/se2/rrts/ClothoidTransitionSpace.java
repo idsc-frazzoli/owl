@@ -19,9 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Nest;
-import ch.ethz.idsc.tensor.sca.Log;
 
 public class ClothoidTransitionSpace extends AbstractTransitionSpace implements Se2TransitionSpace {
   public static final TransitionSpace INSTANCE = new ClothoidTransitionSpace();
@@ -38,9 +36,12 @@ public class ClothoidTransitionSpace extends AbstractTransitionSpace implements 
       @Override // from Transition
       public TransitionSamplesWrap sampled(Scalar minResolution) {
         Tensor samples = Tensors.of(start, end);
-        while (Scalars.lessThan(minResolution, PseudoClothoidDistance.INSTANCE.distance(start, samples.get(1))))
+        TransitionSamplesWrap wrap = wrap(samples);
+        while (wrap.spacing().stream().map(Tensor::Get).anyMatch(s -> Scalars.lessThan(minResolution, s))) {
           samples = SUBDIVISION.string(samples);
-        return wrap(samples.extract(0, samples.length() - 1));
+          wrap = wrap(samples.extract(0, samples.length() - 1));
+        }
+        return wrap;
       }
 
       @Override // from Transition
@@ -48,14 +49,14 @@ public class ClothoidTransitionSpace extends AbstractTransitionSpace implements 
         if (steps < 1)
           throw TensorRuntimeException.of(RealScalar.of(steps));
         Tensor samples = Nest.of(SUBDIVISION::string, Tensors.of(start, end), (int) Math.ceil(Math.log(steps - 1) / LOG2));
-        return wrap(samples);
+        return wrap(samples.extract(0, samples.length() - 1));
       }
 
       private TransitionSamplesWrap wrap(Tensor samples) {
         Tensor spacing = Array.zeros(samples.length());
-        if (samples.length() > 1)
-          IntStream.range(1, samples.length()).parallel().forEach(i ->
-              spacing.set(PseudoClothoidDistance.INSTANCE.distance(spacing.get(i - 1), spacing.get(i)), i));
+        IntStream.range(0, samples.length()).parallel().forEach(i -> spacing.set(i > 0 //
+            ? PseudoClothoidDistance.INSTANCE.distance(samples.get(i - 1), samples.get(i)) //
+            : samples.Get(i, 0).zero(), i));
         return new TransitionSamplesWrap(samples, spacing);
       }
     };

@@ -13,10 +13,8 @@ import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
@@ -49,8 +47,7 @@ public class DubinsTransitionSpace extends AbstractTransitionSpace implements Se
         ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
         IntStream.range(0, steps).parallel().forEach(i -> {
           samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i);
-          if (i > 0)
-            spacing.set(step, i);
+          spacing.set(i > 0 ? step : step.map(Scalar::zero), i);
         });
         return new TransitionSamplesWrap(samples, spacing);
       }

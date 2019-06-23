@@ -34,6 +34,7 @@ public class RnTransitionSpace extends AbstractTransitionSpace {
         Tensor direction = end.subtract(start).divide(RealScalar.of(steps));
         Scalar step = Norm._2.ofVector(direction);
         samples.set(start, 0);
+        spacing.set(step.map(Scalar::zero), 0);
         if (steps > 1)
           IntStream.range(1, steps).parallel().forEach(i -> {
             samples.set(direction.multiply(RealScalar.of(i)).add(start), i);
