@@ -1,7 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.sophus.filter.ga.GeodesicFIR2Filter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicFIR2;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIR2Filter;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieExponential;
@@ -42,7 +42,7 @@ public class GeodesicCausalFilteringEvaluation {
   public Tensor filteredSignal(Scalar alpha, Boolean IIR) {
     Tensor refined = IIR //
         ? Tensor.of(measurements.stream().map(new GeodesicIIR2Filter(geodesicInterface, alpha)))
-        : Tensor.of(measurements.stream().map(new GeodesicFIR2Filter(geodesicInterface, alpha)));
+        : Tensor.of(measurements.stream().map(GeodesicFIR2.of(geodesicInterface, alpha)));
     return refined;
   }
 
