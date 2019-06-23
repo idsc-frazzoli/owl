@@ -8,7 +8,6 @@ import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -19,11 +18,9 @@ public class BiinvariantMeanIIRnTest extends TestCase {
   // FIXME OB
   public void testIIR1() throws ClassNotFoundException, IOException {
     TensorUnaryOperator causalFilter = Serialization.copy(CausalFilter.of(() -> //
-    new BiinvariantMeanIIRn(RnGeodesic.INSTANCE, RnBiinvariantMean.INSTANCE, DirichletWindow.FUNCTION, 2, RationalScalar.HALF)));
+    new BiinvariantMeanIIRn(RnGeodesic.INSTANCE, RnBiinvariantMean.INSTANCE, DirichletWindow.FUNCTION, 1, RationalScalar.HALF)));
     {
-      // System.out.println();
-      Tensor input = UnitVector.of(10, 0).map(Tensors::of);
-      Tensor tensor = causalFilter.apply(input);
+      Tensor tensor = causalFilter.apply(UnitVector.of(10, 0));
       System.out.println(tensor);
       // assertEquals(tensor, Tensors.fromString("{1, 1/2, 1/4, 1/8, 1/16, 1/32, 1/64, 1/128, 1/256, 1/512}"));
       // ExactTensorQ.require(tensor);

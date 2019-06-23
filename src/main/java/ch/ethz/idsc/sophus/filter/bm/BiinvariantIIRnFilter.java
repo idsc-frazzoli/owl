@@ -10,6 +10,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public enum BiinvariantIIRnFilter {
   ;
+  /** @param splitInterface
+   * @param biinvariantMean
+   * @param smoothingKernel
+   * @param radius
+   * @param alpha
+   * @return */
   public static TensorUnaryOperator of( //
       SplitInterface splitInterface, BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
     return CausalFilter.of(() -> new BiinvariantMeanIIRn(splitInterface, biinvariantMean, smoothingKernel, radius, alpha));
