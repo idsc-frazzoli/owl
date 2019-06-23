@@ -24,12 +24,6 @@ public class GeodesicIIR2Filter implements TensorUnaryOperator {
     this.alpha = alpha;
   }
 
-  public GeodesicIIR2Filter(SplitInterface splitInterface, Scalar alpha, Tensor p, Tensor q) {
-    this(splitInterface, alpha);
-    this.p = p;
-    this.q = q;
-  }
-
   /** @return extrapolated "best guess" value from the previous predictions */
   public synchronized Tensor extrapolate() {
     if (Objects.isNull(p))
@@ -44,7 +38,7 @@ public class GeodesicIIR2Filter implements TensorUnaryOperator {
       return q.copy();
     }
     Tensor result = splitInterface.split(extrapolate(), tensor, alpha);
-    p = q.copy();
+    p = q;
     q = result.copy();
     return result;
   }

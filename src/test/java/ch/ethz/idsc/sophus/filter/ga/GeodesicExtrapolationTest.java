@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,9 +24,26 @@ import junit.framework.TestCase;
 public class GeodesicExtrapolationTest extends TestCase {
   public void testSimplest() {
     TensorUnaryOperator unaryOperator = GeodesicExtrapolation.of(RnGeodesic.INSTANCE, DirichletWindow.FUNCTION);
-    Tensor scalar = unaryOperator.apply(Tensors.vector(1, 2));
-    assertEquals(scalar, RealScalar.of(3));
-    ExactScalarQ.require(scalar.Get());
+    {
+      Tensor tensor = unaryOperator.apply(Tensors.vector(12));
+      assertEquals(tensor, RealScalar.of(12));
+      ExactScalarQ.require(tensor.Get());
+    }
+    {
+      Tensor tensor = unaryOperator.apply(Tensors.vector(1, 2));
+      assertEquals(tensor, RealScalar.of(3));
+      ExactScalarQ.require(tensor.Get());
+    }
+    {
+      Tensor tensor = unaryOperator.apply(Tensors.vector(1, 2, 3));
+      assertEquals(tensor, RealScalar.of(4));
+      ExactScalarQ.require(tensor.Get());
+    }
+    {
+      Tensor tensor = unaryOperator.apply(Tensors.vector(1, 2, 1));
+      assertEquals(tensor, RationalScalar.of(2, 3));
+      ExactScalarQ.require(tensor.Get());
+    }
   }
 
   public void testSimple() {

@@ -1,6 +1,7 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.app.api;
 
+import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRn;
@@ -50,7 +51,7 @@ public enum LieGroupCausalFilters {
     public TensorUnaryOperator supply( //
         GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
       TensorUnaryOperator geodesicExtrapolation = BiinvariantMeanExtrapolation.of( //
-          geodesicDisplay.biinvariantMean(), smoothingKernel);
+          geodesicDisplay.biinvariantMean(), MonomialExtrapolationMask.INSTANCE);
       return GeodesicFIRn.of(geodesicExtrapolation, geodesicDisplay.geodesicInterface(), radius, alpha);
     }
   }, //
@@ -59,7 +60,7 @@ public enum LieGroupCausalFilters {
     public TensorUnaryOperator supply( //
         GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
       TensorUnaryOperator geodesicExtrapolation = BiinvariantMeanExtrapolation.of( //
-          geodesicDisplay.biinvariantMean(), smoothingKernel);
+          geodesicDisplay.biinvariantMean(), MonomialExtrapolationMask.INSTANCE);
       return GeodesicIIRn.of(geodesicExtrapolation, geodesicDisplay.geodesicInterface(), radius, alpha);
     }
   }, //
