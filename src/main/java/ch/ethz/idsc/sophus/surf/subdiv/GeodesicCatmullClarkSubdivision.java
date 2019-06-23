@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.surf.subdiv;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.SplitInterface;
@@ -9,12 +11,15 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 
-public class CatmullClarkSubdivision {
+/** Reference:
+ * "Recursively generated B-spline surfaces on arbitrary topological meshes"
+ * by Catmull, Clark; Computer-Aided Design 16(6), 1978 */
+public class GeodesicCatmullClarkSubdivision {
   private final SplitInterface splitInterface;
   private final CurveSubdivision curveSubdivision;
 
-  public CatmullClarkSubdivision(SplitInterface splitInterface) {
-    this.splitInterface = splitInterface;
+  public GeodesicCatmullClarkSubdivision(SplitInterface splitInterface) {
+    this.splitInterface = Objects.requireNonNull(splitInterface);
     curveSubdivision = new BSpline3CurveSubdivision(splitInterface);
   }
 

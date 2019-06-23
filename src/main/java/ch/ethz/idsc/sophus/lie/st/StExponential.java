@@ -13,11 +13,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** Reference 1:
  * "Exponential Barycenters of the Canonical Cartan Connection and Invariant Means on Lie Groups"
- * by Xavier Pennec, Vincent Arsigny, pp. 25-28
+ * by Xavier Pennec, Vincent Arsigny, pp. 25-28, 2012
  * 
  * Reference 2:
  * Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations.
- * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache, pp. 27-31 */
+ * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache, pp. 27-31, 2006 */
 public enum StExponential implements LieExponential {
   INSTANCE;
   // ---

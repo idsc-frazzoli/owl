@@ -49,11 +49,11 @@ public class BiinvariantMeanFIRn implements TensorUnaryOperator {
     Tensor chronological = Tensors.empty();
     for (int index = 0; index < weights.length(); ++index)
       chronological.append(RealScalar.of(index));
-    Scalar distance = RealScalar.of(weights.length() - 1).subtract(weights.dot(chronological));
+    Scalar l = RealScalar.of(weights.length()).subtract(weights.dot(chronological)).reciprocal();
     Tensor extrapolatoryWeights = Tensors.empty();
     for (int index = 0; index < weights.length() - 1; ++index)
-      extrapolatoryWeights.append(weights.Get(index).negate().divide(distance));
-    extrapolatoryWeights.append(distance.reciprocal().multiply(RealScalar.ONE.subtract(weights.Get(weights.length() - 1))).add(RealScalar.ONE));
+      extrapolatoryWeights.append(weights.Get(index).negate().multiply(l));
+    extrapolatoryWeights.append(RealScalar.ONE.add(l).subtract(l.multiply(weights.Get(weights.length() - 1))));
     return extrapolatoryWeights;
   }
 

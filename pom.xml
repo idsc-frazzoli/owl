@@ -42,6 +42,11 @@
 			<version>1.5.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreesvg</artifactId>
+			<version>3.4</version>
+		</dependency>
+		<dependency>
 			<groupId>org.bytedeco</groupId>
 			<artifactId>javacv-platform</artifactId>
 			<version>1.4.1</version>
@@ -58,7 +63,7 @@
 			<version>3.4.1-1.4.1</version>
 			<classifier>macosx-x86_64-gpu</classifier>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

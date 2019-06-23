@@ -47,7 +47,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
   private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
 
-  // TODO OB: make logPlot (standard)
   private static void plot(Tensor data, int radius, String signal, Scalar alpha) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
@@ -58,9 +57,13 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
     }
     VisualSet visualSet = new VisualSet();
-    visualSet.setPlotLabel("Filter Gain " + signal + " - alpha = " + alpha);
-    visualSet.setAxesLabelX("Frequency [Hz]");
-    visualSet.setAxesLabelY("Magnitude");
+    // visualSet.setPlotLabel("Causal IIR Filters: length = "+radius+" Magnitude Response - $" + signal + "$");
+    // visualSet.setPlotLabel("Causal IIR Filters: length = "+radius+" Phase Response - $" + signal + "$");
+    visualSet.setPlotLabel("Causal FIR Filters: length = " + radius + "  Magnitude Response - $" + signal + "$");
+    // visualSet.setPlotLabel("Causal FIR Filters: length = "+radius+" Phase Response - $" + signal + "$");
+    visualSet.setAxesLabelX("Frequency $[Hz]$");
+    visualSet.setAxesLabelY("Phase $H(\\Omega)$");
+    // visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
     int index = 0;
     for (Tensor yAxis : yData) {
       VisualRow visualRow = visualSet.add( //
@@ -72,7 +75,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     JFreeChart jFreeChart = ListPlot.of(visualSet);
     jFreeChart.setBackgroundPaint(Color.WHITE);
     // Exportable as SVG?
-    String fileName = "FilterGain_" + radius + "_" + signal + ".png";
+    String fileName = "Causal_Magnitude" + radius + "_" + signal + ".png";
+    // String fileName = "Causal_Phase_" + radius + "_" + signal + ".png";
     File file = HomeDirectory.Pictures(fileName);
     // impove DPI?
     ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);

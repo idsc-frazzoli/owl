@@ -34,6 +34,8 @@ import ch.ethz.idsc.tensor.Tensor;
     Scalar ofs = dt;
     RrtsNode prev = sequence.get(0);
     trajectory.add(TrajectorySample.head(new StateTime(prev.state(), t0)));
+    // create evenly spaced trajectory samples on the trajectory described by the rrts nodes in sequence
+    // is this necessary this way? implementation could be way easier by spreading samples section wise
     for (RrtsNode node : sequence.subList(1, sequence.size())) {
       // System.out.println(node.state());
       Transition transition = transitionSpace.connect(prev.state(), node.state());

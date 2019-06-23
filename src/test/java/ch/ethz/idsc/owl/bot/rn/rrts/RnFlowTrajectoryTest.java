@@ -46,7 +46,6 @@ public class RnFlowTrajectoryTest extends TestCase {
     Scalar t0 = RealScalar.ZERO;
     List<TrajectorySample> trajectory = //
         RnFlowTrajectory.createTrajectory(TRANSITION_SPACE, sequence, t0, RealScalar.of(0.2));
-    @SuppressWarnings("unused")
     TrajectoryWrap trajectorySampleMap = TrajectoryWrap.of(trajectory);
     // assertFalse(trajectorySampleMap.findControl(RealScalar.of(-0.1)).isPresent());
     trajectorySampleMap.getControl(RealScalar.of(0.0));
