@@ -13,6 +13,9 @@ public enum GeodesicFIR2 {
   ;
   private static final Scalar TWO = RealScalar.of(2);
 
+  /** @param splitInterface
+   * @param alpha
+   * @return */
   public static TensorUnaryOperator of(SplitInterface splitInterface, Scalar alpha) {
     TensorUnaryOperator geodesicExtrapolation = tensor -> splitInterface.split(tensor.get(0), tensor.get(1), TWO);
     return new GeodesicFIRn(geodesicExtrapolation, splitInterface, 2, alpha);

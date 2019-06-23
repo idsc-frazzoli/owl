@@ -46,8 +46,8 @@ public class GeodesicFIR2Test extends TestCase {
 
   public void testCombined() {
     Scalar alpha = RealScalar.of(0.5);
-    CausalFilter causalFilter = //
-        new CausalFilter(() -> GeodesicFIR2.of(Se2Geodesic.INSTANCE, alpha));
+    TensorUnaryOperator causalFilter = //
+        CausalFilter.of(() -> GeodesicFIR2.of(Se2Geodesic.INSTANCE, alpha));
     Distribution distribution = NormalDistribution.standard();
     Tensor control = RandomVariate.of(distribution, 100, 3);
     Tensor result = causalFilter.apply(control);

@@ -14,6 +14,6 @@ public enum GeodesicIIRnFilter {
    * @param alpha
    * @return */
   public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
-    return new CausalFilter(() -> new GeodesicIIRn(geodesicExtrapolation, splitInterface, radius, alpha));
+    return CausalFilter.of(() -> new GeodesicIIRn(geodesicExtrapolation, splitInterface, radius, alpha));
   }
 }

@@ -15,6 +15,6 @@ public enum GeodesicFIRnFilter {
    * @return
    * @throws Exception if either parameter is null */
   public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
-    return new CausalFilter(() -> new GeodesicFIRn(geodesicExtrapolation, splitInterface, radius, alpha));
+    return CausalFilter.of(() -> new GeodesicFIRn(geodesicExtrapolation, splitInterface, radius, alpha));
   }
 }
