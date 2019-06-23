@@ -90,7 +90,7 @@ public class RnFlowTrajectoryTest extends TestCase {
       Tensor u = tc.control(new StateTime(Tensors.vector(1, 2), RealScalar.of(1.2)), RealScalar.of(2)).get();
       assertTrue(Chop._10.close(Norm._2.of(u), RealScalar.ONE));
       List<TrajectorySample> list = tc.getFutureTrajectoryUntil(new StateTime(Tensors.vector(1, 2), RealScalar.of(1.1)), RealScalar.of(1));
-      assertEquals(list.size(), 11);
+      assertEquals(list.size(), 12);
     }
   }
 

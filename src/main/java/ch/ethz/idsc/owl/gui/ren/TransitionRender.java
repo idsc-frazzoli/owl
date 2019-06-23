@@ -17,6 +17,7 @@ import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -87,7 +88,8 @@ enum TransitionRenderWrap {
   private static final int N_MIN = 10;
 
   public static Tensor of(Transition transition) {
-    Scalar dt = Min.of(DT, transition.length().divide(RealScalar.of(N_MIN)));
-    return transition.sampled(RealScalar.ZERO, dt).append(transition.end());
+    return Scalars.lessThan(DT, transition.length().divide(RealScalar.of(N_MIN))) //
+        ? transition.sampled(DT).samples().copy().append(transition.end()) //
+        : transition.sampled(N_MIN).samples().copy().append(transition.end());
   }
 }

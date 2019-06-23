@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
+import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -31,6 +32,7 @@ import ch.ethz.idsc.tensor.Tensor;
   public static List<TrajectorySample> createTrajectory( //
       TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
     List<TrajectorySample> trajectory = new LinkedList<>();
+    /*
     Scalar ofs = dt;
     RrtsNode prev = sequence.get(0);
     trajectory.add(TrajectorySample.head(new StateTime(prev.state(), t0)));
@@ -52,6 +54,29 @@ import ch.ethz.idsc.tensor.Tensor;
       t0 = t0.add(transition.length());
       Scalar rem = t0.subtract(Lists.getLast(trajectory).stateTime().time());
       ofs = dt.subtract(rem);
+    }
+    */
+    Scalar tn = t0;
+    RrtsNode prev = sequence.get(0);
+    for (RrtsNode node : sequence.subList(1, sequence.size())) {
+      Transition transition = transitionSpace.connect(prev.state(), node.state());
+      TransitionSamplesWrap transitionSamplesWrap = transition.sampled(dt);
+      Tensor samples = transitionSamplesWrap.samples();
+      Tensor spacing = transitionSamplesWrap.spacing();
+      Scalar ti = tn;
+      for (int i = 0; i < samples.length(); i++) {
+        ti = ti.add(spacing.Get(i));
+        StateTime stateTime = new StateTime(samples.get(i), ti);
+        if (trajectory.isEmpty())
+          trajectory.add(TrajectorySample.head(stateTime));
+        else {
+          StateTime orig = Lists.getLast(trajectory).stateTime();
+          Flow flow = between(orig, stateTime);
+          trajectory.add(new TrajectorySample(stateTime, flow));
+        }
+      }
+      prev = node;
+      tn = t0.add(transition.length());
     }
     return trajectory;
   }

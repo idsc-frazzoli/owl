@@ -17,8 +17,11 @@ public interface Transition {
    * @see LengthCostFunction */
   Scalar length();
 
-  /** @param ofs is non-negative and strictly less than ds
-   * @param ds
+  /** @param minResolution is positive
    * @return */
-  Tensor sampled(Scalar ofs, Scalar ds);
+  TransitionSamplesWrap sampled(Scalar minResolution);
+
+  /** @param steps > 0
+   * @return */
+  TransitionSamplesWrap sampled(int steps);
 }
