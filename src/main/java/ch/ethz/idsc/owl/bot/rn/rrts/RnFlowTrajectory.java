@@ -38,12 +38,13 @@ import ch.ethz.idsc.tensor.Tensor;
       // System.out.println(node.state());
       Transition transition = transitionSpace.connect(prev.state(), node.state());
       Tensor stateTimes = transition.sampled(ofs, dt);
-      for (@SuppressWarnings("unused")
-      Tensor stateTime : stateTimes) {
-        @SuppressWarnings("unused")
+      Scalar t = t0.add(ofs);
+      for (Tensor stateTime_ : stateTimes) {
+        StateTime stateTime = new StateTime(stateTime_, t);
         StateTime orig = Lists.getLast(trajectory).stateTime();
-        // Flow flow = between(orig, stateTime);
-        // trajectory.add(new TrajectorySample(stateTime, flow));
+        Flow flow = between(orig, stateTime);
+        trajectory.add(new TrajectorySample(stateTime, flow));
+        t = t.add(dt);
       }
       prev = node;
       t0 = t0.add(transition.length());
