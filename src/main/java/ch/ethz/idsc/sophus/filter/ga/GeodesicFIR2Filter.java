@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
+// FIXME OB this filter has an infinity impulse response, see CausalFilterTest
 public class GeodesicFIR2Filter implements TensorUnaryOperator {
   private static final Scalar TWO = RealScalar.of(2);
   // ---
