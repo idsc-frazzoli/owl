@@ -1,10 +1,14 @@
 // code by jph
 package ch.ethz.idsc.sophus.math.crd;
 
+import java.io.IOException;
+
+import ch.ethz.idsc.sophus.math.crd.PowerCoordinates.Aux;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -15,9 +19,11 @@ public class PowerCoordinatesTest extends TestCase {
   }
 
   public void testAux() {
-    Tensor aux = PowerCoordinates.aux(Tensors.vector(1, 2), Tensors.vector(3, 4), RealScalar.of(.2), RealScalar.of(.4));
-    Tensor exp = Tensors.of(Tensors.vector(1.975, 2.975), Tensors.vector(-0.7071067811865475, 0.7071067811865475));
-    Chop._10.requireClose(aux, exp);
+    Aux aux = new PowerCoordinates.Aux(Tensors.vector(1, 2), Tensors.vector(3, 4), RealScalar.of(.2), RealScalar.of(.4));
+    Tensor exp0 = Tensors.vector(1.975, 2.975);
+    Tensor exp1 = Tensors.vector(-0.7071067811865475, 0.7071067811865475);
+    Chop._10.requireClose(aux.pos, exp0);
+    Chop._10.requireClose(aux.nrm, exp1);
   }
 
   public void testGetDual() {
@@ -36,8 +42,8 @@ public class PowerCoordinatesTest extends TestCase {
     Chop._12.requireClose(weights, exp);
   }
 
-  public void testWeights() {
-    PowerCoordinates powerCoordinates = new PowerCoordinates(Barycentric.WACHSPRESS);
+  public void testWeights() throws ClassNotFoundException, IOException {
+    PowerCoordinates powerCoordinates = Serialization.copy(new PowerCoordinates(Barycentric.WACHSPRESS));
     Tensor P = Tensors.fromString("{{1, 1}, {5, 1}, {3, 5}, {2, 5}}");
     Tensor weights = powerCoordinates.weights(P, Tensors.vector(4, 2));
     Tensor exp = Tensors.fromString("{3/26, 33/52, 11/52, 1/26}");
