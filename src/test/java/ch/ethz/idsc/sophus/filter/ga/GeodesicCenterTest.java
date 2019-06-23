@@ -22,15 +22,25 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 import junit.framework.TestCase;
 
 public class GeodesicCenterTest extends TestCase {
   private static final IntegerTensorFunction CONSTANT = //
-      i -> Array.of(k -> RationalScalar.of(1, 2 * i + 1), 2 * i + 1);
+      i -> Array.of(k -> RationalScalar.of(1, i), i);
 
   public void testSimple() {
     // function generates window to compute mean: all points in window have same weight
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(RnGeodesic.INSTANCE, CONSTANT);
+    for (int index = 0; index < 9; ++index) {
+      Tensor apply = tensorUnaryOperator.apply(UnitVector.of(9, index));
+      assertEquals(apply, RationalScalar.of(1, 9));
+    }
+  }
+
+  public void testDirichlet() {
+    // function generates window to compute mean: all points in window have same weight
+    TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(RnGeodesic.INSTANCE, DirichletWindow.FUNCTION);
     for (int index = 0; index < 9; ++index) {
       Tensor apply = tensorUnaryOperator.apply(UnitVector.of(9, index));
       assertEquals(apply, RationalScalar.of(1, 9));
@@ -88,37 +98,37 @@ public class GeodesicCenterTest extends TestCase {
   public void testSplitsMean() {
     Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(SmoothingKernel.DIRICHLET);
     {
-      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(1));
+      Tensor tensor = GeodesicCenter.Splits.of(centerWindowSampler.apply(1));
       assertEquals(tensor, Tensors.fromString("{1/3}"));
     }
     {
-      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(2));
+      Tensor tensor = GeodesicCenter.Splits.of(centerWindowSampler.apply(2));
       assertEquals(tensor, Tensors.fromString("{1/2, 1/5}"));
     }
     {
-      Tensor tensor = GeodesicCenter.splits(centerWindowSampler.apply(3));
+      Tensor tensor = GeodesicCenter.Splits.of(centerWindowSampler.apply(3));
       assertEquals(tensor, Tensors.fromString("{1/2, 1/3, 1/7}"));
     }
   }
 
   public void testSplitsBinomial() {
     {
-      Tensor tensor = GeodesicCenter.splits(BinomialWeights.INSTANCE.apply(1));
+      Tensor tensor = GeodesicCenter.Splits.of(BinomialWeights.INSTANCE.apply(1 * 2 + 1));
       assertEquals(tensor, Tensors.fromString("{1/2}"));
     }
     {
-      Tensor tensor = GeodesicCenter.splits(BinomialWeights.INSTANCE.apply(2));
+      Tensor tensor = GeodesicCenter.Splits.of(BinomialWeights.INSTANCE.apply(2 * 2 + 1));
       assertEquals(tensor, Tensors.fromString("{4/5, 3/8}"));
     }
     {
-      Tensor tensor = GeodesicCenter.splits(BinomialWeights.INSTANCE.apply(3));
+      Tensor tensor = GeodesicCenter.Splits.of(BinomialWeights.INSTANCE.apply(3 * 2 + 1));
       assertEquals(tensor, Tensors.fromString("{6/7, 15/22, 5/16}"));
     }
   }
 
   public void testFailEven() {
     try {
-      GeodesicCenter.splits(Tensors.vector(1, 2));
+      GeodesicCenter.Splits.of(Tensors.vector(1, 2));
       fail();
     } catch (Exception exception) {
       // ---
@@ -127,7 +137,7 @@ public class GeodesicCenterTest extends TestCase {
 
   public void testNonSymmetric() {
     try {
-      GeodesicCenter.splits(Tensors.vector(1, 2, 2));
+      GeodesicCenter.Splits.of(Tensors.vector(1, 2, 2));
       fail();
     } catch (Exception exception) {
       // ---
