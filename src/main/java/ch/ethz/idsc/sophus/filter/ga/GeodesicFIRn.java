@@ -44,7 +44,10 @@ public class GeodesicFIRn implements TensorUnaryOperator {
   public Tensor apply(Tensor x) {
     Tensor value = boundedLinkedList.size() < 2 //
         ? x.copy()
-        : splitInterface.split(geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream())), x, alpha);
+        : splitInterface.split( //
+            geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream())), //
+            x, //
+            alpha);
     boundedLinkedList.add(x);
     return value;
   }

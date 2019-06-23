@@ -5,10 +5,8 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
-import ch.ethz.idsc.sophus.util.BoundedLinkedList;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,34 +16,26 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** BiinvariantMeanCenter projects a uniform sequence of points to their extrapolate
  * with each point weighted as provided by an external function. */
-public class BiinvariantMeanFIRn implements TensorUnaryOperator {
+public class BiinvariantMeanExtrapolation implements TensorUnaryOperator {
   /** @param biinvariantMean non-null
    * @param function non-null
    * @return operator that maps a sequence of odd number of points to their barycenter
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of( //
-      SplitInterface splitInterface, BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-    return new BiinvariantMeanFIRn( //
-        splitInterface, //
+      BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel) {
+    return new BiinvariantMeanExtrapolation( //
         Objects.requireNonNull(biinvariantMean), //
-        Objects.requireNonNull(smoothingKernel), radius, //
-        Objects.requireNonNull(alpha));
+        Objects.requireNonNull(smoothingKernel));
   }
 
   // ---
-  private final SplitInterface splitInterface;
   private final BiinvariantMean biinvariantMean;
   private final Function<Integer, Tensor> windowSideSampler;
-  private final Scalar alpha;
-  private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  /* package */ BiinvariantMeanFIRn( //
-      SplitInterface splitInterface, BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-    this.splitInterface = splitInterface;
+  /* package */ BiinvariantMeanExtrapolation( //
+      BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel) {
     this.biinvariantMean = biinvariantMean;
     windowSideSampler = WindowSideSampler.of(smoothingKernel);
-    this.alpha = alpha;
-    this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 
   // Assumes uniformly sampled signal!
@@ -64,11 +54,7 @@ public class BiinvariantMeanFIRn implements TensorUnaryOperator {
   }
 
   @Override
-  public Tensor apply(Tensor x) {
-    Tensor value = boundedLinkedList.size() < 2 //
-        ? x.copy()
-        : biinvariantMean.mean(Tensor.of(boundedLinkedList.stream()), extrapolatoryWeights(windowSideSampler.apply(boundedLinkedList.size() - 1)));
-    boundedLinkedList.add(x);
-    return splitInterface.split(value, x, alpha);
+  public Tensor apply(Tensor sequence) {
+    return biinvariantMean.mean(sequence, extrapolatoryWeights(windowSideSampler.apply(sequence.length() - 1)));
   }
 }

@@ -12,8 +12,8 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantFIRnFilter;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantIIRnFilter;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnFilter;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRnFilter;
@@ -75,10 +75,10 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         refined = TangentSpaceIIRnFilter.of(smoothingKernel, radius, alpha()).apply(control());
         break;
       case BIINVARIANT_MEAN_FIR:
-        refined = BiinvariantFIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+        refined = BiinvariantMeanFIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
         break;
       case BIINVARIANT_MEAN_IIR:
-        refined = BiinvariantIIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+        refined = BiinvariantMeanIIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
         break;
       }
       return refined;

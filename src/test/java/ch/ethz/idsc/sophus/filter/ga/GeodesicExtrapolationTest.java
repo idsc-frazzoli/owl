@@ -7,6 +7,7 @@ import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,9 +17,17 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sin;
+import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 import junit.framework.TestCase;
 
 public class GeodesicExtrapolationTest extends TestCase {
+  public void testSimplest() {
+    TensorUnaryOperator unaryOperator = GeodesicExtrapolation.of(RnGeodesic.INSTANCE, DirichletWindow.FUNCTION);
+    Tensor scalar = unaryOperator.apply(Tensors.vector(1, 2));
+    assertEquals(scalar, RealScalar.of(3));
+    ExactScalarQ.require(scalar.Get());
+  }
+
   public void testSimple() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
       TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(RnGeodesic.INSTANCE, smoothingKernel);
