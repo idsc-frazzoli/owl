@@ -9,25 +9,26 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-// TODO JPH OWL 045 remove, superseded by UniformWindowSampler
-public class WindowCenterSampler extends WindowBaseSampler {
+public class UniformWindowSampler extends WindowBaseSampler {
   /** @param windowFunction for evaluation in the interval [-1/2, +1/2] */
   public static Function<Integer, Tensor> of(ScalarUnaryOperator windowFunction) {
-    return MemoFunction.wrap(new WindowCenterSampler(windowFunction));
+    return MemoFunction.wrap(new UniformWindowSampler(windowFunction));
   }
 
   // ---
-  private WindowCenterSampler(ScalarUnaryOperator windowFunction) {
+  private UniformWindowSampler(ScalarUnaryOperator windowFunction) {
     super(windowFunction);
   }
 
-  @Override // from WindowBaseSampler
+  @Override
   protected Tensor samples(int extent) {
+    if (extent == 1)
+      return SINGLETON;
     return isContinuous //
-        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * extent + 2) //
+        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, extent + 1) //
             .map(windowFunction) //
-            .extract(1, 2 * extent + 2)
-        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * extent) //
+            .extract(1, extent + 1)
+        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, extent - 1) //
             .map(windowFunction);
   }
 }

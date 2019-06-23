@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public abstract class WindowBaseSampler implements Function<Integer, Tensor>, Serializable {
-  private static final Tensor SINGLETON = Tensors.vector(1).unmodifiable();
+  protected static final Tensor SINGLETON = Tensors.vector(1).unmodifiable();
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
   // ---
   protected final ScalarUnaryOperator windowFunction;

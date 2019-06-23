@@ -28,9 +28,9 @@ public class GeodesicFIRn implements TensorUnaryOperator {
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
-  private final BoundedLinkedList<Tensor> boundedLinkedList;
   private final SplitInterface splitInterface;
   private final Scalar alpha;
+  private final BoundedLinkedList<Tensor> boundedLinkedList;
 
   /* package */ GeodesicFIRn( //
       TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
