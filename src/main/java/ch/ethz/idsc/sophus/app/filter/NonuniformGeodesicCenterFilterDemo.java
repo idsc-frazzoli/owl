@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
 public class NonuniformGeodesicCenterFilterDemo extends NavigableMapDatasetKernelDemo {
   private Tensor refined = Tensors.empty();
   protected final JToggleButton jToggleFixedRadius = new JToggleButton("fixedRadius");
-  // interval manuel gekoppelt an sampling frequency
+  // interval manuell gekoppelt an sampling frequency
   protected final long samplingFrequency = 20;
 
   public NonuniformGeodesicCenterFilterDemo() {

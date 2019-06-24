@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.lie.he;
 
+import ch.ethz.idsc.sophus.lie.BiinvariantMeanEquation;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -10,6 +11,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class HeBiinvariantMeanTest extends TestCase {
+  public static final BiinvariantMeanEquation BIINVARIANT_MEAN_EQUATION = //
+      new BiinvariantMeanEquation(HeGroup.INSTANCE, HeExponential.INSTANCE);
+
   public void testTrivial() {
     Tensor element = Tensors.fromString("{{1}, {1}, 1}");
     Tensor sequence = Tensors.of(element);
@@ -42,6 +46,7 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
     Tensor expected = Tensors.fromString("{{2}, {2}, 1.8}");
     Chop._12.requireClose(actual, expected);
+    BIINVARIANT_MEAN_EQUATION.evaluate(sequence, weights, actual);
   }
 
   public void testSimplelHe5() {
@@ -53,6 +58,7 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor expected = Tensors.fromString("{{2.0, 4.0}, {2.0, 4.0}, 1.0}");
     assertEquals(actual.get(0), actual.get(1));
     Chop._12.requireClose(actual, expected);
+    BIINVARIANT_MEAN_EQUATION.evaluate(sequence, weights, actual);
   }
 
   public void testInverse() {
@@ -64,6 +70,7 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor actual = HeBiinvariantMean.INSTANCE.mean(sequence, weights);
     Tensor identity = Tensors.fromString("{{0, 0}, {0, 0}, 0}");
     assertEquals(identity, actual);
+    BIINVARIANT_MEAN_EQUATION.evaluate(sequence, weights, actual);
   }
 
   public void testBiinvariantMean1() {

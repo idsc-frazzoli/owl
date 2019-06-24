@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-enum DuckietownDataDemo {
+/* package */ enum DuckietownDataDemo {
   ;
   public static void main(String[] args) {
     for (String string : DuckietownSmoothingDemo.LIST) {

@@ -32,6 +32,7 @@ import ch.ethz.idsc.tensor.sca.win.TukeyWindow;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/guide/WindowFunctions.html">WindowFunctions</a> */
 public enum SmoothingKernel implements ScalarUnaryOperator {
+  /** triangle */
   BARTLETT(BartlettWindow.FUNCTION), //
   BLACKMAN(BlackmanWindow.FUNCTION), //
   BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION), //

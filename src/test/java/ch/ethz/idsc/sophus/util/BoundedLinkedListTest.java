@@ -60,4 +60,14 @@ public class BoundedLinkedListTest extends TestCase {
     assertEquals(copy.get(0).intValue(), 3);
     assertEquals(copy.get(1).intValue(), 4);
   }
+
+  public void testFailNegativeSize() {
+    new BoundedLinkedList<>(0);
+    try {
+      new BoundedLinkedList<>(-1);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

@@ -14,6 +14,8 @@ public class BoundedLinkedList<E> extends LinkedList<E> {
 
   /** @param maxSize */
   public BoundedLinkedList(int maxSize) {
+    if (maxSize < 0)
+      throw new IllegalArgumentException("" + maxSize);
     this.maxSize = maxSize;
   }
 

@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <p>Careful: the implementation only supports sequences with ODD number of elements!
  * When a sequence of even length is provided an Exception is thrown. */
 // TODO OB is there an official name for this weighted average in the literature?
+// TODO JPH OWL 044 refactor, document
 public class TangentSpaceCenter implements TensorUnaryOperator {
   /** @param lieGroup
    * @param lieExponential

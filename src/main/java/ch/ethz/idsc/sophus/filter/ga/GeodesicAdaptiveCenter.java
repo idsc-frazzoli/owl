@@ -34,30 +34,30 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public class GeodesicAdaptiveCenter implements TensorUnaryOperator {
   private static final Scalar TWO = RealScalar.of(2);
 
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @param function that maps an extent to a weight mask of length == 2 * extent + 1
    * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(SplitInterface geodesicInterface, Function<Integer, Tensor> function, Scalar interval) {
-    return new GeodesicAdaptiveCenter(geodesicInterface, Objects.requireNonNull(function), interval);
+  public static TensorUnaryOperator of(SplitInterface splitInterface, Function<Integer, Tensor> function, Scalar interval) {
+    return new GeodesicAdaptiveCenter(splitInterface, Objects.requireNonNull(function), interval);
   }
 
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @param windowFunction
    * @return
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(SplitInterface geodesicInterface, ScalarUnaryOperator windowFunction, Scalar interval) {
-    return new GeodesicAdaptiveCenter(geodesicInterface, WindowCenterSampler.of(windowFunction), interval);
+  public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction, Scalar interval) {
+    return new GeodesicAdaptiveCenter(splitInterface, WindowCenterSampler.of(windowFunction), interval);
   }
 
   // ---
-  private final SplitInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final Function<Integer, Tensor> function;
   private final List<Tensor> weights = new ArrayList<>();
   private final Scalar interval;
 
-  private GeodesicAdaptiveCenter(SplitInterface geodesicInterface, Function<Integer, Tensor> function, Scalar interval) {
-    this.geodesicInterface = Objects.requireNonNull(geodesicInterface);
+  private GeodesicAdaptiveCenter(SplitInterface splitInterface, Function<Integer, Tensor> function, Scalar interval) {
+    this.splitInterface = Objects.requireNonNull(splitInterface);
     this.function = function;
     this.interval = interval;
   }
@@ -96,10 +96,10 @@ public class GeodesicAdaptiveCenter implements TensorUnaryOperator {
     Tensor pR = tensor.get(2 * radius);
     for (int index = 0; index < radius;) {
       Scalar scalar = splits.Get(index++);
-      pL = geodesicInterface.split(pL, tensor.get(index), scalar);
-      pR = geodesicInterface.split(pR, tensor.get(2 * radius - index), scalar);
+      pL = splitInterface.split(pL, tensor.get(index), scalar);
+      pR = splitInterface.split(pR, tensor.get(2 * radius - index), scalar);
     }
-    return geodesicInterface.split(pL, pR, RationalScalar.HALF);
+    return splitInterface.split(pL, pR, RationalScalar.HALF);
   }
 
   /** @param mask symmetric vector of odd length

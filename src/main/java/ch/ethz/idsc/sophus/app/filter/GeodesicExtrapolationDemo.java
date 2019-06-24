@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolationFilter;
@@ -22,6 +23,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private Tensor refined = Tensors.empty();
 
   public GeodesicExtrapolationDemo() {
+    super(GeodesicDisplays.SE2_R2);
     updateState();
   }
 
