@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.math.crd;
+package ch.ethz.idsc.sophus.poly.crd;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;

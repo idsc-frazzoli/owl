@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.math.crd;
+package ch.ethz.idsc.sophus.poly.crd;
 
 import java.io.Serializable;
 import java.util.List;
@@ -51,16 +51,16 @@ public class PowerCoordinates implements Serializable {
 
   static class Aux {
     final Tensor pos;
-    final Tensor nrm;
+    final Tensor dir;
 
     Aux(Tensor xi, Tensor xj, Scalar wi, Scalar wj) {
       Tensor nrm = NORMALIZE.apply(xj.subtract(xi));
       pos = xi.add(nrm.multiply(dij(xi, xj, wi, wj))); //
-      this.nrm = Cross.of(nrm);
+      dir = Cross.of(nrm);
     }
 
     Tensor intersect(Aux aux) {
-      return Intersection2D.of(pos, nrm, aux.pos, aux.nrm);
+      return Intersection2D.of(pos, dir, aux.pos, aux.dir);
     }
   }
 
