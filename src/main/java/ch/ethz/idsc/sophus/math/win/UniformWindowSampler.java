@@ -21,14 +21,14 @@ public class UniformWindowSampler extends WindowBaseSampler {
   }
 
   @Override
-  protected Tensor samples(int extent) {
-    if (extent == 1)
+  protected Tensor samples(int length) {
+    if (length == 1)
       return SINGLETON;
     return isContinuous //
-        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, extent + 1) //
+        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, length + 1) //
             .map(windowFunction) //
-            .extract(1, extent + 1)
-        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, extent - 1) //
+            .extract(1, length + 1)
+        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, length - 1) //
             .map(windowFunction);
   }
 }

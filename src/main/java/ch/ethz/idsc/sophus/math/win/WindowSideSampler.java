@@ -7,7 +7,6 @@ import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -23,14 +22,14 @@ public class WindowSideSampler extends WindowBaseSampler {
   }
 
   @Override // from WindowBaseSampler
-  protected Tensor samples(int extent) {
-    if (extent == 1)
-      return Tensors.vector(1);
+  protected Tensor samples(int length) {
+    if (length == 1)
+      return SINGLETON;
     return isContinuous //
-        ? Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, extent) //
+        ? Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, length) //
             .map(windowFunction) //
-            .extract(1, extent + 1)
-        : Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, extent - 1) //
+            .extract(1, length + 1)
+        : Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, length - 1) //
             .map(windowFunction);
   }
 }

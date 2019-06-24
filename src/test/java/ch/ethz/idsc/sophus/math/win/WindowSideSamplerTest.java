@@ -7,10 +7,18 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.NormalizeTotal;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class WindowSideSamplerTest extends TestCase {
+  public void testSpecific() {
+    Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.BARTLETT);
+    assertEquals(windowSideSampler.apply(1), Tensors.fromString("{1}"));
+    assertEquals(windowSideSampler.apply(2), Tensors.fromString("{1/3, 2/3}"));
+    assertEquals(windowSideSampler.apply(3), Tensors.fromString("{1/6, 1/3, 1/2}"));
+  }
+
   public void testExact() {
     Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.HANN);
     Function<Integer, Tensor> windowCenterSampler = WindowCenterSampler.of(SmoothingKernel.HANN);

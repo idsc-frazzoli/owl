@@ -29,12 +29,10 @@ import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 // TODO OB adapt symLinkImages to new filter structure, see use of BufferedImageSupplier
 /* package */ class GeodesicCausalFilterDemo extends DatasetKernelDemo {
-  private Tensor refined = Tensors.empty();
   protected final SpinnerLabel<LieGroupCausalFilters> spinnerCausalFilter = new SpinnerLabel<>();
   /** parameter to blend extrapolation with measurement */
   private final JSlider jSlider = new JSlider(1, 999, 500);
