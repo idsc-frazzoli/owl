@@ -21,14 +21,12 @@ public class DubinsTransitionSpaceTest extends TestCase {
     assertEquals(RealScalar.of(3).add(Pi.HALF), transition.length());
   }
 
-  /* FIXME units do not work
   public void testLengthUnits() {
     Tensor start = Tensors.fromString("{1[m],2[m]}").append(Pi.HALF);
     Tensor end = Tensors.fromString("{2[m],6[m],0}");
     Transition transition = DubinsTransitionSpace.withRadius(Quantity.of(1, "m")).connect(start, end);
     assertEquals(Quantity.of(3 + Math.PI / 2, "m"), transition.length());
   }
-  */
 
   public void testSamples() {
     Tensor start = Tensors.fromString("{2,1,0}");

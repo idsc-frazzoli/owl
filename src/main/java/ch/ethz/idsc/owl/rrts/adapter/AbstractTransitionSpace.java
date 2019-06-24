@@ -1,4 +1,4 @@
-//code by gjoel
+// code by gjoel
 package ch.ethz.idsc.owl.rrts.adapter;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
