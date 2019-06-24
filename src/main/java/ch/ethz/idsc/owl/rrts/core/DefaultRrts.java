@@ -56,7 +56,7 @@ public class DefaultRrts implements Rrts {
 
   private boolean isInsertPlausible(Tensor state) {
     Tensor nearest = nodeCollection.nearTo(state, 1).iterator().next().state();
-    return isCollisionFree(transitionSpace.connect(nearest, state));
+    return !state.equals(nearest) && isCollisionFree(transitionSpace.connect(nearest, state));
   }
 
   private RrtsNode connectAlongMinimumCost(Tensor state, int k_nearest) {

@@ -28,7 +28,7 @@ public class RnTransitionSpace extends AbstractTransitionSpace {
       @Override // from Transition
       public TransitionSamplesWrap sampled(int steps) {
         if (steps < 1)
-          throw TensorRuntimeException.of(RealScalar.of(steps));
+          throw TensorRuntimeException.of(length(), RealScalar.of(steps));
         Tensor samples = Array.zeros(steps);
         Tensor spacing = Array.zeros(steps);
         Tensor direction = end.subtract(start).divide(RealScalar.of(steps));

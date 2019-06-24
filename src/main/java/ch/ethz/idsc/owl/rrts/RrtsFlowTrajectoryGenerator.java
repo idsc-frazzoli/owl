@@ -31,14 +31,13 @@ import ch.ethz.idsc.tensor.Tensor;
   public List<TrajectorySample> createTrajectory( //
       TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
     List<TrajectorySample> trajectory = new LinkedList<>();
-    Scalar tn = t0;
     RrtsNode prev = sequence.get(0);
     for (RrtsNode node : sequence.subList(1, sequence.size())) {
       Transition transition = transitionSpace.connect(prev.state(), node.state());
       TransitionSamplesWrap transitionSamplesWrap = transition.sampled(dt);
       Tensor samples = transitionSamplesWrap.samples();
       Tensor spacing = transitionSamplesWrap.spacing();
-      Scalar ti = tn;
+      Scalar ti = t0;
       for (int i = 0; i < samples.length(); i++) {
         ti = ti.add(spacing.Get(i));
         StateTime stateTime = new StateTime(samples.get(i), ti);
@@ -51,7 +50,7 @@ import ch.ethz.idsc.tensor.Tensor;
         }
       }
       prev = node;
-      tn = t0.add(transition.length());
+      t0 = t0.add(transition.length());
     }
     return trajectory;
   }
