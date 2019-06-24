@@ -32,6 +32,7 @@ public class ClothoidTransitionSpace extends AbstractTransitionSpace implements 
 
   @Override // from TransitionSpace
   public Transition connect(Tensor start, Tensor end) {
+    // TODO distance calculation / wrap is bottle neck
     return new AbstractTransition(this, start, end) {
       @Override // from Transition
       public TransitionSamplesWrap sampled(Scalar minResolution) {
@@ -55,7 +56,7 @@ public class ClothoidTransitionSpace extends AbstractTransitionSpace implements 
       private TransitionSamplesWrap wrap(Tensor samples) {
         Tensor spacing = Array.zeros(samples.length());
         IntStream.range(0, samples.length()).parallel().forEach(i -> spacing.set(i > 0 //
-            ? PseudoClothoidDistance.INSTANCE.distance(samples.get(i - 1), samples.get(i)) //
+            ? distance(samples.get(i - 1), samples.get(i)) //
             : samples.Get(i, 0).zero(), i));
         return new TransitionSamplesWrap(samples, spacing);
       }
