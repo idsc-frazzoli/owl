@@ -43,7 +43,7 @@ public class ColoredNoise {
   private final int poles;
   private final double[] multipliers;
   private final double[] values;
-  private final Random rnd;
+  private final Random random;
 
   /** Generate White noise by choosing the color alpha, using a five-pole IIR. */
   public ColoredNoise() {
@@ -94,28 +94,27 @@ public class ColoredNoise {
    * @param random: the randomness source.
    * @throws IllegalArgumentException: if <code>alpha < 0</code> or <code>alpha > 2</code>. */
   public ColoredNoise(double alpha, int poles, Random random) {
-    this.rnd = random;
+    this.random = random;
     this.poles = poles;
     this.multipliers = new double[poles];
     this.values = new double[poles];
     double a = 1;
-    for (int i = 0; i < poles; i++) {
+    for (int i = 0; i < poles; ++i) {
       a = (i - alpha / 2) * a / (i + 1);
       multipliers[i] = a;
     }
     // Fill the history with random values
-    for (int i = 0; i < 5 * poles; i++)
-      this.nextValue();
+    for (int i = 0; i < 5 * poles; ++i)
+      nextValue();
   }
 
   /** @return the next pink noise sample. */
   public double nextValue() {
     /* The following may be changed to rnd.nextDouble()-0.5 if strict
      * Gaussian distribution of resulting values is not required. */
-    double x = rnd.nextGaussian();
-    for (int i = 0; i < poles; i++) {
+    double x = random.nextGaussian();
+    for (int i = 0; i < poles; ++i)
       x -= multipliers[i] * values[i];
-    }
     System.arraycopy(values, 0, values, 1, values.length - 1);
     values[0] = x;
     return x;

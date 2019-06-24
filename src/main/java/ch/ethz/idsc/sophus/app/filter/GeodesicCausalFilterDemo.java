@@ -12,8 +12,9 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantFIRnFilter;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantIIRnFilter;
+import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnFilter;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRnFilter;
@@ -21,17 +22,17 @@ import ch.ethz.idsc.sophus.filter.ts.TangentSpaceFIRnFilter;
 import ch.ethz.idsc.sophus.filter.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 // TODO OB adapt symLinkImages to new filter structure, see use of BufferedImageSupplier
 /* package */ class GeodesicCausalFilterDemo extends DatasetKernelDemo {
-  private Tensor refined = Tensors.empty();
   protected final SpinnerLabel<LieGroupCausalFilters> spinnerCausalFilter = new SpinnerLabel<>();
   /** parameter to blend extrapolation with measurement */
   private final JSlider jSlider = new JSlider(1, 999, 500);
@@ -61,27 +62,30 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
       // ---
       LieGroupCausalFilters lgcf = spinnerCausalFilter.getValue();
+      TensorUnaryOperator cf = null;
       switch (lgcf) {
       case GEODESIC_FIR:
-        refined = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha()).apply(control());
+        cf = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
         break;
       case GEODESIC_IIR:
-        refined = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha()).apply(control());
+        cf = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
         break;
       case TANGENT_SPACE_FIR:
-        refined = TangentSpaceFIRnFilter.of(smoothingKernel, radius, alpha()).apply(control());
+        cf = TangentSpaceFIRnFilter.of( //
+            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
         break;
       case TANGENT_SPACE_IIR:
-        refined = TangentSpaceIIRnFilter.of(smoothingKernel, radius, alpha()).apply(control());
+        cf = TangentSpaceIIRnFilter.of( //
+            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
         break;
       case BIINVARIANT_MEAN_FIR:
-        refined = BiinvariantFIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+        cf = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
         break;
       case BIINVARIANT_MEAN_IIR:
-        refined = BiinvariantIIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+        cf = BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
         break;
       }
-      return refined;
+      return cf.apply(control());
     }
     // TODO OB: I would like to have this shape with one filter for all different operators
     // if (0 < radius) {

@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** "Exponential Barycenters of the Canonical Cartan Connection and Invariant Means on Lie Groups"
  * by Xavier Pennec, Vincent Arsigny, p.27, Section 4.1
@@ -15,8 +16,9 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public class ScSkew implements ScalarUnaryOperator {
   private final Scalar mean;
 
+  /** @param mean non-zero */
   public ScSkew(Scalar mean) {
-    this.mean = mean;
+    this.mean = Sign.requirePositive(mean);
   }
 
   @Override

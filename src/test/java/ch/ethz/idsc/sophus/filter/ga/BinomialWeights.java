@@ -13,9 +13,8 @@ public enum BinomialWeights implements Function<Integer, Tensor> {
   // ---
   @Override
   public Tensor apply(Integer i) {
-    if (i < 0)
+    if (i <= 0)
       throw new IllegalArgumentException("i=" + i);
-    int two_i = 2 * i;
-    return Tensors.vector(k -> Binomial.of(two_i, k), two_i + 1).divide(Power.of(2, two_i));
+    return Tensors.vector(k -> Binomial.of(i - 1, k), i).divide(Power.of(2, i - 1));
   }
 }
