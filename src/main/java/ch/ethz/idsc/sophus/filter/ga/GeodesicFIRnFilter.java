@@ -8,13 +8,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public enum GeodesicFIRnFilter {
   ;
-  /** @param geodesicExtrapolation
+  /** @param extrapolation
    * @param splitInterface
    * @param radius
    * @param alpha
    * @return
    * @throws Exception if either parameter is null */
-  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
-    return CausalFilter.of(() -> new GeodesicFIRn(geodesicExtrapolation, splitInterface, radius, alpha));
+  public static TensorUnaryOperator of(TensorUnaryOperator extrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
+    return CausalFilter.of(() -> new GeodesicFIRn(extrapolation, splitInterface, radius, alpha));
   }
 }

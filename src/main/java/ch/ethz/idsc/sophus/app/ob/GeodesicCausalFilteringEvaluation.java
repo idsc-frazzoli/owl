@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
 
-public class GeodesicCausalFilteringEvaluation {
+/* package */ class GeodesicCausalFilteringEvaluation {
   public static GeodesicCausalFilteringEvaluation se2(Tensor measurements, Tensor reference) {
     return new GeodesicCausalFilteringEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, measurements, reference);
   }

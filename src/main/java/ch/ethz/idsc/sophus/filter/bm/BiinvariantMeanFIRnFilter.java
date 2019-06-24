@@ -3,8 +3,7 @@ package ch.ethz.idsc.sophus.filter.bm;
 
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.filter.CausalFilter;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRn;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,7 +15,8 @@ public enum BiinvariantMeanFIRnFilter {
   public static TensorUnaryOperator of( //
       BiinvariantMean biinvariantMean, Function<Integer, Tensor> function, //
       SplitInterface splitInterface, int radius, Scalar alpha) {
-    TensorUnaryOperator geodesicExtrapolation = BiinvariantMeanExtrapolation.of(biinvariantMean, function);
-    return CausalFilter.of(() -> GeodesicFIRn.of(geodesicExtrapolation, splitInterface, radius, alpha));
+    return GeodesicFIRnFilter.of( //
+        BiinvariantMeanExtrapolation.of(biinvariantMean, function), //
+        splitInterface, radius, alpha);
   }
 }
