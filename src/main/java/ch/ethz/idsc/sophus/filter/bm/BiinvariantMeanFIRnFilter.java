@@ -19,15 +19,4 @@ public enum BiinvariantMeanFIRnFilter {
     TensorUnaryOperator geodesicExtrapolation = BiinvariantMeanExtrapolation.of(biinvariantMean, function);
     return CausalFilter.of(() -> GeodesicFIRn.of(geodesicExtrapolation, splitInterface, radius, alpha));
   }
-  /** @param splitInterface
-   * @param biinvariantMean
-   * @param smoothingKernel
-   * @param radius
-   * @param alpha
-   * @return */
-  // public static TensorUnaryOperator of( //
-  // BiinvariantMean biinvariantMean, ScalarUnaryOperator smoothingKernel, SplitInterface splitInterface, int radius, Scalar alpha) {
-  // TensorUnaryOperator geodesicExtrapolation = BiinvariantMeanExtrapolation.of(biinvariantMean, WindowSideExtrapolation.of(smoothingKernel));
-  // return CausalFilter.of(() -> GeodesicFIRn.of(geodesicExtrapolation, splitInterface, radius, alpha));
-  // }
 }

@@ -13,7 +13,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
-import ch.ethz.idsc.sophus.filter.WindowSydeExtrapolation;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnFilter;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
@@ -75,11 +74,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         break;
       case TANGENT_SPACE_FIR:
         cf = TangentSpaceFIRnFilter.of( //
-            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSydeExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
+            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
         break;
       case TANGENT_SPACE_IIR:
         cf = TangentSpaceIIRnFilter.of( //
-            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSydeExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
+            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
         break;
       case BIINVARIANT_MEAN_FIR:
         cf = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());

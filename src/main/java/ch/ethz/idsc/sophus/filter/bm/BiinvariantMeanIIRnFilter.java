@@ -1,4 +1,4 @@
-// code by ob
+// code by jph
 package ch.ethz.idsc.sophus.filter.bm;
 
 import java.util.function.Function;

@@ -39,11 +39,11 @@ public class WindowSideExtrapolation implements Function<Integer, Tensor>, Seria
     Tensor chronological = Tensors.empty();
     for (int index = 0; index < weights.length(); ++index)
       chronological.append(RealScalar.of(index));
-    Scalar l = RealScalar.of(weights.length()).subtract(weights.dot(chronological)).reciprocal();
+    Scalar distance = RealScalar.of(weights.length() - 1).subtract(weights.dot(chronological));
     Tensor extrapolatoryWeights = Tensors.empty();
     for (int index = 0; index < weights.length() - 1; ++index)
-      extrapolatoryWeights.append(weights.Get(index).negate().multiply(l));
-    extrapolatoryWeights.append(RealScalar.ONE.add(l).subtract(l.multiply(weights.Get(weights.length() - 1))));
+      extrapolatoryWeights.append(weights.Get(index).negate().divide(distance));
+    extrapolatoryWeights.append(distance.reciprocal().multiply(RealScalar.ONE.subtract(weights.Get(weights.length() - 1))).add(RealScalar.ONE));
     return extrapolatoryWeights.unmodifiable();
   }
 }

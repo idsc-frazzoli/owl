@@ -15,7 +15,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** BiinvariantMeanCenter projects a uniform sequence of points to their extrapolate
  * with each point weighted as provided by an external function. */
-public class WindowSydeExtrapolation implements Function<Integer, Tensor>, Serializable {
+// FIXME OB does not work as extrapolation in tests
+/* package */ class WindowSydeExtrapolation implements Function<Integer, Tensor>, Serializable {
   /** @param function non-null
    * @return
    * @throws Exception if either input parameter is null */
@@ -39,11 +40,11 @@ public class WindowSydeExtrapolation implements Function<Integer, Tensor>, Seria
     Tensor chronological = Tensors.empty();
     for (int index = 0; index < weights.length(); ++index)
       chronological.append(RealScalar.of(index));
-    Scalar distance = RealScalar.of(weights.length() - 1).subtract(weights.dot(chronological));
+    Scalar l = RealScalar.of(weights.length()).subtract(weights.dot(chronological)).reciprocal();
     Tensor extrapolatoryWeights = Tensors.empty();
     for (int index = 0; index < weights.length() - 1; ++index)
-      extrapolatoryWeights.append(weights.Get(index).negate().divide(distance));
-    extrapolatoryWeights.append(distance.reciprocal().multiply(RealScalar.ONE.subtract(weights.Get(weights.length() - 1))).add(RealScalar.ONE));
+      extrapolatoryWeights.append(weights.Get(index).negate().multiply(l));
+    extrapolatoryWeights.append(RealScalar.ONE.add(l).subtract(l.multiply(weights.Get(weights.length() - 1))));
     return extrapolatoryWeights.unmodifiable();
   }
 }

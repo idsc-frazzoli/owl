@@ -13,7 +13,7 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
-import ch.ethz.idsc.sophus.filter.WindowSydeExtrapolation;
+import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.filter.ts.TangentSpaceFIRnFilter;
 import ch.ethz.idsc.sophus.filter.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.LieExponential;
@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       TensorUnaryOperator tensorUnaryOperator;
       Function<Integer, Tensor> function = jToggleMon.isSelected() //
           ? MonomialExtrapolationMask.INSTANCE
-          : WindowSydeExtrapolation.of(spinnerKernel.getValue());
+          : WindowSideExtrapolation.of(spinnerKernel.getValue());
       if (jToggleIIR.isSelected()) {
         tensorUnaryOperator = TangentSpaceIIRnFilter.of( //
             lieGroup, lieExponential, function, geodesicInterface, spinnerRadius.getValue(), alpha());
