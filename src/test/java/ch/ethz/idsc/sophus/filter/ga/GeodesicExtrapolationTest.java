@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter.ga;
 
+import java.io.IOException;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
@@ -15,6 +16,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -33,8 +35,8 @@ public class GeodesicExtrapolationTest extends TestCase {
     }
   }
 
-  public void testDirichlet() {
-    TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(RnGeodesic.INSTANCE, DirichletWindow.FUNCTION);
+  public void testDirichlet() throws ClassNotFoundException, IOException {
+    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(GeodesicExtrapolation.of(RnGeodesic.INSTANCE, DirichletWindow.FUNCTION));
     {
       Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(12));
       assertEquals(tensor, RealScalar.of(12));
@@ -101,14 +103,14 @@ public class GeodesicExtrapolationTest extends TestCase {
 
   public void testSplits2() {
     Tensor mask = Tensors.vector(.5, .5);
-    Tensor result = GeodesicExtrapolation.splits(mask);
+    Tensor result = GeodesicExtrapolation.Splits.of(mask);
     assertEquals(Tensors.vector(2), result);
   }
 
   public void testElaborate() {
     Function<Integer, Tensor> windowSideSampler = WindowSidedSampler.of(SmoothingKernel.GAUSSIAN);
     Tensor mask = windowSideSampler.apply(6);
-    Tensor result = GeodesicExtrapolation.splits(mask);
+    Tensor result = GeodesicExtrapolation.Splits.of(mask);
     // System.out.println(result);
     Tensor expect = Tensors.vector( //
         0.6045315182147757, 0.4610592079176246, 0.3765618899029577, //
@@ -118,14 +120,14 @@ public class GeodesicExtrapolationTest extends TestCase {
 
   public void testNoExtrapolation() {
     Tensor mask = Tensors.vector(1);
-    Tensor result = GeodesicExtrapolation.splits(mask);
+    Tensor result = GeodesicExtrapolation.Splits.of(mask);
     assertEquals(Tensors.vector(1), result);
   }
 
   public void testAffinityFail() {
     Tensor mask = Tensors.vector(.5, .8);
     try {
-      GeodesicExtrapolation.splits(mask);
+      GeodesicExtrapolation.Splits.of(mask);
       fail();
     } catch (Exception exception) {
       // ----
