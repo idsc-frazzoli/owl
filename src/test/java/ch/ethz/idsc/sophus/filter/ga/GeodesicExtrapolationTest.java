@@ -3,10 +3,11 @@ package ch.ethz.idsc.sophus.filter.ga;
 
 import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
+import ch.ethz.idsc.sophus.math.win.WindowSidedSampler;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,26 +23,60 @@ import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 import junit.framework.TestCase;
 
 public class GeodesicExtrapolationTest extends TestCase {
-  public void testSimplest() {
-    TensorUnaryOperator unaryOperator = GeodesicExtrapolation.of(RnGeodesic.INSTANCE, DirichletWindow.FUNCTION);
+  public void testEmptyFail() {
+    TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(RnGeodesic.INSTANCE, DirichletWindow.FUNCTION);
+    try {
+      tensorUnaryOperator.apply(Tensors.empty());
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testDirichlet() {
+    TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(RnGeodesic.INSTANCE, DirichletWindow.FUNCTION);
     {
-      Tensor tensor = unaryOperator.apply(Tensors.vector(12));
+      Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(12));
       assertEquals(tensor, RealScalar.of(12));
       ExactScalarQ.require(tensor.Get());
     }
     {
-      Tensor tensor = unaryOperator.apply(Tensors.vector(1, 2));
+      Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(1, 2));
       assertEquals(tensor, RealScalar.of(3));
       ExactScalarQ.require(tensor.Get());
     }
     {
-      Tensor tensor = unaryOperator.apply(Tensors.vector(1, 2, 3));
+      Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(1, 2, 3));
       assertEquals(tensor, RealScalar.of(4));
       ExactScalarQ.require(tensor.Get());
     }
     {
-      Tensor tensor = unaryOperator.apply(Tensors.vector(1, 2, 1));
+      Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(1, 2, 1));
       assertEquals(tensor, RationalScalar.of(2, 3));
+      ExactScalarQ.require(tensor.Get());
+    }
+  }
+
+  public void testMonomial() {
+    TensorUnaryOperator tensorUnaryOperator = GeodesicExtrapolation.of(RnGeodesic.INSTANCE, MonomialExtrapolationMask.INSTANCE);
+    {
+      Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(12));
+      assertEquals(tensor, RealScalar.of(12));
+      ExactScalarQ.require(tensor.Get());
+    }
+    {
+      Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(1, 2));
+      assertEquals(tensor, RealScalar.of(3));
+      ExactScalarQ.require(tensor.Get());
+    }
+    {
+      Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(1, 2, 3));
+      assertEquals(tensor, RealScalar.of(4));
+      ExactScalarQ.require(tensor.Get());
+    }
+    {
+      Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(1, 2, 1));
+      assertEquals(tensor, RationalScalar.of(-2, 1));
       ExactScalarQ.require(tensor.Get());
     }
   }
@@ -71,7 +106,7 @@ public class GeodesicExtrapolationTest extends TestCase {
   }
 
   public void testElaborate() {
-    Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.GAUSSIAN);
+    Function<Integer, Tensor> windowSideSampler = WindowSidedSampler.of(SmoothingKernel.GAUSSIAN);
     Tensor mask = windowSideSampler.apply(6);
     Tensor result = GeodesicExtrapolation.splits(mask);
     // System.out.println(result);

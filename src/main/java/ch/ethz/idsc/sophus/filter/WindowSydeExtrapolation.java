@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   // TODO OB: refactor for better overview
   @Override
   public Tensor apply(Integer t) {
-    Tensor weights = windowSideSampler.apply(t - 1);
+    Tensor weights = windowSideSampler.apply(t);
     AffineQ.require(weights);
     Tensor chronological = Tensors.empty();
     for (int index = 0; index < weights.length(); ++index)

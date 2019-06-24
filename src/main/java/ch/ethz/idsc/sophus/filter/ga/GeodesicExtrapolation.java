@@ -1,14 +1,13 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter.ga;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
+import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,30 +31,25 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
    * @return operator that maps a sequence of number of points to their next (expected) point
    * @throws Exception if either input parameters is null */
   public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
+    Objects.requireNonNull(windowFunction);
     return new GeodesicExtrapolation(splitInterface, WindowSideSampler.of(windowFunction));
   }
 
   // ---
   private final SplitInterface splitInterface;
   private final Function<Integer, Tensor> function;
-  private final List<Tensor> weights = new ArrayList<>();
 
   private GeodesicExtrapolation(SplitInterface splitInterface, Function<Integer, Tensor> function) {
     this.splitInterface = Objects.requireNonNull(splitInterface);
-    this.function = function;
+    this.function = MemoFunction.wrap(t -> splits(function.apply(t)));
   }
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
-    int radius = (tensor.length() - 1);
-    synchronized (weights) {
-      while (weights.size() <= radius)
-        weights.add(splits(function.apply(weights.size())));
-    }
-    Tensor splits = weights.get(radius);
+    Tensor splits = function.apply(tensor.length());
     Tensor result = tensor.get(0);
-    for (int index = 0; index < radius; ++index)
-      result = splitInterface.split(result, tensor.get(index + 1), splits.Get(index));
+    for (int index = 1; index < tensor.length(); ++index)
+      result = splitInterface.split(result, tensor.get(index), splits.Get(index - 1));
     return result;
   }
 

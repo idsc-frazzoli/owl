@@ -10,12 +10,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class WindowSideSamplerTest extends TestCase {
+public class WindowSidedSamplerTest extends TestCase {
   public void testExact() {
-    Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.HANN);
+    Function<Integer, Tensor> windowSideSampler = WindowSidedSampler.of(SmoothingKernel.HANN);
     Function<Integer, Tensor> windowCenterSampler = WindowCenterSampler.of(SmoothingKernel.HANN);
     for (int extent = 0; extent < 3; ++extent) {
-      Tensor tensor = windowSideSampler.apply(extent + 1);
+      Tensor tensor = windowSideSampler.apply(extent);
       Tensor expect = NormalizeTotal.FUNCTION.apply(windowCenterSampler.apply(extent).extract(0, extent + 1));
       assertEquals(tensor, expect);
       ExactTensorQ.require(tensor);
@@ -25,10 +25,10 @@ public class WindowSideSamplerTest extends TestCase {
 
   public void testNumeric() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(smoothingKernel);
+      Function<Integer, Tensor> windowSideSampler = WindowSidedSampler.of(smoothingKernel);
       Function<Integer, Tensor> windowCenterSampler = WindowCenterSampler.of(smoothingKernel);
       for (int extent = 0; extent < 7; ++extent) {
-        Tensor tensor = windowSideSampler.apply(extent + 1);
+        Tensor tensor = windowSideSampler.apply(extent);
         Tensor expect = NormalizeTotal.FUNCTION.apply(windowCenterSampler.apply(extent).extract(0, extent + 1));
         Chop._12.requireClose(tensor, expect);
       }
@@ -37,10 +37,10 @@ public class WindowSideSamplerTest extends TestCase {
 
   public void testMemo() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      Function<Integer, Tensor> function = WindowSideSampler.of(smoothingKernel);
+      Function<Integer, Tensor> function = WindowSidedSampler.of(smoothingKernel);
       for (int count = 0; count < 5; ++count) {
-        Tensor val1 = function.apply(count + 1);
-        Tensor val2 = function.apply(count + 1);
+        Tensor val1 = function.apply(count);
+        Tensor val2 = function.apply(count);
         assertTrue(val1 == val2); // equal by reference
         try {
           val1.set(RealScalar.ZERO, 0);
