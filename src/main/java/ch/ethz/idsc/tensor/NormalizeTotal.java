@@ -5,6 +5,8 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
 
+/** Consistent with Mathematica, in particular
+ * Mathematica::Normalize[{}, Total] == {} */
 public enum NormalizeTotal implements TensorUnaryOperator {
   FUNCTION;
   // ---

@@ -56,27 +56,27 @@ public class JassCard {
    * @param jassCard to be compared to
    * @return true if this card is less (according to the rules) than the given jassCard, false otherwise */
   public boolean isLess(JassCard jassCard) {
-    this.cheatChecker(jassCard);
-    if (this.isTrumpf && jassCard.isTrumpf) {
-      if (this.type.trumpfOrdering < jassCard.type.trumpfOrdering) {
+    cheatChecker(jassCard);
+    if (isTrumpf && jassCard.isTrumpf)
+      if (type.trumpfOrdering < jassCard.type.trumpfOrdering)
         return true;
-      }
-    }
-    if (!this.isTrumpf && jassCard.isTrumpf) {
+    if (!this.isTrumpf && jassCard.isTrumpf)
       return true;
-    }
-    if (!this.isTrumpf && !jassCard.isTrumpf) {
-      if ((this.color.equals(jassCard.color)) && (this.type.compareTo(jassCard.type) < 0)) {
+    if (!isTrumpf && !jassCard.isTrumpf)
+      if (color.equals(jassCard.color) && type.compareTo(jassCard.type) < 0)
         return true;
-      }
-    }
     return false;
   }
 
   @Override
   public boolean equals(Object object) {
-    return object instanceof JassCard //
-        && this.color.equals(((JassCard) object).color) && this.type.equals(((JassCard) object).type) && (this.isTrumpf == ((JassCard) object).isTrumpf);
+    if (object instanceof JassCard) {
+      JassCard jassCard = (JassCard) object;
+      return color.equals(jassCard.color) //
+          && type.equals(jassCard.type) //
+          && isTrumpf == jassCard.isTrumpf;
+    }
+    return false;
   }
 
   @Override
