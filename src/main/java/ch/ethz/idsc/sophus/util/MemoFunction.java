@@ -14,7 +14,9 @@ public class MemoFunction<K, V> implements Function<K, V>, Serializable {
   /** @param function non-null
    * @return */
   public static <K, V> Function<K, V> wrap(Function<K, V> function) {
-    return new MemoFunction<>(Objects.requireNonNull(function));
+    return function instanceof MemoFunction //
+        ? function
+        : new MemoFunction<>(Objects.requireNonNull(function));
   }
 
   // ---

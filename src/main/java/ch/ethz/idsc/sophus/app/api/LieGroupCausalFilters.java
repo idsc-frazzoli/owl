@@ -6,8 +6,7 @@ import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRn;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRn;
-import ch.ethz.idsc.sophus.filter.ts.TangentSpaceFIRnNEW;
-import ch.ethz.idsc.sophus.filter.ts.TangentSpaceIIRnNEW;
+import ch.ethz.idsc.sophus.filter.ts.TangentSpaceExtrapolation;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -36,14 +35,18 @@ public enum LieGroupCausalFilters {
     @Override
     public TensorUnaryOperator supply( //
         GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-      return TangentSpaceFIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha);
+      TensorUnaryOperator geodesicExtrapolation = TangentSpaceExtrapolation.of( //
+          geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), smoothingKernel);
+      return GeodesicFIRn.of(geodesicExtrapolation, geodesicDisplay.geodesicInterface(), radius, alpha);
     }
   }, //
   TANGENT_SPACE_IIR {
     @Override
     public TensorUnaryOperator supply( //
         GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-      return TangentSpaceIIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha);
+      // return TangentSpaceIIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha);
+      // FIXME
+      return null;
     }
   }, //
   BIINVARIANT_MEAN_FIR {

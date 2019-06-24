@@ -1,5 +1,5 @@
 // code by ob, jph
-package ch.ethz.idsc.sophus.filter.bm;
+package ch.ethz.idsc.sophus.filter;
 
 import java.io.Serializable;
 import java.util.function.Function;

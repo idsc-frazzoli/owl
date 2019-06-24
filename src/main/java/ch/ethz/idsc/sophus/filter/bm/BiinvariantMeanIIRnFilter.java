@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.filter.bm;
 
 import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
 import ch.ethz.idsc.sophus.filter.CausalFilter;
+import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRn;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.SplitInterface;

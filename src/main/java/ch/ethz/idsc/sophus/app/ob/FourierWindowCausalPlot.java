@@ -22,6 +22,7 @@ import ch.ethz.idsc.sophus.filter.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.FilterResponse;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TransferFunctionResponse;
@@ -106,7 +107,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           smoothd = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
           break;
         case TANGENT_SPACE_FIR:
-          smoothd = TangentSpaceFIRnFilter.of(smoothingKernel, radius, alpha).apply(control);
+          smoothd = TangentSpaceFIRnFilter.of(Se2Geodesic.INSTANCE, Se2CoveringExponential.INSTANCE, smoothingKernel, radius, alpha).apply(control);
           break;
         case TANGENT_SPACE_IIR:
           smoothd = TangentSpaceIIRnFilter.of(smoothingKernel, radius, alpha).apply(control);
