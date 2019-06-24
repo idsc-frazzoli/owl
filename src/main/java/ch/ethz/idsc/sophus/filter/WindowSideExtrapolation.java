@@ -44,6 +44,6 @@ public class WindowSideExtrapolation implements Function<Integer, Tensor>, Seria
     for (int index = 0; index < weights.length() - 1; ++index)
       extrapolatoryWeights.append(weights.Get(index).negate().multiply(l));
     extrapolatoryWeights.append(RealScalar.ONE.add(l).subtract(l.multiply(weights.Get(weights.length() - 1))));
-    return extrapolatoryWeights;
+    return extrapolatoryWeights.unmodifiable();
   }
 }

@@ -12,6 +12,7 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
+import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.filter.WindowSydeExtrapolation;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnFilter;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnFilter;
@@ -119,10 +120,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
               .apply(control);
           break;
         case BIINVARIANT_MEAN_FIR:
-          smoothd = BiinvariantMeanFIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
+          smoothd = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
+              .apply(control);
           break;
         case BIINVARIANT_MEAN_IIR:
-          smoothd = BiinvariantMeanIIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
+          smoothd = BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
+              .apply(control);
           break;
         }
         Tensor rawVec = Se2Differences.INSTANCE.apply(control);

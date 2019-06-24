@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.filter.WindowSydeExtrapolation;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnFilter;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnFilter;
@@ -64,31 +65,30 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
       // ---
       LieGroupCausalFilters lgcf = spinnerCausalFilter.getValue();
+      TensorUnaryOperator cf = null;
       switch (lgcf) {
       case GEODESIC_FIR:
-        refined = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha()).apply(control());
+        cf = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
         break;
       case GEODESIC_IIR:
-        refined = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha()).apply(control());
+        cf = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
         break;
       case TANGENT_SPACE_FIR:
-        refined = TangentSpaceFIRnFilter.of( //
-            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSydeExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha())
-            .apply(control());
+        cf = TangentSpaceFIRnFilter.of( //
+            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSydeExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
         break;
       case TANGENT_SPACE_IIR:
-        refined = TangentSpaceIIRnFilter.of( //
-            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSydeExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha())
-            .apply(control());
+        cf = TangentSpaceIIRnFilter.of( //
+            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSydeExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
         break;
       case BIINVARIANT_MEAN_FIR:
-        refined = BiinvariantMeanFIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+        cf = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
         break;
       case BIINVARIANT_MEAN_IIR:
-        refined = BiinvariantMeanIIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
+        cf = BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
         break;
       }
-      return refined;
+      return cf.apply(control());
     }
     // TODO OB: I would like to have this shape with one filter for all different operators
     // if (0 < radius) {
