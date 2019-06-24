@@ -18,20 +18,20 @@ public class GeodesicAverageFilter implements TensorUnaryOperator {
 
   // ---
   private final TensorUnaryOperator geodesicAverage;
-  private int weightlength;
+  private final int weightLength;
 
-  private GeodesicAverageFilter(TensorUnaryOperator geodesicAverage, int weightlength) {
+  private GeodesicAverageFilter(TensorUnaryOperator geodesicAverage, int weightLength) {
     this.geodesicAverage = geodesicAverage;
-    this.weightlength = weightlength;
+    this.weightLength = weightLength;
   }
 
   @Override
   public Tensor apply(Tensor tensor) {
     Tensor result = Unprotect.empty(tensor.length());
     for (int index = 0; index < tensor.length(); ++index)
-      result.append(tensor.length() - weightlength < index || index < weightlength //
+      result.append(tensor.length() - weightLength < index || index < weightLength //
           ? tensor.get(index)
-          : geodesicAverage.apply(tensor.extract(index, index + weightlength)));
+          : geodesicAverage.apply(tensor.extract(index, index + weightLength)));
     return result;
   }
 }

@@ -22,12 +22,14 @@ public class WindowSideSampler extends WindowBaseSampler {
   }
 
   @Override // from WindowBaseSampler
-  protected Tensor samples(int extent) {
+  protected Tensor samples(int length) {
+    if (length == 1)
+      return SINGLETON;
     return isContinuous //
-        ? Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, extent + 1) //
+        ? Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, length) //
             .map(windowFunction) //
-            .extract(1, extent + 2)
-        : Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, extent) //
+            .extract(1, length + 1)
+        : Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, length - 1) //
             .map(windowFunction);
   }
 }

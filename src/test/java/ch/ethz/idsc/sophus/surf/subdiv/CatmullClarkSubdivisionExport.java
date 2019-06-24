@@ -29,13 +29,13 @@ enum CatmullClarkSubdivisionExport {
 
   private static Tensor univariate() {
     Distribution distribution = NormalDistribution.standard();
-    CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(RnGeodesic.INSTANCE);
+    GeodesicCatmullClarkSubdivision catmullClarkSubdivision = new GeodesicCatmullClarkSubdivision(RnGeodesic.INSTANCE);
     Tensor tensor = RandomVariate.of(distribution, 4, 5);
     return Nest.of(catmullClarkSubdivision::refine, tensor, 3);
   }
 
   private static Tensor se2() {
-    CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(Se2Geodesic.INSTANCE);
+    GeodesicCatmullClarkSubdivision catmullClarkSubdivision = new GeodesicCatmullClarkSubdivision(Se2Geodesic.INSTANCE);
     Random random = new Random();
     Tensor tensor = Tensors.matrix((i, j) -> Tensors.vector( //
         i + random.nextGaussian() * .2, //
@@ -46,7 +46,7 @@ enum CatmullClarkSubdivisionExport {
   }
 
   private static Tensor r3s2() {
-    CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(R3S2Geodesic.INSTANCE);
+    GeodesicCatmullClarkSubdivision catmullClarkSubdivision = new GeodesicCatmullClarkSubdivision(R3S2Geodesic.INSTANCE);
     Random random = new Random();
     Tensor tensor = Tensors.matrix((i, j) -> Tensors.of( //
         Tensors.vector( //
@@ -75,7 +75,7 @@ enum CatmullClarkSubdivisionExport {
   }
 
   private static Tensor r3s2_sphere() {
-    CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(R3S2Geodesic.INSTANCE);
+    GeodesicCatmullClarkSubdivision catmullClarkSubdivision = new GeodesicCatmullClarkSubdivision(R3S2Geodesic.INSTANCE);
     Tensor tensor = Tensors.matrix((i, j) -> Tensors.of( //
         r3s2_sp( //
             (i - 1) * .7, //

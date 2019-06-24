@@ -1,42 +1,23 @@
-// code by ob
+// code by jph
 package ch.ethz.idsc.sophus.filter.ts;
 
-import java.util.Objects;
+import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRnFilter;
+import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public class TangentSpaceFIRnFilter implements TensorUnaryOperator {
-  /** @param geodesicDisply non-null
-   * @param function non-null
-   * @param radius
-   * @param alpha
-   * @return
-   * @throws Exception if either parameter is null */
-  public static TensorUnaryOperator of(ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-    return new TangentSpaceFIRnFilter( //
-        Objects.requireNonNull(smoothingKernel), //
-        radius, //
-        Objects.requireNonNull(alpha));
-  }
-
-  // ---
-  private final ScalarUnaryOperator smoothingKernel;
-  private final int radius;
-  private final Scalar alpha;
-
-  private TangentSpaceFIRnFilter(ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-    this.smoothingKernel = smoothingKernel;
-    this.radius = radius;
-    this.alpha = alpha;
-  }
-
-  @Override
-  public Tensor apply(Tensor tensor) {
-    // FIXME OB null below
-    return Tensor.of(tensor.stream() //
-        .map(new TangentSpaceFIRn(null, smoothingKernel, radius, alpha)));
+public enum TangentSpaceFIRnFilter {
+  ;
+  public static TensorUnaryOperator of( //
+      LieGroup lieGroup, LieExponential lieExponential, Function<Integer, Tensor> function, //
+      SplitInterface splitInterface, int radius, Scalar alpha) {
+    return GeodesicFIRnFilter.of( //
+        TangentSpaceExtrapolation.of(lieGroup, lieExponential, function), //
+        splitInterface, radius, alpha);
   }
 }

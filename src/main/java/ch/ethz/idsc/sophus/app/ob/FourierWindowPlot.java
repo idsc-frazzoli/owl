@@ -1,7 +1,6 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
@@ -58,11 +56,11 @@ import ch.ethz.idsc.tensor.red.Mean;
       xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
     }
     VisualSet visualSet = new VisualSet();
-//    visualSet.setPlotLabel("Lie Group Filters: radius = "+radius+"  Magnitude Response - $" + signal + "$");
-    visualSet.setPlotLabel("Lie Group Filters: radius = "+radius+"  Phase Response - $" + signal + "$");
+    // visualSet.setPlotLabel("Lie Group Filters: radius = "+radius+" Magnitude Response - $" + signal + "$");
+    visualSet.setPlotLabel("Lie Group Filters: radius = " + radius + "  Phase Response - $" + signal + "$");
     visualSet.setAxesLabelX("Frequency $[Hz]$");
     visualSet.setAxesLabelY("Phase $H(\\Omega)$");
-//  visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
+    // visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
     int index = 0;
     for (Tensor yAxis : yData) {
       VisualRow visualRow = visualSet.add( //
@@ -73,10 +71,10 @@ import ch.ethz.idsc.tensor.red.Mean;
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);
     SVGGraphics2D svg = new SVGGraphics2D(600, 400);
-    Rectangle rectangle = new Rectangle(0,0,600, 400);
+    Rectangle rectangle = new Rectangle(0, 0, 600, 400);
     jFreeChart.draw(svg, rectangle);
-//    String fileNameSVG = "Geodesic Center Filter("+radius+") Gain " + signal + ".svg";
-    String fileNameSVG = "Geodesic Center Filter("+radius+") Phase " + signal + ".svg";
+    // String fileNameSVG = "Geodesic Center Filter("+radius+") Gain " + signal + ".svg";
+    String fileNameSVG = "Geodesic Center Filter(" + radius + ") Phase " + signal + ".svg";
     File fileSVG = HomeDirectory.Pictures(fileNameSVG);
     SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
@@ -129,11 +127,9 @@ import ch.ethz.idsc.tensor.red.Mean;
     // signal cases: 0:x , 1:y, 2;heading
     List<String> listData = GokartPoseData.INSTANCE.list();
     int limit = 10;
-    for(int rad = 0; rad <14; rad++) {
+    for (int rad = 0; rad < 14; rad++) {
       System.out.println(rad);
       process(listData, map, rad, limit);
     }
-    
-    
   }
 }

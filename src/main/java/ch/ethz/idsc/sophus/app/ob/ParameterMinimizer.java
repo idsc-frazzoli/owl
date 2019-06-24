@@ -19,10 +19,11 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class ParameterMinimizer {
-  // ---
-  private static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = new GeodesicErrorEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
+/* package */ class ParameterMinimizer {
+  private static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = //
+      new GeodesicErrorEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
 
+  // ---
   public Tensor minimizer(String data) {
     Tensor control = control(data);
     // starting values of alpha

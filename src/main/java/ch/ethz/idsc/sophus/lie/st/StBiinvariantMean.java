@@ -14,13 +14,13 @@ import ch.ethz.idsc.tensor.red.Total;
  * 
  * Reference 1:
  * "Exponential Barycenters of the Canonical Cartan Connection and Invariant Means on Lie Groups"
- * by Xavier Pennec, Vincent Arsigny, p.26, Section 4.1:
+ * by Xavier Pennec, Vincent Arsigny, p.26, Section 4.1, 2012:
  * "ST (n) is one of the most simple non-compact and non-commutative Lie groups. As expected for
  * such Lie groups, it has no bi-invariant metric."
  * 
  * Reference 2:
  * "Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations."
- * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache, p.29 */
+ * by Vincent Arsigny, Xavier Pennec, Nicholas Ayache, p.29, 2006 */
 public enum StBiinvariantMean implements BiinvariantMean {
   INSTANCE;
   @Override // from BiinvariantMean
