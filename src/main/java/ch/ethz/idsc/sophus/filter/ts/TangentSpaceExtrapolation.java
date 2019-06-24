@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.filter.ts;
 
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.filter.WindowSydeExtrapolation;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupElement;
@@ -11,7 +10,6 @@ import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** implementation computes a linear combination of tangent vectors */
 public class TangentSpaceExtrapolation implements TensorUnaryOperator {
@@ -21,14 +19,6 @@ public class TangentSpaceExtrapolation implements TensorUnaryOperator {
    * @return */
   public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, Function<Integer, Tensor> function) {
     return new TangentSpaceExtrapolation(lieGroup, lieExponential, MemoFunction.wrap(function));
-  }
-
-  /** @param lieGroup
-   * @param lieExponential
-   * @param smoothingKernel
-   * @return */
-  public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, ScalarUnaryOperator smoothingKernel) {
-    return of(lieGroup, lieExponential, WindowSydeExtrapolation.of(smoothingKernel));
   }
 
   // ---

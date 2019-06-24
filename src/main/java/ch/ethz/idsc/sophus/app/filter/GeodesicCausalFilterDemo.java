@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.filter.WindowSydeExtrapolation;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnFilter;
 import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
@@ -21,6 +22,8 @@ import ch.ethz.idsc.sophus.filter.ts.TangentSpaceFIRnFilter;
 import ch.ethz.idsc.sophus.filter.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -69,10 +72,14 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         refined = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha()).apply(control());
         break;
       case TANGENT_SPACE_FIR:
-        refined = TangentSpaceFIRnFilter.of(smoothingKernel, radius, alpha()).apply(control());
+        refined = TangentSpaceFIRnFilter.of( //
+            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSydeExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha())
+            .apply(control());
         break;
       case TANGENT_SPACE_IIR:
-        refined = TangentSpaceIIRnFilter.of(smoothingKernel, radius, alpha()).apply(control());
+        refined = TangentSpaceIIRnFilter.of( //
+            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSydeExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha())
+            .apply(control());
         break;
       case BIINVARIANT_MEAN_FIR:
         refined = BiinvariantMeanFIRnFilter.of(Se2Geodesic.INSTANCE, se2BiinvariantMean, smoothingKernel, radius, alpha()).apply(control());
