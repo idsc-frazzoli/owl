@@ -1,6 +1,8 @@
 // code by jph
-package ch.ethz.idsc.tensor;
+package ch.ethz.idsc.sophus.math;
 
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import junit.framework.TestCase;
