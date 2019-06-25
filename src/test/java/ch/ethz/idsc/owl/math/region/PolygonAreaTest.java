@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import junit.framework.TestCase;
 
 public class PolygonAreaTest extends TestCase {
@@ -76,6 +77,15 @@ public class PolygonAreaTest extends TestCase {
   public void testFailScalar() {
     try {
       PolygonArea.FUNCTION.apply(RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testFailMatrix() {
+    try {
+      PolygonArea.FUNCTION.apply(HilbertMatrix.of(3));
       fail();
     } catch (Exception exception) {
       // ---

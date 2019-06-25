@@ -1,35 +1,47 @@
 // code by ob
 package ch.ethz.idsc.sophus.lie;
 
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import java.io.Serializable;
+import java.util.Optional;
+
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** Calculates the Biinvariant mean of a sequence in any Lie group by iterating over the implicit
  * formulation of the barycentric equation up until a proximity condition is fulfilled */
-public class BiinvariantMeanImplicit {
+public class BiinvariantMeanImplicit implements Serializable {
+  private static final int MAX_ITERATIONS = 100;
+  // ---
+  private final LieGroup lieGroup;
   private final LieExponential lieExponential;
-  private LieGroup lieGroup;;
+  private final Chop chop = Chop._12;
 
-  BiinvariantMeanImplicit(GeodesicDisplay geodesicDisplay) {
-    this.lieExponential = geodesicDisplay.lieExponential();
-    this.lieGroup = geodesicDisplay.lieGroup();
+  BiinvariantMeanImplicit(LieGroup lieGroup, LieExponential lieExponential) {
+    this.lieGroup = lieGroup;
+    this.lieExponential = lieExponential;
   }
 
-  private Tensor estimationUpdate(Tensor sequence, Tensor weights, Tensor estimate) {
-    LieGroupElement m = lieGroup.element(estimate);
-    return m.combine(lieExponential.exp(weights.dot(Tensor.of(sequence.stream().map(p -> lieExponential.log(m.inverse().combine(p)))))));
+  /** @param sequence
+   * @param weights
+   * @param mean estimate
+   * @return improved mean estimate */
+  private Tensor estimationUpdate(Tensor sequence, Tensor weights, Tensor mean) {
+    LieGroupElement lieGroupElement = lieGroup.element(mean);
+    return lieGroupElement.combine(lieExponential.exp(weights.dot(Tensor.of(sequence.stream() //
+        .map(lieGroupElement.inverse()::combine) //
+        .map(lieExponential::log)))));
   }
 
-  public Tensor apply(Tensor sequence, Tensor weights) {
-    Tensor estimate = sequence.get(0);
-    Tensor estimateOld = estimate;
-    while (true) {
-      estimate = estimationUpdate(sequence, weights, estimateOld);
-      if (Chop._14.close(lieExponential.log(lieGroup.element(estimate).inverse().combine(estimateOld)), Array.zeros(estimate.length())))
-        return estimate;
-      estimateOld = estimate;
+  public Optional<Tensor> apply(Tensor sequence, Tensor weights) {
+    Tensor next = sequence.get(0);
+    Tensor prev = next;
+    int count = 0;
+    while (++count < MAX_ITERATIONS) {
+      next = estimationUpdate(sequence, weights, prev);
+      if (chop.allZero(lieExponential.log(lieGroup.element(next).inverse().combine(prev))))
+        return Optional.of(next);
+      prev = next;
     }
+    return Optional.empty();
   }
 }

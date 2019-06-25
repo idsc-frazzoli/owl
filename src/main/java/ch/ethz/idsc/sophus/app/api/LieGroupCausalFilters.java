@@ -45,9 +45,9 @@ public enum LieGroupCausalFilters {
     @Override
     public TensorUnaryOperator supply( //
         GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
-      // return TangentSpaceIIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha);
-      // FIXME
-      return null;
+      TensorUnaryOperator geodesicExtrapolation = TangentSpaceExtrapolation.of( //
+          geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), WindowSideExtrapolation.of(smoothingKernel));
+      return GeodesicIIRn.of(geodesicExtrapolation, geodesicDisplay.geodesicInterface(), radius, alpha);
     }
   }, //
   BIINVARIANT_MEAN_FIR {

@@ -6,7 +6,7 @@ package ch.ethz.idsc.owl.math.optimization;
  * @param <T>
  * @param <E>
  * @param <R> */
-public interface OptimizationClass<T, E, R> {
+/* package */ interface OptimizationClass<T, E, R> {
   /** Apply constraints to input set
    * 
    * @return List of feasible alternatives */

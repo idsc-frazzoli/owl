@@ -4,18 +4,15 @@ package ch.ethz.idsc.sophus.math.win;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.math.NormalizeTotal;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 public class InverseDistance implements Serializable {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
   private static final Chop CHOP = Chop._14;
   // ---
   private final TensorMetric tensorMetric;
@@ -35,6 +32,6 @@ public class InverseDistance implements Serializable {
       weights.append(distance.reciprocal());
       ++count;
     }
-    return NORMALIZE.apply(weights);
+    return NormalizeTotal.FUNCTION.apply(weights);
   }
 }

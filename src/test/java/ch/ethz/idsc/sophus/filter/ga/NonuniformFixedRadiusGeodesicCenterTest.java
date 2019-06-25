@@ -66,7 +66,6 @@ public class NonuniformFixedRadiusGeodesicCenterTest extends TestCase {
     NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = new NonuniformFixedRadiusGeodesicCenter(Se2Geodesic.INSTANCE);
     Scalar key = RealScalar.of(25);
     Tensor actual = nonuniformFixedRadiusGeodesicCenter.apply(navigableMap, key);
-    System.out.println(actual);
     assertEquals(actual.get(0), actual.get(1));
   }
 

@@ -9,8 +9,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public enum BiinvariantMeans {
   ;
-  /** @param biinvariantMean
-   * @param weights
+  /** @param biinvariantMean non-null
+   * @param weights affine vector
    * @return
    * @throws Exception if given weights is not an affine vector */
   public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, Tensor weights) {

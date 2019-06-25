@@ -1,14 +1,17 @@
 // code by jph
 package ch.ethz.idsc.sophus.math.win;
 
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import junit.framework.TestCase;
 
 public class InverseDistanceTest extends TestCase {
   public void testSimple() {
     InverseDistance inverseDistance = new InverseDistance(Norm2Squared::between);
-    // Scalar scalar = (Scalar) shepardInterpolation.at( //
-    // Range.of(0, 10).map(Tensors::of), Range.of(0, 10), Tensors.vector(5.4));
-    // Chop._12.requireClose(scalar, RealScalar.of(5.268238109178673));
+    Tensor weights = inverseDistance.weights(Tensors.vector(1, 3).map(Tensors::of), RealScalar.of(2).map(Tensors::of));
+    assertEquals(weights, Tensors.of(RationalScalar.HALF, RationalScalar.HALF));
   }
 }

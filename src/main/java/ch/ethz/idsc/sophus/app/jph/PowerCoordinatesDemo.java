@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -20,13 +21,18 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.Extract2D;
-import ch.ethz.idsc.sophus.math.crd.Barycentric;
-import ch.ethz.idsc.sophus.math.crd.PowerCoordinates;
+import ch.ethz.idsc.sophus.poly.crd.Barycentric;
+import ch.ethz.idsc.sophus.poly.crd.PowerCoordinates;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.img.ArrayPlot;
+import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.red.Entrywise;
 
@@ -49,6 +55,7 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
       spinnerRefine.setIndex(0);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
     }
+    setControlPointsSe2(Tensors.fromString("{{0,-2,0},{3,-2,-1},{4,2,1},{-1,3,2}}"));
   }
 
   @Override
@@ -76,6 +83,7 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
         Tensor sX = Subdivide.of(min.Get(0), max.Get(0), spinnerRefine.getValue());
         Tensor sY = Subdivide.of(min.Get(1), max.Get(1), spinnerRefine.getValue());
         Tensor[][] array = new Tensor[sX.length()][sY.length()];
+        Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, sX.length(), sY.length(), domain.length());
         int c0 = 0;
         for (Tensor _x : sX) {
           int c1 = 0;
@@ -85,6 +93,7 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
             Tensor px = Tensors.of(x, y);
             if (Polygons.isInside(domain, px)) {
               Tensor weights = powerCoordinates.weights(domain, px);
+              wgs.set(weights, c0, c1);
               Tensor mean = biinvariantMean.mean(controlPointsSe2, weights);
               array[c0][c1] = mean;
             }
@@ -92,6 +101,16 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
           }
           ++c0;
         }
+        // render basis functions
+        int pix = 0;
+        for (int basis = 0; basis < domain.length(); ++basis) {
+          Tensor image = ArrayPlot.of(wgs.get(Tensor.ALL, Tensor.ALL, basis), ColorDataGradients.CLASSIC);
+          BufferedImage bufferedImage = ImageFormat.of(image);
+          int wid = bufferedImage.getWidth() * 4;
+          graphics.drawImage(bufferedImage, pix, 32, wid, bufferedImage.getHeight() * 4, null);
+          pix += wid;
+        }
+        // render grid lines functions
         graphics.setColor(Color.LIGHT_GRAY);
         for (int i0 = 1; i0 < array.length; ++i0)
           for (int i1 = 1; i1 < array.length; ++i1) {

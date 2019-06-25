@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.math.order.OrderComparator;
 /** Creates a STRICT partial order for cards of deck according to the rules of "Jassen"
  * 
  * @author astoll */
-public enum JassCardPartialOrder {
+/* package */ enum JassCardPartialOrder {
   ;
   /** Compares cards according to their value in the traditional Swiss card game of Jassen
    * 

@@ -1,9 +1,9 @@
 // code by jph
-package ch.ethz.idsc.sophus.math.crd;
+package ch.ethz.idsc.sophus.poly.crd;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.math.crd.PowerCoordinates.Aux;
+import ch.ethz.idsc.sophus.poly.crd.PowerCoordinates.Aux;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,7 +23,7 @@ public class PowerCoordinatesTest extends TestCase {
     Tensor exp0 = Tensors.vector(1.975, 2.975);
     Tensor exp1 = Tensors.vector(-0.7071067811865475, 0.7071067811865475);
     Chop._10.requireClose(aux.pos, exp0);
-    Chop._10.requireClose(aux.nrm, exp1);
+    Chop._10.requireClose(aux.dir, exp1);
   }
 
   public void testGetDual() {
@@ -48,5 +48,15 @@ public class PowerCoordinatesTest extends TestCase {
     Tensor weights = powerCoordinates.weights(P, Tensors.vector(4, 2));
     Tensor exp = Tensors.fromString("{3/26, 33/52, 11/52, 1/26}");
     Chop._12.requireClose(weights, exp);
+  }
+
+  public void testFailEmpty() throws ClassNotFoundException, IOException {
+    PowerCoordinates powerCoordinates = Serialization.copy(new PowerCoordinates(Barycentric.MEAN_VALUE));
+    try {
+      powerCoordinates.weights(Tensors.empty(), Tensors.vector(4, 2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }
