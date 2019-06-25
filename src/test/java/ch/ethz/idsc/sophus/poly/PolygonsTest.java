@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.region;
+package ch.ethz.idsc.sophus.poly;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,8 @@ import java.util.List;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class PolygonsTest extends TestCase {
@@ -22,6 +24,21 @@ public class PolygonsTest extends TestCase {
     assertTrue(Polygons.isInside(polygon, Tensors.vector(0.1, .1)));
     assertFalse(Polygons.isInside(polygon, Tensors.vector(0.1, -0.1)));
     assertFalse(Polygons.isInside(polygon, Tensors.vector(1, 1.1)));
+  }
+
+  public void testInsideQuantity() {
+    ScalarUnaryOperator suo = s -> Quantity.of(s, "km");
+    Tensor polygon = Tensors.matrix(new Number[][] { //
+        { 0, 0 }, //
+        { 1, 0 }, //
+        { 1, 1 }, //
+        { 0, 1 } //
+    }).map(suo);
+    assertTrue(Polygons.isInside(polygon, Tensors.vector(0.5, .5).map(suo)));
+    assertTrue(Polygons.isInside(polygon, Tensors.vector(0.9, .9).map(suo)));
+    assertTrue(Polygons.isInside(polygon, Tensors.vector(0.1, .1).map(suo)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(0.1, -0.1).map(suo)));
+    assertFalse(Polygons.isInside(polygon, Tensors.vector(1, 1.1).map(suo)));
   }
 
   public void testInsideEmpty() {

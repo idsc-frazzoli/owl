@@ -1,18 +1,16 @@
 // code by jph
-package ch.ethz.idsc.owl.math.region;
+package ch.ethz.idsc.sophus.poly;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-// TODO JPH OWL 045 move to ch.ethz.idsc.sophus.poly
 public enum Polygons {
   ;
   /** @param polygon in the 2-dimensional plane
    * @param point of which only the first two coordinates will be considered
    * @return true, if point is inside polygon, otherwise false
-   * @throws Exception if the first two entries of point are not of type {@link Scalar}
-   * @see PolygonRegion */
+   * @throws Exception if the first two entries of point are not of type {@link Scalar} */
   // adapted from PNPOLY - Point Inclusion in Polygon Test W. Randolph Franklin (WRF)
   public static boolean isInside(Tensor polygon, Tensor point) {
     final Scalar tx = point.Get(0);

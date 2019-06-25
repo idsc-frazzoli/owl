@@ -3,9 +3,12 @@ package ch.ethz.idsc.owl.math.region;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.poly.Polygons;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** check if input tensor is inside a polygon in 2D */
+/** check if input tensor is inside a polygon in 2D
+ * 
+ * @see Polygons */
 public class PolygonRegion implements Region<Tensor>, Serializable {
   private final Tensor polygon;
 

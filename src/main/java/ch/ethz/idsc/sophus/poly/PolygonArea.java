@@ -1,6 +1,6 @@
 // code by vc
 // inspired by https://www.mathopenref.com/coordpolygonarea.html
-package ch.ethz.idsc.owl.math.region;
+package ch.ethz.idsc.sophus.poly;
 
 import ch.ethz.idsc.sophus.math.Det2D;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
  * 
  * computes signed area circumscribed by given polygon
  * area is positive when polygon is in counter-clockwise direction */
-// TODO JPH OWL 045 move to ch.ethz.idsc.sophus.poly
 public enum PolygonArea implements TensorScalarFunction {
   FUNCTION;
   // ---

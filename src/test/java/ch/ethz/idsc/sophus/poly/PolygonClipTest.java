@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.poly;
 
-import ch.ethz.idsc.owl.math.region.PolygonArea;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;

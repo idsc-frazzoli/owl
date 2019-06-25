@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.region;
+package ch.ethz.idsc.sophus.poly;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
