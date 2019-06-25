@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.sca.Round;
 
-public enum ColoredNoiseDemo {
+/* package */ enum ColoredNoiseExport {
   ;
   public static void main(String[] args) throws IOException {
     for (Tensor _x : Subdivide.of(0, 2, 10)) {

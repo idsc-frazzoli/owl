@@ -8,6 +8,8 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** Hint: the interface GeodesicDisplay is intended for use in the demo layer
+ * but not in the library functions. */
 public interface GeodesicDisplay {
   /** @return */
   GeodesicInterface geodesicInterface();

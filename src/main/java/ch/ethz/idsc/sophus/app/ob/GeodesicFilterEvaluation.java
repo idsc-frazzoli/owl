@@ -15,10 +15,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-public class GeodesicFilterEvaluation {
-  GeodesicFilterEvaluation() {
-  }
-
+/* package */ enum GeodesicFilterEvaluation {
+  ;
   public static Tensor process(String data) throws IOException {
     ParameterMinimizer parameterMinimizer = new ParameterMinimizer();
     Tensor minimizer = parameterMinimizer.minimizer(data);

@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** GeodesicAverage applies the resulting splits of a weight mask
  * and a tree shape to a sequence of control points */
+// TODO OB add more tests
 public class GeodesicAverage implements TensorUnaryOperator {
   /** @param splitInterface
    * @param splits
@@ -38,18 +39,16 @@ public class GeodesicAverage implements TensorUnaryOperator {
     Scalar alpha = splits.Get(2);
     if (left.length() == 4 && right.length() == 4)
       return splitInterface.split(recursion(left, sequence), recursion(right, sequence), alpha);
-    else //
     if (left.length() == 4) {
       Scalar q = splits.Get(1);
       return splitInterface.split(recursion(left, sequence), sequence.get(q.number().intValue()), alpha);
-    } else //
+    }
     if (right.length() == 4) {
       Scalar p = splits.Get(0);
       return splitInterface.split(sequence.get(p.number().intValue()), recursion(right, sequence), alpha);
-    } else {
-      Scalar p = splits.Get(0);
-      Scalar q = splits.Get(1);
-      return splitInterface.split(sequence.get(p.number().intValue()), sequence.get(q.number().intValue()), alpha);
     }
+    Scalar p = splits.Get(0);
+    Scalar q = splits.Get(1);
+    return splitInterface.split(sequence.get(p.number().intValue()), sequence.get(q.number().intValue()), alpha);
   }
 }
