@@ -27,7 +27,6 @@ import ch.ethz.idsc.tensor.Tensors;
   @Override // from ClothoidCurve
   protected Scalar ir(Scalar t) {
     Scalar _1_t = _1.subtract(t);
-    Tensor xr = X.multiply(_1_t).map(t::add);
-    return W.dot(xr.map(clothoidQuadratic)).Get().multiply(_1_t);
+    return W.dot(X.multiply(_1_t).map(t::add).map(clothoidQuadratic)).Get().multiply(_1_t);
   }
 }

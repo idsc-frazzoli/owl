@@ -20,15 +20,14 @@ import ch.ethz.idsc.tensor.red.Total;
     super(p, q);
   }
 
-  @Override
+  @Override // from ClothoidCurve
   protected Scalar il(Scalar t) {
     return Total.ofVector(X.multiply(t).map(clothoidQuadratic)).multiply(HALF).multiply(t);
   }
 
-  @Override
+  @Override // from ClothoidCurve
   protected Scalar ir(Scalar t) {
     Scalar _1_t = _1.subtract(t);
-    Tensor xr = X.multiply(_1_t).map(t::add);
-    return Total.ofVector(xr.map(clothoidQuadratic)).multiply(HALF).multiply(_1_t);
+    return Total.ofVector(X.multiply(_1_t).map(t::add).map(clothoidQuadratic)).multiply(HALF).multiply(_1_t);
   }
 }
