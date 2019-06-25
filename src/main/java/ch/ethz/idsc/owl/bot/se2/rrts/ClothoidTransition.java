@@ -1,7 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurve;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid2;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     if (Scalars.lessThan(dt, ofs))
       throw TensorRuntimeException.of(ofs, dt);
     Scalar length = length();
-    ScalarTensorFunction scalarTensorFunction = scalar -> ClothoidCurve.INSTANCE.split(start(), end(), scalar);
+    ScalarTensorFunction scalarTensorFunction = scalar -> Clothoid2.INSTANCE.split(start(), end(), scalar);
     Tensor tensor = Tensors.empty();
     while (Scalars.lessThan(ofs, length)) {
       tensor.append(scalarTensorFunction.apply(ofs.divide(length)));

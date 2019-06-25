@@ -17,7 +17,7 @@ public class ClothoidCurveDisplayTest extends TestCase {
     // 4 2.564420707620397
     Tensor p = Tensors.vector(0, 0, 0);
     Tensor q = Tensors.vector(0, 2, 0);
-    Scalar scalar = ClothoidCurveDisplay.INSTANCE.parametricDistance(p, q);
+    Scalar scalar = Clothoid3Display.INSTANCE.parametricDistance(p, q);
     Scalar result = Se2ParametricDistance.INSTANCE.distance(p, q);
     Clips.interval(2.56, 2.57).requireInside(scalar);
     assertEquals(result, RealScalar.of(2));

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurve;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid2;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
@@ -15,14 +15,14 @@ import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum ClothoidCurveDisplay implements GeodesicDisplay {
+public enum Clothoid2Display implements GeodesicDisplay {
   INSTANCE;
   // ---
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
-    return ClothoidCurve.INSTANCE;
+    return Clothoid2.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -67,6 +67,6 @@ public enum ClothoidCurveDisplay implements GeodesicDisplay {
 
   @Override // from Object
   public String toString() {
-    return "Cloth";
+    return "Cl2";
   }
 }

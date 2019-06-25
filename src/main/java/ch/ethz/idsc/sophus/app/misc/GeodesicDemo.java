@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
-import ch.ethz.idsc.sophus.app.api.ClothoidCurveDisplay;
+import ch.ethz.idsc.sophus.app.api.Clothoid3Display;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
@@ -35,7 +35,7 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
   public GeodesicDemo() {
     List<GeodesicDisplay> list = GeodesicDisplays.ALL;
     geodesicDisplaySpinner.setList(list);
-    geodesicDisplaySpinner.setValue(ClothoidCurveDisplay.INSTANCE);
+    geodesicDisplaySpinner.setValue(Clothoid3Display.INSTANCE);
     if (1 < list.size()) {
       geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
       timerFrame.jToolBar.addSeparator();
