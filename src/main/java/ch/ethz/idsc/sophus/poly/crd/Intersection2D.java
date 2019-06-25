@@ -2,7 +2,9 @@
 package ch.ethz.idsc.sophus.poly.crd;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.lie.Cross;
 
 /* package */ enum Intersection2D {
@@ -16,6 +18,8 @@ import ch.ethz.idsc.tensor.lie.Cross;
     Tensor x2 = Cross.of(dir2);
     Scalar num = pos2.subtract(pos1).dot(x2).Get();
     Scalar den = dir1.dot(x2).Get();
+    if (Scalars.isZero(den))
+      throw TensorRuntimeException.of(dir1, dir2);
     return pos1.add(dir1.multiply(num.divide(den)));
   }
 }

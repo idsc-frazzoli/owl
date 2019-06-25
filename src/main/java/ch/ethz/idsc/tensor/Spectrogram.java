@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Spectrogram.html">Spectrogram</a> */
+// TODO JPH OWL 045 TENSOR 074 obsolete
 public enum Spectrogram {
   ;
   /** @param tensor

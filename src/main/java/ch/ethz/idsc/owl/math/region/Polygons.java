@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-// TODO JPH OWL 045 move to sophus
+// TODO JPH OWL 045 move to ch.ethz.idsc.sophus.poly
 public enum Polygons {
   ;
   /** @param polygon in the 2-dimensional plane

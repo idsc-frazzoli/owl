@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
  * 
  * computes signed area circumscribed by given polygon
  * area is positive when polygon is in counter-clockwise direction */
+// TODO JPH OWL 045 move to ch.ethz.idsc.sophus.poly
 public enum PolygonArea implements TensorScalarFunction {
   FUNCTION;
   // ---
