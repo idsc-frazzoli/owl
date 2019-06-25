@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.math.win;
 import java.io.Serializable;
 import java.util.function.Function;
 
-import ch.ethz.idsc.tensor.NormalizeTotal;
+import ch.ethz.idsc.sophus.math.NormalizeTotal;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

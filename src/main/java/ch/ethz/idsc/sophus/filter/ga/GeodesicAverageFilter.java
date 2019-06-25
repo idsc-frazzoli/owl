@@ -7,6 +7,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO OB class is not used, untested
+// TODO JPH OWL 045 possibly remove
 public class GeodesicAverageFilter implements TensorUnaryOperator {
   /** @param geodesicAverage
    * @param weightlength

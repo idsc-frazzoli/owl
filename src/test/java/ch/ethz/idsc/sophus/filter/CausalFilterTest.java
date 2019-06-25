@@ -35,6 +35,7 @@ public class CausalFilterTest extends TestCase {
     }
   }
 
+  // TODO OB/JPH check
   public void testIIR2a() throws ClassNotFoundException, IOException {
     TensorUnaryOperator causalFilter = //
         Serialization.copy(CausalFilter.of(() -> new GeodesicIIR2Filter(RnGeodesic.INSTANCE, RationalScalar.HALF)));

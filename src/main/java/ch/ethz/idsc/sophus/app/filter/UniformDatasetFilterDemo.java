@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.filter;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -20,8 +21,10 @@ import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Spectrogram;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 /* package */ abstract class UniformDatasetFilterDemo extends DatasetFilterDemo {
@@ -32,6 +35,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   protected Tensor _control = null;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
+  // protected final SpinnerLabel<ColorDataGradients> spinnerLabelCDG = new SpinnerLabel<>();
 
   protected UniformDatasetFilterDemo() {
     this(GeodesicDisplays.CLOTH_SE2_R2);
@@ -51,6 +55,11 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       spinnerLabelLimit.setIndex(4);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
+    }
+    {
+      // spinnerLabelCDG.setArray(ColorDataGradients.values());
+      // spinnerLabelCDG.setIndex(0);
+      // spinnerLabelCDG.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
     }
   }
 
@@ -83,12 +92,23 @@ import ch.ethz.idsc.tensor.io.ResourceData;
         visualSet.setPlotLabel(plotLabel());
         visualSet.setAxesLabelX("sample no.");
         Tensor domain = Range.of(0, speeds.length());
-        for (int index = 0; index < dimensions; ++index)
-          visualSet.add(domain, speeds.get(Tensor.ALL, index)); // .setLabel("tangent velocity [m/s]")
+        final int width = timerFrame.geometricComponent.jComponent.getWidth();
+        for (int index = 0; index < dimensions; ++index) {
+          Tensor signal = speeds.get(Tensor.ALL, index).unmodifiable();
+          // ---
+          Tensor image = Spectrogram.of(signal);
+          BufferedImage bufferedImage = ImageFormat.of(image);
+          int wid = bufferedImage.getWidth() * 5;
+          int hgt = bufferedImage.getHeight() * 5;
+          graphics.drawImage(bufferedImage, width - wid, index * hgt, wid, hgt, null);
+          // ---
+          visualSet.add(domain, signal); // .setLabel("tangent velocity [m/s]")
+        }
         // visualSet.add(domain, speeds.get(Tensor.ALL, 1)).setLabel("side slip [m/s]");
         // visualSet.add(domain, speeds.get(Tensor.ALL, 2)).setLabel("rotational rate [rad/s]");
         JFreeChart jFreeChart = ListPlot.of(visualSet);
         jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 80 + speeds.length(), 400));
+        // ---
       }
     }
   }

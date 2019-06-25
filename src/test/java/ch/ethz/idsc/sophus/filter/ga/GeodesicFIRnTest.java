@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.red.Mean;
 import junit.framework.TestCase;
 
 public class GeodesicFIRnTest extends TestCase {
+  // TODO JPH
   public void testSimple() {
     Tensor s0 = Tensors.vector(1, 2, 3);
     Tensor s1 = Tensors.vector(2, 2, 0);
