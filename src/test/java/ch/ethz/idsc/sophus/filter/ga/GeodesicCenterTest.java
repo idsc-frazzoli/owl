@@ -9,7 +9,7 @@ import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.win.WindowCenterSampler;
+import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -76,7 +76,7 @@ public class GeodesicCenterTest extends TestCase {
 
   public void testFail() {
     try {
-      GeodesicCenter.of(RnGeodesic.INSTANCE, (WindowCenterSampler) null);
+      GeodesicCenter.of(RnGeodesic.INSTANCE, (UniformWindowSampler) null);
       fail();
     } catch (Exception exception) {
       // ---
@@ -96,17 +96,17 @@ public class GeodesicCenterTest extends TestCase {
   }
 
   public void testSplitsMean() {
-    Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(SmoothingKernel.DIRICHLET);
+    Function<Integer, Tensor> uniformWindowSampler = UniformWindowSampler.of(SmoothingKernel.DIRICHLET);
     {
-      Tensor tensor = GeodesicCenter.Splits.of(centerWindowSampler.apply(1));
+      Tensor tensor = GeodesicCenter.Splits.of(uniformWindowSampler.apply(3));
       assertEquals(tensor, Tensors.fromString("{1/3}"));
     }
     {
-      Tensor tensor = GeodesicCenter.Splits.of(centerWindowSampler.apply(2));
+      Tensor tensor = GeodesicCenter.Splits.of(uniformWindowSampler.apply(5));
       assertEquals(tensor, Tensors.fromString("{1/2, 1/5}"));
     }
     {
-      Tensor tensor = GeodesicCenter.Splits.of(centerWindowSampler.apply(3));
+      Tensor tensor = GeodesicCenter.Splits.of(uniformWindowSampler.apply(7));
       assertEquals(tensor, Tensors.fromString("{1/2, 1/3, 1/7}"));
     }
   }

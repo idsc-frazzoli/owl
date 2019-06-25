@@ -7,7 +7,7 @@ import java.util.function.Function;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupElement;
-import ch.ethz.idsc.sophus.math.win.WindowCenterSampler;
+import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
 import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -36,7 +36,7 @@ public class TangentSpaceCenter implements TensorUnaryOperator {
    * @return operator that maps a sequence of odd number of points to their weighted center
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, ScalarUnaryOperator windowFunction) {
-    return new TangentSpaceCenter(lieGroup, lieExponential, WindowCenterSampler.of(windowFunction));
+    return new TangentSpaceCenter(lieGroup, lieExponential, UniformWindowSampler.of(windowFunction));
   }
 
   // ---
@@ -55,6 +55,6 @@ public class TangentSpaceCenter implements TensorUnaryOperator {
     int radius = (tensor.length() - 1) / 2;
     LieGroupElement lieGroupElement = lieGroup.element(tensor.get(radius));
     Tensor tangents = Tensor.of(tensor.stream().map(lieGroupElement.inverse()::combine).map(lieExponential::log));
-    return lieGroupElement.combine(lieExponential.exp(function.apply(radius).dot(tangents)));
+    return lieGroupElement.combine(lieExponential.exp(function.apply(tensor.length()).dot(tangents)));
   }
 }

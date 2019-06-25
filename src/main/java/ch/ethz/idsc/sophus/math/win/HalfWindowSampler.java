@@ -1,33 +1,34 @@
-// code by jph
+// code by ob
 package ch.ethz.idsc.sophus.math.win;
 
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-// TODO JPH OWL 045 remove, superseded by UniformWindowSampler
-public class WindowCenterSampler extends WindowBaseSampler {
+/** samples a given window function uniformly in the interval [-1/2, 0] */
+public class HalfWindowSampler extends WindowBaseSampler {
   /** @param windowFunction for evaluation in the interval [-1/2, +1/2] */
   public static Function<Integer, Tensor> of(ScalarUnaryOperator windowFunction) {
-    return MemoFunction.wrap(new WindowCenterSampler(windowFunction));
+    return MemoFunction.wrap(new HalfWindowSampler(windowFunction));
   }
 
   // ---
-  private WindowCenterSampler(ScalarUnaryOperator windowFunction) {
+  private HalfWindowSampler(ScalarUnaryOperator windowFunction) {
     super(windowFunction);
   }
 
   @Override // from WindowBaseSampler
-  protected Tensor samples(int extent) {
+  protected Tensor samples(int length) {
     return isContinuous //
-        ? Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * extent + 2) //
+        ? Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, length) //
             .map(windowFunction) //
-            .extract(1, 2 * extent + 2)
-        : Subdivide.of(RationalScalar.HALF.negate(), RationalScalar.HALF, 2 * extent) //
+            .extract(1, length + 1)
+        : Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, length - 1) //
             .map(windowFunction);
   }
 }

@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.win.AffineQ;
-import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
+import ch.ethz.idsc.sophus.math.win.HalfWindowSampler;
 import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -71,7 +71,7 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
    * @return operator that maps a sequence of number of points to their next (expected) point
    * @throws Exception if either input parameters is null */
   public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicExtrapolation(splitInterface, WindowSideSampler.of(windowFunction));
+    return new GeodesicExtrapolation(splitInterface, HalfWindowSampler.of(windowFunction));
   }
 
   // ---

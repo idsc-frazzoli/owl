@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.math.win;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -25,7 +26,6 @@ public class UniformWindowSamplerTest extends TestCase {
     Function<Integer, Tensor> function = UniformWindowSampler.of(TukeyWindow.FUNCTION);
     for (int count = 1; count < 6; ++count) {
       Tensor tensor = function.apply(count);
-      // System.out.println(tensor.map(Round._3));
       assertEquals(tensor.length(), count);
       SymmetricVectorQ.require(tensor);
     }
@@ -40,5 +40,41 @@ public class UniformWindowSamplerTest extends TestCase {
         0.34340647863075824, //
         0.24266759672960794, //
         0.08562916395501292));
+  }
+
+  public void testMemoUnmodifiable() {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+      Function<Integer, Tensor> function = UniformWindowSampler.of(smoothingKernel);
+      for (int count = 1; count < 5; ++count) {
+        Tensor val1 = function.apply(count);
+        Tensor val2 = function.apply(count);
+        assertTrue(val1 == val2); // equal by reference
+        try {
+          val1.set(RealScalar.ZERO, 0);
+          fail();
+        } catch (Exception exception) {
+          // ---
+        }
+      }
+    }
+  }
+
+  public void testZeroFail() {
+    Function<Integer, Tensor> function = UniformWindowSampler.of(SmoothingKernel.HANN);
+    try {
+      function.apply(0);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testFailNull() {
+    try {
+      UniformWindowSampler.of(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

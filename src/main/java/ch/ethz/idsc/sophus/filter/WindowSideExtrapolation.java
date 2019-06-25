@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.win.AffineQ;
-import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
+import ch.ethz.idsc.sophus.math.win.HalfWindowSampler;
 import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -27,7 +27,7 @@ public class WindowSideExtrapolation implements Function<Integer, Tensor>, Seria
   private final Function<Integer, Tensor> windowSideSampler;
 
   /* package */ WindowSideExtrapolation(ScalarUnaryOperator smoothingKernel) {
-    windowSideSampler = WindowSideSampler.of(smoothingKernel);
+    windowSideSampler = HalfWindowSampler.of(smoothingKernel);
   }
 
   // Assumes uniformly sampled signal!

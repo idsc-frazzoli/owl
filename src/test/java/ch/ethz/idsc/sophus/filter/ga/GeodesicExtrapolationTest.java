@@ -7,8 +7,8 @@ import java.util.function.Function;
 import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.math.win.HalfWindowSampler;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.win.WindowSidedSampler;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -108,8 +108,9 @@ public class GeodesicExtrapolationTest extends TestCase {
   }
 
   public void testElaborate() {
-    Function<Integer, Tensor> windowSideSampler = WindowSidedSampler.of(SmoothingKernel.GAUSSIAN);
-    Tensor mask = windowSideSampler.apply(6);
+    Function<Integer, Tensor> halfWindowSampler = HalfWindowSampler.of(SmoothingKernel.GAUSSIAN);
+    Tensor mask = halfWindowSampler.apply(7);
+    assertEquals(mask.length(), 7);
     Tensor result = GeodesicExtrapolation.Splits.of(mask);
     // System.out.println(result);
     Tensor expect = Tensors.vector( //

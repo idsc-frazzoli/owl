@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public abstract class WindowBaseSampler implements Function<Integer, Tensor>, Serializable {
-  protected static final Tensor SINGLETON = Tensors.vector(1).unmodifiable();
+  private static final Tensor SINGLETON = Tensors.vector(1).unmodifiable();
   // ---
   protected final ScalarUnaryOperator windowFunction;
   protected final boolean isContinuous;
@@ -24,13 +24,15 @@ public abstract class WindowBaseSampler implements Function<Integer, Tensor>, Se
   }
 
   @Override // from IntegerTensorFunction
-  public final Tensor apply(Integer extent) {
-    return extent == 0 //
+  public final Tensor apply(Integer length) {
+    if (length < 1)
+      throw new IllegalArgumentException("" + length);
+    return length == 1 //
         ? SINGLETON
-        : NormalizeTotal.FUNCTION.apply(samples(extent)).unmodifiable();
+        : NormalizeTotal.FUNCTION.apply(samples(length)).unmodifiable();
   }
 
-  /** @param extent
-   * @return vector of weights, not normalized */
-  protected abstract Tensor samples(int extent);
+  /** @param length 2 or greater
+   * @return vector of weights of given length, not normalized */
+  protected abstract Tensor samples(int length);
 }

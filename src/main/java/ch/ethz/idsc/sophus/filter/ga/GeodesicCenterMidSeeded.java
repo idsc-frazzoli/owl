@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
-import ch.ethz.idsc.sophus.math.win.WindowCenterSampler;
+import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -41,7 +41,7 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
    * @return
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicCenterMidSeeded(splitInterface, WindowCenterSampler.of(windowFunction));
+    return new GeodesicCenterMidSeeded(splitInterface, UniformWindowSampler.of(windowFunction));
   }
 
   // ---
@@ -62,7 +62,7 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
     int radius = (tensor.length() - 1) / 2;
     synchronized (weights) {
       while (weights.size() <= radius)
-        weights.add(splits(function.apply(weights.size())));
+        weights.add(splits(function.apply(weights.size() * 2 + 1)));
     }
     Tensor splits = weights.get(radius);
     Tensor pL = tensor.get(radius);
