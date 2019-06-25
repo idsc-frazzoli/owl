@@ -49,6 +49,7 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
       spinnerRefine.setIndex(0);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
     }
+    setControlPointsSe2(Tensors.fromString("{{0,-2,0},{3,-2,-1},{4,2,1},{-1,3,2}}"));
   }
 
   @Override
