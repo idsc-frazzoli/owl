@@ -5,19 +5,22 @@ import java.awt.Graphics2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicAverage;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicAverageFilter;
+import ch.ethz.idsc.sophus.math.NormalizeTotal;
 import ch.ethz.idsc.sophus.sym.SymWeightsToSplits;
-import ch.ethz.idsc.tensor.NormalizeTotal;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO JPH OWL 045 possibly remove
 /* package */ class GeodesicAverageFilterDemo extends DatasetKernelDemo {
   private Tensor refined = Tensors.empty();
 
   public GeodesicAverageFilterDemo() {
+    super(GeodesicDisplays.SE2_R2);
     updateState();
   }
 

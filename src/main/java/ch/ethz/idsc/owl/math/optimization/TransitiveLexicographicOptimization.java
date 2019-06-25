@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** Creates an optimization problem with a given cost functional vector
  * which map the feasible inputs onto an objective space,
  * where they can be evaluated according to a given OrderComparator. */
-public final class TransitiveLexicographicOptimization implements OptimizationClass<Tensor, Tensor, Tensor> {
+/* package */ class TransitiveLexicographicOptimization implements OptimizationClass<Tensor, Tensor, Tensor> {
   private final List<Tensor> inputs;
   private final List<Function<Tensor, Tensor>> featureFunctionVector;
   private final List<Function<Tensor, Tensor>> scoringFunctionVector;

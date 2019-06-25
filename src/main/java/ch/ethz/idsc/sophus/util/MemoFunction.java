@@ -7,17 +7,17 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-/** memo function stores return values of function in hash map, so that the function is
- * not evaluated a second time but instead a lookup using the map is performed.
+/** A memo function stores return values of a given function in hash map, so that the function
+ * is not evaluated a second time, but instead, a lookup using the map is performed.
  * 
- * since the memo function returns references, the function values should be immutable.
+ * Since the memo function returns references, the function values should be immutable.
  * 
  * Wrapping a memo function around a memo function returns the given function. */
 public class MemoFunction<K, V> implements Function<K, V>, Serializable {
   /** @param function non-null
    * @return given function if given function is instance of MemoFunction */
   public static <K, V> Function<K, V> wrap(Function<K, V> function) {
-    return function instanceof MemoFunction // inception
+    return function instanceof MemoFunction // prevent inception
         ? function
         : new MemoFunction<>(Objects.requireNonNull(function));
   }

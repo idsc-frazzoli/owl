@@ -4,30 +4,38 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
+import java.util.function.Function;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
+import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.MSpline3CurveSubdivision;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Nest;
 
-public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
-  public BiinvariantMeanSubdivisionDemo() {
-    super(GeodesicDisplays.SE2C_SE2_R2);
+/** {@link SplitInterface} */
+public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
+  public SplitCurveSubdivisionDemo() {
+    super(GeodesicDisplays.ALL);
   }
 
   @Override
   public Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
     final CurveSubdivisionSchemes scheme = spinnerLabel.getValue();
+    if (scheme.equals(CurveSubdivisionSchemes.DODGSON_SABIN))
+      setGeodesicDisplay(R2GeodesicDisplay.INSTANCE);
     // ---
     if (jToggleSymi.isSelected()) {
       Optional<SymMaskImages> optional = SymMaskImages.get(scheme.name());
@@ -47,13 +55,16 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
-      CurveSubdivision curveSubdivision = new MSpline3CurveSubdivision(geodesicDisplay.biinvariantMean());
-      TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(curveSubdivision, cyclic);
+      Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
+      TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(function.apply(geodesicDisplay.geodesicInterface()), cyclic);
       refined = control;
       for (int level = 0; level < levels; ++level) {
         Tensor prev = refined;
         refined = tensorUnaryOperator.apply(refined);
-        if (CurveSubdivisionHelper.isDual(scheme) && level % 2 == 1 && !cyclic && 1 < control.length()) {
+        if (CurveSubdivisionHelper.isDual(scheme) && //
+            level % 2 == 1 && //
+            !cyclic && //
+            1 < control.length()) {
           refined = Join.of( //
               Tensors.of(geodesicDisplay.geodesicInterface().split(control.get(0), prev.get(0), RationalScalar.HALF)), //
               refined, //
@@ -61,6 +72,10 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
           );
         }
       }
+    }
+    if (jToggleLine.isSelected()) {
+      TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface()), cyclic);
+      lineRender.setCurve(Nest.of(tensorUnaryOperator, control, 8), cyclic).render(geometricLayer, graphics);
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, cyclic, geometricLayer, graphics);
@@ -70,7 +85,7 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new BiinvariantMeanSubdivisionDemo();
+    AbstractDemo abstractDemo = new SplitCurveSubdivisionDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

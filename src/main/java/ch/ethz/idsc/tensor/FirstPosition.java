@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/FirstPosition.html">FirstPosition</a> */
-// TODO JPH TENSOR 074 obsolete
+// TODO JPH OWL 045 TENSOR 074 obsolete
 public enum FirstPosition {
   ;
   /** @param tensor non-null

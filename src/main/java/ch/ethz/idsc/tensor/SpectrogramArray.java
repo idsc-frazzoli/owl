@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a> */
+// TODO JPH OWL 045 TENSOR 074 obsolete
 public class SpectrogramArray implements TensorUnaryOperator {
   private static final ScalarUnaryOperator LOG2 = Log.base(RealScalar.of(2));
 
