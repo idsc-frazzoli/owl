@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Round;
 
-enum FilterErrorTable {
+/* package */ enum FilterErrorTable {
   ;
   public static final File ROOT = HomeDirectory.Desktop("MA/owl_export");
 

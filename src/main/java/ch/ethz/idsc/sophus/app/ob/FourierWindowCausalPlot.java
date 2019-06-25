@@ -12,8 +12,9 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantFIRnFilter;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantIIRnFilter;
+import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnFilter;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRnFilter;
@@ -22,6 +23,8 @@ import ch.ethz.idsc.sophus.filter.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.FilterResponse;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TransferFunctionResponse;
@@ -47,7 +50,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
   private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
 
-  // TODO OB: make logPlot (standard)
   private static void plot(Tensor data, int radius, String signal, Scalar alpha) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
@@ -58,9 +60,13 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
     }
     VisualSet visualSet = new VisualSet();
-    visualSet.setPlotLabel("Filter Gain " + signal + " - alpha = " + alpha);
-    visualSet.setAxesLabelX("Frequency [Hz]");
-    visualSet.setAxesLabelY("Magnitude");
+    // visualSet.setPlotLabel("Causal IIR Filters: length = "+radius+" Magnitude Response - $" + signal + "$");
+    // visualSet.setPlotLabel("Causal IIR Filters: length = "+radius+" Phase Response - $" + signal + "$");
+    visualSet.setPlotLabel("Causal FIR Filters: length = " + radius + "  Magnitude Response - $" + signal + "$");
+    // visualSet.setPlotLabel("Causal FIR Filters: length = "+radius+" Phase Response - $" + signal + "$");
+    visualSet.setAxesLabelX("Frequency $[Hz]$");
+    visualSet.setAxesLabelY("Phase $H(\\Omega)$");
+    // visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
     int index = 0;
     for (Tensor yAxis : yData) {
       VisualRow visualRow = visualSet.add( //
@@ -72,7 +78,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     JFreeChart jFreeChart = ListPlot.of(visualSet);
     jFreeChart.setBackgroundPaint(Color.WHITE);
     // Exportable as SVG?
-    String fileName = "FilterGain_" + radius + "_" + signal + ".png";
+    String fileName = "Causal_Magnitude" + radius + "_" + signal + ".png";
+    // String fileName = "Causal_Phase_" + radius + "_" + signal + ".png";
     File file = HomeDirectory.Pictures(fileName);
     // impove DPI?
     ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
@@ -102,16 +109,22 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           smoothd = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
           break;
         case TANGENT_SPACE_FIR:
-          smoothd = TangentSpaceFIRnFilter.of(smoothingKernel, radius, alpha).apply(control);
+          smoothd = TangentSpaceFIRnFilter.of( //
+              Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
+              .apply(control);
           break;
         case TANGENT_SPACE_IIR:
-          smoothd = TangentSpaceIIRnFilter.of(smoothingKernel, radius, alpha).apply(control);
+          smoothd = TangentSpaceIIRnFilter.of( //
+              Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
+              .apply(control);
           break;
         case BIINVARIANT_MEAN_FIR:
-          smoothd = BiinvariantFIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
+          smoothd = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
+              .apply(control);
           break;
         case BIINVARIANT_MEAN_IIR:
-          smoothd = BiinvariantIIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
+          smoothd = BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
+              .apply(control);
           break;
         }
         Tensor rawVec = Se2Differences.INSTANCE.apply(control);

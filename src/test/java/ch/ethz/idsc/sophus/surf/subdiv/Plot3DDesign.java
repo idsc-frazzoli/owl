@@ -60,7 +60,7 @@ class Plot3DDesign {
       matrix.append(row);
     }
     Put.of(HomeDirectory.file("sinxy2in.mathematica"), matrix);
-    CatmullClarkSubdivision catmullClarkSubdivision = new CatmullClarkSubdivision(R3S2Geodesic.INSTANCE);
+    GeodesicCatmullClarkSubdivision catmullClarkSubdivision = new GeodesicCatmullClarkSubdivision(R3S2Geodesic.INSTANCE);
     Tensor tensor = Nest.of(catmullClarkSubdivision::refine, matrix, 3);
     Put.of(HomeDirectory.file("sinxy2.mathematica"), tensor);
   }

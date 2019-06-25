@@ -1,44 +1,20 @@
 // code by ob
 package ch.ethz.idsc.sophus.filter.ga;
 
-import java.util.Objects;
-
+import ch.ethz.idsc.sophus.filter.CausalFilter;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class GeodesicFIRnFilter implements TensorUnaryOperator {
-  /** @param geodesicExtrapolation
+public enum GeodesicFIRnFilter {
+  ;
+  /** @param extrapolation
    * @param splitInterface
    * @param radius
    * @param alpha
    * @return
    * @throws Exception if either parameter is null */
-  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
-    return new GeodesicFIRnFilter( //
-        Objects.requireNonNull(geodesicExtrapolation), //
-        Objects.requireNonNull(splitInterface), //
-        radius, //
-        Objects.requireNonNull(alpha));
-  }
-
-  // ---
-  private final TensorUnaryOperator geodesicExtrapolation;
-  private final SplitInterface splitInterface;
-  private final int radius;
-  private final Scalar alpha;
-
-  private GeodesicFIRnFilter(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
-    this.geodesicExtrapolation = geodesicExtrapolation;
-    this.splitInterface = splitInterface;
-    this.radius = radius;
-    this.alpha = alpha;
-  }
-
-  @Override
-  public Tensor apply(Tensor tensor) {
-    return Tensor.of(tensor.stream() //
-        .map(new GeodesicFIRn(geodesicExtrapolation, splitInterface, radius, alpha)));
+  public static TensorUnaryOperator of(TensorUnaryOperator extrapolation, SplitInterface splitInterface, int radius, Scalar alpha) {
+    return CausalFilter.of(() -> new GeodesicFIRn(extrapolation, splitInterface, radius, alpha));
   }
 }

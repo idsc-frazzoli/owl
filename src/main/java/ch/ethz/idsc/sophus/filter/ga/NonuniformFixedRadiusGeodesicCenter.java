@@ -6,6 +6,7 @@ import java.util.NavigableMap;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.tensor.NormalizeTotal;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -56,7 +57,7 @@ public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
     for (int index = 1; index <= (subMap.size() - 1) / 2; ++index) {
       remain.append(Power.of(startingWeight, index + 1));
     }
-    remain = remain.divide(Total.ofVector(remain));
+    remain = NormalizeTotal.FUNCTION.apply(remain);
     maskLeft.append(remain.Get(0).multiply(RationalScalar.HALF));
     maskRight.append(remain.Get(0).multiply(RationalScalar.HALF));
     // ---

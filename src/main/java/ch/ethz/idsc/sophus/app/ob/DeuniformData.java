@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public enum DeuniformData {
+/* package */ enum DeuniformData {
   ;
   /** @param Uniform sequence p
    * @param ratio of data to be left out

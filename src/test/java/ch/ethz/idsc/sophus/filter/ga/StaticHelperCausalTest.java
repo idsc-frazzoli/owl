@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
-import ch.ethz.idsc.sophus.math.win.WindowSideSampler;
+import ch.ethz.idsc.sophus.math.win.WindowSidedSampler;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -29,7 +29,7 @@ public class StaticHelperCausalTest extends TestCase {
   }
 
   public void testExact() {
-    Function<Integer, Tensor> windowSideSampler = WindowSideSampler.of(SmoothingKernel.HANN);
+    Function<Integer, Tensor> windowSideSampler = WindowSidedSampler.of(SmoothingKernel.HANN);
     Tensor mask = windowSideSampler.apply(2);
     Tensor splits = StaticHelperCausal.splits(mask);
     ExactTensorQ.require(splits);

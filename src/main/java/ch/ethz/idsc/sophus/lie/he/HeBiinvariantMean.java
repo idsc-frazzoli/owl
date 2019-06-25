@@ -11,21 +11,25 @@ import ch.ethz.idsc.tensor.Tensors;
  * @return associated biinvariant mean which is the solution to the barycentric equation
  * 
  * Reference 1:
- * "Bi-invariant Means in Lie Groups. Application toLeft-invariant Polyaffine Transformations."
- * Vincent Arsigny, Xavier Pennec, Nicholas Ayache, p. 32
+ * "Bi-invariant Means in Lie Groups. Application to Left-invariant Polyaffine Transformations."
+ * Vincent Arsigny, Xavier Pennec, Nicholas Ayache, p. 32, 2006
  * 
  * Reference 2:
  * "Exponential Barycenters of the Canonical Cartan Connection and Invariant Means on Lie Groups"
- * by Xavier Pennec, Vincent Arsigny, p.29, Section 4.2 */
+ * by Xavier Pennec, Vincent Arsigny, p.29, Section 4.2, 2012 */
 public enum HeBiinvariantMean implements BiinvariantMean {
   INSTANCE;
   // ---
+  /* package */ static Tensor xydot(Tensor sequence) {
+    return Tensor.of(sequence.stream().map(xyz -> xyz.get(0).dot(xyz.get(1))));
+  }
+
   @Override // from BiinvariantMean
   public Tensor mean(Tensor sequence, Tensor weights) {
     Tensor ws = weights.dot(sequence);
     Tensor xMean = ws.get(0);
     Tensor yMean = ws.get(1);
-    Tensor xyMean = weights.dot(Tensor.of(sequence.stream().map(xyz -> xyz.get(0).dot(xyz.get(1)))));
+    Tensor xyMean = weights.dot(xydot(sequence));
     return Tensors.of( //
         xMean, //
         yMean, //

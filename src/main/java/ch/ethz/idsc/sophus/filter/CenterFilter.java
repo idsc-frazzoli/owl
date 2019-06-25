@@ -16,10 +16,12 @@ public class CenterFilter implements TensorUnaryOperator {
    * {@link GeodesicCenter}, and {@link BiinvariantMeanCenter}
    * 
    * @param tensorUnaryOperator
-   * @param radius
+   * @param radius non-negative
    * @return
    * @throws Exception if given tensorUnaryOperator is null */
   public static TensorUnaryOperator of(TensorUnaryOperator tensorUnaryOperator, int radius) {
+    if (radius < 0)
+      throw new IllegalArgumentException("" + radius);
     return new CenterFilter(Objects.requireNonNull(tensorUnaryOperator), radius);
   }
 

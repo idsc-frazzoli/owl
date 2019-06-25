@@ -8,16 +8,13 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicAverage;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicAverageFilter;
 import ch.ethz.idsc.sophus.sym.SymWeightsToSplits;
+import ch.ethz.idsc.tensor.NormalizeTotal;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Total;
 
 /* package */ class GeodesicAverageFilterDemo extends DatasetKernelDemo {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
-  // ---
   private Tensor refined = Tensors.empty();
 
   public GeodesicAverageFilterDemo() {
@@ -56,7 +53,7 @@ import ch.ethz.idsc.tensor.red.Total;
     for (int index = 0; index < spinnerRadius.getValue() + 1; ++index)
       weights.append(spinnerKernel.getValue().apply( //
           RealScalar.of(index).divide(RealScalar.of(spinnerRadius.getValue())).subtract(RealScalar.of(0.5))));
-    weights = NORMALIZE.apply(weights);
+    weights = NormalizeTotal.FUNCTION.apply(weights);
     SymWeightsToSplits symWeightsToSplits = new SymWeightsToSplits(tree, weights);
     System.out.println(symWeightsToSplits.splits());
     TensorUnaryOperator tensorUnaryOperator = GeodesicAverage.of(geodesicDisplay().geodesicInterface(), symWeightsToSplits.splits());

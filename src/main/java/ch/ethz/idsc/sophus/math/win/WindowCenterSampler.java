@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
+// TODO JPH OWL 045 remove, superseded by UniformWindowSampler
 public class WindowCenterSampler extends WindowBaseSampler {
   /** @param windowFunction for evaluation in the interval [-1/2, +1/2] */
   public static Function<Integer, Tensor> of(ScalarUnaryOperator windowFunction) {

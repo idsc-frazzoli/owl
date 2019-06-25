@@ -22,9 +22,11 @@ public class BiinvariantMeanCenterTest extends TestCase {
       TensorUnaryOperator tensorUnaryOperator = //
           Serialization.copy(BiinvariantMeanCenter.of(Se2BiinvariantMean.GLOBAL, smoothingKernel));
       Distribution distribution = UniformDistribution.unit();
-      Tensor sequence = RandomVariate.of(distribution, 7, 3);
-      Tensor tensor = tensorUnaryOperator.apply(sequence);
-      assertEquals(Dimensions.of(tensor), Arrays.asList(3));
+      for (int count = 1; count < 10; ++count) {
+        Tensor sequence = RandomVariate.of(distribution, count, 3);
+        Tensor tensor = tensorUnaryOperator.apply(sequence);
+        assertEquals(Dimensions.of(tensor), Arrays.asList(3));
+      }
     }
   }
 

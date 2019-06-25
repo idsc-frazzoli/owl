@@ -1,12 +1,16 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.jph;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
+import java.util.Objects;
 
+import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.region.Polygons;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -27,6 +31,9 @@ import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.red.Entrywise;
 
 public class PowerCoordinatesDemo extends ControlPointsDemo {
+  private static final Stroke STROKE = //
+      new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  // ---
   private final SpinnerLabel<Barycentric> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
 
@@ -51,33 +58,67 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     Tensor domain = Tensor.of(controlPointsSe2.stream().map(Extract2D.FUNCTION));
-    if (2 < domain.length()) {
-      Tensor hull = ConvexHull.of(domain);
-      graphics.setColor(Color.BLACK);
-      Path2D path2d = geometricLayer.toPath2D(hull);
-      path2d.closePath();
-      graphics.draw(path2d);
-      PowerCoordinates powerCoordinates = new PowerCoordinates(spinnerBarycentric.getValue());
-      Tensor min = hull.stream().reduce(Entrywise.min()).get().map(RealScalar.of(0.1)::add);
-      Tensor max = hull.stream().reduce(Entrywise.max()).get().map(RealScalar.of(0.1)::subtract).negate();
-      Tensor sX = Subdivide.of(min.Get(0), max.Get(0), spinnerRefine.getValue());
-      Tensor sY = Subdivide.of(min.Get(1), max.Get(1), spinnerRefine.getValue());
-      for (Tensor _x : sX)
-        for (Tensor _y : sY) {
-          Scalar x = _x.Get();
-          Scalar y = _y.Get();
-          Tensor px = Tensors.of(x, y);
-          if (Polygons.isInside(domain, px)) {
-            Tensor weights = powerCoordinates.weights(domain, px);
-            Tensor mean = biinvariantMean.mean(controlPointsSe2, weights);
-            Tensor matrix = geodesicDisplay.matrixLift(mean);
-            geometricLayer.pushMatrix(matrix);
-            graphics.setColor(new Color(128, 128, 128, 64));
-            graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(.5))));
-            geometricLayer.popMatrix();
-          }
+    if (2 < domain.length())
+      try {
+        GraphicsUtil.setQualityHigh(graphics);
+        Tensor hull = ConvexHull.of(domain);
+        {
+          graphics.setColor(Color.LIGHT_GRAY);
+          graphics.setStroke(STROKE);
+          Path2D path2d = geometricLayer.toPath2D(hull);
+          path2d.closePath();
+          graphics.draw(path2d);
+          graphics.setStroke(new BasicStroke(1));
         }
-    }
+        PowerCoordinates powerCoordinates = new PowerCoordinates(spinnerBarycentric.getValue());
+        Tensor min = hull.stream().reduce(Entrywise.min()).get().map(RealScalar.of(0.01)::add);
+        Tensor max = hull.stream().reduce(Entrywise.max()).get().map(RealScalar.of(0.01)::subtract).negate();
+        Tensor sX = Subdivide.of(min.Get(0), max.Get(0), spinnerRefine.getValue());
+        Tensor sY = Subdivide.of(min.Get(1), max.Get(1), spinnerRefine.getValue());
+        Tensor[][] array = new Tensor[sX.length()][sY.length()];
+        int c0 = 0;
+        for (Tensor _x : sX) {
+          int c1 = 0;
+          for (Tensor _y : sY) {
+            Scalar x = _x.Get();
+            Scalar y = _y.Get();
+            Tensor px = Tensors.of(x, y);
+            if (Polygons.isInside(domain, px)) {
+              Tensor weights = powerCoordinates.weights(domain, px);
+              Tensor mean = biinvariantMean.mean(controlPointsSe2, weights);
+              array[c0][c1] = mean;
+            }
+            ++c1;
+          }
+          ++c0;
+        }
+        graphics.setColor(Color.LIGHT_GRAY);
+        for (int i0 = 1; i0 < array.length; ++i0)
+          for (int i1 = 1; i1 < array.length; ++i1) {
+            Tensor c = array[i0][i1];
+            if (Objects.nonNull(c)) {
+              Tensor p0 = array[i0 - 1][i1];
+              Tensor p1 = array[i0][i1 - 1];
+              if (Objects.nonNull(p0))
+                graphics.draw(geometricLayer.toPath2D(Tensors.of(p0, c)));
+              if (Objects.nonNull(p1))
+                graphics.draw(geometricLayer.toPath2D(Tensors.of(p1, c)));
+            }
+          }
+        for (int i0 = 0; i0 < array.length; ++i0)
+          for (int i1 = 0; i1 < array.length; ++i1) {
+            Tensor mean = array[i0][i1];
+            if (Objects.nonNull(mean)) {
+              Tensor matrix = geodesicDisplay.matrixLift(mean);
+              geometricLayer.pushMatrix(matrix);
+              graphics.setColor(new Color(128, 128, 128, 64));
+              graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape().multiply(RealScalar.of(.5))));
+              geometricLayer.popMatrix();
+            }
+          }
+      } catch (Exception exception) {
+        exception.printStackTrace();
+      }
   }
 
   public static void main(String[] args) {

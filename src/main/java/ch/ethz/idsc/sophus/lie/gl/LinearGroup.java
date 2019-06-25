@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** Lie group GL(n) of invertible square matrices
  * also called "immersely linear Lie group" */
-// TODO OWL 045 JPH move to package lie.gl
 public enum LinearGroup implements LieGroup {
   INSTANCE;
   // ---

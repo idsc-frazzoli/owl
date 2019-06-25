@@ -1,7 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import java.awt.Color;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.EnumMap;
@@ -9,8 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
+import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.jfree.graphics2d.svg.SVGUtils;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
@@ -48,19 +49,18 @@ import ch.ethz.idsc.tensor.red.Mean;
   private static void plot(Tensor data, int radius, String signal) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
-      yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
+      yData.append(TransferFunctionResponse.FREQUENCY.apply(meanData));
     // ---
     Tensor xAxis = Tensors.empty();
-    // FIXME OB shouldn't the freq. labels also depend on WINDOW_DURATION?
-    // FIXME JPH: The WINDOW_DURATION is implicitly given by the yData.length, also higher resolution would require higher sampling frequency (nyquist
-    // criterion) (DELETE ME)
     for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index) {
       xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
     }
     VisualSet visualSet = new VisualSet();
-    visualSet.setPlotLabel("Filter Gain " + signal);
-    visualSet.setAxesLabelX("Frequency [Hz]");
-    visualSet.setAxesLabelY("Magnitude");
+    // visualSet.setPlotLabel("Lie Group Filters: radius = "+radius+" Magnitude Response - $" + signal + "$");
+    visualSet.setPlotLabel("Lie Group Filters: radius = " + radius + "  Phase Response - $" + signal + "$");
+    visualSet.setAxesLabelX("Frequency $[Hz]$");
+    visualSet.setAxesLabelY("Phase $H(\\Omega)$");
+    // visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
     int index = 0;
     for (Tensor yAxis : yData) {
       VisualRow visualRow = visualSet.add( //
@@ -70,12 +70,13 @@ import ch.ethz.idsc.tensor.red.Mean;
       ++index;
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);
-    jFreeChart.setBackgroundPaint(Color.WHITE);
-    // Exportable as SVG?
-    String fileName = "FilterGain_" + radius + "_" + signal + ".png";
-    File file = HomeDirectory.Pictures(fileName);
-    // impove DPI?
-    ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
+    SVGGraphics2D svg = new SVGGraphics2D(600, 400);
+    Rectangle rectangle = new Rectangle(0, 0, 600, 400);
+    jFreeChart.draw(svg, rectangle);
+    // String fileNameSVG = "Geodesic Center Filter("+radius+") Gain " + signal + ".svg";
+    String fileNameSVG = "Geodesic Center Filter(" + radius + ") Phase " + signal + ".svg";
+    File fileSVG = HomeDirectory.Pictures(fileNameSVG);
+    SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
 
   private static void process(List<String> listData, Map<LieGroupFilters, TensorUnaryOperator> map, int radius, int limit) throws IOException {
@@ -125,9 +126,10 @@ import ch.ethz.idsc.tensor.red.Mean;
     // map.put(LieGroupCausalFilters.BIINVARIANT_MEAN_IIR, BiinvariantMeanIIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha()));
     // signal cases: 0:x , 1:y, 2;heading
     List<String> listData = GokartPoseData.INSTANCE.list();
-    int radius = 13;
     int limit = 10;
-    // TODO OB it would be computationally beneficial to not filter again for each signal
-    process(listData, map, radius, limit);
+    for (int rad = 0; rad < 14; rad++) {
+      System.out.println(rad);
+      process(listData, map, rad, limit);
+    }
   }
 }

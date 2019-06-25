@@ -24,6 +24,7 @@ public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
 
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar index) {
+    // TODO GJOEL use GeodesicInterpolation
     int index_ = index.number().intValue();
     try {
       return new TrajectoryEntry(Optional.of(splitInterface.split( //
