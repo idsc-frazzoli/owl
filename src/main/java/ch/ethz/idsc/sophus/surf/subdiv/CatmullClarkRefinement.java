@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.tensor.FirstPosition;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.red.FirstPosition;
 
 /** Reference:
  * "Recursively generated B-spline surfaces on arbitrary topological meshes"

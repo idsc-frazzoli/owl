@@ -4,6 +4,8 @@ package ch.ethz.idsc.tensor;
 import java.io.IOException;
 import java.util.stream.DoubleStream;
 
+import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.img.Spectrogram;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 
@@ -13,7 +15,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     ColoredNoise coloredNoise = new ColoredNoise(1); // 1 == pink noise
     Tensor tensor = Tensor.of(DoubleStream.generate(coloredNoise::nextValue) //
         .limit(1024 * 4).mapToObj(DoubleScalar::of));
-    Tensor image = Spectrogram.of(tensor);
+    Tensor image = Spectrogram.of(tensor, ColorDataGradients.VISIBLESPECTRUM);
     Export.of(HomeDirectory.Pictures(ColoredNoiseSpectrogram.class.getSimpleName() + ".png"), image);
   }
 }

@@ -21,9 +21,10 @@ import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Spectrogram;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.img.Spectrogram;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
@@ -96,7 +97,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
         for (int index = 0; index < dimensions; ++index) {
           Tensor signal = speeds.get(Tensor.ALL, index).unmodifiable();
           // ---
-          Tensor image = Spectrogram.of(signal);
+          Tensor image = Spectrogram.of(signal, ColorDataGradients.VISIBLESPECTRUM);
           BufferedImage bufferedImage = ImageFormat.of(image);
           int wid = bufferedImage.getWidth() * 5;
           int hgt = bufferedImage.getHeight() * 5;
