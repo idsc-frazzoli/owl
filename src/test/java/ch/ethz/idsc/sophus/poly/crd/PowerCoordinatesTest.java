@@ -49,4 +49,14 @@ public class PowerCoordinatesTest extends TestCase {
     Tensor exp = Tensors.fromString("{3/26, 33/52, 11/52, 1/26}");
     Chop._12.requireClose(weights, exp);
   }
+
+  public void testFailEmpty() throws ClassNotFoundException, IOException {
+    PowerCoordinates powerCoordinates = Serialization.copy(new PowerCoordinates(Barycentric.MEAN_VALUE));
+    try {
+      powerCoordinates.weights(Tensors.empty(), Tensors.vector(4, 2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

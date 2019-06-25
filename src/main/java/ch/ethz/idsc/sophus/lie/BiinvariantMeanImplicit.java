@@ -21,8 +21,12 @@ public class BiinvariantMeanImplicit implements Serializable {
     this.lieExponential = lieExponential;
   }
 
-  private Tensor estimationUpdate(Tensor sequence, Tensor weights, Tensor estimate) {
-    LieGroupElement lieGroupElement = lieGroup.element(estimate);
+  /** @param sequence
+   * @param weights
+   * @param mean estimate
+   * @return improved mean estimate */
+  private Tensor estimationUpdate(Tensor sequence, Tensor weights, Tensor mean) {
+    LieGroupElement lieGroupElement = lieGroup.element(mean);
     return lieGroupElement.combine(lieExponential.exp(weights.dot(Tensor.of(sequence.stream() //
         .map(lieGroupElement.inverse()::combine) //
         .map(lieExponential::log)))));
