@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.sym;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;

@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.math.Extract2D;
-import ch.ethz.idsc.sophus.poly.Polygons;
+import ch.ethz.idsc.sophus.ply.Polygons;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;

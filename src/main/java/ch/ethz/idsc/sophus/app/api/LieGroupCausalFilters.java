@@ -2,12 +2,12 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
-import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanExtrapolation;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRn;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRn;
-import ch.ethz.idsc.sophus.filter.ts.TangentSpaceExtrapolation;
+import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
+import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanExtrapolation;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicFIRn;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRn;
+import ch.ethz.idsc.sophus.flt.ts.TangentSpaceExtrapolation;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;

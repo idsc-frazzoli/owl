@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.filter.CenterFilter;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicCenterMidSeeded;
+import ch.ethz.idsc.sophus.flt.CenterFilter;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;

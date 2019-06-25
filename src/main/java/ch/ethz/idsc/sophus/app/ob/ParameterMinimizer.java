@@ -1,10 +1,10 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.sophus.filter.CenterFilter;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicCenter;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRnFilter;
+import ch.ethz.idsc.sophus.flt.CenterFilter;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
