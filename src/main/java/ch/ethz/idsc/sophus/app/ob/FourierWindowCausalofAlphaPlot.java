@@ -13,16 +13,23 @@ import org.jfree.graphics2d.svg.SVGUtils;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantFIRnFilter;
-import ch.ethz.idsc.sophus.filter.bm.BiinvariantIIRnFilter;
+import ch.ethz.idsc.sophus.filter.WindowSideExtrapolation;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanFIRnFilter;
+import ch.ethz.idsc.sophus.filter.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.filter.ts.TangentSpaceFIRnFilter;
 import ch.ethz.idsc.sophus.filter.ts.TangentSpaceIIRnFilter;
+import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.LieDifferences;
+import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.FilterResponse;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.TransferFunctionResponse;
@@ -83,8 +90,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   private static void process(List<String> listData, ScalarUnaryOperator smoothingKernel, int radius, int limit, Scalar alpha) throws IOException {
-    Se2BiinvariantMean se2BiinvariantMean = Se2BiinvariantMean.FILTER;
+    LieGroup lieGroup = Se2Group.INSTANCE;
+    LieExponential lieExponential = Se2CoveringExponential.INSTANCE;
+    BiinvariantMean biinvariantMean = Se2BiinvariantMean.FILTER;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
+    LieDifferences lieDifferences = Se2Differences.INSTANCE;
     TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
     // ---
     Tensor smoothedX = Tensors.empty();
@@ -97,29 +107,32 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       Tensor tempY = Tensors.empty();
       Tensor tempA = Tensors.empty();
       for (LieGroupCausalFilters lgcf : LieGroupCausalFilters.values()) {
-        Tensor smoothd = Tensors.empty();
+        TensorUnaryOperator cf = null;
         switch (lgcf) {
         case GEODESIC_FIR:
-          smoothd = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
+          cf = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha);
           break;
         case GEODESIC_IIR:
-          smoothd = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
+          cf = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha);
           break;
         case TANGENT_SPACE_FIR:
-          smoothd = TangentSpaceFIRnFilter.of(smoothingKernel, radius, alpha).apply(control);
+          cf = TangentSpaceFIRnFilter.of( //
+              lieGroup, lieExponential, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha);
           break;
         case TANGENT_SPACE_IIR:
-          smoothd = TangentSpaceIIRnFilter.of(smoothingKernel, radius, alpha).apply(control);
+          cf = TangentSpaceIIRnFilter.of( //
+              lieGroup, lieExponential, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha);
           break;
         case BIINVARIANT_MEAN_FIR:
-          smoothd = BiinvariantFIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
+          cf = BiinvariantMeanFIRnFilter.of(biinvariantMean, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha);
           break;
         case BIINVARIANT_MEAN_IIR:
-          smoothd = BiinvariantIIRnFilter.of(se2BiinvariantMean, smoothingKernel, radius, alpha).apply(control);
+          cf = BiinvariantMeanIIRnFilter.of(biinvariantMean, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha);
           break;
         }
-        Tensor rawVec = Se2Differences.INSTANCE.apply(control);
-        Tensor smdVec = Se2Differences.INSTANCE.apply(smoothd);
+        Tensor smoothd = cf.apply(control);
+        Tensor rawVec = lieDifferences.apply(control);
+        Tensor smdVec = lieDifferences.apply(smoothd);
         tempX.append(FilterResponse.of(smdVec.get(Tensor.ALL, 0), rawVec.get(Tensor.ALL, 0), SPECTROGRAM_ARRAY));
         tempY.append(FilterResponse.of(smdVec.get(Tensor.ALL, 1), rawVec.get(Tensor.ALL, 1), SPECTROGRAM_ARRAY));
         tempA.append(FilterResponse.of(smdVec.get(Tensor.ALL, 2), rawVec.get(Tensor.ALL, 2), SPECTROGRAM_ARRAY));

@@ -1,16 +1,20 @@
 // code by jph
 package ch.ethz.idsc.sophus.filter.ga;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class GeodesicIIR1FilterTest extends TestCase {
-  public void testSimple() {
-    GeodesicIIR1Filter geodesicIIR1Filter = new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.5));
+  public void testSimple() throws ClassNotFoundException, IOException {
+    GeodesicIIR1Filter geodesicIIR1Filter = //
+        Serialization.copy(new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RealScalar.of(0.5)));
     // irc=0.0[s^-2]
     // irc=1.9999999999999996[s^-2]
     // irc=1.0000000000000009[s^-2]

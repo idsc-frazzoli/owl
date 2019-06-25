@@ -8,9 +8,9 @@ import ch.ethz.idsc.tensor.Tensor;
 /** Hint:
  * angles are required to lie on a half-circle which is not necessarily centered at the origin
  * 
- * Source for Constant C: https://hal.inria.fr/inria-00073318/
- * Xavier Pennec
- * TODO OB cite title, page no., and quote statement */
+ * Reference:
+ * https://hal.inria.fr/inria-00073318/
+ * by Xavier Pennec */
 public enum So2LinearBiinvariantMean implements ScalarBiinvariantMean {
   INSTANCE;
   // ---

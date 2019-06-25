@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** filter blends extrapolated value with measurement */
+// TODO JPH OWL 045 rename to GeodesicIIR1
 public class GeodesicIIR1Filter implements TensorUnaryOperator {
   private final SplitInterface splitInterface;
   private final Scalar alpha;

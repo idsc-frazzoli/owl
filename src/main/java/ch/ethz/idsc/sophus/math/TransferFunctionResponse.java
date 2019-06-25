@@ -5,8 +5,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Arg;
-import ch.ethz.idsc.tensor.sca.Imag;
-import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** Rafaello d'Andrea: Signals and Systems lecture:
@@ -15,7 +13,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public enum TransferFunctionResponse implements TensorUnaryOperator {
   MAGNITUDE(Abs.FUNCTION), //
   FREQUENCY(Arg.FUNCTION), //
-  FREQUENCY2(scalar -> Imag.FUNCTION.apply(scalar).divide(Real.FUNCTION.apply(scalar))), //
   ;
   private final ScalarUnaryOperator scalarUnaryOperator;
 

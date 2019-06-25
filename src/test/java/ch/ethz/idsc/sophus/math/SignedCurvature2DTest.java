@@ -53,7 +53,13 @@ public class SignedCurvature2DTest extends TestCase {
     assertTrue(Chop._10.close(SignedCurvature2D.of(c, b, a).get(), Quantity.of(-1, "m^-1")));
   }
 
-  public void testString() {
+  public void testString2() {
+    Tensor points = Tensors.fromString("{{0,0},{1,1}}");
+    Tensor vector = SignedCurvature2D.string(points);
+    Chop._12.requireClose(vector, Tensors.vector(0, 0));
+  }
+
+  public void testString3() {
     Tensor points = Tensors.fromString("{{0,0},{1,1},{2,0}}");
     Tensor vector = SignedCurvature2D.string(points);
     Chop._12.requireClose(vector, Tensors.vector(-1, -1, -1));
@@ -81,6 +87,15 @@ public class SignedCurvature2DTest extends TestCase {
     Tensor points = Tensors.fromString("{{0,0,0},{1,1,0},{2,0,0}}");
     try {
       SignedCurvature2D.string(points);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testFailStringScalar() {
+    try {
+      SignedCurvature2D.string(RealScalar.ZERO);
       fail();
     } catch (Exception exception) {
       // ---

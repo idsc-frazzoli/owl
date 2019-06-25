@@ -48,7 +48,8 @@ public enum SignedCurvature2D {
   public static Tensor string(Tensor points) {
     int length = points.length();
     Tensor vector = Array.zeros(length);
-    for (int index = 1; index < points.length() - 1; ++index)
+    int last = length - 1;
+    for (int index = 1; index < last; ++index)
       vector.set(of( //
           points.get(index - 1), //
           points.get(index + 0), //
@@ -56,7 +57,7 @@ public enum SignedCurvature2D {
       ).orElse(RealScalar.ZERO), index);
     if (2 < length) {
       vector.set(vector.get(1), 0);
-      vector.set(vector.get(length - 2), length - 1);
+      vector.set(vector.get(length - 2), last);
     }
     return vector;
   }
