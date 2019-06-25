@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import ch.ethz.idsc.sophus.filter.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicFIR2;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicIIR1Filter;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicIIR2Filter;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicIIR1;
+import ch.ethz.idsc.sophus.filter.ga.GeodesicIIR2;
 import ch.ethz.idsc.sophus.filter.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 public class CausalFilterTest extends TestCase {
   public void testIIR1() throws ClassNotFoundException, IOException {
     TensorUnaryOperator causalFilter = //
-        Serialization.copy(CausalFilter.of(() -> new GeodesicIIR1Filter(RnGeodesic.INSTANCE, RationalScalar.HALF)));
+        Serialization.copy(CausalFilter.of(() -> new GeodesicIIR1(RnGeodesic.INSTANCE, RationalScalar.HALF)));
     {
       Tensor tensor = causalFilter.apply(UnitVector.of(10, 0));
       assertEquals(tensor, Tensors.fromString("{1, 1/2, 1/4, 1/8, 1/16, 1/32, 1/64, 1/128, 1/256, 1/512}"));
@@ -38,7 +38,7 @@ public class CausalFilterTest extends TestCase {
   // TODO OB/JPH check
   public void testIIR2a() throws ClassNotFoundException, IOException {
     TensorUnaryOperator causalFilter = //
-        Serialization.copy(CausalFilter.of(() -> new GeodesicIIR2Filter(RnGeodesic.INSTANCE, RationalScalar.HALF)));
+        Serialization.copy(CausalFilter.of(() -> new GeodesicIIR2(RnGeodesic.INSTANCE, RationalScalar.HALF)));
     {
       Tensor tensor = causalFilter.apply(UnitVector.of(10, 0));
       System.out.println(tensor);

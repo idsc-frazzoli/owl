@@ -22,17 +22,17 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class GeodesicIIR2FilterTest extends TestCase {
+public class GeodesicIIR2Test extends TestCase {
   public void testSimple() {
     GeodesicInterface geodesicInterface = //
         new LieGroupGeodesic(Se2Group.INSTANCE::element, Se2CoveringExponential.INSTANCE);
     Scalar alpha = RationalScalar.HALF;
-    GeodesicIIR2Filter geodesicCausal1Filter = new GeodesicIIR2Filter(geodesicInterface, alpha);
+    GeodesicIIR2 geodesicIIR2 = new GeodesicIIR2(geodesicInterface, alpha);
     Tensor vector0 = Tensors.vector(1, 2, 0.25);
-    Tensor res0 = geodesicCausal1Filter.apply(vector0);
+    Tensor res0 = geodesicIIR2.apply(vector0);
     assertEquals(res0, vector0);
     Tensor vector1 = Tensors.vector(4, 5, 0.5);
-    Tensor res1 = geodesicCausal1Filter.apply(vector1);
+    Tensor res1 = geodesicIIR2.apply(vector1);
     assertTrue(Chop._10.close(res1, Tensors.vector(2.593872261349412, 3.406127738650588, 0.375)));
   }
 
@@ -40,7 +40,7 @@ public class GeodesicIIR2FilterTest extends TestCase {
     GeodesicInterface geodesicInterface = //
         new LieGroupGeodesic(RnGroup.INSTANCE::element, RnExponential.INSTANCE);
     Scalar alpha = RationalScalar.HALF;
-    TensorUnaryOperator tensorUnaryOperator = new GeodesicIIR2Filter(geodesicInterface, alpha);
+    TensorUnaryOperator tensorUnaryOperator = new GeodesicIIR2(geodesicInterface, alpha);
     assertEquals(tensorUnaryOperator.apply(RealScalar.of(10)), RealScalar.of(10));
     assertEquals(tensorUnaryOperator.apply(RealScalar.of(10)), RealScalar.of(10));
     assertEquals(tensorUnaryOperator.apply(RealScalar.of(20)), RealScalar.of(15));
@@ -58,7 +58,7 @@ public class GeodesicIIR2FilterTest extends TestCase {
 
   public void testId() {
     Scalar alpha = RealScalar.ONE; // FIXME OB/JPH should result in the same filtered signal
-    TensorUnaryOperator tuo1 = CausalFilter.of(() -> new GeodesicIIR2Filter(RnGeodesic.INSTANCE, alpha));
+    TensorUnaryOperator tuo1 = CausalFilter.of(() -> new GeodesicIIR2(RnGeodesic.INSTANCE, alpha));
     TensorUnaryOperator tuo2 = GeodesicIIRnFilter.of( //
         GeodesicExtrapolation.of(RnGeodesic.INSTANCE, MonomialExtrapolationMask.INSTANCE), RnGeodesic.INSTANCE, 2, alpha);
     Tensor signal = RandomVariate.of(UniformDistribution.unit(), 10);

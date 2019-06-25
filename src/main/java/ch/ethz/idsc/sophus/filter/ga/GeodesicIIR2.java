@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement */
-public class GeodesicIIR2Filter implements TensorUnaryOperator {
+public class GeodesicIIR2 implements TensorUnaryOperator {
   private static final Scalar TWO = RealScalar.of(2);
   // ---
   private final SplitInterface splitInterface;
@@ -19,7 +19,7 @@ public class GeodesicIIR2Filter implements TensorUnaryOperator {
   private Tensor p = null;
   private Tensor q = null;
 
-  public GeodesicIIR2Filter(SplitInterface splitInterface, Scalar alpha) {
+  public GeodesicIIR2(SplitInterface splitInterface, Scalar alpha) {
     this.splitInterface = splitInterface;
     this.alpha = alpha;
   }
