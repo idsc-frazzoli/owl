@@ -22,7 +22,6 @@ import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class RrtsPlannerServer {
   private final TransitionSpace transitionSpace;
@@ -104,9 +103,9 @@ public abstract class RrtsPlannerServer {
     return Optional.ofNullable(trajectory);
   }
 
-  public abstract RrtsNodeCollection rrtsNodeCollection();
+  protected abstract RrtsNodeCollection rrtsNodeCollection();
 
-  public abstract RandomSampleInterface spaceSampler(Tensor... tensors);
+  protected abstract RandomSampleInterface spaceSampler();
 
-  public abstract RandomSampleInterface goalSampler(Tensor... tensors);
+  protected abstract RandomSampleInterface goalSampler();
 }
