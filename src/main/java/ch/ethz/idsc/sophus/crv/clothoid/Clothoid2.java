@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** clothoid2 factory */
-public enum Clothoid2 implements GeodesicInterface {
+/* package */ enum Clothoid2 implements GeodesicInterface {
   INSTANCE;
   // ---
   @Override // from GeodesicInterface
