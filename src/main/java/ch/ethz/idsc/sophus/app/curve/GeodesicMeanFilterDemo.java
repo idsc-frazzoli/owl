@@ -15,7 +15,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicMeanFilter;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;

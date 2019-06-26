@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import java.io.IOException;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurve;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -92,7 +92,7 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
 
   public void testSingleton() {
     Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
-    CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(ClothoidCurve.INSTANCE);
+    CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(Clothoid1.INSTANCE);
     assertEquals(curveSubdivision.cyclic(singleton), singleton);
     assertEquals(curveSubdivision.string(singleton), singleton);
   }

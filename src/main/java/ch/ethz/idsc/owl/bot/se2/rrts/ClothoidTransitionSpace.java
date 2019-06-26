@@ -5,14 +5,13 @@ import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurve;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class ClothoidTransitionSpace extends AbstractTransitionSpace implements Se2TransitionSpace {
   public static final TransitionSpace INSTANCE = new ClothoidTransitionSpace();
@@ -29,10 +28,9 @@ public class ClothoidTransitionSpace extends AbstractTransitionSpace implements 
         if (Scalars.lessThan(ds, ofs))
           throw TensorRuntimeException.of(ofs, ds);
         Scalar length = distance(this);
-        ScalarTensorFunction scalarTensorFunction = scalar -> ClothoidCurve.INSTANCE.split(start(), end(), scalar);
         Tensor tensor = Tensors.empty();
         while (Scalars.lessThan(ofs, length)) {
-          tensor.append(scalarTensorFunction.apply(ofs.divide(length)));
+          tensor.append(Clothoid1.INSTANCE.split(start(), end(), ofs.divide(length)));
           ofs = ofs.add(ds);
         }
         return tensor;

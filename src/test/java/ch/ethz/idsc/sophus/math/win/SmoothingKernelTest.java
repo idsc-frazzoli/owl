@@ -26,31 +26,31 @@ public class SmoothingKernelTest extends TestCase {
   }
 
   public void testConstant() {
-    Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(SmoothingKernel.DIRICHLET);
-    for (int width = 0; width < 5; ++width) {
-      Tensor tensor = centerWindowSampler.apply(width);
-      assertEquals(tensor, constant(width));
+    Function<Integer, Tensor> uniformWindowSampler = UniformWindowSampler.of(SmoothingKernel.DIRICHLET);
+    for (int radius = 0; radius < 5; ++radius) {
+      Tensor tensor = uniformWindowSampler.apply(radius * 2 + 1);
+      assertEquals(tensor, constant(radius));
       ExactTensorQ.require(tensor);
       assertEquals(Total.of(tensor), RealScalar.ONE);
     }
   }
 
   public void testHann() {
-    Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(SmoothingKernel.HANN);
+    Function<Integer, Tensor> centerWindowSampler = UniformWindowSampler.of(SmoothingKernel.HANN);
     ExactTensorQ.require(centerWindowSampler.apply(1));
     ExactTensorQ.require(centerWindowSampler.apply(2));
   }
 
   public void testAll() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(smoothingKernel);
-      for (int size = 0; size < 5; ++size) {
-        Tensor tensor = centerWindowSampler.apply(size);
+      Function<Integer, Tensor> uniformWindowSampler = UniformWindowSampler.of(smoothingKernel);
+      for (int radius = 0; radius < 5; ++radius) {
+        Tensor tensor = uniformWindowSampler.apply(radius * 2 + 1);
         SymmetricVectorQ.require(tensor);
         Chop._13.requireClose(Total.of(tensor), RealScalar.ONE);
         assertFalse(Scalars.isZero(tensor.Get(0)));
         assertFalse(Scalars.isZero(tensor.Get(tensor.length() - 1)));
-        assertEquals(tensor.length(), 2 * size + 1);
+        assertEquals(tensor.length(), 2 * radius + 1);
       }
     }
   }
@@ -71,16 +71,28 @@ public class SmoothingKernelTest extends TestCase {
       Scalar scalar = smoothingKernel.apply(RationalScalar.HALF);
       String string = smoothingKernel.name().toLowerCase() + "Window[1/2]=" + scalar;
       string.length();
-      Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(smoothingKernel);
-      assertEquals(centerWindowSampler.apply(0), Tensors.of(RealScalar.ONE));
-      Tensor vector = centerWindowSampler.apply(1);
+      Function<Integer, Tensor> uniformWindowSampler = UniformWindowSampler.of(smoothingKernel);
+      Tensor vector = uniformWindowSampler.apply(1);
+      assertEquals(vector, Tensors.of(RealScalar.ONE));
       assertTrue(Scalars.lessThan(RealScalar.of(1e-3), vector.Get(0).abs()));
+    }
+  }
+
+  public void testZeroFail() {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+      try {
+        Function<Integer, Tensor> uniformWindowSampler = UniformWindowSampler.of(smoothingKernel);
+        uniformWindowSampler.apply(0);
+        fail();
+      } catch (Exception exception) {
+        // ---
+      }
     }
   }
 
   public void testAllFail() {
     for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
-      Function<Integer, Tensor> centerWindowSampler = WindowCenterSampler.of(smoothingKernel);
+      Function<Integer, Tensor> centerWindowSampler = UniformWindowSampler.of(smoothingKernel);
       try {
         centerWindowSampler.apply(-1);
         fail();

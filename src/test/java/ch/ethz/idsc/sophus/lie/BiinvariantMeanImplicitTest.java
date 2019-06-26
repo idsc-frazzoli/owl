@@ -63,6 +63,6 @@ public class BiinvariantMeanImplicitTest extends TestCase {
         ++success;
       }
     }
-    assertTrue(3 < success);
+    assertTrue(2 < success);
   }
 }

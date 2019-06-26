@@ -53,49 +53,12 @@ public class SignedCurvature2DTest extends TestCase {
     assertTrue(Chop._10.close(SignedCurvature2D.of(c, b, a).get(), Quantity.of(-1, "m^-1")));
   }
 
-  public void testString2() {
-    Tensor points = Tensors.fromString("{{0,0},{1,1}}");
-    Tensor vector = SignedCurvature2D.string(points);
-    Chop._12.requireClose(vector, Tensors.vector(0, 0));
-  }
-
-  public void testString3() {
-    Tensor points = Tensors.fromString("{{0,0},{1,1},{2,0}}");
-    Tensor vector = SignedCurvature2D.string(points);
-    Chop._12.requireClose(vector, Tensors.vector(-1, -1, -1));
-  }
-
-  public void testStringEmpty() {
-    Tensor points = Tensors.empty();
-    Tensor vector = SignedCurvature2D.string(points);
-    assertEquals(points, vector);
-  }
-
   public void testFail() {
     Tensor a = Tensors.vector(1, 1, 0);
     Tensor b = Tensors.vector(1, 2, 1);
     Tensor c = Tensors.vector(1, 3, 2);
     try {
       SignedCurvature2D.of(a, b, c);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testFailHi() {
-    Tensor points = Tensors.fromString("{{0,0,0},{1,1,0},{2,0,0}}");
-    try {
-      SignedCurvature2D.string(points);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testFailStringScalar() {
-    try {
-      SignedCurvature2D.string(RealScalar.ZERO);
       fail();
     } catch (Exception exception) {
       // ---

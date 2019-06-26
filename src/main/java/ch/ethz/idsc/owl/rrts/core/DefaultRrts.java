@@ -69,18 +69,16 @@ public class DefaultRrts implements Rrts {
   private Optional<RrtsNode> connectAlongMinimumCost(Tensor state, int k_nearest) {
     parent = null;
     costFromRoot = null;
-    /*
-    for (RrtsNode node : nodeCollection.nearTo(state, k_nearest)) {
-      Transition transition = transitionSpace.connect(node.state(), state);
-      Scalar cost = transitionCostFunction.cost(transition);
-      Scalar compare = node.costFromRoot().add(cost);
-      if (Objects.isNull(costFromRoot) || Scalars.lessThan(compare, costFromRoot))
-        if (isCollisionFree(transition)) {
-          parent = node;
-          costFromRoot = compare;
-        }
-    }
-    */
+    /* for (RrtsNode node : nodeCollection.nearTo(state, k_nearest)) {
+     * Transition transition = transitionSpace.connect(node.state(), state);
+     * Scalar cost = transitionCostFunction.cost(transition);
+     * Scalar compare = node.costFromRoot().add(cost);
+     * if (Objects.isNull(costFromRoot) || Scalars.lessThan(compare, costFromRoot))
+     * if (isCollisionFree(transition)) {
+     * parent = node;
+     * costFromRoot = compare;
+     * }
+     * } */
     nodeCollection.nearFrom(state, k_nearest).stream().parallel().forEach(node -> {
       Transition transition = transitionSpace.connect(node.state(), state);
       Scalar cost = transitionCostFunction.cost(transition);
@@ -102,18 +100,16 @@ public class DefaultRrts implements Rrts {
 
   @Override // from Rrts
   public void rewireAround(RrtsNode parent, int k_nearest) {
-    /*
-    for (RrtsNode node : nodeCollection.nearFrom(parent.state(), k_nearest)) {
-      Transition transition = transitionSpace.connect(parent.state(), node.state());
-      Scalar costFromParent = transitionCostFunction.cost(transition);
-      if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
-        if (isCollisionFree(transition)) {
-          parent.rewireTo(node, costFromParent);
-          ++rewireCount;
-        }
-      }
-    }
-    */
+    /* for (RrtsNode node : nodeCollection.nearFrom(parent.state(), k_nearest)) {
+     * Transition transition = transitionSpace.connect(parent.state(), node.state());
+     * Scalar costFromParent = transitionCostFunction.cost(transition);
+     * if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
+     * if (isCollisionFree(transition)) {
+     * parent.rewireTo(node, costFromParent);
+     * ++rewireCount;
+     * }
+     * }
+     * } */
     nodeCollection.nearFrom(parent.state(), k_nearest).stream().parallel().forEach(node -> {
       Transition transition = transitionSpace.connect(parent.state(), node.state());
       Scalar costFromParent = transitionCostFunction.cost(transition);

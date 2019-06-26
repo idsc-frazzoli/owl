@@ -43,6 +43,6 @@ public class RnTransitionSpace extends AbstractTransitionSpace {
 
   @Override // from TransitionSpace
   public Scalar distance(Tensor start, Tensor end) {
-      return Norm._2.between(start, end);
-    }
+    return Norm._2.between(start, end);
+  }
 }

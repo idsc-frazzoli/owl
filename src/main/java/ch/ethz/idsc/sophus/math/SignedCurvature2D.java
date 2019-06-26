@@ -5,11 +5,9 @@ package ch.ethz.idsc.sophus.math;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -41,24 +39,5 @@ public enum SignedCurvature2D {
     return Scalars.isZero(den) //
         ? Optional.empty()
         : Optional.of(v.add(v).divide(den)); // 2 * v / den == (v + v) / den
-  }
-
-  /** @param points of the form {{p1x, p1y}, {p2x, p2y}, ..., {pNx, pNy}}
-   * @return vector */
-  public static Tensor string(Tensor points) {
-    int length = points.length();
-    Tensor vector = Array.zeros(length);
-    int last = length - 1;
-    for (int index = 1; index < last; ++index)
-      vector.set(of( //
-          points.get(index - 1), //
-          points.get(index + 0), //
-          points.get(index + 1) //
-      ).orElse(RealScalar.ZERO), index);
-    if (2 < length) {
-      vector.set(vector.get(1), 0);
-      vector.set(vector.get(length - 2), last);
-    }
-    return vector;
   }
 }

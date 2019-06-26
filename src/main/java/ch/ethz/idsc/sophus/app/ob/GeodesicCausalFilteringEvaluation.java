@@ -1,8 +1,8 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.sophus.filter.ga.GeodesicFIR2;
-import ch.ethz.idsc.sophus.filter.ga.GeodesicIIR2Filter;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicFIR2;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicIIR2;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.red.Total;
    * @return filtered signal when using given alpha */
   public Tensor filteredSignal(Scalar alpha, Boolean IIR) {
     Tensor refined = IIR //
-        ? Tensor.of(measurements.stream().map(new GeodesicIIR2Filter(geodesicInterface, alpha)))
+        ? Tensor.of(measurements.stream().map(new GeodesicIIR2(geodesicInterface, alpha)))
         : Tensor.of(measurements.stream().map(GeodesicFIR2.of(geodesicInterface, alpha)));
     return refined;
   }

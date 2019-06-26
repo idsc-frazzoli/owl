@@ -13,7 +13,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.LieGroupFilters;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.filter.CenterFilter;
+import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;

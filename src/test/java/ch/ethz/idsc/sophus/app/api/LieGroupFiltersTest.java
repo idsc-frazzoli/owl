@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.ethz.idsc.sophus.filter.CenterFilter;
+import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;

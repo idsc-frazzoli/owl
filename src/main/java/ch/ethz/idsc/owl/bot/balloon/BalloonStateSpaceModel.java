@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   @Override
   public Tensor f(Tensor x, Tensor u) {
-    /* TODO ANDRE define x' properly
+    /* TODO ASTOLL define x' properly
      * x' = ??
      * y' = vel
      * vel' = (-1 / tau2) * vel + sigma * theta + w / tau2
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     // System.out.println("theta = " + theta);
     // System.out.println(u.Get(0));
     // =======
-    /* TODO ANDRE change to something similar as in the DeltaDemo (imageGradientInterpolation) */
+    /* TODO ASTOLL change to something similar as in the DeltaDemo (imageGradientInterpolation) */
     /** unknown perturbation due to vertical velocity of wind */
     Scalar w = RealScalar.ONE.negate();// of( //
     // 2 * SimplexContinuousNoise.at(x1.number().doubleValue(), y.number().doubleValue(), vel.number().doubleValue(), theta.number().doubleValue()));

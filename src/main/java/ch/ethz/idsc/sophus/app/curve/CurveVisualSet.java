@@ -4,9 +4,9 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
+import ch.ethz.idsc.sophus.crv.CurveCurvature;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.ArcTan2D;
-import ch.ethz.idsc.sophus.math.SignedCurvature2D;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   public CurveVisualSet(Tensor points) {
     differences = Differences.of(points);
     differencesNorm = Tensor.of(differences.stream().map(Norm._2::ofVector));
-    curvature = SignedCurvature2D.string(points);
+    curvature = CurveCurvature.string(points);
     arcLength0 = Accumulate.of(differencesNorm);
     arcLength1 = FoldList.of(Tensor::add, RealScalar.ZERO, differencesNorm);
   }
