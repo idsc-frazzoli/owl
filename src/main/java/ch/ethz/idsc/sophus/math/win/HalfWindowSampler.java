@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** samples a given window function uniformly in the interval [-1/2, 0] */
-public class HalfWindowSampler extends WindowBaseSampler {
+public class HalfWindowSampler extends BaseWindowSampler {
   /** @param windowFunction for evaluation in the interval [-1/2, +1/2] */
   public static Function<Integer, Tensor> of(ScalarUnaryOperator windowFunction) {
     return MemoFunction.wrap(new HalfWindowSampler(windowFunction));
@@ -22,7 +22,7 @@ public class HalfWindowSampler extends WindowBaseSampler {
     super(windowFunction);
   }
 
-  @Override // from WindowBaseSampler
+  @Override // from BaseWindowSampler
   protected Tensor samples(int length) {
     return isContinuous //
         ? Subdivide.of(RationalScalar.HALF.negate(), RealScalar.ZERO, length) //

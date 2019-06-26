@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.sophus.math.SplitInterface;
-import ch.ethz.idsc.sophus.math.win.AffineQ;
 import ch.ethz.idsc.sophus.math.win.HalfWindowSampler;
 import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RealScalar;

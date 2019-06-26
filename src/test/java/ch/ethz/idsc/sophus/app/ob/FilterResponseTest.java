@@ -1,5 +1,5 @@
 // code by jph, ob
-package ch.ethz.idsc.sophus.math;
+package ch.ethz.idsc.sophus.app.ob;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

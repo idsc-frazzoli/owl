@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.math.win;
 
 import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.sophus.math.NormalizeTotal;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -12,6 +13,17 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class HalfWindowSamplerTest extends TestCase {
+  public void testSimple() {
+    for (SmoothingKernel smoothingKernel : SmoothingKernel.values()) {
+      Function<Integer, Tensor> function = HalfWindowSampler.of(smoothingKernel);
+      for (int count = 1; count <= 10; ++count) {
+        Tensor tensor = function.apply(count);
+        assertEquals(tensor.length(), count);
+        AffineQ.require(tensor);
+      }
+    }
+  }
+
   public void testSpecific() {
     Function<Integer, Tensor> function = HalfWindowSampler.of(SmoothingKernel.BARTLETT);
     assertEquals(function.apply(1), Tensors.fromString("{1}"));

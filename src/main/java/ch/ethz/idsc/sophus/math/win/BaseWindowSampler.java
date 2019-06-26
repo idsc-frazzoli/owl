@@ -11,14 +11,14 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public abstract class WindowBaseSampler implements Function<Integer, Tensor>, Serializable {
+/* package */ abstract class BaseWindowSampler implements Function<Integer, Tensor>, Serializable {
   private static final Tensor SINGLETON = Tensors.vector(1).unmodifiable();
   // ---
   protected final ScalarUnaryOperator windowFunction;
   protected final boolean isContinuous;
 
   /** @param windowFunction for evaluation in the interval [-1/2, +1/2] */
-  protected WindowBaseSampler(ScalarUnaryOperator windowFunction) {
+  protected BaseWindowSampler(ScalarUnaryOperator windowFunction) {
     this.windowFunction = windowFunction;
     isContinuous = Chop._03.allZero(windowFunction.apply(RationalScalar.HALF));
   }
