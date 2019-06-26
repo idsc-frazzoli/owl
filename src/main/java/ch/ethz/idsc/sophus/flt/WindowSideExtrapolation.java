@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** BiinvariantMeanCenter projects a uniform sequence of points to their extrapolate
@@ -24,21 +25,19 @@ public class WindowSideExtrapolation implements Function<Integer, Tensor>, Seria
   }
 
   // ---
-  private final Function<Integer, Tensor> windowSideSampler;
+  private final Function<Integer, Tensor> halfWindowSampler;
 
   /* package */ WindowSideExtrapolation(ScalarUnaryOperator smoothingKernel) {
-    windowSideSampler = HalfWindowSampler.of(smoothingKernel);
+    halfWindowSampler = HalfWindowSampler.of(smoothingKernel);
   }
 
   // Assumes uniformly sampled signal!
   // TODO OB: refactor for better overview
   @Override
   public Tensor apply(Integer t) {
-    Tensor weights = windowSideSampler.apply(t);
+    Tensor weights = halfWindowSampler.apply(t);
     AffineQ.require(weights);
-    Tensor chronological = Tensors.empty();
-    for (int index = 0; index < weights.length(); ++index)
-      chronological.append(RealScalar.of(index));
+    Tensor chronological = Range.of(0, weights.length());
     Scalar distance = RealScalar.of(weights.length() - 1).subtract(weights.dot(chronological));
     Tensor extrapolatoryWeights = Tensors.empty();
     for (int index = 0; index < weights.length() - 1; ++index)

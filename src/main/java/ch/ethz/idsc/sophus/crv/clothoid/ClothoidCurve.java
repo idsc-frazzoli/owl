@@ -13,8 +13,8 @@ import ch.ethz.idsc.tensor.sca.Real;
 
 /* package */ abstract class ClothoidCurve implements ScalarTensorFunction {
   protected static final Scalar _1 = RealScalar.of(1.0);
-  private static final Scalar _68 = RealScalar.of(68.0);
-  private static final Scalar _46 = RealScalar.of(46.0);
+  private static final Scalar _1_68 = RealScalar.of(1 / 68.0);
+  private static final Scalar _1_46 = RealScalar.of(1 / 46.0);
   private static final Scalar _1_4 = RealScalar.of(0.25);
   // ---
   private final Tensor pxy;
@@ -33,8 +33,8 @@ import ch.ethz.idsc.tensor.sca.Real;
     Scalar b0 = So2.MOD.apply(pa.subtract(da));
     Scalar b1 = So2.MOD.apply(qa.subtract(da));
     // ---
-    Scalar f1 = b0.multiply(b0).add(b1.multiply(b1)).divide(_68);
-    Scalar f2 = b0.multiply(b1).divide(_46);
+    Scalar f1 = b0.multiply(b0).add(b1.multiply(b1)).multiply(_1_68);
+    Scalar f2 = b0.multiply(b1).multiply(_1_46);
     Scalar f3 = _1_4;
     Scalar bm = b0.add(b1).multiply(f1.subtract(f2).subtract(f3));
     clothoidQuadratic = new ClothoidQuadratic(b0, bm, b1);

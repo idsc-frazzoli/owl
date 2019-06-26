@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 public enum GeodesicDisplays {
   ;
   public static final List<GeodesicDisplay> ALL = Arrays.asList( //
+      Clothoid1Display.INSTANCE, //
       Clothoid2Display.INSTANCE, //
       Clothoid3Display.INSTANCE, //
       Se2CoveringGeodesicDisplay.INSTANCE, //

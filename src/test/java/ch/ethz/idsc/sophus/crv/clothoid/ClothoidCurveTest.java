@@ -23,14 +23,16 @@ public class ClothoidCurveTest extends TestCase {
   }
 
   public void testComparison() {
-    Distribution distribution = NormalDistribution.standard();
-    for (int count = 0; count < 100; ++count) {
+    Distribution distribution = NormalDistribution.of(0.5, 2);
+    for (int count = 0; count < 1000; ++count) {
       Tensor p = RandomVariate.of(distribution, 3);
       Tensor q = RandomVariate.of(distribution, 3);
       Scalar lambda = RandomVariate.of(distribution);
-      Tensor r1 = new ClothoidCurve2(p, q).apply(lambda);
-      Tensor r2 = new ClothoidCurve3(p, q).apply(lambda);
-      Chop._14.requireClose(r1, r2);
+      Tensor r1 = new ClothoidCurve1(p, q).apply(lambda);
+      Tensor r2 = new ClothoidCurve2(p, q).apply(lambda);
+      Tensor r3 = new ClothoidCurve3(p, q).apply(lambda);
+      Chop._12.requireClose(r1, r2);
+      Chop._12.requireClose(r1, r3);
     }
   }
 }

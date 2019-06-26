@@ -10,6 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
   // ---
   @Override // from MidpointInterface
   public Tensor midpoint(Tensor p, Tensor q) {
-    return Clothoid2.INSTANCE.split(p, q, RationalScalar.HALF);
+    return Clothoid1.INSTANCE.split(p, q, RationalScalar.HALF);
   }
 }
