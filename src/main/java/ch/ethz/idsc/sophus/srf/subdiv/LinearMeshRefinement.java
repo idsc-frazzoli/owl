@@ -7,34 +7,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
+import ch.ethz.idsc.sophus.srf.SurfaceMesh;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.Primitives;
+import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 
 public class LinearMeshRefinement implements SurfaceMeshRefinement, Serializable {
   private static final Tensor MIDPOINT = Tensors.of(RationalScalar.HALF, RationalScalar.HALF);
-  private static final Map<Integer, Tensor> MAP = new HashMap<>();
+  private static final Function<Integer, Tensor> WEIGHTS = UniformWindowSampler.of(DirichletWindow.FUNCTION);
 
   /** @param biinvariantMean non-null
    * @return */
   public static SurfaceMeshRefinement of(BiinvariantMean biinvariantMean) {
     return new LinearMeshRefinement(Objects.requireNonNull(biinvariantMean));
-  }
-
-  private static Tensor weights(int n) {
-    Tensor weights = MAP.get(n);
-    if (Objects.isNull(weights)) {
-      Scalar ratio = RationalScalar.of(1, n);
-      weights = Array.of(l -> ratio, n);
-      MAP.put(n, weights);
-    }
-    return weights;
   }
 
   // ---
@@ -51,7 +44,7 @@ public class LinearMeshRefinement implements SurfaceMeshRefinement, Serializable
     int nV = surfaceMesh.vrt.length();
     for (Tensor face : surfaceMesh.ind) { // midpoint
       Tensor sequence = Tensor.of(IntStream.of(Primitives.toIntArray(face)).mapToObj(surfaceMesh.vrt::get));
-      out.addVert(biinvariantMean.mean(sequence, weights(sequence.length())));
+      out.addVert(biinvariantMean.mean(sequence, WEIGHTS.apply(sequence.length())));
     }
     Map<Tensor, Integer> edges = new HashMap<>();
     int faceInd = nV;

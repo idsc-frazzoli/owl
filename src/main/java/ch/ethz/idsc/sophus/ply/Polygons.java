@@ -1,4 +1,5 @@
 // code by jph
+// adapted from PNPOLY - Point Inclusion in Polygon Test W. Randolph Franklin (WRF)
 package ch.ethz.idsc.sophus.ply;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -11,7 +12,6 @@ public enum Polygons {
    * @param point of which only the first two coordinates will be considered
    * @return true, if point is inside polygon, otherwise false
    * @throws Exception if the first two entries of point are not of type {@link Scalar} */
-  // adapted from PNPOLY - Point Inclusion in Polygon Test W. Randolph Franklin (WRF)
   public static boolean isInside(Tensor polygon, Tensor point) {
     final Scalar tx = point.Get(0);
     final Scalar ty = point.Get(1);
@@ -26,8 +26,7 @@ public enum Polygons {
           Scalar vxi = polygon.Get(i, 0);
           Scalar vxj = polygon.Get(j, 0);
           Scalar r1 = vxj.subtract(vxi).multiply(ty.subtract(vyi));
-          if (Scalars.lessThan(tx, r1.divide(div).add(vxi)))
-            c = !c;
+          c ^= Scalars.lessThan(tx, r1.divide(div).add(vxi));
         }
       }
     }

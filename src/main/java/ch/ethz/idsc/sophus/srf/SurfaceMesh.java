@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.srf.subdiv;
+package ch.ethz.idsc.sophus.srf;
 
 import java.util.ArrayList;
 import java.util.List;

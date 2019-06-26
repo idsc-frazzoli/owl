@@ -40,8 +40,12 @@ import ch.ethz.idsc.tensor.sca.Real;
     clothoidQuadratic = new ClothoidQuadratic(b0, bm, b1);
   }
 
+  /** @param t
+   * @return integration of clothoidQuadratic on [0, t] */
   protected abstract Scalar il(Scalar t);
 
+  /** @param t
+   * @return integration of clothoidQuadratic on [t, 1] */
   protected abstract Scalar ir(Scalar t);
 
   @Override

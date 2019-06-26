@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
-public class ClothoidCurveDisplayTest extends TestCase {
+public class ClothoidDisplayTest extends TestCase {
   public void testSimple() {
     // 1 2.5180768787131558
     // 2 2.5597567801548426

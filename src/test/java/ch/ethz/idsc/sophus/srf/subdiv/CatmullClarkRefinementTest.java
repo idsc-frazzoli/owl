@@ -4,6 +4,8 @@ package ch.ethz.idsc.sophus.srf.subdiv;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
+import ch.ethz.idsc.sophus.srf.SurfaceMesh;
+import ch.ethz.idsc.sophus.srf.SurfaceMeshExamples;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;

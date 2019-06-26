@@ -1,13 +1,24 @@
 // code by jph
-package ch.ethz.idsc.sophus.srf.subdiv;
+package ch.ethz.idsc.sophus.srf;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
 
 /** Hint:
  * implementation exists only for evaluation purposes
  * class may be removed in future releases */
 public enum SurfaceMeshExamples {
   ;
+  public static SurfaceMesh unitQuad() {
+    SurfaceMesh surfaceMesh = new SurfaceMesh();
+    CirclePoints.of(4).stream() //
+        .map(xy -> xy.append(RealScalar.ZERO)) //
+        .forEach(surfaceMesh::addVert);
+    surfaceMesh.addFace(0, 1, 2, 3);
+    return surfaceMesh;
+  }
+
   public static SurfaceMesh quads2() {
     SurfaceMesh surfaceMesh = new SurfaceMesh();
     surfaceMesh.addVert(Tensors.vector(0, 0, 0));
