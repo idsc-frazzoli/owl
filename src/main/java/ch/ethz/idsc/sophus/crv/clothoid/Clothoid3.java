@@ -6,7 +6,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-/** clothoid3 factory */
+/** clothoid3 factory
+ * 
+ * Hint: use {@link Clothoid1} */
 /* package */ enum Clothoid3 implements GeodesicInterface {
   INSTANCE;
   // ---
