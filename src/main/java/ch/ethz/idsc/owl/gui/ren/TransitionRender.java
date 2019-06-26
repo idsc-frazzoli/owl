@@ -17,7 +17,9 @@ import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
+import ch.ethz.idsc.tensor.red.Min;
 
 /** renders the edges between nodes
  * 
@@ -27,8 +29,6 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
  * in particular costs of type {@link VectorScalar} are not supported
  * @see EdgeRender */
 public class TransitionRender {
-  private static final Scalar DT = RealScalar.of(0.2); // TODO JPH magic const
-  // ---
   private final TransitionSpace transitionSpace;
   private RenderInterface renderInterface = EmptyRender.INSTANCE;
 
@@ -73,9 +73,20 @@ public class TransitionRender {
           final double interp = (value - min) * inverse;
           graphics.setColor(colors.getColor((int) interp));
           Transition transition = transitionSpace.connect(parent.state(), child.state());
-          Path2D path2d = geometricLayer.toPath2D(transition.sampled(RealScalar.ZERO, DT));
+          Path2D path2d = geometricLayer.toPath2D(TransitionRenderWrap.of(transition));
           graphics.draw(path2d);
         }
     }
+  }
+}
+
+enum TransitionRenderWrap {
+  ;
+  private static final Scalar DT = RealScalar.of(0.2); // TODO JPH magic const
+  private static final int N_MIN = 10;
+
+  public static Tensor of(Transition transition) {
+    Scalar dt = Min.of(DT, transition.length().divide(RealScalar.of(N_MIN)));
+    return transition.sampled(RealScalar.ZERO, dt).append(transition.end());
   }
 }

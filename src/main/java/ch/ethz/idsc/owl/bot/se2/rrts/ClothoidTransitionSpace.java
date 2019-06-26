@@ -1,21 +1,22 @@
 // code by jph, gjoel
-package ch.ethz.idsc.owl.bot.rn;
+package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
+import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Norm;
 
-public class RnTransitionSpace extends AbstractTransitionSpace {
-  public static final TransitionSpace INSTANCE = new RnTransitionSpace();
+public class ClothoidTransitionSpace extends AbstractTransitionSpace implements Se2TransitionSpace {
+  public static final TransitionSpace INSTANCE = new ClothoidTransitionSpace();
 
-  private RnTransitionSpace() {
+  private ClothoidTransitionSpace() {
     // ---
   }
 
@@ -24,16 +25,12 @@ public class RnTransitionSpace extends AbstractTransitionSpace {
     return new AbstractTransition(this, start, end) {
       @Override
       public Tensor sampled(Scalar ofs, Scalar ds) {
-        // RnGeodesic.INSTANCE.curve(start(), end());
-        // TODO JPH implementation not efficient
         if (Scalars.lessThan(ds, ofs))
           throw TensorRuntimeException.of(ofs, ds);
-        Scalar length = RnTransitionSpace.INSTANCE.distance(this);
+        Scalar length = distance(this);
         Tensor tensor = Tensors.empty();
         while (Scalars.lessThan(ofs, length)) {
-          Tensor x = start().multiply(length.subtract(ofs).divide(length)) //
-              .add(end().multiply(ofs.divide(length)));
-          tensor.append(x);
+          tensor.append(Clothoid1.INSTANCE.split(start(), end(), ofs.divide(length)));
           ofs = ofs.add(ds);
         }
         return tensor;
@@ -43,6 +40,6 @@ public class RnTransitionSpace extends AbstractTransitionSpace {
 
   @Override // from TransitionSpace
   public Scalar distance(Tensor start, Tensor end) {
-    return Norm._2.between(start, end);
+    return PseudoClothoidDistance.INSTANCE.distance(start, end);
   }
 }
