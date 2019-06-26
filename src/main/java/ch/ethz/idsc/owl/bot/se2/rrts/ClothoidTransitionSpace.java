@@ -56,7 +56,7 @@ public class ClothoidTransitionSpace extends AbstractTransitionSpace implements 
       private TransitionSamplesWrap wrap(Tensor samples) {
         Tensor spacing = Array.zeros(samples.length());
         IntStream.range(0, samples.length()).parallel().forEach(i -> spacing.set(i > 0 //
-            ? distance(samples.get(i - 1), samples.get(i)) //
+            ? distance(samples.get(i - 1), samples.get(i)) // TODO maybe 2D euclidean is sufficient for collision detection
             : samples.Get(i, 0).zero(), i));
         return new TransitionSamplesWrap(samples, spacing);
       }

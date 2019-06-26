@@ -1,4 +1,4 @@
-// code by gjoel
+// code by jph, gjoel
 package ch.ethz.idsc.owl.bot.se2;
 
 import java.util.Collection;
@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** collection of nodes in Se2 backed by a n-dimensional uniform tree
  * data structure is dependent on Se2NdType */
+// TODO combine with RnRrtsNodeCollection
 public class Se2RrtsNodeCollection implements RrtsNodeCollection {
   public static Se2RrtsNodeCollection euclidean(Tensor lbounds, Tensor ubounds) {
     return new Se2RrtsNodeCollection(Se2NdType.EUCLIDEAN, lbounds, ubounds);

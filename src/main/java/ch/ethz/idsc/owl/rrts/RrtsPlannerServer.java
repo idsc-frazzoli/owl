@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+// TODO find more elegant implementation
 public abstract class RrtsPlannerServer {
   private final TransitionSpace transitionSpace;
   private final TransitionRegionQuery obstacleQuery;
@@ -35,7 +36,6 @@ public abstract class RrtsPlannerServer {
   // ---
   private Tensor state = Tensors.empty();
   private Tensor goal = Tensors.empty();
-  private StateTime tail = null;
   private RrtsNode root = null;
   private RrtsPlanner rrtsPlanner = null;
   private List<TrajectorySample> trajectory = new ArrayList<>();
@@ -63,11 +63,10 @@ public abstract class RrtsPlannerServer {
 
   public RrtsPlannerProcess offer(StateTime tail) throws Exception {
     rrtsPlanner = null;
-    this.tail = Objects.requireNonNull(tail);
-    return setup();
+    return from(Objects.requireNonNull(tail));
   }
 
-  protected RrtsPlannerProcess setup() throws Exception{
+  protected RrtsPlannerProcess from(StateTime tail) throws Exception{
     if (Objects.nonNull(tail)) {
       Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
       root = rrts.insertAsNode(tail.state(), 5).get();
