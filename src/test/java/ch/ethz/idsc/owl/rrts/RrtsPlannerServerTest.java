@@ -49,15 +49,16 @@ public class RrtsPlannerServerTest extends TestCase {
       }
 
       @Override
-      protected RandomSampleInterface spaceSampler() {
+      protected RandomSampleInterface spaceSampler(Tensor state) {
         return SphereRandomSample.of(center, radius);
       }
 
       @Override
-      protected RandomSampleInterface goalSampler() {
+      protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RationalScalar.ZERO);
       }
     };
+    server.setGoal(goal);
     server.offer(stateTime).run(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());
@@ -83,15 +84,16 @@ public class RrtsPlannerServerTest extends TestCase {
       }
 
       @Override
-      protected RandomSampleInterface spaceSampler() {
+      protected RandomSampleInterface spaceSampler(Tensor state) {
         return BoxRandomSample.of(lbounds, ubounds);
       }
 
       @Override
-      protected RandomSampleInterface goalSampler() {
+      protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RationalScalar.ZERO);
       }
     };
+    server.setGoal(goal);
     server.offer(stateTime).run(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());
@@ -101,7 +103,7 @@ public class RrtsPlannerServerTest extends TestCase {
 
   public void testClothoid() throws Exception {
     Tensor lbounds = Tensors.vector(0, 0, 0);
-    Tensor ubounds = Tensors.vector(10, 10, 2* Math.PI);
+    Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
     StateTime stateTime = new StateTime(state, RationalScalar.ZERO);
@@ -109,7 +111,7 @@ public class RrtsPlannerServerTest extends TestCase {
     RrtsPlannerServer server = new RrtsPlannerServer( //
         ClothoidTransitionSpace.INSTANCE, //
         EmptyTransitionRegionQuery.INSTANCE, //
-        RationalScalar.of(1,10), //
+        RationalScalar.of(1, 10), //
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
@@ -117,15 +119,16 @@ public class RrtsPlannerServerTest extends TestCase {
       }
 
       @Override
-      protected RandomSampleInterface spaceSampler() {
+      protected RandomSampleInterface spaceSampler(Tensor state) {
         return BoxRandomSample.of(lbounds, ubounds);
       }
 
       @Override
-      protected RandomSampleInterface goalSampler() {
+      protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RationalScalar.ZERO);
       }
     };
+    server.setGoal(goal);
     server.offer(stateTime).run(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());

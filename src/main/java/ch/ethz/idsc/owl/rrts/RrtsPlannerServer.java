@@ -1,6 +1,7 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.rrts;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +23,8 @@ import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 
 public abstract class RrtsPlannerServer {
   private final TransitionSpace transitionSpace;
@@ -30,10 +33,12 @@ public abstract class RrtsPlannerServer {
   private final TransitionCostFunction costFunction;
   private final RrtsFlowTrajectoryGenerator flowTrajectoryGenerator;
   // ---
+  private Tensor state = Tensors.empty();
+  private Tensor goal = Tensors.empty();
   private StateTime tail = null;
   private RrtsNode root = null;
   private RrtsPlanner rrtsPlanner = null;
-  private List<TrajectorySample> trajectory = null;
+  private List<TrajectorySample> trajectory = new ArrayList<>();
 
   public RrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -58,7 +63,6 @@ public abstract class RrtsPlannerServer {
 
   public RrtsPlannerProcess offer(StateTime tail) throws Exception {
     rrtsPlanner = null;
-    trajectory = null;
     this.tail = Objects.requireNonNull(tail);
     return setup();
   }
@@ -67,7 +71,7 @@ public abstract class RrtsPlannerServer {
     if (Objects.nonNull(tail)) {
       Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
       root = rrts.insertAsNode(tail.state(), 5).get();
-      rrtsPlanner = new RrtsPlanner(rrts, spaceSampler(), goalSampler());
+      rrtsPlanner = new RrtsPlanner(rrts, spaceSampler(state), goalSampler(goal));
       return new RrtsPlannerProcess() {
         @Override // from RrtsPlannerProcess
         public void run(int steps) throws Exception {
@@ -77,7 +81,7 @@ public abstract class RrtsPlannerServer {
             if (rrtsPlanner.getBest().isPresent()) {
               RrtsNode best = rrtsPlanner.getBest().get();
               List<RrtsNode> sequence = Nodes.listFromRoot(best);
-              trajectory = flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, tail.time(), resolution);
+              trajectory.addAll(flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, tail.time(), resolution));
             }
           } else
             throw new Exception("no RRT* planner present");
@@ -85,6 +89,14 @@ public abstract class RrtsPlannerServer {
       };
     } else
       throw new Exception("failed to setup RRT* planner; no tail provided to expand from");
+  }
+
+  public void setState(Tensor state) {
+    this.state = state;
+  }
+
+  public void setGoal(Tensor goal) {
+    this.goal = goal;
   }
 
   public TransitionRegionQuery getObstacleQuery() {
@@ -100,12 +112,12 @@ public abstract class RrtsPlannerServer {
   }
 
   public Optional<List<TrajectorySample>> getTrajectory() {
-    return Optional.ofNullable(trajectory);
+    return trajectory.isEmpty() ? Optional.empty() : Optional.of(trajectory);
   }
 
   protected abstract RrtsNodeCollection rrtsNodeCollection();
 
-  protected abstract RandomSampleInterface spaceSampler();
+  protected abstract RandomSampleInterface spaceSampler(Tensor state);
 
-  protected abstract RandomSampleInterface goalSampler();
+  protected abstract RandomSampleInterface goalSampler(Tensor state);
 }
