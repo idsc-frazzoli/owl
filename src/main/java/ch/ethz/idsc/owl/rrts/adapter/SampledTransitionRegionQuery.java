@@ -10,7 +10,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -25,8 +24,8 @@ public class SampledTransitionRegionQuery implements TransitionRegionQuery, Stat
 
   @Override
   public boolean isDisjoint(Transition transition) {
-    return !transition.sampled(RealScalar.ZERO, dt).stream() //
-        .anyMatch(region::isMember);
+    return transition.sampled(dt).stream() //
+        .noneMatch(region::isMember);
   }
 
   @Override

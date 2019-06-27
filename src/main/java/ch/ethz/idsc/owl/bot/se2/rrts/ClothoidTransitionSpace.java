@@ -7,14 +7,24 @@ import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
+import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
+import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Differences;
+import ch.ethz.idsc.tensor.red.Nest;
+import ch.ethz.idsc.tensor.red.Norm;
 
 public class ClothoidTransitionSpace extends AbstractTransitionSpace implements Se2TransitionSpace {
   public static final TransitionSpace INSTANCE = new ClothoidTransitionSpace();
+  // ---
+  private static final CurveSubdivision SUBDIVISION = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
+  private static final double LOG2 = Math.log(2);
 
   private ClothoidTransitionSpace() {
     // ---
@@ -23,17 +33,20 @@ public class ClothoidTransitionSpace extends AbstractTransitionSpace implements 
   @Override // from TransitionSpace
   public Transition connect(Tensor start, Tensor end) {
     return new AbstractTransition(this, start, end) {
-      @Override
-      public Tensor sampled(Scalar ofs, Scalar ds) {
-        if (Scalars.lessThan(ds, ofs))
-          throw TensorRuntimeException.of(ofs, ds);
-        Scalar length = distance(this);
-        Tensor tensor = Tensors.empty();
-        while (Scalars.lessThan(ofs, length)) {
-          tensor.append(Clothoid1.INSTANCE.split(start(), end(), ofs.divide(length)));
-          ofs = ofs.add(ds);
-        }
-        return tensor;
+      @Override // from Transition
+      public Tensor sampled(Scalar minResolution) {
+        Tensor samples = Tensors.of(start, end);
+        while (Differences.of(samples).stream().parallel().map(Extract2D.FUNCTION).map(Norm._2::ofVector).anyMatch(s -> Scalars.lessThan(minResolution, s)))
+          samples = SUBDIVISION.string(samples);
+        return samples.extract(0, samples.length() - 1);
+      }
+
+      @Override // from Transition
+      public Tensor sampled(int steps) {
+        if (steps < 1)
+          throw TensorRuntimeException.of(RealScalar.of(steps));
+        Tensor samples = Nest.of(SUBDIVISION::string, Tensors.of(start, end), (int) Math.ceil(Math.log(steps - 1) / LOG2));
+        return samples.extract(0, samples.length() - 1);
       }
     };
   }

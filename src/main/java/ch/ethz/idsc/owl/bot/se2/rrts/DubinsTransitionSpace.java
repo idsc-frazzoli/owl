@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransitionSpace;
@@ -9,11 +10,11 @@ import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public class DubinsTransitionSpace extends AbstractTransitionSpace implements Se2TransitionSpace {
@@ -24,10 +25,10 @@ public class DubinsTransitionSpace extends AbstractTransitionSpace implements Se
     return DubinsTransitionSpace.INSTANCE;
   }
 
-  // ---
   private Scalar radius;
 
   private DubinsTransitionSpace() {
+    // ---
   }
 
   @Override // from TransitionSpace
@@ -35,18 +36,15 @@ public class DubinsTransitionSpace extends AbstractTransitionSpace implements Se
     return new AbstractTransition(this, start, end) {
       DubinsPath dubinsPath = FixedRadiusDubins.of(start, end, radius).allValid().min(DubinsPathComparator.length()).get();
 
-      @Override
-      public Tensor sampled(Scalar ofs, Scalar ds) {
-        if (Scalars.lessThan(ds, ofs))
-          throw TensorRuntimeException.of(ofs, ds);
+      @Override // from Transition
+      public Tensor sampled(int steps) {
+        if (steps < 1)
+          throw TensorRuntimeException.of(RealScalar.of(steps));
+        Tensor samples = Array.zeros(steps);
+        Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
         ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
-        Scalar length = dubinsPath.length();
-        Tensor tensor = Tensors.empty();
-        while (Scalars.lessThan(ofs, length)) {
-          tensor.append(scalarTensorFunction.apply(ofs));
-          ofs = ofs.add(ds);
-        }
-        return tensor;
+        IntStream.range(0, steps).parallel().forEach(i -> samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i));
+        return samples;
       }
     };
   }

@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
-import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
@@ -12,6 +11,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   public static void main(String[] args) throws Exception {
     ImageRegion imageRegion = R2ImageRegions.outside_0b36();
-    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(Tensors.vector(0, 0), imageRegion.range());
+    RrtsNodeCollection rrtsNodeCollection = RrtsNodeCollections.rn(Tensors.vector(0, 0), imageRegion.range());
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.1));
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
