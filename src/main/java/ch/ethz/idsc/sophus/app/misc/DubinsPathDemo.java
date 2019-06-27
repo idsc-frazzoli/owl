@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurve;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
@@ -82,7 +82,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     {
-      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
+      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
       pathRender2.setCurve(points, false).render(geometricLayer, graphics);
     }

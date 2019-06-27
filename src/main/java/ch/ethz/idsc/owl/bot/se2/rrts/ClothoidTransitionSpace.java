@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.rrts.adapter.AbstractTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurve;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 
 public class ClothoidTransitionSpace extends AbstractTransitionSpace implements Se2TransitionSpace {
   public static final TransitionSpace INSTANCE = new ClothoidTransitionSpace();
-  public static final CurveSubdivision SUBDIVISION = new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
+  public static final CurveSubdivision SUBDIVISION = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
   private static final double LOG2 = Math.log(2);
 
   private ClothoidTransitionSpace() {

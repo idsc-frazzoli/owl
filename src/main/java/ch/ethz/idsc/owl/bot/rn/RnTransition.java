@@ -16,9 +16,9 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /** Transition as straight line connecting given start and end point in Euclidean space.
  * The length of the transition is Euclidean distance between given start and end point. */
-@Deprecated
+// TODO GJOEL/JPH remove class if not needed anymore
+// @Deprecated
 /* package */ class RnTransition extends AbstractTransition {
-
   public RnTransition(Tensor start, Tensor end) {
     super(RnTransitionSpace.INSTANCE, start, end);
   }

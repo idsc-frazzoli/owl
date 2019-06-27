@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
-import ch.ethz.idsc.sophus.math.QuantityMapper;
 import ch.ethz.idsc.sophus.math.SignedCurvature2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -19,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** clothoid is tangent at start and end points */
 public class ClothoidTerminalRatios implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
-      new LaneRiesenfeldCurveSubdivision(ClothoidCurve.INSTANCE, 1);
+      new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
   private static final TensorUnaryOperator HEAD = //
       value -> CURVE_SUBDIVISION.string(value.extract(0, 2));
   private static final TensorUnaryOperator TAIL = //

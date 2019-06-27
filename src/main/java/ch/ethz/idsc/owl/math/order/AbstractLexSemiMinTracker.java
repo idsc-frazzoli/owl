@@ -114,8 +114,8 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
    * 
    * @return current absolute best pair, may also be null */
   /* package */ final Pair<K> getBest() {
-    // TODO ANDRE implement Pair<K> in usual Tracker as well and use here
-    // TODO ANDRE implement with optional
+    // TODO ASTOLL implement Pair<K> in usual Tracker as well and use here
+    // TODO ASTOLL implement with optional
     if (candidateSet.isEmpty())
       return null;
     List<Pair<K>> bestElements = new ArrayList<>(getMinElements());

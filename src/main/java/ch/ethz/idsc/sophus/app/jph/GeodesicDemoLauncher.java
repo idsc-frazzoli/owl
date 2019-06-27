@@ -12,6 +12,7 @@ import ch.ethz.idsc.sophus.app.curve.BezierFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.BiinvariantMeanSubdivisionDemo;
 import ch.ethz.idsc.sophus.app.curve.SplitCurveSubdivisionDemo;
 import ch.ethz.idsc.sophus.app.filter.LieGroupFiltersDatasetDemo;
+import ch.ethz.idsc.sophus.app.misc.ClothoidDemo;
 import ch.ethz.idsc.sophus.app.misc.DubinsPathDemo;
 import ch.ethz.idsc.sophus.app.misc.GeodesicDemo;
 
@@ -27,6 +28,7 @@ public enum GeodesicDemoLauncher {
         BiinvariantMeanSubdivisionDemo.class, //
         GeodesicDemo.class, //
         DubinsPathDemo.class, //
+        ClothoidDemo.class, //
         ExtrapolationSplitsDemo.class, //
         BezierFunctionDemo.class //
     ));

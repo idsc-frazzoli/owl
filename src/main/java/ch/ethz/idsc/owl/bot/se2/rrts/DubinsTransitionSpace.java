@@ -25,11 +25,11 @@ public class DubinsTransitionSpace extends AbstractTransitionSpace implements Se
     DubinsTransitionSpace.INSTANCE.radius = radius;
     return DubinsTransitionSpace.INSTANCE;
   }
-  // ---
+
   private Scalar radius;
 
   private DubinsTransitionSpace() {
-
+    // ---
   }
 
   @Override // from TransitionSpace

@@ -1,7 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.lie;
 
-import ch.ethz.idsc.sophus.math.win.AffineQ;
+import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** Quote [2012 Pennec, Arsigny; p.20]:
