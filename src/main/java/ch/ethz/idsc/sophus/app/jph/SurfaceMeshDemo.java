@@ -53,6 +53,7 @@ public class SurfaceMeshDemo extends ControlPointsDemo {
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     SurfaceMeshRefinement surfaceMeshRefinement = //
         CatmullClarkRefinement.of(geodesicDisplay.biinvariantMean());
+    // surfaceMeshRefinement = DooSabinRefinement.of(geodesicDisplay.biinvariantMean());
     SurfaceMesh refine = surfaceMesh;
     for (int count = 0; count < spinnerRefine.getValue(); ++count)
       refine = surfaceMeshRefinement.refine(refine);
