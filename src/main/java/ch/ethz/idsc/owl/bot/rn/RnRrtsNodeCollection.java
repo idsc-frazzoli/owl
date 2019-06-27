@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** collection of nodes in R^n backed by a n-dimensional uniform tree
  * in 2-d, the data structure is a quad tree
  * in 3-d, the data structure is a octree */
+@Deprecated // use RrtsNodeCollection.euclidean(lbounds, ubounds) instead
 public class RnRrtsNodeCollection implements RrtsNodeCollection {
   private final NdMap<RrtsNode> ndMap;
 

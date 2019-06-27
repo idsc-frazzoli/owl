@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
-import ch.ethz.idsc.owl.bot.se2.Se2RrtsNodeCollection;
+import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Lists;
@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return Se2RrtsNodeCollection.clothoid(lbounds, ubounds);
+        return RrtsNodeCollections.clothoid(lbounds, ubounds);
       }
 
       @Override

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
-import ch.ethz.idsc.owl.bot.se2.Se2RrtsNodeCollection;
+import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
     Tensor lbounds = imageRegion.origin().copy().append(RealScalar.ZERO).unmodifiable();
     Tensor ubounds = imageRegion.range().copy().append(Pi.TWO).unmodifiable();
-    RrtsNodeCollection rrtsNodeCollection = Se2RrtsNodeCollection.clothoid(lbounds, ubounds);
+    RrtsNodeCollection rrtsNodeCollection = RrtsNodeCollections.clothoid(lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     // ---

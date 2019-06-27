@@ -6,13 +6,13 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.ani.adapter.TemporalTrajectoryControl;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
-import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
+import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -34,7 +34,7 @@ public class RnFlowTrajectoryTest extends TestCase {
   private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
 
   public void testSimple() {
-    RrtsNodeCollection nc = new RnRrtsNodeCollection(Tensors.vector(0, 0), Tensors.vector(10, 10));
+    RrtsNodeCollection nc = RrtsNodeCollections.rn(Tensors.vector(0, 0), Tensors.vector(10, 10));
     TransitionRegionQuery trq = EmptyTransitionRegionQuery.INSTANCE;
     Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 0).get();
@@ -60,7 +60,7 @@ public class RnFlowTrajectoryTest extends TestCase {
   }
 
   public void testDual() {
-    RrtsNodeCollection nc = new RnRrtsNodeCollection(Tensors.vector(0, 0), Tensors.vector(10, 10));
+    RrtsNodeCollection nc = RrtsNodeCollections.rn(Tensors.vector(0, 0), Tensors.vector(10, 10));
     TransitionRegionQuery trq = EmptyTransitionRegionQuery.INSTANCE;
     Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 0).get();

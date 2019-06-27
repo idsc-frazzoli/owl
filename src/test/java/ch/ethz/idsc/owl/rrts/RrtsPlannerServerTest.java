@@ -3,9 +3,7 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
-import ch.ethz.idsc.owl.bot.se2.Se2RrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
@@ -45,7 +43,7 @@ public class RrtsPlannerServerTest extends TestCase {
         SingleIntegratorStateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RnRrtsNodeCollection(min, max);
+        return RrtsNodeCollections.rn(min, max);
       }
 
       @Override
@@ -80,7 +78,7 @@ public class RrtsPlannerServerTest extends TestCase {
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return Se2RrtsNodeCollection.euclidean(lbounds, ubounds);
+        return RrtsNodeCollections.euclidean(lbounds, ubounds);
       }
 
       @Override
@@ -115,7 +113,7 @@ public class RrtsPlannerServerTest extends TestCase {
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return Se2RrtsNodeCollection.clothoid(lbounds, ubounds);
+        return RrtsNodeCollections.clothoid(lbounds, ubounds);
       }
 
       @Override

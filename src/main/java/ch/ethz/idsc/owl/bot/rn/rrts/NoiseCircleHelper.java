@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.rn.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -11,6 +10,7 @@ import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -42,7 +42,7 @@ class NoiseCircleHelper {
     final Tensor center = Mean.of(Tensors.of(orig, goal));
     Tensor min = center.map(scalar -> scalar.subtract(radius));
     Tensor max = center.map(scalar -> scalar.add(radius));
-    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(min, max);
+    RrtsNodeCollection rrtsNodeCollection = RrtsNodeCollections.rn(min, max);
     // obstacleQuery = StaticHelper.noise1();
     this.obstacleQuery = obstacleQuery;
     // ---
