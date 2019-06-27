@@ -66,7 +66,7 @@ public abstract class RrtsPlannerServer {
     return from(Objects.requireNonNull(tail));
   }
 
-  protected RrtsPlannerProcess from(StateTime tail) throws Exception{
+  protected RrtsPlannerProcess from(StateTime tail) throws Exception {
     if (Objects.nonNull(tail)) {
       Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
       root = rrts.insertAsNode(tail.state(), 5).get();
@@ -86,8 +86,8 @@ public abstract class RrtsPlannerServer {
             throw new Exception("no RRT* planner present");
         }
       };
-    } else
-      throw new Exception("failed to setup RRT* planner; no tail provided to expand from");
+    }
+    throw new Exception("failed to setup RRT* planner; no tail provided to expand from");
   }
 
   public void setState(Tensor state) {

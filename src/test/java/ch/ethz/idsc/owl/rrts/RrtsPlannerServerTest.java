@@ -30,7 +30,7 @@ public class RrtsPlannerServerTest extends TestCase {
   public void testRn() throws Exception {
     Tensor goal = Tensors.vector(10, 10);
     Tensor state = Tensors.vector(0, 0);
-    StateTime stateTime = new StateTime(state, RationalScalar.ZERO);
+    StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     Scalar radius = Norm._2.between(goal, state).multiply(RationalScalar.HALF).add(RealScalar.ONE);
     Tensor center = Mean.of(Tensors.of(state, goal));
     Tensor min = center.map(scalar -> scalar.subtract(radius));
@@ -39,7 +39,7 @@ public class RrtsPlannerServerTest extends TestCase {
     RrtsPlannerServer server = new RrtsPlannerServer( //
         RnTransitionSpace.INSTANCE, //
         EmptyTransitionRegionQuery.INSTANCE, //
-        RationalScalar.of(1,10), //
+        RationalScalar.of(1, 10), //
         SingleIntegratorStateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
@@ -53,7 +53,7 @@ public class RrtsPlannerServerTest extends TestCase {
 
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
-        return SphereRandomSample.of(goal, RationalScalar.ZERO);
+        return SphereRandomSample.of(goal, RealScalar.ZERO);
       }
     };
     server.setGoal(goal);
@@ -66,15 +66,15 @@ public class RrtsPlannerServerTest extends TestCase {
 
   public void testDubins() throws Exception {
     Tensor lbounds = Tensors.vector(0, 0, 0);
-    Tensor ubounds = Tensors.vector(10, 10, 2* Math.PI);
+    Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
-    StateTime stateTime = new StateTime(state, RationalScalar.ZERO);
+    StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
     RrtsPlannerServer server = new RrtsPlannerServer( //
-        DubinsTransitionSpace.withRadius(RationalScalar.ONE), //
+        DubinsTransitionSpace.withRadius(RealScalar.ONE), //
         EmptyTransitionRegionQuery.INSTANCE, //
-        RationalScalar.of(1,10), //
+        RationalScalar.of(1, 10), //
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
@@ -88,7 +88,7 @@ public class RrtsPlannerServerTest extends TestCase {
 
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
-        return SphereRandomSample.of(goal, RationalScalar.ZERO);
+        return SphereRandomSample.of(goal, RealScalar.ZERO);
       }
     };
     server.setGoal(goal);
@@ -104,7 +104,7 @@ public class RrtsPlannerServerTest extends TestCase {
     Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
-    StateTime stateTime = new StateTime(state, RationalScalar.ZERO);
+    StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
     RrtsPlannerServer server = new RrtsPlannerServer( //
         ClothoidTransitionSpace.INSTANCE, //
@@ -123,7 +123,7 @@ public class RrtsPlannerServerTest extends TestCase {
 
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
-        return SphereRandomSample.of(goal, RationalScalar.ZERO);
+        return SphereRandomSample.of(goal, RealScalar.ZERO);
       }
     };
     server.setGoal(goal);

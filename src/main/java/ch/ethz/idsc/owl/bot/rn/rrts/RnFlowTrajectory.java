@@ -32,30 +32,28 @@ import ch.ethz.idsc.tensor.Tensor;
   public static List<TrajectorySample> createTrajectory( //
       TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
     List<TrajectorySample> trajectory = new LinkedList<>();
-    /*
-    Scalar ofs = dt;
-    RrtsNode prev = sequence.get(0);
-    trajectory.add(TrajectorySample.head(new StateTime(prev.state(), t0)));
-    // create evenly spaced trajectory samples on the trajectory described by the rrts nodes in sequence
-    // is this necessary this way? implementation could be way easier by spreading samples section wise
-    for (RrtsNode node : sequence.subList(1, sequence.size())) {
-      // System.out.println(node.state());
-      Transition transition = transitionSpace.connect(prev.state(), node.state());
-      Tensor stateTimes = transition.sampled(ofs, dt);
-      Scalar t = t0.add(ofs);
-      for (Tensor stateTime_ : stateTimes) {
-        StateTime stateTime = new StateTime(stateTime_, t);
-        StateTime orig = Lists.getLast(trajectory).stateTime();
-        Flow flow = between(orig, stateTime);
-        trajectory.add(new TrajectorySample(stateTime, flow));
-        t = t.add(dt);
-      }
-      prev = node;
-      t0 = t0.add(transition.length());
-      Scalar rem = t0.subtract(Lists.getLast(trajectory).stateTime().time());
-      ofs = dt.subtract(rem);
-    }
-    */
+    /* Scalar ofs = dt;
+     * RrtsNode prev = sequence.get(0);
+     * trajectory.add(TrajectorySample.head(new StateTime(prev.state(), t0)));
+     * // create evenly spaced trajectory samples on the trajectory described by the rrts nodes in sequence
+     * // is this necessary this way? implementation could be way easier by spreading samples section wise
+     * for (RrtsNode node : sequence.subList(1, sequence.size())) {
+     * // System.out.println(node.state());
+     * Transition transition = transitionSpace.connect(prev.state(), node.state());
+     * Tensor stateTimes = transition.sampled(ofs, dt);
+     * Scalar t = t0.add(ofs);
+     * for (Tensor stateTime_ : stateTimes) {
+     * StateTime stateTime = new StateTime(stateTime_, t);
+     * StateTime orig = Lists.getLast(trajectory).stateTime();
+     * Flow flow = between(orig, stateTime);
+     * trajectory.add(new TrajectorySample(stateTime, flow));
+     * t = t.add(dt);
+     * }
+     * prev = node;
+     * t0 = t0.add(transition.length());
+     * Scalar rem = t0.subtract(Lists.getLast(trajectory).stateTime().time());
+     * ofs = dt.subtract(rem);
+     * } */
     Scalar tn = t0;
     RrtsNode prev = sequence.get(0);
     for (RrtsNode node : sequence.subList(1, sequence.size())) {

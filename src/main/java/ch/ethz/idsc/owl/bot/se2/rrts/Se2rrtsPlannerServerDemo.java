@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     RrtsPlannerServer server = new RrtsPlannerServer( //
         transitionSpace, //
         transitionRegionQuery, //
-        RationalScalar.of(1,10), //
+        RationalScalar.of(1, 10), //
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
-        return SphereRandomSample.of(goal, RationalScalar.ONE);
+        return SphereRandomSample.of(goal, RealScalar.ONE);
       }
     };
     // ---
@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     owlyFrame.configCoordinateOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
-    StateTime stateTime = new StateTime(lbounds, RationalScalar.ZERO);
+    StateTime stateTime = new StateTime(lbounds, RealScalar.ZERO);
     Tensor goal = BoxRandomSample.of(lbounds, ubounds).randomSample(RANDOM);
     int frame = 0;
     while (frame++ < 5 && owlyFrame.jFrame.isVisible()) {

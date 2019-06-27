@@ -32,7 +32,7 @@ public class RrtsPlanner implements ExpandInterface<RrtsNode> {
   /** @param rrts with root already inserted
    * @param spaceSample
    * @param goalSample generates samples in goal region
-   * @param nodeComparator*/
+   * @param nodeComparator */
   public RrtsPlanner(Rrts rrts, RandomSampleInterface spaceSample, RandomSampleInterface goalSample, Comparator<StateCostNode> nodeComparator) {
     this.rrts = rrts;
     this.spaceSample = spaceSample;

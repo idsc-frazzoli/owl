@@ -15,7 +15,6 @@ public class TransitionSamplesWrap {
     return new TransitionSamplesWrap(samples, spacing);
   }
 
-
   private final Tensor samples;
   private final Tensor spacing;
 
@@ -32,4 +31,3 @@ public class TransitionSamplesWrap {
     return spacing;
   }
 }
-
