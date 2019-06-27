@@ -2,12 +2,11 @@
 package ch.ethz.idsc.owl.rrts;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -32,14 +31,6 @@ import ch.ethz.idsc.tensor.Tensors;
 
 // TODO find more elegant implementation
 public abstract class RrtsPlannerServer {
-  private static final Comparator<Map.Entry<RrtsNode, List<TrajectorySample>>> COMPARATOR = //
-      new Comparator<Map.Entry<RrtsNode, List<TrajectorySample>>>() {
-        @Override
-        public int compare(Map.Entry<RrtsNode, List<TrajectorySample>> e1, Map.Entry<RrtsNode, List<TrajectorySample>> e2) {
-          return Scalars.compare(e1.getKey().costFromRoot(), e2.getKey().costFromRoot());
-        }
-      };
-  // ---
   private final TransitionSpace transitionSpace;
   private final TransitionRegionQuery obstacleQuery;
   private final Scalar resolution;
@@ -51,7 +42,7 @@ public abstract class RrtsPlannerServer {
   private RrtsNode root = null;
   private RrtsPlanner rrtsPlanner = null;
   private List<TrajectorySample> trajectory = new ArrayList<>();
-  private Map<RrtsNode, List<TrajectorySample>> potentialFutureTrajectories = new HashMap<>();
+  private NavigableMap<Scalar, List<TrajectorySample>> potentialFutureTrajectories = new TreeMap<>(Scalars::compare);
 
   public RrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -95,7 +86,8 @@ public abstract class RrtsPlannerServer {
             if (rrtsPlanner.getBest().isPresent()) {
               RrtsNode best = rrtsPlanner.getBest().get();
               List<RrtsNode> sequence = Nodes.listFromRoot(best);
-              potentialFutureTrajectories.put(best, flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, tail.time(), resolution));
+              potentialFutureTrajectories.put(best.costFromRoot(), //
+                  flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, tail.time(), resolution));
             }
           } else
             throw new Exception("no RRT* planner present");
@@ -106,8 +98,10 @@ public abstract class RrtsPlannerServer {
   }
 
   private List<TrajectorySample> trajectory() {
+    if (potentialFutureTrajectories.isEmpty())
+      return this.trajectory;
     List<TrajectorySample> trajectory = new ArrayList<>(this.trajectory);
-    potentialFutureTrajectories.entrySet().stream().sorted(COMPARATOR).map(Map.Entry::getValue).findFirst().ifPresent(trajectory::addAll);
+    trajectory.addAll(potentialFutureTrajectories.firstEntry().getValue());
     return trajectory;
   }
 
