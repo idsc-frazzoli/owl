@@ -24,7 +24,7 @@ public class SampledTransitionRegionQuery implements TransitionRegionQuery, Stat
 
   @Override
   public boolean isDisjoint(Transition transition) {
-    return transition.sampled(dt).samples().stream() //
+    return transition.sampled(dt).stream() //
         .noneMatch(region::isMember);
   }
 

@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
+import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -31,21 +32,24 @@ public class DubinsTransitionSpaceTest extends TestCase {
   public void testSamples() {
     Tensor start = Tensors.fromString("{2,1,0}");
     Tensor end = Tensors.fromString("{6,1,0}");
-    Transition transition = DubinsTransitionSpace.withRadius(RealScalar.ONE).connect(start, end);
+    TransitionSpace transitionSpace = DubinsTransitionSpace.withRadius(RealScalar.ONE);
+    Transition transition = transitionSpace.connect(start, end);
     {
       Scalar res = RationalScalar.HALF;
-      TransitionSamplesWrap wrap = transition.sampled(res);
-      assertEquals(8, wrap.samples().length());
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
+      Tensor samples = transition.sampled(res);
+      assertEquals(8, samples.length());
+      assertEquals(start, samples.get(0));
+      assertNotSame(end, Last.of(samples));
+      TransitionSamplesWrap wrap = TransitionSamplesWrap.of(samples, transitionSpace);
       assertEquals(RealScalar.ZERO, wrap.spacing().Get(0));
       assertEquals(res, wrap.spacing().Get(1));
     }
     {
-      TransitionSamplesWrap wrap = transition.sampled(8);
-      assertEquals(8, wrap.samples().length());
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
+      Tensor samples = transition.sampled(8);
+      assertEquals(8, samples.length());
+      assertEquals(start, samples.get(0));
+      assertNotSame(end, Last.of(samples));
+      TransitionSamplesWrap wrap = TransitionSamplesWrap.of(samples, transitionSpace);
       assertEquals(RealScalar.ZERO, wrap.spacing().Get(0));
       assertEquals(transition.length().divide(RealScalar.of(8)), wrap.spacing().Get(1));
     }

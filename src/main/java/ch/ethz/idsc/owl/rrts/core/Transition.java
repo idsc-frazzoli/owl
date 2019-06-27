@@ -19,9 +19,9 @@ public interface Transition {
 
   /** @param minResolution is positive
    * @return */
-  TransitionSamplesWrap sampled(Scalar minResolution);
+  Tensor sampled(Scalar minResolution);
 
   /** @param steps > 0
    * @return */
-  TransitionSamplesWrap sampled(int steps);
+  Tensor sampled(int steps);
 }

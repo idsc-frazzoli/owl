@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
-import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.Lists;
@@ -24,6 +23,7 @@ import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;

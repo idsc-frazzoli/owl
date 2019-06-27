@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
-import ch.ethz.idsc.tensor.red.Min;
 
 /** renders the edges between nodes
  * 
@@ -88,7 +87,7 @@ enum TransitionRenderWrap {
 
   public static Tensor of(Transition transition) {
     return Scalars.lessThan(DT, transition.length().divide(RealScalar.of(N_MIN))) //
-        ? transition.sampled(DT).samples().copy().append(transition.end()) //
-        : transition.sampled(N_MIN).samples().copy().append(transition.end());
+        ? transition.sampled(DT).copy().append(transition.end()) //
+        : transition.sampled(N_MIN).copy().append(transition.end());
   }
 }

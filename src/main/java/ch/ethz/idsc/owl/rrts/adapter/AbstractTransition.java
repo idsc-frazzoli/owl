@@ -39,7 +39,7 @@ public abstract class AbstractTransition implements Transition, Serializable {
   }
 
   @Override // from Transition
-  public TransitionSamplesWrap sampled(Scalar minResolution) {
+  public Tensor sampled(Scalar minResolution) {
     if (Sign.isNegative(minResolution))
       throw TensorRuntimeException.of(minResolution);
     return sampled((int) Math.ceil(length.divide(minResolution).number().doubleValue()));

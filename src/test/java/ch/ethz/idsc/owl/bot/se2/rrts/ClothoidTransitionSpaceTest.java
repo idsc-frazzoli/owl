@@ -29,22 +29,24 @@ public class ClothoidTransitionSpaceTest extends TestCase {
     Transition transition = ClothoidTransitionSpace.INSTANCE.connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");
-      TransitionSamplesWrap wrap = transition.sampled(res);
-      assertEquals(16, wrap.samples().length());
+      Tensor samples = transition.sampled(res);
+      assertEquals(16, samples.length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
+      assertEquals(start, samples.get(0));
+      assertNotSame(end, Last.of(samples));
+      TransitionSamplesWrap wrap = TransitionSamplesWrap.of(samples, ClothoidTransitionSpace.INSTANCE);
       assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
       assertTrue(wrap.spacing().extract(1, 16).stream().map(Tensor::Get) //
           .map(Sign::requirePositive) //
           .allMatch(s -> Scalars.lessEquals(s, res)));
     }
     {
-      TransitionSamplesWrap wrap = transition.sampled(8);
-      assertEquals(8, wrap.samples().length());
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
+      Tensor samples = transition.sampled(8);
+      assertEquals(8, samples.length());
+      assertEquals(start, samples.get(0));
+      assertNotSame(end, Last.of(samples));
+      TransitionSamplesWrap wrap = TransitionSamplesWrap.of(samples, ClothoidTransitionSpace.INSTANCE);
       assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
       wrap.spacing().extract(1, 8).stream().map(Tensor::Get) //
           .map(Sign::requirePositive) //

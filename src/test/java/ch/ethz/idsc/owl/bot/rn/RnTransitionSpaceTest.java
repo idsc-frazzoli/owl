@@ -27,18 +27,20 @@ public class RnTransitionSpaceTest extends TestCase {
     Transition transition = RnTransitionSpace.INSTANCE.connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");
-      TransitionSamplesWrap wrap = transition.sampled(res);
-      assertEquals(8, wrap.samples().length());
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
+      Tensor samples = transition.sampled(res);
+      assertEquals(8, samples.length());
+      assertEquals(start, samples.get(0));
+      assertNotSame(end, Last.of(samples));
+      TransitionSamplesWrap wrap = TransitionSamplesWrap.of(samples, RnTransitionSpace.INSTANCE);
       assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
       assertEquals(res, wrap.spacing().Get(1));
     }
     {
-      TransitionSamplesWrap wrap = transition.sampled(8);
-      assertEquals(8, wrap.samples().length());
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
+      Tensor samples = transition.sampled(8);
+      assertEquals(8, samples.length());
+      assertEquals(start, samples.get(0));
+      assertNotSame(end, Last.of(samples));
+      TransitionSamplesWrap wrap = TransitionSamplesWrap.of(samples, RnTransitionSpace.INSTANCE);
       assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
       assertEquals(transition.length().divide(RealScalar.of(8)), wrap.spacing().Get(1));
     }

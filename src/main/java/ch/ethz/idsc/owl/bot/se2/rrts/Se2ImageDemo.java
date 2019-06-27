@@ -4,13 +4,13 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
-import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;

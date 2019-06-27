@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.Tensor;
     RrtsNode prev = sequence.get(0);
     for (RrtsNode node : sequence.subList(1, sequence.size())) {
       Transition transition = transitionSpace.connect(prev.state(), node.state());
-      TransitionSamplesWrap transitionSamplesWrap = transition.sampled(dt);
+      TransitionSamplesWrap transitionSamplesWrap = TransitionSamplesWrap.of(transition.sampled(dt), transitionSpace);
       Tensor samples = transitionSamplesWrap.samples();
       Tensor spacing = transitionSamplesWrap.spacing();
       Scalar ti = t0;

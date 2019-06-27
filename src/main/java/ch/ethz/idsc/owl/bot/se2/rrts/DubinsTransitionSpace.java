@@ -7,7 +7,6 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.Transition;
-import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
@@ -38,18 +37,14 @@ public class DubinsTransitionSpace extends AbstractTransitionSpace implements Se
       DubinsPath dubinsPath = FixedRadiusDubins.of(start, end, radius).allValid().min(DubinsPathComparator.length()).get();
 
       @Override // from Transition
-      public TransitionSamplesWrap sampled(int steps) {
+      public Tensor sampled(int steps) {
         if (steps < 1)
           throw TensorRuntimeException.of(RealScalar.of(steps));
         Tensor samples = Array.zeros(steps);
-        Tensor spacing = Array.zeros(steps);
         Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
         ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
-        IntStream.range(0, steps).parallel().forEach(i -> {
-          samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i);
-          spacing.set(i > 0 ? step : step.map(Scalar::zero), i);
-        });
-        return new TransitionSamplesWrap(samples, spacing);
+        IntStream.range(0, steps).parallel().forEach(i -> samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i));
+        return samples;
       }
     };
   }
