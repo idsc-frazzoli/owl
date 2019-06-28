@@ -7,6 +7,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 
 public class TransitionSamplesWrap {
+  // TODO GJOEL consider suggestion: create function in Transition that returns class with {samples, spacing}
+  // so that computation can be more efficient and closer to the given transition type
   public static TransitionSamplesWrap of(Tensor samples, TransitionSpace transitionSpace) {
     Tensor spacing = Array.zeros(samples.length());
     IntStream.range(0, samples.length()).parallel().forEach(i -> spacing.set(i > 0 //

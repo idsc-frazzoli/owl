@@ -11,6 +11,7 @@ public interface Transition {
   /** @return end state of this transition */
   Tensor end();
 
+  /** FUNCTIONALITY BELOW IS ONLY FOR COLLISION CHECKING AND RENDERING */
   /** TODO if length() is part of transition interface the function requires a precise definition:
    * length() == Euclidean distance?
    * 

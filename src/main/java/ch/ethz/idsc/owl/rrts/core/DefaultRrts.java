@@ -24,7 +24,8 @@ public class DefaultRrts implements Rrts {
   private int rewireCount = 0;
   // ---
   // TODO GJOEL introduction of non-final local variables bad style and not necessary
-  // ... create a new class if necessary. avoid this design at all cost
+  // ... avoid this design at all cost
+  // ... remove fields, or create a new class if necessary.
   private RrtsNode parent = null;
   private Scalar costFromRoot = null;
 
@@ -65,7 +66,10 @@ public class DefaultRrts implements Rrts {
 
   private boolean isInsertPlausible(Tensor state) {
     Tensor nearest = nodeCollection.nearTo(state, 1).iterator().next().state();
-    return !state.equals(nearest) && isCollisionFree(transitionSpace.connect(nearest, state));
+    return !state.equals(nearest) // <- TODO GJOEL this condition is a bit strange!?
+        // ... it is the responsibility of the application layer to not insert duplicate points...
+        // ... or what am i missing?
+        && isCollisionFree(transitionSpace.connect(nearest, state));
   }
 
   private Optional<RrtsNode> connectAlongMinimumCost(Tensor state, int k_nearest) {
