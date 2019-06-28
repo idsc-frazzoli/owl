@@ -10,6 +10,8 @@ public class TransitionSamplesWrap {
   public static TransitionSamplesWrap of(Tensor samples, TransitionSpace transitionSpace) {
     Tensor spacing = Array.zeros(samples.length());
     IntStream.range(0, samples.length()).parallel().forEach(i -> spacing.set(i > 0 //
+        // TODO GJOEL for dubins transition space transitionSpace::distance triggers dubins path generation!
+        // ... is this really desired/correct/intended?
         ? transitionSpace.distance(samples.get(i - 1), samples.get(i)) //
         : samples.Get(i, 0).zero(), i));
     return new TransitionSamplesWrap(samples, spacing);

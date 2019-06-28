@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.core;
 
-import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -12,9 +11,10 @@ public interface Transition {
   /** @return end state of this transition */
   Tensor end();
 
-  /** @return length of transition
-   * @see TransitionCostFunction
-   * @see LengthCostFunction */
+  /** TODO if length() is part of transition interface the function requires a precise definition:
+   * length() == Euclidean distance?
+   * 
+   * @return length of transition */
   Scalar length();
 
   /** @param minResolution is positive
