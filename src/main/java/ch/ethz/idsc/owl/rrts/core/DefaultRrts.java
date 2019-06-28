@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.rrts.core;
 
 import java.util.NavigableMap;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 

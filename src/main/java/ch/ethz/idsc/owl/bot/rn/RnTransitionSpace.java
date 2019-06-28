@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -35,6 +36,18 @@ public class RnTransitionSpace implements TransitionSpace, Serializable {
         if (steps > 1)
           IntStream.range(1, steps).parallel().forEach(i -> samples.set(direction.multiply(RealScalar.of(i)).add(start), i));
         return samples;
+      }
+
+      @Override // from Transition
+      public TransitionWrap wrapped(int steps) {
+        if (steps < 1)
+          throw TensorRuntimeException.of(length(), RealScalar.of(steps));
+        Scalar step = length.divide(RealScalar.of(steps));
+        Tensor spacing = Array.zeros(steps);
+        IntStream.range(0, steps).parallel().forEach(i -> spacing.set(i > 0 //
+            ? step //
+            : start.Get(0).zero(), i));
+        return new TransitionWrap(sampled(steps), spacing);
       }
     };
   }

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.rn;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
-import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
+import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -34,16 +34,33 @@ public class RnTransitionSpaceTest extends TestCase {
       assertEquals(8, samples.length());
       assertEquals(start, samples.get(0));
       assertNotSame(end, Last.of(samples));
-      TransitionSamplesWrap wrap = TransitionSamplesWrap.of(samples, RnTransitionSpace.INSTANCE);
-      assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
-      assertEquals(res, wrap.spacing().Get(1));
     }
     {
       Tensor samples = transition.sampled(8);
       assertEquals(8, samples.length());
       assertEquals(start, samples.get(0));
       assertNotSame(end, Last.of(samples));
-      TransitionSamplesWrap wrap = TransitionSamplesWrap.of(samples, RnTransitionSpace.INSTANCE);
+    }
+  }
+
+  public void testWrap() {
+    Tensor start = Tensors.fromString("{1[m],2[m]}");
+    Tensor end = Tensors.fromString("{1[m],6[m]}");
+    Transition transition = RnTransitionSpace.INSTANCE.connect(start, end);
+    {
+      Scalar res = Quantity.of(.5, "m");
+      TransitionWrap wrap = transition.wrapped(res);
+      assertEquals(8, wrap.samples().length());
+      assertEquals(start, wrap.samples().get(0));
+      assertNotSame(end, Last.of(wrap.samples()));
+      assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
+      assertEquals(res, wrap.spacing().Get(1));
+    }
+    {
+      TransitionWrap wrap = transition.wrapped(8);
+      assertEquals(8, wrap.samples().length());
+      assertEquals(start, wrap.samples().get(0));
+      assertNotSame(end, Last.of(wrap.samples()));
       assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
       assertEquals(transition.length().divide(RealScalar.of(8)), wrap.spacing().Get(1));
     }

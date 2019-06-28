@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
-import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
+import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,9 +34,9 @@ import ch.ethz.idsc.tensor.Tensor;
     RrtsNode prev = sequence.get(0);
     for (RrtsNode node : sequence.subList(1, sequence.size())) {
       Transition transition = transitionSpace.connect(prev.state(), node.state());
-      TransitionSamplesWrap transitionSamplesWrap = TransitionSamplesWrap.of(transition.sampled(dt), transitionSpace);
-      Tensor samples = transitionSamplesWrap.samples();
-      Tensor spacing = transitionSamplesWrap.spacing();
+      TransitionWrap transitionWrap = transition.wrapped(dt);
+      Tensor samples = transitionWrap.samples();
+      Tensor spacing = transitionWrap.spacing();
       Scalar ti = t0;
       for (int i = 0; i < samples.length(); i++) {
         ti = ti.add(spacing.Get(i));
