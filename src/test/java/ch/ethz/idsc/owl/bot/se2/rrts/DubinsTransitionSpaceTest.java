@@ -1,6 +1,8 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
@@ -10,29 +12,30 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class DubinsTransitionSpaceTest extends TestCase {
-  public void testLengthUnitless() {
+  public void testLengthUnitless() throws ClassNotFoundException, IOException {
     Tensor start = Tensors.fromString("{1,2}").append(Pi.HALF);
     Tensor end = Tensors.fromString("{2,6,0}");
-    Transition transition = DubinsTransitionSpace.withRadius(RealScalar.ONE).connect(start, end);
+    Transition transition = Serialization.copy(DubinsTransitionSpace.of(RealScalar.ONE).connect(start, end));
     assertEquals(RealScalar.of(3).add(Pi.HALF), transition.length());
   }
 
   public void testLengthUnits() {
     Tensor start = Tensors.fromString("{1[m],2[m]}").append(Pi.HALF);
     Tensor end = Tensors.fromString("{2[m],6[m],0}");
-    Transition transition = DubinsTransitionSpace.withRadius(Quantity.of(1, "m")).connect(start, end);
+    Transition transition = DubinsTransitionSpace.of(Quantity.of(1, "m")).connect(start, end);
     assertEquals(Quantity.of(3 + Math.PI / 2, "m"), transition.length());
   }
 
   public void testSamples() {
     Tensor start = Tensors.fromString("{2,1,0}");
     Tensor end = Tensors.fromString("{6,1,0}");
-    TransitionSpace transitionSpace = DubinsTransitionSpace.withRadius(RealScalar.ONE);
+    TransitionSpace transitionSpace = DubinsTransitionSpace.of(RealScalar.ONE);
     Transition transition = transitionSpace.connect(start, end);
     {
       Scalar res = RationalScalar.HALF;

@@ -72,7 +72,7 @@ public class RrtsPlannerServerTest extends TestCase {
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
     RrtsPlannerServer server = new RrtsPlannerServer( //
-        DubinsTransitionSpace.withRadius(RealScalar.ONE), //
+        DubinsTransitionSpace.of(RealScalar.ONE), //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
         Se2StateSpaceModel.INSTANCE) {
@@ -131,6 +131,6 @@ public class RrtsPlannerServerTest extends TestCase {
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
-    Chop._01.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
+    Chop.below(1).requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 }

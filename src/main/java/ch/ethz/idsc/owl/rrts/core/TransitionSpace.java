@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.rrts.core;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** factory for {@link Transition}s */
 public interface TransitionSpace {
   /** @param start state
    * @param end state
@@ -14,8 +15,4 @@ public interface TransitionSpace {
    * @param end state
    * @return Scalar distance between start and end */
   Scalar distance(Tensor start, Tensor end);
-
-  /** @param transition
-   * @return Scalar distance of Transition */
-  Scalar distance(Transition transition);
 }

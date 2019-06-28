@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 public class DubinsPathComparatorTest extends TestCase {
   public void testSimple() {
-    assertNotNull(DubinsPathComparator.length());
-    assertNotNull(DubinsPathComparator.curvature());
+    assertNotNull(DubinsPathComparator.LENGTH);
+    assertNotNull(DubinsPathComparator.CURVATURE);
   }
 }

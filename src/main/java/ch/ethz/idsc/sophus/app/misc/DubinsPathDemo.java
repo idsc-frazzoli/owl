@@ -59,11 +59,11 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
     { // draw shortest path
       graphics.setColor(COLOR_DATA_INDEXED.getColor(1));
       graphics.setStroke(new BasicStroke(2f));
-      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.length()).get();
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.LENGTH).get();
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     }
     {
-      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.length()).get();
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.LENGTH).get();
       ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(START);
       Tensor params = PadLeft.zeros(4).apply(dubinsPath.segments());
       graphics.setColor(new Color(128, 128, 128, 128));
@@ -89,7 +89,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
     { // draw least curved path
       graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
       graphics.setStroke(new BasicStroke(2f));
-      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.curvature()).get();
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.CURVATURE).get();
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     }
   }
