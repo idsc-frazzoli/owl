@@ -1,8 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.core;
 
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -22,12 +24,6 @@ public class DefaultRrts implements Rrts {
   private final TransitionRegionQuery obstacleQuery;
   private final TransitionCostFunction transitionCostFunction;
   private int rewireCount = 0;
-  // ---
-  // TODO GJOEL introduction of non-final local variables bad style and not necessary
-  // ... avoid this design at all cost
-  // ... remove fields, or create a new class if necessary.
-  private RrtsNode parent = null;
-  private Scalar costFromRoot = null;
 
   public DefaultRrts( //
       TransitionSpace transitionSpace, //
@@ -66,16 +62,13 @@ public class DefaultRrts implements Rrts {
 
   private boolean isInsertPlausible(Tensor state) {
     Tensor nearest = nodeCollection.nearTo(state, 1).iterator().next().state();
-    return !state.equals(nearest) // <- TODO GJOEL this condition is a bit strange!?
-        // ... it is the responsibility of the application layer to not insert duplicate points...
-        // ... or what am i missing?
-        && isCollisionFree(transitionSpace.connect(nearest, state));
+    return isCollisionFree(transitionSpace.connect(nearest, state));
   }
 
   private Optional<RrtsNode> connectAlongMinimumCost(Tensor state, int k_nearest) {
-    parent = null;
-    costFromRoot = null;
-    /* for (RrtsNode node : nodeCollection.nearTo(state, k_nearest)) {
+    /* RrtsNode parent = null;
+     * Scalar costFromRoot = null;
+     * for (RrtsNode node : nodeCollection.nearTo(state, k_nearest)) {
      * Transition transition = transitionSpace.connect(node.state(), state);
      * Scalar cost = transitionCostFunction.cost(transition);
      * Scalar compare = node.costFromRoot().add(cost);
@@ -84,24 +77,23 @@ public class DefaultRrts implements Rrts {
      * parent = node;
      * costFromRoot = compare;
      * }
-     * } */
+     * }
+     * if (Objects.nonNull(parent))
+     * return Optional.of(parent.connectTo(state, costFromRoot)); */
+    final NavigableMap<Scalar, RrtsNode> updates = new TreeMap<>(Scalars::compare);
     nodeCollection.nearFrom(state, k_nearest).stream().parallel().forEach(node -> {
       Transition transition = transitionSpace.connect(node.state(), state);
       Scalar cost = transitionCostFunction.cost(transition);
       Scalar compare = node.costFromRoot().add(cost);
-      update(node, transition, compare);
-    });
-    if (Objects.nonNull(parent))
-      return Optional.of(parent.connectTo(state, costFromRoot));
-    return Optional.empty();
-  }
-
-  private synchronized void update(RrtsNode node, Transition transition, Scalar cost) {
-    if (Objects.isNull(costFromRoot) || Scalars.lessThan(cost, costFromRoot))
-      if (isCollisionFree(transition)) {
-        parent = node;
-        costFromRoot = cost;
+      synchronized (updates) {
+        if (updates.isEmpty() || Scalars.lessThan(compare, updates.firstKey()))
+          if (isCollisionFree(transition))
+            updates.put(compare, node);
       }
+    });
+    if (!updates.isEmpty())
+      return Optional.of(updates.firstEntry().getValue().connectTo(state, updates.firstKey()));
+    return Optional.empty();
   }
 
   @Override // from Rrts
