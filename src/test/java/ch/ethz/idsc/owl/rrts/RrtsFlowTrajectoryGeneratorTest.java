@@ -62,7 +62,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
 
   public void testDubins() {
     Rrts rrts = new DefaultRrts( //
-        DubinsTransitionSpace.withRadius(RealScalar.ONE), //
+        DubinsTransitionSpace.of(RealScalar.ONE), //
         RrtsNodeCollections.euclidean(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();

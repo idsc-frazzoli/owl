@@ -17,9 +17,4 @@ public interface TransitionSpace {
    * @return Scalar distance between start and end */
   // TODO function deprecated
   Scalar distance(Tensor start, Tensor end);
-
-  /** @param transition
-   * @return Scalar distance of Transition */
-  // TODO function deprecated
-  Scalar distance(Transition transition);
 }

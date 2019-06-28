@@ -1,12 +1,13 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
-import ch.ethz.idsc.owl.rrts.adapter.AbstractTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.Transition;
+import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
@@ -17,18 +18,18 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-public class DubinsTransitionSpace extends AbstractTransitionSpace implements Se2TransitionSpace {
-  private static final DubinsTransitionSpace INSTANCE = new DubinsTransitionSpace();
-
-  public static DubinsTransitionSpace withRadius(Scalar radius) {
-    DubinsTransitionSpace.INSTANCE.radius = radius;
-    return DubinsTransitionSpace.INSTANCE;
+public class DubinsTransitionSpace implements Se2TransitionSpace, Serializable {
+  /** @param radius
+   * @return */
+  public static TransitionSpace of(Scalar radius) {
+    return new DubinsTransitionSpace(radius);
   }
 
-  private Scalar radius;
+  // ---
+  private final Scalar radius;
 
-  private DubinsTransitionSpace() {
-    // ---
+  private DubinsTransitionSpace(Scalar radius) {
+    this.radius = radius;
   }
 
   @Override // from TransitionSpace

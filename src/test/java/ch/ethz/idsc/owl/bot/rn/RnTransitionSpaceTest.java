@@ -1,6 +1,8 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.bot.rn;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
 import ch.ethz.idsc.tensor.ExactScalarQ;
@@ -9,12 +11,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class RnTransitionSpaceTest extends TestCase {
-  public void testLength() {
-    Transition transition = RnTransitionSpace.INSTANCE.connect( //
+  public void testLength() throws ClassNotFoundException, IOException {
+    Transition transition = Serialization.copy(RnTransitionSpace.INSTANCE).connect( //
         Tensors.fromString("{1[m],2[m]}"), //
         Tensors.fromString("{1[m],6[m]}"));
     assertEquals(transition.length(), Quantity.of(4, "m"));

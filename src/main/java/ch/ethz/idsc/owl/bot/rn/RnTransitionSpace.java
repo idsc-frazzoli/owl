@@ -1,10 +1,10 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.bot.rn;
 
+import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
-import ch.ethz.idsc.owl.rrts.adapter.AbstractTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Norm;
 
-public class RnTransitionSpace extends AbstractTransitionSpace {
+public class RnTransitionSpace implements TransitionSpace, Serializable {
   public static final TransitionSpace INSTANCE = new RnTransitionSpace();
 
   private RnTransitionSpace() {

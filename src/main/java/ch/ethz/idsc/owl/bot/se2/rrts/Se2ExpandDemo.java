@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     int wid = 7;
     Tensor min = Tensors.vector(0, 0, 0);
     Tensor max = Tensors.vector(wid, wid, 2 * Math.PI);
-    TransitionSpace transitionSpace = DubinsTransitionSpace.withRadius(RealScalar.ONE);
+    TransitionSpace transitionSpace = DubinsTransitionSpace.of(RealScalar.ONE);
     RrtsNodeCollection rrtsNodeCollection = ExhaustiveNodeCollection.of(transitionSpace);
     TransitionRegionQuery transitionRegionQuery = EmptyTransitionRegionQuery.INSTANCE;
     // ---
