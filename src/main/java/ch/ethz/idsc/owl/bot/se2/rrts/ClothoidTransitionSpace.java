@@ -32,7 +32,8 @@ public class ClothoidTransitionSpace extends AbstractTransitionSpace implements 
 
   @Override // from TransitionSpace
   public Transition connect(Tensor start, Tensor end) {
-    return new AbstractTransition(this, start, end) {
+    Scalar length = PseudoClothoidDistance.INSTANCE.distance(start, end);
+    return new AbstractTransition(start, end, length) {
       @Override // from Transition
       public Tensor sampled(Scalar minResolution) {
         Tensor samples = Tensors.of(start, end);

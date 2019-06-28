@@ -23,6 +23,8 @@ public class DefaultRrts implements Rrts {
   private final TransitionCostFunction transitionCostFunction;
   private int rewireCount = 0;
   // ---
+  // TODO GJOEL introduction of non-final local variables bad style and not necessary
+  // ... create a new class if necessary. avoid this design at all cost
   private RrtsNode parent = null;
   private Scalar costFromRoot = null;
 

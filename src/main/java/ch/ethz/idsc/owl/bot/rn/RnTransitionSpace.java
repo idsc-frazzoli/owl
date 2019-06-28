@@ -23,7 +23,8 @@ public class RnTransitionSpace extends AbstractTransitionSpace {
 
   @Override // from TransitionSpace
   public Transition connect(Tensor start, Tensor end) {
-    return new AbstractTransition(this, start, end) {
+    Scalar length = distance(start, end);
+    return new AbstractTransition(start, end, length) {
       @Override // from Transition
       public Tensor sampled(int steps) {
         if (steps < 1)

@@ -33,7 +33,8 @@ public class DubinsTransitionSpace extends AbstractTransitionSpace implements Se
 
   @Override // from TransitionSpace
   public Transition connect(Tensor start, Tensor end) {
-    return new AbstractTransition(this, start, end) {
+    Scalar length = distance(start, end);
+    return new AbstractTransition(start, end, length) {
       DubinsPath dubinsPath = FixedRadiusDubins.of(start, end, radius).allValid().min(DubinsPathComparator.length()).get();
 
       @Override // from Transition
