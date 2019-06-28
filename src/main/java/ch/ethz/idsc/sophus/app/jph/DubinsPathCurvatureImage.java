@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 
   private static Scalar function(int y, int x) {
     Tensor xya = Tensors.of(RE.Get(x), IM.Get(y), ALPHA);
-    DubinsPath dubinsPath = FixedRadiusDubins.of(xya, RADIUS).allValid().min(DubinsPathComparator.length()).get();
+    DubinsPath dubinsPath = FixedRadiusDubins.of(xya, RADIUS).allValid().min(DubinsPathComparator.LENGTH).get();
     int ordinal = dubinsPath.type().ordinal();
     return dubinsPath.curvature().add(RealScalar.of(ordinal));
   }

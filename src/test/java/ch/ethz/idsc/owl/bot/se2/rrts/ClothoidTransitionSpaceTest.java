@@ -1,6 +1,8 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSamplesWrap;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -9,6 +11,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -16,8 +19,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class ClothoidTransitionSpaceTest extends TestCase {
-  public void testLength() {
-    Transition transition = ClothoidTransitionSpace.INSTANCE.connect( //
+  public void testLength() throws ClassNotFoundException, IOException {
+    Transition transition = Serialization.copy(ClothoidTransitionSpace.INSTANCE).connect( //
         Tensors.fromString("{1[m],1[m],0}"), //
         Tensors.fromString("{2[m],2[m]}").append(Pi.HALF));
     Chop._15.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
