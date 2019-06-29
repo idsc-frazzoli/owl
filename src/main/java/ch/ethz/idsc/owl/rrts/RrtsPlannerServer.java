@@ -3,8 +3,10 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -23,6 +25,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -39,6 +42,7 @@ public abstract class RrtsPlannerServer {
   private RrtsNode root = null;
   private RrtsPlanner rrtsPlanner = null;
   private List<TrajectorySample> trajectory = new ArrayList<>();
+  private NavigableMap<Scalar, List<TrajectorySample>> potentialFutureTrajectories = new TreeMap<>(Scalars::compare);
 
   public RrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -63,6 +67,8 @@ public abstract class RrtsPlannerServer {
 
   public RrtsPlannerProcess offer(StateTime tail) throws Exception {
     rrtsPlanner = null;
+    trajectory = trajectory();
+    potentialFutureTrajectories.clear();
     return from(Objects.requireNonNull(tail));
   }
 
@@ -80,7 +86,8 @@ public abstract class RrtsPlannerServer {
             if (rrtsPlanner.getBest().isPresent()) {
               RrtsNode best = rrtsPlanner.getBest().get();
               List<RrtsNode> sequence = Nodes.listFromRoot(best);
-              trajectory.addAll(flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, tail.time(), resolution));
+              potentialFutureTrajectories.put(best.costFromRoot(), //
+                  flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, tail.time(), resolution));
             }
           } else
             throw new Exception("no RRT* planner present");
@@ -88,6 +95,14 @@ public abstract class RrtsPlannerServer {
       };
     }
     throw new Exception("failed to setup RRT* planner; no tail provided to expand from");
+  }
+
+  private List<TrajectorySample> trajectory() {
+    if (potentialFutureTrajectories.isEmpty())
+      return this.trajectory;
+    List<TrajectorySample> trajectory = new ArrayList<>(this.trajectory);
+    trajectory.addAll(potentialFutureTrajectories.firstEntry().getValue());
+    return trajectory;
   }
 
   public void setState(Tensor state) {
@@ -98,19 +113,12 @@ public abstract class RrtsPlannerServer {
     this.goal = goal;
   }
 
-  public TransitionRegionQuery getObstacleQuery() {
-    return obstacleQuery;
-  }
-
   public Optional<RrtsNode> getRoot() {
     return Optional.ofNullable(root);
   }
 
-  public Optional<RrtsPlanner> getRrtsPlanner() {
-    return Optional.ofNullable(rrtsPlanner);
-  }
-
   public Optional<List<TrajectorySample>> getTrajectory() {
+    List<TrajectorySample> trajectory = trajectory();
     return trajectory.isEmpty() ? Optional.empty() : Optional.of(trajectory);
   }
 

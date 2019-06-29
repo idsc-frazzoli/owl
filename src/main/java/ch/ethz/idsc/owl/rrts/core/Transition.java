@@ -25,4 +25,12 @@ public interface Transition {
   /** @param steps > 0
    * @return */
   Tensor sampled(int steps);
+
+  /** @param minResolution is positive
+   * @return */
+  TransitionWrap wrapped(Scalar minResolution);
+
+  /** @param steps > 0
+   * @return */
+  TransitionWrap wrapped(int steps);
 }

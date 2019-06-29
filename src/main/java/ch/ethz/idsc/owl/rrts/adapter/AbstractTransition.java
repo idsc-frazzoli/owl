@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.rrts.adapter;
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
+import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -39,5 +40,11 @@ public abstract class AbstractTransition implements Transition, Serializable {
   public Tensor sampled(Scalar minResolution) {
     Sign.requirePositive(minResolution);
     return sampled((int) Math.ceil(length.divide(minResolution).number().doubleValue()));
+  }
+
+  @Override // from Transition
+  public TransitionWrap wrapped(Scalar minResolution) {
+    Sign.requirePositive(minResolution);
+    return wrapped((int) Math.ceil(length.divide(minResolution).number().doubleValue()));
   }
 }

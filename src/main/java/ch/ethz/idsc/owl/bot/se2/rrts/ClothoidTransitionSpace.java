@@ -2,10 +2,12 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.Serializable;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
@@ -17,6 +19,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -49,6 +52,18 @@ public class ClothoidTransitionSpace implements Se2TransitionSpace, Serializable
           throw TensorRuntimeException.of(RealScalar.of(steps));
         Tensor samples = Nest.of(CURVE_SUBDIVISION::string, Tensors.of(start, end), (int) Math.ceil(Math.log(steps - 1) / LOG2));
         return samples.extract(0, samples.length() - 1);
+      }
+
+      @Override // from Transition
+      public TransitionWrap wrapped(int steps) {
+        if (steps < 1)
+          throw TensorRuntimeException.of(length(), RealScalar.of(steps));
+        Tensor samples = sampled(steps);
+        Tensor spacing = Array.zeros(samples.length());
+        IntStream.range(0, samples.length()).parallel().forEach(i -> spacing.set(i > 0 //
+            ? distance(samples.get(i - 1), samples.get(i)) //
+            : samples.Get(i, 0).zero(), i));
+        return new TransitionWrap(samples, spacing);
       }
     };
   }
