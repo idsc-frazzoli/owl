@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -103,8 +102,7 @@ public class OwlyFrame extends BaseFrame {
       Collection<RrtsNode> collection = Serialization.copy(nodes);
       geometricComponent.setRenderInterfaces( //
           RenderElements.create(collection, Serialization.copy(transitionRegionQuery)));
-      if (!transitionSpace.equals(RnTransitionSpace.INSTANCE))
-        geometricComponent.addRenderInterface(new TransitionRender(transitionSpace).setCollection(collection));
+      geometricComponent.addRenderInterface(new TransitionRender(transitionSpace).setCollection(collection));
       geometricComponent.jComponent.repaint();
     } catch (Exception exception) {
       exception.printStackTrace();

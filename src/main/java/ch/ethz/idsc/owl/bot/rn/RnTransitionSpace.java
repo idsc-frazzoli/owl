@@ -10,8 +10,10 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -48,6 +50,11 @@ public class RnTransitionSpace implements TransitionSpace, Serializable {
             ? step //
             : start.Get(0).zero(), i));
         return new TransitionWrap(sampled(steps), spacing);
+      }
+
+      @Override // from RenderTransition
+      public Tensor rendered(Scalar minResolution, int minSteps) {
+        return Tensors.of(start, end);
       }
     };
   }
