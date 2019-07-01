@@ -1,4 +1,4 @@
-// code by jph
+// code by jph, gjoel
 package ch.ethz.idsc.owl.gui.win;
 
 import java.util.Collection;
@@ -7,8 +7,7 @@ import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 
-public class GlcMotionPlanWorker extends MotionPlanWorker<GlcTrajectoryPlanner, GlcPlannerCallback> {
-
+/* package */ class GlcMotionPlanWorker extends MotionPlanWorker<GlcTrajectoryPlanner, GlcPlannerCallback> {
   public GlcMotionPlanWorker(int maxSteps, Collection<GlcPlannerCallback> glcPlannerCallbacks) {
     super(maxSteps, glcPlannerCallbacks);
   }

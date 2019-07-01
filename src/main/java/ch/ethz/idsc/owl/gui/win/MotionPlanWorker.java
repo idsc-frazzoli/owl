@@ -4,26 +4,32 @@ package ch.ethz.idsc.owl.gui.win;
 import java.util.Collection;
 import java.util.List;
 
+import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.PlannerCallback;
+import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryPlanner;
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.rrts.adapter.RrtsGoalConsumer;
 import ch.ethz.idsc.tensor.io.Timing;
 
-/** TODO is generic superclass necessary, or could this be solved in one
- * see e.g. {@link SimpleGoalConsumer} and {@link RrtsGoalConsumer}
- * @param <T>
- * @param <P> */
 public abstract class MotionPlanWorker<T extends TrajectoryPlanner, P extends PlannerCallback<T>> {
+  @SuppressWarnings("unchecked")
+  public static MotionPlanWorker of(int maxSteps, Collection<? extends PlannerCallback> plannerCallbacks) {
+    if (plannerCallbacks.stream().allMatch(p -> p instanceof GlcPlannerCallback))
+      return new GlcMotionPlanWorker(maxSteps, (Collection<GlcPlannerCallback>)plannerCallbacks);
+    if (plannerCallbacks.stream().allMatch(p -> p instanceof RrtsPlannerCallback))
+      return new RrtsMotionPlanWorker(maxSteps, (Collection<RrtsPlannerCallback>)plannerCallbacks);
+    // TODO expand when needed
+    throw new IllegalArgumentException();
+  }
+
   protected final int maxSteps;
   private final Collection<P> plannerCallbacks;
   // ---
   protected volatile boolean isRelevant = true;
 
-  public MotionPlanWorker(int maxSteps, Collection<P> plannerCallbacks) {
+  protected MotionPlanWorker(int maxSteps, Collection<P> plannerCallbacks) {
     this.maxSteps = maxSteps;
     this.plannerCallbacks = plannerCallbacks;
   }
