@@ -66,7 +66,7 @@ public class NegTransitiveMinTracker<T> implements MinTracker<T>, Serializable {
       }
   }
 
-  /** Sets wether or not indifferent or incomparable elements shall be kept as well.
+  /** Sets whether or not indifferent or incomparable elements shall be kept as well.
    * 
    * @param comparison
    * @return true if element to be discarded or false otherwise */
