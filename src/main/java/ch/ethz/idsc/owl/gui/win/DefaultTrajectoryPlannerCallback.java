@@ -6,14 +6,14 @@ import java.util.List;
 import ch.ethz.idsc.owl.ani.api.AnimationInterface;
 import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
+import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
 
 @Deprecated
 class DefaultTrajectoryPlannerCallback implements RrtsPlannerCallback {
   public AnimationInterface controllable;
 
   @Override
-  public void expandResult(List<TrajectorySample> head, RrtsPlannerServer rrtsPlannerServer) {
+  public void expandResult(List<TrajectorySample> head, RrtsTrajectoryPlanner trajectoryPlanner) {
     // ---
   }
 

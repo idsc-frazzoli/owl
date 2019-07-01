@@ -8,7 +8,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.gui.win.MotionPlanWorker;
+import ch.ethz.idsc.owl.gui.win.GlcMotionPlanWorker;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,7 +17,7 @@ public class GlcWaypointFollowing extends WaypointFollowing {
   private static final int MAX_STEPS = 5000; // magic const
   // ---
   protected final Collection<GlcPlannerCallback> glcPlannerCallbacks;
-  private MotionPlanWorker motionPlanWorker = null;
+  private GlcMotionPlanWorker motionPlanWorker = null;
   private final PlannerConstraint plannerConstraint;
 
   /** @param waypoints
@@ -39,7 +39,7 @@ public class GlcWaypointFollowing extends WaypointFollowing {
       motionPlanWorker.flagShutdown();
       motionPlanWorker = null;
     }
-    motionPlanWorker = new MotionPlanWorker(MAX_STEPS, glcPlannerCallbacks);
+    motionPlanWorker = new GlcMotionPlanWorker(MAX_STEPS, glcPlannerCallbacks);
     motionPlanWorker.start(head, entity.createTrajectoryPlanner(plannerConstraint, goal));
   }
 }

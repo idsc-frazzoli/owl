@@ -146,16 +146,17 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
         : Collections.emptyList();
   }
 
+  @Override // from RrtsTrajectoryPlanner
+  public Optional<RrtsPlannerProcess> getProcess() {
+    return Optional.ofNullable(process);
+  }
+
   public void setState(Tensor state) {
     this.state = state;
   }
 
   public void setGoal(Tensor goal) {
     this.goal = goal;
-  }
-
-  public Optional<RrtsPlannerProcess> getProcess() {
-    return Optional.ofNullable(process);
   }
 
   public Optional<RrtsNode> getRoot() {

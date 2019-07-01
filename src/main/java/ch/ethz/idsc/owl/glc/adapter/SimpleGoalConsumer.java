@@ -7,7 +7,7 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.gui.win.MotionPlanWorker;
+import ch.ethz.idsc.owl.gui.win.GlcMotionPlanWorker;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class SimpleGoalConsumer implements GoalConsumer {
@@ -17,7 +17,7 @@ public class SimpleGoalConsumer implements GoalConsumer {
   private final PlannerConstraint plannerConstraint;
   private final Collection<GlcPlannerCallback> glcPlannerCallbacks;
   // ---
-  private MotionPlanWorker motionPlanWorker = null;
+  private GlcMotionPlanWorker motionPlanWorker = null;
 
   public SimpleGoalConsumer(TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, Collection<GlcPlannerCallback> glcPlannerCallbacks) {
     this.trajectoryEntity = trajectoryEntity;
@@ -31,7 +31,7 @@ public class SimpleGoalConsumer implements GoalConsumer {
       motionPlanWorker.flagShutdown();
       motionPlanWorker = null;
     }
-    motionPlanWorker = new MotionPlanWorker(MAX_STEPS, glcPlannerCallbacks);
+    motionPlanWorker = new GlcMotionPlanWorker(MAX_STEPS, glcPlannerCallbacks);
     motionPlanWorker.start( //
         trajectoryEntity.getFutureTrajectoryUntil(trajectoryEntity.delayHint()), //
         trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal));

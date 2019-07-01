@@ -37,6 +37,6 @@ public class RrtsGoalConsumer implements GoalConsumer {
     motionPlanWorker = new RrtsMotionPlanWorker(MAX_STEPS, rrtsPlannerCallbacks);
     motionPlanWorker.start( //
         trajectoryEntity.getFutureTrajectoryUntil(trajectoryEntity.delayHint()), //
-        null /* trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal) */ ); // TODO refactor RrtsPlannerServer
+        null /* trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal) */ ); // TODO refactor TrajectoryEntity
   }
 }
