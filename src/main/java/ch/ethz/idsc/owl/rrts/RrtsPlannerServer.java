@@ -2,6 +2,8 @@
 package ch.ethz.idsc.owl.rrts;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.NavigableMap;
 import java.util.Objects;
@@ -10,7 +12,6 @@ import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -22,6 +23,7 @@ import ch.ethz.idsc.owl.rrts.core.Rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
+import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
@@ -30,10 +32,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/**
- * TODO find more elegant implementation
- * TODO make sort of {@link GlcTrajectoryPlanner} */
-public abstract class RrtsPlannerServer {
+// TODO find more elegant implementation
+public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   private final TransitionSpace transitionSpace;
   private final TransitionRegionQuery obstacleQuery;
   private final Scalar resolution;
@@ -106,6 +106,48 @@ public abstract class RrtsPlannerServer {
     List<TrajectorySample> trajectory = new ArrayList<>(this.trajectory);
     trajectory.addAll(potentialFutureTrajectories.firstEntry().getValue());
     return trajectory;
+  }
+
+  @Override // from ExpandInterface
+  public Optional<RrtsNode> pollNext() {
+    return Objects.nonNull(rrtsPlanner) //
+        ? rrtsPlanner.pollNext() //
+        : Optional.empty();
+  }
+
+  @Override // from ExpandInterface
+  public void expand(RrtsNode node) {
+    if (Objects.nonNull(rrtsPlanner))
+      rrtsPlanner.expand(node);
+  }
+
+  @Override // from ExpandInterface
+  public Optional<RrtsNode> getBest() {
+    return Objects.nonNull(rrtsPlanner) //
+        ? rrtsPlanner.getBest() //
+        : Optional.empty();
+  }
+
+  @Override // from TrajectoryPlanner
+  public void insertRoot(StateTime stateTime) {
+    // TODO combine with offer
+  }
+
+  @Override // from TrajectoryPlanner
+  public Optional<RrtsNode> getBestOrElsePeek() {
+    Optional<RrtsNode> optional = getBest();
+    if (optional.isPresent())
+      return optional;
+    return getQueue().isEmpty() //
+        ? Optional.empty() //
+        : Optional.of(rrtsPlanner.getQueue().get(0));
+  }
+
+  @Override // from TrajectoryPlanner
+  public Collection<RrtsNode> getQueue() {
+    return Objects.nonNull(rrtsPlanner) //
+        ? rrtsPlanner.getQueue() //
+        : Collections.emptyList();
   }
 
   public void setState(Tensor state) {

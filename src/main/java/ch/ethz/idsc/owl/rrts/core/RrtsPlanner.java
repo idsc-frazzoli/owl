@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.core;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -56,6 +58,11 @@ public class RrtsPlanner implements ExpandInterface<RrtsNode> {
   @Override // from ExpandInterface
   public Optional<RrtsNode> getBest() {
     return Optional.ofNullable(queue.peek());
+  }
+
+  /** @return unmodifiable view on queue for display and tests */
+  public List<RrtsNode> getQueue() {
+    return new ArrayList<>(queue);
   }
 
   public TransitionRegionQuery getObstacleQuery() {
