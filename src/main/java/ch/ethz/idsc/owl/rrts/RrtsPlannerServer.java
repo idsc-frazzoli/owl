@@ -29,7 +29,9 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO find more elegant implementation
+/**
+ * TODO find more elegant implementation
+ * TODO make sort of {@link ch.ethz.idsc.owl.glc.core.TrajectoryPlanner} */
 public abstract class RrtsPlannerServer {
   private final TransitionSpace transitionSpace;
   private final TransitionRegionQuery obstacleQuery;

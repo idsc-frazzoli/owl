@@ -1,15 +1,15 @@
-// code by jph
+// code by jph, gjoel
 package ch.ethz.idsc.owl.ani.api;
 
 import java.util.List;
 
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
+import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 
-/**
- * 
- */
-// API not finalized
+/** TODO combine with {@link GlcPlannerCallback}
+ * might require {@link RrtsPlannerServer} to be turned into {@link TrajectoryPlanner} */
+@FunctionalInterface
 public interface RrtsPlannerCallback {
-  void expandResult(List<TrajectorySample> head, RrtsPlanner rrtsPlanner, List<TrajectorySample> tail);
+  void expandResult(List<TrajectorySample> head, RrtsPlannerServer rrtsPlannerServer);
 }

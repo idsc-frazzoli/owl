@@ -1,22 +1,23 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.win;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.idsc.owl.ani.api.AnimationInterface;
 import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
-import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
-import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
-import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
+import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 
 @Deprecated
 class DefaultTrajectoryPlannerCallback implements RrtsPlannerCallback {
   public AnimationInterface controllable;
 
+  @Override
+  public void expandResult(List<TrajectorySample> head, RrtsPlannerServer rrtsPlannerServer) {
+    // ---
+  }
+
+  /*
   @Override
   public void expandResult(List<TrajectorySample> head, RrtsPlanner rrtsPlanner, List<TrajectorySample> tail) {
     List<TrajectorySample> trajectory = new ArrayList<>();
@@ -33,4 +34,5 @@ class DefaultTrajectoryPlannerCallback implements RrtsPlannerCallback {
       // treeRender.setCollection(collection);
     }
   }
+  */
 }
