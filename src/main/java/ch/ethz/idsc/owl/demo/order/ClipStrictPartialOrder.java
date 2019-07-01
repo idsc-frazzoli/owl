@@ -1,4 +1,4 @@
-// code by jph and astoll
+// code by jph, astoll
 package ch.ethz.idsc.owl.demo.order;
 
 import ch.ethz.idsc.owl.math.order.BinaryRelation;
@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
  * In other words, interval <tt> x_i</tt> has to end before <tt> x_j </tt>.
  * 
  * https://en.wikipedia.org/wiki/Interval_order */
-public enum ClipStrictPartialOrder {
+/* package */ enum ClipStrictPartialOrder {
   ;
   /** binary relation
    * irreflexive */

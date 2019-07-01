@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
-import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
