@@ -26,6 +26,7 @@ import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
@@ -79,6 +80,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   @Override
   public void startPlanner( //
       RrtsPlannerCallback rrtsPlannerCallback, List<TrajectorySample> head, Tensor goal) {
+    /*
     StateTime tail = Lists.getLast(head).stateTime();
     NoiseCircleHelper noiseCircleHelper = //
         new NoiseCircleHelper(EmptyTransitionRegionQuery.INSTANCE, tail, Extract2D.FUNCTION.apply(goal));
@@ -87,5 +89,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
       System.out.println("found!");
       rrtsPlannerCallback.expandResult(head, noiseCircleHelper.getRrtsPlanner(), noiseCircleHelper.trajectory);
     }
+    */
+    throw TensorRuntimeException.of();
   }
 }
