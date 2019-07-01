@@ -8,14 +8,14 @@ import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 
 /* package */ enum R2SphereGoal {
   ;
   public static void main(String[] args) {
     R2SphereBase r2SphereBase = new R2SphereBase();
-    TrajectoryPlanner trajectoryPlanner = r2SphereBase.create();
+    GlcTrajectoryPlanner trajectoryPlanner = r2SphereBase.create();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);
     System.out.println("ExpandCount=" + glcExpand.getExpandCount());

@@ -7,14 +7,14 @@ import java.util.function.Supplier;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.ExpandInterface;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Timing;
 
 /** class contains static functions that operate on instances of {@link ExpandInterface}
  * 
  * The expansion of the following planners can be controlled using the functions:
- * {@link StandardTrajectoryPlanner} */
+ * {@link StandardGlcTrajectoryPlanner} */
 public enum Expand {
   ;
   /** Hint: for planning with GLC use {@link GlcExpand}

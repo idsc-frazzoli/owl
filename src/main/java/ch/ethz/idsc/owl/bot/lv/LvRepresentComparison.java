@@ -7,10 +7,10 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.Log;
     GoalInterface goalInterface = new LvGoalInterface(ellipsoidRegion);
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(represent));
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(2, .5), RealScalar.ZERO));

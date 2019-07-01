@@ -2,7 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 enum Se2rExpandDemo {
   ;
   public static void main(String[] args) throws Exception {
-    TrajectoryPlanner trajectoryPlanner = Se2rAnimateDemo.trajectoryPlanner();
+    GlcTrajectoryPlanner trajectoryPlanner = Se2rAnimateDemo.trajectoryPlanner();
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(3), RealScalar.ZERO));
     OwlyFrame owlyFrame = OwlyGui.start();

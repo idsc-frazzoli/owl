@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class TrajectoryPlannerTest extends TestCase {
+public class GlcTrajectoryPlannerTest extends TestCase {
   // static final StateIntegrator STATE_INTEGRATOR = //
   // ;
   public void testSimple() {
@@ -37,7 +37,7 @@ public class TrajectoryPlannerTest extends TestCase {
     SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     // ---
-    TrajectoryPlanner trajectoryPlanner = CheckedTrajectoryPlanner.wrap(new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = CheckedGlcTrajectoryPlanner.wrap(new StandardGlcTrajectoryPlanner( //
         EtaRaster.state(eta), //
         FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5), //
         controls, EmptyObstacleConstraint.INSTANCE, goalInterface));

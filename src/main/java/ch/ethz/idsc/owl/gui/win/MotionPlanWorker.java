@@ -7,7 +7,7 @@ import java.util.List;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.io.Timing;
@@ -27,7 +27,7 @@ public class MotionPlanWorker {
    * 
    * @param head non-empty trajectory
    * @param trajectoryPlanner */
-  public void start(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void start(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
     Thread thread = new Thread(new Runnable() {
       @Override // from Runnable
       public void run() {

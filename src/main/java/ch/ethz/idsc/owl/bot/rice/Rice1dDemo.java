@@ -12,11 +12,11 @@ import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.alg.Array;
  * "Mobility and Autonomous Reconfiguration of Marsokhod" */
 /* package */ enum Rice1dDemo {
   ;
-  public static TrajectoryPlanner simple() {
+  public static GlcTrajectoryPlanner simple() {
     Tensor eta = Tensors.vector(8, 8);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         MidpointIntegrator.INSTANCE, RationalScalar.of(1, 8), 5);
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.alg.Array;
         )));
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   }
 
   public static void main(String[] args) {
-    TrajectoryPlanner trajectoryPlanner = simple();
+    GlcTrajectoryPlanner trajectoryPlanner = simple();
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

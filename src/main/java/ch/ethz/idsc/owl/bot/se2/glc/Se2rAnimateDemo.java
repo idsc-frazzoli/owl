@@ -12,10 +12,10 @@ import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
 enum Se2rAnimateDemo {
   ;
-  public static TrajectoryPlanner trajectoryPlanner() {
+  public static GlcTrajectoryPlanner trajectoryPlanner() {
     Tensor eta = Tensors.vector(6, 6, 50 / Math.PI);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 6), 5);
@@ -53,12 +53,12 @@ enum Se2rAnimateDemo {
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
     // ---
-    return new StandardTrajectoryPlanner( //
+    return new StandardGlcTrajectoryPlanner( //
         EtaRaster.state(eta), stateIntegrator, controls, plannerConstraint, goalInterface);
   }
 
   public static void main(String[] args) throws Exception {
-    TrajectoryPlanner trajectoryPlanner = trajectoryPlanner();
+    GlcTrajectoryPlanner trajectoryPlanner = trajectoryPlanner();
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(3), RealScalar.ZERO));
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(169, 71);

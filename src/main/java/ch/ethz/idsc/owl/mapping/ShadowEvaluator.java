@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Point;
@@ -19,7 +20,6 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -68,7 +68,7 @@ public class ShadowEvaluator {
    * here, colliding states are states intersecting with the shadow region */
   public GlcPlannerCallback timeToReact = new GlcPlannerCallback() {
     @Override
-    public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    public void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
       Function<StateTime, Mat> mapSupplier = new Function<StateTime, Mat>() {
         @Override
         public Mat apply(StateTime t) {
@@ -94,7 +94,7 @@ public class ShadowEvaluator {
   /** Evalates time to react (TTR) along trajectory for each sector */
   public GlcPlannerCallback sectorTimeToReact = new GlcPlannerCallback() {
     @Override
-    public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+    public void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
       Tensor angles = Subdivide.of(Degree.of(0), Degree.of(360), 72);
       Optional<GlcNode> optional = trajectoryPlanner.getBest();
       if (optional.isPresent()) {

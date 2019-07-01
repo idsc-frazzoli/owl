@@ -18,8 +18,8 @@ import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.io.Timing;
   static final EllipsoidRegion ELLIPSOID_REGION = //
       new EllipsoidRegion(Tensors.vector(3, 3, -1, 0), Tensors.vector(0.5, 0.5, 0.4, 0.4));
 
-  public static TrajectoryPlanner createInstance() {
+  public static GlcTrajectoryPlanner createInstance() {
     Tensor eta = Tensors.vector(3, 3, 6, 6);
     Collection<Flow> controls = Rice2Controls.create2d(RealScalar.of(-.5), 1).getFlows(15);
     GoalInterface goalInterface = new Rice2GoalManager(ELLIPSOID_REGION);
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.io.Timing;
         ))));
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0.1, 0, 0), RealScalar.ZERO));
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.io.Timing;
 
   // Hint: ensure that goal region contains at least 1 domain etc.
   public static void main(String[] args) {
-    TrajectoryPlanner trajectoryPlanner = createInstance();
+    GlcTrajectoryPlanner trajectoryPlanner = createInstance();
     Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);

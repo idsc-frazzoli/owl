@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeCoordinateWrap;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -61,7 +61,7 @@ class GokartxTEntity extends CarEntity {
   }
 
   @Override
-  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
     edgeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

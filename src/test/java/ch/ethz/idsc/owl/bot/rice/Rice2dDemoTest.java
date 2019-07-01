@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 public class Rice2dDemoTest extends TestCase {
   public void testExpand() throws InterruptedException {
-    TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
+    GlcTrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
     Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000); // 153 0.368319228
@@ -40,7 +40,7 @@ public class Rice2dDemoTest extends TestCase {
   }
 
   public void testGlcExpand() throws InterruptedException {
-    TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
+    GlcTrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
     Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.untilOptimal(1000); // 220 0.283809941

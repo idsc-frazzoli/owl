@@ -91,7 +91,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     }
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final StateIntegrator getStateIntegrator() {
     return stateIntegrator;
   }

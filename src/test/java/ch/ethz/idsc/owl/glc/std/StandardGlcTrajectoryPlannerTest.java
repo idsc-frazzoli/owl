@@ -10,10 +10,10 @@ import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 import junit.framework.TestCase;
 
-public class StandardTrajectoryPlannerTest extends TestCase {
+public class StandardGlcTrajectoryPlannerTest extends TestCase {
   public void testSimple() {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
@@ -44,7 +44,7 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     GoalInterface goalInterface = RnMinDistGoalManager.sperical(stateGoal, radius);
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));

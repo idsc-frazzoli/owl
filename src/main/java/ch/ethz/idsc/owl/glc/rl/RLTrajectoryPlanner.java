@@ -12,16 +12,16 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializable {
+public abstract class RLTrajectoryPlanner implements GlcTrajectoryPlanner, Serializable {
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---
@@ -116,24 +116,24 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
   }
 
   /***************************************************/
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(openQueue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
     addToOpen(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Optional<GlcNode> getBestOrElsePeek() {
     // Queue#peek() returns the head of queue, or null if queue is empty
     return Optional.ofNullable(getBest().orElse(openQueue.peek()));
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final HeuristicFunction getHeuristicFunction() {
     return heuristicFunction;
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
     // LONGTERM investigate unified design
     throw new UnsupportedOperationException();
@@ -143,7 +143,7 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
     return domainMap.getMap();
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Collection<GlcNode> getQueue() {
     return Collections.unmodifiableCollection(queue().collection());
   }

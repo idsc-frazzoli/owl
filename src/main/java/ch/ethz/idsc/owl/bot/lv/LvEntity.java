@@ -10,11 +10,11 @@ import ch.ethz.idsc.owl.ani.api.AbstractCircularEntity;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -59,10 +59,10 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final GlcTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     GoalInterface goalInterface = LvGoalInterface.create(Extract2D.FUNCTION.apply(goal), Tensors.vector(0.2, 0.2));
     StateTimeRaster stateTimeRaster = EtaRaster.state(PARTITION_SCALE);
-    return new StandardTrajectoryPlanner( //
+    return new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 
@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override
-  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
     treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

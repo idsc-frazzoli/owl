@@ -15,8 +15,8 @@ import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-/** class controls delta using {@link StandardTrajectoryPlanner} */
+/** class controls delta using {@link StandardGlcTrajectoryPlanner} */
 /* package */ class DeltaEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   protected static final Tensor PARTITION_SCALE = Tensors.vector(5, 5).unmodifiable();
   protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = FixedStateIntegrator.create( //
@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   }
 
   @Override
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final GlcTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, U_NORM).getFlows(U_SIZE);
     Scalar u_norm = DeltaControls.maxSpeed(controls);
@@ -86,7 +86,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar maxMove = maxNormGradient.add(u_norm);
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(goalRegion, maxMove);
-    return new StandardTrajectoryPlanner( //
+    return new StandardGlcTrajectoryPlanner( //
         stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 
@@ -104,7 +104,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   }
 
   @Override // from GlcPlannerCallback
-  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
     treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

@@ -15,11 +15,11 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Serializable {
+public abstract class RelaxedTrajectoryPlanner implements GlcTrajectoryPlanner, Serializable {
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   private final RelaxedPriorityQueue globalQueue;
@@ -124,7 +124,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   }
 
   /***************************************************/
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(globalQueue.collection().isEmpty() && domainQueueMap.isEmpty()); // root insertion requires empty planner
     GlcNode root = GlcNodes.createRoot(stateTime, heuristicFunction);
@@ -132,23 +132,23 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     addToDomainMap(stateTimeRaster.convertToKey(stateTime), root);
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Optional<GlcNode> getBestOrElsePeek() {
     return Optional.ofNullable(getBest().orElse(globalQueue.peekBest()));
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final HeuristicFunction getHeuristicFunction() {
     return heuristicFunction;
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
     return domainQueueMap.getMap().entrySet().stream() //
         .collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().peekBest()));
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Collection<GlcNode> getQueue() {
     return Collections.unmodifiableCollection(globalQueue.collection());
   }

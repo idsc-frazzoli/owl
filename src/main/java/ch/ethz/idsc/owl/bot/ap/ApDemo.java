@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
   public static void main(String[] args) throws Exception {
     // StateTimeRaster stateTimeRaster = ApTrajectoryPlanner.stateTimeRaster();
-    StandardTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.apStandardTrajectoryPlanner();
+    StandardGlcTrajectoryPlanner standardTrajectoryPlanner = ApTrajectoryPlanner.apStandardTrajectoryPlanner();
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(300, 300);

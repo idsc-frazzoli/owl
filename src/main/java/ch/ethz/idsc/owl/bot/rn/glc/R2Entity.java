@@ -16,11 +16,11 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -81,13 +81,13 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public GlcTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Collection<Flow> controls = createControls(); // LONGTERM design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         RnMinTimeGoalManager.create(goalRegion, controls), //
         extraCosts);
-    return new StandardTrajectoryPlanner( //
+    return new StandardGlcTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, //
         plannerConstraint, goalInterface);
   }
@@ -111,7 +111,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override
-  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
     treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

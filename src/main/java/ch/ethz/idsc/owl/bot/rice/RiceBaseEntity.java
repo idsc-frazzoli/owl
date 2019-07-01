@@ -6,7 +6,7 @@ import java.util.List;
 import ch.ethz.idsc.owl.ani.api.AbstractCircularEntity;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override
-  public final void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public final void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
     treeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }
 }

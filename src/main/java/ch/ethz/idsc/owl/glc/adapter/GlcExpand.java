@@ -6,17 +6,17 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalars;
 
 /** following the observation by ynager the expansion may continue
  * until merit of queue node is no less than cost of node in goal */
 public class GlcExpand {
-  private final TrajectoryPlanner trajectoryPlanner;
+  private final GlcTrajectoryPlanner trajectoryPlanner;
   private Supplier<Boolean> isContinued = () -> true;
   private int expandCount = 0;
 
-  public GlcExpand(TrajectoryPlanner trajectoryPlanner) {
+  public GlcExpand(GlcTrajectoryPlanner trajectoryPlanner) {
     this.trajectoryPlanner = Objects.requireNonNull(trajectoryPlanner);
   }
 

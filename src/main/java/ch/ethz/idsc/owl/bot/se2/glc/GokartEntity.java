@@ -9,7 +9,7 @@ import java.util.Random;
 import ch.ethz.idsc.owl.ani.api.EntityControl;
 import ch.ethz.idsc.owl.ani.api.ProviderRank;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -70,7 +70,7 @@ public class GokartEntity extends CarEntity {
   }
 
   @Override
-  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
     // System.out.println(trajectoryPlanner.getDomainMap().values().size());
     edgeRender.setCollection(trajectoryPlanner.getDomainMap().values());
   }

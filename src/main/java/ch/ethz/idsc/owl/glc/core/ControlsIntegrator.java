@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -40,7 +40,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
   }
 }
 
-/** utility class used in {@link TrajectoryPlanner}s to compute
+/** utility class used in {@link GlcTrajectoryPlanner}s to compute
  * the trajectories from a given node for all controls.
  * 
  * Since the integration is independent for all controls,
@@ -60,7 +60,7 @@ public class ControlsIntegrator implements Serializable {
     this.costFunction = Objects.requireNonNull(costFunction);
   }
 
-  /** parallel trajectory integration is used by {@link StandardTrajectoryPlanner}
+  /** parallel trajectory integration is used by {@link StandardGlcTrajectoryPlanner}
    * 
    * @param node from which to expand
    * @return */

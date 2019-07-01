@@ -13,8 +13,8 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -38,22 +38,22 @@ import ch.ethz.idsc.tensor.alg.Array;
   ;
   private static final Tensor ETA = Tensors.vector(5, 7);
 
-  public static TrajectoryPlanner raw(GoalInterface goalInterface) {
+  public static GlcTrajectoryPlanner raw(GoalInterface goalInterface) {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta4Integrator.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     return trajectoryPlanner;
   }
 
-  public static TrajectoryPlanner simple() {
+  public static GlcTrajectoryPlanner simple() {
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, Tensors.vector(Math.PI * 0.7, 0.5), RealScalar.of(0.3));
-    TrajectoryPlanner trajectoryPlanner = raw(goalInterface);
+    GlcTrajectoryPlanner trajectoryPlanner = raw(goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     return trajectoryPlanner;
   }
 
-  public static TrajectoryPlanner medium() {
+  public static GlcTrajectoryPlanner medium() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
@@ -70,7 +70,7 @@ import ch.ethz.idsc.tensor.alg.Array;
         PsuMetric.INSTANCE, Tensors.vector(Math.PI, 2), RealScalar.of(0.3));
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));
@@ -81,7 +81,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   }
 
   public static void main(String[] args) {
-    TrajectoryPlanner trajectoryPlanner = medium();
+    GlcTrajectoryPlanner trajectoryPlanner = medium();
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

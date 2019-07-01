@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.gui.win;
 
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 
 public enum OwlyGui {
   ;
@@ -11,7 +11,7 @@ public enum OwlyGui {
     return owlyFrame;
   }
 
-  public static OwlyFrame glc(TrajectoryPlanner trajectoryPlanner) {
+  public static OwlyFrame glc(GlcTrajectoryPlanner trajectoryPlanner) {
     OwlyFrame owlyFrame = new OwlyFrame();
     owlyFrame.setGlc(trajectoryPlanner);
     owlyFrame.jFrame.setVisible(true);

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.math.state.TrajectoryWrap;
@@ -53,5 +53,5 @@ public abstract class TrajectoryEntity extends AbstractEntity implements Traject
   /** @param plannerConstraint
    * @param goal for instance {px, py, angle}
    * @return */
-  public abstract TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal);
+  public abstract GlcTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal);
 }

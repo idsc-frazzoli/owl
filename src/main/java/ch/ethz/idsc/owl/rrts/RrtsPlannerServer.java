@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -31,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /**
  * TODO find more elegant implementation
- * TODO make sort of {@link ch.ethz.idsc.owl.glc.core.TrajectoryPlanner} */
+ * TODO make sort of {@link GlcTrajectoryPlanner} */
 public abstract class RrtsPlannerServer {
   private final TransitionSpace transitionSpace;
   private final TransitionRegionQuery obstacleQuery;

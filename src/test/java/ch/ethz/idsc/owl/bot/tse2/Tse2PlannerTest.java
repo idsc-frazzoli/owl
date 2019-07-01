@@ -12,12 +12,12 @@ import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -49,7 +49,7 @@ public class Tse2PlannerTest extends TestCase {
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         new Tse2Integrator(v_range), Scalars.fromString("1/10[s]"), 4);
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, //
         stateIntegrator, //
         controls, //
@@ -85,7 +85,7 @@ public class Tse2PlannerTest extends TestCase {
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         new Tse2Integrator(v_range), Scalars.fromString("1/10[s]"), 4);
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         stateTimeRaster, //
         stateIntegrator, //
         controls, //

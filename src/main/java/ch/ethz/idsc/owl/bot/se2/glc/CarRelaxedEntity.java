@@ -12,9 +12,9 @@ import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
@@ -79,7 +79,7 @@ public class CarRelaxedEntity extends CarEntity {
   }
 
   @Override
-  public void expandResult(List<TrajectorySample> head, TrajectoryPlanner trajectoryPlanner) {
+  public void expandResult(List<TrajectorySample> head, GlcTrajectoryPlanner trajectoryPlanner) {
     edgeRender.setCollection(trajectoryPlanner.getQueue());
   }
 

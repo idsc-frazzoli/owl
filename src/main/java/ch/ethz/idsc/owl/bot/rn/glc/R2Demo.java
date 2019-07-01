@@ -15,10 +15,10 @@ import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -43,15 +43,15 @@ import ch.ethz.idsc.tensor.sca.Ramp;
   static final StateIntegrator STATE_INTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
 
-  static TrajectoryPlanner simpleEmpty() {
+  static GlcTrajectoryPlanner simpleEmpty() {
     return simple(EmptyObstacleConstraint.INSTANCE);
   }
 
-  static TrajectoryPlanner simpleR2Bubbles() {
+  static GlcTrajectoryPlanner simpleR2Bubbles() {
     return simple(RegionConstraints.timeInvariant(R2Bubbles.INSTANCE));
   }
 
-  private static TrajectoryPlanner simple(PlannerConstraint plannerConstraint) {
+  private static GlcTrajectoryPlanner simple(PlannerConstraint plannerConstraint) {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
     final Scalar radius = DoubleScalar.of(0.25);
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
     // ---
-    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
+    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
         EtaRaster.state(eta), STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     return trajectoryPlanner;
   }
 
-  private static void demo(TrajectoryPlanner trajectoryPlanner) {
+  private static void demo(GlcTrajectoryPlanner trajectoryPlanner) {
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.gui.ren;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 
@@ -13,9 +13,9 @@ class HudRender implements RenderInterface {
   private static final Color SHADING = new Color(0, 0, 0, 64);
   // ---
   @SuppressWarnings("unused")
-  private final TrajectoryPlanner trajectoryPlanner;
+  private final GlcTrajectoryPlanner trajectoryPlanner;
 
-  HudRender(TrajectoryPlanner trajectoryPlanner) {
+  HudRender(GlcTrajectoryPlanner trajectoryPlanner) {
     this.trajectoryPlanner = trajectoryPlanner;
   }
 

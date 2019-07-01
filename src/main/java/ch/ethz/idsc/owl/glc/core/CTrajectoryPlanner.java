@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** base class for classic generalized label correction implementation */
-public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializable {
+public abstract class CTrajectoryPlanner implements GlcTrajectoryPlanner, Serializable {
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
   private final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
@@ -76,7 +76,7 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
   }
 
   /** @return number of replacements in the domain map caused by
-   * {@link TrajectoryPlanner#insert(Tensor, GlcNode)} */
+   * {@link GlcTrajectoryPlanner#insert(Tensor, GlcNode)} */
   public final int replaceCount() {
     return replaceCount;
   }
@@ -106,30 +106,30 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
   }
 
   /***************************************************/
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(queue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
     boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
     GlobalAssert.that(!replaced); // root insertion should not replace any other node
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Optional<GlcNode> getBestOrElsePeek() {
     // Queue#peek() returns the head of queue, or null if queue is empty
     return Optional.ofNullable(getBest().orElse(queue.peek()));
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final HeuristicFunction getHeuristicFunction() {
     return heuristicFunction;
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
     return Collections.unmodifiableMap(domainMap);
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Collection<GlcNode> getQueue() {
     return Collections.unmodifiableCollection(queue);
   }
