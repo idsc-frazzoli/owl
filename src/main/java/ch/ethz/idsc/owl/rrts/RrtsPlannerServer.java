@@ -46,6 +46,7 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   private RrtsPlanner rrtsPlanner = null;
   private List<TrajectorySample> trajectory = new ArrayList<>();
   private NavigableMap<Scalar, List<TrajectorySample>> potentialFutureTrajectories = new TreeMap<>(Scalars::compare);
+  private RrtsPlannerProcess process = null;
 
   public RrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -68,21 +69,15 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     flowTrajectoryGenerator = new RrtsFlowTrajectoryGenerator(stateSpaceModel);
   }
 
-  public RrtsPlannerProcess offer(StateTime tail) throws Exception {
-    rrtsPlanner = null;
-    trajectory = trajectory();
-    potentialFutureTrajectories.clear();
-    return from(Objects.requireNonNull(tail));
-  }
-
-  protected RrtsPlannerProcess from(StateTime tail) throws Exception {
+  protected void from(StateTime tail) {
+    process = null;
     if (Objects.nonNull(tail)) {
       Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
       root = rrts.insertAsNode(tail.state(), 5).get();
       rrtsPlanner = new RrtsPlanner(rrts, spaceSampler(state), goalSampler(goal));
-      return new RrtsPlannerProcess() {
+      process = new RrtsPlannerProcess() {
         @Override // from RrtsPlannerProcess
-        public void run(int steps) throws Exception {
+        public void run(int steps) {
           if (Objects.nonNull(rrtsPlanner)) {
             Expand.steps(rrtsPlanner, steps);
             RrtsNodes.costConsistency(root, transitionSpace, costFunction);
@@ -92,12 +87,10 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
               potentialFutureTrajectories.put(best.costFromRoot(), //
                   flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, tail.time(), resolution));
             }
-          } else
-            throw new Exception("no RRT* planner present");
+          }
         }
       };
     }
-    throw new Exception("failed to setup RRT* planner; no tail provided to expand from");
   }
 
   private List<TrajectorySample> trajectory() {
@@ -130,7 +123,10 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
 
   @Override // from TrajectoryPlanner
   public void insertRoot(StateTime stateTime) {
-    // TODO combine with offer
+    rrtsPlanner = null;
+    trajectory = trajectory();
+    potentialFutureTrajectories.clear();
+    from(Objects.requireNonNull(stateTime));
   }
 
   @Override // from TrajectoryPlanner
@@ -156,6 +152,10 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
 
   public void setGoal(Tensor goal) {
     this.goal = goal;
+  }
+
+  public Optional<RrtsPlannerProcess> getProcess() {
+    return Optional.ofNullable(process);
   }
 
   public Optional<RrtsNode> getRoot() {

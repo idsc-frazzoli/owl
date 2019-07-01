@@ -79,7 +79,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
     int frame = 0;
     while (frame++ < 5 && owlyFrame.jFrame.isVisible()) {
       server.setGoal(goal);
-      server.offer(stateTime).run(200);
+      server.insertRoot(stateTime);
+      server.getProcess().ifPresent(process -> process.run(200));
       owlyFrame.setRrts(transitionSpace, server.getRoot().get(), transitionRegionQuery);
       Optional<List<TrajectorySample>> optional = server.getTrajectory();
       if (optional.isPresent()) {

@@ -57,7 +57,8 @@ public class RrtsPlannerServerTest extends TestCase {
       }
     };
     server.setGoal(goal);
-    server.offer(stateTime).run(400);
+    server.insertRoot(stateTime);
+    server.getProcess().ifPresent(process -> process.run(400));
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
@@ -92,7 +93,8 @@ public class RrtsPlannerServerTest extends TestCase {
       }
     };
     server.setGoal(goal);
-    server.offer(stateTime).run(400);
+    server.insertRoot(stateTime);
+    server.getProcess().ifPresent(process -> process.run(400));
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
@@ -127,7 +129,8 @@ public class RrtsPlannerServerTest extends TestCase {
       }
     };
     server.setGoal(goal);
-    server.offer(stateTime).run(400);
+    server.insertRoot(stateTime);
+    server.getProcess().ifPresent(process -> process.run(400));
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();

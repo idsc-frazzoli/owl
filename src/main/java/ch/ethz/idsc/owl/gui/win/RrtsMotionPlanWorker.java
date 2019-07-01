@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.rrts.RrtsPlannerProcess;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.tensor.io.Timing;
 
@@ -36,12 +35,8 @@ public class RrtsMotionPlanWorker {
       public void run() {
         Timing timing = Timing.started();
         StateTime root = Lists.getLast(head).stateTime(); // last statetime in head trajectory
-        try {
-          RrtsPlannerProcess plannerProcess = rrtsPlannerServer.offer(root);
-          plannerProcess.run(maxSteps);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+        rrtsPlannerServer.insertRoot(root);
+        rrtsPlannerServer.getProcess().ifPresent(process -> process.run(maxSteps));
         if (isRelevant) {
           timing.seconds();
           for (RrtsPlannerCallback rrtsPlannerCallback : rrtsPlannerCallbacks)
