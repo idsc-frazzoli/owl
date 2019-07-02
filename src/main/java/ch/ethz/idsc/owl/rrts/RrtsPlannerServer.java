@@ -1,6 +1,7 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.rrts;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,6 +32,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 
 // TODO find more elegant implementation
 public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
@@ -166,6 +168,16 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   public Optional<List<TrajectorySample>> getTrajectory() {
     List<TrajectorySample> trajectory = trajectory();
     return trajectory.isEmpty() ? Optional.empty() : Optional.of(trajectory);
+  }
+
+  public Optional<TransitionRegionQuery> getObstacleQuery() {
+    return Objects.nonNull(rrtsPlanner) //
+        ? Optional.of(rrtsPlanner.getObstacleQuery()) //
+        : Optional.empty();
+  }
+
+  public TransitionSpace getTransitionSpace() throws ClassNotFoundException, IOException {
+    return Serialization.copy(transitionSpace);
   }
 
   protected abstract RrtsNodeCollection rrtsNodeCollection();

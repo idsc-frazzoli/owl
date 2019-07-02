@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.ExpandInterface;
-import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Timing;
@@ -24,7 +23,7 @@ public enum Expand {
    * @param expandInterface
    * @param expandLimit
    * @param isContinued
-   * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
+   * @return number of function calls of {@link ExpandInterface#expand(StateCostNode)} */
   public static <T extends StateCostNode> int maxSteps(ExpandInterface<T> expandInterface, int expandLimit, Supplier<Boolean> isContinued) {
     int expandCount = 0;
     while (0 <= --expandLimit //
@@ -46,7 +45,7 @@ public enum Expand {
    * 
    * @param expandInterface
    * @param timeLimit of expand function in [s]
-   * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
+   * @return number of function calls of {@link ExpandInterface#expand(StateCostNode)} */
   public static <T extends StateCostNode> int maxTime(ExpandInterface<T> expandInterface, Scalar timeLimit) {
     System.out.println("*** EXPANDING ***");
     Timing timing = Timing.started();
@@ -80,7 +79,7 @@ public enum Expand {
    * 
    * @param expandInterface
    * @param expandLimit
-   * @return number of function calls of {@link ExpandInterface#expand(GlcNode)} */
+   * @return number of function calls of {@link ExpandInterface#expand(StateCostNode)} */
   public static <T extends StateCostNode> int steps(ExpandInterface<T> expandInterface, int expandLimit) {
     int expandCount = 0;
     while (expandCount < expandLimit) {

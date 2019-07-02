@@ -8,5 +8,5 @@ import ch.ethz.idsc.owl.rrts.RrtsPlannerProcess;
 
 public interface RrtsTrajectoryPlanner extends TrajectoryPlanner<RrtsNode> {
   /** @return {@link RrtsPlannerProcess} or null if not properly set up */
-  public Optional<RrtsPlannerProcess> getProcess();
+  Optional<RrtsPlannerProcess> getProcess();
 }

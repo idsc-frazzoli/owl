@@ -1,29 +1,31 @@
-// code by jph
+// code by jph, gjoel
 package ch.ethz.idsc.owl.bot.rn.rrts;
-
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.util.List;
 
 import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
 import ch.ethz.idsc.owl.ani.api.AbstractRrtsEntity;
-import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
+import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.rn.glc.R2TrajectoryControl;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
-import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
+import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
+import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
+import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
+import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
+import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
+import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
@@ -31,16 +33,42 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 /* package */ class R2RrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(0.5);
+  private static final StateSpaceModel STATE_SPACE_MODEL = SingleIntegratorStateSpaceModel.INSTANCE;
 
   // ---
-  /** @param state initial position of entity */
-  public R2RrtsEntity(Tensor state) {
-    super(new SimpleEpisodeIntegrator( //
-        SingleIntegratorStateSpaceModel.INSTANCE, //
-        EulerIntegrator.INSTANCE, //
-        new StateTime(state, RealScalar.ZERO)), //
+  /** @param stateTime initial position of entity */
+  public R2RrtsEntity(StateTime stateTime, ImageRegion imageRegion) {
+    super( //
+        new RrtsPlannerServer( //
+            RnTransitionSpace.INSTANCE, //
+            new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
+            RationalScalar.of(1, 10), //
+            SingleIntegratorStateSpaceModel.INSTANCE) {
+          @Override
+          protected RrtsNodeCollection rrtsNodeCollection() {
+            return RrtsNodeCollections.rn(imageRegion.origin(), imageRegion.range());
+          }
+
+          @Override
+          protected RandomSampleInterface spaceSampler(Tensor state) {
+            return BoxRandomSample.of(imageRegion.origin(), imageRegion.range());
+          }
+
+          @Override
+          protected RandomSampleInterface goalSampler(Tensor goal) {
+            return new ConstantRandomSample(Extract2D.FUNCTION.apply(goal));
+          }
+        }, //
+        new SimpleEpisodeIntegrator( //
+            STATE_SPACE_MODEL, //
+            EulerIntegrator.INSTANCE, //
+            stateTime), //
         new R2TrajectoryControl());
     add(FallbackControl.of(Array.zeros(2)));
+  }
+
+  protected Tensor shape() {
+    return Tensors.fromString("{{.1,.1},{.1,-.1},{-.1,-.1},{-.1,.1}}").unmodifiable();
   }
 
   @Override // from TensorMetrix
@@ -48,45 +76,14 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
     return Norm2Squared.between(x, y); // non-negative
   }
 
-  @Override
+  @Override // from TrajectoryEntity
   public Scalar delayHint() {
     return DELAY_HINT;
   }
 
-  @Override
-  public final GlcTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    throw new RuntimeException(); // LONGTERM API not finalized
-  }
-
-  @Override
-  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    { // indicate current position
-      Tensor state = getStateTimeNow().state();
-      Point2D point = geometricLayer.toPoint2D(state);
-      graphics.setColor(new Color(64, 128, 64, 192));
-      graphics.fill(new Ellipse2D.Double(point.getX() - 2, point.getY() - 2, 7, 7));
-    }
-    { // indicate position 1[s] into the future
-      Tensor state = getEstimatedLocationAt(DELAY_HINT);
-      Point2D point = geometricLayer.toPoint2D(state);
-      graphics.setColor(new Color(255, 128, 128 - 64, 128 + 64));
-      graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
-    }
-  }
-
-  @Override
-  public void startPlanner( //
-      RrtsPlannerCallback rrtsPlannerCallback, List<TrajectorySample> head, Tensor goal) {
-    /*
-    StateTime tail = Lists.getLast(head).stateTime();
-    NoiseCircleHelper noiseCircleHelper = //
-        new NoiseCircleHelper(EmptyTransitionRegionQuery.INSTANCE, tail, Extract2D.FUNCTION.apply(goal));
-    noiseCircleHelper.plan(350);
-    if (noiseCircleHelper.trajectory != null) {
-      System.out.println("found!");
-      rrtsPlannerCallback.expandResult(head, noiseCircleHelper.getRrtsPlanner(), noiseCircleHelper.trajectory);
-    }
-    */
-    throw TensorRuntimeException.of();
+  @Override // from TrajectoryEntity
+  public final RrtsTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+    plannerServer.setGoal(goal);
+    return plannerServer;
   }
 }
