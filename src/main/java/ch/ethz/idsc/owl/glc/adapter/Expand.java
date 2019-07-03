@@ -1,96 +1,73 @@
 // code by jph and jl
 package ch.ethz.idsc.owl.glc.adapter;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.glc.core.ExpandInterface;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Timing;
 
-/** class contains static functions that operate on instances of {@link ExpandInterface}
- * 
- * The expansion of the following planners can be controlled using the functions:
- * {@link StandardGlcTrajectoryPlanner} */
-public enum Expand {
-  ;
-  /** Hint: for planning with GLC use {@link GlcExpand}
-   * 
-   * expand aborts if isContinued supplies false
-   * 
-   * @param expandInterface
-   * @param expandLimit
-   * @param isContinued
-   * @return number of function calls of {@link ExpandInterface#expand(StateCostNode)} */
-  public static <T extends StateCostNode> int maxSteps(ExpandInterface<T> expandInterface, int expandLimit, Supplier<Boolean> isContinued) {
-    int expandCount = 0;
-    while (0 <= --expandLimit //
-        && !expandInterface.getBest().isPresent() //
-        && isContinued.get()) {
-      Optional<T> next = expandInterface.pollNext();
-      if (next.isPresent()) { // queue is empty
-        expandInterface.expand(next.get());
-        ++expandCount;
-      } else {
-        System.out.println("*** Queue is empty -- No Goal was found ***");
-        break;
-      }
-    }
+public class Expand<T extends StateCostNode> {
+  protected final ExpandInterface<T> expandInterface;
+  protected Supplier<Boolean> isContinued = () -> true;
+  protected int expandCount = 0;
+
+  public Expand(ExpandInterface<T> expandInterface) {
+    this.expandInterface = Objects.requireNonNull(expandInterface);
+  }
+
+  /** @return number of expand operations */
+  public int getExpandCount() {
     return expandCount;
   }
 
-  /** expands until the time of the running algorithm exceeds the maxTime or a goal was found
-   * 
-   * @param expandInterface
-   * @param timeLimit of expand function in [s]
-   * @return number of function calls of {@link ExpandInterface#expand(StateCostNode)} */
-  public static <T extends StateCostNode> int maxTime(ExpandInterface<T> expandInterface, Scalar timeLimit) {
-    System.out.println("*** EXPANDING ***");
-    Timing timing = Timing.started();
-    final double time = timeLimit.number().doubleValue();
-    int expandCount = 0;
-    while (true) {
-      Optional<T> next = expandInterface.pollNext();
-      if (!next.isPresent()) {
-        System.err.println("**** Queue is empty -- No Goal was found"); // queue is empty
-        break;
-      }
-      expandInterface.expand(next.get());
-      ++expandCount;
-      if (expandInterface.getBest().isPresent()) { // found node in goal region
-        timing.stop();
-        System.out.println("after " + timing.seconds() + "s");
-        break;
-      }
-      if (time < timing.seconds()) {
-        System.out.println("*** TimeLimit reached -- No Goal was found ***");
-        break;
-      }
-    }
-    return expandCount;
+  public void setContinued(Supplier<Boolean> isContinued) {
+    this.isContinued = isContinued;
   }
 
   /** fixed number of invocations of expand(...)
    * however, earlier abort may be possible for instance to due lack of nodes to expand from
-   * 
-   * function used by GLC as well as RRTS planner
-   * 
-   * @param expandInterface
-   * @param expandLimit
-   * @return number of function calls of {@link ExpandInterface#expand(StateCostNode)} */
-  public static <T extends StateCostNode> int steps(ExpandInterface<T> expandInterface, int expandLimit) {
-    int expandCount = 0;
-    while (expandCount < expandLimit) {
+   *
+   * @param limit */
+  public void steps(int limit) {
+    expand(limit, () -> false);
+  }
+
+  /** iterates until expansion creates a first node goal region
+   *
+   * @param limit */
+  public void findAny(int limit) {
+    expand(limit, () -> expandInterface.getBest().isPresent());
+  }
+
+  /** iterates until expansion creates a first node goal region or timeLimit is reached
+   *
+   * @param timeLimit */
+  public void maxTime(Scalar timeLimit) {
+    final Timing timing = Timing.started();
+    final double time = timeLimit.number().doubleValue();
+    expand(Integer.MAX_VALUE, () -> {
+      double t = timing.seconds();
+      boolean bool = t >= time;
+      if (bool)
+        System.out.println("*** TimeLimit reached -- No Goal was found ***");
+      return bool;
+    });
+  }
+
+  private void expand(int limit, Supplier<Boolean> isFinished) {
+    while (0 <= --limit && !isFinished.get() && isContinued.get()) {
       Optional<T> next = expandInterface.pollNext();
-      if (!next.isPresent()) { // queue is empty
+      if (next.isPresent()) {
+        expandInterface.expand(next.get());
+        ++expandCount;
+      } else { // queue is empty
         System.out.println("*** Queue is empty -- No Goal was found ***");
         break;
       }
-      expandInterface.expand(next.get());
-      ++expandCount;
     }
-    return expandCount;
   }
 }

@@ -106,7 +106,7 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
         @Override // from RrtsPlannerProcess
         public void run(int steps) {
           if (Objects.nonNull(rrtsPlanner)) {
-            Expand.steps(rrtsPlanner, steps); // FIXME can get stuck here
+            new Expand<>(rrtsPlanner).steps(steps); // FIXME can get stuck here
             RrtsNodes.costConsistency(root, transitionSpace, costFunction);
             if (rrtsPlanner.getBest().isPresent()) {
               RrtsNode best = rrtsPlanner.getBest().get();

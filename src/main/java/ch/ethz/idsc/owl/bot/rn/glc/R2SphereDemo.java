@@ -17,8 +17,9 @@ import ch.ethz.idsc.owl.math.state.StateTime;
   public static void main(String[] args) {
     R2SphereBase r2SphereBase = new R2SphereBase();
     GlcTrajectoryPlanner trajectoryPlanner = r2SphereBase.create();
-    int iters = Expand.steps(trajectoryPlanner, 200);
-    GlobalAssert.that(iters == 200);
+    Expand expand =new Expand<>(trajectoryPlanner);
+    expand.steps(200);
+    GlobalAssert.that(expand.getExpandCount() == 200);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

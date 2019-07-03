@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.gui.win;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
+import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
 
 /* package */ class RrtsMotionPlanWorker extends MotionPlanWorker<RrtsTrajectoryPlanner, RrtsPlannerCallback>{
@@ -13,5 +14,10 @@ import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
 
   protected void expand(RrtsTrajectoryPlanner trajectoryPlanner) {
     trajectoryPlanner.getProcess().ifPresent(process -> process.run(maxSteps));
+    /*
+    Expand expand = new Expand<>(trajectoryPlanner);
+    expand.setContinued(() -> isRelevant);
+    expand.steps(maxSteps);
+    */
   }
 }
