@@ -79,8 +79,23 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     trajectory = trajectory().stream().filter(predicate).collect(Collectors.toList());
     potentialFutureTrajectories.clear();
     from(Objects.requireNonNull(stateTime));
+    // TODO ability to interrupt current trajectory
+    // where to put that, also see AbstractRrtsEntity::expandResult
+    // -> TrajectoryEntity::getFutureTrajectoryUntil
+    // -> StateTrajectoryControl::getFutureTrajectoryUntil
+    /*
+    StateTime future = trajectory.isEmpty() ? stateTime : trajectory.get(trajectory.size() / 2).stateTime();
+    Predicate<TrajectorySample> inversePredicate = //
+        trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), future.time());
+    trajectory = trajectory().stream().filter(inversePredicate).collect(Collectors.toList());
+    from(Objects.requireNonNull(future));
+    */
   }
 
+  /** TODO
+   * merge {@link Expand} and {@link ch.ethz.idsc.owl.glc.adapter.GlcExpand}
+   * remove {@link RrtsPlannerProcess} and integrate actions into {@link RrtsPlannerServer#expand(RrtsNode)} and {@link RrtsPlannerServer#trajectory()}
+   * -> merge {@link ch.ethz.idsc.owl.gui.win.RrtsMotionPlanWorker} and {@link ch.ethz.idsc.owl.gui.win.GlcMotionPlanWorker} */
   protected void from(StateTime tail) {
     process = null;
     if (Objects.nonNull(tail)) {
@@ -91,7 +106,7 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
         @Override // from RrtsPlannerProcess
         public void run(int steps) {
           if (Objects.nonNull(rrtsPlanner)) {
-            Expand.steps(rrtsPlanner, steps);
+            Expand.steps(rrtsPlanner, steps); // FIXME can get stuck here
             RrtsNodes.costConsistency(root, transitionSpace, costFunction);
             if (rrtsPlanner.getBest().isPresent()) {
               RrtsNode best = rrtsPlanner.getBest().get();
