@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
@@ -58,7 +59,7 @@ public class RrtsPlannerServerTest extends TestCase {
     };
     server.setGoal(goal);
     server.insertRoot(stateTime);
-    server.getProcess().ifPresent(process -> process.run(400));
+    new Expand<>(server).steps(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
@@ -94,7 +95,7 @@ public class RrtsPlannerServerTest extends TestCase {
     };
     server.setGoal(goal);
     server.insertRoot(stateTime);
-    server.getProcess().ifPresent(process -> process.run(400));
+    new Expand<>(server).steps(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
@@ -130,11 +131,11 @@ public class RrtsPlannerServerTest extends TestCase {
     };
     server.setGoal(goal);
     server.insertRoot(stateTime);
-    server.getProcess().ifPresent(process -> process.run(400));
+    new Expand<>(server).steps(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
     Chop.below(1).requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
-  // TODO design test for rerunning RrtsPlannerProcess
+  // TODO design test for rerunning expansion
 }

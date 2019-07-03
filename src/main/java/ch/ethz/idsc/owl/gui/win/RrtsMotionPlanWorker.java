@@ -13,11 +13,9 @@ import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
   }
 
   protected void expand(RrtsTrajectoryPlanner trajectoryPlanner) {
-    trajectoryPlanner.getProcess().ifPresent(process -> process.run(maxSteps));
-    /*
     Expand expand = new Expand<>(trajectoryPlanner);
     expand.setContinued(() -> isRelevant);
     expand.steps(maxSteps);
-    */
+    trajectoryPlanner.checkConsistency();
   }
 }

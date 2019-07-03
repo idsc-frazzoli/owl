@@ -13,7 +13,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -45,10 +44,10 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   private Tensor state = Tensors.empty();
   private Tensor goal = Tensors.empty();
   private RrtsNode root = null;
+  private Scalar time;
   private RrtsPlanner rrtsPlanner = null;
   private List<TrajectorySample> trajectory = new ArrayList<>();
   private NavigableMap<Scalar, List<TrajectorySample>> potentialFutureTrajectories = new TreeMap<>(Scalars::compare);
-  private RrtsPlannerProcess process = null;
 
   public RrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -73,12 +72,10 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
 
   @Override // from TrajectoryPlanner
   public void insertRoot(StateTime stateTime) {
-    rrtsPlanner = null;
     Predicate<TrajectorySample> predicate = //
         trajectorySample -> Scalars.lessEquals(stateTime.time(), trajectorySample.stateTime().time());
     trajectory = trajectory().stream().filter(predicate).collect(Collectors.toList());
     potentialFutureTrajectories.clear();
-    from(Objects.requireNonNull(stateTime));
     // TODO ability to interrupt current trajectory
     // where to put that, also see AbstractRrtsEntity::expandResult
     // -> TrajectoryEntity::getFutureTrajectoryUntil
@@ -88,39 +85,20 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     Predicate<TrajectorySample> inversePredicate = //
         trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), future.time());
     trajectory = trajectory().stream().filter(inversePredicate).collect(Collectors.toList());
-    from(Objects.requireNonNull(future));
     */
-  }
-
-  /** TODO
-   * merge {@link Expand} and {@link ch.ethz.idsc.owl.glc.adapter.GlcExpand}
-   * remove {@link RrtsPlannerProcess} and integrate actions into {@link RrtsPlannerServer#expand(RrtsNode)} and {@link RrtsPlannerServer#trajectory()}
-   * -> merge {@link ch.ethz.idsc.owl.gui.win.RrtsMotionPlanWorker} and {@link ch.ethz.idsc.owl.gui.win.GlcMotionPlanWorker} */
-  protected void from(StateTime tail) {
-    process = null;
-    if (Objects.nonNull(tail)) {
-      Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
-      root = rrts.insertAsNode(tail.state(), 5).get();
-      rrtsPlanner = new RrtsPlanner(rrts, spaceSampler(state), goalSampler(goal));
-      process = new RrtsPlannerProcess() {
-        @Override // from RrtsPlannerProcess
-        public void run(int steps) {
-          if (Objects.nonNull(rrtsPlanner)) {
-            new Expand<>(rrtsPlanner).steps(steps); // FIXME can get stuck here
-            RrtsNodes.costConsistency(root, transitionSpace, costFunction);
-            if (rrtsPlanner.getBest().isPresent()) {
-              RrtsNode best = rrtsPlanner.getBest().get();
-              List<RrtsNode> sequence = Nodes.listFromRoot(best);
-              potentialFutureTrajectories.put(best.costFromRoot(), //
-                  flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, tail.time(), resolution));
-            }
-          }
-        }
-      };
-    }
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
+    root = rrts.insertAsNode(Objects.requireNonNull(stateTime).state(), 5).get();
+    time = stateTime.time();
+    rrtsPlanner = new RrtsPlanner(rrts, spaceSampler(state), goalSampler(goal));
   }
 
   private List<TrajectorySample> trajectory() {
+    if (Objects.nonNull(rrtsPlanner) && rrtsPlanner.getBest().isPresent()) {
+      RrtsNode best = rrtsPlanner.getBest().get();
+      List<RrtsNode> sequence = Nodes.listFromRoot(best);
+      potentialFutureTrajectories.put(best.costFromRoot(), //
+          flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, time, resolution));
+    }
     if (potentialFutureTrajectories.isEmpty())
       return this.trajectory;
     List<TrajectorySample> trajectory = new ArrayList<>(this.trajectory);
@@ -138,7 +116,7 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   @Override // from ExpandInterface
   public void expand(RrtsNode node) {
     if (Objects.nonNull(rrtsPlanner))
-      rrtsPlanner.expand(node);
+      rrtsPlanner.expand(node); // FIXME can get stuck here
   }
 
   @Override // from ExpandInterface
@@ -166,8 +144,8 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   }
 
   @Override // from RrtsTrajectoryPlanner
-  public Optional<RrtsPlannerProcess> getProcess() {
-    return Optional.ofNullable(process);
+  public void checkConsistency() {
+    RrtsNodes.costConsistency(root, transitionSpace, costFunction);
   }
 
   public void setState(Tensor state) {
