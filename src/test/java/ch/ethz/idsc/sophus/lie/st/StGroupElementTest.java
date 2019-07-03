@@ -47,7 +47,7 @@ public class StGroupElementTest extends TestCase {
   }
 
   public void testAdjoint() {
-    StGroupElement pE = new StGroupElement(Tensors.fromString("{4,{1, 2, 3}}"));
+    StGroupElement pE = new StGroupElement(Tensors.fromString("{4, {1, 2, 3}}"));
     Tensor adjoint = pE.adjoint(Tensors.fromString("{2, {5, 7, 8}}"));
     assertEquals(adjoint, Tensors.fromString("{2, {18, 24, 26}}"));
     ExactTensorQ.require(adjoint);

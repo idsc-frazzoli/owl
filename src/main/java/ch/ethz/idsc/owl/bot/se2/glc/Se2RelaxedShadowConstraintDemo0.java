@@ -85,7 +85,7 @@ public class Se2RelaxedShadowConstraintDemo0 extends Se2ShadowBaseDemo {
         ConstraintViolationCost.of(shadowConstraintPed, RealScalar.ONE);
     carRelaxedEntity.set2ndCostFunction(pedLegalCost);
     //
-    // Tensor waypoints = Tensors.fromString("{{39, 20, 1.8},{39, 15, 1.8}}");
+    // Tensor waypoints = Tensors.fromString("{{39, 20, 1.8}, {39, 15, 1.8}}");
     // ---
     // owlyAnimationFrame.add(carRelaxedEntity);
     // owlyAnimationFrame.addBackground(RegionRenders.create(imageRegionCar));

@@ -40,7 +40,7 @@ public class PurePursuitTest extends TestCase {
   }
 
   public void testDistanceFail() {
-    Tensor curve = Tensors.fromString("{{-0.4},{0.6},{1.4},{2.2}}");
+    Tensor curve = Tensors.fromString("{{-0.4}, {0.6}, {1.4}, {2.2}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(curve, RealScalar.of(3.3));
     Optional<Tensor> optional = purePursuit.lookAhead();
     assertFalse(optional.isPresent());

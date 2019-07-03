@@ -15,7 +15,7 @@ public class RegionUnionTest extends TestCase {
     List<StateTime> stateList = new ArrayList<>();
     List<Region<Tensor>> regionList = new ArrayList<>();
     Tensor radius = Tensors.vector(0.1, 0.1);
-    // Goalstates: {0, 0}, {1, 1},{2, 2},{3, 3},{4, 4},{5, 5},{6, 6},{7, 7}
+    // Goalstates: {0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}
     for (int i = 0; i < 8; ++i) {
       Tensor goal = Tensors.of(RealScalar.of(1 * i), RealScalar.of(1 * i));
       stateList.add(new StateTime(goal, RealScalar.ZERO));
