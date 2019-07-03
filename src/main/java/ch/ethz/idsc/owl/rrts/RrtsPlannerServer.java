@@ -1,7 +1,6 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.rrts;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,6 +9,8 @@ import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -34,7 +35,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 
-// TODO find more elegant implementation
 public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   private final TransitionSpace transitionSpace;
   private final TransitionRegionQuery obstacleQuery;
@@ -69,6 +69,16 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     this.resolution = resolution;
     this.costFunction = costFunction;
     flowTrajectoryGenerator = new RrtsFlowTrajectoryGenerator(stateSpaceModel);
+  }
+
+  @Override // from TrajectoryPlanner
+  public void insertRoot(StateTime stateTime) {
+    rrtsPlanner = null;
+    Predicate<TrajectorySample> predicate = //
+        trajectorySample -> Scalars.lessEquals(stateTime.time(), trajectorySample.stateTime().time());
+    trajectory = trajectory().stream().filter(predicate).collect(Collectors.toList());
+    potentialFutureTrajectories.clear();
+    from(Objects.requireNonNull(stateTime));
   }
 
   protected void from(StateTime tail) {
@@ -124,14 +134,6 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   }
 
   @Override // from TrajectoryPlanner
-  public void insertRoot(StateTime stateTime) {
-    rrtsPlanner = null;
-    trajectory = trajectory();
-    potentialFutureTrajectories.clear();
-    from(Objects.requireNonNull(stateTime));
-  }
-
-  @Override // from TrajectoryPlanner
   public Optional<RrtsNode> getBestOrElsePeek() {
     Optional<RrtsNode> optional = getBest();
     if (optional.isPresent())
@@ -176,8 +178,14 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
         : Optional.empty();
   }
 
-  public TransitionSpace getTransitionSpace() throws ClassNotFoundException, IOException {
-    return Serialization.copy(transitionSpace);
+  public TransitionSpace getTransitionSpace() {
+    try {
+      return Serialization.copy(transitionSpace);
+    } catch (Exception e) {
+      // this should never happen!
+      e.printStackTrace();
+      return null;
+    }
   }
 
   protected abstract RrtsNodeCollection rrtsNodeCollection();

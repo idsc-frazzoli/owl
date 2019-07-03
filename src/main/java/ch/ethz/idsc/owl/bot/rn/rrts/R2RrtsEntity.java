@@ -34,6 +34,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   /** preserve 0.5[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(0.5);
   private static final StateSpaceModel STATE_SPACE_MODEL = SingleIntegratorStateSpaceModel.INSTANCE;
+  private static final Tensor SHAPE = Tensors.fromString("{{0,.1},{.1,0},{0,-.1},{-.1,0}}").unmodifiable();
 
   // ---
   /** @param stateTime initial position of entity */
@@ -68,7 +69,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   protected Tensor shape() {
-    return Tensors.fromString("{{.1,.1},{.1,-.1},{-.1,-.1},{-.1,.1}}").unmodifiable();
+    return SHAPE;
   }
 
   @Override // from TensorMetrix

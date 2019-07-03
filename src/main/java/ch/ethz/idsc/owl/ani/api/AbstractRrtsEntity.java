@@ -5,40 +5,43 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.gui.ren.RenderElements;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.ren.TransitionRender;
+import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
 import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.PadRight;
-import ch.ethz.idsc.tensor.io.Serialization;
 
 public abstract class AbstractRrtsEntity extends TrajectoryEntity implements RrtsPlannerCallback {
   protected final RrtsPlannerServer plannerServer;
+  // ---
+  private final TreeRender treeRender = new TreeRender();
+  private final TransitionRender transitionRender;
 
   public AbstractRrtsEntity(RrtsPlannerServer plannerServer, EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
     super(episodeIntegrator, trajectoryControl);
     this.plannerServer = plannerServer;
+    transitionRender = new TransitionRender(plannerServer.getTransitionSpace());
   }
 
   protected abstract Tensor shape();
 
   @Override // from PlannerCallback
   public void expandResult(List<TrajectorySample> head, RrtsTrajectoryPlanner trajectoryPlanner) {
+    plannerServer.getRoot().map(Nodes::ofSubtree).ifPresent(collection -> {
+      treeRender.setCollection(collection);
+      transitionRender.setCollection(collection);
+    });
     plannerServer.getTrajectory().ifPresent(this::trajectory);
   }
 
@@ -65,18 +68,7 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity implements Rrt
       graphics.fill(new Rectangle2D.Double(point.getX() - 2, point.getY() - 2, 5, 5));
     }
     // ---
-    /* FIXME concurrent modifications
-    Optional<RrtsNode> optional = plannerServer.getRoot();
-    if (optional.isPresent())
-      try {
-        Collection<RrtsNode> nodes = Nodes.ofSubtree(optional.get());
-        Collection<RrtsNode> collection = Serialization.copy(nodes);
-        Collection<RenderInterface> renderInterfaces = RenderElements.create(collection, //
-            Serialization.copy(plannerServer.getObstacleQuery().orElse(null)));
-        renderInterfaces.add(new TransitionRender(plannerServer.getTransitionSpace()).setCollection(collection));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    */
+    treeRender.render(geometricLayer, graphics);
+    transitionRender.render(geometricLayer, graphics);
   }
 }

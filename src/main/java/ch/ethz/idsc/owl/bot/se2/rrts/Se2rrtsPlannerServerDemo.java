@@ -76,6 +76,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
     StateTime stateTime = new StateTime(lbounds, RealScalar.ZERO);
     Tensor goal = BoxRandomSample.of(lbounds, ubounds).randomSample(RANDOM);
+    Tensor trajectory = Tensors.empty();
     int frame = 0;
     while (frame++ < 5 && owlyFrame.jFrame.isVisible()) {
       server.setGoal(goal);
@@ -84,11 +85,11 @@ import ch.ethz.idsc.tensor.opt.Pi;
       owlyFrame.setRrts(transitionSpace, server.getRoot().get(), transitionRegionQuery);
       Optional<List<TrajectorySample>> optional = server.getTrajectory();
       if (optional.isPresent()) {
+        optional.get().stream().map(TrajectorySample::stateTime).map(StateTime::state).map(Extract2D.FUNCTION).forEach(trajectory::append);
         owlyFrame.geometricComponent.addRenderInterface(new RenderInterface() {
           @Override
           public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-            Tensor tensor = Tensor.of(optional.get().stream().map(TrajectorySample::stateTime).map(StateTime::state).map(Extract2D.FUNCTION));
-            Path2D path = geometricLayer.toPath2D(tensor);
+            Path2D path = geometricLayer.toPath2D(trajectory);
             graphics.setStroke(new BasicStroke(2));
             graphics.setColor(Color.BLACK);
             graphics.draw(path);
