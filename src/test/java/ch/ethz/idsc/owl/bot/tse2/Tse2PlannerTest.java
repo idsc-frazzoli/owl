@@ -38,14 +38,14 @@ public class Tse2PlannerTest extends TestCase {
     final Clip v_range = tse2ComboRegion.v_range();
     assertEquals(v_range.min(), Quantity.of(0, "m*s^-1"));
     assertEquals(v_range.max(), Quantity.of(8, "m*s^-1"));
-    FlowsInterface flowsInterface = Tse2CarFlows.of(Quantity.of(1, "m^-1"), Tensors.fromString("{-1[m*s^-2],0[m*s^-2],1[m*s^-2]}"));
+    FlowsInterface flowsInterface = Tse2CarFlows.of(Quantity.of(1, "m^-1"), Tensors.fromString("{-1[m*s^-2], 0[m*s^-2], 1[m*s^-2]}"));
     Collection<Flow> controls = flowsInterface.getFlows(1);
     AbstractMinTimeGoalManager tse2ForwardMinTimeGoalManager = //
         new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);
     GoalInterface goalInterface = tse2ForwardMinTimeGoalManager.getGoalInterface();
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // new Tse2VelocityConstraint(v_range);
-    Tensor eta = Tensors.fromString("{7[m^-1],7[m^-1],4,7[s*m^-1]}");
+    Tensor eta = Tensors.fromString("{7[m^-1], 7[m^-1], 4, 7[s*m^-1]}");
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         new Tse2Integrator(v_range), Scalars.fromString("1/10[s]"), 4);
@@ -55,7 +55,7 @@ public class Tse2PlannerTest extends TestCase {
         controls, //
         plannerConstraint, //
         goalInterface);
-    trajectoryPlanner.insertRoot(new StateTime(Tensors.fromString("{0[m],0[m],0,0[m*s^-1]}"), Quantity.of(1, "s")));
+    trajectoryPlanner.insertRoot(new StateTime(Tensors.fromString("{0[m], 0[m], 0, 0[m*s^-1]}"), Quantity.of(1, "s")));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);
     glcExpand.getExpandCount();
@@ -74,14 +74,14 @@ public class Tse2PlannerTest extends TestCase {
     final Clip v_range = tse2ComboRegion.v_range();
     assertEquals(v_range.min(), Quantity.of(0, "m*s^-1"));
     assertEquals(v_range.max(), Quantity.of(8, "m*s^-1"));
-    FlowsInterface flowsInterface = Tse2CarFlows.of(Quantity.of(1, "m^-1"), Tensors.fromString("{-1[m*s^-2],0[m*s^-2],1[m*s^-2]}"));
+    FlowsInterface flowsInterface = Tse2CarFlows.of(Quantity.of(1, "m^-1"), Tensors.fromString("{-1[m*s^-2], 0[m*s^-2], 1[m*s^-2]}"));
     Collection<Flow> controls = flowsInterface.getFlows(1);
     AbstractMinTimeGoalManager tse2ForwardMinTimeGoalManager = //
         new Tse2MinTimeGoalManager(tse2ComboRegion, controls, v_range.max());
     GoalInterface goalInterface = tse2ForwardMinTimeGoalManager.getGoalInterface();
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // new Tse2VelocityConstraint(v_range);
-    Tensor eta = Tensors.fromString("{7[m^-1],7[m^-1],4,7[s*m^-1]}");
+    Tensor eta = Tensors.fromString("{7[m^-1], 7[m^-1], 4, 7[s*m^-1]}");
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         new Tse2Integrator(v_range), Scalars.fromString("1/10[s]"), 4);
@@ -91,7 +91,7 @@ public class Tse2PlannerTest extends TestCase {
         controls, //
         plannerConstraint, //
         goalInterface);
-    trajectoryPlanner.insertRoot(new StateTime(Tensors.fromString("{0[m],0[m],0,0[m*s^-1]}"), Quantity.of(1, "s")));
+    trajectoryPlanner.insertRoot(new StateTime(Tensors.fromString("{0[m], 0[m], 0, 0[m*s^-1]}"), Quantity.of(1, "s")));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000); // TODO YN does not find solution even with 10000
     int expandCount = glcExpand.getExpandCount();

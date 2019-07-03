@@ -39,7 +39,7 @@ public class GeodesicDeBoorDemo extends BaseCurvatureDemo implements BufferedIma
     // ---
     setGeodesicDisplay(Se2CoveringGeodesicDisplay.INSTANCE);
     // ---
-    Tensor dubins = Tensors.fromString("{{1,0,0},{2,0,2.5708}}");
+    Tensor dubins = Tensors.fromString("{{1, 0, 0}, {2, 0, 2.5708}}");
     setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
         Tensor.of(dubins.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
   }

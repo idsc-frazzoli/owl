@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
  * <p>One interval I1, being considered less than another, I2,
  * if I1 is completely to the left of I2
  * 
- * <p>For two intervals <tt>x_i = [l_i,r_i] </tt> and <tt>x_j = [l_j, r_j]</tt>,
+ * <p>For two intervals <tt>x_i = [l_i, r_i] </tt> and <tt>x_j = [l_j, r_j]</tt>,
  * <tt>x_i R x_j</tt> is satisfied if and only if <tt>r_i &lt l_j </tt>.
  * In other words, interval <tt> x_i</tt> has to end before <tt> x_j </tt>.
  * 

@@ -19,14 +19,14 @@ public class RnMinTimeGoalManagerTest extends TestCase {
   public void testSimple() {
     R2Flows r2Flows = new R2Flows(Quantity.of(2, "m*s^-1"));
     Collection<Flow> controls = r2Flows.getFlows(10);
-    Tensor center = Tensors.fromString("{3[m],6[m]}");
+    Tensor center = Tensors.fromString("{3[m], 6[m]}");
     Scalar radius = Quantity.of(1, "m");
     RegionWithDistance<Tensor> regionWithDistance = new SphericalRegion(center, radius);
     GoalInterface goalInterface = RnMinTimeGoalManager.create(regionWithDistance, controls);
     // Scalar cost = ;
-    assertEquals(goalInterface.minCostToGoal(Tensors.fromString("{3[m],6[m]}")), Quantity.of(0, "s"));
-    assertEquals(goalInterface.minCostToGoal(Tensors.fromString("{2[m],6[m]}")), Quantity.of(0, "s"));
+    assertEquals(goalInterface.minCostToGoal(Tensors.fromString("{3[m], 6[m]}")), Quantity.of(0, "s"));
+    assertEquals(goalInterface.minCostToGoal(Tensors.fromString("{2[m], 6[m]}")), Quantity.of(0, "s"));
     Chop._14.requireClose(goalInterface.minCostToGoal( //
-        Tensors.fromString("{0[m],6[m]}")), Quantity.of(1, "s"));
+        Tensors.fromString("{0[m], 6[m]}")), Quantity.of(1, "s"));
   }
 }

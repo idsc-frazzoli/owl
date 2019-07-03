@@ -26,7 +26,7 @@ public class EulerIntegratorTest extends TestCase {
     StateSpaceModel stateSpaceModel = DoubleIntegratorStateSpaceModel.INSTANCE;
     Flow flow = StateSpaceModels.createFlow( // acceleration
         stateSpaceModel, QuantityTensor.of(Tensors.vector(1, 2), Unit.of("m*s^-2")));
-    Tensor x = Tensors.fromString("{2[m],3[m],4[m*s^-1],5[m*s^-1]}"); // pos and vel
+    Tensor x = Tensors.fromString("{2[m], 3[m], 4[m*s^-1], 5[m*s^-1]}"); // pos and vel
     Tensor r = EulerIntegrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
     assertEquals(r, Tensors.fromString("{10[m], 13[m], 6[m*s^-1], 9[m*s^-1]}"));
   }

@@ -23,14 +23,14 @@ public class PurePursuitTest extends TestCase {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
   public void testRatioForwardLeftPositiveXUnit() {
-    Tensor tensor = Tensors.fromString("{{.2[m],0[m]},{1[m],1[m]}}");
+    Tensor tensor = Tensors.fromString("{{.2[m], 0[m]}, {1[m], 1[m]}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, Quantity.of(1.0, "m"));
     Clip clip = Clips.interval(Quantity.of(1.2, "m^-1"), Quantity.of(1.5, "m^-1"));
     clip.requireInside(purePursuit.ratio().get());
   }
 
   public void testMatch2() {
-    Tensor curve = Tensors.fromString("{{-0.4},{0.6},{1.4},{2.2}}");
+    Tensor curve = Tensors.fromString("{{-0.4}, {0.6}, {1.4}, {2.2}}");
     try {
       PurePursuit.fromTrajectory(curve, RealScalar.ONE);
       fail();
@@ -47,7 +47,7 @@ public class PurePursuitTest extends TestCase {
   }
 
   public void testRatioFail() {
-    Tensor tensor = Tensors.fromString("{{.2,0},{1,0}}");
+    Tensor tensor = Tensors.fromString("{{0.2, 0}, {1, 0}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(1.5));
     Optional<Tensor> optional = purePursuit.lookAhead();
     assertFalse(optional.isPresent());
@@ -55,7 +55,7 @@ public class PurePursuitTest extends TestCase {
   }
 
   public void testEquals() {
-    Tensor tensor = Tensors.fromString("{{1,0},{1,0}}");
+    Tensor tensor = Tensors.fromString("{{1, 0}, {1, 0}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.ONE);
     Optional<Tensor> optional = purePursuit.lookAhead();
     assertTrue(optional.isPresent());
@@ -72,14 +72,14 @@ public class PurePursuitTest extends TestCase {
   }
 
   public void testDirectionFail() {
-    Tensor tensor = Tensors.fromString("{{1,1},{0.3,0.2}}");
+    Tensor tensor = Tensors.fromString("{{1, 1}, {0.3, 0.2}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.ONE);
     assertFalse(purePursuit.lookAhead().isPresent());
     assertFalse(purePursuit.ratio().isPresent());
   }
 
   public void testRatioForward() {
-    Tensor tensor = Tensors.fromString("{{.2,0},{1,0}}");
+    Tensor tensor = Tensors.fromString("{{0.2, 0}, {1, 0}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
     Tensor normal = NORMALIZE.apply(dir);
@@ -90,28 +90,28 @@ public class PurePursuitTest extends TestCase {
   }
 
   public void testRatioForwardPositiveX() {
-    Tensor tensor = Tensors.fromString("{{.2,0},{1,0}}");
+    Tensor tensor = Tensors.fromString("{{0.2, 0}, {1, 0}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Scalar rate = purePursuit.ratio().get();
     assertTrue(Scalars.isZero(rate));
   }
 
   public void testRatioForwardLeftPositiveX() {
-    Tensor tensor = Tensors.fromString("{{.2,0},{1,1}}");
+    Tensor tensor = Tensors.fromString("{{0.2, 0}, {1, 1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(1.0));
     Clip clip = Clips.interval(1.2, 1.5);
     clip.requireInside(purePursuit.ratio().get());
   }
 
   public void testRatioForwardRightPositiveX() {
-    Tensor tensor = Tensors.fromString("{{.2,0},{1,-1}}");
+    Tensor tensor = Tensors.fromString("{{0.2, 0}, {1, -1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(1.0));
     Clip clip = Clips.interval(-1.5, -1.2);
     clip.requireInside(purePursuit.ratio().get());
   }
 
   public void testRatioBackRight() {
-    Tensor tensor = Tensors.fromString("{{0,0},{-1,-1}}");
+    Tensor tensor = Tensors.fromString("{{0, 0}, {-1, -1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
     Tensor normal = NORMALIZE.apply(dir);
@@ -120,7 +120,7 @@ public class PurePursuitTest extends TestCase {
   }
 
   public void testRatioBackLeft() {
-    Tensor tensor = Tensors.fromString("{{0,0},{-1,1}}");
+    Tensor tensor = Tensors.fromString("{{0, 0}, {-1, 1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
     Tensor normal = NORMALIZE.apply(dir);
@@ -129,7 +129,7 @@ public class PurePursuitTest extends TestCase {
   }
 
   public void testRatioXZero() {
-    Tensor tensor = Tensors.fromString("{{0,.3},{0,1}}");
+    Tensor tensor = Tensors.fromString("{{0, 0.3}, {0, 1}}");
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
     Tensor normal = NORMALIZE.apply(dir);
@@ -139,7 +139,7 @@ public class PurePursuitTest extends TestCase {
 
   // shows problem with non-positive x
   public void testRatioLarge() {
-    Tensor tensor = Tensors.fromString("{{0,0},{-100,1}}");
+    Tensor tensor = Tensors.fromString("{{0, 0}, {-100, 1}}");
     Scalar distance = DoubleScalar.of(100.0);
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, distance);
     Optional<Scalar> optional = purePursuit.ratio();

@@ -45,7 +45,7 @@ public class IntersectionEntryFinderTest extends TestCase {
   }
 
   public void testSweep2() {
-    Tensor waypoints = Tensors.fromString("{{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0}}");
+    Tensor waypoints = Tensors.fromString("{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}}");
     TrajectoryEntryFinder finder = IntersectionEntryFinder.INSTANCE;
     Tensor swept = Tensor.of(finder.sweep(waypoints).map(entry -> entry.point).map(Optional::get));
     assertEquals(waypoints, swept);

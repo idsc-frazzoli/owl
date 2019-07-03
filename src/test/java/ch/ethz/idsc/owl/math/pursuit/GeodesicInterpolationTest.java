@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 public class GeodesicInterpolationTest extends TestCase {
   public void testSimple() {
-    Tensor sequence = Tensors.fromString("{{1,2,3},{4,3,2},{5,-1,2.5}}");
+    Tensor sequence = Tensors.fromString("{{1, 2, 3}, {4, 3, 2}, {5, -1, 2.5}}");
     GeodesicInterpolation geodesicInterpolation = //
         new GeodesicInterpolation(Se2CoveringGeodesic.INSTANCE, sequence);
     Chop._12.requireClose( //

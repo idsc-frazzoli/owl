@@ -9,13 +9,13 @@ import junit.framework.TestCase;
 
 public class CurveCurvatureTest extends TestCase {
   public void testString2() {
-    Tensor points = Tensors.fromString("{{0,0},{1,1}}");
+    Tensor points = Tensors.fromString("{{0, 0}, {1, 1}}");
     Tensor vector = CurveCurvature.string(points);
     Chop._12.requireClose(vector, Tensors.vector(0, 0));
   }
 
   public void testString3() {
-    Tensor points = Tensors.fromString("{{0,0},{1,1},{2,0}}");
+    Tensor points = Tensors.fromString("{{0, 0}, {1, 1}, {2, 0}}");
     Tensor vector = CurveCurvature.string(points);
     Chop._12.requireClose(vector, Tensors.vector(-1, -1, -1));
   }
@@ -27,7 +27,7 @@ public class CurveCurvatureTest extends TestCase {
   }
 
   public void testFailHi() {
-    Tensor points = Tensors.fromString("{{0,0,0},{1,1,0},{2,0,0}}");
+    Tensor points = Tensors.fromString("{{0, 0, 0}, {1, 1, 0}, {2, 0, 0}}");
     try {
       CurveCurvature.string(points);
       fail();

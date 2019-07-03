@@ -28,7 +28,7 @@ public class Tse2CarFlowsTest extends TestCase {
         Tse2CarFlows.of(Quantity.of(3, "m^-1"), Tensors.fromString("{-2[m*s^-2], 0[m*s^-2], 2[m*s^-2]}"));
     Collection<Flow> flows = flowsInterface.getFlows(1);
     assertEquals(flows.size(), 9);
-    Tensor x = Tensors.fromString("{3[m],4[m],-1,3[m*s^-1]}");
+    Tensor x = Tensors.fromString("{3[m], 4[m], -1, 3[m*s^-1]}");
     for (Flow flow : flows) {
       Tensor dx = Tse2StateSpaceModel.INSTANCE.f(x, flow.getU());
       Tensor xp = x.add(dx.multiply(Quantity.of(2, "s")));

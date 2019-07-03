@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 public class AbstractBSplineInterpolationTest extends TestCase {
   public void testS2() {
-    Tensor target = Tensors.fromString("{{1,0,0},{0,1,0},{0,0,1},{-1,0,0}}");
+    Tensor target = Tensors.fromString("{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}, {-1, 0, 0}}");
     AbstractBSplineInterpolation geodesicBSplineInterpolation = //
         new GeodesicBSplineInterpolation(SnGeodesic.INSTANCE, 2, target);
     Iteration iteration = geodesicBSplineInterpolation.untilClose(Chop._08, 100);
@@ -25,7 +25,7 @@ public class AbstractBSplineInterpolationTest extends TestCase {
   }
 
   public void testS2Jacobi() {
-    Tensor target = Tensors.fromString("{{1,0,0},{0,1,0},{0,0,1},{-1,0,0}}");
+    Tensor target = Tensors.fromString("{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}, {-1, 0, 0}}");
     AbstractBSplineInterpolation geodesicBSplineInterpolation = //
         new GeodesicBSplineInterpolation(SnGeodesic.INSTANCE, 2, target);
     Iteration iteration = geodesicBSplineInterpolation.init();

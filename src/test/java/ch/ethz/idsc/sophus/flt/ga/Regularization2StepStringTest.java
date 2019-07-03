@@ -55,7 +55,7 @@ public class Regularization2StepStringTest extends TestCase {
   public void testMatrix() {
     TensorUnaryOperator STRING = //
         Regularization2Step.string(RnGeodesic.INSTANCE, RationalScalar.of(1, 2));
-    Tensor signal = Tensors.fromString("{{1,2},{2,2},{3,2},{4,2},{3,3}}");
+    Tensor signal = Tensors.fromString("{{1, 2}, {2, 2}, {3, 2}, {4, 2}, {3, 3}}");
     Tensor tensor = STRING.apply(signal);
     ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.fromString("{{1, 2}, {2, 2}, {3, 2}, {7/2, 9/4}, {3, 3}}"));

@@ -39,7 +39,7 @@ public class Se2BarycenterDemo extends ControlPointsDemo {
   public Se2BarycenterDemo() {
     super(false, GeodesicDisplays.SE2C_ONLY);
     timerFrame.jToolBar.add(axes);
-    Tensor tensor = DubinsGenerator.of(Tensors.vector(0, 0, 0), Tensors.fromString("{{5,0,-1}}")) //
+    Tensor tensor = DubinsGenerator.of(Tensors.vector(0, 0, 0), Tensors.fromString("{{5, 0, -1}}")) //
         .append(Tensors.vector(0, -1, 0)) //
         .append(Tensors.vector(0, 0, Math.PI / 7));
     setControlPointsSe2(tensor);

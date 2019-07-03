@@ -38,7 +38,7 @@ public class RegionUnionTest extends TestCase {
 
   public void testSimple2() {
     List<Region<Tensor>> regionList = new ArrayList<>();
-    final Region<Tensor> region1 = new HyperplaneRegion(Tensors.vector(-1, 0), RealScalar.ZERO); // right halfplane going through {0,0}: x>0
+    final Region<Tensor> region1 = new HyperplaneRegion(Tensors.vector(-1, 0), RealScalar.ZERO); // right halfplane going through {0, 0}: x>0
     {
       assertTrue(region1.isMember(Tensors.vector(1, 1)));
       assertFalse(region1.isMember(Tensors.vector(-1, 1)));
@@ -46,7 +46,7 @@ public class RegionUnionTest extends TestCase {
       assertTrue(region1.isMember(Tensors.vector(1, -1)));
       regionList.add(region1);
     }
-    final Region<Tensor> region2 = new HyperplaneRegion(Tensors.vector(0, -1), RealScalar.ZERO); // upper halfplane going through {0,0} y>0
+    final Region<Tensor> region2 = new HyperplaneRegion(Tensors.vector(0, -1), RealScalar.ZERO); // upper halfplane going through {0, 0} y>0
     {
       assertTrue(region2.isMember(Tensors.vector(1, 1)));
       assertTrue(region2.isMember(Tensors.vector(-1, 1)));

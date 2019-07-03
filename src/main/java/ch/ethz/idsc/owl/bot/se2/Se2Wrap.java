@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Mod;
 
-/** identifies (x,y,theta) === (x,y,theta + 2 pi n) for all n
+/** identifies (x, y, theta) === (x, y, theta + 2 pi n) for all n
  * 
  * representation of angles is in the interval [0, 2pi)
  * 

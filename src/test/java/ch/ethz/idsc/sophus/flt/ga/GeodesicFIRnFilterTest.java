@@ -56,7 +56,7 @@ public class GeodesicFIRnFilterTest extends TestCase {
   }
 
   public void testLinear() {
-    Tensor control = Tensors.fromString("{{0,0,0},{1,0,0},{2,0,0},{3,0,0},{4,0,0},{5,0,0}}");
+    Tensor control = Tensors.fromString("{{0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {3, 0, 0}, {4, 0, 0}, {5, 0, 0}}");
     Scalar alpha = RealScalar.of(0.5);
     final int radius = 3;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
@@ -66,7 +66,7 @@ public class GeodesicFIRnFilterTest extends TestCase {
   }
 
   public void testOnlyMeasurement() {
-    Tensor control = Tensors.fromString("{{0,0.2,0},{1,0,0},{2,7,0},{3,9,0},{3,0,0},{-1,0,-1}}");
+    Tensor control = Tensors.fromString("{{0, 0.2, 0}, {1, 0, 0}, {2, 7, 0}, {3, 9, 0}, {3, 0, 0}, {-1, 0, -1}}");
     Scalar alpha = RealScalar.of(1);
     final int radius = 3;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
@@ -76,7 +76,7 @@ public class GeodesicFIRnFilterTest extends TestCase {
   }
 
   public void testOnlyPrediction() {
-    Tensor control = Tensors.fromString("{{0,0.2,0},{1,0,0},{2,7,0},{3,9,0},{3,0,0},{-1,0,-1}}");
+    Tensor control = Tensors.fromString("{{0, 0.2, 0}, {1, 0, 0}, {2, 7, 0}, {3, 9, 0}, {3, 0, 0}, {-1, 0, -1}}");
     Scalar alpha = RealScalar.of(0);
     final int radius = 2;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;

@@ -56,7 +56,7 @@ public class FourPointCurveSubdivisionTest extends TestCase {
   }
 
   public void testSimple1() {
-    Tensor curve = Tensors.fromString("{{0,0},{1,0},{0,1}}");
+    Tensor curve = Tensors.fromString("{{0, 0}, {1, 0}, {0, 1}}");
     TensorUnaryOperator curveSubdivision = //
         new FourPointCurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
     Tensor n1 = Nest.of(curveSubdivision, curve, 1);

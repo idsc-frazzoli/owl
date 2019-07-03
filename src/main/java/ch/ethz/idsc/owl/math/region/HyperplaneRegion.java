@@ -28,8 +28,8 @@ public class HyperplaneRegion extends ImplicitFunctionRegion implements Serializ
   private final Scalar distanceFromZero;
 
   /** @param normal is normal to hyperplane pointing outside
-   * @param distanceFromZero needed to reach the region starting from position (0,...,0)
-   * That means, if distanceFromZero is negative, (0,...,0) is inside the region */
+   * @param distanceFromZero needed to reach the region starting from position (0, ..., 0)
+   * That means, if distanceFromZero is negative, (0, ..., 0) is inside the region */
   public HyperplaneRegion(Tensor normal, Scalar distanceFromZero) {
     this.normal = normal;
     this.distanceFromZero = distanceFromZero;

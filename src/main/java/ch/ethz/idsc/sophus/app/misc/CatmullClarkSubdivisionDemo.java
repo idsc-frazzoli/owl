@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     spinnerRefine.setValue(2);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
-    setControlPointsSe2(Tensors.fromString("{{0,0,0},{1,0,0},{2,0,0},{0,1,0},{1,1,0},{2,1,0}}").multiply(RealScalar.of(2)));
+    setControlPointsSe2(Tensors.fromString("{{0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {0, 1, 0}, {1, 1, 0}, {2, 1, 0}}").multiply(RealScalar.of(2)));
   }
 
   @Override // from RenderInterface

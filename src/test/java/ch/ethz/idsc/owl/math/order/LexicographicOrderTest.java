@@ -109,7 +109,7 @@ public class LexicographicOrderTest extends TestCase {
   // }
   // FIXME ASTOLL Does not work for comparator of different types
   // public void testMultipleDifferentComparators() {
-  // UniversalComparator<Integer> comparator1 = UniversalOrder.comparator((x,y)-> x<=y);
+  // UniversalComparator<Integer> comparator1 = UniversalOrder.comparator((x, y)-> x<=y);
   // UniversalComparator<Scalar> comparator2 = UniversalOrder.comparator(Scalars::lessEquals);
   // List<UniversalComparator<Object>> comparatorList = new LinkedList<>();
   // comparatorList.add(comparator1);

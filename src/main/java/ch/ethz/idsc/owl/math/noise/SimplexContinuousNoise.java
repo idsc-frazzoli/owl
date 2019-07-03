@@ -82,7 +82,7 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
    * 
    * @param xin
    * @param yin
-   * @return value in the interval [-1,1] */
+   * @return value in the interval [-1, 1] */
   @Override
   public double at(double xin, double yin) {
     double n0, n1, n2; // Noise contributions from the three corners
@@ -91,27 +91,27 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
     int i = Noise.floor(xin + s);
     int j = Noise.floor(yin + s);
     double t = (i + j) * G2;
-    double X0 = i - t; // Unskew the cell origin back to (x,y) space
+    double X0 = i - t; // Unskew the cell origin back to (x, y) space
     double Y0 = j - t;
-    double x0 = xin - X0; // The x,y distances from the cell origin
+    double x0 = xin - X0; // The x, y distances from the cell origin
     double y0 = yin - Y0;
     // For the 2D case, the simplex shape is an equilateral triangle.
     // Determine which simplex we are in.
-    int i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
+    int i1, j1; // Offsets for second (middle) corner of simplex in (i, j) coords
     if (x0 > y0) {
       i1 = 1;
       j1 = 0;
-    } // lower triangle, XY order: (0,0)->(1,0)->(1,1)
+    } // lower triangle, XY order: (0, 0)->(1, 0)->(1, 1)
     else {
       i1 = 0;
       j1 = 1;
-    } // upper triangle, YX order: (0,0)->(0,1)->(1,1)
-    // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
-    // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
+    } // upper triangle, YX order: (0, 0)->(0, 1)->(1, 1)
+    // A step of (1, 0) in (i, j) means a step of (1-c, -c) in (x, y), and
+    // a step of (0, 1) in (i, j) means a step of (-c, 1-c) in (x, y), where
     // c = (3-sqrt(3))/6
-    double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
+    double x1 = x0 - i1 + G2; // Offsets for middle corner in (x, y) unskewed coords
     double y1 = y0 - j1 + G2;
-    double x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords
+    double x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x, y) unskewed coords
     double y2 = y0 - 1.0 + 2.0 * G2;
     // Work out the hashed gradient indices of the three simplex corners
     int ii = i & 255;
@@ -125,7 +125,7 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
       n0 = 0.0;
     else {
       t0 *= t0;
-      n0 = t0 * t0 * GRAD3[gi0].dot(x0, y0); // (x,y) of grad3 used for 2D gradient
+      n0 = t0 * t0 * GRAD3[gi0].dot(x0, y0); // (x, y) of grad3 used for 2D gradient
     }
     double t1 = 0.5 - x1 * x1 - y1 * y1;
     if (t1 < 0)
@@ -150,7 +150,7 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
    * @param xin
    * @param yin
    * @param zin
-   * @return value in the interval [-1,1] */
+   * @return value in the interval [-1, 1] */
   @Override
   public double at(double xin, double yin, double zin) {
     double n0, n1, n2, n3; // Noise contributions from the four corners
@@ -160,16 +160,16 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
     int j = Noise.floor(yin + s);
     int k = Noise.floor(zin + s);
     double t = (i + j + k) * G3;
-    double X0 = i - t; // Unskew the cell origin back to (x,y,z) space
+    double X0 = i - t; // Unskew the cell origin back to (x, y, z) space
     double Y0 = j - t;
     double Z0 = k - t;
-    double x0 = xin - X0; // The x,y,z distances from the cell origin
+    double x0 = xin - X0; // The x, y, z distances from the cell origin
     double y0 = yin - Y0;
     double z0 = zin - Z0;
     // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
     // Determine which simplex we are in.
-    int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
-    int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
+    int i1, j1, k1; // Offsets for second corner of simplex in (i, j, k) coords
+    int i2, j2, k2; // Offsets for third corner of simplex in (i, j, k) coords
     if (x0 >= y0) {
       if (y0 >= z0) {
         i1 = 1;
@@ -221,17 +221,17 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
         k2 = 0;
       } // Y X Z order
     }
-    // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
-    // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
-    // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
+    // A step of (1, 0, 0) in (i, j, k) means a step of (1-c, -c, -c) in (x, y, z),
+    // a step of (0, 1, 0) in (i, j, k) means a step of (-c, 1-c, -c) in (x, y, z), and
+    // a step of (0, 0, 1) in (i, j, k) means a step of (-c, -c, 1-c) in (x, y, z), where
     // c = 1/6.
-    double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
+    double x1 = x0 - i1 + G3; // Offsets for second corner in (x, y, z) coords
     double y1 = y0 - j1 + G3;
     double z1 = z0 - k1 + G3;
-    double x2 = x0 - i2 + 2.0 * G3; // Offsets for third corner in (x,y,z) coords
+    double x2 = x0 - i2 + 2.0 * G3; // Offsets for third corner in (x, y, z) coords
     double y2 = y0 - j2 + 2.0 * G3;
     double z2 = z0 - k2 + 2.0 * G3;
-    double x3 = x0 - 1.0 + 3.0 * G3; // Offsets for last corner in (x,y,z) coords
+    double x3 = x0 - 1.0 + 3.0 * G3; // Offsets for last corner in (x, y, z) coords
     double y3 = y0 - 1.0 + 3.0 * G3;
     double z3 = z0 - 1.0 + 3.0 * G3;
     // Work out the hashed gradient indices of the four simplex corners
@@ -281,21 +281,21 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
    * @param y
    * @param z
    * @param w
-   * @return value in the interval [-1,1] */
+   * @return value in the interval [-1, 1] */
   public static double at(double x, double y, double z, double w) {
     double n0, n1, n2, n3, n4; // Noise contributions from the five corners
-    // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
+    // Skew the (x, y, z, w) space to determine which cell of 24 simplices we're in
     double s = (x + y + z + w) * F4; // Factor for 4D skewing
     int i = Noise.floor(x + s);
     int j = Noise.floor(y + s);
     int k = Noise.floor(z + s);
     int l = Noise.floor(w + s);
     double t = (i + j + k + l) * G4; // Factor for 4D unskewing
-    double X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
+    double X0 = i - t; // Unskew the cell origin back to (x, y, z, w) space
     double Y0 = j - t;
     double Z0 = k - t;
     double W0 = l - t;
-    double x0 = x - X0; // The x,y,z,w distances from the cell origin
+    double x0 = x - X0; // The x, y, z, w distances from the cell origin
     double y0 = y - Y0;
     double z0 = z - Z0;
     double w0 = w - W0;
@@ -355,19 +355,19 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
     k3 = rankz >= 1 ? 1 : 0;
     l3 = rankw >= 1 ? 1 : 0;
     // The fifth corner has all coordinate offsets = 1, so no need to compute that.
-    double x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w) coords
+    double x1 = x0 - i1 + G4; // Offsets for second corner in (x, y, z, w) coords
     double y1 = y0 - j1 + G4;
     double z1 = z0 - k1 + G4;
     double w1 = w0 - l1 + G4;
-    double x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
+    double x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x, y, z, w) coords
     double y2 = y0 - j2 + 2.0 * G4;
     double z2 = z0 - k2 + 2.0 * G4;
     double w2 = w0 - l2 + 2.0 * G4;
-    double x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
+    double x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x, y, z, w) coords
     double y3 = y0 - j3 + 3.0 * G4;
     double z3 = z0 - k3 + 3.0 * G4;
     double w3 = w0 - l3 + 3.0 * G4;
-    double x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
+    double x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x, y, z, w) coords
     double y4 = y0 - 1.0 + 4.0 * G4;
     double z4 = z0 - 1.0 + 4.0 * G4;
     double w4 = w0 - 1.0 + 4.0 * G4;
