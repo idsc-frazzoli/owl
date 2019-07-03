@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 
 public class SphereCurveIntersectionTest extends TestCase {
   public void testString() {
-    Tensor curve = Tensors.fromString("{{0,0},{1,0},{1,1},{0,1}}").unmodifiable();
+    Tensor curve = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}").unmodifiable();
     CurveIntersection curveIntersection = new SphereCurveIntersection(RationalScalar.HALF);
     for (int index = 0; index < curve.length(); ++index) {
       Optional<Tensor> optional = curveIntersection.string(RotateLeft.of(curve, index));
@@ -34,7 +34,7 @@ public class SphereCurveIntersectionTest extends TestCase {
   }
 
   public void testCyclic() {
-    Tensor curve = Tensors.fromString("{{0,0},{1,0},{1,1},{0,1}}").unmodifiable();
+    Tensor curve = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}").unmodifiable();
     CurveIntersection curveIntersection = new SphereCurveIntersection(RationalScalar.HALF);
     for (int index = 0; index < curve.length(); ++index) {
       Optional<Tensor> optional = curveIntersection.cyclic(RotateLeft.of(curve, index));
@@ -46,19 +46,19 @@ public class SphereCurveIntersectionTest extends TestCase {
   }
 
   public void testQuantity() {
-    Tensor curve = Tensors.fromString("{{0[m],0[m]},{1[m],0[m]},{1[m],1[m]},{0[m],1[m]}}").unmodifiable();
+    Tensor curve = Tensors.fromString("{{0[m], 0[m]}, {1[m], 0[m]}, {1[m], 1[m]}, {0[m], 1[m]}}").unmodifiable();
     CurveIntersection curveIntersection = new SphereCurveIntersection(Quantity.of(RationalScalar.HALF, "m"));
     for (int index = 0; index < curve.length(); ++index) {
       Optional<Tensor> optional = curveIntersection.cyclic(RotateLeft.of(curve, index));
       assertTrue(optional.isPresent());
       Tensor tensor = optional.get();
       ExactTensorQ.require(tensor);
-      assertEquals(tensor, Tensors.fromString("{1/2[m],0[m]}"));
+      assertEquals(tensor, Tensors.fromString("{1/2[m], 0[m]}"));
     }
   }
 
   public void testPoint() {
-    Tensor curve = Tensors.fromString("{{1,0}}").unmodifiable();
+    Tensor curve = Tensors.fromString("{{1, 0}}").unmodifiable();
     CurveIntersection curveIntersection = new SphereCurveIntersection(RationalScalar.HALF);
     assertFalse(curveIntersection.cyclic(curve).isPresent());
     assertFalse(curveIntersection.string(curve).isPresent());
@@ -73,7 +73,7 @@ public class SphereCurveIntersectionTest extends TestCase {
 
   public void testOne() {
     CurveIntersection curveIntersection = new SphereCurveIntersection(RationalScalar.HALF);
-    Tensor curve = Tensors.fromString("{{-1},{0},{1},{2},{3}}").unmodifiable();
+    Tensor curve = Tensors.fromString("{{-1}, {0}, {1}, {2}, {3}}").unmodifiable();
     for (int index = 0; index < curve.length(); ++index) {
       Optional<Tensor> optional = curveIntersection.cyclic(RotateLeft.of(curve, index));
       assertTrue(optional.isPresent());
@@ -85,7 +85,7 @@ public class SphereCurveIntersectionTest extends TestCase {
 
   public void testThree() {
     CurveIntersection curveIntersection = new SphereCurveIntersection(RationalScalar.HALF);
-    Tensor curve = Tensors.fromString("{{0,0,0},{1,0,0},{1,1,0},{0,1,0}}").unmodifiable();
+    Tensor curve = Tensors.fromString("{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}").unmodifiable();
     for (int index = 0; index < curve.length(); ++index) {
       Optional<Tensor> optional = curveIntersection.cyclic(RotateLeft.of(curve, index));
       assertTrue(optional.isPresent());

@@ -131,7 +131,7 @@ public class RrtsPlannerServerTest extends TestCase {
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
-    Chop.below(1).requireClose(goal, Lists.getLast(trajectory).stateTime().state());
+    Chop.below(2).requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
   // TODO design test for rerunning RrtsPlannerProcess
 }

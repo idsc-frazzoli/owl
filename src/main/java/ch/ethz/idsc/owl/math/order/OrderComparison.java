@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.order;
 
 /** Creates an enumeration for a comparison of paired objects.
  * 
- * <p>An ordered pair is pair of objects <tt>(x,y)</tt> associated with an order (binary) relation <tt>R</tt>.
+ * <p>An ordered pair is pair of objects <tt>(x, y)</tt> associated with an order (binary) relation <tt>R</tt>.
  * 
  * <p>If the ordered pair is in the relation <tt>R</tt>, we write <tt>xRy</tt>.
  * 

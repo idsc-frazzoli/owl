@@ -18,15 +18,15 @@ import junit.framework.TestCase;
 public class RnTransitionSpaceTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
     Transition transition = Serialization.copy(RnTransitionSpace.INSTANCE).connect( //
-        Tensors.fromString("{1[m],2[m]}"), //
-        Tensors.fromString("{1[m],6[m]}"));
+        Tensors.fromString("{1[m], 2[m]}"), //
+        Tensors.fromString("{1[m], 6[m]}"));
     assertEquals(transition.length(), Quantity.of(4, "m"));
     ExactScalarQ.require(transition.length());
   }
 
   public void testSamples() {
-    Tensor start = Tensors.fromString("{1[m],2[m]}");
-    Tensor end = Tensors.fromString("{1[m],6[m]}");
+    Tensor start = Tensors.fromString("{1[m], 2[m]}");
+    Tensor end = Tensors.fromString("{1[m], 6[m]}");
     Transition transition = RnTransitionSpace.INSTANCE.connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");
@@ -44,8 +44,8 @@ public class RnTransitionSpaceTest extends TestCase {
   }
 
   public void testWrap() {
-    Tensor start = Tensors.fromString("{1[m],2[m]}");
-    Tensor end = Tensors.fromString("{1[m],6[m]}");
+    Tensor start = Tensors.fromString("{1[m], 2[m]}");
+    Tensor end = Tensors.fromString("{1[m], 6[m]}");
     Transition transition = RnTransitionSpace.INSTANCE.connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");

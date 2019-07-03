@@ -51,8 +51,8 @@ public class ProductOrderComparatorTest extends TestCase {
         new Order<>(relation1), //
         ScalarTotalOrder.INSTANCE); //
     ProductOrderComparator genericProductOrder = new ProductOrderComparator(comparators);
-    Tensor tensorX = Tensors.fromString("{{1,2,3}, 10}");
-    Tensor tensorY = Tensors.fromString("{{2,3,4,5},7}");
+    Tensor tensorX = Tensors.fromString("{{1, 2, 3}, 10}");
+    Tensor tensorY = Tensors.fromString("{{2, 3, 4, 5}, 7}");
     OrderComparison orderComparison = genericProductOrder.compare(tensorX, tensorY);
     assertEquals(orderComparison, OrderComparison.INCOMPARABLE);
   }

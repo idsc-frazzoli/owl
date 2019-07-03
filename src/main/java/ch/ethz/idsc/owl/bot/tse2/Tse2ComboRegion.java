@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 /** suggested base class for tse2 goal managers.
  * all implemented methods in this layer are final.
  * 
- * class defines circle region for (x,y) component, periodic intervals in angular component, linear region in v */
+ * class defines circle region for (x, y) component, periodic intervals in angular component, linear region in v */
 public class Tse2ComboRegion extends Se2ComboRegion {
   /** @param goal {px, py, angle, v}
    * @param radiusVector {dist_radius, dist_radius, dist_angle, dist_v}

@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.qty.Degree;
 
-/** (x,y,theta) */
+/** (x, y, theta) */
 enum Se2rImageDemo {
   ;
   public static void main(String[] args) throws Exception {

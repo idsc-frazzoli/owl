@@ -34,22 +34,22 @@ public class PolygonClipTest extends TestCase {
     // {{2.0, 1.0}, {1.0, 1.0}, {1.0, 2.0}}
     // {{2.0, 1.0}, {1.0, 1.0}, {1.0, 1.5}, {1.3333333333333333, 1.6666666666666667}}
     {
-      Tensor poly1 = Tensors.fromString("{{1,1},{2,1},{1,2}}");
-      Tensor poly2 = Tensors.fromString("{{1,1},{2,1},{2,3},{1,2}}");
+      Tensor poly1 = Tensors.fromString("{{1, 1}, {2, 1}, {1, 2}}");
+      Tensor poly2 = Tensors.fromString("{{1, 1}, {2, 1}, {2, 3}, {1, 2}}");
       Tensor result = PolygonClip.of(poly1).apply(poly2);
       assertTrue(equalsCycle(poly1, result));
     }
     {
-      Tensor poly1 = Tensors.fromString("{{1,1},{2,1},{1,2}}");
-      Tensor poly2 = Tensors.fromString("{{0,1},{2,1},{2,2}}");
+      Tensor poly1 = Tensors.fromString("{{1, 1}, {2, 1}, {1, 2}}");
+      Tensor poly2 = Tensors.fromString("{{0, 1}, {2, 1}, {2, 2}}");
       Tensor result = PolygonClip.of(poly1).apply(poly2);
       assertTrue(equalsCycle(result, Tensors.fromString("{{4/3, 5/3}, {1, 3/2}, {1, 1}, {2, 1}}")));
     }
   }
 
   public void testMore() {
-    Tensor clipper = Tensors.fromString("{{0,0},{1,0},{1,1},{0,1}}");
-    Tensor subject = Tensors.fromString("{{0,0},{1,0},{1/2,1/2}}");
+    Tensor clipper = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
+    Tensor subject = Tensors.fromString("{{0, 0}, {1, 0}, {1/2, 1/2}}");
     Tensor result = PolygonClip.of(clipper).apply(subject);
     assertTrue(equalsCycle(subject, result));
     Scalar area = PolygonArea.FUNCTION.apply(result);
@@ -58,8 +58,8 @@ public class PolygonClipTest extends TestCase {
   }
 
   public void testMore2() {
-    Tensor clip = Tensors.fromString("{{0,0},{1,0},{1,1},{0,1}}");
-    Tensor subj = Tensors.fromString("{{0,0},{2,0},{1/2,1/2}}");
+    Tensor clip = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
+    Tensor subj = Tensors.fromString("{{0, 0}, {2, 0}, {1/2, 1/2}}");
     Tensor result = PolygonClip.of(clip).apply(subj);
     assertTrue(equalsCycle(result, Tensors.fromString("{{0, 0}, {1, 0}, {1, 1/3}, {1/2, 1/2}}")));
     Scalar area = PolygonArea.FUNCTION.apply(result);
@@ -68,8 +68,8 @@ public class PolygonClipTest extends TestCase {
   }
 
   public void testMore3() {
-    Tensor clip = Tensors.fromString("{{0,0},{1,0},{1,1},{0,1}}");
-    Tensor subj = Tensors.fromString("{{0,0},{2,0},{1/2,1/2}}");
+    Tensor clip = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
+    Tensor subj = Tensors.fromString("{{0, 0}, {2, 0}, {1/2, 1/2}}");
     Tensor result = PolygonClip.of(subj).apply(clip);
     assertTrue(equalsCycle(result, Tensors.fromString("{{1/2, 1/2}, {0, 0}, {1, 0}, {1, 1/3}}")));
     Scalar area = PolygonArea.FUNCTION.apply(result);

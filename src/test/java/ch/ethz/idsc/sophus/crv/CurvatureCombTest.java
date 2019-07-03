@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 
 public class CurvatureCombTest extends TestCase {
   public void testSimple() {
-    Tensor points = Tensors.fromString("{{0,0},{1,1},{2,0}}");
+    Tensor points = Tensors.fromString("{{0, 0}, {1, 1}, {2, 0}}");
     Tensor tensor = CurvatureComb.of(points, RealScalar.ONE.negate(), false);
     String string = "{{-0.7071067811865474, 0.7071067811865474}, {1, 2}, {2.7071067811865475, 0.7071067811865474}}";
     Tensor result = Tensors.fromString(string);
@@ -36,7 +36,7 @@ public class CurvatureCombTest extends TestCase {
   }
 
   public void testString() {
-    Tensor tensor = CurvatureComb.string(Tensors.fromString("{{0,0},{1,1},{2,0}}"));
+    Tensor tensor = CurvatureComb.string(Tensors.fromString("{{0, 0}, {1, 1}, {2, 0}}"));
     String format = "{{-0.7071067811865474, 0.7071067811865474}, {0, 1}, {0.7071067811865474, 0.7071067811865474}}";
     Tensor result = Tensors.fromString(format).negate();
     Chop._12.requireClose(tensor, result);
@@ -48,13 +48,13 @@ public class CurvatureCombTest extends TestCase {
   }
 
   public void testOne() {
-    Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1,2}}"), RealScalar.of(2), false);
-    assertEquals(tensor, Tensors.fromString("{{1,2}}"));
+    Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1, 2}}"), RealScalar.of(2), false);
+    assertEquals(tensor, Tensors.fromString("{{1, 2}}"));
   }
 
   public void testTwo() {
-    Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1,2},{4,5}}"), RealScalar.of(2), false);
-    assertEquals(tensor, Tensors.fromString("{{1,2},{4,5}}"));
+    Tensor tensor = CurvatureComb.of(Tensors.fromString("{{1, 2}, {4, 5}}"), RealScalar.of(2), false);
+    assertEquals(tensor, Tensors.fromString("{{1, 2}, {4, 5}}"));
   }
 
   public void testZeros() {
@@ -64,7 +64,7 @@ public class CurvatureCombTest extends TestCase {
   }
 
   public void testFail() {
-    Tensor points = Tensors.fromString("{{0,0,0},{1,1,0},{2,0,0}}");
+    Tensor points = Tensors.fromString("{{0, 0, 0}, {1, 1, 0}, {2, 0, 0}}");
     try {
       CurvatureComb.of(points, RealScalar.ONE, false);
       fail();

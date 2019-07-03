@@ -26,7 +26,7 @@ public class MidpointIntegratorTest extends TestCase {
     StateSpaceModel stateSpaceModel = DoubleIntegratorStateSpaceModel.INSTANCE;
     Flow flow = StateSpaceModels.createFlow( // acceleration
         stateSpaceModel, QuantityTensor.of(Tensors.vector(1, 2), Unit.of("m*s^-2")));
-    Tensor x = Tensors.fromString("{2[m],3[m],4[m*s^-1],5[m*s^-1]}"); // pos and vel
+    Tensor x = Tensors.fromString("{2[m], 3[m], 4[m*s^-1], 5[m*s^-1]}"); // pos and vel
     Tensor r = MidpointIntegrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
     assertEquals(r, Tensors.fromString("{12[m], 17[m], 6[m*s^-1], 9[m*s^-1]}"));
   }

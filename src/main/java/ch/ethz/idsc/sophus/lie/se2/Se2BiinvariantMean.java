@@ -23,7 +23,7 @@ public enum Se2BiinvariantMean implements BiinvariantMean {
   /** The Arsigny-formula which treats SO(2) locally as a vector space yields
    * better results in BiinvariantMeanCenter compared to the global formula.
    * However, the operation domain is reduced
-   * rotation angles a_i have to satisfy: sup (i,j) |ai-aj| < pi */
+   * rotation angles a_i have to satisfy: sup (i, j) |ai-aj| < pi */
   LINEAR(So2LinearBiinvariantMean.INSTANCE), //
   /** Careful:
    * FILTER is NOT invariant under permutation of input parameters

@@ -20,7 +20,7 @@ public class FixedRadiusDubinsTest extends TestCase {
   }
 
   public void testUnits() {
-    DubinsPathGenerator dubinsPathGenerator = FixedRadiusDubins.of(Tensors.fromString("{10[m],2[m]}").append(Pi.HALF), Quantity.of(1, "m"));
+    DubinsPathGenerator dubinsPathGenerator = FixedRadiusDubins.of(Tensors.fromString("{10[m], 2[m]}").append(Pi.HALF), Quantity.of(1, "m"));
     assertEquals(dubinsPathGenerator.allValid().count(), 4);
   }
 

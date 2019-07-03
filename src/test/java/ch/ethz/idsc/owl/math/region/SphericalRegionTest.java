@@ -38,17 +38,17 @@ public class SphericalRegionTest extends TestCase {
   }
 
   public void testQuantity() {
-    RegionWithDistance<Tensor> regionWithDistance = new SphericalRegion(Tensors.fromString("{10[m],20[m]}"), Quantity.of(5, "m"));
-    assertTrue(regionWithDistance.isMember(Tensors.fromString("{11[m],19[m]}")));
-    Scalar scalar = regionWithDistance.distance(Tensors.fromString("{10[m],0[m]}"));
+    RegionWithDistance<Tensor> regionWithDistance = new SphericalRegion(Tensors.fromString("{10[m], 20[m]}"), Quantity.of(5, "m"));
+    assertTrue(regionWithDistance.isMember(Tensors.fromString("{11[m], 19[m]}")));
+    Scalar scalar = regionWithDistance.distance(Tensors.fromString("{10[m], 0[m]}"));
     assertEquals(scalar, Quantity.of(15, "m"));
     assertTrue(ExactScalarQ.of(scalar));
   }
 
   public void testSignedDistance() {
-    ImplicitFunctionRegion implicitFunctionRegion = new SphericalRegion(Tensors.fromString("{10[m],20[m]}"), Quantity.of(5, "m"));
-    assertTrue(implicitFunctionRegion.isMember(Tensors.fromString("{11[m],19[m]}")));
-    Scalar scalar = implicitFunctionRegion.signedDistance(Tensors.fromString("{11[m],20[m]}"));
+    ImplicitFunctionRegion implicitFunctionRegion = new SphericalRegion(Tensors.fromString("{10[m], 20[m]}"), Quantity.of(5, "m"));
+    assertTrue(implicitFunctionRegion.isMember(Tensors.fromString("{11[m], 19[m]}")));
+    Scalar scalar = implicitFunctionRegion.signedDistance(Tensors.fromString("{11[m], 20[m]}"));
     assertEquals(scalar, Quantity.of(-4, "m"));
     assertTrue(ExactScalarQ.of(scalar));
   }

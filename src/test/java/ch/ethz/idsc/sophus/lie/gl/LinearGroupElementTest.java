@@ -57,7 +57,7 @@ public class LinearGroupElementTest extends TestCase {
     Tensor xya = Tensors.vector(1, 2, 3);
     Se2GroupElement se2GroupElement = new Se2GroupElement(xya);
     Tensor matrix = Se2Utils.toSE2Matrix(xya);
-    Tensor adjointGl = LinearGroupElement.of(matrix).adjoint(Tensors.fromString("{{0,1,0},{-1,0,0},{0,0,0}}")).map(Chop._10);
+    Tensor adjointGl = LinearGroupElement.of(matrix).adjoint(Tensors.fromString("{{0, 1, 0}, {-1, 0, 0}, {0, 0, 0}}")).map(Chop._10);
     Tensor adjointSe = se2GroupElement.adjoint(Tensors.vector(0, 0, -1));
     Chop._12.requireClose(adjointGl.get(0, 2), adjointSe.get(0));
     Chop._12.requireClose(adjointGl.get(1, 2), adjointSe.get(1));

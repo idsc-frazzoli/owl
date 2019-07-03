@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     // ---
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(300, 300);
-    owlyFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{1,0,10},{0,-1,500},{0,0,1}}"));
+    owlyFrame.geometricComponent.setModel2Pixel(Tensors.fromString("{{1, 0, 10}, {0, -1, 500}, {0, 0, 1}}"));
     // owlyFrame.addBackground(RegionRenders.create(region));
     // owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
     // owlyFrame.addBackground(RenderElements.create(stateTimeRaster));

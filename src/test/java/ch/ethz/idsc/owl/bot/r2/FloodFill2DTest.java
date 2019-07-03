@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 public class FloodFill2DTest extends TestCase {
   public void testSimple() {
     Tensor tensor = Array.zeros(5, 6);
-    Tensor seeds = Tensors.fromString("{{2,2},{4,3}}");
+    Tensor seeds = Tensors.fromString("{{2, 2}, {4, 3}}");
     int ttl = 3;
     Tensor manh = FloodFill2D.of(tensor, ttl, seeds.stream().collect(Collectors.toSet()));
     String s = "{{0, 0, 1, 0, 0, 0}, {0, 1, 2, 1, 0, 0}, {1, 2, 3, 2, 1, 0}, {0, 1, 2, 2, 1, 0}, {0, 1, 2, 3, 2, 1}}";
@@ -24,7 +24,7 @@ public class FloodFill2DTest extends TestCase {
   public void testObstacles() {
     Tensor tensor = Array.zeros(5, 6);
     tensor.set(Tensors.vector(0, 1, 1, 1, 1), Tensor.ALL, 1);
-    Tensor seeds = Tensors.fromString("{{2,2},{4,3}}");
+    Tensor seeds = Tensors.fromString("{{2, 2}, {4, 3}}");
     int ttl = 10;
     Tensor manh = FloodFill2D.of(tensor, ttl, seeds.stream().collect(Collectors.toSet()));
     String s = "{{6, 7, 8, 7, 6, 5}, {5, 0, 9, 8, 7, 6}, {4, 0, 10, 9, 8, 7}, {3, 0, 9, 9, 8, 7}, {2, 0, 9, 10, 9, 8}}";

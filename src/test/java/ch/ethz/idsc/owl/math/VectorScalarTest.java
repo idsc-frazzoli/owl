@@ -42,10 +42,10 @@ public class VectorScalarTest extends TestCase {
   }
 
   public void testComplex() {
-    Scalar a = VectorScalar.of(Tensors.fromString("{1+3*I,2-4*I}"));
+    Scalar a = VectorScalar.of(Tensors.fromString("{1+3*I, 2-4*I}"));
     assertEquals(Real.of(a), VectorScalar.of(1, +2));
     assertEquals(Imag.of(a), VectorScalar.of(3, -4));
-    assertEquals(Conjugate.of(a), VectorScalar.of(Tensors.fromString("{1-3*I,2+4*I}")));
+    assertEquals(Conjugate.of(a), VectorScalar.of(Tensors.fromString("{1-3*I, 2+4*I}")));
   }
 
   public void testMultiply() {

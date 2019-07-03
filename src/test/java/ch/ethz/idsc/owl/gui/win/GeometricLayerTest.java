@@ -26,7 +26,7 @@ public class GeometricLayerTest extends TestCase {
   }
 
   public void testConstruction() {
-    Tensor model2pixel = Tensors.fromString("{{1,2,3},{2,-1,7},{0,0,1}}");
+    Tensor model2pixel = Tensors.fromString("{{1, 2, 3}, {2, -1, 7}, {0, 0, 1}}");
     Tensor mouseSe2State = Tensors.vector(9, 7, 2);
     GeometricLayer geometricLayer = new GeometricLayer(model2pixel, mouseSe2State);
     geometricLayer.toPoint2D(Tensors.vector(1, 2));
@@ -45,7 +45,7 @@ public class GeometricLayerTest extends TestCase {
   }
 
   public void testVector() {
-    Tensor model2pixel = Tensors.fromString("{{1,2,3},{2,-1,7},{0,0,1}}");
+    Tensor model2pixel = Tensors.fromString("{{1, 2, 3}, {2, -1, 7}, {0, 0, 1}}");
     Tensor mouseSe2State = Tensors.vector(9, 7, 2);
     GeometricLayer geometricLayer = new GeometricLayer(model2pixel, mouseSe2State);
     Tensor vector = Tensors.vector(9, 20, 1);
