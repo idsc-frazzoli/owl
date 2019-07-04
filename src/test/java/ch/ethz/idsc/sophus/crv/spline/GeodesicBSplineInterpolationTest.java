@@ -44,7 +44,7 @@ public class GeodesicBSplineInterpolationTest extends TestCase {
   }
 
   public void testH2a() {
-    Tensor target = Tensors.fromString("{{0,2},{1,2},{2,2}}");
+    Tensor target = Tensors.fromString("{{0, 2}, {1, 2}, {2, 2}}");
     AbstractBSplineInterpolation geodesicBSplineInterpolation = //
         new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
     target = N.DOUBLE.of(target);
@@ -53,7 +53,7 @@ public class GeodesicBSplineInterpolationTest extends TestCase {
   }
 
   public void testH2b() {
-    Tensor target = Tensors.fromString("{{0,1},{1,1},{2,1}}");
+    Tensor target = Tensors.fromString("{{0, 1}, {1, 1}, {2, 1}}");
     AbstractBSplineInterpolation geodesicBSplineInterpolation = //
         new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
     target = N.DOUBLE.of(target);
@@ -62,7 +62,7 @@ public class GeodesicBSplineInterpolationTest extends TestCase {
   }
 
   public void testH2c() {
-    Tensor target = Tensors.fromString("{{0,1},{1,1},{2,0.1},{3,1}}");
+    Tensor target = Tensors.fromString("{{0, 1}, {1, 1}, {2, 0.1}, {3, 1}}");
     AbstractBSplineInterpolation geodesicBSplineInterpolation = //
         new GeodesicBSplineInterpolation(H2Geodesic.INSTANCE, 3, target);
     target = N.DOUBLE.of(target);

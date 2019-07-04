@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 
 public class DMLexSemiMinTrackerTest extends TestCase {
   private static void _checkSimple(AbstractLexSemiMinTracker<Integer> LSMT1) {
-    Tensor x = Tensors.fromString("{1,2,2}");
+    Tensor x = Tensors.fromString("{1, 2, 2}");
     LSMT1.digest(1, x);
     assertFalse(LSMT1.getCandidateSet().isEmpty());
   }
@@ -43,10 +43,10 @@ public class DMLexSemiMinTrackerTest extends TestCase {
 
   /***************************************************/
   private static void _checkCS(AbstractLexSemiMinTracker<Integer> lexSemiMinTracker) {
-    Tensor x = Tensors.fromString("{1,4,4}");
-    Tensor y = Tensors.fromString("{3,3,1}");
-    Tensor z = Tensors.fromString("{1.5,4,4}");
-    Tensor w = Tensors.fromString("{0.9,2.9,1}");
+    Tensor x = Tensors.fromString("{1, 4, 4}");
+    Tensor y = Tensors.fromString("{3, 3, 1}");
+    Tensor z = Tensors.fromString("{1.5, 4, 4}");
+    Tensor w = Tensors.fromString("{0.9, 2.9, 1}");
     assertTrue(lexSemiMinTracker.getCandidateSet().isEmpty());
     {
       Collection<Integer> collection = lexSemiMinTracker.digest(1, x);

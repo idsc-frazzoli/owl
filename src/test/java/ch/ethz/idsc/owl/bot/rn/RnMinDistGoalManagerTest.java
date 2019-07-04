@@ -25,7 +25,7 @@ public class RnMinDistGoalManagerTest extends TestCase {
 
   public void testQuantity() {
     GoalInterface goalInterface = RnMinDistGoalManager.sperical(Tensors.fromString("{10[m], 10[m], 10[m]}"), Quantity.of(2, "m"));
-    Scalar scalar = goalInterface.minCostToGoal(Tensors.fromString("{10[m],0[m],10[m]}"));
+    Scalar scalar = goalInterface.minCostToGoal(Tensors.fromString("{10[m], 0[m], 10[m]}"));
     assertEquals(scalar, Quantity.of(8, "m"));
   }
 

@@ -24,7 +24,7 @@ public class Se2CarFlowsTest extends TestCase {
     FlowsInterface carFlows = Se2CarFlows.standard(speed, rate_max);
     Collection<Flow> collection = carFlows.getFlows(8);
     Flow flow = collection.iterator().next();
-    Tensor x = Tensors.fromString("{1[m],2[m],3[rad]}").map(UnitSystem.SI());
+    Tensor x = Tensors.fromString("{1[m], 2[m], 3[rad]}").map(UnitSystem.SI());
     Tensor r = RungeKutta45Integrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
     Chop._10.requireClose(r, //
         Tensors.fromString("{1.9786265584792444[m], 3.5241205617280174[m], -1}"));
@@ -35,7 +35,7 @@ public class Se2CarFlowsTest extends TestCase {
     Scalar rate = (Scalar) Quantity.of(2.384, "rad*m^-1").map(UnitSystem.SI());
     Flow flow = CarHelper.singleton(speed, rate);
     Tensor u = flow.getU();
-    Tensor origin = Tensors.fromString("{0[m],0[m],0}");
+    Tensor origin = Tensors.fromString("{0[m], 0[m], 0}");
     Scalar half_turn = Pi.VALUE.divide(u.Get(2));
     Tensor res = Se2CoveringIntegrator.INSTANCE.spin(origin, u.multiply(half_turn));
     res = res.map(Chop._12);
@@ -49,7 +49,7 @@ public class Se2CarFlowsTest extends TestCase {
     FlowsInterface carFlows = Se2CarFlows.standard(speed, rate_max);
     Collection<Flow> collection = carFlows.getFlows(8);
     Flow flow = collection.iterator().next();
-    Tensor x = Tensors.fromString("{1[m],2[m],3[]}").map(UnitSystem.SI());
+    Tensor x = Tensors.fromString("{1[m], 2[m], 3[]}").map(UnitSystem.SI());
     Tensor r = RungeKutta45Integrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
     Chop._10.requireClose(r, //
         Tensors.fromString("{1.9786265584792444[m], 3.5241205617280174[m], -1}"));
@@ -60,7 +60,7 @@ public class Se2CarFlowsTest extends TestCase {
     Scalar rate = (Scalar) Quantity.of(2.384, "m^-1").map(UnitSystem.SI());
     Flow flow = CarHelper.singleton(speed, rate);
     Tensor u = flow.getU();
-    Tensor origin = Tensors.fromString("{0[m],0[m],0}");
+    Tensor origin = Tensors.fromString("{0[m], 0[m], 0}");
     Scalar half_turn = Pi.VALUE.divide(u.Get(2));
     Tensor res = Se2CoveringIntegrator.INSTANCE.spin(origin, u.multiply(half_turn));
     res = res.map(Chop._12);

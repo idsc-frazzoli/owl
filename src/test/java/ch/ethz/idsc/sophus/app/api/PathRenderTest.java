@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 public class PathRenderTest extends TestCase {
   public void testFail() {
     PathRender pathRender = new PathRender(Color.BLACK);
-    pathRender.setCurve(Tensors.fromString("{{1,2,3},{4,5,6},{7,8,9}}"), false);
+    pathRender.setCurve(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}"), false);
     try {
       pathRender.render(null, null);
       fail();

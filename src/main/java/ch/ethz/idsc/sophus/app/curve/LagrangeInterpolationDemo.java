@@ -48,7 +48,7 @@ public class LagrangeInterpolationDemo extends CurvatureDemo {
     spinnerRefine.setValue(7);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     {
-      Tensor tensor = Tensors.fromString("{{1,0,0},{1,0,2.1}}");
+      Tensor tensor = Tensors.fromString("{{1, 0, 0}, {1, 0, 2.1}}");
       setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
           Tensor.of(tensor.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }

@@ -75,7 +75,7 @@ public class GeodesicCatmullClarkSubdivisionTest extends TestCase {
 
   public void testRefine() {
     GeodesicCatmullClarkSubdivision catmullClarkSubdivision = new GeodesicCatmullClarkSubdivision(RnGeodesic.INSTANCE);
-    Tensor grid = Tensors.fromString("{{0,0,0,0},{0,1,0,0},{0,0,0,1}}");
+    Tensor grid = Tensors.fromString("{{0, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 0, 1}}");
     Tensor refine = catmullClarkSubdivision.refine(grid);
     String string = "{{0, 0, 0, 0, 0, 0, 0}, {0, 1/4, 3/8, 1/4, 1/16, 0, 0}, {0, 3/8, 9/16, 3/8, 7/64, 1/16, 1/8}, {0, 1/4, 3/8, 1/4, 1/8, 1/4, 1/2}, {0, 0, 0, 0, 1/8, 1/2, 1}}";
     assertEquals(refine, Tensors.fromString(string));
@@ -83,7 +83,7 @@ public class GeodesicCatmullClarkSubdivisionTest extends TestCase {
 
   public void testRefineX() {
     GeodesicCatmullClarkSubdivision catmullClarkSubdivision = new GeodesicCatmullClarkSubdivision(RnGeodesic.INSTANCE);
-    Tensor grid = Tensors.fromString("{{0,1},{0,1},{0,1}}");
+    Tensor grid = Tensors.fromString("{{0, 1}, {0, 1}, {0, 1}}");
     Tensor refine = Nest.of(catmullClarkSubdivision::refine, grid, 2);
     assertEquals(refine, Tensors.vector(i -> Subdivide.of(0, 1, 4), 9));
     ExactTensorQ.require(refine);
@@ -91,7 +91,7 @@ public class GeodesicCatmullClarkSubdivisionTest extends TestCase {
 
   public void testRefineY() {
     GeodesicCatmullClarkSubdivision catmullClarkSubdivision = new GeodesicCatmullClarkSubdivision(RnGeodesic.INSTANCE);
-    Tensor grid = Tensors.fromString("{{0,0},{1,1},{2,2}}");
+    Tensor grid = Tensors.fromString("{{0, 0}, {1, 1}, {2, 2}}");
     Tensor refine = Nest.of(catmullClarkSubdivision::refine, grid, 2);
     assertEquals(Transpose.of(refine), Tensors.vector(i -> Subdivide.of(0, 2, 8), 5));
     ExactTensorQ.require(refine);

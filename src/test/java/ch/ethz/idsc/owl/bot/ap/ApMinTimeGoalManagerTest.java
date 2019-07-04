@@ -18,6 +18,6 @@ public class ApMinTimeGoalManagerTest extends TestCase {
         So2Region.periodic(RealScalar.of(0.1), RealScalar.of(0.05)));
     ApMinTimeGoalManager apMinTimeGoalManager = new ApMinTimeGoalManager(apComboRegion, maxSpeed);
     Scalar expected = Quantity.of(4, "m").divide(maxSpeed);
-    assertEquals(expected, apMinTimeGoalManager.minCostToGoal(Tensors.fromString("{1000[m],10[m],45[m*s^-1],0.05}")));
+    assertEquals(expected, apMinTimeGoalManager.minCostToGoal(Tensors.fromString("{1000[m], 10[m], 45[m*s^-1], 0.05}")));
   }
 }

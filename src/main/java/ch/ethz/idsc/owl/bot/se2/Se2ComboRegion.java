@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** suggested base class for se2 goal managers.
  * all implemented methods in this layer are final.
  * 
- * class defines circle region for (x,y) component and periodic intervals in angular component */
+ * class defines circle region for (x, y) component and periodic intervals in angular component */
 public class Se2ComboRegion implements Region<Tensor>, Serializable {
   /** @param goal {px, py, angle}
    * @param radiusVector {dist_radius, dist_radius, dist_angle}

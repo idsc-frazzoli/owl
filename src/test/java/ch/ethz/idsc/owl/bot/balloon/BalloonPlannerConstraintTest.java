@@ -21,14 +21,14 @@ public class BalloonPlannerConstraintTest extends TestCase {
       StateSpaceModels.createFlow(BalloonStateSpaceModels.defaultWithUnits(), Tensors.vector(100, 0.1));
 
   public void testYConstraints() {
-    Tensor yUnvalid = Tensors.fromString("{5[m],-3[m],4[m*s^-1],40[m * K^-1 * s^-2]}");
+    Tensor yUnvalid = Tensors.fromString("{5[m], -3[m], 4[m*s^-1], 40[m * K^-1 * s^-2]}");
     GlcNode pseudoNodeZ = GlcNode.of(FLOW, new StateTime(yUnvalid, TIME), RealScalar.ONE, RealScalar.ONE);
     assertFalse(PLANNER_CONSTRAINT.isSatisfied(pseudoNodeZ, null, FLOW));
   }
 
   public void testVConstraints() {
-    Tensor vUnvalidMax = Tensors.fromString("{5[m],0[m],6[m*s^-1],40[m * K^-1 * s^-2]}");
-    Tensor vUnvalidNegative = Tensors.fromString("{5[m],0[m],-4[m*s^-1],40[m * K^-1 * s^-2]}");
+    Tensor vUnvalidMax = Tensors.fromString("{5[m], 0[m], 6[m*s^-1], 40[m * K^-1 * s^-2]}");
+    Tensor vUnvalidNegative = Tensors.fromString("{5[m], 0[m], -4[m*s^-1], 40[m * K^-1 * s^-2]}");
     GlcNode pseudoNodeVNegative = GlcNode.of(FLOW, new StateTime(vUnvalidNegative, TIME), RealScalar.ONE, RealScalar.ONE);
     GlcNode pseudoNodeVMax = GlcNode.of(FLOW, new StateTime(vUnvalidMax, TIME), RealScalar.ONE, RealScalar.ONE);
     assertTrue(PLANNER_CONSTRAINT.isSatisfied(pseudoNodeVNegative, null, FLOW));
@@ -36,7 +36,7 @@ public class BalloonPlannerConstraintTest extends TestCase {
   }
 
   public void testValidConstraints() {
-    Tensor valid = Tensors.fromString("{5[m],0[m],4[m*s^-1],40[m * K^-1 * s^-2]}");
+    Tensor valid = Tensors.fromString("{5[m], 0[m], 4[m*s^-1], 40[m * K^-1 * s^-2]}");
     GlcNode pseudoNodeValid = GlcNode.of(FLOW, new StateTime(valid, TIME), RealScalar.ONE, RealScalar.ONE);
     assertTrue(PLANNER_CONSTRAINT.isSatisfied(pseudoNodeValid, null, FLOW));
   }

@@ -22,7 +22,7 @@ public class Tse2IntegratorTest extends TestCase {
     Collection<Flow> collection = flowsInterface.getFlows(3);
     Tse2Integrator tse2Integrator = new Tse2Integrator(Clips.interval(Quantity.of(-20, "m*s^-1"), Quantity.of(20, "m*s^-1")));
     for (Flow flow : collection) {
-      Tensor x = Tensors.fromString("{2[m],3[m],4,3[m*s^-1]}").unmodifiable();
+      Tensor x = Tensors.fromString("{2[m], 3[m], 4, 3[m*s^-1]}").unmodifiable();
       Tensor u = flow.getU().unmodifiable();
       Tensor f = Tse2StateSpaceModel.INSTANCE.f(x, u).unmodifiable();
       Scalar h = Quantity.of(0.1, "s");

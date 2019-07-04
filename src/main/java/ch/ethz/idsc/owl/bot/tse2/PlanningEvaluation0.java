@@ -78,15 +78,15 @@ public class PlanningEvaluation0 extends Se2Demo {
   static final float CAR_RAD = 1.0f; // [m]
   static final Tensor PARTITIONSCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(10).reciprocal(), RealScalar.of(10)).unmodifiable();
-  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 8.0), RealScalar.ZERO); // normal (s3,s4)
-  // static final StateTime INITIAL = new StateTime(Tensors.vector(10.5, 3.0, 1.571, 8), RealScalar.ZERO); // left (s3,s4)
+  static final StateTime INITIAL = new StateTime(Tensors.vector(12, 3.0, 1.571, 8.0), RealScalar.ZERO); // normal (s3, s4)
+  // static final StateTime INITIAL = new StateTime(Tensors.vector(10.5, 3.0, 1.571, 8), RealScalar.ZERO); // left (s3, s4)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(20.5, 1.5, 1.571, 7), RealScalar.ZERO); // normal (s6)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(20.0, 1.5, 1.571, 7), RealScalar.ZERO); // left (s6)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(21.5, 20.0, 1.571, 7), RealScalar.ZERO); // up (s6)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(19.0, 6.0, Math.PI / 2.0f, 8), RealScalar.ZERO); // normal (s7)
   // static final StateTime INITIAL = new StateTime(Tensors.vector(21.8, 1.5, Math.PI / 2.0f, 8), RealScalar.ZERO); // normal (s8)
-  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straigh (s3,s4)
-  // static final Tensor GOAL = Tensors.vector(27, 33.5, 0, MAX_SPEED.divide(RealScalar.of(2)).number()); // around curve (s3,s4)
+  static final Tensor GOAL = Tensors.vector(12, 31, 1.571, MAX_SPEED.divide(RealScalar.of(2)).number()); // only straight (s3, s4)
+  // static final Tensor GOAL = Tensors.vector(27, 33.5, 0, MAX_SPEED.divide(RealScalar.of(2)).number()); // around curve (s3, s4)
   // static final Tensor GOAL = Tensors.vector(20.0, 34, 1.3f*Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // hc (s6)
   // static final Tensor GOAL = Tensors.vector(21.5, 32, Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // normal (s6)
   // static final Tensor GOAL = Tensors.vector(19.0, 42, Math.PI / 2.0f, MAX_SPEED.divide(RealScalar.of(2)).number()); // normal (s7)

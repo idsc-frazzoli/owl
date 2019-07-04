@@ -31,9 +31,9 @@ public class ConeRegionTest extends TestCase {
   }
 
   public void testUnits() {
-    ConeRegion coneRegion = new ConeRegion(Tensors.fromString("{3[m],4[m],1.5}"), RealScalar.of(1));
-    assertTrue(coneRegion.isMember(Tensors.fromString("{3[m],4+1[m]}")));
-    assertFalse(coneRegion.isMember(Tensors.fromString("{3[m],4-1[m]}")));
+    ConeRegion coneRegion = new ConeRegion(Tensors.fromString("{3[m], 4[m], 1.5}"), RealScalar.of(1));
+    assertTrue(coneRegion.isMember(Tensors.fromString("{3[m], 4+1[m]}")));
+    assertFalse(coneRegion.isMember(Tensors.fromString("{3[m], 4-1[m]}")));
   }
 
   public void testDistance() {

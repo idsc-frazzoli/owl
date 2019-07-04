@@ -64,7 +64,7 @@ public class SphereRandomSampleTest extends TestCase {
 
   public void testQuantity() {
     RandomSampleInterface randomSampleInterface = //
-        SphereRandomSample.of(Tensors.fromString("{10[m],20[m],-5[m]}"), Quantity.of(2, "m"));
+        SphereRandomSample.of(Tensors.fromString("{10[m], 20[m], -5[m]}"), Quantity.of(2, "m"));
     Tensor tensor = randomSampleInterface.randomSample(RANDOM);
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("m");
     tensor.map(scalarUnaryOperator);

@@ -54,7 +54,7 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
     jSliderExponent.setToolTipText("centripetal exponent");
     timerFrame.jToolBar.add(jSliderExponent);
     {
-      Tensor dubins = Tensors.fromString("{{1,1,0}, {1,2,-1}, {2,1,0.5}}");
+      Tensor dubins = Tensors.fromString("{{1, 1, 0}, {1, 2, -1}, {2, 1, 0.5}}");
       setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 0), //
           Tensor.of(dubins.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
     }

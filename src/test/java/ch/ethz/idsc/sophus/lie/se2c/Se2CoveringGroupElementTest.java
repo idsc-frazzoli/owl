@@ -63,8 +63,8 @@ public class Se2CoveringGroupElementTest extends TestCase {
   }
 
   public void testQuantity() {
-    Tensor xya = Tensors.fromString("{1[m],2[m],.34}");
-    Tensor oth = Tensors.fromString("{-.3[m],.8[m],-.5}");
+    Tensor xya = Tensors.fromString("{1[m], 2[m], 0.34}");
+    Tensor oth = Tensors.fromString("{-.3[m], 0.8[m], -0.5}");
     Se2CoveringGroupElement se2GroupAction = new Se2CoveringGroupElement(xya);
     Tensor inverse = se2GroupAction.inverse().combine(Array.zeros(3));
     assertEquals(inverse, Tensors.fromString("{-1.6097288498099749[m], -1.552022238915878[m], -0.34}"));
@@ -90,7 +90,7 @@ public class Se2CoveringGroupElementTest extends TestCase {
   }
 
   public void testInverseTensor() {
-    Tensor xya = Tensors.fromString("{1[m],2[m],.34}");
+    Tensor xya = Tensors.fromString("{1[m], 2[m], 0.34}");
     Se2CoveringGroupElement element = new Se2CoveringGroupElement(xya);
     Tensor combine = element.combine(element.inverseTensor());
     Chop._12.requireClose(combine, Tensors.fromString("{0[m], 0[m], 0}"));

@@ -125,8 +125,8 @@ public class Se2GroupElementTest extends TestCase {
   }
 
   public void testUnits() {
-    TensorUnaryOperator se2Adjoint = Se2Group.INSTANCE.element(Tensors.fromString("{2[m],3[m],4}"))::adjoint;
-    Tensor tensor = se2Adjoint.apply(Tensors.fromString("{7[m*s^-1],-5[m*s^-1],1[s^-1]}"));
+    TensorUnaryOperator se2Adjoint = Se2Group.INSTANCE.element(Tensors.fromString("{2[m], 3[m], 4}"))::adjoint;
+    Tensor tensor = se2Adjoint.apply(Tensors.fromString("{7[m*s^-1], -5[m*s^-1], 1[s^-1]}"));
     Chop._13.requireClose(tensor, //
         Tensors.fromString("{-5.359517822584925[m*s^-1], -4.029399362837438[m*s^-1], 1[s^-1]}"));
   }

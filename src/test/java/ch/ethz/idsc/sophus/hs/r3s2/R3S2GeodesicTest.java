@@ -12,41 +12,41 @@ import junit.framework.TestCase;
 public class R3S2GeodesicTest extends TestCase {
   public void testZero() {
     Tensor split = R3S2Geodesic.INSTANCE.split( //
-        Tensors.fromString("{{1,2,3},{1,0,0}}"), //
-        Tensors.fromString("{{8,8,8},{0,1,0}}"), //
+        Tensors.fromString("{{1, 2, 3}, {1, 0, 0}}"), //
+        Tensors.fromString("{{8, 8, 8}, {0, 1, 0}}"), //
         RealScalar.ZERO);
-    assertEquals(split, Tensors.fromString("{{1,2,3},{1,0,0}}"));
+    assertEquals(split, Tensors.fromString("{{1, 2, 3}, {1, 0, 0}}"));
   }
 
   public void testOne() {
     Tensor split = R3S2Geodesic.INSTANCE.split( //
-        Tensors.fromString("{{1,2,3},{1,0,0}}"), //
-        Tensors.fromString("{{8,8,8},{0,1,0}}"), //
+        Tensors.fromString("{{1, 2, 3}, {1, 0, 0}}"), //
+        Tensors.fromString("{{8, 8, 8}, {0, 1, 0}}"), //
         RealScalar.ONE);
-    assertTrue(Chop._10.close(split, Tensors.fromString("{{8,8,8},{0,1,0}}")));
+    assertTrue(Chop._10.close(split, Tensors.fromString("{{8, 8, 8}, {0, 1, 0}}")));
   }
 
   public void testHalfShift() {
     Tensor split = R3S2Geodesic.INSTANCE.split( //
-        Tensors.fromString("{{1,2,3},{1,0,0}}"), //
-        Tensors.fromString("{{8,8,8},{1,0,0}}"), //
+        Tensors.fromString("{{1, 2, 3}, {1, 0, 0}}"), //
+        Tensors.fromString("{{8, 8, 8}, {1, 0, 0}}"), //
         RationalScalar.HALF);
-    assertTrue(Chop._10.close(split, Tensors.fromString("{{4.5,5,5.5}, {1,0,0}}")));
+    assertTrue(Chop._10.close(split, Tensors.fromString("{{4.5, 5, 5.5}, {1, 0, 0}}")));
   }
 
   public void testHalfRotate() {
     Tensor split = R3S2Geodesic.INSTANCE.split( //
-        Tensors.fromString("{{1,2,3},{1,0,0}}"), //
-        Tensors.fromString("{{1,2,3},{0,1,0}}"), //
+        Tensors.fromString("{{1, 2, 3}, {1, 0, 0}}"), //
+        Tensors.fromString("{{1, 2, 3}, {0, 1, 0}}"), //
         RationalScalar.HALF);
     assertTrue(Chop._10.close(split, Tensors.fromString( //
-        "{{1,2,3},{0.7071067811865476, 0.7071067811865475, 0}}")));
+        "{{1, 2, 3}, {0.7071067811865476, 0.7071067811865475, 0}}")));
   }
 
   public void testHalfSome() {
     Tensor split = R3S2Geodesic.INSTANCE.split( //
-        Tensors.fromString("{{1,2,3},{1,0,0}}"), //
-        Tensors.fromString("{{8,8,8},{0,1,0}}"), //
+        Tensors.fromString("{{1, 2, 3}, {1, 0, 0}}"), //
+        Tensors.fromString("{{8, 8, 8}, {0, 1, 0}}"), //
         RationalScalar.HALF);
     assertTrue(Chop._10.close(split.get(0), Tensors.fromString( //
         "{5.742640687119285, 3.5502525316941673, 5.5}")));

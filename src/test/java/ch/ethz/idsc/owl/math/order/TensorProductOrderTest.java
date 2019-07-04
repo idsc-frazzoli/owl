@@ -20,10 +20,10 @@ public class TensorProductOrderTest extends TestCase {
   }
 
   public void testSimple() {
-    Tensor tensorX = Tensors.fromString("{1,2,3}");
-    Tensor tensorY = Tensors.fromString("{2,3,4}");
-    Tensor tensorA = Tensors.fromString("{0,3,3}");
-    Tensor tensorZ = Tensors.fromString("{0,3,4}");
+    Tensor tensorX = Tensors.fromString("{1, 2, 3}");
+    Tensor tensorY = Tensors.fromString("{2, 3, 4}");
+    Tensor tensorA = Tensors.fromString("{0, 3, 3}");
+    Tensor tensorZ = Tensors.fromString("{0, 3, 4}");
     _check(tensorX, tensorY, OrderComparison.STRICTLY_PRECEDES);
     _check(tensorY, tensorX, OrderComparison.STRICTLY_SUCCEEDS);
     _check(tensorX, tensorZ, OrderComparison.INCOMPARABLE);
@@ -33,8 +33,8 @@ public class TensorProductOrderTest extends TestCase {
 
   public void testDimOne() {
     ProductOrderComparator productOrderComparator = TensorProductOrder.comparator(2);
-    Tensor tensorX = Tensors.fromString("{1,2,3}");
-    Tensor tensorY = Tensors.fromString("{2,3,4}");
+    Tensor tensorX = Tensors.fromString("{1, 2, 3}");
+    Tensor tensorY = Tensors.fromString("{2, 3, 4}");
     OrderComparison orderComparison1 = productOrderComparator.compare(tensorX.extract(0, 2), tensorY.extract(0, 2));
     assertEquals(orderComparison1, OrderComparison.STRICTLY_PRECEDES);
   }
@@ -64,8 +64,8 @@ public class TensorProductOrderTest extends TestCase {
 
   public void testFailLength() {
     ProductOrderComparator productOrderComparator = TensorProductOrder.comparator(3);
-    Tensor tensorX = Tensors.fromString("{1,2}");
-    Tensor tensorY = Tensors.fromString("{2,3}");
+    Tensor tensorX = Tensors.fromString("{1, 2}");
+    Tensor tensorY = Tensors.fromString("{2, 3}");
     try {
       productOrderComparator.compare(tensorX, tensorY);
       fail();

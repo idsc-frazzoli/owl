@@ -126,8 +126,8 @@ public class TransitiveMinTrackerTest extends TestCase {
 
   public void testLexicographic() throws ClassNotFoundException, IOException {
     List<OrderComparator<? extends Object>> comparators = Collections.nCopies(2, ScalarTotalOrder.INSTANCE);
-    Tensor tensorX = Tensors.fromString("{1,2}");
-    Tensor tensorY = Tensors.fromString("{2,3}");
+    Tensor tensorX = Tensors.fromString("{1, 2}");
+    Tensor tensorY = Tensors.fromString("{2, 3}");
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
     MinTracker<Iterable<? extends Object>> lexTracker = //
         Serialization.copy(TransitiveMinTracker.withSet(genericLexicographicOrder));

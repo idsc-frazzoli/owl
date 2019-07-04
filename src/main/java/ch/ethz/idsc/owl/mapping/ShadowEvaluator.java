@@ -216,7 +216,7 @@ public class ShadowEvaluator {
     // get pixel coordinates as Points
     Point polyPoint = StaticHelper.toPoint(rays.stream() //
         .map(forward::apply) //
-        .map(shadowMap::state2pixel) // TODO JPH not efficient since converts point -> int{x,y} -> vector -> int[]
+        .map(shadowMap::state2pixel) // TODO JPH not efficient since converts point -> int{x, y} -> vector -> int[]
         // ... suggestion: use geometricLayer.toVector
         .map(a -> Tensors.vector(a.x(), a.y())));
     Mat segment = new Mat(mat.size(), mat.type(), AbstractScalar.BLACK);

@@ -26,7 +26,7 @@ public class ImageRegionsTest extends TestCase {
   }
 
   public void testGrayscale() {
-    Tensor image = Tensors.fromString("{{0,1},{0,0}}");
+    Tensor image = Tensors.fromString("{{0, 1}, {0, 0}}");
     Tensor output = ImageRegions.grayscale(image);
     assertEquals(image, output);
   }

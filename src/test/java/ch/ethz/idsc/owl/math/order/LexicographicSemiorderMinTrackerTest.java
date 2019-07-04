@@ -13,12 +13,12 @@ import junit.framework.TestCase;
 
 public class LexicographicSemiorderMinTrackerTest extends TestCase {
   public void testDigestSimple() {
-    Tensor slackVector = Tensors.fromString("{1,1,1}");
+    Tensor slackVector = Tensors.fromString("{1, 1, 1}");
     LexicographicSemiorderMinTracker<Integer> LSMT1 = (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker
         .<Integer>withList(slackVector);
     LexicographicSemiorderMinTracker<Integer> LSMT2 = (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker
         .<Integer>withSet(slackVector);
-    Tensor x = Tensors.fromString("{1,2,2}");
+    Tensor x = Tensors.fromString("{1, 2, 2}");
     LSMT1.digest(1, x);
     LSMT1.digest(2, x);
     LSMT2.digest(1, x);
@@ -47,13 +47,13 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
   }
 
   public void testCandidateSet() {
-    Tensor slackVector = Tensors.fromString("{2,2,2}");
+    Tensor slackVector = Tensors.fromString("{2, 2, 2}");
     LexicographicSemiorderMinTracker<Integer> LSMT1 = (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker
         .<Integer>withList(slackVector);
-    Tensor x = Tensors.fromString("{1,4,4}");
-    Tensor y = Tensors.fromString("{3,3,1}");
-    Tensor z = Tensors.fromString("{1.5,4,4}");
-    Tensor w = Tensors.fromString("{-1.5,10,10}");
+    Tensor x = Tensors.fromString("{1, 4, 4}");
+    Tensor y = Tensors.fromString("{3, 3, 1}");
+    Tensor z = Tensors.fromString("{1.5, 4, 4}");
+    Tensor w = Tensors.fromString("{-1.5, 10, 10}");
     assertTrue(LSMT1.getCandidateSet().isEmpty());
     {
       Collection<Integer> collection = LSMT1.digest(1, x);
@@ -102,9 +102,9 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     Tensor slacks = Tensors.vector(1, 1, 1);
     LexicographicSemiorderMinTracker<Integer> LSMT1 = //
         (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
-    Tensor x = Tensors.fromString("{1,4,4}");
-    Tensor y = Tensors.fromString("{3,3,1}");
-    Tensor z = Tensors.fromString("{1.5,4,4}");
+    Tensor x = Tensors.fromString("{1, 4, 4}");
+    Tensor y = Tensors.fromString("{3, 3, 1}");
+    Tensor z = Tensors.fromString("{1.5, 4, 4}");
     assertTrue(LSMT1.getMinElements().isEmpty());
     LSMT1.digest(1, x);
     assertTrue(LSMT1.getMinElements().size() == 1);
@@ -125,9 +125,9 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     Tensor slacks = Tensors.vector(1, 1, 1);
     LexicographicSemiorderMinTracker<Integer> LSMT1 = //
         (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
-    Tensor x = Tensors.fromString("{1,4,4}");
-    Tensor y = Tensors.fromString("{3,3,1}");
-    Tensor z = Tensors.fromString("{1.5,4,4}");
+    Tensor x = Tensors.fromString("{1, 4, 4}");
+    Tensor y = Tensors.fromString("{3, 3, 1}");
+    Tensor z = Tensors.fromString("{1.5, 4, 4}");
     assertTrue(LSMT1.getMinKeys().isEmpty());
     LSMT1.digest(1, x);
     assertTrue(LSMT1.getMinKeys().contains(1));
@@ -145,9 +145,9 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
     Tensor slacks = Tensors.vector(1, 1, 1);
     LexicographicSemiorderMinTracker<Integer> LSMT1 = //
         (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
-    Tensor x = Tensors.fromString("{1,4,4}");
-    Tensor y = Tensors.fromString("{3,3,1}");
-    Tensor z = Tensors.fromString("{1.5,4,4}");
+    Tensor x = Tensors.fromString("{1, 4, 4}");
+    Tensor y = Tensors.fromString("{3, 3, 1}");
+    Tensor z = Tensors.fromString("{1.5, 4, 4}");
     assertTrue(LSMT1.getMinValues().isEmpty());
     LSMT1.digest(1, x);
     assertTrue(LSMT1.getMinValues().contains(x));
@@ -165,9 +165,9 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
         (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
     LexicographicSemiorderMinTracker<Integer> LSMT3 = //
         (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
-    Tensor x = Tensors.fromString("{1,0,4}");
-    Tensor y = Tensors.fromString("{1,2,0}");
-    Tensor z = Tensors.fromString("{2,1,4}");
+    Tensor x = Tensors.fromString("{1, 0, 4}");
+    Tensor y = Tensors.fromString("{1, 2, 0}");
+    Tensor z = Tensors.fromString("{2, 1, 4}");
     LSMT1.digest(1, x);
     assertTrue(LSMT1.getCandidateValues().contains(x) && LSMT1.getCandidateSet().size() == 1);
     LSMT1.digest(2, y);
@@ -196,7 +196,7 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
   }
 
   public void testPermutations() {
-    Tensor slackVector = Tensors.fromString("{1,1,1,1}");
+    Tensor slackVector = Tensors.fromString("{1, 1, 1, 1}");
     LexicographicSemiorderMinTracker<Integer> LSMT1 = //
         (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slackVector);
     Tensor tensor = Permutations.of(Range.of(0, 4));
@@ -205,10 +205,10 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
       LSMT1.digest(key, v);
       ++key;
     }
-    Tensor x = Tensors.fromString("{0,1,2,3}");
-    Tensor y = Tensors.fromString("{0,1,3,2}");
-    Tensor z = Tensors.fromString("{1,0,2,3}");
-    Tensor w = Tensors.fromString("{0,2,1,3}");
+    Tensor x = Tensors.fromString("{0, 1, 2, 3}");
+    Tensor y = Tensors.fromString("{0, 1, 3, 2}");
+    Tensor z = Tensors.fromString("{1, 0, 2, 3}");
+    Tensor w = Tensors.fromString("{0, 2, 1, 3}");
     assertTrue(LSMT1.getCandidateValues().contains(w));
     assertTrue(LSMT1.getCandidateValues().contains(x) && LSMT1.getMinValues().contains(x));
     assertTrue(LSMT1.getCandidateValues().contains(y) && LSMT1.getMinValues().contains(z));
@@ -216,11 +216,11 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
   }
 
   public void testGetBest() {
-    Tensor slackVector = Tensors.fromString("{1,1,1}");
+    Tensor slackVector = Tensors.fromString("{1, 1, 1}");
     LexicographicSemiorderMinTracker<String> LSMT1 = (LexicographicSemiorderMinTracker<String>) LexicographicSemiorderMinTracker.<String>withList(slackVector);
-    Tensor x = Tensors.fromString("{1,1,1}");
-    Tensor y = Tensors.fromString("{1,1,0}");
-    Tensor z = Tensors.fromString("{1.0000001,1,1}");
+    Tensor x = Tensors.fromString("{1, 1, 1}");
+    Tensor y = Tensors.fromString("{1, 1, 0}");
+    Tensor z = Tensors.fromString("{1.0000001, 1, 1}");
     assertTrue(LSMT1.getBest() == null);
     assertTrue(LSMT1.peekBestKey() == null);
     // assertTrue(LSMT1.peekBestValue() == null);
@@ -242,12 +242,12 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
   }
 
   public void testExtractBest() {
-    Tensor slackVector = Tensors.fromString("{1,1,1}");
+    Tensor slackVector = Tensors.fromString("{1, 1, 1}");
     LexicographicSemiorderMinTracker<Integer> LSMT1 = (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker
         .<Integer>withList(slackVector);
-    Tensor x = Tensors.fromString("{1,1,1}");
-    Tensor y = Tensors.fromString("{1,1,0}");
-    Tensor z = Tensors.fromString("{1,0,1}");
+    Tensor x = Tensors.fromString("{1, 1, 1}");
+    Tensor y = Tensors.fromString("{1, 1, 0}");
+    Tensor z = Tensors.fromString("{1, 0, 1}");
     LSMT1.digest(1, x);
     assertTrue(LSMT1.getCandidateSet().size() == 1);
     assertTrue(LSMT1.pollBestKey() == 1);

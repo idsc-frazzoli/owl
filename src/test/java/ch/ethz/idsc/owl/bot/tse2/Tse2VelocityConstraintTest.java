@@ -15,17 +15,17 @@ public class Tse2VelocityConstraintTest extends TestCase {
     PlannerConstraint plannerConstraint = //
         new Tse2VelocityConstraint(Quantity.of(-3, "m*s^-1"), Quantity.of(5, "m*s^-1"));
     assertTrue(plannerConstraint.isSatisfied(null, //
-        Arrays.asList(new StateTime(Tensors.fromString("{-Infinity,-Infinity,-Infinity,2[m*s^-1]}"), RealScalar.of(2))), null));
+        Arrays.asList(new StateTime(Tensors.fromString("{-Infinity, -Infinity, -Infinity, 2[m*s^-1]}"), RealScalar.of(2))), null));
     assertFalse(plannerConstraint.isSatisfied(null, //
-        Arrays.asList(new StateTime(Tensors.fromString("{-Infinity,-Infinity,-Infinity,6[m*s^-1]}"), RealScalar.of(2))), null));
+        Arrays.asList(new StateTime(Tensors.fromString("{-Infinity, -Infinity, -Infinity, 6[m*s^-1]}"), RealScalar.of(2))), null));
   }
 
   public void testEquals() {
     PlannerConstraint plannerConstraint = //
         new Tse2VelocityConstraint(Quantity.of(5, "m*s^-1"), Quantity.of(5, "m*s^-1"));
     assertTrue(plannerConstraint.isSatisfied(null, //
-        Arrays.asList(new StateTime(Tensors.fromString("{-Infinity,-Infinity,-Infinity,5[m*s^-1]}"), RealScalar.of(2))), null));
+        Arrays.asList(new StateTime(Tensors.fromString("{-Infinity, -Infinity, -Infinity, 5[m*s^-1]}"), RealScalar.of(2))), null));
     assertFalse(plannerConstraint.isSatisfied(null, //
-        Arrays.asList(new StateTime(Tensors.fromString("{-Infinity,-Infinity,-Infinity,6[m*s^-1]}"), RealScalar.of(2))), null));
+        Arrays.asList(new StateTime(Tensors.fromString("{-Infinity, -Infinity, -Infinity, 6[m*s^-1]}"), RealScalar.of(2))), null));
   }
 }
