@@ -82,6 +82,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     while (frame++ < 5 && owlyFrame.jFrame.isVisible()) {
       server.setGoal(goal);
       server.insertRoot(stateTime);
+      server.setState(stateTime);
       new Expand<>(server).steps(200);
       owlyFrame.setRrts(transitionSpace, server.getRoot().get(), transitionRegionQuery);
       Optional<List<TrajectorySample>> optional = server.getTrajectory();

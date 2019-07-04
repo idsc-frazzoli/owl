@@ -52,5 +52,5 @@ public abstract class TrajectoryEntity extends AbstractEntity implements Traject
   /** @param plannerConstraint
    * @param goal for instance {px, py, angle}
    * @return */
-  public abstract <T extends TrajectoryPlanner> T createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal);
+  public abstract TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal);
 }

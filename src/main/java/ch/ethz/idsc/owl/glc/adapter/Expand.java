@@ -52,7 +52,7 @@ public class Expand<T extends StateCostNode> {
     expand(Integer.MAX_VALUE, () -> {
       double t = timing.seconds();
       boolean bool = t >= time;
-      if (bool)
+      if (bool && !expandInterface.getBest().isPresent())
         System.out.println("*** TimeLimit reached -- No Goal was found ***");
       return bool;
     });

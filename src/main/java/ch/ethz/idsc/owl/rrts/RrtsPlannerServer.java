@@ -140,14 +140,11 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     RrtsNodes.costConsistency(root, transitionSpace, costFunction);
   }
 
-  public void setState(Tensor state) {
-    this.state = state;
-  }
-
   public void setState(StateTime stateTime) {
     Predicate<TrajectorySample> predicate = //
         trajectorySample -> Scalars.lessEquals(stateTime.time(), trajectorySample.stateTime().time());
     trajectory = trajectory.stream().filter(predicate).collect(Collectors.toList());
+    state = stateTime.state();
   }
 
   public void setGoal(Tensor goal) {
