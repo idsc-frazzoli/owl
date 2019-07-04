@@ -16,6 +16,9 @@ public enum GokartPoseData {
     return list;
   }
 
+  /** @param name
+   * @param limit
+   * @return matrix of dimensions N x 3 with rows of the form {x, y, heading} without units */
   public static Tensor getPose(String name, int limit) {
     return Tensor.of(ResourceData.of("/dubilab/app/pose/" + name + ".csv").stream() //
         .limit(limit) //
