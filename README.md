@@ -39,6 +39,21 @@ Obstacle anticipation
 </tr>
 </table>
 
+## Student Projects
+
+### 2017
+
+* Jonas Londschien (MT): *An Anytime Generalized Label Correcting Method for Motion Planning*
+
+### 2018
+
+* Yannik Nager (MT): *What lies in the shadows? Safe and computation-aware motion planning for autonomous vehicles using intent-aware dynamic shadow regions*
+
+### 2019
+
+* André Stoll (MT): *Multi-Objective Optimization Using Preference Structures*
+* Joel Gaechter (MT): RRTS with clothoids
+
 ## Features
 
 * Motion planning algorithms: [GLC](src/main/java/ch/ethz/idsc/owl/glc/std/StandardTrajectoryPlanner.java), and [RRT*](src/main/java/ch/ethz/idsc/owl/rrts/core/DefaultRrts.java)
