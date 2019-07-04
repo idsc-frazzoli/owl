@@ -41,9 +41,6 @@ Obstacle anticipation
 
 ## Student Projects
 
-The student projects are supervised by Andrea Censi, Jacopo Tani, Alessandro Zanardi, and Jan Hakenberg.
-The gokart is operated at Innovation Park Duebendorf since December 2017.
-
 ### 2017
 
 * Jonas Londschien (MT): *An Anytime Generalized Label Correcting Method for Motion Planning*
