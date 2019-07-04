@@ -73,19 +73,9 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   @Override // from TrajectoryPlanner
   public void insertRoot(StateTime stateTime) {
     Predicate<TrajectorySample> predicate = //
-        trajectorySample -> Scalars.lessEquals(stateTime.time(), trajectorySample.stateTime().time());
+        trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), stateTime.time());
     trajectory = trajectory().stream().filter(predicate).collect(Collectors.toList());
     potentialFutureTrajectories.clear();
-    // TODO ability to interrupt current trajectory
-    // where to put that, also see AbstractRrtsEntity::expandResult
-    // -> TrajectoryEntity::getFutureTrajectoryUntil
-    // -> StateTrajectoryControl::getFutureTrajectoryUntil
-    /*
-    StateTime future = trajectory.isEmpty() ? stateTime : trajectory.get(trajectory.size() / 2).stateTime();
-    Predicate<TrajectorySample> inversePredicate = //
-        trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), future.time());
-    trajectory = trajectory().stream().filter(inversePredicate).collect(Collectors.toList());
-    */
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
     root = rrts.insertAsNode(Objects.requireNonNull(stateTime).state(), 5).get();
     time = stateTime.time();
@@ -105,6 +95,8 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     trajectory.addAll(potentialFutureTrajectories.firstEntry().getValue());
     return trajectory;
   }
+
+
 
   @Override // from ExpandInterface
   public Optional<RrtsNode> pollNext() {
@@ -150,6 +142,12 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
 
   public void setState(Tensor state) {
     this.state = state;
+  }
+
+  public void setState(StateTime stateTime) {
+    Predicate<TrajectorySample> predicate = //
+        trajectorySample -> Scalars.lessEquals(stateTime.time(), trajectorySample.stateTime().time());
+    trajectory = trajectory.stream().filter(predicate).collect(Collectors.toList());
   }
 
   public void setGoal(Tensor goal) {

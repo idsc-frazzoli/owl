@@ -42,6 +42,7 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity implements Rrt
       treeRender.setCollection(collection);
       transitionRender.setCollection(collection);
     });
+    plannerServer.setState(head.get(0).stateTime());
     plannerServer.getTrajectory().ifPresent(this::trajectory);
   }
 

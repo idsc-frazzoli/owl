@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 // LONGTERM the redundancy in R2****Entity shows that re-factoring is needed!
 /* package */ class R2RrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
-  private static final Scalar DELAY_HINT = RealScalar.of(0.5);
+  private static final Scalar DELAY_HINT = RealScalar.of(2.5);
   private static final StateSpaceModel STATE_SPACE_MODEL = SingleIntegratorStateSpaceModel.INSTANCE;
   private static final Tensor SHAPE = Tensors.fromString("{{0,.1},{.1,0},{0,-.1},{-.1,0}}").unmodifiable();
 
