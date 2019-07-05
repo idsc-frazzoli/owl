@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
+import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.ren.TransitionRender;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
@@ -19,6 +20,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
 import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.PadRight;
 
@@ -44,6 +46,17 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity implements Rrt
     });
     plannerServer.setState(head.get(0).stateTime());
     plannerServer.getTrajectory().ifPresent(this::trajectory);
+  }
+
+  @Override // from TensorMetrix
+  public Scalar distance(Tensor x, Tensor y) {
+    return plannerServer.getTransitionSpace().distance(x, y);
+  }
+
+  @Override // from TrajectoryEntity
+  public RrtsTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+    plannerServer.setGoal(goal);
+    return plannerServer;
   }
 
   @Override // from RenderInterface
