@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   public static void main(String[] args) {
     for (int radius = 1; radius < 20; ++radius) {
-      List<String> list = GokartPoseData.INSTANCE.list();
+      List<String> list = GokartPoseDataV1.INSTANCE.list();
       Iterator<String> iterator = list.iterator();
       int index = 0;
       for (SmoothingKernel sk : SmoothingKernel.values()) {

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
@@ -20,13 +20,14 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO OB use member functions of GokartPoseData 
 /* package */ class SpectrogramDataExport {
   static final File ROOT = HomeDirectory.Desktop("MA/owl_export");
   // ---
   protected static Tensor _control = null;
 
   private static void process() throws IOException {
-    List<String> dataSource = GokartPoseData.INSTANCE.list();
+    List<String> dataSource = GokartPoseDataV1.INSTANCE.list();
     List<SmoothingKernel> kernel = Arrays.asList(SmoothingKernel.GAUSSIAN, SmoothingKernel.HAMMING, SmoothingKernel.BLACKMAN);
     // iterate over data
     for (String data : dataSource) {
