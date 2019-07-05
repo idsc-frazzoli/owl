@@ -16,10 +16,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/* package */ class FrequencyEffectDataExport {
+/* package */ enum FrequencyEffectDataExport {
+  ;
   // private final static SmoothingKernel SMOOTHING_KERNEL = SmoothingKernel.GAUSSIAN;
   private static void export(Tensor tensor, String filterType, int index, int radius, SmoothingKernel smoothingKernel) throws IOException {
-    try (FileWriter writer = new FileWriter("030619_" + filterType + "_" + smoothingKernel.toString() + "_" + radius + "_" + index + ".csv")) {
+    // TODO use Export of tensor library
+    try (FileWriter fileWriter = new FileWriter("030619_" + filterType + "_" + smoothingKernel.toString() + "_" + radius + "_" + index + ".csv")) {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < tensor.length(); i++) {
         sb.append(tensor.get(i).Get(0).toString());
@@ -29,7 +31,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         sb.append(tensor.get(i).Get(2).toString());
         sb.append("\n");
       }
-      writer.write(sb.toString());
+      fileWriter.write(sb.toString());
     }
   }
 

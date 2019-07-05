@@ -16,12 +16,14 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Export;
+import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class SpectrogramDataExport {
+  static final File ROOT = HomeDirectory.Desktop("MA/owl_export");
+  // ---
   protected static Tensor _control = null;
-  public static final File ROOT = new File("C:/Users/Oliver/Desktop/MA/owl_export");
 
   private static void process() throws IOException {
     List<String> dataSource = GokartPoseData.INSTANCE.list();
