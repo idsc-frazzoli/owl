@@ -14,23 +14,24 @@ import org.jfree.chart.JFreeChart;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.Spectrogram;
 import ch.ethz.idsc.tensor.io.ImageFormat;
-import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class UniformDatasetFilterDemo extends DatasetFilterDemo {
-  // TODO OB/JPH sampling freq is not generic here (because datasets may have other sampling rate)
-  private static final Scalar SAMPLING_FREQUENCY = RealScalar.of(20.0);
+  private static final ScalarUnaryOperator SAMPLE_RATE = QuantityMagnitude.SI().in("s^-1");
+  private static final GokartPoseData GOKART_POSE_DATA = GokartPoseDataV2.INSTANCE;
   // ---
   // TODO JPH refactor
   protected Tensor _control = null;
@@ -46,7 +47,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     super(list);
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
-      spinnerLabelString.setList(GokartPoseData.INSTANCE.list());
+      spinnerLabelString.setList(GOKART_POSE_DATA.list());
       spinnerLabelString.addSpinnerListener(type -> updateState());
       spinnerLabelString.setIndex(0);
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
@@ -65,9 +66,9 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   }
 
   protected void updateState() {
-    _control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + spinnerLabelString.getValue() + ".csv").stream() //
-        .limit(spinnerLabelLimit.getValue()) //
-        .map(row -> row.extract(1, 4)));
+    int limit = spinnerLabelLimit.getValue();
+    String name = spinnerLabelString.getValue();
+    _control = GOKART_POSE_DATA.getPose(name, limit);
     // Make uniform data artificially non-uniform by randomly leaving out elements
     // _control = DeuniformData.of(_control, RealScalar.of(0.2));
     // _control = DuckietownData.states(DuckietownData.POSE_20190325_0);
@@ -86,7 +87,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
-      Tensor speeds = lieDifferences.apply(refined).multiply(SAMPLING_FREQUENCY);
+      Scalar sampleRate = SAMPLE_RATE.apply(GOKART_POSE_DATA.getSampleRate());
+      Tensor speeds = lieDifferences.apply(refined).multiply(sampleRate);
       if (0 < speeds.length()) {
         int dimensions = speeds.get(0).length();
         VisualSet visualSet = new VisualSet();

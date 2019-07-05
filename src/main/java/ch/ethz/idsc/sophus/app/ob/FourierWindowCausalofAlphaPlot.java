@@ -11,7 +11,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;
@@ -148,7 +148,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   public static void main(String[] args) throws IOException {
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    List<String> listData = GokartPoseData.INSTANCE.list();
+    List<String> listData = GokartPoseDataV1.INSTANCE.list();
     int radius = 3;
     int limit = 5;
     for (int index = 1; index < 5; ++index) {

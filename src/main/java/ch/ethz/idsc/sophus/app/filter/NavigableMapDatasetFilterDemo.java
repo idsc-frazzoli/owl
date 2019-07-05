@@ -15,7 +15,7 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -64,7 +64,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     //
     timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
     {
-      spinnerLabelString.setList(GokartPoseData.INSTANCE.list());
+      spinnerLabelString.setList(GokartPoseDataV1.INSTANCE.list());
       spinnerLabelString.addSpinnerListener(type -> updateStateTime());
       spinnerLabelString.setIndex(0);
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");

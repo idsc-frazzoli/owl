@@ -14,7 +14,7 @@ import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.api.LieGroupFilters;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
@@ -123,7 +123,7 @@ import ch.ethz.idsc.tensor.red.Mean;
     // map.put(LieGroupCausalFilters.BIINVARIANT_MEAN_FIR, BiinvariantMeanFIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha()));
     // map.put(LieGroupCausalFilters.BIINVARIANT_MEAN_IIR, BiinvariantMeanIIRnNEW.of(geodesicDisplay, smoothingKernel, radius, alpha()));
     // signal cases: 0:x , 1:y, 2;heading
-    List<String> listData = GokartPoseData.INSTANCE.list();
+    List<String> listData = GokartPoseDataV1.INSTANCE.list();
     int limit = 10;
     for (int rad = 0; rad < 14; rad++) {
       System.out.println(rad);

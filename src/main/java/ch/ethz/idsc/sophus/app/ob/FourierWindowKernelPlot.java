@@ -11,7 +11,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
@@ -100,7 +100,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   public static void main(String[] args) throws IOException {
-    List<String> listData = GokartPoseData.INSTANCE.list();
+    List<String> listData = GokartPoseDataV1.INSTANCE.list();
     int limit = 10;
     for (int rad = 2; rad < 10; rad++) {
       process(listData, rad, limit);
