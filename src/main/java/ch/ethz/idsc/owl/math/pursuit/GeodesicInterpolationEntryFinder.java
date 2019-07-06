@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.sophus.itp.ga.GeodesicInterpolation;
+import ch.ethz.idsc.sophus.itp.GeodesicInterpolation;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

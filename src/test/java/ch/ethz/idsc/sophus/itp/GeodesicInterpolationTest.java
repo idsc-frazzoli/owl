@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.itp.ga;
+package ch.ethz.idsc.sophus.itp;
 
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;

@@ -1,5 +1,5 @@
 // code by gjoel, jph
-package ch.ethz.idsc.sophus.itp.ga;
+package ch.ethz.idsc.sophus.itp;
 
 import java.util.Objects;
 
@@ -31,6 +31,7 @@ public class GeodesicInterpolation extends AbstractInterpolation {
 
   @Override // from Interpolation
   public Tensor get(Tensor index) {
+    // TODO JPH allow multi-variate interpolation
     throw new UnsupportedOperationException();
   }
 
