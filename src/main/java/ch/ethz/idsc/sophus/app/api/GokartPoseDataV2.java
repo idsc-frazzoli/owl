@@ -28,6 +28,6 @@ public enum GokartPoseDataV2 implements GokartPoseData {
 
   @Override
   public Scalar getSampleRate() {
-    return Quantity.of(20, "s^-1");
+    return Quantity.of(50, "s^-1");
   }
 }
