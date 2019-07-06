@@ -18,8 +18,7 @@ public abstract class TrajectoryEntryFinder implements Serializable {
   /** @param waypoints of trajectory
    * @return stream of coarsely distributed trajectory entries */
   public final Stream<TrajectoryEntry> sweep(Tensor waypoints) {
-    Function<Scalar, TrajectoryEntry> function = on(waypoints);
-    return sweep_variables(waypoints).map(function);
+    return sweep_variables(waypoints).map(on(waypoints));
   }
 
   /** @param waypoints of trajectory

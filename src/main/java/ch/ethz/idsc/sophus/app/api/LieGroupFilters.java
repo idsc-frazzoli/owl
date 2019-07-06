@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.app.api;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenterMidSeeded;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceCenter;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -27,14 +26,6 @@ public enum LieGroupFilters {
         GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel, //
         LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
       return GeodesicCenterMidSeeded.of(geodesicInterface, smoothingKernel);
-    }
-  }, //
-  TANGENT_SPACE {
-    @Override
-    public TensorUnaryOperator supply( //
-        GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel, //
-        LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-      return TangentSpaceCenter.of(lieGroup, lieExponential, smoothingKernel);
     }
   }, //
   BIINVARIANT_MEAN {

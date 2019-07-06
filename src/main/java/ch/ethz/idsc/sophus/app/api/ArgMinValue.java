@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.math;
+package ch.ethz.idsc.sophus.app.api;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.red.ArgMin;
 
 /** Hint:
  * does not implement {@link Serializable} because {@link Optional} does not implement {@link Serializable} */
-public class ArgMinValue {
+/* package */ class ArgMinValue {
   public static ArgMinValue of(Tensor tensor) {
     int index = ArgMin.of(tensor);
     return new ArgMinValue(index, 0 <= index //

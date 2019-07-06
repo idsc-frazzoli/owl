@@ -1,7 +1,6 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
-import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -20,12 +19,9 @@ public final class NaiveEntryFinder extends TrajectoryEntryFinder {
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar var) {
     int index = var.number().intValue();
-    try {
-      return new TrajectoryEntry(Optional.of(waypoints.get(index)), RealScalar.of(index));
-    } catch (IndexOutOfBoundsException e) {
-      // ---
-    }
-    return new TrajectoryEntry(Optional.empty(), RealScalar.of(index));
+    return new TrajectoryEntry(0 <= index && index < waypoints.length()//
+        ? waypoints.get(index)
+        : null, var);
   }
 
   @Override // from TrajectoryEntryFinder
