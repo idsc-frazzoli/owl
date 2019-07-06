@@ -28,7 +28,7 @@ public class ArgMinVariableTest extends TestCase {
     TrajectoryEntryFinder entryFinder = InterpolationEntryFinder.INSTANCE;
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
-    assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point.get().map(N.DOUBLE).map(Chop._06));
+    assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(N.DOUBLE).map(Chop._06));
   }
 
   public void testIntersection() {
@@ -36,7 +36,7 @@ public class ArgMinVariableTest extends TestCase {
     TrajectoryEntryFinder entryFinder = IntersectionEntryFinder.INSTANCE;
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
-    assertEquals(Tensors.vector(1, 0, 0), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
+    assertEquals(Tensors.vector(1, 0, 0), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
   }
 
   public void testGeodesic() {
@@ -44,7 +44,7 @@ public class ArgMinVariableTest extends TestCase {
     TrajectoryEntryFinder entryFinder = new GeodesicInterpolationEntryFinder(Clothoid1.INSTANCE);
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
-    assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
+    assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
   }
 
   public void testPerformance() {
@@ -57,7 +57,7 @@ public class ArgMinVariableTest extends TestCase {
       Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
       timings.append(RealScalar.of(timing.seconds()));
       assertEquals(Dimensions.of(tensor), Arrays.asList(200, 3));
-      assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
+      assertEquals(Array.zeros(3), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
     }
     Scalar mean_duration = N.DOUBLE.of(Mean.of(timings).Get()); // in seconds
     System.out.println(mean_duration);

@@ -51,10 +51,10 @@ public class ArgMinVariable implements TensorScalarFunction {
   /** calculate and add pair {value, variable}
    * @param trajectoryEntry */
   private void insert(TrajectoryEntry trajectoryEntry) {
-    if (trajectoryEntry.point.isPresent()) {
-      Scalar cost = mapping.apply(trajectoryEntry.point.get());
+    if (trajectoryEntry.point().isPresent()) {
+      Scalar cost = mapping.apply(trajectoryEntry.point().get());
       synchronized (pairs) {
-        pairs[2] = Tensors.of(cost, trajectoryEntry.variable);
+        pairs[2] = Tensors.of(cost, trajectoryEntry.variable());
         Arrays.sort(pairs, ArgMinComparator.INSTANCE);
       }
     }
@@ -67,7 +67,7 @@ public class ArgMinVariable implements TensorScalarFunction {
    * @return TrajectoryEntry */
   private TrajectoryEntry update(Function<Scalar, TrajectoryEntry> function, Scalar var) {
     TrajectoryEntry trajectoryEntry = function.apply(var);
-    if (trajectoryEntry.point.isPresent())
+    if (trajectoryEntry.point().isPresent())
       insert(trajectoryEntry);
     return trajectoryEntry;
   }

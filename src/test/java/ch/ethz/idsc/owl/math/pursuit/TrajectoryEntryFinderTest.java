@@ -21,7 +21,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
   public void testNaive() {
     TrajectoryEntryFinder finder = NaiveEntryFinder.INSTANCE;
     // ---
-    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(0.3)).point;
+    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(0.3)).point();
     assertTrue(waypoint.isPresent());
     assertEquals(Tensors.vector(0, 0, 0), waypoint.get());
   }
@@ -29,7 +29,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
   public void testInterpolation() {
     TrajectoryEntryFinder finder = InterpolationEntryFinder.INSTANCE;
     // ---
-    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point;
+    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point();
     assertTrue(waypoint.isPresent());
     assertEquals(Tensors.vector(3, 1, 0), waypoint.get());
   }
@@ -43,7 +43,7 @@ public class TrajectoryEntryFinderTest extends TestCase {
   public void testGeodesic() {
     TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(Clothoid1.INSTANCE);
     // ---
-    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point;
+    Optional<Tensor> waypoint = finder.on(WAYPOINTS).apply(RealScalar.of(2.5)).point();
     assertTrue(waypoint.isPresent());
     assertEquals(Tensors.vector(3, 1, 0), waypoint.get());
   }

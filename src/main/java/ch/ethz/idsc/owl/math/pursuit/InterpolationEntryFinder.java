@@ -1,7 +1,6 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
-import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -33,10 +32,10 @@ public final class InterpolationEntryFinder extends TrajectoryEntryFinder {
       Interpolation interpolation = LinearInterpolation.of(Tensors.of( //
           waypoints.get(index_), //
           waypoints.get(index_ + 1)));
-      return new TrajectoryEntry(Optional.of(interpolation.at(MOD_UNIT.apply(index))), index);
+      return new TrajectoryEntry(interpolation.at(MOD_UNIT.apply(index)), index);
     } else if (index_ == waypoints.length() - 1)
-      return new TrajectoryEntry(Optional.of(waypoints.get(index_)), index);
-    return new TrajectoryEntry(Optional.empty(), index);
+      return new TrajectoryEntry(waypoints.get(index_), index);
+    return new TrajectoryEntry(null, index);
   }
 
   @Override // from TrajectoryEntryFinder

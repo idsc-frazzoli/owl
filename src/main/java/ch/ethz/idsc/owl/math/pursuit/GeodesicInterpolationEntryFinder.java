@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.math.pursuit;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -27,18 +26,18 @@ public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
     // TODO GJOEL use GeodesicInterpolation
     int index_ = index.number().intValue();
     try {
-      return new TrajectoryEntry(Optional.of(splitInterface.split( //
+      return new TrajectoryEntry(splitInterface.split( //
           waypoints.get(index_), //
           waypoints.get(index_ + 1), //
-          MOD_UNIT.apply(index))), index);
+          MOD_UNIT.apply(index)), index);
     } catch (IndexOutOfBoundsException e1) {
       try {
-        return new TrajectoryEntry(Optional.of(waypoints.get(index_)), index);
+        return new TrajectoryEntry(waypoints.get(index_), index);
       } catch (IndexOutOfBoundsException e2) {
         // ---
       }
     }
-    return new TrajectoryEntry(Optional.empty(), index);
+    return new TrajectoryEntry(null, index);
   }
 
   @Override // from TrajectoryEntryFinder
