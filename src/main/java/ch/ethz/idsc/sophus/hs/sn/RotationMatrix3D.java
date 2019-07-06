@@ -18,8 +18,8 @@ public enum RotationMatrix3D {
    * RotationMatrix3D.of(a, b).dot(a) == b
    * </pre>
    * 
-   * Hint: if the input vectors are of 2-norm <b>unequal<b> to 1
-   * the return value will not be orthogonal.
+   * <p>Hint: the function does not check the 2-norm of a or b.
+   * If the input vectors are of 2-norm <b>unequal<b> to 1 the return value will not be orthogonal.
    * 
    * @param a vector with 3 entries and 2-norm equals to 1
    * @param b vector with 3 entries and 2-norm equals to 1

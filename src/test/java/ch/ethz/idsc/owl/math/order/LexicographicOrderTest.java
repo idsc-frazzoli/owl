@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.order;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,6 @@ public class LexicographicOrderTest extends TestCase {
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
     comparatorList.add(comparator1);
-    // FIXME ASTOLL warnings
     LexicographicOrder<Scalar> lexicographicOrder = new LexicographicOrder<>(comparatorList);
     List<Scalar> x = new LinkedList<>();
     x.add(RealScalar.of(1));
@@ -103,16 +103,10 @@ public class LexicographicOrderTest extends TestCase {
     assertEquals(OrderComparison.INDIFFERENT, lexicographicOrder.compare(x, x));
     assertEquals(OrderComparison.INDIFFERENT, lexicographicOrder.compare(y, y));
   }
-  // public void testQualifiesForComparison() {
-  // // TODO ASTOLL
-  //
-  // }
-  // FIXME ASTOLL Does not work for comparator of different types
-  // public void testMultipleDifferentComparators() {
-  // UniversalComparator<Integer> comparator1 = UniversalOrder.comparator((x, y)-> x<=y);
-  // UniversalComparator<Scalar> comparator2 = UniversalOrder.comparator(Scalars::lessEquals);
-  // List<UniversalComparator<Object>> comparatorList = new LinkedList<>();
-  // comparatorList.add(comparator1);
-  // comparatorList.add(comparator2);
-  // }
+
+  public void testEmpty() {
+    LexicographicOrder<Object> lexicographicOrder = new LexicographicOrder<>(Collections.emptyList());
+    OrderComparison orderComparison = lexicographicOrder.compare(Collections.emptyList(), Collections.emptyList());
+    assertEquals(orderComparison, OrderComparison.INDIFFERENT);
+  }
 }

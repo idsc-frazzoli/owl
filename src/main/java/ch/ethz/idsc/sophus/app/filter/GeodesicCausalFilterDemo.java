@@ -18,12 +18,8 @@ import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceFIRnFilter;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -69,14 +65,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         break;
       case GEODESIC_IIR:
         cf = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
-        break;
-      case TANGENT_SPACE_FIR:
-        cf = TangentSpaceFIRnFilter.of( //
-            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
-        break;
-      case TANGENT_SPACE_IIR:
-        cf = TangentSpaceIIRnFilter.of( //
-            Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha());
         break;
       case BIINVARIANT_MEAN_FIR:
         cf = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());

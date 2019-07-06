@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     // ---
     TensorScalarFunction costMapping = new ClothoidLengthCostFunction(isCompliant(state, speed), REFINEMENT);
     Scalar var = ArgMinVariable.using(entryFinder, costMapping, MAX_LEVEL).apply(beacons);
-    Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point;
+    Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point();
     if (lookAhead.isPresent()) {
       Tensor xya = lookAhead.get();
       GeodesicPursuitInterface geodesicPursuitInterface = new ClothoidPursuit(xya);
