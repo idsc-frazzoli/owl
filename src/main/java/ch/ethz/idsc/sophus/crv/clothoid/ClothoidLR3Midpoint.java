@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   @Override // from MidpointInterface
   public Tensor midpoint(Tensor p, Tensor q) {
+    // TODO JPH TENSOR 075 Unprotect.byRef, also other occurrence
     return TENSOR_UNARY_OPERATOR.apply(Tensor.of(Stream.of(p, q))).get(1);
   }
 }
