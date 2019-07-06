@@ -24,7 +24,7 @@ public class ArgMinVariableTest extends TestCase {
   private static final int DEPTH = 5;
 
   public void testInterpolation() {
-    Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}").unmodifiable();
+    Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}");
     TrajectoryEntryFinder entryFinder = InterpolationEntryFinder.INSTANCE;
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), 20).apply(tensor);
@@ -33,7 +33,7 @@ public class ArgMinVariableTest extends TestCase {
 
   public void testIntersection() {
     Tensor tensor = Tensors.fromString("{{-4, -2, 0}, {-3, -2, 0}, {-3, -1, 0}, {-2, 0, 0}, {1, 0, 0}, {2, 1, 0}, {3, 1, 0}}").unmodifiable();
-    TrajectoryEntryFinder entryFinder = IntersectionEntryFinder.INSTANCE;
+    TrajectoryEntryFinder entryFinder = IntersectionEntryFinder.SPHERE_SE2;
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
     assertEquals(Tensors.vector(1, 0, 0), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
@@ -51,7 +51,7 @@ public class ArgMinVariableTest extends TestCase {
     Tensor timings = Tensors.empty();
     Tensor tensor = Tensor.of(IntStream.range(-100, 100).mapToObj(RealScalar::of).map(Tensors.vector(1, 2, 0)::multiply)).unmodifiable();
     assertEquals(Dimensions.of(tensor), Arrays.asList(200, 3));
-    TrajectoryEntryFinder entryFinder = IntersectionEntryFinder.INSTANCE;
+    TrajectoryEntryFinder entryFinder = IntersectionEntryFinder.SPHERE_SE2;
     for (int i = 0; i < 20; i++) {
       Timing timing = Timing.started();
       Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);

@@ -34,12 +34,6 @@ public class TrajectoryEntryFinderTest extends TestCase {
     assertEquals(Tensors.vector(3, 1, 0), waypoint.get());
   }
 
-  public void testIntersection() {
-    IntersectionEntryFinderTest test = new IntersectionEntryFinderTest();
-    test.testSE2();
-    test.test2D();
-  }
-
   public void testGeodesic() {
     TrajectoryEntryFinder finder = new GeodesicInterpolationEntryFinder(Clothoid1.INSTANCE);
     // ---

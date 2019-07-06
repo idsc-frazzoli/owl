@@ -19,12 +19,9 @@ public final class NaiveEntryFinder extends TrajectoryEntryFinder {
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar var) {
     int index = var.number().intValue();
-    try {
-      return new TrajectoryEntry(waypoints.get(index), RealScalar.of(index));
-    } catch (IndexOutOfBoundsException e) {
-      // ---
-    }
-    return new TrajectoryEntry(null, RealScalar.of(index));
+    return new TrajectoryEntry(0 <= index && index < waypoints.length()//
+        ? waypoints.get(index)
+        : null, var);
   }
 
   @Override // from TrajectoryEntryFinder

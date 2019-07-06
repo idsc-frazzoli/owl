@@ -23,7 +23,7 @@ public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
 
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar index) {
-    Clip clip = Clips.interval(0, waypoints.length() - 1);
+    Clip clip = Clips.positive(waypoints.length() - 1);
     return new TrajectoryEntry(clip.isInside(index) //
         ? GeodesicInterpolation.of(splitInterface, waypoints).at(index)
         : null, index);
