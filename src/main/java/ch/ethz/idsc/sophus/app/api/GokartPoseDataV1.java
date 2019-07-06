@@ -14,22 +14,19 @@ public enum GokartPoseDataV1 implements GokartPoseData {
   // ---
   private final List<String> list = Collections.unmodifiableList(ResourceData.lines("/dubilab/app/pose/index.vector"));
 
-  @Override
+  @Override // from GokartPoseData
   public List<String> list() {
     return list;
   }
 
-  /** @param name
-   * @param limit
-   * @return matrix of dimensions N x 3 with rows of the form {x, y, heading} without units */
-  @Override
+  @Override // from GokartPoseData
   public Tensor getPose(String name, int limit) {
     return Tensor.of(ResourceData.of("/dubilab/app/pose/" + name + ".csv").stream() //
         .limit(limit) //
         .map(row -> row.extract(1, 4)));
   }
 
-  @Override
+  @Override // from GokartPoseData
   public Scalar getSampleRate() {
     return Quantity.of(20, "s^-1");
   }
