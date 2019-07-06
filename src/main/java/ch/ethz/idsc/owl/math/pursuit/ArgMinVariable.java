@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.pursuit;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -51,8 +52,9 @@ public class ArgMinVariable implements TensorScalarFunction {
   /** calculate and add pair {value, variable}
    * @param trajectoryEntry */
   private void insert(TrajectoryEntry trajectoryEntry) {
-    if (trajectoryEntry.point().isPresent()) {
-      Scalar cost = mapping.apply(trajectoryEntry.point().get());
+    Optional<Tensor> optional = trajectoryEntry.point();
+    if (optional.isPresent()) {
+      Scalar cost = mapping.apply(optional.get());
       synchronized (pairs) {
         pairs[2] = Tensors.of(cost, trajectoryEntry.variable());
         Arrays.sort(pairs, ArgMinComparator.INSTANCE);
@@ -67,6 +69,7 @@ public class ArgMinVariable implements TensorScalarFunction {
    * @return TrajectoryEntry */
   private TrajectoryEntry update(Function<Scalar, TrajectoryEntry> function, Scalar var) {
     TrajectoryEntry trajectoryEntry = function.apply(var);
+    // TODO LONGTERM structure not optimal: isPresent, insert, isPresent
     if (trajectoryEntry.point().isPresent())
       insert(trajectoryEntry);
     return trajectoryEntry;

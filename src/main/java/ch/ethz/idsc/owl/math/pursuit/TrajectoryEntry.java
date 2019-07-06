@@ -7,9 +7,7 @@ import java.util.Optional;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** container for TrajectoryEntryFinder results
- * 
- * does not implement {@link Serializable} because Optional is not serializable */
+/** container for TrajectoryEntryFinder results */
 public final class TrajectoryEntry implements Serializable {
   private final Tensor point;
   private final Scalar variable;

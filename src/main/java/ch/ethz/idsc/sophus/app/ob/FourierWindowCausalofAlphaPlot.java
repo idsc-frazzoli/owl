@@ -21,13 +21,9 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
-import ch.ethz.idsc.sophus.lie.LieExponential;
-import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
@@ -87,8 +83,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   private static void process(List<String> listData, ScalarUnaryOperator smoothingKernel, int radius, int limit, Scalar alpha) throws IOException {
-    LieGroup lieGroup = Se2Group.INSTANCE;
-    LieExponential lieExponential = Se2CoveringExponential.INSTANCE;
     BiinvariantMean biinvariantMean = Se2BiinvariantMean.FILTER;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     LieDifferences lieDifferences = Se2Differences.INSTANCE;
