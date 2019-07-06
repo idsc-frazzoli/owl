@@ -27,6 +27,7 @@ import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
 import ch.ethz.idsc.subare.util.plot.VisualRow;
 import ch.ethz.idsc.subare.util.plot.VisualSet;
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -50,14 +51,21 @@ import ch.ethz.idsc.tensor.sca.Log;
   private static final GokartPoseData GOKART_POSE_DATA = GokartPoseDataV2.INSTANCE;
 
   private static void phasePlot(Tensor data, int radius, String signal, SmoothingKernel smoothingKernel) throws IOException {
+    Tensor xAxis = Tensors.empty();
+    for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index) {
+      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(RealScalar.of(50)));
+    }
+    Tensor factor = Tensors.empty();
+    for (int j = 0; j < xAxis.length(); j++) {
+      if (xAxis.Get(j).equals(RealScalar.ZERO))
+        factor.append(RealScalar.ONE);
+      else
+        factor.append(RealScalar.ONE.divide(xAxis.Get(j).multiply(ComplexScalar.I).multiply(RealScalar.of(Math.PI * 2))));
+    }
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
       yData.append(TransferFunctionResponse.FREQUENCY.apply(meanData));
     // ---
-    Tensor xAxis = Tensors.empty();
-    for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index) {
-      xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
-    }
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Lie Group Filters: radius = " + radius + "  Phase Response - $" + signal + "$");
     visualSet.setAxesLabelX("Frequency $[Hz]$");
@@ -86,22 +94,31 @@ import ch.ethz.idsc.tensor.sca.Log;
 
   private static void magniutdePlot(Tensor data, int radius, String signal, SmoothingKernel smoothingKernel) throws IOException {
     Tensor yData = Tensors.empty();
-    for (Tensor meanData : data)
+    for (Tensor meanData : data) {
       yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
+    }
     // ---
     Tensor xAxis = Tensors.empty();
-    for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index) {
-      xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
+    for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index) {
+      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(RealScalar.of(50)));
     }
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Lie Group Filters: radius = " + radius + "  Magnitude Response - $" + signal + "$");
     visualSet.setAxesLabelX("Frequency $[Hz]$");
     visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
     int index = 0;
+    Tensor factor = Tensors.empty();
+    for (int j = 0; j < xAxis.length(); j++) {
+      if (xAxis.Get(j).equals(RealScalar.ZERO))
+        factor.append(RealScalar.ONE);
+      else
+        factor.append(RealScalar.ONE.divide(RealScalar.of(Math.PI * 2).multiply(Abs.of(xAxis.Get(j)))));
+    }
     for (Tensor yAxis : yData) {
+      Tensor temp = Tensor.of(yAxis.append(yAxis).flatten(1)).extract(xAxis.length() / 2, xAxis.length() * 3 / 2).pmul(factor);
       VisualRow visualRow = visualSet.add( //
           xAxis, //
-          decibelConversion(Tensor.of(yAxis.append(yAxis).flatten(1)).extract(xAxis.length() / 2, xAxis.length() * 3 / 2)));
+          decibelConversion(temp));
       visualRow.setLabel(LieGroupFilters.values()[index].toString());
       ++index;
     }
@@ -176,7 +193,7 @@ import ch.ethz.idsc.tensor.sca.Log;
     map.put(LieGroupFilters.GEODESIC_MID, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
     map.put(LieGroupFilters.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
     List<String> listData = GOKART_POSE_DATA.list();
-    int limit = 10;
+    int limit = 1;
     int rad = 24;
     process(listData, map, rad, limit, smoothingKernel);
   }
