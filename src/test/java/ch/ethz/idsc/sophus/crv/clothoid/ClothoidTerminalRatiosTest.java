@@ -30,7 +30,8 @@ public class ClothoidTerminalRatiosTest extends TestCase {
 
   public void testLeftUniv() {
     ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of( //
-        Tensors.vector(0, 1, 0), Tensors.vector(2, 2, 0));
+        Tensors.vector(0, 1, 0).unmodifiable(), //
+        Tensors.vector(2, 2, 0).unmodifiable());
     // turn left
     Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2190137723033907));
     // turn right
@@ -66,7 +67,8 @@ public class ClothoidTerminalRatiosTest extends TestCase {
         Tensor curve = Nest.of(curveSubdivision::string, init, depth);
         Scalar head = ClothoidTerminalRatios.curvature(curve.extract(0, 3));
         Scalar tail = ClothoidTerminalRatios.curvature(curve.extract(curve.length() - 3, curve.length()));
-        ClothoidTerminalRatios clothoidTerminalRatios = new ClothoidTerminalRatios(beg, end, depth);
+        ClothoidTerminalRatios clothoidTerminalRatios = //
+            new ClothoidTerminalRatios(beg.unmodifiable(), end.unmodifiable(), depth);
         assertEquals(head, clothoidTerminalRatios.head());
         assertEquals(tail, clothoidTerminalRatios.tail());
       }
@@ -76,7 +78,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
     TableBuilder tableBuilder = new TableBuilder();
     for (int depth = 5; depth < ClothoidTerminalRatios.MAX_ITER; ++depth) {
       ClothoidTerminalRatios clothoidTerminalRatios = //
-          new ClothoidTerminalRatios(Tensors.vector(0, 1, 0), Tensors.vector(2, 0, 0), depth);
+          new ClothoidTerminalRatios(Tensors.vector(0, 1, 0).unmodifiable(), Tensors.vector(2, 0, 0).unmodifiable(), depth);
       tableBuilder.appendRow(RealScalar.of(depth), clothoidTerminalRatios.head().map(Round._8), clothoidTerminalRatios.tail().map(Round._8));
     }
     // System.out.println(MatrixForm.of(tableBuilder.toTable()));
