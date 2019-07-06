@@ -5,15 +5,15 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.sophus.itp.ga.GeodesicInterpolation;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Mod;
+import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
-  private static final Mod MOD_UNIT = Mod.function(1);
-  // ---
   private final SplitInterface splitInterface;
 
   /** @param splitInterface non-null */
@@ -23,21 +23,10 @@ public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
 
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar index) {
-    // TODO GJOEL use GeodesicInterpolation
-    int index_ = index.number().intValue();
-    try {
-      return new TrajectoryEntry(splitInterface.split( //
-          waypoints.get(index_), //
-          waypoints.get(index_ + 1), //
-          MOD_UNIT.apply(index)), index);
-    } catch (IndexOutOfBoundsException e1) {
-      try {
-        return new TrajectoryEntry(waypoints.get(index_), index);
-      } catch (IndexOutOfBoundsException e2) {
-        // ---
-      }
-    }
-    return new TrajectoryEntry(null, index);
+    Clip clip = Clips.interval(0, waypoints.length() - 1);
+    return new TrajectoryEntry(clip.isInside(index) //
+        ? GeodesicInterpolation.of(splitInterface, waypoints).at(index)
+        : null, index);
   }
 
   @Override // from TrajectoryEntryFinder
