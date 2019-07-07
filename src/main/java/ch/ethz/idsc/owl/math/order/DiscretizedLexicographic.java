@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * anti-symmetric bifunction: when the input parameters are swapped, the return value flips sign
  * 
  * returns -1 if t1 < t2 */
+// TODO ASTOLL is this class obsolete?
 public class DiscretizedLexicographic implements Comparator<Tensor>, Serializable {
   public static final DiscretizedLexicographic of(Tensor slack) {
     return new DiscretizedLexicographic(slack);
