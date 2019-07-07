@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.ob;
 
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NavigableMap;
@@ -106,9 +105,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       jFreeChart.draw(svg, rectangle);
       File fileSVG = HomeDirectory.Pictures(fileNameSVG);
       SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
   }
 

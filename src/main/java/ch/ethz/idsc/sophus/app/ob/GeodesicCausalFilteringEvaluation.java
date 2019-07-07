@@ -60,8 +60,7 @@ import ch.ethz.idsc.tensor.red.Total;
         Scalar aDiff = Norm._2.ofVector(difference.extract(2, 3));
         errors.append(Tensors.of(xyDiff, aDiff));
       } else {
-        // TODO use already computed difference
-        Scalar xyaDiff = Norm._2.ofVector(lieDifferences.pair(reference.get(i), filtering.get(i)));
+        Scalar xyaDiff = Norm._2.ofVector(difference);
         errors.append(xyaDiff);
       }
     }

@@ -33,13 +33,11 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 
   @Override
   public Tensor get(Tensor index) {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 
   @Override
   public Tensor at(Scalar index) {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 }
