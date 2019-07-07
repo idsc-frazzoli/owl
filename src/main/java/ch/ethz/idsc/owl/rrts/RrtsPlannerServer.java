@@ -35,6 +35,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 
+// TODO provide RrtsPlanner from function/supplier
+// requires new solution for root and time
 public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   private final TransitionSpace transitionSpace;
   private final TransitionRegionQuery obstacleQuery;
