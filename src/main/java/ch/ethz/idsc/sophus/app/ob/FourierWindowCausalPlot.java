@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
     Tensor xAxis = Tensors.empty();
     for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index)
-      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s")))); // TODO OB
+      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s"))));
     // ---
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel(

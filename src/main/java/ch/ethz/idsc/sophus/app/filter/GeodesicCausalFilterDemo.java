@@ -75,7 +75,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       }
       return cf.apply(control());
     }
-    // TODO OB: I would like to have this shape with one filter for all different operators
+    // TODO OB I would like to have this shape with one filter for all different operators
     // if (0 < radius) {
     // ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue();
     // // --

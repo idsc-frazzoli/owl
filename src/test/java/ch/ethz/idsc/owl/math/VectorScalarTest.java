@@ -66,6 +66,12 @@ public class VectorScalarTest extends TestCase {
     c.multiply(a);
   }
 
+  public void testChop() {
+    Scalar a = VectorScalar.of(1, 2, 3);
+    Scalar b = VectorScalar.of(1 + 1e-8, 2 - 1e-8, 3 + 2e-8);
+    Chop._06.requireClose(a, b);
+  }
+
   public void testCommute() {
     Scalar a = VectorScalar.of(1, 2, 3);
     assertFalse(a.equals(null));

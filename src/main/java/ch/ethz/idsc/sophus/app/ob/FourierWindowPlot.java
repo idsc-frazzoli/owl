@@ -95,8 +95,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     // ---
     Tensor xAxis = Tensors.empty();
     for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index) {
-      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s")))); // TODO OB
-                                                                                                                                                      // 50 ?
+      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s"))));
     }
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Lie Group Filters: radius = " + radius + "  Magnitude Response - $" + signal + "$");
@@ -118,10 +117,10 @@ import ch.ethz.idsc.tensor.sca.Round;
       visualRow.setLabel(LieGroupFilters.values()[index].toString());
       ++index;
     }
-    // TODO OB right now, Abs is only applied to left - As I see it, its applied to both, left and right?
-    Tensor reference = Decibel.of(Abs.of( //
-        Join.of(linearResponse(smoothingKernel, radius), linearResponse(smoothingKernel, radius)) //
-            .extract(xAxis.length() / 2, xAxis.length() * 3 / 2)));
+    Tensor reference = Decibel.of(Abs.of(Join.of( //
+        linearResponse(smoothingKernel, radius), //
+        linearResponse(smoothingKernel, radius)) // not efficient
+        .extract(xAxis.length() / 2, xAxis.length() * 3 / 2)));
     VisualRow visualRow = visualSet.add(//
         xAxis, //
         reference);
