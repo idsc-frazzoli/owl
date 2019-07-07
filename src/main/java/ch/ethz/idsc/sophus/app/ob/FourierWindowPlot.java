@@ -34,6 +34,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.mat.Fourier;
 import ch.ethz.idsc.tensor.mat.SpectrogramArray;
@@ -44,6 +45,9 @@ import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Arg;
+import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Log;
+import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ enum FourierWindowPlot {
@@ -51,7 +55,8 @@ import ch.ethz.idsc.tensor.sca.Round;
   private static void phasePlot(Tensor data, int radius, String signal, SmoothingKernel smoothingKernel) throws IOException {
     Tensor xAxis = Tensors.empty();
     for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index) {
-      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(RealScalar.of(50))); // TODO OB 50 ?
+      // System.out.println((Scalar) GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s")));
+      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate()));
     }
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
@@ -77,7 +82,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     SVGGraphics2D svg = new SVGGraphics2D(600, 400);
     Rectangle rectangle = new Rectangle(0, 0, 600, 400);
     jFreeChart.draw(svg, rectangle);
-    String fileNameSVG = "PhaseResponse(" + radius + ")" + signal + ".svg";
+    String fileNameSVG = "PhaseResponse(" + radius + ")" + smoothingKernel.toString() + " " + signal + ".svg";
     File fileSVG = HomeDirectory.Pictures(fileNameSVG);
     SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
@@ -90,12 +95,13 @@ import ch.ethz.idsc.tensor.sca.Round;
     // ---
     Tensor xAxis = Tensors.empty();
     for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index) {
-      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(RealScalar.of(50))); // TODO OB 50 ?
+      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s")))); // TODO OB
+                                                                                                                                                      // 50 ?
     }
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Lie Group Filters: radius = " + radius + "  Magnitude Response - $" + signal + "$");
     visualSet.setAxesLabelX("Frequency $[Hz]$");
-    visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
+    visualSet.setAxesLabelY("Magnitude [dB]");
     int index = 0;
     Tensor factor = Tensors.empty();
     for (int j = 0; j < xAxis.length(); j++) {
@@ -112,7 +118,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       visualRow.setLabel(LieGroupFilters.values()[index].toString());
       ++index;
     }
-    // TODO OB right now, Abs is only applied to left
+    // TODO OB right now, Abs is only applied to left - As I see it, its applied to both, left and right?
     Tensor reference = Decibel.of(Abs.of( //
         Join.of(linearResponse(smoothingKernel, radius), linearResponse(smoothingKernel, radius)) //
             .extract(xAxis.length() / 2, xAxis.length() * 3 / 2)));
@@ -124,7 +130,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     SVGGraphics2D svg = new SVGGraphics2D(600, 400);
     Rectangle rectangle = new Rectangle(0, 0, 600, 400);
     jFreeChart.draw(svg, rectangle);
-    String fileNameSVG = "MagnitudeResponse(" + radius + ")" + signal + ".svg";
+    String fileNameSVG = "MagnitudeResponse(" + radius + ")" + smoothingKernel.toString() + " " + signal + ".svg";
     File fileSVG = HomeDirectory.Pictures(fileNameSVG);
     SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
@@ -135,8 +141,8 @@ import ch.ethz.idsc.tensor.sca.Round;
       ref.append(RealScalar.of(j - radius).divide(RealScalar.of(2 * radius + 1)));
     }
     ref = Tensor.of(ref.stream().map(x -> smoothingKernel.apply((Scalar) x)));
-    for (int index = 0; index < 15; ++index) // TODO OB 15? zero pad until power of 2
-      ref.append(RealScalar.ZERO);
+    Scalar powerOf2Length = Power.of(2, Ceiling.of(Log.base(2).apply(RealScalar.of(ref.length()))));
+    ref = PadRight.zeros(powerOf2Length.number().intValue()).apply(ref);
     ref = ref.divide(Total.ofVector(ref)).multiply(RealScalar.of(Math.sqrt(ref.length())));
     return Fourier.of(ref);
   }
@@ -152,7 +158,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     Tensor smoothedA = Tensors.empty();
     Iterator<String> iterator = gokartPoseData.list().iterator();
     for (int index = 0; index < limit; ++index) {
-      Tensor control = gokartPoseData.getPose(iterator.next(), 1000);
+      Tensor control = gokartPoseData.getPose(iterator.next(), 10000);
       Tensor tempX = Tensors.empty();
       Tensor tempY = Tensors.empty();
       Tensor tempA = Tensors.empty();
@@ -169,12 +175,12 @@ import ch.ethz.idsc.tensor.sca.Round;
       smoothedY.append(tempY);
       smoothedA.append(tempA);
     }
-    magniutdePlot(Mean.of(smoothedX), radius, "x", smoothingKernel);
-    magniutdePlot(Mean.of(smoothedY), radius, "y", smoothingKernel);
-    magniutdePlot(Mean.of(smoothedA), radius, "a", smoothingKernel);
-    phasePlot(Mean.of(smoothedX), radius, "x", smoothingKernel);
-    phasePlot(Mean.of(smoothedY), radius, "y", smoothingKernel);
-    phasePlot(Mean.of(smoothedA), radius, "a", smoothingKernel);
+    magniutdePlot(Mean.of(smoothedX), radius, "_x", smoothingKernel);
+    magniutdePlot(Mean.of(smoothedY), radius, "_y", smoothingKernel);
+    magniutdePlot(Mean.of(smoothedA), radius, "_a", smoothingKernel);
+    phasePlot(Mean.of(smoothedX), radius, "_x", smoothingKernel);
+    phasePlot(Mean.of(smoothedY), radius, "_y", smoothingKernel);
+    phasePlot(Mean.of(smoothedA), radius, "_a", smoothingKernel);
   }
 
   public static void main(String[] args) throws IOException {
@@ -184,7 +190,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     map.put(LieGroupFilters.GEODESIC, GeodesicCenter.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
     map.put(LieGroupFilters.GEODESIC_MID, GeodesicCenterMidSeeded.of(geodesicDisplay.geodesicInterface(), smoothingKernel));
     map.put(LieGroupFilters.BIINVARIANT_MEAN, BiinvariantMeanCenter.of(geodesicDisplay.biinvariantMean(), smoothingKernel));
-    int limit = 1;
+    int limit = 5;
     int rad = 24;
     process(GokartPoseDataV2.INSTANCE, map, rad, limit, smoothingKernel);
   }

@@ -25,7 +25,7 @@ import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
       spinnerKernel.addSpinnerListener(value -> updateState());
     }
     {
-      spinnerRadius.setList(IntStream.range(0, 21).boxed().collect(Collectors.toList()));
+      spinnerRadius.setList(IntStream.range(0, 25).boxed().collect(Collectors.toList()));
       spinnerRadius.setValue(1);
       spinnerRadius.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
       spinnerRadius.addSpinnerListener(value -> updateState());
