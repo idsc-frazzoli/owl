@@ -8,12 +8,12 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
-import ch.ethz.idsc.owl.bot.se2.rrts.DirectionalClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.rrts.adapter.Directional;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -135,7 +135,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
 
   public void testDirectionalClothoid() {
     Rrts rrts = new DefaultRrts( //
-        DirectionalClothoidTransitionSpace.INSTANCE, //
+        Directional.of(ClothoidTransitionSpace.INSTANCE), //
         // no specific collection for directional clothoid
         RrtsNodeCollections.euclidean(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
