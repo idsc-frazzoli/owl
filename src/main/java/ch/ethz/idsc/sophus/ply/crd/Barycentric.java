@@ -1,25 +1,23 @@
 // code by jph
 package ch.ethz.idsc.sophus.ply.crd;
 
-import ch.ethz.idsc.sophus.math.TensorMetric;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
-import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/** Reference:
+/** Hint: only DISCRETE_HARMONIC allows {@link Quantity} as coordinates
+ * 
+ * Reference:
  * "Power Coordinates: A Geometric Construction of Barycentric Coordinates on Convex Polytopes"
  * Max Budninskiy, Beibei Liu, Yiying Tong, Mathieu Desbrun, 2016 */
-public enum Barycentric implements TensorMetric {
+public enum Barycentric implements ScalarUnaryOperator {
   /** Section 3.3, eqs (12)
    * mean value coordinates seem to be the most robust */
   MEAN_VALUE() {
     @Override
-    public Scalar distance(Tensor p, Tensor q) {
-      Scalar norm2 = Norm2Squared.between(p, q);
-      Scalar norm = Sqrt.FUNCTION.apply(norm2);
-      return norm2.subtract(norm.add(norm));
+    public Scalar apply(Scalar norm) {
+      return norm.reciprocal();
     }
   }, //
   /** Section 3.1
@@ -30,11 +28,9 @@ public enum Barycentric implements TensorMetric {
    * d_i = 1/|v_i −x|. This is, in fact, a particular case of our generalized notion of dual, and using
    * Eq. (2) we directly conclude that Wachspress coordinates are expressed in arbitrary dimensions as" */
   WACHSPRESS() {
-    private final Scalar TWO = RealScalar.of(2);
-
     @Override
-    public Scalar distance(Tensor p, Tensor q) {
-      return Norm2Squared.between(p, q).subtract(TWO);
+    public Scalar apply(Scalar norm) {
+      return norm.multiply(norm).reciprocal();
     }
   }, //
   /** Section 3.2
@@ -47,8 +43,8 @@ public enum Barycentric implements TensorMetric {
    * would not enforce." */
   DISCRETE_HARMONIC() {
     @Override
-    public Scalar distance(Tensor p, Tensor q) {
-      return RealScalar.ZERO;
+    public Scalar apply(Scalar norm) {
+      return RationalScalar.HALF;
     }
   }, //
   ;

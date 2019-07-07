@@ -20,19 +20,27 @@ public enum CurveCurvatureRender {
   private static final PathRender PATH_RENDER_CURVE = new PathRender(Color.BLUE, 1.25f);
   private static final PathRender PATH_RENDER_CURVATURE = new PathRender(COLOR_CURVATURE_COMB);
 
-  /** @param refined
+  /** @param curve {{x0, y0}, {x1, y1}, ...}
    * @param isCyclic
    * @param geometricLayer
    * @param graphics */
-  public static void of(Tensor refined, boolean isCyclic, GeometricLayer geometricLayer, Graphics2D graphics) {
-    of(refined, isCyclic, COMB_SCALE, geometricLayer, graphics);
+  public static void of(Tensor curve, boolean isCyclic, GeometricLayer geometricLayer, Graphics2D graphics) {
+    of(curve, isCyclic, COMB_SCALE, geometricLayer, graphics);
   }
 
-  public static void of(Tensor refined, boolean isCyclic, Scalar scale, GeometricLayer geometricLayer, Graphics2D graphics) {
-    if (0 < refined.length())
-      if (Unprotect.dimension1(refined) != 2)
-        throw TensorRuntimeException.of(refined);
-    PATH_RENDER_CURVE.setCurve(refined, isCyclic).render(geometricLayer, graphics);
-    PATH_RENDER_CURVATURE.setCurve(CurvatureComb.of(refined, scale, isCyclic), isCyclic).render(geometricLayer, graphics);
+  /** Hint: when control points have coordinates with unit "m",
+   * scale should have unit "m^2"
+   * 
+   * @param curve {{x0, y0}, {x1, y1}, ...}
+   * @param isCyclic
+   * @param scale
+   * @param geometricLayer
+   * @param graphics */
+  public static void of(Tensor curve, boolean isCyclic, Scalar scale, GeometricLayer geometricLayer, Graphics2D graphics) {
+    if (0 < curve.length())
+      if (Unprotect.dimension1(curve) != 2)
+        throw TensorRuntimeException.of(curve);
+    PATH_RENDER_CURVE.setCurve(curve, isCyclic).render(geometricLayer, graphics);
+    PATH_RENDER_CURVATURE.setCurve(CurvatureComb.of(curve, scale, isCyclic), isCyclic).render(geometricLayer, graphics);
   }
 }
