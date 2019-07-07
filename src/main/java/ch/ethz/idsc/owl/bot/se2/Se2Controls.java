@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.red.Max;
   }
 
   /** @param flows
-   * @return TODO max rate per meter driven in unit "s^-1" */
+   * @return max rate per meter driven in unit "s^-1" */
   public static Scalar maxTurning(Collection<Flow> flows) {
     return flows.stream().map(Flow::getU).map(u -> u.Get(2).abs()).reduce(Max::of).get();
   }
