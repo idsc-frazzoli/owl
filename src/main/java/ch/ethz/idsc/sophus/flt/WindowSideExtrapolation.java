@@ -32,7 +32,7 @@ public class WindowSideExtrapolation implements Function<Integer, Tensor>, Seria
   }
 
   // Assumes uniformly sampled signal!
-  // TODO OB: refactor for better overview
+  // TODO OB refactor for better overview
   @Override
   public Tensor apply(Integer t) {
     Tensor weights = halfWindowSampler.apply(t);

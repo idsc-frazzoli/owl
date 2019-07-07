@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 
-// TODO OB: rewrite for quantities
+// TODO OB rewrite for quantities
 /* package */ enum NonuniformityEvaluation {
   ;
   public static final GokartPoseData GOKART_POSE_DATA = GokartPoseDataV2.INSTANCE;

@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /* package */ class FourierWindowCausalofAlphaPlot {
   private static final Scalar WINDOW_DURATION = Quantity.of(1, "s");
   private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
-  // TODO offset == 1 is not necessary, see SpectrogramArray for default value computation
+  // TODO OB offset == 1 is not necessary, see SpectrogramArray for default value computation
   private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
 
   private static void plot(Tensor data, int radius, String signal, Scalar alpha) throws IOException {
