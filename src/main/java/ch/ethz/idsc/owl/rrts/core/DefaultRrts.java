@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * by Sertac Karaman and Emilio Frazzoli
  * 
  * <p>the class does not require the concept of a sampler, or goal region.
- * @see RrtsPlanner */
+ * @see DefaultRrtsPlanner */
 public class DefaultRrts implements Rrts {
   private final TransitionSpace transitionSpace;
   private final RrtsNodeCollection nodeCollection;

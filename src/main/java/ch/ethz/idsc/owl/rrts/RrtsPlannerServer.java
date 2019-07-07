@@ -20,6 +20,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
+import ch.ethz.idsc.owl.rrts.core.DefaultRrtsPlanner;
 import ch.ethz.idsc.owl.rrts.core.Rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
@@ -79,7 +80,7 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
     root = rrts.insertAsNode(Objects.requireNonNull(stateTime).state(), 5).get();
     time = stateTime.time();
-    rrtsPlanner = new RrtsPlanner(rrts, spaceSampler(state), goalSampler(goal));
+    rrtsPlanner = new DefaultRrtsPlanner(rrts, spaceSampler(state), goalSampler(goal));
   }
 
   private List<TrajectorySample> trajectory() {
