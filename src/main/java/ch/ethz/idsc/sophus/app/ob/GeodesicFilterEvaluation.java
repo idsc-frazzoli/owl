@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.subare.util.HtmlUtf8;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -118,7 +118,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   }
 
   public static void main(String[] args) throws IOException {
-    List<String> list = GokartPoseData.INSTANCE.list();
+    List<String> list = GokartPoseDataV1.INSTANCE.list();
     Iterator<String> iterator = list.iterator();
     while (iterator.hasNext()) {
       String data = iterator.next();

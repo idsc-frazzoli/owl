@@ -3,13 +3,13 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.math.SignedCurvature2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.red.Nest;
@@ -20,9 +20,9 @@ public class ClothoidTerminalRatios implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
       new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
   private static final TensorUnaryOperator HEAD = //
-      value -> CURVE_SUBDIVISION.string(value.extract(0, 2));
+      value -> CURVE_SUBDIVISION.string(Tensor.of(value.stream().limit(2)));
   private static final TensorUnaryOperator TAIL = //
-      value -> CURVE_SUBDIVISION.string(value.extract(value.length() - 2, value.length()));
+      value -> CURVE_SUBDIVISION.string(Tensor.of(value.stream().skip(value.length() - 2)));
   private static final QuantityMapper QUANTITY_MAPPER = new QuantityMapper(Scalar::zero, Unit::negate);
   static final Chop CHOP = Chop._03;
   /** typically 13, or 14 iterations are needed to reach precision up 1e-3 */
@@ -32,7 +32,7 @@ public class ClothoidTerminalRatios implements Serializable {
    * @param end of the form {end_x, end_y, end_heading}
    * @return */
   public static ClothoidTerminalRatios of(Tensor beg, Tensor end) {
-    final Tensor init = CURVE_SUBDIVISION.string(Tensors.of(beg, end));
+    final Tensor init = CURVE_SUBDIVISION.string(Tensor.of(Stream.of(beg, end)));
     Scalar head = curvature(init);
     {
       Tensor hseq = init;
@@ -71,8 +71,8 @@ public class ClothoidTerminalRatios implements Serializable {
    * @param depth strictly positive */
   public ClothoidTerminalRatios(Tensor beg, Tensor end, int depth) {
     this( //
-        curvature(Nest.of(HEAD, Tensors.of(beg, end), depth)), //
-        curvature(Nest.of(TAIL, Tensors.of(beg, end), depth)));
+        curvature(Nest.of(HEAD, Tensor.of(Stream.of(beg, end)), depth)), //
+        curvature(Nest.of(TAIL, Tensor.of(Stream.of(beg, end)), depth)));
   }
 
   private ClothoidTerminalRatios(Scalar head, Scalar tail) {
@@ -100,6 +100,6 @@ public class ClothoidTerminalRatios implements Serializable {
         abc.get(2).extract(0, 2));
     return optional.isPresent() //
         ? optional.get()
-        : QUANTITY_MAPPER.apply(abc.Get(0, 0));
+        : QUANTITY_MAPPER.apply(abc.Get(0, 0)); // numerical zero with reciprocal/negated unit of abc(0, 0)
   }
 }

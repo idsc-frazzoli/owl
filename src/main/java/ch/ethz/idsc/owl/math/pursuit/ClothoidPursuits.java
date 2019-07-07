@@ -9,12 +9,12 @@ import ch.ethz.idsc.tensor.Tensor;
 public enum ClothoidPursuits {
   ;
   /** @param tensor waypoints
-   * @param entryFinder strategy
+   * @param trajectoryEntryFinder strategy
    * @param var
    * @return GeodesicPursuit */
   public static GeodesicPursuitInterface fromTrajectory( //
-      Tensor tensor, TrajectoryEntryFinder entryFinder, Scalar var) {
-    Optional<Tensor> lookAhead = entryFinder.on(tensor).apply(var).point;
+      Tensor tensor, TrajectoryEntryFinder trajectoryEntryFinder, Scalar var) {
+    Optional<Tensor> lookAhead = trajectoryEntryFinder.on(tensor).apply(var).point();
     return lookAhead.isPresent() //
         ? new ClothoidPursuit(lookAhead.get())
         : VoidPursuit.INSTANCE;

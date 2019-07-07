@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.Real;
     Scalar qa = q.Get(2);
     // ---
     diff = qxy.subtract(pxy);
-    da = ArcTan2D.of(diff);
+    da = ArcTan2D.of(diff); // special case when diff == {0, 0}
     Scalar b0 = So2.MOD.apply(pa.subtract(da));
     Scalar b1 = So2.MOD.apply(qa.subtract(da));
     // ---

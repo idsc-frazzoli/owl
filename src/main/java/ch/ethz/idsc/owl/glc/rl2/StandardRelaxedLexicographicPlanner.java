@@ -48,7 +48,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     Map<GlcNode, List<StateTime>> connectors = controlsIntegrator.from(node);
     // ---
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
-      // TODO ASTOLL make "deterministic"
+      // TODO ASTOLL (?) make "deterministic" (?)
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       final List<StateTime> trajectory = connectors.get(next);
       // check if planner constraints are satisfied otherwise discard next

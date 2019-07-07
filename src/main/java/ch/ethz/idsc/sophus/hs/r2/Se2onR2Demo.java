@@ -41,6 +41,6 @@ public class Se2onR2Demo {
     Se2onR2Demo se2onR2Demo = new Se2onR2Demo();
     Tensor matrix = Parallelize.matrix((i, j) -> se2onR2Demo.min(Tensors.of(x.Get(i), y.Get(j))), x.length(), y.length());
     Tensor image = ArrayPlot.of(matrix, ColorDataGradients.CLASSIC);
-    Export.of(HomeDirectory.Pictures("edelweis.png"), image);
+    Export.of(HomeDirectory.Pictures(Se2onR2Demo.class.getSimpleName() + ".png"), image);
   }
 }

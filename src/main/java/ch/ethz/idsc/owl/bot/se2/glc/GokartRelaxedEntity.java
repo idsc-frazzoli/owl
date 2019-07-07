@@ -36,7 +36,7 @@ public class GokartRelaxedEntity extends GokartEntity {
     this.slacks = slacks;
   }
 
-  // FIXME ANDRE has to work with multiple cost functions
+  // TODO ASTOLL has to work with multiple cost functions
   /** @param costFunction for instance, corner cutting costs */
   public void setAdditionalCostFunction(CostFunction costFunction) {
     this.costFunction = Objects.requireNonNull(costFunction);
@@ -63,7 +63,7 @@ public class GokartRelaxedEntity extends GokartEntity {
   }
 
   public Tensor getSlack() {
-    return this.slacks;
+    return slacks;
   }
 
   @Override

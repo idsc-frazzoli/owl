@@ -11,7 +11,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;
@@ -19,17 +19,11 @@ import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceFIRnFilter;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
-import ch.ethz.idsc.sophus.lie.LieExponential;
-import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
@@ -51,6 +45,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /* package */ class FourierWindowCausalofAlphaPlot {
   private static final Scalar WINDOW_DURATION = Quantity.of(1, "s");
   private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
+  // TODO offset == 1 is not necessary, see SpectrogramArray for default value computation
   private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
 
   private static void plot(Tensor data, int radius, String signal, Scalar alpha) throws IOException {
@@ -88,8 +83,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   private static void process(List<String> listData, ScalarUnaryOperator smoothingKernel, int radius, int limit, Scalar alpha) throws IOException {
-    LieGroup lieGroup = Se2Group.INSTANCE;
-    LieExponential lieExponential = Se2CoveringExponential.INSTANCE;
     BiinvariantMean biinvariantMean = Se2BiinvariantMean.FILTER;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     LieDifferences lieDifferences = Se2Differences.INSTANCE;
@@ -112,14 +105,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           break;
         case GEODESIC_IIR:
           cf = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha);
-          break;
-        case TANGENT_SPACE_FIR:
-          cf = TangentSpaceFIRnFilter.of( //
-              lieGroup, lieExponential, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha);
-          break;
-        case TANGENT_SPACE_IIR:
-          cf = TangentSpaceIIRnFilter.of( //
-              lieGroup, lieExponential, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha);
           break;
         case BIINVARIANT_MEAN_FIR:
           cf = BiinvariantMeanFIRnFilter.of(biinvariantMean, WindowSideExtrapolation.of(smoothingKernel), geodesicInterface, radius, alpha);
@@ -147,7 +132,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   public static void main(String[] args) throws IOException {
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    List<String> listData = GokartPoseData.INSTANCE.list();
+    List<String> listData = GokartPoseDataV1.INSTANCE.list();
     int radius = 3;
     int limit = 5;
     for (int index = 1; index < 5; ++index) {

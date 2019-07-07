@@ -1,6 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.owl.math.pursuit;
 
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -10,25 +11,23 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public final class IntersectionEntryFinder extends TrajectoryEntryFinder {
-  public static final TrajectoryEntryFinder INSTANCE = new IntersectionEntryFinder();
-
+  public static final TrajectoryEntryFinder SPHERE_RN = new IntersectionEntryFinder(SphereCurveIntersection::new);
+  public static final TrajectoryEntryFinder SPHERE_SE2 = new IntersectionEntryFinder(SphereSe2CurveIntersection::new);
   // ---
-  private IntersectionEntryFinder() {
-    // ---
+  private final Function<Scalar, AssistedCurveIntersection> function;
+
+  public IntersectionEntryFinder(Function<Scalar, AssistedCurveIntersection> function) {
+    this.function = function;
   }
 
   @Override // from TrajectoryEntryFinder
-  public TrajectoryEntry protected_apply(Tensor waypoints, Scalar variable) {
-    AssistedCurveIntersection intersection = waypoints.stream().allMatch(t -> VectorQ.ofLength(t, 2)) ? //
-        new SphereCurveIntersection(variable) : //
-        new SphereSe2CurveIntersection(variable);
-    return new TrajectoryEntry(intersection.string(waypoints), variable);
+  public TrajectoryEntry protected_apply(Tensor waypoints, Scalar radius) {
+    return new TrajectoryEntry(function.apply(radius).string(waypoints).orElse(null), radius);
   }
 
   @Override // from TrajectoryEntryFinder

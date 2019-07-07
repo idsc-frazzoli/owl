@@ -20,9 +20,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class LieGroupFiltersTest extends TestCase {
-  public void testSimple() {
-    List<String> lines = GokartPoseData.INSTANCE.list();
-    Tensor control = GokartPoseData.getPose(lines.get(0), 250);
+  private static void _check(GokartPoseData gokartPoseData) {
+    List<String> lines = gokartPoseData.list();
+    Tensor control = gokartPoseData.getPose(lines.get(0), 250);
     GeodesicDisplay geodesicDisplay = Se2GeodesicDisplay.INSTANCE;
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
@@ -43,5 +43,10 @@ public class LieGroupFiltersTest extends TestCase {
       Scalar norm = Norm.INFINITY.ofMatrix(diff);
       assertTrue(Chop._02.allZero(norm));
     }
+  }
+
+  public void testSimple() {
+    _check(GokartPoseDataV1.INSTANCE);
+    _check(GokartPoseDataV2.INSTANCE);
   }
 }

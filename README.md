@@ -52,7 +52,7 @@ Obstacle anticipation
 ### 2019
 
 * André Stoll (MT): *Multi-Objective Optimization Using Preference Structures*
-* Joel Gaechter (MT): RRTS with clothoids
+* Joel Gächter (MT): RRTS with clothoids
 
 ## Features
 

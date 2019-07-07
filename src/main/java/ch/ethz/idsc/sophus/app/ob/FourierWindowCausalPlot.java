@@ -10,7 +10,7 @@ import java.util.List;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;
@@ -18,13 +18,9 @@ import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceFIRnFilter;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
@@ -106,16 +102,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         case GEODESIC_IIR:
           smoothd = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
           break;
-        case TANGENT_SPACE_FIR:
-          smoothd = TangentSpaceFIRnFilter.of( //
-              Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
-              .apply(control);
-          break;
-        case TANGENT_SPACE_IIR:
-          smoothd = TangentSpaceIIRnFilter.of( //
-              Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
-              .apply(control);
-          break;
         case BIINVARIANT_MEAN_FIR:
           smoothd = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
               .apply(control);
@@ -142,7 +128,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   public static void main(String[] args) throws IOException {
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    List<String> listData = GokartPoseData.INSTANCE.list();
+    List<String> listData = GokartPoseDataV1.INSTANCE.list();
     int radius = 7;
     int limit = 5;
     Scalar alpha = RealScalar.of(0.8);
