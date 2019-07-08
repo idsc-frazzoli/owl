@@ -5,7 +5,6 @@ import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
 import ch.ethz.idsc.owl.ani.api.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.rn.glc.R2TrajectoryControl;
-import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
@@ -15,8 +14,8 @@ import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
-import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.sophus.math.Extract2D;
@@ -38,7 +37,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   /** @param stateTime initial position of entity */
   public R2RrtsEntity(StateTime stateTime, ImageRegion imageRegion) {
     super( //
-        new RrtsPlannerServer( //
+        new DefaultRrtsPlannerServer( //
             RnTransitionSpace.INSTANCE, //
             new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
             RationalScalar.of(1, 10), //

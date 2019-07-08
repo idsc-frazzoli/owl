@@ -13,8 +13,8 @@ import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
-import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
   /** @param stateTime initial position of entity */
   public ClothoidRrtsEntity(StateTime stateTime, ImageRegion imageRegion) {
     super( //
-        new RrtsPlannerServer( //
+        new DefaultRrtsPlannerServer( //
             ClothoidTransitionSpace.INSTANCE, //
             new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
             RationalScalar.of(1, 10), //

@@ -24,6 +24,7 @@ import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -50,7 +51,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         imageRegion, RealScalar.of(0.05));
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
     // ---
-    RrtsPlannerServer server = new RrtsPlannerServer( //
+    RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         transitionSpace, //
         transitionRegionQuery, //
         RationalScalar.of(1, 10), //

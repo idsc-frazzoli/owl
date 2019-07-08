@@ -14,16 +14,10 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
-import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
-import ch.ethz.idsc.owl.rrts.core.DefaultRrtsPlanner;
-import ch.ethz.idsc.owl.rrts.core.Rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
-import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
 import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
@@ -32,33 +26,21 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 
 // TODO provide RrtsPlanner from function/supplier
 // requires new solution for root and time
 public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
-  private final TransitionSpace transitionSpace;
-  private final TransitionRegionQuery obstacleQuery;
+  protected final TransitionSpace transitionSpace;
+  protected final TransitionRegionQuery obstacleQuery;
+  protected final TransitionCostFunction costFunction;
   private final Scalar resolution;
-  private final TransitionCostFunction costFunction;
   private final RrtsFlowTrajectoryGenerator flowTrajectoryGenerator;
   // ---
-  private Tensor state = Tensors.empty();
-  private Tensor goal = Tensors.empty();
-  private RrtsNode root = null;
   private Scalar time;
-  private RrtsPlanner rrtsPlanner = null;
+  private RrtsPlannerProcess process = null;
   private List<TrajectorySample> trajectory = new ArrayList<>();
   private NavigableMap<Scalar, List<TrajectorySample>> potentialFutureTrajectories = new TreeMap<>(Scalars::compare);
-
-  public RrtsPlannerServer( //
-      TransitionSpace transitionSpace, //
-      TransitionRegionQuery obstacleQuery, //
-      Scalar resolution, //
-      StateSpaceModel stateSpaceModel) {
-    this(transitionSpace, obstacleQuery, resolution, stateSpaceModel, LengthCostFunction.IDENTITY);
-  }
 
   public RrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -79,15 +61,13 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
         trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), stateTime.time());
     trajectory = trajectory().stream().filter(predicate).collect(Collectors.toList());
     potentialFutureTrajectories.clear();
-    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
-    root = rrts.insertAsNode(Objects.requireNonNull(stateTime).state(), 5).get();
     time = stateTime.time();
-    rrtsPlanner = new DefaultRrtsPlanner(rrts, spaceSampler(state), goalSampler(goal));
+    process = setupProcess(stateTime);
   }
 
   private List<TrajectorySample> trajectory() {
-    if (Objects.nonNull(rrtsPlanner) && rrtsPlanner.getBest().isPresent()) {
-      RrtsNode best = rrtsPlanner.getBest().get();
+    if (Objects.nonNull(process) && process.rrtsPlanner.getBest().isPresent()) {
+      RrtsNode best = process.rrtsPlanner.getBest().get();
       List<RrtsNode> sequence = Nodes.listFromRoot(best);
       potentialFutureTrajectories.put(best.costFromRoot(), //
           flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, time, resolution));
@@ -103,21 +83,21 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
 
   @Override // from ExpandInterface
   public Optional<RrtsNode> pollNext() {
-    return Objects.nonNull(rrtsPlanner) //
-        ? rrtsPlanner.pollNext() //
+    return Objects.nonNull(process) //
+        ? process.rrtsPlanner.pollNext() //
         : Optional.empty();
   }
 
   @Override // from ExpandInterface
   public void expand(RrtsNode node) {
-    if (Objects.nonNull(rrtsPlanner))
-      rrtsPlanner.expand(node); // FIXME can get stuck here
+    if (Objects.nonNull(process))
+      process.rrtsPlanner.expand(node); // FIXME can get stuck here
   }
 
   @Override // from ExpandInterface
   public Optional<RrtsNode> getBest() {
-    return Objects.nonNull(rrtsPlanner) //
-        ? rrtsPlanner.getBest() //
+    return Objects.nonNull(process) //
+        ? process.rrtsPlanner.getBest() //
         : Optional.empty();
   }
 
@@ -128,34 +108,29 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
       return optional;
     return getQueue().isEmpty() //
         ? Optional.empty() //
-        : Optional.of(rrtsPlanner.getQueue().get(0));
+        : Optional.of(process.rrtsPlanner.getQueue().get(0));
   }
 
   @Override // from TrajectoryPlanner
   public Collection<RrtsNode> getQueue() {
-    return Objects.nonNull(rrtsPlanner) //
-        ? rrtsPlanner.getQueue() //
+    return Objects.nonNull(process) //
+        ? process.rrtsPlanner.getQueue() //
         : Collections.emptyList();
   }
 
   @Override // from RrtsTrajectoryPlanner
   public void checkConsistency() {
-    RrtsNodes.costConsistency(root, transitionSpace, costFunction);
+    RrtsNodes.costConsistency(process.root, transitionSpace, costFunction);
   }
 
   public void setState(StateTime stateTime) {
     Predicate<TrajectorySample> predicate = //
         trajectorySample -> Scalars.lessEquals(stateTime.time(), trajectorySample.stateTime().time());
     trajectory = trajectory.stream().filter(predicate).collect(Collectors.toList());
-    state = stateTime.state();
-  }
-
-  public void setGoal(Tensor goal) {
-    this.goal = goal;
   }
 
   public Optional<RrtsNode> getRoot() {
-    return Optional.ofNullable(root);
+    return Optional.ofNullable(process).map(RrtsPlannerProcess::root);
   }
 
   public Optional<List<TrajectorySample>> getTrajectory() {
@@ -164,8 +139,8 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   }
 
   public Optional<TransitionRegionQuery> getObstacleQuery() {
-    return Objects.nonNull(rrtsPlanner) //
-        ? Optional.of(rrtsPlanner.getObstacleQuery()) //
+    return Objects.nonNull(process) //
+        ? Optional.of(process.rrtsPlanner.getObstacleQuery()) //
         : Optional.empty();
   }
 
@@ -179,9 +154,25 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     }
   }
 
-  protected abstract RrtsNodeCollection rrtsNodeCollection();
+  protected abstract RrtsPlannerProcess setupProcess(StateTime stateTime);
 
-  protected abstract RandomSampleInterface spaceSampler(Tensor state);
+  public abstract void setGoal(Tensor goal);
 
-  protected abstract RandomSampleInterface goalSampler(Tensor state);
+  public class RrtsPlannerProcess {
+    private final RrtsPlanner rrtsPlanner;
+    private final RrtsNode root;
+
+    public RrtsPlannerProcess(RrtsPlanner rrtsPlanner, RrtsNode root) {
+      this.rrtsPlanner = Objects.requireNonNull(rrtsPlanner);
+      this.root = Objects.requireNonNull(root);
+    }
+
+    public RrtsPlanner planner() {
+      return rrtsPlanner;
+    }
+
+    public RrtsNode root() {
+      return root;
+    }
+  }
 }

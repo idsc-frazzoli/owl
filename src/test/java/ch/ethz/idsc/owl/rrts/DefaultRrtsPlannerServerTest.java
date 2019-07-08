@@ -27,8 +27,8 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class RrtsPlannerServerTest extends TestCase {
-  public void testRn() throws Exception {
+public class DefaultRrtsPlannerServerTest extends TestCase {
+  public void testRn() {
     Tensor goal = Tensors.vector(10, 10);
     Tensor state = Tensors.vector(0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
@@ -37,7 +37,7 @@ public class RrtsPlannerServerTest extends TestCase {
     Tensor min = center.map(scalar -> scalar.subtract(radius));
     Tensor max = center.map(scalar -> scalar.add(radius));
     // ---
-    RrtsPlannerServer server = new RrtsPlannerServer( //
+    RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         RnTransitionSpace.INSTANCE, //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
@@ -66,14 +66,14 @@ public class RrtsPlannerServerTest extends TestCase {
     Chop._01.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 
-  public void testDubins() throws Exception {
+  public void testDubins() {
     Tensor lbounds = Tensors.vector(0, 0, 0);
     Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
-    RrtsPlannerServer server = new RrtsPlannerServer( //
+    RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         DubinsTransitionSpace.of(RealScalar.ONE), //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
@@ -102,14 +102,14 @@ public class RrtsPlannerServerTest extends TestCase {
     Chop._01.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 
-  public void testClothoid() throws Exception {
+  public void testClothoid() {
     Tensor lbounds = Tensors.vector(0, 0, 0);
     Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
-    RrtsPlannerServer server = new RrtsPlannerServer( //
+    RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         ClothoidTransitionSpace.INSTANCE, //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
