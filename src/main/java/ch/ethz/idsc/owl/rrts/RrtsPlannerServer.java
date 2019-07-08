@@ -28,8 +28,6 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Serialization;
 
-// TODO provide RrtsPlanner from function/supplier
-// requires new solution for root and time
 public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
   protected final TransitionSpace transitionSpace;
   protected final TransitionRegionQuery obstacleQuery;
