@@ -50,7 +50,9 @@ public class ClothoidTransitionSpace implements Se2TransitionSpace, Serializable
       public Tensor sampled(int steps) {
         if (steps < 1)
           throw TensorRuntimeException.of(RealScalar.of(steps));
-        Tensor samples = Nest.of(CURVE_SUBDIVISION::string, Tensors.of(start, end), (int) Math.ceil(Math.log(steps - 1) / LOG2));
+        Tensor samples = Tensors.of(start, end);
+        if (steps > 1)
+          samples = Nest.of(CURVE_SUBDIVISION::string, samples, (int) Math.ceil(Math.log(steps - 1) / LOG2));
         return samples.extract(0, samples.length() - 1);
       }
 

@@ -1,11 +1,16 @@
 // code by gjoel
 package ch.ethz.idsc.owl.rrts.core;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
+import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.rrts.adapter.Reversal;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 public class BidirectionalRrts implements Rrts {
   private final Rrts forwardRrts;
@@ -16,12 +21,12 @@ public class BidirectionalRrts implements Rrts {
 
   public BidirectionalRrts( //
       TransitionSpace transitionSpace, //
-      RrtsNodeCollection rrtsNodeCollection, //
+      Supplier<RrtsNodeCollection> rrtsNodeCollection, //
       TransitionRegionQuery obstacleQuery, //
       TransitionCostFunction transitionCostFunction, //
       Tensor root, Tensor goal) {
-    forwardRrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, obstacleQuery, transitionCostFunction);
-    backwardRrts = new DefaultRrts(Reversal.of(transitionSpace), rrtsNodeCollection, obstacleQuery, transitionCostFunction);
+    forwardRrts = new DefaultRrts(transitionSpace, rrtsNodeCollection.get(), obstacleQuery, transitionCostFunction);
+    backwardRrts = new DefaultRrts(Reversal.of(transitionSpace), rrtsNodeCollection.get(), obstacleQuery, transitionCostFunction);
     this.root = forwardRrts.insertAsNode(root, 0).get();
     backwardRrts.insertAsNode(goal, 0).get();
     this.goal = goal;
@@ -40,17 +45,20 @@ public class BidirectionalRrts implements Rrts {
 
   @Override // from Rrts
   public void rewireAround(RrtsNode parent, int k_nearest) {
-    Optional<RrtsNode> child = Optional.empty();
-    while (Objects.nonNull(parent)) {
-      child = forwardRrts.insertAsNode(parent.state(), k_nearest);
-      if(!child.isPresent())
-        break;
-      parent = parent.parent();
-    }
-    if (child.map(node -> node.state().equals(goal)).orElse(false))
-      goalNode = child;
+    System.out.print("match: ");
+    List<RrtsNode> toGoal = Nodes.listToRoot(parent);
+    Tensor backwardRoot = Lists.getLast(toGoal).state();
+    if (!backwardRoot.equals(goal))
+      throw TensorRuntimeException.of(backwardRoot, goal);
+    List<Optional<RrtsNode>> optionals = new ArrayList<>();
+    for (RrtsNode node : toGoal)
+      optionals.add(forwardRrts.insertAsNode(node.state(), k_nearest)); // FIXME multiple insertions of same node
+    if (optionals.stream().allMatch(Optional::isPresent)) { // FIXME should always be true
+      goalNode = Lists.getLast(optionals);
+      System.out.println("success");
+    } else
+      System.out.println("fail");
   }
-
   @Override // from Rrts
   public int rewireCount() {
     return forwardRrts.rewireCount() + backwardRrts.rewireCount();
