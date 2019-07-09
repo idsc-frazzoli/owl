@@ -56,6 +56,11 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
       protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RealScalar.ZERO);
       }
+
+      @Override
+      protected Tensor uBetween(StateTime orig, StateTime dest) {
+        return RrtsFlowHelper.U_R2.apply(orig, dest);
+      }
     };
     server.setGoal(goal);
     server.insertRoot(stateTime);
@@ -92,6 +97,11 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
       protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RealScalar.ZERO);
       }
+
+      @Override
+      protected Tensor uBetween(StateTime orig, StateTime dest) {
+        return RrtsFlowHelper.U_SE2.apply(orig, dest);
+      }
     };
     server.setGoal(goal);
     server.insertRoot(stateTime);
@@ -127,6 +137,11 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RealScalar.ZERO);
+      }
+
+      @Override
+      protected Tensor uBetween(StateTime orig, StateTime dest) {
+        return RrtsFlowHelper.U_SE2.apply(orig, dest);
       }
     };
     server.setGoal(goal);

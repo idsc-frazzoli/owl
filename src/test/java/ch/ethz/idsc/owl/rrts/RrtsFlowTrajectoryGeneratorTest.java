@@ -45,7 +45,9 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     // ---
     List<RrtsNode> sequence = Nodes.listFromRoot(n3);
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
-    RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator(SingleIntegratorStateSpaceModel.INSTANCE);
+    RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
+        SingleIntegratorStateSpaceModel.INSTANCE, //
+        RrtsFlowHelper.U_R2);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(RnTransitionSpace.INSTANCE, sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     assertEquals(30, trajectory.size());
@@ -79,7 +81,9 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     // ---
     List<RrtsNode> sequence = Nodes.listFromRoot(n3);
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
-    RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator(Se2StateSpaceModel.INSTANCE /* SingleIntegratorStateSpaceModel.INSTANCE */ );
+    RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
+        Se2StateSpaceModel.INSTANCE, //
+        RrtsFlowHelper.U_R2);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(RnTransitionSpace.INSTANCE, sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
@@ -115,7 +119,9 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     // ---
     List<RrtsNode> sequence = Nodes.listFromRoot(n3);
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
-    RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator(Se2StateSpaceModel.INSTANCE);
+    RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
+        Se2StateSpaceModel.INSTANCE, //
+        RrtsFlowHelper.U_SE2);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(RnTransitionSpace.INSTANCE, sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
@@ -152,7 +158,9 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     // ---
     List<RrtsNode> sequence = Nodes.listFromRoot(n3);
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
-    RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator(Se2StateSpaceModel.INSTANCE);
+    RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
+        Se2StateSpaceModel.INSTANCE, //
+        RrtsFlowHelper.U_SE2);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(RnTransitionSpace.INSTANCE, sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);

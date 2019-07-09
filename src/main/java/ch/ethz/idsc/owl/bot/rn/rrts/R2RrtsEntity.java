@@ -7,7 +7,9 @@ import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.rn.glc.R2TrajectoryControl;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
+import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
@@ -15,6 +17,7 @@ import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
+import ch.ethz.idsc.owl.rrts.RrtsFlowHelper;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
@@ -55,6 +58,11 @@ import ch.ethz.idsc.tensor.alg.Array;
           @Override
           protected RandomSampleInterface goalSampler(Tensor goal) {
             return new ConstantRandomSample(Extract2D.FUNCTION.apply(goal));
+          }
+
+          @Override
+          protected Tensor uBetween(StateTime orig, StateTime dest) {
+            return RrtsFlowHelper.U_R2.apply(orig, dest);
           }
         }, //
         new SimpleEpisodeIntegrator( //

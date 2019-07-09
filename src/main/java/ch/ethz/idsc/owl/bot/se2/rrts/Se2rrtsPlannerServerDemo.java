@@ -25,6 +25,7 @@ import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
+import ch.ethz.idsc.owl.rrts.RrtsFlowHelper;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -69,6 +70,10 @@ import ch.ethz.idsc.tensor.opt.Pi;
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RealScalar.ONE);
+      }
+      @Override
+      protected Tensor uBetween(StateTime orig, StateTime dest) {
+        return RrtsFlowHelper.U_SE2.apply(orig, dest);
       }
     };
     // ---

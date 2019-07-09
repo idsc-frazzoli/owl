@@ -50,7 +50,7 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     this.obstacleQuery = obstacleQuery;
     this.resolution = resolution;
     this.costFunction = costFunction;
-    flowTrajectoryGenerator = new RrtsFlowTrajectoryGenerator(stateSpaceModel);
+    flowTrajectoryGenerator = new RrtsFlowTrajectoryGenerator(stateSpaceModel, this::uBetween); // TODO make uBetween dependent on state space model
   }
 
   @Override // from TrajectoryPlanner
@@ -151,6 +151,8 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
       return null;
     }
   }
+
+  protected abstract Tensor uBetween(StateTime orig, StateTime dest);
 
   protected abstract RrtsPlannerProcess setupProcess(StateTime stateTime);
 
