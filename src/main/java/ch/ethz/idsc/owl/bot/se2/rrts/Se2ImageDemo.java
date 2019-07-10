@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
-import ch.ethz.idsc.owl.rrts.adapter.UnionTransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
 import ch.ethz.idsc.owl.rrts.core.Rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(RealScalar.of(5));
-    TransitionRegionQuery unionTransitionRegionQuery = UnionTransitionRegionQuery.wrap(transitionRegionQuery, transitionCurvatureQuery);
+    TransitionRegionQuery unionTransitionRegionQuery = TransitionRegionQueryUnion.wrap(transitionRegionQuery, transitionCurvatureQuery);
     // ---
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, unionTransitionRegionQuery, LengthCostFunction.IDENTITY);

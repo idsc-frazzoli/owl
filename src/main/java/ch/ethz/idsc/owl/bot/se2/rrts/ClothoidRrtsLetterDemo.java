@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
-import ch.ethz.idsc.owl.rrts.adapter.UnionTransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
@@ -33,7 +33,7 @@ class ClothoidRrtsLetterDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     ImageRegion imageRegion = R2ImageRegions._GTOB.imageRegion();
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
-    TransitionRegionQuery transitionRegionQuery = UnionTransitionRegionQuery.wrap( //
+    TransitionRegionQuery transitionRegionQuery = TransitionRegionQueryUnion.wrap( //
         new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
         new TransitionCurvatureQuery(5.));
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, Math.PI / 4), RealScalar.ZERO);
