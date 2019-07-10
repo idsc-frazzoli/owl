@@ -1,14 +1,13 @@
 // code by ynager
-package ch.ethz.idsc.owl.ani.api;
+package ch.ethz.idsc.owl.data.tree;
 
 import java.util.Collection;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
-import ch.ethz.idsc.owl.glc.core.ExpandInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
 
-public interface TrajectoryPlanner<T extends StateCostNode> extends ExpandInterface<T>  {
+/** grows a tree of nodes */
+public interface TreePlanner<T extends StateCostNode> extends ExpandInterface<T> {
   /** @param stateTime */
   void insertRoot(StateTime stateTime);
 

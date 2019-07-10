@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -69,7 +69,7 @@ public class GlcNodeTest extends TestCase {
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
-    GlcTrajectoryPlanner trajectoryPlanner = CheckedGlcTrajectoryPlanner.wrap(new StandardGlcTrajectoryPlanner( //
+    TrajectoryPlanner trajectoryPlanner = CheckedGlcTrajectoryPlanner.wrap(new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, plannerConstraint, rnGoal));
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     List<GlcNode> nodeList = new ArrayList<>(trajectoryPlanner.getDomainMap().values());

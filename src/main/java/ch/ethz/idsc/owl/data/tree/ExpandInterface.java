@@ -1,9 +1,7 @@
 // code by jph
-package ch.ethz.idsc.owl.glc.core;
+package ch.ethz.idsc.owl.data.tree;
 
 import java.util.Optional;
-
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 
 public interface ExpandInterface<T extends StateCostNode> {
   /** retrieves next node and removes the node from the queue

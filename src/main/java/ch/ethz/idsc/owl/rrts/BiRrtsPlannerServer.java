@@ -36,7 +36,7 @@ public abstract class BiRrtsPlannerServer extends RrtsPlannerServer {
       Scalar resolution, //
       StateSpaceModel stateSpaceModel, //
       TransitionCostFunction costFunction) {
-    super(transitionSpace, obstacleQuery,resolution, stateSpaceModel, costFunction);
+    super(transitionSpace, obstacleQuery, resolution, stateSpaceModel, costFunction);
   }
 
   @Override // from RrtsPlannerServer
@@ -52,7 +52,8 @@ public abstract class BiRrtsPlannerServer extends RrtsPlannerServer {
 
   @Override // from RrtsPlannerServer
   protected RrtsPlannerProcess setupProcess(StateTime stateTime) {
-    BidirectionalRrts rrts = new BidirectionalRrts(transitionSpace, this::rrtsNodeCollection, obstacleQuery, costFunction, Objects.requireNonNull(stateTime).state(), goal);
+    BidirectionalRrts rrts = new BidirectionalRrts(transitionSpace, this::rrtsNodeCollection, obstacleQuery, costFunction,
+        Objects.requireNonNull(stateTime).state(), goal);
     RrtsPlanner rrtsPlanner = new BiRrtsPlanner(rrts, spaceSampler(state));
     return new RrtsPlannerProcess(rrtsPlanner, rrts.getRoot());
   }

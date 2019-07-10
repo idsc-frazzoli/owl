@@ -31,28 +31,28 @@ import ch.ethz.idsc.tensor.Tensor;
  * <li>parallel processing of queues
  * <li>nodes that get replaced in a domain, are also removed from the queue
  * </ul> */
-public class StandardGlcTrajectoryPlanner extends CTrajectoryPlanner {
+public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
   private final RelabelDecision relabelDecision;
   private transient final ControlsIntegrator controlsIntegrator;
 
-  public StandardGlcTrajectoryPlanner( //
+  public StandardTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface) {
     this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, //
         SimpleRelabelDecision.DEFAULT, NodeMeritComparator.INSTANCE);
   }
 
-  public StandardGlcTrajectoryPlanner( //
+  public StandardTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface, RelabelDecision relabelDecision) {
     this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, //
         relabelDecision, NodeMeritComparator.INSTANCE);
   }
 
-  public StandardGlcTrajectoryPlanner( //
+  public StandardTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface, //
       RelabelDecision relabelDecision, Comparator<GlcNode> comparator) {

@@ -59,6 +59,7 @@ public class BidirectionalRrts implements Rrts {
     } else
       System.out.println("fail");
   }
+
   @Override // from Rrts
   public int rewireCount() {
     return forwardRrts.rewireCount() + backwardRrts.rewireCount();

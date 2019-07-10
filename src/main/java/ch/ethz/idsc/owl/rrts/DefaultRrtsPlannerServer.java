@@ -39,7 +39,7 @@ public abstract class DefaultRrtsPlannerServer extends RrtsPlannerServer {
       Scalar resolution, //
       StateSpaceModel stateSpaceModel, //
       TransitionCostFunction costFunction) {
-    super(transitionSpace, obstacleQuery,resolution, stateSpaceModel, costFunction);
+    super(transitionSpace, obstacleQuery, resolution, stateSpaceModel, costFunction);
   }
 
   @Override // from RrtsPlannerServer

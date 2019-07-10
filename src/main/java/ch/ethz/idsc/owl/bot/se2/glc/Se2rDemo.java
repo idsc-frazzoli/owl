@@ -18,8 +18,8 @@ import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.HyperplaneRegion;
@@ -56,7 +56,7 @@ enum Se2rDemo {
             new HyperplaneRegion(Tensors.vector(0, +1, 0), RealScalar.of(2.0)) //
         )));
     // ---
-    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
+    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(eta), stateIntegrator, controls, new TrajectoryObstacleConstraint(obstacleQuery), goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(3), RealScalar.ZERO));

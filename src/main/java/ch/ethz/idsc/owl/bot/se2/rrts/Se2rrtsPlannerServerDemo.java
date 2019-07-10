@@ -71,6 +71,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
       protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RealScalar.ONE);
       }
+
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
         return RrtsFlowHelper.U_SE2.apply(orig, dest);

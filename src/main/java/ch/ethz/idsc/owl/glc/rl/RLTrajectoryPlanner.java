@@ -12,16 +12,16 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class RLTrajectoryPlanner implements GlcTrajectoryPlanner, Serializable {
+public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializable {
   protected final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
   // ---

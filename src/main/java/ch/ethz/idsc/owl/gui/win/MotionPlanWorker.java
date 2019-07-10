@@ -7,19 +7,19 @@ import java.util.List;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.PlannerCallback;
 import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
-import ch.ethz.idsc.owl.ani.api.TrajectoryPlanner;
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.data.tree.TreePlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.io.Timing;
 
-public abstract class MotionPlanWorker<T extends TrajectoryPlanner, P extends PlannerCallback<T>> {
+public abstract class MotionPlanWorker<T extends TreePlanner<?>, P extends PlannerCallback<T>> {
   @SuppressWarnings("unchecked")
   public static MotionPlanWorker of(int maxSteps, Collection<? extends PlannerCallback> plannerCallbacks) {
     if (plannerCallbacks.stream().allMatch(p -> p instanceof GlcPlannerCallback))
-      return new GlcMotionPlanWorker(maxSteps, (Collection<GlcPlannerCallback>)plannerCallbacks);
+      return new GlcMotionPlanWorker(maxSteps, (Collection<GlcPlannerCallback>) plannerCallbacks);
     if (plannerCallbacks.stream().allMatch(p -> p instanceof RrtsPlannerCallback))
-      return new RrtsMotionPlanWorker(maxSteps, (Collection<RrtsPlannerCallback>)plannerCallbacks);
+      return new RrtsMotionPlanWorker(maxSteps, (Collection<RrtsPlannerCallback>) plannerCallbacks);
     // TODO expand when needed
     throw new IllegalArgumentException();
   }

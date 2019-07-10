@@ -20,8 +20,8 @@ import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
@@ -64,7 +64,7 @@ enum Se2WrapDemo {
     )));
   }
 
-  static GlcTrajectoryPlanner createPlanner(CoordinateWrap coordinateWrap, So2Region so2Region) {
+  static TrajectoryPlanner createPlanner(CoordinateWrap coordinateWrap, So2Region so2Region) {
     Tensor eta = Tensors.vector(3, 3, 50 / Math.PI);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 6), 5);
@@ -76,12 +76,12 @@ enum Se2WrapDemo {
     TrajectoryRegionQuery obstacleQuery = obstacleQuery();
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(coordinateWrap::represent));
-    return new StandardGlcTrajectoryPlanner(stateTimeRaster, stateIntegrator, controls, //
+    return new StandardTrajectoryPlanner(stateTimeRaster, stateIntegrator, controls, //
         new TrajectoryObstacleConstraint(obstacleQuery), se2MinTimeGoalManager.getGoalInterface());
   }
 
   private static void demo(CoordinateWrap coordinateWrap, So2Region so2Region) {
-    GlcTrajectoryPlanner trajectoryPlanner = createPlanner(coordinateWrap, so2Region);
+    TrajectoryPlanner trajectoryPlanner = createPlanner(coordinateWrap, so2Region);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0, 0), RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(4000);

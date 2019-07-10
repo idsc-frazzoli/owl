@@ -70,17 +70,17 @@ import ch.ethz.idsc.tensor.alg.Array;
     add(FallbackControl.of(Array.zeros(2)));
   }
 
+  @Override
   protected Tensor shape() {
     return SHAPE;
   }
 
   /* why Norm2Squared?
-  @Override // from TensorMetrix
-  public Scalar distance(Tensor x, Tensor y) {
-    return Norm2Squared.between(x, y); // non-negative
-  }
-  */
-
+   * 
+   * @Override // from TensorMetrix
+   * public Scalar distance(Tensor x, Tensor y) {
+   * return Norm2Squared.between(x, y); // non-negative
+   * } */
   @Override // from TrajectoryEntity
   public Scalar delayHint() {
     return DELAY_HINT;

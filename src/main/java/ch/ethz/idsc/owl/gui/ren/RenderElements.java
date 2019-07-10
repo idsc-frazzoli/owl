@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.glc.adapter.GlcTrajectories;
 import ch.ethz.idsc.owl.glc.core.CTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
@@ -21,7 +21,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 
 public enum RenderElements {
   ;
-  public static Collection<RenderInterface> create(GlcTrajectoryPlanner trajectoryPlanner) {
+  public static Collection<RenderInterface> create(TrajectoryPlanner trajectoryPlanner) {
     List<RenderInterface> list = new LinkedList<>();
     list.add(AxesRender.INSTANCE);
     // ---

@@ -13,9 +13,9 @@ import ch.ethz.idsc.owl.glc.adapter.GoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   static final StateIntegrator STATE_INTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.ONE, 1);
 
-  private static GlcTrajectoryPlanner simple() {
+  private static TrajectoryPlanner simple() {
     final Tensor stateRoot = Tensors.vector(0, 0);
     // ---
     Tensor eta = Tensors.vector(1, 1);
@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.alg.Array;
       }
     });
     // ---
-    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
+    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(eta), //
         STATE_INTEGRATOR, //
         controls, //
@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   }
 
   public static void main(String[] args) {
-    GlcTrajectoryPlanner trajectoryPlanner = simple();
+    TrajectoryPlanner trajectoryPlanner = simple();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(200);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();

@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     Tensor samples = Array.zeros(steps);
     Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
-    IntStream.range(0, steps).parallel().forEach(i -> samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i));
+    IntStream.range(0, steps).forEach(i -> samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i));
     return samples;
   }
 
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     Tensor spacing = Array.zeros(steps);
     Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
-    IntStream.range(0, steps).parallel().forEach(i -> {
+    IntStream.range(0, steps).forEach(i -> {
       samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i);
       spacing.set(i > 0 ? step : step.zero(), i);
     });

@@ -15,6 +15,7 @@ public class UnionTransitionRegionQuery implements TransitionRegionQuery {
   public static TransitionRegionQuery wrap(Collection<TransitionRegionQuery> collection) {
     return new UnionTransitionRegionQuery(collection);
   }
+
   // ---
   private final Collection<TransitionRegionQuery> collection;
 

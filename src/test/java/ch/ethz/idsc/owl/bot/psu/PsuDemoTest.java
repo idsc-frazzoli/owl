@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.glc.core.CheckedGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
@@ -20,7 +20,7 @@ public class PsuDemoTest extends TestCase {
   public void testFindGoal() {
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, Tensors.vector(Math.PI * 0.7, 0.5), RealScalar.of(0.3));
-    GlcTrajectoryPlanner trajectoryPlanner = CheckedGlcTrajectoryPlanner.wrap(PsuDemo.raw(goalInterface));
+    TrajectoryPlanner trajectoryPlanner = CheckedGlcTrajectoryPlanner.wrap(PsuDemo.raw(goalInterface));
     HeuristicAssert.check(trajectoryPlanner);
     assertFalse(trajectoryPlanner.getBest().isPresent());
     trajectoryPlanner.insertRoot(new StateTime(Array.zeros(2), RealScalar.ZERO));

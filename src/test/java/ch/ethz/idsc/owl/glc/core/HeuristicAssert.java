@@ -15,7 +15,7 @@ public enum HeuristicAssert {
   /** Checks if the Cost and the Heuristic along the found trajectory are consistent
    * 
    * @param trajectoryPlanner */
-  public static void check(GlcTrajectoryPlanner trajectoryPlanner) {
+  public static void check(TrajectoryPlanner trajectoryPlanner) {
     check(getFinalGoalNode(trajectoryPlanner));
   }
 
@@ -52,7 +52,7 @@ public enum HeuristicAssert {
     }
   }
 
-  private static Optional<GlcNode> getFinalGoalNode(GlcTrajectoryPlanner trajectoryPlanner) {
+  private static Optional<GlcNode> getFinalGoalNode(TrajectoryPlanner trajectoryPlanner) {
     return HeuristicQ.of(trajectoryPlanner.getHeuristicFunction()) //
         ? trajectoryPlanner.getBestOrElsePeek() //
         : trajectoryPlanner.getBest();

@@ -18,7 +18,6 @@ public enum RrtsFlowHelper {
     Scalar delta = dest.time().subtract(orig.time());
     return direction.divide(delta);
   };
-
   public static final BiFunction<StateTime, StateTime, Tensor> U_SE2 = (StateTime orig, StateTime dest) -> {
     Tensor direction = dest.state().subtract(orig.state());
     Scalar delta = dest.time().subtract(orig.time());

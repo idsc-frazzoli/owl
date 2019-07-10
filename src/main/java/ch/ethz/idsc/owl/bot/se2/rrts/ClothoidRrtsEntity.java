@@ -78,6 +78,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     add(FallbackControl.of(Array.zeros(3)));
   }
 
+  @Override
   protected Tensor shape() {
     return SHAPE;
   }

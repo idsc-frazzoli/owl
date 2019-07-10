@@ -16,10 +16,10 @@ import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
@@ -47,20 +47,20 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 
 /* package */ enum R2DemoSlow {
   ;
-  static GlcTrajectoryPlanner simpleEmpty() throws Exception {
+  static TrajectoryPlanner simpleEmpty() throws Exception {
     return simple(EmptyTrajectoryRegionQuery.INSTANCE);
   }
 
-  static GlcTrajectoryPlanner simpleR2Bubbles() throws Exception {
+  static TrajectoryPlanner simpleR2Bubbles() throws Exception {
     return simple(CatchyTrajectoryRegionQuery.timeInvariant(R2Bubbles.INSTANCE));
   }
 
-  static GlcTrajectoryPlanner simpleR2Circle() throws Exception {
+  static TrajectoryPlanner simpleR2Circle() throws Exception {
     return simple(CatchyTrajectoryRegionQuery.timeInvariant( //
         new EllipsoidRegion(Tensors.vector(-1, 0), Tensors.vector(2, 2))));
   }
 
-  private static GlcTrajectoryPlanner simple(TrajectoryRegionQuery obstacleQuery) throws Exception {
+  private static TrajectoryPlanner simple(TrajectoryRegionQuery obstacleQuery) throws Exception {
     final Tensor stateRoot = Tensors.vector(-2.2, -2.2);
     final Tensor stateGoal = Tensors.vector(2, 3.5);
     final Scalar radius = DoubleScalar.of(0.8);
@@ -74,7 +74,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     RenderInterface renderInterface = RegionRenders.create(obstacleQuery);
     // ---
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(obstacleQuery);
-    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
+    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(eta), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
@@ -104,7 +104,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     return trajectoryPlanner;
   }
 
-  static void demo(GlcTrajectoryPlanner trajectoryPlanner) {
+  static void demo(TrajectoryPlanner trajectoryPlanner) {
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

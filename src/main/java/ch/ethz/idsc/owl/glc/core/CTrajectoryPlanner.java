@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** base class for classic generalized label correction implementation */
-public abstract class CTrajectoryPlanner implements GlcTrajectoryPlanner, Serializable {
+public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializable {
   private final Map<Tensor, GlcNode> domainMap = new HashMap<>();
   private final StateTimeRaster stateTimeRaster;
   private final HeuristicFunction heuristicFunction;
@@ -76,7 +76,7 @@ public abstract class CTrajectoryPlanner implements GlcTrajectoryPlanner, Serial
   }
 
   /** @return number of replacements in the domain map caused by
-   * {@link GlcTrajectoryPlanner#insert(Tensor, GlcNode)} */
+   * {@link TrajectoryPlanner#insert(Tensor, GlcNode)} */
   public final int replaceCount() {
     return replaceCount;
   }

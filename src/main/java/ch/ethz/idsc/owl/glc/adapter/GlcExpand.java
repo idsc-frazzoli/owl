@@ -5,13 +5,13 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalars;
 
 /** following the observation by ynager the expansion may continue
  * until merit of queue node is no less than cost of node in goal */
 public class GlcExpand extends Expand<GlcNode> {
-  public GlcExpand(GlcTrajectoryPlanner trajectoryPlanner) {
+  public GlcExpand(TrajectoryPlanner trajectoryPlanner) {
     super(trajectoryPlanner);
   }
 
@@ -49,6 +49,6 @@ public class GlcExpand extends Expand<GlcNode> {
     return Scalars.lessEquals( //
         best.costFromRoot(), //
         // in the current implementation the best node is guaranteed in queue
-        ((GlcTrajectoryPlanner) expandInterface).getQueue().iterator().next().merit());
+        ((TrajectoryPlanner) expandInterface).getQueue().iterator().next().merit());
   }
 }

@@ -11,7 +11,7 @@ import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.RenderElements;
 import ch.ethz.idsc.owl.gui.ren.TransitionRender;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 public class OwlyFrame extends BaseFrame {
   private boolean replay = false;
   private int replayIndex = 0;
-  private final List<GlcTrajectoryPlanner> backup = new ArrayList<>();
+  private final List<TrajectoryPlanner> backup = new ArrayList<>();
   private final JSlider jSlider = new JSlider();
 
   public OwlyFrame() {
@@ -71,7 +71,7 @@ public class OwlyFrame extends BaseFrame {
     }
   }
 
-  public void setGlc(GlcTrajectoryPlanner trajectoryPlanner) {
+  public void setGlc(TrajectoryPlanner trajectoryPlanner) {
     try {
       backup.add(Serialization.copy(trajectoryPlanner));
       jSlider.setMaximum(backup.size() - 1);

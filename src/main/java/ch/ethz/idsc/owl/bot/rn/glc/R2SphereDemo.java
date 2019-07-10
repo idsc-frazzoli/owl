@@ -9,15 +9,15 @@ import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.StateTime;
 
 /* package */ enum R2SphereDemo {
   ;
   public static void main(String[] args) {
     R2SphereBase r2SphereBase = new R2SphereBase();
-    GlcTrajectoryPlanner trajectoryPlanner = r2SphereBase.create();
-    Expand expand =new Expand<>(trajectoryPlanner);
+    TrajectoryPlanner trajectoryPlanner = r2SphereBase.create();
+    Expand<GlcNode> expand = new Expand<>(trajectoryPlanner);
     expand.steps(200);
     GlobalAssert.that(expand.getExpandCount() == 200);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();

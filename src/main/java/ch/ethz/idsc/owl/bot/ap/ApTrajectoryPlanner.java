@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
    * All necessary parameters are defined in {@link ApTrajectoryPlanner}
    * 
    * @return New StandardGlcTrajectoryPlanner for airplane simulation */
-  static StandardGlcTrajectoryPlanner apStandardTrajectoryPlanner() {
+  static StandardTrajectoryPlanner apStandardTrajectoryPlanner() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         INTEGRATOR, RationalScalar.of(1, 5), 3);
     Collection<Flow> controls = AP_FLOWS.getFlows(FLOWRES);
@@ -59,6 +59,6 @@ import ch.ethz.idsc.tensor.qty.Degree;
     ApMinTimeGoalManager apMinTimeGoalManager = new ApMinTimeGoalManager(apComboRegion, ApStateSpaceModel.Z_DOT_FLIGHT_MAX);
     GoalInterface goalInterface = apMinTimeGoalManager.getGoalInterface();
     PlannerConstraint apPlannerConstraint = new ApPlannerConstraint();
-    return new StandardGlcTrajectoryPlanner(stateTimeRaster(), stateIntegrator, controls, apPlannerConstraint, goalInterface);
+    return new StandardTrajectoryPlanner(stateTimeRaster(), stateIntegrator, controls, apPlannerConstraint, goalInterface);
   }
 }

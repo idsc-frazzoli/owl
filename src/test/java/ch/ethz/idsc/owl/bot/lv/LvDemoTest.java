@@ -9,8 +9,8 @@ import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -38,7 +38,7 @@ public class LvDemoTest extends TestCase {
       GoalInterface goalInterface = new LvGoalInterface(ellipsoidRegion);
       // ---
       StateTimeRaster stateTimeRaster = new EtaRaster(eta, StateTimeTensorFunction.state(Log::of));
-      GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
+      TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
           stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
       // ---
       // trajectoryPlanner.represent = StateTimeTensorFunction.state(Log::of);

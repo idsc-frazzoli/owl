@@ -39,8 +39,7 @@ public class ArgMinVariable implements TensorScalarFunction {
 
   @Override // from Function
   public Scalar apply(Tensor tensor) {
-    // TODO JPH/GJOEL use of parallel
-    trajectoryEntryFinder.sweep(tensor).parallel().forEach(this::insert);
+    trajectoryEntryFinder.sweep(tensor).forEach(this::insert);
     try {
       bisect(trajectoryEntryFinder.on(tensor), 0);
     } catch (NullPointerException e) {

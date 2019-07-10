@@ -20,8 +20,8 @@ import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.order.DiscretizedLexicographic;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -63,7 +63,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
   }
 
   @Override
-  public final GlcTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor _goal) {
+  public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor _goal) {
     Tensor goal = VectorQ.requireLength(_goal, 3).copy().append(goalVelocity);
     goalRegion = getGoalRegionWithDistance(goal);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
@@ -80,7 +80,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
     // ---
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, tse2ComboRegion);
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(Tensors.vector(slacks));
-    return new StandardGlcTrajectoryPlanner( //
+    return new StandardTrajectoryPlanner( //
         stateTimeRaster(), fixedStateIntegrator, controls, plannerConstraint, goalInterface, //
         new LexicographicRelabelDecision(comparator), new CustomNodeMeritComparator(comparator));
   }

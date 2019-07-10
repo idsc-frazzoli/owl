@@ -16,8 +16,8 @@ import ch.ethz.idsc.owl.glc.adapter.MultiCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
-import ch.ethz.idsc.owl.glc.std.StandardGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override
-  public final GlcTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = //
         new Se2ComboRegion(goalRegion, So2Region.periodic(goal.Get(2), goalRadius_theta));
@@ -96,7 +96,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         se2MinTimeGoalManager.getGoalInterface(), //
         extraCosts);
-    return new StandardGlcTrajectoryPlanner( //
+    return new StandardTrajectoryPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 

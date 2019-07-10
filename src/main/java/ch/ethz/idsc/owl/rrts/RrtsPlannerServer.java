@@ -19,8 +19,8 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
-import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
+import ch.ethz.idsc.owl.rrts.core.TransitionPlanner;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Serialization;
 
-public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
+public abstract class RrtsPlannerServer implements TransitionPlanner {
   protected final TransitionSpace transitionSpace;
   protected final TransitionRegionQuery obstacleQuery;
   protected final TransitionCostFunction costFunction;
@@ -79,8 +79,6 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     trajectory.addAll(futureTrajectory);
     return trajectory;
   }
-
-
 
   @Override // from ExpandInterface
   public Optional<RrtsNode> pollNext() {

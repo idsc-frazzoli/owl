@@ -5,8 +5,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import ch.ethz.idsc.owl.data.tree.ExpandInterface;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
-import ch.ethz.idsc.owl.glc.core.ExpandInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Timing;
 

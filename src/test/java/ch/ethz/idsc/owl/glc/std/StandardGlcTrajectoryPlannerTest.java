@@ -10,10 +10,10 @@ import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.glc.core.GlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -44,7 +44,7 @@ public class StandardGlcTrajectoryPlannerTest extends TestCase {
     GoalInterface goalInterface = RnMinDistGoalManager.sperical(stateGoal, radius);
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
-    GlcTrajectoryPlanner trajectoryPlanner = new StandardGlcTrajectoryPlanner( //
+    TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, EmptyObstacleConstraint.INSTANCE, goalInterface);
     assertEquals(trajectoryPlanner.getStateIntegrator(), stateIntegrator);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));

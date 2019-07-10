@@ -23,11 +23,11 @@ public class DirectionalTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
     Tensor a = Tensors.fromString("{1[m], 1[m], 0}");
     Tensor b = Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF);
-    testLength(a, b);
-    testLength(b, a);
+    _checkLength(a, b);
+    _checkLength(b, a);
   }
 
-  private void testLength(Tensor start, Tensor end) throws ClassNotFoundException, IOException {
+  private static void _checkLength(Tensor start, Tensor end) throws ClassNotFoundException, IOException {
     Transition transition = Serialization.copy(Directional.of(ClothoidTransitionSpace.INSTANCE)).connect(start, end);
     Chop._15.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
   }
@@ -35,11 +35,11 @@ public class DirectionalTest extends TestCase {
   public void testSamples() {
     Tensor a = Tensors.fromString("{1[m], 2[m], 1}");
     Tensor b = Tensors.fromString("{1[m], 6[m], 3}");
-    testSamples(a, b);
-    testSamples(b, a);
+    _checkSamples(a, b);
+    _checkSamples(b, a);
   }
 
-  private void testSamples(Tensor start, Tensor end) {
+  private static void _checkSamples(Tensor start, Tensor end) {
     Transition transition = Directional.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");
@@ -65,7 +65,7 @@ public class DirectionalTest extends TestCase {
     testWrap(b, a);
   }
 
-  private void testWrap(Tensor start, Tensor end) {
+  public void testWrap(Tensor start, Tensor end) {
     Transition transition = Directional.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");

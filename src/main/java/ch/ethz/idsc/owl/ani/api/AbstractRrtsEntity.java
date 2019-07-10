@@ -18,7 +18,7 @@ import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.core.RrtsTrajectoryPlanner;
+import ch.ethz.idsc.owl.rrts.core.TransitionPlanner;
 import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -39,7 +39,7 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity implements Rrt
   protected abstract Tensor shape();
 
   @Override // from PlannerCallback
-  public void expandResult(List<TrajectorySample> head, RrtsTrajectoryPlanner trajectoryPlanner) {
+  public void expandResult(List<TrajectorySample> head, TransitionPlanner trajectoryPlanner) {
     plannerServer.getRoot().map(Nodes::ofSubtree).ifPresent(collection -> {
       treeRender.setCollection(collection);
       transitionRender.setCollection(collection);
@@ -54,7 +54,7 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity implements Rrt
   }
 
   @Override // from TrajectoryEntity
-  public RrtsTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public TransitionPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     plannerServer.setGoal(goal);
     return plannerServer;
   }

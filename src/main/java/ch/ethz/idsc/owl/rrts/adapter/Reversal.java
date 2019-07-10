@@ -19,6 +19,7 @@ public class Reversal implements TransitionSpace, Serializable {
   public static TransitionSpace of(TransitionSpace transitionSpace) {
     return new Reversal(transitionSpace);
   }
+
   // ---
   private final TransitionSpace transitionSpace;
 
@@ -42,6 +43,7 @@ public class Reversal implements TransitionSpace, Serializable {
       }
 
       private Tensor swap(Tensor samples) {
+        // TODO not efficient
         return PadLeft.with(start, samples.length()).apply(Reverse.of(samples.extract(1, samples.length())));
       }
 
@@ -51,7 +53,7 @@ public class Reversal implements TransitionSpace, Serializable {
           throw TensorRuntimeException.of(length(), RealScalar.of(steps));
         Tensor samples = sampled(steps);
         Tensor spacing = Array.zeros(samples.length());
-        IntStream.range(0, samples.length()).parallel().forEach(i -> spacing.set(i > 0 //
+        IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
             ? distance(samples.get(i - 1), samples.get(i)) //
             : samples.Get(i, 0).zero(), i));
         return new TransitionWrap(samples, spacing);

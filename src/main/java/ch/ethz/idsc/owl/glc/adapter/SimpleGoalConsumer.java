@@ -35,6 +35,6 @@ public class SimpleGoalConsumer implements GoalConsumer {
     motionPlanWorker = MotionPlanWorker.of(MAX_STEPS, plannerCallbacks);
     motionPlanWorker.start( //
         trajectoryEntity.getFutureTrajectoryUntil(trajectoryEntity.delayHint()), //
-        trajectoryEntity.createTrajectoryPlanner(plannerConstraint, goal));
+        trajectoryEntity.createTreePlanner(plannerConstraint, goal));
   }
 }

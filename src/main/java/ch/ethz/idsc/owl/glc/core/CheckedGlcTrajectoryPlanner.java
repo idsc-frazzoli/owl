@@ -11,15 +11,15 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** Hint: only use for debug/test purposes */
-public class CheckedGlcTrajectoryPlanner implements GlcTrajectoryPlanner {
-  public static GlcTrajectoryPlanner wrap(GlcTrajectoryPlanner trajectoryPlanner) {
+public class CheckedGlcTrajectoryPlanner implements TrajectoryPlanner {
+  public static TrajectoryPlanner wrap(TrajectoryPlanner trajectoryPlanner) {
     return new CheckedGlcTrajectoryPlanner(trajectoryPlanner);
   }
 
   // ---
-  private final GlcTrajectoryPlanner trajectoryPlanner;
+  private final TrajectoryPlanner trajectoryPlanner;
 
-  private CheckedGlcTrajectoryPlanner(GlcTrajectoryPlanner trajectoryPlanner) {
+  private CheckedGlcTrajectoryPlanner(TrajectoryPlanner trajectoryPlanner) {
     this.trajectoryPlanner = Objects.requireNonNull(trajectoryPlanner);
   }
 
