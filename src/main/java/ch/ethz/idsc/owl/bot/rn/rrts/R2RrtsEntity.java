@@ -7,10 +7,7 @@ import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.rn.glc.R2TrajectoryControl;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
@@ -19,8 +16,8 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsFlowHelper;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
-import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
+import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -38,21 +35,21 @@ import ch.ethz.idsc.tensor.alg.Array;
 
   // ---
   /** @param stateTime initial position of entity */
-  public R2RrtsEntity(StateTime stateTime, ImageRegion imageRegion) {
+  public R2RrtsEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds) {
     super( //
         new DefaultRrtsPlannerServer( //
             RnTransitionSpace.INSTANCE, //
-            new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
+            transitionRegionQuery, //
             RationalScalar.of(1, 10), //
             STATE_SPACE_MODEL) {
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return RrtsNodeCollections.rn(imageRegion.origin(), imageRegion.range());
+            return RrtsNodeCollections.rn(lbounds, ubounds);
           }
 
           @Override
           protected RandomSampleInterface spaceSampler(Tensor state) {
-            return BoxRandomSample.of(imageRegion.origin(), imageRegion.range());
+            return BoxRandomSample.of(lbounds, ubounds);
           }
 
           @Override

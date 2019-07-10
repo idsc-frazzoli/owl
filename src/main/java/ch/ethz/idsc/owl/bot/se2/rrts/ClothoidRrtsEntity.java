@@ -7,7 +7,6 @@ import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.glc.CarEntity;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
@@ -16,8 +15,8 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsFlowHelper;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
-import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
+import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -41,24 +40,24 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
   // ---
   /** @param stateTime initial position of entity */
-  public ClothoidRrtsEntity(StateTime stateTime, ImageRegion imageRegion) {
+  public ClothoidRrtsEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds) {
     super( //
         new DefaultRrtsPlannerServer( //
             ClothoidTransitionSpace.INSTANCE, //
-            new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
+            transitionRegionQuery, //
             RationalScalar.of(1, 10), //
             STATE_SPACE_MODEL) {
-          private final Tensor lbounds = imageRegion.origin().copy().append(RealScalar.ZERO).unmodifiable();
-          private final Tensor ubounds = imageRegion.range().copy().append(Pi.TWO).unmodifiable();
+          private final Tensor lbounds_ = lbounds.copy().append(RealScalar.ZERO).unmodifiable();
+          private final Tensor ubounds_ = ubounds.copy().append(Pi.TWO).unmodifiable();
 
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return RrtsNodeCollections.clothoid(lbounds, ubounds);
+            return RrtsNodeCollections.clothoid(lbounds_, ubounds_);
           }
 
           @Override
           protected RandomSampleInterface spaceSampler(Tensor state) {
-            return BoxRandomSample.of(lbounds, ubounds);
+            return BoxRandomSample.of(lbounds_, ubounds_);
           }
 
           @Override

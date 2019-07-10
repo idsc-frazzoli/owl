@@ -73,7 +73,10 @@ public abstract class RrtsPlannerServer implements RrtsTrajectoryPlanner {
     if (potentialFutureTrajectories.isEmpty())
       return this.trajectory;
     List<TrajectorySample> trajectory = new ArrayList<>(this.trajectory);
-    trajectory.addAll(potentialFutureTrajectories.firstEntry().getValue());
+    List<TrajectorySample> futureTrajectory = potentialFutureTrajectories.firstEntry().getValue();
+    if (!trajectory.isEmpty())
+      futureTrajectory = futureTrajectory.subList(1, futureTrajectory.size());
+    trajectory.addAll(futureTrajectory);
     return trajectory;
   }
 

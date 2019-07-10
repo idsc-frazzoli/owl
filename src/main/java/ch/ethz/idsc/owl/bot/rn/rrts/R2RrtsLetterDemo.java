@@ -12,6 +12,8 @@ import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -21,7 +23,8 @@ class R2RrtsLetterDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     ImageRegion imageRegion = R2ImageRegions._GTOB.imageRegion();
     StateTime stateTime = new StateTime(Tensors.vector(6, 5), RealScalar.ZERO);
-    R2RrtsEntity entity = new R2RrtsEntity(stateTime, imageRegion);
+    TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05));
+    R2RrtsEntity entity = new R2RrtsEntity(stateTime, transitionRegionQuery, imageRegion.origin(), imageRegion.range());
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     MouseGoal.simpleRrts(owlyAnimationFrame, entity, null);
     owlyAnimationFrame.add(entity);
