@@ -27,8 +27,8 @@ public class Reversal implements TransitionSpace, Serializable {
   }
 
   @Override // from TransitionSpace
-  public Transition connect(Tensor start, Tensor end) {
-    return new AbstractTransition(start, end, transitionSpace.distance(end, start)) {
+  public DirectedTransition connect(Tensor start, Tensor end) {
+    return new DirectedTransition(start, end, transitionSpace.distance(end, start), false) {
       final Transition transition = transitionSpace.connect(end, start);
 
       @Override // from Transition
