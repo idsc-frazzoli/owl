@@ -1,4 +1,4 @@
-// gjoel
+// code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.util.stream.IntStream;
@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -60,5 +61,9 @@ public class ClothoidTransition extends AbstractTransition {
         ? TENSOR_METRIC.distance(samples.get(i - 1), samples.get(i)) //
         : samples.Get(i, 0).zero(), i));
     return new TransitionWrap(samples, spacing);
+  }
+
+  public ClothoidTerminalRatios terminalRatios() {
+    return ClothoidTerminalRatios.of(start(), end());
   }
 }

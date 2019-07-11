@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 /* package */ class ClothoidRrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(3);
-  private static final StateSpaceModel STATE_SPACE_MODEL = Se2StateSpaceModel.INSTANCE; // SingleIntegratorStateSpaceModel.INSTANCE;
+  private static final StateSpaceModel STATE_SPACE_MODEL = Se2StateSpaceModel.INSTANCE;
   static final Tensor SHAPE = Tensors.matrixDouble( //
       new double[][] { //
           { .2, +.07 }, //
@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     add(FallbackControl.of(Array.zeros(3)));
   }
 
-  @Override
+  @Override // from AbstractRrtsEntity
   protected Tensor shape() {
     return SHAPE;
   }

@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
@@ -12,6 +13,7 @@ import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.Directional;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
@@ -57,6 +59,8 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
           && sample.stateTime().state().equals(Tensors.of(RationalScalar.of(i, 10), RealScalar.ZERO)) //
           && sample.getFlow().get().getU().equals(Tensors.vector(1, 0));
     }));
+    assertFalse(trajectory.get(0).getFlow().isPresent());
+    assertTrue(trajectory.subList(1, 30).stream().map(TrajectorySample::getFlow).allMatch(Optional::isPresent));
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(10).stateTime().state());
     Chop._15.requireClose(n2.state(), trajectory.get(20).stateTime().state());
@@ -94,6 +98,8 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
           && sample.stateTime().state().equals(Tensors.of(RationalScalar.of(i, 10), RealScalar.ZERO, RealScalar.ZERO)) //
           && sample.getFlow().get().getU().map(Chop._15).equals(Tensors.vector(1, 0, 0));
     }));
+    assertFalse(trajectory.get(0).getFlow().isPresent());
+    assertTrue(trajectory.subList(1, 42).stream().map(TrajectorySample::getFlow).allMatch(Optional::isPresent));
     // TODO verify correctness of U
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(10).stateTime().state());
@@ -132,6 +138,9 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
           && sample.stateTime().state().equals(Tensors.of(RationalScalar.of(i, 10), RealScalar.ZERO, RealScalar.ZERO)) //
           && sample.getFlow().get().getU().map(Chop._15).equals(Tensors.vector(1, 0, 0));
     }));
+    assertFalse(trajectory.get(0).getFlow().isPresent());
+    assertTrue(trajectory.subList(1, 48).stream().map(TrajectorySample::getFlow).map(Optional::get).map(Flow::getU) //
+        .allMatch(u -> u.Get(1).equals(RealScalar.ZERO)));
     // TODO verify correctness of U
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(10).stateTime().state());
@@ -171,6 +180,8 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
           && sample.stateTime().state().equals(Tensors.of(RationalScalar.of(i, 10), RealScalar.ZERO, RealScalar.ZERO)) //
           && sample.getFlow().get().getU().map(Chop._15).equals(Tensors.vector(1, 0, 0));
     }));
+    assertFalse(trajectory.get(0).getFlow().isPresent());
+    assertTrue(trajectory.subList(1, 54).stream().map(TrajectorySample::getFlow).allMatch(Optional::isPresent));
     // TODO verify correctness of U
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(10).stateTime().state());

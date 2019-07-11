@@ -70,7 +70,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     add(FallbackControl.of(Array.zeros(2)));
   }
 
-  @Override
+  @Override // from AbstractRrtsEntity
   protected Tensor shape() {
     return SHAPE;
   }

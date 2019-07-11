@@ -19,8 +19,7 @@ public enum Trajectories {
    * @return trajectory { head[0:end], tail[1:end]}
    * @throws Exception if head[end] != tail[0] */
   public static List<TrajectorySample> glue(List<TrajectorySample> head, List<TrajectorySample> tail) {
-    List<TrajectorySample> trajectory = new ArrayList<>();
-    trajectory.addAll(head);
+    List<TrajectorySample> trajectory = new ArrayList<>(head);
     TrajectorySample tsh = Lists.getLast(head);
     TrajectorySample tst = tail.get(0);
     boolean contact = tsh.stateTime().equals(tst.stateTime());
@@ -45,5 +44,11 @@ public enum Trajectories {
    * @return predicate for {@link TrajectorySample} before or at given time */
   public static Predicate<TrajectorySample> untilTime(Scalar time) {
     return trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), time);
+  }
+
+  /** @param time
+   * @return predicate for {@link TrajectorySample} after or at given time */
+  public static Predicate<TrajectorySample> afterTime(Scalar time) {
+    return trajectorySample -> Scalars.lessEquals(time, trajectorySample.stateTime().time());
   }
 }

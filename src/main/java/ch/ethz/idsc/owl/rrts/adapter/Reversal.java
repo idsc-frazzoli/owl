@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.PadLeft;
 import ch.ethz.idsc.tensor.alg.Reverse;
 
 public class Reversal implements TransitionSpace, Serializable {
@@ -44,8 +43,7 @@ public class Reversal implements TransitionSpace, Serializable {
       }
 
       private Tensor swap(Tensor samples) {
-        // TODO not efficient
-        return PadLeft.with(start, samples.length()).apply(Reverse.of(samples.extract(1, samples.length())));
+        return Reverse.of(samples.extract(1, samples.length()).append(start));
       }
 
       @Override // from Transition
