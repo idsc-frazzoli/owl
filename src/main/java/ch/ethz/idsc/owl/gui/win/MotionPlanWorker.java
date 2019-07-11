@@ -60,5 +60,5 @@ public abstract class MotionPlanWorker<T extends TreePlanner<?>, P extends Plann
     isRelevant = false;
   }
 
-  protected abstract void expand(T trajectoryPlanner);
+  protected abstract void expand(T treePlanner);
 }

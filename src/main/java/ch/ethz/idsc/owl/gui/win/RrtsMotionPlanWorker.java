@@ -23,13 +23,13 @@ import ch.ethz.idsc.tensor.red.Min;
   }
 
   @Override
-  protected void expand(TransitionPlanner trajectoryPlanner) {
-    Expand<RrtsNode> expand = new Expand<>(trajectoryPlanner);
+  protected void expand(TransitionPlanner transitionPlanner) {
+    Expand<RrtsNode> expand = new Expand<>(transitionPlanner);
     expand.setContinued(() -> isRelevant);
     if (Objects.nonNull(delayHint))
       expand.maxTime(RealScalar.of(.5));
     else
       expand.steps(maxSteps);
-    trajectoryPlanner.checkConsistency();
+    transitionPlanner.checkConsistency();
   }
 }

@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.pursuit.ArgMinVariable;
 import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuit;
+import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuits;
 import ch.ethz.idsc.owl.math.pursuit.GeodesicPursuitInterface;
 import ch.ethz.idsc.owl.math.pursuit.TrajectoryEntryFinder;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -66,7 +67,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     if (lookAhead.isPresent()) {
       Tensor xya = lookAhead.get();
       GeodesicPursuitInterface geodesicPursuitInterface = new ClothoidPursuit(xya);
-      curve = ClothoidPursuit.curve(xya, REFINEMENT);
+      curve = ClothoidPursuits.curve(xya, REFINEMENT);
       if (inReverse)
         mirrorAndReverse(curve);
       return Optional.of(CarHelper.singleton(speed, geodesicPursuitInterface.firstRatio().get()).getU());
