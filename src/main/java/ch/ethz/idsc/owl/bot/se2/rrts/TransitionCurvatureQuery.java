@@ -23,9 +23,7 @@ public class TransitionCurvatureQuery implements TransitionRegionQuery {
 
   @Override // from TransitionRegionQuery
   public boolean isDisjoint(Transition transition) {
-    if (!(transition instanceof ClothoidTransition))
-      throw new IllegalArgumentException(transition.getClass().getSimpleName());
-    ClothoidTerminalRatios curvatures = ClothoidTerminalRatios.of(transition.start(), transition.end());
+    ClothoidTerminalRatios curvatures = ((ClothoidTransition) transition).terminalRatios();
     return clip.isInside(curvatures.head()) && clip.isInside(curvatures.tail());
   }
 }
