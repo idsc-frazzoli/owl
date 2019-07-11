@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.red.Total;
    * @param: separated: should xy errors be sepearted from heading errors?
    * @param: finitenes: true: IIR, false: FIR
    * @return cumulated 0-order-errors between reference and filtered signal */
-  public Scalar evaluate0Error(Scalar alpha, Boolean separated, Boolean IIR) {
+  public Scalar evaluate0Error(Scalar alpha, boolean separated, Boolean IIR) {
     Tensor errors = Tensors.empty();
     Tensor filtering = filteredSignal(alpha, IIR);
     for (int i = 0; i < measurements.length(); ++i) {
@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.red.Total;
         Scalar aDiff = Norm._2.ofVector(difference.extract(2, 3));
         errors.append(Tensors.of(xyDiff, aDiff));
       } else {
-        Scalar xyaDiff = Norm._2.ofVector(lieDifferences.pair(reference.get(i), filtering.get(i)));
+        Scalar xyaDiff = Norm._2.ofVector(difference);
         errors.append(xyaDiff);
       }
     }
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.red.Total;
    * @param separated: should xy errors be sepearted from heading errors?
    * @param finitenes: true: IIR, false: FIR
    * @return cumulated 1-order-errors between reference and filtered signal */
-  public Tensor evaluate1Error(Scalar alpha, Boolean separated, Boolean IIR) {
+  public Tensor evaluate1Error(Scalar alpha, boolean separated, Boolean IIR) {
     Tensor errors = Tensors.empty();
     Tensor filtering = filteredSignal(alpha, IIR);
     for (int i = 1; i < measurements.length(); ++i) {

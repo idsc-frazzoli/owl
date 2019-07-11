@@ -42,10 +42,10 @@ public class VectorScalarTest extends TestCase {
   }
 
   public void testComplex() {
-    Scalar a = VectorScalar.of(Tensors.fromString("{1+3*I,2-4*I}"));
+    Scalar a = VectorScalar.of(Tensors.fromString("{1+3*I, 2-4*I}"));
     assertEquals(Real.of(a), VectorScalar.of(1, +2));
     assertEquals(Imag.of(a), VectorScalar.of(3, -4));
-    assertEquals(Conjugate.of(a), VectorScalar.of(Tensors.fromString("{1-3*I,2+4*I}")));
+    assertEquals(Conjugate.of(a), VectorScalar.of(Tensors.fromString("{1-3*I, 2+4*I}")));
   }
 
   public void testMultiply() {
@@ -64,6 +64,12 @@ public class VectorScalarTest extends TestCase {
     // the next expression gives [2, 4, 6][Apples]
     // which is not desired by cannot be prevented easily
     c.multiply(a);
+  }
+
+  public void testChop() {
+    Scalar a = VectorScalar.of(1, 2, 3);
+    Scalar b = VectorScalar.of(1 + 1e-8, 2 - 1e-8, 3 + 2e-8);
+    Chop._06.requireClose(a, b);
   }
 
   public void testCommute() {

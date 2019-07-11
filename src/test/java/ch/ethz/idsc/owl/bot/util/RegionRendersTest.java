@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 public class RegionRendersTest extends TestCase {
   public void testSimple() {
-    Tensor image = Tensors.fromString("{{1,0,1}}");
+    Tensor image = Tensors.fromString("{{1, 0, 1}}");
     BufferedImage bufferedImage = RegionRenders.image(image);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_BYTE_GRAY);
     int[] pixel = new int[1];

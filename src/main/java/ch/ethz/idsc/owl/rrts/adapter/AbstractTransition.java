@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** suggested base class for all implementations of {@link Transition} */
@@ -42,13 +43,13 @@ public abstract class AbstractTransition implements Transition, RenderTransition
   @Override // from Transition
   public Tensor sampled(Scalar minResolution) {
     Sign.requirePositive(minResolution);
-    return sampled((int) Math.ceil(length.divide(minResolution).number().doubleValue()));
+    return sampled(Ceiling.FUNCTION.apply(length.divide(minResolution)).number().intValue());
   }
 
   @Override // from Transition
   public TransitionWrap wrapped(Scalar minResolution) {
     Sign.requirePositive(minResolution);
-    return wrapped((int) Math.ceil(length.divide(minResolution).number().doubleValue()));
+    return wrapped(Ceiling.FUNCTION.apply(length.divide(minResolution)).number().intValue());
   }
 
   @Override // from RenderTransition

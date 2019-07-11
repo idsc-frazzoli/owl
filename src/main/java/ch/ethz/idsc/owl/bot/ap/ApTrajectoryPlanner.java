@@ -27,8 +27,8 @@ import ch.ethz.idsc.tensor.qty.Degree;
 /* package */ class ApTrajectoryPlanner {
   /* Setting up parameters for the ApComboRegion
    * Note: GOAL and RADIUS_VECTOR are 3D, since x is omitted in ApComboRegion */
-  final static Tensor GOAL = Tensors.vector(5, 60, 0); // goal = {zCenter,vCenter, gammaCenter}
-  final static Tensor RADIUS_VECTOR = Tensors.of(RealScalar.of(5), RealScalar.of(200), Degree.of(50)); // radius_vector = {zRadius,vRadius, GammaRadius}
+  final static Tensor GOAL = Tensors.vector(5, 60, 0); // goal = {zCenter, vCenter, gammaCenter}
+  final static Tensor RADIUS_VECTOR = Tensors.of(RealScalar.of(5), RealScalar.of(200), Degree.of(50)); // radius_vector = {zRadius, vRadius, GammaRadius}
   /* Creation of control flows */
   final static Scalar MAX_AOA = ApStateSpaceModel.MAX_AOA;
   final static int THRUST_PARTIONING = 3;
@@ -47,10 +47,10 @@ import ch.ethz.idsc.tensor.qty.Degree;
     return new EtaRaster(PARTITIONSCALE, StateTimeTensorFunction.state(ApWrap.INSTANCE::represent));
   }
 
-  /** This function creates an object of the StandardTrajectoryPlanner class.
+  /** This function creates an object of the StandardGlcTrajectoryPlanner class.
    * All necessary parameters are defined in {@link ApTrajectoryPlanner}
    * 
-   * @return New StandardTrajectoryPlanner for airplane simulation */
+   * @return New StandardGlcTrajectoryPlanner for airplane simulation */
   static StandardTrajectoryPlanner apStandardTrajectoryPlanner() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         INTEGRATOR, RationalScalar.of(1, 5), 3);

@@ -124,7 +124,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   }
 
   /***************************************************/
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
     GlobalAssert.that(globalQueue.collection().isEmpty() && domainQueueMap.isEmpty()); // root insertion requires empty planner
     GlcNode root = GlcNodes.createRoot(stateTime, heuristicFunction);
@@ -132,23 +132,23 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     addToDomainMap(stateTimeRaster.convertToKey(stateTime), root);
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Optional<GlcNode> getBestOrElsePeek() {
     return Optional.ofNullable(getBest().orElse(globalQueue.peekBest()));
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final HeuristicFunction getHeuristicFunction() {
     return heuristicFunction;
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
     return domainQueueMap.getMap().entrySet().stream() //
         .collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().peekBest()));
   }
 
-  @Override // from TrajectoryPlanner
+  @Override // from GlcTrajectoryPlanner
   public final Collection<GlcNode> getQueue() {
     return Collections.unmodifiableCollection(globalQueue.collection());
   }

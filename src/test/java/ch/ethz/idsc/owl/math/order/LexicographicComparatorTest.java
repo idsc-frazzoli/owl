@@ -50,8 +50,8 @@ public class LexicographicComparatorTest extends TestCase {
         new Order<>(relation1), //
         ScalarTotalOrder.INSTANCE); //
     LexicographicComparator genericLexicographicOrder = new LexicographicComparator(comparators);
-    Tensor tensorX = Tensors.fromString("{{1,2,3}, 2}");
-    Tensor tensorY = Tensors.fromString("{{2,3,4,5},-2}");
+    Tensor tensorX = Tensors.fromString("{{1, 2, 3}, 2}");
+    Tensor tensorY = Tensors.fromString("{{2, 3, 4, 5}, -2}");
     OrderComparison orderComparison = genericLexicographicOrder.compare(tensorX, tensorY);
     assertEquals(orderComparison, OrderComparison.STRICTLY_PRECEDES);
   }

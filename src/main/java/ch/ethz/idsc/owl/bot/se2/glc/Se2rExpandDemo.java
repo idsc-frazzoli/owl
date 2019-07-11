@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 
-/** (x,y,theta) */
+/** (x, y, theta) */
 enum Se2rExpandDemo {
   ;
   public static void main(String[] args) throws Exception {

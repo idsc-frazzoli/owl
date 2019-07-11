@@ -48,7 +48,8 @@ import ch.ethz.idsc.tensor.red.Norm;
     jTextField.setPreferredSize(new Dimension(100, 28));
     timerFrame.jToolBar.add(jTextField);
     // ---
-    Tensor blub = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+    Tensor blub = Tensors.fromString(
+        "{{1, 0, 0}, {1, 0, 0}, {2, 0, 2.5708}, {1, 0, 2.1}, {1.5, 0, 0}, {2.3, 0, -1.2}, {1.5, 0, 0}, {4, 0, 3.14159}, {2, 0, 3.14159}, {2, 0, 0}}");
     setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
         Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
   }

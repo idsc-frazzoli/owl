@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * by Sertac Karaman and Emilio Frazzoli
  * 
  * <p>the class does not require the concept of a sampler, or goal region.
- * @see RrtsPlanner */
+ * @see DefaultRrtsPlanner */
 public class DefaultRrts implements Rrts {
   private final TransitionSpace transitionSpace;
   private final RrtsNodeCollection nodeCollection;
@@ -45,7 +45,7 @@ public class DefaultRrts implements Rrts {
       nodeCollection.insert(rrtsNode);
       return Optional.of(rrtsNode);
     }
-    if (isInsertPlausible(state)) {
+    if (isInsertPlausible(state)) { // is this needed?
       k_nearest = Math.min(Math.max(1, k_nearest), size);
       Optional<RrtsNode> optional = connectAlongMinimumCost(state, k_nearest);
       if (optional.isPresent()) {

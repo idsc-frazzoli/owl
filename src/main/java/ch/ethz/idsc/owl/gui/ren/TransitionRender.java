@@ -25,16 +25,12 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
  * only real-valued costs are supported
  * in particular costs of type {@link VectorScalar} are not supported
  * @see EdgeRender */
-public class TransitionRender {
+public class TransitionRender implements RenderInterface {
   private final TransitionSpace transitionSpace;
   private RenderInterface renderInterface = EmptyRender.INSTANCE;
 
   public TransitionRender(TransitionSpace transitionSpace) {
     this.transitionSpace = transitionSpace;
-  }
-
-  public RenderInterface getRender() {
-    return renderInterface;
   }
 
   public RenderInterface setCollection(Collection<? extends RrtsNode> collection) {
@@ -43,8 +39,13 @@ public class TransitionRender {
         : new Render(collection);
   }
 
+  @Override // from RenderInterface
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    renderInterface.render(geometricLayer, graphics);
+  }
+
   private class Render implements RenderInterface {
-    private final ColorDataIndexed colors = TreeColor.LO.edgeColor; // ColorLookup.hsluv_lightness(128, .65);
+    private final ColorDataIndexed colors = TreeColor.LO.edgeColor;
     private final Collection<? extends RrtsNode> collection;
     private final double min;
     private final double inverse;

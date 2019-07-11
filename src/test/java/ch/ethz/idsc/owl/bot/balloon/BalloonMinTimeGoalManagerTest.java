@@ -22,14 +22,14 @@ public class BalloonMinTimeGoalManagerTest extends TestCase {
   }
 
   public void testWithUnits() {
-    Tensor goal = Tensors.fromString("{5[m],0[m]}");
+    Tensor goal = Tensors.fromString("{5[m], 0[m]}");
     Scalar maxSpeed = Quantity.of(10, "m*s^-1");
     Scalar goalRadius = Quantity.of(1, "m");
     BalloonMinTimeGoalManager balloonMinTimeGoalManager = //
         new BalloonMinTimeGoalManager(goal, goalRadius, maxSpeed);
     Scalar expected = Quantity.of(0.4, "s");
-    assertEquals(expected, balloonMinTimeGoalManager.minCostToGoal(Tensors.fromString("{8[m],4[m],0[m*s^-1],0.05[m * K^-1 * s^-2]}")));
-    Tensor element = Tensors.fromString("{5.5[m],0.1[m],0[m*s^-1],0.05[m * K^-1 * s^-2]}");
+    assertEquals(expected, balloonMinTimeGoalManager.minCostToGoal(Tensors.fromString("{8[m], 4[m], 0[m*s^-1], 0.05[m * K^-1 * s^-2]}")));
+    Tensor element = Tensors.fromString("{5.5[m], 0.1[m], 0[m*s^-1], 0.05[m * K^-1 * s^-2]}");
     assertTrue(balloonMinTimeGoalManager.isMember(element));
   }
 }

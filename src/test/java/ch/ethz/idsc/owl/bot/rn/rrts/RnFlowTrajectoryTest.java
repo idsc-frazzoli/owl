@@ -51,7 +51,7 @@ public class RnFlowTrajectoryTest extends TestCase {
     trajectorySampleMap.getControl(RealScalar.of(0.0));
     // assertTrue();
     // assertFalse(trajectorySampleMap.findControl(RealScalar.of(10.1)).isPresent());
-    assertEquals(trajectorySampleMap.getControl(RealScalar.of(0.0)), Tensors.vector(1, 0));
+    Chop._12.requireClose(trajectorySampleMap.getControl(RealScalar.of(0.0)), Tensors.vector(1, 0));
     assertTrue(trajectorySampleMap.isRelevant(RealScalar.of(-1000)));
     assertFalse(trajectorySampleMap.isRelevant(RealScalar.of(1000)));
     assertTrue(trajectorySampleMap.isDefined(RealScalar.ZERO));
@@ -95,8 +95,8 @@ public class RnFlowTrajectoryTest extends TestCase {
   }
 
   public void testBetween() {
-    StateTime orig = new StateTime(Tensors.fromString("{4[m],5[m]}"), Quantity.of(3, "s"));
-    StateTime dest = new StateTime(Tensors.fromString("{10[m],13[m]}"), Quantity.of(5, "s"));
+    StateTime orig = new StateTime(Tensors.fromString("{4[m], 5[m]}"), Quantity.of(3, "s"));
+    StateTime dest = new StateTime(Tensors.fromString("{10[m], 13[m]}"), Quantity.of(5, "s"));
     Flow flow = RnFlowTrajectory.between(orig, dest);
     Tensor u = flow.getU();
     assertEquals(u, Tensors.fromString("{3[m*s^-1], 4[m*s^-1]}"));

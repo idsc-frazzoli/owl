@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** dual scheme */
-// TODO implementation is not efficient: expressions in lo,hi are computed twice
+// TODO implementation is not efficient: expressions in lo, hi are computed twice
 public class BSpline4LRCurveSubdivision extends Dual3PointCurveSubdivision {
   /** @param geodesicInterface non-null */
   public BSpline4LRCurveSubdivision(GeodesicInterface geodesicInterface) {

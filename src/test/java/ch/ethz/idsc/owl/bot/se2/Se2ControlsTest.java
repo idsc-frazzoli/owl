@@ -52,6 +52,20 @@ public class Se2ControlsTest extends TestCase {
 
   public void testUnits() {
     final Scalar ms = Quantity.of(2, "m*s^-1");
+    final Scalar mr = Scalars.fromString("3[m^-1]");
+    Flow flow = CarHelper.singleton(ms, mr);
+    assertEquals(QuantityUnit.of(flow.getU().Get(2)), Unit.of("s^-1"));
+    Collection<Flow> controls = Collections.singleton(flow);
+    Scalar maxSpeed = Se2Controls.maxSpeed(controls);
+    assertEquals(maxSpeed, ms.abs());
+    assertEquals(QuantityUnit.of(maxSpeed), Unit.of("m*s^-1"));
+    Scalar maxTurning = Se2Controls.maxTurning(controls);
+    assertEquals(QuantityUnit.of(maxTurning), Unit.of("s^-1"));
+    assertEquals(maxTurning, Quantity.of(6, "s^-1"));
+  }
+
+  public void testUnitsNonSI() {
+    final Scalar ms = Quantity.of(2, "m*s^-1");
     final Scalar mr = Scalars.fromString("3[rad*m^-1]");
     Flow flow = CarHelper.singleton(ms, mr);
     assertEquals(QuantityUnit.of(flow.getU().Get(2)), Unit.of("rad*s^-1"));

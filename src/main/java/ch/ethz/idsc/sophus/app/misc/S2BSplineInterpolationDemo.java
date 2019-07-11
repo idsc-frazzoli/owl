@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 /* package */ enum S2BSplineInterpolationDemo {
   ;
   public static void main(String[] args) throws IOException {
-    Tensor target = Tensors.fromString("{{1,0,0},{0,1,0},{0,0,1},{-1,0,0}}");
+    Tensor target = Tensors.fromString("{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}, {-1, 0, 0}}");
     Export.of(HomeDirectory.file("Documents", "s2", "target.csv"), target.map(Round._6));
     AbstractBSplineInterpolation geodesicBSplineInterpolation = //
         new GeodesicBSplineInterpolation(SnGeodesic.INSTANCE, 2, target);

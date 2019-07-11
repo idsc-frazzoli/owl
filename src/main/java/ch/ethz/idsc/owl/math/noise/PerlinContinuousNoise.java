@@ -19,11 +19,11 @@ public enum PerlinContinuousNoise implements NativeContinuousNoise {
     int X = Noise.floor(x) & 255; // FIND UNIT CUBE THAT
     int Y = Noise.floor(y) & 255; // CONTAINS POINT.
     int Z = Noise.floor(z) & 255;
-    x -= Math.floor(x); // FIND RELATIVE X,Y,Z
+    x -= Math.floor(x); // FIND RELATIVE X, Y, Z
     y -= Math.floor(y); // OF POINT IN CUBE.
     z -= Math.floor(z);
     double u = fade(x); // COMPUTE FADE CURVES
-    double v = fade(y); // FOR EACH OF X,Y,Z.
+    double v = fade(y); // FOR EACH OF X, Y, Z.
     double w = fade(z);
     int A = Noise.TABLE.perm[X] + Y; // HASH COORDINATES OF
     int AA = Noise.TABLE.perm[A] + Z; // THE 8 CUBE CORNERS,
@@ -38,7 +38,7 @@ public enum PerlinContinuousNoise implements NativeContinuousNoise {
     return lerp(w, lerp(v, i1a, i1b), lerp(v, i2a, i2b));
   }
 
-  /** smooth transition function f:[0,1] -> [0,1] with
+  /** smooth transition function f:[0, 1] -> [0, 1] with
    * f(0) == 0
    * f(1) == 1
    * f'(0) == f'(1) == 0

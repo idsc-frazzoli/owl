@@ -16,7 +16,7 @@ public class Se3GroupElementTest extends TestCase {
     Tensor R = Rodrigues.exp(Tensors.vector(-1, -.2, .3));
     Tensor t = Tensors.vector(4, 5, 6);
     Se3GroupElement g = new Se3GroupElement(R, t);
-    Tensor adjoint = g.inverse().adjoint(Tensors.fromString("{{1,2,3},{4,5,6}}"));
+    Tensor adjoint = g.inverse().adjoint(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
     assertEquals(Dimensions.of(adjoint), Arrays.asList(2, 3));
     Tensor ge = g.combine(IdentityMatrix.of(4));
     Chop._10.requireClose(Se3Utils.rotation(ge), R);

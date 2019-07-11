@@ -6,6 +6,7 @@ import java.io.IOException;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,19 +19,20 @@ import junit.framework.TestCase;
 public class RnTransitionSpaceTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
     Transition transition = Serialization.copy(RnTransitionSpace.INSTANCE).connect( //
-        Tensors.fromString("{1[m],2[m]}"), //
-        Tensors.fromString("{1[m],6[m]}"));
+        Tensors.fromString("{1[m], 2[m]}"), //
+        Tensors.fromString("{1[m], 6[m]}"));
     assertEquals(transition.length(), Quantity.of(4, "m"));
     ExactScalarQ.require(transition.length());
   }
 
   public void testSamples() {
-    Tensor start = Tensors.fromString("{1[m],2[m]}");
-    Tensor end = Tensors.fromString("{1[m],6[m]}");
+    Tensor start = Tensors.fromString("{1[m], 2[m]}");
+    Tensor end = Tensors.fromString("{1[m], 6[m]}");
     Transition transition = RnTransitionSpace.INSTANCE.connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");
       Tensor samples = transition.sampled(res);
+      ExactTensorQ.require(samples);
       assertEquals(8, samples.length());
       assertEquals(start, samples.get(0));
       assertNotSame(end, Last.of(samples));
@@ -44,8 +46,8 @@ public class RnTransitionSpaceTest extends TestCase {
   }
 
   public void testWrap() {
-    Tensor start = Tensors.fromString("{1[m],2[m]}");
-    Tensor end = Tensors.fromString("{1[m],6[m]}");
+    Tensor start = Tensors.fromString("{1[m], 2[m]}");
+    Tensor end = Tensors.fromString("{1[m], 6[m]}");
     Transition transition = RnTransitionSpace.INSTANCE.connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");

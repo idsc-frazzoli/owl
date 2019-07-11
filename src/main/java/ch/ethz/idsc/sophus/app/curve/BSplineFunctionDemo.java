@@ -47,7 +47,8 @@ public class BSplineFunctionDemo extends BaseCurvatureDemo implements BufferedIm
     // ---
     timerFrame.jToolBar.add(jToggleItrp);
     // ---
-    Tensor dubins = Tensors.fromString("{{1,0,0},{1,0,0},{2,0,2.5708},{1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+    Tensor dubins = Tensors.fromString(
+        "{{1, 0, 0}, {1, 0, 0}, {2, 0, 2.5708}, {1, 0, 2.1}, {1.5, 0, 0}, {2.3, 0, -1.2}, {1.5, 0, 0}, {4, 0, 3.14159}, {2, 0, 3.14159}, {2, 0, 0}}");
     setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
         Tensor.of(dubins.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
   }

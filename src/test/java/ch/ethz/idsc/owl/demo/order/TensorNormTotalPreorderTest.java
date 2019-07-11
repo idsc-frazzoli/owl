@@ -26,10 +26,10 @@ public class TensorNormTotalPreorderTest extends TestCase {
 
   public void testMatrix() {
     TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
-    Tensor m1 = Tensors.fromString("{{1,2},{2,3}}");
-    Tensor m2 = Tensors.fromString("{{2,1},{2,3}}");
-    Tensor m3 = Tensors.fromString("{{1,1},{2,3}}");
-    Tensor m4 = Tensors.fromString("{{1,1},{1,3}}");
+    Tensor m1 = Tensors.fromString("{{1, 2}, {2, 3}}");
+    Tensor m2 = Tensors.fromString("{{2, 1}, {2, 3}}");
+    Tensor m3 = Tensors.fromString("{{1, 1}, {2, 3}}");
+    Tensor m4 = Tensors.fromString("{{1, 1}, {1, 3}}");
     assertEquals(tensorNormWeakOrder.comparator().compare(m1, m2), OrderComparison.INDIFFERENT);
     assertEquals(tensorNormWeakOrder.comparator().compare(m1, m3), OrderComparison.INDIFFERENT);
     assertEquals(tensorNormWeakOrder.comparator().compare(m2, m3), OrderComparison.INDIFFERENT);

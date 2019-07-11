@@ -14,6 +14,7 @@ import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
 import ch.ethz.idsc.owl.rrts.core.Rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
@@ -37,9 +38,11 @@ import ch.ethz.idsc.tensor.opt.Pi;
     RrtsNodeCollection rrtsNodeCollection = RrtsNodeCollections.clothoid(lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
+    TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(RealScalar.of(5));
+    TransitionRegionQuery unionTransitionRegionQuery = TransitionRegionQueryUnion.wrap(transitionRegionQuery, transitionCurvatureQuery);
     // ---
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
-    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, unionTransitionRegionQuery, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(60, 477);

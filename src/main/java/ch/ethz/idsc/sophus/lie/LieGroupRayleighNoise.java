@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/** Rayleigh Noise calculated from uniform[0,1] distributed random with inverse transform sampling
+/** Rayleigh Noise calculated from uniform[0, 1] distributed random with inverse transform sampling
  * 
  * This function creates a Gaussian noise vector on the Lie algebra and maps it to the Lie Group.
  * The noise can be added by either left-/ or right-multiplication

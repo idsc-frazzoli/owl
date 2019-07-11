@@ -111,7 +111,7 @@ public class Tse2CarEntity extends Tse2Entity {
   protected RegionWithDistance<Tensor> goalRegion = null;
 
   @Override // from TrajectoryEntity
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     goal = goal.copy().append(goalVelocity);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
     Tse2MinTimeGoalManager tse2MinTimeGoalManager = //

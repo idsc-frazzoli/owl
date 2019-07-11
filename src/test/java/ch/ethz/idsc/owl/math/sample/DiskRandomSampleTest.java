@@ -27,7 +27,7 @@ public class DiskRandomSampleTest extends TestCase {
   }
 
   public void testQuantity() {
-    DiskRandomSample diskRandomSample = new DiskRandomSample(Tensors.fromString("{10[m],20[m]}"), Quantity.of(2, "m"));
+    DiskRandomSample diskRandomSample = new DiskRandomSample(Tensors.fromString("{10[m], 20[m]}"), Quantity.of(2, "m"));
     Tensor tensor = diskRandomSample.randomSample(RANDOM);
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("m");
     tensor.map(scalarUnaryOperator);

@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 public class GokartPoseDataTest extends TestCase {
   public void testSimple() {
-    List<String> list = GokartPoseData.INSTANCE.list();
+    List<String> list = GokartPoseDataV2.INSTANCE.list();
     assertTrue(50 < list.size());
   }
 

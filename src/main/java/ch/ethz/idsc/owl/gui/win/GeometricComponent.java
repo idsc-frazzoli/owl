@@ -199,7 +199,7 @@ public final class GeometricComponent {
   }
 
   /** @return {px, py, angle} in model space */
-  Tensor getMouseSe2State() {
+  public Tensor getMouseSe2State() {
     Scalar scalar = RealScalar.of(mouseWheel).multiply(WHEEL_ANGLE);
     return mouseLocation.copy().append(scalar);
   }

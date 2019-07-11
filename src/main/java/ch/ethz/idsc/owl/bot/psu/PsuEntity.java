@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Tensor eta = Tensors.vector(6, 8);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         INTEGRATOR, RationalScalar.of(1, 4), 5);

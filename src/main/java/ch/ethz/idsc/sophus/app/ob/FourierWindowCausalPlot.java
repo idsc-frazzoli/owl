@@ -1,16 +1,19 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import java.awt.Color;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
+import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.jfree.graphics2d.svg.SVGUtils;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;
@@ -18,13 +21,10 @@ import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanIIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicFIRnFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicIIRnFilter;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceFIRnFilter;
-import ch.ethz.idsc.sophus.flt.ts.TangentSpaceIIRnFilter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.math.Decibel;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.subare.util.plot.ListPlot;
@@ -33,67 +33,76 @@ import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.mat.SpectrogramArray;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
+import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class FourierWindowCausalPlot {
-  private static final Scalar WINDOW_DURATION = Quantity.of(1, "s");
-  private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
-  private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
-
-  private static void plot(Tensor data, int radius, String signal, Scalar alpha) throws IOException {
+  private static void plot(Tensor data, int radius, String signal, Scalar alpha, ScalarUnaryOperator smoothingKernel) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
       yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
-    // ---
     Tensor xAxis = Tensors.empty();
-    for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index) {
-      xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
-    }
+    for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index)
+      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s"))));
+    // ---
     VisualSet visualSet = new VisualSet();
-    // visualSet.setPlotLabel("Causal IIR Filters: length = "+radius+" Magnitude Response - $" + signal + "$");
-    // visualSet.setPlotLabel("Causal IIR Filters: length = "+radius+" Phase Response - $" + signal + "$");
-    visualSet.setPlotLabel("Causal FIR Filters: length = " + radius + "  Magnitude Response - $" + signal + "$");
-    // visualSet.setPlotLabel("Causal FIR Filters: length = "+radius+" Phase Response - $" + signal + "$");
+    visualSet.setPlotLabel(
+        "Lie Group Filters: radius = " + radius + "  Magnitude Response - $" + smoothingKernel.toString() + "- alpha: " + alpha + " - " + signal + "$");
     visualSet.setAxesLabelX("Frequency $[Hz]$");
-    visualSet.setAxesLabelY("Phase $H(\\Omega)$");
-    // visualSet.setAxesLabelY("Magnitude $|H(\\Omega)|$");
+    visualSet.setAxesLabelY("Magnitude [dB]");
+    // ---
     int index = 0;
+    Tensor factor = Tensors.empty();
+    for (int j = 0; j < xAxis.length(); j++) {
+      if (xAxis.Get(j).equals(RealScalar.ZERO))
+        factor.append(RealScalar.ONE);
+      else
+        factor.append(RealScalar.ONE.divide(Pi.TWO.multiply(Abs.of(xAxis.Get(j)))));
+    }
     for (Tensor yAxis : yData) {
+      Tensor temp = Join.of(yAxis, yAxis).extract(xAxis.length() / 2, xAxis.length() * 3 / 2).pmul(factor);
       VisualRow visualRow = visualSet.add( //
           xAxis, //
-          Tensor.of(yAxis.append(yAxis).flatten(1)).extract(xAxis.length() / 2, xAxis.length() * 3 / 2));
+          Decibel.of(temp));
       visualRow.setLabel(LieGroupCausalFilters.values()[index].toString());
       ++index;
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);
-    jFreeChart.setBackgroundPaint(Color.WHITE);
-    // Exportable as SVG?
-    String fileName = "Causal_Magnitude" + radius + "_" + signal + ".png";
-    // String fileName = "Causal_Phase_" + radius + "_" + signal + ".png";
-    File file = HomeDirectory.Pictures(fileName);
-    // impove DPI?
-    ChartUtils.saveChartAsPNG(file, jFreeChart, 1024, 768);
+    SVGGraphics2D svg = new SVGGraphics2D(600, 400);
+    Rectangle rectangle = new Rectangle(0, 0, 600, 400);
+    jFreeChart.draw(svg, rectangle);
+    String fileNameSVG = "MagnitudeResponse(" + radius + ")" + smoothingKernel.toString() + " " + signal + ".svg";
+    File fileSVG = HomeDirectory.Pictures(fileNameSVG);
+    SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
 
-  private static void process(List<String> listData, ScalarUnaryOperator smoothingKernel, int radius, int limit, Scalar alpha) throws IOException {
+  private static void process(GokartPoseData gokartPoseData, List<String> listData, ScalarUnaryOperator smoothingKernel, int radius, int limit, Scalar alpha)
+      throws IOException {
     Se2BiinvariantMean se2BiinvariantMean = Se2BiinvariantMean.FILTER;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
     // ---
+    int windowLength = Scalars.intValueExact(Round.FUNCTION.apply(Quantity.of(1, "s").multiply(gokartPoseData.getSampleRate())));
+    int offset = Scalars.intValueExact(Round.FUNCTION.apply(RationalScalar.of(windowLength, 3)));
+    TensorUnaryOperator spectrogramArray = SpectrogramArray.of(windowLength, offset);
+    // ---
     Tensor smoothedX = Tensors.empty();
     Tensor smoothedY = Tensors.empty();
     Tensor smoothedA = Tensors.empty();
-    Iterator<String> iterator = listData.iterator();
+    Iterator<String> iterator = gokartPoseData.list().iterator();
     for (int index = 0; index < limit; ++index) {
-      Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
+      Tensor control = gokartPoseData.getPose(iterator.next(), 10000);
       Tensor tempX = Tensors.empty();
       Tensor tempY = Tensors.empty();
       Tensor tempA = Tensors.empty();
@@ -106,16 +115,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         case GEODESIC_IIR:
           smoothd = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
           break;
-        case TANGENT_SPACE_FIR:
-          smoothd = TangentSpaceFIRnFilter.of( //
-              Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
-              .apply(control);
-          break;
-        case TANGENT_SPACE_IIR:
-          smoothd = TangentSpaceIIRnFilter.of( //
-              Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
-              .apply(control);
-          break;
         case BIINVARIANT_MEAN_FIR:
           smoothd = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
               .apply(control);
@@ -127,25 +126,25 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         }
         Tensor rawVec = Se2Differences.INSTANCE.apply(control);
         Tensor smdVec = Se2Differences.INSTANCE.apply(smoothd);
-        tempX.append(FilterResponse.of(smdVec.get(Tensor.ALL, 0), rawVec.get(Tensor.ALL, 0), SPECTROGRAM_ARRAY));
-        tempY.append(FilterResponse.of(smdVec.get(Tensor.ALL, 1), rawVec.get(Tensor.ALL, 1), SPECTROGRAM_ARRAY));
-        tempA.append(FilterResponse.of(smdVec.get(Tensor.ALL, 2), rawVec.get(Tensor.ALL, 2), SPECTROGRAM_ARRAY));
+        tempX.append(FilterResponse.of(smdVec.get(Tensor.ALL, 0), rawVec.get(Tensor.ALL, 0), spectrogramArray));
+        tempY.append(FilterResponse.of(smdVec.get(Tensor.ALL, 1), rawVec.get(Tensor.ALL, 1), spectrogramArray));
+        tempA.append(FilterResponse.of(smdVec.get(Tensor.ALL, 2), rawVec.get(Tensor.ALL, 2), spectrogramArray));
       }
       smoothedX.append(tempX);
       smoothedY.append(tempY);
       smoothedA.append(tempA);
     }
-    plot(Mean.of(smoothedX), radius, "x", alpha);
-    plot(Mean.of(smoothedY), radius, "y", alpha);
-    plot(Mean.of(smoothedA), radius, "a", alpha);
+    plot(Mean.of(smoothedX), radius, "x", alpha, smoothingKernel);
+    plot(Mean.of(smoothedY), radius, "y", alpha, smoothingKernel);
+    plot(Mean.of(smoothedA), radius, "a", alpha, smoothingKernel);
   }
 
   public static void main(String[] args) throws IOException {
     SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    List<String> listData = GokartPoseData.INSTANCE.list();
+    List<String> listData = GokartPoseDataV1.INSTANCE.list();
     int radius = 7;
-    int limit = 5;
+    int limit = 1;
     Scalar alpha = RealScalar.of(0.8);
-    process(listData, smoothingKernel, radius, limit, alpha);
+    process(GokartPoseDataV2.INSTANCE, listData, smoothingKernel, radius, limit, alpha);
   }
 }

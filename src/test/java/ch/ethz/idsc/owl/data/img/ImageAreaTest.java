@@ -33,7 +33,7 @@ public class ImageAreaTest extends TestCase {
   }
 
   public void testTensorArea() {
-    Tensor image = Tensors.fromString("{{1,0,0,1,0}}");
+    Tensor image = Tensors.fromString("{{1, 0, 0, 1, 0}}");
     ImageRegion imageRegion = new ImageRegion(image, Tensors.vector(5, 1), true);
     assertTrue(imageRegion.isMember(Tensors.vector(0.5, 0.5)));
     assertFalse(imageRegion.isMember(Tensors.vector(1.5, 0.5)));

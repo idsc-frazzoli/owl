@@ -22,14 +22,14 @@ public class DubinsGeneratorTest extends TestCase {
   }
 
   public void testProject() {
-    Tensor tensor = Tensors.fromString("{{-1,0,0},{1,1,1},{-1,2,2},{0,3,5}}");
+    Tensor tensor = Tensors.fromString("{{-1, 0, 0}, {1, 1, 1}, {-1, 2, 2}, {0, 3, 5}}");
     Tensor project = DubinsGenerator.project(tensor);
     assertTrue(MatrixQ.ofSize(project, tensor.length(), 3));
   }
 
   public void testFail() {
     try {
-      DubinsGenerator.of(Tensors.vector(1, 2, 3, 4), Tensors.fromString("{{1, 0, 0}, {1, 0, .3}}"));
+      DubinsGenerator.of(Tensors.vector(1, 2, 3, 4), Tensors.fromString("{{1, 0, 0}, {1, 0, 0.3}}"));
       fail();
     } catch (Exception exception) {
       // ---

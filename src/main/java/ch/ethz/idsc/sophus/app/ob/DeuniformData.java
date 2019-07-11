@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
+// TODO implement using Stream.generate(...), move class to general location
 /* package */ enum DeuniformData {
   ;
   /** @param Uniform sequence p

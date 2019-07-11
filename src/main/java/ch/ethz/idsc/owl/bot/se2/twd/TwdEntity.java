@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = //
         new Se2ComboRegion(goalRegion, So2Region.periodic(goal.Get(2), goalRadius_theta));

@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
           // ---
           graphics.setColor(Color.LIGHT_GRAY);
           {
-            Path2D path2d = geometricLayer.toPath2D(Tensors.fromString("{{0,1},{0,0},{1,0}}"));
+            Path2D path2d = geometricLayer.toPath2D(Tensors.fromString("{{0, 1}, {0, 0}, {1, 0}}"));
             graphics.draw(path2d);
           }
           for (int k_th = 0; k_th < length; ++k_th) {

@@ -20,7 +20,7 @@ class Se2PointsVsRegion implements Region<Tensor>, Serializable {
     this.region = Objects.requireNonNull(region);
   }
 
-  /** @param tensor of the form (x,y,theta)
+  /** @param tensor of the form (x, y, theta)
    * @return true if any of the points subject to the given transformation are in region */
   @Override
   public boolean isMember(Tensor tensor) {

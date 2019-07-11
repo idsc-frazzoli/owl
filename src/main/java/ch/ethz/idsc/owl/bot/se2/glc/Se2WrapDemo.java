@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
  * CLASS Se2WrapDemo IS USED IN TESTS
  * MODIFICATION MAY INVALIDATE THE TESTS
  * 
- * (x,y,theta) */
+ * (x, y, theta) */
 enum Se2WrapDemo {
   ;
   static TrajectoryRegionQuery obstacleQuery() {

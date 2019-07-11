@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 public class PseudoClothoidDistanceTest extends TestCase {
   public void testSimple() {
-    Scalar scalar = PseudoClothoidDistance.INSTANCE.norm(Tensors.fromString("{1[m],2[m],.3}"));
+    Scalar scalar = PseudoClothoidDistance.INSTANCE.norm(Tensors.fromString("{1[m], 2[m], 0.3}"));
     Clips.interval(Quantity.of(2.4, "m"), Quantity.of(2.5, "m")).requireInside(scalar);
   }
 

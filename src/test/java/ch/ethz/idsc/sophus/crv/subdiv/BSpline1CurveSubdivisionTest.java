@@ -33,7 +33,7 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
 
   public void testString() {
     CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
-    Tensor string = curveSubdivision.string(Tensors.fromString("{{0,10}, {1,12}}"));
+    Tensor string = curveSubdivision.string(Tensors.fromString("{{0, 10}, {1, 12}}"));
     assertEquals(string, Tensors.fromString("{{0, 10}, {1/2, 11}, {1, 12}}"));
     ExactTensorQ.require(string);
   }

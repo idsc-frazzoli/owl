@@ -21,14 +21,14 @@ import junit.framework.TestCase;
 public class ClothoidTransitionSpaceTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
     Transition transition = Serialization.copy(ClothoidTransitionSpace.INSTANCE).connect( //
-        Tensors.fromString("{1[m],1[m],0}"), //
-        Tensors.fromString("{2[m],2[m]}").append(Pi.HALF));
+        Tensors.fromString("{1[m], 1[m], 0}"), //
+        Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF));
     Chop._15.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
   }
 
   public void testSamples() {
-    Tensor start = Tensors.fromString("{1[m],2[m],1}");
-    Tensor end = Tensors.fromString("{1[m],6[m],3}");
+    Tensor start = Tensors.fromString("{1[m], 2[m], 1}");
+    Tensor end = Tensors.fromString("{1[m], 6[m], 3}");
     Transition transition = ClothoidTransitionSpace.INSTANCE.connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");
@@ -48,8 +48,8 @@ public class ClothoidTransitionSpaceTest extends TestCase {
   }
 
   public void testWrap() {
-    Tensor start = Tensors.fromString("{1[m],2[m],1}");
-    Tensor end = Tensors.fromString("{1[m],6[m],3}");
+    Tensor start = Tensors.fromString("{1[m], 2[m], 1}");
+    Tensor end = Tensors.fromString("{1[m], 6[m], 3}");
     Transition transition = ClothoidTransitionSpace.INSTANCE.connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");

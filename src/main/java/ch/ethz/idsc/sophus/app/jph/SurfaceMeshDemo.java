@@ -30,12 +30,14 @@ public class SurfaceMeshDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_DRAW = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final ColorDataIndexed COLOR_DATA_INDEXED_FILL = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   // ---
+  private final JToggleButton ctrl = new JToggleButton("ctrl");
   private final JToggleButton axes = new JToggleButton("axes");
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SurfaceMesh surfaceMesh = SurfaceMeshExamples.quads6();
 
   public SurfaceMeshDemo() {
     super(false, GeodesicDisplays.SE2C_R2);
+    timerFrame.jToolBar.add(ctrl);
     timerFrame.jToolBar.add(axes);
     setControlPointsSe2(surfaceMesh.vrt);
     // ---
@@ -72,7 +74,8 @@ public class SurfaceMeshDemo extends ControlPointsDemo {
       graphics.fill(geometricLayer.toPath2D(shape));
       geometricLayer.popMatrix();
     }
-    renderControlPoints(geometricLayer, graphics);
+    if (ctrl.isSelected())
+      renderControlPoints(geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

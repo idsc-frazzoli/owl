@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.pursuit.ArgMinVariable;
 import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuit;
+import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuits;
 import ch.ethz.idsc.owl.math.pursuit.GeodesicPursuitInterface;
 import ch.ethz.idsc.owl.math.pursuit.TrajectoryEntryFinder;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -62,11 +63,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
     // ---
     TensorScalarFunction costMapping = new ClothoidLengthCostFunction(isCompliant(state, speed), REFINEMENT);
     Scalar var = ArgMinVariable.using(entryFinder, costMapping, MAX_LEVEL).apply(beacons);
-    Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point;
+    Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point();
     if (lookAhead.isPresent()) {
       Tensor xya = lookAhead.get();
       GeodesicPursuitInterface geodesicPursuitInterface = new ClothoidPursuit(xya);
-      curve = ClothoidPursuit.curve(xya, REFINEMENT);
+      curve = ClothoidPursuits.curve(xya, REFINEMENT);
       if (inReverse)
         mirrorAndReverse(curve);
       return Optional.of(CarHelper.singleton(speed, geodesicPursuitInterface.firstRatio().get()).getU());
@@ -77,7 +78,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   }
 
   /** mirror the points along the y axis and invert their orientation
-   * @param se2points curve given by points {x,y,a} */
+   * @param se2points curve given by points {x, y, a} */
   private static void mirrorAndReverse(Tensor se2points) {
     se2points.set(Scalar::negate, Tensor.ALL, 0);
     se2points.set(Scalar::negate, Tensor.ALL, 2);

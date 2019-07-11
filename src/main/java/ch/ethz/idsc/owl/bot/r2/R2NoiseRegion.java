@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * the simplex noise function is a continuous bivariate function with values in the interval [-1, 1]
  * https://de.wikipedia.org/wiki/Simplex_Noise
  * 
- * membership in the region for coordinates (x,y) that evaluate the noise function above a given threshold. */
+ * membership in the region for coordinates (x, y) that evaluate the noise function above a given threshold. */
 public class R2NoiseRegion implements Region<Tensor>, Serializable {
   private static final ContinuousNoise CONTINUOUS_NOISE = //
       ContinuousNoiseUtils.wrap2D(SimplexContinuousNoise.FUNCTION);

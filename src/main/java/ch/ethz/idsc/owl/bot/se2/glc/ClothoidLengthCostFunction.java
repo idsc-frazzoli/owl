@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.function.Predicate;
 
 import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuit;
+import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuits;
 import ch.ethz.idsc.owl.math.pursuit.GeodesicPursuitInterface;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -26,7 +27,7 @@ public class ClothoidLengthCostFunction implements TensorScalarFunction {
     GeodesicPursuitInterface geodesicPursuitInterface = new ClothoidPursuit(xya);
     Tensor ratios = geodesicPursuitInterface.ratios();
     if (ratios.stream().map(Tensor::Get).allMatch(isCompliant))
-      return curveLength(ClothoidPursuit.curve(xya, refinement)); // Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
+      return curveLength(ClothoidPursuits.curve(xya, refinement)); // Norm._2.ofVector(Extract2D.FUNCTION.apply(vector));
     return DoubleScalar.POSITIVE_INFINITY;
   }
 

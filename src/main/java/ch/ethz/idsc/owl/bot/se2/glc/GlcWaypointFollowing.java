@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
+import ch.ethz.idsc.owl.ani.api.PlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.win.MotionPlanWorker;
@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public class GlcWaypointFollowing extends WaypointFollowing {
   private static final int MAX_STEPS = 5000; // magic const
   // ---
-  protected final Collection<GlcPlannerCallback> glcPlannerCallbacks;
+  protected final Collection<? extends PlannerCallback> plannerCallbacks;
   private MotionPlanWorker motionPlanWorker = null;
   private final PlannerConstraint plannerConstraint;
 
@@ -24,22 +24,23 @@ public class GlcWaypointFollowing extends WaypointFollowing {
    * @param replanningRate
    * @param entity
    * @param plannerConstraint
-   * @param glcPlannerCallbacks */
+   * @param plannerCallbacks */
   public GlcWaypointFollowing( //
       Tensor waypoints, Scalar replanningRate, TrajectoryEntity entity, //
-      PlannerConstraint plannerConstraint, Collection<GlcPlannerCallback> glcPlannerCallbacks) {
+      PlannerConstraint plannerConstraint, Collection<? extends PlannerCallback> plannerCallbacks) {
     super(waypoints, replanningRate, entity);
-    this.glcPlannerCallbacks = glcPlannerCallbacks;
+    this.plannerCallbacks = plannerCallbacks;
     this.plannerConstraint = plannerConstraint;
   }
 
-  @Override
+  @Override // from WayPointFollowing
+  @SuppressWarnings("unchecked")
   protected void planToGoal(List<TrajectorySample> head, Tensor goal) {
     if (Objects.nonNull(motionPlanWorker)) {
       motionPlanWorker.flagShutdown();
       motionPlanWorker = null;
     }
-    motionPlanWorker = new MotionPlanWorker(MAX_STEPS, glcPlannerCallbacks);
-    motionPlanWorker.start(head, entity.createTrajectoryPlanner(plannerConstraint, goal));
+    motionPlanWorker = MotionPlanWorker.of(MAX_STEPS, plannerCallbacks);
+    motionPlanWorker.start(head, entity.createTreePlanner(plannerConstraint, goal));
   }
 }

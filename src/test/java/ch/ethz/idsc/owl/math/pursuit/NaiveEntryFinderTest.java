@@ -17,6 +17,6 @@ public class NaiveEntryFinderTest extends TestCase {
     TrajectoryEntryFinder entryFinder = NaiveEntryFinder.INSTANCE;
     // ---
     Scalar var = ArgMinVariable.using(entryFinder, t -> Norm._2.ofVector(Extract2D.FUNCTION.apply(t)), DEPTH).apply(tensor);
-    assertEquals(Tensors.vector(1, 0, 0), entryFinder.on(tensor).apply(var).point.get().map(Chop._06));
+    assertEquals(Tensors.vector(1, 0, 0), entryFinder.on(tensor).apply(var).point().get().map(Chop._06));
   }
 }

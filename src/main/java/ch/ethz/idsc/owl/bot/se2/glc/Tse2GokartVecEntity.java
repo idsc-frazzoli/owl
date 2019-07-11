@@ -63,7 +63,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
   }
 
   @Override
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor _goal) {
+  public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor _goal) {
     Tensor goal = VectorQ.requireLength(_goal, 3).copy().append(goalVelocity);
     goalRegion = getGoalRegionWithDistance(goal);
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical(goal, goalRadius);
