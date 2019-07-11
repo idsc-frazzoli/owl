@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override // from TrajectoryEntity
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Collection<Flow> controls = BalloonFlows.of(U_MAX, stateSpaceModel).getFlows(FLOWRES);
     BalloonMinTimeGoalManager balloonMinTimeGoalManager = //
         new BalloonMinTimeGoalManager(Extract2D.FUNCTION.apply(goal), GOAL_RADIUS, SPEED_MAX);

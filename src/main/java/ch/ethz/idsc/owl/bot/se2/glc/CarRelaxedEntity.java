@@ -59,7 +59,7 @@ public class CarRelaxedEntity extends CarEntity {
   }
 
   @Override
-  public final RelaxedTrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final RelaxedTrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     // define goal region
     goalRegion = getGoalRegionWithDistance(goal);
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion(goalRegion, So2Region.periodic(goal.Get(2), goalRadius.Get(2)));

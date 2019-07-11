@@ -19,7 +19,7 @@ public class GokartRelaxedEntityTest extends TestCase {
     GokartRelaxedEntity gokartRelaxedEntity = GokartRelaxedEntity.createRelaxedGokartEntity(initial, slacks);
     gokartRelaxedEntity.setAdditionalCostFunction(ConstraintViolationCost.of(EmptyObstacleConstraint.INSTANCE, RealScalar.ONE));
     Tensor goal = Tensors.vector(0, 25, 0);
-    RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = gokartRelaxedEntity.createTrajectoryPlanner(EmptyObstacleConstraint.INSTANCE, goal);
+    RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = gokartRelaxedEntity.createTreePlanner(EmptyObstacleConstraint.INSTANCE, goal);
     assertEquals(gokartRelaxedEntity.getSlack(), slacks);
     relaxedTrajectoryPlanner.insertRoot(initial);
     RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(relaxedTrajectoryPlanner);

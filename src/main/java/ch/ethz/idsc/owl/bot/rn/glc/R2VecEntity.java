@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   }
 
   @Override
-  public final TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     System.out.println("goal=" + goal);
     Collection<Flow> controls = createControls(); // LONGTERM design no good
     goalRegion = getGoalRegionWithDistance(goal);

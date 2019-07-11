@@ -9,12 +9,14 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
+import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 
+// TODO find a way to merge simple and simpleRrts
 public enum MouseGoal {
   ;
   public static void simple( //
@@ -29,6 +31,21 @@ public enum MouseGoal {
     if (trajectoryEntity instanceof GlcPlannerCallback)
       callbacks.add((GlcPlannerCallback) trajectoryEntity);
     callbacks.add(new SimpleGlcPlannerCallback(trajectoryEntity));
+    supply(owlyAnimationFrame.geometricComponent, //
+        new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, callbacks));
+  }
+
+  public static void simpleRrts( //
+      OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint) {
+    simpleRrts(owlyAnimationFrame, trajectoryEntity, plannerConstraint, Collections.emptyList());
+  }
+
+  public static void simpleRrts( //
+      OwlyAnimationFrame owlyAnimationFrame, TrajectoryEntity trajectoryEntity, PlannerConstraint plannerConstraint, //
+      List<RrtsPlannerCallback> _callbacks) {
+    List<RrtsPlannerCallback> callbacks = new ArrayList<>(_callbacks);
+    if (trajectoryEntity instanceof RrtsPlannerCallback)
+      callbacks.add((RrtsPlannerCallback) trajectoryEntity);
     supply(owlyAnimationFrame.geometricComponent, //
         new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, callbacks));
   }

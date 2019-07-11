@@ -61,7 +61,7 @@ public class BalloonEntityTest extends TestCase {
     Scalar vertSpeedMax = RealScalar.of(4);
     PlannerConstraint plannerConstraint = new BalloonPlannerConstraint(vertSpeedMax);
     BalloonEntity balloonEntity = createEntity();
-    TrajectoryPlanner trajectoryPlanner = balloonEntity.createTrajectoryPlanner(plannerConstraint, goal);
+    TrajectoryPlanner trajectoryPlanner = balloonEntity.createTreePlanner(plannerConstraint, goal);
     assertTrue(trajectoryPlanner instanceof StandardTrajectoryPlanner);
     trajectoryPlanner.insertRoot(START);
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);

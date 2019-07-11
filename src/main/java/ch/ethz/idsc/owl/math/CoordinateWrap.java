@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math;
 import ch.ethz.idsc.sophus.math.TensorDifference;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** functionality used in {@code TrajectoryPlanner} to map state coordinates to
+/** functionality used in {@code GlcTrajectoryPlanner} to map state coordinates to
  * the coordinates that imply domain keys */
 public interface CoordinateWrap extends TensorDifference {
   /** @param x

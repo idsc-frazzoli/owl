@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 import junit.framework.TestCase;
 
-public class StandardTrajectoryPlannerTest extends TestCase {
+public class StandardGlcTrajectoryPlannerTest extends TestCase {
   public void testSimple() {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);

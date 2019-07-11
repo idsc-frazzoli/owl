@@ -51,7 +51,7 @@ public class RnFlowTrajectoryTest extends TestCase {
     trajectorySampleMap.getControl(RealScalar.of(0.0));
     // assertTrue();
     // assertFalse(trajectorySampleMap.findControl(RealScalar.of(10.1)).isPresent());
-    assertEquals(trajectorySampleMap.getControl(RealScalar.of(0.0)), Tensors.vector(1, 0));
+    Chop._12.requireClose(trajectorySampleMap.getControl(RealScalar.of(0.0)), Tensors.vector(1, 0));
     assertTrue(trajectorySampleMap.isRelevant(RealScalar.of(-1000)));
     assertFalse(trajectorySampleMap.isRelevant(RealScalar.of(1000)));
     assertTrue(trajectorySampleMap.isDefined(RealScalar.ZERO));

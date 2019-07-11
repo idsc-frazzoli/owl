@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
@@ -19,9 +20,11 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RrtsFlowTrajectoryGenerator {
   private final StateSpaceModel stateSpaceModel;
+  private final BiFunction<StateTime, StateTime, Tensor> uBetween;
 
-  public RrtsFlowTrajectoryGenerator(StateSpaceModel stateSpaceModel) {
+  public RrtsFlowTrajectoryGenerator(StateSpaceModel stateSpaceModel, BiFunction<StateTime, StateTime, Tensor> uBetween) {
     this.stateSpaceModel = stateSpaceModel;
+    this.uBetween = uBetween;
   }
 
   /** @param transitionSpace
@@ -45,7 +48,7 @@ import ch.ethz.idsc.tensor.Tensor;
           trajectory.add(TrajectorySample.head(stateTime));
         else {
           StateTime orig = Lists.getLast(trajectory).stateTime();
-          Flow flow = between(orig, stateTime);
+          Flow flow = StateSpaceModels.createFlow(stateSpaceModel, uBetween.apply(orig, stateTime));
           trajectory.add(new TrajectorySample(stateTime, flow));
         }
       }
@@ -53,14 +56,5 @@ import ch.ethz.idsc.tensor.Tensor;
       t0 = t0.add(transition.length());
     }
     return trajectory;
-  }
-
-  /** @param orig
-   * @param dest
-   * @return */
-  private Flow between(StateTime orig, StateTime dest) {
-    Tensor direction = dest.state().subtract(orig.state());
-    Scalar delta = dest.time().subtract(orig.time());
-    return StateSpaceModels.createFlow(stateSpaceModel, direction.divide(delta));
   }
 }

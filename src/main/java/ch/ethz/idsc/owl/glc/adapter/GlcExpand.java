@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.glc.adapter;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -11,29 +10,9 @@ import ch.ethz.idsc.tensor.Scalars;
 
 /** following the observation by ynager the expansion may continue
  * until merit of queue node is no less than cost of node in goal */
-public class GlcExpand {
-  private final TrajectoryPlanner trajectoryPlanner;
-  private Supplier<Boolean> isContinued = () -> true;
-  private int expandCount = 0;
-
+public class GlcExpand extends Expand<GlcNode> {
   public GlcExpand(TrajectoryPlanner trajectoryPlanner) {
-    this.trajectoryPlanner = Objects.requireNonNull(trajectoryPlanner);
-  }
-
-  /** @return number of expand operations */
-  public int getExpandCount() {
-    return expandCount;
-  }
-
-  public void setContinued(Supplier<Boolean> isContinued) {
-    this.isContinued = isContinued;
-  }
-
-  /** iterates until expansion creates a first node goal region
-   * 
-   * @param limit */
-  public void findAny(int limit) {
-    expand(limit, () -> trajectoryPlanner.getBest().isPresent());
+    super(trajectoryPlanner);
   }
 
   /** Hint: the use of findAny is preferred over untilOptimal
@@ -48,9 +27,9 @@ public class GlcExpand {
 
   private void expand(int limit, Supplier<Boolean> isFinished) {
     while (0 <= --limit && !isFinished.get() && isContinued.get()) {
-      Optional<GlcNode> next = trajectoryPlanner.pollNext();
+      Optional<GlcNode> next = expandInterface.pollNext();
       if (next.isPresent()) {
-        trajectoryPlanner.expand(next.get());
+        expandInterface.expand(next.get());
         ++expandCount;
       } else { // queue is empty
         System.out.println("*** Queue is empty -- No Goal was found ***");
@@ -61,7 +40,7 @@ public class GlcExpand {
 
   /** @return true if no node in queue can achieve a lower cost than best node in goal region */
   public final boolean isOptimal() {
-    Optional<GlcNode> best = trajectoryPlanner.getBest();
+    Optional<GlcNode> best = expandInterface.getBest();
     return best.isPresent() //
         && isOptimal(best.get());
   }
@@ -70,6 +49,6 @@ public class GlcExpand {
     return Scalars.lessEquals( //
         best.costFromRoot(), //
         // in the current implementation the best node is guaranteed in queue
-        trajectoryPlanner.getQueue().iterator().next().merit());
+        ((TrajectoryPlanner) expandInterface).getQueue().iterator().next().merit());
   }
 }

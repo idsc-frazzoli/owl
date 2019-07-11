@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
@@ -26,8 +27,8 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class RrtsPlannerServerTest extends TestCase {
-  public void testRn() throws Exception {
+public class DefaultRrtsPlannerServerTest extends TestCase {
+  public void testRn() {
     Tensor goal = Tensors.vector(10, 10);
     Tensor state = Tensors.vector(0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
@@ -36,7 +37,7 @@ public class RrtsPlannerServerTest extends TestCase {
     Tensor min = center.map(scalar -> scalar.subtract(radius));
     Tensor max = center.map(scalar -> scalar.add(radius));
     // ---
-    RrtsPlannerServer server = new RrtsPlannerServer( //
+    RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         RnTransitionSpace.INSTANCE, //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
@@ -55,23 +56,29 @@ public class RrtsPlannerServerTest extends TestCase {
       protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RealScalar.ZERO);
       }
+
+      @Override
+      protected Tensor uBetween(StateTime orig, StateTime dest) {
+        return RrtsFlowHelper.U_R2.apply(orig, dest);
+      }
     };
     server.setGoal(goal);
-    server.offer(stateTime).run(400);
+    server.insertRoot(stateTime);
+    new Expand<>(server).steps(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
     Chop._01.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 
-  public void testDubins() throws Exception {
+  public void testDubins() {
     Tensor lbounds = Tensors.vector(0, 0, 0);
     Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
-    RrtsPlannerServer server = new RrtsPlannerServer( //
+    RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         DubinsTransitionSpace.of(RealScalar.ONE), //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
@@ -90,23 +97,29 @@ public class RrtsPlannerServerTest extends TestCase {
       protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RealScalar.ZERO);
       }
+
+      @Override
+      protected Tensor uBetween(StateTime orig, StateTime dest) {
+        return RrtsFlowHelper.U_SE2.apply(orig, dest);
+      }
     };
     server.setGoal(goal);
-    server.offer(stateTime).run(400);
+    server.insertRoot(stateTime);
+    new Expand<>(server).steps(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
     Chop._01.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 
-  public void testClothoid() throws Exception {
+  public void testClothoid() {
     Tensor lbounds = Tensors.vector(0, 0, 0);
     Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
-    RrtsPlannerServer server = new RrtsPlannerServer( //
+    RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         ClothoidTransitionSpace.INSTANCE, //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
@@ -125,13 +138,19 @@ public class RrtsPlannerServerTest extends TestCase {
       protected RandomSampleInterface goalSampler(Tensor goal) {
         return SphereRandomSample.of(goal, RealScalar.ZERO);
       }
+
+      @Override
+      protected Tensor uBetween(StateTime orig, StateTime dest) {
+        return RrtsFlowHelper.U_SE2.apply(orig, dest);
+      }
     };
     server.setGoal(goal);
-    server.offer(stateTime).run(400);
+    server.insertRoot(stateTime);
+    new Expand<>(server).steps(400);
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
     Chop.below(2).requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
-  // TODO design test for rerunning RrtsPlannerProcess
+  // TODO design test for rerunning expansion
 }

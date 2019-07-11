@@ -69,7 +69,7 @@ public class GlcNodeTest extends TestCase {
     PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
-    TrajectoryPlanner trajectoryPlanner = CheckedTrajectoryPlanner.wrap(new StandardTrajectoryPlanner( //
+    TrajectoryPlanner trajectoryPlanner = CheckedGlcTrajectoryPlanner.wrap(new StandardTrajectoryPlanner( //
         stateTimeRaster, stateIntegrator, controls, plannerConstraint, rnGoal));
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     List<GlcNode> nodeList = new ArrayList<>(trajectoryPlanner.getDomainMap().values());

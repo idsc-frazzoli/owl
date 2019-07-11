@@ -81,7 +81,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   @Override
-  public TrajectoryPlanner createTrajectoryPlanner(PlannerConstraint plannerConstraint, Tensor goal) {
+  public TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Collection<Flow> controls = createControls(); // LONGTERM design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //

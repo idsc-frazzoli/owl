@@ -24,7 +24,7 @@ public class Se2RelaxedCornerCuttingDemoTest extends TestCase {
     PlannerConstraint plannerConstraint = Se2CarDemo.createConstraint(imageRegion);
     Tensor goal = Tensors.vector(4.183, 5.017, 1.571);
     RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = //
-        carRelaxedEntity.createTrajectoryPlanner(plannerConstraint, goal);
+        carRelaxedEntity.createTreePlanner(plannerConstraint, goal);
     relaxedTrajectoryPlanner.insertRoot(stateTime);
     RelaxedGlcExpand relaxedGlcExpand = new RelaxedGlcExpand(relaxedTrajectoryPlanner);
     relaxedGlcExpand.findAny(1000);
