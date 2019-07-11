@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.ply.crd;
 
-import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -10,16 +10,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * Reference:
  * "Power Coordinates: A Geometric Construction of Barycentric Coordinates on Convex Polytopes"
- * Max Budninskiy, Beibei Liu, Yiying Tong, Mathieu Desbrun, 2016 */
+ * Max Budninskiy, Beibei Liu, Yiying Tong, Mathieu Desbrun, 2016
+ * 
+ * "Interpolation via Barycentric Coordinates" by Pierre Alliez, 2017 */
 public enum Barycentric implements ScalarUnaryOperator {
-  /** Section 3.3, eqs (12)
-   * mean value coordinates seem to be the most robust */
-  MEAN_VALUE() {
-    @Override
-    public Scalar apply(Scalar norm) {
-      return norm.reciprocal();
-    }
-  }, //
   /** Section 3.1
    * 
    * Quote:
@@ -33,6 +27,30 @@ public enum Barycentric implements ScalarUnaryOperator {
       return norm.multiply(norm).reciprocal();
     }
   }, //
+  // SEMI_15() {
+  // final ScalarUnaryOperator POWER = Power.function(-1.5);
+  //
+  // @Override
+  // public Scalar apply(Scalar norm) {
+  // return POWER.apply(norm);
+  // }
+  // }, //
+  /** Section 3.3, eqs (12)
+   * mean value coordinates seem to be the most robust */
+  MEAN_VALUE() {
+    @Override
+    public Scalar apply(Scalar norm) {
+      return norm.reciprocal();
+    }
+  }, //
+  // SEMI05() {
+  // final ScalarUnaryOperator POWER = Power.function(-0.5);
+  //
+  // @Override
+  // public Scalar apply(Scalar norm) {
+  // return POWER.apply(norm);
+  // }
+  // }, //
   /** Section 3.2
    * 
    * Quote:
@@ -44,7 +62,8 @@ public enum Barycentric implements ScalarUnaryOperator {
   DISCRETE_HARMONIC() {
     @Override
     public Scalar apply(Scalar norm) {
-      return RationalScalar.HALF;
+      // the return value was originally 1/2. however, the value 1 seems to be more consistent.
+      return RealScalar.ONE;
     }
   }, //
   ;
