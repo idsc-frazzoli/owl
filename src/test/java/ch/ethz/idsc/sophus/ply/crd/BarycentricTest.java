@@ -23,6 +23,6 @@ public class BarycentricTest extends TestCase {
 
   public void testDiscreteHarmonic() {
     Scalar scalar = Barycentric.DISCRETE_HARMONIC.apply(RealScalar.of(3));
-    assertEquals(scalar, RationalScalar.HALF);
+    assertEquals(scalar, RealScalar.ONE);
   }
 }

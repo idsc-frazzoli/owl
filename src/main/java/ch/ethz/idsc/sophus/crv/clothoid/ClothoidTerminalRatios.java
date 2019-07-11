@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** clothoid is tangent at start and end points */
+// TODO according to a theorem by R/W a simpler approximation exists
 public class ClothoidTerminalRatios implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
       new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
