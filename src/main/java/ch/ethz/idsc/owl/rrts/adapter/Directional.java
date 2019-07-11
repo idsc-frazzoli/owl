@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.ArgMin;
-import ch.ethz.idsc.tensor.red.Min;
 
 public class Directional implements TransitionSpace, Serializable {
   public static TransitionSpace of(TransitionSpace transitionSpace) {
@@ -29,8 +28,8 @@ public class Directional implements TransitionSpace, Serializable {
   @Override // from TransitionSpace
   public DirectedTransition connect(Tensor start, Tensor end) {
     Tensor lengths = Tensors.of( //
-        forwardTransitionSpace.distance(start, end), //
-        backwardTransitionSpace.distance(start, end));
+        forwardTransitionSpace.connect(start, end).length(), //
+        backwardTransitionSpace.connect(start, end).length());
     int index = ArgMin.of(lengths);
     return new DirectedTransition(start, end, lengths.Get(index), index == 0) {
       final Transition transition = (isForward //
@@ -52,12 +51,5 @@ public class Directional implements TransitionSpace, Serializable {
         return transition.wrapped(steps);
       }
     };
-  }
-
-  @Override // from TransitionSpace
-  public Scalar distance(Tensor start, Tensor end) {
-    return Min.of( //
-        forwardTransitionSpace.distance(start, end), //
-        backwardTransitionSpace.distance(start, end));
   }
 }

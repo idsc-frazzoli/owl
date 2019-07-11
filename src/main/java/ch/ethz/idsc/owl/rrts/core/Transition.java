@@ -11,12 +11,11 @@ public interface Transition {
   /** @return end state of this transition */
   Tensor end();
 
-  /** FUNCTIONALITY BELOW IS ONLY FOR COLLISION CHECKING AND RENDERING */
-  /** TODO if length() is part of transition interface the function requires a precise definition:
-   * length() == Euclidean distance?
-   * 
-   * @return length of transition */
+  /** @return length of transition; length does not have to be Euclidean length but
+   * is an abstract measure, which is a concept used in relation with minResolution */
   Scalar length();
+  /** FUNCTIONALITY BELOW IS ONLY FOR COLLISION CHECKING AND RENDERING */
+  // ---
 
   /** @param minResolution is positive
    * @return */

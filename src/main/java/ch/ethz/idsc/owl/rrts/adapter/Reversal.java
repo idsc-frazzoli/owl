@@ -28,8 +28,9 @@ public class Reversal implements TransitionSpace, Serializable {
 
   @Override // from TransitionSpace
   public DirectedTransition connect(Tensor start, Tensor end) {
-    return new DirectedTransition(start, end, transitionSpace.distance(end, start), false) {
-      final Transition transition = transitionSpace.connect(end, start);
+    Transition _transition = transitionSpace.connect(end, start);
+    return new DirectedTransition(start, end, _transition.length(), false) {
+      final Transition transition = _transition;
 
       @Override // from Transition
       public Tensor sampled(Scalar minResolution) {
@@ -52,15 +53,10 @@ public class Reversal implements TransitionSpace, Serializable {
         Tensor samples = sampled(steps);
         Tensor spacing = Array.zeros(samples.length());
         IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
-            ? distance(samples.get(i - 1), samples.get(i)) //
+            ? connect(samples.get(i - 1), samples.get(i)).length() //
             : samples.Get(i, 0).zero(), i));
         return new TransitionWrap(samples, spacing);
       }
     };
-  }
-
-  @Override // from TransitionSpace
-  public Scalar distance(Tensor start, Tensor end) {
-    return transitionSpace.distance(end, start);
   }
 }
