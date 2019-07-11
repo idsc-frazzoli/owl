@@ -24,4 +24,23 @@ public class ClothoidTransitionTest extends TestCase {
     int bit = 31 - Integer.numberOfLeadingZeros(value);
     System.out.println(bit);
   }
+
+  public void testSamplesSteps() {
+    ClothoidTransition clothoidTransition = //
+        new ClothoidTransition(Tensors.vector(1, 2, 3), Tensors.vector(4, 1, 5));
+    try {
+      clothoidTransition.sampled(0);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    assertEquals(clothoidTransition.sampled(1).length(), 1);
+    assertEquals(clothoidTransition.sampled(2).length(), 2);
+    try {
+      clothoidTransition.wrapped(0);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

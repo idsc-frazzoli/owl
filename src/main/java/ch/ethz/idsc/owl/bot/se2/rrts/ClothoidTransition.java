@@ -44,18 +44,13 @@ public class ClothoidTransition extends AbstractTransition {
   @Override // from Transition
   public Tensor sampled(int steps) {
     if (steps < 1)
-      throw TensorRuntimeException.of(RealScalar.of(steps));
-    Tensor samples = Tensors.of(start(), end());
-    if (steps > 1)
-      // TODO GJOEL check if "IntegerLog2.of(steps - 1) + 1" is intended
-      samples = Nest.of(CURVE_SUBDIVISION::string, samples, IntegerLog2.of(steps - 1) + 1);
+      throw TensorRuntimeException.of(length(), RealScalar.of(steps));
+    Tensor samples = Nest.of(CURVE_SUBDIVISION::string, Tensors.of(start(), end()), IntegerLog2.ceil(steps));
     return samples.extract(0, samples.length() - 1);
   }
 
   @Override // from Transition
   public TransitionWrap wrapped(int steps) {
-    if (steps < 1)
-      throw TensorRuntimeException.of(length(), RealScalar.of(steps));
     Tensor samples = sampled(steps);
     Tensor spacing = Array.zeros(samples.length());
     IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
