@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
+import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -55,9 +56,8 @@ public abstract class RrtsPlannerServer implements TransitionPlanner {
 
   @Override // from TrajectoryPlanner
   public void insertRoot(StateTime stateTime) {
-    Predicate<TrajectorySample> predicate = //
-        trajectorySample -> Scalars.lessEquals(trajectorySample.stateTime().time(), stateTime.time());
-    trajectory = trajectory().stream().filter(predicate).collect(Collectors.toList());
+    Predicate<TrajectorySample> predicate = Trajectories.untilTime(stateTime.time());
+    trajectory = Collections.unmodifiableList(trajectory().stream().filter(predicate).collect(Collectors.toList()));
     potentialFutureTrajectories.clear();
     time = stateTime.time();
     process = setupProcess(stateTime);
@@ -71,13 +71,11 @@ public abstract class RrtsPlannerServer implements TransitionPlanner {
           flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, time, resolution));
     }
     if (potentialFutureTrajectories.isEmpty())
-      return this.trajectory;
-    List<TrajectorySample> trajectory = new ArrayList<>(this.trajectory);
+      return Collections.unmodifiableList(trajectory);
     List<TrajectorySample> futureTrajectory = potentialFutureTrajectories.firstEntry().getValue();
-    if (!trajectory.isEmpty())
-      futureTrajectory = futureTrajectory.subList(1, futureTrajectory.size());
-    trajectory.addAll(futureTrajectory);
-    return trajectory;
+    if (trajectory.isEmpty())
+      return Collections.unmodifiableList(futureTrajectory);
+    return Trajectories.glue(trajectory, futureTrajectory);
   }
 
   @Override // from ExpandInterface
@@ -123,9 +121,8 @@ public abstract class RrtsPlannerServer implements TransitionPlanner {
   }
 
   public void setState(StateTime stateTime) {
-    Predicate<TrajectorySample> predicate = //
-        trajectorySample -> Scalars.lessEquals(stateTime.time(), trajectorySample.stateTime().time());
-    trajectory = trajectory.stream().filter(predicate).collect(Collectors.toList());
+    Predicate<TrajectorySample> predicate = Trajectories.afterTime(stateTime.time());
+    trajectory = Collections.unmodifiableList(trajectory.stream().filter(predicate).collect(Collectors.toList()));
   }
 
   public Optional<RrtsNode> getRoot() {
