@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,7 +16,7 @@ public class RnTransitionSpace implements TransitionSpace, Serializable {
   }
 
   @Override // from TransitionSpace
-  public Transition connect(Tensor start, Tensor end) {
+  public RnTransition connect(Tensor start, Tensor end) {
     return new RnTransition(start, end);
   }
 

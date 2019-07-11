@@ -25,7 +25,8 @@ public class RnTransition extends AbstractTransition {
       throw TensorRuntimeException.of(length(), RealScalar.of(steps));
     if (steps == 0)
       return Tensors.of(start());
-    return Subdivide.of(start(), end(), steps);
+    // TODO JPH improve
+    return Tensor.of(Subdivide.of(start(), end(), steps).stream().limit(steps));
   }
 
   @Override // from Transition
