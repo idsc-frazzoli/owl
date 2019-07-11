@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Pi;
 
-/* package */ enum Se2rrtsPlannerServerDemo {
+/* package */ enum Se2RrtsPlannerServerDemo {
   ;
   private static final Random RANDOM = new Random();
 

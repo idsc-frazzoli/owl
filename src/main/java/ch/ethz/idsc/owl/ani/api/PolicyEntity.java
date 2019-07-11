@@ -32,7 +32,7 @@ public abstract class PolicyEntity implements AnimationInterface, RenderInterfac
     return Objects.isNull(obstacleQuery) || !obstacleQuery.isMember(stateTime);
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();

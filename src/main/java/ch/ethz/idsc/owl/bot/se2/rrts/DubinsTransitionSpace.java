@@ -42,11 +42,6 @@ public class DubinsTransitionSpace implements Se2TransitionSpace, Serializable {
     return new DubinsTransition(start, end, dubinsPath);
   }
 
-  @Override // from TransitionSpace
-  public Scalar distance(Tensor start, Tensor end) {
-    return dubinsPath(start, end).map(DubinsPath::length).get();
-  }
-
   /** @param start
    * @param end
    * @return dubins path with minimal length if any */
