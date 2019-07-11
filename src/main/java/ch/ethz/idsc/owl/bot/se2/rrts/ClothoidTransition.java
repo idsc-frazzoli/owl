@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.owl.math.IntegerLog2;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
@@ -26,7 +27,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 public class ClothoidTransition extends AbstractTransition {
   static final TensorMetric TENSOR_METRIC = PseudoClothoidDistance.INSTANCE;
   private static final CurveSubdivision CURVE_SUBDIVISION = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
-  private static final double LOG2 = Math.log(2);
 
   public ClothoidTransition(Tensor start, Tensor end) {
     super(start, end, TENSOR_METRIC.distance(start, end));
@@ -47,7 +47,8 @@ public class ClothoidTransition extends AbstractTransition {
       throw TensorRuntimeException.of(RealScalar.of(steps));
     Tensor samples = Tensors.of(start(), end());
     if (steps > 1)
-      samples = Nest.of(CURVE_SUBDIVISION::string, samples, (int) Math.ceil(Math.log(steps - 1) / LOG2));
+      // TODO GJOEL check if "IntegerLog2.of(steps - 1) + 1" is intended
+      samples = Nest.of(CURVE_SUBDIVISION::string, samples, IntegerLog2.of(steps - 1) + 1);
     return samples.extract(0, samples.length() - 1);
   }
 
