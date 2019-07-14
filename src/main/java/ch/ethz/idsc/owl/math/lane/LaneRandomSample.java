@@ -1,12 +1,13 @@
 // code by gjoel
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.owl.math.lane;
 
 import java.util.Collection;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.math.Lane;
+import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.sophus.math.Extract2D;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -19,19 +20,19 @@ import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public class LaneRandomSample implements RandomSampleInterface {
-  public static LaneRandomSample along(GeodesicInterface geodesicInterface, Scalar width, Tensor... controlPoints) {
+  public static LaneRandomSample along(SplitInterface geodesicInterface, Scalar width, Tensor... controlPoints) {
     return along(geodesicInterface, width, Tensors.of(controlPoints));
   }
 
-  public static LaneRandomSample along(GeodesicInterface geodesicInterface, Scalar width, Collection<Tensor> controlPoints) {
+  public static LaneRandomSample along(SplitInterface geodesicInterface, Scalar width, Collection<Tensor> controlPoints) {
     return along(geodesicInterface, width, Tensor.of(controlPoints.stream()));
   }
 
-  public static LaneRandomSample along(GeodesicInterface geodesicInterface, Scalar width, Tensor controlPoints) {
-    return new LaneRandomSample(new Lane(geodesicInterface, controlPoints, width));
+  public static LaneRandomSample along(SplitInterface geodesicInterface, Scalar width, Tensor controlPoints) {
+    return new LaneRandomSample(StableLane.of(geodesicInterface, controlPoints, width));
   }
 
-  public static LaneRandomSample along(Lane lane) {
+  public static LaneRandomSample along(LaneInterface lane) {
     Tensor orth = lane.leftBoundary().get(0).subtract(lane.rightBoundary().get(0));
     Scalar width = Norm._2.of(Extract2D.FUNCTION.apply(orth));
     return new LaneRandomSample(lane);
@@ -42,9 +43,11 @@ public class LaneRandomSample implements RandomSampleInterface {
   private final Scalar halfWidth;
   public final Tensor refined;
 
-  private LaneRandomSample(Lane lane) {
+  private LaneRandomSample(LaneInterface lane) {
     refined = lane.midLane();
-    halfWidth = lane.width.multiply(RationalScalar.HALF);
+    Tensor orth = lane.leftBoundary().get(0).subtract(lane.rightBoundary().get(0));
+    Scalar width = Norm._2.of(Extract2D.FUNCTION.apply(orth));
+    halfWidth = width.multiply(RationalScalar.HALF);
   }
 
   @Override // from RandomSampleInterface

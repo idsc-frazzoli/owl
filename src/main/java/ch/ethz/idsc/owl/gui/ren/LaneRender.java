@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.Lane;
+import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -21,7 +21,7 @@ public class LaneRender implements RenderInterface {
     this.cyclic = cyclic;
   }
 
-  public void setLane(Lane lane) {
+  public void setLane(LaneInterface lane) {
     if (Objects.nonNull(lane))
       setLanes(lane.leftBoundary(), lane.rightBoundary());
     else
@@ -38,5 +38,4 @@ public class LaneRender implements RenderInterface {
     PATH_SIDE_L.render(geometricLayer, graphics);
     PATH_SIDE_R.render(geometricLayer, graphics);
   }
-
 }
