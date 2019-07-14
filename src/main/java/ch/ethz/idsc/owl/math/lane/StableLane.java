@@ -29,6 +29,7 @@ public class StableLane implements LaneInterface, Serializable {
     return new StableLane(controlPoints, refined, width);
   }
 
+  // ---
   private final Tensor controlPoints;
   private final Tensor refined;
   private final Tensor lbound;
@@ -43,7 +44,9 @@ public class StableLane implements LaneInterface, Serializable {
 
   private Tensor boundary(Tensor base, Scalar width) {
     Tensor ofs = base.multiply(width.multiply(RationalScalar.HALF));
-    return Tensor.of(refined.stream().map(Se2GroupElement::new).map(se2GroupElement -> se2GroupElement.combine(ofs)));
+    return Tensor.of(refined.stream() //
+        .map(Se2GroupElement::new) //
+        .map(se2GroupElement -> se2GroupElement.combine(ofs)));
   }
 
   @Override
