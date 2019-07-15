@@ -24,13 +24,9 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** GeodesicCenter projects a sequence of points to their geodesic center
- * with each point weighted as provided by an external function.
- * 
- * <p>Careful: the implementation only supports sequences with ODD number of elements!
- * When a sequence of even length is provided an Exception is thrown. */
-// TODO OB GeodesicAdaptiveCenterTest is missing
-// TODO OB many redundancies with GeodesicCenter
+// TODO OB URGENT documentation is missing
+// TODO OB URGENT GeodesicAdaptiveCenterTest is missing
+// TODO OB/JPH refactor to minimize redundancies with GeodesicCenter(Filter(Demo))
 public class GeodesicAdaptiveCenter implements TensorUnaryOperator {
   private static final Scalar TWO = RealScalar.of(2);
 
@@ -63,18 +59,17 @@ public class GeodesicAdaptiveCenter implements TensorUnaryOperator {
   }
 
   // only adding to GeodesicCenter
-  public int adaptRadius(Tensor control, Scalar interval) {
+  private static int adaptRadius(Tensor control, Scalar interval) {
     Sign.requirePositive(interval);
     int mid = (control.length() - 1) / 2;
     int radius = (control.length() - 1) / 2;
     while (Scalars.lessEquals(interval, Norm._2.between(control.get(mid).extract(0, 2), control.get(mid - radius).extract(0, 2)))
         || Scalars.lessEquals(interval, Norm._2.between(control.get(mid).extract(0, 2), control.get(mid + radius).extract(0, 2)))) {
-      radius = radius - 1;
+      --radius;
     }
     return radius;
   }
 
-  // TODO JPH refactor to minimize redundancies with GeodesicCenter(Filter(Demo))
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     if (tensor.length() % 2 != 1)
@@ -105,6 +100,7 @@ public class GeodesicAdaptiveCenter implements TensorUnaryOperator {
   /** @param mask symmetric vector of odd length
    * @return weights of Kalman-style iterative moving average
    * @throws Exception if mask is not symmetric or has even number of elements */
+  // TODO OB URGENT many redundancies with GeodesicCenter, function splits is identical!
   /* package */ static Tensor splits(Tensor mask) {
     if (mask.length() % 2 == 0)
       throw TensorRuntimeException.of(mask);
