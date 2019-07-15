@@ -21,12 +21,12 @@ import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.Lane;
+import ch.ethz.idsc.owl.math.lane.LaneConsumer;
+import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.owl.rrts.adapter.LaneConsumer;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.SimpleLaneConsumer;
 import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
@@ -74,14 +74,16 @@ class ClothoidRrtsLaneDemo implements DemoInterface {
       Timer timer = new Timer();
       { // periodic task for rendering
         TimerTask timerTask = new TimerTask() {
-          @Override public void run() {
+          @Override
+          public void run() {
             laneConsumptionDemo.timerFrame.geometricComponent.jComponent.repaint();
           }
         };
         timer.schedule(timerTask, 100, 50);
       }
       laneConsumptionDemo.timerFrame.jFrame.addWindowListener(new WindowAdapter() {
-        @Override public void windowClosed(WindowEvent windowEvent) {
+        @Override
+        public void windowClosed(WindowEvent windowEvent) {
           timer.cancel();
         }
       });
@@ -89,7 +91,8 @@ class ClothoidRrtsLaneDemo implements DemoInterface {
         TimerTask timerTask = new TimerTask() {
           TimeKeeper timeKeeper = new TimeKeeper();
 
-          @Override public void run() {
+          @Override
+          public void run() {
             Scalar now = timeKeeper.now();
             entity.integrate(now);
           }
@@ -111,7 +114,7 @@ class ClothoidRrtsLaneDemo implements DemoInterface {
       RenderInterface renderInterface = new RenderInterface() {
         @Override
         public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-          Optional<Lane> optional = laneConsumptionDemo.lane();
+          Optional<LaneInterface> optional = laneConsumptionDemo.lane();
           if (optional.isPresent()) {
             Tensor xya = Last.of(optional.get().controlPoints());
             geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
@@ -135,7 +138,7 @@ class ClothoidRrtsLaneDemo implements DemoInterface {
   @Override // from DemoInterface
   public BaseFrame start() {
     BaseFrame baseFrame = laneConsumptionDemo.start();
-    baseFrame.configCoordinateOffset(50,700);
+    baseFrame.configCoordinateOffset(50, 700);
     baseFrame.jFrame.setBounds(100, 100, 1200, 900);
     baseFrame.jFrame.setTitle(getClass().getSimpleName());
     return baseFrame;

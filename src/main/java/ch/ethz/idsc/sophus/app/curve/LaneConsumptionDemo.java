@@ -1,7 +1,6 @@
 // code by gjoel
 package ch.ethz.idsc.sophus.app.curve;
 
-import javax.swing.JButton;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,9 +8,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import javax.swing.JButton;
+
 import ch.ethz.idsc.owl.gui.ren.LaneRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.Lane;
+import ch.ethz.idsc.owl.math.lane.LaneInterface;
+import ch.ethz.idsc.owl.math.lane.StableLane;
 import ch.ethz.idsc.sophus.app.api.Clothoid1Display;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
@@ -22,14 +24,14 @@ import ch.ethz.idsc.tensor.io.Serialization;
 
 public class LaneConsumptionDemo extends BaseCurvatureDemo {
   private final LaneRender laneRender = new LaneRender(false);
-  private Lane lane = null;
+  private LaneInterface lane = null;
 
   @SafeVarargs
-  public LaneConsumptionDemo(Consumer<Lane>... consumers) {
+  public LaneConsumptionDemo(Consumer<LaneInterface>... consumers) {
     this(Arrays.asList(consumers));
   }
 
-  public LaneConsumptionDemo(Collection<Consumer<Lane>> consumers) {
+  public LaneConsumptionDemo(Collection<Consumer<LaneInterface>> consumers) {
     super(Arrays.asList( //
         Clothoid1Display.INSTANCE, //
         // Clothoid2Display.INSTANCE, //
@@ -51,7 +53,7 @@ public class LaneConsumptionDemo extends BaseCurvatureDemo {
   @Override
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     renderControlPoints(geometricLayer, graphics);
-    Lane lane = new Lane(geodesicDisplay().geodesicInterface(), control, width(), degree, levels);
+    LaneInterface lane = StableLane.of(geodesicDisplay().geodesicInterface(), control, width(), degree, levels);
     try {
       this.lane = Serialization.copy(lane);
     } catch (Exception e) {
@@ -66,7 +68,7 @@ public class LaneConsumptionDemo extends BaseCurvatureDemo {
     return RationalScalar.of(jSlider.getValue(), 200);
   }
 
-  public final Optional<Lane> lane() {
+  public final Optional<LaneInterface> lane() {
     return Optional.ofNullable(lane);
   }
 

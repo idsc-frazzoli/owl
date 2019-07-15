@@ -3,12 +3,12 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.math.Lane;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.lane.LaneConsumer;
+import ch.ethz.idsc.owl.math.lane.LaneInterface;
+import ch.ethz.idsc.owl.math.lane.LaneRandomSample;
 import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
-import ch.ethz.idsc.owl.math.sample.LaneRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.rrts.adapter.LaneConsumer;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
@@ -50,7 +50,7 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   }
 
   @Override // from Consumer
-  public void accept(Lane lane) {
+  public void accept(LaneInterface lane) {
     laneSampler = LaneRandomSample.along(lane);
   }
 }

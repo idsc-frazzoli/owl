@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.rrts;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;

@@ -9,7 +9,8 @@ import ch.ethz.idsc.owl.data.tree.TreePlanner;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.math.Lane;
+import ch.ethz.idsc.owl.math.lane.LaneConsumer;
+import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Last;
 
@@ -25,7 +26,7 @@ public class SimpleLaneConsumer implements LaneConsumer {
   }
 
   @Override // from Consumer
-  public void accept(Lane lane) {
+  public void accept(LaneInterface lane) {
     Tensor goal = Last.of(lane.midLane());
     TreePlanner treePlanner = trajectoryEntity.createTreePlanner(plannerConstraint, goal);
     if (treePlanner instanceof LaneConsumer)

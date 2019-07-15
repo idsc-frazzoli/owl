@@ -32,6 +32,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private final static int REFINEMENT = 2;
   // ---
   private final TrajectoryEntryFinder entryFinder;
+  // TODO GJOEL/JPH list of conditions is unnecessary, since one condition can wrap multiple conditions
   private final List<DynamicRatioLimit> ratioClippers = new ArrayList<>();
   // ---
   private Tensor curve; // for visualization
@@ -95,6 +96,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   }
 
   /** @param dynamicLimit on turning ratio depending on state and speed */
+  // TODO GJOEL/JPH class design is not good
   public void addRatioLimit(DynamicRatioLimit dynamicLimit) {
     ratioClippers.add(dynamicLimit);
   }
