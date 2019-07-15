@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** lane of constant width */
@@ -34,12 +35,14 @@ public class StableLane implements LaneInterface, Serializable {
   private final Tensor refined;
   private final Tensor lbound;
   private final Tensor rbound;
+  private final Tensor margins;
 
   private StableLane(Tensor controlPoints, Tensor refined, Scalar width) {
     this.controlPoints = controlPoints.unmodifiable();
     this.refined = refined;
     lbound = boundary(OFS_L, width).unmodifiable();
     rbound = boundary(OFS_R, width).unmodifiable();
+    margins = Array.zeros(refined.length()).map(s -> width.multiply(RationalScalar.HALF));
   }
 
   private Tensor boundary(Tensor base, Scalar width) {
@@ -49,23 +52,28 @@ public class StableLane implements LaneInterface, Serializable {
         .map(se2GroupElement -> se2GroupElement.combine(ofs)));
   }
 
-  @Override
+  @Override // from LaneInterface
   public Tensor controlPoints() {
     return controlPoints;
   }
 
-  @Override
+  @Override // from LaneInterface
   public Tensor midLane() {
     return refined;
   }
 
-  @Override
+  @Override // from LaneInterface
   public Tensor leftBoundary() {
     return lbound;
   }
 
-  @Override
+  @Override // from LaneInterface
   public Tensor rightBoundary() {
     return rbound;
+  }
+
+  @Override // from LaneInterface
+  public Tensor margins() {
+    return margins;
   }
 }
