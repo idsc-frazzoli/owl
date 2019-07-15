@@ -62,11 +62,11 @@ public class LaneConsumptionDemo extends BaseCurvatureDemo {
     return lane.midLane();
   }
 
-  protected final Scalar width() {
+  public final Scalar width() {
     return RationalScalar.of(jSlider.getValue(), 200);
   }
 
-  protected final Optional<Lane> lane() {
+  public final Optional<Lane> lane() {
     return Optional.ofNullable(lane);
   }
 

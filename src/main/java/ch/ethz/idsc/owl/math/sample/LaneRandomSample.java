@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Degree;
-import ch.ethz.idsc.tensor.red.Norm;
 
 public class LaneRandomSample implements RandomSampleInterface {
   public static LaneRandomSample along(GeodesicInterface geodesicInterface, Scalar width, Tensor... controlPoints) {
@@ -32,8 +31,6 @@ public class LaneRandomSample implements RandomSampleInterface {
   }
 
   public static LaneRandomSample along(Lane lane) {
-    Tensor orth = lane.leftBoundary().get(0).subtract(lane.rightBoundary().get(0));
-    Scalar width = Norm._2.of(Extract2D.FUNCTION.apply(orth));
     return new LaneRandomSample(lane);
   }
 
