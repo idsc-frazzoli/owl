@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static void plot(Tensor data, int radius, String signal, Scalar alpha, ScalarUnaryOperator smoothingKernel) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
-      yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
+      yData.append(FrequencyResponse.MAGNITUDE.apply(meanData));
     Tensor xAxis = Tensors.empty();
     for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index)
       xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s"))));

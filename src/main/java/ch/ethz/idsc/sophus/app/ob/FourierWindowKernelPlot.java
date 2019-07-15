@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static void plot(Tensor data, int radius, String signal) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
-      yData.append(TransferFunctionResponse.FREQUENCY.apply(meanData));
+      yData.append(FrequencyResponse.PHASE.apply(meanData));
     // ---
     Tensor xAxis = Tensors.empty();
     for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index) {

@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO OB URGENT 
 // TODO JPH OWL 046 possibly remove
 /* package */ class GeodesicAverageFilterDemo extends DatasetKernelDemo {
   private Tensor refined = Tensors.empty();

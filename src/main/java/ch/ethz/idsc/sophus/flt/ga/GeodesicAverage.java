@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** GeodesicAverage applies the resulting splits of a weight mask
  * and a tree shape to a sequence of control points */
-// TODO OB add more tests
+// TODO OB URGENT add more tests or remove
 public class GeodesicAverage implements TensorUnaryOperator {
   /** @param splitInterface
    * @param splits

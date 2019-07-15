@@ -1,14 +1,14 @@
 // code by ob
 package ch.ethz.idsc.sophus.flt.ga;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
+import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -24,9 +24,42 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * <p>Careful: the implementation only supports sequences with ODD number of elements!
  * When a sequence of even length is provided an Exception is thrown. */
-// TODO OB/JPH implementation very redundant to GeodesicCenter
 public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
-  private static final Scalar TWO = RealScalar.of(2);
+  /* package */ static class Splits implements Function<Integer, Tensor>, Serializable {
+    private static final Scalar TWO = RealScalar.of(2);
+    // ---
+    private final Function<Integer, Tensor> function;
+
+    public Splits(Function<Integer, Tensor> function) {
+      this.function = function;
+    }
+
+    @Override
+    public Tensor apply(Integer t) {
+      return of(function.apply(t));
+    }
+
+    /** @param mask symmetric vector of odd length
+     * @return weights of Kalman-style iterative moving average
+     * @throws Exception if mask is not symmetric or has even number of elements */
+    /* package */ static Tensor of(Tensor mask) {
+      if (mask.length() % 2 == 0)
+        throw TensorRuntimeException.of(mask);
+      SymmetricVectorQ.require(mask);
+      int radius = (mask.length() - 1) / 2;
+      Tensor halfmask = Tensors.vector(i -> i == radius //
+          ? mask.Get(i).divide(TWO)
+          : mask.Get(i), radius + 1);
+      Scalar factor = halfmask.Get(radius);
+      Tensor splits = Tensors.empty();
+      for (int index = radius - 1; index >= 0; --index) {
+        Scalar lambda = factor.divide(factor.add(halfmask.Get(index)));
+        factor = factor.add(halfmask.Get(index));
+        splits.append(lambda);
+      }
+      return splits;
+    }
+  }
 
   /** @param splitInterface
    * @param function that maps an extent to a weight mask of length == 2 * extent + 1
@@ -47,24 +80,19 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
   // ---
   private final SplitInterface geodesicInterface;
   private final Function<Integer, Tensor> function;
-  private final List<Tensor> weights = new ArrayList<>();
 
   private GeodesicCenterMidSeeded(SplitInterface splitInterface, Function<Integer, Tensor> function) {
     this.geodesicInterface = Objects.requireNonNull(splitInterface);
-    this.function = function;
+    this.function = MemoFunction.wrap(new Splits(function));
   }
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     if (tensor.length() % 2 != 1)
       throw TensorRuntimeException.of(tensor);
-    // spatial neigborhood we want to consider for centering
+    // spatial neighborhood we want to consider for centering
     int radius = (tensor.length() - 1) / 2;
-    synchronized (weights) {
-      while (weights.size() <= radius)
-        weights.add(splits(function.apply(weights.size() * 2 + 1)));
-    }
-    Tensor splits = weights.get(radius);
+    Tensor splits = function.apply(tensor.length());
     Tensor pL = tensor.get(radius);
     Tensor pR = tensor.get(radius);
     for (int index = 0; index < radius;) {
@@ -73,26 +101,5 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
       pR = geodesicInterface.split(pR, tensor.get(radius + index), RealScalar.ONE.subtract(scalar));
     }
     return geodesicInterface.split(pL, pR, RationalScalar.HALF);
-  }
-
-  /** @param mask symmetric vector of odd length
-   * @return weights of Kalman-style iterative moving average
-   * @throws Exception if mask is not symmetric or has even number of elements */
-  /* package */ static Tensor splits(Tensor mask) {
-    if (mask.length() % 2 == 0)
-      throw TensorRuntimeException.of(mask);
-    SymmetricVectorQ.require(mask);
-    int radius = (mask.length() - 1) / 2;
-    Tensor halfmask = Tensors.vector(i -> i == radius //
-        ? mask.Get(i).divide(TWO)
-        : mask.Get(i), radius + 1);
-    Scalar factor = halfmask.Get(radius);
-    Tensor splits = Tensors.empty();
-    for (int index = radius - 1; index >= 0; --index) {
-      Scalar lambda = factor.divide(factor.add(halfmask.Get(index)));
-      factor = factor.add(halfmask.Get(index));
-      splits.append(lambda);
-    }
-    return splits;
   }
 }

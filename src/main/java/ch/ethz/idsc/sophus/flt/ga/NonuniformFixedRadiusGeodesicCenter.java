@@ -5,14 +5,15 @@ import java.io.Serializable;
 import java.util.NavigableMap;
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.NormalizeTotal;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -20,22 +21,22 @@ import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @return operator that maps a chronological, symmetric sequence of points to their geodesic center
    * @throws Exception if geodesicInterface is null */
-  public static NonuniformFixedRadiusGeodesicCenter of(GeodesicInterface geodesicInterface) {
-    return new NonuniformFixedRadiusGeodesicCenter(Objects.requireNonNull(geodesicInterface));
+  public static NonuniformFixedRadiusGeodesicCenter of(SplitInterface splitInterface) {
+    return new NonuniformFixedRadiusGeodesicCenter(Objects.requireNonNull(splitInterface));
   }
 
   // ---
-  private final GeodesicInterface geodesicInterface;
+  private final SplitInterface splitInterface;
 
-  /* package */ NonuniformFixedRadiusGeodesicCenter(GeodesicInterface geodesicInterface) {
-    this.geodesicInterface = geodesicInterface;
+  /* package */ NonuniformFixedRadiusGeodesicCenter(SplitInterface splitInterface) {
+    this.splitInterface = splitInterface;
   }
 
   private static Tensor maskToSplits(Tensor mask) {
-    Tensor result = Tensors.empty();
+    Tensor result = Unprotect.empty(mask.length() - 1);
     Scalar factor = mask.Get(0);
     for (int index = 1; index < mask.length(); ++index) {
       factor = factor.add(mask.Get(index));
@@ -47,7 +48,7 @@ public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
   public static Tensor weights(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
     // TODO OB Magic Constant which defines the distribution => Test for suitable choice, or keep as a parameter
     // 1 corresponds to DIRICHLET
-    Scalar startingWeight = RealScalar.of(1);
+    Scalar startingWeight = RealScalar.ONE;
     // ---
     Tensor maskLeft = Tensors.empty();
     Tensor maskRight = Tensors.empty();
@@ -92,22 +93,23 @@ public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
   }
 
   public Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
+    // TODO OB URGENT statement is ineffective
     Scalars.isZero(Abs.FUNCTION.apply(RealScalar.of(subMap.headMap(key, false).size() - subMap.tailMap(key, false).size())));
     // ---
-    key = Sign.requirePositiveOrZero(key);
+    Sign.requirePositiveOrZero(key);
     Tensor tempL = subMap.firstEntry().getValue();
     Tensor tempR = subMap.lastEntry().getValue();
     Tensor splits = splits(subMap, key);
     int index = 0;
     for (Scalar headMapKey : subMap.subMap(subMap.firstKey(), false, key, true).keySet()) {
-      tempL = geodesicInterface.split(tempL, subMap.get(headMapKey), splits.get(0).Get(index));
+      tempL = splitInterface.split(tempL, subMap.get(headMapKey), splits.Get(0, index));
       ++index;
     }
     index = 0;
     for (Scalar tailMapKey : subMap.subMap(key, true, subMap.lastKey(), false).descendingKeySet()) {
-      tempR = geodesicInterface.split(tempR, subMap.get(tailMapKey), splits.get(1).Get(index));
+      tempR = splitInterface.split(tempR, subMap.get(tailMapKey), splits.Get(1, index));
       ++index;
     }
-    return geodesicInterface.split(tempL, tempR, splits.get(2).Get(0));
+    return splitInterface.split(tempL, tempR, splits.Get(2, 0));
   }
 }

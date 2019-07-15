@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.NavigableMap;
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -14,22 +14,21 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-// TODO OB reduce redundancy with NonuniformFixedRadiusGeodesicCenter
 public class NonuniformFixedIntervalGeodesicCenter implements Serializable {
-  /** @param geodesicInterface
+  /** @param splitInterface
    * @param function that maps the (temporally) neighborhood of a control point to a weight mask
    * @return operator that maps a sequence of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static NonuniformFixedIntervalGeodesicCenter of(GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel) {
-    return new NonuniformFixedIntervalGeodesicCenter(Objects.requireNonNull(geodesicInterface), Objects.requireNonNull(smoothingKernel));
+  public static NonuniformFixedIntervalGeodesicCenter of(SplitInterface splitInterface, ScalarUnaryOperator smoothingKernel) {
+    return new NonuniformFixedIntervalGeodesicCenter(Objects.requireNonNull(splitInterface), Objects.requireNonNull(smoothingKernel));
   }
 
   // ---
-  public final GeodesicInterface geodesicInterface;
+  public final SplitInterface splitInterface;
   private final ScalarUnaryOperator windowFunction;
 
-  /* package */ NonuniformFixedIntervalGeodesicCenter(GeodesicInterface geodesicInterface, ScalarUnaryOperator windowFunction) {
-    this.geodesicInterface = geodesicInterface;
+  /* package */ NonuniformFixedIntervalGeodesicCenter(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
+    this.splitInterface = splitInterface;
     this.windowFunction = windowFunction;
   }
 
@@ -66,8 +65,8 @@ public class NonuniformFixedIntervalGeodesicCenter implements Serializable {
   }
 
   public synchronized Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key, Scalar interval) {
-    key = Sign.requirePositiveOrZero(key);
-    interval = Sign.requirePositiveOrZero(interval);
+    Sign.requirePositiveOrZero(key);
+    Sign.requirePositiveOrZero(interval);
     Tensor tempL = subMap.firstEntry().getValue();
     Tensor tempR = subMap.lastEntry().getValue();
     Tensor splits = splits(subMap, key, interval);
@@ -75,16 +74,16 @@ public class NonuniformFixedIntervalGeodesicCenter implements Serializable {
     int index = 0;
     // subMap on the left side: (first_key, key] both excluded
     for (Scalar headMapKey : subMap.subMap(subMap.firstKey(), false, key, true).keySet()) {
-      tempL = geodesicInterface.split(tempL, subMap.get(headMapKey), splits.get(0).Get(index));
-      index += 1;
+      tempL = splitInterface.split(tempL, subMap.get(headMapKey), splits.Get(0, index));
+      ++index;
     }
     index = 0;
     // subMap on the right side: [key, last_key)
     for (Scalar tailMapKey : subMap.subMap(key, true, subMap.lastKey(), false).descendingKeySet()) {
-      tempR = geodesicInterface.split(tempR, subMap.get(tailMapKey), splits.get(1).Get(index));
-      index += 1;
+      tempR = splitInterface.split(tempR, subMap.get(tailMapKey), splits.Get(1, index));
+      ++index;
     }
-    Tensor result = geodesicInterface.split(tempL, tempR, splits.get(2).Get(0));
+    Tensor result = splitInterface.split(tempL, tempR, splits.Get(2, 0));
     return result;
   }
 }
