@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.rrts;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
@@ -16,14 +17,17 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer implements LaneConsumer {
+  private final boolean greedy;
   private LaneRandomSample laneSampler;
 
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
       TransitionRegionQuery obstacleQuery, //
       Scalar resolution, //
-      StateSpaceModel stateSpaceModel) {
+      StateSpaceModel stateSpaceModel, //
+      boolean greedy) {
     super(transitionSpace, obstacleQuery, resolution, stateSpaceModel);
+    this.greedy = greedy;
   }
 
   public LaneRrtsPlannerServer( //
@@ -31,8 +35,10 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
       TransitionRegionQuery obstacleQuery, //
       Scalar resolution, //
       StateSpaceModel stateSpaceModel, //
-      TransitionCostFunction costFunction) {
+      TransitionCostFunction costFunction, //
+      boolean greedy) {
     super(transitionSpace, obstacleQuery, resolution, stateSpaceModel, costFunction);
+    this.greedy = greedy;
   }
 
   @Override // from DefaultRrtsPlannerServer
@@ -52,5 +58,7 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   @Override // from Consumer
   public void accept(LaneInterface lane) {
     laneSampler = LaneRandomSample.along(lane);
+    if (greedy)
+      setGreeds(lane.controlPoints().stream().collect(Collectors.toList()));
   }
 }
