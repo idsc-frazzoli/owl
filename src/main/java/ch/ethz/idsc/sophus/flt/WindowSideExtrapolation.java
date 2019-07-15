@@ -4,13 +4,12 @@ package ch.ethz.idsc.sophus.flt;
 import java.io.Serializable;
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.sophus.math.win.HalfWindowSampler;
 import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -32,17 +31,13 @@ public class WindowSideExtrapolation implements Function<Integer, Tensor>, Seria
   }
 
   // Assumes uniformly sampled signal!
-  // TODO OB refactor for better overview
   @Override
   public Tensor apply(Integer t) {
     Tensor weights = halfWindowSampler.apply(t);
-    AffineQ.require(weights);
     Tensor chronological = Range.of(0, weights.length());
     Scalar distance = RealScalar.of(weights.length() - 1).subtract(weights.dot(chronological));
-    Tensor extrapolatoryWeights = Tensors.empty();
-    for (int index = 0; index < weights.length() - 1; ++index)
-      extrapolatoryWeights.append(weights.Get(index).negate().divide(distance));
-    extrapolatoryWeights.append(distance.reciprocal().multiply(RealScalar.ONE.subtract(weights.Get(weights.length() - 1))).add(RealScalar.ONE));
-    return extrapolatoryWeights.unmodifiable();
+    Tensor extrapolatory = weights.extract(0, weights.length() - 1).negate();
+    extrapolatory.append(RealScalar.ONE.subtract(Last.of(weights)).add(distance));
+    return extrapolatory.divide(distance).unmodifiable();
   }
 }
