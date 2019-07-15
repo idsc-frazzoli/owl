@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.owl.rrts.adapter.DirectedTransition;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
@@ -48,7 +49,10 @@ import ch.ethz.idsc.tensor.Tensor;
           trajectory.add(TrajectorySample.head(stateTime));
         else {
           StateTime orig = Lists.getLast(trajectory).stateTime();
-          Flow flow = StateSpaceModels.createFlow(stateSpaceModel, uBetween.apply(orig, stateTime));
+          Tensor u = (transition instanceof DirectedTransition && !((DirectedTransition) transition).isForward) //
+              ? uBetween.apply(stateTime, orig) //
+              : uBetween.apply(orig, stateTime);
+          Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
           trajectory.add(new TrajectorySample(stateTime, flow));
         }
       }

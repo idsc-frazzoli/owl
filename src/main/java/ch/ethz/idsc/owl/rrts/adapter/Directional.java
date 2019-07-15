@@ -26,13 +26,13 @@ public class Directional implements TransitionSpace, Serializable {
   }
 
   @Override // from TransitionSpace
-  public Transition connect(Tensor start, Tensor end) {
+  public DirectedTransition connect(Tensor start, Tensor end) {
     Tensor lengths = Tensors.of( //
         forwardTransitionSpace.connect(start, end).length(), //
         backwardTransitionSpace.connect(start, end).length());
     int index = ArgMin.of(lengths);
-    return new AbstractTransition(start, end, lengths.Get(index)) {
-      final Transition transition = (index == 0 //
+    return new DirectedTransition(start, end, lengths.Get(index), index == 0) {
+      final Transition transition = (isForward //
           ? forwardTransitionSpace //
           : backwardTransitionSpace).connect(start, end);
 

@@ -13,11 +13,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 public class BidirectionalRrts implements Rrts {
+  private final RrtsNodeCollection nodeCollection;
   private final Rrts forwardRrts;
   private final Rrts backwardRrts;
   private final RrtsNode root;
   private final Tensor goal;
-  private Optional<RrtsNode> goalNode = Optional.empty();
 
   public BidirectionalRrts( //
       TransitionSpace transitionSpace, //
@@ -25,9 +25,11 @@ public class BidirectionalRrts implements Rrts {
       TransitionRegionQuery obstacleQuery, //
       TransitionCostFunction transitionCostFunction, //
       Tensor root, Tensor goal) {
-    forwardRrts = new DefaultRrts(transitionSpace, rrtsNodeCollection.get(), obstacleQuery, transitionCostFunction);
+    nodeCollection = rrtsNodeCollection.get();
+    forwardRrts = new DefaultRrts(transitionSpace, nodeCollection, obstacleQuery, transitionCostFunction);
     backwardRrts = new DefaultRrts(Reversal.of(transitionSpace), rrtsNodeCollection.get(), obstacleQuery, transitionCostFunction);
     this.root = forwardRrts.insertAsNode(root, 0).get();
+    forwardRrts.insertAsNode(goal, 1); // trivial solution
     backwardRrts.insertAsNode(goal, 0).get();
     this.goal = goal;
   }
@@ -51,10 +53,13 @@ public class BidirectionalRrts implements Rrts {
     if (!backwardRoot.equals(goal))
       throw TensorRuntimeException.of(backwardRoot, goal);
     List<Optional<RrtsNode>> optionals = new ArrayList<>();
-    for (RrtsNode node : toGoal)
-      optionals.add(forwardRrts.insertAsNode(node.state(), k_nearest)); // FIXME multiple insertions of same node
-    if (optionals.stream().allMatch(Optional::isPresent)) { // FIXME should always be true
-      goalNode = Lists.getLast(optionals);
+    for (RrtsNode node : toGoal) {
+      Optional<RrtsNode> optional = find(node.state());
+      if (!optional.isPresent())
+        optional = forwardRrts.insertAsNode(node.state(), k_nearest);
+      optionals.add(optional);
+    }
+    if (!optionals.isEmpty() && optionals.stream().allMatch(Optional::isPresent)) { // FIXME should always be true
       System.out.println("success");
     } else
       System.out.println("fail");
@@ -70,10 +75,20 @@ public class BidirectionalRrts implements Rrts {
   }
 
   public Optional<RrtsNode> getGoal() {
-    return goalNode;
+    return find(goal);
   }
 
   /* package */ TransitionRegionQuery getObstacleQuery() {
     return ((DefaultRrtsPlanner) forwardRrts).getObstacleQuery();
+  }
+
+  private Optional<RrtsNode> find(Tensor state) {
+    Optional<RrtsNode> optional = nodeCollection.nearTo(state, 1).stream().findFirst();
+    if (optional.isPresent()) {
+      RrtsNode closest = optional.get();
+      if (closest.state().equals(state))
+        return optional;
+    }
+    return Optional.empty();
   }
 }

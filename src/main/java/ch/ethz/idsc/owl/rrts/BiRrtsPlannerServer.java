@@ -47,7 +47,7 @@ public abstract class BiRrtsPlannerServer extends RrtsPlannerServer {
 
   @Override // from RrtsPlannerServer
   public void setGoal(Tensor goal) {
-    this.goal = goal;
+    this.goal = convertGoal(goal);
   }
 
   @Override // from RrtsPlannerServer
@@ -61,4 +61,6 @@ public abstract class BiRrtsPlannerServer extends RrtsPlannerServer {
   protected abstract RrtsNodeCollection rrtsNodeCollection();
 
   protected abstract RandomSampleInterface spaceSampler(Tensor state);
+
+  protected abstract Tensor convertGoal(Tensor goal);
 }
