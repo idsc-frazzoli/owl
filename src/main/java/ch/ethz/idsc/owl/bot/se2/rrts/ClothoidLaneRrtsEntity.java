@@ -35,14 +35,19 @@ import ch.ethz.idsc.tensor.opt.Pi;
       }).unmodifiable();
 
   // ---
-  /** @param stateTime initial position of entity */
   public ClothoidLaneRrtsEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds) {
+    this(stateTime, transitionRegionQuery, lbounds, ubounds, false);
+  }
+
+  /** @param stateTime initial position of entity */
+  public ClothoidLaneRrtsEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds, boolean greedy) {
     super( //
         new LaneRrtsPlannerServer( //
             ClothoidTransitionSpace.INSTANCE, //
             transitionRegionQuery, //
             RationalScalar.of(1, 10), //
-            STATE_SPACE_MODEL) {
+            STATE_SPACE_MODEL, //
+            greedy) {
           private final Tensor lbounds_ = lbounds.copy().append(RealScalar.ZERO).unmodifiable();
           private final Tensor ubounds_ = ubounds.copy().append(Pi.TWO).unmodifiable();
 

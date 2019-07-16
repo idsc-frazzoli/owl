@@ -14,14 +14,14 @@ import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 
 public class DefaultRrtsPlanner implements RrtsPlanner {
-  private static final int K_NEAREST = 12;
+  protected static final int K_NEAREST = 12;
+  protected static final Random RANDOM = new Random();
   private static final RrtsNode DUMMY = new RrtsNodeImpl(null, null);
-  private static final Random RANDOM = new Random();
   // ---
-  private final Rrts rrts;
+  protected final Rrts rrts;
   private final RandomSampleInterface spaceSample;
   private final RandomSampleInterface goalSample;
-  private final Queue<RrtsNode> queue;
+  protected final Queue<RrtsNode> queue;
 
   /** @param rrts with root already inserted
    * @param spaceSample

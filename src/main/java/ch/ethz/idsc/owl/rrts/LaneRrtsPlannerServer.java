@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.rrts;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
@@ -16,14 +17,18 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer implements LaneConsumer {
-  private LaneRandomSample laneSampler;
+  private final boolean greedy;
+  private RandomSampleInterface laneSampler;
+  private RandomSampleInterface goalSampler;
 
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
       TransitionRegionQuery obstacleQuery, //
       Scalar resolution, //
-      StateSpaceModel stateSpaceModel) {
+      StateSpaceModel stateSpaceModel, //
+      boolean greedy) {
     super(transitionSpace, obstacleQuery, resolution, stateSpaceModel);
+    this.greedy = greedy;
   }
 
   public LaneRrtsPlannerServer( //
@@ -31,8 +36,10 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
       TransitionRegionQuery obstacleQuery, //
       Scalar resolution, //
       StateSpaceModel stateSpaceModel, //
-      TransitionCostFunction costFunction) {
+      TransitionCostFunction costFunction, //
+      boolean greedy) {
     super(transitionSpace, obstacleQuery, resolution, stateSpaceModel, costFunction);
+    this.greedy = greedy;
   }
 
   @Override // from DefaultRrtsPlannerServer
@@ -44,13 +51,16 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
 
   @Override // from DefaultRrtsPlannerServer
   protected RandomSampleInterface goalSampler(Tensor state) {
-    if (Objects.nonNull(laneSampler))
-      return laneSampler.endSample();
+    if (Objects.nonNull(goalSampler))
+      return goalSampler;
     return new ConstantRandomSample(state);
   }
 
   @Override // from Consumer
-  public void accept(LaneInterface lane) {
-    laneSampler = LaneRandomSample.along(lane);
+  public void accept(LaneInterface laneInterface) {
+    laneSampler = LaneRandomSample.along(laneInterface);
+    goalSampler = LaneRandomSample.endSample(laneInterface);
+    if (greedy)
+      setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }
 }
