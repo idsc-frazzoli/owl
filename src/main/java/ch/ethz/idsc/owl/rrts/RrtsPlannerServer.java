@@ -27,7 +27,6 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.io.Serialization;
 
 public abstract class RrtsPlannerServer implements TransitionPlanner {
   protected final TransitionSpace transitionSpace;
@@ -141,13 +140,7 @@ public abstract class RrtsPlannerServer implements TransitionPlanner {
   }
 
   public TransitionSpace getTransitionSpace() {
-    try {
-      return Serialization.copy(transitionSpace);
-    } catch (Exception e) {
-      // this should never happen!
-      e.printStackTrace();
-      return null;
-    }
+    return transitionSpace;
   }
 
   protected abstract Tensor uBetween(StateTime orig, StateTime dest);
@@ -156,7 +149,7 @@ public abstract class RrtsPlannerServer implements TransitionPlanner {
 
   public abstract void setGoal(Tensor goal);
 
-  public class RrtsPlannerProcess {
+  protected static class RrtsPlannerProcess {
     private final RrtsPlanner rrtsPlanner;
     private final RrtsNode root;
 

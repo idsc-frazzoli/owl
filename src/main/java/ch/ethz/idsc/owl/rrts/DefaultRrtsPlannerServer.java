@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,7 @@ import ch.ethz.idsc.tensor.Tensors;
 public abstract class DefaultRrtsPlannerServer extends RrtsPlannerServer {
   private Tensor state = Tensors.empty();
   private Tensor goal = Tensors.empty();
-  private Collection<Tensor> greeds = Collections.EMPTY_LIST;
+  private Collection<Tensor> greeds = Collections.emptyList();
 
   public DefaultRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -61,9 +60,11 @@ public abstract class DefaultRrtsPlannerServer extends RrtsPlannerServer {
   @Override // from RrtsPlannerServer
   protected RrtsPlannerProcess setupProcess(StateTime stateTime) {
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
-    Optional<RrtsNode> optional = rrts.insertAsNode(Objects.requireNonNull(stateTime).state(), 5);
+    Optional<RrtsNode> optional = rrts.insertAsNode(stateTime.state(), 5);
     if (optional.isPresent()) {
-      Collection<Tensor> greeds_ = greeds.stream().filter(point -> !optional.get().state().equals(point)).collect(Collectors.toList());
+      Collection<Tensor> greeds_ = greeds.stream() //
+          .filter(point -> !optional.get().state().equals(point)) //
+          .collect(Collectors.toList());
       RrtsPlanner rrtsPlanner = greeds_.isEmpty() //
           ? new DefaultRrtsPlanner(rrts, spaceSampler(state), goalSampler(goal)) //
           : new GreedyRrtsPlanner(rrts, spaceSampler(state), goalSampler(goal), greeds_).withGoal(goal);
