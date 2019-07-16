@@ -16,8 +16,7 @@ public interface LaneInterface {
   /** @return points of right lane boundary */
   Tensor rightBoundary();
 
-  /** @return distances to boundary boundary from {@link LaneInterface#midLane()}*/
+  /** @return distances to boundary boundary from {@link LaneInterface#midLane()} */
   Tensor margins();
-
   // maybe also add curvature at some point
 }

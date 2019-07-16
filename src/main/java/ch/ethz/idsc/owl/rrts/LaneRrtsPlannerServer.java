@@ -18,7 +18,8 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer implements LaneConsumer {
   private final boolean greedy;
-  private LaneRandomSample laneSampler;
+  private RandomSampleInterface laneSampler;
+  private RandomSampleInterface goalSampler;
 
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -50,15 +51,16 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
 
   @Override // from DefaultRrtsPlannerServer
   protected RandomSampleInterface goalSampler(Tensor state) {
-    if (Objects.nonNull(laneSampler))
-      return laneSampler.endSample();
+    if (Objects.nonNull(goalSampler))
+      return goalSampler;
     return new ConstantRandomSample(state);
   }
 
   @Override // from Consumer
-  public void accept(LaneInterface lane) {
-    laneSampler = LaneRandomSample.along(lane);
+  public void accept(LaneInterface laneInterface) {
+    laneSampler = LaneRandomSample.along(laneInterface);
+    goalSampler = LaneRandomSample.endSample(laneInterface);
     if (greedy)
-      setGreeds(lane.controlPoints().stream().collect(Collectors.toList()));
+      setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }
 }

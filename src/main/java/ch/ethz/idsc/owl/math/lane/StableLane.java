@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** lane of constant width */
@@ -42,7 +41,8 @@ public class StableLane implements LaneInterface, Serializable {
     this.refined = refined;
     lbound = boundary(OFS_L, width).unmodifiable();
     rbound = boundary(OFS_R, width).unmodifiable();
-    margins = Array.zeros(refined.length()).map(s -> width.multiply(RationalScalar.HALF));
+    Scalar margin = width.multiply(RationalScalar.HALF);
+    margins = Tensors.vector(i -> margin, refined.length());
   }
 
   private Tensor boundary(Tensor base, Scalar width) {
