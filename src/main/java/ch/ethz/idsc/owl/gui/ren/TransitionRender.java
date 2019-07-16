@@ -45,7 +45,7 @@ public class TransitionRender implements RenderInterface {
   }
 
   private class Render implements RenderInterface {
-    private final ColorDataIndexed colors = TreeColor.LO.edgeColor;
+    private final ColorDataIndexed colorDataIndexed = TreeColor.LO.edgeColor;
     private final Collection<? extends RrtsNode> collection;
     private final double min;
     private final double inverse;
@@ -60,7 +60,7 @@ public class TransitionRender implements RenderInterface {
           .summaryStatistics();
       min = doubleSummaryStatistics.getMin();
       double max = doubleSummaryStatistics.getMax();
-      inverse = (colors.length() - 1) / (max - min);
+      inverse = (colorDataIndexed.length() - 1) / (max - min);
     }
 
     @Override // from RenderInterface
@@ -69,10 +69,12 @@ public class TransitionRender implements RenderInterface {
         for (RrtsNode child : parent.children()) {
           double value = child.costFromRoot().number().doubleValue();
           final double interp = (value - min) * inverse;
-          graphics.setColor(colors.getColor((int) interp));
+          graphics.setColor(colorDataIndexed.getColor((int) interp));
           Transition transition = transitionSpace.connect(parent.state(), child.state());
+          // TODO JPH class design not ideal
           if (transition instanceof RenderTransition) {
-            Path2D path2d = geometricLayer.toPath2D(((RenderTransition) transition).rendered(RealScalar.of(0.2), 10)); // TODO JPH magic const
+            // TODO JPH magic const
+            Path2D path2d = geometricLayer.toPath2D(((RenderTransition) transition).rendered(RealScalar.of(0.2), 10));
             graphics.draw(path2d);
           }
         }

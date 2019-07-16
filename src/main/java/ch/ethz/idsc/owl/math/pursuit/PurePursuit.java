@@ -56,6 +56,7 @@ public class PurePursuit {
         : Optional.empty();
   }
 
+  /** @return */
   public Optional<Tensor> lookAhead() {
     return lookAhead;
   }
