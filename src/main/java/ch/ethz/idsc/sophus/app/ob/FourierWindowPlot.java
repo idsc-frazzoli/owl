@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.sca.Round;
     }
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
-      yData.append(TransferFunctionResponse.FREQUENCY.apply(meanData));
+      yData.append(FrequencyResponse.PHASE.apply(meanData));
     // ---
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Lie Group Filters: radius = " + radius + "  Phase Response - $" + signal + "$");
@@ -90,7 +90,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   private static void magniutdePlot(Tensor data, int radius, String signal, SmoothingKernel smoothingKernel) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data) {
-      yData.append(TransferFunctionResponse.MAGNITUDE.apply(meanData));
+      yData.append(FrequencyResponse.MAGNITUDE.apply(meanData));
     }
     // ---
     Tensor xAxis = Tensors.empty();

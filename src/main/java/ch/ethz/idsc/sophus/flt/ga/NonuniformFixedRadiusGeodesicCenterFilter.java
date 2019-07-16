@@ -19,6 +19,8 @@ public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUn
    * @throws Exception given if nonuniformFixedRadiusGeodesicCenter is null */
   public static NonuniformFixedRadiusGeodesicCenterFilter of( //
       NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, int radius) {
+    if (radius < 0)
+      throw new IllegalArgumentException("radius=" + radius);
     return new NonuniformFixedRadiusGeodesicCenterFilter( //
         Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenter), radius);
   }
@@ -30,7 +32,7 @@ public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUn
   private NonuniformFixedRadiusGeodesicCenterFilter( //
       NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, int radius) {
     this.nonuniformFixedRadiusGeodesicCenter = nonuniformFixedRadiusGeodesicCenter;
-    this.radius = radius >= 0 ? radius : null;
+    this.radius = radius;
   }
 
   @Override
