@@ -1,33 +1,24 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
-import java.awt.Shape;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.pursuit.PurePursuit;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** pure pursuit control */
-/* package */ class PurePursuitControl extends Se2TrajectoryControl {
-  private final Scalar lookAhead;
-  private PurePursuit purePursuit = null;
-
+/* package */ class PurePursuitControl extends LookAheadControl {
   /** @param lookAhead distance
    * @param maxTurningRate */
   public PurePursuitControl(Scalar lookAhead, Scalar maxTurningRate) {
-    super(Clips.absolute(maxTurningRate));
-    this.lookAhead = lookAhead;
+    super(lookAhead, maxTurningRate);
   }
 
   @Override // from AbstractEntity
@@ -42,23 +33,15 @@ import ch.ethz.idsc.tensor.sca.Sign;
         .map(tensorUnaryOperator));
     if (Sign.isNegative(speed))
       beacons.set(Scalar::negate, Tensor.ALL, 0);
-    PurePursuit _purePursuit = PurePursuit.fromTrajectory(beacons, lookAhead);
-    if (_purePursuit.ratio().isPresent()) {
-      Scalar ratio = _purePursuit.ratio().get();
+    PurePursuit purePursuit = PurePursuit.fromTrajectory(beacons, lookAhead);
+    if (purePursuit.ratio().isPresent()) {
+      Scalar ratio = purePursuit.ratio().get();
       if (clip.isInside(ratio)) {
-        purePursuit = _purePursuit;
+        targetLocal = purePursuit.lookAhead().get(); // ratio isPresent implies lookAhead isPresent
         return Optional.of(CarHelper.singleton(speed, ratio).getU());
       }
     }
-    purePursuit = null;
-    return Optional.empty();
-  }
-
-  @Override // from TrajectoryTargetRender
-  public Optional<Shape> toTarget(GeometricLayer geometricLayer) {
-    PurePursuit _purePursuit = purePursuit; // copy reference
-    if (Objects.nonNull(_purePursuit) && _purePursuit.lookAhead().isPresent())
-      return Optional.of(geometricLayer.toLine2D(Array.zeros(2), _purePursuit.lookAhead().get()));
+    targetLocal = null;
     return Optional.empty();
   }
 }
