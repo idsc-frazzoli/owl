@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
-public class DirectionalTest extends TestCase {
+public class DirectionalTransitionSpaceTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
     Tensor a = Tensors.fromString("{1[m], 1[m], 0}");
     Tensor b = Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF);
@@ -28,7 +28,7 @@ public class DirectionalTest extends TestCase {
   }
 
   private static void _checkLength(Tensor start, Tensor end) throws ClassNotFoundException, IOException {
-    Transition transition = Serialization.copy(Directional.of(ClothoidTransitionSpace.INSTANCE)).connect(start, end);
+    Transition transition = Serialization.copy(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE)).connect(start, end);
     Chop._15.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
   }
 
@@ -40,7 +40,7 @@ public class DirectionalTest extends TestCase {
   }
 
   private static void _checkSamples(Tensor start, Tensor end) {
-    Transition transition = Directional.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
+    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");
       Tensor samples = transition.sampled(res);
@@ -66,7 +66,7 @@ public class DirectionalTest extends TestCase {
   }
 
   public void testWrap(Tensor start, Tensor end) {
-    Transition transition = Directional.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
+    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
     {
       Scalar res = Quantity.of(.5, "m");
       TransitionWrap wrap = transition.wrapped(res);

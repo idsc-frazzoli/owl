@@ -42,7 +42,7 @@ public class RnTransition extends AbstractTransition {
   }
 
   @Override // from RenderTransition
-  public Tensor rendered(Scalar minResolution, int minSteps) {
+  public Tensor linearized(Scalar minResolution, int minSteps) {
     return Tensors.of(start(), end());
   }
 }

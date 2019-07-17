@@ -32,4 +32,11 @@ public interface Transition {
   /** @param steps > 0
    * @return */
   TransitionWrap wrapped(int steps);
+
+  /** Hint: function is suitable to efficiently draw transition as path2d
+   * 
+   * @param minResolution
+   * @param minSteps
+   * @return sequence of points on transition that can be connected with straight lines */
+  Tensor linearized(Scalar minResolution, int minSteps);
 }

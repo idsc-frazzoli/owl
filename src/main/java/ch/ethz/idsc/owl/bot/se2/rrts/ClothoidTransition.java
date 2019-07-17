@@ -62,4 +62,11 @@ public class ClothoidTransition extends AbstractTransition {
   public ClothoidTerminalRatios terminalRatios() {
     return ClothoidTerminalRatios.of(start(), end());
   }
+
+  @Override // from Transition
+  public Tensor linearized(Scalar minResolution, int minSteps) {
+    return (Scalars.lessThan(minResolution, length().divide(RealScalar.of(minSteps))) //
+        ? sampled(minResolution).copy() //
+        : sampled(minSteps).copy()).append(end());
+  }
 }

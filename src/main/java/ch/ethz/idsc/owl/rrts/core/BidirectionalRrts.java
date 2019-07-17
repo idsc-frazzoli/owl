@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.rrts.adapter.Reversal;
+import ch.ethz.idsc.owl.rrts.adapter.ReversalTransitionSpace;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 
@@ -27,7 +27,7 @@ public class BidirectionalRrts implements Rrts {
       Tensor root, Tensor goal) {
     nodeCollection = rrtsNodeCollection.get();
     forwardRrts = new DefaultRrts(transitionSpace, nodeCollection, obstacleQuery, transitionCostFunction);
-    backwardRrts = new DefaultRrts(Reversal.of(transitionSpace), rrtsNodeCollection.get(), obstacleQuery, transitionCostFunction);
+    backwardRrts = new DefaultRrts(ReversalTransitionSpace.of(transitionSpace), rrtsNodeCollection.get(), obstacleQuery, transitionCostFunction);
     this.root = forwardRrts.insertAsNode(root, 0).get();
     forwardRrts.insertAsNode(goal, 1); // trivial solution
     backwardRrts.insertAsNode(goal, 0).get();

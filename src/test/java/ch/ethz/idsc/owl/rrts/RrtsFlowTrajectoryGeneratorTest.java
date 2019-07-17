@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.owl.rrts.adapter.Directional;
+import ch.ethz.idsc.owl.rrts.adapter.DirectionalTransitionSpace;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -149,7 +149,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
 
   public void testDirectionalClothoid() {
     Rrts rrts = new DefaultRrts( //
-        Directional.of(ClothoidTransitionSpace.INSTANCE), //
+        DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), //
         // no specific collection for directional clothoid
         RrtsNodeCollections.euclidean(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
@@ -170,7 +170,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
         Se2StateSpaceModel.INSTANCE, //
         RrtsFlowHelper.U_SE2);
     List<TrajectorySample> trajectory = //
-        generator.createTrajectory(Directional.of(ClothoidTransitionSpace.INSTANCE), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
+        generator.createTrajectory(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
     assertEquals(48, trajectory.size());
     for (int i = 1; i < 16; i++) {

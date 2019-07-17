@@ -8,6 +8,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -45,5 +46,12 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
       spacing.set(i > 0 ? step : step.zero(), i);
     });
     return new TransitionWrap(samples, spacing);
+  }
+
+  @Override // from RenderTransition
+  public Tensor linearized(Scalar minResolution, int minSteps) {
+    return (Scalars.lessThan(minResolution, length().divide(RealScalar.of(minSteps))) //
+        ? sampled(minResolution).copy() //
+        : sampled(minSteps).copy()).append(end());
   }
 }

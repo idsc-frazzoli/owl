@@ -1,14 +1,38 @@
 // code by gjoel
 package ch.ethz.idsc.owl.rrts.adapter;
 
+import ch.ethz.idsc.owl.rrts.core.Transition;
+import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class DirectedTransition extends AbstractTransition {
+public class DirectedTransition extends AbstractTransition {
+  private final Transition transition;
   public final boolean isForward;
 
-  public DirectedTransition(Tensor start, Tensor end, Scalar length, boolean isForward) {
-    super(start, end, length);
+  public DirectedTransition(Transition transition, Scalar length, boolean isForward) {
+    super(transition.start(), transition.end(), length);
+    this.transition = transition;
     this.isForward = isForward;
+  }
+
+  @Override // from Transition
+  public Tensor sampled(Scalar minResolution) {
+    return transition.sampled(minResolution);
+  }
+
+  @Override // from Transition
+  public Tensor sampled(int steps) {
+    return transition.sampled(steps);
+  }
+
+  @Override // from Transition
+  public TransitionWrap wrapped(int steps) {
+    return transition.wrapped(steps);
+  }
+
+  @Override // from Transition
+  public Tensor linearized(Scalar minResolution, int minSteps) {
+    return transition.linearized(minResolution, minSteps);
   }
 }

@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.data.tree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,7 +76,7 @@ public enum Nodes {
    * @param node
    * @return */
   public static <T extends Node> Collection<T> ofSubtree(T node) {
-    Collection<T> collection = new ArrayList<>();
+    Collection<T> collection = new LinkedList<>();
     ofSubtree(node, collection);
     return collection;
   }

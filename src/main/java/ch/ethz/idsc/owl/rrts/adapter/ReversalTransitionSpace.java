@@ -14,22 +14,22 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Reverse;
 
-public class Reversal implements TransitionSpace, Serializable {
+public class ReversalTransitionSpace implements TransitionSpace, Serializable {
   public static TransitionSpace of(TransitionSpace transitionSpace) {
-    return new Reversal(transitionSpace);
+    return new ReversalTransitionSpace(transitionSpace);
   }
 
   // ---
   private final TransitionSpace transitionSpace;
 
-  private Reversal(TransitionSpace transitionSpace) {
+  private ReversalTransitionSpace(TransitionSpace transitionSpace) {
     this.transitionSpace = transitionSpace;
   }
 
   @Override // from TransitionSpace
   public DirectedTransition connect(Tensor start, Tensor end) {
     Transition _transition = transitionSpace.connect(end, start);
-    return new DirectedTransition(start, end, _transition.length(), false) {
+    return new DirectedTransition(_transition, _transition.length(), false) {
       final Transition transition = _transition;
 
       @Override // from Transition
