@@ -18,7 +18,6 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /* package */ class RrtsFlowTrajectoryGenerator {
   private final StateSpaceModel stateSpaceModel;
@@ -47,16 +46,12 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
       for (int i = 0; i < samples.length(); i++) {
         ti = ti.add(spacing.Get(i));
         StateTime stateTime = new StateTime(samples.get(i), ti);
-        if (trajectory.isEmpty())
-          throw TensorRuntimeException.of(t0, ti); // trajectory.add(TrajectorySample.head(stateTime));
-        else {
-          StateTime orig = Lists.getLast(trajectory).stateTime();
-          Tensor u = (transition instanceof DirectedTransition && !((DirectedTransition) transition).isForward) //
-              ? uBetween.apply(stateTime, orig) //
-              : uBetween.apply(orig, stateTime);
-          Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
-          trajectory.add(new TrajectorySample(stateTime, flow));
-        }
+        StateTime orig = Lists.getLast(trajectory).stateTime();
+        Tensor u = (transition instanceof DirectedTransition && !((DirectedTransition) transition).isForward) //
+            ? uBetween.apply(stateTime, orig) //
+            : uBetween.apply(orig, stateTime);
+        Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
+        trajectory.add(new TrajectorySample(stateTime, flow));
       }
       prev = node;
       t0 = t0.add(transition.length());
