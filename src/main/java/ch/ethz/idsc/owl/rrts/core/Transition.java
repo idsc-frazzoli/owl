@@ -17,23 +17,16 @@ public interface Transition {
   /** FUNCTIONALITY BELOW IS ONLY FOR COLLISION CHECKING AND RENDERING */
   // ---
 
-  /** FIXME GJOEL/JPH define if start or end are inclusive
+  /** FIXME GJOEL/JPH doc/define if start or end are inclusive
    * JAN: "probably start should not be part of the returned samples"
    * 
-   * @param minResolution is positive
+   * @param minResolution is strictly positive
    * @return */
   Tensor sampled(Scalar minResolution);
 
-  /** @param steps > 0
-   * @return */
-  // Tensor sampled(int steps);
   /** @param minResolution is positive
    * @return */
   TransitionWrap wrapped(Scalar minResolution);
-
-  /** @param steps > 0
-   * @return */
-  TransitionWrap wrapped(int steps);
 
   /** Hint: function is suitable to efficiently draw transition as path2d
    * 

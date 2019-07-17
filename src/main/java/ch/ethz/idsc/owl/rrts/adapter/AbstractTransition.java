@@ -4,11 +4,8 @@ package ch.ethz.idsc.owl.rrts.adapter;
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
-import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Ceiling;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 /** suggested base class for all implementations of {@link Transition} */
 public abstract class AbstractTransition implements Transition, Serializable {
@@ -35,11 +32,5 @@ public abstract class AbstractTransition implements Transition, Serializable {
   @Override // from Transition
   public final Scalar length() {
     return length;
-  }
-
-  @Override // from Transition
-  public final TransitionWrap wrapped(Scalar minResolution) {
-    Sign.requirePositive(minResolution);
-    return wrapped(Ceiling.FUNCTION.apply(length.divide(minResolution)).number().intValue());
   }
 }

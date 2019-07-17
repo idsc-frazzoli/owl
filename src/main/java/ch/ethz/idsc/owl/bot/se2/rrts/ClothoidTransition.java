@@ -20,8 +20,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
+  private static final int MAX_ITER = 8;
   static final TensorMetric TENSOR_METRIC = PseudoClothoidDistance.INSTANCE;
   private static final CurveSubdivision CURVE_SUBDIVISION = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
 
@@ -31,22 +34,27 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor sampled(Scalar minResolution) {
+    Sign.requirePositive(minResolution);
     Tensor samples = Tensors.of(start(), end());
     // TODO GJOEL/JPH implementation inefficient
-    while (Differences.of(samples).stream().map(Extract2D.FUNCTION).map(Norm._2::ofVector).anyMatch(s -> Scalars.lessThan(minResolution, s)))
+    int iter = 0;
+    while (iter < MAX_ITER) {
+      boolean sufficient = Differences.of(samples).stream() //
+          .map(Extract2D.FUNCTION) //
+          .map(Norm._2::ofVector) //
+          .allMatch(scalar -> Scalars.lessThan(scalar, minResolution));
+      if (sufficient)
+        break;
       samples = CURVE_SUBDIVISION.string(samples);
+      ++iter;
+    }
     return samples.extract(0, samples.length() - 1);
   }
 
-  // @Override // from Transition
-  // public Tensor sampled(int steps) {
-  // if (steps < 1)
-  // throw TensorRuntimeException.of(length(), RealScalar.of(steps));
-  // Tensor samples = Nest.of(CURVE_SUBDIVISION::string, Tensors.of(start(), end()), IntegerLog2.ceil(steps));
-  // return samples.extract(0, samples.length() - 1);
-  // }
   @Override // from Transition
-  public TransitionWrap wrapped(int steps) {
+  public TransitionWrap wrapped(Scalar minResolution) {
+    Sign.requirePositive(minResolution);
+    int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
     Tensor samples = sampled(length().divide(RealScalar.of(steps)));
     Tensor spacing = Array.zeros(samples.length());
     IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //

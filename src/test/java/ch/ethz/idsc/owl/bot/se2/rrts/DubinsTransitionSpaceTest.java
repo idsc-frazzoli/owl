@@ -66,13 +66,13 @@ public class DubinsTransitionSpaceTest extends TestCase {
       assertEquals(RealScalar.ZERO, wrap.spacing().Get(0));
       assertEquals(res, wrap.spacing().Get(1));
     }
-    {
-      TransitionWrap wrap = transition.wrapped(8);
-      assertEquals(8, wrap.samples().length());
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
-      assertEquals(RealScalar.ZERO, wrap.spacing().Get(0));
-      assertEquals(transition.length().divide(RealScalar.of(8)), wrap.spacing().Get(1));
-    }
+    // {
+    // TransitionWrap wrap = transition.wrapped(8);
+    // assertEquals(8, wrap.samples().length());
+    // assertEquals(start, wrap.samples().get(0));
+    // assertNotSame(end, Last.of(wrap.samples()));
+    // assertEquals(RealScalar.ZERO, wrap.spacing().Get(0));
+    // assertEquals(transition.length().divide(RealScalar.of(8)), wrap.spacing().Get(1));
+    // }
   }
 }

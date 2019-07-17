@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public class RnTransition extends AbstractTransition {
   public RnTransition(Tensor start, Tensor end) {
@@ -27,7 +28,9 @@ public class RnTransition extends AbstractTransition {
   }
 
   @Override // from Transition
-  public TransitionWrap wrapped(int steps) {
+  public TransitionWrap wrapped(Scalar minResolution) {
+    Sign.requirePositive(minResolution);
+    int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
     if (steps < 1)
       throw TensorRuntimeException.of(length(), RealScalar.of(steps));
     Scalar resolution = length().divide(RealScalar.of(steps));

@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class DubinsTransition extends AbstractTransition {
   final DubinsPath dubinsPath;
@@ -35,7 +36,9 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
   }
 
   @Override // from Transition
-  public TransitionWrap wrapped(int steps) {
+  public TransitionWrap wrapped(Scalar minResolution) {
+    Sign.requirePositive(minResolution);
+    int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
     if (steps < 1)
       throw TensorRuntimeException.of(RealScalar.of(steps));
     Tensor samples = Array.zeros(steps);

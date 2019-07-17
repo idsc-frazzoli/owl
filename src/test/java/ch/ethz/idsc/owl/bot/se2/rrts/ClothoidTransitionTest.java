@@ -35,10 +35,10 @@ public class ClothoidTransitionTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
-    assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 1);
-    assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 2);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 64);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 128);
     try {
-      clothoidTransition.wrapped(0);
+      clothoidTransition.wrapped(RealScalar.ZERO);
       fail();
     } catch (Exception exception) {
       // ---

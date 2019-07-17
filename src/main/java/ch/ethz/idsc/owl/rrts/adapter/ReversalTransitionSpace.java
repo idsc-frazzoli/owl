@@ -8,9 +8,12 @@ import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ReversalTransitionSpace implements TransitionSpace, Serializable {
   public static TransitionSpace of(TransitionSpace transitionSpace) {
@@ -29,7 +32,9 @@ public class ReversalTransitionSpace implements TransitionSpace, Serializable {
     Transition transition = transitionSpace.connect(end, start);
     return new ReversalTransition(transition) {
       @Override // from Transition
-      public TransitionWrap wrapped(int steps) {
+      public TransitionWrap wrapped(Scalar minResolution) {
+        Sign.requirePositive(minResolution);
+        int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
         if (steps < 1)
           throw TensorRuntimeException.of(length(), RealScalar.of(steps));
         Tensor samples = sampled(length().divide(RealScalar.of(steps)));

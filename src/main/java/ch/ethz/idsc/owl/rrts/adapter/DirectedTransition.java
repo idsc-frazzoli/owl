@@ -22,8 +22,8 @@ public class DirectedTransition extends AbstractTransition {
   }
 
   @Override // from Transition
-  public TransitionWrap wrapped(int steps) {
-    return transition.wrapped(steps);
+  public TransitionWrap wrapped(Scalar minResolution) {
+    return transition.wrapped(minResolution);
   }
 
   @Override // from Transition
