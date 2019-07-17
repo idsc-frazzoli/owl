@@ -36,8 +36,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
     Tensor a = Tensors.fromString("{1[m], 2[m], 1}");
     Tensor b = Tensors.fromString("{1[m], 6[m], 3}");
     _checkSamples(a, b);
-    // TODO GJOEL/JPH jan broke test
-    // _checkSamples(b, a);
+    _checkSamples(b, a);
   }
 
   private static void _checkSamples(Tensor start, Tensor end) {
@@ -62,9 +61,8 @@ public class DirectionalTransitionSpaceTest extends TestCase {
   public void testWrap() {
     Tensor a = Tensors.fromString("{1[m], 2[m], 1}");
     Tensor b = Tensors.fromString("{1[m], 6[m], 3}");
-    // TODO GJOEL/JPH jan broke test
-    // testWrap(a, b);
-    // testWrap(b, a);
+    testWrap(a, b);
+    testWrap(b, a);
   }
 
   public void testWrap(Tensor start, Tensor end) {
