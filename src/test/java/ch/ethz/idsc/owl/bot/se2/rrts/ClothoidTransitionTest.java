@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,7 +24,13 @@ public class ClothoidTransitionTest extends TestCase {
   public void testLog2Int() {
     int value = 1024;
     int bit = 31 - Integer.numberOfLeadingZeros(value);
-    System.out.println(bit);
+    assertEquals(bit, 10);
+  }
+
+  public void testWrapped() {
+    ClothoidTransition clothoidTransition = new ClothoidTransition(Tensors.vector(2, 3, 3), Tensors.vector(4, 1, 5));
+    TransitionWrap transitionWrap = clothoidTransition.wrapped(RealScalar.of(.2));
+    assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
   }
 
   public void testSamplesSteps() {

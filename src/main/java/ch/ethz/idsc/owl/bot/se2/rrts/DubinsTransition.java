@@ -18,10 +18,10 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class DubinsTransition extends AbstractTransition {
-  final DubinsPath dubinsPath;
+  private final DubinsPath dubinsPath;
 
   public DubinsTransition(Tensor start, Tensor end, DubinsPath dubinsPath) {
-    super(start, end, dubinsPath.length()); // TODO GJOEL confirm assumption that length() == Euclidean length
+    super(start, end, dubinsPath.length());
     this.dubinsPath = dubinsPath;
   }
 
