@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
@@ -13,7 +12,6 @@ import org.jfree.graphics2d.svg.SVGUtils;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;
@@ -48,13 +46,78 @@ import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class FourierWindowCausalPlot {
-  private static void plot(Tensor data, int radius, String signal, Scalar alpha, ScalarUnaryOperator smoothingKernel) throws IOException {
+  private final GokartPoseData gokartPoseData;
+  private final ScalarUnaryOperator smoothingKernel;
+  private final int radius;
+  private final Scalar alpha;
+
+  public FourierWindowCausalPlot(GokartPoseData gokartPoseData, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha) {
+    this.gokartPoseData = gokartPoseData;
+    this.smoothingKernel = smoothingKernel;
+    this.radius = radius;
+    this.alpha = alpha;
+  }
+
+  private void process(int limit) throws IOException {
+    Se2BiinvariantMean se2BiinvariantMean = Se2BiinvariantMean.FILTER;
+    GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
+    TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
+    // ---
+    // TODO JPH TENSOR V075
+    int windowLength = Scalars.intValueExact(Round.FUNCTION.apply(Quantity.of(1, "s").multiply(gokartPoseData.getSampleRate())));
+    int offset = Scalars.intValueExact(Round.FUNCTION.apply(RationalScalar.of(windowLength, 3)));
+    TensorUnaryOperator spectrogramArray = SpectrogramArray.of(windowLength, offset);
+    // ---
+    Tensor smoothedX = Tensors.empty();
+    Tensor smoothedY = Tensors.empty();
+    Tensor smoothedA = Tensors.empty();
+    Iterator<String> iterator = gokartPoseData.list().iterator();
+    for (int index = 0; index < limit; ++index) {
+      Tensor control = gokartPoseData.getPose(iterator.next(), Integer.MAX_VALUE);
+      Tensor tempX = Tensors.empty();
+      Tensor tempY = Tensors.empty();
+      Tensor tempA = Tensors.empty();
+      for (LieGroupCausalFilters lgcf : LieGroupCausalFilters.values()) {
+        Tensor smoothd = Tensors.empty();
+        switch (lgcf) {
+        case GEODESIC_FIR:
+          smoothd = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
+          break;
+        case GEODESIC_IIR:
+          smoothd = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
+          break;
+        case BIINVARIANT_MEAN_FIR:
+          smoothd = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
+              .apply(control);
+          break;
+        case BIINVARIANT_MEAN_IIR:
+          smoothd = BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
+              .apply(control);
+          break;
+        }
+        Tensor rawVec = Se2Differences.INSTANCE.apply(control);
+        Tensor smdVec = Se2Differences.INSTANCE.apply(smoothd);
+        tempX.append(FilterResponse.of(smdVec.get(Tensor.ALL, 0), rawVec.get(Tensor.ALL, 0), spectrogramArray));
+        tempY.append(FilterResponse.of(smdVec.get(Tensor.ALL, 1), rawVec.get(Tensor.ALL, 1), spectrogramArray));
+        tempA.append(FilterResponse.of(smdVec.get(Tensor.ALL, 2), rawVec.get(Tensor.ALL, 2), spectrogramArray));
+      }
+      smoothedX.append(tempX);
+      smoothedY.append(tempY);
+      smoothedA.append(tempA);
+    }
+    plot(Mean.of(smoothedX), "x");
+    plot(Mean.of(smoothedY), "y");
+    plot(Mean.of(smoothedA), "a");
+  }
+
+  private void plot(Tensor data, String signal) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
       yData.append(FrequencyResponse.MAGNITUDE.apply(meanData));
     Tensor xAxis = Tensors.empty();
+    // TODO OB URGENT mistake
     for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index)
-      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(GokartPoseDataV2.INSTANCE.getSampleRate().multiply(Quantity.of(1, "s"))));
+      xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(gokartPoseData.getSampleRate().multiply(Quantity.of(1, "s"))));
     // ---
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel(
@@ -87,64 +150,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
 
-  private static void process(GokartPoseData gokartPoseData, List<String> listData, ScalarUnaryOperator smoothingKernel, int radius, int limit, Scalar alpha)
-      throws IOException {
-    Se2BiinvariantMean se2BiinvariantMean = Se2BiinvariantMean.FILTER;
-    GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
-    TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
-    // ---
-    int windowLength = Scalars.intValueExact(Round.FUNCTION.apply(Quantity.of(1, "s").multiply(gokartPoseData.getSampleRate())));
-    int offset = Scalars.intValueExact(Round.FUNCTION.apply(RationalScalar.of(windowLength, 3)));
-    TensorUnaryOperator spectrogramArray = SpectrogramArray.of(windowLength, offset);
-    // ---
-    Tensor smoothedX = Tensors.empty();
-    Tensor smoothedY = Tensors.empty();
-    Tensor smoothedA = Tensors.empty();
-    Iterator<String> iterator = gokartPoseData.list().iterator();
-    for (int index = 0; index < limit; ++index) {
-      Tensor control = gokartPoseData.getPose(iterator.next(), 10000);
-      Tensor tempX = Tensors.empty();
-      Tensor tempY = Tensors.empty();
-      Tensor tempA = Tensors.empty();
-      for (LieGroupCausalFilters lgcf : LieGroupCausalFilters.values()) {
-        Tensor smoothd = Tensors.empty();
-        switch (lgcf) {
-        case GEODESIC_FIR:
-          smoothd = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
-          break;
-        case GEODESIC_IIR:
-          smoothd = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha).apply(control);
-          break;
-        case BIINVARIANT_MEAN_FIR:
-          smoothd = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
-              .apply(control);
-          break;
-        case BIINVARIANT_MEAN_IIR:
-          smoothd = BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha)
-              .apply(control);
-          break;
-        }
-        Tensor rawVec = Se2Differences.INSTANCE.apply(control);
-        Tensor smdVec = Se2Differences.INSTANCE.apply(smoothd);
-        tempX.append(FilterResponse.of(smdVec.get(Tensor.ALL, 0), rawVec.get(Tensor.ALL, 0), spectrogramArray));
-        tempY.append(FilterResponse.of(smdVec.get(Tensor.ALL, 1), rawVec.get(Tensor.ALL, 1), spectrogramArray));
-        tempA.append(FilterResponse.of(smdVec.get(Tensor.ALL, 2), rawVec.get(Tensor.ALL, 2), spectrogramArray));
-      }
-      smoothedX.append(tempX);
-      smoothedY.append(tempY);
-      smoothedA.append(tempA);
-    }
-    plot(Mean.of(smoothedX), radius, "x", alpha, smoothingKernel);
-    plot(Mean.of(smoothedY), radius, "y", alpha, smoothingKernel);
-    plot(Mean.of(smoothedA), radius, "a", alpha, smoothingKernel);
-  }
-
   public static void main(String[] args) throws IOException {
-    SmoothingKernel smoothingKernel = SmoothingKernel.GAUSSIAN;
-    List<String> listData = GokartPoseDataV1.INSTANCE.list();
-    int radius = 7;
+    FourierWindowCausalPlot fourierWindowCausalPlot = //
+        new FourierWindowCausalPlot(GokartPoseDataV1.INSTANCE, SmoothingKernel.GAUSSIAN, 7, RealScalar.of(0.8));
     int limit = 1;
-    Scalar alpha = RealScalar.of(0.8);
-    process(GokartPoseDataV2.INSTANCE, listData, smoothingKernel, radius, limit, alpha);
+    fourierWindowCausalPlot.process(limit);
   }
 }

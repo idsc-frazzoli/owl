@@ -81,7 +81,7 @@ import ch.ethz.idsc.tensor.Tensor;
     GlcNode minCostNode = StaticHelper.getMin(list, d);
     Scalar minMerit = VectorScalars.at(minCostNode.merit(), d);
     Scalar threshold = minMerit.add(slack.Get(d));
-    list.removeIf(node -> Scalars.lessThan(threshold, VectorScalars.at(node.merit(), d)));
+    list.removeIf(glcNode -> Scalars.lessThan(threshold, VectorScalars.at(glcNode.merit(), d)));
     return d < slack.length() - 1 //
         ? getBestSet(list, d + 1)
         : list;

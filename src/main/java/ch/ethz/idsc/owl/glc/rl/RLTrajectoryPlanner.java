@@ -81,9 +81,9 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
           Scalar margin = merit.Get(i).add(slacks.Get(i));
           final int j = i;
           List<GlcNode> toRemove = reachingSet.stream() // find nodes to be removed
-              .filter(n -> Scalars.lessThan( //
+              .filter(glcNode -> Scalars.lessThan( //
                   margin, // lhs
-                  VectorScalars.at(n.merit(), j) // rhs
+                  VectorScalars.at(glcNode.merit(), j) // rhs
               )).collect(Collectors.toList());
           if (!toRemove.isEmpty()) {
             queue().removeAll(toRemove);
