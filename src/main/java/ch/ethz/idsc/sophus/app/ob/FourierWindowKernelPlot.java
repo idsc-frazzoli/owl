@@ -34,15 +34,17 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private static final Scalar WINDOW_DURATION = Quantity.of(1, "s");
   // ---
   private final GokartPoseData gokartPoseData;
+  private final int radius;
   private final TensorUnaryOperator spectrogramArray;
 
-  public FourierWindowKernelPlot(GokartPoseData gokartPoseData) {
+  public FourierWindowKernelPlot(GokartPoseData gokartPoseData, int radius) {
     this.gokartPoseData = gokartPoseData;
+    this.radius = radius;
     // TODO JPH TENSOR V075
     spectrogramArray = SpectrogramArray.of(WINDOW_DURATION, gokartPoseData.getSampleRate(), 1);
   }
 
-  private void process(int radius) throws IOException {
+  private void process() throws IOException {
     Tensor smoothedX = Tensors.empty();
     Tensor smoothedY = Tensors.empty();
     Tensor smoothedA = Tensors.empty();
@@ -65,12 +67,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       smoothedY.append(tempY);
       smoothedA.append(tempA);
     }
-    plot(Mean.of(smoothedX), radius, "x");
-    plot(Mean.of(smoothedY), radius, "y");
-    plot(Mean.of(smoothedA), radius, "a");
+    plot(Mean.of(smoothedX), "x");
+    plot(Mean.of(smoothedY), "y");
+    plot(Mean.of(smoothedA), "a");
   }
 
-  private void plot(Tensor data, int radius, String signal) throws IOException {
+  private void plot(Tensor data, String signal) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
       yData.append(FrequencyResponse.PHASE.apply(meanData));
@@ -104,10 +106,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   }
 
   public static void main(String[] args) throws IOException {
-    FourierWindowKernelPlot fourierWindowKernelPlot = new FourierWindowKernelPlot(GokartPoseDataV1.INSTANCE);
-    for (int rad = 2; rad < 10; rad++) {
-      fourierWindowKernelPlot.process(rad);
-      System.out.println(rad);
+    for (int radius = 2; radius < 10; radius++) {
+      FourierWindowKernelPlot fourierWindowKernelPlot = //
+          new FourierWindowKernelPlot(GokartPoseDataV1.INSTANCE, radius);
+      fourierWindowKernelPlot.process();
+      System.out.println(radius);
     }
   }
 }
