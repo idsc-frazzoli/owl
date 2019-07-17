@@ -12,46 +12,34 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Reverse;
+import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Sign;
 
-public class Reversal implements TransitionSpace, Serializable {
+public class ReversalTransitionSpace implements TransitionSpace, Serializable {
   public static TransitionSpace of(TransitionSpace transitionSpace) {
-    return new Reversal(transitionSpace);
+    return new ReversalTransitionSpace(transitionSpace);
   }
 
   // ---
   private final TransitionSpace transitionSpace;
 
-  private Reversal(TransitionSpace transitionSpace) {
+  private ReversalTransitionSpace(TransitionSpace transitionSpace) {
     this.transitionSpace = transitionSpace;
   }
 
   @Override // from TransitionSpace
   public DirectedTransition connect(Tensor start, Tensor end) {
-    Transition _transition = transitionSpace.connect(end, start);
-    return new DirectedTransition(start, end, _transition.length(), false) {
-      final Transition transition = _transition;
-
+    Transition transition = transitionSpace.connect(end, start);
+    return new ReversalTransition(transition) {
       @Override // from Transition
-      public Tensor sampled(Scalar minResolution) {
-        return swap(transition.sampled(minResolution));
-      }
-
-      @Override // from Transition
-      public Tensor sampled(int steps) {
-        return swap(transition.sampled(steps));
-      }
-
-      private Tensor swap(Tensor samples) {
-        return Reverse.of(samples.extract(1, samples.length()).append(start));
-      }
-
-      @Override // from Transition
-      public TransitionWrap wrapped(int steps) {
+      public TransitionWrap wrapped(Scalar minResolution) {
+        Sign.requirePositive(minResolution);
+        int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
         if (steps < 1)
           throw TensorRuntimeException.of(length(), RealScalar.of(steps));
-        Tensor samples = sampled(steps);
+        Tensor samples = sampled(length().divide(RealScalar.of(steps)));
         Tensor spacing = Array.zeros(samples.length());
+        // TODO GJOEL use of function "connect" does not give subsegments of transition generally
         IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
             ? connect(samples.get(i - 1), samples.get(i)).length() //
             : samples.Get(i, 0).zero(), i));

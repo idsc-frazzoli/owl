@@ -13,6 +13,8 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public class RnTransition extends AbstractTransition {
   public RnTransition(Tensor start, Tensor end) {
@@ -20,29 +22,28 @@ public class RnTransition extends AbstractTransition {
   }
 
   @Override // from Transition
-  public Tensor sampled(int steps) {
-    if (steps < 1)
-      throw TensorRuntimeException.of(length(), RealScalar.of(steps));
-    if (steps == 0)
-      return Tensors.of(start());
-    // TODO JPH improve
+  public Tensor sampled(Scalar minResolution) {
+    int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
     return Tensor.of(Subdivide.of(start(), end(), steps).stream().limit(steps));
   }
 
   @Override // from Transition
-  public TransitionWrap wrapped(int steps) {
+  public TransitionWrap wrapped(Scalar minResolution) {
+    Sign.requirePositive(minResolution);
+    int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
     if (steps < 1)
       throw TensorRuntimeException.of(length(), RealScalar.of(steps));
-    Scalar step = length().divide(RealScalar.of(steps));
+    Scalar resolution = length().divide(RealScalar.of(steps));
     Tensor spacing = Array.zeros(steps);
+    // TODO JPH
     IntStream.range(0, steps).forEach(i -> spacing.set(i > 0 //
-        ? step //
+        ? resolution //
         : start().Get(0).zero(), i));
-    return new TransitionWrap(sampled(steps), spacing);
+    return new TransitionWrap(sampled(resolution), spacing);
   }
 
   @Override // from RenderTransition
-  public Tensor rendered(Scalar minResolution, int minSteps) {
+  public Tensor linearized(Scalar minResolution) {
     return Tensors.of(start(), end());
   }
 }

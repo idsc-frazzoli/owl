@@ -71,12 +71,9 @@ public class TransitionRender implements RenderInterface {
           final double interp = (value - min) * inverse;
           graphics.setColor(colorDataIndexed.getColor((int) interp));
           Transition transition = transitionSpace.connect(parent.state(), child.state());
-          // TODO JPH class design not ideal
-          if (transition instanceof RenderTransition) {
-            // TODO JPH magic const
-            Path2D path2d = geometricLayer.toPath2D(((RenderTransition) transition).rendered(RealScalar.of(0.2), 10));
-            graphics.draw(path2d);
-          }
+          // TODO JPH magic const
+          Path2D path2d = geometricLayer.toPath2D(transition.linearized(RealScalar.of(0.2)));
+          graphics.draw(path2d);
         }
     }
   }
