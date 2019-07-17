@@ -9,7 +9,10 @@ import ch.ethz.idsc.tensor.Tensor;
 public interface GokartPoseData {
   List<String> list();
 
-  /** @param name
+  /** Hint:
+   * use limit == Integer.MAX_VALUE for all pose data
+   * 
+   * @param name
    * @param limit
    * @return matrix of dimensions N x 3 with rows of the form {x, y, heading} without units */
   Tensor getPose(String name, int limit);

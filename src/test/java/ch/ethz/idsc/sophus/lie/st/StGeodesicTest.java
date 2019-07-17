@@ -70,7 +70,7 @@ public class StGeodesicTest extends TestCase {
       Tensor split = StGeodesic.INSTANCE.split(p, q, x.Get());
       clip_l.requireInside(split.Get(0));
       clip_t1.requireInside((split.get(1)).Get(0));
-      clip_t2.requireInside(split.get(1).Get(1));
+      clip_t2.requireInside(split.Get(1, 1));
     }
   }
 

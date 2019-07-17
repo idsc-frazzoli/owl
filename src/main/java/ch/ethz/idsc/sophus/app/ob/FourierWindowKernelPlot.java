@@ -1,16 +1,15 @@
-// code by ob
+// code by ob, jph
 package ch.ethz.idsc.sophus.app.ob;
 
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
+import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
@@ -25,7 +24,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.mat.SpectrogramArray;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -34,17 +32,52 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class FourierWindowKernelPlot {
   private static final Scalar WINDOW_DURATION = Quantity.of(1, "s");
-  private static final Scalar SAMPLING_FREQUENCY = Quantity.of(20, "s^-1");
-  private static final TensorUnaryOperator SPECTROGRAM_ARRAY = SpectrogramArray.of(WINDOW_DURATION, SAMPLING_FREQUENCY, 1);
+  // ---
+  private final GokartPoseData gokartPoseData;
+  private final TensorUnaryOperator spectrogramArray;
 
-  private static void plot(Tensor data, int radius, String signal) throws IOException {
+  public FourierWindowKernelPlot(GokartPoseData gokartPoseData) {
+    this.gokartPoseData = gokartPoseData;
+    // TODO JPH TENSOR V075
+    spectrogramArray = SpectrogramArray.of(WINDOW_DURATION, gokartPoseData.getSampleRate(), 1);
+  }
+
+  private void process(int radius) throws IOException {
+    Tensor smoothedX = Tensors.empty();
+    Tensor smoothedY = Tensors.empty();
+    Tensor smoothedA = Tensors.empty();
+    for (String name : gokartPoseData.list()) {
+      Tensor control = gokartPoseData.getPose(name, Integer.MAX_VALUE);
+      Tensor tempX = Tensors.empty();
+      Tensor tempY = Tensors.empty();
+      Tensor tempA = Tensors.empty();
+      for (ScalarUnaryOperator smoothingKernel : SmoothingKernel.values()) {
+        TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
+        TensorUnaryOperator centerFilter = CenterFilter.of(tensorUnaryOperator, radius);
+        Tensor smoothd = centerFilter.apply(control);
+        Tensor rawVec = Se2Differences.INSTANCE.apply(control);
+        Tensor smdVec = Se2Differences.INSTANCE.apply(smoothd);
+        tempX.append(FilterResponse.of(smdVec.get(Tensor.ALL, 0), rawVec.get(Tensor.ALL, 0), spectrogramArray));
+        tempY.append(FilterResponse.of(smdVec.get(Tensor.ALL, 1), rawVec.get(Tensor.ALL, 1), spectrogramArray));
+        tempA.append(FilterResponse.of(smdVec.get(Tensor.ALL, 2), rawVec.get(Tensor.ALL, 2), spectrogramArray));
+      }
+      smoothedX.append(tempX);
+      smoothedY.append(tempY);
+      smoothedA.append(tempA);
+    }
+    plot(Mean.of(smoothedX), radius, "x");
+    plot(Mean.of(smoothedY), radius, "y");
+    plot(Mean.of(smoothedA), radius, "a");
+  }
+
+  private void plot(Tensor data, int radius, String signal) throws IOException {
     Tensor yData = Tensors.empty();
     for (Tensor meanData : data)
       yData.append(FrequencyResponse.PHASE.apply(meanData));
     // ---
     Tensor xAxis = Tensors.empty();
     for (int index = -yData.get(0).length() / 2; index < yData.get(0).length() / 2; ++index) {
-      xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(SAMPLING_FREQUENCY));
+      xAxis.append(RationalScalar.of(index, yData.get(0).length()).multiply(gokartPoseData.getSampleRate()));
     }
     VisualSet visualSet = new VisualSet();
     // visualSet.setPlotLabel("Geodesic Center Filter("+radius+") Magnitude Response $" + signal + "$");
@@ -70,40 +103,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
   }
 
-  private static void process(List<String> listData, int radius, int limit) throws IOException {
-    Tensor smoothedX = Tensors.empty();
-    Tensor smoothedY = Tensors.empty();
-    Tensor smoothedA = Tensors.empty();
-    Iterator<String> iterator = listData.iterator();
-    for (int index = 0; index < limit; ++index) {
-      Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + iterator.next() + ".csv").stream().map(row -> row.extract(1, 4)));
-      Tensor tempX = Tensors.empty();
-      Tensor tempY = Tensors.empty();
-      Tensor tempA = Tensors.empty();
-      for (ScalarUnaryOperator smoothingKernel : SmoothingKernel.values()) {
-        TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, smoothingKernel);
-        TensorUnaryOperator unaryOperator = CenterFilter.of(tensorUnaryOperator, radius);
-        Tensor smoothd = unaryOperator.apply(control);
-        Tensor rawVec = Se2Differences.INSTANCE.apply(control);
-        Tensor smdVec = Se2Differences.INSTANCE.apply(smoothd);
-        tempX.append(FilterResponse.of(smdVec.get(Tensor.ALL, 0), rawVec.get(Tensor.ALL, 0), SPECTROGRAM_ARRAY));
-        tempY.append(FilterResponse.of(smdVec.get(Tensor.ALL, 1), rawVec.get(Tensor.ALL, 1), SPECTROGRAM_ARRAY));
-        tempA.append(FilterResponse.of(smdVec.get(Tensor.ALL, 2), rawVec.get(Tensor.ALL, 2), SPECTROGRAM_ARRAY));
-      }
-      smoothedX.append(tempX);
-      smoothedY.append(tempY);
-      smoothedA.append(tempA);
-    }
-    plot(Mean.of(smoothedX), radius, "x");
-    plot(Mean.of(smoothedY), radius, "y");
-    plot(Mean.of(smoothedA), radius, "a");
-  }
-
   public static void main(String[] args) throws IOException {
-    List<String> listData = GokartPoseDataV1.INSTANCE.list();
-    int limit = 10;
+    FourierWindowKernelPlot fourierWindowKernelPlot = new FourierWindowKernelPlot(GokartPoseDataV1.INSTANCE);
     for (int rad = 2; rad < 10; rad++) {
-      process(listData, rad, limit);
+      fourierWindowKernelPlot.process(rad);
       System.out.println(rad);
     }
   }

@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private Scalar time() {
     Tensor time = Tensor.of(ResourceData.of("/dubilab/app/pose/" + signalname + ".csv").stream() //
         .map(row -> row.extract(0, 1)));
-    Scalar duration = time.get(time.length() - 1).Get(0).subtract(time.get(0).Get(0));
+    Scalar duration = time.Get(time.length() - 1, 0).subtract(time.Get(0, 0));
     return duration;
   }
 
