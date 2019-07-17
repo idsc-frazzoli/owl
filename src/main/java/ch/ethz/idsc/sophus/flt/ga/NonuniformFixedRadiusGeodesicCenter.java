@@ -10,13 +10,11 @@ import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -93,9 +91,6 @@ public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
   }
 
   public Tensor apply(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
-    // TODO OB URGENT statement is ineffective
-    Scalars.isZero(Abs.FUNCTION.apply(RealScalar.of(subMap.headMap(key, false).size() - subMap.tailMap(key, false).size())));
-    // ---
     Sign.requirePositiveOrZero(key);
     Tensor tempL = subMap.firstEntry().getValue();
     Tensor tempR = subMap.lastEntry().getValue();

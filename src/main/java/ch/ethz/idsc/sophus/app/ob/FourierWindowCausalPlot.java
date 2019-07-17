@@ -115,7 +115,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     for (Tensor meanData : data)
       yData.append(FrequencyResponse.MAGNITUDE.apply(meanData));
     Tensor xAxis = Tensors.empty();
-    // TODO OB URGENT mistake
     for (int index = -data.get(0).length() / 2; index < data.get(0).length() / 2; ++index)
       xAxis.append(RationalScalar.of(index, data.get(0).length()).multiply(gokartPoseData.getSampleRate().multiply(Quantity.of(1, "s"))));
     // ---

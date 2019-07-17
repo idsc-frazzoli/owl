@@ -11,11 +11,10 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
 
+/** Reference:
+ * Ulrich Reif slides */
 /* package */ abstract class ClothoidCurve implements ScalarTensorFunction {
   protected static final Scalar _1 = RealScalar.of(1.0);
-  private static final Scalar _1_68 = RealScalar.of(1 / 68.0);
-  private static final Scalar _1_46 = RealScalar.of(1 / 46.0);
-  private static final Scalar _1_4 = RealScalar.of(0.25);
   // ---
   private final Tensor pxy;
   private final Tensor diff;
@@ -30,22 +29,18 @@ import ch.ethz.idsc.tensor.sca.Real;
     // ---
     diff = qxy.subtract(pxy);
     da = ArcTan2D.of(diff); // special case when diff == {0, 0}
-    Scalar b0 = So2.MOD.apply(pa.subtract(da));
-    Scalar b1 = So2.MOD.apply(qa.subtract(da));
+    Scalar b0 = So2.MOD.apply(pa.subtract(da)); // normal form T0 == b0
+    Scalar b1 = So2.MOD.apply(qa.subtract(da)); // normal form T1 == b1
     // ---
-    Scalar f1 = b0.multiply(b0).add(b1.multiply(b1)).multiply(_1_68);
-    Scalar f2 = b0.multiply(b1).multiply(_1_46);
-    Scalar f3 = _1_4;
-    Scalar bm = b0.add(b1).multiply(f1.subtract(f2).subtract(f3));
-    clothoidQuadratic = new ClothoidQuadratic(b0, bm, b1);
+    clothoidQuadratic = new ClothoidQuadratic(b0, ClothoidApproximation.f(b0, b1), b1);
   }
 
   /** @param t
-   * @return integration of clothoidQuadratic on [0, t] */
+   * @return approximate integration of clothoidQuadratic on [0, t] */
   protected abstract Scalar il(Scalar t);
 
   /** @param t
-   * @return integration of clothoidQuadratic on [t, 1] */
+   * @return approximate integration of clothoidQuadratic on [t, 1] */
   protected abstract Scalar ir(Scalar t);
 
   @Override
@@ -54,7 +49,6 @@ import ch.ethz.idsc.tensor.sca.Real;
     Scalar ir = ir(t);
     Tensor nc = StaticHelper.prod(il, diff).divide(il.add(ir));
     Tensor ret_p = pxy.add(nc);
-    Scalar ret_a = clothoidQuadratic.angle(t).add(da);
     Scalar p0r = Real.FUNCTION.apply(ret_p.Get(0));
     Scalar p1r = Real.FUNCTION.apply(ret_p.Get(1));
     Scalar p0i = Imag.FUNCTION.apply(ret_p.Get(0));
@@ -62,6 +56,6 @@ import ch.ethz.idsc.tensor.sca.Real;
     return Tensors.of( //
         p0r.subtract(p1i), //
         p0i.add(p1r), //
-        ret_a);
+        clothoidQuadratic.angle(t).add(da));
   }
 }
