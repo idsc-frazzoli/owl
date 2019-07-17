@@ -5,7 +5,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.Mat;
@@ -131,8 +130,10 @@ public class ShadowEvaluator {
     Tensor timeToReactVec = Tensors.empty();
     // -
     Scalar tEnd = Lists.getLast(trajectory).stateTime().time();
-    int maxSize = trajectory.stream().filter(c -> Scalars.lessThan(c.stateTime().time(), tEnd.subtract(DoubleScalar.of(MAX_TREACT)))) //
-        .collect(Collectors.toList()).size();
+    Scalar threshold = tEnd.subtract(DoubleScalar.of(MAX_TREACT));
+    int maxSize = (int) trajectory.stream() //
+        .filter(trajectorySample -> Scalars.lessThan(trajectorySample.stateTime().time(), threshold)) //
+        .count();
     for (int i = 0; i < maxSize; ++i) {
       // System.out.println("processing sample " + i + " / " + maxSize);
       StateTime stateTime = trajectory.get(i).stateTime();

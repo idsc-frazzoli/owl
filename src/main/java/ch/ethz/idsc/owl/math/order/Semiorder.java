@@ -7,13 +7,15 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 
 /** A semiorder is a special type of strict partial order.
- * Given the semiorder representation a real-scalar valued function <t>u</t>(called the utility function), which maps
- * the elements on to the reals, and a discrimination threshold (also alled slack and usually denoted by sigma) we can infer the semiorder relation.
- * Two elements <t>x</t> and <t>y</t> are in the relation <t>R</t> which is represent by <t>u</t> and <t>sigma</t> iff:
+ * 
+ * Given the semiorder representation a real-scalar valued function <t>u</t> (called the utility function),
+ * which maps the elements on to the reals, and a discrimination threshold (also alled slack and usually
+ * denoted by sigma) we can infer the semiorder relation. Two elements <t>x</t> and <t>y</t> are in the
+ * relation <t>R</t> which is represent by <t>u</t> and <t>sigma</t> iff:
  * <t>u(x) + sigma less than f(y)</t> */
 public enum Semiorder {
   ;
-  /** Implements the semiorder where the utilityfunction maps from type T to Scalar.
+  /** Implements the semiorder where the utility function maps from type T to Scalar.
    * 
    * @param utilityFunction<T, Scalar>
    * @param slack
