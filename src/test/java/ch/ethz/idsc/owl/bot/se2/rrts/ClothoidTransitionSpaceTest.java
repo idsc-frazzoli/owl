@@ -39,12 +39,12 @@ public class ClothoidTransitionSpaceTest extends TestCase {
       assertEquals(start, samples.get(0));
       assertNotSame(end, Last.of(samples));
     }
-    {
-      Tensor samples = transition.sampled(8);
-      assertEquals(8, samples.length());
-      assertEquals(start, samples.get(0));
-      assertNotSame(end, Last.of(samples));
-    }
+    // {
+    // Tensor samples = transition.sampled(8);
+    // assertEquals(8, samples.length());
+    // assertEquals(start, samples.get(0));
+    // assertNotSame(end, Last.of(samples));
+    // }
   }
 
   public void testWrap() {

@@ -8,11 +8,11 @@ import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.sca.Ceiling;
 
 /* package */ class DubinsTransition extends AbstractTransition {
   final DubinsPath dubinsPath;
@@ -23,7 +23,8 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   }
 
   @Override // from Transition
-  public Tensor sampled(int steps) {
+  public Tensor sampled(Scalar minResolution) {
+    int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
     if (steps < 1)
       throw TensorRuntimeException.of(RealScalar.of(steps));
     Tensor samples = Array.zeros(steps);
@@ -49,9 +50,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   }
 
   @Override // from RenderTransition
-  public Tensor linearized(Scalar minResolution, int minSteps) {
-    return (Scalars.lessThan(minResolution, length().divide(RealScalar.of(minSteps))) //
-        ? sampled(minResolution).copy() //
-        : sampled(minSteps).copy()).append(end());
+  public Tensor linearized(Scalar minResolution) {
+    return sampled(minResolution).copy().append(end());
   }
 }

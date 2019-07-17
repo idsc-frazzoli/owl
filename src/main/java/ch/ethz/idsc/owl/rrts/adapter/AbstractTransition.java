@@ -38,12 +38,6 @@ public abstract class AbstractTransition implements Transition, Serializable {
   }
 
   @Override // from Transition
-  public Tensor sampled(Scalar minResolution) {
-    Sign.requirePositive(minResolution);
-    return sampled(Ceiling.FUNCTION.apply(length.divide(minResolution)).number().intValue());
-  }
-
-  @Override // from Transition
   public final TransitionWrap wrapped(Scalar minResolution) {
     Sign.requirePositive(minResolution);
     return wrapped(Ceiling.FUNCTION.apply(length.divide(minResolution)).number().intValue());

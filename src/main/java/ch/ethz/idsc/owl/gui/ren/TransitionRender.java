@@ -72,7 +72,7 @@ public class TransitionRender implements RenderInterface {
           graphics.setColor(colorDataIndexed.getColor((int) interp));
           Transition transition = transitionSpace.connect(parent.state(), child.state());
           // TODO JPH magic const
-          Path2D path2d = geometricLayer.toPath2D(transition.linearized(RealScalar.of(0.2), 10));
+          Path2D path2d = geometricLayer.toPath2D(transition.linearized(RealScalar.of(0.2)));
           graphics.draw(path2d);
         }
     }

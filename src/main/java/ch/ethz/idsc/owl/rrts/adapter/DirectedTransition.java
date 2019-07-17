@@ -22,17 +22,12 @@ public class DirectedTransition extends AbstractTransition {
   }
 
   @Override // from Transition
-  public Tensor sampled(int steps) {
-    return transition.sampled(steps);
-  }
-
-  @Override // from Transition
   public TransitionWrap wrapped(int steps) {
     return transition.wrapped(steps);
   }
 
   @Override // from Transition
-  public Tensor linearized(Scalar minResolution, int minSteps) {
-    return transition.linearized(minResolution, minSteps);
+  public Tensor linearized(Scalar minResolution) {
+    return transition.linearized(minResolution);
   }
 }

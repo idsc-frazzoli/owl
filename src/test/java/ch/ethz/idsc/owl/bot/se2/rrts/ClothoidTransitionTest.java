@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -29,13 +30,13 @@ public class ClothoidTransitionTest extends TestCase {
     ClothoidTransition clothoidTransition = //
         new ClothoidTransition(Tensors.vector(1, 2, 3), Tensors.vector(4, 1, 5));
     try {
-      clothoidTransition.sampled(0);
+      clothoidTransition.sampled(RealScalar.ZERO);
       fail();
     } catch (Exception exception) {
       // ---
     }
-    assertEquals(clothoidTransition.sampled(1).length(), 1);
-    assertEquals(clothoidTransition.sampled(2).length(), 2);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 1);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 2);
     try {
       clothoidTransition.wrapped(0);
       fail();
