@@ -11,7 +11,13 @@ public class DirectedTransition extends AbstractTransition {
   public final boolean isForward;
 
   public DirectedTransition(Transition transition, boolean isForward) {
-    super(transition.start(), transition.end(), transition.length());
+    super(isForward //
+            ? transition.start() //
+            : transition.end(), //
+        isForward //
+            ? transition.end() //
+            : transition.start(), //
+        transition.length());
     this.transition = transition;
     this.isForward = isForward;
   }

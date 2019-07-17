@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class ReversalTransitionSpaceTest extends TestCase {
@@ -36,8 +37,7 @@ public class ReversalTransitionSpaceTest extends TestCase {
       assertEquals(16, samples.length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
-      // TODO GJOEL/JPH jan broke test
-      // assertEquals(start, samples.get(0));
+      assertEquals(start, samples.get(0));
       assertNotSame(end, Last.of(samples));
     }
     // {
@@ -58,14 +58,12 @@ public class ReversalTransitionSpaceTest extends TestCase {
       assertEquals(16, wrap.samples().length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
-      // TODO GJOEL/JPH jan broke test
-      // assertEquals(start, wrap.samples().get(0));
+      assertEquals(start, wrap.samples().get(0));
       assertNotSame(end, Last.of(wrap.samples()));
       assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
-      // TODO GJOEL/JPH jan broke test
-      // assertTrue(wrap.spacing().extract(1, 16).stream().map(Tensor::Get) //
-      // .map(Sign::requirePositive) //
-      // .allMatch(s -> Scalars.lessEquals(s, res)));
+      assertTrue(wrap.spacing().extract(1, 16).stream().map(Tensor::Get) //
+          .map(Sign::requirePositive) //
+          .allMatch(s -> Scalars.lessEquals(s, res)));
     }
     // {
     // TransitionWrap wrap = transition.wrapped(8);
