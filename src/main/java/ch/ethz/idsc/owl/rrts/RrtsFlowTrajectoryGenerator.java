@@ -36,6 +36,7 @@ import ch.ethz.idsc.tensor.Tensor;
       TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
     List<TrajectorySample> trajectory = new LinkedList<>();
     RrtsNode prev = sequence.get(0);
+    trajectory.add(TrajectorySample.head(new StateTime(prev.state(), t0)));
     for (RrtsNode node : sequence.subList(1, sequence.size())) {
       Transition transition = transitionSpace.connect(prev.state(), node.state());
       TransitionWrap transitionWrap = transition.wrapped(dt);
@@ -45,16 +46,12 @@ import ch.ethz.idsc.tensor.Tensor;
       for (int i = 0; i < samples.length(); i++) {
         ti = ti.add(spacing.Get(i));
         StateTime stateTime = new StateTime(samples.get(i), ti);
-        if (trajectory.isEmpty())
-          trajectory.add(TrajectorySample.head(stateTime));
-        else {
-          StateTime orig = Lists.getLast(trajectory).stateTime();
-          Tensor u = (transition instanceof DirectedTransition && !((DirectedTransition) transition).isForward) //
-              ? uBetween.apply(stateTime, orig) //
-              : uBetween.apply(orig, stateTime);
-          Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
-          trajectory.add(new TrajectorySample(stateTime, flow));
-        }
+        StateTime orig = Lists.getLast(trajectory).stateTime();
+        Tensor u = (transition instanceof DirectedTransition && !((DirectedTransition) transition).isForward) //
+            ? uBetween.apply(stateTime, orig) //
+            : uBetween.apply(orig, stateTime);
+        Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
+        trajectory.add(new TrajectorySample(stateTime, flow));
       }
       prev = node;
       t0 = t0.add(transition.length());

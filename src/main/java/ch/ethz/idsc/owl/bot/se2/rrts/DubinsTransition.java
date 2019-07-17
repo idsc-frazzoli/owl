@@ -10,16 +10,18 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class DubinsTransition extends AbstractTransition {
-  final DubinsPath dubinsPath;
+  private final DubinsPath dubinsPath;
 
   public DubinsTransition(Tensor start, Tensor end, DubinsPath dubinsPath) {
-    super(start, end, dubinsPath.length()); // TODO GJOEL confirm assumption that length() == Euclidean length
+    super(start, end, dubinsPath.length());
     this.dubinsPath = dubinsPath;
   }
 
@@ -31,7 +33,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Tensor samples = Array.zeros(steps);
     Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
-    IntStream.range(0, steps).forEach(i -> samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i));
+    IntStream.range(0, steps).forEach(i -> samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i + 1))), i));
     return samples;
   }
 
@@ -42,18 +44,16 @@ import ch.ethz.idsc.tensor.sca.Sign;
     if (steps < 1)
       throw TensorRuntimeException.of(RealScalar.of(steps));
     Tensor samples = Array.zeros(steps);
-    Tensor spacing = Array.zeros(steps);
     Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
-    IntStream.range(0, steps).forEach(i -> {
-      samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i))), i);
-      spacing.set(i > 0 ? step : step.zero(), i);
-    });
+    IntStream.range(0, steps).forEach(i -> samples.set(scalarTensorFunction.apply(step.multiply(RealScalar.of(i + 1))), i));
+    Tensor spacing = Tensors.vector(i -> step, steps);
     return new TransitionWrap(samples, spacing);
   }
 
   @Override // from RenderTransition
   public Tensor linearized(Scalar minResolution) {
-    return sampled(minResolution).copy().append(end());
+    // TODO GJOEL/JPH straight section could be simplified
+    return Join.of(Tensors.of(start()), sampled(minResolution));
   }
 }

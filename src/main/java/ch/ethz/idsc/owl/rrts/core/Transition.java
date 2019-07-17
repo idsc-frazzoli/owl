@@ -17,11 +17,8 @@ public interface Transition {
   /** FUNCTIONALITY BELOW IS ONLY FOR COLLISION CHECKING AND RENDERING */
   // ---
 
-  /** FIXME GJOEL/JPH doc/define if start or end are inclusive
-   * JAN: "probably start should not be part of the returned samples"
-   * 
-   * @param minResolution is strictly positive
-   * @return */
+  /** @param minResolution is strictly positive
+   * @return Tensor with samples (start, ..., end] */
   Tensor sampled(Scalar minResolution);
 
   /** @param minResolution is positive
@@ -31,7 +28,6 @@ public interface Transition {
   /** Hint: function is suitable to efficiently draw transition as path2d
    * 
    * @param minResolution
-   * @param minSteps
    * @return sequence of points on transition that can be connected with straight lines */
   Tensor linearized(Scalar minResolution);
 }

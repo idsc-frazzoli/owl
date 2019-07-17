@@ -37,14 +37,14 @@ public class ReversalTransitionSpaceTest extends TestCase {
       assertEquals(16, samples.length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
-      assertEquals(start, samples.get(0));
-      assertNotSame(end, Last.of(samples));
+      assertNotSame(start, samples.get(0));
+      assertEquals(end, Last.of(samples));
     }
     // {
     // Tensor samples = transition.sampled(8);
     // assertEquals(8, samples.length());
-    // assertEquals(start, samples.get(0));
-    // assertNotSame(end, Last.of(samples));
+    // assertNotSame(start, samples.get(0));
+    // assertEquals(end, Last.of(samples));
     // }
   }
 
@@ -58,23 +58,20 @@ public class ReversalTransitionSpaceTest extends TestCase {
       assertEquals(16, wrap.samples().length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
-      assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
-      assertTrue(wrap.spacing().extract(1, 16).stream().map(Tensor::Get) //
+      assertNotSame(start, wrap.samples().get(0));
+      assertEquals(end, Last.of(wrap.samples()));
+      assertTrue(wrap.spacing().extract(0, 16).stream().map(Tensor::Get) //
           .map(Sign::requirePositive) //
           .allMatch(s -> Scalars.lessEquals(s, res)));
     }
     // {
     // TransitionWrap wrap = transition.wrapped(8);
-    // // TODO GJOEL/JPH jan broke test
-    // // assertEquals(8, wrap.samples().length());
-    // // assertEquals(start, wrap.samples().get(0));
-    // assertNotSame(end, Last.of(wrap.samples()));
-    // assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
-    // // wrap.spacing().extract(1, 8).stream().map(Tensor::Get) //
-    // // .map(Sign::requirePositive) //
-    // // .forEach(s -> Chop._01.requireClose(s, transition.length().divide(RealScalar.of(8))));
+    // assertEquals(8, wrap.samples().length());
+    // assertNotSame(start, wrap.samples().get(0));
+    // assertEquals(end, Last.of(wrap.samples()));
+    // wrap.spacing().extract(0, 8).stream().map(Tensor::Get) //
+    // .map(Sign::requirePositive) //
+    // .forEach(s -> Chop._01.requireClose(s, transition.length().divide(RealScalar.of(8))));
     // }
   }
 }

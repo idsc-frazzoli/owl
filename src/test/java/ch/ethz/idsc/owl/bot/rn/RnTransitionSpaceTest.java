@@ -33,14 +33,14 @@ public class RnTransitionSpaceTest extends TestCase {
       Tensor samples = transition.sampled(res);
       ExactTensorQ.require(samples);
       assertEquals(8, samples.length());
-      assertEquals(start, samples.get(0));
-      assertNotSame(end, Last.of(samples));
+      assertNotSame(start, samples.get(0));
+      assertEquals(end, Last.of(samples));
     }
     // {
     // Tensor samples = transition.sampled(8);
     // assertEquals(8, samples.length());
-    // assertEquals(start, samples.get(0));
-    // assertNotSame(end, Last.of(samples));
+    // assertNotSame(start, samples.get(0));
+    // assertEquals(end, Last.of(samples));
     // }
   }
 
@@ -52,18 +52,16 @@ public class RnTransitionSpaceTest extends TestCase {
       Scalar res = Quantity.of(.5, "m");
       TransitionWrap wrap = transition.wrapped(res);
       assertEquals(8, wrap.samples().length());
-      assertEquals(start, wrap.samples().get(0));
-      assertNotSame(end, Last.of(wrap.samples()));
-      assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
-      assertEquals(res, wrap.spacing().Get(1));
+      assertNotSame(start, wrap.samples().get(0));
+      assertEquals(end, Last.of(wrap.samples()));
+      wrap.spacing().stream().forEach(s -> assertEquals(res, s));
     }
     // {
     // TransitionWrap wrap = transition.wrapped(8);
     // assertEquals(8, wrap.samples().length());
-    // assertEquals(start, wrap.samples().get(0));
-    // assertNotSame(end, Last.of(wrap.samples()));
-    // assertEquals(Quantity.of(0, "m"), wrap.spacing().Get(0));
-    // assertEquals(transition.length().divide(RealScalar.of(8)), wrap.spacing().Get(1));
+    // assertNotSame(start, wrap.samples().get(0));
+    // assertEquals(end, Last.of(wrap.samples()));
+    // wrap.spacing().stream().forEach(s -> assertEquals(transition.length().divide(RealScalar.of(8)), s));
     // }
   }
 }

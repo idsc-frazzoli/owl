@@ -1,8 +1,6 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import java.util.stream.IntStream;
-
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
@@ -17,15 +15,15 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Differences;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
   private static final int MAX_ITER = 8;
-  static final TensorMetric TENSOR_METRIC = PseudoClothoidDistance.INSTANCE;
+  private static final TensorMetric TENSOR_METRIC = PseudoClothoidDistance.INSTANCE;
   private static final CurveSubdivision CURVE_SUBDIVISION = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
 
   public ClothoidTransition(Tensor start, Tensor end) {
@@ -48,7 +46,7 @@ public class ClothoidTransition extends AbstractTransition {
       samples = CURVE_SUBDIVISION.string(samples);
       ++iter;
     }
-    return samples.extract(0, samples.length() - 1);
+    return samples.extract(1, samples.length());
   }
 
   @Override // from Transition
@@ -56,10 +54,9 @@ public class ClothoidTransition extends AbstractTransition {
     Sign.requirePositive(minResolution);
     int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
     Tensor samples = sampled(length().divide(RealScalar.of(steps)));
-    Tensor spacing = Array.zeros(samples.length());
-    IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
-        ? TENSOR_METRIC.distance(samples.get(i - 1), samples.get(i)) //
-        : samples.Get(i, 0).zero(), i));
+    Tensor spacing = Tensors.vector(i -> 0 == i //
+        ? TENSOR_METRIC.distance(start(), samples.get(0)) //
+        : TENSOR_METRIC.distance(samples.get(i - 1), samples.get(i)), samples.length());
     return new TransitionWrap(samples, spacing);
   }
 
@@ -69,6 +66,6 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
-    return sampled(minResolution).copy().append(end());
+    return Join.of(Tensors.of(start()), sampled(minResolution));
   }
 }
