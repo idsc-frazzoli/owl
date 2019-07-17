@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Differences;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -48,7 +49,7 @@ public class ClothoidTransition extends AbstractTransition {
       samples = CURVE_SUBDIVISION.string(samples);
       ++iter;
     }
-    return samples.extract(0, samples.length() - 1);
+    return samples.extract(1, samples.length());
   }
 
   @Override // from Transition
@@ -59,7 +60,7 @@ public class ClothoidTransition extends AbstractTransition {
     Tensor spacing = Array.zeros(samples.length());
     IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
         ? TENSOR_METRIC.distance(samples.get(i - 1), samples.get(i)) //
-        : samples.Get(i, 0).zero(), i));
+        : TENSOR_METRIC.distance(start(), samples.get(0)), i));
     return new TransitionWrap(samples, spacing);
   }
 
@@ -69,6 +70,6 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
-    return sampled(minResolution).copy().append(end());
+    return Join.of(Tensors.of(start()), sampled(minResolution));
   }
 }

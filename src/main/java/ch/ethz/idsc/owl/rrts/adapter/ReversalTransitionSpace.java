@@ -42,7 +42,7 @@ public class ReversalTransitionSpace implements TransitionSpace, Serializable {
         // TODO GJOEL use of function "connect" does not give subsegments of transition generally
         IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
             ? connect(samples.get(i - 1), samples.get(i)).length() //
-            : samples.Get(i, 0).zero(), i));
+            : connect(start, samples.get(0)).length(), i));
         return new TransitionWrap(samples, spacing);
       }
     };

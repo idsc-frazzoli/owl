@@ -17,6 +17,7 @@ public abstract class ReversalTransition extends DirectedTransition {
   }
 
   private Tensor swap(Tensor samples) {
-    return Reverse.of(samples.extract(1, samples.length()).append(start()));
+    // return Reverse.of(samples.extract(1, samples.length()).append(start()));
+    return Reverse.of(samples.extract(0, samples.length() - 1)).append(end());
   }
 }

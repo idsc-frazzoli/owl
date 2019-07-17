@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
+import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -54,7 +55,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
-        return SphereRandomSample.of(goal, RealScalar.ZERO);
+        return new ConstantRandomSample(goal);
       }
 
       @Override
@@ -68,7 +69,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
-    Chop._01.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
+    Chop._15.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 
   public void testDubins() {
@@ -95,7 +96,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
-        return SphereRandomSample.of(goal, RealScalar.ZERO);
+        return new ConstantRandomSample(goal);
       }
 
       @Override
@@ -109,7 +110,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
-    Chop._01.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
+    Chop._14.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
 
   public void testClothoid() {
@@ -136,7 +137,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
-        return SphereRandomSample.of(goal, RealScalar.ZERO);
+        return new ConstantRandomSample(goal);
       }
 
       @Override
@@ -150,7 +151,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     // ---
     assertTrue(server.getTrajectory().isPresent());
     List<TrajectorySample> trajectory = server.getTrajectory().get();
-    Chop.below(2).requireClose(goal, Lists.getLast(trajectory).stateTime().state());
+    Chop._15.requireClose(goal, Lists.getLast(trajectory).stateTime().state());
   }
   // TODO design test for rerunning expansion
 }
