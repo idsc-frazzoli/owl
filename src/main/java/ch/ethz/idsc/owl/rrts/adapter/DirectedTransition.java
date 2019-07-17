@@ -12,8 +12,8 @@ public class DirectedTransition extends AbstractTransition {
 
   public DirectedTransition(Transition transition, boolean isForward) {
     super(isForward //
-            ? transition.start() //
-            : transition.end(), //
+        ? transition.start() //
+        : transition.end(), //
         isForward //
             ? transition.end() //
             : transition.start(), //
