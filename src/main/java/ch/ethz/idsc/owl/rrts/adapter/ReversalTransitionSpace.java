@@ -8,11 +8,9 @@ import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Reverse;
 
 public class ReversalTransitionSpace implements TransitionSpace, Serializable {
   public static TransitionSpace of(TransitionSpace transitionSpace) {
@@ -28,30 +26,15 @@ public class ReversalTransitionSpace implements TransitionSpace, Serializable {
 
   @Override // from TransitionSpace
   public DirectedTransition connect(Tensor start, Tensor end) {
-    Transition _transition = transitionSpace.connect(end, start);
-    return new DirectedTransition(_transition, _transition.length(), false) {
-      final Transition transition = _transition;
-
-      @Override // from Transition
-      public Tensor sampled(Scalar minResolution) {
-        return swap(transition.sampled(minResolution));
-      }
-
-      @Override // from Transition
-      public Tensor sampled(int steps) {
-        return swap(transition.sampled(steps));
-      }
-
-      private Tensor swap(Tensor samples) {
-        return Reverse.of(samples.extract(1, samples.length()).append(start));
-      }
-
+    Transition transition = transitionSpace.connect(end, start);
+    return new ReversalTransition(transition) {
       @Override // from Transition
       public TransitionWrap wrapped(int steps) {
         if (steps < 1)
           throw TensorRuntimeException.of(length(), RealScalar.of(steps));
         Tensor samples = sampled(steps);
         Tensor spacing = Array.zeros(samples.length());
+        // TODO GJOEL use of function connect is generally not correct
         IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
             ? connect(samples.get(i - 1), samples.get(i)).length() //
             : samples.Get(i, 0).zero(), i));

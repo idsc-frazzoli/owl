@@ -32,6 +32,6 @@ public class DirectionalTransitionSpace implements TransitionSpace, Serializable
     final Transition transition = (index == 0 //
         ? forwardTransitionSpace //
         : backwardTransitionSpace).connect(start, end);
-    return new DirectedTransition(transition, lengths.Get(index), index == 0);
+    return new DirectedTransition(transition, index == 0);
   }
 }

@@ -44,7 +44,7 @@ public abstract class AbstractTransition implements Transition, Serializable {
   }
 
   @Override // from Transition
-  public TransitionWrap wrapped(Scalar minResolution) {
+  public final TransitionWrap wrapped(Scalar minResolution) {
     Sign.requirePositive(minResolution);
     return wrapped(Ceiling.FUNCTION.apply(length.divide(minResolution)).number().intValue());
   }

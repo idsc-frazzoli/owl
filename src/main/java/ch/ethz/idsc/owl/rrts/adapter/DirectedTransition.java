@@ -7,11 +7,11 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class DirectedTransition extends AbstractTransition {
-  private final Transition transition;
+  protected final Transition transition;
   public final boolean isForward;
 
-  public DirectedTransition(Transition transition, Scalar length, boolean isForward) {
-    super(transition.start(), transition.end(), length);
+  public DirectedTransition(Transition transition, boolean isForward) {
+    super(transition.start(), transition.end(), transition.length());
     this.transition = transition;
     this.isForward = isForward;
   }
