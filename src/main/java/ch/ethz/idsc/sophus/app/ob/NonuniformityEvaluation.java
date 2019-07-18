@@ -13,7 +13,7 @@ import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedIntervalGeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedIntervalGeodesicCenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedRadiusGeodesicCenter;
@@ -32,25 +32,24 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 
-// TODO OB TRIVIAL rewrite for quantities
-/* package */ enum NonuniformityEvaluation {
-  ;
-  public static final GokartPoseData GOKART_POSE_DATA = GokartPoseDataV2.INSTANCE;
-  public final static NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = NonuniformFixedRadiusGeodesicCenter.of(Se2Geodesic.INSTANCE);
-  public final static NonuniformFixedIntervalGeodesicCenter nonuniformFixedIntervalGeodesicCenter = NonuniformFixedIntervalGeodesicCenter
-      .of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
+/* package */ class NonuniformityEvaluation {
+  private static final NonuniformFixedRadiusGeodesicCenter NONUNIFORM_FIXED_RADIUS_GEODESIC_CENTER = //
+      NonuniformFixedRadiusGeodesicCenter.of(Se2Geodesic.INSTANCE);
+  private static final NonuniformFixedIntervalGeodesicCenter NONUNIFORM_FIXED_INTERVAL_GEODESIC_CENTER = //
+      NonuniformFixedIntervalGeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN);
   private static final GeodesicErrorEvaluation GEODESIC_ERROR_EVALUATION = //
       new GeodesicErrorEvaluation(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
 
-  public static Tensor process(NavigableMap<Scalar, Tensor> fullMap, int nonuniformitySteps, int radius) {
+  Tensor process(NavigableMap<Scalar, Tensor> fullMap, int nonuniformitySteps, int radius) {
     Tensor errors = Tensors.empty();
     for (int index = 0; index < nonuniformitySteps; ++index) {
       Scalar alpha = RationalScalar.of(index, nonuniformitySteps);
       NavigableMap<Scalar, Tensor> nonUniformMap = nonUniform(fullMap, alpha);
-      Tensor refinedRadius = Tensor
-          .of(NonuniformFixedRadiusGeodesicCenterFilter.of(nonuniformFixedRadiusGeodesicCenter, radius).apply(nonUniformMap).values().stream());
-      Tensor refinedInterval = Tensor.of(NonuniformFixedIntervalGeodesicCenterFilter.of(nonuniformFixedIntervalGeodesicCenter, RationalScalar.of(radius, 20))
-          .apply(nonUniformMap).values().stream());
+      Tensor refinedRadius = Tensor.of( //
+          NonuniformFixedRadiusGeodesicCenterFilter.of(NONUNIFORM_FIXED_RADIUS_GEODESIC_CENTER, radius).apply(nonUniformMap).values().stream());
+      Tensor refinedInterval = Tensor.of( //
+          NonuniformFixedIntervalGeodesicCenterFilter.of(NONUNIFORM_FIXED_INTERVAL_GEODESIC_CENTER, RationalScalar.of(radius, 20)).apply(nonUniformMap).values()
+              .stream());
       Tensor original = Tensor.of(nonUniformMap.values().stream());
       Tensor errorRad = GEODESIC_ERROR_EVALUATION.evaluate0ErrorSeperated(refinedRadius, original).divide(RealScalar.of(original.length()));
       Tensor errorInt = GEODESIC_ERROR_EVALUATION.evaluate0ErrorSeperated(refinedInterval, original).divide(RealScalar.of(original.length()));
@@ -59,7 +58,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     return errors;
   }
 
-  public static NavigableMap<Scalar, Tensor> nonUniform(NavigableMap<Scalar, Tensor> fullMap, Scalar nonuniformity) {
+  NavigableMap<Scalar, Tensor> nonUniform(NavigableMap<Scalar, Tensor> fullMap, Scalar nonuniformity) {
     NavigableMap<Scalar, Tensor> nonUniformMap = new TreeMap<>();
     for (int index = 0; index < fullMap.size(); ++index) {
       if (Math.random() > nonuniformity.number().doubleValue()) {
@@ -72,7 +71,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 
   // signal = 0: xy Error
   // signal = 1: a-Error
-  public static void plot(Tensor errors, Tensor radii, int signal) {
+  void plot(Tensor errors, Tensor radii, int signal) {
     VisualSet visualSet = new VisualSet();
     visualSet.setPlotLabel("Translational Error");
     visualSet.setAxesLabelX("Ratio of missing data [-]");
@@ -97,24 +96,25 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       visualRow.setLabel("interval" + radii.get(index));
       index++;
     }
+    JFreeChart jFreeChart = ListPlot.of(visualSet);
+    SVGGraphics2D svgGraphics2D = new SVGGraphics2D(600, 400);
+    Rectangle rectangle = new Rectangle(0, 0, 600, 400);
+    jFreeChart.draw(svgGraphics2D, rectangle);
+    File file = HomeDirectory.Pictures(fileNameSVG);
     try {
-      // ---
-      JFreeChart jFreeChart = ListPlot.of(visualSet);
-      SVGGraphics2D svg = new SVGGraphics2D(600, 400);
-      Rectangle rectangle = new Rectangle(0, 0, 600, 400);
-      jFreeChart.draw(svg, rectangle);
-      File fileSVG = HomeDirectory.Pictures(fileNameSVG);
-      SVGUtils.writeToSVG(fileSVG, svg.getSVGElement());
+      SVGUtils.writeToSVG(file, svgGraphics2D.getSVGElement());
     } catch (Exception exception) {
       exception.printStackTrace();
     }
   }
 
   public static void main(String[] args) {
-    List<String> listData = GOKART_POSE_DATA.list();
+    GokartPoseData gokartPoseData = GokartPoseDataV1.INSTANCE;
+    NonuniformityEvaluation nonuniformityEvaluation = new NonuniformityEvaluation();
+    List<String> listData = gokartPoseData.list();
     NavigableMap<Scalar, Tensor> fullMap = new TreeMap<>();
     Iterator<String> iterator = listData.iterator();
-    Tensor control = GOKART_POSE_DATA.getPose(iterator.next(), 1000);
+    Tensor control = gokartPoseData.getPose(iterator.next(), 1000);
     for (int index = 0; index < control.length(); ++index) {
       fullMap.put(RealScalar.of(index).divide(RealScalar.of(20)), control.get(index));
     }
@@ -122,9 +122,9 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     Tensor errors = Tensors.empty();
     for (Tensor radius : radii) {
       Scalar rad = (Scalar) radius;
-      errors.append(process(fullMap, 5, rad.number().intValue()));
+      errors.append(nonuniformityEvaluation.process(fullMap, 5, rad.number().intValue()));
     }
-    plot(errors, radii, 0);
-    plot(errors, radii, 1);
+    nonuniformityEvaluation.plot(errors, radii, 0);
+    nonuniformityEvaluation.plot(errors, radii, 1);
   }
 }

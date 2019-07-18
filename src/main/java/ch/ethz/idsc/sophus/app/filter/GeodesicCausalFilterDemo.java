@@ -82,8 +82,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     // Map<LieGroupCausalFilters, TensorUnaryOperator> map = new EnumMap<>(LieGroupCausalFilters.class);
     // map.put(LieGroupCausalFilters.GEODESIC_FIR, GeodesicFIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
     // map.put(LieGroupCausalFilters.GEODESIC_IIR, GeodesicIIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
-    // map.put(LieGroupCausalFilters.TANGENT_SPACE_FIR, TangentSpaceFIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
-    // map.put(LieGroupCausalFilters.TANGENT_SPACE_IIR, TangentSpaceIIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
     // map.put(LieGroupCausalFilters.BIINVARIANT_MEAN_FIR, BiinvariantMeanFIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
     // map.put(LieGroupCausalFilters.BIINVARIANT_MEAN_IIR, BiinvariantMeanIIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
     // refined = GeodesicCausalFilter.of(map.get(spinnerCausalFilter.getValue())).apply(control());
