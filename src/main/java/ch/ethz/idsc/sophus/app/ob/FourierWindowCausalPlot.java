@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
     // ---
-    // TODO JPH TENSOR V075
+    // TODO JPH TENSOR 075
     int windowLength = Scalars.intValueExact(Round.FUNCTION.apply(Quantity.of(1, "s").multiply(gokartPoseData.getSampleRate())));
     int offset = Scalars.intValueExact(Round.FUNCTION.apply(RationalScalar.of(windowLength, 3)));
     TensorUnaryOperator spectrogramArray = SpectrogramArray.of(windowLength, offset);

@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public FourierWindowKernelPlot(GokartPoseData gokartPoseData, int radius) {
     this.gokartPoseData = gokartPoseData;
     this.radius = radius;
-    // TODO JPH TENSOR V075
+    // TODO JPH TENSOR 075
     spectrogramArray = SpectrogramArray.of(WINDOW_DURATION, gokartPoseData.getSampleRate(), 1);
   }
 
