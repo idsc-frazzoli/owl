@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** clothoid is tangent at start and end points */
-// TODO according to a theorem by R/W a simpler approximation exists
+// TODO JPH move to test area once implementation is superseded
 public class ClothoidTerminalRatios implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
       new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
@@ -32,6 +32,7 @@ public class ClothoidTerminalRatios implements Serializable {
   /** @param beg of the form {beg_x, beg_y, beg_heading}
    * @param end of the form {end_x, end_y, end_heading}
    * @return */
+  // TODO JPH OWL 046 extract to own class
   public static ClothoidTerminalRatios of(Tensor beg, Tensor end) {
     final Tensor init = CURVE_SUBDIVISION.string(Tensor.of(Stream.of(beg, end)));
     Scalar head = curvature(init);
@@ -70,13 +71,13 @@ public class ClothoidTerminalRatios implements Serializable {
   /** @param beg
    * @param end
    * @param depth strictly positive */
-  public ClothoidTerminalRatios(Tensor beg, Tensor end, int depth) {
+  /* package for testing */ ClothoidTerminalRatios(Tensor beg, Tensor end, int depth) {
     this( //
         curvature(Nest.of(HEAD, Tensor.of(Stream.of(beg, end)), depth)), //
         curvature(Nest.of(TAIL, Tensor.of(Stream.of(beg, end)), depth)));
   }
 
-  private ClothoidTerminalRatios(Scalar head, Scalar tail) {
+  ClothoidTerminalRatios(Scalar head, Scalar tail) {
     this.head = head;
     this.tail = tail;
   }
