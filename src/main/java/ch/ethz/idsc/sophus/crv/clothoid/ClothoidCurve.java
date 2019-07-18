@@ -6,10 +6,7 @@ import ch.ethz.idsc.sophus.math.ArcTan2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.sca.Imag;
-import ch.ethz.idsc.tensor.sca.Real;
 
 /** Reference:
  * Ulrich Reif slides */
@@ -36,26 +33,19 @@ import ch.ethz.idsc.tensor.sca.Real;
   }
 
   /** @param t
-   * @return approximate integration of clothoidQuadratic on [0, t] */
+   * @return approximate integration of exp i*clothoidQuadratic on [0, t] */
   protected abstract Scalar il(Scalar t);
 
   /** @param t
-   * @return approximate integration of clothoidQuadratic on [t, 1] */
+   * @return approximate integration of exp i*clothoidQuadratic on [t, 1] */
   protected abstract Scalar ir(Scalar t);
 
   @Override
   public final Tensor apply(Scalar t) {
     Scalar il = il(t);
     Scalar ir = ir(t);
-    Tensor nc = StaticHelper.prod(il, diff).divide(il.add(ir));
-    Tensor ret_p = pxy.add(nc);
-    Scalar p0r = Real.FUNCTION.apply(ret_p.Get(0));
-    Scalar p1r = Real.FUNCTION.apply(ret_p.Get(1));
-    Scalar p0i = Imag.FUNCTION.apply(ret_p.Get(0));
-    Scalar p1i = Imag.FUNCTION.apply(ret_p.Get(1));
-    return Tensors.of( //
-        p0r.subtract(p1i), //
-        p0i.add(p1r), //
-        clothoidQuadratic.angle(t).add(da));
+    Scalar z = il.divide(il.add(ir));
+    return pxy.add(StaticHelper.prod(z, diff)) //
+        .append(clothoidQuadratic.angle(t).add(da));
   }
 }

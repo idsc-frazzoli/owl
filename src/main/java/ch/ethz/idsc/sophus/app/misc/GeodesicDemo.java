@@ -34,6 +34,7 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
   public GeodesicDemo() {
     List<GeodesicDisplay> list = GeodesicDisplays.ALL;
     geodesicDisplaySpinner.setList(list);
+    geodesicDisplaySpinner.setIndex(0);
     if (1 < list.size()) {
       geodesicDisplaySpinner.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "geodesic type");
       timerFrame.jToolBar.addSeparator();
