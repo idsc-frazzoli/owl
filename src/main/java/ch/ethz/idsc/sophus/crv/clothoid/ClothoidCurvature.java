@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private final Tensor diff;
   private final Scalar da;
   protected final ClothoidQuadraticD clothoidQuadraticD;
+  private final Scalar v;
 
   public ClothoidCurvature(Tensor p, Tensor q) {
     pxy = p.extract(0, 2);
@@ -21,6 +22,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     Scalar qa = q.Get(2);
     // ---
     diff = qxy.subtract(pxy);
+    v = Norm._2.ofVector(diff);
     da = ArcTan2D.of(diff); // special case when diff == {0, 0}
     Scalar b0 = So2.MOD.apply(pa.subtract(da)); // normal form T0 == b0
     Scalar b1 = So2.MOD.apply(qa.subtract(da)); // normal form T1 == b1
@@ -30,6 +32,14 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   @Override
   public Scalar apply(Scalar t) {
-    return clothoidQuadraticD.apply(t).divide(Norm._2.ofVector(diff));
+    return clothoidQuadraticD.apply(t).divide(v);
+  }
+
+  public Scalar head() {
+    return clothoidQuadraticD.head().divide(v);
+  }
+
+  public Scalar tail() {
+    return clothoidQuadraticD.tail().divide(v);
   }
 }

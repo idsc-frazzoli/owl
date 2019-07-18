@@ -35,4 +35,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public Scalar apply(Scalar s) {
     return c0.add(c1.multiply(s));
   }
+
+  public Scalar head() {
+    return c0;
+  }
+
+  public Scalar tail() {
+    return c0.add(c1);
+  }
 }
