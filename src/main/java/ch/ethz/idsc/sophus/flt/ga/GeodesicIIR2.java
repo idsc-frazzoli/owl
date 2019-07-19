@@ -25,14 +25,14 @@ public class GeodesicIIR2 implements TensorUnaryOperator {
   }
 
   /** @return extrapolated "best guess" value from the previous predictions */
-  public synchronized Tensor extrapolate() {
+  private Tensor extrapolate() {
     if (Objects.isNull(p))
       return q;
     return splitInterface.split(p, q, TWO);
   }
 
   @Override
-  public synchronized Tensor apply(Tensor tensor) {
+  public Tensor apply(Tensor tensor) {
     if (Objects.isNull(q)) {
       q = tensor.copy();
       return q.copy();

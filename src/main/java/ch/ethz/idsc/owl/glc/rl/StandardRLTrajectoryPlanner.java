@@ -66,7 +66,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
     }
     // ---
     domainQueueMap.mapEntrySetStream() //
-        .parallel() // TODO YN check if all operations are thread safe!
+        .parallel() // all operations thread safe?
         .forEach(entry -> processCandidates(node, connectors, entry.getKey(), entry.getValue()));
   }
 
@@ -79,7 +79,6 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   private void processCandidates( //
       GlcNode node, Map<GlcNode, List<StateTime>> connectors, Tensor domainKey, RLDomainQueue domainQueue) {
     // iterate over the candidates in DomainQueue
-    // TODO YN is there any requirement on the ordering of the nodes in the iterator?
     for (GlcNode next : domainQueue) {
       final List<StateTime> trajectory = connectors.get(next);
       if (plannerConstraint.isSatisfied(node, trajectory, next.flow())) {
