@@ -7,7 +7,6 @@ import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 
 public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
@@ -40,7 +39,7 @@ public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
     Scalar half_num = qa.subtract(pa);
     Scalar num = half_num.add(half_num); // 2 * half_num
     Scalar den = AbsSquared.FUNCTION.apply(clothoidTerminalRatios.tail()).subtract(AbsSquared.FUNCTION.apply(clothoidTerminalRatios.head()));
-    Scalar a_squared = Abs.of(num.divide(den));
+    Scalar a_squared = num.divide(den).abs();
     return a_squared.multiply(clothoidTerminalRatios.difference().abs());
   }
 
