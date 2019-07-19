@@ -1,4 +1,4 @@
-// code by ob and jph
+// code by ob, jph
 package ch.ethz.idsc.sophus.flt.ga;
 
 import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -56,15 +57,23 @@ public class GeodesicIIR2Test extends TestCase {
     assertEquals(tensorUnaryOperator.apply(RealScalar.of(20.)), RealScalar.of(19.375));
   }
 
+  public void testId2() {
+    Scalar alpha = RealScalar.ONE;
+    TensorUnaryOperator tuo1 = CausalFilter.of(() -> new GeodesicIIR2(RnGeodesic.INSTANCE, alpha));
+    for (int k = 0; k < 10; ++k) {
+      Tensor signal = UnitVector.of(10, k);
+      assertEquals(signal, tuo1.apply(signal));
+    }
+  }
+
   public void testId() {
-    Scalar alpha = RealScalar.ONE; // FIXME OB/JPH should result in the same filtered signal
+    Scalar alpha = RealScalar.ONE;
     TensorUnaryOperator tuo1 = CausalFilter.of(() -> new GeodesicIIR2(RnGeodesic.INSTANCE, alpha));
     TensorUnaryOperator tuo2 = GeodesicIIRnFilter.of( //
         GeodesicExtrapolation.of(RnGeodesic.INSTANCE, MonomialExtrapolationMask.INSTANCE), RnGeodesic.INSTANCE, 2, alpha);
     Tensor signal = RandomVariate.of(UniformDistribution.unit(), 10);
     Tensor r1 = tuo1.apply(signal);
     Tensor r2 = tuo2.apply(signal);
-    // System.out.println(r2);
     Chop._10.requireClose(r1, r2);
   }
 }

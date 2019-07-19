@@ -57,36 +57,26 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
       TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
       // ---
-      LieGroupCausalFilters lgcf = spinnerCausalFilter.getValue();
-      TensorUnaryOperator cf = null;
-      switch (lgcf) {
+      LieGroupCausalFilters lieGroupCausalFilters = spinnerCausalFilter.getValue();
+      TensorUnaryOperator tensorUnaryOperator = null;
+      switch (lieGroupCausalFilters) {
       case GEODESIC_FIR:
-        cf = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
+        tensorUnaryOperator = GeodesicFIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
         break;
       case GEODESIC_IIR:
-        cf = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
+        tensorUnaryOperator = GeodesicIIRnFilter.of(geodesicExtrapolation, geodesicInterface, radius, alpha());
         break;
       case BIINVARIANT_MEAN_FIR:
-        cf = BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
+        tensorUnaryOperator = //
+            BiinvariantMeanFIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
         break;
       case BIINVARIANT_MEAN_IIR:
-        cf = BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
+        tensorUnaryOperator = //
+            BiinvariantMeanIIRnFilter.of(se2BiinvariantMean, WindowSideExtrapolation.of(smoothingKernel), Se2Geodesic.INSTANCE, radius, alpha());
         break;
       }
-      return cf.apply(control());
+      return tensorUnaryOperator.apply(control());
     }
-    // TODO OB I would like to have this shape with one filter for all different operators
-    // if (0 < radius) {
-    // ScalarUnaryOperator smoothingKernel = spinnerKernel.getValue();
-    // // --
-    // Map<LieGroupCausalFilters, TensorUnaryOperator> map = new EnumMap<>(LieGroupCausalFilters.class);
-    // map.put(LieGroupCausalFilters.GEODESIC_FIR, GeodesicFIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
-    // map.put(LieGroupCausalFilters.GEODESIC_IIR, GeodesicIIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
-    // map.put(LieGroupCausalFilters.BIINVARIANT_MEAN_FIR, BiinvariantMeanFIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
-    // map.put(LieGroupCausalFilters.BIINVARIANT_MEAN_IIR, BiinvariantMeanIIRnNEW.of(geodesicDisplay(), smoothingKernel, radius, alpha()));
-    // refined = GeodesicCausalFilter.of(map.get(spinnerCausalFilter.getValue())).apply(control());
-    // return refined;
-    // }
     return control();
   }
 

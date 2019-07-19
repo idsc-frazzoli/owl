@@ -98,7 +98,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     }
     assertFalse(trajectory.get(0).getFlow().isPresent());
     assertTrue(trajectory.subList(1, 37).stream().map(TrajectorySample::getFlow).allMatch(Optional::isPresent));
-    // TODO verify correctness of U
+    // TODO GJOEL verify correctness of U
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(10).stateTime().state());
     Chop._15.requireClose(n2.state(), trajectory.get(20).stateTime().state());
@@ -139,7 +139,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertFalse(trajectory.get(0).getFlow().isPresent());
     assertTrue(trajectory.subList(1, 65).stream().map(TrajectorySample::getFlow).map(Optional::get).map(Flow::getU) //
         .allMatch(u -> u.Get(1).equals(RealScalar.ZERO)));
-    // TODO verify correctness of U
+    // TODO GJOEL verify correctness of U
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(16).stateTime().state());
     Chop._15.requireClose(n2.state(), trajectory.get(32).stateTime().state());
@@ -180,7 +180,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     }
     assertFalse(trajectory.get(0).getFlow().isPresent());
     assertTrue(trajectory.subList(1, 49).stream().map(TrajectorySample::getFlow).allMatch(Optional::isPresent));
-    // TODO verify correctness of U
+    // TODO GJOEL verify correctness of U
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(16).stateTime().state());
     Chop._15.requireClose(n2.state(), trajectory.get(32).stateTime().state());
