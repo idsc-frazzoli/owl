@@ -44,6 +44,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   public final Tensor apply(Scalar t) {
     Scalar il = il(t);
     Scalar ir = ir(t);
+    /** ratio z enforces interpolation at end-points
+     * t == 0 -> (0, 0)
+     * t == 1 -> (1, 0) */
     Scalar z = il.divide(il.add(ir));
     return pxy.add(StaticHelper.prod(z, diff)) //
         .append(clothoidQuadratic.angle(t).add(da));

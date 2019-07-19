@@ -87,7 +87,7 @@ public abstract class RrtsPlannerServer implements TransitionPlanner {
   @Override // from ExpandInterface
   public void expand(RrtsNode node) {
     if (Objects.nonNull(process))
-      process.rrtsPlanner.expand(node); // FIXME can get stuck here
+      process.rrtsPlanner.expand(node); // FIXME GJOEL can get stuck here
   }
 
   @Override // from ExpandInterface

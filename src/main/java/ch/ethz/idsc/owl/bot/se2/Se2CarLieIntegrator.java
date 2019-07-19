@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.lie.RotationMatrix;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sin;
 
+/** kinematic car model */
 public enum Se2CarLieIntegrator implements LieIntegrator {
   INSTANCE;
   // ---

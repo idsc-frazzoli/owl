@@ -5,7 +5,6 @@ import ch.ethz.idsc.owl.bot.se2.glc.CarHelper;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
-import ch.ethz.idsc.owl.math.map.Se2Integrator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,7 +31,7 @@ enum Se2IntegratorDemo {
       Se2CarIntegrator.INSTANCE.step(flow, x, h);
       s1.stop();
       s4.start();
-      Se2Integrator.INSTANCE.step(flow, x, h);
+      Se2FlowIntegrator.INSTANCE.step(flow, x, h);
       s4.stop();
       s2.start();
       RungeKutta4Integrator.INSTANCE.step(flow, x, h);
