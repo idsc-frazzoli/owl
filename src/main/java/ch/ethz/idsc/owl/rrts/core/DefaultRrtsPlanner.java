@@ -27,7 +27,8 @@ public class DefaultRrtsPlanner implements RrtsPlanner {
    * @param spaceSample
    * @param goalSample generates samples in goal region */
   public DefaultRrtsPlanner(Rrts rrts, RandomSampleInterface spaceSample, RandomSampleInterface goalSample) {
-    this(rrts, spaceSample, goalSample, NodeCostComparator.INSTANCE); // TODO use other criterion: distance from goal center ...?
+    // TODO GJOEL use other criterion: distance from goal center ...?
+    this(rrts, spaceSample, goalSample, NodeCostComparator.INSTANCE);
   }
 
   /** @param rrts with root already inserted

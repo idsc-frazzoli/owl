@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.math.flow;
 
-import ch.ethz.idsc.owl.bot.se2.Se2FlowIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
@@ -21,16 +20,6 @@ public class RungeKutta45IntegratorTest extends TestCase {
     Tensor r = EulerIntegrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
     assertTrue(Chop._10.close(r, //
         Tensors.fromString("{-0.9799849932008908[m], 2.2822400161197343[m], 7}")));
-  }
-
-  public void testSe2Exact() {
-    StateSpaceModel stateSpaceModel = Se2StateSpaceModel.INSTANCE;
-    Flow flow = StateSpaceModels.createFlow( //
-        stateSpaceModel, Tensors.fromString("{1[m*s^-1], 0, 2[rad*s^-1]}").map(UnitSystem.SI()));
-    Tensor x = Tensors.fromString("{1[m], 2[m], 3[rad]}").map(UnitSystem.SI());
-    Tensor r = Se2FlowIntegrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
-    assertTrue(Chop._10.close(r, //
-        Tensors.fromString("{1.2579332953294609[m], 1.128052624528125[m], 7}")));
   }
 
   public void testSe2Rk() {
