@@ -11,8 +11,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * 
  * <p>Hint:
  * Although the curvature of the provided curve resembles that of a clothoid,
- * the curve does not interpolate the end-points p and q very well in general
- * at parameter values 0, and 1.
+ * the curve does not interpolate the tangents at the end points p and q in general.
  * 
  * <p>In order to obtain samples of a clothoid that interpolates p and q the
  * recommended method is to use {@link LaneRiesenfeldCurveSubdivision} with
