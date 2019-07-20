@@ -34,8 +34,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
     if (Sign.isNegative(speed))
       beacons.set(Scalar::negate, Tensor.ALL, 0);
     PurePursuit purePursuit = PurePursuit.fromTrajectory(beacons, lookAhead);
-    if (purePursuit.ratio().isPresent()) {
-      Scalar ratio = purePursuit.ratio().get();
+    if (purePursuit.firstRatio().isPresent()) {
+      Scalar ratio = purePursuit.firstRatio().get();
       if (clip.isInside(ratio)) {
         targetLocal = purePursuit.lookAhead().get(); // ratio isPresent implies lookAhead isPresent
         return Optional.of(CarHelper.singleton(speed, ratio).getU());

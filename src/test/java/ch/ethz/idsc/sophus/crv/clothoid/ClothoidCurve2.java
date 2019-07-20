@@ -22,12 +22,12 @@ import ch.ethz.idsc.tensor.red.Total;
 
   @Override // from ClothoidCurve
   protected Scalar il(Scalar t) {
-    return Total.ofVector(X.multiply(t).map(clothoidQuadratic)).multiply(HALF).multiply(t);
+    return Total.ofVector(X.multiply(t).map(clothoidQuadratic::exp_i)).multiply(HALF).multiply(t);
   }
 
   @Override // from ClothoidCurve
   protected Scalar ir(Scalar t) {
     Scalar _1_t = _1.subtract(t);
-    return Total.ofVector(X.multiply(_1_t).map(t::add).map(clothoidQuadratic)).multiply(HALF).multiply(_1_t);
+    return Total.ofVector(X.multiply(_1_t).map(t::add).map(clothoidQuadratic::exp_i)).multiply(HALF).multiply(_1_t);
   }
 }

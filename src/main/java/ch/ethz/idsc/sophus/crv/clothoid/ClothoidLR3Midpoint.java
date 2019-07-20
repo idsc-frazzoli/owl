@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   INSTANCE;
   // ---
   private static final TensorUnaryOperator TENSOR_UNARY_OPERATOR = //
-      new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 3)::string;
+      new LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, 3)::string;
 
   @Override // from MidpointInterface
   public Tensor midpoint(Tensor p, Tensor q) {
