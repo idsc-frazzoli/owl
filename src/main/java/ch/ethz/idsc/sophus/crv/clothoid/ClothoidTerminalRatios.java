@@ -32,7 +32,7 @@ public class ClothoidTerminalRatios implements Serializable {
   /** @param beg of the form {beg_x, beg_y, beg_heading}
    * @param end of the form {end_x, end_y, end_heading}
    * @return */
-  // TODO JPH OWL 046 extract to own class
+  // TODO JPH OWL 047 extract to own class
   public static ClothoidTerminalRatios of(Tensor beg, Tensor end) {
     final Tensor init = CURVE_SUBDIVISION.string(Tensor.of(Stream.of(beg, end)));
     Scalar head = curvature(init);
