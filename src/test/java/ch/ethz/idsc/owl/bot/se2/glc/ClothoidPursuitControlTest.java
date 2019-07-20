@@ -6,12 +6,12 @@ import java.io.IOException;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
-public class StaticRatioLimitTest extends TestCase {
+public class ClothoidPursuitControlTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    StaticRatioLimit staticRatioLimit = Serialization.copy(new StaticRatioLimit(Quantity.of(2, "m^-1")));
-    Clip clip = staticRatioLimit.at(null, null);
+    Clip clip = Serialization.copy(Clips.absolute(Quantity.of(2, "m^-1")));
     clip.requireInside(Quantity.of(-2, "m^-1"));
     clip.requireInside(Quantity.of(+2, "m^-1"));
     assertFalse(clip.isInside(Quantity.of(-3, "m^-1")));
