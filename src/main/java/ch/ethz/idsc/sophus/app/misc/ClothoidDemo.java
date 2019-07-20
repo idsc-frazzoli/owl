@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
@@ -42,13 +42,13 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
       geometricLayer.popMatrix();
     }
     {
-      Tensor points = DOMAIN.map(Clothoid1.INSTANCE.curve(START, mouse));
+      Tensor points = DOMAIN.map(Clothoid.INSTANCE.curve(START, mouse));
       new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
     }
     int count = 1;
     for (int deg = 1; deg <= 5; deg += 2) {
-      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, deg);
+      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, deg);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
       new PathRender(COLOR_DATA_INDEXED.getColor(count), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);

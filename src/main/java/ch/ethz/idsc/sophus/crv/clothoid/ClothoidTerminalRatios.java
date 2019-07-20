@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 // TODO JPH move to test area once implementation is superseded
 public class ClothoidTerminalRatios implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
-      new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
+      new LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, 1);
   private static final TensorUnaryOperator HEAD = //
       value -> CURVE_SUBDIVISION.string(Tensor.of(value.stream().limit(2)));
   private static final TensorUnaryOperator TAIL = //

@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public class ClothoidTransition extends AbstractTransition {
   private static final int MAX_ITER = 8;
   private static final TensorMetric TENSOR_METRIC = PseudoClothoidDistance.INSTANCE;
-  private static final CurveSubdivision CURVE_SUBDIVISION = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
+  private static final CurveSubdivision CURVE_SUBDIVISION = new LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, 1);
 
   public ClothoidTransition(Tensor start, Tensor end) {
     super(start, end, TENSOR_METRIC.distance(start, end));

@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** clothoid2 factory
  * 
- * Hint: use {@link Clothoid1} */
+ * Hint: use {@link Clothoid} */
 /* package */ enum Clothoid2 implements GeodesicInterface {
   INSTANCE;
   // ---
