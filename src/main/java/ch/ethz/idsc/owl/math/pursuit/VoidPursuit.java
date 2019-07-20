@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public enum VoidPursuit implements GeodesicPursuitInterface {
+public enum VoidPursuit implements PursuitInterface {
   INSTANCE;
   // ---
   @Override // from GeodesicPursuitInterface

@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.pursuit.ArgMinVariable;
 import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuit;
 import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuits;
-import ch.ethz.idsc.owl.math.pursuit.GeodesicPursuitInterface;
+import ch.ethz.idsc.owl.math.pursuit.PursuitInterface;
 import ch.ethz.idsc.owl.math.pursuit.TrajectoryEntryFinder;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -64,11 +64,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point();
     if (lookAhead.isPresent()) {
       Tensor xya = lookAhead.get();
-      GeodesicPursuitInterface geodesicPursuitInterface = new ClothoidPursuit(xya);
+      PursuitInterface pursuitInterface = ClothoidPursuit.of(xya);
       curve = ClothoidPursuits.curve(xya, REFINEMENT);
       if (inReverse)
         mirrorAndReverse(curve);
-      return Optional.of(CarHelper.singleton(speed, geodesicPursuitInterface.firstRatio().get()).getU());
+      return Optional.of(CarHelper.singleton(speed, pursuitInterface.firstRatio().get()).getU());
     }
     curve = null;
     // System.err.println("no compliant strategy found!");

@@ -7,6 +7,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.math.pursuit.ClothoidPursuit;
 import ch.ethz.idsc.owl.math.pursuit.CurveIntersection;
 import ch.ethz.idsc.owl.math.pursuit.PseudoSe2CurveIntersection;
+import ch.ethz.idsc.owl.math.pursuit.PursuitInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
@@ -40,9 +41,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
       beacons.set(Scalar::negate, Tensor.ALL, 0);
     Optional<Tensor> optional = curveIntersection.string(beacons);
     if (optional.isPresent()) {
-      ClothoidPursuit clothoidPursuit = new ClothoidPursuit(optional.get());
-      if (clothoidPursuit.firstRatio().isPresent()) {
-        Scalar ratio = clothoidPursuit.firstRatio().get();
+      PursuitInterface pursuitInterface = ClothoidPursuit.of(optional.get());
+      if (pursuitInterface.firstRatio().isPresent()) {
+        Scalar ratio = pursuitInterface.firstRatio().get();
         if (clip.isInside(ratio)) {
           targetLocal = optional.get();
           return Optional.of(CarHelper.singleton(speed, ratio).getU());
