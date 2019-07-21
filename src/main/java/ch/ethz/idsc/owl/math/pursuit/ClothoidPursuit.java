@@ -10,14 +10,15 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 public class ClothoidPursuit implements PursuitInterface, Serializable {
+  /** @param lookAhead trajectory point {px, py, pa} */
   public static PursuitInterface of(Tensor lookAhead) {
     return new ClothoidPursuit(lookAhead);
   }
 
+  // ---
   /** first and last ratio/curvature in curve */
   private final ClothoidTerminalRatios clothoidTerminalRatios;
 
-  /** @param lookAhead trajectory point {px, py, pa} */
   private ClothoidPursuit(Tensor lookAhead) {
     clothoidTerminalRatios = ClothoidTerminalRatios.of(lookAhead.map(Scalar::zero), lookAhead);
   }
