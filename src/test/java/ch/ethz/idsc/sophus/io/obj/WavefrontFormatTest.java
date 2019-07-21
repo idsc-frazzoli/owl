@@ -1,14 +1,11 @@
 // code by jph
 package ch.ethz.idsc.sophus.io.obj;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,20 +13,14 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
+import ch.ethz.idsc.tensor.io.ReadLine;
 import ch.ethz.idsc.tensor.red.Max;
 import junit.framework.TestCase;
 
 public class WavefrontFormatTest extends TestCase {
-  /** @param inputStream
-   * @return lines in given inputStream as stream of strings */
-  static Stream<String> lines(InputStream inputStream) {
-    return new BufferedReader(new InputStreamReader(inputStream)).lines();
-  }
-
   public void testBlender0() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/obj/blender0.obj").openStream()) {
-      Stream<String> stream = lines(inputStream);
-      Wavefront wavefront = WavefrontFormat.parse(stream);
+      Wavefront wavefront = WavefrontFormat.parse(ReadLine.of(inputStream));
       assertEquals(wavefront.objects().size(), 2);
       assertEquals(wavefront.objects().get(0).name(), "Cylinder");
       assertEquals(wavefront.objects().get(1).name(), "Cube");
@@ -67,8 +58,7 @@ public class WavefrontFormatTest extends TestCase {
 
   public void testMathematica0() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/obj/meshregionex2d.obj").openStream()) {
-      Stream<String> stream = lines(inputStream);
-      Wavefront wavefront = WavefrontFormat.parse(stream);
+      Wavefront wavefront = WavefrontFormat.parse(ReadLine.of(inputStream));
       List<WavefrontObject> objects = wavefront.objects();
       assertEquals(objects.size(), 1);
       WavefrontObject wavefrontObject = objects.get(0);

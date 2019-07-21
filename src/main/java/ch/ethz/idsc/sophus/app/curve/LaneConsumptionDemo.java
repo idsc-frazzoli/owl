@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.gui.ren.LaneRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.StableLane;
-import ch.ethz.idsc.sophus.app.api.Clothoid1Display;
+import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -33,7 +33,7 @@ public class LaneConsumptionDemo extends BaseCurvatureDemo {
 
   public LaneConsumptionDemo(Collection<Consumer<LaneInterface>> consumers) {
     super(Arrays.asList( //
-        Clothoid1Display.INSTANCE, //
+        ClothoidDisplay.INSTANCE, //
         // Clothoid2Display.INSTANCE, //
         // Clothoid3Display.INSTANCE, //
         Se2CoveringGeodesicDisplay.INSTANCE, //

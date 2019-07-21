@@ -6,8 +6,8 @@ import java.util.Optional;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -41,7 +41,7 @@ public class ArcTan2DTest extends TestCase {
       // ---
     }
     try {
-      ArcTan2D.of(LieAlgebras.se2());
+      ArcTan2D.of(Array.zeros(3, 3, 3));
       fail();
     } catch (Exception exception) {
       // ---

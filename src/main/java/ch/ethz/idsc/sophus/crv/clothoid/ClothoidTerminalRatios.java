@@ -3,20 +3,19 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.math.SignedCurvature2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** clothoid is tangent at start and end points */
-// TODO JPH move to test area once implementation is superseded
 public class ClothoidTerminalRatios implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
       new LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, 1);
@@ -32,9 +31,8 @@ public class ClothoidTerminalRatios implements Serializable {
   /** @param beg of the form {beg_x, beg_y, beg_heading}
    * @param end of the form {end_x, end_y, end_heading}
    * @return */
-  // TODO JPH OWL 047 extract to own class
   public static ClothoidTerminalRatios of(Tensor beg, Tensor end) {
-    final Tensor init = CURVE_SUBDIVISION.string(Tensor.of(Stream.of(beg, end)));
+    final Tensor init = CURVE_SUBDIVISION.string(Unprotect.byRef(beg, end));
     Scalar head = curvature(init);
     {
       Tensor hseq = init;
@@ -73,8 +71,8 @@ public class ClothoidTerminalRatios implements Serializable {
    * @param depth strictly positive */
   /* package for testing */ ClothoidTerminalRatios(Tensor beg, Tensor end, int depth) {
     this( //
-        curvature(Nest.of(HEAD, Tensor.of(Stream.of(beg, end)), depth)), //
-        curvature(Nest.of(TAIL, Tensor.of(Stream.of(beg, end)), depth)));
+        curvature(Nest.of(HEAD, Unprotect.byRef(beg, end), depth)), //
+        curvature(Nest.of(TAIL, Unprotect.byRef(beg, end), depth)));
   }
 
   ClothoidTerminalRatios(Scalar head, Scalar tail) {

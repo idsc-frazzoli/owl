@@ -18,8 +18,7 @@ public class ClothoidPursuit implements PursuitInterface, Serializable {
   private final ClothoidTerminalRatios clothoidTerminalRatios;
 
   /** @param lookAhead trajectory point {px, py, pa} */
-  // TODO JPH OWL 047 make private
-  public ClothoidPursuit(Tensor lookAhead) {
+  private ClothoidPursuit(Tensor lookAhead) {
     clothoidTerminalRatios = ClothoidTerminalRatios.of(lookAhead.map(Scalar::zero), lookAhead);
   }
 
