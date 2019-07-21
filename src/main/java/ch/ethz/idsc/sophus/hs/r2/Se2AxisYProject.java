@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie.se2;
+package ch.ethz.idsc.sophus.hs.r2;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;

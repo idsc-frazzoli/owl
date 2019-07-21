@@ -1,0 +1,21 @@
+# Created with the Wolfram Language : www.wolfram.com
+mtllib meshregionex2d.obj.mtl
+
+# 5 vertex positions
+v  0 0 0
+v  0 0 1
+v  0 -1 0
+v  1 0 0
+v  0 1 0
+
+# 0 UV coordinates
+
+# 0 vertex normals
+
+# Mesh '<STL_BINARY>' with 3 faces
+g <STL_BINARY>
+usemtl DefaultMaterial
+f  1// 2// 3//
+f  1// 2// 4//
+f  1// 2// 5//
+

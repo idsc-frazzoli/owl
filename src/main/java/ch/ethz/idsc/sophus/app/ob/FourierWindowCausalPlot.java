@@ -31,7 +31,6 @@ import ch.ethz.idsc.subare.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
@@ -41,7 +40,6 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
-import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ class FourierWindowCausalPlot {
@@ -62,10 +60,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     TensorUnaryOperator geodesicExtrapolation = GeodesicExtrapolation.of(geodesicInterface, smoothingKernel);
     // ---
-    // TODO JPH TENSOR 075
-    int windowLength = Scalars.intValueExact(Round.FUNCTION.apply(Quantity.of(1, "s").multiply(gokartPoseData.getSampleRate())));
-    int offset = Scalars.intValueExact(Round.FUNCTION.apply(RationalScalar.of(windowLength, 3)));
-    TensorUnaryOperator spectrogramArray = SpectrogramArray.of(windowLength, offset);
+    TensorUnaryOperator spectrogramArray = SpectrogramArray.of(Quantity.of(1, "s"), gokartPoseData.getSampleRate());
     // ---
     Tensor smoothedX = Tensors.empty();
     Tensor smoothedY = Tensors.empty();

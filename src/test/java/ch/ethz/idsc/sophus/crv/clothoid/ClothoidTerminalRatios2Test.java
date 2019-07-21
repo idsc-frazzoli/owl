@@ -21,7 +21,6 @@ public class ClothoidTerminalRatios2Test extends TestCase {
     // turn right
     Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2190137715979599));
     Chop._03.requireClose(clothoidTerminalRatios.head(), ClothoidTerminalRatios2.head(p, q));
-    // TODO JPH
     // Chop._03.requireClose(clothoidTerminalRatios.tail(), ClothoidTerminalRatios2.tail(p, q));
   }
 

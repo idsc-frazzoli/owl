@@ -62,12 +62,6 @@ public class PurePursuit implements PursuitInterface {
     return lookAhead;
   }
 
-  /** @return */
-  // TODO JPH OWL 047 function obsolete
-  public Optional<Scalar> ratio() {
-    return ratio;
-  }
-
   @Override // from PursuitInterface
   public Optional<Scalar> firstRatio() {
     return ratio;
@@ -75,6 +69,6 @@ public class PurePursuit implements PursuitInterface {
 
   @Override // from PursuitInterface
   public Tensor ratios() {
-    return Tensors.of(ratio().get());
+    return Tensors.of(firstRatio().get());
   }
 }
