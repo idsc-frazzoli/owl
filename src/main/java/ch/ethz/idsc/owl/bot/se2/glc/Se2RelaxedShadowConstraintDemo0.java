@@ -80,7 +80,7 @@ public class Se2RelaxedShadowConstraintDemo0 extends Se2ShadowBaseDemo {
         new ShadowMapSpherical(lidarEmulatorCon, imageRegionPed, PED_VELOCITY, PED_RADIUS);
     SimpleShadowConstraintCV shadowConstraintPed = //
         new SimpleShadowConstraintCV(smPedLegalCon, imageRegionCar, CAR_RADIUS, CAR_MAX_ACC, CAR_REACTION_TIME, false);
-    // set up second cost function TODO for what exactly
+    // set up second cost function
     CostFunction pedLegalCost = //
         ConstraintViolationCost.of(shadowConstraintPed, RealScalar.ONE);
     carRelaxedEntity.set2ndCostFunction(pedLegalCost);
