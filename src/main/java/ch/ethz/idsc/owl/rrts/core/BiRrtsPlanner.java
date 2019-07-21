@@ -25,7 +25,6 @@ public class BiRrtsPlanner implements RrtsPlanner {
   /** @param rrts with root already inserted
    * @param spaceSample */
   public BiRrtsPlanner(BidirectionalRrts rrts, RandomSampleInterface spaceSample) {
-    // TODO GJOEL use other criterion: distance from goal center ...?
     this(rrts, spaceSample, NodeCostComparator.INSTANCE);
   }
 
