@@ -17,7 +17,7 @@ public class ClothoidPursuitsTest extends TestCase {
   }
 
   public void testFromTrajectory() {
-    GeodesicPursuitInterface geodesicPursuit;
+    PursuitInterface geodesicPursuit;
     Tensor trajectory = Tensors.of( //
         Tensors.vector(0, 0, 0), //
         Tensors.vector(2, 2, Math.PI / 2), //

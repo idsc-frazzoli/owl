@@ -5,7 +5,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcSinh;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Log;
@@ -23,7 +22,7 @@ public class H2ParametricDistanceTest extends TestCase {
     Tensor q = Tensors.vector(2, 7 + Math.random());
     // ---
     Scalar actual = H2ParametricDistance.INSTANCE.distance(p, q);
-    Scalar expected = Abs.FUNCTION.apply(Log.of(q.Get(1).divide(p.Get(1))));
+    Scalar expected = Log.of(q.Get(1).divide(p.Get(1))).abs();
     Chop._12.requireClose(actual, expected);
   }
 
@@ -32,7 +31,8 @@ public class H2ParametricDistanceTest extends TestCase {
     Tensor q = Tensors.vector(7 + Math.random(), 3);
     // ---
     Scalar actual = H2ParametricDistance.INSTANCE.distance(p, q);
-    Scalar expected = RealScalar.of(2).multiply(ArcSinh.of(Abs.of(q.Get(0).subtract(p.Get(0))).divide(p.Get(1).add(p.Get(1)))));
+    Scalar expected = RealScalar.of(2).multiply(ArcSinh.of( //
+        q.Get(0).subtract(p.Get(0)).abs().divide(p.Get(1).add(p.Get(1)))));
     Chop._12.requireClose(actual, expected);
   }
 

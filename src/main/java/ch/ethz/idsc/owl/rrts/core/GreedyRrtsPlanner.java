@@ -21,7 +21,8 @@ public class GreedyRrtsPlanner extends DefaultRrtsPlanner {
    * @param spaceSample
    * @param goalSample generates samples in goal region */
   public GreedyRrtsPlanner(Rrts rrts, RandomSampleInterface spaceSample, RandomSampleInterface goalSample, Collection<Tensor> greeds) {
-    this(rrts, spaceSample, goalSample, NodeCostComparator.INSTANCE, greeds); // TODO use other criterion: distance from goal center ...?
+    // TODO GJOEL use other criterion: distance from goal center ...?
+    this(rrts, spaceSample, goalSample, NodeCostComparator.INSTANCE, greeds);
   }
 
   /** @param rrts with root already inserted

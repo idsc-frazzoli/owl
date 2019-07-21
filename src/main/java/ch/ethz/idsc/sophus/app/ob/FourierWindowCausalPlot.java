@@ -41,7 +41,6 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
-import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -130,7 +129,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       if (xAxis.Get(j).equals(RealScalar.ZERO))
         factor.append(RealScalar.ONE);
       else
-        factor.append(RealScalar.ONE.divide(Pi.TWO.multiply(Abs.of(xAxis.Get(j)))));
+        factor.append(RealScalar.ONE.divide(Pi.TWO.multiply(xAxis.Get(j).abs())));
     }
     for (Tensor yAxis : yData) {
       Tensor temp = Join.of(yAxis, yAxis).extract(xAxis.length() / 2, xAxis.length() * 3 / 2).pmul(factor);

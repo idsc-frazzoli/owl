@@ -5,11 +5,12 @@ import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
 
-public class PurePursuit {
+public class PurePursuit implements PursuitInterface {
   /** @param lookAhead {x, y, ...} where x is positive
    * @return rate with interpretation in [m^-1], or empty if the first coordinate
    * of the look ahead beacon is non-positive
@@ -62,7 +63,18 @@ public class PurePursuit {
   }
 
   /** @return */
+  // TODO JPH OWL 047 function obsolete
   public Optional<Scalar> ratio() {
     return ratio;
+  }
+
+  @Override // from PursuitInterface
+  public Optional<Scalar> firstRatio() {
+    return ratio;
+  }
+
+  @Override // from PursuitInterface
+  public Tensor ratios() {
+    return Tensors.of(ratio().get());
   }
 }

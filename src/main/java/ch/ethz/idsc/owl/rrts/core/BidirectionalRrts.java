@@ -59,7 +59,8 @@ public class BidirectionalRrts implements Rrts {
         optional = forwardRrts.insertAsNode(node.state(), k_nearest);
       optionals.add(optional);
     }
-    if (!optionals.isEmpty() && optionals.stream().allMatch(Optional::isPresent)) { // FIXME should always be true
+    // FIXME GJOEL should always be true
+    if (!optionals.isEmpty() && optionals.stream().allMatch(Optional::isPresent)) {
       System.out.println("success");
     } else
       System.out.println("fail");

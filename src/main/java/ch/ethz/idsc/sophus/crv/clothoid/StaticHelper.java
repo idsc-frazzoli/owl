@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Real;
    * 
    * @param z
    * @param vector of length 2 with entries that may be {@link Quantity}
-   * @return */
+   * @return vector of length 2 with real entries corresponding to real and imag of result */
   public static Tensor prod(Scalar z, Tensor vector) {
     Scalar zr = Real.FUNCTION.apply(z);
     Scalar zi = Imag.FUNCTION.apply(z);

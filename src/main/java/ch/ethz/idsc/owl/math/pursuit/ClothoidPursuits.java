@@ -25,11 +25,11 @@ public enum ClothoidPursuits {
    * @param trajectoryEntryFinder strategy
    * @param var
    * @return GeodesicPursuit */
-  public static GeodesicPursuitInterface fromTrajectory( //
+  public static PursuitInterface fromTrajectory( //
       Tensor tensor, TrajectoryEntryFinder trajectoryEntryFinder, Scalar var) {
     Optional<Tensor> lookAhead = trajectoryEntryFinder.on(tensor).apply(var).point();
     return lookAhead.isPresent() //
-        ? new ClothoidPursuit(lookAhead.get())
+        ? ClothoidPursuit.of(lookAhead.get())
         : VoidPursuit.INSTANCE;
   }
 }

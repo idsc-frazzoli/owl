@@ -17,7 +17,6 @@ public class Tse2CarFlowsTest extends TestCase {
   public void testSimple() {
     FlowsInterface flowsInterface = Tse2CarFlows.of(RealScalar.of(3), Tensors.vector(-2, 0, 1));
     Collection<Flow> flows = flowsInterface.getFlows(10);
-    // TODO YN are these values intended, if so update comments in Tse2Controls
     assertEquals(Tse2Controls.maxAcc(flows), RealScalar.of(1));
     assertEquals(Tse2Controls.minAcc(flows), RealScalar.of(-2));
     assertEquals(Tse2Controls.maxTurning(flows), RealScalar.of(3));

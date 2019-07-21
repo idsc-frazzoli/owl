@@ -21,12 +21,12 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override // from ClothoidCurve
   protected Scalar il(Scalar t) {
-    return W.dot(X.multiply(t).map(clothoidQuadratic)).Get().multiply(t);
+    return W.dot(X.multiply(t).map(clothoidQuadratic::exp_i)).Get().multiply(t);
   }
 
   @Override // from ClothoidCurve
   protected Scalar ir(Scalar t) {
     Scalar _1_t = _1.subtract(t);
-    return W.dot(X.multiply(_1_t).map(t::add).map(clothoidQuadratic)).Get().multiply(_1_t);
+    return W.dot(X.multiply(_1_t).map(t::add).map(clothoidQuadratic::exp_i)).Get().multiply(_1_t);
   }
 }

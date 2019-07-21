@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
+import ch.ethz.idsc.owl.bot.se2.Se2FlowIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
@@ -22,7 +23,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -46,7 +46,7 @@ public abstract class Se2Entity extends TrajectoryEntity implements GlcPlannerCa
   protected Se2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
     super( //
         new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, //
-            Se2Integrator.INSTANCE, // for simulation we allow slip to the sides
+            Se2FlowIntegrator.INSTANCE, // for simulation we allow slip to the sides
             stateTime), //
         trajectoryControl);
     add(FallbackControl.of(Array.zeros(3)));

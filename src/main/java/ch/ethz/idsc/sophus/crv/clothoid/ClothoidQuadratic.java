@@ -36,10 +36,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   @Override
   public Scalar apply(Scalar s) {
-    return ComplexScalar.unit(angle(s));
+    return series.apply(s);
   }
 
-  public Scalar angle(Scalar s) {
-    return series.apply(s);
+  public Scalar exp_i(Scalar s) {
+    return ComplexScalar.unit(apply(s));
   }
 }
