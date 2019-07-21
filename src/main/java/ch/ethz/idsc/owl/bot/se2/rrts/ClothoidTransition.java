@@ -1,7 +1,6 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import ch.ethz.idsc.owl.math.IntegerLog2;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
@@ -18,7 +17,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -49,9 +47,8 @@ public class ClothoidTransition extends AbstractTransition {
       ++iter;
     }
     /* conservative alternative
-    int n = IntegerLog2.ceil(Ceiling.of(length().divide(minResolution)).number().intValue());
-    samples = Nest.of(CURVE_SUBDIVISION::string, samples, Math.min(MAX_ITER, n + 1));
-    */
+     * int n = IntegerLog2.ceil(Ceiling.of(length().divide(minResolution)).number().intValue());
+     * samples = Nest.of(CURVE_SUBDIVISION::string, samples, Math.min(MAX_ITER, n + 1)); */
     return samples.extract(1, samples.length());
   }
 
