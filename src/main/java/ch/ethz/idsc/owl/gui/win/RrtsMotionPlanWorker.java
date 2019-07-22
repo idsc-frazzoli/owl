@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionPlanner;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.red.Min;
 
@@ -27,7 +26,7 @@ import ch.ethz.idsc.tensor.red.Min;
     Expand<RrtsNode> expand = new Expand<>(transitionPlanner);
     expand.setContinued(() -> isRelevant);
     if (Objects.nonNull(delayHint))
-      expand.maxTime(RealScalar.of(.5));
+      expand.maxTime(delayHint);
     else
       expand.steps(maxSteps);
     transitionPlanner.checkConsistency();
