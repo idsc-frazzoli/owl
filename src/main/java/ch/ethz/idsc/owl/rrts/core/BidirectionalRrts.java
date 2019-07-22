@@ -1,8 +1,8 @@
 // code by gjoel
 package ch.ethz.idsc.owl.rrts.core;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -47,23 +47,15 @@ public class BidirectionalRrts implements Rrts {
 
   @Override // from Rrts
   public void rewireAround(RrtsNode parent, int k_nearest) {
-    System.out.print("match: ");
     List<RrtsNode> toGoal = Nodes.listToRoot(parent);
     Tensor backwardRoot = Lists.getLast(toGoal).state();
     if (!backwardRoot.equals(goal))
       throw TensorRuntimeException.of(backwardRoot, goal);
-    List<Optional<RrtsNode>> optionals = new ArrayList<>();
     for (RrtsNode node : toGoal) {
       Optional<RrtsNode> optional = find(node.state());
       if (!optional.isPresent())
-        optional = forwardRrts.insertAsNode(node.state(), k_nearest);
-      optionals.add(optional);
+        ((DefaultRrts) forwardRrts).insertAsNode(node.state(), k_nearest, true).orElseThrow(NoSuchElementException::new);
     }
-    // FIXME GJOEL should always be true
-    if (!optionals.isEmpty() && optionals.stream().allMatch(Optional::isPresent)) {
-      System.out.println("success");
-    } else
-      System.out.println("fail");
   }
 
   @Override // from Rrts
