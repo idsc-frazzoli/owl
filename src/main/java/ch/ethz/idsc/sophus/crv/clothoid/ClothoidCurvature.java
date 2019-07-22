@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/* package */ class ClothoidCurvature implements ScalarUnaryOperator {
+public class ClothoidCurvature implements ScalarUnaryOperator {
   private final Tensor pxy;
   private final Tensor diff;
   private final Scalar da;
