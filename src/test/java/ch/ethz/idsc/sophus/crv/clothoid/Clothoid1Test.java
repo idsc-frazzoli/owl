@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import junit.framework.TestCase;
 
-public class ClothoidTest extends TestCase {
+public class Clothoid1Test extends TestCase {
   public void testSimple() {
     ScalarTensorFunction scalarTensorFunction = Clothoid1.INSTANCE.curve(Tensors.vector(1, 2, 3), Array.zeros(3));
     assertTrue(scalarTensorFunction instanceof ClothoidCurve1);
