@@ -12,14 +12,14 @@ import junit.framework.TestCase;
 
 public class ClothoidTest extends TestCase {
   public void testSimple() {
-    ScalarTensorFunction scalarTensorFunction = Clothoid.INSTANCE.curve(Tensors.vector(1, 2, 3), Array.zeros(3));
+    ScalarTensorFunction scalarTensorFunction = Clothoid1.INSTANCE.curve(Tensors.vector(1, 2, 3), Array.zeros(3));
     assertTrue(scalarTensorFunction instanceof ClothoidCurve1);
   }
 
   public void testSingular() {
     Tensor beg = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(1, 2, -1);
-    ScalarTensorFunction scalarTensorFunction = Clothoid.INSTANCE.curve(beg, end);
+    ScalarTensorFunction scalarTensorFunction = Clothoid1.INSTANCE.curve(beg, end);
     assertEquals(beg, scalarTensorFunction.apply(RealScalar.ZERO));
     assertEquals(end, scalarTensorFunction.apply(RealScalar.ONE));
     Tensor curve = Subdivide.of(0.0, 1.0, 50).map(scalarTensorFunction);

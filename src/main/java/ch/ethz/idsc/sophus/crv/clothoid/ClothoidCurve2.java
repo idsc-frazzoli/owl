@@ -1,17 +1,19 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.clothoid;
 
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** 2-point Gauss Legendre quadrature on interval [0, 1] */
 /* package */ class ClothoidCurve2 extends ClothoidCurve {
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Tensor X = Tensors.vector(-1, 1) //
-      .multiply(RealScalar.of(Math.sqrt(1 / 3))) //
+      .multiply(Sqrt.FUNCTION.apply(RationalScalar.of(1, 3))) //
       .map(RealScalar.ONE::add) //
       .divide(RealScalar.of(2));
 

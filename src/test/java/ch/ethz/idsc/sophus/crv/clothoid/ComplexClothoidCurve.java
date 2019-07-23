@@ -5,6 +5,7 @@ import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.ArcTan2D;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -12,6 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** original implementation */
 /* package */ enum ComplexClothoidCurve implements GeodesicInterface {
@@ -19,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Real;
   // ---
   private static final Tensor W = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
   private static final Tensor X = Tensors.vector(-1, 0, 1) //
-      .multiply(RealScalar.of(Math.sqrt(3 / 5))) //
+      .multiply(Sqrt.FUNCTION.apply(RationalScalar.of(3, 5))) //
       .map(RealScalar.ONE::add) //
       .divide(RealScalar.of(2));
   private static final Scalar _1 = RealScalar.of(1.0);
