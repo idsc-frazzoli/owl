@@ -37,6 +37,10 @@ public class DefaultRrts implements Rrts {
 
   @Override // from Rrts
   public Optional<RrtsNode> insertAsNode(Tensor state, int k_nearest) {
+    return insertAsNode(state, k_nearest, false);
+  }
+
+  /* package */ Optional<RrtsNode> insertAsNode(Tensor state, int k_nearest, boolean ignoreCheck) {
     // the collision check available to class works on transitions, but not on states
     // that means no sanity collision check on state is carried out inside function insertAsNode
     int size = nodeCollection.size();
@@ -45,7 +49,7 @@ public class DefaultRrts implements Rrts {
       nodeCollection.insert(rrtsNode);
       return Optional.of(rrtsNode);
     }
-    if (isInsertPlausible(state)) { // TODO GJOEL/JPH is this needed?
+    if (ignoreCheck || isInsertPlausible(state)) { // TODO GJOEL/JPH is this needed?
       k_nearest = Math.min(Math.max(1, k_nearest), size);
       Optional<RrtsNode> optional = connectAlongMinimumCost(state, k_nearest);
       if (optional.isPresent()) {

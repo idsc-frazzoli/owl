@@ -32,7 +32,7 @@ public class RnTransition extends AbstractTransition {
       throw TensorRuntimeException.of(length(), RealScalar.of(steps));
     Scalar resolution = length().divide(RealScalar.of(steps));
     Tensor spacing = Tensors.vector(i -> resolution, steps);
-    return new TransitionWrap(sampled(resolution), spacing);
+    return new TransitionWrap(sampled(minResolution), spacing);
   }
 
   @Override // from RenderTransition
