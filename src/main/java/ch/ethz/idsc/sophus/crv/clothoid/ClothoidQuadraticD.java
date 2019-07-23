@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** Reference: U. Reif slide 8/32
  * 
- * quadratic polynomial that interpolates given values at parameters 0, 1/2, 1:
+ * derivative of quadratic polynomial p[t] that interpolates given values at parameters 0, 1/2, 1:
  * <pre>
  * p[0/2] == b0
  * p[1/2] == bm
@@ -20,8 +20,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private final Scalar c0;
   private final Scalar c1;
 
-  /** The Lagrange interpolating polynomial has the following coeffients
-   * {b0, -3 b0 - b1 + 4 bm, 2 (b0 + b1 - 2 bm)}
+  /** The Lagrange interpolating polynomial has the following coefficients
+   * {-3 b0 + 4 bm - b1, 4 (b0 - 2 bm + b1)}
    * 
    * @param b0
    * @param bm
