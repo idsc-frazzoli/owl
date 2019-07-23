@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.CurveCurvature;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidCurvature;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
@@ -61,7 +61,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
       graphics.fill(geometricLayer.toPath2D(Arrowhead.of(.3)));
       geometricLayer.popMatrix();
     }
-    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid.INSTANCE, 1);
+    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
     Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), spinnerLevel.getValue());
     new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
         .setCurve(points, false).render(geometricLayer, graphics);

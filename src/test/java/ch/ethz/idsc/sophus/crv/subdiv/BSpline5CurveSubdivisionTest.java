@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -39,7 +39,7 @@ public class BSpline5CurveSubdivisionTest extends TestCase {
 
   public void testSingleton() {
     Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
-    CurveSubdivision curveSubdivision = new BSpline5CurveSubdivision(Clothoid.INSTANCE);
+    CurveSubdivision curveSubdivision = new BSpline5CurveSubdivision(Clothoid1.INSTANCE);
     assertEquals(curveSubdivision.cyclic(singleton), singleton);
     assertEquals(curveSubdivision.string(singleton), singleton);
   }
