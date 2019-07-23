@@ -1,16 +1,18 @@
 // code by ureif
 package ch.ethz.idsc.sophus.crv.clothoid;
 
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** 3-point Gauss Legendre quadrature on interval [0, 1] */
 /* package */ class ClothoidCurve3 extends ClothoidCurve {
   private static final Tensor W = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
   private static final Tensor X = Tensors.vector(-1, 0, 1) //
-      .multiply(RealScalar.of(Math.sqrt(3 / 5))) //
+      .multiply(Sqrt.FUNCTION.apply(RationalScalar.of(3, 5))) //
       .map(RealScalar.ONE::add) //
       .divide(RealScalar.of(2));
 
