@@ -7,8 +7,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
+/** examples of extensions are
+ * LaneRiesenfeld3CurveSubdivision
+ * BSpline5CurveSubdivision */
 public abstract class AbstractBSpline3CurveSubdivision extends AbstractBSpline1CurveSubdivision {
-  @Override // from CurveSubdivision
+  @Override // from AbstractBSpline1CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
@@ -37,7 +40,13 @@ public abstract class AbstractBSpline3CurveSubdivision extends AbstractBSpline1C
     }
   }
 
+  /** @param tensor with at least 2 control points
+   * @return subdivision of control points along string */
   protected abstract Tensor refine(Tensor tensor);
 
+  /** @param p
+   * @param q
+   * @param r
+   * @return replacement for control point q */
   protected abstract Tensor center(Tensor p, Tensor q, Tensor r);
 }
