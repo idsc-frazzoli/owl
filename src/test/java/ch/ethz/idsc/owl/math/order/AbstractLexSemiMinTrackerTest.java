@@ -18,15 +18,15 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import junit.framework.TestCase;
 
-public class LexicographicSemiorderMinTracker2Test extends TestCase {
+public class AbstractLexSemiMinTrackerTest extends TestCase {
   public void testPermutations() {
     Tensor slackVector = Tensors.vector(1, 2, 0.5);
     Distribution distribution = UniformDistribution.of(0, 3);
     Tensor values = RandomVariate.of(distribution, 300, 3);
     final Set<Integer> minKeys1;
     {
-      LexicographicSemiorderMinTracker<Integer> lexicographicSemiorderMinTracker = //
-          (LexicographicSemiorderMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withSet(slackVector);
+      AbstractLexSemiMinTracker<Integer> lexicographicSemiorderMinTracker = //
+          (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withSet(slackVector);
       for (int index = 0; index < values.length(); ++index)
         lexicographicSemiorderMinTracker.digest(index, values.get(index));
       minKeys1 = new HashSet<>(lexicographicSemiorderMinTracker.getMinKeys());

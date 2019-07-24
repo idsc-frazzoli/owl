@@ -8,7 +8,7 @@ public enum Sl2Group implements LieGroup {
   INSTANCE;
   // ---
   @Override // from LieGroup
-  public Sl2GroupElement element(Tensor xya) {
-    return new Sl2GroupElement(xya);
+  public Sl2GroupElement element(Tensor vector) {
+    return new Sl2GroupElement(vector);
   }
 }
