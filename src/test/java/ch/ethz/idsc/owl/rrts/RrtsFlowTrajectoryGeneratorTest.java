@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
@@ -210,6 +211,8 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     // ---
     assertFalse(trajectory.get(0).getFlow().isPresent());
     assertTrue(trajectory.subList(1, 49).stream().map(TrajectorySample::getFlow).allMatch(Optional::isPresent));
+    assertTrue(trajectory.subList(1, 33).stream().map(TrajectorySample::getFlow).map(Optional::get).map(Flow::getU).allMatch(t -> Sign.isPositive(t.Get(0))));
+    assertTrue(trajectory.subList(33, 49).stream().map(TrajectorySample::getFlow).map(Optional::get).map(Flow::getU).allMatch(t -> Sign.isNegative(t.Get(0))));
     Iterator<TrajectorySample> iterator = trajectory.iterator();
     EpisodeIntegrator integrator = new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, //
         Se2FlowIntegrator.INSTANCE, //

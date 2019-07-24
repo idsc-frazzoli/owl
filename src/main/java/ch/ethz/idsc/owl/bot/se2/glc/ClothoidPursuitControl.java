@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         .map(StateTime::state) //
         .map(tensorUnaryOperator));
     if (inReverse)
-      mirrorAndReverse(beacons);
+      ClothoidControlHelper.mirrorAndReverse(beacons);
     // ---
     TensorScalarFunction costMapping = new ClothoidLengthCostFunction(ratioClip::isInside, REFINEMENT);
     Scalar var = ArgMinVariable.using(entryFinder, costMapping, MAX_LEVEL).apply(beacons);
@@ -67,19 +67,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
       PursuitInterface pursuitInterface = ClothoidPursuit.of(xya);
       curve = ClothoidPursuits.curve(xya, REFINEMENT);
       if (inReverse)
-        mirrorAndReverse(curve);
+        ClothoidControlHelper.mirrorAndReverse(curve);
       return Optional.of(CarHelper.singleton(speed, pursuitInterface.firstRatio().get()).getU());
     }
     curve = null;
     // System.err.println("no compliant strategy found!");
     return Optional.empty();
-  }
-
-  /** mirror the points along the y axis and invert their orientation
-   * @param se2points curve given by points {x, y, a} */
-  private static void mirrorAndReverse(Tensor se2points) {
-    se2points.set(Scalar::negate, Tensor.ALL, 0);
-    se2points.set(Scalar::negate, Tensor.ALL, 2);
   }
 
   /** @param ratioClip on turning ratio depending on state and speed */

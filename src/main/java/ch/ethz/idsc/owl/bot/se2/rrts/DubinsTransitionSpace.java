@@ -37,7 +37,7 @@ public class DubinsTransitionSpace implements Se2TransitionSpace, Serializable {
 
   @Override // from TransitionSpace
   public DubinsTransition connect(Tensor start, Tensor end) {
-    DubinsPath dubinsPath = FixedRadiusDubins.of(start, end, radius).allValid().min(comparator).get();
+    DubinsPath dubinsPath = dubinsPath(start, end).get();
     return new DubinsTransition(start, end, dubinsPath);
   }
 
