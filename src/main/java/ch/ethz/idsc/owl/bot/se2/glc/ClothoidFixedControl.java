@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -37,15 +38,17 @@ import ch.ethz.idsc.tensor.sca.Sign;
         .map(StateTime::state) //
         .map(tensorUnaryOperator));
     if (Sign.isNegative(speed))
-      // FIXME GJOEL what is the trick for reverse driving? can use Se2Letter6Demo for testing
-      beacons.set(Scalar::negate, Tensor.ALL, 0);
+      ClothoidControlHelper.mirrorAndReverse(beacons);
     Optional<Tensor> optional = curveIntersection.string(beacons);
     if (optional.isPresent()) {
       PursuitInterface pursuitInterface = ClothoidPursuit.of(optional.get());
       if (pursuitInterface.firstRatio().isPresent()) {
         Scalar ratio = pursuitInterface.firstRatio().get();
         if (clip.isInside(ratio)) {
-          targetLocal = optional.get();
+          Tensor targetLocal_ = Tensors.of(optional.get());
+          if (Sign.isNegative(speed))
+            ClothoidControlHelper.mirrorAndReverse(targetLocal_);
+          targetLocal = targetLocal_.get(0);
           return Optional.of(CarHelper.singleton(speed, ratio).getU());
         }
       }
