@@ -1,15 +1,13 @@
 // code by jph, gjoel
 package ch.ethz.idsc.sophus.crv.clothoid;
 
-import java.util.stream.IntStream;
-
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.TensorNorm;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Nest;
 
@@ -29,9 +27,11 @@ public enum SubdivisionClothoidDistance implements TensorMetric, TensorNorm {
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
     Tensor tensor = Nest.of(CURVE_SUBDIVISION::string, Tensors.of(p, q), DEPTH);
-    return IntStream.range(1, tensor.length()) //
-        .mapToObj(i -> ClothoidParametricDistance.INSTANCE.distance(tensor.get(i - 1), tensor.get(i))) //
-        .reduce(Scalar::add).orElseThrow(() -> TensorRuntimeException.of(p, q));
+    Scalar sum = RealScalar.ZERO;
+    Tensor a = tensor.get(0);
+    for (int index = 1; index < tensor.length(); ++index)
+      sum = sum.add(ClothoidParametricDistance.INSTANCE.distance(a, a = tensor.get(index)));
+    return sum;
   }
 
   /** @param xya element in SE(2) of the form {x, y, angle}
