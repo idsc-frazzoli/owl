@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * <pre>
  * LieDifferences[{a, b, c, d, e}] == {log a^-1.b, log b^-1.c, log c^-1.d, log d^-1.e}
  * </pre> */
-public class LieDifferences implements TensorUnaryOperator {
+public final class LieDifferences implements TensorUnaryOperator {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
 
@@ -28,7 +28,7 @@ public class LieDifferences implements TensorUnaryOperator {
   }
 
   @Override
-  public final Tensor apply(Tensor tensor) {
+  public Tensor apply(Tensor tensor) {
     Tensor result = Unprotect.empty(tensor.length() - 1);
     Tensor prev = tensor.get(0);
     for (int index = 1; index < tensor.length(); ++index)
@@ -39,7 +39,7 @@ public class LieDifferences implements TensorUnaryOperator {
   /** @param p element of the lie group
    * @param q element of the lie group
    * @return vector == log(p^-1 . q) so that exp(vector) == p^-1 . q */
-  public final Tensor pair(Tensor p, Tensor q) {
+  public Tensor pair(Tensor p, Tensor q) {
     return lieExponential.log(lieGroup.element(p).inverse().combine(q));
   }
 }

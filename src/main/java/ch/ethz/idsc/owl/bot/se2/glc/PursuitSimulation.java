@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.glc;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -22,14 +23,8 @@ import ch.ethz.idsc.tensor.qty.Degree;
 /* package */ class PursuitSimulation extends Se2Demo {
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
-    CarEntity carEntity = new CarEntity( //
-        new StateTime(Tensors.vector(2, 0, Math.PI / 2), RealScalar.ZERO), //
-        // new PurePursuitControl(CarEntity.LOOKAHEAD, CarEntity.MAX_TURNING_RATE), //
-        new ClothoidFixedControl(CarEntity.LOOKAHEAD, CarEntity.MAX_TURNING_RATE), //
-        CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE);
     List<TrajectorySample> trajectory = new ArrayList<>();
     int t = 0;
-    // Scalar q = Pi.VALUE.n
     for (Tensor angle : Subdivide.of(Degree.of(0), Degree.of(360), 100)) {
       Tensor x = AngleVector.of(angle.Get()).multiply(RealScalar.of(2)).append(angle.add(Pi.HALF));
       StateTime stateTime = new StateTime(x, RealScalar.of(++t));
@@ -37,9 +32,23 @@ import ch.ethz.idsc.tensor.qty.Degree;
       TrajectorySample trajectorySample = new TrajectorySample(stateTime, flow);
       trajectory.add(trajectorySample);
     }
-    carEntity.trajectory(trajectory);
-    owlyAnimationFrame.add(carEntity);
+    TrajectoryControl[] trajectoryControls = { //
+        new PurePursuitControl(CarEntity.LOOKAHEAD, CarEntity.MAX_TURNING_RATE), //
+        new ClothoidFixedControl(CarEntity.LOOKAHEAD, CarEntity.MAX_TURNING_RATE) };
+    Tensor[] starts = { //
+        Tensors.vector(2, 0, Math.PI / 2), //
+        Tensors.vector(0, 2, Math.PI) };
+    int index = -1;
+    for (TrajectoryControl trajectoryControl : trajectoryControls) {
+      CarEntity carEntity = new CarEntity( //
+          new StateTime(starts[++index], RealScalar.ZERO), //
+          trajectoryControl, //
+          CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE);
+      carEntity.trajectory(trajectory);
+      owlyAnimationFrame.add(carEntity);
+    }
     owlyAnimationFrame.addBackground(new GridRender(Subdivide.of(0, 10, 5)));
+    owlyAnimationFrame.configCoordinateOffset(400, 400);
   }
 
   public static void main(String[] args) {

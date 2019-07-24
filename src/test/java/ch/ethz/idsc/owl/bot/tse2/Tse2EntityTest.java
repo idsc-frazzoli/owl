@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Clip;
 import junit.framework.TestCase;
 
-public class Tse2PlannerTest extends TestCase {
+public class Tse2EntityTest extends TestCase {
   public void testForward() {
     Tse2ComboRegion tse2ComboRegion = Tse2ComboRegion.spherical( //
         Tensors.fromString("{10[m], 0[m], 2, 4[m*s^-1]}"), //

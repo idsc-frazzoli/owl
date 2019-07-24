@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ abstract class LookAheadControl extends Se2TrajectoryControl {
   private static final Tensor ZEROS = Array.zeros(2);
+  // ---
   final Scalar lookAhead;
   /** for drawing only */
   Tensor targetLocal = null;

@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
+import ch.ethz.idsc.owl.glc.core.CheckedGlcTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
@@ -16,6 +17,7 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -31,7 +33,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 import junit.framework.TestCase;
 
-public class StandardGlcTrajectoryPlannerTest extends TestCase {
+public class StandardTrajectoryPlannerTest extends TestCase {
   public void testSimple() {
     final Tensor stateRoot = Tensors.vector(-2, -2);
     final Tensor stateGoal = Tensors.vector(2, 2);
@@ -61,5 +63,27 @@ public class StandardGlcTrajectoryPlannerTest extends TestCase {
     HeuristicAssert.check(trajectoryPlanner);
     // TrajectoryPlannerConsistency.check(trajectoryPlanner);
     assertTrue(glcExpand.getExpandCount() < 100);
+  }
+
+  public void testSimple2() {
+    final Tensor stateRoot = Tensors.vector(-2, -2);
+    final Tensor stateGoal = Tensors.vector(2, 2);
+    final Scalar radius = DoubleScalar.of(0.25);
+    // ---
+    Tensor eta = Tensors.vector(8, 8);
+    R2Flows r2Flows = new R2Flows(RealScalar.ONE);
+    Collection<Flow> controls = r2Flows.getFlows(36);
+    SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
+    GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
+    // ---
+    TrajectoryPlanner trajectoryPlanner = CheckedGlcTrajectoryPlanner.wrap(new StandardTrajectoryPlanner( //
+        EtaRaster.state(eta), //
+        FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5), //
+        controls, EmptyObstacleConstraint.INSTANCE, goalInterface));
+    trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
+    GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
+    glcExpand.findAny(200);
+    Optional<GlcNode> optional = trajectoryPlanner.getBest();
+    assertTrue(optional.isPresent());
   }
 }
