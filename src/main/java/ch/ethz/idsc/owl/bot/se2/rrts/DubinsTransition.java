@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Tensor samples = Array.zeros(steps);
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
     IntStream.range(0, steps).forEach(i -> //
-        samples.set(scalarTensorFunction.apply(Clips.positive(dubinsPath.length()).apply(resolution.multiply(RealScalar.of(i + 1)))), i));
+    samples.set(scalarTensorFunction.apply(Clips.positive(dubinsPath.length()).apply(resolution.multiply(RealScalar.of(i + 1)))), i));
     return samples;
   }
 
