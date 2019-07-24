@@ -1,23 +1,26 @@
-// code by ob
+// code by ob, jph
 package ch.ethz.idsc.sophus.app.ob;
 
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import java.util.stream.Stream;
 
-// TODO JPH implement using Stream.generate(...), move class to general location
+import ch.ethz.idsc.subare.util.Coinflip;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+
 /* package */ enum DeuniformData {
   ;
-  /** @param Uniform sequence p
-   * @param ratio of data to be left out
-   * @return Randomized nonuniform data */
-  public static Tensor of(Tensor data, Scalar q) {
-    Tensor result = Tensors.empty();
-    for (int index = 0; index < data.length(); ++index)
-      if (Scalars.lessEquals(q, RealScalar.of(Math.random())))
-        result.append(data.get(index));
-    return result;
+  /** @param stream
+   * @param p_keep in interval [0, 1] probability of data to be kept
+   * @return */
+  public static <T> Stream<T> of(Stream<T> stream, Scalar p_keep) {
+    Coinflip coinflip = Coinflip.of(p_keep);
+    return stream.filter(i -> coinflip.tossHead()); //
+  }
+
+  /** @param tensor
+   * @param p_keep in interval [0, 1] probability of data to be kept
+   * @return */
+  public static Tensor of(Tensor tensor, Scalar p_keep) {
+    return Tensor.of(of(tensor.stream(), p_keep).map(Tensor::copy));
   }
 }

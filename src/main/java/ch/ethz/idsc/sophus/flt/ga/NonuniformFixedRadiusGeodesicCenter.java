@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
   /** @param splitInterface
    * @return operator that maps a chronological, symmetric sequence of points to their geodesic center
-   * @throws Exception if geodesicInterface is null */
+   * @throws Exception if given splitInterface is null */
   public static NonuniformFixedRadiusGeodesicCenter of(SplitInterface splitInterface) {
     return new NonuniformFixedRadiusGeodesicCenter(Objects.requireNonNull(splitInterface));
   }
@@ -44,7 +44,7 @@ public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
   }
 
   public static Tensor weights(NavigableMap<Scalar, Tensor> subMap, Scalar key) {
-    // TODO OB Magic Constant which defines the distribution => Test for suitable choice, or keep as a parameter
+    // Magic Constant which defines the distribution => Test for suitable choice, or keep as a parameter
     // 1 corresponds to DIRICHLET
     Scalar startingWeight = RealScalar.ONE;
     // ---
