@@ -18,10 +18,11 @@ public class Sl2GroupElement implements LieGroupElement {
   private final Scalar a2;
   private final Scalar a3;
 
-  public Sl2GroupElement(Tensor tensor) {
-    this(tensor.Get(0), //
-        tensor.Get(1), //
-        tensor.Get(2));
+  /** @param vector of length 3 */
+  public Sl2GroupElement(Tensor vector) {
+    this(vector.Get(0), //
+        vector.Get(1), //
+        vector.Get(2));
   }
 
   private Sl2GroupElement(Scalar a1, Scalar a2, Scalar a3) {
