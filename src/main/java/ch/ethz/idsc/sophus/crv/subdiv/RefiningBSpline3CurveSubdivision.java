@@ -4,6 +4,9 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 
+/** examples of extensions are
+ * {@link BSpline3CurveSubdivision}, and
+ * {@link MSpline3CurveSubdivision} */
 public abstract class RefiningBSpline3CurveSubdivision extends AbstractBSpline3CurveSubdivision {
   @Override
   protected final Tensor refine(Tensor tensor) {

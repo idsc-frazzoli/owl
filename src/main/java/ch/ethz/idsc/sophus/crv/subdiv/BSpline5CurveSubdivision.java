@@ -20,7 +20,7 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
     super(splitInterface);
   }
 
-  @Override // from CurveSubdivision
+  @Override // from AbstractBSpline3CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();

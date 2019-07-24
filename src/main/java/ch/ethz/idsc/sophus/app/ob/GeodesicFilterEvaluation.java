@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
       FrequencyResponsePlot frequencyResponsePlot = new FrequencyResponsePlot(minimizer);
       frequencyResponsePlot.evaluate();
       htmlUtf8.appendln("<p><b>Frequency Responses: </b></p>");
-      // TODO OB change name of frequency responses s.t. they are not overwritten each time
+      // change name of frequency responses s.t. they are not overwritten each time
       htmlUtf8.appendln("<img src='FrequencyResponsePlot_MagnitudeResponse_Test.png' />");
       htmlUtf8.appendln("<img src='FrequencyResponsePlot_PhaseResponse_Test.png' />");
     }

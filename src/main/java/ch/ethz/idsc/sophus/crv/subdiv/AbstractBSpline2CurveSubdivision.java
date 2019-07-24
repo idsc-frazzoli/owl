@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.math.ParametricCurve;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
@@ -12,12 +11,6 @@ import ch.ethz.idsc.tensor.alg.Last;
 /** base class for B-Spline degree 2 curve subdivision
  * Chaikin 1965 */
 public abstract class AbstractBSpline2CurveSubdivision implements CurveSubdivision, Serializable {
-  protected final ParametricCurve parametricCurve;
-
-  protected AbstractBSpline2CurveSubdivision(ParametricCurve parametricCurve) {
-    this.parametricCurve = parametricCurve;
-  }
-
   @Override // from CurveSubdivision
   public final Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);

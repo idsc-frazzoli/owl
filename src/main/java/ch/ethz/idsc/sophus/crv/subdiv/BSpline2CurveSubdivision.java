@@ -11,14 +11,18 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** quadratic B-spline
  * De Rham
- * Chaikin 1965 */
+ * Chaikin 1965
+ * 
+ * the same connecting curve is evaluated at 2 different parameter values: 1/4 and 3/4 */
 public class BSpline2CurveSubdivision extends AbstractBSpline2CurveSubdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _3_4 = RationalScalar.of(3, 4);
-
   // ---
+  protected final ParametricCurve parametricCurve;
+
+  /** @param parametricCurve non-null */
   public BSpline2CurveSubdivision(ParametricCurve parametricCurve) {
-    super(Objects.requireNonNull(parametricCurve));
+    this.parametricCurve = Objects.requireNonNull(parametricCurve);
   }
 
   @Override // from AbstractBSpline2CurveSubdivision

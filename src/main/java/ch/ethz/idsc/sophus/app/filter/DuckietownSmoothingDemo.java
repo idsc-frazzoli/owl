@@ -101,16 +101,9 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
     return RealScalar.of(0.01);
   }
 
-  public static void main(String[] args) {
-    AbstractDemo abstractDemo = new DuckietownSmoothingDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
-  }
-
   @Override
   public BufferedImage bufferedImage() {
     final int degree = spinnerDegree.getValue();
-    // final int levels =
     spinnerRefine.getValue();
     final Tensor control = control();
     Tensor effective = control;
@@ -125,5 +118,11 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
     GeodesicDeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
     SymLinkImage symLinkImage = KnotsBSplineFunctionDemo.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
     return symLinkImage.bufferedImage();
+  }
+
+  public static void main(String[] args) {
+    AbstractDemo abstractDemo = new DuckietownSmoothingDemo();
+    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
+    abstractDemo.timerFrame.jFrame.setVisible(true);
   }
 }
