@@ -5,7 +5,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
+import java.util.List;
 
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid2;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.subare.util.plot.VisualRow;
 import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
@@ -42,6 +48,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private final SpinnerLabel<Integer> spinnerLevel = new SpinnerLabel<>();
+  private final List<GeodesicInterface> geodesics = Arrays.asList(Clothoid1.INSTANCE, Clothoid2.INSTANCE, Clothoid3.INSTANCE);
 
   public ClothoidCurvatureDemo() {
     spinnerLevel.setArray(1, 2, 3, 4, 5, 6, 7, 8);
@@ -61,14 +68,38 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
       graphics.fill(geometricLayer.toPath2D(Arrowhead.of(.3)));
       geometricLayer.popMatrix();
     }
-    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
-    Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), spinnerLevel.getValue());
-    new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
-        .setCurve(points, false).render(geometricLayer, graphics);
     VisualSet visualSet = new VisualSet();
+    for (int nr = 0; nr < geodesics.size(); nr++)
+      innerRender(geodesics.get(nr), geometricLayer, graphics, visualSet, nr);
+    int n = (int) Math.pow(2, spinnerLevel.getValue());
+    {
+      ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(START, mouse);
+      Scalar head = clothoidTerminalRatios.head();
+      visualSet.add(Tensors.vector(0, n), Tensors.of(head, head));
+    }
+    {
+      ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(START, mouse);
+      Scalar tail = clothoidTerminalRatios.tail();
+      visualSet.add(Tensors.vector(0, n), Tensors.of(tail, tail));
+    }
+    JFreeChart jFreeChart = ListPlot.of(visualSet);
+    Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+    jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
+  }
+
+  private void innerRender(GeodesicInterface geodesicInterface, GeometricLayer geometricLayer, Graphics2D graphics, VisualSet visualSet, int nr) {
+    Tensor mouse = geometricLayer.getMouseSe2State();
+    Color color = COLOR_DATA_INDEXED.getColor(nr);
+    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(geodesicInterface, 1);
+    Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), spinnerLevel.getValue());
+    graphics.setColor(color);
+    graphics.drawString(geodesicInterface.getClass().getSimpleName(), 0, (nr + 2) * 10);
+    new PathRender(color, 1.5f) //
+        .setCurve(points, false).render(geometricLayer, graphics);
     {
       Tensor curvature = CurveCurvature.string(Tensor.of(points.stream().map(Extract2D.FUNCTION)));
-      visualSet.add(Range.of(0, curvature.length()), curvature);
+      VisualRow visualRow = visualSet.add(Range.of(0, curvature.length()), curvature);
+      visualRow.setColor(color);
     }
     {
       Tensor p = points.get(0);
@@ -81,21 +112,9 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
         p = q;
       }
       curvature.append(clothoidCurvature.tail());
-      visualSet.add(Range.of(0, curvature.length()), curvature);
+      VisualRow visualRow = visualSet.add(Range.of(0, curvature.length()), curvature);
+      visualRow.setColor(color);
     }
-    {
-      ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(START, mouse);
-      Scalar head = clothoidTerminalRatios.head();
-      visualSet.add(Tensors.vector(0, points.length() - 1), Tensors.of(head, head));
-    }
-    {
-      ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(START, mouse);
-      Scalar tail = clothoidTerminalRatios.tail();
-      visualSet.add(Tensors.vector(0, points.length() - 1), Tensors.of(tail, tail));
-    }
-    JFreeChart jFreeChart = ListPlot.of(visualSet);
-    Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
-    jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
   }
 
   @Override // from DemoInterface
