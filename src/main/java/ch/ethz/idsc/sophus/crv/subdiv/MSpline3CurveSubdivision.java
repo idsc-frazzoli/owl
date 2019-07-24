@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** cubic B-spline
  * 
- * biinvariant mean */
+ * uses biinvariant mean */
 public final class MSpline3CurveSubdivision extends RefiningBSpline3CurveSubdivision {
   private static final Tensor MASK_MID = Tensors.vector(4, 4).divide(RealScalar.of(8));
   private static final Tensor MASK_CEN = Tensors.vector(1, 6, 1).divide(RealScalar.of(8));

@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
 public enum ClothoidParametricDistance implements TensorMetric, TensorNorm {
   INSTANCE;
-
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
     Tensor diff = Extract2D.FUNCTION.apply(q.subtract(p));

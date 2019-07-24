@@ -27,7 +27,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-// TODO OB adapt symLinkImages to new filter structure, see use of BufferedImageSupplier
 /* package */ class GeodesicCausalFilterDemo extends DatasetKernelDemo {
   protected final SpinnerLabel<LieGroupCausalFilters> spinnerCausalFilter = new SpinnerLabel<>();
   /** parameter to blend extrapolation with measurement */

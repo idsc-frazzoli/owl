@@ -17,16 +17,15 @@ public class SubdivisionClothoidDistanceTest extends TestCase {
   public void testOrigin() {
     assertEquals(SubdivisionClothoidDistance.INSTANCE.norm(Tensors.vector(0, 0, 0)), RealScalar.of(0));
   }
-
   /** valid if {@link PseudoClothoidDistance} also depends on {@link Clothoid3} */
   // public void testComparison() {
-  //   Distribution distribution = NormalDistribution.standard();
-  //   for (int count = 0; count < 1000; ++count) {
-  //     Tensor p = RandomVariate.of(distribution, 3);
-  //     Tensor q = RandomVariate.of(distribution, 3);
-  //     Tensor d1 = PseudoClothoidDistance.INSTANCE.distance(p, q);
-  //     Tensor d2 = SubdivisionClothoidDistance.INSTANCE.distance(p, q);
-  //     Chop._02.requireClose(d1, d2);
-  //   }
+  // Distribution distribution = NormalDistribution.standard();
+  // for (int count = 0; count < 1000; ++count) {
+  // Tensor p = RandomVariate.of(distribution, 3);
+  // Tensor q = RandomVariate.of(distribution, 3);
+  // Tensor d1 = PseudoClothoidDistance.INSTANCE.distance(p, q);
+  // Tensor d2 = SubdivisionClothoidDistance.INSTANCE.distance(p, q);
+  // Chop._02.requireClose(d1, d2);
+  // }
   // }
 }
