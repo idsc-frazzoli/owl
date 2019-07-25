@@ -17,9 +17,12 @@ public class ClothoidTerminalRatios2Test extends TestCase {
     Tensor q = Tensors.vector(2, 2, 0).unmodifiable();
     ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(p, q);
     // turn left
-    Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2190137723033907));
+    // Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2190137723033907)); // cl1
+    Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2148814483313415)); // cl3
+    //
     // turn right
-    Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2190137715979599));
+    // Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2190137715979599)); // cl1
+    Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2148814483313415)); // cl3
     Chop._03.requireClose(clothoidTerminalRatios.head(), ClothoidTerminalRatios2.head(p, q));
     // Chop._03.requireClose(clothoidTerminalRatios.tail(), ClothoidTerminalRatios2.tail(p, q));
   }

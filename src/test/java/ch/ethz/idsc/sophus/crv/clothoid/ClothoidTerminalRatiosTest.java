@@ -23,9 +23,11 @@ public class ClothoidTerminalRatiosTest extends TestCase {
     ClothoidTerminalRatios clothoidTerminalRatios = new ClothoidTerminalRatios( //
         Tensors.vector(0, 1, 0), Tensors.vector(2, 2, 0), 3);
     // turn left
-    Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+0.9068461106738649));
+    // Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+0.9068461106738649)); // cl1
+    Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+0.9114223615997659)); // cl3
     // turn right
-    Chop._10.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-0.9068461106738649));
+    // Chop._10.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-0.9068461106738649)); // cl1
+    Chop._10.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-0.9114223615997659)); // cl3
   }
 
   public void testLeftUniv() {
@@ -33,32 +35,38 @@ public class ClothoidTerminalRatiosTest extends TestCase {
         Tensors.vector(0, 1, 0).unmodifiable(), //
         Tensors.vector(2, 2, 0).unmodifiable());
     // turn left
-    Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2190137723033907));
+    // Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2190137723033907)); // cl1
+    Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2148814483313415)); // cl3
     // turn right
-    Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2190137715979599));
+    // Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2190137715979599)); // cl1
+    Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2148814483313415)); // cl3
   }
 
   public void testRight() {
     ClothoidTerminalRatios clothoidTerminalRatios = new ClothoidTerminalRatios( //
         Tensors.vector(0, 1, 0), Tensors.vector(2, 0, 0), 3);
     // turn right
-    Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(-0.9068461106738649));
+    // Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(-0.9068461106738649)); // cl1
+    Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(-0.9114223615997659)); // cl3
     // turn left
-    Chop._10.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(+0.9068461106738649));
+    // Chop._10.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(+0.9068461106738649)); // cl1
+    Chop._10.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(+0.9114223615997659)); // cl3
   }
 
   public void testLeftUnit() {
     ClothoidTerminalRatios clothoidTerminalRatios = new ClothoidTerminalRatios( //
         Tensors.fromString("{0[m], 1[m], 0}"), Tensors.fromString("{2[m], 2[m], 0}"), 3);
     // turn left
-    Chop._10.requireClose(clothoidTerminalRatios.head(), Quantity.of(+0.9068461106738649, "m^-1"));
+    // Chop._10.requireClose(clothoidTerminalRatios.head(), Quantity.of(+0.9068461106738649, "m^-1")); // cl1
+    Chop._10.requireClose(clothoidTerminalRatios.head(), Quantity.of(+0.9114223615997659, "m^-1")); // cl3
     // turn right
-    Chop._10.requireClose(clothoidTerminalRatios.tail(), Quantity.of(-0.9068461106738649, "m^-1"));
+    // Chop._10.requireClose(clothoidTerminalRatios.tail(), Quantity.of(-0.9068461106738649, "m^-1")); // cl1
+    Chop._10.requireClose(clothoidTerminalRatios.tail(), Quantity.of(-0.9114223615997659, "m^-1")); // cl3
   }
 
   public void testCurve() {
     Distribution distribution = NormalDistribution.standard();
-    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
+    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, 1);
     for (int depth = 2; depth < 5; ++depth)
       for (int count = 0; count < 10; ++count) {
         Tensor beg = RandomVariate.of(distribution, 3);

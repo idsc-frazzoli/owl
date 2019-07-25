@@ -3,9 +3,11 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -47,5 +49,16 @@ public class ClothoidCurveTest extends TestCase {
     ExactTensorQ.require(tensor);
     Scalar compare = z.multiply(a);
     assertEquals(compare, ComplexScalar.of(-23, 37));
+  }
+
+  public void testDistinct() {
+    Tensor p = Array.zeros(3);
+    Tensor q = Tensors.vector(-3.7, 0.3, 3.142);
+    Tensor m1 = Clothoid1.INSTANCE.curve(p, q).apply(RationalScalar.HALF);
+    Tensor m2 = Clothoid2.INSTANCE.curve(p, q).apply(RationalScalar.HALF);
+    Tensor m3 = Clothoid3.INSTANCE.curve(p, q).apply(RationalScalar.HALF);
+    assertFalse(Chop._01.close(m1, m2));
+    assertFalse(Chop._01.close(m1, m3));
+    assertFalse(Chop._01.close(m2, m3));
   }
 }

@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 // TODO JPH implementation seems to have issues
 /* package */ class ClothoidTerminalRatios2 implements Serializable {
   public static final CurveSubdivision CURVE_SUBDIVISION = //
-      new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
+      new LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, 1);
   private static final TensorUnaryOperator HEAD = //
       value -> CURVE_SUBDIVISION.string(Tensor.of(value.stream().limit(2)));
   private static final TensorUnaryOperator TAIL = //
