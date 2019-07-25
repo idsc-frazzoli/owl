@@ -15,14 +15,12 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline3CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -82,8 +80,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     {
-      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid1.INSTANCE, 1);
-      Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
+      Tensor points = Nest.of(ClothoidTerminalRatios.CURVE_SUBDIVISION::string, Tensors.of(START, mouse), 6);
       pathRender2.setCurve(points, false).render(geometricLayer, graphics);
     }
     { // draw least curved path
