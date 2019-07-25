@@ -49,6 +49,6 @@ public class ClothoidPursuitTest extends TestCase {
   public void testQuantity() {
     PursuitInterface pursuitInterface = ClothoidPursuit.of(Tensors.fromString("{1[m], 1[m], .3}"));
     Optional<Scalar> optional = pursuitInterface.firstRatio();
-    Clips.interval(Quantity.of(2.75, "m^-1"), Quantity.of(2.77, "m^-1")).requireInside(optional.get());
+    Clips.interval(Quantity.of(2.77, "m^-1"), Quantity.of(2.78, "m^-1")).requireInside(optional.get());
   }
 }

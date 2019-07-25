@@ -8,13 +8,18 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
+/** Hint:
+ * If the given points p and q have identical (x, y)-coordinates, then
+ * the result is undefined. */
 public class ClothoidCurvature implements ScalarUnaryOperator {
   private final Tensor pxy;
   private final Tensor diff;
   private final Scalar da;
-  protected final ClothoidQuadraticD clothoidQuadraticD;
+  private final ClothoidQuadraticD clothoidQuadraticD;
   private final Scalar v;
 
+  /** @param p start point
+   * @param q end point */
   public ClothoidCurvature(Tensor p, Tensor q) {
     pxy = p.extract(0, 2);
     Scalar pa = p.Get(2);
