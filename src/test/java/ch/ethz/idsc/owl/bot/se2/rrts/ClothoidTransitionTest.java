@@ -16,8 +16,8 @@ public class ClothoidTransitionTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     ClothoidTransition clothoidTransition = //
         Serialization.copy(new ClothoidTransition(Tensors.vector(1, 2, 3), Tensors.vector(4, 1, 5)));
-    ClothoidTerminalRatio clothoidTerminalRatios = clothoidTransition.terminalRatios();
-    Scalar head = clothoidTerminalRatios.head();
+    ClothoidTerminalRatio clothoidTerminalRatio = clothoidTransition.terminalRatios();
+    Scalar head = clothoidTerminalRatio.head();
     Clips.interval(2.5, 2.6).requireInside(head);
   }
 

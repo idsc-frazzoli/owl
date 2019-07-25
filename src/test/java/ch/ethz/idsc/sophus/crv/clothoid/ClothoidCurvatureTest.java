@@ -16,8 +16,8 @@ public class ClothoidCurvatureTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     Tensor p = Tensors.vector(1, 2, 1);
     Tensor q = Tensors.vector(8, 6, 2);
-    ClothoidTerminalRatio clothoidTerminalRatios = ClothoidTerminalRatios.of(p, q);
-    Scalar head = clothoidTerminalRatios.head();
+    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(p, q);
+    Scalar head = clothoidTerminalRatio.head();
     System.out.println(head);
     ClothoidCurvature clothoidCurvature = Serialization.copy(new ClothoidCurvature(p, q));
     Scalar scalar = clothoidCurvature.apply(RealScalar.ZERO);
@@ -27,8 +27,8 @@ public class ClothoidCurvatureTest extends TestCase {
   public void testSimpleSome() {
     Tensor p = Tensors.vector(1, 2, 0);
     Tensor q = Tensors.vector(10, 3, 0);
-    ClothoidTerminalRatio clothoidTerminalRatios = ClothoidTerminalRatios.of(p, q);
-    Scalar head = clothoidTerminalRatios.head();
+    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(p, q);
+    Scalar head = clothoidTerminalRatio.head();
     ClothoidCurvature clothoidCurvature = new ClothoidCurvature(p, q);
     Scalar scalar = clothoidCurvature.apply(RealScalar.ZERO);
     Chop._12.requireClose(clothoidCurvature.head(), scalar);

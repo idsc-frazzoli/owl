@@ -24,25 +24,40 @@ public enum ClothoidTerminalRatios {
       value -> CURVE_SUBDIVISION.string(value.extract(value.length() - 2, value.length()));
   /** typically 13, or 14 iterations are needed to reach precision up 1e-3 */
   /***************************************************/
-  private static final int ITERATIONS = 2;
+  /** investigations have shown that for iterations == 5 works on all start and end point configurations
+   * 
+   * (see ClothoidCurvatureDemo) */
+  private static final int ITERATIONS = 5;
 
-  public static ClothoidTerminalRatio analytic(Tensor p, Tensor q) {
-    return new ClothoidTerminalRatio(head(p, q), tail(p, q));
+  /** Hint: the method is the preferred method to obtain ClothoidTerminalRatio.
+   * 
+   * @param p start configuration
+   * @param q end configuration
+   * @return */
+  public static ClothoidTerminalRatio of(Tensor p, Tensor q) {
+    // TODO could use variable iteration depth based on some accuracy criteria
+    return of(p, q, ITERATIONS);
+  }
+
+  public static ClothoidTerminalRatio of(Tensor p, Tensor q, int iterations) {
+    return new ClothoidTerminalRatio( //
+        head(p, q, iterations), //
+        tail(p, q, iterations));
   }
 
   /** @param p of the form {p_x, p_y, p_heading}
    * @param q of the form {q_x, q_y, q_heading}
    * @return */
-  public static Scalar head(Tensor p, Tensor q) {
-    Tensor tensor = Nest.of(HEAD, Unprotect.byRef(p, q), ITERATIONS);
+  public static Scalar head(Tensor p, Tensor q, int iterations) {
+    Tensor tensor = Nest.of(HEAD, Unprotect.byRef(p, q), iterations);
     return new ClothoidCurvature(tensor.get(0), tensor.get(1)).head();
   }
 
   /** @param p of the form {p_x, p_y, p_heading}
    * @param q of the form {q_x, q_y, q_heading}
    * @return */
-  public static Scalar tail(Tensor p, Tensor q) {
-    Tensor tensor = Nest.of(TAIL, Unprotect.byRef(p, q), ITERATIONS);
+  public static Scalar tail(Tensor p, Tensor q, int iterations) {
+    Tensor tensor = Nest.of(TAIL, Unprotect.byRef(p, q), iterations);
     return new ClothoidCurvature(tensor.get(1), tensor.get(2)).tail();
   }
 
@@ -50,10 +65,12 @@ public enum ClothoidTerminalRatios {
   static final Chop CHOP = Chop._03;
   static final int MAX_ITER = 18;
 
-  /** @param beg of the form {beg_x, beg_y, beg_heading}
+  /** Hint: for almost straight segments, this curvature approximation is relatively far off!
+   * 
+   * @param beg of the form {beg_x, beg_y, beg_heading}
    * @param end of the form {end_x, end_y, end_heading}
    * @return */
-  public static ClothoidTerminalRatio of(Tensor beg, Tensor end) {
+  public static ClothoidTerminalRatio planar(Tensor beg, Tensor end) {
     final Tensor init = CURVE_SUBDIVISION.string(Unprotect.byRef(beg, end));
     Scalar head = ClothoidTerminalRatios.curvature(init);
     {

@@ -65,7 +65,7 @@ public class ClothoidTransition extends AbstractTransition {
   }
 
   public ClothoidTerminalRatio terminalRatios() {
-    return ClothoidTerminalRatios.of(start(), end());
+    return ClothoidTerminalRatios.planar(start(), end());
   }
 
   @Override // from Transition

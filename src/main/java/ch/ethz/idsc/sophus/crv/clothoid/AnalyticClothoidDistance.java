@@ -35,12 +35,12 @@ public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
       return half_dist.add(half_dist); // 2 * half_dist
     }
     // TODO GJOEL investigate "direction"
-    ClothoidTerminalRatio clothoidTerminalRatios = ClothoidTerminalRatios.of(p, q);
+    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(p, q);
     Scalar half_num = qa.subtract(pa);
     Scalar num = half_num.add(half_num); // 2 * half_num
-    Scalar den = AbsSquared.FUNCTION.apply(clothoidTerminalRatios.tail()).subtract(AbsSquared.FUNCTION.apply(clothoidTerminalRatios.head()));
+    Scalar den = AbsSquared.FUNCTION.apply(clothoidTerminalRatio.tail()).subtract(AbsSquared.FUNCTION.apply(clothoidTerminalRatio.head()));
     Scalar a_squared = num.divide(den).abs();
-    return a_squared.multiply(clothoidTerminalRatios.difference().abs());
+    return a_squared.multiply(clothoidTerminalRatio.difference().abs());
   }
 
   @Override // from TensorNorm

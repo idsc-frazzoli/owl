@@ -51,6 +51,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private final SpinnerLabel<Integer> spinnerBegin = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLevel = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerCurve = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("signed curv.");
   private final List<SplitInterface> splitInterfaces = //
       Arrays.asList(Clothoid1.INSTANCE, Clothoid2.INSTANCE, Clothoid3.INSTANCE);
@@ -58,11 +59,15 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
   public ClothoidCurvatureDemo() {
     spinnerBegin.setArray(0, 1, 2);
     spinnerBegin.setIndex(2);
-    spinnerBegin.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "begin");
+    spinnerBegin.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "begin");
     // ---
     spinnerLevel.setArray(1, 2, 3, 4, 5, 6, 7, 8);
     spinnerLevel.setIndex(4);
-    spinnerLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "levels");
+    spinnerLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "levels");
+    // ---
+    spinnerCurve.setArray(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    spinnerCurve.setValue(5);
+    spinnerCurve.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "iterations of curvature computation");
     // ---
     jToggleButton.setToolTipText("display signed curvature result");
     timerFrame.jToolBar.add(jToggleButton);
@@ -85,17 +90,18 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
       innerRender(splitInterfaces.get(index), geometricLayer, graphics, visualSet, index);
     int n = (int) Math.pow(2, spinnerLevel.getValue());
     {
-      ClothoidTerminalRatio clothoidTerminalRatios = ClothoidTerminalRatios.of(START, mouse);
-      Scalar head = clothoidTerminalRatios.head();
-      Scalar tail = clothoidTerminalRatios.tail();
-      {
-        VisualRow visualRow = visualSet.add(Tensors.vector(0, n), Tensors.of(head, head));
-        visualRow.setColor(Color.BLACK);
-      }
-      {
-        VisualRow visualRow = visualSet.add(Tensors.vector(0, n), Tensors.of(tail, tail));
-        visualRow.setColor(Color.BLACK);
-      }
+      ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(START, mouse);
+      Scalar head = clothoidTerminalRatio.head();
+      Scalar tail = clothoidTerminalRatio.tail();
+      visualSet.add(Tensors.vector(0, n), Tensors.of(head, head)).setColor(Color.BLACK);
+      visualSet.add(Tensors.vector(0, n), Tensors.of(tail, tail)).setColor(Color.BLACK);
+    }
+    {
+      ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.of(START, mouse, spinnerCurve.getValue());
+      Scalar head = clothoidTerminalRatio.head();
+      Scalar tail = clothoidTerminalRatio.tail();
+      visualSet.add(Tensors.vector(0, n), Tensors.of(head, head)).setColor(Color.RED);
+      visualSet.add(Tensors.vector(0, n), Tensors.of(tail, tail)).setColor(Color.RED);
     }
     JFreeChart jFreeChart = ListPlot.of(visualSet);
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
