@@ -24,6 +24,7 @@ import ch.ethz.idsc.sophus.crv.CurveCurvature;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid2;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatio;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
@@ -84,7 +85,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
       innerRender(splitInterfaces.get(index), geometricLayer, graphics, visualSet, index);
     int n = (int) Math.pow(2, spinnerLevel.getValue());
     {
-      ClothoidTerminalRatios clothoidTerminalRatios = ClothoidTerminalRatios.of(START, mouse);
+      ClothoidTerminalRatio clothoidTerminalRatios = ClothoidTerminalRatios.of(START, mouse);
       Scalar head = clothoidTerminalRatios.head();
       Scalar tail = clothoidTerminalRatios.tail();
       {

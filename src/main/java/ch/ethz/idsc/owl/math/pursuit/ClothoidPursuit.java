@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.pursuit;
 import java.io.Serializable;
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatio;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,7 +18,7 @@ public class ClothoidPursuit implements PursuitInterface, Serializable {
 
   // ---
   /** first and last ratio/curvature in curve */
-  private final ClothoidTerminalRatios clothoidTerminalRatios;
+  private final ClothoidTerminalRatio clothoidTerminalRatios;
 
   private ClothoidPursuit(Tensor lookAhead) {
     clothoidTerminalRatios = ClothoidTerminalRatios.of(lookAhead.map(Scalar::zero), lookAhead);

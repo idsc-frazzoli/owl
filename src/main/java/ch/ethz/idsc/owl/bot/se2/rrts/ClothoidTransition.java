@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatio;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
@@ -63,7 +64,7 @@ public class ClothoidTransition extends AbstractTransition {
     return new TransitionWrap(samples, spacing);
   }
 
-  public ClothoidTerminalRatios terminalRatios() {
+  public ClothoidTerminalRatio terminalRatios() {
     return ClothoidTerminalRatios.of(start(), end());
   }
 
