@@ -18,7 +18,7 @@ public class ClothoidTransitionTest extends TestCase {
         Serialization.copy(new ClothoidTransition(Tensors.vector(1, 2, 3), Tensors.vector(4, 1, 5)));
     ClothoidTerminalRatios clothoidTerminalRatios = clothoidTransition.terminalRatios();
     Scalar head = clothoidTerminalRatios.head();
-    Clips.interval(2.1, 2.2).requireInside(head);
+    Clips.interval(2.5, 2.6).requireInside(head);
   }
 
   public void testLog2Int() {
@@ -42,8 +42,8 @@ public class ClothoidTransitionTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
-    assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 64);
-    assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 128);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 32);
+    assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 64);
     try {
       clothoidTransition.wrapped(RealScalar.ZERO);
       fail();
