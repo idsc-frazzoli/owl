@@ -20,7 +20,7 @@ public class ClothoidDisplayTest extends TestCase {
     Tensor q = Tensors.vector(0, 2, 0);
     Scalar scalar = ClothoidDisplay.INSTANCE.parametricDistance(p, q);
     Scalar result = Se2ParametricDistance.INSTANCE.distance(p, q);
-    Clips.interval(2.56, 2.57).requireInside(scalar);
+    Clips.interval(2.54, 2.55).requireInside(scalar);
     assertEquals(result, RealScalar.of(2));
   }
 
