@@ -53,7 +53,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
     Chop._10.requireClose(clothoidTerminalRatio.tail(), RealScalar.of(+0.9114223615997659)); // cl3
   }
 
-  public void testLeftUnit() {
+  public void testFixedLeftUnit() {
     ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.fixed( //
         Tensors.fromString("{0[m], 1[m], 0}"), Tensors.fromString("{2[m], 2[m], 0}"), 3);
     // turn left
@@ -62,6 +62,17 @@ public class ClothoidTerminalRatiosTest extends TestCase {
     // turn right
     // Chop._10.requireClose(clothoidTerminalRatios.tail(), Quantity.of(-0.9068461106738649, "m^-1")); // cl1
     Chop._10.requireClose(clothoidTerminalRatio.tail(), Quantity.of(-0.9114223615997659, "m^-1")); // cl3
+  }
+
+  public void testOfLeftUnit() {
+    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.of( //
+        Tensors.fromString("{0[m], 1[m], 0}"), Tensors.fromString("{2[m], 2[m], 0}"), 3);
+    // turn left
+    // Chop._10.requireClose(clothoidTerminalRatios.head(), Quantity.of(+0.9068461106738649, "m^-1")); // cl1
+    Chop._10.requireClose(clothoidTerminalRatio.head(), Quantity.of(+1.2201535736244924, "m^-1")); // cl3
+    // turn right
+    // Chop._10.requireClose(clothoidTerminalRatios.tail(), Quantity.of(-0.9068461106738649, "m^-1")); // cl1
+    Chop._10.requireClose(clothoidTerminalRatio.tail(), Quantity.of(-1.2201535736244924, "m^-1")); // cl3
   }
 
   public void testCurve() {
@@ -159,10 +170,11 @@ public class ClothoidTerminalRatiosTest extends TestCase {
     // Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2190137723033907)); // cl1
     Chop._08.requireClose(clothoidTerminalRatio1.head(), RealScalar.of(+1.2148814483313415)); // cl3
     // Chop._05.requireClose(clothoidTerminalRatio1.head(), clothoidTerminalRatio2.head());
-    // Chop._05.requireClose(clothoidTerminalRatio1.tail(), clothoidTerminalRatio2.tail());
+    Chop._02.requireClose(clothoidTerminalRatio1.head(), clothoidTerminalRatio2.head());
     // turn right
     // Chop._08.requireClose(clothoidTerminalRatios.tail(), RealScalar.of(-1.2190137715979599)); // cl1
     Chop._08.requireClose(clothoidTerminalRatio1.tail(), RealScalar.of(-1.2148814483313415)); // cl3
+    Chop._02.requireClose(clothoidTerminalRatio1.tail(), clothoidTerminalRatio2.tail());
     // Chop._03.requireClose(clothoidTerminalRatios.head(), ClothoidTerminalRatios2.head(p, q));
     // Chop._03.requireClose(clothoidTerminalRatios.tail(), ClothoidTerminalRatios2.tail(p, q));
   }

@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   private final Scalar c0;
   private final Scalar c1;
 
-  /** The Lagrange interpolating polynomial has the following coefficients
+  /** The Lagrange interpolating polynomial is linear with the following coefficients
    * {-3 b0 + 4 bm - b1, 4 (b0 - 2 bm + b1)}
    * 
    * @param b0

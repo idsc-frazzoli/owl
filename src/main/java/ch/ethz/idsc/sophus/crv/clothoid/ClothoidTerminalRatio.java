@@ -27,4 +27,9 @@ public class ClothoidTerminalRatio implements Serializable {
   public Scalar difference() {
     return tail.subtract(head);
   }
+
+  @Override // from Object
+  public final String toString() {
+    return "{\"head\": " + head() + ", \"tail\": " + tail() + "}";
+  }
 }

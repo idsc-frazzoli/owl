@@ -24,7 +24,7 @@ public class ClothoidCurvatureTest extends TestCase {
     System.out.println(scalar);
   }
 
-  public void testSimpleSome() {
+  public void testAlmostStraight() {
     Tensor p = Tensors.vector(1, 2, 0);
     Tensor q = Tensors.vector(10, 3, 0);
     ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(p, q);

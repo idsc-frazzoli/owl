@@ -65,7 +65,10 @@ public enum ClothoidTerminalRatios {
   static final Chop CHOP = Chop._03;
   static final int MAX_ITER = 18;
 
-  /** Hint: for almost straight segments, this curvature approximation is relatively far off!
+  /** Hint:
+   * this curvature approximation is:
+   * for almost straight segments, relatively far off!
+   * for circle configurations better than the "analytic" solution
    * 
    * @param beg of the form {beg_x, beg_y, beg_heading}
    * @param end of the form {end_x, end_y, end_heading}
