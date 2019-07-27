@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
-import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.Drop;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -33,24 +33,7 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor sampled(Scalar minResolution) {
-    Sign.requirePositive(minResolution);
-    Tensor samples = Tensors.of(start(), end());
-    // TODO GJOEL/JPH implementation inefficient
-    int iter = 0;
-    while (iter < MAX_ITER) {
-      boolean sufficient = Differences.of(samples).stream() //
-          .map(Extract2D.FUNCTION) //
-          .map(Norm._2::ofVector) //
-          .allMatch(scalar -> Scalars.lessThan(scalar, minResolution));
-      if (sufficient)
-        break;
-      samples = CURVE_SUBDIVISION.string(samples);
-      ++iter;
-    }
-    /* conservative alternative
-     * int n = IntegerLog2.ceil(Ceiling.of(length().divide(minResolution)).number().intValue());
-     * samples = Nest.of(CURVE_SUBDIVISION::string, samples, Math.min(MAX_ITER, n + 1)); */
-    return samples.extract(1, samples.length());
+    return Drop.head(linearized(minResolution), 1);
   }
 
   @Override // from Transition
@@ -70,6 +53,23 @@ public class ClothoidTransition extends AbstractTransition {
 
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
-    return Join.of(Tensors.of(start()), sampled(minResolution));
+    Sign.requirePositive(minResolution);
+    Tensor samples = Tensors.of(start(), end());
+    // TODO GJOEL/JPH implementation inefficient
+    int iter = 0;
+    while (iter < MAX_ITER) {
+      boolean sufficient = Differences.of(samples).stream() //
+          .map(Extract2D.FUNCTION) //
+          .map(Norm._2::ofVector) //
+          .allMatch(scalar -> Scalars.lessThan(scalar, minResolution));
+      if (sufficient)
+        break;
+      samples = CURVE_SUBDIVISION.string(samples);
+      ++iter;
+    }
+    /* conservative alternative
+     * int n = IntegerLog2.ceil(Ceiling.of(length().divide(minResolution)).number().intValue());
+     * samples = Nest.of(CURVE_SUBDIVISION::string, samples, Math.min(MAX_ITER, n + 1)); */
+    return samples;
   }
 }

@@ -28,11 +28,11 @@ import ch.ethz.idsc.tensor.red.Entrywise;
         .reduce(Entrywise.min());
   }
 
-  // FIXME YN magic const
+  // FIXME_YN magic const
   private static final Scalar MERIT_EPS = RationalScalar.of(1, 100);
 
   static boolean isEqual(GlcNode next, RLDomainQueue domainQueue) {
-    // TODO YN check if close to existing nodes / assert if this is helpful
+    // TODO_YN check if close to existing nodes / assert if this is helpful
     Tensor nextMerit = VectorScalars.vector(next.merit());
     return domainQueue.stream() //
         .anyMatch(glcNode -> VectorScalars.vector(glcNode.merit()).subtract(nextMerit).stream() //

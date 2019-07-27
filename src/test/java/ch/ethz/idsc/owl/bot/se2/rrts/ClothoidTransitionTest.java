@@ -44,6 +44,8 @@ public class ClothoidTransitionTest extends TestCase {
     }
     assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 32);
     assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 64);
+    assertEquals(clothoidTransition.linearized(RealScalar.of(.2)).length(), 33);
+    assertEquals(clothoidTransition.linearized(RealScalar.of(.1)).length(), 65);
     try {
       clothoidTransition.wrapped(RealScalar.ZERO);
       fail();

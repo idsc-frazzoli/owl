@@ -18,7 +18,7 @@ public class MonteCarloAlgorithmsTest extends TestCase {
     checkExampleWithSarsa(MonteCarloExamples.MAXBIAS, true);
     checkExampleWithSarsa(MonteCarloExamples.MAZE2, false);
     checkExampleWithSarsa(MonteCarloExamples.RACETRACK, false);
-    // checkExampleWithSarsa(MonteCarloExamples.WINDYGRID, false); // TODO too slow
+    // checkExampleWithSarsa(MonteCarloExamples.WINDYGRID, false); // too slow
     checkExampleWithSarsa(MonteCarloExamples.WIRELOOP_4, false);
     checkExampleWithSarsa(MonteCarloExamples.WIRELOOP_C, false);
   }

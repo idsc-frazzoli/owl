@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
 
@@ -54,6 +55,10 @@ import ch.ethz.idsc.tensor.sca.Real;
     Scalar z = il.divide(il.add(ir));
     return pxy.add(prod(z, diff)) //
         .append(clothoidQuadratic.apply(t).add(da));
+  }
+
+  public final Scalar v() {
+    return Norm._2.ofVector(diff);
   }
 
   /** complex multiplication

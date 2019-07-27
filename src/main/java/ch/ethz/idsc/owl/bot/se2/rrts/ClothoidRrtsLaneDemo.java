@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.qty.Degree;
 
-class ClothoidRrtsLaneDemo implements DemoInterface {
+/* package */ class ClothoidRrtsLaneDemo implements DemoInterface {
   private static final LidarRaytracer LIDAR_RAYTRACER = //
       new LidarRaytracer(Subdivide.of(Degree.of(-90), Degree.of(90), 32), Subdivide.of(0, 5, 30));
   private static final Tensor CIRCLE = CirclePoints.of(50).multiply(RationalScalar.HALF).unmodifiable();
