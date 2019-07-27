@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Floor;
 
+// TODO JPH OWL 049 move to package hs.r2
 public enum Se2CoveringParametricDistance implements TensorMetric {
   INSTANCE;
   // ---
@@ -19,13 +20,13 @@ public enum Se2CoveringParametricDistance implements TensorMetric {
    * @return length of geodesic between p and q when projected to R^2 including the number of windings */
   @Override
   public Scalar distance(Tensor p, Tensor q) {
-    // Distance procjected on S2
+    // Distance projected on SE2
     Scalar distance = Se2ParametricDistance.INSTANCE.distance(p, q);
     // change of heading w/o modulo
     Scalar alphaCovering = q.Get(2).subtract(p.get(2)).multiply(HALF);
     // number of windings
     Scalar windings = Floor.FUNCTION.apply(alphaCovering.divide(RealScalar.of(2 * Math.PI)));
-    // alpha from se2ParametricDistance
+    // alpha from Se2ParametricDistance
     Scalar alpha = So2.MOD.apply(q.Get(2).subtract(p.get(2))).multiply(HALF);
     // length of one winding
     Scalar circleDistance = alpha.divide(RealScalar.of(2 * Math.PI)).multiply(distance);
