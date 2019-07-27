@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /** Hint:
  * If the given points p and q have identical (x, y)-coordinates, then
  * the result is undefined. */
-public class ClothoidCurvature implements ScalarUnaryOperator {
+/* package */ class ClothoidCurvature implements ScalarUnaryOperator {
   private final ClothoidQuadraticD clothoidQuadraticD;
   private final Scalar v;
 

@@ -6,12 +6,7 @@ import ch.ethz.idsc.sophus.math.ArcTan2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.sca.Imag;
-import ch.ethz.idsc.tensor.sca.Real;
 
 /** Reference:
  * Ulrich Reif slides */
@@ -53,30 +48,7 @@ import ch.ethz.idsc.tensor.sca.Real;
      * t == 0 -> (0, 0)
      * t == 1 -> (1, 0) */
     Scalar z = il.divide(il.add(ir));
-    return pxy.add(prod(z, diff)) //
+    return pxy.add(Clothoid.prod(z, diff)) //
         .append(clothoidQuadratic.apply(t).add(da));
-  }
-
-  /** Reference: U. Reif slides
-   * 
-   * @return */
-  public final Scalar v() {
-    return Norm._2.ofVector(diff);
-  }
-
-  /** complex multiplication
-   * 
-   * @param z
-   * @param vector of length 2 with entries that may be {@link Quantity}
-   * @return vector of length 2 with real entries corresponding to real and imag of result */
-  static Tensor prod(Scalar z, Tensor vector) {
-    Scalar zr = Real.FUNCTION.apply(z);
-    Scalar zi = Imag.FUNCTION.apply(z);
-    Scalar v0 = vector.Get(0);
-    Scalar v1 = vector.Get(1);
-    return Tensors.of( //
-        zr.multiply(v0).subtract(zi.multiply(v1)), //
-        zi.multiply(v0).add(zr.multiply(v1)) //
-    );
   }
 }

@@ -50,7 +50,7 @@ public enum ClothoidTerminalRatios {
    * @return */
   public static Scalar head(Tensor p, Tensor q, int iterations) {
     Tensor tensor = Nest.of(HEAD, Unprotect.byRef(p, q), iterations);
-    return new ClothoidCurvature(tensor.get(0), tensor.get(1)).head();
+    return new Clothoid(tensor.get(0), tensor.get(1)).new Curvature().head();
   }
 
   /** @param p of the form {p_x, p_y, p_heading}
@@ -58,7 +58,7 @@ public enum ClothoidTerminalRatios {
    * @return */
   public static Scalar tail(Tensor p, Tensor q, int iterations) {
     Tensor tensor = Nest.of(TAIL, Unprotect.byRef(p, q), iterations);
-    return new ClothoidCurvature(tensor.get(1), tensor.get(2)).tail();
+    return new Clothoid(tensor.get(1), tensor.get(2)).new Curvature().tail();
   }
 
   /***************************************************/
