@@ -1,8 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
-import ch.ethz.idsc.tensor.RationalScalar;
+import java.util.Objects;
+
+import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
@@ -17,10 +18,15 @@ import ch.ethz.idsc.tensor.alg.Last;
  * LaneRiesenfeldCurveSubdivision with degree 3 produces better curvature for
  * Clothoid geodesics than LaneRiesenfeld3CurveSubdivision. */
 public final class LaneRiesenfeld3CurveSubdivision extends AbstractBSpline3CurveSubdivision {
-  private final SplitInterface splitInterface;
+  public static CurveSubdivision of(MidpointInterface midpointInterface) {
+    return new LaneRiesenfeld3CurveSubdivision(Objects.requireNonNull(midpointInterface));
+  }
 
-  public LaneRiesenfeld3CurveSubdivision(SplitInterface splitInterface) {
-    this.splitInterface = splitInterface;
+  // ---
+  private final MidpointInterface midpointInterface;
+
+  private LaneRiesenfeld3CurveSubdivision(MidpointInterface midpointInterface) {
+    this.midpointInterface = midpointInterface;
   }
 
   @Override // from CurveSubdivision
@@ -70,6 +76,6 @@ public final class LaneRiesenfeld3CurveSubdivision extends AbstractBSpline3Curve
 
   @Override // from AbstractBSpline1CurveSubdivision
   public Tensor midpoint(Tensor p, Tensor q) {
-    return splitInterface.split(p, q, RationalScalar.HALF);
+    return midpointInterface.midpoint(p, q);
   }
 }

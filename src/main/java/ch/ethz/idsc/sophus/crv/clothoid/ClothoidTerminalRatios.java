@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 public enum ClothoidTerminalRatios {
   ;
   public static final CurveSubdivision CURVE_SUBDIVISION = //
-      new LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, 1);
+      LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1);
   private static final TensorUnaryOperator HEAD = //
       value -> CURVE_SUBDIVISION.string(value.extract(0, 2));
   private static final TensorUnaryOperator TAIL = //

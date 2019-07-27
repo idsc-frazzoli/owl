@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 public enum H2Midpoint implements MidpointInterface {
   INSTANCE;
   // ---
-  @Override
+  @Override // from MidpointInterface
   public Tensor midpoint(Tensor a, Tensor b) {
     Tensor pa = psi(a);
     Tensor pb = psi(b);

@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 
 public class LaneRiesenfeld3CurveSubdivisionTest extends TestCase {
   public void testSimple() {
-    CurveSubdivision curveSubdivision = new LaneRiesenfeld3CurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = LaneRiesenfeld3CurveSubdivision.of(RnGeodesic.INSTANCE);
     ScalarUnaryOperator operator = Rationalize.withDenominatorLessEquals(100);
     Tensor tensor = CirclePoints.of(4).map(operator);
     Tensor actual = Nest.of(curveSubdivision::cyclic, tensor, 1);
@@ -36,7 +36,7 @@ public class LaneRiesenfeld3CurveSubdivisionTest extends TestCase {
 
   public void testString() {
     Tensor curve = Tensors.vector(0, 1, 2, 3);
-    CurveSubdivision curveSubdivision = new LaneRiesenfeld3CurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = LaneRiesenfeld3CurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor refined = curveSubdivision.string(curve);
     assertEquals(refined, Tensors.fromString("{0, 1/2, 1, 3/2, 2, 5/2, 3}"));
     ExactTensorQ.require(refined);
@@ -44,7 +44,7 @@ public class LaneRiesenfeld3CurveSubdivisionTest extends TestCase {
 
   public void testStringTwo() {
     Tensor curve = Tensors.vector(0, 1);
-    CurveSubdivision curveSubdivision = new LaneRiesenfeld3CurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = LaneRiesenfeld3CurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor refined = curveSubdivision.string(curve);
     assertEquals(refined, Tensors.fromString("{0, 1/2, 1}"));
     ExactTensorQ.require(refined);
@@ -52,7 +52,7 @@ public class LaneRiesenfeld3CurveSubdivisionTest extends TestCase {
 
   public void testStringOne() {
     Tensor curve = Tensors.vector(1);
-    CurveSubdivision curveSubdivision = new LaneRiesenfeld3CurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = LaneRiesenfeld3CurveSubdivision.of(RnGeodesic.INSTANCE);
     Tensor refined = curveSubdivision.string(curve);
     assertEquals(refined, Tensors.fromString("{1}"));
     ExactTensorQ.require(refined);
@@ -60,13 +60,13 @@ public class LaneRiesenfeld3CurveSubdivisionTest extends TestCase {
 
   public void testEmpty() {
     Tensor curve = Tensors.vector();
-    CurveSubdivision curveSubdivision = new LaneRiesenfeld3CurveSubdivision(RnGeodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = LaneRiesenfeld3CurveSubdivision.of(RnGeodesic.INSTANCE);
     assertEquals(curveSubdivision.string(curve), Tensors.empty());
     assertEquals(curveSubdivision.cyclic(curve), Tensors.empty());
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator fps = new LaneRiesenfeld3CurveSubdivision(RnGeodesic.INSTANCE)::cyclic;
+    TensorUnaryOperator fps = LaneRiesenfeld3CurveSubdivision.of(RnGeodesic.INSTANCE)::cyclic;
     TensorUnaryOperator copy = Serialization.copy(fps);
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
   }
@@ -77,13 +77,13 @@ public class LaneRiesenfeld3CurveSubdivisionTest extends TestCase {
     tensor = Tensor.of(tensor.stream() //
         .map(Normalize.with(Norm._2)) //
         .map(row -> Tensors.of(row, row)));
-    TensorUnaryOperator string = new LaneRiesenfeld3CurveSubdivision(R3S2Geodesic.INSTANCE)::string;
+    TensorUnaryOperator string = LaneRiesenfeld3CurveSubdivision.of(R3S2Geodesic.INSTANCE)::string;
     Tensor apply = string.apply(tensor);
     assertEquals(Dimensions.of(apply), Arrays.asList(13, 2, 3));
   }
 
   public void testScalarFail() {
-    CurveSubdivision curveSubdivision = new LaneRiesenfeld3CurveSubdivision(Se2Geodesic.INSTANCE);
+    CurveSubdivision curveSubdivision = LaneRiesenfeld3CurveSubdivision.of(Se2Geodesic.INSTANCE);
     try {
       curveSubdivision.string(RealScalar.ONE);
       fail();
@@ -92,6 +92,15 @@ public class LaneRiesenfeld3CurveSubdivisionTest extends TestCase {
     }
     try {
       curveSubdivision.cyclic(RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNullFail() {
+    try {
+      LaneRiesenfeld3CurveSubdivision.of(null);
       fail();
     } catch (Exception exception) {
       // ---

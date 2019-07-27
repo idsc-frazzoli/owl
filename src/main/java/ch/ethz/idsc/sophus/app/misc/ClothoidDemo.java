@@ -55,7 +55,7 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
     }
     int count = 1;
     for (int degree = 1; degree <= 5; degree += 2) {
-      CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(GEODESIC_INTERFACE, degree);
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(GEODESIC_INTERFACE, degree);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
       new PathRender(COLOR_DATA_INDEXED.getColor(count), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);

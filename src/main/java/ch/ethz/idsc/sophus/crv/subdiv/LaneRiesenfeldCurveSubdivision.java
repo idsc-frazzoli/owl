@@ -2,8 +2,9 @@
 package ch.ethz.idsc.sophus.crv.subdiv;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
+import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -11,12 +12,23 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
 public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Serializable {
+  /** @param midpointInterface
+   * @param degree strictly positive
+   * @return */
+  public static CurveSubdivision of(MidpointInterface midpointInterface, int degree) {
+    if (degree < 1)
+      throw new IllegalArgumentException("" + degree);
+    return new LaneRiesenfeldCurveSubdivision(Objects.requireNonNull(midpointInterface), degree);
+  }
+
+  // ---
   /** linear subdivision */
   private final BSpline1CurveSubdivision bSpline1CurveSubdivision;
   private final int degree;
 
-  public LaneRiesenfeldCurveSubdivision(SplitInterface splitInterface, int degree) {
-    bSpline1CurveSubdivision = new BSpline1CurveSubdivision(splitInterface);
+  // TODO JPH OWL 049 make private
+  public LaneRiesenfeldCurveSubdivision(MidpointInterface midpointInterface, int degree) {
+    bSpline1CurveSubdivision = new BSpline1CurveSubdivision(midpointInterface);
     this.degree = degree;
   }
 
