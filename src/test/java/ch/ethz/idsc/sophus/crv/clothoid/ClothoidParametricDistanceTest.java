@@ -24,6 +24,6 @@ public class ClothoidParametricDistanceTest extends TestCase {
       if (!close)
         ++fails;
     }
-    assertTrue(fails < 30);
+    assertTrue(fails < 40);
   }
 }

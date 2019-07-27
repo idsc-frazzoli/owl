@@ -19,10 +19,8 @@ import ch.ethz.idsc.tensor.Unprotect;
       ClothoidCurvature clothoidCurvature = null;
       Tensor p = iterator.next();
       while (iterator.hasNext()) {
-        Tensor q = iterator.next();
-        clothoidCurvature = new ClothoidCurvature(p, q);
+        clothoidCurvature = new ClothoidCurvature(p, p = iterator.next());
         vector.append(clothoidCurvature.head());
-        p = q;
       }
       vector.append(clothoidCurvature.tail());
     }

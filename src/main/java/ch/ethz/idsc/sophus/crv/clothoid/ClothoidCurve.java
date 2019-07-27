@@ -57,6 +57,9 @@ import ch.ethz.idsc.tensor.sca.Real;
         .append(clothoidQuadratic.apply(t).add(da));
   }
 
+  /** Reference: U. Reif slides
+   * 
+   * @return */
   public final Scalar v() {
     return Norm._2.ofVector(diff);
   }
