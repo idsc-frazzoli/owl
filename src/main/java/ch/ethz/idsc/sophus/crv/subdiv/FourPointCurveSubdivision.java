@@ -27,11 +27,13 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
   private final static Scalar P5_4 = RationalScalar.of(+5, 4);
   private final static Scalar P3_4 = RationalScalar.of(+3, 4);
   // ---
+  protected final SplitInterface splitInterface;
   private final Scalar lambda;
   private final Scalar _1_lam;
 
   public FourPointCurveSubdivision(SplitInterface splitInterface, Scalar omega) {
     super(splitInterface);
+    this.splitInterface = splitInterface;
     Scalar two_omega = omega.add(omega);
     _1_lam = two_omega.negate();
     lambda = two_omega.add(RealScalar.ONE);

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,8 +22,8 @@ public class FarSixPointCurveSubdivision extends AbstractSixPointCurveSubdivisio
   private static final Scalar Q_ = RationalScalar.of(153, 128);
 
   // ---
-  public FarSixPointCurveSubdivision(GeodesicInterface geodesicInterface) {
-    super(geodesicInterface);
+  public FarSixPointCurveSubdivision(SplitInterface splitInterface) {
+    super(splitInterface);
   }
 
   @Override // from AbstractSixPointCurveSubdivision

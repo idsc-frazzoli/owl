@@ -13,9 +13,11 @@ public class EightPointCurveSubdivision extends BSpline1CurveSubdivision {
   private static final Scalar _R = RationalScalar.of(245, 201);
   private static final Scalar _S = RationalScalar.of(1225, 1024);
   // ---
+  private final SplitInterface splitInterface;
 
   public EightPointCurveSubdivision(SplitInterface splitInterface) {
     super(splitInterface);
+    this.splitInterface = splitInterface;
   }
 
   @Override // from CurveSubdivision

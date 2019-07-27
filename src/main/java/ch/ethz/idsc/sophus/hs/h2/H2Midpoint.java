@@ -8,7 +8,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-/** Reference:
+/** H2 with coordinates in unit disc
+ * 
+ * Reference:
  * "Intrinsic Subdivision with Smooth Limits for Graphics and Animation"
  * Wallner, Pottmann, p. 6, eq. (6)
  * 
@@ -16,6 +18,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
  * Alekseevskij et al. 1993 */
 public enum H2Midpoint implements MidpointInterface {
   INSTANCE;
+  // ---
   @Override
   public Tensor midpoint(Tensor a, Tensor b) {
     Tensor pa = psi(a);
