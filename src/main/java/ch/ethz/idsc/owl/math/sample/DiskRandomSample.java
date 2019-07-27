@@ -7,10 +7,8 @@ import java.util.Random;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** produces bivariate random samples uniformly draw from a circle with
@@ -22,11 +20,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   private final Scalar radius;
 
   /** @param center vector of length 2
-   * @param radius non-negative
-   * @throws Exception if given center is not a vector */
+   * @param radius non-negative */
   DiskRandomSample(Tensor center, Scalar radius) {
-    this.center = VectorQ.requireLength(center, 2);
-    this.radius = Sign.requirePositiveOrZero(radius);
+    this.center = center;
+    this.radius = radius;
   }
 
   @Override // from RandomSampleInterface

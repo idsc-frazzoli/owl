@@ -7,8 +7,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/** H2 with coordinates in unit disc
+/** H2 parameterized with coordinates in unit disc
+ * Poincaré disk model of hyperbolic geometry
  * 
  * Reference:
  * "Intrinsic Subdivision with Smooth Limits for Graphics and Animation"
@@ -21,17 +23,12 @@ public enum H2Midpoint implements MidpointInterface {
   // ---
   @Override // from MidpointInterface
   public Tensor midpoint(Tensor a, Tensor b) {
-    Tensor pa = psi(a);
-    Tensor pb = psi(b);
-    Tensor sum = pa.add(pb);
+    Tensor sum = psi(a).add(psi(b));
     return phi(sum.divide(nrm(sum)));
   }
 
   private static Tensor phi(Tensor x) {
-    Scalar x0 = x.Get(0);
-    Scalar x1 = x.Get(1);
-    Scalar x2 = x.Get(2);
-    return Tensors.of(x1, x2).divide(RealScalar.ONE.add(x0));
+    return x.extract(1, 3).divide(RealScalar.ONE.add(x.Get(0)));
   }
 
   private static Tensor psi(Tensor x) {
@@ -48,6 +45,6 @@ public enum H2Midpoint implements MidpointInterface {
     Scalar x0 = x.Get(0);
     Scalar x1 = x.Get(1);
     Scalar x2 = x.Get(2);
-    return x0.multiply(x0).subtract(x1.multiply(x1)).subtract(x2.multiply(x2));
+    return Sqrt.FUNCTION.apply(x0.multiply(x0).subtract(x1.multiply(x1)).subtract(x2.multiply(x2)));
   }
 }
