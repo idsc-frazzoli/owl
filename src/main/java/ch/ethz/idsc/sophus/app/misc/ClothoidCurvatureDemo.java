@@ -111,7 +111,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
   private void innerRender(SplitInterface splitInterface, GeometricLayer geometricLayer, Graphics2D graphics, VisualSet visualSet, int nr) {
     Tensor mouse = geometricLayer.getMouseSe2State();
     Color color = COLOR_DATA_INDEXED.getColor(nr);
-    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(splitInterface, 1);
+    CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(splitInterface, 1);
     Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), spinnerLevel.getValue());
     graphics.setColor(color);
     graphics.drawString(splitInterface.getClass().getSimpleName(), 0, (nr + 2) * 10);

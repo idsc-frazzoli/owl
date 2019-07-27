@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.Tensors;
   BSPLINE1(BSpline1CurveSubdivision::new), //
   BSPLINE2(BSpline2CurveSubdivision::new), //
   BSPLINE3(BSpline3CurveSubdivision::new), //
-  BSPLINE3LR(LaneRiesenfeld3CurveSubdivision::new), //
+  BSPLINE3LR(LaneRiesenfeld3CurveSubdivision::of), //
   /** Dyn/Sharon 2014 that uses 2 binary averages */
   BSPLINE4(BSpline4CurveSubdivision::of), //
   /** Alternative to Dyn/Sharon 2014 that also uses 2 binary averages */
@@ -36,12 +36,12 @@ import ch.ethz.idsc.tensor.Tensors;
   BSPLINE4S3(CurveSubdivisionHelper::split3), //
   BSPLINE5(BSpline5CurveSubdivision::new), //
   BSPLINE6(BSpline6CurveSubdivision::of), //
-  LR1(gi -> new LaneRiesenfeldCurveSubdivision(gi, 1)), //
-  LR2(gi -> new LaneRiesenfeldCurveSubdivision(gi, 2)), //
-  LR3(gi -> new LaneRiesenfeldCurveSubdivision(gi, 3)), //
-  LR4(gi -> new LaneRiesenfeldCurveSubdivision(gi, 4)), //
-  LR5(gi -> new LaneRiesenfeldCurveSubdivision(gi, 5)), //
-  LR6(gi -> new LaneRiesenfeldCurveSubdivision(gi, 6)), //
+  LR1(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 1)), //
+  LR2(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 2)), //
+  LR3(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 3)), //
+  LR4(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 4)), //
+  LR5(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 5)), //
+  LR6(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 6)), //
   DODGSON_SABIN(i -> DodgsonSabinCurveSubdivision.INSTANCE), //
   THREEPOINT(HormannSabinCurveSubdivision::of), //
   FOURPOINT(FourPointCurveSubdivision::new), //

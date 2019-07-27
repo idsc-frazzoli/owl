@@ -28,17 +28,17 @@ import ch.ethz.idsc.tensor.Tensor;
   BSPLINE1(BSpline1CurveSubdivision::new, 2, 0, 1), //
   BSPLINE2(BSpline2CurveSubdivision::new, 2, 0, 1), //
   BSPLINE3(BSpline3CurveSubdivision::new, 3, 1, 2), //
-  BSPLINE3LR(LaneRiesenfeld3CurveSubdivision::new, 3, 1, 2), //
+  BSPLINE3LR(LaneRiesenfeld3CurveSubdivision::of, 3, 1, 2), //
   BSPLINE4(BSpline4CurveSubdivision::of, 3, 2, 3), //
   BSPLINE4S2(BSpline4CurveSubdivision::split2, 3, 2, 3), //
   BSPLINE4S3(CurveSubdivisionHelper::split3, 3, 2, 3), //
   BSPLINE5(BSpline5CurveSubdivision::new, 4, 2, 3), //
-  LR1(gi -> new LaneRiesenfeldCurveSubdivision(gi, 1), 2, 0, 1), //
-  LR2(gi -> new LaneRiesenfeldCurveSubdivision(gi, 2), 3, 0, 1), //
-  LR3(gi -> new LaneRiesenfeldCurveSubdivision(gi, 3), 3, 1, 2), //
-  LR4(gi -> new LaneRiesenfeldCurveSubdivision(gi, 4), 5, 1, 2), //
-  LR5(gi -> new LaneRiesenfeldCurveSubdivision(gi, 5), 5, 2, 3), //
-  LR6(gi -> new LaneRiesenfeldCurveSubdivision(gi, 6), 5, 2, 3), //
+  LR1(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 1), 2, 0, 1), //
+  LR2(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 2), 3, 0, 1), //
+  LR3(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 3), 3, 1, 2), //
+  LR4(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 4), 5, 1, 2), //
+  LR5(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 5), 5, 2, 3), //
+  LR6(gi -> LaneRiesenfeldCurveSubdivision.of(gi, 6), 5, 2, 3), //
   THREEPOINT(HormannSabinCurveSubdivision::of, 5, 1, 2), //
   FOURPOINT(FourPointCurveSubdivision::new, 6, 0, 3), //
   FOURPOINT2(CurveSubdivisionHelper::fps, 6, 0, 3), //

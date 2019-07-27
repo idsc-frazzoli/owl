@@ -34,6 +34,7 @@ public class SphereRandomSample implements RandomSampleInterface, Serializable {
    * @throws Exception if center is not a vector
    * @throws Exception if radius is negative */
   public static RandomSampleInterface of(Tensor center, Scalar radius) {
+    Sign.requirePositiveOrZero(radius);
     switch (center.length()) {
     case 0:
       throw TensorRuntimeException.of(center, radius);
@@ -61,7 +62,7 @@ public class SphereRandomSample implements RandomSampleInterface, Serializable {
     if (MAX_LENGTH < center.length())
       throw TensorRuntimeException.of(center);
     this.center = center;
-    this.radius = Sign.requirePositiveOrZero(radius);
+    this.radius = radius;
   }
 
   @Override // from RandomSampleInterface

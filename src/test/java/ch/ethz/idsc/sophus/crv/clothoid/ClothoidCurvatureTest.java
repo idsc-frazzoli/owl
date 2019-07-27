@@ -24,6 +24,17 @@ public class ClothoidCurvatureTest extends TestCase {
     System.out.println(scalar);
   }
 
+  public void testStraight() {
+    Tensor p = Tensors.vector(1, 2, 0);
+    Tensor q = Tensors.vector(10, 2, 0);
+    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.of(p, q);
+    Chop._12.requireClose(clothoidTerminalRatio.head(), RealScalar.ZERO);
+    Chop._12.requireClose(clothoidTerminalRatio.tail(), RealScalar.ZERO);
+    ClothoidCurvature clothoidCurvature = new ClothoidCurvature(p, q);
+    Chop._12.requireClose(clothoidCurvature.head(), RealScalar.ZERO);
+    Chop._12.requireClose(clothoidCurvature.tail(), RealScalar.ZERO);
+  }
+
   public void testAlmostStraight() {
     Tensor p = Tensors.vector(1, 2, 0);
     Tensor q = Tensors.vector(10, 3, 0);

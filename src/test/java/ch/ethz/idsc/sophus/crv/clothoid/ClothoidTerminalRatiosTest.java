@@ -77,7 +77,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
 
   public void testCurve() {
     Distribution distribution = NormalDistribution.standard();
-    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, 1);
+    CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1);
     for (int depth = 2; depth < 5; ++depth)
       for (int count = 0; count < 10; ++count) {
         Tensor beg = RandomVariate.of(distribution, 3);

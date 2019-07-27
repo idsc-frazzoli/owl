@@ -18,7 +18,7 @@ public enum SubdivisionClothoidDistance implements TensorMetric, TensorNorm {
   INSTANCE;
   // ---
   private static final CurveSubdivision CURVE_SUBDIVISION = //
-      new LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, 1);
+      LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1);
   private static final int DEPTH = 3;
 
   /** @param p element in SE2 of the form {px, py, p_heading}

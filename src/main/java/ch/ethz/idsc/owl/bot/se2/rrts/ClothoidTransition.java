@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public class ClothoidTransition extends AbstractTransition {
   private static final int MAX_ITER = 8;
   private static final TensorMetric TENSOR_METRIC = PseudoClothoidDistance.INSTANCE;
-  private static final CurveSubdivision CURVE_SUBDIVISION = new LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, 1);
+  private static final CurveSubdivision CURVE_SUBDIVISION = LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1);
 
   public ClothoidTransition(Tensor start, Tensor end) {
     super(start, end, TENSOR_METRIC.distance(start, end));

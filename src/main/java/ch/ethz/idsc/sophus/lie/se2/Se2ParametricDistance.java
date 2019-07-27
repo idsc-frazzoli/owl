@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.sca.Sinc;
 
 /** length of geodesic between p and q in SE(2) when projected to R^2
  * the projection is a circle segment */
+// TODO JPH OWL 049 move to package hs.r2
 public enum Se2ParametricDistance implements TensorMetric, TensorNorm {
   INSTANCE;
   // ---

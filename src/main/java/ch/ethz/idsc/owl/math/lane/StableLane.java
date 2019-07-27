@@ -24,7 +24,7 @@ public class StableLane implements LaneInterface, Serializable {
   }
 
   public static LaneInterface of(SplitInterface splitInterface, Tensor controlPoints, Scalar width, int degree, int level) {
-    CurveSubdivision curveSubdivision = new LaneRiesenfeldCurveSubdivision(splitInterface, degree);
+    CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(splitInterface, degree);
     Tensor refined = Nest.of(curveSubdivision::string, controlPoints, level).unmodifiable();
     return new StableLane(controlPoints, refined, width);
   }
