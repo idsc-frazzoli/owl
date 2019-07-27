@@ -64,7 +64,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
             offerDestination(next, trajectory);
         }
         if (!discardedNodes.isEmpty() && !discardedNodes.contains(next)) {
-          // TODO ASTOLL check if sufficient, criteria here: not next and not empty
+          //
           // remove all discarded nodes in GlobalQueue from it
           removeChildren(discardedNodes);
         }
@@ -75,11 +75,9 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     // RelaxedDebugUtils.closeMatchesCheck(this);
     // RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(this);
     // RelaxedDebugUtils.nodeAmountCompare(this);
-    // TODO ASTOLL check if close to other merits see StaticHelper
   }
 
   private void removeChildren(Collection<GlcNode> collection) {
-    // TODO ASTOLL TEST
     for (GlcNode glcNode : collection) {
       removeChildren(glcNode.children()); // recursive call to remove all children
       Nodes.disjoinChild(glcNode); // disconnect from parent

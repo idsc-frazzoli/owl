@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
  * In other words, interval <tt> x_i</tt> has to end before <tt> x_j </tt>.
  * 
  * https://en.wikipedia.org/wiki/Interval_order */
-/* package */ enum ClipStrictPartialOrder {
+public enum ClipStrictPartialOrder {
   ;
   /** binary relation
    * irreflexive */

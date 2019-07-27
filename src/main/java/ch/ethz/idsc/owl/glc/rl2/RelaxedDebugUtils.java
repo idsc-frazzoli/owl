@@ -9,6 +9,10 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.data.tree.NodesAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalars;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.UserName;
 
 public enum RelaxedDebugUtils {
@@ -51,12 +55,11 @@ public enum RelaxedDebugUtils {
         System.out.println("Number of elements in domain queue: " + relaxedPriorityQueue.collection().size());
         relaxedPriorityQueue.collection().stream().forEach(glcNode -> System.out.println("merit=" + glcNode.merit() + "\n" + "state=" + glcNode.state()));
       }
-      // Tensor bestMerit =
-      VectorScalars.vector(relaxedPriorityQueue.peekBest().merit());
+      Tensor bestMerit = VectorScalars.vector(relaxedPriorityQueue.peekBest().merit());
       if (PRINT)
         System.out.println("Number of elements similar to best: " + StaticHelper.numberEquals(relaxedPriorityQueue));
-      // rlDomainQueue.collection().stream().filter(a -> VectorScalars.vector(a.merit()).subtract(bestMerit).stream() //
-      // .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(v.abs(), RationalScalar.of(1, 100)))).forEach(x -> System.out.println(x.merit()));
+      relaxedPriorityQueue.collection().stream().filter(a -> VectorScalars.vector(a.merit()).subtract(bestMerit).stream() //
+          .map(Scalar.class::cast).allMatch(v -> Scalars.lessThan(v.abs(), RationalScalar.of(1, 100)))).forEach(x -> System.out.println(x.merit()));
     }
   }
 

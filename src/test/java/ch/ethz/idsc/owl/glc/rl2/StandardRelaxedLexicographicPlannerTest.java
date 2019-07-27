@@ -39,4 +39,9 @@ public class StandardRelaxedLexicographicPlannerTest extends TestCase {
     assertTrue(relaxedTrajectoryPlanner.getQueue().contains(node1));
     assertTrue(relaxedTrajectoryPlanner.getQueue().contains(node2));
   }
+
+  public void testRemoveChildren() {
+    // TODO ASTOLL write test
+    ;
+  }
 }

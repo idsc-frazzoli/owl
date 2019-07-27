@@ -32,7 +32,6 @@ public class RepresentativeNegTransitiveMinTracker<T> extends NegTransitiveMinTr
    * @return true if element to be discarded or false otherwise */
   @Override
   protected boolean keepOnlyRepresentatives() {
-    // FIXME ASTOLL this is the same as super.keepOnlyRepresentatives()
-    return false;
+    return true;
   }
 }
