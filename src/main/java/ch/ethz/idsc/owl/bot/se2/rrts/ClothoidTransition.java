@@ -58,7 +58,7 @@ public class ClothoidTransition extends AbstractTransition {
   public Tensor linearized(Scalar minResolution) {
     /* investigation has shown that midpoint splits result in clothoid segments of approximately equal length */
     return Nest.of(CURVE_SUBDIVISION::string, Unprotect.byRef(start(), end()), //
-        IntegerLog2.ceil(Ceiling.of(length().divide(Sign.requirePositive(minResolution))).number().intValue()));
+        IntegerLog2.ceiling(Ceiling.of(length().divide(Sign.requirePositive(minResolution))).number().intValue()));
   }
 
   public ClothoidTerminalRatio terminalRatios() {

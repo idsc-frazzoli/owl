@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
@@ -39,7 +39,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   // ---
   private final PathRender pathRender = new PathRender(Color.RED, 2f);
-  private final PathRender pathRender2 = new PathRender(Color.CYAN, 2f);
+  private final PathRender clothoidRender = new PathRender(Color.CYAN, 2f);
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -67,7 +67,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
       graphics.setColor(new Color(128, 128, 128, 128));
       // graphics.setColor(COLOR_DATA_INDEXED.getColor(3));
       Tensor map = params.map(scalarTensorFunction);
-      for (Tensor point : map) {
+      for (Tensor point : map) { // draw control point
         geometricLayer.pushMatrix(Se2CoveringGeodesicDisplay.INSTANCE.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(Se2CoveringGeodesicDisplay.INSTANCE.shape());
         graphics.fill(path2d);
@@ -79,9 +79,9 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
       // graphics.setStroke(new BasicStroke(2f));
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
-    {
-      Tensor points = Nest.of(ClothoidTerminalRatios.CURVE_SUBDIVISION::string, Tensors.of(START, mouse), 6);
-      pathRender2.setCurve(points, false).render(geometricLayer, graphics);
+    { // draw clothoid
+      clothoidRender.setCurve(Nest.of(Clothoid3.SUBDIVISION::string, Tensors.of(START, mouse), 6), false) //
+          .render(geometricLayer, graphics);
     }
     { // draw least curved path
       graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
