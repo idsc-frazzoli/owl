@@ -118,17 +118,22 @@ public class DubinsPath implements Serializable {
     return segLength.dot(type.signatureAbs()).divide(radius).Get();
   }
 
-  /** parameterization of Dubins path over the closed interval [length().zero(), length()]
-   * 
-   * @param g start configuration
-   * @return scalar function for input in the interval [0, length()] */
-  public ScalarTensorFunction sampler(Tensor g) {
+  /** @param g start configuration
+   * @return arc-length parameterization of dubins path starting at given configuration g
+   * over the closed interval [0, 1] */
+  public ScalarTensorFunction unit(Tensor g) {
     Tensor tensor = Unprotect.empty(4);
     tensor.append(g);
     for (int index = 0; index < 3; ++index)
       tensor.append(g = Se2CoveringIntegrator.INSTANCE.spin(g, type.tangent(index, radius).multiply(segLength.Get(index))));
-    ScalarTensorFunction scalarTensorFunction = //
-        ArcLengthParameterization.of(segLength, Se2CoveringGeodesic.INSTANCE, tensor);
+    return ArcLengthParameterization.of(segLength, Se2CoveringGeodesic.INSTANCE, tensor);
+  }
+
+  /** @param g start configuration
+   * @return arc-length parameterization of dubins path starting at given configuration g
+   * over the closed interval [length().zero(), length()] */
+  public ScalarTensorFunction sampler(Tensor g) {
+    ScalarTensorFunction scalarTensorFunction = unit(g);
     return scalar -> scalarTensorFunction.apply(scalar.divide(length));
   }
 }

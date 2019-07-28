@@ -22,7 +22,7 @@ public class DubinsTransitionSpace implements Se2TransitionSpace, Serializable {
 
   /** @param radius
    * @return shortest length dubins path factory */
-  public static TransitionSpace of(Scalar radius) {
+  public static TransitionSpace shortest(Scalar radius) {
     return of(radius, DubinsPathComparator.LENGTH);
   }
 

@@ -76,7 +76,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
 
   public void testDubins() {
     Rrts rrts = new DefaultRrts( //
-        DubinsTransitionSpace.of(RealScalar.ONE), //
+        DubinsTransitionSpace.shortest(RealScalar.ONE), //
         new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
@@ -96,7 +96,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
         Se2StateSpaceModel.INSTANCE, //
         RrtsFlowHelper.U_SE2);
     List<TrajectorySample> trajectory = //
-        generator.createTrajectory(DubinsTransitionSpace.of(RealScalar.ONE), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
+        generator.createTrajectory(DubinsTransitionSpace.shortest(RealScalar.ONE), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
     assertEquals(37, trajectory.size());
     for (int i = 1; i < 21; i++) {

@@ -8,6 +8,7 @@ public class TransitionWrap {
   private final Tensor spacing;
 
   public TransitionWrap(Tensor samples, Tensor spacing) {
+    // TODO GJOEL check that length of samples and spacing are consistent
     this.samples = samples.unmodifiable();
     this.spacing = spacing.unmodifiable();
   }

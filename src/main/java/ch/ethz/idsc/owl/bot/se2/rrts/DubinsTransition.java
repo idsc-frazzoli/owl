@@ -11,13 +11,11 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Ceiling;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class DubinsTransition extends AbstractTransition {
@@ -29,34 +27,24 @@ import ch.ethz.idsc.tensor.sca.Sign;
   }
 
   private int steps(Scalar minResolution) {
-    Sign.requirePositive(minResolution);
-    int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
-    if (steps < 1)
-      throw TensorRuntimeException.of(RealScalar.of(steps));
-    return steps;
-  }
-
-  private Tensor samples(Scalar resolution, int steps) {
-    Tensor samples = Array.zeros(steps);
-    ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
-    IntStream.range(0, steps).forEach(i -> //
-    samples.set(scalarTensorFunction.apply(Clips.positive(dubinsPath.length()).apply(resolution.multiply(RealScalar.of(i + 1)))), i));
-    return samples;
+    return Ceiling.FUNCTION.apply(length().divide(Sign.requirePositive(minResolution))).number().intValue();
   }
 
   @Override // from Transition
   public Tensor sampled(Scalar minResolution) {
-    int steps = steps(minResolution);
-    Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
-    return samples(step, steps);
+    int n = steps(minResolution);
+    return Tensor.of(Subdivide.of(0, 1, n).stream() //
+        .skip(1) //
+        .map(Scalar.class::cast) //
+        .map(dubinsPath.unit(start())));
   }
 
   @Override // from Transition
   public TransitionWrap wrapped(Scalar minResolution) {
     int steps = steps(minResolution);
-    Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
+    Scalar step = length().divide(RealScalar.of(steps));
     Tensor spacing = Tensors.vector(i -> step, steps);
-    return new TransitionWrap(samples(step, steps), spacing);
+    return new TransitionWrap(sampled(minResolution), spacing);
   }
 
   @Override // from RenderTransition
