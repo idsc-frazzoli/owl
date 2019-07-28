@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 import ch.ethz.idsc.tensor.Scalars;
 
-enum NdEntryComparators {
+/* package */ enum NdEntryComparators {
   ;
   static final Comparator<NdEntry<?>> INCREASING = new Comparator<NdEntry<?>>() {
     @Override

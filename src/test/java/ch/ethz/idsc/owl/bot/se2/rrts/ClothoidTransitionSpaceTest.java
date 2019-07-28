@@ -23,7 +23,7 @@ public class ClothoidTransitionSpaceTest extends TestCase {
     Transition transition = Serialization.copy(ClothoidTransitionSpace.INSTANCE).connect( //
         Tensors.fromString("{1[m], 1[m], 0}"), //
         Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF));
-    Chop._15.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
+    Chop._04.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
   }
 
   public void testSamples() {

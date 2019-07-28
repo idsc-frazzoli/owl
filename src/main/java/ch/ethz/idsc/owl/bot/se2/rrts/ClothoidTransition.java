@@ -13,7 +13,6 @@ import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.math.Distances;
-import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,7 +23,6 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
-  private static final TensorMetric TENSOR_METRIC = ClothoidParametricDistance.INSTANCE;
   private static final CurveSubdivision CURVE_SUBDIVISION = LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1);
 
   public static ClothoidTransition of(Tensor start, Tensor end) {
@@ -33,13 +31,12 @@ public class ClothoidTransition extends AbstractTransition {
   }
 
   // ---
-  private final Clothoid clothoid;
-  private final Curve curve;
-
+  // private final Clothoid clothoid;
+  // private final Curve curve;
   private ClothoidTransition(Tensor start, Tensor end, Clothoid clothoid, Curve curve) {
     super(start, end, curve.length());
-    this.clothoid = clothoid;
-    this.curve = curve;
+    // this.clothoid = clothoid;
+    // this.curve = curve;
   }
 
   @Override // from Transition
@@ -54,7 +51,7 @@ public class ClothoidTransition extends AbstractTransition {
     Tensor samples = linearized(length().divide(RealScalar.of(steps)));
     return new TransitionWrap( //
         Drop.head(samples, 1), //
-        Distances.of(TENSOR_METRIC, samples));
+        Distances.of(ClothoidParametricDistance.INSTANCE, samples));
   }
 
   @Override // from Transition
