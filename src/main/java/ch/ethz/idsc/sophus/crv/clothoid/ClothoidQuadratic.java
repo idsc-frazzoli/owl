@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * p[2/2] == b1
  * </pre> */
 /* package */ class ClothoidQuadratic implements ScalarUnaryOperator {
-  private static final Scalar _3 = RealScalar.of(+3);
+  private static final Scalar _3 = RealScalar.of(+3.0);
   // ---
   private final Scalar c0;
   private final Scalar c1;

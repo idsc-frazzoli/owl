@@ -8,6 +8,6 @@ public enum ClothoidTransitionSpace implements Se2TransitionSpace {
   // ---
   @Override // from TransitionSpace
   public ClothoidTransition connect(Tensor start, Tensor end) {
-    return new ClothoidTransition(start, end);
+    return ClothoidTransition.of(start, end);
   }
 }

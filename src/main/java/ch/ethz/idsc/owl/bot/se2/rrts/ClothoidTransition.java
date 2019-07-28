@@ -1,34 +1,45 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
+import ch.ethz.idsc.owl.math.IntegerLog2;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curve;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatio;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
-import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
-import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.math.Distances;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Differences;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Drop;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
-  private static final int MAX_ITER = 8;
-  private static final TensorMetric TENSOR_METRIC = PseudoClothoidDistance.INSTANCE;
+  private static final TensorMetric TENSOR_METRIC = ClothoidParametricDistance.INSTANCE;
   private static final CurveSubdivision CURVE_SUBDIVISION = LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1);
 
-  public ClothoidTransition(Tensor start, Tensor end) {
-    super(start, end, TENSOR_METRIC.distance(start, end));
+  public static ClothoidTransition of(Tensor start, Tensor end) {
+    Clothoid clothoid = new Clothoid(start, end);
+    return new ClothoidTransition(start, end, clothoid, clothoid.new Curve());
+  }
+
+  // ---
+  private final Clothoid clothoid;
+  private final Curve curve;
+
+  private ClothoidTransition(Tensor start, Tensor end, Clothoid clothoid, Curve curve) {
+    super(start, end, curve.length());
+    this.clothoid = clothoid;
+    this.curve = curve;
   }
 
   @Override // from Transition
@@ -40,36 +51,20 @@ public class ClothoidTransition extends AbstractTransition {
   public TransitionWrap wrapped(Scalar minResolution) {
     Sign.requirePositive(minResolution);
     int steps = Ceiling.FUNCTION.apply(length().divide(minResolution)).number().intValue();
-    Tensor samples = sampled(length().divide(RealScalar.of(steps)));
-    Tensor spacing = Tensors.vector(i -> 0 == i //
-        ? TENSOR_METRIC.distance(start(), samples.get(0)) //
-        : TENSOR_METRIC.distance(samples.get(i - 1), samples.get(i)), samples.length());
-    return new TransitionWrap(samples, spacing);
-  }
-
-  public ClothoidTerminalRatio terminalRatios() {
-    return ClothoidTerminalRatios.planar(start(), end());
+    Tensor samples = linearized(length().divide(RealScalar.of(steps)));
+    return new TransitionWrap( //
+        Drop.head(samples, 1), //
+        Distances.of(TENSOR_METRIC, samples));
   }
 
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
-    Sign.requirePositive(minResolution);
-    Tensor samples = Tensors.of(start(), end());
-    // TODO GJOEL/JPH implementation inefficient
-    int iter = 0;
-    while (iter < MAX_ITER) {
-      boolean sufficient = Differences.of(samples).stream() //
-          .map(Extract2D.FUNCTION) //
-          .map(Norm._2::ofVector) //
-          .allMatch(scalar -> Scalars.lessThan(scalar, minResolution));
-      if (sufficient)
-        break;
-      samples = CURVE_SUBDIVISION.string(samples);
-      ++iter;
-    }
-    /* conservative alternative
-     * int n = IntegerLog2.ceil(Ceiling.of(length().divide(minResolution)).number().intValue());
-     * samples = Nest.of(CURVE_SUBDIVISION::string, samples, Math.min(MAX_ITER, n + 1)); */
-    return samples;
+    /* investigation has shown that midpoint splits result in clothoid segments of approximately equal length */
+    return Nest.of(CURVE_SUBDIVISION::string, Unprotect.byRef(start(), end()), //
+        IntegerLog2.ceil(Ceiling.of(length().divide(Sign.requirePositive(minResolution))).number().intValue()));
+  }
+
+  public ClothoidTerminalRatio terminalRatios() {
+    return ClothoidTerminalRatios.of(start(), end());
   }
 }

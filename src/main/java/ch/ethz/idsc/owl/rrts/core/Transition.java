@@ -17,17 +17,26 @@ public interface Transition {
   /** FUNCTIONALITY BELOW IS ONLY FOR COLLISION CHECKING AND RENDERING */
   // ---
 
-  /** @param minResolution is strictly positive
-   * @return Tensor with samples (start, ..., end] */
+  /** sequence of samples along transition that are not further than given
+   * minResolution apart.
+   * 
+   * @param minResolution strictly positive
+   * @return sequence of points (start, ..., end] */
   Tensor sampled(Scalar minResolution);
 
-  /** @param minResolution is positive
+  /** TODO GJOEL document function! is start included?!
+   * ... what is TransitionWrap.samples.length vs. TransitionWrap.spacing.length
+   * 
+   * @param minResolution strictly positive
    * @return */
   TransitionWrap wrapped(Scalar minResolution);
 
-  /** Hint: function is suitable to efficiently draw transition as path2d
+  /** sequence of samples along transition that are not further than given
+   * minResolution apart, except if they can be joined with a straight line.
    * 
-   * @param minResolution
-   * @return sequence of points on transition that can be connected with straight lines */
+   * Hint: function is suitable to efficiently draw transition as path2d
+   * 
+   * @param minResolution strictly positive
+   * @return sequence of points [start, ..., end] on transition that can be connected with straight lines */
   Tensor linearized(Scalar minResolution);
 }

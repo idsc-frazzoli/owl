@@ -1,8 +1,9 @@
 // code by jph, gjoel
-package ch.ethz.idsc.owl.data.nd;
+package ch.ethz.idsc.owl.rrts;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

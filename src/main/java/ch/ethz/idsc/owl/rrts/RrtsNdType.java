@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.Tensor;
   SE2_CLOTHOID {
     @Override
     public NdCenterInterface getNdCenterInterface(Tensor tensor) {
-      return NdCenterInterface.clothoid(tensor);
+      return new ClothoidNdCenter(tensor);
     }
   };
   /** @param tensor
