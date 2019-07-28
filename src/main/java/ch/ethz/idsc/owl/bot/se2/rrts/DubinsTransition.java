@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from RenderTransition
   public Tensor linearized(Scalar minResolution) {
-    if (dubinsPath.type().name().contains("S")) {
+    if (dubinsPath.type().containsStraight()) {
       int steps = steps(minResolution);
       Scalar step = dubinsPath.length().divide(RealScalar.of(steps));
       ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(start());
