@@ -114,6 +114,12 @@ public class DubinsPath implements Serializable {
     return length;
   }
 
+  /** @param index is 0, 1, or 2
+   * @return length of segment of given index */
+  public Scalar length(int index) {
+    return segLength.Get(index);
+  }
+
   /** @return total curvature, return value is non-negative */
   public Scalar curvature() {
     return segLength.dot(type.signatureAbs()).divide(radius).Get();

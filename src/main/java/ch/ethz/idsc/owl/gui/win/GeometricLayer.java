@@ -135,4 +135,8 @@ public class GeometricLayer {
   public float model2pixelWidth(double modelWidth) {
     return (float) (Math.sqrt(Math.abs(deque.peek().det())) * modelWidth);
   }
+
+  public double pixel2modelWidth(double pixelWidth) {
+    return pixelWidth / Math.sqrt(Math.abs(deque.peek().det()));
+  }
 }
