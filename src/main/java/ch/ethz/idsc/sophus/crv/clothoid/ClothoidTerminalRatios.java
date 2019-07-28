@@ -16,11 +16,11 @@ import ch.ethz.idsc.tensor.sca.Chop;
 public enum ClothoidTerminalRatios {
   ;
   // TODO JPH OWL 049 use Clothoids... instead!
-  public static final CurveSubdivision CURVE_SUBDIVISION = Clothoid3.SUBDIVISION;
+  public static final CurveSubdivision CURVE_SUBDIVISION = Clothoid3.CURVE_SUBDIVISION;
   private static final TensorUnaryOperator HEAD = //
-      value -> Clothoid3.SUBDIVISION.string(value.extract(0, 2));
+      value -> Clothoid3.CURVE_SUBDIVISION.string(value.extract(0, 2));
   private static final TensorUnaryOperator TAIL = //
-      value -> Clothoid3.SUBDIVISION.string(value.extract(value.length() - 2, value.length()));
+      value -> Clothoid3.CURVE_SUBDIVISION.string(value.extract(value.length() - 2, value.length()));
   /** typically 13, or 14 iterations are needed to reach precision up 1e-3 */
   /***************************************************/
   /** investigations have shown that for iterations == 5 works on all start and end point configurations
@@ -73,7 +73,7 @@ public enum ClothoidTerminalRatios {
    * @param end of the form {end_x, end_y, end_heading}
    * @return */
   public static ClothoidTerminalRatio planar(Tensor beg, Tensor end) {
-    final Tensor init = Clothoid3.SUBDIVISION.string(Unprotect.byRef(beg, end));
+    final Tensor init = Clothoid3.CURVE_SUBDIVISION.string(Unprotect.byRef(beg, end));
     Scalar head = ClothoidTerminalRatios.curvature(init);
     {
       Tensor hseq = init;

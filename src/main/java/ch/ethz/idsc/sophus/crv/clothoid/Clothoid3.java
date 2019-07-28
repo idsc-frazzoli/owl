@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 public enum Clothoid3 implements GeodesicInterface {
   INSTANCE;
   // ---
-  public static final CurveSubdivision SUBDIVISION = LaneRiesenfeldCurveSubdivision.of(INSTANCE, 1);
+  public static final CurveSubdivision CURVE_SUBDIVISION = LaneRiesenfeldCurveSubdivision.of(INSTANCE, 1);
 
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {

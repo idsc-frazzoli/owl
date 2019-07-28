@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
+/** TODO JPH reference */
 public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Serializable {
   /** @param midpointInterface
    * @param degree strictly positive

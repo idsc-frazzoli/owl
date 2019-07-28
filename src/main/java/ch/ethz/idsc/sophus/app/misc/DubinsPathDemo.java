@@ -80,7 +80,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     { // draw clothoid
-      clothoidRender.setCurve(Nest.of(Clothoid3.SUBDIVISION::string, Tensors.of(START, mouse), 6), false) //
+      clothoidRender.setCurve(Nest.of(Clothoid3.CURVE_SUBDIVISION::string, Tensors.of(START, mouse), 6), false) //
           .render(geometricLayer, graphics);
     }
     { // draw least curved path

@@ -16,7 +16,7 @@ public enum ClothoidPursuits {
    * @return curve of ((1 << depth) + 1) points in SE(2) from origin {0, 0, 0} to given lookAhead */
   public static Tensor curve(Tensor lookAhead, int depth) {
     return Nest.of( //
-        Clothoid3.SUBDIVISION::string, //
+        Clothoid3.CURVE_SUBDIVISION::string, //
         Tensor.of(Stream.of(lookAhead.map(Scalar::zero), lookAhead)), //
         depth);
   }
