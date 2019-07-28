@@ -15,30 +15,17 @@ import ch.ethz.idsc.tensor.Tensor;
 /** collection of rrts nodes backed by a n-dimensional uniform tree
  * data structure is dependent on RrtsNdType */
 public class RrtsNodeCollections implements RrtsNodeCollection {
-  public static RrtsNodeCollection rn(Tensor lbounds, Tensor ubounds) {
-    return new RrtsNodeCollections(RrtsNdType.RN, lbounds, ubounds);
-  }
-
-  public static RrtsNodeCollection euclidean(Tensor lbounds, Tensor ubounds) {
-    return new RrtsNodeCollections(RrtsNdType.SE2_EUCLIDEAN, lbounds, ubounds);
-  }
-
-  public static RrtsNodeCollection clothoid(Tensor lbounds, Tensor ubounds) {
-    return new RrtsNodeCollections(RrtsNdType.SE2_CLOTHOID, lbounds, ubounds);
-  }
-
-  // ---
-  private final RrtsNdType type;
+  private final RrtsNdType rrtsNdType;
   private final NdMap<RrtsNode> ndMap;
 
-  private RrtsNodeCollections(RrtsNdType type, Tensor lbounds, Tensor ubounds) {
-    this.type = type;
-    ndMap = new NdTreeMap<>(this.type.convert(lbounds), this.type.convert(ubounds), 5, 20); // magic const
+  public RrtsNodeCollections(RrtsNdType rrtsNdType, Tensor lbounds, Tensor ubounds) {
+    this.rrtsNdType = rrtsNdType;
+    ndMap = new NdTreeMap<>(rrtsNdType.convert(lbounds), rrtsNdType.convert(ubounds), 5, 20); // magic const
   }
 
   @Override // from RrtsNodeCollection
   public void insert(RrtsNode rrtsNode) {
-    ndMap.add(type.convert(rrtsNode.state()), rrtsNode);
+    ndMap.add(rrtsNdType.convert(rrtsNode.state()), rrtsNode);
   }
 
   @Override // from RrtsNodeCollection
@@ -48,7 +35,7 @@ public class RrtsNodeCollections implements RrtsNodeCollection {
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
-    NdCluster<RrtsNode> cluster = ndMap.buildCluster(type.getNdCenterInterface(end), k_nearest);
+    NdCluster<RrtsNode> cluster = ndMap.buildCluster(rrtsNdType.getNdCenterInterface(end), k_nearest);
     // System.out.println("considered " + cluster.considered() + " " + ndMap.size());
     return cluster.stream() //
         .map(NdEntry::value) //

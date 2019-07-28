@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   @Override
   public Scalar apply(Scalar s) {
-    return c0.add(c1.multiply(s));
+    return c1.multiply(s).add(c0);
   }
 
   public Scalar head() {

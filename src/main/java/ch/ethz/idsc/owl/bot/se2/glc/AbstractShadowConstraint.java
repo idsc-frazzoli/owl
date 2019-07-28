@@ -27,7 +27,7 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
   private static final int RESOLUTION = 10;
   /** values for seglength have been 3 and 4 */
   private static final int SEGLENGTH = 3;
-  private static final float TIMESTEP = 0.1f; // TODO YN get from state integrator
+  private static final float TIMESTEP = 0.1f; // TODO_YN get from state integrator
   // ---
   private final int steps;
   private final BiFunction<StateTime, Flow, Scalar> velSupplier;
@@ -36,7 +36,7 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
   final float tReact;
 
   public AbstractShadowConstraint(float a, float tReact, boolean tse2) {
-    // TODO YN hack
+    // TODO_YN hack
     // GlobalAssert.that((tReact / TIMESTEP) % SEGLENGTH == 0); // <- does not work
     this.a = a;
     this.tReact = tReact;
@@ -48,12 +48,12 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
 
   @Override
   public final boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    // TODO YN there are few different values for vel => precompute
+    // TODO_YN there are few different values for vel => precompute
     StateTime childStateTime = Lists.getLast(trajectory);
     float vel = velSupplier.apply(childStateTime, flow).number().floatValue();
     float tBrake = vel / a;
     float dBrake = tBrake * vel / 2;
-    Tensor range = Subdivide.of(0, dBrake, RESOLUTION);
+    Tensor range = Subdivide.of(0.0, dBrake, RESOLUTION);
     Tensor ray = TensorProduct.of(range, DIR);
     Se2Bijection se2Bijection = new Se2Bijection(childStateTime.state());
     // -

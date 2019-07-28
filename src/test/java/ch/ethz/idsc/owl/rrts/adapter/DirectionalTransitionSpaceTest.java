@@ -29,7 +29,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
 
   private static void _checkLength(Tensor start, Tensor end) throws ClassNotFoundException, IOException {
     Transition transition = Serialization.copy(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE)).connect(start, end);
-    Chop._15.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
+    Chop._03.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
   }
 
   public void testSamples() {

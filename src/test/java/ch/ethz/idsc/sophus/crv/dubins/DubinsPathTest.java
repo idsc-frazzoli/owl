@@ -80,12 +80,12 @@ public class DubinsPathTest extends TestCase {
   public void testWithoutUnits() {
     DubinsPath dubinsPath = new DubinsPath(Type.LSR, RealScalar.of(2), Tensors.vector(3, 2, 1));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.vector(0, 0, 0));
-    assertTrue(Chop._10.close(scalarTensorFunction.apply(RealScalar.of(0.3)), //
-        Tensors.fromString("{0.29887626494719843, 0.022457844127915516, 0.15}")));
-    assertTrue(Chop._10.close(scalarTensorFunction.apply(RealScalar.of(4.7)), //
-        Tensors.fromString("{2.1152432160432038, 3.554267073891487, 1.5}")));
-    assertTrue(Chop._10.close(scalarTensorFunction.apply(RealScalar.of(5.8)), //
-        Tensors.fromString("{2.349039629628753, 4.6192334093884515, 1.1}")));
+    Chop._10.requireClose(scalarTensorFunction.apply(RealScalar.of(0.3)), //
+        Tensors.fromString("{0.29887626494719843, 0.022457844127915516, 0.15}"));
+    Chop._10.requireClose(scalarTensorFunction.apply(RealScalar.of(4.7)), //
+        Tensors.fromString("{2.1152432160432038, 3.554267073891487, 1.5}"));
+    Chop._10.requireClose(scalarTensorFunction.apply(RealScalar.of(5.8)), //
+        Tensors.fromString("{2.349039629628753, 4.6192334093884515, 1.1}"));
   }
 
   public void testUnits() {
@@ -93,7 +93,7 @@ public class DubinsPathTest extends TestCase {
     assertEquals(dubinsPath.length(), Quantity.of(12, "m"));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.fromString("{1[m], 2[m], 3}"));
     Tensor tensor = scalarTensorFunction.apply(Quantity.of(0.3, "m"));
-    assertTrue(Chop._10.close(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}")));
+    Chop._10.requireClose(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}"));
   }
 
   public void testMemberFuncs() {
@@ -116,7 +116,7 @@ public class DubinsPathTest extends TestCase {
     assertEquals(dubinsPath.length(), Quantity.of(10, "m"));
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(Tensors.fromString("{1[m], 2[m], 3}"));
     Tensor tensor = scalarTensorFunction.apply(Quantity.of(0.3, "m"));
-    assertTrue(Chop._10.close(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}")));
+    Chop._10.requireClose(tensor, Tensors.fromString("{0.7009454891459682[m], 2.0199443237417927[m], 3.15}"));
   }
 
   public void testSignFail() {

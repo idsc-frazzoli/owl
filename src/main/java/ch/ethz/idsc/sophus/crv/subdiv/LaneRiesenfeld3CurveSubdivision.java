@@ -13,10 +13,7 @@ import ch.ethz.idsc.tensor.alg.Last;
  * LaneRiesenfeldCurveSubdivision with degree 3 for vertex reposition.
  * 
  * the computational complexity of LaneRiesenfeld3CurveSubdivision is
- * between cubic bspline and LaneRiesenfeldCurveSubdivision with degree 3.
- * 
- * LaneRiesenfeldCurveSubdivision with degree 3 produces better curvature for
- * Clothoid geodesics than LaneRiesenfeld3CurveSubdivision. */
+ * between cubic bspline and LaneRiesenfeldCurveSubdivision with degree 3. */
 public final class LaneRiesenfeld3CurveSubdivision extends AbstractBSpline3CurveSubdivision {
   public static CurveSubdivision of(MidpointInterface midpointInterface) {
     return new LaneRiesenfeld3CurveSubdivision(Objects.requireNonNull(midpointInterface));

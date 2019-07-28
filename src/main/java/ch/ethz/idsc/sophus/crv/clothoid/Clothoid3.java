@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.clothoid;
 
+import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
@@ -18,9 +19,11 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 public enum Clothoid3 implements GeodesicInterface {
   INSTANCE;
   // ---
+  public static final CurveSubdivision CURVE_SUBDIVISION = LaneRiesenfeldCurveSubdivision.of(INSTANCE, 1);
+
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    return new ClothoidCurve3(p, q);
+    return new Clothoid(p, q).new Curve();
   }
 
   @Override // from GeodesicInterface

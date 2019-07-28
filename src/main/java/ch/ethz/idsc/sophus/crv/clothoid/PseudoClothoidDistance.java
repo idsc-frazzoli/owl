@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.clothoid;
 
+import java.util.Iterator;
+
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2ParametricDistance;
@@ -9,7 +11,7 @@ import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** implementation is only an approximation of the clothoid length */
@@ -26,11 +28,12 @@ public enum PseudoClothoidDistance implements TensorMetric, TensorNorm {
    * the projection is a circle segment */
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
-    Tensor tensor = Nest.of(CURVE_SUBDIVISION::string, Tensors.of(p, q), DEPTH);
+    Tensor tensor = Nest.of(CURVE_SUBDIVISION::string, Unprotect.byRef(p, q), DEPTH);
     Scalar sum = RealScalar.ZERO;
-    Tensor a = tensor.get(0);
-    for (int index = 1; index < tensor.length(); ++index)
-      sum = sum.add(Se2ParametricDistance.INSTANCE.distance(a, a = tensor.get(index)));
+    Iterator<Tensor> iterator = tensor.iterator();
+    Tensor a = iterator.next();
+    while (iterator.hasNext())
+      sum = sum.add(Se2ParametricDistance.INSTANCE.distance(a, a = iterator.next()));
     return sum;
   }
 

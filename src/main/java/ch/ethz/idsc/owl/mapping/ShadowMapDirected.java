@@ -32,7 +32,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-// TODO YN extract more duplicate code from ShadowMapSpherical into common base class  
+// TODO_YN extract more duplicate code from ShadowMapSpherical into common base class  
 public class ShadowMapDirected extends ShadowMapCV {
   private final static int NSEGS = 40;
   private final static float CAR_RAD = 1.0f;
@@ -91,10 +91,10 @@ public class ShadowMapDirected extends ShadowMapCV {
     opencv_imgproc.dilate(obsLane, obsLane, ellipseKernel);
     obsDilArea = Mat.zeros(img.size(), img.type()).asMat();
     opencv_imgproc.dilate(obsLane, obsDilArea, ellipseKernel, new Point(-1, -1), radius2it(ellipseKernel, CAR_RAD), opencv_core.BORDER_CONSTANT, null);
-    // TODO YN use spherical for lanes, carkernel for other obstacles
+    // TODO_YN use spherical for lanes, carkernel for other obstacles
     // Mat carObs = opencv_imgcodecs.imread(carObsURL.getPath(), opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
     // IntStream.range(0, NSEGS).parallel() //
-    // .mapToObj(seg -> StaticHelper.dilateSegment(seg, carObs, carKernels, new Point(2, 2), laneMasks, 15)) // TODO YN magic iteration number
+    // .mapToObj(seg -> StaticHelper.dilateSegment(seg, carObs, carKernels, new Point(2, 2), laneMasks, 15)) // TODO_YN magic iteration number
     // .forEach(upimg -> opencv_core.add(obsDilArea, upimg, obsDilArea));
     //
     initArea = new Mat(img.size(), img.type(), AbstractScalar.WHITE);
@@ -133,8 +133,8 @@ public class ShadowMapDirected extends ShadowMapCV {
     opencv_imgproc.fillPoly(lidarMat, polygonPoint, new int[] { poly.length() }, 1, AbstractScalar.WHITE);
     opencv_core.subtract(area, lidarMat, area);
     // expand shadow region according to lane direction
-    // TODO YN this is a bottleneck
-    int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO YN check if correct
+    // TODO_YN this is a bottleneck
+    int it = radius2it(updateKernels.get(0), timeDelta * vMax); // TODO_YN check if correct
     for (int i = 1; i < it; ++i) {
       List<Mat> updated = IntStream.range(0, NSEGS).parallel() //
           .mapToObj(s -> StaticHelper.dilateSegment(s, area, updateKernels, new Point(-1, -1), laneMasks, 1)) //
@@ -182,7 +182,7 @@ public class ShadowMapDirected extends ShadowMapCV {
 
   @Override
   public Mat getShape(Mat mat, float radius) {
-    // TODO YN use car shape
+    // TODO_YN use car shape
     Mat shape = mat.clone();
     Mat radPx = new Mat(Scalar.all((CAR_RAD + radius + 0.5) / pixelDim.number().floatValue()));
     Mat negSrc = new Mat(shape.size(), shape.type());

@@ -21,7 +21,7 @@ public class ClothoidPursuit implements PursuitInterface, Serializable {
   private final ClothoidTerminalRatio clothoidTerminalRatio;
 
   private ClothoidPursuit(Tensor lookAhead) {
-    clothoidTerminalRatio = ClothoidTerminalRatios.planar(lookAhead.map(Scalar::zero), lookAhead);
+    clothoidTerminalRatio = ClothoidTerminalRatios.of(lookAhead.map(Scalar::zero), lookAhead);
   }
 
   @Override // from GeodesicPursuitInterface

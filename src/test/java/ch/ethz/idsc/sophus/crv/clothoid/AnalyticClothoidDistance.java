@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 
-public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
+/* package */ enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
   LR1(ClothoidLR1Midpoint.INSTANCE), //
   LR3(ClothoidLR3Midpoint.INSTANCE), //
   ;
@@ -35,7 +35,7 @@ public enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
       return half_dist.add(half_dist); // 2 * half_dist
     }
     // TODO GJOEL investigate "direction"
-    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(p, q);
+    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.of(p, q);
     Scalar half_num = qa.subtract(pa);
     Scalar num = half_num.add(half_num); // 2 * half_num
     Scalar den = AbsSquared.FUNCTION.apply(clothoidTerminalRatio.tail()).subtract(AbsSquared.FUNCTION.apply(clothoidTerminalRatio.head()));

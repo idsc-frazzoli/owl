@@ -39,7 +39,7 @@ public class GokartShadowPlanning1Demo extends GokartDemo {
   private static final float CAR_RADIUS = 0.2f;
   private static final Tensor RANGE = Tensors.vector(52, 40);
   private static final LidarRaytracer LIDAR_RAYTRACER = //
-      new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0, 20, 60));
+      new LidarRaytracer(Subdivide.of(Degree.of(-180), Degree.of(180), 72), Subdivide.of(0.0, 20.0, 60));
 
   @Override
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {

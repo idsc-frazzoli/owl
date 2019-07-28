@@ -72,7 +72,7 @@ public class CarPolicyEntity extends PolicyEntity implements RewardInterface {
     // ---
     LidarRaytracer = new LidarRaytracer( //
         Subdivide.of(Degree.of(+50), Degree.of(-50), carDiscreteModel.resolution - 1), //
-        Subdivide.of(0, 5, 23));
+        Subdivide.of(0.0, 5.0, 23));
     lidarEmulator = new LidarEmulator(LidarRaytracer, this::getStateTimeNow, raytraceQuery);
     SHAPE.set(Tensors.vector(0.2, 0), 0);
     reset(RealScalar.ZERO);

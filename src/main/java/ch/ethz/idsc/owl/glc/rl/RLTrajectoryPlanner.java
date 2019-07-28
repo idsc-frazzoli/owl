@@ -73,7 +73,7 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
   protected final void offerDestination(GlcNode node, List<StateTime> connector) {
     Optional<Tensor> optional = reachingSet.getMinValues();
     if (optional.isPresent()) {
-      // TODO YN code redundant to StdRL.TPlanner#processCandidates -> can simplify?
+      // TODO_YN code redundant to StdRL.TPlanner#processCandidates -> can simplify?
       Tensor minValues = optional.get();
       Tensor merit = VectorScalars.vector(node.merit());
       for (int i = 0; i < slacks.length(); ++i) {

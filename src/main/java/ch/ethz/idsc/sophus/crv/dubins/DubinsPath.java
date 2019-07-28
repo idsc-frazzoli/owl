@@ -4,17 +4,18 @@ package ch.ethz.idsc.sophus.crv.dubins;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.itp.ArcLengthParameterization;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.sca.Clip;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** compatible with the use of Quantity:
@@ -35,6 +36,7 @@ public class DubinsPath implements Serializable {
     private final Tensor signatureAbs;
     private final boolean isFirstTurnRight;
     private final boolean isFirstEqualsLast;
+    private final boolean containsStraight;
     private final DubinsSteer dubinsSteer;
 
     private Type(int s0s, int s1s, int s2s, DubinsSteer dubinsSteer) {
@@ -42,6 +44,7 @@ public class DubinsPath implements Serializable {
       signatureAbs = signature.map(Scalar::abs).unmodifiable();
       isFirstTurnRight = s0s == -1;
       isFirstEqualsLast = s0s == s2s;
+      containsStraight = s1s == 0;
       this.dubinsSteer = dubinsSteer;
     }
 
@@ -57,6 +60,10 @@ public class DubinsPath implements Serializable {
 
     public Tensor signatureAbs() {
       return signatureAbs;
+    }
+
+    public boolean containsStraight() {
+      return containsStraight;
     }
 
     /* package */ DubinsSteer dubinsSteer() {
@@ -107,43 +114,41 @@ public class DubinsPath implements Serializable {
     return length;
   }
 
+  /** @param index is 0, 1, or 2
+   * @return length of segment of given index */
+  public Scalar length(int index) {
+    return segLength.Get(index);
+  }
+
   /** @return total curvature, return value is non-negative */
   public Scalar curvature() {
     return segLength.dot(type.signatureAbs()).divide(radius).Get();
   }
 
-  /** parameterization of Dubins path over the closed interval [length().zero(), length()]
-   * 
-   * @param g start configuration
-   * @return scalar function for input in the interval [0, length()] */
-  public ScalarTensorFunction sampler(Tensor g) {
-    return new AbsoluteDubinsPath(g);
+  /** @param g start configuration
+   * @return arc-length parameterization of dubins path starting at given configuration g
+   * over the closed interval [0, 1] */
+  public ScalarTensorFunction unit(Tensor g) {
+    if (Scalars.isZero(length))
+      return zero(g);
+    Tensor tensor = Unprotect.empty(4);
+    tensor.append(g);
+    for (int index = 0; index < 3; ++index)
+      tensor.append(g = Se2CoveringIntegrator.INSTANCE.spin(g, type.tangent(index, radius).multiply(segLength.Get(index))));
+    return ArcLengthParameterization.of(segLength, Se2CoveringGeodesic.INSTANCE, tensor);
   }
 
-  private class AbsoluteDubinsPath implements ScalarTensorFunction {
-    private final Tensor g;
-    private final Clip clip;
+  /** @param g start configuration
+   * @return arc-length parameterization of dubins path starting at given configuration g
+   * over the closed interval [length().zero(), length()] */
+  public ScalarTensorFunction sampler(Tensor g) {
+    if (Scalars.isZero(length))
+      return zero(g);
+    ScalarTensorFunction scalarTensorFunction = unit(g);
+    return scalar -> scalarTensorFunction.apply(scalar.divide(length));
+  }
 
-    AbsoluteDubinsPath(Tensor g) {
-      this.g = g;
-      Scalar length = length();
-      clip = Clips.interval(length.zero(), length);
-    }
-
-    /** parameter scalar is of same unit as length() of dubins path */
-    @Override // from ScalarTensorFunction
-    public Tensor apply(Scalar scalar) {
-      Tensor g = this.g;
-      clip.requireInside(scalar);
-      for (int index = 0; index < 2; ++index) {
-        Tensor x = type.tangent(index, radius);
-        if (Scalars.lessEquals(scalar, segLength.Get(index)))
-          return Se2CoveringIntegrator.INSTANCE.spin(g, x.multiply(scalar));
-        g = Se2CoveringIntegrator.INSTANCE.spin(g, x.multiply(segLength.Get(index)));
-        scalar = scalar.subtract(segLength.Get(index));
-      }
-      Tensor x = type.tangent(2, radius);
-      return Se2CoveringIntegrator.INSTANCE.spin(g, x.multiply(scalar));
-    }
+  private static ScalarTensorFunction zero(Tensor g) {
+    return scalar -> g.copy();
   }
 }
