@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
+import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNdType;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -76,7 +77,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testDubins() {
     Rrts rrts = new DefaultRrts( //
         DubinsTransitionSpace.of(RealScalar.ONE), //
-        RrtsNodeCollections.euclidean(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
+        new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -178,7 +179,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     Rrts rrts = new DefaultRrts( //
         DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), //
         // no specific collection for directional clothoid
-        RrtsNodeCollections.euclidean(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
+        new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());

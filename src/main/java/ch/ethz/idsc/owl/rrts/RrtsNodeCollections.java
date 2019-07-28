@@ -15,11 +15,6 @@ import ch.ethz.idsc.tensor.Tensor;
 /** collection of rrts nodes backed by a n-dimensional uniform tree
  * data structure is dependent on RrtsNdType */
 public class RrtsNodeCollections implements RrtsNodeCollection {
-  public static RrtsNodeCollection euclidean(Tensor lbounds, Tensor ubounds) {
-    return new RrtsNodeCollections(RrtsNdTypes.SE2_EUCLIDEAN, lbounds, ubounds);
-  }
-
-  // ---
   private final RrtsNdType rrtsNdType;
   private final NdMap<RrtsNode> ndMap;
 

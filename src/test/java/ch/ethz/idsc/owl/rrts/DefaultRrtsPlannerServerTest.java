@@ -9,6 +9,7 @@ import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
+import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNdType;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -88,7 +89,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return RrtsNodeCollections.euclidean(lbounds, ubounds);
+        return new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override
