@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.alg.Array;
             STATE_SPACE_MODEL) {
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return RrtsNodeCollections.rn(lbounds, ubounds);
+            return new RrtsNodeCollections(RnRrtsNdType.INSTANCE, lbounds, ubounds);
           }
 
           @Override

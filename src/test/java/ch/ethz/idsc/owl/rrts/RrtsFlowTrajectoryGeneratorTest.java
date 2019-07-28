@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
+import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.Se2FlowIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
@@ -36,7 +37,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testRn() {
     Rrts rrts = new DefaultRrts( //
         RnTransitionSpace.INSTANCE, //
-        RrtsNodeCollections.rn(Tensors.vector(0, 0), Tensors.vector(10, 10)), //
+        new RrtsNodeCollections(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 0).get();
     assertEquals(0, root.children().size());

@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
   public static void main(String[] args) throws Exception {
     ImageRegion imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
-    RrtsNodeCollection rrtsNodeCollection = RrtsNodeCollections.rn(imageRegion.origin(), imageRegion.range());
+    RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(RnRrtsNdType.INSTANCE, imageRegion.origin(), imageRegion.range());
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.1));
     // ---

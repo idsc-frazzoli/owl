@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.rrts;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
+import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
@@ -45,7 +46,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         SingleIntegratorStateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return RrtsNodeCollections.rn(min, max);
+        return new RrtsNodeCollections(RnRrtsNdType.INSTANCE, min, max);
       }
 
       @Override
