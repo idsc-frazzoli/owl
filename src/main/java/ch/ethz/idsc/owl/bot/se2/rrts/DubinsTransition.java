@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Ceiling;
@@ -33,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   @Override // from Transition
   public Tensor sampled(Scalar minResolution) {
     int n = steps(minResolution);
-    return Tensor.of(Subdivide.of(0, 1, n).stream() //
+    return Tensor.of(Subdivide.of(0.0, 1.0, n).stream() //
         .skip(1) //
         .map(Scalar.class::cast) //
         .map(dubinsPath.unit(start())));
@@ -59,6 +58,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       IntStream.range(0, steps).mapToObj(i -> step.multiply(RealScalar.of(i))).filter(nonStraight).forEach(interp::append);
       return Tensor.of(interp.stream().map(Tensor::Get).sorted().map(scalarTensorFunction));
     }
-    return Join.of(Tensors.of(start()), sampled(minResolution));
+    return Subdivide.of(0.0, 1.0, steps(minResolution)) //
+        .map(dubinsPath.unit(start()));
   }
 }

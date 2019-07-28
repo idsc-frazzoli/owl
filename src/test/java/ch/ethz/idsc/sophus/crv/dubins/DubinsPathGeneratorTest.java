@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath.Type;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -31,6 +33,14 @@ public class DubinsPathGeneratorTest extends TestCase {
       Tensor tensor = scalarTensorFunction.apply(Quantity.of(13.141592653589793, "m"));
       Chop._12.requireClose(tensor, Tensors.fromString("{2[m], 12[m], 0}"));
     }
+  }
+
+  public void testZeroLength() {
+    DubinsPath dubinsPath = new DubinsPath(Type.LSR, Quantity.of(1, "m"), Tensors.fromString("{0[m], 0[m], 0[m]}"));
+    Tensor g0 = Tensors.fromString("{1[m], 2[m], 3}").unmodifiable();
+    assertTrue(Scalars.isZero(dubinsPath.length()));
+    Subdivide.of(0, 1, 10).map(dubinsPath.sampler(g0));
+    Subdivide.of(0, 1, 10).map(dubinsPath.unit(g0));
   }
 
   public void testFail() throws ClassNotFoundException, IOException {

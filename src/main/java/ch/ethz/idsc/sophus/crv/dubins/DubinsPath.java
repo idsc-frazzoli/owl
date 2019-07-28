@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
@@ -122,6 +123,8 @@ public class DubinsPath implements Serializable {
    * @return arc-length parameterization of dubins path starting at given configuration g
    * over the closed interval [0, 1] */
   public ScalarTensorFunction unit(Tensor g) {
+    if (Scalars.isZero(length))
+      return zero(g);
     Tensor tensor = Unprotect.empty(4);
     tensor.append(g);
     for (int index = 0; index < 3; ++index)
@@ -133,7 +136,13 @@ public class DubinsPath implements Serializable {
    * @return arc-length parameterization of dubins path starting at given configuration g
    * over the closed interval [length().zero(), length()] */
   public ScalarTensorFunction sampler(Tensor g) {
+    if (Scalars.isZero(length))
+      return zero(g);
     ScalarTensorFunction scalarTensorFunction = unit(g);
     return scalar -> scalarTensorFunction.apply(scalar.divide(length));
+  }
+
+  private static ScalarTensorFunction zero(Tensor g) {
+    return scalar -> g.copy();
   }
 }

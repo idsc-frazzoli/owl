@@ -92,7 +92,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
   }
 
   private static Tensor sample(DubinsPath dubinsPath) {
-    return Subdivide.of(RealScalar.ZERO, dubinsPath.length(), POINTS).map(dubinsPath.sampler(START));
+    return Subdivide.of(0.0, 1.0, POINTS).map(dubinsPath.unit(START));
   }
 
   @Override // from DemoInterface

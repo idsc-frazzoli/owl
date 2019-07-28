@@ -53,7 +53,7 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
     float vel = velSupplier.apply(childStateTime, flow).number().floatValue();
     float tBrake = vel / a;
     float dBrake = tBrake * vel / 2;
-    Tensor range = Subdivide.of(0, dBrake, RESOLUTION);
+    Tensor range = Subdivide.of(0.0, dBrake, RESOLUTION);
     Tensor ray = TensorProduct.of(range, DIR);
     Se2Bijection se2Bijection = new Se2Bijection(childStateTime.state());
     // -
