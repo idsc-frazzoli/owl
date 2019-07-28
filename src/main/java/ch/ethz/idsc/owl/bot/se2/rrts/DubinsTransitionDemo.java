@@ -36,6 +36,7 @@ public class DubinsTransitionDemo extends AbstractDemo implements DemoInterface 
     // ---
     DubinsPathGenerator dubinsPathGenerator = FixedRadiusDubins.of(START, mouse, RealScalar.of(1));
     List<DubinsPath> list = dubinsPathGenerator.allValid().collect(Collectors.toList());
+    // TODO JPH does not work with length() units at the moment
     double pixel2modelWidth = geometricLayer.pixel2modelWidth(5);
     {
       graphics.setColor(COLOR_DATA_INDEXED.getColor(0));

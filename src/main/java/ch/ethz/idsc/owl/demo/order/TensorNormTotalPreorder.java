@@ -8,8 +8,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/** TODO implement this abstractly:
- * a mapping from any set to the reals results in a preorder
+/** a mapping from any set to the reals results in a preorder
  * using Scalars.lessEquals as a binary relation
  * 
  * binary relation that is reflexive and transitive, but not antisymmetric */

@@ -35,6 +35,7 @@ public class ClothoidLengthCostFunction implements TensorScalarFunction {
 
   /** @param curve geodesic
    * @return approximated length of curve */
+  @Deprecated // TODO JPH
   private static Scalar curveLength(Tensor curve) {
     Tensor curve_ = Tensor.of(curve.stream().map(Extract2D.FUNCTION));
     return Differences.of(curve_).stream() //

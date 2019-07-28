@@ -13,7 +13,11 @@ import ch.ethz.idsc.tensor.alg.Last;
  * LaneRiesenfeldCurveSubdivision with degree 3 for vertex reposition.
  * 
  * the computational complexity of LaneRiesenfeld3CurveSubdivision is
- * between cubic bspline and LaneRiesenfeldCurveSubdivision with degree 3. */
+ * between cubic bspline and LaneRiesenfeldCurveSubdivision with degree 3.
+ * 
+ * Reference:
+ * "A theoretical development for the computer generation of piecewise polynomial surfaces"
+ * by J. M. Lane and R. F. Riesenfeld; IEEE Trans. Pattern Anal. Machine Intell. 2 (1980), 35-46 */
 public final class LaneRiesenfeld3CurveSubdivision extends AbstractBSpline3CurveSubdivision {
   public static CurveSubdivision of(MidpointInterface midpointInterface) {
     return new LaneRiesenfeld3CurveSubdivision(Objects.requireNonNull(midpointInterface));

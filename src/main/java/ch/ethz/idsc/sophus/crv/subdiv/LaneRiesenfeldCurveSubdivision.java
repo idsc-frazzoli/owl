@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.crv.subdiv;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.MidpointInterface;
@@ -11,7 +12,9 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
-/** TODO JPH reference */
+/** Reference:
+ * "A theoretical development for the computer generation of piecewise polynomial surfaces"
+ * by J. M. Lane and R. F. Riesenfeld; IEEE Trans. Pattern Anal. Machine Intell. 2 (1980), 35-46 */
 public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Serializable {
   /** @param midpointInterface
    * @param degree strictly positive
@@ -80,9 +83,10 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       Tensor queue = Unprotect.empty(value.length() + 1);
       if (odd)
         queue.append(tensor.get(0));
-      Tensor p = value.get(0);
-      for (int index = 1; index < value.length(); ++index)
-        queue.append(bSpline1CurveSubdivision.midpoint(p, p = value.get(index)));
+      Iterator<Tensor> iterator = value.iterator();
+      Tensor p = iterator.next();
+      while (iterator.hasNext())
+        queue.append(bSpline1CurveSubdivision.midpoint(p, p = iterator.next()));
       if (odd)
         queue.append(Last.of(tensor));
       tensor = value;
