@@ -6,12 +6,6 @@ import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ enum RrtsNdTypes implements RrtsNdType {
-  // RN {
-  // @Override
-  // public NdCenterInterface getNdCenterInterface(Tensor tensor) {
-  // return NdCenterInterface.euclidean(tensor);
-  // }
-  // },
   SE2_EUCLIDEAN {
     @Override
     public Tensor convert(Tensor tensor) {
@@ -21,12 +15,6 @@ import ch.ethz.idsc.tensor.Tensor;
     @Override
     public NdCenterInterface getNdCenterInterface(Tensor tensor) {
       return NdCenterInterface.euclidean(convert(tensor));
-    }
-  },
-  SE2_CLOTHOID {
-    @Override
-    public NdCenterInterface getNdCenterInterface(Tensor tensor) {
-      return new ClothoidNdCenter(tensor);
     }
   };
   @Override

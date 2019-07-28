@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
     Tensor lbounds = imageRegion.origin().copy().append(RealScalar.ZERO).unmodifiable();
     Tensor ubounds = imageRegion.range().copy().append(Pi.TWO).unmodifiable();
-    RrtsNodeCollection rrtsNodeCollection = RrtsNodeCollections.clothoid(lbounds, ubounds);
+    RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(RealScalar.of(5));

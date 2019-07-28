@@ -6,6 +6,7 @@ import java.util.List;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.data.Lists;
@@ -128,7 +129,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return RrtsNodeCollections.clothoid(lbounds, ubounds);
+        return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override

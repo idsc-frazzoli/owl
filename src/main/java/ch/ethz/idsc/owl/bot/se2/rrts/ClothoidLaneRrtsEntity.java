@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return RrtsNodeCollections.clothoid(lbounds_, ubounds_);
+            return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds_, ubounds_);
           }
 
           @Override

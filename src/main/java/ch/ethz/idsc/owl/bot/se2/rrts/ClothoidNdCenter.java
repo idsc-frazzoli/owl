@@ -1,10 +1,10 @@
 // code by jph, gjoel
-package ch.ethz.idsc.owl.rrts;
+package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
-import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override // from VectorNormInterface
   public Scalar ofVector(Tensor vector) {
-    return PseudoClothoidDistance.INSTANCE.distance(vector, center);
+    return ClothoidParametricDistance.INSTANCE.distance(vector, center);
   }
 
   @Override // from NdCenterInterface
