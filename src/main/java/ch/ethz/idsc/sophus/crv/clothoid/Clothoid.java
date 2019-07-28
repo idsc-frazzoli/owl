@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
+/** Reference: U. Reif slides */
 public class Clothoid implements Serializable {
   private static final Scalar _1 = RealScalar.of(1.0);
   /** 3-point Gauss Legendre quadrature on interval [0, 1] */
