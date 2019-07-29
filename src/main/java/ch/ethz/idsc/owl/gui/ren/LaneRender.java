@@ -12,8 +12,8 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class LaneRender implements RenderInterface {
-  private static final PathRender PATH_SIDE_L = new PathRender(new Color(255, 128, 128, 192), 1);
-  private static final PathRender PATH_SIDE_R = new PathRender(new Color(128, 192, 128, 192), 1);
+  private final PathRender pathRenderL = new PathRender(new Color(255, 128, 128, 192), 1);
+  private final PathRender pathRenderR = new PathRender(new Color(128, 192, 128, 192), 1);
   // ---
   private final boolean cyclic;
 
@@ -29,13 +29,13 @@ public class LaneRender implements RenderInterface {
   }
 
   public void setLanes(Tensor lLane, Tensor rLane) {
-    PATH_SIDE_L.setCurve(lLane, cyclic);
-    PATH_SIDE_R.setCurve(rLane, cyclic);
+    pathRenderL.setCurve(lLane, cyclic);
+    pathRenderR.setCurve(rLane, cyclic);
   }
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    PATH_SIDE_L.render(geometricLayer, graphics);
-    PATH_SIDE_R.render(geometricLayer, graphics);
+    pathRenderL.render(geometricLayer, graphics);
+    pathRenderR.render(geometricLayer, graphics);
   }
 }

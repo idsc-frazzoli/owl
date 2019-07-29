@@ -1,6 +1,7 @@
 // code by jph, gjoel
 package ch.ethz.idsc.sophus.app.api;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
@@ -49,6 +50,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   // ---
   private final static Color ORANGE = new Color(255, 200, 0, 192);
   private final static Color GREEN = new Color(0, 255, 0, 192);
+  // ---
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -60,8 +62,18 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
         ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
         Optional<Scalar> value = argMinValue.value(getPositioningThreshold());
-        graphics.setColor(value.isPresent() && isPositioningEnabled() ? ORANGE : GREEN);
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
+        boolean hold = value.isPresent() && isPositioningEnabled();
+        graphics.setColor(hold ? ORANGE : GREEN);
+        Tensor posit = mouse;
+        if (hold) {
+          graphics.setStroke(new BasicStroke(2f));
+          Tensor closest = control.get(argMinValue.index());
+          graphics.draw(geometricLayer.toPath2D(Tensors.of(mouse, closest)));
+          graphics.setStroke(new BasicStroke());
+          posit.set(closest.get(0), 0);
+          posit.set(closest.get(1), 1);
+        }
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(posit)));
         graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
         geometricLayer.popMatrix();
       }
