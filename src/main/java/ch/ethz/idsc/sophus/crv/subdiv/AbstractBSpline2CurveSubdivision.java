@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.crv.subdiv;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,9 +34,10 @@ public abstract class AbstractBSpline2CurveSubdivision implements CurveSubdivisi
   private Tensor protected_string(Tensor tensor) {
     int length = tensor.length();
     Tensor curve = Unprotect.empty(2 * length);
-    Tensor p = tensor.get(0);
-    for (int index = 1; index < length; ++index) {
-      Tensor q = tensor.get(index);
+    Iterator<Tensor> iterator = tensor.iterator();
+    Tensor p = iterator.next();
+    while (iterator.hasNext()) {
+      Tensor q = iterator.next();
       refine(curve, p, q);
       p = q;
     }

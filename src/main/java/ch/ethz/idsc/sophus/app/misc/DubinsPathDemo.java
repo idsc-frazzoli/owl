@@ -39,7 +39,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
   // ---
   private final PathRender pathRender = new PathRender(Color.RED, 2f);
-  private final PathRender clothoidRender = new PathRender(Color.CYAN, 2f);
+  private final PathRender pathRenderClothoid = new PathRender(Color.CYAN, 2f);
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -80,7 +80,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     { // draw clothoid
-      clothoidRender.setCurve(Nest.of(Clothoid3.CURVE_SUBDIVISION::string, Tensors.of(START, mouse), 6), false) //
+      pathRenderClothoid.setCurve(Nest.of(Clothoid3.CURVE_SUBDIVISION::string, Tensors.of(START, mouse), 6), false) //
           .render(geometricLayer, graphics);
     }
     { // draw least curved path

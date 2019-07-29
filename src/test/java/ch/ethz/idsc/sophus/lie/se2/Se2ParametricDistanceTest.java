@@ -3,7 +3,11 @@ package ch.ethz.idsc.sophus.lie.se2;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -31,5 +35,16 @@ public class Se2ParametricDistanceTest extends TestCase {
 
   public void testOrigin() {
     assertEquals(Se2ParametricDistance.INSTANCE.norm(Tensors.vector(0, 0, 0)), RealScalar.of(0));
+  }
+
+  public void testOrderInvariant() {
+    Distribution distribution = NormalDistribution.standard();
+    for (int count = 0; count < 100; ++count) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Tensor q = RandomVariate.of(distribution, 3);
+      Scalar dpq = Se2ParametricDistance.INSTANCE.distance(p, q);
+      Scalar dqp = Se2ParametricDistance.INSTANCE.distance(q, p);
+      Chop._14.requireClose(dpq, dqp);
+    }
   }
 }

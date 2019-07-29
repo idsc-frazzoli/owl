@@ -122,7 +122,7 @@ public class GeometricLayer {
    * 
    * @return {x, y, alpha} unmodifiable */
   public Tensor getMouseSe2State() {
-    return mouseSe2State;
+    return mouseSe2State.copy();
   }
 
   /** function allows to render lines with width defined in model coordinates

@@ -26,12 +26,12 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
   private static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 100, 10));
   // ---
+  private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
+  private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
+  // ---
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
   private final JToggleButton jToggleData = new JToggleButton("data");
   private final JToggleButton jToggleConv = new JToggleButton("conv");
-  // ---
-  private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
-  private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
 
   public DatasetFilterDemo(List<GeodesicDisplay> list) {
