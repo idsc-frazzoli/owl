@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** implementation is only an approximation of the clothoid length */
-public enum PseudoClothoidDistance implements TensorMetric, TensorNorm {
+/* package */ enum PseudoClothoidDistance implements TensorMetric, TensorNorm {
   INSTANCE;
   // ---
   private static final CurveSubdivision CURVE_SUBDIVISION = //

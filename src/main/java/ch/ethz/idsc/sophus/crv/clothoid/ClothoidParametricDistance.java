@@ -6,6 +6,7 @@ import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** length of clothoid in Euclidean plane */
 public enum ClothoidParametricDistance implements TensorMetric, TensorNorm {
   INSTANCE;
   // ---

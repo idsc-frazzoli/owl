@@ -23,12 +23,15 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** class is used in other projects outside of owl */
 public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
-  private static final Scalar THRESHOLD_DEFAULT = RealScalar.of(0.2);
+  /** mouse snaps 20 pixel to control points */
+  private static final Scalar PIXEL_THRESHOLD = RealScalar.of(20.0);
   /** control points */
   private static final PointsRender POINTS_RENDER_0 = //
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
@@ -43,8 +46,9 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   /** min_index is non-null while the user drags a control points */
   private Integer min_index = null;
   private boolean mousePositioning = true;
-  private Scalar threshold = THRESHOLD_DEFAULT;
   // ---
+  private final static Color ORANGE = new Color(255, 200, 0, 192);
+  private final static Color GREEN = new Color(0, 255, 0, 192);
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -55,8 +59,8 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
         Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
         ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-        Optional<Scalar> value = argMinValue.value(threshold);
-        graphics.setColor(value.isPresent() && isPositioningEnabled() ? Color.ORANGE : Color.GREEN);
+        Optional<Scalar> value = argMinValue.value(getPositioningThreshold());
+        graphics.setColor(value.isPresent() && isPositioningEnabled() ? ORANGE : GREEN);
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
         graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
         geometricLayer.popMatrix();
@@ -85,7 +89,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           if (Objects.isNull(min_index)) {
             Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
             ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-            min_index = argMinValue.index(threshold).orElse(null);
+            min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
             if (Objects.isNull(min_index)) {
               min_index = argMinValue.index();
               if (min_index == control.length() - 1) {
@@ -109,7 +113,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           if (Objects.isNull(min_index)) {
             Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
             ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-            min_index = argMinValue.index(threshold).orElse(null);
+            min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
           }
           if (Objects.nonNull(min_index)) {
             control = Join.of(control.extract(0, min_index), control.extract(min_index + 1, control.length()));
@@ -141,12 +145,8 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     return mousePositioning;
   }
 
-  public void setPositioningThreshold(Scalar threshold) {
-    this.threshold = threshold;
-  }
-
   public Scalar getPositioningThreshold() {
-    return threshold;
+    return PIXEL_THRESHOLD.divide(Sqrt.FUNCTION.apply(Det.of(timerFrame.geometricComponent.getModel2Pixel()).abs()));
   }
 
   public final void addButtonDubins() {
