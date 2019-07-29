@@ -48,7 +48,6 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     Map<GlcNode, List<StateTime>> connectors = controlsIntegrator.from(node);
     // ---
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
-      // TODO ASTOLL (?) make "deterministic" (?)
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       final List<StateTime> trajectory = connectors.get(next);
       // check if planner constraints are satisfied otherwise discard next
@@ -77,7 +76,10 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     // RelaxedDebugUtils.nodeAmountCompare(this);
   }
 
-  private void removeChildren(Collection<GlcNode> collection) {
+  /** removes the nodes in the collection from the planner as well as its children
+   * 
+   * @param collection */
+  void removeChildren(Collection<GlcNode> collection) {
     for (GlcNode glcNode : collection) {
       removeChildren(glcNode.children()); // recursive call to remove all children
       Nodes.disjoinChild(glcNode); // disconnect from parent
