@@ -23,9 +23,7 @@ import ch.ethz.idsc.tensor.io.UserName;
  * 
  * For a detailed description, see Chapter 7.1 in "Multi-Objective Optimization Using Preference Structures".
  * 
- * @author Andre
- *
- */
+ * @author Andre */
 public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanner {
   private static final boolean PRINT = !(UserName.is("travis") || UserName.is("datahaki"));
   // ---
