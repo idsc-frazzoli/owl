@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
-import ch.ethz.idsc.sophus.crv.clothoid.PseudoClothoidDistance;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -57,7 +57,7 @@ public enum ClothoidDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public final Scalar parametricDistance(Tensor p, Tensor q) {
-    return PseudoClothoidDistance.INSTANCE.distance(p, q);
+    return ClothoidParametricDistance.INSTANCE.distance(p, q);
   }
 
   @Override // from GeodesicDisplay

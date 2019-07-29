@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +17,6 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.util.StandardMenu;
@@ -37,7 +35,6 @@ import ch.ethz.idsc.tensor.red.Mean;
   final JToggleButton jToggleLine = new JToggleButton("line");
   final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   final JToggleButton jToggleSymi = new JToggleButton("graph");
-  final PathRender lineRender = new PathRender(new Color(0, 255, 0, 128));
 
   public CurveSubdivisionDemo(List<GeodesicDisplay> _list) {
     super(_list);

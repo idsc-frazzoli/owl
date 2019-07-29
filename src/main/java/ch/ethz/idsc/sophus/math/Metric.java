@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.math;
 
 import ch.ethz.idsc.tensor.Scalar;
 
+@FunctionalInterface
 public interface Metric<T> {
   /** a metric satisfies the following conditions
    * 
@@ -10,6 +11,8 @@ public interface Metric<T> {
    * 2. identity of indiscernibles
    * 3. symmetry
    * 4. subadditivity or triangle inequality
+   * 
+   * <p>implementations threat parameters p and q as immutable
    * 
    * @param p
    * @param q

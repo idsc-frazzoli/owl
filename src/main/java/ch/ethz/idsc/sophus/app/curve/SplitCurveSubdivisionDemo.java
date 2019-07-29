@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
@@ -27,6 +29,8 @@ import ch.ethz.idsc.tensor.red.Nest;
 
 /** {@link SplitInterface} */
 public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
+  private final PathRender pathRender = new PathRender(new Color(0, 255, 0, 128));
+
   public SplitCurveSubdivisionDemo() {
     super(GeodesicDisplays.ALL);
   }
@@ -75,7 +79,7 @@ public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
     }
     if (jToggleLine.isSelected()) {
       TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface()), cyclic);
-      lineRender.setCurve(Nest.of(tensorUnaryOperator, control, 8), cyclic).render(geometricLayer, graphics);
+      pathRender.setCurve(Nest.of(tensorUnaryOperator, control, 8), cyclic).render(geometricLayer, graphics);
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, cyclic, geometricLayer, graphics);

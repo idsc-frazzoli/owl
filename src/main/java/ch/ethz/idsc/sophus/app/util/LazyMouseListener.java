@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.app.util;
 
 import java.awt.event.MouseEvent;
 
+@FunctionalInterface
 public interface LazyMouseListener {
   void lazyClicked(MouseEvent mouseEvent);
 

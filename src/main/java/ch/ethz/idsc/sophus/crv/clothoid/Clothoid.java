@@ -68,11 +68,6 @@ public class Clothoid implements Serializable {
           .append(clothoidQuadratic.apply(t).add(da));
     }
 
-    /** @return approximate length */
-    public Scalar length() {
-      return Norm._2.ofVector(diff).divide(il(_1).abs());
-    }
-
     /** @param t
      * @return approximate integration of exp i*clothoidQuadratic on [0, t] */
     private Scalar il(Scalar t) {
@@ -90,6 +85,20 @@ public class Clothoid implements Serializable {
       Scalar w1 = clothoidQuadratic.exp_i(X1.multiply(_1_t).add(t)).multiply(W1);
       Scalar v2 = clothoidQuadratic.exp_i(X2.multiply(_1_t).add(t));
       return v0.add(v2).multiply(W0).add(w1).multiply(_1_t);
+    }
+
+    /** @return approximate length */
+    public Scalar length() {
+      return Norm._2.ofVector(diff).divide(one().abs());
+    }
+
+    /** @return approximate integration of exp i*clothoidQuadratic on [0, 1] */
+    private Scalar one() {
+      // TODO JPH gauss-legendre 5th on [0, 1]
+      Scalar v0 = clothoidQuadratic.exp_i(X0);
+      Scalar w1 = clothoidQuadratic.exp_i(X1).multiply(W1);
+      Scalar v2 = clothoidQuadratic.exp_i(X2);
+      return v0.add(v2).multiply(W0).add(w1);
     }
   }
 

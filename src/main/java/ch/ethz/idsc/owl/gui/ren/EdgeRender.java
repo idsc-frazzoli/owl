@@ -41,7 +41,7 @@ public class EdgeRender {
   }
 
   public EdgeRender() {
-    this(TreeRender.DEFAULT_LIMIT);
+    this(TreeRender.LIMIT_DEFAULT);
   }
 
   public RenderInterface setCollection(Collection<? extends StateCostNode> collection) {
