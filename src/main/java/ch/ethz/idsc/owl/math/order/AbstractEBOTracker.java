@@ -39,11 +39,10 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
   }
 }
 
-/** Creates minTracker for a lexicographic semiorder.
- * The minimal elements for a lexicographic semiorder is the iteratively constructed set
- * where all elements are discarded which are not minimal w.r.t the first semiorder. Then from this remaining
- * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
-public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<K>, Serializable {
+/** Creates EBO (elimination by objective) tracker for a lexicographic semiorder.
+ * The EBO procedure chooses a the "best" element from a given set according to the underlying lexicographic semiorder.
+ * For a detailed description of the procedure, see Chapter 6.1 in "Multi-Objective Optimization Using Preference Structures" */
+public abstract class AbstractEBOTracker<K> implements EBOTracker<K>, Serializable {
   private static final Random RANDOM = new Random();
   // ---
   private final Tensor slacks;
@@ -51,7 +50,7 @@ public abstract class AbstractLexSemiMinTracker<K> implements LexSemiMinTracker<
   protected final int dim;
   protected final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
 
-  protected AbstractLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+  protected AbstractEBOTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     this.slacks = VectorQ.require(slacks);
     this.candidateSet = candidateSet;
     this.dim = slacks.length();

@@ -4,6 +4,9 @@ package ch.ethz.idsc.owl.math.order;
 import java.io.Serializable;
 import java.util.List;
 
+/*
+ * See Chapter 2.7.5 in "Multi-Objective Optimization Using Preference Structures"
+ */
 public class LexicographicOrder<T> implements OrderComparator<List<T>>, Serializable {
   private final List<OrderComparator<T>> comparatorList;
 

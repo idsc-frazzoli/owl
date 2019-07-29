@@ -7,8 +7,8 @@ import java.util.Iterator;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalars;
-import ch.ethz.idsc.owl.math.order.LexSemiMinTracker;
-import ch.ethz.idsc.owl.math.order.LexicographicSemiorderMinTracker;
+import ch.ethz.idsc.owl.math.order.EBOTracker;
+import ch.ethz.idsc.owl.math.order.SetEBOTracker;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** holds the node which have not yet been expanded */
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override // from RelaxedPriorityQueue
   public GlcNode peekBest() {
-    LexSemiMinTracker<GlcNode> minTracker = LexicographicSemiorderMinTracker.withList(slacks);
+    EBOTracker<GlcNode> minTracker = SetEBOTracker.withList(slacks);
     Iterator<GlcNode> iterator = iterator();
     while (iterator.hasNext()) {
       GlcNode currentGlcNode = iterator.next();

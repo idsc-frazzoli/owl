@@ -11,13 +11,13 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.lie.Permutations;
 import junit.framework.TestCase;
 
-public class LexicographicSemiorderMinTrackerTest extends TestCase {
+public class SetEBOTrackerTest extends TestCase {
   public void testDigestSimple() {
     Tensor slackVector = Tensors.fromString("{1, 1, 1}");
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slackVector);
-    AbstractLexSemiMinTracker<Integer> LSMT2 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withSet(slackVector);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slackVector);
+    AbstractEBOTracker<Integer> LSMT2 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withSet(slackVector);
     Tensor x = Tensors.fromString("{1, 2, 2}");
     LSMT1.digest(1, x);
     LSMT1.digest(2, x);
@@ -31,8 +31,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testDigest() {
     Tensor slackVector = Tensors.fromString("{2}");
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slackVector);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slackVector);
     Tensor x = Tensors.fromString("{1}");
     Tensor y = Tensors.fromString("{3.5}");
     Tensor z = Tensors.fromString("{1.5}");
@@ -48,8 +48,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testCandidateSet() {
     Tensor slackVector = Tensors.fromString("{2, 2, 2}");
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slackVector);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slackVector);
     Tensor x = Tensors.fromString("{1, 4, 4}");
     Tensor y = Tensors.fromString("{3, 3, 1}");
     Tensor z = Tensors.fromString("{1.5, 4, 4}");
@@ -88,7 +88,7 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testDigestFalseDim() {
     Tensor slacks = Tensors.vector(1, 1, 1);
-    LexSemiMinTracker<Integer> lexSemiMinTracker = LexicographicSemiorderMinTracker.withList(slacks);
+    EBOTracker<Integer> lexSemiMinTracker = SetEBOTracker.withList(slacks);
     Tensor x = Tensors.vector(1, 2, 2, 3);
     try {
       lexSemiMinTracker.digest(1, x);
@@ -100,8 +100,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testGetMinElements() {
     Tensor slacks = Tensors.vector(1, 1, 1);
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slacks);
     Tensor x = Tensors.fromString("{1, 4, 4}");
     Tensor y = Tensors.fromString("{3, 3, 1}");
     Tensor z = Tensors.fromString("{1.5, 4, 4}");
@@ -123,8 +123,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testGetMinKeys() {
     Tensor slacks = Tensors.vector(1, 1, 1);
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slacks);
     Tensor x = Tensors.fromString("{1, 4, 4}");
     Tensor y = Tensors.fromString("{3, 3, 1}");
     Tensor z = Tensors.fromString("{1.5, 4, 4}");
@@ -143,8 +143,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testGetMinValues() {
     Tensor slacks = Tensors.vector(1, 1, 1);
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slacks);
     Tensor x = Tensors.fromString("{1, 4, 4}");
     Tensor y = Tensors.fromString("{3, 3, 1}");
     Tensor z = Tensors.fromString("{1.5, 4, 4}");
@@ -159,12 +159,12 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testReverseSequencewithList() {
     Tensor slacks = Tensors.vector(1, 1, 1);
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
-    AbstractLexSemiMinTracker<Integer> LSMT2 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
-    AbstractLexSemiMinTracker<Integer> LSMT3 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slacks);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slacks);
+    AbstractEBOTracker<Integer> LSMT2 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slacks);
+    AbstractEBOTracker<Integer> LSMT3 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slacks);
     Tensor x = Tensors.fromString("{1, 0, 4}");
     Tensor y = Tensors.fromString("{1, 2, 0}");
     Tensor z = Tensors.fromString("{2, 1, 4}");
@@ -197,8 +197,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testPermutations() {
     Tensor slackVector = Tensors.fromString("{1, 1, 1, 1}");
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slackVector);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slackVector);
     Tensor tensor = Permutations.of(Range.of(0, 4));
     int key = 1;
     for (Tensor v : tensor) {
@@ -217,8 +217,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testGetBest() {
     Tensor slackVector = Tensors.fromString("{1, 1, 1}");
-    AbstractLexSemiMinTracker<String> LSMT1 = //
-        (AbstractLexSemiMinTracker<String>) LexicographicSemiorderMinTracker.<String>withList(slackVector);
+    AbstractEBOTracker<String> LSMT1 = //
+        (AbstractEBOTracker<String>) SetEBOTracker.<String>withList(slackVector);
     Tensor x = Tensors.fromString("{1, 1, 1}");
     Tensor y = Tensors.fromString("{1, 1, 0}");
     Tensor z = Tensors.fromString("{1.0000001, 1, 1}");
@@ -244,8 +244,8 @@ public class LexicographicSemiorderMinTrackerTest extends TestCase {
 
   public void testExtractBest() {
     Tensor slackVector = Tensors.fromString("{1, 1, 1}");
-    AbstractLexSemiMinTracker<Integer> LSMT1 = //
-        (AbstractLexSemiMinTracker<Integer>) LexicographicSemiorderMinTracker.<Integer>withList(slackVector);
+    AbstractEBOTracker<Integer> LSMT1 = //
+        (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withList(slackVector);
     Tensor x = Tensors.fromString("{1, 1, 1}");
     Tensor y = Tensors.fromString("{1, 1, 0}");
     Tensor z = Tensors.fromString("{1, 0, 1}");

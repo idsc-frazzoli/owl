@@ -5,8 +5,10 @@ import java.util.Collection;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-// TODO JPH rename to LexSemiMinMapper
-public interface LexSemiMinTracker<K> {
+/** Creates EBO (elimination by objective) tracker for a lexicographic semiorder.
+ * The EBO procedure chooses a the "best" element from a given set according to the underlying lexicographic semiorder.
+ * For a detailed description of the procedure, see Chapter 6.1 in "Multi-Objective Optimization Using Preference Structures" */
+public interface EBOTracker<K> {
   /** Updates the set of potential future candidates for the minimal set.
    * 
    * An element x is not a candidate if there is an index where one of the current candidates

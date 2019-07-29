@@ -6,7 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /** Creates a product order comparator where each elements of two tuples are compared coordinatewise.
- * An element x precedes y if it precedes y in all coordinates. */
+ * An element x precedes y if it precedes y in all coordinates.
+ * See Chapter 2.7.4 in "Multi-Objective Optimization Using Preference Structures" */
 public class ProductOrderComparator implements OrderComparator<Iterable<? extends Object>>, Serializable {
   private final List<OrderComparator<? extends Object>> orderComparators;
 

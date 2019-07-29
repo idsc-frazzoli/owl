@@ -3,6 +3,11 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.io.Serializable;
 
+/** See Chapter 2.2 in "Multi-Objective Optimization Using Preference Structures"
+ * 
+ * @author Andre
+ *
+ * @param <T> */
 public final class Order<T> implements OrderComparator<T>, Serializable {
   private final BinaryRelation<T> binaryRelation;
 
