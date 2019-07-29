@@ -10,6 +10,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -72,5 +75,16 @@ public class Se2CoveringParametricDistanceTest extends TestCase {
     Chop._14.requireClose(se2, Pi.HALF);
     Scalar se2c = Se2CoveringParametricDistance.INSTANCE.distance(p, q);
     Chop._14.requireClose(se2c, Pi.TWO.multiply(RationalScalar.of(7, 4)));
+  }
+
+  public void testOrderInvariant() {
+    Distribution distribution = NormalDistribution.standard();
+    for (int count = 0; count < 100; ++count) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Tensor q = RandomVariate.of(distribution, 3);
+      Scalar dpq = Se2CoveringParametricDistance.INSTANCE.distance(p, q);
+      Scalar dqp = Se2CoveringParametricDistance.INSTANCE.distance(q, p);
+      Chop._14.requireClose(dpq, dqp);
+    }
   }
 }

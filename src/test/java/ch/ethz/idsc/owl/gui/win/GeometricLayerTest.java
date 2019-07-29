@@ -7,22 +7,23 @@ import java.util.Deque;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
 
 public class GeometricLayerTest extends TestCase {
   public void testSimple() {
-    Deque<Integer> ad = new ArrayDeque<>();
-    ad.push(2);
-    ad.push(4);
-    ad.push(9);
-    assertEquals((int) ad.peek(), 9);
-    ad.pop();
-    assertEquals((int) ad.peek(), 4);
-    ad.pop();
-    assertEquals((int) ad.peek(), 2);
-    ad.pop();
-    assertEquals(ad.peek(), null);
+    Deque<Integer> deque = new ArrayDeque<>();
+    deque.push(2);
+    deque.push(4);
+    deque.push(9);
+    assertEquals((int) deque.peek(), 9);
+    deque.pop();
+    assertEquals((int) deque.peek(), 4);
+    deque.pop();
+    assertEquals((int) deque.peek(), 2);
+    deque.pop();
+    assertEquals(deque.peek(), null);
   }
 
   public void testConstruction() {
@@ -58,6 +59,12 @@ public class GeometricLayerTest extends TestCase {
 
   public void testFail() {
     GeometricLayer geometricLayer = new GeometricLayer(IdentityMatrix.of(3), Array.zeros(3));
+    try {
+      Serialization.copy(geometricLayer);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
     geometricLayer.popMatrix();
     try {
       geometricLayer.popMatrix();

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.crv.subdiv;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.ScalarQ;
@@ -36,10 +37,11 @@ public abstract class AbstractBSpline1CurveSubdivision implements CurveSubdivisi
   private Tensor stringNonEmpty(Tensor tensor) {
     int length = tensor.length();
     Tensor curve = Unprotect.empty(2 * length);
-    Tensor p = tensor.get(0);
+    Iterator<Tensor> iterator = tensor.iterator();
+    Tensor p = iterator.next();
     curve.append(p);
-    for (int index = 1; index < length; ++index) {
-      Tensor q = tensor.get(index);
+    while (iterator.hasNext()) {
+      Tensor q = iterator.next();
       curve.append(midpoint(p, q)).append(p = q);
     }
     return curve;

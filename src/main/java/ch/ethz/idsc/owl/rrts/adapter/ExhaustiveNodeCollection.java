@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-class NodeTransition implements Comparable<NodeTransition> {
+/* package */ class NodeTransition implements Comparable<NodeTransition> {
   private final RrtsNode rrtsNode;
   private final Transition transition;
 

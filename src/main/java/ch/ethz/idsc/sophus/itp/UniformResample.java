@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.itp;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.hs.r2.Se2UniformResample;
@@ -17,30 +18,37 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Round;
 
-/** .
- * @see RnUniformResample
- * @see Se2UniformResample
- * 
- * <p>inspired by
+/** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Resampling.html">Resampling</a> */
 public class UniformResample implements CurveSubdivision, Serializable {
+  /** @param tensorMetric
+   * @param splitInterface
+   * @param spacing
+   * @return
+   * @see RnUniformResample
+   * @see Se2UniformResample */
+  public static CurveSubdivision of(TensorMetric tensorMetric, SplitInterface splitInterface, Scalar spacing) {
+    return new UniformResample(tensorMetric, splitInterface, Objects.requireNonNull(spacing));
+  }
+
+  // ---
   private final TensorMetric tensorMetric;
   private final SplitInterface splitInterface;
   private final Scalar spacing;
 
-  public UniformResample(TensorMetric tensorMetric, SplitInterface splitInterface, Scalar spacing) {
+  private UniformResample(TensorMetric tensorMetric, SplitInterface splitInterface, Scalar spacing) {
     this.tensorMetric = tensorMetric;
     this.splitInterface = splitInterface;
     this.spacing = spacing;
   }
 
   @Override // from CurveSubdivision
-  public final Tensor cyclic(Tensor tensor) {
+  public Tensor cyclic(Tensor tensor) {
     return string(tensor.copy().append(tensor.get(0)));
   }
 
   @Override // from CurveSubdivision
-  public final Tensor string(Tensor tensor) {
+  public Tensor string(Tensor tensor) {
     Tensor distances = Distances.of(tensorMetric, tensor);
     ScalarTensorFunction scalarTensorFunction = ArcLengthParameterization.of(distances, splitInterface, tensor);
     Scalar length = Total.ofVector(distances);

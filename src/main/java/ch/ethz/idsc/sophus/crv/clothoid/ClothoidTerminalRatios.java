@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 public enum ClothoidTerminalRatios {
   ;
-  // TODO JPH OWL 049 use Clothoids... instead!
+  // TODO JPH OWL 049 use Clothoid3... instead!
   public static final CurveSubdivision CURVE_SUBDIVISION = Clothoid3.CURVE_SUBDIVISION;
   private static final TensorUnaryOperator HEAD = //
       value -> Clothoid3.CURVE_SUBDIVISION.string(value.extract(0, 2));

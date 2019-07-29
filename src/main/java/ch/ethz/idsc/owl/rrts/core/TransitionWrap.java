@@ -2,15 +2,15 @@
 package ch.ethz.idsc.owl.rrts.core;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public class TransitionWrap {
   private final Tensor samples;
   private final Tensor spacing;
 
   public TransitionWrap(Tensor samples, Tensor spacing) {
-    // TODO GJOEL check that length of samples and spacing are consistent
     this.samples = samples.unmodifiable();
-    this.spacing = spacing.unmodifiable();
+    this.spacing = VectorQ.requireLength(spacing.unmodifiable(), samples.length());
   }
 
   public Tensor samples() {

@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class DubinsTransitionTest extends TestCase {
@@ -19,6 +20,7 @@ public class DubinsTransitionTest extends TestCase {
     Transition transition = transitionSpace.connect(Tensors.vector(1, 2, 3), Tensors.vector(3, -8, 1));
     TransitionWrap transitionWrap = transition.wrapped(RealScalar.of(.3));
     assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
+    assertTrue(transitionWrap.spacing().stream().map(Tensor::Get).allMatch(Sign::isPositive));
   }
 
   public void testTrivial() {

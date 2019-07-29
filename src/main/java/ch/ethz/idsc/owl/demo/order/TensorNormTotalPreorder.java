@@ -8,7 +8,12 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/** Total preorder for tensor norms. */
+/** Total preorder for tensor norms.
+ * 
+ * a mapping from any set to the reals results in a preorder
+ * using Scalars.lessEquals as a binary relation
+ * 
+ * binary relation that is reflexive and transitive, but not antisymmetric */
 public class TensorNormTotalPreorder implements BinaryRelation<Tensor> {
   private final Norm norm;
 

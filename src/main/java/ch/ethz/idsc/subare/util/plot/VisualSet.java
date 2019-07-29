@@ -95,5 +95,4 @@ public class VisualSet {
   public void setAxesLabelY(String string) {
     axesLabelY = string;
   }
-  // TODO is there a way to make better use of similarity?
 }

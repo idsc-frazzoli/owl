@@ -5,7 +5,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
@@ -28,7 +27,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 public class GeodesicDemo extends AbstractDemo implements DemoInterface {
   private static final Color COLOR = new Color(128, 128, 128, 128);
   private static final int SPLITS = 20;
-  //
+  // ---
+  private final PathRender pathRender = new PathRender(new Color(128, 128, 255), //
+      new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0));
   private final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
 
   public GeodesicDemo() {
@@ -63,12 +64,9 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
       CurveCurvatureRender.of(render, false, geometricLayer, graphics);
     }
     {
-      Stroke stroke = //
-          new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
       Tensor refined = Subdivide.of(1, 1.5, SPLITS * 3).map(scalarTensorFunction);
       Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
       // CurveCurvatureRender.of(render, false, geometricLayer, graphics);
-      PathRender pathRender = new PathRender(new Color(128, 128, 255), stroke);
       pathRender.setCurve(render, false);
       pathRender.render(geometricLayer, graphics);
     }
