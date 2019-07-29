@@ -93,7 +93,7 @@ public class Tse2EntityTest extends TestCase {
         goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.fromString("{0[m], 0[m], 0, 0[m*s^-1]}"), Quantity.of(1, "s")));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-    glcExpand.findAny(1000); // TODO YN does not find solution even with 10000
+    glcExpand.findAny(1000); // TODO_YN does not find solution even with 10000
     int expandCount = glcExpand.getExpandCount();
     System.out.println(expandCount);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();

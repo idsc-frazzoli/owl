@@ -24,7 +24,7 @@ public class ReversalTransitionSpaceTest extends TestCase {
     Transition transition = Serialization.copy(ReversalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE)).connect( //
         Tensors.fromString("{1[m], 1[m]}").append(Pi.VALUE), //
         Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF.negate()));
-    Chop._15.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
+    Chop._03.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
   }
 
   public void testSamples() {

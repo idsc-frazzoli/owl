@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.clothoid;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,7 +22,7 @@ public class ClothoidQuadraticTest extends TestCase {
     ClothoidQuadratic clothoidQuadratic = //
         new ClothoidQuadratic(RealScalar.of(5), RealScalar.of(7), RealScalar.of(13));
     Scalar angle = clothoidQuadratic.apply(RealScalar.of(11));
-    assertEquals(ExactScalarQ.require(angle), RealScalar.of(973));
+    assertEquals(angle, RealScalar.of(973));
     Scalar p0 = clothoidQuadratic.apply(RealScalar.ZERO);
     Scalar pm = clothoidQuadratic.apply(RationalScalar.HALF);
     Scalar p1 = clothoidQuadratic.apply(RealScalar.ONE);

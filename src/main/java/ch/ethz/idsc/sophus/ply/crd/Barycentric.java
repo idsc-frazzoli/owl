@@ -26,15 +26,7 @@ public enum Barycentric implements ScalarUnaryOperator {
     public Scalar apply(Scalar norm) {
       return norm.multiply(norm).reciprocal();
     }
-  }, //
-  // SEMI_15() {
-  // final ScalarUnaryOperator POWER = Power.function(-1.5);
-  //
-  // @Override
-  // public Scalar apply(Scalar norm) {
-  // return POWER.apply(norm);
-  // }
-  // }, //
+  },
   /** Section 3.3, eqs (12)
    * mean value coordinates seem to be the most robust */
   MEAN_VALUE() {
@@ -42,15 +34,7 @@ public enum Barycentric implements ScalarUnaryOperator {
     public Scalar apply(Scalar norm) {
       return norm.reciprocal();
     }
-  }, //
-  // SEMI05() {
-  // final ScalarUnaryOperator POWER = Power.function(-0.5);
-  //
-  // @Override
-  // public Scalar apply(Scalar norm) {
-  // return POWER.apply(norm);
-  // }
-  // }, //
+  },
   /** Section 3.2
    * 
    * Quote:
@@ -65,6 +49,5 @@ public enum Barycentric implements ScalarUnaryOperator {
       // the return value was originally 1/2. however, the value 1 seems to be more consistent.
       return RealScalar.ONE;
     }
-  }, //
-  ;
+  };
 }

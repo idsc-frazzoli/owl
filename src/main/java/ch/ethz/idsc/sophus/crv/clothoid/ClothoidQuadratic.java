@@ -4,8 +4,6 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** Reference: U. Reif slide 8/32
@@ -17,9 +15,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * p[2/2] == b1
  * </pre> */
 /* package */ class ClothoidQuadratic implements ScalarUnaryOperator {
-  private static final Scalar _3 = RealScalar.of(+3);
+  private static final Scalar _3 = RealScalar.of(+3.0);
   // ---
-  private final ScalarUnaryOperator series;
+  private final Scalar c0;
+  private final Scalar c1;
+  private final Scalar c2;
 
   /** The Lagrange interpolating polynomial has the following coefficients
    * {b0, -3 b0 - b1 + 4 bm, 2 (b0 + b1 - 2 bm)}
@@ -28,15 +28,16 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
    * @param bm
    * @param b1 */
   public ClothoidQuadratic(Scalar b0, Scalar bm, Scalar b1) {
+    c0 = b0;
     Scalar b2 = bm.add(bm);
-    Scalar c1 = b2.add(b2).subtract(b0.multiply(_3).add(b1));
-    Scalar c2 = b0.add(b1).subtract(b2);
-    series = Series.of(Tensors.of(b0, c1, c2.add(c2)));
+    c1 = b2.add(b2).subtract(b0.multiply(_3).add(b1));
+    Scalar t2 = b0.add(b1).subtract(b2);
+    c2 = t2.add(t2);
   }
 
   @Override
   public Scalar apply(Scalar s) {
-    return series.apply(s);
+    return c2.multiply(s).add(c1).multiply(s).add(c0);
   }
 
   public Scalar exp_i(Scalar s) {

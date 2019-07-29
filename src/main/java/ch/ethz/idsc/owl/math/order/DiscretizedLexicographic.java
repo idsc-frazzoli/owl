@@ -44,7 +44,7 @@ public class DiscretizedLexicographic implements Comparator<Tensor>, Serializabl
       }
       cmp = Scalars.compare(a, b);
     }
-    // TODO suggestion by jan is to simply return 0 here
+    // suggestion by jan is to simply return 0 here
     if (cmp == 0)
       cmp = VectorLexicographic.COMPARATOR.compare(t1, t2);
     return cmp;

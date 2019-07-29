@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   public static void main(String[] args) throws Exception {
     ImageRegion imageRegion = R2ImageRegions.outside_0b36();
-    RrtsNodeCollection rrtsNodeCollection = RrtsNodeCollections.rn(Tensors.vector(0, 0), imageRegion.range());
+    RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), imageRegion.range());
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.1));
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;

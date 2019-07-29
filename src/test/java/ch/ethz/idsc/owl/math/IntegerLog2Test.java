@@ -14,17 +14,17 @@ public class IntegerLog2Test extends TestCase {
   }
 
   public void testCeil() {
-    assertEquals(IntegerLog2.ceil(1), 0);
-    assertEquals(IntegerLog2.ceil(2), 1);
-    assertEquals(IntegerLog2.ceil(3), 2);
-    assertEquals(IntegerLog2.ceil(4), 2);
-    assertEquals(IntegerLog2.ceil(5), 3);
-    assertEquals(IntegerLog2.ceil(1024 + 123), 11);
+    assertEquals(IntegerLog2.ceiling(1), 0);
+    assertEquals(IntegerLog2.ceiling(2), 1);
+    assertEquals(IntegerLog2.ceiling(3), 2);
+    assertEquals(IntegerLog2.ceiling(4), 2);
+    assertEquals(IntegerLog2.ceiling(5), 3);
+    assertEquals(IntegerLog2.ceiling(1024 + 123), 11);
   }
 
   public void testFailZero() {
     try {
-      IntegerLog2.ceil(0);
+      IntegerLog2.ceiling(0);
       fail();
     } catch (Exception exception) {
       // ---
@@ -33,7 +33,7 @@ public class IntegerLog2Test extends TestCase {
 
   public void testFailNegative() {
     try {
-      IntegerLog2.ceil(-1);
+      IntegerLog2.ceiling(-1);
       fail();
     } catch (Exception exception) {
       // ---

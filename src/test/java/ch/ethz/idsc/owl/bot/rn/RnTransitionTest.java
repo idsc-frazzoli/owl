@@ -21,6 +21,12 @@ public class RnTransitionTest extends TestCase {
     assertEquals(tensor.length(), 90);
   }
 
+  public void testLinearized() {
+    RnTransition rnTransition = RnTransitionSpace.INSTANCE.connect(Tensors.vector(1, 2), Tensors.vector(10, 2));
+    Tensor linearized = rnTransition.linearized(RealScalar.of(0.1));
+    assertEquals(linearized, Tensors.fromString("{{1, 2}, {10, 2}}"));
+  }
+
   public void testWrapped() {
     RnTransition rnTransition = RnTransitionSpace.INSTANCE.connect(Tensors.vector(1, 2), Tensors.vector(10, 2));
     TransitionWrap transitionWrap = rnTransition.wrapped(RealScalar.of(0.1));

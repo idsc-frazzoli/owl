@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-class NdPair<V> implements Serializable {
+/* package */ class NdPair<V> implements Serializable {
   final Tensor location; // <- key
   private final V value;
 

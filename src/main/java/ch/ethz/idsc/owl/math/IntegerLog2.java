@@ -19,7 +19,7 @@ public enum IntegerLog2 {
 
   /** @param value
    * @return ceil(log<sub>2</sub>(value)) */
-  public static int ceil(int value) {
+  public static int ceiling(int value) {
     if (0 < value)
       return 32 - Integer.numberOfLeadingZeros(value - 1);
     throw new IllegalArgumentException("" + value);

@@ -19,25 +19,25 @@ public class ClothoidPursuitTest extends TestCase {
     PursuitInterface pursuitInterface = //
         Serialization.copy(ClothoidPursuit.of(Tensors.vector(1, 1, Math.PI / 2)));
     Optional<Scalar> optional = pursuitInterface.firstRatio();
-    Chop._12.requireClose(optional.get(), RealScalar.ONE);
+    Chop._03.requireClose(optional.get(), RealScalar.ONE);
   }
 
   public void testPointRadius1Neg() {
     PursuitInterface pursuitInterface = ClothoidPursuit.of(Tensors.vector(1, -1, -Math.PI / 2));
     Optional<Scalar> optional = pursuitInterface.firstRatio();
-    Chop._12.requireClose(optional.get(), RealScalar.ONE.negate());
+    Chop._03.requireClose(optional.get(), RealScalar.ONE.negate());
   }
 
   public void testPointRadiusTwo() {
     PursuitInterface pursuitInterface = ClothoidPursuit.of(Tensors.vector(2, 2, Math.PI / 2));
     Optional<Scalar> optional = pursuitInterface.firstRatio();
-    Chop._12.requireClose(optional.get(), RationalScalar.HALF);
+    Chop._03.requireClose(optional.get(), RationalScalar.HALF);
   }
 
   public void testPointRadiusTwoNeg() {
     PursuitInterface pursuitInterface = ClothoidPursuit.of(Tensors.vector(2, -2, -Math.PI / 2));
     Optional<Scalar> optional = pursuitInterface.firstRatio();
-    Chop._12.requireClose(optional.get(), RationalScalar.HALF.negate());
+    Chop._03.requireClose(optional.get(), RationalScalar.HALF.negate());
   }
 
   public void testPointRadiusStraight() {

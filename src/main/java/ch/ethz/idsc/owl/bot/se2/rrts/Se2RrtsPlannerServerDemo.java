@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return RrtsNodeCollections.clothoid(lbounds, ubounds);
+        return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override

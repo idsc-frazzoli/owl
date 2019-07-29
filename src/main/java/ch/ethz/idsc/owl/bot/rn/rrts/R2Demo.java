@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
     Tensor max = Tensors.vector(wid, wid);
-    RrtsNodeCollection rrtsNodeCollection = RrtsNodeCollections.rn(min, max);
+    RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(RnRrtsNdType.INSTANCE, min, max);
     TransitionRegionQuery transitionRegionQuery = StaticHelper.polygon1();
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;

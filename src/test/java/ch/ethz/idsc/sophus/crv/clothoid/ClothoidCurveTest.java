@@ -44,7 +44,7 @@ public class ClothoidCurveTest extends TestCase {
     Scalar z = ComplexScalar.of(2, 3);
     Scalar a = ComplexScalar.of(5, 11);
     Tensor vector = Tensors.vector(5, 11);
-    Tensor tensor = ClothoidCurve.prod(z, vector);
+    Tensor tensor = Clothoid.prod(z, vector);
     assertEquals(tensor, Tensors.vector(-23, 37));
     ExactTensorQ.require(tensor);
     Scalar compare = z.multiply(a);

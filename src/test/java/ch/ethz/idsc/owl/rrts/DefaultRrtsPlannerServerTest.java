@@ -4,9 +4,12 @@ package ch.ethz.idsc.owl.rrts;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
+import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
+import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNdType;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -45,7 +48,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         SingleIntegratorStateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return RrtsNodeCollections.rn(min, max);
+        return new RrtsNodeCollections(RnRrtsNdType.INSTANCE, min, max);
       }
 
       @Override
@@ -80,13 +83,13 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
     // ---
     RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
-        DubinsTransitionSpace.of(RealScalar.ONE), //
+        DubinsTransitionSpace.shortest(RealScalar.ONE), //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return RrtsNodeCollections.euclidean(lbounds, ubounds);
+        return new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override
@@ -127,7 +130,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         Se2StateSpaceModel.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return RrtsNodeCollections.clothoid(lbounds, ubounds);
+        return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override

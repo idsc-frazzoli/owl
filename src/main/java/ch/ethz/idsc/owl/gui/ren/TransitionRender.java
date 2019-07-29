@@ -65,14 +65,15 @@ public class TransitionRender implements RenderInterface {
 
     @Override // from RenderInterface
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+      double pixel2modelWidth = geometricLayer.pixel2modelWidth(5);
+      Scalar minResolution = RealScalar.of(pixel2modelWidth); // units!
       for (RrtsNode parent : collection)
         for (RrtsNode child : parent.children()) {
           double value = child.costFromRoot().number().doubleValue();
           final double interp = (value - min) * inverse;
           graphics.setColor(colorDataIndexed.getColor((int) interp));
           Transition transition = transitionSpace.connect(parent.state(), child.state());
-          // TODO JPH magic const
-          Path2D path2d = geometricLayer.toPath2D(transition.linearized(RealScalar.of(0.2)));
+          Path2D path2d = geometricLayer.toPath2D(transition.linearized(minResolution));
           graphics.draw(path2d);
         }
     }

@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class DubinsTransitionSpace implements Se2TransitionSpace, Serializable {
+public class DubinsTransitionSpace implements TransitionSpace, Serializable {
   /** @param radius
    * @param comparator
    * @return */
@@ -22,7 +22,7 @@ public class DubinsTransitionSpace implements Se2TransitionSpace, Serializable {
 
   /** @param radius
    * @return shortest length dubins path factory */
-  public static TransitionSpace of(Scalar radius) {
+  public static TransitionSpace shortest(Scalar radius) {
     return of(radius, DubinsPathComparator.LENGTH);
   }
 

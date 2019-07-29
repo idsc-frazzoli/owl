@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class ClothoidPursuitsTest extends TestCase {
@@ -17,14 +17,13 @@ public class ClothoidPursuitsTest extends TestCase {
   }
 
   public void testFromTrajectory() {
-    PursuitInterface geodesicPursuit;
+    PursuitInterface pursuitInterface;
     Tensor trajectory = Tensors.of( //
         Tensors.vector(0, 0, 0), //
         Tensors.vector(2, 2, Math.PI / 2), //
         Tensors.vector(4, 4, Math.PI / 2));
     // ---
-    geodesicPursuit = ClothoidPursuits.fromTrajectory(trajectory, NaiveEntryFinder.INSTANCE, RealScalar.ONE);
-    // System.out.println("ratios 1 = " + (geodesicPursuit.firstRatio().isPresent() ? geodesicPursuit.firstRatio().get() : "empty"));
-    assertEquals(RationalScalar.of(1, 2), Round._8.apply(geodesicPursuit.firstRatio().orElse(null)));
+    pursuitInterface = ClothoidPursuits.fromTrajectory(trajectory, NaiveEntryFinder.INSTANCE, RealScalar.ONE);
+    Chop._03.requireClose(pursuitInterface.firstRatio().get(), RationalScalar.HALF);
   }
 }

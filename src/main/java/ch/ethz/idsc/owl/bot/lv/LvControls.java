@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   ;
   public static Collection<Flow> create(StateSpaceModel stateSpaceModel, int num) {
     List<Flow> list = new ArrayList<>();
-    for (Tensor u : Subdivide.of(0, 1, num))
+    for (Tensor u : Subdivide.of(0.0, 1.0, num))
       list.add(StateSpaceModels.createFlow(stateSpaceModel, Tensors.of(u)));
     return list;
   }

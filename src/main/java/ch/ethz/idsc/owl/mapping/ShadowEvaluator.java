@@ -49,7 +49,7 @@ public class ShadowEvaluator {
   final Scalar carRadius;
   final Tensor dir = AngleVector.of(RealScalar.ZERO);
   final Tensor tReactVec;
-  final StateTime oob = new StateTime(Tensors.vector(-1000, -1000, 0), RealScalar.ZERO); // TODO YN not nice
+  final StateTime oob = new StateTime(Tensors.vector(-1000, -1000, 0), RealScalar.ZERO); // TODO_YN not nice
   // Mat negSrc = new Mat();
 
   public ShadowEvaluator(ShadowMapCV shadowMap, Scalar maxA, Scalar carRadius, String id) {
@@ -140,7 +140,7 @@ public class ShadowEvaluator {
       Mat simArea = mapSupplier.apply(stateTime).clone();
       // -
       Scalar vel = RealScalar.ZERO;
-      if (stateTime.state().length() == 4) // TODO YN not nice
+      if (stateTime.state().length() == 4) // TODO_YN not nice
         vel = stateTime.state().Get(3); // vel is in state
       else if (trajectory.get(i).getFlow().isPresent())
         vel = trajectory.get(i).getFlow().get().getU().Get(0); // vel is in flow
@@ -152,7 +152,7 @@ public class ShadowEvaluator {
       Tensor range = Subdivide.of(0, dBrake.number(), RESOLUTION);
       Tensor ray = TensorProduct.of(range, dir);
       // -
-      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue() / 3.0f); // TODO YN fix
+      shadowMap.updateMap(simArea, stateTime, tBrake.number().floatValue() / 3.0f); // TODO_YN fix
       shadowMap.updateMap(simArea, oob, tBrake.number().floatValue() / 3.0f);
       shadowMap.updateMap(simArea, oob, tBrake.number().floatValue() / 3.0f);
       Mat shape = shadowMap.getShape(simArea, carRadius.number().floatValue());
@@ -211,7 +211,7 @@ public class ShadowEvaluator {
     Se2Bijection se2Bijection = new Se2Bijection(state);
     TensorUnaryOperator forward = se2Bijection.forward();
     // -
-    Scalar range = RealScalar.of(100); // TODO YN magic const
+    Scalar range = RealScalar.of(100); // TODO_YN magic const
     Tensor rays = Tensor.of(angles.stream().map(Scalar.class::cast).map(AngleVector::of)).multiply(range);
     rays.append(Tensors.vector(0, 0)); // append origin
     // get pixel coordinates as Points
