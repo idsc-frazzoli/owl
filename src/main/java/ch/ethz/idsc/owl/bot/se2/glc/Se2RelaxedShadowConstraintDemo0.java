@@ -83,7 +83,7 @@ public class Se2RelaxedShadowConstraintDemo0 extends Se2ShadowBaseDemo {
     // set up second cost function
     CostFunction pedLegalCost = //
         ConstraintViolationCost.of(shadowConstraintPed, RealScalar.ONE);
-    carRelaxedEntity.set2ndCostFunction(pedLegalCost);
+    carRelaxedEntity.setAdditionalCostFunction(pedLegalCost);
     //
     // Tensor waypoints = Tensors.fromString("{{39, 20, 1.8}, {39, 15, 1.8}}");
     // ---

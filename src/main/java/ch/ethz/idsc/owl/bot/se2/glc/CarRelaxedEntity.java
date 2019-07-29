@@ -2,9 +2,12 @@
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
@@ -40,7 +43,7 @@ public class CarRelaxedEntity extends CarEntity {
   // ---
   private final EdgeRender edgeRender = new EdgeRender();
   private final Tensor slacks;
-  private CostFunction costFunction = null;
+  private List<CostFunction> additionalCosts = new ArrayList<CostFunction>();
 
   private CarRelaxedEntity( //
       StateTime stateTime, //
@@ -54,8 +57,8 @@ public class CarRelaxedEntity extends CarEntity {
   }
 
   /** @param costFunction for instance, corner cutting costs */
-  public void set2ndCostFunction(CostFunction costFunction) {
-    this.costFunction = Objects.requireNonNull(costFunction);
+  public void setAdditionalCostFunction(CostFunction costFunction) {
+    additionalCosts.add(Objects.requireNonNull(costFunction));
   }
 
   @Override
@@ -66,8 +69,10 @@ public class CarRelaxedEntity extends CarEntity {
     // define Se2MinTimeGoalManager
     Se2MinTimeGoalManager timeCosts = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     // set up cost vector with eventual other costs
-    List<CostFunction> costVector = Arrays.asList(timeCosts, costFunction);
-    GoalInterface goalInterface = new VectorCostGoalAdapter(costVector, se2ComboRegion);
+    // construct cost vector
+    List<CostFunction> costTime = Arrays.asList(timeCosts);
+    List<CostFunction> costFunctionVector = Stream.concat(costTime.stream(), additionalCosts.stream()).collect(Collectors.toList());
+    GoalInterface goalInterface = new VectorCostGoalAdapter(costFunctionVector, se2ComboRegion);
     // --
     return new StandardRelaxedLexicographicPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface, slacks);

@@ -19,7 +19,7 @@ public class Se2RelaxedCornerCuttingDemoTest extends TestCase {
     CarRelaxedEntity carRelaxedEntity = CarRelaxedEntity.createDefault(stateTime, slacks);
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = Se2RelaxedCornerCuttingDemo.createResLo();
-    carRelaxedEntity.set2ndCostFunction(r2ImageRegionWrap.costFunction());
+    carRelaxedEntity.setAdditionalCostFunction(r2ImageRegionWrap.costFunction());
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = Se2CarDemo.createConstraint(imageRegion);
     Tensor goal = Tensors.vector(4.183, 5.017, 1.571);
