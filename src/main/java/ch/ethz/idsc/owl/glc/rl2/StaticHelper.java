@@ -7,8 +7,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ enum StaticHelper {
   ;
-  // TODO ASTOLL make as small as possible
-  private static final Chop CHOP = Chop._02;
+  private static final Chop CHOP = Chop._09;
 
   /** Checks whether the merit of node next is numerically close any merit of any other node within the domain queue.
    * This shall not be confused with the slack margin.

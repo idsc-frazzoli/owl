@@ -1,9 +1,12 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.se2.glc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
@@ -29,17 +32,16 @@ public class GokartRelaxedEntity extends GokartEntity {
 
   // ---
   private final Tensor slacks;
-  private CostFunction costFunction = null;
+  private List<CostFunction> additionalCosts = new ArrayList<CostFunction>();
 
   private GokartRelaxedEntity(StateTime stateTime, Tensor slacks) {
     super(stateTime);
     this.slacks = slacks;
   }
 
-  // TODO ASTOLL has to work with multiple cost functions
   /** @param costFunction for instance, corner cutting costs */
   public void setAdditionalCostFunction(CostFunction costFunction) {
-    this.costFunction = Objects.requireNonNull(costFunction);
+    additionalCosts.add(Objects.requireNonNull(costFunction));
   }
 
   @Override
@@ -50,8 +52,9 @@ public class GokartRelaxedEntity extends GokartEntity {
     // define Se2MinTimeGoalManager
     Se2MinTimeGoalManager timeCosts = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     // construct cost vector
-    List<CostFunction> costVector = Arrays.asList(timeCosts, costFunction);
-    GoalInterface goalInterface = new VectorCostGoalAdapter(costVector, se2ComboRegion);
+    List<CostFunction> costTime = Arrays.asList(timeCosts);
+    List<CostFunction> costFunctionVector = Stream.concat(costTime.stream(), additionalCosts.stream()).collect(Collectors.toList());
+    GoalInterface goalInterface = new VectorCostGoalAdapter(costFunctionVector, se2ComboRegion);
     // --
     return new StandardRelaxedLexicographicPlanner( //
         stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface, slacks);

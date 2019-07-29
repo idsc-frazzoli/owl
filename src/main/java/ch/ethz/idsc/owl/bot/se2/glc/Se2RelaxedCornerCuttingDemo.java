@@ -60,7 +60,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     CarRelaxedEntity carRelaxedEntity = CarRelaxedEntity.createDefault(stateTime, slacks);
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = createResLo();
-    carRelaxedEntity.set2ndCostFunction(r2ImageRegionWrap.costFunction());
+    carRelaxedEntity.setAdditionalCostFunction(r2ImageRegionWrap.costFunction());
     // ---
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     PlannerConstraint plannerConstraint = createConstraint(imageRegion);

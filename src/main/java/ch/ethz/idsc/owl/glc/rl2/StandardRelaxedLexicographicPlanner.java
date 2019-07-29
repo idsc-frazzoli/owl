@@ -48,7 +48,6 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     Map<GlcNode, List<StateTime>> connectors = controlsIntegrator.from(node);
     // ---
     for (GlcNode next : connectors.keySet()) { // <- order of keys is non-deterministic
-      // TODO ASTOLL (?) make "deterministic" (?)
       final Tensor domainKey = stateTimeRaster.convertToKey(next.stateTime());
       final List<StateTime> trajectory = connectors.get(next);
       // check if planner constraints are satisfied otherwise discard next
@@ -64,7 +63,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
             offerDestination(next, trajectory);
         }
         if (!discardedNodes.isEmpty() && !discardedNodes.contains(next)) {
-          // TODO ASTOLL check if sufficient, criteria here: not next and not empty
+          //
           // remove all discarded nodes in GlobalQueue from it
           removeChildren(discardedNodes);
         }
@@ -75,11 +74,12 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     // RelaxedDebugUtils.closeMatchesCheck(this);
     // RelaxedDebugUtils.globalQueueSubsetOfQueuesInDomainMap(this);
     // RelaxedDebugUtils.nodeAmountCompare(this);
-    // TODO ASTOLL check if close to other merits see StaticHelper
   }
 
-  private void removeChildren(Collection<GlcNode> collection) {
-    // TODO ASTOLL TEST
+  /** removes the nodes in the collection from the planner as well as its children
+   * 
+   * @param collection */
+  void removeChildren(Collection<GlcNode> collection) {
     for (GlcNode glcNode : collection) {
       removeChildren(glcNode.children()); // recursive call to remove all children
       Nodes.disjoinChild(glcNode); // disconnect from parent

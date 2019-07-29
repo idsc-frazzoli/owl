@@ -39,7 +39,6 @@ public class NegTransitiveMinTracker<T> implements MinTracker<T>, Serializable {
    * the element gets added to the list.
    * 
    * @param x Element next up for comparison */
-  // TODO ASTOLL cases in function are not fully covered by tests
   @Override // from MinTrackerInterface
   public final void digest(T x) {
     if (collection.isEmpty())
