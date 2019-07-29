@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-// TODO ASTOLL make generic by passing in scalar to constructor 
 /* package */ class BalloonFallbackControl implements EntityControl, Serializable {
   @Override
   public Optional<Tensor> control(StateTime tail, Scalar now) {
