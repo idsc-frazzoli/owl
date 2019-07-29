@@ -24,8 +24,9 @@ public interface Transition {
    * @return sequence of points (start, ..., end] */
   Tensor sampled(Scalar minResolution);
 
-  /** TODO GJOEL document function! is start included?!
-   * ... what is TransitionWrap.samples.length vs. TransitionWrap.spacing.length
+  /** create {@link TransitionWrap} containing samples from {@link #sampled(Scalar)} and spacing
+   * i.e. distance between current and previous sample (resp. {@link #start()} for the first sample),
+   * hence samples and spacing have the same length
    * 
    * @param minResolution strictly positive
    * @return */

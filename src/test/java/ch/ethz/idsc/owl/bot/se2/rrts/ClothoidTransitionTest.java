@@ -7,10 +7,12 @@ import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatio;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class ClothoidTransitionTest extends TestCase {
@@ -32,6 +34,7 @@ public class ClothoidTransitionTest extends TestCase {
     ClothoidTransition clothoidTransition = ClothoidTransition.of(Tensors.vector(2, 3, 3), Tensors.vector(4, 1, 5));
     TransitionWrap transitionWrap = clothoidTransition.wrapped(RealScalar.of(.2));
     assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
+    assertTrue(transitionWrap.spacing().stream().map(Tensor::Get).allMatch(Sign::isPositive));
   }
 
   public void testSamples2() {
