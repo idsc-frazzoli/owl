@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public final class GeometricComponent {
-  private static final Font DEFAULT_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
+  private static final Font FONT_DEFAULT = new Font(Font.DIALOG, Font.PLAIN, 12);
   private static final Scalar WHEEL_ANGLE = Degree.of(15);
   /** initial model to pixel matrix */
   private static final Tensor MODEL2PIXEL_INITIAL = Tensors.matrix(new Number[][] { //
@@ -56,7 +56,7 @@ public final class GeometricComponent {
     protected void paintComponent(Graphics graphics) {
       render((Graphics2D) graphics, getSize());
       // display frame rate only when rendering in component
-      graphics.setFont(DEFAULT_FONT);
+      graphics.setFont(FONT_DEFAULT);
       graphics.setColor(Color.LIGHT_GRAY);
       graphics.drawString(String.format("%4.1f Hz", intervalClock.hertz()), 0, 10);
     }

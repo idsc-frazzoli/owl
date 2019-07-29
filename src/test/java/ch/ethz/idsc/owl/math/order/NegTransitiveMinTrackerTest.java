@@ -3,14 +3,12 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import ch.ethz.idsc.owl.demo.order.TensorNormTotalPreorder;
+import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -83,23 +81,20 @@ public class NegTransitiveMinTrackerTest extends TestCase {
 
   public void testPermutations() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 10);
-    Tensor tensor = RandomVariate.of(distribution, 100, 3);
-    List<Tensor> list = Unprotect.list(tensor.copy());
+    final Tensor tensor = RandomVariate.of(distribution, 100, 3);
     TensorNormTotalPreorder tensorNormWeakOrder = new TensorNormTotalPreorder(Norm.INFINITY);
     OrderComparator<Tensor> weakOrderComparator = tensorNormWeakOrder.comparator();
     Collection<Tensor> collection1;
     {
-      Collections.shuffle(list);
       MinTracker<Tensor> minTracker = NegTransitiveMinTracker.withSet(weakOrderComparator);
-      list.forEach(minTracker::digest);
+      RandomSample.stream(tensor).forEach(minTracker::digest);
       collection1 = minTracker.getMinElements();
       assertTrue(0 < collection1.size());
     }
     Collection<Tensor> collection2;
     {
-      Collections.shuffle(list);
       MinTracker<Tensor> minTracker = NegTransitiveMinTracker.withSet(weakOrderComparator);
-      list.forEach(minTracker::digest);
+      RandomSample.stream(tensor).forEach(minTracker::digest);
       collection2 = minTracker.getMinElements();
       assertTrue(0 < collection2.size());
     }

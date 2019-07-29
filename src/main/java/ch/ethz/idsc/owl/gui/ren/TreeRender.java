@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * in particular costs of type {@link VectorScalar} are not supported
  * @see EdgeRender */
 public class TreeRender implements RenderInterface {
-  public static final int DEFAULT_LIMIT = 2500;
+  public static final int LIMIT_DEFAULT = 2500;
   private static final int NODE_WIDTH = 2;
   private static final Color CONVEX_HULL_COLOR = new Color(192, 192, 0, 128);
   // ---
@@ -42,7 +42,7 @@ public class TreeRender implements RenderInterface {
   }
 
   public TreeRender() {
-    this(DEFAULT_LIMIT);
+    this(LIMIT_DEFAULT);
   }
 
   public RenderInterface setCollection(Collection<? extends StateCostNode> collection) {

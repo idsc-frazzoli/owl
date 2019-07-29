@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.sca.N;
 
 /** class is used in other projects outside of owl */
 public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
-  private static final Scalar THRESHOLD = RealScalar.of(0.2);
+  private static final Scalar THRESHOLD_DEFAULT = RealScalar.of(0.2);
   /** control points */
   private static final PointsRender POINTS_RENDER_0 = //
       new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
@@ -43,6 +43,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   /** min_index is non-null while the user drags a control points */
   private Integer min_index = null;
   private boolean mousePositioning = true;
+  private Scalar threshold = THRESHOLD_DEFAULT;
   // ---
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
@@ -54,7 +55,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
         Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
         ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-        Optional<Scalar> value = argMinValue.value(THRESHOLD);
+        Optional<Scalar> value = argMinValue.value(threshold);
         graphics.setColor(value.isPresent() && isPositioningEnabled() ? Color.ORANGE : Color.GREEN);
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(mouse)));
         graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
@@ -84,7 +85,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           if (Objects.isNull(min_index)) {
             Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
             ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-            min_index = argMinValue.index(THRESHOLD).orElse(null);
+            min_index = argMinValue.index(threshold).orElse(null);
             if (Objects.isNull(min_index)) {
               min_index = argMinValue.index();
               if (min_index == control.length() - 1) {
@@ -108,7 +109,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           if (Objects.isNull(min_index)) {
             Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
             ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-            min_index = argMinValue.index(THRESHOLD).orElse(null);
+            min_index = argMinValue.index(threshold).orElse(null);
           }
           if (Objects.nonNull(min_index)) {
             control = Join.of(control.extract(0, min_index), control.extract(min_index + 1, control.length()));
@@ -138,6 +139,14 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
 
   public boolean isPositioningEnabled() {
     return mousePositioning;
+  }
+
+  public void setPositioningThreshold(Scalar threshold) {
+    this.threshold = threshold;
+  }
+
+  public Scalar getPositioningThreshold() {
+    return threshold;
   }
 
   public final void addButtonDubins() {

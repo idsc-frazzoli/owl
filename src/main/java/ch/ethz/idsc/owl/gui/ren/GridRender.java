@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.N;
  * new GridRender(Subdivide.of(0, 50, 5));
  * </pre> */
 public class GridRender implements RenderInterface, Serializable {
-  private static final Color DEFAULT_COLOR = new Color(224, 224, 224, 128);
+  private static final Color COLOR_DEFAULT = new Color(224, 224, 224, 128);
   // ---
   private final Tensor x_grid;
   private final Tensor y_grid;
@@ -53,7 +53,7 @@ public class GridRender implements RenderInterface, Serializable {
    * @param x vector of coordinates along the x axis
    * @param y vector of coordinates along the y axis */
   public GridRender(Tensor x, Tensor y) {
-    this(x, y, DEFAULT_COLOR);
+    this(x, y, COLOR_DEFAULT);
   }
 
   /** @param vector of coordinates along the x axis and y axis
