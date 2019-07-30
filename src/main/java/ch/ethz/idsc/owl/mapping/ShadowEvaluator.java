@@ -109,7 +109,7 @@ public class ShadowEvaluator {
           Tensor minTimeReact = timeToReact(trajectory, mapSupplier);
           mtrMatrix.append(minTimeReact);
         }
-        File folder = HomeDirectory.file("Desktop", "eval");
+        File folder = HomeDirectory.Desktop("eval");
         folder.mkdirs();
         try {
           File file1 = new File(folder, "minSecTTR_" + id + ".csv");

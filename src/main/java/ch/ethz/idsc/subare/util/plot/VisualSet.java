@@ -1,6 +1,7 @@
 // code by gjoel, jph
 package ch.ethz.idsc.subare.util.plot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 
-public class VisualSet {
+public class VisualSet implements Serializable {
   static {
     ChartFactory.setChartTheme(DefaultChartTheme.STANDARD);
     // BarRenderer.setDefaultBarPainter(new StandardBarPainter());

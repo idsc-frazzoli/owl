@@ -33,6 +33,7 @@ public enum ClothoidTerminalRatios {
    * @param p start configuration
    * @param q end configuration
    * @return */
+  // TODO JPH OWL 049 replace return type with HeadTailInterface
   public static ClothoidTerminalRatio of(Tensor p, Tensor q) {
     // TODO could use variable iteration depth based on some accuracy criteria
     return of(p, q, ITERATIONS);
@@ -72,6 +73,7 @@ public enum ClothoidTerminalRatios {
    * @param beg of the form {beg_x, beg_y, beg_heading}
    * @param end of the form {end_x, end_y, end_heading}
    * @return */
+  // TODO JPH OWL 049 replace return type with HeadTailInterface
   public static ClothoidTerminalRatio planar(Tensor beg, Tensor end) {
     final Tensor init = Clothoid3.CURVE_SUBDIVISION.string(Unprotect.byRef(beg, end));
     Scalar head = ClothoidTerminalRatios.curvature(init);

@@ -31,6 +31,7 @@
 			<artifactId>lcm-java</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.jfree</groupId>
 			<artifactId>jfreechart</artifactId>
@@ -77,8 +78,8 @@
 
 	<repositories>
 		<repository>
-			<id>tensor-mvn-repo</id>
-			<url>https://raw.github.com/idsc-frazzoli/tensor/mvn-repo/</url>
+			<id>subare-mvn-repo</id>
+			<url>https://raw.github.com/idsc-frazzoli/subare/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -87,14 +88,6 @@
 		<repository>
 			<id>ephemeral-mvn-repo</id>
 			<url>https://raw.github.com/idsc-frazzoli/ephemeral/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>subare-mvn-repo</id>
-			<url>https://raw.github.com/idsc-frazzoli/subare/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>

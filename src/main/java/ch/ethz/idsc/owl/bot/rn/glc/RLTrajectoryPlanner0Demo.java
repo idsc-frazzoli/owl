@@ -29,7 +29,6 @@ import ch.ethz.idsc.owl.gui.ren.EtaRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -100,10 +99,10 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
   public BaseFrame start() {
     Optional<GlcNode> optional = getBest();
     GlcNode goalNode = optional.get();
-    System.out.println(goalNode.merit());
-    System.out.println(goalNode.costFromRoot());
-    @SuppressWarnings("unused")
-    VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
+    // System.out.println(goalNode.merit());
+    // System.out.println(goalNode.costFromRoot());
+    // @SuppressWarnings("unused")
+    // VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
     // System.out.println(cost);
     // ---
     List<TrajectorySample> trajectory = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, goalNode);

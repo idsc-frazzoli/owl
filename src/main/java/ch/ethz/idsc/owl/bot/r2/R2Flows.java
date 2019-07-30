@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
@@ -32,11 +31,13 @@ public class R2Flows implements FlowsInterface, Serializable {
 
   @Override // from FlowsInterface
   public Collection<Flow> getFlows(int resolution) {
-    GlobalAssert.that(2 < resolution); // otherwise does not cover plane
-    List<Flow> list = new ArrayList<>();
-    for (Tensor u : CirclePoints.of(resolution))
-      list.add(StateSpaceModels.createFlow(STATE_SPACE_MODEL, mapU(u).multiply(speed)));
-    return list;
+    if (2 < resolution) {
+      List<Flow> list = new ArrayList<>();
+      for (Tensor u : CirclePoints.of(resolution))
+        list.add(StateSpaceModels.createFlow(STATE_SPACE_MODEL, mapU(u).multiply(speed)));
+      return list;
+    }
+    throw new RuntimeException("does not cover plane");
   }
 
   public Flow stayPut() {

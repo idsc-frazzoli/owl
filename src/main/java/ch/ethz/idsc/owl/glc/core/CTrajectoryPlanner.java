@@ -14,7 +14,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TreeMap;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -108,9 +107,9 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
   /***************************************************/
   @Override // from GlcTrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
-    GlobalAssert.that(queue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
-    boolean replaced = insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
-    GlobalAssert.that(!replaced); // root insertion should not replace any other node
+    if (!domainMap.isEmpty())
+      throw new RuntimeException("root insertion requires empty planner");
+    insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
   }
 
   @Override // from GlcTrajectoryPlanner

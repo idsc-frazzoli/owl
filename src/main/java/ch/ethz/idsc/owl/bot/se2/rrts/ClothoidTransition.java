@@ -10,8 +10,6 @@ import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatio;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.math.Distances;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,8 +21,6 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
-  private static final CurveSubdivision CURVE_SUBDIVISION = LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1);
-
   public static ClothoidTransition of(Tensor start, Tensor end) {
     Clothoid clothoid = new Clothoid(start, end);
     return new ClothoidTransition(start, end, clothoid, clothoid.new Curve());
@@ -57,7 +53,7 @@ public class ClothoidTransition extends AbstractTransition {
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
     /* investigation has shown that midpoint splits result in clothoid segments of approximately equal length */
-    return Nest.of(CURVE_SUBDIVISION::string, Unprotect.byRef(start(), end()), //
+    return Nest.of(Clothoid3.CURVE_SUBDIVISION::string, Unprotect.byRef(start(), end()), //
         IntegerLog2.ceiling(Ceiling.of(length().divide(Sign.requirePositive(minResolution))).number().intValue()));
   }
 

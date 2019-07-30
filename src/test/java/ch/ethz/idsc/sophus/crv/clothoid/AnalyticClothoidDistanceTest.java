@@ -33,6 +33,9 @@ public class AnalyticClothoidDistanceTest extends TestCase {
     Scalar lr1 = AnalyticClothoidDistance.LR1.norm(pose);
     Scalar lr3 = AnalyticClothoidDistance.LR3.norm(pose);
     Chop._12.requireClose(lr1, lr3);
+    Scalar length = new Clothoid(pose.map(Scalar::zero), pose).new Curve().length();
+    Chop._01.requireClose(lr1, length);
+    Chop._01.requireClose(lr3, length);
   }
 
   public void testNonNegative() {

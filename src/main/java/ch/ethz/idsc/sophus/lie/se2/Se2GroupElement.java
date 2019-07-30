@@ -8,9 +8,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** SE(2) is parameterized by R^2 x [-pi,+pi) */
 public class Se2GroupElement extends Se2CoveringGroupElement {
-  private static final int MOD_INDEX = 2;
-
-  // ---
   /** @param xya == {px, py, angle} as member of Lie group SE2 */
   public Se2GroupElement(Tensor xya) {
     super(xya);
@@ -25,7 +22,7 @@ public class Se2GroupElement extends Se2CoveringGroupElement {
   @Override // from Se2CoveringGroupElement
   public Tensor combine(Tensor tensor) {
     Tensor xya = super.combine(tensor);
-    xya.set(So2.MOD, MOD_INDEX);
+    xya.set(So2.MOD, 2);
     return xya;
   }
 

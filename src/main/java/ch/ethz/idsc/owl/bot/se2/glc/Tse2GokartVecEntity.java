@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.bot.tse2.Tse2CarFlows;
 import ch.ethz.idsc.owl.bot.tse2.Tse2ComboRegion;
 import ch.ethz.idsc.owl.bot.tse2.Tse2MinTimeGoalManager;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.CustomNodeMeritComparator;
 import ch.ethz.idsc.owl.glc.adapter.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
@@ -73,7 +72,8 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
     List<Double> slacks = new ArrayList<>(slackVector);
     // ---
     if (timeCostPriority.isPresent() && timeCostSlack.isPresent()) {
-      GlobalAssert.that(timeCostPriority.get() <= costs.size());
+      if (costs.size() < timeCostPriority.get().intValue())
+        throw new RuntimeException();
       slacks.add(timeCostPriority.get(), timeCostSlack.get());
       costs.add(timeCostPriority.get(), new Tse2MinTimeGoalManager(tse2ComboRegion, controls, MAX_SPEED));
     }
@@ -90,7 +90,8 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
    * @param costVector
    * @param slackVector */
   public void setCostVector(List<CostFunction> costVector, List<Double> slackVector) {
-    GlobalAssert.that(costVector.size() == slackVector.size());
+    if (costVector.size() != slackVector.size())
+      throw new RuntimeException();
     this.costVector = costVector;
     this.slackVector = slackVector;
   }

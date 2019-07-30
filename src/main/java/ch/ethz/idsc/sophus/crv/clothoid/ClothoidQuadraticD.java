@@ -1,6 +1,7 @@
 // code by ureif
 package ch.ethz.idsc.sophus.crv.clothoid;
 
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -13,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * p[1/2] == bm
  * p[2/2] == b1
  * </pre> */
-/* package */ class ClothoidQuadraticD implements ScalarUnaryOperator {
+/* package */ class ClothoidQuadraticD implements ScalarUnaryOperator, HeadTailInterface {
   private static final Scalar _3 = RealScalar.of(+3);
   private static final Scalar _4 = RealScalar.of(+4);
   // ---
@@ -36,10 +37,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     return c1.multiply(s).add(c0);
   }
 
+  @Override
   public Scalar head() {
     return c0;
   }
 
+  @Override
   public Scalar tail() {
     return c0.add(c1);
   }

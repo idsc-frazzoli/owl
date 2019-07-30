@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
 import ch.ethz.idsc.sophus.hs.h2.H2Midpoint;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -64,7 +64,7 @@ public class LaneRiesenfeldCurveSubdivisionTest extends TestCase {
 
   public void testEmpty() {
     for (int degree = 1; degree < 4; ++degree) {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoid1.INSTANCE, degree);
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, degree);
       assertEquals(curveSubdivision.cyclic(Tensors.empty()), Tensors.empty());
       assertEquals(curveSubdivision.string(Tensors.empty()), Tensors.empty());
     }
@@ -73,7 +73,7 @@ public class LaneRiesenfeldCurveSubdivisionTest extends TestCase {
   public void testSingleton() {
     Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
     for (int degree = 1; degree < 4; ++degree) {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoid1.INSTANCE, degree);
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, degree);
       assertEquals(curveSubdivision.cyclic(singleton), singleton);
       assertEquals(curveSubdivision.string(singleton), singleton);
     }

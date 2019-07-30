@@ -3,10 +3,11 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.Scalar;
 
 /** clothoid is tangent at start and end points */
-public class ClothoidTerminalRatio implements Serializable {
+public class ClothoidTerminalRatio implements HeadTailInterface, Serializable {
   private final Scalar head;
   private final Scalar tail;
 
@@ -15,17 +16,14 @@ public class ClothoidTerminalRatio implements Serializable {
     this.tail = tail;
   }
 
+  @Override
   public Scalar head() {
     return head;
   }
 
+  @Override
   public Scalar tail() {
     return tail;
-  }
-
-  /** @return tail - head */
-  public Scalar difference() {
-    return tail.subtract(head);
   }
 
   @Override // from Object

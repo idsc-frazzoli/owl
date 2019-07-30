@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.ArcTan2D;
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -102,7 +103,7 @@ public class Clothoid implements Serializable {
     }
   }
 
-  public final class Curvature implements ScalarUnaryOperator {
+  public final class Curvature implements ScalarUnaryOperator, HeadTailInterface {
     private final ClothoidQuadraticD clothoidQuadraticD = new ClothoidQuadraticD(b0, bm, b1);
     private final Scalar v = Norm._2.ofVector(diff);
 
@@ -111,10 +112,12 @@ public class Clothoid implements Serializable {
       return clothoidQuadraticD.apply(t).divide(v);
     }
 
+    @Override
     public Scalar head() {
       return clothoidQuadraticD.head().divide(v);
     }
 
+    @Override
     public Scalar tail() {
       return clothoidQuadraticD.tail().divide(v);
     }

@@ -6,6 +6,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -67,6 +68,7 @@ public class NonuniformFixedIntervalGeodesicCenterFilterTest extends TestCase {
         .apply(navigableMap).values().stream());
     Tensor expected = Tensors.fromString(
         "{{0.0, 0.0, 0.0}, {0.8895784526281458, 0.7276528633124004, 0.8004148013462675}, {1.8895784526281458, 1.7276528633124004, 1.8004148013462675}, {3.0, 3.0, 3.0}, {4.0, 4.0, 4.0}}");
+    expected.set(So2.MOD, Tensor.ALL, 2);
     assertEquals(expected, actual);
   }
 }

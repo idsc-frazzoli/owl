@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.map.RigidFamily;
 import ch.ethz.idsc.owl.math.map.TranslationFamily;
@@ -44,7 +43,7 @@ public class TrajectoryTranslationFamily extends TranslationFamily {
     // ---
     { // consistency check
       Tensor times = Tensor.of(trajectory.stream().map(StateTime::time).map(this::index));
-      GlobalAssert.that(Chop._10.close(times, Range.of(1, times.length() + 1)));
+      Chop._10.requireClose(times, Range.of(1, times.length() + 1));
     }
   }
 

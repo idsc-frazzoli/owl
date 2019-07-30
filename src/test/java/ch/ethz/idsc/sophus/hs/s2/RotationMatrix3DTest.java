@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.hs.sn;
+package ch.ethz.idsc.sophus.hs.s2;
 
 import ch.ethz.idsc.sophus.hs.r3s2.R3S2Geodesic;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -37,6 +38,7 @@ public class RotationMatrix3DTest extends TestCase {
       Tensor rotation = RotationMatrix3D.of(a, b);
       assertTrue(OrthogonalMatrixQ.of(rotation, Chop._10));
       Chop._08.requireClose(rotation.dot(a), b);
+      Chop._08.requireClose(Det.of(rotation), RealScalar.ONE);
     }
   }
 }

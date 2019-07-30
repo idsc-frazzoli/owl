@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
@@ -118,7 +117,8 @@ public abstract class RLTrajectoryPlanner implements TrajectoryPlanner, Serializ
   /***************************************************/
   @Override // from GlcTrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
-    GlobalAssert.that(openQueue.isEmpty() && domainMap.isEmpty()); // root insertion requires empty planner
+    if (!domainMap.isEmpty())
+      throw new RuntimeException("root insertion requires empty planner");
     addToOpen(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
   }
 

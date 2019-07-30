@@ -23,14 +23,14 @@ public class BezierExtrapolationTest extends TestCase {
   public void testCircle2() {
     TensorUnaryOperator tensorUnaryOperator = BezierExtrapolation.of(Se2Geodesic.INSTANCE);
     Tensor tensor = tensorUnaryOperator.apply(Tensors.fromString("{{0, 0, 0}, {1, 1, " + Math.PI / 2 + "}}"));
-    Tensor result = Tensors.vector(0, 2, Math.PI);
+    Tensor result = Tensors.vector(0, 2, -Math.PI);
     Chop._14.requireClose(tensor, result);
   }
 
   public void testCircle3() {
     TensorUnaryOperator tensorUnaryOperator = BezierExtrapolation.of(Se2Geodesic.INSTANCE);
     Tensor tensor = tensorUnaryOperator.apply(Tensors.fromString("{{0, 0, 0}, {1, 1, " + Math.PI / 2 + "}, {0, 2, " + Math.PI + "}}"));
-    Tensor result = Tensors.vector(-1, 1, Math.PI * 3 / 2);
+    Tensor result = Tensors.vector(-1, 1, -Math.PI * 1 / 2);
     Chop._14.requireClose(tensor, result);
   }
 

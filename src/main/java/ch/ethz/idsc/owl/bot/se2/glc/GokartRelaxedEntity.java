@@ -32,7 +32,7 @@ public class GokartRelaxedEntity extends GokartEntity {
 
   // ---
   private final Tensor slacks;
-  private List<CostFunction> additionalCosts = new ArrayList<CostFunction>();
+  private final List<CostFunction> additionalCosts = new ArrayList<>();
 
   private GokartRelaxedEntity(StateTime stateTime, Tensor slacks) {
     super(stateTime);

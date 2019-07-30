@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Timing;
-import ch.ethz.idsc.tensor.io.UserName;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
@@ -109,7 +108,7 @@ public class SphereCurveIntersectionTest extends TestCase {
       timing1.stop();
     }
     Timing timing2 = Timing.started();
-    {
+    { // faster
       int prevIdx = 0;
       for (int index = 0; index < curve.length() - 1; index += 5) {
         Scalar radius = RealScalar.of(index + 1.5);
@@ -121,10 +120,10 @@ public class SphereCurveIntersectionTest extends TestCase {
       }
       timing2.stop();
     }
-    if (!UserName.is("travis")) {
-      System.out.println(timing1.seconds());
-      System.out.println(timing2.seconds());
-    }
+    // if (!UserName.is("travis")) {
+    // System.out.println(timing1.seconds());
+    // System.out.println(timing2.seconds());
+    // }
     assertTrue(timing2.seconds() < timing1.seconds());
   }
 }

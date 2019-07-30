@@ -1,9 +1,10 @@
 // code by gjoel, jph
 package ch.ethz.idsc.subare.util.plot;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-/* package */ class ComparableLabel implements Comparable<ComparableLabel> {
+/* package */ class ComparableLabel implements Comparable<ComparableLabel>, Serializable {
   private final int index;
   /** may not be null */
   private String string;

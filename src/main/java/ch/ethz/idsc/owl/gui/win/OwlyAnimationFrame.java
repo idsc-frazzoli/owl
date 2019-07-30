@@ -17,7 +17,6 @@ import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.ani.api.AnimationInterface;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.TimeKeeper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -41,7 +40,6 @@ public class OwlyAnimationFrame extends TimerFrame {
         TrajectoryEntity abstractEntity = (TrajectoryEntity) animationInterfaces.get(0);
         File directory = HomeDirectory.Pictures(abstractEntity.getClass().getSimpleName() + "_" + System.currentTimeMillis());
         directory.mkdir();
-        GlobalAssert.that(directory.isDirectory());
         timerTask = new TimerTask() {
           int count = 0;
           Point2D point = null;

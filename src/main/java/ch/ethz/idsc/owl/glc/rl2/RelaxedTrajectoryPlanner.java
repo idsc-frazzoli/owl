@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.HeuristicFunction;
@@ -126,7 +125,8 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   /***************************************************/
   @Override // from GlcTrajectoryPlanner
   public final void insertRoot(StateTime stateTime) {
-    GlobalAssert.that(globalQueue.collection().isEmpty() && domainQueueMap.isEmpty()); // root insertion requires empty planner
+    if (!domainQueueMap.isEmpty())
+      throw new RuntimeException("root insertion requires empty planner");
     GlcNode root = GlcNodes.createRoot(stateTime, heuristicFunction);
     addToGlobalQueue(root);
     addToDomainMap(stateTimeRaster.convertToKey(stateTime), root);

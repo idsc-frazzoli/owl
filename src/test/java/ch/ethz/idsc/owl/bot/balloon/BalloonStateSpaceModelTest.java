@@ -4,12 +4,11 @@ package ch.ethz.idsc.owl.bot.balloon;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;
 import junit.framework.TestCase;
 
 public class BalloonStateSpaceModelTest extends TestCase {
-  @SuppressWarnings("unused")
   public void testValidity() {
     Tensor xWithUnits = Tensors.fromString("{2[m], 2[m], 2[m*s^-1], 4[K]}");
     Tensor uWithUnits = Tensors.fromString("{3[K*s^-1]}");
@@ -20,10 +19,9 @@ public class BalloonStateSpaceModelTest extends TestCase {
     assertEquals(stateSpaceModelWithoutUnits.f(xWithoutUnits, uWithoutUnits).length(), 4);
     Tensor fWithUnits = stateSpaceModel.f(xWithUnits, uWithUnits);
     assertEquals(fWithUnits.length(), 4);
-    System.out.println(((Quantity) fWithUnits.Get(0)).unit());
-    assertEquals(((Quantity) fWithUnits.Get(0)).unit(), Unit.of("m*s^-1"));
-    assertEquals(((Quantity) fWithUnits.Get(1)).unit(), Unit.of("m*s^-1"));
-    assertEquals(((Quantity) fWithUnits.Get(2)).unit(), Unit.of("m*s^-2"));
-    assertEquals(((Quantity) fWithUnits.Get(3)).unit(), Unit.of("K*s^-1"));
+    assertEquals(QuantityUnit.of(fWithUnits.Get(0)), Unit.of("m*s^-1"));
+    assertEquals(QuantityUnit.of(fWithUnits.Get(1)), Unit.of("m*s^-1"));
+    assertEquals(QuantityUnit.of(fWithUnits.Get(2)), Unit.of("m*s^-2"));
+    assertEquals(QuantityUnit.of(fWithUnits.Get(3)), Unit.of("K*s^-1"));
   }
 }
