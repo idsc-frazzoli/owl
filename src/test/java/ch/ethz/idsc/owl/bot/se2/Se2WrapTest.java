@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -51,7 +52,9 @@ public class Se2WrapTest extends TestCase {
     Distribution distribution = NormalDistribution.of(0, 10);
     for (int index = 0; index < 100; ++index) {
       Tensor p = RandomVariate.of(distribution, 3);
+      p.set(So2.MOD, 2);
       Tensor q = RandomVariate.of(distribution, 3);
+      q.set(So2.MOD, 2);
       Chop._14.requireClose(p, Se2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO));
       Tensor r = Se2Geodesic.INSTANCE.split(p, q, RealScalar.ONE);
       if (!Chop._14.close(q, r))

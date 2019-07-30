@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.lie.se2;
 
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringIntegrator;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
@@ -25,11 +24,7 @@ public enum Se2Geodesic implements GeodesicInterface {
     Tensor delta = new Se2GroupElement(p).inverse().combine(q);
     delta.set(So2.MOD, INDEX_ANGLE);
     Tensor x = Se2CoveringExponential.INSTANCE.log(delta);
-    return scalar -> Se2CoveringIntegrator.INSTANCE.spin(p, x.multiply(scalar));
-    // Se2GroupElement p_act = new Se2GroupElement(p);
-    // Tensor delta = p_act.inverse().combine(q);
-    // Tensor x = Se2CoveringExponential.INSTANCE.log(delta);
-    // return scalar -> p_act.combine(Se2CoveringExponential.INSTANCE.exp(x.multiply(scalar)));
+    return scalar -> Se2Integrator.INSTANCE.spin(p, x.multiply(scalar));
   }
 
   @Override // from GeodesicInterface

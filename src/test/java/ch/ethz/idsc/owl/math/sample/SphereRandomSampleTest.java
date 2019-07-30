@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.math.sample;
 import java.util.Random;
 
 import ch.ethz.idsc.sophus.hs.r3s2.R3S2Geodesic;
-import ch.ethz.idsc.sophus.hs.sn.RotationMatrix3D;
+import ch.ethz.idsc.sophus.hs.s2.RotationMatrix3D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

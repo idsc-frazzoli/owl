@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.hs.sn;
 
+import ch.ethz.idsc.sophus.hs.s2.S2Geodesic;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;

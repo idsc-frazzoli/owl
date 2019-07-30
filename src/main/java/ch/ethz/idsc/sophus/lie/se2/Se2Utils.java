@@ -22,6 +22,7 @@ public enum Se2Utils {
    * [0 0 1]
    * </pre>
    * @throws Exception if parameter g is not a vector of length 3 */
+  // TODO JPH OWL 049 remove SE2 from function name
   public static Tensor toSE2Matrix(Tensor xya) {
     Scalar angle = xya.Get(2);
     Scalar cos = Cos.FUNCTION.apply(angle);
@@ -40,6 +41,7 @@ public enum Se2Utils {
    * [0 1 py]
    * [0 0 1]
    * </pre> */
+  // TODO JPH OWL 049 remove SE2 from function name
   public static Tensor toSE2Translation(Tensor xy) {
     return Tensors.matrix(new Scalar[][] { //
         { RealScalar.ONE, RealScalar.ZERO, xy.Get(0) }, //
@@ -52,6 +54,7 @@ public enum Se2Utils {
    * 
    * @param matrix
    * @return {px, py, angle} */
+  // TODO JPH OWL 049 remove SE2 from function name
   public static Tensor fromSE2Matrix(Tensor matrix) { // only used in tests
     SquareMatrixQ.require(matrix);
     return Tensors.of(matrix.Get(0, 2), matrix.Get(1, 2), //

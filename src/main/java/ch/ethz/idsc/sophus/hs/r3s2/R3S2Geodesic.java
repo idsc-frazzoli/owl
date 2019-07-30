@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.hs.r3s2;
 
-import ch.ethz.idsc.sophus.hs.sn.RotationMatrix3D;
+import ch.ethz.idsc.sophus.hs.s2.RotationMatrix3D;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
 import ch.ethz.idsc.sophus.lie.se3.Se3Utils;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
