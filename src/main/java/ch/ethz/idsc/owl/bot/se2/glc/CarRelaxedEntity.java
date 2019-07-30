@@ -43,7 +43,7 @@ public class CarRelaxedEntity extends CarEntity {
   // ---
   private final EdgeRender edgeRender = new EdgeRender();
   private final Tensor slacks;
-  private List<CostFunction> additionalCosts = new ArrayList<CostFunction>();
+  private final List<CostFunction> additionalCosts = new ArrayList<>();
 
   private CarRelaxedEntity( //
       StateTime stateTime, //
