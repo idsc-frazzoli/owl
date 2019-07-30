@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 
+/** TODO GJOEL is AnalyticClothoidDistance the "correct" length? -> document purpose */
 /* package */ enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
   LR1(ClothoidLR1Midpoint.INSTANCE), //
   LR3(ClothoidLR3Midpoint.INSTANCE), //
@@ -36,11 +37,13 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
     }
     // TODO GJOEL investigate "direction"
     ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.of(p, q);
+    Scalar head = clothoidTerminalRatio.head();
+    Scalar tail = clothoidTerminalRatio.tail();
     Scalar half_num = qa.subtract(pa);
     Scalar num = half_num.add(half_num); // 2 * half_num
-    Scalar den = AbsSquared.FUNCTION.apply(clothoidTerminalRatio.tail()).subtract(AbsSquared.FUNCTION.apply(clothoidTerminalRatio.head()));
+    Scalar den = AbsSquared.FUNCTION.apply(tail).subtract(AbsSquared.FUNCTION.apply(head));
     Scalar a_squared = num.divide(den).abs();
-    return a_squared.multiply(clothoidTerminalRatio.difference().abs());
+    return a_squared.multiply(tail.subtract(head).abs());
   }
 
   @Override // from TensorNorm

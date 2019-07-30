@@ -1,5 +1,5 @@
 // code by jph, gjoel
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.crv.clothoid;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,11 +21,6 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.CurveCurvature;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid1;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid2;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatio;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Utils;

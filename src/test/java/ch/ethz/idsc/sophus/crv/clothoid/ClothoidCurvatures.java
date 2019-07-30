@@ -1,13 +1,12 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.crv.clothoid;
 
 import java.util.Iterator;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 
-/** class exists for */
+/** class exists for demo */
 /* package */ enum ClothoidCurvatures {
   ;
   /** @param tensor

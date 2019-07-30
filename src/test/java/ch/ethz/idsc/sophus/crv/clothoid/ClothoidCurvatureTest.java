@@ -18,10 +18,9 @@ public class ClothoidCurvatureTest extends TestCase {
     Tensor q = Tensors.vector(8, 6, 2);
     ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(p, q);
     Scalar head = clothoidTerminalRatio.head();
-    System.out.println(head);
     ClothoidCurvature clothoidCurvature = Serialization.copy(new ClothoidCurvature(p, q));
-    Scalar scalar = clothoidCurvature.apply(RealScalar.ZERO);
-    System.out.println(scalar);
+    Scalar scalar = clothoidCurvature.head();
+    Chop._01.requireClose(head, scalar);
   }
 
   public void testStraight() {
