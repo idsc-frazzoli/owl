@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.ani.api.ProviderRank;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
+import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
@@ -34,7 +34,8 @@ public abstract class StateTrajectoryControl implements TrajectoryControl, Seria
     // implementation does not require that current position is perfectly located on trajectory
     if (Objects.nonNull(trajectory)) {
       final int argmin = indexOfPassedTrajectorySample(tail, trajectory.subList(trajectory_skip, trajectory.size()));
-      GlobalAssert.that(argmin != ArgMin.EMPTY);
+      if (argmin == ArgMin.EMPTY)
+        throw new RuntimeException();
       int index = trajectory_skip + argmin;
       trajectory_skip = index;
       ++index; // <- next node has flow control
@@ -42,8 +43,8 @@ public abstract class StateTrajectoryControl implements TrajectoryControl, Seria
         Optional<Tensor> optional = customControl(tail, trajectory.subList(index, trajectory.size()));
         if (optional.isPresent())
           return optional;
-        GlobalAssert.that(trajectory.get(index).getFlow().isPresent());
-        return Optional.of(trajectory.get(index).getFlow().get().getU());
+        Flow flow = trajectory.get(index).getFlow().get();
+        return Optional.of(flow.getU());
       }
       trajectory = resetAction(trajectory);
     }

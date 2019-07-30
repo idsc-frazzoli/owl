@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
@@ -28,7 +27,8 @@ public enum Trajectories {
       System.err.println(" 1st of tail: " + tst.toInfoString());
       // GlobalAssert.that(contact);
     }
-    GlobalAssert.that(!tst.getFlow().isPresent());
+    if (tst.getFlow().isPresent())
+      throw new RuntimeException();
     trajectory.addAll(tail.subList(1, tail.size()));
     return Collections.unmodifiableList(trajectory);
   }

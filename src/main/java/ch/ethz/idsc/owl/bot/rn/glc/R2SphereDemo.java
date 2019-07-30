@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
@@ -19,7 +18,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
     TrajectoryPlanner trajectoryPlanner = r2SphereBase.create();
     Expand<GlcNode> expand = new Expand<>(trajectoryPlanner);
     expand.steps(200);
-    GlobalAssert.that(expand.getExpandCount() == 200);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(optional.get());

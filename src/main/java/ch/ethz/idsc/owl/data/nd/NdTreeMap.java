@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -226,8 +225,6 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       if (Objects.nonNull(node.rChild))
         print(node.rChild);
     } else {
-      GlobalAssert.that(Objects.isNull(node.lChild));
-      GlobalAssert.that(Objects.isNull(node.rChild));
       System.out.println(v + Integer.toString(node.queue.size()));
       for (NdPair<V> entry : node.queue)
         System.out.println(v + entry.location.toString() + " " + entry.value());

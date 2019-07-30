@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -34,18 +33,18 @@ public class RLQueueTest extends TestCase {
     // ---
     GlcNode best;
     best = rlQueue.poll();
-    GlobalAssert.that(best.merit() == node21.merit());
+    assertTrue(best.merit() == node21.merit());
     best = rlQueue.poll();
-    GlobalAssert.that(best.merit() == node12.merit());
+    assertTrue(best.merit() == node12.merit());
     best = rlQueue.poll();
-    GlobalAssert.that(best.merit() == node31.merit());
+    assertTrue(best.merit() == node31.merit());
     best = rlQueue.poll();
-    GlobalAssert.that(best.merit() == node22.merit());
+    assertTrue(best.merit() == node22.merit());
     best = rlQueue.poll();
-    GlobalAssert.that(best.merit() == node32.merit());
+    assertTrue(best.merit() == node32.merit());
     best = rlQueue.poll();
-    GlobalAssert.that(best.merit() == node23.merit());
-    GlobalAssert.that(rlQueue.isEmpty());
+    assertTrue(best.merit() == node23.merit());
+    assertTrue(rlQueue.isEmpty());
   }
 
   public void testSpeed() {

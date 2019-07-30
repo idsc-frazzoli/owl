@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.owl.glc.adapter.CustomNodeMeritComparator;
 import ch.ethz.idsc.owl.glc.adapter.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
@@ -63,7 +62,8 @@ public class GokartVecEntity extends GokartEntity {
    * @param costVector
    * @param slackVector */
   public void setCostVector(List<CostFunction> costVector, List<Double> slackVector) {
-    GlobalAssert.that(costVector.size() == slackVector.size());
+    if (costVector.size() != slackVector.size())
+      throw new RuntimeException();
     this.costVector = costVector;
     this.slackVector = slackVector;
   }

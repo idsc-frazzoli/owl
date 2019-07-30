@@ -4,8 +4,6 @@ package ch.ethz.idsc.owl.data.tree;
 import java.util.Collection;
 import java.util.Iterator;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
-
 public enum NodesAssert {
   ;
   /** TODO document
@@ -26,8 +24,9 @@ public enum NodesAssert {
   public static <T extends Node> void connectivityCheck(Collection<T> collection) {
     for (Iterator<T> iterator = collection.iterator(); iterator.hasNext();) {
       Node node = iterator.next();
-      if (!node.isRoot())
-        GlobalAssert.that(node.parent().children().contains(node));
+      if (!node.isRoot() && //
+          !node.parent().children().contains(node))
+        throw new RuntimeException();
     }
   }
 

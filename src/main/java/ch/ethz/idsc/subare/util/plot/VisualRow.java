@@ -4,18 +4,20 @@ package ch.ethz.idsc.subare.util.plot;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class VisualRow {
+public class VisualRow implements Serializable {
   private static final Stroke STROKE_DEFAULT = new BasicStroke(1f);
   // ---
   private final Tensor points;
   private final ComparableLabel comparableLabel;
   private Color color = Color.BLUE;
-  private Stroke stroke = STROKE_DEFAULT;
+  /** not serializable */
+  private transient Stroke stroke;
 
   /** Mathematica::ListPlot[points]
    * 
@@ -45,7 +47,9 @@ public class VisualRow {
   }
 
   public Stroke getStroke() {
-    return stroke;
+    return Objects.isNull(stroke) //
+        ? STROKE_DEFAULT
+        : stroke;
   }
 
   public void setLabel(String string) {

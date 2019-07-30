@@ -1,14 +1,16 @@
 // code by jph
 package ch.ethz.idsc.owl.sim;
 
-import ch.ethz.idsc.owl.data.GlobalAssert;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
-enum StaticHelper {
+/* package */ enum StaticHelper {
   ;
-  static Tensor create(int resolution) {
+  /** @param resolution at least 2
+   * @return
+   * @throws Exception if resolution is less than 2 */
+  public static Tensor create(int resolution) {
     Tensor localPoints = Tensors.empty();
     for (Tensor _xn : Subdivide.of(0, 1, resolution - 1)) {
       double xn = _xn.Get().number().doubleValue();
@@ -19,7 +21,6 @@ enum StaticHelper {
         localPoints.append(probe);
       }
     }
-    GlobalAssert.that(localPoints.length() == resolution * resolution);
     return localPoints;
   }
 }
