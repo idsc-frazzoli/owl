@@ -10,31 +10,30 @@ import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** Adapted version of the LexicographicSemiorderMinTracker which only tracks elements that
- * have advantageous or beneficial scores, i.e. any element with scores that are worse in
- * all objectives compared to any existing element in the tracker will be discarded regardless
- * whether or not they are within the threshold.
+/** Creates EBO (elimination by objective) tracker for a lexicographic semiorder.
+ * The EBO procedure chooses a the "best" element from a given set according to the underlying lexicographic semiorder.
+ * For a detailed description of the procedure, see Chapter 6.1 in "Multi-Objective Optimization Using Preference Structures"
  * 
- * @param <K> key type */
-public class DMLexSemiMinTracker<K> extends AbstractLexSemiMinTracker<K> {
+ * Only keeps track of necessary elements for a single choice. */
+public class SingleEBOTracker<K> extends AbstractEBOTracker<K> {
   /** @param slacks
    * @return
    * @throws Exception if given slacks is null */
-  public static <K> LexSemiMinTracker<K> withList(Tensor slacks) {
-    return new DMLexSemiMinTracker<>(slacks, new LinkedList<>());
+  public static <K> EBOTracker<K> withList(Tensor slacks) {
+    return new SingleEBOTracker<>(slacks, new LinkedList<>());
   }
 
   /** @param slacks
    * @return
    * @throws Exception if given slacks is null */
-  public static <K> LexSemiMinTracker<K> withSet(Tensor slacks) {
-    return new DMLexSemiMinTracker<>(slacks, new HashSet<>());
+  public static <K> EBOTracker<K> withSet(Tensor slacks) {
+    return new SingleEBOTracker<>(slacks, new HashSet<>());
   }
 
   // ---
   private final ProductOrderComparator productOrderComparator;
 
-  private DMLexSemiMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+  private SingleEBOTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     super(slacks, candidateSet);
     productOrderComparator = TensorProductOrder.comparator(dim);
   }

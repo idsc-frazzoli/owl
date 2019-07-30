@@ -7,7 +7,8 @@ import java.util.List;
 
 /** Creates a lexicographic order where two tuples are compared to each other.
  * An element x precedes another element y if there is an index where x_i
- * precedes y_i and for all indices j smaller than i x_j is indifferent y_j. */
+ * precedes y_i and for all indices j smaller than i x_j is indifferent y_j.
+ * See Chapter 2.7.5 in "Multi-Objective Optimization Using Preference Structures" */
 public class LexicographicComparator implements OrderComparator<Iterable<? extends Object>>, Serializable {
   private final List<OrderComparator<? extends Object>> orderComparators;
 

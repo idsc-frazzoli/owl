@@ -31,6 +31,8 @@ package ch.ethz.idsc.owl.math.order;
  * <td>INCOMPARABLE</td>
  * </tr>
  * </table>
+ * 
+ * See Chapter 2.2 in "Multi-Objective Optimization Using Preference Structures"
  * @author astoll */
 public enum OrderComparison {
   STRICTLY_PRECEDES, //

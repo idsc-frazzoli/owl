@@ -9,6 +9,8 @@ import java.util.function.BiPredicate;
  * <p>The input parameters x and y are of the same type. Therefore BinaryRelation is a special example
  * of a {@link BiPredicate}.
  * 
+ * See Chapter 2.1 in "Multi-Objective Optimization Using Preference Structures"
+ * 
  * @param <T>
  * @return true or false */
 @FunctionalInterface

@@ -3,7 +3,8 @@ package ch.ethz.idsc.owl.math.order;
 
 import java.util.Objects;
 
-/** symmetric in the arguments intersect(a, b) == intersect(b, a) */
+/** symmetric in the arguments intersect(a, b) == intersect(b, a)
+ * See Chapter 2.7.4 in "Multi-Objective Optimization Using Preference Structures" */
 public enum ProductOrder {
   ;
   /** @param c1

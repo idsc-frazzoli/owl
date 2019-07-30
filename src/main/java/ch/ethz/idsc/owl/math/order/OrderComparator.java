@@ -19,6 +19,8 @@ public interface OrderComparator<T> {
    * UniversalComparison.STRICTLY_PRECEDES if xRy and not yRx,
    * UniversalComparison.STRICTLY_SUCCEDES if yRx and not xRy,
    * UniversalComparison.INDIFFERENT xRy and yRx
-   * UniversalComparison.INCOMPARABLE if neither xRy and nor yRx */
+   * UniversalComparison.INCOMPARABLE if neither xRy and nor yRx
+   * 
+   * See Chapter 2.2 in "Multi-Objective Optimization Using Preference Structures" */
   OrderComparison compare(T x, T y);
 }

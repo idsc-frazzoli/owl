@@ -7,8 +7,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class DMLexSemiMinTrackerTest extends TestCase {
-  private static void _checkSimple(AbstractLexSemiMinTracker<Integer> LSMT1) {
+public class SingleEBOTrackerTest extends TestCase {
+  private static void _checkSimple(AbstractEBOTracker<Integer> LSMT1) {
     Tensor x = Tensors.fromString("{1, 2, 2}");
     LSMT1.digest(1, x);
     assertFalse(LSMT1.getCandidateSet().isEmpty());
@@ -16,12 +16,12 @@ public class DMLexSemiMinTrackerTest extends TestCase {
 
   public void testDigestSimple() {
     Tensor slacks = Tensors.vector(1, 1, 1);
-    _checkSimple((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withList(slacks));
-    _checkSimple((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withSet(slacks));
+    _checkSimple((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withList(slacks));
+    _checkSimple((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withSet(slacks));
   }
 
   /***************************************************/
-  private static void _checkDigest(AbstractLexSemiMinTracker<Integer> LSMT1) {
+  private static void _checkDigest(AbstractEBOTracker<Integer> LSMT1) {
     Tensor x = Tensors.fromString("{1}");
     Tensor y = Tensors.fromString("{3.5}");
     Tensor z = Tensors.fromString("{1.5}");
@@ -37,12 +37,12 @@ public class DMLexSemiMinTrackerTest extends TestCase {
 
   public void testDigest() {
     Tensor slacks = Tensors.fromString("{2}");
-    _checkDigest((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withList(slacks));
-    _checkDigest((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withSet(slacks));
+    _checkDigest((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withList(slacks));
+    _checkDigest((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withSet(slacks));
   }
 
   /***************************************************/
-  private static void _checkCS(AbstractLexSemiMinTracker<Integer> lexSemiMinTracker) {
+  private static void _checkCS(AbstractEBOTracker<Integer> lexSemiMinTracker) {
     Tensor x = Tensors.fromString("{1, 4, 4}");
     Tensor y = Tensors.fromString("{3, 3, 1}");
     Tensor z = Tensors.fromString("{1.5, 4, 4}");
@@ -85,19 +85,19 @@ public class DMLexSemiMinTrackerTest extends TestCase {
 
   public void testCandidateSet() {
     Tensor slacks = Tensors.vector(2, 2, 2);
-    _checkCS((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withList(slacks));
-    _checkCS((AbstractLexSemiMinTracker<Integer>) DMLexSemiMinTracker.<Integer>withSet(slacks));
+    _checkCS((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withList(slacks));
+    _checkCS((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withSet(slacks));
   }
 
   public void testFailNull() {
     try {
-      DMLexSemiMinTracker.withList(null);
+      SingleEBOTracker.withList(null);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      DMLexSemiMinTracker.withSet(null);
+      SingleEBOTracker.withSet(null);
       fail();
     } catch (Exception exception) {
       // ---

@@ -10,25 +10,26 @@ import ch.ethz.idsc.owl.demo.order.ScalarTotalOrder;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** Creates minTracker for a lexicographic semiorder.
- * The minimal elements for a lexicographic semiorder is the iteratively constructed set
- * where all elements are discarded which are not minimal w.r.t the first semiorder. Then from this remaining
- * set all elements are discarded which are not minimal with respect to the second semiorder and so on. */
-public class LexicographicSemiorderMinTracker<K> extends AbstractLexSemiMinTracker<K> {
+/** Creates EBO (elimination by objective) tracker for a lexicographic semiorder.
+ * The EBO procedure chooses a the "best" element from a given set according to the underlying lexicographic semiorder.
+ * For a detailed description of the procedure, see Chapter 6.1 in "Multi-Objective Optimization Using Preference Structures".
+ * 
+ * Keeps track of the whole set. */
+public class SetEBOTracker<K> extends AbstractEBOTracker<K> {
   /** @param slacks
    * @return */
-  public static <K> LexSemiMinTracker<K> withList(Tensor slacks) {
-    return new LexicographicSemiorderMinTracker<>(slacks, new LinkedList<>());
+  public static <K> EBOTracker<K> withList(Tensor slacks) {
+    return new SetEBOTracker<>(slacks, new LinkedList<>());
   }
 
   /** @param slacks
    * @return */
-  public static <K> LexSemiMinTracker<K> withSet(Tensor slacks) {
-    return new LexicographicSemiorderMinTracker<>(slacks, new HashSet<>());
+  public static <K> EBOTracker<K> withSet(Tensor slacks) {
+    return new SetEBOTracker<>(slacks, new HashSet<>());
   }
 
   // ---
-  private LexicographicSemiorderMinTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+  private SetEBOTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     super(slacks, candidateSet);
   }
 
