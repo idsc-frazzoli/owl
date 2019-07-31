@@ -15,7 +15,7 @@ public class GeodesicIIR1 implements TensorUnaryOperator {
   private final SplitInterface splitInterface;
   private final Scalar alpha;
   // ---
-  private Tensor p = null;
+  private transient Tensor p = null;
 
   /** larger alpha means more emphasis on the recent value
    * smaller alpha means more emphasis towards past values

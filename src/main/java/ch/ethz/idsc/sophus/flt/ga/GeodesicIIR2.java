@@ -16,8 +16,8 @@ public class GeodesicIIR2 implements TensorUnaryOperator {
   private final SplitInterface splitInterface;
   private final Scalar alpha;
   // ---
-  private Tensor p = null;
-  private Tensor q = null;
+  private transient Tensor p = null;
+  private transient Tensor q = null;
 
   public GeodesicIIR2(SplitInterface splitInterface, Scalar alpha) {
     this.splitInterface = splitInterface;

@@ -44,7 +44,6 @@ import junit.framework.TestCase;
 
 public class StandardRLTrajectoryPlannerTest extends TestCase {
   private static GlcNode _withSlack(Tensor slacks) {
-    // System.out.println("---slacks=" + slacks);
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
     // ---

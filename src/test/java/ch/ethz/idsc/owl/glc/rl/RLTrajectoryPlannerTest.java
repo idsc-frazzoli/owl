@@ -48,7 +48,6 @@ import junit.framework.TestCase;
 // TODO JPH refactor and generate stats
 public class RLTrajectoryPlannerTest extends TestCase {
   private static GlcNode _withSlack(String name, Tensor slacks) {
-    // System.out.println("---slacks=" + slacks);
     final Tensor stateRoot = Tensors.vector(0, 0);
     final Tensor stateGoal = Tensors.vector(5, 0);
     // ---

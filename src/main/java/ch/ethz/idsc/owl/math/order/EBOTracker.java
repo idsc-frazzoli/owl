@@ -7,7 +7,9 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** Creates EBO (elimination by objective) tracker for a lexicographic semiorder.
  * The EBO procedure chooses a the "best" element from a given set according to the underlying lexicographic semiorder.
- * For a detailed description of the procedure, see Chapter 6.1 in "Multi-Objective Optimization Using Preference Structures" */
+ * 
+ * <p>For a detailed description of the procedure, see
+ * "Multi-Objective Optimization Using Preference Structures", Chapter 6.1 */
 public interface EBOTracker<K> {
   /** Updates the set of potential future candidates for the minimal set.
    * 
