@@ -1,10 +1,14 @@
 // code by astoll
 package ch.ethz.idsc.owl.glc.rl2;
 
+import java.io.IOException;
+import java.util.PriorityQueue;
+
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
 public class StaticHelperTest extends TestCase {
@@ -42,5 +46,14 @@ public class StaticHelperTest extends TestCase {
     rlQueue.add(node5);
     rlQueue.add(node6);
     assertEquals(StaticHelper.numberEquals(rlQueue), 1);
+  }
+
+  public void testPriorityQueue() throws ClassNotFoundException, IOException {
+    PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
+    priorityQueue.add(2);
+    priorityQueue.add(1);
+    priorityQueue.add(3);
+    PriorityQueue<Integer> copy = Serialization.copy(priorityQueue);
+    assertEquals(copy.size(), 3);
   }
 }
