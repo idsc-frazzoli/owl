@@ -112,12 +112,12 @@ public class Clothoid implements Serializable {
       return clothoidQuadraticD.apply(t).divide(v);
     }
 
-    @Override
+    @Override // from HeadTailInterface
     public Scalar head() {
       return clothoidQuadraticD.head().divide(v);
     }
 
-    @Override
+    @Override // from HeadTailInterface
     public Scalar tail() {
       return clothoidQuadraticD.tail().divide(v);
     }

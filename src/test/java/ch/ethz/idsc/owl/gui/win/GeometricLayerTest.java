@@ -73,4 +73,13 @@ public class GeometricLayerTest extends TestCase {
       // ---
     }
   }
+
+  public void testSerializableFail() {
+    try {
+      Serialization.copy(new GeometricLayer(IdentityMatrix.of(3), Array.zeros(3)));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
