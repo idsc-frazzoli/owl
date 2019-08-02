@@ -73,7 +73,6 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
   public void testBiinvariantMeanNotTangentSpace() {
     Distribution distribution = UniformDistribution.of(-2, 2);
     Tensor vectors = RandomVariate.of(distribution, 3, 3);
-    // System.out.println(Pretty.of(vectors.map(Round._4)));
     Tensor weights = RandomVariate.of(distribution, 3);
     Tensor exp = Se2CoveringExponential.INSTANCE.exp(weights.dot(vectors));
     // ---

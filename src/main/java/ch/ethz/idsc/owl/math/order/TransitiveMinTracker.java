@@ -13,7 +13,7 @@ import java.util.Objects;
  * An element x is said to be minimal if there is no other element y such that yRx.
  * (Strict) Total orders, total preorders and weak orders, preorders, semiorders are all transitive.
  * Be aware that negatively transitive orders are transitive as well and
- * thus work for this MinTracker but with significant performance losses.
+ * thus work for this MinTracker but with significant performance loss.
  * 
  * @param <T> type of elements to compare */
 public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
@@ -58,7 +58,7 @@ public class TransitiveMinTracker<T> implements MinTracker<T>, Serializable {
     return orderComparison.equals(OrderComparison.STRICTLY_SUCCEEDS);
   }
 
-  /** @return Minimal elements of partially ordered set */
+  /** @return minimal elements of partially ordered set */
   @Override // from MinTracker
   public final Collection<T> getMinElements() {
     return Collections.unmodifiableCollection(collection);

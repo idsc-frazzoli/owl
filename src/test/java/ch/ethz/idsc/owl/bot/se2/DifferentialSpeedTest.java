@@ -78,7 +78,6 @@ public class DifferentialSpeedTest extends TestCase {
       Scalar tireR = tireRearR.get(speed, angle);
       assertTrue(Scalars.lessThan(tireL, tireR));
       Tensor pair = tireRearL.pair(speed, angle);
-      // System.out.println(pair);
       assertEquals(pair, Tensors.of(tireL, tireR));
       assertEquals(QuantityUnit.of(pair.Get(0)), Unit.of("s^-1"));
       assertEquals(QuantityUnit.of(pair.Get(1)), Unit.of("s^-1"));
@@ -143,14 +142,6 @@ public class DifferentialSpeedTest extends TestCase {
     assertTrue(Chop._10.close(ds.get(v.divide(Cos.FUNCTION.apply(beta)), beta.negate()), RealScalar.of(3.4844395839839613)));
   }
 
-  // public void testSome() {
-  // Tensor pair_unit = RimoAxleConstants.getDifferentialSpeed().pair(RealScalar.ONE, RealScalar.of(0.1));
-  // // System.out.println(pair_unit);
-  // Tensor pair_meas = Tensors.vector(0.9497016064634988, 1.040306724092553);
-  // // Scalar speed =
-  // pair_meas.dot(pair_unit).Get().multiply(RealScalar.of(0.5));
-  // // System.out.println(speed);
-  // }
   public void testFail() {
     try {
       DifferentialSpeed.fromSI(RealScalar.of(0.0), RealScalar.of(.5));

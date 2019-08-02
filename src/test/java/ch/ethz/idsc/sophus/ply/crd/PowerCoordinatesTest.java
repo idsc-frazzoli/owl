@@ -65,7 +65,6 @@ public class PowerCoordinatesTest extends TestCase {
       PowerCoordinates powerCoordinates = new PowerCoordinates(barycentric);
       for (int index = 0; index < P.length(); ++index) {
         Tensor weights = powerCoordinates.weights(P, Mean.of(RotateLeft.of(P, index).extract(0, 2)));
-        // System.out.println(weights);
         weights.stream().map(Scalar.class::cast).forEach(Sign::requirePositiveOrZero);
       }
     }

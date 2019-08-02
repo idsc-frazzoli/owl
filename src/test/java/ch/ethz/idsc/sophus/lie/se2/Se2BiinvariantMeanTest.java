@@ -157,8 +157,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor weights = mask.divide(Total.ofVector(mask));
     for (Se2BiinvariantMean se2BiinvariantMean : Se2BiinvariantMean.values()) {
       Tensor solution = se2BiinvariantMean.mean(sequence, weights);
-      // System.out.println(solution);
-      // Chop._12.requireClose(solution, Tensors.vector(14.83619642851975, -5.043678108261259, -1.466370614359171));
+      Chop._01.requireClose(solution, Tensors.vector(14.83619642851975, -5.043678108261259, -1.466370614359171));
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
         Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));

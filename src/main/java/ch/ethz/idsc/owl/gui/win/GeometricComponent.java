@@ -113,6 +113,7 @@ public final class GeometricComponent {
 
         @Override
         public void mouseDragged(MouseEvent mouseEvent) {
+          mouseLocation = toModel(mouseEvent.getPoint());
           if (Objects.nonNull(down)) {
             Point now = mouseEvent.getPoint();
             int dx = now.x - down.x;

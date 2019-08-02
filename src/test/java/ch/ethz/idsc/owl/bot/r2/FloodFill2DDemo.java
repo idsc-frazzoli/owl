@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-enum FloodFill2DDemo {
+/* package */ enum FloodFill2DDemo {
   ;
   public static final ScalarUnaryOperator GRAYSCALE = new ScalarUnaryOperator() {
     final Scalar scale = RealScalar.of(63.0);
@@ -57,7 +57,6 @@ enum FloodFill2DDemo {
     Tensor visual = Array.of(l -> RealScalar.of(255), dims.get(0), dims.get(1), 4);
     visual.set(dx, Tensor.ALL, Tensor.ALL, 0);
     visual.set(dy, Tensor.ALL, Tensor.ALL, 1);
-    // System.out.println(min + " " + max);
     // Export.of(UserHome.Pictures("cost_dx.png"), dx);
     // Export.of(UserHome.Pictures("cost_dy.png"), dy);
     Export.of(HomeDirectory.Pictures("visual.png"), visual);

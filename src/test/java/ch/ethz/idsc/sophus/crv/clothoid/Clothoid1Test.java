@@ -24,6 +24,5 @@ public class Clothoid1Test extends TestCase {
     assertEquals(end, scalarTensorFunction.apply(RealScalar.ONE));
     Tensor curve = Subdivide.of(0.0, 1.0, 50).map(scalarTensorFunction);
     assertTrue(NumberQ.all(curve));
-    // System.out.println(Pretty.of(curve.map(Round._5)));
   }
 }

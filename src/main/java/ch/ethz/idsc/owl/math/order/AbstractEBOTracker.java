@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.sophus.util.RandomChoice;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -41,10 +41,10 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 /** Creates EBO (elimination by objective) tracker for a lexicographic semiorder.
  * The EBO procedure chooses a the "best" element from a given set according to the underlying lexicographic semiorder.
- * For a detailed description of the procedure, see Chapter 6.1 in "Multi-Objective Optimization Using Preference Structures" */
+ * 
+ * For a detailed description of the procedure, see
+ * "Multi-Objective Optimization Using Preference Structures", Chapter 6.1 */
 public abstract class AbstractEBOTracker<K> implements EBOTracker<K>, Serializable {
-  private static final Random RANDOM = new Random();
-  // ---
   private final Tensor slacks;
   private final Collection<Pair<K>> candidateSet;
   protected final int dim;
@@ -126,9 +126,7 @@ public abstract class AbstractEBOTracker<K> implements EBOTracker<K>, Serializab
           .filter(pair -> pair.value().Get(fi).equals(u_min)) //
           .collect(Collectors.toList());
     }
-    // if (bestElements.size() != 1)
-    // System.out.println("random choice");
-    return bestElements.get(RANDOM.nextInt(bestElements.size()));
+    return RandomChoice.of(bestElements);
   }
 
   @Override // from LexSemiMinTracker

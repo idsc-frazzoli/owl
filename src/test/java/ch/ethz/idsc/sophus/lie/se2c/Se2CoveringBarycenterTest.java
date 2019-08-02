@@ -47,17 +47,12 @@ public class Se2CoveringBarycenterTest extends TestCase {
     Tensor sequence = Tensors.fromString("{{0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}");
     Se2CoveringBarycenter se2CoveringBarycenter = new Se2CoveringBarycenter(sequence);
     Tensor mean = Tensors.vector(0.75, 1, 0);
-    // System.out.println("DET=" + Det.of(se2CoveringBarycenter.matrix(mean)));
     Tensor weights = se2CoveringBarycenter.apply(mean);
     AffineQ.require(weights);
-    // System.out.println(weights);
     Tensor result = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, weights);
     Chop._12.requireClose(result, mean);
-    // TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
     Scalar w = weights.Get(1);
-    // Tensor approx =
     Se2CoveringBiinvariantMean.INSTANCE.mean(sequence.extract(0, 2), Tensors.of(RealScalar.ONE.subtract(w), w));
-    // System.out.println(approx.map(Round._4));
   }
 
   public void testLengthFail() {

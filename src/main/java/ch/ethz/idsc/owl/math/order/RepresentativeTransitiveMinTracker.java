@@ -9,10 +9,11 @@ import java.util.LinkedList;
  * An element x is said to be minimal if there is no other element y such that yRx.
  * (Strict) Total orders, total preorders and weak orders, preorders, semiorders are all transitive.
  * Be aware that negatively transitive orders are transitive as well and
- * thus work for this MinTracker but with significant performance losses.
+ * thus work for this MinTracker but with significant performance loss.
  * 
- * @param <T> type of elements to compare
- * @return complete set of representatives of the minimal equivalence classes */
+ * Maintains complete set of representatives of the minimal equivalence classes.
+ * 
+ * @param <T> type of elements to compare */
 public class RepresentativeTransitiveMinTracker<T> extends TransitiveMinTracker<T> {
   public static <T> MinTracker<T> withList(OrderComparator<T> orderComparator) {
     return new RepresentativeTransitiveMinTracker<>(orderComparator, new LinkedList<>());

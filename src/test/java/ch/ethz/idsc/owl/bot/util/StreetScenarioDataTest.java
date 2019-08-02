@@ -11,13 +11,9 @@ public class StreetScenarioDataTest extends TestCase {
       try {
         StreetScenarioData streetScenarioData = streetScenario.load();
         assertTrue(0 < streetScenarioData.render.getWidth());
-        // System.out.println("imagePedLegal");
         MatrixQ.require(streetScenarioData.imagePedLegal);
-        // System.out.println("imagePedIllegal");
         MatrixQ.require(streetScenarioData.imagePedIllegal);
-        // System.out.println("imageCar");
         MatrixQ.require(streetScenarioData.imageCar_extrude(1));
-        // System.out.println("imageLid");
         MatrixQ.require(streetScenarioData.imageLid);
         Tensor imageLanes = streetScenarioData.imageLanes();
         MatrixQ.require(imageLanes);

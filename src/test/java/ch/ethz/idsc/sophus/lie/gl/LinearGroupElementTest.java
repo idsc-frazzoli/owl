@@ -62,8 +62,6 @@ public class LinearGroupElementTest extends TestCase {
     Chop._12.requireClose(adjointGl.get(0, 2), adjointSe.get(0));
     Chop._12.requireClose(adjointGl.get(1, 2), adjointSe.get(1));
     Chop._12.requireClose(adjointGl.get(1, 0), adjointSe.get(2));
-    // System.out.println(adjointGl);
-    // System.out.println(adjointSe);
   }
 
   public void testAdjointFail() {
