@@ -1,8 +1,7 @@
 // code by ynager
-package ch.ethz.idsc.owl.gui.ren;
+package ch.ethz.idsc.owl.bot.se2.glc;
 
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.function.Supplier;
 
@@ -17,29 +16,29 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 
 /** Renders an arbitrary image at the supplier state */
-public class EntityImageRender implements RenderInterface {
+/* package */ class EntityImageRender implements RenderInterface {
   private final Tensor matrix;
   private final Supplier<StateTime> supplier;
-  private BufferedImage img;
+  private final BufferedImage bufferedImage;
 
-  public EntityImageRender(Supplier<StateTime> supplier, BufferedImage img, Tensor range) {
+  public EntityImageRender(Supplier<StateTime> supplier, BufferedImage bufferedImage, Tensor range) {
     this.supplier = supplier;
-    this.img = img;
-    Tensor scale = Tensors.vector(img.getWidth(), img.getHeight()) //
+    this.bufferedImage = bufferedImage;
+    Tensor scale = Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()) //
         .pmul(range.map(Scalar::reciprocal));
     Tensor invsc = DiagonalMatrix.of( //
         +scale.Get(0).reciprocal().number().doubleValue(), //
         -scale.Get(1).reciprocal().number().doubleValue(), 1);
+    // not generic
     Tensor translate = Se2Matrix.translation( //
-        Tensors.vector(-img.getWidth() / 3, -img.getHeight() / 2));
+        Tensors.vector(-bufferedImage.getWidth() / 3, -bufferedImage.getHeight() / 2));
     matrix = invsc.dot(translate);
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     geometricLayer.pushMatrix(Se2Matrix.of(supplier.get().state()));
-    AffineTransform trans = AffineTransforms.toAffineTransform(geometricLayer.getMatrix().dot(matrix));
-    graphics.drawImage(img, trans, null);
+    graphics.drawImage(bufferedImage, AffineTransforms.toAffineTransform(geometricLayer.getMatrix().dot(matrix)), null);
     geometricLayer.popMatrix();
   }
 }
