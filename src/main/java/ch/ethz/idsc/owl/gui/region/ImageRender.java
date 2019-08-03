@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** Hint:
@@ -40,9 +41,9 @@ public class ImageRender implements RenderInterface {
    * @param scale vector of length 2 */
   public static ImageRender scale(BufferedImage bufferedImage, Tensor scale) {
     VectorQ.requireLength(scale, 2);
-    Tensor weights = Tensors.of(scale.Get(0).reciprocal(), scale.Get(1).reciprocal().negate(), RealScalar.ONE);
-    Tensor translate = Se2Matrix.translation(Tensors.vector(0, -bufferedImage.getHeight()));
-    return new ImageRender(bufferedImage, weights.pmul(translate));
+    return new ImageRender(bufferedImage, //
+        DiagonalMatrix.with(scale.map(Scalar::reciprocal).append(RealScalar.ONE)) //
+            .dot(Se2Matrix.flipY(bufferedImage.getHeight())));
   }
 
   // ---

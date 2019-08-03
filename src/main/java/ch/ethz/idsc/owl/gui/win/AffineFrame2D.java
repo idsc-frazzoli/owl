@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 /** @see AffineTransform */
 /* package */ class AffineFrame2D {
-  private final Tensor tensor;
+  private final Tensor matrix;
   private final double m00;
   private final double m10;
   private final double m01;
@@ -17,15 +17,15 @@ import ch.ethz.idsc.tensor.Tensors;
   private final double m02;
   private final double m12;
 
-  /** @param tensor 3 x 3 matrix */
-  public AffineFrame2D(Tensor tensor) {
-    this.tensor = tensor.copy();
-    m00 = tensor.Get(0, 0).number().doubleValue();
-    m10 = tensor.Get(1, 0).number().doubleValue();
-    m01 = tensor.Get(0, 1).number().doubleValue();
-    m11 = tensor.Get(1, 1).number().doubleValue();
-    m02 = tensor.Get(0, 2).number().doubleValue();
-    m12 = tensor.Get(1, 2).number().doubleValue();
+  /** @param matrix of dimensions 3 x 3 */
+  public AffineFrame2D(Tensor matrix) {
+    this.matrix = matrix.copy();
+    m00 = matrix.Get(0, 0).number().doubleValue();
+    m10 = matrix.Get(1, 0).number().doubleValue();
+    m01 = matrix.Get(0, 1).number().doubleValue();
+    m11 = matrix.Get(1, 1).number().doubleValue();
+    m02 = matrix.Get(0, 2).number().doubleValue();
+    m12 = matrix.Get(1, 2).number().doubleValue();
   }
 
   /** @param px
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.Tensors;
   /** @param matrix with dimensions 3 x 3
    * @return combined transformation of this and given matrix */
   public AffineFrame2D dot(Tensor matrix) {
-    return new AffineFrame2D(tensor.dot(matrix));
+    return new AffineFrame2D(this.matrix.dot(matrix));
   }
 
   /** @return determinant of affine transform, for a standard,
@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   /** @return 3 x 3 matrix that represents this transformation */
-  public Tensor tensor_copy() {
-    return tensor.copy();
+  public Tensor matrix_copy() {
+    return matrix.copy();
   }
 }

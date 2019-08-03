@@ -99,4 +99,8 @@ public class Se2MatrixTest extends TestCase {
     assertEquals(Se2Matrix.of(xya), translate);
     ExactTensorQ.require(translate);
   }
+
+  public void testFlipY() {
+    assertEquals(Se2Matrix.flipY(5), Tensors.fromString("{{1, 0, 0}, {0, -1, 5}, {0, 0, 1}}"));
+  }
 }

@@ -33,6 +33,16 @@ public enum Se2Matrix {
     });
   }
 
+  /** maps a matrix from the group SE2 to a vector in the group SE2
+   * 
+   * @param matrix
+   * @return {px, py, angle} */
+  public static Tensor toVector(Tensor matrix) {
+    SquareMatrixQ.require(matrix);
+    return Tensors.of(matrix.Get(0, 2), matrix.Get(1, 2), //
+        ArcTan.of(matrix.Get(0, 0), matrix.Get(1, 0))); // arc tan is numerically stable
+  }
+
   /** @param vector of the form {px, py, ...}
    * @return
    * <pre>
@@ -48,13 +58,18 @@ public enum Se2Matrix {
     });
   }
 
-  /** maps a matrix from the group SE2 to a vector in the group SE2
-   * 
-   * @param matrix
-   * @return {px, py, angle} */
-  public static Tensor toVector(Tensor matrix) {
-    SquareMatrixQ.require(matrix);
-    return Tensors.of(matrix.Get(0, 2), matrix.Get(1, 2), //
-        ArcTan.of(matrix.Get(0, 0), matrix.Get(1, 0))); // arc tan is numerically stable
+  /** @param height
+   * @return matrix with determinant -1
+   * <pre>
+   * [1 0 0]
+   * [0 -1 height]
+   * [0 0 1]
+   * </pre> */
+  public static Tensor flipY(int height) {
+    return Tensors.matrix(new Scalar[][] { //
+        { RealScalar.ONE, RealScalar.ZERO, RealScalar.ZERO }, //
+        { RealScalar.ZERO, RealScalar.ONE.negate(), RealScalar.of(height) }, //
+        { RealScalar.ZERO, RealScalar.ZERO, RealScalar.ONE }, //
+    });
   }
 }

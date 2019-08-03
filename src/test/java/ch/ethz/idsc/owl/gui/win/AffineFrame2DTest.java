@@ -14,7 +14,7 @@ public class AffineFrame2DTest extends TestCase {
     Tensor m2 = Se2Matrix.of(Tensors.vector(-.3, 0.2, .4));
     AffineFrame2D af2 = new AffineFrame2D(m1);
     AffineFrame2D af3 = af2.dot(m2);
-    assertEquals(af3.tensor_copy(), m1.dot(m2));
+    assertEquals(af3.matrix_copy(), m1.dot(m2));
   }
 
   public void testPoint() {
