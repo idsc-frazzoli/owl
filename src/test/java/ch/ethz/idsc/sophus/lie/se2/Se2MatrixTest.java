@@ -101,6 +101,9 @@ public class Se2MatrixTest extends TestCase {
   }
 
   public void testFlipY() {
-    assertEquals(Se2Matrix.flipY(5), Tensors.fromString("{{1, 0, 0}, {0, -1, 5}, {0, 0, 1}}"));
+    Tensor tensor = Se2Matrix.flipY(5);
+    ExactTensorQ.require(tensor);
+    assertEquals(tensor, Tensors.fromString("{{1, 0, 0}, {0, -1, 5}, {0, 0, 1}}"));
+    assertEquals(Det.of(tensor), RealScalar.ONE.negate());
   }
 }

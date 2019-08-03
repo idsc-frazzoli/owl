@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
@@ -22,11 +23,13 @@ import ch.ethz.idsc.tensor.sca.N;
  * On ubuntu, we have observed for grayscale images that the initial rendering
  * configuration influences the rendering when rotating the image. */
 public class ImageRender implements RenderInterface {
+  private static final Color COLOR = new Color(0, 0, 255, 32);
+
   /** @param bufferedImage
-   * @param matrix with dimensions 3 x 3
+   * @param pixel2model with dimensions 3 x 3
    * @return */
-  public static ImageRender of(BufferedImage bufferedImage, Tensor matrix) {
-    return new ImageRender(bufferedImage, matrix);
+  public static ImageRender of(BufferedImage bufferedImage, Tensor pixel2model) {
+    return new ImageRender(bufferedImage, pixel2model);
   }
 
   /** @param bufferedImage
@@ -41,18 +44,19 @@ public class ImageRender implements RenderInterface {
    * @param scale vector of length 2 */
   public static ImageRender scale(BufferedImage bufferedImage, Tensor scale) {
     VectorQ.requireLength(scale, 2);
-    return new ImageRender(bufferedImage, //
-        DiagonalMatrix.with(scale.map(Scalar::reciprocal).append(RealScalar.ONE)) //
-            .dot(Se2Matrix.flipY(bufferedImage.getHeight())));
+    return new ImageRender(bufferedImage, Dot.of( //
+        DiagonalMatrix.with(scale.map(Scalar::reciprocal).append(RealScalar.ONE)), //
+        Se2Matrix.flipY(bufferedImage.getHeight())));
   }
 
   // ---
   private final BufferedImage bufferedImage;
+  private final Tensor pixel2model;
   private final Tensor box;
-  private final Tensor matrix;
 
-  private ImageRender(BufferedImage bufferedImage, Tensor matrix) {
+  private ImageRender(BufferedImage bufferedImage, Tensor pixel2model) {
     this.bufferedImage = bufferedImage;
+    this.pixel2model = MatrixQ.requireSize(pixel2model, 3, 3).copy();
     int width = bufferedImage.getWidth();
     int height = bufferedImage.getHeight();
     box = N.DOUBLE.of(Tensors.of( //
@@ -60,15 +64,13 @@ public class ImageRender implements RenderInterface {
         Tensors.vector(width, 0), //
         Tensors.vector(width, height), //
         Tensors.vector(0, height)));
-    this.matrix = MatrixQ.requireSize(matrix, 3, 3).copy();
   }
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    geometricLayer.pushMatrix(matrix);
-    graphics.drawImage(bufferedImage, //
-        AffineTransforms.toAffineTransform(geometricLayer.getMatrix()), null);
-    graphics.setColor(new Color(255, 0, 0, 128));
+    geometricLayer.pushMatrix(pixel2model);
+    graphics.drawImage(bufferedImage, AffineTransforms.toAffineTransform(geometricLayer.getMatrix()), null);
+    graphics.setColor(COLOR);
     graphics.draw(geometricLayer.toPath2D(box, true));
     geometricLayer.popMatrix();
   }

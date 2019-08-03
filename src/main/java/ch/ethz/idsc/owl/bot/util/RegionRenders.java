@@ -10,11 +10,13 @@ import ch.ethz.idsc.owl.bot.rn.RnPointcloudRegionRender;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.region.EllipseRegionRender;
 import ch.ethz.idsc.owl.gui.region.ImageRegionRender;
+import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
 import ch.ethz.idsc.owl.gui.region.StateTimeCollectorRender;
 import ch.ethz.idsc.owl.gui.ren.ConeRegionRender;
 import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.region.BufferedImageRegion;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -59,6 +61,11 @@ public enum RegionRenders {
   public static RenderInterface create(Region<Tensor> region) {
     if (region instanceof ImageRegion)
       return ImageRegionRender.create((ImageRegion) region);
+    if (region instanceof BufferedImageRegion) {
+      BufferedImageRegion bufferedImageRegion = (BufferedImageRegion) region;
+      Tensor tensor = ImageFormat.from(bufferedImageRegion.bufferedImage());
+      return ImageRender.of(image(tensor), bufferedImageRegion.pixel2model());
+    }
     if (region instanceof EllipsoidRegion)
       return EllipseRegionRender.of((EllipsoidRegion) region);
     if (region instanceof SphericalRegion)

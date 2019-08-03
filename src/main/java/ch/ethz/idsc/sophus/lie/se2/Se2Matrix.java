@@ -58,7 +58,10 @@ public enum Se2Matrix {
     });
   }
 
-  /** @param height
+  /** Hint: function is useful to construct a pixel2model matrix
+   * for an image of given height.
+   * 
+   * @param height
    * @return matrix with determinant -1
    * <pre>
    * [1 0 0]

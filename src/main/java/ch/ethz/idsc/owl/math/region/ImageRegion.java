@@ -13,7 +13,9 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 
 /** only the first two coordinates are tested for membership
- * a location is available if the grayscale value of the pixel equals 0 */
+ * a location is available if the grayscale value of the pixel equals 0
+ * 
+ * Hint: the use of {@link BufferedImageRegion} is preferred. */
 public class ImageRegion implements Region<Tensor>, Serializable {
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
   // ---

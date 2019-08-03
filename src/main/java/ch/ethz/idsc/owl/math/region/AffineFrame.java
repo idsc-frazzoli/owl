@@ -6,7 +6,7 @@ import java.awt.geom.AffineTransform;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** @see AffineTransform */
-/* package */ class AffinePoint2D {
+/* package */ class AffineFrame {
   private final double m00;
   private final double m10;
   private final double m01;
@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
   private final double m12;
 
   /** @param matrix of dimensions 3 x 3 */
-  public AffinePoint2D(Tensor matrix) {
+  public AffineFrame(Tensor matrix) {
     m00 = matrix.Get(0, 0).number().doubleValue();
     m10 = matrix.Get(1, 0).number().doubleValue();
     m01 = matrix.Get(0, 1).number().doubleValue();
