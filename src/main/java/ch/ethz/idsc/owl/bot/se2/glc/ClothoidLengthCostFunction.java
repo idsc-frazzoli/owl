@@ -25,7 +25,8 @@ public class ClothoidLengthCostFunction implements TensorScalarFunction {
     if (isCompliant.test(curvature.head()) && //
         isCompliant.test(curvature.tail()))
       return clothoid.new Curve().length();
-    // TODO JPH filter out via collision check, units
+    // TODO GJOEL filter out via collision check, units
+    // FIXME GJOEL units not consistent if length has unit "m"
     return DoubleScalar.POSITIVE_INFINITY;
   }
 }

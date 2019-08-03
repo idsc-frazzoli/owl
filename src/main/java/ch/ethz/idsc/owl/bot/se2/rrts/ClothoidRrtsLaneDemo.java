@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     laneConsumptionDemo.setControlPointsSe2(Tensors.of(stateTime.state()));
     laneConsumptionDemo.timerFrame.geometricComponent.addRenderInterfaceBackground(RegionRenders.create(imageRegion));
     laneConsumptionDemo.timerFrame.geometricComponent.addRenderInterface(entity);
-    /** TODO rework; currently taken over from {@link OwlyAnimationFrame}
+    /** TODO GJOEL rework; currently taken over from {@link OwlyAnimationFrame}
      * shorter variant, that does not close properly
      * OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
      * owlyAnimationFrame.add(entity); */

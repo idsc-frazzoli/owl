@@ -6,9 +6,7 @@ import java.util.Iterator;
 
 public enum NodesAssert {
   ;
-  /** TODO document
-   * 
-   * @param best
+  /** @param best
    * @param size */
   public static <T extends Node> void check(T best, int size) {
     final T root = Nodes.rootFrom(best);

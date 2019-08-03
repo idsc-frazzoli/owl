@@ -41,7 +41,7 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
     for (List<Integer> list : out.vertToFace()) {
       int n = list.size();
       if (2 < n) {
-        // TODO identify boundary
+        // TODO JPH identify boundary
         Tensor sequence = Tensors.reserve(2 * n + 1);
         Tensor weights = Tensors.reserve(2 * n + 1);
         Scalar ga = RationalScalar.of(1, 4);

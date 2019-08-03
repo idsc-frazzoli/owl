@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 
-/** TODO GJOEL is AnalyticClothoidDistance the "correct" length? -> document purpose */
 /* package */ enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
   LR1(ClothoidLR1Midpoint.INSTANCE), //
   LR3(ClothoidLR3Midpoint.INSTANCE), //

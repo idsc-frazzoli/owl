@@ -7,7 +7,7 @@ import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.Scalar;
 
 /** clothoid is tangent at start and end points */
-public class ClothoidTerminalRatio implements HeadTailInterface, Serializable {
+/* package */ class ClothoidTerminalRatio implements HeadTailInterface, Serializable {
   private final Scalar head;
   private final Scalar tail;
 

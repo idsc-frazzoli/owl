@@ -15,11 +15,18 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 public enum ClothoidTerminalRatios {
   ;
+  /** @param p
+   * @param q
+   * @return */
+  public static HeadTailInterface direct(Tensor p, Tensor q) {
+    return new Clothoid(p, q).new Curvature();
+  }
+
+  /***************************************************/
   private static final TensorUnaryOperator HEAD = //
       value -> Clothoid3.CURVE_SUBDIVISION.string(value.extract(0, 2));
   private static final TensorUnaryOperator TAIL = //
       value -> Clothoid3.CURVE_SUBDIVISION.string(value.extract(value.length() - 2, value.length()));
-  /** typically 13, or 14 iterations are needed to reach precision up 1e-3 */
   /***************************************************/
   /** investigations have shown that for iterations == 5 works on all start and end point configurations
    * 
@@ -32,7 +39,7 @@ public enum ClothoidTerminalRatios {
    * @param q end configuration
    * @return */
   public static HeadTailInterface of(Tensor p, Tensor q) {
-    // TODO could use variable iteration depth based on some accuracy criteria
+    // could use variable iteration depth based on some accuracy criteria
     return of(p, q, ITERATIONS);
   }
 
@@ -47,7 +54,7 @@ public enum ClothoidTerminalRatios {
    * @return */
   public static Scalar head(Tensor p, Tensor q, int iterations) {
     Tensor tensor = Nest.of(HEAD, Unprotect.byRef(p, q), iterations);
-    return new Clothoid(tensor.get(0), tensor.get(1)).new Curvature().head();
+    return direct(tensor.get(0), tensor.get(1)).head();
   }
 
   /** @param p of the form {p_x, p_y, p_heading}
@@ -55,10 +62,11 @@ public enum ClothoidTerminalRatios {
    * @return */
   public static Scalar tail(Tensor p, Tensor q, int iterations) {
     Tensor tensor = Nest.of(TAIL, Unprotect.byRef(p, q), iterations);
-    return new Clothoid(tensor.get(1), tensor.get(2)).new Curvature().tail();
+    return direct(tensor.get(1), tensor.get(2)).tail();
   }
 
   /***************************************************/
+  /** typically 13, or 14 iterations are needed to reach precision up 1e-3 */
   static final Chop CHOP = Chop._03;
   static final int MAX_ITER = 18;
 

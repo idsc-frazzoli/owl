@@ -34,8 +34,6 @@ public class LaneConsumptionDemo extends BaseCurvatureDemo {
   public LaneConsumptionDemo(Collection<Consumer<LaneInterface>> consumers) {
     super(Arrays.asList( //
         ClothoidDisplay.INSTANCE, //
-        // Clothoid2Display.INSTANCE, //
-        // Clothoid3Display.INSTANCE, //
         Se2CoveringGeodesicDisplay.INSTANCE, //
         Se2GeodesicDisplay.INSTANCE));
     jToggleCurvature.setSelected(false);

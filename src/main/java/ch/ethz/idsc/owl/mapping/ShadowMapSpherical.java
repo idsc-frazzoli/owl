@@ -50,7 +50,7 @@ public class ShadowMapSpherical extends ShadowMapCV {
     this.rMin = rMin;
     this.kernelWorldRadius = sphericalKernel.arrayWidth() / 2.0f * pixelDim.number().floatValue();
     Mat area = CvHelper.bufferedImageToMat(bufferedImage);
-    opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV); // TODO magic consts
+    opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV);
     //
     Mat obstacleArea = area.clone();
     initArea = new Mat(obstacleArea.size(), obstacleArea.type(), AbstractScalar.WHITE);

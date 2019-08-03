@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 
-// TODO first API draft, unify with se2entity and abstract entity
+// TODO JPH first API draft, unify with se2entity and abstract entity
 public abstract class PolicyEntity implements AnimationInterface, RenderInterface {
   protected EpisodeIntegrator episodeIntegrator;
   public TrajectoryRegionQuery obstacleQuery = null;

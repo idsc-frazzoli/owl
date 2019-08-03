@@ -20,7 +20,7 @@ public abstract class MotionPlanWorker<T extends TreePlanner<?>, P extends Plann
       return new GlcMotionPlanWorker(maxSteps, (Collection<GlcPlannerCallback>) plannerCallbacks);
     if (plannerCallbacks.stream().allMatch(p -> p instanceof RrtsPlannerCallback))
       return new RrtsMotionPlanWorker(maxSteps, (Collection<RrtsPlannerCallback>) plannerCallbacks);
-    // TODO expand when needed
+    // ... expand when needed
     throw new IllegalArgumentException();
   }
 

@@ -18,11 +18,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
+/** Careful: implementation assumes max speed == 1
+ * Cost function attains values as minimal distance (not minimal time)! */
 /* package */ class Rice2GoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   private final Tensor center;
   private final Scalar radius;
 
-  // TODO implementation assumes max speed == 1
   public Rice2GoalManager(EllipsoidRegion ellipsoidRegion) {
     super(new TimeInvariantRegion(ellipsoidRegion));
     center = Extract2D.FUNCTION.apply(ellipsoidRegion.center());
@@ -36,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    Scalar mindist = Ramp.of(Norm._2.between(Extract2D.FUNCTION.apply(x), center).subtract(radius));
-    return mindist; // .divide(1 [m/s]), since max velocity == 1 => division is obsolete
+    Scalar minDist = Ramp.of(Norm._2.between(Extract2D.FUNCTION.apply(x), center).subtract(radius));
+    return minDist; // .divide(1 [m/s]), since max velocity == 1 => division is obsolete
   }
 }
