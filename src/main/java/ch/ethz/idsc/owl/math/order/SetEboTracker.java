@@ -16,21 +16,21 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * For a detailed description of the procedure, see
  * "Multi-Objective Optimization Using Preference Structures", Chapter 6.1 */
-public class SetEBOTracker<K> extends AbstractEBOTracker<K> {
+public class SetEboTracker<K> extends AbstractEboTracker<K> {
   /** @param slacks
    * @return */
-  public static <K> EBOTracker<K> withList(Tensor slacks) {
-    return new SetEBOTracker<>(slacks, new LinkedList<>());
+  public static <K> EboTracker<K> withList(Tensor slacks) {
+    return new SetEboTracker<>(slacks, new LinkedList<>());
   }
 
   /** @param slacks
    * @return */
-  public static <K> EBOTracker<K> withSet(Tensor slacks) {
-    return new SetEBOTracker<>(slacks, new HashSet<>());
+  public static <K> EboTracker<K> withSet(Tensor slacks) {
+    return new SetEboTracker<>(slacks, new HashSet<>());
   }
 
   // ---
-  private SetEBOTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+  private SetEboTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     super(slacks, candidateSet);
   }
 

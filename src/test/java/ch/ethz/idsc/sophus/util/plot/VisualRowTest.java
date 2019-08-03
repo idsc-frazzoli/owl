@@ -1,8 +1,6 @@
 // code by gjoel, jph
-package ch.ethz.idsc.subare.util.plot;
+package ch.ethz.idsc.sophus.util.plot;
 
-import ch.ethz.idsc.sophus.util.plot.VisualRow;
-import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

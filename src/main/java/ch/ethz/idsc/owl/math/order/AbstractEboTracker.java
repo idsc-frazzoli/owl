@@ -44,13 +44,13 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * 
  * For a detailed description of the procedure, see
  * "Multi-Objective Optimization Using Preference Structures", Chapter 6.1 */
-public abstract class AbstractEBOTracker<K> implements EBOTracker<K>, Serializable {
+public abstract class AbstractEboTracker<K> implements EboTracker<K>, Serializable {
   private final Tensor slacks;
   private final Collection<Pair<K>> candidateSet;
   protected final int dim;
   protected final List<OrderComparator<Scalar>> semiorderComparators = new ArrayList<>();
 
-  protected AbstractEBOTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+  protected AbstractEboTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     this.slacks = VectorQ.require(slacks);
     this.candidateSet = candidateSet;
     this.dim = slacks.length();

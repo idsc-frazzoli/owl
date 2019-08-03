@@ -18,15 +18,15 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import junit.framework.TestCase;
 
-public class AbstractEBOTrackerTest extends TestCase {
+public class AbstractEboTrackerTest extends TestCase {
   public void testPermutations() {
     Tensor slackVector = Tensors.vector(1, 2, 0.5);
     Distribution distribution = UniformDistribution.of(0, 3);
     Tensor values = RandomVariate.of(distribution, 300, 3);
     final Set<Integer> minKeys1;
     {
-      AbstractEBOTracker<Integer> lexicographicSemiorderMinTracker = //
-          (AbstractEBOTracker<Integer>) SetEBOTracker.<Integer>withSet(slackVector);
+      AbstractEboTracker<Integer> lexicographicSemiorderMinTracker = //
+          (AbstractEboTracker<Integer>) SetEboTracker.<Integer>withSet(slackVector);
       for (int index = 0; index < values.length(); ++index)
         lexicographicSemiorderMinTracker.digest(index, values.get(index));
       minKeys1 = new HashSet<>(lexicographicSemiorderMinTracker.getMinKeys());
@@ -34,8 +34,8 @@ public class AbstractEBOTrackerTest extends TestCase {
     List<Integer> list = IntStream.range(0, values.length()).boxed().collect(Collectors.toList());
     for (int round = 0; round < 10; ++round) {
       Collections.shuffle(list);
-      SetEBOTracker<Integer> lsmtc = //
-          (SetEBOTracker<Integer>) SetEBOTracker.<Integer>withSet(slackVector);
+      SetEboTracker<Integer> lsmtc = //
+          (SetEboTracker<Integer>) SetEboTracker.<Integer>withSet(slackVector);
       for (int index = 0; index < values.length(); ++index) {
         int count = list.get(index);
         lsmtc.digest(count, values.get(count));
@@ -47,8 +47,8 @@ public class AbstractEBOTrackerTest extends TestCase {
 
   public void testEmptyPollFail() {
     Tensor slackVector = Tensors.vector(1, 2, 0.5);
-    EBOTracker<Integer> lexicographicSemiorderMinTracker = //
-        SetEBOTracker.<Integer>withSet(slackVector);
+    EboTracker<Integer> lexicographicSemiorderMinTracker = //
+        SetEboTracker.<Integer>withSet(slackVector);
     try {
       lexicographicSemiorderMinTracker.pollBestKey();
       fail();
@@ -59,7 +59,7 @@ public class AbstractEBOTrackerTest extends TestCase {
 
   public void testMatrixSlackFail() {
     try {
-      SetEBOTracker.withSet(HilbertMatrix.of(3));
+      SetEboTracker.withSet(HilbertMatrix.of(3));
       fail();
     } catch (Exception exception) {
       // ---
@@ -68,7 +68,7 @@ public class AbstractEBOTrackerTest extends TestCase {
 
   public void testScalarSlackFail() {
     try {
-      SetEBOTracker.withSet(Pi.VALUE);
+      SetEboTracker.withSet(Pi.VALUE);
       fail();
     } catch (Exception exception) {
       // ---

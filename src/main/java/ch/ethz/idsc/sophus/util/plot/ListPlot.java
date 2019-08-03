@@ -10,7 +10,6 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ListPlot.html">ListPlot</a> */
-// TODO JPH OWL 049 change package name to sophus
 public enum ListPlot {
   ;
   /** @param visualSet

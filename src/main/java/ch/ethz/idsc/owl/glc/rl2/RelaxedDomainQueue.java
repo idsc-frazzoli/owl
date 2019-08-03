@@ -6,8 +6,8 @@ import java.util.Collections;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalars;
-import ch.ethz.idsc.owl.math.order.EBOTracker;
-import ch.ethz.idsc.owl.math.order.SingleEBOTracker;
+import ch.ethz.idsc.owl.math.order.EboTracker;
+import ch.ethz.idsc.owl.math.order.SingleEboTracker;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class RelaxedDomainQueue extends RelaxedPollingQueue {
@@ -27,10 +27,10 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   // ---
-  private final EBOTracker<GlcNode> domainMinTracker;
+  private final EboTracker<GlcNode> eboTracker;
 
   private RelaxedDomainQueue(Tensor slacks) {
-    this.domainMinTracker = SingleEBOTracker.withSet(slacks);
+    this.eboTracker = SingleEboTracker.withSet(slacks);
   }
 
   /** Checks whether glcNode's merit precedes or is equally good than any other. If yes, it will be added to the domain map and all
@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.Tensor;
     if (StaticHelper.isSimilar(glcNode, this))
       return Collections.singleton(glcNode);
     // ---
-    Collection<GlcNode> discardedNodes = domainMinTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
+    Collection<GlcNode> discardedNodes = eboTracker.digest(glcNode, VectorScalars.vector(glcNode.merit()));
     if (!discardedNodes.contains(glcNode))
       addSingle(glcNode);
     removeAll(discardedNodes);
@@ -51,11 +51,11 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override // from RelaxedPriorityQueue
   public final GlcNode peekBest() {
-    return domainMinTracker.peekBestKey();
+    return eboTracker.peekBestKey();
   }
 
   @Override // from RelaxedBaseQueue
   protected GlcNode getNodeToPoll() {
-    return domainMinTracker.pollBestKey();
+    return eboTracker.pollBestKey();
   }
 }

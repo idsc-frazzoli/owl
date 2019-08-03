@@ -1,8 +1,6 @@
 // code by jph
-package ch.ethz.idsc.subare.util.plot;
+package ch.ethz.idsc.sophus.util.plot;
 
-import ch.ethz.idsc.sophus.util.plot.StackedTimeChart;
-import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 

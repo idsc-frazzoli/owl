@@ -7,8 +7,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class SingleEBOTrackerTest extends TestCase {
-  private static void _checkSimple(AbstractEBOTracker<Integer> LSMT1) {
+public class SingleEboTrackerTest extends TestCase {
+  private static void _checkSimple(AbstractEboTracker<Integer> LSMT1) {
     Tensor x = Tensors.fromString("{1, 2, 2}");
     LSMT1.digest(1, x);
     assertFalse(LSMT1.getCandidateSet().isEmpty());
@@ -16,12 +16,12 @@ public class SingleEBOTrackerTest extends TestCase {
 
   public void testDigestSimple() {
     Tensor slacks = Tensors.vector(1, 1, 1);
-    _checkSimple((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withList(slacks));
-    _checkSimple((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withSet(slacks));
+    _checkSimple((AbstractEboTracker<Integer>) SingleEboTracker.<Integer>withList(slacks));
+    _checkSimple((AbstractEboTracker<Integer>) SingleEboTracker.<Integer>withSet(slacks));
   }
 
   /***************************************************/
-  private static void _checkDigest(AbstractEBOTracker<Integer> LSMT1) {
+  private static void _checkDigest(AbstractEboTracker<Integer> LSMT1) {
     Tensor x = Tensors.fromString("{1}");
     Tensor y = Tensors.fromString("{3.5}");
     Tensor z = Tensors.fromString("{1.5}");
@@ -37,12 +37,12 @@ public class SingleEBOTrackerTest extends TestCase {
 
   public void testDigest() {
     Tensor slacks = Tensors.fromString("{2}");
-    _checkDigest((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withList(slacks));
-    _checkDigest((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withSet(slacks));
+    _checkDigest((AbstractEboTracker<Integer>) SingleEboTracker.<Integer>withList(slacks));
+    _checkDigest((AbstractEboTracker<Integer>) SingleEboTracker.<Integer>withSet(slacks));
   }
 
   /***************************************************/
-  private static void _checkCS(AbstractEBOTracker<Integer> lexSemiMinTracker) {
+  private static void _checkCS(AbstractEboTracker<Integer> lexSemiMinTracker) {
     Tensor x = Tensors.fromString("{1, 4, 4}");
     Tensor y = Tensors.fromString("{3, 3, 1}");
     Tensor z = Tensors.fromString("{1.5, 4, 4}");
@@ -85,19 +85,19 @@ public class SingleEBOTrackerTest extends TestCase {
 
   public void testCandidateSet() {
     Tensor slacks = Tensors.vector(2, 2, 2);
-    _checkCS((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withList(slacks));
-    _checkCS((AbstractEBOTracker<Integer>) SingleEBOTracker.<Integer>withSet(slacks));
+    _checkCS((AbstractEboTracker<Integer>) SingleEboTracker.<Integer>withList(slacks));
+    _checkCS((AbstractEboTracker<Integer>) SingleEboTracker.<Integer>withSet(slacks));
   }
 
   public void testFailNull() {
     try {
-      SingleEBOTracker.withList(null);
+      SingleEboTracker.withList(null);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      SingleEBOTracker.withSet(null);
+      SingleEboTracker.withSet(null);
       fail();
     } catch (Exception exception) {
       // ---

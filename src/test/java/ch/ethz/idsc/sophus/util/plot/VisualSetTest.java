@@ -1,5 +1,5 @@
 // code by gjoel, jph
-package ch.ethz.idsc.subare.util.plot;
+package ch.ethz.idsc.sophus.util.plot;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,9 +7,6 @@ import java.io.IOException;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
-import ch.ethz.idsc.sophus.util.plot.ListPlot;
-import ch.ethz.idsc.sophus.util.plot.VisualRow;
-import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

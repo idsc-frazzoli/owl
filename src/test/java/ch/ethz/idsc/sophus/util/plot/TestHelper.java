@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.subare.util.plot;
+package ch.ethz.idsc.sophus.util.plot;
 
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;

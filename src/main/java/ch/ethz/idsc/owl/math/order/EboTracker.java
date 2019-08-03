@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * <p>For a detailed description of the procedure, see
  * "Multi-Objective Optimization Using Preference Structures", Chapter 6.1 */
-public interface EBOTracker<K> {
+public interface EboTracker<K> {
   /** Updates the set of potential future candidates for the minimal set.
    * 
    * An element x is not a candidate if there is an index where one of the current candidates

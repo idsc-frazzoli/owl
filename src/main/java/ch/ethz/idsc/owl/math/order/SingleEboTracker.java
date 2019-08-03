@@ -16,25 +16,25 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * <p>For a detailed description of the procedure, see
  * "Multi-Objective Optimization Using Preference Structures", Chapter 6.1 */
-public class SingleEBOTracker<K> extends AbstractEBOTracker<K> {
+public class SingleEboTracker<K> extends AbstractEboTracker<K> {
   /** @param slacks
    * @return
    * @throws Exception if given slacks is null */
-  public static <K> EBOTracker<K> withList(Tensor slacks) {
-    return new SingleEBOTracker<>(slacks, new LinkedList<>());
+  public static <K> EboTracker<K> withList(Tensor slacks) {
+    return new SingleEboTracker<>(slacks, new LinkedList<>());
   }
 
   /** @param slacks
    * @return
    * @throws Exception if given slacks is null */
-  public static <K> EBOTracker<K> withSet(Tensor slacks) {
-    return new SingleEBOTracker<>(slacks, new HashSet<>());
+  public static <K> EboTracker<K> withSet(Tensor slacks) {
+    return new SingleEboTracker<>(slacks, new HashSet<>());
   }
 
   // ---
   private final ProductOrderComparator productOrderComparator;
 
-  private SingleEBOTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
+  private SingleEboTracker(Tensor slacks, Collection<Pair<K>> candidateSet) {
     super(slacks, candidateSet);
     productOrderComparator = TensorProductOrder.comparator(dim);
   }
