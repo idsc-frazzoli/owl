@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 
 /** C1 interpolatory four-point scheme
  * Dubuc 1986, Dyn/Gregory/Levin 1987
@@ -50,7 +50,7 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     for (int index = 0; index < length; ++index) {
       Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
@@ -67,7 +67,7 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
     if (length < 3)
       return new BSpline3CurveSubdivision(splitInterface).string(tensor);
     // ---
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     {
       Tensor p = tensor.get(0);
       Tensor q = tensor.get(1);

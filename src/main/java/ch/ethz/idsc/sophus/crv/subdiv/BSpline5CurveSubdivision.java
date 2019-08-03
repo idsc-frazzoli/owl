@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 
 /** quintic B-spline is implemented as an extension of
@@ -26,7 +26,7 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     Tensor p = Last.of(tensor);
     for (int index = 0; index < length; ++index) {
       Tensor q = tensor.get(index);
@@ -48,7 +48,7 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
 
   private Tensor private_refine(Tensor tensor) {
     int length = tensor.length();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     {
       Tensor q = tensor.get(0);
       Tensor r = tensor.get(1);

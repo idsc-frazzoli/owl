@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 
 public enum CogPoints {
@@ -19,7 +19,7 @@ public enum CogPoints {
     int n4 = n * 4;
     Scalar[] radius = new Scalar[] { s_hi, s_hi, s_lo, s_lo };
     int count = 0;
-    Tensor polygon = Unprotect.empty(n4);
+    Tensor polygon = Tensors.reserve(n4);
     for (Tensor u : CirclePoints.of(n4))
       polygon.append(u.multiply(radius[count++ % 4]));
     return polygon;

@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
@@ -131,7 +130,7 @@ public class DubinsPath implements Serializable {
   public ScalarTensorFunction unit(Tensor g) {
     if (Scalars.isZero(length))
       return zero(g);
-    Tensor tensor = Unprotect.empty(4);
+    Tensor tensor = Tensors.reserve(4);
     tensor.append(g);
     for (int index = 0; index < 3; ++index)
       tensor.append(g = Se2CoveringIntegrator.INSTANCE.spin(g, type.tangent(index, radius).multiply(segLength.Get(index))));

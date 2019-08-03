@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
 /** Reference:
@@ -30,8 +29,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
   private final BSpline1CurveSubdivision bSpline1CurveSubdivision;
   private final int degree;
 
-  // TODO JPH OWL 049 make private
-  public LaneRiesenfeldCurveSubdivision(MidpointInterface midpointInterface, int degree) {
+  private LaneRiesenfeldCurveSubdivision(MidpointInterface midpointInterface, int degree) {
     bSpline1CurveSubdivision = new BSpline1CurveSubdivision(midpointInterface);
     this.degree = degree;
   }
@@ -47,7 +45,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       if (Tensors.isEmpty(value))
         return value;
       boolean odd = count % 2 == 1;
-      Tensor queue = Unprotect.empty(value.length());
+      Tensor queue = Tensors.reserve(value.length());
       if (odd) {
         Tensor p = Last.of(value);
         for (int index = 0; index < value.length(); ++index) {
@@ -80,7 +78,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       if (Tensors.isEmpty(value))
         return value;
       boolean odd = count % 2 == 1;
-      Tensor queue = Unprotect.empty(value.length() + 1);
+      Tensor queue = Tensors.reserve(value.length() + 1);
       if (odd)
         queue.append(tensor.get(0));
       Iterator<Tensor> iterator = value.iterator();

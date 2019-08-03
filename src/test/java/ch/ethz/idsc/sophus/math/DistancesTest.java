@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.math;
 
+import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.lie.rn.RnMetric;
-import ch.ethz.idsc.sophus.lie.se2.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

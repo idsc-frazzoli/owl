@@ -6,7 +6,7 @@ import java.util.Objects;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 
 /** subdivision scheme with linear subdivision for mid-point insertion and
@@ -36,7 +36,7 @@ public final class LaneRiesenfeld3CurveSubdivision extends AbstractBSpline3Curve
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     Tensor pq = midpoint(Last.of(tensor), tensor.get(0));
     for (int index = 0; index < length; /* nothing */ ) {
       Tensor q = tensor.get(index);
@@ -51,7 +51,7 @@ public final class LaneRiesenfeld3CurveSubdivision extends AbstractBSpline3Curve
   @Override // from AbstractBSpline3CurveSubdivision
   protected Tensor refine(Tensor tensor) {
     int length = tensor.length();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     Tensor pq;
     {
       Tensor q = tensor.get(0);

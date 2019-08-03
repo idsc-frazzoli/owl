@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie.se2;
+package ch.ethz.idsc.sophus.hs.r2;
 
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.TensorMetric;
@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.sca.Sinc;
 
 /** length of geodesic between p and q in SE(2) when projected to R^2
  * the projection is a circle segment */
-// TODO JPH OWL 049 move to package hs.r2
 public enum Se2ParametricDistance implements TensorMetric, TensorNorm {
   INSTANCE;
   // ---

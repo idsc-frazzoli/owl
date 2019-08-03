@@ -6,7 +6,7 @@ import java.util.Objects;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.MeanFilter;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
@@ -36,7 +36,7 @@ public class CenterFilter implements TensorUnaryOperator {
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
-    Tensor result = Unprotect.empty(tensor.length());
+    Tensor result = Tensors.reserve(tensor.length());
     for (int index = 0; index < tensor.length(); ++index) {
       int lo = Math.max(0, index - radius);
       int hi = Math.min(index + radius, tensor.length() - 1);

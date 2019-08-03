@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 
 public enum StarPoints {
@@ -16,7 +16,7 @@ public enum StarPoints {
     int n2 = n * 2;
     Scalar[] radius = new Scalar[] { s_hi, s_lo };
     int count = 0;
-    Tensor polygon = Unprotect.empty(n2);
+    Tensor polygon = Tensors.reserve(n2);
     for (Tensor u : CirclePoints.of(n2))
       polygon.append(u.multiply(radius[count++ % 2]));
     return polygon;
