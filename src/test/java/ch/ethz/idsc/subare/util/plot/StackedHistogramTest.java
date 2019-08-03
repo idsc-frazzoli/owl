@@ -1,6 +1,8 @@
 // code by gjoel, jph
 package ch.ethz.idsc.subare.util.plot;
 
+import ch.ethz.idsc.sophus.util.plot.StackedHistogram;
+import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 

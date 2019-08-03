@@ -1,5 +1,5 @@
 // code by gjoel, jph
-package ch.ethz.idsc.subare.util.plot;
+package ch.ethz.idsc.sophus.util.plot;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;

@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.subare.util.plot;
 
+import ch.ethz.idsc.sophus.util.plot.ListPlot;
+import ch.ethz.idsc.sophus.util.plot.VisualRow;
+import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 

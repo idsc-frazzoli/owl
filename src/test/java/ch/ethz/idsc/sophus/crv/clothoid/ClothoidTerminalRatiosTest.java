@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,7 +21,7 @@ import junit.framework.TestCase;
 
 public class ClothoidTerminalRatiosTest extends TestCase {
   public void testLeft() {
-    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.fixed( //
+    HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.fixed( //
         Tensors.vector(0, 1, 0), Tensors.vector(2, 2, 0), 3);
     // turn left
     // Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+0.9068461106738649)); // cl1
@@ -31,7 +32,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
   }
 
   public void testLeftUniv() {
-    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar( //
+    HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.planar( //
         Tensors.vector(0, 1, 0).unmodifiable(), //
         Tensors.vector(2, 2, 0).unmodifiable());
     // turn left
@@ -43,7 +44,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
   }
 
   public void testRight() {
-    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.fixed( //
+    HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.fixed( //
         Tensors.vector(0, 1, 0), Tensors.vector(2, 0, 0), 3);
     // turn right
     // Chop._10.requireClose(clothoidTerminalRatios.head(), RealScalar.of(-0.9068461106738649)); // cl1
@@ -54,7 +55,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
   }
 
   public void testFixedLeftUnit() {
-    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.fixed( //
+    HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.fixed( //
         Tensors.fromString("{0[m], 1[m], 0}"), Tensors.fromString("{2[m], 2[m], 0}"), 3);
     // turn left
     // Chop._10.requireClose(clothoidTerminalRatios.head(), Quantity.of(+0.9068461106738649, "m^-1")); // cl1
@@ -65,7 +66,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
   }
 
   public void testOfLeftUnit() {
-    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.of( //
+    HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.of( //
         Tensors.fromString("{0[m], 1[m], 0}"), Tensors.fromString("{2[m], 2[m], 0}"), 3);
     // turn left
     // Chop._10.requireClose(clothoidTerminalRatios.head(), Quantity.of(+0.9068461106738649, "m^-1")); // cl1
@@ -86,7 +87,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
         Tensor curve = Nest.of(curveSubdivision::string, init, depth);
         Scalar head = ClothoidTerminalRatios.curvature(curve.extract(0, 3));
         Scalar tail = ClothoidTerminalRatios.curvature(curve.extract(curve.length() - 3, curve.length()));
-        ClothoidTerminalRatio clothoidTerminalRatio = //
+        HeadTailInterface clothoidTerminalRatio = //
             ClothoidTerminalRatios.fixed(beg.unmodifiable(), end.unmodifiable(), depth);
         assertEquals(head, clothoidTerminalRatio.head());
         assertEquals(tail, clothoidTerminalRatio.tail());
@@ -96,7 +97,7 @@ public class ClothoidTerminalRatiosTest extends TestCase {
   public void testPercision() {
     TableBuilder tableBuilder = new TableBuilder();
     for (int depth = 5; depth < ClothoidTerminalRatios.MAX_ITER; ++depth) {
-      ClothoidTerminalRatio clothoidTerminalRatio = //
+      HeadTailInterface clothoidTerminalRatio = //
           ClothoidTerminalRatios.fixed(Tensors.vector(0, 1, 0).unmodifiable(), Tensors.vector(2, 0, 0).unmodifiable(), depth);
       tableBuilder.appendRow(RealScalar.of(depth), clothoidTerminalRatio.head().map(Round._8), clothoidTerminalRatio.tail().map(Round._8));
     }
@@ -105,12 +106,12 @@ public class ClothoidTerminalRatiosTest extends TestCase {
 
   private static void _checkZero(Tensor pose, Scalar zero) {
     {
-      ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.fixed(pose, pose, 3);
+      HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.fixed(pose, pose, 3);
       assertEquals(clothoidTerminalRatio.head(), zero);
       assertEquals(clothoidTerminalRatio.tail(), zero);
     }
     {
-      ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(pose, pose);
+      HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.planar(pose, pose);
       assertEquals(clothoidTerminalRatio.head(), zero);
       assertEquals(clothoidTerminalRatio.tail(), zero);
     }
@@ -130,8 +131,8 @@ public class ClothoidTerminalRatiosTest extends TestCase {
     for (int count = 0; count < 20; ++count) {
       Tensor beg = RandomVariate.of(distribution, 3);
       Tensor end = RandomVariate.of(distribution, 3);
-      ClothoidTerminalRatio clothoidTerminalRatio1 = ClothoidTerminalRatios.planar(beg, end);
-      ClothoidTerminalRatio clothoidTerminalRatio2 = ClothoidTerminalRatios.fixed(beg, end, ClothoidTerminalRatios.MAX_ITER);
+      HeadTailInterface clothoidTerminalRatio1 = ClothoidTerminalRatios.planar(beg, end);
+      HeadTailInterface clothoidTerminalRatio2 = ClothoidTerminalRatios.fixed(beg, end, ClothoidTerminalRatios.MAX_ITER);
       if (!chop.close(clothoidTerminalRatio1.head(), clothoidTerminalRatio2.head())) {
         // beg={0.33199331585891245, -0.553240463025886, -0.03881900926835866}
         // end={-1.3174375242633647, -0.9411502957371748, 0.25948643363292373}
@@ -148,10 +149,10 @@ public class ClothoidTerminalRatiosTest extends TestCase {
   }
 
   public void testOpenEndUnit() {
-    ClothoidTerminalRatio clothoidTerminalRatio1 = ClothoidTerminalRatios.planar( //
+    HeadTailInterface clothoidTerminalRatio1 = ClothoidTerminalRatios.planar( //
         Tensors.fromString("{1[m], 1[m], 1}"), //
         Tensors.fromString("{2[m], 3[m], 3}"));
-    ClothoidTerminalRatio clothoidTerminalRatio2 = ClothoidTerminalRatios.fixed( //
+    HeadTailInterface clothoidTerminalRatio2 = ClothoidTerminalRatios.fixed( //
         Tensors.fromString("{1[m], 1[m], 1}"), //
         Tensors.fromString("{2[m], 3[m], 3}"), ClothoidTerminalRatios.MAX_ITER);
     ClothoidTerminalRatios.CHOP.requireClose(clothoidTerminalRatio1.head(), clothoidTerminalRatio2.head());
@@ -164,8 +165,8 @@ public class ClothoidTerminalRatiosTest extends TestCase {
   public void testAnalytic() {
     Tensor p = Tensors.vector(0, 1, 0).unmodifiable();
     Tensor q = Tensors.vector(2, 2, 0).unmodifiable();
-    ClothoidTerminalRatio clothoidTerminalRatio1 = ClothoidTerminalRatios.planar(p, q);
-    ClothoidTerminalRatio clothoidTerminalRatio2 = ClothoidTerminalRatios.of(p, q, 10);
+    HeadTailInterface clothoidTerminalRatio1 = ClothoidTerminalRatios.planar(p, q);
+    HeadTailInterface clothoidTerminalRatio2 = ClothoidTerminalRatios.of(p, q, 10);
     // turn left
     // Chop._08.requireClose(clothoidTerminalRatios.head(), RealScalar.of(+1.2190137723033907)); // cl1
     Chop._08.requireClose(clothoidTerminalRatio1.head(), RealScalar.of(+1.2148814483313415)); // cl3

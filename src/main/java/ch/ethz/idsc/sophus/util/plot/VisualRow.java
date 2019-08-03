@@ -1,5 +1,5 @@
 // code by gjoel, jph
-package ch.ethz.idsc.subare.util.plot;
+package ch.ethz.idsc.sophus.util.plot;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

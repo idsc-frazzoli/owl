@@ -8,6 +8,14 @@ import java.io.IOException;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
+import ch.ethz.idsc.sophus.util.plot.Histogram;
+import ch.ethz.idsc.sophus.util.plot.ListPlot;
+import ch.ethz.idsc.sophus.util.plot.StackedHistogram;
+import ch.ethz.idsc.sophus.util.plot.StackedTablePlot;
+import ch.ethz.idsc.sophus.util.plot.StackedTimeChart;
+import ch.ethz.idsc.sophus.util.plot.TimeChart;
+import ch.ethz.idsc.sophus.util.plot.VisualRow;
+import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
