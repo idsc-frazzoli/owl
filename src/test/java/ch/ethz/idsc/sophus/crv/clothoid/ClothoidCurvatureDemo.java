@@ -23,7 +23,7 @@ import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.CurveCurvature;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -76,7 +76,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
     // ---
     {
       graphics.setColor(new Color(255, 0, 0, 128));
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
+      geometricLayer.pushMatrix(Se2Matrix.of(mouse));
       graphics.fill(geometricLayer.toPath2D(Arrowhead.of(.3)));
       geometricLayer.popMatrix();
     }

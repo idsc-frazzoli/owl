@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 
 // TODO first API draft, unify with se2entity and abstract entity
@@ -36,7 +36,7 @@ public abstract class PolicyEntity implements AnimationInterface, RenderInterfac
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(stateTime.state()));
+      geometricLayer.pushMatrix(Se2Matrix.of(stateTime.state()));
       graphics.fill(geometricLayer.toPath2D(shape()));
       geometricLayer.popMatrix();
     }
@@ -46,7 +46,7 @@ public abstract class PolicyEntity implements AnimationInterface, RenderInterfac
       StateTime stateTime = new StateTime(xya, getStateTimeNow().time());
       if (!obstacleQuery_isDisjoint(stateTime))
         color = new Color(255, 96, 96, 128);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
+      geometricLayer.pushMatrix(Se2Matrix.of(xya));
       graphics.setColor(color);
       graphics.fill(geometricLayer.toPath2D(shape()));
       geometricLayer.popMatrix();

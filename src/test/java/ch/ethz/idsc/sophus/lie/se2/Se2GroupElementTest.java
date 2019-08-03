@@ -137,7 +137,7 @@ public class Se2GroupElementTest extends TestCase {
       Tensor g = RandomVariate.of(distribution, 3);
       Tensor uvw = RandomVariate.of(distribution, 3);
       Tensor adjoint = new Se2GroupElement(g).adjoint(uvw);
-      Tensor gM = Se2Utils.toSE2Matrix(g);
+      Tensor gM = Se2Matrix.of(g);
       Tensor X = Tensors.matrix(new Scalar[][] { //
           { RealScalar.ZERO, uvw.Get(2).negate(), uvw.Get(0) }, //
           { uvw.Get(2), RealScalar.ZERO, uvw.Get(1) }, //

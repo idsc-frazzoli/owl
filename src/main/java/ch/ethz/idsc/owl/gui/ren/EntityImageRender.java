@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -30,14 +30,14 @@ public class EntityImageRender implements RenderInterface {
     Tensor invsc = DiagonalMatrix.of( //
         +scale.Get(0).reciprocal().number().doubleValue(), //
         -scale.Get(1).reciprocal().number().doubleValue(), 1);
-    Tensor translate = Se2Utils.toSE2Translation( //
+    Tensor translate = Se2Matrix.translation( //
         Tensors.vector(-img.getWidth() / 3, -img.getHeight() / 2));
     matrix = invsc.dot(translate);
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(supplier.get().state()));
+    geometricLayer.pushMatrix(Se2Matrix.of(supplier.get().state()));
     AffineTransform trans = AffineTransforms.toAffineTransform(geometricLayer.getMatrix().dot(matrix));
     graphics.drawImage(img, trans, null);
     geometricLayer.popMatrix();

@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.map;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.RotationMatrix;
@@ -45,6 +45,6 @@ public final class Se2Family implements RigidFamily, Serializable {
 
   @Override // from RigidFamily
   public Tensor forward_se2(Scalar scalar) {
-    return Se2Utils.toSE2Matrix(function.apply(scalar));
+    return Se2Matrix.of(function.apply(scalar));
   }
 }

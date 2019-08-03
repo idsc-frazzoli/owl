@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,7 +36,7 @@ public class ImageRender implements RenderInterface {
     this.bufferedImage = bufferedImage;
     VectorQ.requireLength(scale, 2);
     Tensor weights = Tensors.of(scale.Get(0).reciprocal(), scale.Get(1).reciprocal().negate(), RealScalar.ONE);
-    Tensor translate = Se2Utils.toSE2Translation(Tensors.vector(0, -bufferedImage.getHeight()));
+    Tensor translate = Se2Matrix.translation(Tensors.vector(0, -bufferedImage.getHeight()));
     matrix = weights.pmul(translate);
   }
 

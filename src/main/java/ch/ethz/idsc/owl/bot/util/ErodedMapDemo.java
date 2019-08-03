@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.TimerFrame;
 import ch.ethz.idsc.sophus.app.util.LazyMouse;
 import ch.ethz.idsc.sophus.app.util.LazyMouseListener;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.Tensors;
     BufferedImage bufferedImage = new BufferedImage(64, 48, BufferedImage.TYPE_BYTE_GRAY);
     Tensor //
     matrix = Tensors.fromString("{{0.1, 0, 3}, {0, 0.1, 1}, {0, 0, 1}}") //
-        .dot(Se2Utils.toSE2Matrix(Tensors.vector(0, 0, 0.3)));
+        .dot(Se2Matrix.of(Tensors.vector(0, 0, 0.3)));
     // matrix = IdentityMatrix.of(3);
     EroMap eroMap = new EroMap(bufferedImage, matrix, 3);
     // GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(matrix));

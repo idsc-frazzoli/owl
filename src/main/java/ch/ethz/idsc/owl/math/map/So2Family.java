@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.map;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -38,6 +38,6 @@ public class So2Family implements RigidFamily, Serializable {
   @Override // from RigidFamily
   public Tensor forward_se2(Scalar scalar) {
     Scalar angle = function.apply(scalar);
-    return Se2Utils.toSE2Matrix(Array.zeros(2).append(angle));
+    return Se2Matrix.of(Array.zeros(2).append(angle));
   }
 }

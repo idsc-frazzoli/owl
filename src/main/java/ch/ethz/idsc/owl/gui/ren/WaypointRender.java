@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -42,7 +42,7 @@ public class WaypointRender implements RenderInterface {
     private final Tensor se2Matrixs;
 
     public Render(Tensor waypoints) {
-      se2Matrixs = Tensor.of(waypoints.stream().map(Se2Utils::toSE2Matrix));
+      se2Matrixs = Tensor.of(waypoints.stream().map(Se2Matrix::of));
     }
 
     @Override // from RenderInterface

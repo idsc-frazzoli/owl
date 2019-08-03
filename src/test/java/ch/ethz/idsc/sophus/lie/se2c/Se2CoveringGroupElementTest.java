@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.lie.se2c;
 
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -21,8 +21,8 @@ public class Se2CoveringGroupElementTest extends TestCase {
       Se2CoveringGroupElement se2GroupAction = new Se2CoveringGroupElement(xya);
       Tensor other = RandomVariate.of(distribution, 3);
       Tensor result = se2GroupAction.combine(other);
-      Tensor prod = Se2Utils.toSE2Matrix(xya).dot(Se2Utils.toSE2Matrix(other));
-      Tensor matrix = Se2Utils.toSE2Matrix(result);
+      Tensor prod = Se2Matrix.of(xya).dot(Se2Matrix.of(other));
+      Tensor matrix = Se2Matrix.of(result);
       assertTrue(Chop._10.close(prod, matrix));
     }
   }
@@ -32,8 +32,8 @@ public class Se2CoveringGroupElementTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor xya = RandomVariate.of(distribution, 3);
       Tensor result = new Se2CoveringGroupElement(xya).inverse().combine(Array.zeros(3));
-      Tensor prod = Inverse.of(Se2Utils.toSE2Matrix(xya));
-      Tensor matrix = Se2Utils.toSE2Matrix(result);
+      Tensor prod = Inverse.of(Se2Matrix.of(xya));
+      Tensor matrix = Se2Matrix.of(result);
       assertTrue(Chop._10.close(prod, matrix));
     }
   }
@@ -78,8 +78,8 @@ public class Se2CoveringGroupElementTest extends TestCase {
       Tensor xya1 = RandomVariate.of(distribution, 3);
       Tensor xya2 = RandomVariate.of(distribution, 3);
       Tensor xya3 = new Se2CoveringGroupElement(xya1).combine(xya2);
-      Tensor xyam = Se2Utils.toSE2Matrix(xya1).dot(Se2Utils.toSE2Matrix(xya2));
-      assertTrue(Chop._12.close(Se2Utils.toSE2Matrix(xya3), xyam));
+      Tensor xyam = Se2Matrix.of(xya1).dot(Se2Matrix.of(xya2));
+      assertTrue(Chop._12.close(Se2Matrix.of(xya3), xyam));
     }
   }
 

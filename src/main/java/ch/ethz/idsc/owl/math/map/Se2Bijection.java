@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.map;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
@@ -34,6 +34,6 @@ public class Se2Bijection implements RigidBijection, Serializable {
 
   @Override // from RigidBijection
   public Tensor forward_se2() {
-    return Se2Utils.toSE2Matrix(xya);
+    return Se2Matrix.of(xya);
   }
 }

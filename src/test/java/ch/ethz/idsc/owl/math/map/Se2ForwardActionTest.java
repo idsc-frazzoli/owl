@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.map;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringIntegrator;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -20,14 +20,14 @@ public class Se2ForwardActionTest extends TestCase {
     TensorUnaryOperator tuo = new Se2ForwardAction(xya);
     Tensor p = Tensors.vector(6, -9, 1);
     Tensor q1 = tuo.apply(p);
-    Tensor m = Se2Utils.toSE2Matrix(xya);
+    Tensor m = Se2Matrix.of(xya);
     Tensor q2 = m.dot(p).extract(0, 2);
     assertTrue(Chop._12.close(q1, q2));
   }
 
   public void testSome() {
     Tensor u = Tensors.vector(1.2, 0, 0.75);
-    Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u));
+    Tensor m = Se2Matrix.of(Se2CoveringExponential.INSTANCE.exp(u));
     Tensor p = Tensors.vector(-2, 3);
     Tensor v = m.dot(p.copy().append(RealScalar.ONE));
     Tensor r = Se2CoveringIntegrator.INSTANCE.spin(Se2CoveringExponential.INSTANCE.exp(u), p.append(RealScalar.ZERO));

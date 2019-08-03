@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.map;
 
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -40,6 +40,6 @@ public class So2FamilyTest extends TestCase {
     RigidFamily rigidFamily = new So2Family(s -> s);
     Tensor matrix = rigidFamily.forward_se2(RealScalar.ONE);
     assertTrue(OrthogonalMatrixQ.of(matrix, Chop._14));
-    assertEquals(matrix, Se2Utils.toSE2Matrix(Tensors.vector(0, 0, 1)));
+    assertEquals(matrix, Se2Matrix.of(Tensors.vector(0, 0, 1)));
   }
 }

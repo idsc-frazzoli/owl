@@ -14,9 +14,9 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class Se2UtilsTest extends TestCase {
+public class Se2MatrixTest extends TestCase {
   public void testSimple1() {
-    Tensor matrix = Se2Utils.toSE2Matrix(Tensors.vector(2, 3, 4));
+    Tensor matrix = Se2Matrix.of(Tensors.vector(2, 3, 4));
     assertEquals(matrix.get(2), Tensors.vector(0, 0, 1));
     Scalar det = Det.of(matrix);
     assertTrue(Chop._14.close(det, RealScalar.ONE));
@@ -75,15 +75,15 @@ public class Se2UtilsTest extends TestCase {
 
   public void testFromMatrix() {
     Tensor x = Tensors.vector(2, 3, .5);
-    Tensor matrix = Se2Utils.toSE2Matrix(x);
-    Tensor y = Se2Utils.fromSE2Matrix(matrix);
+    Tensor matrix = Se2Matrix.of(x);
+    Tensor y = Se2Matrix.toVector(matrix);
     assertEquals(x, y);
   }
 
   public void testFromMatrix1() {
     Tensor x = Tensors.vector(2, 3, 3.5);
-    Tensor matrix = Se2Utils.toSE2Matrix(x);
-    Tensor y = Se2Utils.fromSE2Matrix(matrix);
+    Tensor matrix = Se2Matrix.of(x);
+    Tensor y = Se2Matrix.toVector(matrix);
     assertTrue(Chop._10.close(x.Get(2), y.Get(2).add(RealScalar.of(Math.PI * 2))));
   }
 
@@ -95,8 +95,8 @@ public class Se2UtilsTest extends TestCase {
 
   public void testTranslations() {
     Tensor xya = Tensors.vector(1, 2, 0);
-    Tensor translate = Se2Utils.toSE2Translation(xya.extract(0, 2));
-    assertEquals(Se2Utils.toSE2Matrix(xya), translate);
+    Tensor translate = Se2Matrix.translation(xya.extract(0, 2));
+    assertEquals(Se2Matrix.of(xya), translate);
     ExactTensorQ.require(translate);
   }
 }

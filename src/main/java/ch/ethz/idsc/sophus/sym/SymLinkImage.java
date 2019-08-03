@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.img.ImageCrop;
@@ -83,7 +83,7 @@ public class SymLinkImage {
       graphics.setStroke(new BasicStroke(1f));
     }
     { // circle bottom node
-      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(root.getPosition()));
+      geometricLayer.pushMatrix(Se2Matrix.translation(root.getPosition()));
       Path2D path2d = geometricLayer.toPath2D(SymLinkRender.CIRCLE_END);
       path2d.closePath();
       graphics.setColor(Color.BLACK);

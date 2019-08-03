@@ -5,7 +5,7 @@ import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -118,7 +118,7 @@ public class Se2AxisYProjectTest extends TestCase {
       Tensor u = Tensors.vector(0.9, 0, 0.3);
       Tensor p = RandomSample.of(rsi);
       Scalar t = Se2AxisYProject.of(u).apply(p).negate();
-      Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
+      Tensor m = Se2Matrix.of(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
       Tensor v = m.dot(p.copy().append(RealScalar.ONE));
       assertTrue(Chop._12.allZero(v.Get(0)));
     }
@@ -130,7 +130,7 @@ public class Se2AxisYProjectTest extends TestCase {
       Tensor u = Tensors.vector(1.1, 0, 1.3);
       Tensor p = RandomSample.of(rsi);
       Scalar t = Se2AxisYProject.of(u).apply(p).negate();
-      Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
+      Tensor m = Se2Matrix.of(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
       Tensor v = m.dot(p.copy().append(RealScalar.ONE));
       assertTrue(Chop._12.allZero(v.Get(0)));
     }
@@ -142,7 +142,7 @@ public class Se2AxisYProjectTest extends TestCase {
       Tensor u = Tensors.vector(2, 0, 0);
       Tensor p = RandomSample.of(rsi);
       Scalar t = Se2AxisYProject.of(u).apply(p).negate();
-      Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
+      Tensor m = Se2Matrix.of(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
       Tensor v = m.dot(p.copy().append(RealScalar.ONE));
       assertTrue(Chop._12.allZero(v.Get(0)));
     }

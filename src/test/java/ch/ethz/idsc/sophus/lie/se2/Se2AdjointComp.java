@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public Se2AdjointComp(Tensor xya) {
     if (xya.length() != 3)
       throw TensorRuntimeException.of(xya);
-    matrix = Se2Utils.toSE2Matrix(Tensors.of( //
+    matrix = Se2Matrix.of(Tensors.of( //
         xya.get(1), // t2
         xya.get(0).negate(), // -t1
         xya.get(2))); // omega

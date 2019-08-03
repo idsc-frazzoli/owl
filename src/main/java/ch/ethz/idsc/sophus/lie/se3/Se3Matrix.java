@@ -6,14 +6,14 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 
-public enum Se3Utils {
+public enum Se3Matrix {
   ;
   private static final Tensor UNIT3 = UnitVector.of(4, 3);
 
   /** @param R 3x3 orthogonal matrix
    * @param t vector of length 3
-   * @return */
-  public static Tensor toMatrix4x4(Tensor R, Tensor t) {
+   * @return matrix of dimensions 4 x 4 */
+  public static Tensor of(Tensor R, Tensor t) {
     return Tensors.of( //
         Join.of(R.get(0), t.extract(0, 1)), //
         Join.of(R.get(1), t.extract(1, 2)), //

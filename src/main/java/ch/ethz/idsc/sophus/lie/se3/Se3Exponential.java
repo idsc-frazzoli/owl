@@ -39,19 +39,19 @@ public enum Se3Exponential implements LieExponential {
     Tensor R = ID3.add(wx.multiply(se3Numerics.A)).add(wx2.multiply(se3Numerics.B));
     Tensor V = ID3.add(wx.multiply(se3Numerics.B)).add(wx2.multiply(se3Numerics.C));
     Tensor Vu = V.dot(u);
-    return Se3Utils.toMatrix4x4(R, Vu);
+    return Se3Matrix.of(R, Vu);
   }
 
   @Override // from LieExponential
   public Tensor log(Tensor g) {
-    Tensor R = Se3Utils.rotation(g);
+    Tensor R = Se3Matrix.rotation(g);
     Tensor wx = Rodrigues.logMatrix(R);
     Tensor w = Tensors.of(wx.Get(2, 1), wx.Get(0, 2), wx.Get(1, 0)); // copied from Rodrigues
     Scalar theta = Norm._2.ofVector(w);
     Tensor wx2 = wx.dot(wx);
     Se3Numerics se3Numerics = new Se3Numerics(theta);
     Tensor Vi = ID3.subtract(wx.multiply(RationalScalar.HALF)).add(wx2.multiply(se3Numerics.D));
-    Tensor t = Se3Utils.translation(g);
+    Tensor t = Se3Matrix.translation(g);
     return Tensors.of(Vi.dot(t), w);
   }
 }

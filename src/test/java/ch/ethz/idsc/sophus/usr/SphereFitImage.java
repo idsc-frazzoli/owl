@@ -12,7 +12,7 @@ import java.util.Random;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Export;
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     GraphicsUtil.setQualityHigh(graphics);
     {
       graphics.setColor(Color.BLUE);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(center));
+      geometricLayer.pushMatrix(Se2Matrix.translation(center));
       Path2D path2d = geometricLayer.toPath2D(CirclePoints.of(100).multiply(radius));
       path2d.closePath();
       graphics.draw(path2d);
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     }
     graphics.setColor(Color.RED);
     for (Tensor point : points) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(point));
+      geometricLayer.pushMatrix(Se2Matrix.translation(point));
       Path2D path2d = geometricLayer.toPath2D(StaticHelper.POINT);
       graphics.fill(path2d);
       geometricLayer.popMatrix();

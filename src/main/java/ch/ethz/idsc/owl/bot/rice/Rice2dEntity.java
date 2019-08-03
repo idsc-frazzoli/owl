@@ -22,7 +22,7 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -75,7 +75,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
     treeRender.render(geometricLayer, graphics);
     {
       Tensor xya = geometricLayer.getMouseSe2State();
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
+      geometricLayer.pushMatrix(Se2Matrix.of(xya));
       graphics.setColor(new Color(0, 128, 255, 192));
       graphics.fill(geometricLayer.toPath2D(SHAPE));
       geometricLayer.popMatrix();

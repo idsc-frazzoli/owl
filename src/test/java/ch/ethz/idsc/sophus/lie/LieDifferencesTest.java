@@ -10,7 +10,7 @@ import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se3.Se3Exponential;
-import ch.ethz.idsc.sophus.lie.se3.Se3Utils;
+import ch.ethz.idsc.sophus.lie.se3.Se3Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
@@ -58,7 +58,7 @@ public class LieDifferencesTest extends TestCase {
     Distribution distribution = NormalDistribution.of(0, .1);
     Tensor tensor = Tensors.empty();
     for (int index = 0; index < 10; ++index)
-      tensor.append(Se3Utils.toMatrix4x4( //
+      tensor.append(Se3Matrix.of( //
           Rodrigues.exp(RandomVariate.of(distribution, 3)), RandomVariate.of(distribution, 3)));
     LieDifferences lieDifferences = //
         new LieDifferences(LinearGroup.INSTANCE, Se3Exponential.INSTANCE);
