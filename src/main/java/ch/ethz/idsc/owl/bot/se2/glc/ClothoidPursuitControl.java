@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     if (inReverse)
       ClothoidControlHelper.mirrorAndReverse(beacons);
     // ---
-    TensorScalarFunction costMapping = new ClothoidLengthCostFunction(ratioClip::isInside, REFINEMENT);
+    TensorScalarFunction costMapping = new ClothoidLengthCostFunction(ratioClip::isInside);
     Scalar var = ArgMinVariable.using(entryFinder, costMapping, MAX_LEVEL).apply(beacons);
     Optional<Tensor> lookAhead = entryFinder.on(beacons).apply(var).point();
     if (lookAhead.isPresent()) {
