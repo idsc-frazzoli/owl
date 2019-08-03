@@ -40,8 +40,6 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private static final PointsRender POINTS_RENDER_1 = //
       new PointsRender(new Color(160, 160, 160, 128 + 64), Color.BLACK);
   // ---
-  private final JButton jButton = new JButton("clear");
-  // ---
   private Tensor control = Tensors.empty();
   private Tensor mouse = Array.zeros(3);
   /** min_index is non-null while the user drags a control points */
@@ -79,22 +77,25 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       }
     }
   };
-  private final ActionListener actionListener = actionEvent -> {
-    min_index = null;
-    control = Tensors.empty();
-  };
 
-  // TODO JPH use clearButton flag to prevent deletion of points
-  public ControlPointsDemo(boolean clearButton, List<GeodesicDisplay> list) {
+  /** @param addRemoveControlPoints
+   * @param list */
+  public ControlPointsDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list) {
     super(list);
-    if (clearButton) {
+    // ---
+    if (addRemoveControlPoints) {
+      ActionListener actionListener = actionEvent -> {
+        min_index = null;
+        control = Tensors.empty();
+      };
+      JButton jButton = new JButton("clear");
       jButton.addActionListener(actionListener);
       timerFrame.jToolBar.add(jButton);
     }
     timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent mouseEvent) {
-        if (!mousePositioning)
+        if (!isPositioningEnabled())
           return;
         switch (mouseEvent.getButton()) {
         case MouseEvent.BUTTON1: // insert point
@@ -102,7 +103,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
             Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
             ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
             min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
-            if (Objects.isNull(min_index)) {
+            if (Objects.isNull(min_index) && addRemoveControlPoints) {
               min_index = argMinValue.index();
               if (min_index == control.length() - 1) {
                 min_index = control.length();
@@ -122,14 +123,16 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           }
           break;
         case MouseEvent.BUTTON3: // remove point
-          if (Objects.isNull(min_index)) {
-            Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
-            ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-            min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
-          }
-          if (Objects.nonNull(min_index)) {
-            control = Join.of(control.extract(0, min_index), control.extract(min_index + 1, control.length()));
-            min_index = null;
+          if (addRemoveControlPoints) {
+            if (Objects.isNull(min_index)) {
+              Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+              ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+              min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
+            }
+            if (Objects.nonNull(min_index)) {
+              control = Join.of(control.extract(0, min_index), control.extract(min_index + 1, control.length()));
+              min_index = null;
+            }
           }
           break;
         }
