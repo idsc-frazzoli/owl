@@ -55,7 +55,7 @@ public class Se2RelaxedShadowConstraintDemo0 extends Se2ShadowBaseDemo {
     // planner constraints given by car region
     PlannerConstraint plannerConstraint = createConstraint(imageRegionCar);
     //
-    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    ImageRender imageRender = ImageRender.range(STREET_SCENARIO_DATA.render, RANGE);
     owlyAnimationFrame.addBackground(imageRender);
     // Lidar
     LidarEmulator lidarEmulator = new LidarEmulator( //

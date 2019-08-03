@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.gui.region;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -14,36 +13,53 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.sca.N;
 
-/** does not render boundaries correctly for all BufferedImage types */
+/** Hint:
+ * On ubuntu, we have observed for grayscale images that the initial rendering
+ * configuration influences the rendering when rotating the image. */
 public class ImageRender implements RenderInterface {
   /** @param bufferedImage
+   * @param matrix with dimensions 3 x 3
+   * @return */
+  public static ImageRender of(BufferedImage bufferedImage, Tensor matrix) {
+    return new ImageRender(bufferedImage, matrix);
+  }
+
+  /** @param bufferedImage
    * @param range vector of length 2, i.e. the extensions of the image in model coordinates */
-  public static ImageRender of(BufferedImage bufferedImage, Tensor range) {
+  public static ImageRender range(BufferedImage bufferedImage, Tensor range) {
     Tensor scale = Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()) //
         .pmul(range.map(Scalar::reciprocal));
-    return new ImageRender(bufferedImage, scale);
+    return scale(bufferedImage, scale);
+  }
+
+  /** @param bufferedImage
+   * @param scale vector of length 2 */
+  public static ImageRender scale(BufferedImage bufferedImage, Tensor scale) {
+    VectorQ.requireLength(scale, 2);
+    Tensor weights = Tensors.of(scale.Get(0).reciprocal(), scale.Get(1).reciprocal().negate(), RealScalar.ONE);
+    Tensor translate = Se2Matrix.translation(Tensors.vector(0, -bufferedImage.getHeight()));
+    return new ImageRender(bufferedImage, weights.pmul(translate));
   }
 
   // ---
   private final BufferedImage bufferedImage;
+  private final Tensor box;
   private final Tensor matrix;
 
-  /** @param bufferedImage
-   * @param scale vector of length 2 */
-  public ImageRender(BufferedImage bufferedImage, Tensor scale) {
+  private ImageRender(BufferedImage bufferedImage, Tensor matrix) {
     this.bufferedImage = bufferedImage;
-    VectorQ.requireLength(scale, 2);
-    Tensor weights = Tensors.of(scale.Get(0).reciprocal(), scale.Get(1).reciprocal().negate(), RealScalar.ONE);
-    Tensor translate = Se2Matrix.translation(Tensors.vector(0, -bufferedImage.getHeight()));
-    matrix = weights.pmul(translate);
-  }
-
-  // TODO JPH OWL 049 only 1 constructor
-  public ImageRender(BufferedImage bufferedImage, Tensor matrix, boolean some) {
-    this.bufferedImage = bufferedImage;
-    this.matrix = matrix.copy();
+    int width = bufferedImage.getWidth();
+    int height = bufferedImage.getHeight();
+    box = N.DOUBLE.of(Tensors.of( //
+        Tensors.vector(0, 0), //
+        Tensors.vector(width, 0), //
+        Tensors.vector(width, height), //
+        Tensors.vector(0, height)));
+    this.matrix = MatrixQ.requireSize(matrix, 3, 3).copy();
   }
 
   @Override // from RenderInterface
@@ -51,13 +67,8 @@ public class ImageRender implements RenderInterface {
     geometricLayer.pushMatrix(matrix);
     graphics.drawImage(bufferedImage, //
         AffineTransforms.toAffineTransform(geometricLayer.getMatrix()), null);
-    graphics.setColor(Color.RED);
-    Path2D path2d = geometricLayer.toPath2D(Tensors.of( //
-        Tensors.vector(0, 0), //
-        Tensors.vector(bufferedImage.getWidth(), 0), //
-        Tensors.vector(bufferedImage.getWidth(), bufferedImage.getHeight()), //
-        Tensors.vector(0, bufferedImage.getHeight())), true);
-    graphics.draw(path2d);
+    graphics.setColor(new Color(255, 0, 0, 128));
+    graphics.draw(geometricLayer.toPath2D(box, true));
     geometricLayer.popMatrix();
   }
 }

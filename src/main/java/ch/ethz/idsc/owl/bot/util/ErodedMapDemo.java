@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // matrix = IdentityMatrix.of(3);
     EroMap eroMap = new EroMap(bufferedImage, matrix, 3);
     // GeometricLayer geometricLayer = GeometricLayer.of(Inverse.of(matrix));
-    timerFrame1.geometricComponent.addRenderInterface(new ImageRender(bufferedImage, matrix, true));
+    timerFrame1.geometricComponent.addRenderInterface(ImageRender.of(bufferedImage, matrix));
     LazyMouseListener lazyMouseListener = new LazyMouseListener() {
       @Override
       public void lazyClicked(MouseEvent mouseEvent) {
