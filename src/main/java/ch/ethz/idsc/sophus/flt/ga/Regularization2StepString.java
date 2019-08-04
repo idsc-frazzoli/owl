@@ -1,6 +1,8 @@
 // code by mh, jph
 package ch.ethz.idsc.sophus.flt.ga;
 
+import java.util.Iterator;
+
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -14,20 +16,19 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   public Tensor apply(Tensor tensor) {
-    Tensor center = Tensors.empty();
-    int last = tensor.length() - 1;
-    if (last < 1)
+    if (tensor.length() < 2)
       return tensor.copy();
-    Tensor prev = tensor.get(0);
-    Tensor curr = tensor.get(1);
+    Tensor center = Tensors.reserve(tensor.length());
+    Iterator<Tensor> iterator = tensor.iterator();
+    Tensor prev = iterator.next();
+    Tensor curr = iterator.next();
     center.append(prev);
-    for (int index = 1; index < last; ++index) {
-      Tensor next = tensor.get(index + 1);
+    while (iterator.hasNext()) {
+      Tensor next = iterator.next();
       center.append(average(prev, curr, next));
       prev = curr;
       curr = next;
     }
-    center.append(curr);
-    return center;
+    return center.append(curr);
   }
 }

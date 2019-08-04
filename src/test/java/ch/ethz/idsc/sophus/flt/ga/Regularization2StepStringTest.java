@@ -43,6 +43,10 @@ public class Regularization2StepStringTest extends TestCase {
     assertEquals(STRING.apply(Tensors.vector(2)), Tensors.vector(2));
   }
 
+  public void testTuple() {
+    assertEquals(STRING.apply(Tensors.vector(3, 2)), Tensors.vector(3, 2));
+  }
+
   public void testSimple() {
     TensorUnaryOperator STRING = //
         Regularization2Step.string(RnGeodesic.INSTANCE, RationalScalar.of(1, 2));
