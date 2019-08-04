@@ -210,6 +210,7 @@ Smoothing
 
 <td>
 
+![wachspress](https://user-images.githubusercontent.com/4012178/62423041-7c7a2f80-b6bc-11e9-874e-414ae13be3ab.png)
 
 Wachspress
 
