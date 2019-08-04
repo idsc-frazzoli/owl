@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.sophus.math.sample;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;

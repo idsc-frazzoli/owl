@@ -13,14 +13,14 @@ import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNdType;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
-import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
-import ch.ethz.idsc.owl.math.sample.ConstantRandomSample;
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
+import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
+import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.ConstantRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -53,7 +53,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected RandomSampleInterface spaceSampler(Tensor state) {
-        return SphereRandomSample.of(center, radius);
+        return BallRandomSample.of(center, radius);
       }
 
       @Override

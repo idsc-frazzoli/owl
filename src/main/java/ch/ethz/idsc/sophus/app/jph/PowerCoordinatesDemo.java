@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
 public class PowerCoordinatesDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
-  private static final ColorDataGradient COLOR_DATA_GRADIENT = ColorDataGradients.PARULA.deriveWithFactor(RationalScalar.HALF);
+  private static final ColorDataGradient COLOR_DATA_GRADIENT = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
   // ---
   private final SpinnerLabel<Barycentric> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();

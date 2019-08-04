@@ -37,7 +37,7 @@ public class BufferedImageRegion implements Region<Tensor>, RenderInterface {
   }
 
   @Override // from Region
-  public boolean isMember(Tensor vector) {
+  public final boolean isMember(Tensor vector) {
     return isMember( //
         vector.Get(0).number().doubleValue(), //
         vector.Get(1).number().doubleValue());

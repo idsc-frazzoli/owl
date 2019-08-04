@@ -5,8 +5,6 @@ import java.util.Random;
 
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
-import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.ExhaustiveNodeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
@@ -17,6 +15,8 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

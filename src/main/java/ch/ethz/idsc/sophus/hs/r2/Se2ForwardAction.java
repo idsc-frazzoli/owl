@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.hs.r2;
 
+import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -13,7 +14,8 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * Se2ForwardAction is the canonic action of SE2 on R^2.
  * 
- * @see Se2InverseAction */
+ * @see Se2InverseAction
+ * @see Se2GroupElement */
 /* package */ class Se2ForwardAction implements TensorUnaryOperator {
   private final Scalar px;
   private final Scalar py;

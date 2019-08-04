@@ -1,5 +1,5 @@
 // code by gjoel
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.sophus.math.sample;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,7 +8,8 @@ import java.util.function.Predicate;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-public class SafeSampleWrap {
+// TODO GJOEL is this class still needed?
+/* package */ class SafeSampleWrap {
   @SafeVarargs
   public static SafeSampleWrap with(Predicate<Tensor>... predicates) {
     return with(Arrays.asList(predicates));

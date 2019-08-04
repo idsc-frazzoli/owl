@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.math.lane;
 import java.io.Serializable;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -62,7 +62,7 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
     return new RandomSampleInterface() {
       @Override // from RandomSampleInterface
       public Tensor randomSample(Random random) {
-        Tensor xy = SphereRandomSample.of(Extract2D.FUNCTION.apply(point), radius).randomSample(random);
+        Tensor xy = BallRandomSample.of(Extract2D.FUNCTION.apply(point), radius).randomSample(random);
         Scalar a = RandomVariate.of(NormalDistribution.of(point.Get(2), MU_A));
         return xy.append(a);
       }

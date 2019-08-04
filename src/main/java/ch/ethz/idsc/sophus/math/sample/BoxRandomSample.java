@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.sophus.math.sample;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -33,6 +33,7 @@ public class BoxRandomSample implements RandomSampleInterface, Serializable {
 
   @Override // from RandomSampleInterface
   public Tensor randomSample(Random random) {
-    return Tensor.of(distributions.stream().map(RandomVariate::of));
+    return Tensor.of(distributions.stream() //
+        .map(distribution -> RandomVariate.of(distribution, random)));
   }
 }

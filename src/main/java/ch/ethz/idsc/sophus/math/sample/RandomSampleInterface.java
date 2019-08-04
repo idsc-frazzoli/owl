@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.sophus.math.sample;
 
 import java.util.Random;
 
@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariateInterface;
  * 
  * RandomSampleInterface produces tensors from a multi-variate probability distribution.
  * 
- * Examples: {@link BoxRandomSample}, {@link DiskRandomSample} */
+ * Examples: {@link BoxRandomSample}, {@link BallRandomSample} */
 @FunctionalInterface
 public interface RandomSampleInterface {
   /** @return random sample from continuous or discrete set */

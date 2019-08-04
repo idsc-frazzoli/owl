@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.sophus.math.sample;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 public class RandomSampleTest extends TestCase {
   public void testSimple() {
-    Tensor tensor = RandomSample.of(SphereRandomSample.of(Tensors.vector(1, 2, 3), RealScalar.ONE), 6);
+    Tensor tensor = RandomSample.of(BallRandomSample.of(Tensors.vector(1, 2, 3), RealScalar.ONE), 6);
     assertEquals(Dimensions.of(tensor), Arrays.asList(6, 3));
   }
 

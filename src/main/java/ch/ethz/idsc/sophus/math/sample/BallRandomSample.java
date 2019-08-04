@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.sophus.math.sample;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -23,8 +23,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * implementation supports the use of Quantity
  * 
- * implementation generalizes {@link UniformRandomSample} and {@link DiskRandomSample} */
-public class SphereRandomSample implements RandomSampleInterface, Serializable {
+ * implementation generalizes {@link UniformRandomSample} and {@link DiskRandomSample}
+ * 
+ * <p>inspired by
+ * <a href="https://reference.wolfram.com/language/ref/Ball.html">Ball</a> */
+public class BallRandomSample implements RandomSampleInterface, Serializable {
   public static final int MAX_LENGTH = 10;
   private static final Distribution UNIFORM = UniformDistribution.of(Clips.absoluteOne());
 
@@ -51,14 +54,14 @@ public class SphereRandomSample implements RandomSampleInterface, Serializable {
     VectorQ.require(center);
     return Scalars.isZero(radius) //
         ? new ConstantRandomSample(center)
-        : new SphereRandomSample(center, radius);
+        : new BallRandomSample(center, radius);
   }
 
   // ---
   private final Tensor center;
   private final Scalar radius;
 
-  private SphereRandomSample(Tensor center, Scalar radius) {
+  private BallRandomSample(Tensor center, Scalar radius) {
     if (MAX_LENGTH < center.length())
       throw TensorRuntimeException.of(center);
     this.center = center;

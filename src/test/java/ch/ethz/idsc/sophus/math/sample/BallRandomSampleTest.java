@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.sample;
+package ch.ethz.idsc.sophus.math.sample;
 
 import java.util.Random;
 
@@ -24,14 +24,14 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
-public class SphereRandomSampleTest extends TestCase {
+public class BallRandomSampleTest extends TestCase {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
   private static final Random RANDOM = new Random();
 
   public void testSimple() {
     Tensor center = Tensors.vector(10, 20, 30, 40);
     Scalar radius = RealScalar.of(2);
-    RandomSampleInterface rsi = SphereRandomSample.of(center, radius);
+    RandomSampleInterface rsi = BallRandomSample.of(center, radius);
     Tensor vector = rsi.randomSample(RANDOM).subtract(center);
     assertTrue(Scalars.lessEquals(Norm._2.ofVector(vector), radius));
   }
@@ -39,7 +39,7 @@ public class SphereRandomSampleTest extends TestCase {
   public void test1D() {
     Tensor center = Tensors.vector(15);
     Scalar radius = RealScalar.of(3);
-    RandomSampleInterface randomSampleInterface = SphereRandomSample.of(center, radius);
+    RandomSampleInterface randomSampleInterface = BallRandomSample.of(center, radius);
     for (int index = 0; index < 100; ++index) {
       Tensor tensor = randomSampleInterface.randomSample(RANDOM);
       VectorQ.requireLength(tensor, 1);
@@ -50,21 +50,21 @@ public class SphereRandomSampleTest extends TestCase {
   public void test2D() {
     Tensor center = Tensors.vector(10, 20);
     Scalar radius = RealScalar.of(2);
-    RandomSampleInterface rsi = SphereRandomSample.of(center, radius);
+    RandomSampleInterface rsi = BallRandomSample.of(center, radius);
     assertTrue(rsi instanceof DiskRandomSample);
   }
 
   public void test3DZeroRadius() {
     Tensor center = Tensors.vector(10, 20, 3);
     Scalar radius = RealScalar.of(0.0);
-    RandomSampleInterface randomSampleInterface = SphereRandomSample.of(center, radius);
+    RandomSampleInterface randomSampleInterface = BallRandomSample.of(center, radius);
     assertTrue(randomSampleInterface instanceof ConstantRandomSample);
     assertEquals(randomSampleInterface.randomSample(RANDOM), center);
   }
 
   public void testQuantity() {
     RandomSampleInterface randomSampleInterface = //
-        SphereRandomSample.of(Tensors.fromString("{10[m], 20[m], -5[m]}"), Quantity.of(2, "m"));
+        BallRandomSample.of(Tensors.fromString("{10[m], 20[m], -5[m]}"), Quantity.of(2, "m"));
     Tensor tensor = randomSampleInterface.randomSample(RANDOM);
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("m");
     tensor.map(scalarUnaryOperator);
@@ -72,7 +72,7 @@ public class SphereRandomSampleTest extends TestCase {
 
   public void testR3S2Geodesic() {
     RandomSampleInterface randomSampleInterface = //
-        SphereRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
+        BallRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
     int fails = 0;
     for (int index = 0; index < 20; ++index) {
       Tensor pn = NORMALIZE.apply(randomSampleInterface.randomSample(RANDOM));
@@ -92,7 +92,7 @@ public class SphereRandomSampleTest extends TestCase {
   public void testRotationMatrix3D() {
     for (int index = 0; index < 50; ++index) {
       RandomSampleInterface randomSampleInterface = //
-          SphereRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
+          BallRandomSample.of(Tensors.vector(0, 0, 0), RealScalar.ONE);
       Tensor p = NORMALIZE.apply(randomSampleInterface.randomSample(RANDOM));
       Tensor q = NORMALIZE.apply(randomSampleInterface.randomSample(RANDOM));
       Tensor tensor = RotationMatrix3D.of(p, q);
@@ -103,13 +103,13 @@ public class SphereRandomSampleTest extends TestCase {
 
   public void testLarge() {
     RandomSampleInterface randomSampleInterface = //
-        SphereRandomSample.of(Array.zeros(SphereRandomSample.MAX_LENGTH), RealScalar.ONE);
+        BallRandomSample.of(Array.zeros(BallRandomSample.MAX_LENGTH), RealScalar.ONE);
     randomSampleInterface.randomSample(RANDOM);
   }
 
   public void testLargeFail() {
     try {
-      SphereRandomSample.of(Array.zeros(SphereRandomSample.MAX_LENGTH + 1), RealScalar.ONE);
+      BallRandomSample.of(Array.zeros(BallRandomSample.MAX_LENGTH + 1), RealScalar.ONE);
       fail();
     } catch (Exception exception) {
       // ---
@@ -118,7 +118,7 @@ public class SphereRandomSampleTest extends TestCase {
 
   public void testCenterEmptyFail() {
     try {
-      SphereRandomSample.of(Tensors.empty(), Quantity.of(2, "m"));
+      BallRandomSample.of(Tensors.empty(), Quantity.of(2, "m"));
       fail();
     } catch (Exception exception) {
       // ---
@@ -127,7 +127,7 @@ public class SphereRandomSampleTest extends TestCase {
 
   public void testRadiusNegative2Fail() {
     try {
-      SphereRandomSample.of(Tensors.vector(1, 2), RealScalar.of(-1));
+      BallRandomSample.of(Tensors.vector(1, 2), RealScalar.of(-1));
       fail();
     } catch (Exception exception) {
       // ---
@@ -136,7 +136,7 @@ public class SphereRandomSampleTest extends TestCase {
 
   public void testRadiusNegative3Fail() {
     try {
-      SphereRandomSample.of(Tensors.vector(1, 2, 3), RealScalar.of(-1));
+      BallRandomSample.of(Tensors.vector(1, 2, 3), RealScalar.of(-1));
       fail();
     } catch (Exception exception) {
       // ---
@@ -145,7 +145,7 @@ public class SphereRandomSampleTest extends TestCase {
 
   public void testCenterScalarFail() {
     try {
-      SphereRandomSample.of(RealScalar.ONE, RealScalar.ONE);
+      BallRandomSample.of(RealScalar.ONE, RealScalar.ONE);
       fail();
     } catch (Exception exception) {
       // ---
@@ -154,7 +154,7 @@ public class SphereRandomSampleTest extends TestCase {
 
   public void testCenterScalarZeroFail() {
     try {
-      SphereRandomSample.of(RealScalar.ONE, RealScalar.ZERO);
+      BallRandomSample.of(RealScalar.ONE, RealScalar.ZERO);
       fail();
     } catch (Exception exception) {
       // ---
