@@ -8,7 +8,7 @@ import ch.ethz.idsc.sophus.math.NormalizeTotal;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.sca.Chop;
 
@@ -23,7 +23,7 @@ public class InverseDistance implements Serializable {
   }
 
   public Tensor weights(Tensor tensor, Tensor q) {
-    Tensor weights = Unprotect.empty(tensor.length());
+    Tensor weights = Tensors.reserve(tensor.length());
     int count = 0;
     for (Tensor p : tensor) {
       Scalar distance = tensorMetric.distance(p, q);

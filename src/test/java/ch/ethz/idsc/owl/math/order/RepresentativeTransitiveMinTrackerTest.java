@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.demo.order.DigitSumDivisibilityPreorder;
-import ch.ethz.idsc.owl.math.sample.RandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;

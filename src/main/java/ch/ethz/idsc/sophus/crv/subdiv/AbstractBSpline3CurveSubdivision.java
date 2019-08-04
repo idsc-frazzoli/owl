@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 
 /** examples of extensions are
@@ -17,7 +16,7 @@ public abstract class AbstractBSpline3CurveSubdivision extends AbstractBSpline1C
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     Tensor p = Last.of(tensor);
     for (int index = 0; index < length; ++index) {
       Tensor q = tensor.get(index);

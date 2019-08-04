@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.data.tree.NodeCostComparator;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 

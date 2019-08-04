@@ -84,16 +84,18 @@ public class DefaultRrts implements Rrts {
      * if (Objects.nonNull(parent))
      * return Optional.of(parent.connectTo(state, costFromRoot)); */
     final NavigableMap<Scalar, RrtsNode> updates = new TreeMap<>(Scalars::compare);
-    nodeCollection.nearFrom(state, k_nearest).stream().parallel().forEach(node -> {
-      Transition transition = transitionSpace.connect(node.state(), state);
-      Scalar cost = transitionCostFunction.cost(transition);
-      Scalar compare = node.costFromRoot().add(cost);
-      synchronized (updates) {
-        if (updates.isEmpty() || Scalars.lessThan(compare, updates.firstKey()))
-          if (isCollisionFree(transition))
-            updates.put(compare, node);
-      }
-    });
+    nodeCollection.nearFrom(state, k_nearest).stream()
+        // .parallel()
+        .forEach(node -> {
+          Transition transition = transitionSpace.connect(node.state(), state);
+          Scalar cost = transitionCostFunction.cost(transition);
+          Scalar compare = node.costFromRoot().add(cost);
+          synchronized (updates) {
+            if (updates.isEmpty() || Scalars.lessThan(compare, updates.firstKey()))
+              if (isCollisionFree(transition))
+                updates.put(compare, node);
+          }
+        });
     if (!updates.isEmpty())
       return Optional.of(updates.firstEntry().getValue().connectTo(state, updates.firstKey()));
     return Optional.empty();
@@ -111,18 +113,20 @@ public class DefaultRrts implements Rrts {
      * }
      * }
      * } */
-    nodeCollection.nearFrom(parent.state(), k_nearest).stream().parallel().forEach(node -> {
-      Transition transition = transitionSpace.connect(parent.state(), node.state());
-      Scalar costFromParent = transitionCostFunction.cost(transition);
-      synchronized (parent) {
-        if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
-          if (isCollisionFree(transition)) {
-            parent.rewireTo(node, costFromParent);
-            ++rewireCount;
+    nodeCollection.nearFrom(parent.state(), k_nearest).stream() //
+        // .parallel()
+        .forEach(node -> {
+          Transition transition = transitionSpace.connect(parent.state(), node.state());
+          Scalar costFromParent = transitionCostFunction.cost(transition);
+          synchronized (parent) {
+            if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
+              if (isCollisionFree(transition)) {
+                parent.rewireTo(node, costFromParent);
+                ++rewireCount;
+              }
+            }
           }
-        }
-      }
-    });
+        });
   }
 
   @Override // from Rrts

@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 
 public class EightPointCurveSubdivision extends BSpline1CurveSubdivision {
   private static final Scalar PQ = RationalScalar.of(49, 44);
@@ -24,7 +24,7 @@ public class EightPointCurveSubdivision extends BSpline1CurveSubdivision {
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     for (int index = 0; index < length; ++index) {
       int first = Math.floorMod(index - 3, length);
       Tensor p = tensor.get((first + 0) % length);

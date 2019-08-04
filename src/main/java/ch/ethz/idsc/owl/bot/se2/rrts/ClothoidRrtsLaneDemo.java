@@ -33,7 +33,7 @@ import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.sophus.app.curve.LaneConsumptionDemo;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     laneConsumptionDemo.setControlPointsSe2(Tensors.of(stateTime.state()));
     laneConsumptionDemo.timerFrame.geometricComponent.addRenderInterfaceBackground(RegionRenders.create(imageRegion));
     laneConsumptionDemo.timerFrame.geometricComponent.addRenderInterface(entity);
-    /** TODO rework; currently taken over from {@link OwlyAnimationFrame}
+    /** TODO GJOEL rework; currently taken over from {@link OwlyAnimationFrame}
      * shorter variant, that does not close properly
      * OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
      * owlyAnimationFrame.add(entity); */
@@ -116,7 +116,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
           Optional<LaneInterface> optional = laneConsumptionDemo.lane();
           if (optional.isPresent()) {
             Tensor xya = Last.of(optional.get().controlPoints());
-            geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
+            geometricLayer.pushMatrix(Se2Matrix.of(xya));
             graphics.setColor(new Color(224, 168, 0, 128));
             Tensor shape = CIRCLE.multiply(laneConsumptionDemo.width());
             graphics.fill(geometricLayer.toPath2D(shape));

@@ -7,13 +7,11 @@ import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.rn.glc.R2xTEllipsoidsAnimationDemo;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
@@ -22,6 +20,8 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
+import ch.ethz.idsc.sophus.hs.r2.SimpleR2TranslationFamily;
+import ch.ethz.idsc.sophus.math.BijectionFamily;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -37,11 +37,11 @@ public class Se2xTEllipsoidsDemo implements DemoInterface {
     owlyAnimationFrame.add(carxTEntity);
     // ---
     ScalarTensorFunction stf1 = R2xTEllipsoidsAnimationDemo.wrap1DTensor(SimplexContinuousNoise.FUNCTION, Tensors.vector(0, 2), 0.05, 2.3);
-    BijectionFamily noise1 = new SimpleTranslationFamily(stf1);
+    BijectionFamily noise1 = new SimpleR2TranslationFamily(stf1);
     Region<StateTime> region1 = new R2xTEllipsoidStateTimeRegion( //
         Tensors.vector(0.6, 0.8), noise1, () -> carxTEntity.getStateTimeNow().time());
     ScalarTensorFunction stf2 = R2xTEllipsoidsAnimationDemo.wrap1DTensor(SimplexContinuousNoise.FUNCTION, Tensors.vector(1, 3), 0.05, 2.3);
-    BijectionFamily noise2 = new SimpleTranslationFamily(stf2);
+    BijectionFamily noise2 = new SimpleR2TranslationFamily(stf2);
     Region<StateTime> region2 = new R2xTEllipsoidStateTimeRegion( //
         Tensors.vector(0.8, 0.6), noise2, () -> carxTEntity.getStateTimeNow().time());
     TrajectoryRegionQuery trq = new SimpleTrajectoryRegionQuery( //

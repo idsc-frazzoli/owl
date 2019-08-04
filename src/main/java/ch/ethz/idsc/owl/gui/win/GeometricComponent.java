@@ -22,7 +22,7 @@ import javax.swing.event.MouseInputListener;
 
 import ch.ethz.idsc.owl.data.IntervalClock;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -130,8 +130,8 @@ public final class GeometricComponent {
               model2pixel.set(RealScalar.of(dx)::add, 0, 2);
               model2pixel.set(RealScalar.of(dy)::add, 1, 2);
             } else {
-              Tensor t1 = Se2Utils.toSE2Translation(center.negate());
-              Tensor t2 = Se2Utils.toSE2Matrix(center.copy().append(a2.subtract(a1)));
+              Tensor t1 = Se2Matrix.translation(center.negate());
+              Tensor t2 = Se2Matrix.of(center.copy().append(a2.subtract(a1)));
               model2pixel = model2pixel.dot(t2).dot(t1);
             }
             jComponent.repaint();

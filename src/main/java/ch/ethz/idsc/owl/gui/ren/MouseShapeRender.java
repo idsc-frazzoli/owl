@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -28,7 +28,7 @@ public class MouseShapeRender implements RenderInterface {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor xya = geometricLayer.getMouseSe2State();
     StateTime stateTime = new StateTime(xya, supplier.get());
-    geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(xya));
+    geometricLayer.pushMatrix(Se2Matrix.of(xya));
     Color color = region.isMember(stateTime) //
         ? new Color(255, 96, 96, 128)
         : new Color(0, 128, 255, 192);

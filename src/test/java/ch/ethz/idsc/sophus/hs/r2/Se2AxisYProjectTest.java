@@ -1,12 +1,11 @@
 // code by jph
 package ch.ethz.idsc.sophus.hs.r2;
 
-import ch.ethz.idsc.owl.math.map.Se2Bijection;
-import ch.ethz.idsc.owl.math.sample.RandomSample;
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -113,36 +112,36 @@ public class Se2AxisYProjectTest extends TestCase {
   }
 
   public void testCheck() {
-    RandomSampleInterface rsi = SphereRandomSample.of(Tensors.vector(0, 0), RealScalar.of(10));
+    RandomSampleInterface rsi = BallRandomSample.of(Tensors.vector(0, 0), RealScalar.of(10));
     for (int index = 0; index < 100; ++index) {
       Tensor u = Tensors.vector(0.9, 0, 0.3);
       Tensor p = RandomSample.of(rsi);
       Scalar t = Se2AxisYProject.of(u).apply(p).negate();
-      Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
+      Tensor m = Se2Matrix.of(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
       Tensor v = m.dot(p.copy().append(RealScalar.ONE));
       assertTrue(Chop._12.allZero(v.Get(0)));
     }
   }
 
   public void testCheck2() {
-    RandomSampleInterface rsi = SphereRandomSample.of(Tensors.vector(0, 0), RealScalar.of(10));
+    RandomSampleInterface rsi = BallRandomSample.of(Tensors.vector(0, 0), RealScalar.of(10));
     for (int index = 0; index < 100; ++index) {
       Tensor u = Tensors.vector(1.1, 0, 1.3);
       Tensor p = RandomSample.of(rsi);
       Scalar t = Se2AxisYProject.of(u).apply(p).negate();
-      Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
+      Tensor m = Se2Matrix.of(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
       Tensor v = m.dot(p.copy().append(RealScalar.ONE));
       assertTrue(Chop._12.allZero(v.Get(0)));
     }
   }
 
   public void testCheckZero() {
-    RandomSampleInterface rsi = SphereRandomSample.of(Tensors.vector(0, 0), RealScalar.of(10));
+    RandomSampleInterface rsi = BallRandomSample.of(Tensors.vector(0, 0), RealScalar.of(10));
     for (int index = 0; index < 100; ++index) {
       Tensor u = Tensors.vector(2, 0, 0);
       Tensor p = RandomSample.of(rsi);
       Scalar t = Se2AxisYProject.of(u).apply(p).negate();
-      Tensor m = Se2Utils.toSE2Matrix(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
+      Tensor m = Se2Matrix.of(Se2CoveringExponential.INSTANCE.exp(u.multiply(t)));
       Tensor v = m.dot(p.copy().append(RealScalar.ONE));
       assertTrue(Chop._12.allZero(v.Get(0)));
     }

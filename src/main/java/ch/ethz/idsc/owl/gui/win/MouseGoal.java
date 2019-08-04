@@ -16,7 +16,6 @@ import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 
-// TODO find a way to merge simple and simpleRrts
 public enum MouseGoal {
   ;
   public static void simple( //

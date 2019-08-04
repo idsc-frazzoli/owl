@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
 import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.bot.util.TrajectoryTranslationFamily;
+import ch.ethz.idsc.owl.bot.util.TrajectoryR2TranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -88,7 +88,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 10), 120 * 10);
     return new R2xTEllipsoidStateTimeRegion(Tensors.of(radius, radius), //
-        TrajectoryTranslationFamily.create(stateIntegrator, new StateTime(pos, RealScalar.ZERO), flow), //
+        TrajectoryR2TranslationFamily.create(stateIntegrator, new StateTime(pos, RealScalar.ZERO), flow), //
         supplier);
   }
 

@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 
 /** dual scheme
  * 
@@ -31,7 +31,7 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     for (int index = 0; index < length; ++index) {
       Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
@@ -47,7 +47,7 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     {
       Tensor p = tensor.get(0);
       Tensor q = tensor.get(1);

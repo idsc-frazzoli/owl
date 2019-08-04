@@ -5,9 +5,9 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
-import ch.ethz.idsc.owl.math.sample.RandomSample;
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;

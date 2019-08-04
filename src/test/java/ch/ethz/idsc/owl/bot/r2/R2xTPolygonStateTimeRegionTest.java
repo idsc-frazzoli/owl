@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
-import ch.ethz.idsc.owl.math.map.BijectionFamily;
-import ch.ethz.idsc.owl.math.map.So2Family;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.sophus.hs.r2.So2Family;
+import ch.ethz.idsc.sophus.math.BijectionFamily;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

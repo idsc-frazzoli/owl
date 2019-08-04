@@ -51,7 +51,7 @@ public class GokartEntity extends CarEntity {
       Optional<Tensor> optional = Optional.empty();
       if (trigger)
         optional = Optional.of(RandomVariate.of(distribution, 3));
-      trigger = 0 == random.nextInt(20); // TODO use now to alter position every 1[s] for instance
+      trigger = 0 == random.nextInt(20);
       return optional;
     }
   };

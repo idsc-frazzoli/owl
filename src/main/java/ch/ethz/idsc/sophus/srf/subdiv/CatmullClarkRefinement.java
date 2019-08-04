@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.FirstPosition;
 
 /** Reference:
@@ -41,9 +41,9 @@ public class CatmullClarkRefinement implements SurfaceMeshRefinement, Serializab
     for (List<Integer> list : out.vertToFace()) {
       int n = list.size();
       if (2 < n) {
-        // TODO identify boundary
-        Tensor sequence = Unprotect.empty(2 * n + 1);
-        Tensor weights = Unprotect.empty(2 * n + 1);
+        // TODO JPH identify boundary
+        Tensor sequence = Tensors.reserve(2 * n + 1);
+        Tensor weights = Tensors.reserve(2 * n + 1);
         Scalar ga = RationalScalar.of(1, 4);
         Scalar al = RationalScalar.of(1, 4 * n);
         Scalar be = RationalScalar.of(1, 2 * n);

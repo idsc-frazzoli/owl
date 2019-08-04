@@ -23,9 +23,9 @@ import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.data.img.CvHelper;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.sophus.hs.r2.Se2Bijection;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class ShadowMapSpherical extends ShadowMapCV {
@@ -50,7 +50,7 @@ public class ShadowMapSpherical extends ShadowMapCV {
     this.rMin = rMin;
     this.kernelWorldRadius = sphericalKernel.arrayWidth() / 2.0f * pixelDim.number().floatValue();
     Mat area = CvHelper.bufferedImageToMat(bufferedImage);
-    opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV); // TODO magic consts
+    opencv_imgproc.threshold(area, area, 254, 255, opencv_imgproc.THRESH_BINARY_INV);
     //
     Mat obstacleArea = area.clone();
     initArea = new Mat(obstacleArea.size(), obstacleArea.type(), AbstractScalar.WHITE);

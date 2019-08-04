@@ -13,13 +13,13 @@ import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.map.RigidFamily;
-import ch.ethz.idsc.owl.math.map.Se2Family;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.sophus.hs.r2.R2RigidFamily;
+import ch.ethz.idsc.sophus.hs.r2.Se2Family;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
@@ -38,7 +38,7 @@ public class R2xTImageAnimationDemo implements DemoInterface {
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, DELAY);
     owlyAnimationFrame.add(abstractEntity);
     // ---
-    RigidFamily rigidFamily = Se2Family.rotationAround( //
+    R2RigidFamily rigidFamily = Se2Family.rotationAround( //
         Tensors.vectorDouble(1.5, 2), time -> time.multiply(RealScalar.of(0.1)));
     ImageRegion imageRegion = R2ImageRegions.inside_circ();
     Region<StateTime> region = new R2xTImageStateTimeRegion( //

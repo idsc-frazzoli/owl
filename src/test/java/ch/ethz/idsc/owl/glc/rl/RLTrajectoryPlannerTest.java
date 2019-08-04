@@ -45,7 +45,6 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
-// TODO JPH refactor and generate stats
 public class RLTrajectoryPlannerTest extends TestCase {
   private static GlcNode _withSlack(String name, Tensor slacks) {
     final Tensor stateRoot = Tensors.vector(0, 0);

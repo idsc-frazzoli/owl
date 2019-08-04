@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.sophus.math.SignedCurvature2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -15,13 +15,18 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 public enum ClothoidTerminalRatios {
   ;
-  // TODO JPH OWL 049 use Clothoid3... instead!
-  public static final CurveSubdivision CURVE_SUBDIVISION = Clothoid3.CURVE_SUBDIVISION;
+  /** @param p
+   * @param q
+   * @return */
+  public static HeadTailInterface direct(Tensor p, Tensor q) {
+    return new Clothoid(p, q).new Curvature();
+  }
+
+  /***************************************************/
   private static final TensorUnaryOperator HEAD = //
       value -> Clothoid3.CURVE_SUBDIVISION.string(value.extract(0, 2));
   private static final TensorUnaryOperator TAIL = //
       value -> Clothoid3.CURVE_SUBDIVISION.string(value.extract(value.length() - 2, value.length()));
-  /** typically 13, or 14 iterations are needed to reach precision up 1e-3 */
   /***************************************************/
   /** investigations have shown that for iterations == 5 works on all start and end point configurations
    * 
@@ -33,13 +38,12 @@ public enum ClothoidTerminalRatios {
    * @param p start configuration
    * @param q end configuration
    * @return */
-  // TODO JPH OWL 049 replace return type with HeadTailInterface
-  public static ClothoidTerminalRatio of(Tensor p, Tensor q) {
-    // TODO could use variable iteration depth based on some accuracy criteria
+  public static HeadTailInterface of(Tensor p, Tensor q) {
+    // could use variable iteration depth based on some accuracy criteria
     return of(p, q, ITERATIONS);
   }
 
-  public static ClothoidTerminalRatio of(Tensor p, Tensor q, int iterations) {
+  public static HeadTailInterface of(Tensor p, Tensor q, int iterations) {
     return new ClothoidTerminalRatio( //
         head(p, q, iterations), //
         tail(p, q, iterations));
@@ -50,7 +54,7 @@ public enum ClothoidTerminalRatios {
    * @return */
   public static Scalar head(Tensor p, Tensor q, int iterations) {
     Tensor tensor = Nest.of(HEAD, Unprotect.byRef(p, q), iterations);
-    return new Clothoid(tensor.get(0), tensor.get(1)).new Curvature().head();
+    return direct(tensor.get(0), tensor.get(1)).head();
   }
 
   /** @param p of the form {p_x, p_y, p_heading}
@@ -58,10 +62,11 @@ public enum ClothoidTerminalRatios {
    * @return */
   public static Scalar tail(Tensor p, Tensor q, int iterations) {
     Tensor tensor = Nest.of(TAIL, Unprotect.byRef(p, q), iterations);
-    return new Clothoid(tensor.get(1), tensor.get(2)).new Curvature().tail();
+    return direct(tensor.get(1), tensor.get(2)).tail();
   }
 
   /***************************************************/
+  /** typically 13, or 14 iterations are needed to reach precision up 1e-3 */
   static final Chop CHOP = Chop._03;
   static final int MAX_ITER = 18;
 
@@ -73,8 +78,7 @@ public enum ClothoidTerminalRatios {
    * @param beg of the form {beg_x, beg_y, beg_heading}
    * @param end of the form {end_x, end_y, end_heading}
    * @return */
-  // TODO JPH OWL 049 replace return type with HeadTailInterface
-  public static ClothoidTerminalRatio planar(Tensor beg, Tensor end) {
+  public static HeadTailInterface planar(Tensor beg, Tensor end) {
     final Tensor init = Clothoid3.CURVE_SUBDIVISION.string(Unprotect.byRef(beg, end));
     Scalar head = ClothoidTerminalRatios.curvature(init);
     {
@@ -106,7 +110,7 @@ public enum ClothoidTerminalRatios {
   }
 
   /***************************************************/
-  /* package */ static ClothoidTerminalRatio fixed(Tensor beg, Tensor end, int depth) {
+  /* package */ static HeadTailInterface fixed(Tensor beg, Tensor end, int depth) {
     return new ClothoidTerminalRatio( //
         ClothoidTerminalRatios.curvature(Nest.of(HEAD, Unprotect.byRef(beg, end), depth)), //
         ClothoidTerminalRatios.curvature(Nest.of(TAIL, Unprotect.byRef(beg, end), depth)));

@@ -12,4 +12,19 @@ public class DivisibilityPreorderTest extends TestCase {
     assertEquals(DivisibilityPreorder.INSTANCE.compare(RealScalar.of(6), RealScalar.of(2)), OrderComparison.STRICTLY_SUCCEEDS);
     assertEquals(DivisibilityPreorder.INSTANCE.compare(RealScalar.of(6), RealScalar.of(7)), OrderComparison.INCOMPARABLE);
   }
+
+  public void testZeroFail() {
+    try {
+      DivisibilityPreorder.INSTANCE.compare(RealScalar.ZERO, RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      DivisibilityPreorder.INSTANCE.compare(RealScalar.ONE, RealScalar.ZERO);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

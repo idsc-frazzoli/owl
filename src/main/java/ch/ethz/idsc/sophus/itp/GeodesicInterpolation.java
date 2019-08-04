@@ -31,7 +31,6 @@ public class GeodesicInterpolation extends AbstractInterpolation {
 
   @Override // from Interpolation
   public Tensor get(Tensor index) {
-    // TODO JPH allow multi-variate interpolation
     throw new UnsupportedOperationException();
   }
 

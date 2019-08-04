@@ -37,8 +37,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   /** @param g element from Lie Group SE3 as 4x4 affine matrix */
   private Se3Adjoint(Tensor g) {
-    R = Se3Utils.rotation(g);
-    t = Se3Utils.translation(g);
+    R = Se3Matrix.rotation(g);
+    t = Se3Matrix.translation(g);
   }
 
   @Override

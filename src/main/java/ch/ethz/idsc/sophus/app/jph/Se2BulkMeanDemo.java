@@ -42,7 +42,7 @@ public class Se2BulkMeanDemo extends ControlPointsDemo {
   private final JToggleButton axes = new JToggleButton("axes");
 
   public Se2BulkMeanDemo() {
-    super(false, GeodesicDisplays.SE2C_ONLY);
+    super(true, GeodesicDisplays.SE2C_ONLY);
     timerFrame.jToolBar.add(axes);
     Distribution dX = UniformDistribution.of(-3, 3);
     Distribution dY = NormalDistribution.of(0, .3);
@@ -58,9 +58,11 @@ public class Se2BulkMeanDemo extends ControlPointsDemo {
     if (axes.isSelected())
       AxesRender.INSTANCE.render(geometricLayer, graphics);
     Tensor sequence = getControlPointsSe2();
-    int n = sequence.length();
-    Scalar scalar = RationalScalar.of(1, n);
-    Tensor mean = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, Array.of(l -> scalar, n));
+    int length = sequence.length();
+    if (0 == length)
+      return;
+    Scalar scalar = RationalScalar.of(1, length);
+    Tensor mean = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, Array.of(l -> scalar, length));
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(STROKE);

@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 
 /** base class for B-Spline degree 2 curve subdivision
@@ -33,7 +33,7 @@ public abstract class AbstractBSpline2CurveSubdivision implements CurveSubdivisi
 
   private Tensor protected_string(Tensor tensor) {
     int length = tensor.length();
-    Tensor curve = Unprotect.empty(2 * length);
+    Tensor curve = Tensors.reserve(2 * length);
     Iterator<Tensor> iterator = tensor.iterator();
     Tensor p = iterator.next();
     while (iterator.hasNext()) {

@@ -19,9 +19,6 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
-import ch.ethz.idsc.owl.math.sample.BoxRandomSample;
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
@@ -33,6 +30,9 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
+import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
       @Override
       protected RandomSampleInterface goalSampler(Tensor goal) {
-        return SphereRandomSample.of(goal, RealScalar.ONE);
+        return BallRandomSample.of(goal, RealScalar.ONE);
       }
 
       @Override

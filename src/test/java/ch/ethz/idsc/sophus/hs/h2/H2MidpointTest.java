@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 public class H2MidpointTest extends TestCase {
   public void testSymmetric() {
     Random random = new Random();
-    RandomSampleInterface randomSampleInterface = SphereRandomSample.of(Array.zeros(2), RealScalar.ONE);
+    RandomSampleInterface randomSampleInterface = BallRandomSample.of(Array.zeros(2), RealScalar.ONE);
     for (int count = 0; count < 10; ++count) {
       Tensor a = randomSampleInterface.randomSample(random);
       Tensor midpoint = H2Midpoint.INSTANCE.midpoint(a, a.negate());

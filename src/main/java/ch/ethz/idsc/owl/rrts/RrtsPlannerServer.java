@@ -50,7 +50,8 @@ public abstract class RrtsPlannerServer implements TransitionPlanner {
     this.obstacleQuery = obstacleQuery;
     this.resolution = resolution;
     this.costFunction = costFunction;
-    flowTrajectoryGenerator = new RrtsFlowTrajectoryGenerator(stateSpaceModel, this::uBetween); // TODO make uBetween dependent on state space model
+    // TODO GJOEL make uBetween dependent on state space model, or input uBetween as function pointer to planner server
+    flowTrajectoryGenerator = new RrtsFlowTrajectoryGenerator(stateSpaceModel, this::uBetween);
   }
 
   @Override // from TrajectoryPlanner

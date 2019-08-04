@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.glc.adapter.MultiConstraintAdapter;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
-import ch.ethz.idsc.owl.gui.ren.EntityImageRender;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
@@ -60,7 +59,7 @@ public class Se2ShadowRulesDemo extends Se2ShadowBaseDemo {
     PlannerConstraint regionConstraint = createConstraint(imageRegionCar);
     constraintCollection.add(regionConstraint);
     //
-    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    ImageRender imageRender = ImageRender.range(STREET_SCENARIO_DATA.render, RANGE);
     owlyAnimationFrame.addBackground(imageRender);
     // Lidar
     LidarEmulator lidarEmulator = new LidarEmulator( //

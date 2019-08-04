@@ -11,7 +11,7 @@ import java.util.Random;
 
 import ch.ethz.idsc.owl.data.tree.NodeCostComparator;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
-import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 
 public class BiRrtsPlanner implements RrtsPlanner {
   private static final int K_NEAREST = 12;

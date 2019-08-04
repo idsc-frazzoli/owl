@@ -9,8 +9,6 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.map.RigidFamily;
-import ch.ethz.idsc.owl.math.map.Se2Family;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
@@ -18,6 +16,8 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
+import ch.ethz.idsc.sophus.hs.r2.R2RigidFamily;
+import ch.ethz.idsc.sophus.hs.r2.Se2Family;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -34,7 +34,7 @@ public class TwdxTImageAnimationDemo extends AbstractTwdDemo {
     TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1.2), RealScalar.of(0.5));
     twdxTEntity = new TwdxTEntity(twdConfig, new StateTime(Tensors.vector(-1, -1, 1.0), RealScalar.ZERO));
     // ---
-    RigidFamily rigidFamily = Se2Family.rotationAround( //
+    R2RigidFamily rigidFamily = Se2Family.rotationAround( //
         Tensors.vectorDouble(1.5, 2), time -> time.multiply(RealScalar.of(0.1)));
     ImageRegion imageRegion = R2ImageRegions.inside_circ();
     region = new R2xTImageStateTimeRegion( //

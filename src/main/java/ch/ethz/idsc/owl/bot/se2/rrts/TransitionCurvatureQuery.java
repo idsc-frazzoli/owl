@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
-import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatio;
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -23,7 +23,7 @@ public class TransitionCurvatureQuery implements TransitionRegionQuery {
 
   @Override // from TransitionRegionQuery
   public boolean isDisjoint(Transition transition) {
-    ClothoidTerminalRatio clothoidTerminalRatio = ((ClothoidTransition) transition).terminalRatios();
+    HeadTailInterface clothoidTerminalRatio = ((ClothoidTransition) transition).terminalRatios();
     return clip.isInside(clothoidTerminalRatio.head()) //
         && clip.isInside(clothoidTerminalRatio.tail());
   }

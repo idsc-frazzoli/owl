@@ -7,7 +7,7 @@ import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.FoldList;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -56,7 +56,7 @@ public class KnotSpacing implements TensorUnaryOperator {
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor control) {
-    Tensor knots = Unprotect.empty(control.length() - 1);
+    Tensor knots = Tensors.reserve(control.length() - 1);
     Tensor prev = control.get(0);
     for (int index = 1; index < control.length(); ++index) {
       Scalar scalar = distanceFunction.apply(tensorMetric.distance(prev, prev = control.get(index)));

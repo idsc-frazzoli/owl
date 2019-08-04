@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.sca.Round;
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     Tensor position = symLink.getPosition();
     if (symLink instanceof SymNode) {
-      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(position));
+      geometricLayer.pushMatrix(Se2Matrix.translation(position));
       Path2D path2d = geometricLayer.toPath2D(CIRCLE_END);
       path2d.closePath();
       graphics.setColor(Color.BLACK);
@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.Round;
       geometricLayer.popMatrix();
     } else {
       {
-        geometricLayer.pushMatrix(Se2Utils.toSE2Translation(position));
+        geometricLayer.pushMatrix(Se2Matrix.translation(position));
         Path2D path2d = geometricLayer.toPath2D(CIRCLE_MID);
         path2d.closePath();
         graphics.setColor(Color.BLACK);

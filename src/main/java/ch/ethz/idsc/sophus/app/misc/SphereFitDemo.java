@@ -17,7 +17,7 @@ import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     if (optional.isPresent()) {
       Tensor center = optional.get().center();
       Scalar radius = optional.get().radius();
-      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(center));
+      geometricLayer.pushMatrix(Se2Matrix.translation(center));
       pathRenderBall.setCurve(CirclePoints.of(40).multiply(radius), true);
       geometricLayer.popMatrix();
     }
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       Tensor weiszfeld = SpatialMedian.with(1e-4).uniform(control).get();
-      geometricLayer.pushMatrix(Se2Utils.toSE2Translation(weiszfeld));
+      geometricLayer.pushMatrix(Se2Matrix.translation(weiszfeld));
       Path2D path2d = geometricLayer.toPath2D(geodesicDisplay.shape());
       path2d.closePath();
       graphics.setColor(new Color(128, 128, 255, 64));

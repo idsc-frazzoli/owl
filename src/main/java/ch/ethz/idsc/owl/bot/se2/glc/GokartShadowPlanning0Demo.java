@@ -63,7 +63,7 @@ public class GokartShadowPlanning0Demo extends GokartDemo {
     ImageRegion irCar = new ImageRegion(imageCar, RANGE, false);
     ImageRegion irLid = new ImageRegion(imageLid, RANGE, false);
     // ---
-    ImageRender imageRender = ImageRender.of(STREET_SCENARIO_DATA.render, RANGE);
+    ImageRender imageRender = ImageRender.range(STREET_SCENARIO_DATA.render, RANGE);
     owlyAnimationFrame.addBackground(imageRender);
     owlyAnimationFrame.add(gokartEntity);
     // ---

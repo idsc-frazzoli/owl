@@ -26,7 +26,7 @@ import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -146,7 +146,7 @@ public class CarEntity extends Se2Entity {
     // ---
     if (trajectoryControl instanceof TrajectoryTargetRender) {
       StateTime stateTime = getStateTimeNow();
-      Tensor matrix = Se2Utils.toSE2Matrix(stateTime.state());
+      Tensor matrix = Se2Matrix.of(stateTime.state());
       geometricLayer.pushMatrix(matrix);
       graphics.setColor(Color.RED);
       ((TrajectoryTargetRender) trajectoryControl).toTarget(geometricLayer).ifPresent(graphics::draw);

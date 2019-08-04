@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.demo.order.TensorNormTotalPreorder;
-import ch.ethz.idsc.owl.math.sample.RandomSample;
+import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

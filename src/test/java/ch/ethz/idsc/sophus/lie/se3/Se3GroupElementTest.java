@@ -19,11 +19,11 @@ public class Se3GroupElementTest extends TestCase {
     Tensor adjoint = g.inverse().adjoint(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
     assertEquals(Dimensions.of(adjoint), Arrays.asList(2, 3));
     Tensor ge = g.combine(IdentityMatrix.of(4));
-    Chop._10.requireClose(Se3Utils.rotation(ge), R);
-    Chop._10.requireClose(Se3Utils.translation(ge), t);
+    Chop._10.requireClose(Se3Matrix.rotation(ge), R);
+    Chop._10.requireClose(Se3Matrix.translation(ge), t);
     Se3GroupElement e = new Se3GroupElement(IdentityMatrix.of(4));
-    Tensor eg = e.combine(Se3Utils.toMatrix4x4(R, t));
-    Chop._10.requireClose(Se3Utils.rotation(eg), R);
-    Chop._10.requireClose(Se3Utils.translation(eg), t);
+    Tensor eg = e.combine(Se3Matrix.of(R, t));
+    Chop._10.requireClose(Se3Matrix.rotation(eg), R);
+    Chop._10.requireClose(Se3Matrix.translation(eg), t);
   }
 }

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.lie.se2c;
 
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -42,7 +42,7 @@ public class Se2CoveringIntegratorTest extends TestCase {
     Tensor vec = Se2CoveringIntegrator.INSTANCE.spin(Array.zeros(3), Tensors.vector(1, 2, .3));
     Tensor v0 = Se2CoveringExponential.INSTANCE.exp(Tensors.vector(1, 2, .3));
     assertEquals(vec, v0);
-    Tensor alt = Se2Utils.toSE2Matrix(vec);
+    Tensor alt = Se2Matrix.of(vec);
     assertTrue(Chop._13.close(mat, alt));
   }
 
@@ -53,7 +53,7 @@ public class Se2CoveringIntegratorTest extends TestCase {
       Tensor vec = Se2CoveringIntegrator.INSTANCE.spin(Array.zeros(3), rnd);
       Tensor v0 = Se2CoveringExponential.INSTANCE.exp(rnd);
       assertEquals(vec, v0);
-      Tensor alt = Se2Utils.toSE2Matrix(vec);
+      Tensor alt = Se2Matrix.of(vec);
       boolean close = Chop._11.close(mat, alt);
       if (!close) {
         System.err.println(alt);

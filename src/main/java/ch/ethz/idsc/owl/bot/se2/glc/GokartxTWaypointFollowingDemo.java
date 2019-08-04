@@ -7,14 +7,12 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.owl.bot.r2.R2xTEllipsoidStateTimeRegion;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.WaypointRender;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.map.BijectionFamily;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.Region;
@@ -24,6 +22,8 @@ import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
+import ch.ethz.idsc.sophus.hs.r2.SimpleR2TranslationFamily;
+import ch.ethz.idsc.sophus.math.BijectionFamily;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -47,7 +47,7 @@ public class GokartxTWaypointFollowingDemo extends GokartDemo {
     };
     // ---
     Tensor ext = Tensors.vector(0.7, 0.7).unmodifiable(); // 0.7 is the half-width of the gokart
-    BijectionFamily oscillation = new SimpleTranslationFamily(s -> Tensors.vector( //
+    BijectionFamily oscillation = new SimpleR2TranslationFamily(s -> Tensors.vector( //
         Math.sin(s.number().doubleValue() * -.4) * 6.0 + 44, //
         Math.cos(s.number().doubleValue() * -.4) * 6.0 + 44.0));
     Tensor dim1 = Tensors.vector(2., 2.);
@@ -56,7 +56,7 @@ public class GokartxTWaypointFollowingDemo extends GokartDemo {
     Region<StateTime> region1d = new R2xTEllipsoidStateTimeRegion( //
         dim1.subtract(ext), oscillation, () -> gokartEntity.getStateTimeNow().time());
     // ---
-    BijectionFamily oscillation2 = new SimpleTranslationFamily(s -> Tensors.vector( //
+    BijectionFamily oscillation2 = new SimpleR2TranslationFamily(s -> Tensors.vector( //
         Math.sin((s.number().doubleValue() - 1) * -.3) * 5.0 + 48, //
         Math.cos((s.number().doubleValue() - 1) * -.3) * 5.0 + 50.0));
     Tensor dim = Tensors.vector(2.5, 2.5);

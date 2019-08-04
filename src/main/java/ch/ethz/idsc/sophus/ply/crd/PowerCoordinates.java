@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.red.Hypot;
@@ -66,7 +66,7 @@ public class PowerCoordinates implements Serializable {
   Tensor getDual(Tensor polygon, Tensor x) {
     List<Aux> auxs = polygon.stream().map(p -> new Aux(x, p)).collect(Collectors.toList());
     int length = polygon.length();
-    Tensor result = Unprotect.empty(length);
+    Tensor result = Tensors.reserve(length);
     Aux prev = auxs.get(length - 1);
     for (int index = 0; index < length; ++index) {
       Aux next = auxs.get(index);
@@ -78,7 +78,7 @@ public class PowerCoordinates implements Serializable {
 
   Tensor hDual(Tensor polygon, Tensor x) {
     int length = polygon.length();
-    Tensor dens = Unprotect.empty(length);
+    Tensor dens = Tensors.reserve(length);
     for (int index = 0; index < length; ++index) {
       Scalar den = Norm._2.between(polygon.get(index), x);
       if (Scalars.isZero(den))

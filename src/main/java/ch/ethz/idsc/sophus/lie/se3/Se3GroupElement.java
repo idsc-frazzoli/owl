@@ -25,8 +25,8 @@ public class Se3GroupElement implements LieGroupElement {
 
   /** @param g element from Lie Group SE3 as 4x4 affine matrix */
   public Se3GroupElement(Tensor g) {
-    R = Se3Utils.rotation(g);
-    t = Se3Utils.translation(g);
+    R = Se3Matrix.rotation(g);
+    t = Se3Matrix.translation(g);
   }
 
   @Override // from LieGroupElement
@@ -38,7 +38,7 @@ public class Se3GroupElement implements LieGroupElement {
   @Override // from LieGroupElement
   public Tensor combine(Tensor g) {
     Se3GroupElement eg = new Se3GroupElement(g);
-    return Se3Utils.toMatrix4x4(R.dot(eg.R), R.dot(eg.t).add(t));
+    return Se3Matrix.of(R.dot(eg.R), R.dot(eg.t).add(t));
   }
 
   @Override // from LieGroupElement

@@ -5,7 +5,7 @@ import ch.ethz.idsc.sophus.hs.r2.Se2CoveringParametricDistance;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
@@ -42,7 +42,7 @@ public enum Se2CoveringGeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public Tensor matrixLift(Tensor p) {
-    return Se2Utils.toSE2Matrix(p);
+    return Se2Matrix.of(p);
   }
 
   @Override // from GeodesicDisplay

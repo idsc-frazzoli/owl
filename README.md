@@ -1,6 +1,6 @@
 # ch.ethz.idsc.owl <a href="https://travis-ci.org/idsc-frazzoli/owl"><img src="https://travis-ci.org/idsc-frazzoli/owl.svg?branch=master" alt="Build Status"></a>
 
-Library for motion planning in Java, version `0.4.7`
+Library for motion planning in Java, version `0.4.9`
 
 ![owl](https://user-images.githubusercontent.com/4012178/57274601-0e61a480-709c-11e9-9b9a-904ce21d394e.png)
 
@@ -52,6 +52,7 @@ Obstacle anticipation
 ### 2019
 
 * André Stoll (MT): *Multi-Objective Optimization Using Preference Structures*
+* Oliver Brinkmann (MT): *Averaging on Lie Groups: Applications of Geodesic Averages and Biinvariant Means*
 * Joel Gächter (MT): RRTS with clothoids
 
 ## Features
@@ -152,7 +153,7 @@ Specify `repository` and `dependency` of the owl library in the `pom.xml` file o
       <dependency>
         <groupId>ch.ethz.idsc</groupId>
         <artifactId>owl</artifactId>
-        <version>0.4.7</version>
+        <version>0.4.9</version>
       </dependency>
     </dependencies>
 
@@ -206,6 +207,12 @@ Curve Subdivision
 ![smoothing](https://user-images.githubusercontent.com/4012178/47631759-91cb9780-db47-11e8-9dc7-a2631a144ecc.png)
 
 Smoothing
+
+<td>
+
+![wachspress](https://user-images.githubusercontent.com/4012178/62423041-7c7a2f80-b6bc-11e9-874e-414ae13be3ab.png)
+
+Wachspress
 
 <td>
 

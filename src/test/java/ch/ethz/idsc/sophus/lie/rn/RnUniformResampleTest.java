@@ -24,6 +24,21 @@ public class RnUniformResampleTest extends TestCase {
     assertEquals(ExactTensorQ.require(tensor), Tensors.fromString("{{0[m]}, {2[m]}, {4[m]}, {6[m]}, {4[m]}, {2[m]}}"));
   }
 
+  public void testNegativeFail() {
+    try {
+      RnUniformResample.of(Quantity.of(0.0, "m"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      RnUniformResample.of(Quantity.of(-1, "m"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testNullFail() {
     try {
       RnUniformResample.of(null);

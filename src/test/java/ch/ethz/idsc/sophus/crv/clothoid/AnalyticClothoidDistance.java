@@ -1,6 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.sophus.crv.clothoid;
 
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.sophus.math.TensorNorm;
@@ -9,7 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 
-/** TODO GJOEL is AnalyticClothoidDistance the "correct" length? -> document purpose */
 /* package */ enum AnalyticClothoidDistance implements TensorMetric, TensorNorm {
   LR1(ClothoidLR1Midpoint.INSTANCE), //
   LR3(ClothoidLR3Midpoint.INSTANCE), //
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
       return half_dist.add(half_dist); // 2 * half_dist
     }
     // TODO GJOEL investigate "direction"
-    ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.of(p, q);
+    HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.of(p, q);
     Scalar head = clothoidTerminalRatio.head();
     Scalar tail = clothoidTerminalRatio.tail();
     Scalar half_num = qa.subtract(pa);

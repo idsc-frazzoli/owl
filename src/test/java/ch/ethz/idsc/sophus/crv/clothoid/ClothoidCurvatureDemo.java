@@ -23,13 +23,14 @@ import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.CurveCurvature;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
-import ch.ethz.idsc.subare.util.plot.ListPlot;
-import ch.ethz.idsc.subare.util.plot.VisualRow;
-import ch.ethz.idsc.subare.util.plot.VisualSet;
+import ch.ethz.idsc.sophus.util.plot.ListPlot;
+import ch.ethz.idsc.sophus.util.plot.VisualRow;
+import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -76,7 +77,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
     // ---
     {
       graphics.setColor(new Color(255, 0, 0, 128));
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(mouse));
+      geometricLayer.pushMatrix(Se2Matrix.of(mouse));
       graphics.fill(geometricLayer.toPath2D(Arrowhead.of(.3)));
       geometricLayer.popMatrix();
     }
@@ -85,14 +86,14 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
       innerRender(splitInterfaces.get(index), geometricLayer, graphics, visualSet, index);
     int n = (int) Math.pow(2, spinnerLevel.getValue());
     {
-      ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.planar(START, mouse);
+      HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.planar(START, mouse);
       Scalar head = clothoidTerminalRatio.head();
       Scalar tail = clothoidTerminalRatio.tail();
       visualSet.add(Tensors.vector(0, n), Tensors.of(head, head)).setColor(Color.BLACK);
       visualSet.add(Tensors.vector(0, n), Tensors.of(tail, tail)).setColor(Color.BLACK);
     }
     {
-      ClothoidTerminalRatio clothoidTerminalRatio = ClothoidTerminalRatios.of(START, mouse, spinnerCurve.getValue());
+      HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.of(START, mouse, spinnerCurve.getValue());
       Scalar head = clothoidTerminalRatio.head();
       Scalar tail = clothoidTerminalRatio.tail();
       visualSet.add(Tensors.vector(0, n), Tensors.of(head, head)).setColor(Color.RED);

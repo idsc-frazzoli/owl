@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -34,7 +33,7 @@ public class NonuniformFixedRadiusGeodesicCenter implements Serializable {
   }
 
   private static Tensor maskToSplits(Tensor mask) {
-    Tensor result = Unprotect.empty(mask.length() - 1);
+    Tensor result = Tensors.reserve(mask.length() - 1);
     Scalar factor = mask.Get(0);
     for (int index = 1; index < mask.length(); ++index) {
       factor = factor.add(mask.Get(index));

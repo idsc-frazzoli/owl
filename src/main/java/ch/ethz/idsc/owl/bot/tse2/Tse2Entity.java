@@ -24,7 +24,7 @@ import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.sophus.lie.se2.Se2Utils;
+import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -67,7 +67,7 @@ public abstract class Tse2Entity extends TrajectoryEntity implements GlcPlannerC
     { // indicate current position
       final StateTime stateTime = getStateTimeNow();
       Color color = new Color(64, 64, 64, 128);
-      geometricLayer.pushMatrix(Se2Utils.toSE2Matrix(stateTime.state()));
+      geometricLayer.pushMatrix(Se2Matrix.of(stateTime.state()));
       graphics.setColor(color);
       graphics.fill(geometricLayer.toPath2D(shape()));
       geometricLayer.popMatrix();

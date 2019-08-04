@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.hs.r3s2;
 
 import ch.ethz.idsc.sophus.hs.s2.RotationMatrix3D;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
-import ch.ethz.idsc.sophus.lie.se3.Se3Utils;
+import ch.ethz.idsc.sophus.lie.se3.Se3Matrix;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,11 +34,11 @@ public enum R3S2Geodesic implements GeodesicInterface {
     Tensor qt = q.get(0);
     Tensor qn = q.get(1);
     Tensor rotation = RotationMatrix3D.of(pn, qn);
-    Tensor pSe3 = Se3Utils.toMatrix4x4(ID3, pt);
-    Tensor qSe3 = Se3Utils.toMatrix4x4(rotation, qt);
+    Tensor pSe3 = Se3Matrix.of(ID3, pt);
+    Tensor qSe3 = Se3Matrix.of(rotation, qt);
     Tensor split = Se3Geodesic.INSTANCE.split(pSe3, qSe3, scalar);
-    Tensor r = Se3Utils.rotation(split);
-    Tensor t = Se3Utils.translation(split);
+    Tensor r = Se3Matrix.rotation(split);
+    Tensor t = Se3Matrix.translation(split);
     return Tensors.of(t, r.dot(pn));
   }
 }

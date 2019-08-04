@@ -83,7 +83,7 @@ public class GeometricLayer {
 
   /** @return current model2pixel matrix */
   public Tensor getMatrix() {
-    return deque.peek().tensor_copy();
+    return deque.peek().matrix_copy();
   }
 
   /** @param p
