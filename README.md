@@ -210,6 +210,11 @@ Smoothing
 
 <td>
 
+
+Wachspress
+
+<td>
+
 ![dubinspathcurvature](https://user-images.githubusercontent.com/4012178/50681318-5d72cc80-100b-11e9-943e-e168d0463eca.png)
 
 Dubins path curvature
