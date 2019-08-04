@@ -5,7 +5,7 @@ package ch.ethz.idsc.sophus.math.sample;
 import java.io.Serializable;
 import java.util.Random;
 
-import ch.ethz.idsc.sophus.hs.sn.S2RandomSample;
+import ch.ethz.idsc.sophus.hs.s2.S2RandomSample;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;

@@ -51,7 +51,7 @@ public class GeodesicCenter implements TensorUnaryOperator {
           ? mask.Get(radius + i)
           : mask.Get(radius + i).multiply(TWO), radius);
       Scalar factor = RealScalar.ONE;
-      Tensor splits = Tensors.empty();
+      Tensor splits = Tensors.reserve(radius);
       for (int index = 0; index < radius; ++index) {
         Scalar lambda = halfmask.Get(index).divide(factor);
         splits.append(lambda);

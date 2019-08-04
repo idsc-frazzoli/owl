@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
+// TODO GJOEL not used yet, not generic for sophus: move to rrts specific package in owl
 public class DirectedRandomSample implements RandomSampleInterface, Serializable {
   /** the parameters define the coordinate bounds of the axis-aligned box
    * from which the samples are drawn

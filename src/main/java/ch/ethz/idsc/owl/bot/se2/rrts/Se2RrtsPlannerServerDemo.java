@@ -29,7 +29,6 @@ import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
@@ -94,7 +93,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
       owlyFrame.setRrts(transitionSpace, server.getRoot().get(), transitionRegionQuery);
       Optional<List<TrajectorySample>> optional = server.getTrajectory();
       if (optional.isPresent()) {
-        optional.get().stream().map(TrajectorySample::stateTime).map(StateTime::state).map(Extract2D.FUNCTION).forEach(trajectory::append);
+        optional.get().stream().map(TrajectorySample::stateTime).map(StateTime::state).forEach(trajectory::append);
         owlyFrame.geometricComponent.addRenderInterface(new RenderInterface() {
           @Override
           public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
