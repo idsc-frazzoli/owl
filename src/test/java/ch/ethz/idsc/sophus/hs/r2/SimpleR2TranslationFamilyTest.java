@@ -1,7 +1,7 @@
 // code by jph
-package ch.ethz.idsc.owl.math.map;
+package ch.ethz.idsc.sophus.hs.r2;
 
-import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
+import ch.ethz.idsc.sophus.math.BijectionFamily;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -11,9 +11,9 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import junit.framework.TestCase;
 
-public class TranslationFamilyTest extends TestCase {
+public class SimpleR2TranslationFamilyTest extends TestCase {
   public void testSimple() {
-    BijectionFamily bijectionFamily = new SimpleTranslationFamily(s -> Tensors.of(RealScalar.of(3), RealScalar.of(100).add(s)));
+    BijectionFamily bijectionFamily = new SimpleR2TranslationFamily(s -> Tensors.of(RealScalar.of(3), RealScalar.of(100).add(s)));
     Distribution distribution = DiscreteUniformDistribution.of(-15, 16);
     for (int index = 0; index < 100; ++index) {
       Scalar scalar = RandomVariate.of(distribution);

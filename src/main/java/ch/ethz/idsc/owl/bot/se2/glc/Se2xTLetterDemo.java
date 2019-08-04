@@ -12,14 +12,11 @@ import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
-import ch.ethz.idsc.owl.bot.util.SimpleTranslationFamily;
 import ch.ethz.idsc.owl.glc.adapter.TrajectoryObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.map.BijectionFamily;
-import ch.ethz.idsc.owl.math.map.Se2Family;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
@@ -29,6 +26,9 @@ import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
+import ch.ethz.idsc.sophus.hs.r2.Se2Family;
+import ch.ethz.idsc.sophus.hs.r2.SimpleR2TranslationFamily;
+import ch.ethz.idsc.sophus.math.BijectionFamily;
 import ch.ethz.idsc.subare.core.td.SarsaType;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -48,7 +48,7 @@ public class Se2xTLetterDemo implements DemoInterface {
     ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
     carxTEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     // ---
-    BijectionFamily oscillation = new SimpleTranslationFamily(s -> Tensors.vector( //
+    BijectionFamily oscillation = new SimpleR2TranslationFamily(s -> Tensors.vector( //
         Math.sin(s.number().doubleValue() * .12) * 3.0 + 3.6, 4.0));
     Region<StateTime> region1 = new R2xTEllipsoidStateTimeRegion( //
         Tensors.vector(0.4, 0.5), oscillation, () -> carxTEntity.getStateTimeNow().time());

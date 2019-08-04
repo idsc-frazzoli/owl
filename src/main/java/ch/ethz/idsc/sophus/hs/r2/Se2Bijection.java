@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.map;
+package ch.ethz.idsc.sophus.hs.r2;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * (SE2 matrix)^-1 dot point
  * 
  * @see Se2InverseAction */
-public class Se2Bijection implements RigidBijection, Serializable {
+public class Se2Bijection implements R2RigidBijection, Serializable {
   private final Tensor xya;
 
   /** @param xya == {px, py, angle} as member of Lie group SE2 */

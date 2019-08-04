@@ -1,18 +1,17 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.util;
+package ch.ethz.idsc.sophus.hs.r2;
 
-import ch.ethz.idsc.owl.math.map.TranslationFamily;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** the term "family" conveys the meaning that the translation
  * depends on a single parameter, for instance time */
-public final class SimpleTranslationFamily extends TranslationFamily {
+public final class SimpleR2TranslationFamily extends R2TranslationFamily {
   private final ScalarTensorFunction function;
 
   /** @param function maps a scalar to a vector in R^n */
-  public SimpleTranslationFamily(ScalarTensorFunction function) {
+  public SimpleR2TranslationFamily(ScalarTensorFunction function) {
     this.function = function;
   }
 

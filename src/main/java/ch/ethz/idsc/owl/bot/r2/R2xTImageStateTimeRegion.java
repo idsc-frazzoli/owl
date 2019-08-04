@@ -9,10 +9,10 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.map.RigidFamily;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.sophus.hs.r2.R2RigidFamily;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 /** for images only rigid transformations are allowed */
 public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterface, Serializable {
   private final ImageRegion imageRegion;
-  private final RigidFamily rigidFamily;
+  private final R2RigidFamily rigidFamily;
   private final Supplier<Scalar> supplier;
   /** image render */
   private final RenderInterface renderInterface;
@@ -29,7 +29,7 @@ public class R2xTImageStateTimeRegion implements Region<StateTime>, RenderInterf
   /** @param imageRegion
    * @param rigidFamily
    * @param supplier */
-  public R2xTImageStateTimeRegion(ImageRegion imageRegion, RigidFamily rigidFamily, Supplier<Scalar> supplier) {
+  public R2xTImageStateTimeRegion(ImageRegion imageRegion, R2RigidFamily rigidFamily, Supplier<Scalar> supplier) {
     this.imageRegion = imageRegion;
     this.rigidFamily = rigidFamily;
     this.supplier = supplier;

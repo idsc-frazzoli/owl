@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.hs.r2;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

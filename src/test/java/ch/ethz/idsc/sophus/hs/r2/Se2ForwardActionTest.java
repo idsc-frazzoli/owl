@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.map;
+package ch.ethz.idsc.sophus.hs.r2;
 
 import java.io.IOException;
 

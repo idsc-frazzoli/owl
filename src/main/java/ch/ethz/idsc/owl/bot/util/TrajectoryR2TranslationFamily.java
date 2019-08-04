@@ -5,24 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.map.RigidFamily;
-import ch.ethz.idsc.owl.math.map.TranslationFamily;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.sophus.hs.r2.R2RigidFamily;
+import ch.ethz.idsc.sophus.hs.r2.R2TranslationFamily;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-public class TrajectoryTranslationFamily extends TranslationFamily {
+public class TrajectoryR2TranslationFamily extends R2TranslationFamily {
   /** @param stateIntegrator
    * @param initial
    * @param flow
    * @return */
-  public static RigidFamily create(StateIntegrator stateIntegrator, StateTime initial, Flow flow) {
+  public static R2RigidFamily create(StateIntegrator stateIntegrator, StateTime initial, Flow flow) {
     List<StateTime> trajectory = stateIntegrator.trajectory(initial, flow);
-    return new TrajectoryTranslationFamily(trajectory, initial);
+    return new TrajectoryR2TranslationFamily(trajectory, initial);
   }
 
   // ---
@@ -31,7 +31,7 @@ public class TrajectoryTranslationFamily extends TranslationFamily {
   private final Scalar delta;
   private final int limit;
 
-  private TrajectoryTranslationFamily(List<StateTime> trajectory, StateTime initial) {
+  private TrajectoryR2TranslationFamily(List<StateTime> trajectory, StateTime initial) {
     list.add(Extract2D.FUNCTION.apply(initial.state()));
     trajectory.stream() //
         .map(StateTime::state) //

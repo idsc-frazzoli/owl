@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.itp;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.hs.r2.Se2UniformResample;
@@ -17,18 +16,19 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Resampling.html">Resampling</a> */
 public class UniformResample implements CurveSubdivision, Serializable {
   /** @param tensorMetric
    * @param splitInterface
-   * @param spacing
+   * @param spacing positive
    * @return
    * @see RnUniformResample
    * @see Se2UniformResample */
   public static CurveSubdivision of(TensorMetric tensorMetric, SplitInterface splitInterface, Scalar spacing) {
-    return new UniformResample(tensorMetric, splitInterface, Objects.requireNonNull(spacing));
+    return new UniformResample(tensorMetric, splitInterface, Sign.requirePositive(spacing));
   }
 
   // ---

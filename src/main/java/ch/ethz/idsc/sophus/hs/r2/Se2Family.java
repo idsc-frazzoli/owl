@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.owl.math.map;
+package ch.ethz.idsc.sophus.hs.r2;
 
 import java.io.Serializable;
 
@@ -13,11 +13,11 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** the term "family" conveys the meaning that the rigid transformation
  * depends on a single parameter, for instance time */
-public final class Se2Family implements RigidFamily, Serializable {
+public final class Se2Family implements R2RigidFamily, Serializable {
   /** @param center
    * @param rotation
    * @return */
-  public static RigidFamily rotationAround(Tensor center, ScalarUnaryOperator rotation) {
+  public static R2RigidFamily rotationAround(Tensor center, ScalarUnaryOperator rotation) {
     return new Se2Family(time -> {
       Scalar theta = rotation.apply(time);
       return center.subtract(RotationMatrix.of(theta).dot(center)).append(theta);

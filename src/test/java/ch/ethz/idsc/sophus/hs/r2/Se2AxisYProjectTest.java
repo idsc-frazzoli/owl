@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.hs.r2;
 
-import ch.ethz.idsc.owl.math.map.Se2Bijection;
 import ch.ethz.idsc.owl.math.sample.RandomSample;
 import ch.ethz.idsc.owl.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.owl.math.sample.SphereRandomSample;
