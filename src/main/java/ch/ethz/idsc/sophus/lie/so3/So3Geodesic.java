@@ -4,7 +4,6 @@ package ch.ethz.idsc.sophus.lie.so3;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
@@ -13,8 +12,8 @@ public enum So3Geodesic implements GeodesicInterface {
   // ---
   @Override
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    Tensor log = Rodrigues.log(LinearSolve.of(p, q));
-    return scalar -> p.dot(Rodrigues.exp(log.multiply(scalar)));
+    Tensor log = So3Exponential.INSTANCE.log(LinearSolve.of(p, q));
+    return scalar -> p.dot(So3Exponential.INSTANCE.exp(log.multiply(scalar)));
   }
 
   /** p and q are orthogonal matrices with dimension 3 x 3 */

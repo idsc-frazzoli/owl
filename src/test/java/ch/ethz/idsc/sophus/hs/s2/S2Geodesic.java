@@ -2,12 +2,12 @@
 package ch.ethz.idsc.sophus.hs.s2;
 
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
+import ch.ethz.idsc.sophus.lie.so3.So3Exponential;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.Cross;
-import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Sin;
@@ -28,7 +28,7 @@ public enum S2Geodesic implements GeodesicInterface {
       return scalar -> p.copy();
     Scalar prod = a.divide(sina);
     Tensor cross = Cross.of(p, q);
-    return scalar -> Rodrigues.exp(cross.multiply(scalar).multiply(prod)).dot(p);
+    return scalar -> So3Exponential.INSTANCE.exp(cross.multiply(scalar).multiply(prod)).dot(p);
   }
 
   /** p and q are vectors of length 3 with unit length

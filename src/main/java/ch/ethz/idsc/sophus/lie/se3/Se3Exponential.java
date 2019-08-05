@@ -4,12 +4,12 @@ package ch.ethz.idsc.sophus.lie.se3;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroupElement;
 import ch.ethz.idsc.sophus.lie.gl.LinearGroup;
+import ch.ethz.idsc.sophus.lie.so3.So3Exponential;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.Cross;
-import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -45,8 +45,8 @@ public enum Se3Exponential implements LieExponential {
   @Override // from LieExponential
   public Tensor log(Tensor g) {
     Tensor R = Se3Matrix.rotation(g);
-    Tensor wx = Rodrigues.logMatrix(R);
-    Tensor w = Tensors.of(wx.Get(2, 1), wx.Get(0, 2), wx.Get(1, 0)); // copied from Rodrigues
+    Tensor wx = So3Exponential.logMatrix(R);
+    Tensor w = Tensors.of(wx.Get(2, 1), wx.Get(0, 2), wx.Get(1, 0)); // copied from So3Exponential
     Scalar theta = Norm._2.ofVector(w);
     Tensor wx2 = wx.dot(wx);
     Se3Numerics se3Numerics = new Se3Numerics(theta);
