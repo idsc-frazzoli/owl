@@ -63,7 +63,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
-        return RrtsFlowHelper.U_R2.apply(orig, dest);
+        return RrtsFlowHelper.u_r2(orig, dest);
       }
     };
     server.setGoal(goal);
@@ -104,7 +104,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
-        return RrtsFlowHelper.U_SE2.apply(orig, dest);
+        return RrtsFlowHelper.u_se2(orig, dest);
       }
     };
     server.setGoal(goal);
@@ -145,7 +145,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
-        return RrtsFlowHelper.U_SE2.apply(orig, dest);
+        return RrtsFlowHelper.u_se2(orig, dest);
       }
     };
     server.setGoal(goal);

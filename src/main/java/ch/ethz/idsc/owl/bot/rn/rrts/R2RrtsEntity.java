@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 
           @Override
           protected Tensor uBetween(StateTime orig, StateTime dest) {
-            return RrtsFlowHelper.U_R2.apply(orig, dest);
+            return RrtsFlowHelper.u_r2(orig, dest);
           }
         }, //
         new SimpleEpisodeIntegrator( //

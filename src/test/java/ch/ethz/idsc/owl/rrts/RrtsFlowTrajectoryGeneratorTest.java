@@ -56,7 +56,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
     RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
         SingleIntegratorStateSpaceModel.INSTANCE, //
-        RrtsFlowHelper.U_R2);
+        RrtsFlowHelper::u_r2);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(RnTransitionSpace.INSTANCE, sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     assertEquals(31, trajectory.size());
@@ -94,7 +94,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
     RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
         Se2StateSpaceModel.INSTANCE, //
-        RrtsFlowHelper.U_SE2);
+        RrtsFlowHelper::u_se2);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(DubinsTransitionSpace.shortest(RealScalar.ONE), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
@@ -144,7 +144,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
     RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
         Se2StateSpaceModel.INSTANCE, //
-        RrtsFlowHelper.U_SE2);
+        RrtsFlowHelper::u_se2);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(ClothoidTransitionSpace.INSTANCE, sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
@@ -196,7 +196,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
     RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
         Se2StateSpaceModel.INSTANCE, //
-        RrtsFlowHelper.U_SE2);
+        RrtsFlowHelper::u_se2);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);

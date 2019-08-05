@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
           @Override
           protected Tensor uBetween(StateTime orig, StateTime dest) {
-            return RrtsFlowHelper.U_SE2.apply(orig, dest);
+            return RrtsFlowHelper.u_se2(orig, dest);
           }
         }, //
         new SimpleEpisodeIntegrator( //
