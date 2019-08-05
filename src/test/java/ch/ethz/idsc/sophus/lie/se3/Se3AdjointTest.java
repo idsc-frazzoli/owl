@@ -3,11 +3,11 @@ package ch.ethz.idsc.sophus.lie.se3;
 
 import java.util.Arrays;
 
+import ch.ethz.idsc.sophus.lie.so3.So3Exponential;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -21,7 +21,7 @@ public class Se3AdjointTest extends TestCase {
   public void testForwardInverse() {
     Distribution distribution = NormalDistribution.standard();
     for (int count = 0; count < 100; ++count) {
-      Tensor g = Se3Matrix.of(Rodrigues.exp(RandomVariate.of(distribution, 3)), RandomVariate.of(distribution, 3));
+      Tensor g = Se3Matrix.of(So3Exponential.INSTANCE.exp(RandomVariate.of(distribution, 3)), RandomVariate.of(distribution, 3));
       TensorUnaryOperator se3Adjoint = Se3Adjoint.forward(g);
       Tensor u_w = RandomVariate.of(distribution, 2, 3);
       Tensor out = se3Adjoint.apply(u_w);

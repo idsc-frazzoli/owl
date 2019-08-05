@@ -37,12 +37,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     return c1.multiply(s).add(c0);
   }
 
-  @Override
+  @Override // from HeadTailInterface
   public Scalar head() {
     return c0;
   }
 
-  @Override
+  @Override // from HeadTailInterface
   public Scalar tail() {
     return c0.add(c1);
   }

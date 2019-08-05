@@ -1,7 +1,6 @@
 // code by jph
-package ch.ethz.idsc.sophus.lie.se2;
+package ch.ethz.idsc.sophus.hs.r2;
 
-import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

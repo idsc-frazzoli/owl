@@ -32,9 +32,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     states = Tensors.empty();
     for (Tensor perm : Permutations.of(Range.of(0, resolution))) {
       Tensor pair = represent(perm);
-      if (pair.Get(1).equals(RealScalar.ONE)) {
+      if (pair.Get(1).equals(RealScalar.ONE))
         states.append(pair.get(0));
-      }
     }
     states.append(COLLISION);
     FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.of(1), RealScalar.of(2));

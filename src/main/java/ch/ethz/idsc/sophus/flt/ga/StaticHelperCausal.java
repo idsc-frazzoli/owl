@@ -14,14 +14,14 @@ import ch.ethz.idsc.tensor.alg.Last;
    * @throws Exception if mask is not a vector, or empty, or entries do not add up to 1 */
   public static Tensor splits(Tensor mask) {
     AffineQ.require(mask);
-    Tensor splits = Tensors.empty();
+    int last = mask.length() - 1;
+    Tensor splits = Tensors.reserve(last);
     Scalar factor = mask.Get(0);
-    for (int index = 1; index < mask.length() - 1; ++index) {
+    for (int index = 1; index < last; ++index) {
       factor = factor.add(mask.get(index));
       Scalar lambda = mask.Get(index).divide(factor);
       splits.append(lambda);
     }
-    splits.append(Last.of(mask));
-    return splits;
+    return splits.append(Last.of(mask));
   }
 }

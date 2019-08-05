@@ -10,6 +10,7 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.so3.So3Exponential;
 import ch.ethz.idsc.sophus.lie.so3.So3Geodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -24,7 +25,6 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.Serialization;
-import ch.ethz.idsc.tensor.lie.Rodrigues;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -75,7 +75,7 @@ public class CenterFilterTest extends TestCase {
     TensorUnaryOperator geodesicCenter = GeodesicCenter.of(So3Geodesic.INSTANCE, SmoothingKernel.HAMMING);
     TensorUnaryOperator geodesicCenterFilter = CenterFilter.of(geodesicCenter, 1);
     Distribution distribution = UniformDistribution.unit();
-    Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(Rodrigues::exp));
+    Tensor tensor = Tensor.of(RandomVariate.of(distribution, 10, 3).stream().map(So3Exponential.INSTANCE::exp));
     Tensor result = geodesicCenterFilter.apply(tensor);
     assertEquals(Dimensions.of(tensor), Dimensions.of(result));
   }

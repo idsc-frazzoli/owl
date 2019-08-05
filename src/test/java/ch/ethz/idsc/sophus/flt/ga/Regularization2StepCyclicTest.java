@@ -38,6 +38,12 @@ public class Regularization2StepCyclicTest extends TestCase {
     assertEquals(CYCLIC.apply(Tensors.vector(3)), Tensors.vector(3));
   }
 
+  public void testTuple() {
+    Tensor tensor = CYCLIC.apply(Tensors.vector(3, 2));
+    ExactTensorQ.require(tensor);
+    assertEquals(tensor, Tensors.fromString("{11/4, 9/4}"));
+  }
+
   public void testZero() {
     Tensor signal = Tensors.vector(1, 1, 1, 2, 1, 1, 3, 1, 1, 1);
     Tensor tensor = Regularization2Step.cyclic(RnGeodesic.INSTANCE, RealScalar.ZERO).apply(signal);

@@ -49,6 +49,8 @@ public enum SmoothingKernel implements ScalarUnaryOperator {
   /** has nice properties in the frequency domain */
   HAMMING(HammingWindow.FUNCTION), //
   HANN(HannWindow.FUNCTION), //
+  // TODO JPH TENSOR 077
+  // LANCZOS(LanczosWindow.FUNCTION), //
   NUTTALL(NuttallWindow.FUNCTION), //
   PARZEN(ParzenWindow.FUNCTION), //
   TUKEY(TukeyWindow.FUNCTION), //

@@ -51,11 +51,11 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
           ? mask.Get(i).divide(TWO)
           : mask.Get(i), radius + 1);
       Scalar factor = halfmask.Get(radius);
-      Tensor splits = Tensors.empty();
-      for (int index = radius - 1; index >= 0; --index) {
+      Tensor splits = Tensors.reserve(radius);
+      for (int index = radius - 1; 0 <= index; --index) {
         Scalar lambda = factor.divide(factor.add(halfmask.Get(index)));
-        factor = factor.add(halfmask.Get(index));
         splits.append(lambda);
+        factor = factor.add(halfmask.Get(index));
       }
       return splits;
     }
