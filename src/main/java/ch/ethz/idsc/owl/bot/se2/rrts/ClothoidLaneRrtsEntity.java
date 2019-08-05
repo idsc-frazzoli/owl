@@ -1,10 +1,14 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
+import java.awt.Graphics2D;
+
 import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
 import ch.ethz.idsc.owl.ani.api.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.glc.CarEntity;
+import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -77,5 +81,11 @@ import ch.ethz.idsc.tensor.opt.Pi;
   @Override // from TrajectoryEntity
   public Scalar delayHint() {
     return DELAY_HINT;
+  }
+
+  @Override // from RenderInterface
+  public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    ((LaneRrtsPlannerServer) plannerServer).goalRegion().ifPresent(region -> RegionRenders.draw(geometricLayer, graphics, region));
+    super.render(geometricLayer, graphics);
   }
 }
