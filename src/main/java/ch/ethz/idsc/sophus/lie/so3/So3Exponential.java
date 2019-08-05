@@ -2,22 +2,18 @@
 package ch.ethz.idsc.sophus.lie.so3;
 
 import ch.ethz.idsc.sophus.lie.LieExponential;
-import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ArcCos;
-import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sinc;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -35,7 +31,7 @@ public enum So3Exponential implements LieExponential {
   INSTANCE;
   // ---
   private static final Tensor ID3 = IdentityMatrix.of(3);
-  private static final Scalar HALF = RationalScalar.HALF;
+  private static final Scalar HALF = DoubleScalar.of(0.5);
 
   @Override // from LieExponential
   public Tensor exp(Tensor vector) {
@@ -51,12 +47,9 @@ public enum So3Exponential implements LieExponential {
   /** @param matrix with dimensions 3 x 3 that satisfies OrthogonalMatrixQ
    * @return skew-symmetric 3 x 3 matrix X with exp X == matrix */
   public static Tensor logMatrix(Tensor matrix) {
-    if (MatrixQ.ofSize(matrix, 3, 3) && OrthogonalMatrixQ.of(matrix)) {
-      Scalar theta = theta(matrix);
-      if (Scalars.isZero(theta))
-        return Array.zeros(3, 3);
-      Scalar sin = Sin.FUNCTION.apply(theta);
-      return matrix.subtract(Transpose.of(matrix)).multiply(theta.divide(sin.add(sin)));
+    if (OrthogonalMatrixQ.of(matrix)) {
+      Scalar sinc = Sinc.FUNCTION.apply(theta(matrix));
+      return matrix.subtract(Transpose.of(matrix)).divide(sinc.add(sinc));
     }
     throw TensorRuntimeException.of(matrix);
   }

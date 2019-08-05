@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.red.ArgMin;
+import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /** used as logo of edelweis */
@@ -34,8 +35,8 @@ import ch.ethz.idsc.tensor.red.Norm;
     for (int count = 0; count < 4; ++count)
       seed = Flatten.of(Outer.of(Se2onR2Demo::action, actions, seed), 1);
     Tensor tensor = Tensor.of(seed.stream().map(Norm._2::ofVector));
-    return RealScalar.of(ArgMin.of(tensor));
-    // return tensor.stream().reduce(Min::of).get().Get();
+    Scalar dist = tensor.stream().reduce(Min::of).get().Get();
+    return RealScalar.of(ArgMin.of(tensor) * 0.01).add(dist);
   }
 
   private static Tensor action(Tensor xya, Tensor uv) {
