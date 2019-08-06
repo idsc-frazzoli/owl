@@ -2,12 +2,15 @@
 // inspired by https://www.mathopenref.com/coordpolygonarea.html
 package ch.ethz.idsc.sophus.ply;
 
+import java.util.Iterator;
+
 import ch.ethz.idsc.sophus.math.Det2D;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 
 /** polygon not necessarily convex
@@ -21,10 +24,11 @@ public enum PolygonArea implements TensorScalarFunction {
   public Scalar apply(Tensor polygon) {
     if (Tensors.isEmpty(polygon))
       return RealScalar.ZERO;
-    int last = polygon.length() - 1;
-    Scalar sum = Det2D.of(polygon.get(last), polygon.get(0));
-    for (int index = 0; index < last; ++index)
-      sum = sum.add(Det2D.of(polygon.get(index), polygon.get(index + 1)));
+    Scalar sum = RealScalar.ZERO;
+    Tensor prev = Last.of(polygon);
+    Iterator<Tensor> iterator = polygon.iterator();
+    while (iterator.hasNext())
+      sum = sum.add(Det2D.of(prev, prev = iterator.next()));
     return sum.multiply(RationalScalar.HALF);
   }
 }

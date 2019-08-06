@@ -4,11 +4,13 @@ package ch.ethz.idsc.owl.rrts;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
+import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsFlow;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
+import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsFlow;
 import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNdType;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -63,7 +65,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
-        return RrtsFlowHelper.U_R2.apply(orig, dest);
+        return RnRrtsFlow.uBetween(orig, dest);
       }
     };
     server.setGoal(goal);
@@ -104,7 +106,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
-        return RrtsFlowHelper.U_SE2.apply(orig, dest);
+        return Se2RrtsFlow.uBetween(orig, dest);
       }
     };
     server.setGoal(goal);
@@ -145,7 +147,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
-        return RrtsFlowHelper.U_SE2.apply(orig, dest);
+        return Se2RrtsFlow.uBetween(orig, dest);
       }
     };
     server.setGoal(goal);

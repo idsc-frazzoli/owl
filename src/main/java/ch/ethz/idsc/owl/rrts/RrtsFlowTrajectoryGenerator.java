@@ -23,7 +23,9 @@ import ch.ethz.idsc.tensor.Tensor;
   private final StateSpaceModel stateSpaceModel;
   private final BiFunction<StateTime, StateTime, Tensor> uBetween;
 
-  public RrtsFlowTrajectoryGenerator(StateSpaceModel stateSpaceModel, BiFunction<StateTime, StateTime, Tensor> uBetween) {
+  public RrtsFlowTrajectoryGenerator( //
+      StateSpaceModel stateSpaceModel, //
+      BiFunction<StateTime, StateTime, Tensor> uBetween) {
     this.stateSpaceModel = stateSpaceModel;
     this.uBetween = uBetween;
   }
