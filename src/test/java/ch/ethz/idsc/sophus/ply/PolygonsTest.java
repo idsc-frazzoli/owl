@@ -33,7 +33,7 @@ public class PolygonsTest extends TestCase {
         { 1, 0 }, //
         { 1, 1 }, //
         { 0, 1 } //
-    }).map(suo);
+    }).map(suo).unmodifiable();
     assertTrue(Polygons.isInside(polygon, Tensors.vector(0.5, .5).map(suo)));
     assertTrue(Polygons.isInside(polygon, Tensors.vector(0.9, .9).map(suo)));
     assertTrue(Polygons.isInside(polygon, Tensors.vector(0.1, .1).map(suo)));
@@ -74,6 +74,15 @@ public class PolygonsTest extends TestCase {
       Tensor wo2 = wo;
       wo = Tensors.vector(9, 9); // does not change wo2
       assertFalse(wo.equals(wo2));
+    }
+  }
+
+  public void testScalarFail() {
+    try {
+      Polygons.isInside(RealScalar.of(2), Tensors.vector(0.5, .5));
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 }
