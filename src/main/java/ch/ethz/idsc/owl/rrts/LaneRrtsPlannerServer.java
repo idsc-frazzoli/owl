@@ -63,7 +63,7 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   public void accept(LaneInterface laneInterface) {
     laneSampler = LaneRandomSample.along(laneInterface);
     goalSampler = LaneRandomSample.endSample(laneInterface);
-        // LaneRandomSample.endSample(laneInterface, RealScalar.of(10), Degree.of(25));
+    // LaneRandomSample.endSample(laneInterface, RealScalar.of(10), Degree.of(25));
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }

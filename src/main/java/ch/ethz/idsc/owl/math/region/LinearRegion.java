@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
+/** interval region in R^1 */
 public class LinearRegion extends ImplicitRegionWithDistance implements Serializable {
   private final Scalar center;
   private final Scalar radius;
@@ -39,6 +40,8 @@ public class LinearRegion extends ImplicitRegionWithDistance implements Serializ
 
   /** @return region as clip interval */
   public Clip clip() {
-    return Clips.interval(center.subtract(radius), center.add(radius));
+    return Clips.interval( //
+        center.subtract(radius), //
+        center.add(radius));
   }
 }

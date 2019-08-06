@@ -8,9 +8,11 @@ import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
+// TODO GJOEL possibly not implement Region<Tensor>
 public class RegionRandomSample implements Region<Tensor>, RandomSampleInterface {
   private static final int MAX_TRIES = 100;
 
+  // TODO GJOEL remove function since Extract2D.FUNCTION is too specific
   public static RegionRandomSample combine(RandomSampleInterface randomSampleInterface, Region<Tensor> region) {
     return combine(randomSampleInterface, region, Extract2D.FUNCTION);
   }

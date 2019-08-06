@@ -3,12 +3,15 @@ package ch.ethz.idsc.owl.math.region;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Chop;
 
+/** region in R^n */
 public class HyperplaneRegion extends ImplicitFunctionRegion implements Serializable {
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
@@ -31,6 +34,7 @@ public class HyperplaneRegion extends ImplicitFunctionRegion implements Serializ
    * @param distanceFromZero needed to reach the region starting from position (0, ..., 0)
    * That means, if distanceFromZero is negative, (0, ..., 0) is inside the region */
   public HyperplaneRegion(Tensor normal, Scalar distanceFromZero) {
+    Chop._12.requireClose(Norm._2.ofVector(normal), RealScalar.ONE);
     this.normal = normal;
     this.distanceFromZero = distanceFromZero;
   }

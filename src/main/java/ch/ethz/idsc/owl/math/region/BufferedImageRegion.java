@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
 
+/** region in R2 */
 public class BufferedImageRegion implements Region<Tensor>, RenderInterface {
   private final BufferedImage bufferedImage;
   private final AffineFrame affineFrame;

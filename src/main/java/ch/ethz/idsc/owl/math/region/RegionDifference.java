@@ -2,10 +2,16 @@
 package ch.ethz.idsc.owl.math.region;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class RegionDifference<T> implements Region<T>, Serializable {
+  /** @param belongs
+   * @param butNot
+   * @return belongs \ butNot */
   public static <T> Region<T> of(Region<T> belongs, Region<T> butNot) {
-    return new RegionDifference<>(belongs, butNot);
+    return new RegionDifference<>( //
+        Objects.requireNonNull(belongs), //
+        Objects.requireNonNull(butNot));
   }
 
   // ---
