@@ -11,6 +11,7 @@ import java.util.Random;
 
 import ch.ethz.idsc.owl.data.tree.NodeCostComparator;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
+import ch.ethz.idsc.sophus.math.sample.BiasedSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 
 public class DefaultRrtsPlanner implements RrtsPlanner {
@@ -48,7 +49,14 @@ public class DefaultRrtsPlanner implements RrtsPlanner {
 
   @Override // from ExpandInterface
   public void expand(RrtsNode node) { // node is not used, instead new random sample
-    rrts.insertAsNode(spaceSample.randomSample(RANDOM), K_NEAREST);
+    boolean success = rrts.insertAsNode(spaceSample.randomSample(RANDOM), K_NEAREST).isPresent();
+    if (spaceSample instanceof BiasedSample) {
+      if (success)
+        ((BiasedSample) spaceSample).resetCurrent();
+        // ((BiasedSample) spaceSample).discourage();
+      else
+        ((BiasedSample) spaceSample).encourage();
+    }
     if (queue.isEmpty()) { // TODO RRTS logic not final
       rrts.insertAsNode(goalSample.randomSample(RANDOM), K_NEAREST).ifPresent(queue::add);
     }

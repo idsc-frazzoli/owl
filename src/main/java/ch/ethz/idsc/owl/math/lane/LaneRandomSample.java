@@ -63,7 +63,7 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
     return RegionRandomSample.combine(randomSampleInterface, new ConeRegion(point, semi));
   }
 
-  private RandomSampleInterface around(int index) {
+  protected RandomSampleInterface around(int index) {
     return around(laneInterface.midLane().get(index), laneInterface.margins().Get(index));
   }
 
@@ -73,7 +73,7 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
   // ---
   public final LaneInterface laneInterface;
 
-  private LaneRandomSample(LaneInterface lane) {
+  protected LaneRandomSample(LaneInterface lane) {
     this.laneInterface = lane;
   }
 

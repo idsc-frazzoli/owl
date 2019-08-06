@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.lane.BiasedLaneSample;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.LaneRandomSample;
@@ -61,7 +62,7 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
 
   @Override // from Consumer
   public void accept(LaneInterface laneInterface) {
-    laneSampler = LaneRandomSample.along(laneInterface);
+    laneSampler = BiasedLaneSample.along(laneInterface);
     goalSampler = LaneRandomSample.endSample(laneInterface);
         // LaneRandomSample.endSample(laneInterface, RealScalar.of(10), Degree.of(25));
     if (greedy)
