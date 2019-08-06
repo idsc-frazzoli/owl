@@ -15,39 +15,39 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.lie.AngleVector;
+import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.qty.Degree;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class LaneRandomSample implements RandomSampleInterface, Serializable {
-  // public static RandomSampleInterface along(SplitInterface geodesicInterface, Scalar width, Tensor... controlPoints) {
-  // return along(geodesicInterface, width, Tensors.of(controlPoints));
+  // public static RandomSampleInterface along(SplitInterface geodesicInterface, Scalar width, Tensor... controlPoints, Distribution rotDist) {
+  // return along(geodesicInterface, width, Tensors.of(controlPoints), rotDist);
   // }
   //
-  // public static RandomSampleInterface along(SplitInterface geodesicInterface, Scalar width, Collection<Tensor> controlPoints) {
-  // return along(geodesicInterface, width, Tensor.of(controlPoints.stream()));
+  // public static RandomSampleInterface along(SplitInterface geodesicInterface, Scalar width, Collection<Tensor> controlPoints, Distribution rotDist) {
+  // return along(geodesicInterface, width, Tensor.of(controlPoints.stream()), rotDist);
   // }
   //
-  // public static RandomSampleInterface along(SplitInterface geodesicInterface, Scalar width, Tensor controlPoints) {
-  // return new LaneRandomSample(StableLane.of(geodesicInterface, controlPoints, width));
+  // public static RandomSampleInterface along(SplitInterface geodesicInterface, Scalar width, Tensor controlPoints, Distribution rotDist) {
+  // return new LaneRandomSample(StableLane.of(geodesicInterface, controlPoints, width), rotDist);
   // }
-  public static RandomSampleInterface along(LaneInterface laneInterface) {
-    return new LaneRandomSample(laneInterface);
+  public static RandomSampleInterface along(LaneInterface laneInterface, Distribution rotDist) {
+    return new LaneRandomSample(laneInterface, rotDist);
   }
 
-  public static RandomSampleInterface startSample(LaneInterface laneInterface) {
-    return new LaneRandomSample(laneInterface).around(0);
+  public static RandomSampleInterface startSample(LaneInterface laneInterface, Distribution rotDist) {
+    return new LaneRandomSample(laneInterface, rotDist).around(0);
   }
 
-  public static RegionRandomSample endSample(LaneInterface laneInterface) {
+  public static RegionRandomSample endSample(LaneInterface laneInterface, Distribution rotDist) {
     return RegionRandomSample.combine( //
-        new LaneRandomSample(laneInterface).around(laneInterface.midLane().length() - 1), //
+        new LaneRandomSample(laneInterface, rotDist).around(laneInterface.midLane().length() - 1), //
         new SphericalRegion(Extract2D.FUNCTION.apply(Last.of(laneInterface.midLane())), Last.of(laneInterface.margins()).Get()));
   }
 
-  public static RegionRandomSample endSample(LaneInterface laneInterface, Scalar mu_r, Scalar semi) {
+  public static RegionRandomSample endSample(LaneInterface laneInterface, Distribution rotDist, Scalar mu_r, Scalar semi) {
     Sign.requirePositive(semi);
     Tensor point = Last.of(laneInterface.midLane());
     RandomSampleInterface randomSampleInterface = new RandomSampleInterface() {
@@ -56,7 +56,7 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
         Scalar r = RandomVariate.of(NormalDistribution.standard(), random).abs().multiply(mu_r);
         Scalar a1 = RandomVariate.of(UniformDistribution.of(semi.negate(), semi), random);
         Tensor xy = AngleVector.of(a1).multiply(r);
-        Scalar a2 = RandomVariate.of(NormalDistribution.standard(), random).multiply(MU_A);
+        Scalar a2 = RandomVariate.of(rotDist, random);
         return new Se2GroupElement(point).combine(xy.append(a2));
       }
     };
@@ -68,13 +68,12 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
   }
 
   // ---
-  // TODO GJOEL/JPH magic const
-  private final static Scalar MU_A = Degree.of(18);
-  // ---
   public final LaneInterface laneInterface;
+  private final Distribution rotDist;
 
-  private LaneRandomSample(LaneInterface lane) {
+  private LaneRandomSample(LaneInterface lane, Distribution rotDist) {
     this.laneInterface = lane;
+    this.rotDist = rotDist;
   }
 
   @Override // from RandomSampleInterface
@@ -84,13 +83,13 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
     return around(index).randomSample(random);
   }
 
-  private static RandomSampleInterface around(Tensor point, Scalar radius) {
+  private RandomSampleInterface around(Tensor point, Scalar radius) {
     return new RandomSampleInterface() {
       @Override // from RandomSampleInterface
       public Tensor randomSample(Random random) {
-        Tensor xy = BallRandomSample.of(Extract2D.FUNCTION.apply(point), radius).randomSample(random);
-        Scalar a = RandomVariate.of(NormalDistribution.of(point.Get(2), MU_A));
-        return xy.append(a);
+        Tensor trans = BallRandomSample.of(Extract2D.FUNCTION.apply(point).map(Scalar::zero), radius).randomSample(random);
+        Scalar rot = RandomVariate.of(rotDist, random);
+        return new Se2GroupElement(point).combine(trans.append(rot));
       }
     };
   }

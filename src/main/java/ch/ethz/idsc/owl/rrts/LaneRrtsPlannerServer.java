@@ -16,13 +16,20 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.math.sample.ConstantRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.sophus.math.sample.RegionRandomSample;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.qty.Degree;
 
 public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer implements LaneConsumer {
+  private static final Distribution DEFAULT_ROT_DIST = NormalDistribution.of(RealScalar.ZERO, Degree.of(5));
+  // ---
   private final boolean greedy;
   private RandomSampleInterface laneSampler;
   private RandomSampleInterface goalSampler;
+  private Distribution rotDist = DEFAULT_ROT_DIST;
 
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -61,9 +68,9 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
 
   @Override // from Consumer
   public void accept(LaneInterface laneInterface) {
-    laneSampler = LaneRandomSample.along(laneInterface);
-    goalSampler = LaneRandomSample.endSample(laneInterface);
-        // LaneRandomSample.endSample(laneInterface, RealScalar.of(10), Degree.of(25));
+    laneSampler = LaneRandomSample.along(laneInterface, rotDist);
+    goalSampler = LaneRandomSample.endSample(laneInterface, rotDist);
+        // LaneRandomSample.endSample(laneInterface, rotDist, RealScalar.of(10), Degree.of(25));
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }
@@ -72,5 +79,9 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
     if (goalSampler instanceof RegionRandomSample)
       return Optional.of(((RegionRandomSample) goalSampler).region());
     return Optional.empty();
+  }
+
+  public void setRotationDistribution(Distribution distribution) {
+    rotDist = distribution;
   }
 }
