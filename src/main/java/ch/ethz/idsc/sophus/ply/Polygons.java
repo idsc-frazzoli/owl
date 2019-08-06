@@ -2,9 +2,13 @@
 // adapted from PNPOLY - Point Inclusion in Polygon Test W. Randolph Franklin (WRF)
 package ch.ethz.idsc.sophus.ply;
 
+import java.util.Iterator;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 
 public enum Polygons {
   ;
@@ -15,20 +19,25 @@ public enum Polygons {
   public static boolean isInside(Tensor polygon, Tensor point) {
     final Scalar tx = point.Get(0);
     final Scalar ty = point.Get(1);
-    int i, j;
+    if (Tensors.isEmpty(polygon))
+      return false;
     boolean c = false;
-    for (i = 0, j = polygon.length() - 1; i < polygon.length(); j = i++) {
-      Scalar vyi = polygon.Get(i, 1);
-      Scalar vyj = polygon.Get(j, 1);
-      if (Scalars.lessThan(ty, vyi) != Scalars.lessThan(ty, vyj)) {
-        Scalar div = vyj.subtract(vyi);
+    Tensor prev = Last.of(polygon);
+    Iterator<Tensor> iterator = polygon.iterator();
+    while (iterator.hasNext()) {
+      Tensor next = iterator.next();
+      Scalar py = prev.Get(1);
+      Scalar ny = next.Get(1);
+      if (Scalars.lessThan(ty, ny) != Scalars.lessThan(ty, py)) {
+        Scalar div = py.subtract(ny);
         if (Scalars.nonZero(div)) {
-          Scalar vxi = polygon.Get(i, 0);
-          Scalar vxj = polygon.Get(j, 0);
-          Scalar r1 = vxj.subtract(vxi).multiply(ty.subtract(vyi));
-          c ^= Scalars.lessThan(tx, r1.divide(div).add(vxi));
+          Scalar px = prev.Get(0);
+          Scalar nx = next.Get(0);
+          Scalar r1 = px.subtract(nx).multiply(ty.subtract(ny));
+          c ^= Scalars.lessThan(tx, r1.divide(div).add(nx));
         }
       }
+      prev = next;
     }
     return c;
   }

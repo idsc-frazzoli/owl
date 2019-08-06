@@ -8,7 +8,11 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Reverse;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class PolygonAreaTest extends TestCase {
@@ -57,6 +61,16 @@ public class PolygonAreaTest extends TestCase {
     Scalar area = PolygonArea.FUNCTION.apply(poly);
     assertEquals(area, Scalars.fromString("0[cm^2]"));
     ExactScalarQ.require(area);
+  }
+
+  public void testAreaCirclePoints() {
+    Scalar area = PolygonArea.FUNCTION.apply(CirclePoints.of(100));
+    Chop._02.requireClose(area, Pi.VALUE);
+  }
+
+  public void testAreaCirclePointsReverse() {
+    Scalar area = PolygonArea.FUNCTION.apply(Reverse.of(CirclePoints.of(100)));
+    Chop._02.requireClose(area, Pi.VALUE.negate());
   }
 
   public void testAreaEmptyUnit() {
