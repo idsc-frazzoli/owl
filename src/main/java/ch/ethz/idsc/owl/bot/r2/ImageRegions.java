@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.region.ImageRegion;
@@ -9,7 +9,6 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.TensorRank;
-import ch.ethz.idsc.tensor.io.Import;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
 public enum ImageRegions {
@@ -19,19 +18,13 @@ public enum ImageRegions {
    * @param strict
    * @return */
   public static Region<Tensor> loadFromRepository(String path, Tensor range, boolean strict) {
-    return _universal(ResourceData.of(path), range, strict);
+    return from(ResourceData.bufferedImage(path), range, strict);
   }
 
-  /** @param file on local machine
-   * @param range vector of length 2
-   * @param strict
-   * @return */
-  public static ImageRegion loadFromLocalFile(File file, Tensor range, boolean strict) throws Exception {
-    return _universal(Import.of(file), range, strict);
-  }
-
-  private static ImageRegion _universal(Tensor image, Tensor range, boolean strict) {
-    return new ImageRegion(grayscale(image), range, strict);
+  public static Region<Tensor> from(BufferedImage bufferedImage, Tensor range, boolean strict) {
+    if (bufferedImage.getType() != BufferedImage.TYPE_BYTE_GRAY)
+      bufferedImage = Binarize.of(bufferedImage);
+    return ImageRegion.of(bufferedImage, range, strict);
   }
 
   /** grayscale images that encode free space (as black pixels) and the location of obstacles

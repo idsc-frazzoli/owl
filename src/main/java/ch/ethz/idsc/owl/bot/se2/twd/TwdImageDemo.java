@@ -10,7 +10,6 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -18,6 +17,7 @@ import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 
@@ -25,8 +25,8 @@ public class TwdImageDemo extends AbstractTwdDemo {
   static final LidarRaytracer LIDAR_RAYTRACER = new LidarRaytracer(Subdivide.of(-1, 1, 26), Subdivide.of(0, 4, 30));
   // ---
   private final R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._0F5C_2182;
-  private final ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-  private final TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
+  private final Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+  private final TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
 
   @Override // from AbstractTwdDemo
   TwdEntity configure(OwlyAnimationFrame owlyAnimationFrame) {
@@ -35,7 +35,7 @@ public class TwdImageDemo extends AbstractTwdDemo {
     owlyAnimationFrame.add(twdEntity);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     MouseGoal.simple(owlyAnimationFrame, twdEntity, plannerConstraint);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    owlyAnimationFrame.addBackground(RegionRenders.create(region));
     {
       RenderInterface renderInterface = new CameraEmulator( //
           48, RealScalar.of(10), twdEntity::getStateTimeNow, trajectoryRegionQuery);

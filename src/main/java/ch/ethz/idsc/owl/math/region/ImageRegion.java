@@ -23,9 +23,6 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 public class ImageRegion implements Region<Tensor>, Serializable {
   private static final Tensor ORIGIN = Array.zeros(2).unmodifiable();
 
-  // public static Region<Tensor> of(Tensor obstacleImage, Tensor range, boolean outside) {
-  // return new ImageRegion(obstacleImage, range, outside);
-  // }
   public static Region<Tensor> of(BufferedImage bufferedImage, Tensor range, boolean outside) {
     return new BufferedImageRegion(bufferedImage, //
         Dot.of( //

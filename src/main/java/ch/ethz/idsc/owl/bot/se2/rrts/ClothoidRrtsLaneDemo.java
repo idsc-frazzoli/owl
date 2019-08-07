@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -30,6 +30,7 @@ import ch.ethz.idsc.owl.sim.LidarRaytracer;
 import ch.ethz.idsc.sophus.app.curve.LaneConsumptionDemo;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
@@ -42,13 +43,13 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
   public ClothoidRrtsLaneDemo() {
     super();
-    ImageRegion imageRegion = R2ImageRegions._GTOB.imageRegion();
+    Region<Tensor> imageRegion = R2ImageRegions._GTOB.imageRegion();
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     TransitionRegionQuery transitionRegionQuery = TransitionRegionQueryUnion.wrap( //
         new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
         new TransitionCurvatureQuery(5.));
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, Math.PI / 4), RealScalar.ZERO);
-    ClothoidLaneRrtsEntity entity = new ClothoidLaneRrtsEntity(stateTime, transitionRegionQuery, imageRegion.origin(), imageRegion.range(), true);
+    ClothoidLaneRrtsEntity entity = new ClothoidLaneRrtsEntity(stateTime, transitionRegionQuery, Tensors.vector(0, 0), imageRegion.range(), true);
     LaneConsumer laneConsumer = new SimpleLaneConsumer(entity, null, Collections.singleton(entity));
     laneConsumptionDemo = new LaneConsumptionDemo(laneConsumer);
     laneConsumptionDemo.setControlPointsSe2(Tensors.of(stateTime.state()));

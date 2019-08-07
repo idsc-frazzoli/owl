@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
@@ -15,8 +16,8 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 /** collection of ready-to-use image regions */
 public enum R2ImageRegions {
   ;
-  static ImageRegion normal(BufferedImage bufferedImage, Tensor range, boolean strict) {
-    return new ImageRegion(ImageFormat.from(bufferedImage), range, strict);
+  static Region<Tensor> normal(BufferedImage bufferedImage, Tensor range, boolean strict) {
+    return ImageRegion.of(bufferedImage, range, strict);
   }
 
   // the use of normal is preferred over transpose
@@ -24,40 +25,40 @@ public enum R2ImageRegions {
     return new ImageRegion(Transpose.of(ImageFormat.from(bufferedImage)), range, strict);
   }
 
-  public static ImageRegion outside_0b36() {
+  public static Region<Tensor> outside_0b36(Tensor range) {
     CharImage charImage = CharImage.fillBlack(new Dimension(256, 256));
     charImage.setFont(new Font(Font.DIALOG, Font.PLAIN, 256));
     charImage.draw('\u0b36', new Point(30, 200));
-    return normal(charImage.bufferedImage(), Tensors.vector(7, 7), false);
+    return normal(charImage.bufferedImage(), range, false);
   }
 
-  public static ImageRegion inside_0b36() {
+  public static Region<Tensor> inside_0b36() {
     CharImage charImage = CharImage.fillWhite(new Dimension(210, 256));
     charImage.draw('\u0b36', new Point(0, 240));
     return normal(charImage.bufferedImage(), Tensors.vector(6, 7), false);
   }
 
-  public static ImageRegion inside_265b() {
+  public static Region<Tensor> inside_265b() {
     CharImage charImage = CharImage.fillWhite(new Dimension(320, 320));
     charImage.draw('\u265b', new Point(-20, 300));
     return normal(charImage.bufferedImage(), Tensors.vector(7, 7), false);
   }
 
-  public static ImageRegion inside_2180() {
+  public static Region<Tensor> inside_2180() {
     CharImage charImage = CharImage.fillWhite(new Dimension(480, 320));
     charImage.setFont(new Font(Font.DIALOG, Font.BOLD, 385));
     charImage.draw('\u2180', new Point(-10, 300));
     return normal(charImage.bufferedImage(), Tensors.vector(9, 6), false);
   }
 
-  public static ImageRegion inside_2181() {
+  public static Region<Tensor> inside_2181() {
     CharImage charImage = CharImage.fillWhite(new Dimension(300, 320));
     charImage.setFont(new Font(Font.DIALOG, Font.BOLD, 385));
     charImage.draw('\u2181', new Point(-10, 300));
     return normal(charImage.bufferedImage(), Tensors.vector(6, 6), false);
   }
 
-  public static ImageRegion inside_2182() {
+  public static Region<Tensor> inside_2182() {
     CharImage charImage = CharImage.fillWhite(new Dimension(480, 320));
     charImage.draw('\u2182', new Point(-10, 305));
     return normal(charImage.bufferedImage(), Tensors.vector(9, 6), false);
@@ -93,7 +94,7 @@ public enum R2ImageRegions {
   public static final R2ImageRegionWrap _GTOB = //
       new R2ImageRegionWrap(inside_gtob_charImage(), Tensors.vector(12, 12), 15);
 
-  private static Tensor inside_gtob_charImage() {
+  private static BufferedImage inside_gtob_charImage() {
     CharImage charImage = CharImage.fillWhite(new Dimension(640, 640));
     charImage.setFont(new Font(Font.DIALOG, Font.BOLD, 400));
     charImage.draw('G', new Point(0, 310));
@@ -101,7 +102,7 @@ public enum R2ImageRegions {
     charImage.draw('I', new Point(480, 323));
     charImage.draw('O', new Point(20, 560));
     charImage.draw('B', new Point(280, 580));
-    return Transpose.of(ImageFormat.from(charImage.bufferedImage()));
+    return ImageFormat.of(Transpose.of(ImageFormat.from(charImage.bufferedImage())));
   }
 
   /***************************************************/

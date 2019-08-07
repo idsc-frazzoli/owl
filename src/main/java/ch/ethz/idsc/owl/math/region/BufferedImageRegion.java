@@ -27,6 +27,8 @@ public class BufferedImageRegion implements Region<Tensor>, RenderInterface, Ser
    * @param pixel2model with dimension 3 x 3
    * @param outside membership */
   public BufferedImageRegion(BufferedImage bufferedImage, Tensor pixel2model, boolean outside) {
+    if (bufferedImage.getType() != BufferedImage.TYPE_BYTE_GRAY)
+      throw new IllegalArgumentException("" + bufferedImage.getType());
     this.bufferedImage = bufferedImage;
     this.pixel2model = pixel2model.copy();
     affineFrame = new AffineFrame(Inverse.of(pixel2model));

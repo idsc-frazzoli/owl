@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
@@ -45,7 +44,7 @@ public class Se2xTLetterDemo implements DemoInterface {
     owlyAnimationFrame.add(carxTEntity);
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
     carxTEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     // ---
     BijectionFamily oscillation = new SimpleR2TranslationFamily(s -> Tensors.vector( //
@@ -58,7 +57,7 @@ public class Se2xTLetterDemo implements DemoInterface {
     Region<StateTime> cog0 = new R2xTPolygonStateTimeRegion( //
         polygon, rigid3, () -> carxTEntity.getStateTimeNow().time());
     // ---
-    Region<Tensor> se2PointsVsRegion = Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), imageRegion);
+    Region<Tensor> se2PointsVsRegion = Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), region);
     TrajectoryRegionQuery trajectoryRegionQuery = new SimpleTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList( //
             new TimeInvariantRegion(se2PointsVsRegion), // <- expects se2 states
@@ -73,14 +72,14 @@ public class Se2xTLetterDemo implements DemoInterface {
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     // abstractEntity.raytraceQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    owlyAnimationFrame.addBackground(RegionRenders.create(region));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     // owlyAnimationFrame.addBackground((RenderInterface) region2);
     owlyAnimationFrame.addBackground((RenderInterface) cog0);
     // ---
     final TrajectoryRegionQuery ray = new SimpleTrajectoryRegionQuery( //
         RegionUnion.wrap(Arrays.asList( //
-            new TimeInvariantRegion(imageRegion), //
+            new TimeInvariantRegion(region), //
             region1,
             // region2,
             cog0 //

@@ -1,19 +1,16 @@
 // code by jph and jl
 package ch.ethz.idsc.owl.bot.rn;
 
-import java.util.List;
+import java.awt.image.BufferedImage;
 
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.BufferedImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.sca.N;
 
 public enum RnPointcloudRegions {
   ;
@@ -29,24 +26,24 @@ public enum RnPointcloudRegions {
 
   /** extrusion of non-zero pixels in given image by fixed radius
    * 
-   * @param imageRegion
+   * @param bufferedImageRegion
    * @param radius non-negative
    * @return */
-  public static Region<Tensor> from(ImageRegion imageRegion, Scalar radius) {
-    return RnPointcloudRegion.of(points(imageRegion), radius);
+  public static Region<Tensor> from(Region<Tensor> bufferedImageRegion, Scalar radius) {
+    return RnPointcloudRegion.of(points((BufferedImageRegion) bufferedImageRegion), radius);
   }
 
-  /* package */ static Tensor points(ImageRegion imageRegion) {
-    Tensor inverse = N.DOUBLE.of(imageRegion.scale().map(Scalar::reciprocal));
-    Tensor tensor = imageRegion.image();
-    List<Integer> dimensions = Dimensions.of(tensor);
+  /* package */ static Tensor points(BufferedImageRegion bufferedImageRegion) {
     Tensor points = Tensors.empty();
-    final int rows = dimensions.get(0);
+    BufferedImage bufferedImage = bufferedImageRegion.bufferedImage();
+    Tensor pixel2model = bufferedImageRegion.pixel2model();
+    int cols = bufferedImage.getWidth();
+    int rows = bufferedImage.getHeight();
     for (int row = 0; row < rows; ++row)
-      for (int col = 0; col < dimensions.get(1); ++col) {
-        Scalar occ = tensor.Get(row, col);
-        if (Scalars.nonZero(occ))
-          points.append(Tensors.vector(col, rows - row).pmul(inverse));
+      for (int col = 0; col < cols; ++col) {
+        Tensor model = pixel2model.dot(Tensors.vector(col, row, 1)).extract(0, 2);
+        if (bufferedImageRegion.isMember(model))
+          points.append(model);
       }
     return points;
   }
