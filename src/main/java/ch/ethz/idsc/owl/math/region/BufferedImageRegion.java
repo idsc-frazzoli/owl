@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
+import java.io.Serializable;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.AffineTransforms;
@@ -12,9 +13,10 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
 
-public class BufferedImageRegion implements Region<Tensor>, RenderInterface {
-  private final BufferedImage bufferedImage;
-  private final AffineFrame affineFrame;
+/** region in R2 */
+public class BufferedImageRegion implements Region<Tensor>, RenderInterface, Serializable {
+  private transient final BufferedImage bufferedImage;
+  private transient final AffineFrame affineFrame;
   private final Tensor pixel2model;
   private final int width;
   private final int height;
@@ -25,6 +27,8 @@ public class BufferedImageRegion implements Region<Tensor>, RenderInterface {
    * @param pixel2model with dimension 3 x 3
    * @param outside membership */
   public BufferedImageRegion(BufferedImage bufferedImage, Tensor pixel2model, boolean outside) {
+    if (bufferedImage.getType() != BufferedImage.TYPE_BYTE_GRAY)
+      throw new IllegalArgumentException("" + bufferedImage.getType());
     this.bufferedImage = bufferedImage;
     this.pixel2model = pixel2model.copy();
     affineFrame = new AffineFrame(Inverse.of(pixel2model));

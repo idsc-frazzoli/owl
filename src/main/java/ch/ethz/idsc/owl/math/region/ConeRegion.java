@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** planar infinite cone region */
+/** planar infinite cone region in R^2 */
 public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
   private final Tensor apex;
   private final TensorUnaryOperator inverse;

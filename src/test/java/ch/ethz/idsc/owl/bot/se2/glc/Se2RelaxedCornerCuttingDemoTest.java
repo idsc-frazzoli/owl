@@ -5,7 +5,7 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,8 +20,8 @@ public class Se2RelaxedCornerCuttingDemoTest extends TestCase {
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = Se2RelaxedCornerCuttingDemo.createResLo();
     carRelaxedEntity.setAdditionalCostFunction(r2ImageRegionWrap.costFunction());
-    ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-    PlannerConstraint plannerConstraint = Se2CarDemo.createConstraint(imageRegion);
+    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    PlannerConstraint plannerConstraint = Se2CarDemo.createConstraint(region);
     Tensor goal = Tensors.vector(4.183, 5.017, 1.571);
     RelaxedTrajectoryPlanner relaxedTrajectoryPlanner = //
         carRelaxedEntity.createTreePlanner(plannerConstraint, goal);

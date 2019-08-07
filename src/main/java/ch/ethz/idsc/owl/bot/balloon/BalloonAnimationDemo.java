@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -33,8 +34,7 @@ public class BalloonAnimationDemo implements DemoInterface {
     BalloonEntity balloonEntity = new BalloonEntity(episodeIntegrator, trajectoryControl, balloonStateSpaceModel);
     MouseGoal.simple(owlyAnimationFrame, balloonEntity, plannerConstraint);
     Tensor range = Tensors.vector(500, 100).unmodifiable();
-    Tensor obstacleImage = ResourceData.of("/io/mountainChain.png");
-    ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
+    Region<Tensor> imageRegion = ImageRegion.of(ResourceData.bufferedImage("/io/mountainChain.png"), range, true);
     owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
     owlyAnimationFrame.add(balloonEntity);
     owlyAnimationFrame.addBackground(AxesRender.INSTANCE);

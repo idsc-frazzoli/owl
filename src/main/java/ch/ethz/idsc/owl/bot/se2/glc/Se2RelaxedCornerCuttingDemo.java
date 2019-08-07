@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
@@ -50,7 +50,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     Tensor image = Transpose.of(ImageFormat.from(bufferedImage));
     Tensor range = Tensors.vector(12, 12);
     int ttl = 2;
-    return new R2ImageRegionWrap(image, range, ttl);
+    return new R2ImageRegionWrap(ImageFormat.of(image), range, ttl);
   }
 
   @Override // from Se2CarDemo
@@ -62,10 +62,10 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     R2ImageRegionWrap r2ImageRegionWrap = createResLo();
     carRelaxedEntity.setAdditionalCostFunction(r2ImageRegionWrap.costFunction());
     // ---
-    ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-    PlannerConstraint plannerConstraint = createConstraint(imageRegion);
+    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    PlannerConstraint plannerConstraint = createConstraint(region);
     TrajectoryRegionQuery trajectoryRegionQuery = //
-        SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
+        SimpleTrajectoryRegionQuery.timeInvariant(region);
     // owlyAnimationFrame.addBackground(RegionRenders.create(testImageRegion));
     List<GlcPlannerCallback> list = new ArrayList<>();
     list.add(carRelaxedEntity);
@@ -76,7 +76,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     goalConsumer.accept(goal);
     // ---
     owlyAnimationFrame.add(carRelaxedEntity);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    owlyAnimationFrame.addBackground(RegionRenders.create(region));
     MouseGoal.simple(owlyAnimationFrame, carRelaxedEntity, plannerConstraint);
     {
       RenderInterface renderInterface = new CameraEmulator( //
@@ -90,7 +90,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     }
     {
       RenderInterface renderInterface = new MouseShapeRender( //
-          SimpleTrajectoryRegionQuery.timeInvariant(line(imageRegion)), //
+          SimpleTrajectoryRegionQuery.timeInvariant(line(region)), //
           CarEntity.SHAPE, () -> carRelaxedEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }

@@ -12,11 +12,12 @@ import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** demo shows the use of a cost image that is added to the distance cost
@@ -35,10 +36,10 @@ public class R2ImageAnimationDemo implements DemoInterface {
     R2Entity r2Entity = new R2Entity(episodeIntegrator, trajectoryControl);
     r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.add(r2Entity);
-    ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(imageRegion);
+    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    owlyAnimationFrame.addBackground(RegionRenders.create(region));
     owlyAnimationFrame.configCoordinateOffset(50, 700);
     return owlyAnimationFrame;
   }

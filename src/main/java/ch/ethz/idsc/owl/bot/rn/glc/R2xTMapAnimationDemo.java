@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -36,8 +35,7 @@ public class R2xTMapAnimationDemo implements DemoInterface {
     TrajectoryEntity abstractEntity = new R2xTEntity(episodeIntegrator, DELAY);
     owlyAnimationFrame.add(abstractEntity);
     // ---
-    ImageRegion imageRegion = null;
-    imageRegion = ImageRegions.loadFromRepository( //
+    Region<Tensor> imageRegion = ImageRegions.loadFromRepository( //
         "/dubilab/localization/20180122.png", Tensors.vector(10, 10), false);
     Region<Tensor> region = RnPointcloudRegions.from(imageRegion, RealScalar.of(0.15));
     // ---

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.math.region;
 
 import java.awt.geom.AffineTransform;
+import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -9,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * for use in BufferedImageRegion
  * 
  * @see AffineTransform */
-/* package */ class AffineFrame {
+/* package */ class AffineFrame implements Serializable {
   private final double m00;
   private final double m01;
   private final double m02;

@@ -7,9 +7,10 @@ import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.glc.adapter.CatchyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.subare.core.td.SarsaType;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 public class Se2PolicyImageDemo implements DemoInterface {
@@ -18,10 +19,10 @@ public class Se2PolicyImageDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._2181;
-    ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
     // ---
-    TrajectoryRegionQuery trq = CatchyTrajectoryRegionQuery.timeInvariant(imageRegion);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    TrajectoryRegionQuery trq = CatchyTrajectoryRegionQuery.timeInvariant(region);
+    owlyAnimationFrame.addBackground(RegionRenders.create(region));
     owlyAnimationFrame.addBackground(RegionRenders.create(trq));
     // ---
     {
