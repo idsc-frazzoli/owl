@@ -25,7 +25,7 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 enum Se2rImageDemo {
   ;
   public static void main(String[] args) throws Exception {
-    ImageRegion imageRegion = //
+    Region<Tensor> region = //
         ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(8, 8), false);
     Tensor partitionScale = Tensors.vector(3, 3, 50 / Math.PI);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
@@ -53,7 +53,7 @@ enum Se2rImageDemo {
         se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     PlannerConstraint plannerConstraint = //
-        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(imageRegion));
+        new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(region));
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(partitionScale), stateIntegrator, controls, plannerConstraint, goalInterface);
@@ -62,7 +62,7 @@ enum Se2rImageDemo {
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(100, 550);
     owlyFrame.jFrame.setBounds(100, 100, 700, 700);
-    owlyFrame.addBackground(RegionRenders.create(imageRegion));
+    owlyFrame.addBackground(RegionRenders.create(region));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     while (!trajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
       glcExpand.findAny(1000);

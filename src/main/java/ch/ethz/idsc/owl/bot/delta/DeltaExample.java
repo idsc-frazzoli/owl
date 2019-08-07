@@ -34,8 +34,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private static final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create( //
       RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
   private static final Tensor RANGE = Tensors.vector(9, 6.5);
-  private static final Tensor OBSTACLE_IMAGE = ResourceData.of("/io/delta_free.png"); //
-  static final Region<Tensor> REGION = new ImageRegion(OBSTACLE_IMAGE, RANGE, true);
+  // private static final Tensor OBSTACLE_IMAGE = ; //
+  static final Region<Tensor> REGION = ImageRegion.of(ResourceData.bufferedImage("/io/delta_free.png"), RANGE, true);
   private static final PlannerConstraint PLANNER_CONSTRAINT = //
       new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(REGION));
   private static final Scalar MAX_INPUT = RealScalar.ONE;

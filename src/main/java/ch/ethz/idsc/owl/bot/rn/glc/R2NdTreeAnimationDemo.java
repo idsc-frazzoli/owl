@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -26,7 +25,7 @@ import ch.ethz.idsc.tensor.Tensors;
 public class R2NdTreeAnimationDemo implements DemoInterface {
   @Override
   public OwlyAnimationFrame start() {
-    ImageRegion imageRegion = ImageRegions.loadFromRepository( //
+    Region<Tensor> imageRegion = ImageRegions.loadFromRepository( //
         "/io/track0_100.png", Tensors.vector(10, 10), false);
     Region<Tensor> region = RnPointcloudRegions.from(imageRegion, RealScalar.of(0.3));
     // ---

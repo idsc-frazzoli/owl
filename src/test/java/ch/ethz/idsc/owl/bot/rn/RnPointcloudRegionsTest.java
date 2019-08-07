@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.rn;
 import java.util.Arrays;
 
 import ch.ethz.idsc.owl.bot.r2.ImageRegions;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,7 +21,7 @@ public class RnPointcloudRegionsTest extends TestCase {
   }
 
   public void testPointsMatrix() {
-    ImageRegion imageRegion = ImageRegions.loadFromRepository( //
+    Region<Tensor> imageRegion = ImageRegions.loadFromRepository( //
         "/io/track0_100.png", Tensors.vector(10, 10), false);
     Tensor points = RnPointcloudRegions.points(imageRegion);
     assertEquals(Dimensions.of(points), Arrays.asList(1429, 2));

@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.TensorRank;
@@ -17,7 +18,7 @@ public enum ImageRegions {
    * @param range vector of length 2
    * @param strict
    * @return */
-  public static ImageRegion loadFromRepository(String path, Tensor range, boolean strict) {
+  public static Region<Tensor> loadFromRepository(String path, Tensor range, boolean strict) {
     return _universal(ResourceData.of(path), range, strict);
   }
 

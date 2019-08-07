@@ -66,20 +66,19 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     Region<StateTime> region3 = create(RealScalar.of(0.3), Tensors.vector(2, 7), flow, supplier);
     Region<StateTime> region4 = create(RealScalar.of(0.3), Tensors.vector(1, 8), flow, supplier);
     // ---
-    Tensor obstacleImage = ResourceData.of("/io/delta_free.png");
-    ImageRegion imageRegion = new ImageRegion(obstacleImage, range, true);
+    Region<Tensor> region = ImageRegion.of(ResourceData.bufferedImage("/io/delta_free.png"), range, true);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(new SimpleTrajectoryRegionQuery( //
-        RegionUnion.wrap(Arrays.asList(new TimeInvariantRegion(imageRegion), region1, region2, region3, region4))));
+        RegionUnion.wrap(Arrays.asList(new TimeInvariantRegion(region), region1, region2, region3, region4))));
     // ---
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     owlyAnimationFrame.add(trajectoryEntity);
     MouseGoal.simple(owlyAnimationFrame, trajectoryEntity, plannerConstraint);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    owlyAnimationFrame.addBackground(RegionRenders.create(region));
     owlyAnimationFrame.addBackground((RenderInterface) region1);
     owlyAnimationFrame.addBackground((RenderInterface) region2);
     owlyAnimationFrame.addBackground((RenderInterface) region3);
     owlyAnimationFrame.addBackground((RenderInterface) region4);
-    owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, imageRegion, RealScalar.of(0.5)));
+    owlyAnimationFrame.addBackground(DeltaHelper.vectorFieldRender(stateSpaceModel, range, region, RealScalar.of(0.5)));
     owlyAnimationFrame.configCoordinateOffset(50, 600);
     return owlyAnimationFrame;
   }
