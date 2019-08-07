@@ -18,7 +18,7 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ enum Se2RrtsPlannerServerDemo {
@@ -42,10 +43,11 @@ import ch.ethz.idsc.tensor.opt.Pi;
   private static final Random RANDOM = new Random();
 
   public static void main(String[] args) throws Exception {
-    ImageRegion imageRegion = //
-        ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
-    Tensor lbounds = imageRegion.origin().copy().append(RealScalar.ZERO).unmodifiable();
-    Tensor ubounds = imageRegion.range().copy().append(Pi.TWO).unmodifiable();
+    Tensor range = Tensors.vector(7, 7).unmodifiable();
+    Region<Tensor> imageRegion = //
+        ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
+    Tensor lbounds = Array.zeros(2).append(RealScalar.ZERO).unmodifiable();
+    Tensor ubounds = range.copy().append(Pi.TWO).unmodifiable();
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;

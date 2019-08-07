@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   };
 
   public static void main(String[] args) throws IOException {
-    final Tensor tensor = R2ImageRegions._0F5C_2182.imageRegion().image();
+    final Tensor tensor = R2ImageRegions.inside_0f5c_2182_charImage();
     int ttl = 30;
     // ---
     System.out.println("export image " + Dimensions.of(tensor));

@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.region;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Collection;
+import java.util.Objects;
 
 /** RegionUnion is a region that defines membership
  * to be member in either of a collection of {@link Region}s
@@ -18,10 +19,10 @@ public class RegionUnion<T> implements Region<T>, Serializable {
    * 
    * The function name is inspired by {@link ByteBuffer#wrap(byte[])}.
    * 
-   * @param collection collection of Regions
-   * @return the combined Regions */
+   * @param collection of regions
+   * @return the combined region */
   public static <T> Region<T> wrap(Collection<Region<T>> collection) {
-    return new RegionUnion<>(collection);
+    return new RegionUnion<>(Objects.requireNonNull(collection));
   }
 
   // ---
@@ -32,7 +33,8 @@ public class RegionUnion<T> implements Region<T>, Serializable {
   }
 
   @Override // from Region
-  public boolean isMember(T type) {
-    return collection.stream().parallel().anyMatch(region -> region.isMember(type));
+  public boolean isMember(T element) {
+    return collection.stream() //
+        .anyMatch(region -> region.isMember(element));
   }
 }

@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
@@ -22,16 +22,20 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 
 /* package */ enum R2ImageDemo {
   ;
   private static final Random RANDOM = new Random();
 
   public static void main(String[] args) throws Exception {
-    ImageRegion imageRegion = //
-        ImageRegions.loadFromRepository("/io/track0_100.png", Tensors.vector(7, 7), false);
-    RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(RnRrtsNdType.INSTANCE, imageRegion.origin(), imageRegion.range());
+    Tensor origin = Array.zeros(2);
+    Tensor range = Tensors.vector(7, 7);
+    Region<Tensor> imageRegion = //
+        ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
+    RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(RnRrtsNdType.INSTANCE, origin, range);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.1));
     // ---
@@ -42,7 +46,7 @@ import ch.ethz.idsc.tensor.Tensors;
     owlyFrame.configCoordinateOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
-    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(imageRegion.origin(), imageRegion.range());
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(origin, range);
     int frame = 0;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int c = 0; c < 50; ++c)

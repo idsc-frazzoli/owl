@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
-import ch.ethz.idsc.owl.math.region.ImageRegion;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -43,12 +43,12 @@ public abstract class Se2LetterADemo extends Se2CarDemo {
       }
     };
     carEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
-    ImageRegion imageRegion = r2ImageRegionWrap.imageRegion();
-    PlannerConstraint plannerConstraint = createConstraint(imageRegion);
+    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    PlannerConstraint plannerConstraint = createConstraint(region);
     TrajectoryRegionQuery trajectoryRegionQuery = //
-        SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
+        SimpleTrajectoryRegionQuery.timeInvariant(region);
     owlyAnimationFrame.add(carEntity);
-    owlyAnimationFrame.addBackground(RegionRenders.create(imageRegion));
+    owlyAnimationFrame.addBackground(RegionRenders.create(region));
     MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);
     {
       RenderInterface renderInterface = new CameraEmulator( //
@@ -62,7 +62,7 @@ public abstract class Se2LetterADemo extends Se2CarDemo {
     }
     {
       RenderInterface renderInterface = new MouseShapeRender( //
-          SimpleTrajectoryRegionQuery.timeInvariant(line(imageRegion)), //
+          SimpleTrajectoryRegionQuery.timeInvariant(line(region)), //
           CarEntity.SHAPE, () -> carEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }

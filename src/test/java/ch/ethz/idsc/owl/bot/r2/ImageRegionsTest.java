@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.r2;
 
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -20,9 +20,12 @@ public class ImageRegionsTest extends TestCase {
   }
 
   public void testDubendorf() {
-    ImageRegion ir = ImageRegions.loadFromRepository( //
-        "/dubilab/localization/20180122.png", Tensors.vector(10, 10), false);
-    assertEquals(Dimensions.of(ir.image()), Arrays.asList(640, 640));
+    BufferedImage bufferedImage = ResourceData.bufferedImage("/dubilab/localization/20180122.png");
+    // Region<Tensor> ir = ImageRegions.loadFromRepository( //
+    // "/dubilab/localization/20180122.png", Tensors.vector(10, 10), false);
+    // assertEquals(Dimensions.of(ir.image()), Arrays.asList(640, 640));
+    assertEquals(bufferedImage.getWidth(), 640);
+    assertEquals(bufferedImage.getHeight(), 640);
   }
 
   public void testGrayscale() {

@@ -6,7 +6,9 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** open region consisting of all states with a negative coordinate at a given index */
+/** open region consisting of all states with a negative coordinate at a given index
+ * 
+ * region in R^n */
 public class NegativeHalfspaceRegion implements Region<Tensor>, Serializable {
   private final int index;
 

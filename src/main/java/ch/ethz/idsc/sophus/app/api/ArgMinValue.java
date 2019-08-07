@@ -33,9 +33,10 @@ import ch.ethz.idsc.tensor.red.ArgMin;
   }
 
   public Optional<Integer> index(Scalar threshold) {
-    return value.isPresent() && Scalars.lessEquals(value.get(), threshold) //
-        ? Optional.of(index)
-        : Optional.empty();
+    return value.isPresent() //
+        && Scalars.lessEquals(value.get(), threshold) //
+            ? Optional.of(index)
+            : Optional.empty();
   }
 
   public Optional<Scalar> value() {
@@ -43,8 +44,9 @@ import ch.ethz.idsc.tensor.red.ArgMin;
   }
 
   public Optional<Scalar> value(Scalar threshold) {
-    return value.isPresent() && Scalars.lessEquals(value.get(), threshold) //
-        ? value
-        : Optional.empty();
+    return value.isPresent() //
+        && Scalars.lessEquals(value.get(), threshold) //
+            ? value
+            : Optional.empty();
   }
 }
