@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.api;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,13 +16,14 @@ import javax.swing.JButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Insert;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.Det;
@@ -39,12 +41,12 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   /** refined points */
   private static final PointsRender POINTS_RENDER_1 = //
       new PointsRender(new Color(160, 160, 160, 128 + 64), Color.BLACK);
+  private static final Stroke STROKE = new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   // ---
   private Tensor control = Tensors.empty();
   private Tensor mouse = Array.zeros(3);
   /** min_index is non-null while the user drags a control points */
   private Integer min_index = null;
-  private Integer pos_index = null;
   private boolean mousePositioning = true;
   // ---
   private final static Color ORANGE = new Color(255, 200, 0, 192);
@@ -58,31 +60,43 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         control.set(mouse, min_index);
       else {
         GeodesicDisplay geodesicDisplay = geodesicDisplay();
-        Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
-        ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-        Optional<Scalar> value = argMinValue.value(getPositioningThreshold());
-        boolean hold = value.isPresent() && isPositioningEnabled();
-        graphics.setColor(hold ? ORANGE : GREEN);
-        Tensor posit = mouse;
-        if (hold) {
-          graphics.setStroke(new BasicStroke(2f));
-          Tensor closest = control.get(argMinValue.index());
-          graphics.draw(geometricLayer.toPath2D(Tensors.of(mouse, closest)));
-          graphics.setStroke(new BasicStroke());
-          posit.set(closest.get(0), 0);
-          posit.set(closest.get(1), 1);
-        }
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(posit)));
-        graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
-        geometricLayer.popMatrix();
-        if (Objects.nonNull(pos_index)) {
-          try {
-            // Line2D line2d = ;
-            graphics.setColor(Color.RED);
-            graphics.draw(geometricLayer.toLine2D(mouse, control.get(pos_index)));
-          } catch (Exception exception) {
-            System.err.println("problem: " + pos_index);
+        final boolean hold;
+        {
+          Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+          ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+          Optional<Scalar> value = argMinValue.value(getPositioningThreshold());
+          hold = value.isPresent() && isPositioningEnabled();
+          graphics.setColor(hold ? ORANGE : GREEN);
+          Tensor posit = mouse;
+          if (hold) {
+            graphics.setStroke(new BasicStroke(2f));
+            Tensor closest = control.get(argMinValue.index());
+            graphics.draw(geometricLayer.toPath2D(Tensors.of(mouse, closest)));
+            graphics.setStroke(new BasicStroke());
+            posit.set(closest.get(0), 0);
+            posit.set(closest.get(1), 1);
           }
+          geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(posit)));
+          graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
+          geometricLayer.popMatrix();
+        }
+        if (!hold && Tensors.nonEmpty(control)) {
+          CurveSubdivision curveSubdivision = ControlMidpoints.of(geodesicDisplay.geodesicInterface());
+          Tensor midpoints = curveSubdivision.string(control);
+          // graphics.setColor(new Color(128, 128, 128, 32));
+          // Tensor shape = getControlPointShape().multiply(RealScalar.of(.5));
+          // for (Tensor midpoint : midpoints) {
+          // geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(midpoint)));
+          // graphics.fill(geometricLayer.toPath2D(shape));
+          // geometricLayer.popMatrix();
+          // }
+          Tensor mouse_dist = Tensor.of(midpoints.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+          ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+          int pos_index = argMinValue.index();
+          graphics.setColor(Color.RED);
+          graphics.setStroke(STROKE);
+          graphics.draw(geometricLayer.toLine2D(mouse, midpoints.get(pos_index)));
+          graphics.setStroke(new BasicStroke());
         }
       }
     }
@@ -104,55 +118,30 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     }
     MouseAdapter mouseAdapter = new MouseAdapter() {
       @Override
-      public void mouseMoved(MouseEvent mouseEvent) {
-        if (Objects.isNull(min_index)) {
-          // System.out.println("moved");
-          // if (addRemoveControlPoints)
-          Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
-          ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-          pos_index = argMinValue.index(getPositioningThreshold()).orElse(null);
-          if (Objects.isNull(pos_index) && addRemoveControlPoints) {
-            // System.out.println("here ");
-            pos_index = argMinValue.index();
-            if (pos_index == control.length() - 1) {
-              // pos_index = control.length();
-              // control = control.append(mouse);
-            } else //
-            if (pos_index == 0) {
-              // control = Join.of(Tensors.of(mouse), control);
-            } else {
-              if (Scalars.lessThan(mouse_dist.Get(pos_index + 1), mouse_dist.Get(pos_index - 1)))
-                pos_index++;
-              // control = Join.of(control.extract(0, pos_index).append(mouse), control.extract(pos_index, control.length()));
-            }
-          }
-        } else {
-          pos_index = null;
-        }
-      }
-
-      @Override
       public void mousePressed(MouseEvent mouseEvent) {
         if (!isPositioningEnabled())
           return;
         switch (mouseEvent.getButton()) {
         case MouseEvent.BUTTON1: // insert point
           if (Objects.isNull(min_index)) {
-            Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
-            ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
-            min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
+            {
+              Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+              ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+              min_index = argMinValue.index(getPositioningThreshold()).orElse(null);
+            }
             if (Objects.isNull(min_index) && addRemoveControlPoints) {
-              min_index = argMinValue.index();
-              if (min_index == control.length() - 1) {
+              // insert
+              if (control.length() < 2) {
                 control = control.append(mouse);
-                min_index = control.length();
-              } else //
-              if (min_index == 0)
-                control = Join.of(Tensors.of(mouse), control);
-              else {
-                if (Scalars.lessThan(mouse_dist.Get(min_index + 1), mouse_dist.Get(min_index - 1)))
-                  ++min_index;
-                control = Join.of(control.extract(0, min_index).append(mouse), control.extract(min_index, control.length()));
+                min_index = control.length() - 1;
+              } else {
+                CurveSubdivision curveSubdivision = ControlMidpoints.of(geodesicDisplay().geodesicInterface());
+                Tensor midpoints = curveSubdivision.string(control);
+                Tensor mouse_dist = Tensor.of(midpoints.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+                ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+                int pos_index = argMinValue.index();
+                control = Insert.of(control, mouse, pos_index);
+                min_index = argMinValue.index();
               }
             }
           } else {
@@ -176,7 +165,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         }
       }
     };
-    // timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
+    timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
     timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
     timerFrame.geometricComponent.addRenderInterface(renderInterface);
   }
