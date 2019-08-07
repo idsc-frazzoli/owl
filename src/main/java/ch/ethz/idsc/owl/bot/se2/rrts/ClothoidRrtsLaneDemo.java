@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.se2.Se2PointsVsRegions;
@@ -43,13 +44,14 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
   public ClothoidRrtsLaneDemo() {
     super();
+    R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     Region<Tensor> imageRegion = R2ImageRegions._GTOB.imageRegion();
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
     TransitionRegionQuery transitionRegionQuery = TransitionRegionQueryUnion.wrap( //
         new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
         new TransitionCurvatureQuery(5.));
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, Math.PI / 4), RealScalar.ZERO);
-    ClothoidLaneRrtsEntity entity = new ClothoidLaneRrtsEntity(stateTime, transitionRegionQuery, Tensors.vector(0, 0), imageRegion.range(), true);
+    ClothoidLaneRrtsEntity entity = new ClothoidLaneRrtsEntity(stateTime, transitionRegionQuery, Tensors.vector(0, 0), r2ImageRegionWrap.range(), true);
     LaneConsumer laneConsumer = new SimpleLaneConsumer(entity, null, Collections.singleton(entity));
     laneConsumptionDemo = new LaneConsumptionDemo(laneConsumer);
     laneConsumptionDemo.setControlPointsSe2(Tensors.of(stateTime.state()));

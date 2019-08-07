@@ -32,36 +32,36 @@ public enum R2ImageRegions {
     return normal(charImage.bufferedImage(), range, false);
   }
 
-  public static Region<Tensor> inside_0b36() {
+  public static BufferedImage inside_0b36() {
     CharImage charImage = CharImage.fillWhite(new Dimension(210, 256));
     charImage.draw('\u0b36', new Point(0, 240));
-    return normal(charImage.bufferedImage(), Tensors.vector(6, 7), false);
+    return charImage.bufferedImage();
   }
 
-  public static Region<Tensor> inside_265b() {
+  public static BufferedImage inside_265b() {
     CharImage charImage = CharImage.fillWhite(new Dimension(320, 320));
     charImage.draw('\u265b', new Point(-20, 300));
-    return normal(charImage.bufferedImage(), Tensors.vector(7, 7), false);
+    return charImage.bufferedImage();
   }
 
-  public static Region<Tensor> inside_2180() {
+  public static BufferedImage inside_2180() {
     CharImage charImage = CharImage.fillWhite(new Dimension(480, 320));
     charImage.setFont(new Font(Font.DIALOG, Font.BOLD, 385));
     charImage.draw('\u2180', new Point(-10, 300));
-    return normal(charImage.bufferedImage(), Tensors.vector(9, 6), false);
+    return charImage.bufferedImage();
   }
 
-  public static Region<Tensor> inside_2181() {
+  public static BufferedImage inside_2181() {
     CharImage charImage = CharImage.fillWhite(new Dimension(300, 320));
     charImage.setFont(new Font(Font.DIALOG, Font.BOLD, 385));
     charImage.draw('\u2181', new Point(-10, 300));
-    return normal(charImage.bufferedImage(), Tensors.vector(6, 6), false);
+    return charImage.bufferedImage();
   }
 
-  public static Region<Tensor> inside_2182() {
+  public static BufferedImage inside_2182() {
     CharImage charImage = CharImage.fillWhite(new Dimension(480, 320));
     charImage.draw('\u2182', new Point(-10, 305));
-    return normal(charImage.bufferedImage(), Tensors.vector(9, 6), false);
+    return charImage.bufferedImage();
   }
 
   public static ImageRegion inside_0f5c() {
@@ -73,14 +73,14 @@ public enum R2ImageRegions {
 
   /***************************************************/
   public static final R2ImageRegionWrap _2180 = //
-      new R2ImageRegionWrap(inside_2180().image(), Tensors.vector(10, 7), 15);
+      new R2ImageRegionWrap(inside_2180(), Tensors.vector(10, 7), 15);
   public static final R2ImageRegionWrap _2181 = //
-      new R2ImageRegionWrap(inside_2181().image(), Tensors.vector(10, 7), 15);
+      new R2ImageRegionWrap(inside_2181(), Tensors.vector(10, 7), 15);
   /***************************************************/
   public static final R2ImageRegionWrap _0F5C_2182 = //
-      new R2ImageRegionWrap(inside_0f5c_2182_charImage(), Tensors.vector(20, 10), 15);
+      new R2ImageRegionWrap(ImageFormat.of(inside_0f5c_2182_charImage()), Tensors.vector(20, 10), 15);
 
-  private static Tensor inside_0f5c_2182_charImage() {
+  public static Tensor inside_0f5c_2182_charImage() {
     CharImage charImage = CharImage.fillWhite(new Dimension(320, 640));
     charImage.setFont(new Font(Font.DIALOG, Font.PLAIN, 600));
     charImage.draw('\u0f5c', new Point(20, 560));

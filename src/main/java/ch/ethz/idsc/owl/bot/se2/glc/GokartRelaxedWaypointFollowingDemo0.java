@@ -34,7 +34,7 @@ public class GokartRelaxedWaypointFollowingDemo0 extends GokartDemo {
     HelperHangarMap hangarMap = new HelperHangarMap("/dubilab/obstacles/20180704.png", gokartEntity);
     Tensor waypoints = ResourceData.of("/dubilab/waypoints/20180610.csv");
     // add set up second cost function, e.g. penalty for coming to close to obstacles
-    R2ImageRegionWrap r2ImageRegionWrap = new R2ImageRegionWrap(hangarMap.imageRegion.image(), hangarMap.imageRegion.range(), 8);
+    R2ImageRegionWrap r2ImageRegionWrap = new R2ImageRegionWrap(hangarMap.bufferedImage, hangarMap.imageRegion.range(), 8);
     gokartEntity.setAdditionalCostFunction(r2ImageRegionWrap.costFunction());
     // --
     TrajectoryRegionQuery trajectoryRegionQuery = //

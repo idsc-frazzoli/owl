@@ -50,7 +50,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     Tensor image = Transpose.of(ImageFormat.from(bufferedImage));
     Tensor range = Tensors.vector(12, 12);
     int ttl = 2;
-    return new R2ImageRegionWrap(image, range, ttl);
+    return new R2ImageRegionWrap(ImageFormat.of(image), range, ttl);
   }
 
   @Override // from Se2CarDemo
