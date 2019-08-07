@@ -1,17 +1,15 @@
 // code by jph
-package ch.ethz.idsc.owl.bot.se2;
+package ch.ethz.idsc.sophus.lie.se2c;
 
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroupElement;
 import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/** induced metric
- * simply ||log(p^-1.q)||
- * mixes units */
-public enum Se2CoveringMetric implements TensorMetric {
+/** mixes units
+ * 
+ * ||log(p^-1.q)|| */
+/* package */ enum Se2CoveringMetric implements TensorMetric {
   INSTANCE;
   // ---
   @Override // from TensorMetric

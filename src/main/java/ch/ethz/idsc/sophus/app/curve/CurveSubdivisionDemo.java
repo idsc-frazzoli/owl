@@ -41,11 +41,11 @@ import ch.ethz.idsc.tensor.red.Mean;
     Tensor control = null;
     {
       Tensor move = Tensors.fromString( //
-          "{{1, 0, 0}, {1,0,0}, {2,0,2.5708}, {1,0,2.1},{1.5,0,0},{2.3,0,-1.2},{1.5,0,0},{4,0,3.14159},{2,0,3.14159},{2,0,0}}");
+          "{{1, 0, 0}, {1, 0, 0}, {2, 0, 2.5708}, {1, 0, 2.1}, {1.5, 0, 0}, {2.3, 0, -1.2}, {1.5, 0, 0}, {4, 0, 3.14159}, {2, 0, 3.14159}, {2, 0, 0}}");
       move = Tensor.of(move.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))));
       Tensor init = Tensors.vector(0, 0, 2.1);
       control = DubinsGenerator.of(init, move);
-      control = Tensors.fromString("{{0,0,0}, {1,0,0},{2,0,0},{3,1,0},{4,1,0},{5,0,0},{6,0,0},{7,0,0}}").multiply(RealScalar.of(2));
+      control = Tensors.fromString("{{0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {3, 1, 0}, {4, 1, 0}, {5, 0, 0}, {6, 0, 0}, {7, 0, 0}}").multiply(RealScalar.of(2));
     }
     setControlPointsSe2(control);
     timerFrame.jToolBar.addSeparator();

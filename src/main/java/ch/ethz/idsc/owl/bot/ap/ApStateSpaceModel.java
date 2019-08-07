@@ -47,8 +47,8 @@ import ch.ethz.idsc.tensor.sca.Sin;
   public Tensor f(Tensor x, Tensor u) {
     // x1' = x3*cos(x4)
     // x2' = x3*sin(x4)
-    // x3' = 1/m * (u1*cos(u2) - D(u2,x3) - m*g*sin(x4))
-    // x4' = 1/(m*x3) * (u1*sin(u2) + L(u2,x3) - m*g*cos(x4))
+    // x3' = 1/m * (u1*cos(u2) - D(u2, x3) - m*g*sin(x4))
+    // x4' = 1/(m*x3) * (u1*sin(u2) + L(u2, x3) - m*g*cos(x4))
     // Scalar x1 = x.Get(0); // horizontal distance
     // Scalar x2 = x.Get(1); // altitude
     Scalar x3 = x.Get(2); // velocity
@@ -64,13 +64,13 @@ import ch.ethz.idsc.tensor.sca.Sin;
   }
 
   private static Scalar D(Scalar u2, Scalar x3) {
-    // D(u2,x1) = (2.7 + 3.08 * (1.25 + 4.2 * u2^2) * x1^2
+    // D(u2, x1) = (2.7 + 3.08 * (1.25 + 4.2 * u2^2) * x1^2
     double value = (1.25 + 4.2 * u2.number().doubleValue());
     return Times.of(RealScalar.of(2.7 + 3.08 * value * value), x3, x3);
   }
 
   private static Scalar L(Scalar u2, Scalar x3) {
-    // L(u2,x1) = (68.6 * (1.25 + 4.2 * u2^2) * x1^2
+    // L(u2, x1) = (68.6 * (1.25 + 4.2 * u2^2) * x1^2
     double value = (1.25 + 4.2 * u2.number().doubleValue());
     return Times.of(RealScalar.of(68.6 * value), x3, x3);
   }

@@ -44,6 +44,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private Tensor mouse = Array.zeros(3);
   /** min_index is non-null while the user drags a control points */
   private Integer min_index = null;
+  private Integer pos_index = null;
   private boolean mousePositioning = true;
   // ---
   private final static Color ORANGE = new Color(255, 200, 0, 192);
@@ -74,6 +75,15 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(posit)));
         graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
         geometricLayer.popMatrix();
+        if (Objects.nonNull(pos_index)) {
+          try {
+            // Line2D line2d = ;
+            graphics.setColor(Color.RED);
+            graphics.draw(geometricLayer.toLine2D(mouse, control.get(pos_index)));
+          } catch (Exception exception) {
+            System.err.println("problem: " + pos_index);
+          }
+        }
       }
     }
   };
@@ -92,7 +102,35 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
       jButton.addActionListener(actionListener);
       timerFrame.jToolBar.add(jButton);
     }
-    timerFrame.geometricComponent.jComponent.addMouseListener(new MouseAdapter() {
+    MouseAdapter mouseAdapter = new MouseAdapter() {
+      @Override
+      public void mouseMoved(MouseEvent mouseEvent) {
+        if (Objects.isNull(min_index)) {
+          // System.out.println("moved");
+          // if (addRemoveControlPoints)
+          Tensor mouse_dist = Tensor.of(control.stream().map(mouse::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector));
+          ArgMinValue argMinValue = ArgMinValue.of(mouse_dist);
+          pos_index = argMinValue.index(getPositioningThreshold()).orElse(null);
+          if (Objects.isNull(pos_index) && addRemoveControlPoints) {
+            // System.out.println("here ");
+            pos_index = argMinValue.index();
+            if (pos_index == control.length() - 1) {
+              // pos_index = control.length();
+              // control = control.append(mouse);
+            } else //
+            if (pos_index == 0) {
+              // control = Join.of(Tensors.of(mouse), control);
+            } else {
+              if (Scalars.lessThan(mouse_dist.Get(pos_index + 1), mouse_dist.Get(pos_index - 1)))
+                pos_index++;
+              // control = Join.of(control.extract(0, pos_index).append(mouse), control.extract(pos_index, control.length()));
+            }
+          }
+        } else {
+          pos_index = null;
+        }
+      }
+
       @Override
       public void mousePressed(MouseEvent mouseEvent) {
         if (!isPositioningEnabled())
@@ -106,14 +144,14 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
             if (Objects.isNull(min_index) && addRemoveControlPoints) {
               min_index = argMinValue.index();
               if (min_index == control.length() - 1) {
-                min_index = control.length();
                 control = control.append(mouse);
+                min_index = control.length();
               } else //
               if (min_index == 0)
                 control = Join.of(Tensors.of(mouse), control);
               else {
                 if (Scalars.lessThan(mouse_dist.Get(min_index + 1), mouse_dist.Get(min_index - 1)))
-                  min_index++;
+                  ++min_index;
                 control = Join.of(control.extract(0, min_index).append(mouse), control.extract(min_index, control.length()));
               }
             }
@@ -137,7 +175,9 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           break;
         }
       }
-    });
+    };
+    // timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
+    timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
     timerFrame.geometricComponent.addRenderInterface(renderInterface);
   }
 
@@ -153,7 +193,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   public void setPositioningEnabled(boolean enabled) {
     if (!enabled)
       min_index = null;
-    this.mousePositioning = enabled;
+    mousePositioning = enabled;
   }
 
   public boolean isPositioningEnabled() {
