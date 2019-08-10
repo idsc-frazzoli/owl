@@ -14,7 +14,6 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
-import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -57,8 +56,8 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
     spinnerBegin.setIndex(2);
     spinnerBegin.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "begin");
     // ---
-    spinnerLevel.setArray(1, 2, 3, 4, 5, 6, 7, 8);
-    spinnerLevel.setIndex(4);
+    spinnerLevel.setArray(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    spinnerLevel.setIndex(6);
     spinnerLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "levels");
     // ---
     spinnerCurve.setArray(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -72,11 +71,12 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    AxesRender.INSTANCE.render(geometricLayer, graphics);
+    // AxesRender.INSTANCE.render(geometricLayer, graphics);
     Tensor mouse = geometricLayer.getMouseSe2State();
     // ---
     {
       graphics.setColor(new Color(255, 0, 0, 128));
+      graphics.fill(geometricLayer.toPath2D(Arrowhead.of(.3)));
       geometricLayer.pushMatrix(Se2Matrix.of(mouse));
       graphics.fill(geometricLayer.toPath2D(Arrowhead.of(.3)));
       geometricLayer.popMatrix();
