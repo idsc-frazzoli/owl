@@ -55,6 +55,8 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+      if (!isPositioningEnabled())
+        return;
       mouse = geometricLayer.getMouseSe2State();
       if (Objects.nonNull(min_index))
         control.set(mouse, min_index);
