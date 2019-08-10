@@ -22,7 +22,7 @@ public enum ColorLookup {
     Tensor tensor = Tensor.of(Subdivide.increasing(Clips.unit(), length - 1).stream() //
         .map(hue -> Hsluv.of(hue.Get().number().doubleValue(), 1, lightness, 1)) //
         .map(ColorFormat::toVector));
-    return StrictColorDataIndexed.create(tensor);
+    return StrictColorDataIndexed.of(tensor);
   }
 
   /** @param length
@@ -30,7 +30,7 @@ public enum ColorLookup {
    * @return
    * @see ColorDataGradient */
   public static ColorDataIndexed increasing(int length, ScalarTensorFunction colorDataGradient) {
-    return StrictColorDataIndexed.create(Subdivide.increasing(Clips.unit(), length - 1).map(colorDataGradient));
+    return StrictColorDataIndexed.of(Subdivide.increasing(Clips.unit(), length - 1).map(colorDataGradient));
   }
 
   /** @param length
@@ -38,6 +38,6 @@ public enum ColorLookup {
    * @return
    * @see ColorDataGradient */
   public static ColorDataIndexed decreasing(int length, ScalarTensorFunction colorDataGradient) {
-    return StrictColorDataIndexed.create(Subdivide.decreasing(Clips.unit(), length - 1).map(colorDataGradient));
+    return StrictColorDataIndexed.of(Subdivide.decreasing(Clips.unit(), length - 1).map(colorDataGradient));
   }
 }

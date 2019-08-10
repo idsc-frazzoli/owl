@@ -14,6 +14,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -57,7 +58,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
           }
           for (int k_th = 0; k_th < length; ++k_th) {
             graphics.setColor(COLOR_DATA_INDEXED.getColor(k_th));
-            DeBoor deBoor = DeBoor.of(knots, UnitVector.of(length, k_th));
+            DeBoor deBoor = DeBoor.of(RnGeodesic.INSTANCE, knots, UnitVector.of(length, k_th));
             {
               graphics.setStroke(new BasicStroke(1.25f));
               Tensor values = domain.map(deBoor);

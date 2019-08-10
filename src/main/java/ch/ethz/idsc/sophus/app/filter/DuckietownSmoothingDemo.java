@@ -20,7 +20,6 @@ import ch.ethz.idsc.sophus.app.misc.PolyDuckietownData;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
-import ch.ethz.idsc.sophus.crv.spline.GeodesicDeBoor;
 import ch.ethz.idsc.sophus.math.win.KnotSpacing;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -29,6 +28,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.DeBoor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class DuckietownSmoothingDemo extends DatasetKernelDemo implements BufferedImageSupplier {
@@ -115,7 +115,7 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, knots, effective);
-    GeodesicDeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
+    DeBoor geodesicDeBoor = scalarTensorFunction.deBoor(parameter);
     SymLinkImage symLinkImage = KnotsBSplineFunctionDemo.deboor(geodesicDeBoor, geodesicDeBoor.degree() + 1, parameter);
     return symLinkImage.bufferedImage();
   }

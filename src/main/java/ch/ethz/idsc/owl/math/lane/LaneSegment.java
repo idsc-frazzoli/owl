@@ -39,7 +39,7 @@ public class LaneSegment implements LaneInterface {
   }
 
   @Override // from LaneInterface
-  public Tensor leftBoundary(){
+  public Tensor leftBoundary() {
     return segment(laneInterface.leftBoundary());
   }
 

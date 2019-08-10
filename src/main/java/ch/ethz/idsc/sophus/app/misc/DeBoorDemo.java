@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
           {
             for (int k_th = 0; k_th < length; ++k_th) {
               graphics.setColor(StaticHelper.COLOR_DATA_INDEXED.getColor(k_th));
-              BSplineFunction bSplineFunction = BSplineFunction.of(degree, UnitVector.of(length, k_th));
+              BSplineFunction bSplineFunction = (BSplineFunction) BSplineFunction.string(degree, UnitVector.of(length, k_th));
               DeBoor deBoor = bSplineFunction.deBoor(k_th);
               Tensor knots = deBoor.knots();
               Point2D point2d = geometricLayer.toPoint2D(k_th, 0);
