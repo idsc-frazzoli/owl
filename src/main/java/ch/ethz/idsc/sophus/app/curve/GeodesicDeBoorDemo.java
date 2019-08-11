@@ -16,7 +16,6 @@ import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicBSplineFunction;
-import ch.ethz.idsc.sophus.crv.spline.GeodesicDeBoor;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
 import ch.ethz.idsc.sophus.sym.SymLinkImage;
@@ -28,6 +27,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.opt.DeBoor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 // TODO JPH demo does not seem correct
@@ -57,7 +57,7 @@ public class GeodesicDeBoorDemo extends BaseCurvatureDemo implements BufferedIma
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     ScalarTensorFunction scalarTensorFunction = //
-        GeodesicDeBoor.of(geodesicInterface, knots, control);
+        DeBoor.of(geodesicInterface, knots, control);
     GeodesicBSplineFunction.of(geodesicDisplay.geodesicInterface(), degree, control);
     Scalar center = RationalScalar.of(control.length() - 1, 2);
     Tensor refined = Subdivide.of( //
@@ -86,7 +86,7 @@ public class GeodesicDeBoorDemo extends BaseCurvatureDemo implements BufferedIma
 
   private static SymLinkImage symLinkImage(Tensor knots, int length, Scalar scalar) {
     Tensor vector = Tensor.of(IntStream.range(0, length).mapToObj(SymScalar::leaf));
-    ScalarTensorFunction scalarTensorFunction = GeodesicDeBoor.of(SymGeodesic.INSTANCE, knots, vector);
+    ScalarTensorFunction scalarTensorFunction = DeBoor.of(SymGeodesic.INSTANCE, knots, vector);
     Tensor tensor = scalarTensorFunction.apply(scalar);
     SymLinkImage symLinkImage = new SymLinkImage((SymScalar) tensor, SymLinkImages.FONT_SMALL);
     symLinkImage.title("DeBoor" + knots + " at " + scalar);

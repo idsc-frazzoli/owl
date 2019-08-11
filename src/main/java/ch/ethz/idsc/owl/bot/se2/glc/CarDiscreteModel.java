@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public static Tensor represent(Tensor range) {
     if (Chop.NONE.allZero(range))
       return Tensors.of(CarDiscreteModel.COLLISION, RealScalar.ONE);
-    Tensor tensor = Tensors.vectorInt(Ordering.DECREASING.of(range));
+    Tensor tensor = Tensors.vector(Ordering.DECREASING.of(range));
     Tensor revrse = Reverse.of(tensor);
     int cmp = VectorLexicographic.COMPARATOR.compare(tensor, revrse);
     if (1 == cmp)

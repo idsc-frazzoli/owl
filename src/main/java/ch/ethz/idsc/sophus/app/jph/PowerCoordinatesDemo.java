@@ -85,8 +85,8 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
           graphics.setStroke(new BasicStroke(1));
         }
         PowerCoordinates powerCoordinates = new PowerCoordinates(spinnerBarycentric.getValue());
-        Tensor min = hull.stream().reduce(Entrywise.min()).get().map(RealScalar.of(0.01)::add);
-        Tensor max = hull.stream().reduce(Entrywise.max()).get().map(RealScalar.of(0.01)::subtract).negate();
+        Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
+        Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
         Tensor sX = Subdivide.of(min.Get(0), max.Get(0), spinnerRefine.getValue());
         Tensor sY = Subdivide.of(min.Get(1), max.Get(1), spinnerRefine.getValue());
         Tensor[][] array = new Tensor[sX.length()][sY.length()];

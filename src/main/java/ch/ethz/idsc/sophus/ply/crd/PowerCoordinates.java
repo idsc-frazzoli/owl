@@ -16,8 +16,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.Cross;
-import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** Reference:
@@ -48,8 +48,7 @@ public class PowerCoordinates implements Serializable {
 
     Aux(Tensor x, Tensor p) {
       Tensor diff = p.subtract(x);
-      Scalar norm = Hypot.ofVector(diff);
-      Tensor ofs = diff.multiply(barycentric.apply(norm));
+      Tensor ofs = diff.multiply(barycentric.apply(Norm2Squared.ofVector(diff)));
       pos = x.add(ofs);
       dir = Cross.of(ofs);
     }

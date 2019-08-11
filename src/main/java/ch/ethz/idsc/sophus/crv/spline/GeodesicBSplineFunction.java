@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.opt.DeBoor;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -109,15 +110,15 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
     return domain;
   }
 
-  public GeodesicDeBoor deBoor(Scalar scalar) {
+  public DeBoor deBoor(Scalar scalar) {
     return deBoor(navigableMap.floorEntry(domain.requireInside(scalar)).getValue());
   }
 
   /** @param k in the interval [0, control.length() - 1]
    * @return */
-  public GeodesicDeBoor deBoor(int k) {
+  public DeBoor deBoor(int k) {
     int hi = degree + 1 + k;
-    return new GeodesicDeBoor(splitInterface, degree, //
+    return new DeBoor(splitInterface, degree, //
         samples.extract(k, k + 2 * degree), //
         Tensor.of(IntStream.range(k - half, hi - half) // control
             .map(this::bound) //

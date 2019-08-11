@@ -18,8 +18,8 @@ public class MinMax implements Serializable {
   private final Tensor max;
 
   private MinMax(Tensor tensor) {
-    min = tensor.stream().reduce(Entrywise.min()).get().unmodifiable();
-    max = tensor.stream().reduce(Entrywise.max()).get().unmodifiable();
+    min = Entrywise.min().of(tensor).unmodifiable();
+    max = Entrywise.max().of(tensor).unmodifiable();
   }
 
   public Tensor min() {
