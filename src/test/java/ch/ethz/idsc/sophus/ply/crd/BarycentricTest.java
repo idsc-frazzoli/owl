@@ -17,7 +17,7 @@ public class BarycentricTest extends TestCase {
 
   public void testWachspress() {
     Scalar scalar = Barycentric.WACHSPRESS.apply(RealScalar.of(3));
-    assertEquals(scalar, RationalScalar.of(1, 9));
+    assertEquals(scalar, RationalScalar.of(1, 3));
     ExactScalarQ.require(scalar);
   }
 

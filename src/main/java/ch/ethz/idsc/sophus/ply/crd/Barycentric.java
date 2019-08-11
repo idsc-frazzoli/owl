@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Hint: only DISCRETE_HARMONIC allows {@link Quantity} as coordinates
  * 
@@ -23,16 +24,16 @@ public enum Barycentric implements ScalarUnaryOperator {
    * Eq. (2) we directly conclude that Wachspress coordinates are expressed in arbitrary dimensions as" */
   WACHSPRESS() {
     @Override
-    public Scalar apply(Scalar norm) {
-      return norm.multiply(norm).reciprocal();
+    public Scalar apply(Scalar norm2) {
+      return norm2.reciprocal();
     }
   },
   /** Section 3.3, eqs (12)
    * mean value coordinates seem to be the most robust */
   MEAN_VALUE() {
     @Override
-    public Scalar apply(Scalar norm) {
-      return norm.reciprocal();
+    public Scalar apply(Scalar norm2) {
+      return Sqrt.FUNCTION.apply(norm2).reciprocal();
     }
   },
   /** Section 3.2
@@ -45,7 +46,7 @@ public enum Barycentric implements ScalarUnaryOperator {
    * would not enforce." */
   DISCRETE_HARMONIC() {
     @Override
-    public Scalar apply(Scalar norm) {
+    public Scalar apply(Scalar norm2) {
       // the return value was originally 1/2. however, the value 1 seems to be more consistent.
       return RealScalar.ONE;
     }
