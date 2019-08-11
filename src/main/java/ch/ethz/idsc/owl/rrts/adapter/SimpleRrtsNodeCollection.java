@@ -15,18 +15,19 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
   private final TransitionSpace transitionSpace;
+  private final TransitionSpace reversalTransitionSpace;
   private final TransitionCostFunction transitionCostFunction;
   private final Set<RrtsNode> set = new HashSet<>();
 
   public SimpleRrtsNodeCollection(TransitionSpace transitionSpace, TransitionCostFunction transitionCostFunction) {
     this.transitionSpace = transitionSpace;
+    reversalTransitionSpace = ReversalTransitionSpace.of(transitionSpace);
     this.transitionCostFunction = transitionCostFunction;
   }
 
@@ -55,7 +56,7 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
       }
     };
     PriorityQueue<RrtsNode> priorityQueue = new PriorityQueue<>(comparator);
-    set.stream().forEach(priorityQueue::add);
+    priorityQueue.addAll(set);
     return Stream.generate(priorityQueue::poll) //
         .limit(k_nearest) //
         .collect(Collectors.toList());
@@ -68,16 +69,15 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
 
       @Override
       public int compare(RrtsNode o1, RrtsNode o2) {
-        RrtsNode rrtsNode = RrtsNode.createRoot(start, RealScalar.ZERO);
         if (!map.containsKey(o1))
-          map.put(o1, transitionCostFunction.cost(transitionSpace.connect(rrtsNode, o1.state()))); // TODO GJOEl investigate if ReversalTransition
+          map.put(o1, transitionCostFunction.cost(reversalTransitionSpace.connect(o1, start)));
         if (!map.containsKey(o2))
-          map.put(o2, transitionCostFunction.cost(transitionSpace.connect(rrtsNode, o2.state()))); // TODO GJOEl investigate if ReversalTransition
+          map.put(o2, transitionCostFunction.cost(reversalTransitionSpace.connect(o2, start)));
         return Scalars.compare(map.get(o1), map.get(o2));
       }
     };
     PriorityQueue<RrtsNode> priorityQueue = new PriorityQueue<>(comparator);
-    set.stream().forEach(priorityQueue::add);
+    priorityQueue.addAll(set);
     return Stream.generate(priorityQueue::poll) //
         .limit(k_nearest) //
         .collect(Collectors.toList());
