@@ -1,14 +1,15 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.adapter;
 
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Reverse;
 
 public abstract class ReversalTransition extends DirectedTransition {
-  public ReversalTransition(Transition transition) {
-    super(transition, false);
+  /* package */ ReversalTransition(Transition transition, RrtsNode start) {
+    super(transition, start, false);
   }
 
   @Override // from Transition

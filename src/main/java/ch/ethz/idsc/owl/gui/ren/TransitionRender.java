@@ -72,7 +72,7 @@ public class TransitionRender implements RenderInterface {
           double value = child.costFromRoot().number().doubleValue();
           final double interp = (value - min) * inverse;
           graphics.setColor(colorDataIndexed.getColor((int) interp));
-          Transition transition = transitionSpace.connect(parent.state(), child.state());
+          Transition transition = transitionSpace.connect(parent, child.state());
           Path2D path2d = geometricLayer.toPath2D(transition.linearized(minResolution));
           graphics.draw(path2d);
         }

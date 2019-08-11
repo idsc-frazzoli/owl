@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.rrts.adapter;
 import java.io.Serializable;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
@@ -28,9 +29,9 @@ public class ReversalTransitionSpace implements TransitionSpace, Serializable {
   }
 
   @Override // from TransitionSpace
-  public DirectedTransition connect(Tensor start, Tensor end) {
-    Transition transition = transitionSpace.connect(end, start);
-    return new ReversalTransition(transition) {
+  public DirectedTransition connect(RrtsNode start, Tensor end) {
+    Transition transition = transitionSpace.connect(RrtsNode.createRoot(end, RealScalar.ZERO), start.state());
+    return new ReversalTransition(transition, start) {
       @Override // from Transition
       public TransitionWrap wrapped(Scalar minResolution) {
         Sign.requirePositive(minResolution);
@@ -41,7 +42,7 @@ public class ReversalTransitionSpace implements TransitionSpace, Serializable {
         Tensor spacing = Array.zeros(samples.length());
         // TODO GJOEL use of function "connect" does not give subsegments of transition generally
         IntStream.range(0, samples.length()).forEach(i -> spacing.set(i > 0 //
-            ? connect(samples.get(i - 1), samples.get(i)).length() //
+            ? connect(RrtsNode.createRoot(samples.get(i - 1), RealScalar.ZERO), samples.get(i)).length() //
             : connect(start, samples.get(0)).length(), i));
         return new TransitionWrap(samples, spacing);
       }

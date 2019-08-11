@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -17,8 +18,9 @@ import junit.framework.TestCase;
 
 public class ClothoidTransitionTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    ClothoidTransition clothoidTransition = //
-        Serialization.copy(ClothoidTransition.of(Tensors.vector(1, 2, 3), Tensors.vector(4, 1, 5)));
+    RrtsNode start = RrtsNode.createRoot(Tensors.vector(1, 2, 3), RealScalar.ZERO);
+    Tensor end = Tensors.vector(4, 1, 5);
+    ClothoidTransition clothoidTransition = Serialization.copy(ClothoidTransition.of(start, end));
     HeadTailInterface clothoidTerminalRatio = clothoidTransition.terminalRatios();
     Scalar head = clothoidTerminalRatio.head();
     Clips.interval(2.5, 2.6).requireInside(head);
@@ -31,23 +33,27 @@ public class ClothoidTransitionTest extends TestCase {
   }
 
   public void testWrapped() {
-    ClothoidTransition clothoidTransition = ClothoidTransition.of(Tensors.vector(2, 3, 3), Tensors.vector(4, 1, 5));
+    RrtsNode start = RrtsNode.createRoot(Tensors.vector(2, 3, 3), RealScalar.ZERO);
+    Tensor end = Tensors.vector(4, 1, 5);
+    ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
     TransitionWrap transitionWrap = clothoidTransition.wrapped(RealScalar.of(.2));
     assertEquals(transitionWrap.samples().length(), transitionWrap.spacing().length());
     assertTrue(transitionWrap.spacing().stream().map(Tensor::Get).allMatch(Sign::isPositive));
   }
 
   public void testSamples2() {
-    ClothoidTransition clothoidTransition = //
-        ClothoidTransition.of(Tensors.vector(0, 0, 0), Tensors.vector(4, 0, 0));
+    RrtsNode start = RrtsNode.createRoot(Tensors.vector(0, 0, 0), RealScalar.ZERO);
+    Tensor end = Tensors.vector(4, 0, 0);
+    ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
     Chop._12.requireClose(clothoidTransition.length(), RealScalar.of(4));
     assertEquals(clothoidTransition.sampled(RealScalar.of(2)).length(), 2);
     assertEquals(clothoidTransition.sampled(RealScalar.of(1.9)).length(), 4);
   }
 
   public void testSamplesSteps() {
-    ClothoidTransition clothoidTransition = //
-        ClothoidTransition.of(Tensors.vector(1, 2, 3), Tensors.vector(4, 1, 5));
+    RrtsNode start = RrtsNode.createRoot(Tensors.vector(1, 2, 3), RealScalar.ZERO);
+    Tensor end = Tensors.vector(4, 1, 5);
+    ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
     assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 32);
     assertEquals(clothoidTransition.sampled(RealScalar.of(.1)).length(), 64);
     assertEquals(clothoidTransition.linearized(RealScalar.of(.2)).length(), 33);
@@ -55,8 +61,10 @@ public class ClothoidTransitionTest extends TestCase {
   }
 
   public void testFails() {
+    RrtsNode start = RrtsNode.createRoot(Tensors.vector(1, 2, 3), RealScalar.ZERO);
+    Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = //
-        ClothoidTransition.of(Tensors.vector(1, 2, 3), Tensors.vector(4, 1, 5));
+        ClothoidTransition.of(start, end);
     try {
       clothoidTransition.sampled(RealScalar.of(-0.1));
       fail();

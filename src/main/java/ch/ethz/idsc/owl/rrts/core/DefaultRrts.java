@@ -64,7 +64,7 @@ public class DefaultRrts implements Rrts {
   }
 
   private boolean isInsertPlausible(Tensor state) {
-    Tensor nearest = nodeCollection.nearTo(state, 1).iterator().next().state();
+    RrtsNode nearest = nodeCollection.nearTo(state, 1).iterator().next();
     return isCollisionFree(transitionSpace.connect(nearest, state));
   }
 
@@ -87,7 +87,7 @@ public class DefaultRrts implements Rrts {
     nodeCollection.nearFrom(state, k_nearest).stream()
         // .parallel()
         .forEach(node -> {
-          Transition transition = transitionSpace.connect(node.state(), state);
+          Transition transition = transitionSpace.connect(node, state);
           Scalar cost = transitionCostFunction.cost(transition);
           Scalar compare = node.costFromRoot().add(cost);
           synchronized (updates) {
@@ -116,7 +116,7 @@ public class DefaultRrts implements Rrts {
     nodeCollection.nearFrom(parent.state(), k_nearest).stream() //
         // .parallel()
         .forEach(node -> {
-          Transition transition = transitionSpace.connect(parent.state(), node.state());
+          Transition transition = transitionSpace.connect(parent, node.state());
           Scalar costFromParent = transitionCostFunction.cost(transition);
           synchronized (parent) {
             if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {

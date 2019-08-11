@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -47,9 +48,9 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
       @Override
       public int compare(RrtsNode o1, RrtsNode o2) {
         if (!map.containsKey(o1))
-          map.put(o1, transitionCostFunction.cost(transitionSpace.connect(o1.state(), end)));
+          map.put(o1, transitionCostFunction.cost(transitionSpace.connect(o1, end)));
         if (!map.containsKey(o2))
-          map.put(o2, transitionCostFunction.cost(transitionSpace.connect(o2.state(), end)));
+          map.put(o2, transitionCostFunction.cost(transitionSpace.connect(o2, end)));
         return Scalars.compare(map.get(o1), map.get(o2));
       }
     };
@@ -67,10 +68,11 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
 
       @Override
       public int compare(RrtsNode o1, RrtsNode o2) {
+        RrtsNode rrtsNode = RrtsNode.createRoot(start, RealScalar.ZERO);
         if (!map.containsKey(o1))
-          map.put(o1, transitionCostFunction.cost(transitionSpace.connect(start, o1.state())));
+          map.put(o1, transitionCostFunction.cost(transitionSpace.connect(rrtsNode, o1.state()))); // TODO GJOEl investigate if ReversalTransition
         if (!map.containsKey(o2))
-          map.put(o2, transitionCostFunction.cost(transitionSpace.connect(start, o2.state())));
+          map.put(o2, transitionCostFunction.cost(transitionSpace.connect(rrtsNode, o2.state()))); // TODO GJOEl investigate if ReversalTransition
         return Scalars.compare(map.get(o1), map.get(o2));
       }
     };

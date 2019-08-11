@@ -22,7 +22,7 @@ public enum RrtsNodes {
     RrtsNode parent = node.parent();
     if (Objects.nonNull(parent)) {
       Scalar tran = node.costFromRoot().subtract(parent.costFromRoot());
-      Transition transition = transitionSpace.connect(parent.state(), node.state());
+      Transition transition = transitionSpace.connect(parent, node.state());
       Scalar tc = transitionCostFunction.cost(transition);
       status &= Scalars.isZero(Chop._10.of(tc.subtract(tran)));
       if (!status)

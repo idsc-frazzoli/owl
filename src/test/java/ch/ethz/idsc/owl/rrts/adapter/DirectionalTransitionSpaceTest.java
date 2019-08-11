@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.rrts.adapter;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -28,8 +29,11 @@ public class DirectionalTransitionSpaceTest extends TestCase {
   }
 
   private static void _checkLength(Tensor start, Tensor end) throws ClassNotFoundException, IOException {
-    Transition transition = Serialization.copy(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE)).connect(start, end);
+    Transition transition = Serialization.copy(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE)) //
+        .connect(RrtsNode.createRoot(start, RealScalar.ZERO), end);
     Chop._03.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
+    assertEquals(start, transition.start().state());
+    assertEquals(end, transition.end());
   }
 
   public void testSamples() {
@@ -40,7 +44,8 @@ public class DirectionalTransitionSpaceTest extends TestCase {
   }
 
   private static void _checkSamples(Tensor start, Tensor end) {
-    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
+    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE) //
+        .connect(RrtsNode.createRoot(start, RealScalar.ZERO), end);
     {
       Scalar res = Quantity.of(.5, "m");
       Tensor samples = transition.sampled(res);
@@ -53,7 +58,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
     // {
     // Tensor samples = transition.sampled(8);
     // assertEquals(8, samples.length());
-    // assertNotSame(start, samples.get(0));
+    // assertNotSame(start.state(), samples.get(0));
     // assertEquals(end, Last.of(samples));
     // }
   }
@@ -66,7 +71,8 @@ public class DirectionalTransitionSpaceTest extends TestCase {
   }
 
   public void testWrap(Tensor start, Tensor end) {
-    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE).connect(start, end);
+    Transition transition = DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE) //
+        .connect(RrtsNode.createRoot(start, RealScalar.ZERO), end);
     {
       Scalar res = Quantity.of(.5, "m");
       TransitionWrap wrap = transition.wrapped(res);
@@ -82,7 +88,7 @@ public class DirectionalTransitionSpaceTest extends TestCase {
     // {
     // TransitionWrap wrap = transition.wrapped(8);
     // assertEquals(8, wrap.samples().length());
-    // assertNotSame(start, wrap.samples().get(0));
+    // assertNotSame(start.state(), wrap.samples().get(0));
     // assertEquals(end, Last.of(wrap.samples()));
     // wrap.spacing().extract(0, 8).stream().map(Tensor::Get) //
     // .map(Sign::requirePositive) //

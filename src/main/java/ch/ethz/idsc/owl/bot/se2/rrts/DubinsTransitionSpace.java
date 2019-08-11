@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Optional;
 
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
@@ -36,8 +37,8 @@ public class DubinsTransitionSpace implements TransitionSpace, Serializable {
   }
 
   @Override // from TransitionSpace
-  public DubinsTransition connect(Tensor start, Tensor end) {
-    DubinsPath dubinsPath = dubinsPath(start, end).get();
+  public DubinsTransition connect(RrtsNode start, Tensor end) {
+    DubinsPath dubinsPath = dubinsPath(start.state(), end).get();
     return new DubinsTransition(start, end, dubinsPath);
   }
 

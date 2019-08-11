@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
@@ -42,7 +43,7 @@ public class DubinsTransitionDemo extends AbstractDemo implements DemoInterface 
       graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.setStroke(new BasicStroke(1));
       for (DubinsPath dubinsPath : list) {
-        DubinsTransition dubinsTransition = new DubinsTransition(START, mouse, dubinsPath);
+        DubinsTransition dubinsTransition = new DubinsTransition(RrtsNode.createRoot(START, RealScalar.ZERO), mouse, dubinsPath);
         graphics.draw(geometricLayer.toPath2D(dubinsTransition.linearized(RealScalar.of(pixel2modelWidth))));
       }
     }

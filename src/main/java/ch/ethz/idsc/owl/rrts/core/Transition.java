@@ -5,8 +5,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public interface Transition {
-  /** @return start state of this transition */
-  Tensor start();
+  /** @return start node of this transition */
+  RrtsNode start();
 
   /** @return end state of this transition */
   Tensor end();

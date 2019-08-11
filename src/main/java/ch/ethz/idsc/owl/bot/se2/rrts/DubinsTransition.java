@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class DubinsTransition extends AbstractTransition {
   private final DubinsPath dubinsPath;
 
-  public DubinsTransition(Tensor start, Tensor end, DubinsPath dubinsPath) {
+  public DubinsTransition(RrtsNode start, Tensor end, DubinsPath dubinsPath) {
     super(start, end, dubinsPath.length());
     this.dubinsPath = dubinsPath;
   }
@@ -35,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     return Tensor.of(Subdivide.of(0.0, 1.0, n).stream() //
         .skip(1) //
         .map(Scalar.class::cast) //
-        .map(dubinsPath.unit(start())));
+        .map(dubinsPath.unit(start().state())));
   }
 
   @Override // from Transition
@@ -50,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   public Tensor linearized(Scalar minResolution) {
     if (dubinsPath.type().containsStraight() && //
         Scalars.lessThan(minResolution, dubinsPath.length(1))) {
-      ScalarTensorFunction scalarTensorFunction = dubinsPath.unit(start());
+      ScalarTensorFunction scalarTensorFunction = dubinsPath.unit(start().state());
       int s0 = Ceiling.FUNCTION.apply(dubinsPath.length(0).divide(minResolution)).number().intValue();
       int s2 = Ceiling.FUNCTION.apply(dubinsPath.length(2).divide(minResolution)).number().intValue();
       Tensor segments = dubinsPath.segments().divide(length());
@@ -60,6 +61,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
     }
     int n = Math.max(1, steps(minResolution));
     return Subdivide.of(0.0, 1.0, n) //
-        .map(dubinsPath.unit(start()));
+        .map(dubinsPath.unit(start().state()));
   }
 }

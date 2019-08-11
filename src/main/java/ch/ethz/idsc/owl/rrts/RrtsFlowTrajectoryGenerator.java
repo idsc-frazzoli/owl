@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.Tensor;
     RrtsNode prev = sequence.get(0);
     trajectory.add(TrajectorySample.head(new StateTime(prev.state(), t0)));
     for (RrtsNode node : sequence.subList(1, sequence.size())) {
-      Transition transition = transitionSpace.connect(prev.state(), node.state());
+      Transition transition = transitionSpace.connect(prev, node.state());
       TransitionWrap transitionWrap = transition.wrapped(dt);
       Tensor samples = transitionWrap.samples();
       Tensor spacing = transitionWrap.spacing();
