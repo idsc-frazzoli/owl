@@ -89,7 +89,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     return trajectory;
   }
 
-  public List<TrajectorySample> postProcessedTrajectory( //
+  private List<TrajectorySample> postProcessedTrajectory( //
       TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
     List<TrajectorySample> trajectory = new LinkedList<>();
     Iterator<RrtsNode> iterator = sequence.iterator();
@@ -102,7 +102,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       Transition transition = transitionSpace.connect(prev, node.state());
       boolean direction = (!(transition instanceof DirectedTransition)) || ((DirectedTransition) transition).isForward;
       if (direction != prevDirection) {
-        trajectory = flush(transitionSpace, trajectory, segment, prevDirection, dt);
+        flush(transitionSpace, trajectory, segment, prevDirection, dt);
         prevDirection = direction;
         segment = new ArrayList<>();
       }
