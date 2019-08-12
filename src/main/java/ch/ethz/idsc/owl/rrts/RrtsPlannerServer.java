@@ -24,6 +24,8 @@ import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionPlanner;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -142,6 +144,10 @@ public abstract class RrtsPlannerServer implements TransitionPlanner {
 
   public TransitionSpace getTransitionSpace() {
     return transitionSpace;
+  }
+
+  public void addTrajectoryPostprocessing(CurveSubdivision subdivision, TensorMetric metric) {
+    flowTrajectoryGenerator.addPostProcessing(subdivision, metric);
   }
 
   protected abstract Tensor uBetween(StateTime orig, StateTime dest);

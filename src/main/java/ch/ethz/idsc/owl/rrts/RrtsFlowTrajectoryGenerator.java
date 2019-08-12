@@ -1,11 +1,15 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.rrts;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 import ch.ethz.idsc.owl.data.Lists;
+import ch.ethz.idsc.owl.math.IntegerLog2;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -16,12 +20,22 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
+import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
+import ch.ethz.idsc.sophus.math.Distances;
+import ch.ethz.idsc.sophus.math.TensorMetric;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Reverse;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Nest;
+import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class RrtsFlowTrajectoryGenerator {
   private final StateSpaceModel stateSpaceModel;
   private final BiFunction<StateTime, StateTime, Tensor> uBetween;
+  private CurveSubdivision subdivision = null;
+  private TensorMetric metric = null;
 
   public RrtsFlowTrajectoryGenerator( //
       StateSpaceModel stateSpaceModel, //
@@ -30,11 +44,25 @@ import ch.ethz.idsc.tensor.Tensor;
     this.uBetween = uBetween;
   }
 
+  /** @param subdivision interpolation scheme
+   * @param metric distance metric between samples */
+  public void addPostProcessing(CurveSubdivision subdivision, TensorMetric metric) {
+    this.subdivision = Objects.requireNonNull(subdivision);
+    this.metric = Objects.requireNonNull(metric);
+  }
+
   /** @param transitionSpace
-   * @param sequence
-   * @param dt
-   * @return */
+   * @param sequence of control point nodes
+   * @param dt minimal time resolution
+   * @return trajectory */
   public List<TrajectorySample> createTrajectory( //
+      TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
+    if (Objects.isNull(subdivision))
+      return standardTrajectory(transitionSpace, sequence, t0, dt);
+    return postProcessedTrajectory(transitionSpace, sequence, t0, dt);
+  }
+
+  private List<TrajectorySample> standardTrajectory( //
       TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
     List<TrajectorySample> trajectory = new LinkedList<>();
     RrtsNode prev = sequence.get(0);
@@ -57,6 +85,61 @@ import ch.ethz.idsc.tensor.Tensor;
       }
       prev = node;
       t0 = t0.add(transition.length());
+    }
+    return trajectory;
+  }
+
+  public List<TrajectorySample> postProcessedTrajectory( //
+      TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
+    List<TrajectorySample> trajectory = new LinkedList<>();
+    Iterator<RrtsNode> iterator = sequence.iterator();
+    RrtsNode prev = iterator.next();
+    trajectory.add(TrajectorySample.head(new StateTime(prev.state(), t0)));
+    boolean prevDirection = true;
+    List<RrtsNode> segment = new ArrayList<>();
+    while (iterator.hasNext()) {
+      RrtsNode node = iterator.next();
+      Transition transition = transitionSpace.connect(prev, node.state());
+      boolean direction = (!(transition instanceof DirectedTransition)) || ((DirectedTransition) transition).isForward;
+      if (direction != prevDirection) {
+        trajectory = flush(transitionSpace, trajectory, segment, prevDirection, dt);
+        prevDirection = direction;
+        segment = new ArrayList<>();
+      }
+      if (segment.isEmpty())
+        segment.add(prev);
+      segment.add(node);
+      prev = node;
+    }
+    return flush(transitionSpace, trajectory, segment, prevDirection, dt);
+  }
+
+  private List<TrajectorySample> flush(TransitionSpace transitionSpace, List<TrajectorySample> trajectory, List<RrtsNode> segment, boolean direction, Scalar dt) {
+    if (!segment.isEmpty()) {
+      Tensor points = Tensor.of(segment.stream().map(RrtsNode::state));
+      Scalar maxLength = //
+          segment.subList(1, segment.size()).stream().map(node -> transitionSpace.connect(node.parent(), node.state()).length()).reduce(Max::of).get();
+      Scalar t0 = Lists.getLast(trajectory).stateTime().time();
+      int depth = IntegerLog2.ceiling(Ceiling.of(maxLength.divide(Sign.requirePositive(dt))).number().intValue());
+      if (!direction)
+        points = Reverse.of(points);
+      Tensor samples = Nest.of(subdivision::string, points, depth);
+      Tensor spacing = Distances.of(metric, samples);
+      if (!direction) {
+        samples = Reverse.of(samples);
+        spacing = Reverse.of(spacing);
+      }
+      Scalar ti = t0;
+      for (int i = 1; i < samples.length(); i++) {
+        ti = ti.add(spacing.Get(i - 1));
+        StateTime stateTime = new StateTime(samples.get(i), ti);
+        StateTime orig = Lists.getLast(trajectory).stateTime();
+        Tensor u = direction //
+            ? uBetween.apply(orig, stateTime) //
+            : uBetween.apply(stateTime, orig);
+        Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
+        trajectory.add(new TrajectorySample(stateTime, flow));
+      }
     }
     return trajectory;
   }
