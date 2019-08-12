@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.sca.win.FlatTopWindow;
 import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
 import ch.ethz.idsc.tensor.sca.win.HammingWindow;
 import ch.ethz.idsc.tensor.sca.win.HannWindow;
+import ch.ethz.idsc.tensor.sca.win.LanczosWindow;
 import ch.ethz.idsc.tensor.sca.win.NuttallWindow;
 import ch.ethz.idsc.tensor.sca.win.ParzenWindow;
 import ch.ethz.idsc.tensor.sca.win.TukeyWindow;
@@ -49,8 +50,7 @@ public enum SmoothingKernel implements ScalarUnaryOperator {
   /** has nice properties in the frequency domain */
   HAMMING(HammingWindow.FUNCTION), //
   HANN(HannWindow.FUNCTION), //
-  // TODO JPH TENSOR 077
-  // LANCZOS(LanczosWindow.FUNCTION), //
+  LANCZOS(LanczosWindow.FUNCTION), //
   NUTTALL(NuttallWindow.FUNCTION), //
   PARZEN(ParzenWindow.FUNCTION), //
   TUKEY(TukeyWindow.FUNCTION), //
