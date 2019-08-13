@@ -24,4 +24,9 @@ public class LengthCostFunction implements TransitionCostFunction {
   public Scalar cost(Transition transition) {
     return function.apply(transition.length());
   }
+
+  @Override
+  public int influence() {
+    return 0;
+  }
 }

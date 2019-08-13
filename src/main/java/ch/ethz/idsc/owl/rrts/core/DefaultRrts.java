@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.rrts.core;
 import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -121,7 +122,8 @@ public class DefaultRrts implements Rrts {
           synchronized (parent) {
             if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
               if (isCollisionFree(transition)) {
-                parent.rewireTo(node, costFromParent);
+                BiFunction<RrtsNode, RrtsNode, Scalar> cost = (p, n) -> transitionCostFunction.cost(transitionSpace.connect(p, n.state()));
+                parent.rewireTo(node, costFromParent, cost, transitionCostFunction.influence());
                 ++rewireCount;
               }
             }

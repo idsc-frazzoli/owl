@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.rrts.core;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.tensor.Scalar;
@@ -35,6 +36,8 @@ public interface RrtsNode extends StateCostNode {
    * and update all costs in the subtree of child
    * 
    * @param child
-   * @param costFromParent cost of transition between this and child */
-  void rewireTo(RrtsNode child, Scalar costFromParent);
+   * @param costFromParent cost of transition between this and child
+   * @param cost between to nodes
+   * @param influence region of influence for cost */
+  void rewireTo(RrtsNode child, Scalar costFromParent, BiFunction<RrtsNode, RrtsNode, Scalar> cost, int influence);
 }
