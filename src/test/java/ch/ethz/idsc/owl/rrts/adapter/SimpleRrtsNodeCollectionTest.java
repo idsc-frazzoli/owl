@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.rrts.adapter;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
-import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -19,7 +18,7 @@ import junit.framework.TestCase;
 public class SimpleRrtsNodeCollectionTest extends TestCase {
   public void testEuclideanNear() {
     Distribution distribution = UniformDistribution.unit();
-    RrtsNodeCollection rrtsNodeCollection = new SimpleRrtsNodeCollection(RnTransitionSpace.INSTANCE, Transition::length);
+    RrtsNodeCollection rrtsNodeCollection = new SimpleRrtsNodeCollection(RnTransitionSpace.INSTANCE, LengthCostFunction.IDENTITY);
     for (int index = 0; index < 200; ++index)
       rrtsNodeCollection.insert(RrtsNode.createRoot(RandomVariate.of(distribution, 3), RealScalar.of(10)));
     Tensor center = Tensors.vector(0.5, 0.5, 0.5);
