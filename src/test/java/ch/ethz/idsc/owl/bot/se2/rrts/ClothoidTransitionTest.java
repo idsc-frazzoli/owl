@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -18,7 +17,7 @@ import junit.framework.TestCase;
 
 public class ClothoidTransitionTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    RrtsNode start = RrtsNode.createRoot(Tensors.vector(1, 2, 3), RealScalar.ZERO);
+    Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = Serialization.copy(ClothoidTransition.of(start, end));
     HeadTailInterface clothoidTerminalRatio = clothoidTransition.terminalRatios();
@@ -33,7 +32,7 @@ public class ClothoidTransitionTest extends TestCase {
   }
 
   public void testWrapped() {
-    RrtsNode start = RrtsNode.createRoot(Tensors.vector(2, 3, 3), RealScalar.ZERO);
+    Tensor start = Tensors.vector(2, 3, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
     TransitionWrap transitionWrap = clothoidTransition.wrapped(RealScalar.of(.2));
@@ -42,7 +41,7 @@ public class ClothoidTransitionTest extends TestCase {
   }
 
   public void testSamples2() {
-    RrtsNode start = RrtsNode.createRoot(Tensors.vector(0, 0, 0), RealScalar.ZERO);
+    Tensor start = Tensors.vector(0, 0, 0);
     Tensor end = Tensors.vector(4, 0, 0);
     ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
     Chop._12.requireClose(clothoidTransition.length(), RealScalar.of(4));
@@ -51,7 +50,7 @@ public class ClothoidTransitionTest extends TestCase {
   }
 
   public void testSamplesSteps() {
-    RrtsNode start = RrtsNode.createRoot(Tensors.vector(1, 2, 3), RealScalar.ZERO);
+    Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
     assertEquals(clothoidTransition.sampled(RealScalar.of(.2)).length(), 32);
@@ -61,7 +60,7 @@ public class ClothoidTransitionTest extends TestCase {
   }
 
   public void testFails() {
-    RrtsNode start = RrtsNode.createRoot(Tensors.vector(1, 2, 3), RealScalar.ZERO);
+    Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
     ClothoidTransition clothoidTransition = //
         ClothoidTransition.of(start, end);

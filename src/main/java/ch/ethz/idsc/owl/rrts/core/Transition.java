@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public interface Transition {
   /** @return start node of this transition */
-  RrtsNode start();
+  Tensor start();
 
   /** @return end state of this transition */
   Tensor end();

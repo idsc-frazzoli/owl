@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
@@ -18,7 +17,7 @@ import junit.framework.TestCase;
 public class DubinsTransitionTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     TransitionSpace transitionSpace = Serialization.copy(DubinsTransitionSpace.shortest(RealScalar.of(2)));
-    RrtsNode start = RrtsNode.createRoot(Tensors.vector(1, 2, 3), RealScalar.ZERO);
+    Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(3, -8, 1);
     Transition transition = transitionSpace.connect(start, end);
     TransitionWrap transitionWrap = transition.wrapped(RealScalar.of(.3));
@@ -28,7 +27,7 @@ public class DubinsTransitionTest extends TestCase {
 
   public void testTrivial() {
     TransitionSpace transitionSpace = DubinsTransitionSpace.shortest(RealScalar.of(1));
-    RrtsNode start = RrtsNode.createRoot(Tensors.vector(0, 0, 0), RealScalar.ZERO);
+    Tensor start = Tensors.vector(0, 0, 0);
     Tensor end = Tensors.vector(4, 0, 0);
     Transition transition = transitionSpace.connect(start, end);
     Tensor sampled = transition.sampled(RealScalar.of(2));
@@ -37,7 +36,7 @@ public class DubinsTransitionTest extends TestCase {
 
   public void testTrivial2() {
     TransitionSpace transitionSpace = DubinsTransitionSpace.shortest(RealScalar.of(1));
-    RrtsNode start = RrtsNode.createRoot(Tensors.vector(0, 0, 0), RealScalar.ZERO);
+    Tensor start = Tensors.vector(0, 0, 0);
     Tensor end = Tensors.vector(4, 0, 0);
     Transition transition = transitionSpace.connect(start, end);
     Tensor sampled = transition.sampled(RealScalar.of(1.9));

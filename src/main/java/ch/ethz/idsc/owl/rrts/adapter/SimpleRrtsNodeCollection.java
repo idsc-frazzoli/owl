@@ -49,9 +49,9 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
       @Override
       public int compare(RrtsNode o1, RrtsNode o2) {
         if (!map.containsKey(o1))
-          map.put(o1, transitionCostFunction.cost(transitionSpace.connect(o1, end)));
+          map.put(o1, transitionCostFunction.cost(o1, transitionSpace.connect(o1.state(), end)));
         if (!map.containsKey(o2))
-          map.put(o2, transitionCostFunction.cost(transitionSpace.connect(o2, end)));
+          map.put(o2, transitionCostFunction.cost(o2, transitionSpace.connect(o2.state(), end)));
         return Scalars.compare(map.get(o1), map.get(o2));
       }
     };
@@ -70,9 +70,9 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
       @Override
       public int compare(RrtsNode o1, RrtsNode o2) {
         if (!map.containsKey(o1))
-          map.put(o1, transitionCostFunction.cost(reversalTransitionSpace.connect(o1, start)));
+          map.put(o1, transitionCostFunction.cost(o1, reversalTransitionSpace.connect(o1.state(), start)));
         if (!map.containsKey(o2))
-          map.put(o2, transitionCostFunction.cost(reversalTransitionSpace.connect(o2, start)));
+          map.put(o2, transitionCostFunction.cost(o2, reversalTransitionSpace.connect(o2.state(), start)));
         return Scalars.compare(map.get(o1), map.get(o2));
       }
     };

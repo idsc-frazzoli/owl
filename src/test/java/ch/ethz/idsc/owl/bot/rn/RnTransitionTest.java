@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -16,7 +15,7 @@ import junit.framework.TestCase;
 
 public class RnTransitionTest extends TestCase {
   public void testSampled() throws ClassNotFoundException, IOException {
-    RrtsNode rrtsNode = RrtsNode.createRoot(Tensors.vector(1, 2), RealScalar.ZERO);
+    Tensor rrtsNode = Tensors.vector(1, 2);
     RnTransition rnTransition = //
         Serialization.copy(RnTransitionSpace.INSTANCE.connect(rrtsNode, Tensors.vector(10, 2)));
     Tensor tensor = rnTransition.sampled(RealScalar.of(0.1));
@@ -24,14 +23,14 @@ public class RnTransitionTest extends TestCase {
   }
 
   public void testLinearized() {
-    RrtsNode rrtsNode = RrtsNode.createRoot(Tensors.vector(1, 2), RealScalar.ZERO);
+    Tensor rrtsNode = Tensors.vector(1, 2);
     RnTransition rnTransition = RnTransitionSpace.INSTANCE.connect(rrtsNode, Tensors.vector(10, 2));
     Tensor linearized = rnTransition.linearized(RealScalar.of(0.1));
     assertEquals(linearized, Tensors.fromString("{{1, 2}, {10, 2}}"));
   }
 
   public void testWrapped() {
-    RrtsNode rrtsNode = RrtsNode.createRoot(Tensors.vector(1, 2), RealScalar.ZERO);
+    Tensor rrtsNode = Tensors.vector(1, 2);
     RnTransition rnTransition = RnTransitionSpace.INSTANCE.connect(rrtsNode, Tensors.vector(10, 2));
     TransitionWrap transitionWrap = rnTransition.wrapped(RealScalar.of(0.1));
     Tensor samples = transitionWrap.samples();
@@ -43,7 +42,7 @@ public class RnTransitionTest extends TestCase {
   }
 
   public void testFail() {
-    RrtsNode rrtsNode = RrtsNode.createRoot(Tensors.vector(1, 2), RealScalar.ZERO);
+    Tensor rrtsNode = Tensors.vector(1, 2);
     RnTransition rnTransition = RnTransitionSpace.INSTANCE.connect(rrtsNode, Tensors.vector(10, 2));
     rnTransition.sampled(RealScalar.of(100));
     try {

@@ -66,7 +66,7 @@ public class DefaultRrts implements Rrts {
 
   private boolean isInsertPlausible(Tensor state) {
     RrtsNode nearest = nodeCollection.nearTo(state, 1).iterator().next();
-    return isCollisionFree(transitionSpace.connect(nearest, state));
+    return isCollisionFree(transitionSpace.connect(nearest.state(), state));
   }
 
   private Optional<RrtsNode> connectAlongMinimumCost(Tensor state, int k_nearest) {
@@ -88,8 +88,8 @@ public class DefaultRrts implements Rrts {
     nodeCollection.nearFrom(state, k_nearest).stream()
         // .parallel()
         .forEach(node -> {
-          Transition transition = transitionSpace.connect(node, state);
-          Scalar cost = transitionCostFunction.cost(transition);
+          Transition transition = transitionSpace.connect(node.state(), state);
+          Scalar cost = transitionCostFunction.cost(node, transition);
           Scalar compare = node.costFromRoot().add(cost);
           synchronized (updates) {
             if (updates.isEmpty() || Scalars.lessThan(compare, updates.firstKey()))
@@ -117,12 +117,12 @@ public class DefaultRrts implements Rrts {
     nodeCollection.nearFrom(parent.state(), k_nearest).stream() //
         // .parallel()
         .forEach(node -> {
-          Transition transition = transitionSpace.connect(parent, node.state());
-          Scalar costFromParent = transitionCostFunction.cost(transition);
+          Transition transition = transitionSpace.connect(parent.state(), node.state());
+          Scalar costFromParent = transitionCostFunction.cost(parent, transition);
           synchronized (parent) {
             if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
               if (isCollisionFree(transition)) {
-                BiFunction<RrtsNode, RrtsNode, Scalar> cost = (p, n) -> transitionCostFunction.cost(transitionSpace.connect(p, n.state()));
+                BiFunction<RrtsNode, RrtsNode, Scalar> cost = (p, n) -> transitionCostFunction.cost(p, transitionSpace.connect(p.state(), n.state()));
                 parent.rewireTo(node, costFromParent, cost, transitionCostFunction.influence());
                 ++rewireCount;
               }

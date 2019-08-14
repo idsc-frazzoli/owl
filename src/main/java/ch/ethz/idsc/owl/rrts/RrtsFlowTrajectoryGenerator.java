@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     RrtsNode prev = sequence.get(0);
     trajectory.add(TrajectorySample.head(new StateTime(prev.state(), t0)));
     for (RrtsNode node : sequence.subList(1, sequence.size())) {
-      Transition transition = transitionSpace.connect(prev, node.state());
+      Transition transition = transitionSpace.connect(prev.state(), node.state());
       TransitionWrap transitionWrap = transition.wrapped(dt);
       Tensor samples = transitionWrap.samples();
       Tensor spacing = transitionWrap.spacing();
@@ -99,7 +99,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     List<RrtsNode> segment = new ArrayList<>();
     while (iterator.hasNext()) {
       RrtsNode node = iterator.next();
-      Transition transition = transitionSpace.connect(prev, node.state());
+      Transition transition = transitionSpace.connect(prev.state(), node.state());
       boolean direction = (!(transition instanceof DirectedTransition)) || ((DirectedTransition) transition).isForward;
       if (direction != prevDirection) {
         flush(transitionSpace, trajectory, segment, prevDirection, dt);
@@ -114,11 +114,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
     return flush(transitionSpace, trajectory, segment, prevDirection, dt);
   }
 
-  private List<TrajectorySample> flush(TransitionSpace transitionSpace, List<TrajectorySample> trajectory, List<RrtsNode> segment, boolean direction, Scalar dt) {
+  private List<TrajectorySample> flush(TransitionSpace transitionSpace, List<TrajectorySample> trajectory, List<RrtsNode> segment, boolean direction,
+      Scalar dt) {
     if (!segment.isEmpty()) {
       Tensor points = Tensor.of(segment.stream().map(RrtsNode::state));
       Scalar maxLength = //
-          segment.subList(1, segment.size()).stream().map(node -> transitionSpace.connect(node.parent(), node.state()).length()).reduce(Max::of).get();
+          segment.subList(1, segment.size()).stream().map(node -> transitionSpace.connect(node.parent().state(), node.state()).length()).reduce(Max::of).get();
       Scalar t0 = Lists.getLast(trajectory).stateTime().time();
       int depth = IntegerLog2.ceiling(Ceiling.of(maxLength.divide(Sign.requirePositive(dt))).number().intValue());
       if (!direction)

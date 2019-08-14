@@ -19,5 +19,5 @@ public interface TransitionSpace {
   /** @param start state
    * @param end state
    * @return transition that represents the (unique) connection between the start and end state */
-  Transition connect(RrtsNode start, Tensor end);
+  Transition connect(Tensor start, Tensor end);
 }

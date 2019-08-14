@@ -18,10 +18,8 @@ import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionPlanner;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.PadRight;
@@ -52,7 +50,7 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity implements Rrt
 
   @Override // from TensorMetric
   public Scalar distance(Tensor x, Tensor y) {
-    return plannerServer.getTransitionSpace().connect(RrtsNode.createRoot(x, RealScalar.ZERO), y).length();
+    return plannerServer.getTransitionSpace().connect(x, y).length();
   }
 
   @Override // from TrajectoryEntity

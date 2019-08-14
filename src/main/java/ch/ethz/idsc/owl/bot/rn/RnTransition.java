@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.rn;
 
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -14,13 +13,13 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class RnTransition extends AbstractTransition {
-  public RnTransition(RrtsNode start, Tensor end) {
-    super(start, end, Norm._2.between(start.state(), end));
+  public RnTransition(Tensor start, Tensor end) {
+    super(start, end, Norm._2.between(start, end));
   }
 
   @Override // from Transition
   public Tensor sampled(Scalar minResolution) {
-    return Tensor.of(Subdivide.of(start().state(), end(), steps(minResolution)).stream().skip(1));
+    return Tensor.of(Subdivide.of(start(), end(), steps(minResolution)).stream().skip(1));
   }
 
   @Override // from Transition
@@ -33,7 +32,7 @@ public class RnTransition extends AbstractTransition {
 
   @Override // from RenderTransition
   public Tensor linearized(Scalar minResolution) {
-    return Tensors.of(start().state(), end());
+    return Tensors.of(start(), end());
   }
 
   private int steps(Scalar minResolution) {

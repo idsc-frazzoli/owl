@@ -5,9 +5,7 @@ import java.util.function.BiFunction;
 
 import ch.ethz.idsc.owl.data.tree.SetNode;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /** Implementation based on
  * Sertac Karaman and Emilio Frazzoli, 2011:
@@ -34,11 +32,9 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
     child.parent().removeEdgeTo(child);
     insertEdgeTo(child);
     final Scalar nodeCostFromRoot = costFromRoot().add(costFromParent);
-    /*
-    // the condition of cost reduction is not strictly necessary
-    if (!Scalars.lessThan(nodeCostFromRoot, child.costFromRoot()))
-      throw TensorRuntimeException.of(nodeCostFromRoot, child.costFromRoot());
-    */
+    /* // the condition of cost reduction is not strictly necessary
+     * if (!Scalars.lessThan(nodeCostFromRoot, child.costFromRoot()))
+     * throw TensorRuntimeException.of(nodeCostFromRoot, child.costFromRoot()); */
     if (influence > 0) {
       ((RrtsNodeImpl) child).costFromRoot = nodeCostFromRoot;
       for (RrtsNode grandChild : child.children())

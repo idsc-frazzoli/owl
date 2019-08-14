@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import ch.ethz.idsc.owl.math.IntegerLog2;
 import ch.ethz.idsc.owl.rrts.adapter.AbstractTransition;
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curve;
@@ -22,15 +21,15 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
-  public static ClothoidTransition of(RrtsNode start, Tensor end) {
-    Clothoid clothoid = new Clothoid(start.state(), end);
+  public static ClothoidTransition of(Tensor start, Tensor end) {
+    Clothoid clothoid = new Clothoid(start, end);
     return new ClothoidTransition(start, end, clothoid, clothoid.new Curve());
   }
 
   // ---
   // private final Clothoid clothoid;
   // private final Curve curve;
-  private ClothoidTransition(RrtsNode start, Tensor end, Clothoid clothoid, Curve curve) {
+  private ClothoidTransition(Tensor start, Tensor end, Clothoid clothoid, Curve curve) {
     super(start, end, curve.length());
     // this.clothoid = clothoid;
     // this.curve = curve;
@@ -54,11 +53,11 @@ public class ClothoidTransition extends AbstractTransition {
   @Override // from Transition
   public Tensor linearized(Scalar minResolution) {
     /* investigation has shown that midpoint splits result in clothoid segments of approximately equal length */
-    return Nest.of(Clothoid3.CURVE_SUBDIVISION::string, Unprotect.byRef(start().state(), end()), //
+    return Nest.of(Clothoid3.CURVE_SUBDIVISION::string, Unprotect.byRef(start(), end()), //
         IntegerLog2.ceiling(Ceiling.of(length().divide(Sign.requirePositive(minResolution))).number().intValue()));
   }
 
   public HeadTailInterface terminalRatios() {
-    return ClothoidTerminalRatios.of(start().state(), end());
+    return ClothoidTerminalRatios.of(start(), end());
   }
 }

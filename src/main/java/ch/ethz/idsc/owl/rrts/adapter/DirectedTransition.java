@@ -12,14 +12,15 @@ public class DirectedTransition extends AbstractTransition {
   protected final Transition transition;
   public final boolean isForward;
 
-  /* package */ DirectedTransition(Transition transition, RrtsNode start, boolean isForward) {
-    super(requireEquals(start, //
+  /* package */ DirectedTransition(Transition transition, boolean isForward) {
+    super(
+        // requireEquals(rrtsNode, //
         isForward //
-            ? transition.start().state() //
-            : transition.end()), //
+            ? transition.start() //
+            : transition.end(), //
         isForward //
             ? transition.end() //
-            : transition.start().state(), //
+            : transition.start(), //
         transition.length());
     this.transition = transition;
     this.isForward = isForward;
@@ -40,9 +41,9 @@ public class DirectedTransition extends AbstractTransition {
     return transition.linearized(minResolution);
   }
 
-  private static RrtsNode requireEquals(RrtsNode rrtsNode, Tensor state) {
+  private static Tensor requireEquals(RrtsNode rrtsNode, Tensor state) {
     if (rrtsNode.state().equals(state))
-      return rrtsNode;
+      return state;
     throw TensorRuntimeException.of(rrtsNode.state(), state);
   }
 }

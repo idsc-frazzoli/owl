@@ -65,7 +65,7 @@ public class ExhaustiveNodeCollection implements RrtsNodeCollection {
   public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
     Queue<NodeTransition> queue = BoundedMinQueue.of(k_nearest);
     for (RrtsNode rrtsNode : list)
-      queue.offer(new NodeTransition(rrtsNode, transitionSpace.connect(rrtsNode, end)));
+      queue.offer(new NodeTransition(rrtsNode, transitionSpace.connect(rrtsNode.state(), end)));
     return queue.stream().map(NodeTransition::rrtsNode).collect(Collectors.toList());
   }
 
@@ -73,7 +73,7 @@ public class ExhaustiveNodeCollection implements RrtsNodeCollection {
   public Collection<RrtsNode> nearFrom(Tensor start, int k_nearest) {
     Queue<NodeTransition> queue = BoundedMinQueue.of(k_nearest);
     for (RrtsNode rrtsNode : list)
-      queue.offer(new NodeTransition(rrtsNode, reversalTransitionSpace.connect(rrtsNode, start)));
+      queue.offer(new NodeTransition(rrtsNode, reversalTransitionSpace.connect(rrtsNode.state(), start)));
     return queue.stream().map(NodeTransition::rrtsNode).collect(Collectors.toList());
   }
 }

@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.rrts.adapter;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalars;
@@ -24,11 +23,11 @@ public class DirectionalTransitionSpace implements TransitionSpace, Serializable
   }
 
   @Override // from TransitionSpace
-  public DirectedTransition connect(RrtsNode start, Tensor end) {
+  public DirectedTransition connect(Tensor start, Tensor end) {
     Transition tf = forwardTransitionSpace.connect(start, end);
     Transition tr = backwardTransitionSpace.connect(start, end);
     boolean isForward = Scalars.lessEquals(tf.length(), tr.length());
     // return new DirectedTransition(isForward ? tf : tr, start, isForward);
-    return isForward ? new DirectedTransition(tf, start, true) : (DirectedTransition) tr;
+    return isForward ? new DirectedTransition(tf, true) : (DirectedTransition) tr;
   }
 }

@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,13 +21,13 @@ import junit.framework.TestCase;
 public class ClothoidTransitionSpaceTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
     Transition transition = Serialization.copy(ClothoidTransitionSpace.INSTANCE).connect( //
-        RrtsNode.createRoot(Tensors.fromString("{1[m], 1[m], 0}"), RealScalar.ZERO), //
+        Tensors.fromString("{1[m], 1[m], 0}"), //
         Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF));
     Chop._04.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
   }
 
   public void testSamples() {
-    RrtsNode start = RrtsNode.createRoot(Tensors.fromString("{1[m], 2[m], 1}"), RealScalar.ZERO);
+    Tensor start = Tensors.fromString("{1[m], 2[m], 1}");
     Tensor end = Tensors.fromString("{1[m], 6[m], 3}");
     Transition transition = ClothoidTransitionSpace.INSTANCE.connect(start, end);
     {
@@ -37,7 +36,7 @@ public class ClothoidTransitionSpaceTest extends TestCase {
       assertEquals(16, samples.length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
-      assertNotSame(start.state(), samples.get(0));
+      assertNotSame(start, samples.get(0));
       assertEquals(end, Last.of(samples));
     }
     // {
@@ -49,7 +48,7 @@ public class ClothoidTransitionSpaceTest extends TestCase {
   }
 
   public void testWrap() {
-    RrtsNode start = RrtsNode.createRoot(Tensors.fromString("{1[m], 2[m], 1}"), RealScalar.ZERO);
+    Tensor start = Tensors.fromString("{1[m], 2[m], 1}");
     Tensor end = Tensors.fromString("{1[m], 6[m], 3}");
     Transition transition = ClothoidTransitionSpace.INSTANCE.connect(start, end);
     {
@@ -58,7 +57,7 @@ public class ClothoidTransitionSpaceTest extends TestCase {
       assertEquals(16, wrap.samples().length());
       assertTrue(Scalars.lessThan(res, transition.length().divide(RealScalar.of(8))));
       assertTrue(Scalars.lessThan(transition.length().divide(RealScalar.of(16)), res));
-      assertNotSame(start.state(), wrap.samples().get(0));
+      assertNotSame(start, wrap.samples().get(0));
       assertEquals(end, Last.of(wrap.samples()));
       assertTrue(wrap.spacing().extract(0, 16).stream().map(Tensor::Get) //
           .map(Sign::requirePositive) //

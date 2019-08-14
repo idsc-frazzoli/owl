@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,8 +23,8 @@ public class ComboCostFunction implements TransitionCostFunction {
   }
 
   @Override
-  public Scalar cost(Transition transition) {
-    return costFunctions.entrySet().stream().map(e -> e.getKey().cost(transition).multiply(e.getValue())).reduce(Scalar::add).get();
+  public Scalar cost(RrtsNode rrtsNode, Transition transition) {
+    return costFunctions.entrySet().stream().map(e -> e.getKey().cost(rrtsNode, transition).multiply(e.getValue())).reduce(Scalar::add).get();
   }
 
   @Override
