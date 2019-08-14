@@ -17,9 +17,9 @@ import junit.framework.TestCase;
 
 public class RnTransitionSpaceTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
-    Transition transition = Serialization.copy(RnTransitionSpace.INSTANCE).connect( //
-        Tensors.fromString("{1[m], 2[m]}"), //
-        Tensors.fromString("{1[m], 6[m]}"));
+    Tensor start = Tensors.fromString("{1[m], 2[m]}");
+    Tensor end = Tensors.fromString("{1[m], 6[m]}");
+    Transition transition = Serialization.copy(RnTransitionSpace.INSTANCE).connect(start, end);
     assertEquals(transition.length(), Quantity.of(4, "m"));
     ExactScalarQ.require(transition.length());
   }

@@ -1,11 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.core;
 
+import java.util.function.BiFunction;
+
 import ch.ethz.idsc.owl.data.tree.SetNode;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /** Implementation based on
  * Sertac Karaman and Emilio Frazzoli, 2011:
@@ -28,15 +28,21 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   }
 
   @Override
-  public void rewireTo(RrtsNode child, Scalar costFromParent) {
+  public void rewireTo(RrtsNode child, Scalar costFromParent, BiFunction<RrtsNode, RrtsNode, Scalar> cost, final int influence) {
     child.parent().removeEdgeTo(child);
     insertEdgeTo(child);
     final Scalar nodeCostFromRoot = costFromRoot().add(costFromParent);
-    // the condition of cost reduction is not strictly necessary
-    if (!Scalars.lessThan(nodeCostFromRoot, child.costFromRoot()))
-      throw TensorRuntimeException.of(nodeCostFromRoot, child.costFromRoot());
-    _propagate(child, nodeCostFromRoot);
-    ((RrtsNodeImpl) child).costFromRoot = nodeCostFromRoot;
+    /* // the condition of cost reduction is not strictly necessary
+     * if (!Scalars.lessThan(nodeCostFromRoot, child.costFromRoot()))
+     * throw TensorRuntimeException.of(nodeCostFromRoot, child.costFromRoot()); */
+    if (influence > 0) {
+      ((RrtsNodeImpl) child).costFromRoot = nodeCostFromRoot;
+      for (RrtsNode grandChild : child.children())
+        child.rewireTo(grandChild, cost.apply(child, grandChild), cost, influence - 1);
+    } else {
+      _propagate(child, nodeCostFromRoot);
+      ((RrtsNodeImpl) child).costFromRoot = nodeCostFromRoot;
+    }
   }
 
   private static void _propagate(RrtsNode node, Scalar nodeCostFromRoot) {

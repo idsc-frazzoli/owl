@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Reverse;
 
 public abstract class ReversalTransition extends DirectedTransition {
-  public ReversalTransition(Transition transition) {
+  /* package */ ReversalTransition(Transition transition, Tensor start) {
     super(transition, false);
   }
 

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.adapter;
 
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.tensor.Scalar;
@@ -21,7 +22,12 @@ public class LengthCostFunction implements TransitionCostFunction {
   }
 
   @Override
-  public Scalar cost(Transition transition) {
+  public Scalar cost(RrtsNode rrtsNode, Transition transition) {
     return function.apply(transition.length());
+  }
+
+  @Override
+  public int influence() {
+    return 0;
   }
 }

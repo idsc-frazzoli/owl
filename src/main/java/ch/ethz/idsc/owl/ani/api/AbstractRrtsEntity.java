@@ -48,7 +48,7 @@ public abstract class AbstractRrtsEntity extends TrajectoryEntity implements Rrt
     plannerServer.getTrajectory().ifPresent(this::trajectory);
   }
 
-  @Override // from TensorMetrix
+  @Override // from TensorMetric
   public Scalar distance(Tensor x, Tensor y) {
     return plannerServer.getTransitionSpace().connect(x, y).length();
   }

@@ -47,7 +47,7 @@ public class DubinsTransitionSpaceTest extends TestCase {
     // {
     // Tensor samples = transition.sampled(8);
     // assertEquals(8, samples.length());
-    // assertNotSame(start, samples.get(0));
+    // assertNotSame(start.state(), samples.get(0));
     // assertEquals(end, Last.of(samples));
     // }
   }
@@ -68,7 +68,7 @@ public class DubinsTransitionSpaceTest extends TestCase {
     // {
     // TransitionWrap wrap = transition.wrapped(8);
     // assertEquals(8, wrap.samples().length());
-    // assertNotSame(start, wrap.samples().get(0));
+    // assertNotSame(start.state(), wrap.samples().get(0));
     // assertEquals(end, Last.of(wrap.samples()));
     // wrap.spacing().stream().forEach(s -> assertEquals(res, s));
     // }

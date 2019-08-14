@@ -21,11 +21,13 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
   private final TransitionSpace transitionSpace;
+  private final TransitionSpace reversalTransitionSpace;
   private final TransitionCostFunction transitionCostFunction;
   private final Set<RrtsNode> set = new HashSet<>();
 
   public SimpleRrtsNodeCollection(TransitionSpace transitionSpace, TransitionCostFunction transitionCostFunction) {
     this.transitionSpace = transitionSpace;
+    reversalTransitionSpace = ReversalTransitionSpace.of(transitionSpace);
     this.transitionCostFunction = transitionCostFunction;
   }
 
@@ -47,14 +49,14 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
       @Override
       public int compare(RrtsNode o1, RrtsNode o2) {
         if (!map.containsKey(o1))
-          map.put(o1, transitionCostFunction.cost(transitionSpace.connect(o1.state(), end)));
+          map.put(o1, transitionCostFunction.cost(o1, transitionSpace.connect(o1.state(), end)));
         if (!map.containsKey(o2))
-          map.put(o2, transitionCostFunction.cost(transitionSpace.connect(o2.state(), end)));
+          map.put(o2, transitionCostFunction.cost(o2, transitionSpace.connect(o2.state(), end)));
         return Scalars.compare(map.get(o1), map.get(o2));
       }
     };
     PriorityQueue<RrtsNode> priorityQueue = new PriorityQueue<>(comparator);
-    set.stream().forEach(priorityQueue::add);
+    priorityQueue.addAll(set);
     return Stream.generate(priorityQueue::poll) //
         .limit(k_nearest) //
         .collect(Collectors.toList());
@@ -68,14 +70,14 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
       @Override
       public int compare(RrtsNode o1, RrtsNode o2) {
         if (!map.containsKey(o1))
-          map.put(o1, transitionCostFunction.cost(transitionSpace.connect(start, o1.state())));
+          map.put(o1, transitionCostFunction.cost(o1, reversalTransitionSpace.connect(o1.state(), start)));
         if (!map.containsKey(o2))
-          map.put(o2, transitionCostFunction.cost(transitionSpace.connect(start, o2.state())));
+          map.put(o2, transitionCostFunction.cost(o2, reversalTransitionSpace.connect(o2.state(), start)));
         return Scalars.compare(map.get(o1), map.get(o2));
       }
     };
     PriorityQueue<RrtsNode> priorityQueue = new PriorityQueue<>(comparator);
-    set.stream().forEach(priorityQueue::add);
+    priorityQueue.addAll(set);
     return Stream.generate(priorityQueue::poll) //
         .limit(k_nearest) //
         .collect(Collectors.toList());
