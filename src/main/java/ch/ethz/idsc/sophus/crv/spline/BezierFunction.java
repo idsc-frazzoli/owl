@@ -5,7 +5,6 @@ import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** <a href="https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm">
@@ -41,17 +40,13 @@ public class BezierFunction implements ScalarTensorFunction {
 
   @Override // from ScalarTensorFunction
   public Tensor apply(Scalar scalar) {
-    Tensor points = this.control;
-    while (1 < points.length()) {
-      Tensor tensor = Tensors.empty();
-      Tensor p = points.get(0);
-      for (int index = 1; index < points.length(); ++index) {
-        Tensor q = points.get(index);
-        tensor.append(splitInterface.split(p, q, scalar));
-        p = q;
-      }
-      points = tensor;
+    Tensor[] points = control.stream().toArray(Tensor[]::new);
+    for (int i = points.length; 1 <= i; --i) {
+      int count = -1;
+      Tensor p = points[0];
+      for (int index = 1; index < i; ++index)
+        points[++count] = splitInterface.split(p, p = points[index], scalar);
     }
-    return points.get(0);
+    return points[0];
   }
 }

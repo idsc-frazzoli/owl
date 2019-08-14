@@ -38,9 +38,9 @@ public class BSplineFunctionDemo extends CurvatureDemo {
 
   @Override
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // ---
     GraphicsUtil.setQualityHigh(graphics);
     renderControlPoints(geometricLayer, graphics); // control points
+    GraphicsUtil.setQualityDefault(graphics);
     Tensor control = getGeodesicControlPoints();
     Tensor refined = Tensors.empty();
     if (0 < control.length()) {

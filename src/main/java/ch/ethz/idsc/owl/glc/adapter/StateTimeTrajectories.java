@@ -32,7 +32,7 @@ public enum StateTimeTrajectories {
    * @param trajectory
    * @return vector with {dt_0, dt_1, ... } all entries non-negative */
   public static Tensor deltaTimes(GlcNode glcNode, List<StateTime> trajectory) {
-    Tensor dts = Tensors.empty();
+    Tensor dts = Tensors.reserve(trajectory.size());
     Scalar prev = glcNode.stateTime().time();
     for (StateTime stateTime : trajectory) {
       Scalar next = stateTime.time();

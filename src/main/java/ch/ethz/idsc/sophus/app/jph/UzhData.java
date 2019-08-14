@@ -8,11 +8,11 @@ import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se3.Se3Differences;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
+import ch.ethz.idsc.sophus.lie.se3.Se3Matrix;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Import;
 import ch.ethz.idsc.tensor.io.Put;
@@ -33,12 +33,7 @@ import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
     for (Tensor row : tensor) {
       Tensor p = row.extract(2, 5);
       Tensor R = QuaternionToRotationMatrix.of(Quaternion.of(row.Get(5), row.extract(6, 9)));
-      Tensor SE3 = Tensors.of( //
-          Join.of(R.get(0), p.extract(0, 1)), //
-          Join.of(R.get(1), p.extract(1, 2)), //
-          Join.of(R.get(2), p.extract(2, 3)), //
-          Tensors.vector(0, 0, 0, 1));
-      poses.append(SE3);
+      poses.append(Se3Matrix.of(R, p));
       if (12500 <= poses.length())
         break;
     }

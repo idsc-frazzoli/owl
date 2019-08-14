@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensors;
 public class VectorFieldRender implements RenderInterface {
   private static final Color COLOR = new Color(192, 192, 192, 128);
   // ---
+  // TODO JPH very bad design, not thread safe, etc.
   public Tensor uv_pairs = Tensors.empty();
 
   @Override

@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Differences;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
@@ -24,11 +23,13 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     System.out.println("here");
     Tensor tensor = ResourceData.of("/dubilab/app/pose/2r/20180820T165637_2.csv");
     // System.out.println(Dimensions.of(tensor));
-    Tensor poses = Tensors.empty();
-    for (Tensor row : tensor) {
-      Tensor xyt = row.extract(1, 4);
-      poses.append(xyt);
-    }
+    Tensor poses = Tensor.of(tensor.stream() //
+        .map(row -> row.extract(1, 4)));
+    // Tensors.empty();
+    // for (Tensor row : tensor) {
+    // Tensor xyt = row.extract(1, 4);
+    // poses.append(xyt);
+    // }
     System.out.println(Dimensions.of(poses));
     Put.of(HomeDirectory.file("gokart_poses.file"), poses);
     {
