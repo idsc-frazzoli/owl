@@ -20,10 +20,12 @@ import junit.framework.TestCase;
 
 public class ClothoidTransitionSpaceTest extends TestCase {
   public void testLength() throws ClassNotFoundException, IOException {
-    Transition transition = Serialization.copy(ClothoidTransitionSpace.INSTANCE).connect( //
-        Tensors.fromString("{1[m], 1[m], 0}"), //
-        Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF));
+    Tensor start = Tensors.fromString("{1[m], 1[m], 0}");
+    Tensor end = Tensors.fromString("{2[m], 2[m]}").append(Pi.HALF);
+    Transition transition = Serialization.copy(ClothoidTransitionSpace.INSTANCE).connect(start, end);
     Chop._04.requireClose(transition.length(), Quantity.of(Pi.HALF, "m"));
+    assertEquals(start, transition.start());
+    assertEquals(end, transition.end());
   }
 
   public void testSamples() {

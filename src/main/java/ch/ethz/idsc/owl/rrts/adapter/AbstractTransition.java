@@ -14,7 +14,7 @@ public abstract class AbstractTransition implements Transition, Serializable {
   private final Scalar length;
 
   public AbstractTransition(Tensor start, Tensor end, Scalar length) {
-    this.start = start;
+    this.start = start.unmodifiable();
     this.end = end.unmodifiable();
     this.length = length;
   }

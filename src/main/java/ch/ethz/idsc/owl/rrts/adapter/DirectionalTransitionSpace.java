@@ -25,9 +25,8 @@ public class DirectionalTransitionSpace implements TransitionSpace, Serializable
   @Override // from TransitionSpace
   public DirectedTransition connect(Tensor start, Tensor end) {
     Transition tf = forwardTransitionSpace.connect(start, end);
-    Transition tr = backwardTransitionSpace.connect(start, end);
+    Transition tr = backwardTransitionSpace.connect(start, end); // ReversalTransition
     boolean isForward = Scalars.lessEquals(tf.length(), tr.length());
-    // return new DirectedTransition(isForward ? tf : tr, start, isForward);
     return isForward ? new DirectedTransition(tf, true) : (DirectedTransition) tr;
   }
 }

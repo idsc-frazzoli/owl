@@ -62,8 +62,7 @@ public class ClothoidTransitionTest extends TestCase {
   public void testFails() {
     Tensor start = Tensors.vector(1, 2, 3);
     Tensor end = Tensors.vector(4, 1, 5);
-    ClothoidTransition clothoidTransition = //
-        ClothoidTransition.of(start, end);
+    ClothoidTransition clothoidTransition = ClothoidTransition.of(start, end);
     try {
       clothoidTransition.sampled(RealScalar.of(-0.1));
       fail();

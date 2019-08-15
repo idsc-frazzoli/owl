@@ -21,13 +21,11 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
   private final TransitionSpace transitionSpace;
-  private final TransitionSpace reversalTransitionSpace;
   private final TransitionCostFunction transitionCostFunction;
   private final Set<RrtsNode> set = new HashSet<>();
 
   public SimpleRrtsNodeCollection(TransitionSpace transitionSpace, TransitionCostFunction transitionCostFunction) {
     this.transitionSpace = transitionSpace;
-    reversalTransitionSpace = ReversalTransitionSpace.of(transitionSpace);
     this.transitionCostFunction = transitionCostFunction;
   }
 
@@ -70,9 +68,9 @@ public class SimpleRrtsNodeCollection implements RrtsNodeCollection {
       @Override
       public int compare(RrtsNode o1, RrtsNode o2) {
         if (!map.containsKey(o1))
-          map.put(o1, transitionCostFunction.cost(o1, reversalTransitionSpace.connect(o1.state(), start)));
+          map.put(o1, transitionCostFunction.cost(o1, transitionSpace.connect(start, o1.state())));
         if (!map.containsKey(o2))
-          map.put(o2, transitionCostFunction.cost(o2, reversalTransitionSpace.connect(o2.state(), start)));
+          map.put(o2, transitionCostFunction.cost(o2, transitionSpace.connect(start, o2.state())));
         return Scalars.compare(map.get(o1), map.get(o2));
       }
     };
