@@ -45,7 +45,7 @@ public class ReversalTransitionSpaceTest extends TestCase {
     // {
     // Tensor samples = transition.sampled(8);
     // assertEquals(8, samples.length());
-    // assertNotSame(start.state(), samples.get(0));
+    // assertNotSame(start, samples.get(0));
     // assertEquals(end, Last.of(samples));
     // }
   }
@@ -69,7 +69,7 @@ public class ReversalTransitionSpaceTest extends TestCase {
     // {
     // TransitionWrap wrap = transition.wrapped(8);
     // assertEquals(8, wrap.samples().length());
-    // assertNotSame(start.state(), wrap.samples().get(0));
+    // assertNotSame(start, wrap.samples().get(0));
     // assertEquals(end, Last.of(wrap.samples()));
     // wrap.spacing().extract(0, 8).stream().map(Tensor::Get) //
     // .map(Sign::requirePositive) //

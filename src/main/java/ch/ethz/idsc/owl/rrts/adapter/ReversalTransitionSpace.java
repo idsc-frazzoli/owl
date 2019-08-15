@@ -30,7 +30,7 @@ public class ReversalTransitionSpace implements TransitionSpace, Serializable {
   @Override // from TransitionSpace
   public DirectedTransition connect(Tensor start, Tensor end) {
     Transition transition = transitionSpace.connect(end, start);
-    return new ReversalTransition(transition, start) {
+    return new ReversalTransition(transition) {
       @Override // from Transition
       public TransitionWrap wrapped(Scalar minResolution) {
         Sign.requirePositive(minResolution);

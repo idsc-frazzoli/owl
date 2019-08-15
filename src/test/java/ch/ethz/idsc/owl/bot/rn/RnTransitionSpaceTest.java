@@ -20,8 +20,10 @@ public class RnTransitionSpaceTest extends TestCase {
     Tensor start = Tensors.fromString("{1[m], 2[m]}");
     Tensor end = Tensors.fromString("{1[m], 6[m]}");
     Transition transition = Serialization.copy(RnTransitionSpace.INSTANCE).connect(start, end);
-    assertEquals(transition.length(), Quantity.of(4, "m"));
+    assertEquals(Quantity.of(4, "m"), transition.length());
     ExactScalarQ.require(transition.length());
+    assertEquals(start, transition.start());
+    assertEquals(end, transition.end());
   }
 
   public void testSamples() {

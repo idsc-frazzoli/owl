@@ -23,6 +23,8 @@ public class DubinsTransitionSpaceTest extends TestCase {
     Tensor end = Tensors.fromString("{2, 6, 0}");
     Transition transition = Serialization.copy(DubinsTransitionSpace.shortest(RealScalar.ONE).connect(start, end));
     assertEquals(RealScalar.of(3).add(Pi.HALF), transition.length());
+    assertEquals(start, transition.start());
+    assertEquals(end, transition.end());
   }
 
   public void testLengthUnits() {
@@ -30,6 +32,8 @@ public class DubinsTransitionSpaceTest extends TestCase {
     Tensor end = Tensors.fromString("{2[m], 6[m], 0}");
     Transition transition = DubinsTransitionSpace.shortest(Quantity.of(1, "m")).connect(start, end);
     assertEquals(Quantity.of(3 + Math.PI / 2, "m"), transition.length());
+    assertEquals(start, transition.start());
+    assertEquals(end, transition.end());
   }
 
   public void testSamples() {
@@ -47,7 +51,7 @@ public class DubinsTransitionSpaceTest extends TestCase {
     // {
     // Tensor samples = transition.sampled(8);
     // assertEquals(8, samples.length());
-    // assertNotSame(start.state(), samples.get(0));
+    // assertNotSame(start, samples.get(0));
     // assertEquals(end, Last.of(samples));
     // }
   }
@@ -68,7 +72,7 @@ public class DubinsTransitionSpaceTest extends TestCase {
     // {
     // TransitionWrap wrap = transition.wrapped(8);
     // assertEquals(8, wrap.samples().length());
-    // assertNotSame(start.state(), wrap.samples().get(0));
+    // assertNotSame(start, wrap.samples().get(0));
     // assertEquals(end, Last.of(wrap.samples()));
     // wrap.spacing().stream().forEach(s -> assertEquals(res, s));
     // }
