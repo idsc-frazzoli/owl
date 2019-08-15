@@ -46,7 +46,7 @@ public class DefaultRrts implements Rrts {
     // that means no sanity collision check on state is carried out inside function insertAsNode
     int size = nodeCollection.size();
     if (size == 0) {
-      RrtsNode rrtsNode = RrtsNode.createRoot(state, RealScalar.ZERO);
+      RrtsNode rrtsNode = RrtsNode.createRoot(state, RealScalar.ZERO); // TODO JPH/GJOEL units?
       nodeCollection.insert(rrtsNode);
       return Optional.of(rrtsNode);
     }
