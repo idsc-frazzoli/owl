@@ -33,7 +33,7 @@ public class Se2CarFlowsTest extends TestCase {
   public void testRadRadius() {
     Scalar speed = Quantity.of(1.423, "m*s^-1");
     Scalar rate = (Scalar) Quantity.of(2.384, "rad*m^-1").map(UnitSystem.SI());
-    Flow flow = CarHelper.singleton(speed, rate);
+    Flow flow = Se2CarFlows.singleton(speed, rate);
     Tensor u = flow.getU();
     Tensor origin = Tensors.fromString("{0[m], 0[m], 0}");
     Scalar half_turn = Pi.VALUE.divide(u.Get(2));
@@ -58,7 +58,7 @@ public class Se2CarFlowsTest extends TestCase {
   public void testRadius() {
     Scalar speed = Quantity.of(1.423, "m*s^-1");
     Scalar rate = (Scalar) Quantity.of(2.384, "m^-1").map(UnitSystem.SI());
-    Flow flow = CarHelper.singleton(speed, rate);
+    Flow flow = Se2CarFlows.singleton(speed, rate);
     Tensor u = flow.getU();
     Tensor origin = Tensors.fromString("{0[m], 0[m], 0}");
     Scalar half_turn = Pi.VALUE.divide(u.Get(2));

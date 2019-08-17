@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.bot.se2.glc.CarHelper;
+import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.se2.twd.TwdDuckieFlows;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -19,7 +19,7 @@ public class ScaledLateralAccelerationTest extends TestCase {
   public void testCar() {
     final Scalar ms = Quantity.of(2, "m*s^-1");
     final Scalar mr = Scalars.fromString("3[rad*m^-1]");
-    Flow flow = CarHelper.singleton(ms, mr);
+    Flow flow = Se2CarFlows.singleton(ms, mr);
     assertEquals(QuantityUnit.of(flow.getU().Get(2)), Unit.of("rad*s^-1"));
     Tensor u = flow.getU();
     ScaledLateralAcceleration se2LateralAcceleration = new ScaledLateralAcceleration(Quantity.of(1, "CHF*s*rad^-2"));

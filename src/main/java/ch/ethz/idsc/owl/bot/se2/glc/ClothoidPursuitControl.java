@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       curve = ClothoidPursuits.curve(xya, REFINEMENT);
       if (inReverse)
         ClothoidControlHelper.mirrorAndReverse(curve);
-      return Optional.of(CarHelper.singleton(speed, pursuitInterface.firstRatio().get()).getU());
+      return Optional.of(Se2CarFlows.singleton(speed, pursuitInterface.firstRatio().get()).getU());
     }
     curve = null;
     // System.err.println("no compliant strategy found!");

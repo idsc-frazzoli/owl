@@ -29,7 +29,7 @@ public abstract class TwdFlows implements FlowsInterface, Serializable {
   protected final Flow singleton(Scalar speedL, Scalar speedR) {
     Scalar speed = speedL.add(speedR).multiply(maxSpeedHalf);
     Scalar rate = speedR.subtract(speedL).multiply(maxSpeedHalf).divide(halfWidth);
-    return StateSpaceModels.createFlow(Se2StateSpaceModel.INSTANCE, //
-        N.DOUBLE.of(Tensors.of(speed, RealScalar.ZERO, rate)));
+    return StateSpaceModels.createFlow( //
+        Se2StateSpaceModel.INSTANCE, N.DOUBLE.of(Tensors.of(speed, speed.zero(), rate)));
   }
 }

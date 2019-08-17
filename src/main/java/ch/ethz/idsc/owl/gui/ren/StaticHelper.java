@@ -15,10 +15,11 @@ import ch.ethz.idsc.tensor.Tensors;
     case 0:
       return ZEROS;
     case 1:
-      return vector.append(RealScalar.ZERO);
+      return vector.copy().append(RealScalar.ZERO);
     case 2:
       return vector;
+    default:
+      return Extract2D.FUNCTION.apply(vector);
     }
-    return Extract2D.FUNCTION.apply(vector);
   }
 }
