@@ -11,8 +11,8 @@ import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.se2.LidarEmulator;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.glc.adapter.EntityGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
-import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.RenderInterface;
@@ -69,7 +69,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     // owlyAnimationFrame.addBackground(RegionRenders.create(testImageRegion));
     List<GlcPlannerCallback> list = new ArrayList<>();
     list.add(carRelaxedEntity);
-    list.add(new SimpleGlcPlannerCallback(carRelaxedEntity));
+    list.add(EntityGlcPlannerCallback.of(carRelaxedEntity));
     // ---
     GoalConsumer goalConsumer = new SimpleGoalConsumer(carRelaxedEntity, plannerConstraint, list);
     Tensor goal = Tensors.vector(4.3, 4.2, 1.517);

@@ -7,9 +7,9 @@ import java.util.List;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
+import ch.ethz.idsc.owl.glc.adapter.EntityGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
-import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -53,7 +53,7 @@ public class GokartRLVec0Demo extends GokartDemo {
     // ---
     List<GlcPlannerCallback> list = new ArrayList<>();
     list.add(gokartEntity);
-    list.add(new SimpleGlcPlannerCallback(gokartEntity));
+    list.add(EntityGlcPlannerCallback.of(gokartEntity));
     GoalConsumer goalconsumer = new SimpleGoalConsumer(gokartEntity, plannerConstraint, list);
     goalconsumer.accept(goal);
     MouseGoal.simple(owlyAnimationFrame, gokartEntity, plannerConstraint);

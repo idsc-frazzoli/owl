@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 // TODO GJOEL not used yet. implementation is a bit unfinished: goal.get(2) is never used etc.
-public class DirectedRandomSample implements RandomSampleInterface, Serializable {
+public class Se2DirectedRandomSample implements RandomSampleInterface, Serializable {
   /** the parameters define the coordinate bounds of the axis-aligned box
    * from which the samples are drawn
    *
@@ -28,7 +28,7 @@ public class DirectedRandomSample implements RandomSampleInterface, Serializable
    * @param mu of heading distribution
    * @param goal in SE2 */
   public static RandomSampleInterface of(Tensor min, Tensor max, Scalar mu, Tensor goal) {
-    return new DirectedRandomSample(min, max, mu, goal);
+    return new Se2DirectedRandomSample(min, max, mu, goal);
   }
 
   // ---
@@ -36,7 +36,7 @@ public class DirectedRandomSample implements RandomSampleInterface, Serializable
   private final Scalar mu;
   private Tensor goal;
 
-  private DirectedRandomSample(Tensor min, Tensor max, Scalar mu, Tensor goal) {
+  private Se2DirectedRandomSample(Tensor min, Tensor max, Scalar mu, Tensor goal) {
     VectorQ.requireLength(min, 3);
     VectorQ.requireLength(max, 3);
     this.mu = mu;
