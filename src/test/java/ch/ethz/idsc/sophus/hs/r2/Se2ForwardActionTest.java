@@ -3,9 +3,11 @@ package ch.ethz.idsc.sophus.hs.r2;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringIntegrator;
+import ch.ethz.idsc.sophus.sym.AnyScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -42,5 +44,15 @@ public class Se2ForwardActionTest extends TestCase {
     TensorUnaryOperator copy = Serialization.copy(forward);
     Tensor vector = Tensors.vector(0.32, -0.98);
     assertEquals(forward.apply(vector), copy.apply(vector));
+  }
+
+  public void testGroupAction() {
+    Tensor xya = Tensors.vector(1, 2, 3);
+    TensorUnaryOperator tuo = new Se2ForwardAction(xya);
+    Se2GroupElement se2GroupElement = new Se2GroupElement(xya);
+    Tensor point = Tensors.of(RealScalar.of(2.1), RealScalar.of(4.3), AnyScalar.INSTANCE);
+    Tensor r1 = tuo.apply(point);
+    Tensor r2 = se2GroupElement.combine(point);
+    Chop._12.requireClose(r1, r2.extract(0, 2));
   }
 }

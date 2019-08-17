@@ -15,19 +15,15 @@ public class LengthCostFunction implements TransitionCostFunction {
     return new LengthCostFunction(function);
   }
 
+  // ---
   private final ScalarUnaryOperator function;
 
   private LengthCostFunction(ScalarUnaryOperator function) {
     this.function = function;
   }
 
-  @Override
+  @Override // from TransitionCostFunction
   public Scalar cost(RrtsNode rrtsNode, Transition transition) {
     return function.apply(transition.length());
-  }
-
-  @Override
-  public int influence() {
-    return 0;
   }
 }

@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public enum Se2Group implements LieGroup {
   INSTANCE;
   // ---
-  @Override
+  @Override // from LieGroup
   public Se2GroupElement element(Tensor xya) {
     return new Se2GroupElement(xya);
   }

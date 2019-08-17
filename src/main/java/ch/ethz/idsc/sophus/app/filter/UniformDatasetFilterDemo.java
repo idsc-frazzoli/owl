@@ -14,7 +14,7 @@ import org.jfree.chart.JFreeChart;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class UniformDatasetFilterDemo extends DatasetFilterDemo {
   private static final ScalarUnaryOperator SAMPLE_RATE = QuantityMagnitude.SI().in("s^-1");
-  private static final GokartPoseData GOKART_POSE_DATA = GokartPoseDataV2.INSTANCE;
+  private static final GokartPoseData GOKART_POSE_DATA = GokartPoseDataV1.INSTANCE;
   // ---
   // TODO JPH refactor
   protected Tensor _control = null;
