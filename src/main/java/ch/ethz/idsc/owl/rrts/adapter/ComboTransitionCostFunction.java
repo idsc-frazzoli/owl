@@ -1,4 +1,4 @@
-// code by gjoel
+// code by gjoel, jph
 package ch.ethz.idsc.owl.rrts.adapter;
 
 import java.io.Serializable;
@@ -13,16 +13,18 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 public class ComboTransitionCostFunction implements TransitionCostFunction, Serializable {
-  private final Map<TransitionCostFunction, Scalar> costFunctions;
-  private final int influence;
-
-  public ComboTransitionCostFunction(TransitionCostFunction... costFunctions) {
-    this(Arrays.stream(costFunctions).collect(Collectors.toMap(f -> f, f -> RealScalar.ONE)));
+  public static TransitionCostFunction of(TransitionCostFunction... costFunctions) {
+    return new ComboTransitionCostFunction(Arrays.stream(costFunctions).collect(Collectors.toMap(f -> f, f -> RealScalar.ONE)));
   }
 
-  public ComboTransitionCostFunction(Map<TransitionCostFunction, Scalar> costFunctions) {
-    this.costFunctions = costFunctions;
-    influence = costFunctions.keySet().stream() //
+  // ---
+  private final Map<TransitionCostFunction, Scalar> map;
+  private final int influence;
+
+  /** @param map */
+  public ComboTransitionCostFunction(Map<TransitionCostFunction, Scalar> map) {
+    this.map = map;
+    influence = map.keySet().stream() //
         .mapToInt(TransitionCostFunction::influence) //
         .max() //
         .getAsInt();
@@ -30,7 +32,7 @@ public class ComboTransitionCostFunction implements TransitionCostFunction, Seri
 
   @Override // from TransitionCostFunction
   public Scalar cost(RrtsNode rrtsNode, Transition transition) {
-    return costFunctions.entrySet().stream() //
+    return map.entrySet().stream() //
         .map(entry -> entry.getKey().cost(rrtsNode, transition).multiply(entry.getValue())) //
         .reduce(Scalar::add).get();
   }

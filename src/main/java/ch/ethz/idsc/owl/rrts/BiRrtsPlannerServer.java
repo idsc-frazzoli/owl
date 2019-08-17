@@ -27,7 +27,7 @@ public abstract class BiRrtsPlannerServer extends RrtsPlannerServer {
       TransitionRegionQuery obstacleQuery, //
       Scalar resolution, //
       StateSpaceModel stateSpaceModel) {
-    this(transitionSpace, obstacleQuery, resolution, stateSpaceModel, LengthCostFunction.IDENTITY);
+    this(transitionSpace, obstacleQuery, resolution, stateSpaceModel, LengthCostFunction.INSTANCE);
   }
 
   public BiRrtsPlannerServer( //
