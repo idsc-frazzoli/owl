@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       Scalar ratio = purePursuit.firstRatio().get();
       if (clip.isInside(ratio)) {
         targetLocal = purePursuit.lookAhead().get(); // ratio isPresent implies lookAhead isPresent
-        return Optional.of(CarHelper.singleton(speed, ratio).getU());
+        return Optional.of(Se2CarFlows.singleton(speed, ratio).getU());
       }
     }
     targetLocal = null;

@@ -15,7 +15,7 @@ public class LengthCostFunctionTest extends TestCase {
     Rrts rrts = new DefaultRrts( //
         RnTransitionSpace.INSTANCE, //
         new RrtsNodeCollections(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
-        EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
+        EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     rrts.insertAsNode(Tensors.vector(0, 0), 0);
     RrtsNode n1 = rrts.insertAsNode(Tensors.vector(1, 0), 0).get();
     assertEquals(RealScalar.ONE, n1.costFromRoot());
@@ -25,7 +25,7 @@ public class LengthCostFunctionTest extends TestCase {
     Rrts rrts = new DefaultRrts( //
         RnTransitionSpace.INSTANCE, //
         new RrtsNodeCollections(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
-        EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.IDENTITY);
+        EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     rrts.insertAsNode(Tensors.vector(0, 0), 0);
     rrts.insertAsNode(Tensors.vector(1, 0), 0);
     rrts.insertAsNode(Tensors.vector(2, 0), 0);

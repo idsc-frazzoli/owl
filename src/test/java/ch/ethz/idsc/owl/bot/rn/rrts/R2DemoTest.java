@@ -21,7 +21,7 @@ public class R2DemoTest extends TestCase {
   public void testSimple() {
     RrtsNodeCollection nc = new RrtsNodeCollections(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10));
     TransitionRegionQuery trq = EmptyTransitionRegionQuery.INSTANCE;
-    Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 0).get();
     assertEquals(root.children().size(), 0);
     RrtsNode n1 = rrts.insertAsNode(Tensors.vector(1, 0), 0).get();

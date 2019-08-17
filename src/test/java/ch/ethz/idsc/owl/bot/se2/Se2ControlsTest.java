@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.se2.glc.CarHelper;
 import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.se2.twd.TwdDuckieFlows;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
@@ -37,7 +36,7 @@ public class Se2ControlsTest extends TestCase {
   public void testMaxRate() {
     List<Flow> list = new ArrayList<>();
     for (Tensor angle : Subdivide.of(RealScalar.of(-.1), RealScalar.of(0.3), 5))
-      list.add(CarHelper.singleton(RealScalar.of(2), angle));
+      list.add(Se2CarFlows.singleton(RealScalar.of(2), angle.Get()));
     Scalar maxR = Se2Controls.maxTurning(list);
     assertEquals(maxR, RealScalar.of(0.6));
   }
@@ -45,7 +44,7 @@ public class Se2ControlsTest extends TestCase {
   public void testMaxRate2() {
     List<Flow> list = new ArrayList<>();
     for (Tensor angle : Subdivide.of(RealScalar.of(-.3), RealScalar.of(0.1), 5))
-      list.add(CarHelper.singleton(RealScalar.of(2), angle));
+      list.add(Se2CarFlows.singleton(RealScalar.of(2), angle.Get()));
     Scalar maxR = Se2Controls.maxTurning(list);
     assertEquals(maxR, RealScalar.of(0.6));
   }
@@ -53,7 +52,7 @@ public class Se2ControlsTest extends TestCase {
   public void testUnits() {
     final Scalar ms = Quantity.of(2, "m*s^-1");
     final Scalar mr = Scalars.fromString("3[m^-1]");
-    Flow flow = CarHelper.singleton(ms, mr);
+    Flow flow = Se2CarFlows.singleton(ms, mr);
     assertEquals(QuantityUnit.of(flow.getU().Get(2)), Unit.of("s^-1"));
     Collection<Flow> controls = Collections.singleton(flow);
     Scalar maxSpeed = Se2Controls.maxSpeed(controls);
@@ -67,7 +66,7 @@ public class Se2ControlsTest extends TestCase {
   public void testUnitsNonSI() {
     final Scalar ms = Quantity.of(2, "m*s^-1");
     final Scalar mr = Scalars.fromString("3[rad*m^-1]");
-    Flow flow = CarHelper.singleton(ms, mr);
+    Flow flow = Se2CarFlows.singleton(ms, mr);
     assertEquals(QuantityUnit.of(flow.getU().Get(2)), Unit.of("rad*s^-1"));
     Collection<Flow> controls = Collections.singleton(flow);
     Scalar maxSpeed = Se2Controls.maxSpeed(controls);

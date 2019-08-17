@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.Tensors;
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(region, RealScalar.of(0.1));
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
-    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(start, 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(60, 477);
@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.Tensors;
       Thread.sleep(10);
     }
     System.out.println(rrts.rewireCount());
-    RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.IDENTITY);
+    RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.INSTANCE);
   }
 
   public static void _0b36() throws Exception {

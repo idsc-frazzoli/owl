@@ -121,7 +121,7 @@ public class RelaxedDomainQueueTest extends TestCase {
       }
       double seconds = timing.seconds(); // 0.11995163700000001
       // System.out.println(seconds);
-      assertTrue(seconds < 0.5);
+      assertTrue(seconds < 2.5);
       assertEquals(relaxedPriorityQueue.size() + removed, limit + 1);
     }
     {

@@ -1,5 +1,6 @@
 package ch.ethz.idsc.owl.rrts.adapter;
 
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidContinuityCostFunction;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
@@ -16,7 +17,7 @@ public class ContinuityCostFunctionTest extends TestCase {
     Rrts rrts = new DefaultRrts( //
         ClothoidTransitionSpace.INSTANCE, //
         new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
-        EmptyTransitionRegionQuery.INSTANCE, ContinuityCostFunction.INSTANCE);
+        EmptyTransitionRegionQuery.INSTANCE, ClothoidContinuityCostFunction.INSTANCE);
     rrts.insertAsNode(Tensors.vector(0, 0, 0), 0);
     RrtsNode n1 = rrts.insertAsNode(Tensors.vector(1, 1, Math.PI / 2), 0).get();
     assertEquals(RealScalar.ZERO, n1.costFromRoot());
@@ -26,7 +27,7 @@ public class ContinuityCostFunctionTest extends TestCase {
     Rrts rrts = new DefaultRrts( //
         ClothoidTransitionSpace.INSTANCE, //
         new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
-        EmptyTransitionRegionQuery.INSTANCE, ContinuityCostFunction.INSTANCE);
+        EmptyTransitionRegionQuery.INSTANCE, ClothoidContinuityCostFunction.INSTANCE);
     rrts.insertAsNode(Tensors.vector(0, 0, 0), 0);
     rrts.insertAsNode(Tensors.vector(1, 0, 0), 0);
     rrts.insertAsNode(Tensors.vector(2, 0, 0), 0);

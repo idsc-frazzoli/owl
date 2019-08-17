@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 public class SimpleRrtsNodeCollectionTest extends TestCase {
   public void testEuclideanNear() {
     Distribution distribution = UniformDistribution.unit();
-    RrtsNodeCollection rrtsNodeCollection = new SimpleRrtsNodeCollection(RnTransitionSpace.INSTANCE, LengthCostFunction.IDENTITY);
+    RrtsNodeCollection rrtsNodeCollection = new SimpleRrtsNodeCollection(RnTransitionSpace.INSTANCE, LengthCostFunction.INSTANCE);
     for (int index = 0; index < 200; ++index)
       rrtsNodeCollection.insert(RrtsNode.createRoot(RandomVariate.of(distribution, 3), RealScalar.of(10)));
     Tensor center = Tensors.vector(0.5, 0.5, 0.5);

@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
           if (Sign.isNegative(speed))
             ClothoidControlHelper.mirrorAndReverse(targetLocal_);
           targetLocal = targetLocal_.get(0);
-          return Optional.of(CarHelper.singleton(speed, ratio).getU());
+          return Optional.of(Se2CarFlows.singleton(speed, ratio).getU());
         }
       }
     }

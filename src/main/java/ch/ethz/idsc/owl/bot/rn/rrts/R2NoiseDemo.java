@@ -32,14 +32,14 @@ import ch.ethz.idsc.tensor.Tensors;
     TransitionRegionQuery transitionRegionQuery = StaticHelper.noise1();
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;
-    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 5).get();
     RandomSampleInterface randomSampleInterface = //
         BallRandomSample.of(Tensors.vector(2, 0), RealScalar.of(3));
     for (int c = 0; c < 1000; ++c)
       rrts.insertAsNode(randomSampleInterface.randomSample(RANDOM), 15);
     System.out.println("rewireCount=" + rrts.rewireCount());
-    RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.IDENTITY);
+    RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.INSTANCE);
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(122, 226);
     owlyFrame.jFrame.setBounds(100, 100, 500, 500);

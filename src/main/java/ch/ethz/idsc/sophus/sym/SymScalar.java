@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.sym;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -9,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class SymScalar extends ScalarAdapter {
+public class SymScalar extends ScalarAdapter implements Serializable {
   /** @param p
    * @param q
    * @param ratio

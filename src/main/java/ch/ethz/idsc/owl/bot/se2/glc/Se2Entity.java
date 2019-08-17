@@ -44,10 +44,10 @@ public abstract class Se2Entity extends TrajectoryEntity implements GlcPlannerCa
   public final Collection<CostFunction> extraCosts = new LinkedList<>();
 
   protected Se2Entity(StateTime stateTime, TrajectoryControl trajectoryControl) {
-    super( //
-        new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, //
-            Se2FlowIntegrator.INSTANCE, // for simulation we allow slip to the sides
-            stateTime), //
+    super(new SimpleEpisodeIntegrator( //
+        Se2StateSpaceModel.INSTANCE, //
+        Se2FlowIntegrator.INSTANCE, // for simulation we allow slip to the sides
+        stateTime), //
         trajectoryControl);
     add(FallbackControl.of(Array.zeros(3)));
   }

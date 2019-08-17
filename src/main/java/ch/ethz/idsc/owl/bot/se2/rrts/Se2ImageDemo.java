@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     TransitionRegionQuery unionTransitionRegionQuery = TransitionRegionQueryUnion.wrap(transitionRegionQuery, transitionCurvatureQuery);
     // ---
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
-    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, unionTransitionRegionQuery, LengthCostFunction.IDENTITY);
+    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, unionTransitionRegionQuery, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.configCoordinateOffset(60, 477);
@@ -59,6 +59,6 @@ import ch.ethz.idsc.tensor.opt.Pi;
       Thread.sleep(10);
     }
     System.out.println(rrts.rewireCount());
-    RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.IDENTITY);
+    RrtsNodes.costConsistency(root, transitionSpace, LengthCostFunction.INSTANCE);
   }
 }

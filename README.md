@@ -138,24 +138,26 @@ R^2
 
 Specify `repository` and `dependency` of the owl library in the `pom.xml` file of your maven project:
 
-    <repositories>
-      <repository>
-        <id>owl-mvn-repo</id>
-        <url>https://raw.github.com/idsc-frazzoli/owl/mvn-repo/</url>
-        <snapshots>
-          <enabled>true</enabled>
-          <updatePolicy>always</updatePolicy>
-        </snapshots>
-      </repository>
-    </repositories>
-    
-    <dependencies>
-      <dependency>
-        <groupId>ch.ethz.idsc</groupId>
-        <artifactId>owl</artifactId>
-        <version>0.5.0</version>
-      </dependency>
-    </dependencies>
+```xml
+<repositories>
+  <repository>
+    <id>owl-mvn-repo</id>
+    <url>https://raw.github.com/idsc-frazzoli/owl/mvn-repo/</url>
+    <snapshots>
+      <enabled>true</enabled>
+      <updatePolicy>always</updatePolicy>
+    </snapshots>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>ch.ethz.idsc</groupId>
+    <artifactId>owl</artifactId>
+    <version>0.5.0</version>
+  </dependency>
+</dependencies>
+```
 
 ## Contributors
 
