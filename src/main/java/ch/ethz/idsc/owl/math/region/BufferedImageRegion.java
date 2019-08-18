@@ -65,6 +65,7 @@ public class BufferedImageRegion implements Region<Tensor>, RenderInterface, Ser
     geometricLayer.popMatrix();
   }
 
+  /** @return bufferedImage of type BufferedImage.TYPE_BYTE_GRAY */
   public BufferedImage bufferedImage() {
     return bufferedImage;
   }

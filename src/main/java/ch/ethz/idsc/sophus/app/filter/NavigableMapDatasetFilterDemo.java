@@ -16,6 +16,7 @@ import org.jfree.chart.JFreeChart;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -30,6 +31,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
+// TODO spectrogram
 /* package */ abstract class NavigableMapDatasetFilterDemo extends DatasetFilterDemo {
   private final JSlider jSlider = new JSlider(1, 999, 200);
   // ---
@@ -62,7 +64,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     // ---
     jSlider.setPreferredSize(new Dimension(500, 28));
     //
-    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
+    timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
       spinnerLabelString.setList(GokartPoseDataV1.INSTANCE.list());
       spinnerLabelString.addSpinnerListener(type -> updateStateTime());
@@ -93,7 +95,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   protected abstract String plotLabel();
 
   @Override
-  protected void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined) {
+  protected void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram) {
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());

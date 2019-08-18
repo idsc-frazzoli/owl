@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   @Override // from IntegerTensorFunction
   public final Tensor apply(Integer length) {
+    // TODO JPH TENSOR 078 Internal
     if (length < 1)
       throw new IllegalArgumentException("" + length);
     return length == 1 //

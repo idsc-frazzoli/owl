@@ -17,6 +17,7 @@ import ch.ethz.idsc.owl.math.lane.StableLane;
 import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -51,7 +52,10 @@ public class LaneConsumptionDemo extends BaseCurvatureDemo {
   @Override
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     renderControlPoints(geometricLayer, graphics);
-    LaneInterface lane = StableLane.of(geodesicDisplay().geodesicInterface(), control, width(), degree, levels);
+    LaneInterface lane = StableLane.of( //
+        control, //
+        LaneRiesenfeldCurveSubdivision.of(geodesicDisplay().geodesicInterface(), degree)::string, //
+        levels, width());
     try {
       this.lane = Serialization.copy(lane);
     } catch (Exception e) {

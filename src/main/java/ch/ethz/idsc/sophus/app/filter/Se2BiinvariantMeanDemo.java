@@ -8,6 +8,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
@@ -31,7 +32,7 @@ public class Se2BiinvariantMeanDemo extends DatasetKernelDemo {
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
 
   public Se2BiinvariantMeanDemo() {
-    super(GeodesicDisplays.SE2_ONLY);
+    super(GeodesicDisplays.SE2_ONLY, GokartPoseDataV2.INSTANCE);
     {
       spinnerFilters.setArray(Se2BiinvariantMean.values());
       spinnerFilters.setIndex(0);

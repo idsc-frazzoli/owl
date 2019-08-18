@@ -55,6 +55,7 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
    * @return
    * @throws Exception */
   public static GeodesicBSplineFunction of(SplitInterface splitInterface, int degree, Tensor knots, Tensor control) {
+    // TODO JPH TENSOR 078 Internal
     if (degree < 0)
       throw new IllegalArgumentException(Integer.toString(degree));
     if (!Sort.of(knots).equals(knots))

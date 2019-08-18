@@ -11,8 +11,8 @@ import java.util.List;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
+import ch.ethz.idsc.owl.glc.adapter.EntityGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
-import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 
@@ -29,7 +29,7 @@ public enum MouseGoal {
     List<GlcPlannerCallback> callbacks = new ArrayList<>(_callbacks);
     if (trajectoryEntity instanceof GlcPlannerCallback)
       callbacks.add((GlcPlannerCallback) trajectoryEntity);
-    callbacks.add(new SimpleGlcPlannerCallback(trajectoryEntity));
+    callbacks.add(EntityGlcPlannerCallback.of(trajectoryEntity));
     supply(owlyAnimationFrame.geometricComponent, //
         new SimpleGoalConsumer(trajectoryEntity, plannerConstraint, callbacks));
   }

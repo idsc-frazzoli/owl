@@ -11,6 +11,7 @@ import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
+/** in the current implementation all filters have the same performance for an arbitrary radius */
 public enum LieGroupFilters {
   GEODESIC {
     @Override

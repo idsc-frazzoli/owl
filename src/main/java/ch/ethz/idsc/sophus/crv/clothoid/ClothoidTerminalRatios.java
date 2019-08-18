@@ -52,9 +52,24 @@ public enum ClothoidTerminalRatios {
   /** @param p of the form {p_x, p_y, p_heading}
    * @param q of the form {q_x, q_y, q_heading}
    * @return */
+  public static Scalar head(Tensor p, Tensor q) {
+    return head(p, q, ITERATIONS);
+  }
+
+  /** @param p of the form {p_x, p_y, p_heading}
+   * @param q of the form {q_x, q_y, q_heading}
+   * @return */
   public static Scalar head(Tensor p, Tensor q, int iterations) {
     Tensor tensor = Nest.of(HEAD, Unprotect.byRef(p, q), iterations);
     return direct(tensor.get(0), tensor.get(1)).head();
+  }
+
+  /***************************************************/
+  /** @param p of the form {p_x, p_y, p_heading}
+   * @param q of the form {q_x, q_y, q_heading}
+   * @return */
+  public static Scalar tail(Tensor p, Tensor q) {
+    return tail(p, q, ITERATIONS);
   }
 
   /** @param p of the form {p_x, p_y, p_heading}

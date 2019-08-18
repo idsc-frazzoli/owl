@@ -10,6 +10,7 @@ import javax.swing.JSlider;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
@@ -33,7 +34,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   private final JSlider jSlider = new JSlider(1, 999, 500);
 
   public GeodesicCausalFilterDemo() {
-    super(GeodesicDisplays.SE2_ONLY);
+    super(GeodesicDisplays.SE2_ONLY, GokartPoseDataV2.INSTANCE);
     {
       spinnerCausalFilter.setList(Arrays.asList(LieGroupCausalFilters.values()));
       spinnerCausalFilter.setValue(LieGroupCausalFilters.BIINVARIANT_MEAN_IIR);

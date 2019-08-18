@@ -48,6 +48,7 @@ public enum Nodes {
    * @return n'th degree parent of node; 0 for given node, 1 for parent of given node, etc. */
   @SuppressWarnings("unchecked")
   public static <T extends Node> T getParent(T node, int n) {
+    // TODO JPH TENSOR 078 Internal
     if (0 <= n) {
       Node parent = node;
       for (int i = 0; Objects.nonNull(parent.parent()) && i < n; ++i)

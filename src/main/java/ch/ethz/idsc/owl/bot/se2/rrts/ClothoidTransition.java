@@ -21,6 +21,9 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class ClothoidTransition extends AbstractTransition {
+  /** @param start of the form {px, py, p_angle}
+   * @param end of the form {qx, qy, q_angle}
+   * @return */
   public static ClothoidTransition of(Tensor start, Tensor end) {
     Clothoid clothoid = new Clothoid(start, end);
     return new ClothoidTransition(start, end, clothoid, clothoid.new Curve());

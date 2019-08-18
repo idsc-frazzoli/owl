@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
 public enum ClothoidContinuityCostFunction implements TransitionCostFunction {
   INSTANCE;
   // ---
-  private final static int ITERATIONS = 4;
-
   @Override // from TransitionCostFunction
   public Scalar cost(RrtsNode rrtsNode, Transition transition) {
     ClothoidTransition clothoidTransition = (ClothoidTransition) transition;
@@ -23,10 +21,10 @@ public enum ClothoidContinuityCostFunction implements TransitionCostFunction {
     Chop._12.requireClose(rrtsNode.state(), clothoidTransition.start());
     Scalar tail = ClothoidTerminalRatios.tail( //
         rrtsNode.parent().state(), //
-        rrtsNode.state(), ITERATIONS);
+        rrtsNode.state());
     Scalar head = ClothoidTerminalRatios.head( //
         clothoidTransition.start(), // should coincide with rrtsNode.state()
-        clothoidTransition.end(), ITERATIONS);
+        clothoidTransition.end());
     // return Abs.FUNCTION.apply(head.subtract(tail));
     return AbsSquared.FUNCTION.apply(head.subtract(tail));
   }

@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.curve.KnotsBSplineFunctionDemo;
 import ch.ethz.idsc.sophus.app.misc.PolyDuckietownData;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
@@ -45,6 +46,8 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
   private final JSlider jSlider = new JSlider(0, 1000, 500);
 
   public DuckietownSmoothingDemo() {
+    super(GokartPoseDataV2.INSTANCE);
+    // ---
     spinnerDegree.setList(DEGREES);
     spinnerDegree.setValue(2);
     spinnerDegree.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "degree");

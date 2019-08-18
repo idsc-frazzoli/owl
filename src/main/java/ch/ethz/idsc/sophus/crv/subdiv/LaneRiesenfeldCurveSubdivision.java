@@ -19,6 +19,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
    * @param degree strictly positive
    * @return */
   public static CurveSubdivision of(MidpointInterface midpointInterface, int degree) {
+    // TODO JPH TENSOR 078 Internal
     if (degree < 1)
       throw new IllegalArgumentException("" + degree);
     return new LaneRiesenfeldCurveSubdivision(Objects.requireNonNull(midpointInterface), degree);

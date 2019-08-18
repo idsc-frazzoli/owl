@@ -13,6 +13,7 @@ public enum BinomialWeights implements Function<Integer, Tensor> {
   // ---
   @Override
   public Tensor apply(Integer i) {
+    // TODO JPH TENSOR 078 Internal
     if (i <= 0)
       throw new IllegalArgumentException("i=" + i);
     return Tensors.vector(k -> Binomial.of(i - 1, k), i).divide(Power.of(2, i - 1));

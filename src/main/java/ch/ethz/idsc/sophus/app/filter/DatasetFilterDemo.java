@@ -30,15 +30,22 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
   private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE);
   // ---
   private final JToggleButton jToggleDiff = new JToggleButton("diff");
+  private final JToggleButton jToggleSpec = new JToggleButton("spec");
   private final JToggleButton jToggleData = new JToggleButton("data");
   private final JToggleButton jToggleConv = new JToggleButton("conv");
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
 
   public DatasetFilterDemo(List<GeodesicDisplay> list) {
     super(list);
+    timerFrame.geometricComponent.addRenderInterfaceBackground(GRID_RENDER);
     // ---
     jToggleDiff.setSelected(true);
+    jToggleDiff.addActionListener(l -> jToggleSpec.setEnabled(jToggleDiff.isSelected()));
     timerFrame.jToolBar.add(jToggleDiff);
+    // ---
+    jToggleSpec.setToolTipText("spectrogram");
+    jToggleSpec.setSelected(true);
+    timerFrame.jToolBar.add(jToggleSpec);
     // ---
     jToggleData.setSelected(true);
     timerFrame.jToolBar.add(jToggleData);
@@ -54,7 +61,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
   @Override
   public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GRID_RENDER.render(geometricLayer, graphics);
     Tensor control = control();
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
@@ -94,8 +100,9 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
         geometricLayer.popMatrix();
       }
     }
+    GraphicsUtil.setQualityDefault(graphics);
     if (jToggleDiff.isSelected())
-      differences_render(graphics, geodesicDisplay(), refined);
+      differences_render(graphics, geodesicDisplay(), refined, jToggleSpec.isSelected());
   }
 
   public Scalar markerScale() {
@@ -106,5 +113,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
   protected abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
 
-  protected abstract void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined);
+  protected abstract void differences_render( //
+      Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram);
 }

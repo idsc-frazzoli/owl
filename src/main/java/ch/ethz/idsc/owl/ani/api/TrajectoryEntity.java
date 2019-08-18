@@ -25,6 +25,7 @@ public abstract class TrajectoryEntity extends AbstractEntity implements Traject
     this.trajectoryControl = trajectoryControl;
   }
 
+  /** function {@link #trajectory(List)} is called by GlcPlannerCallback */
   @Override
   public synchronized void trajectory(List<TrajectorySample> trajectory) {
     trajectoryWrap = TrajectoryWrap.of(trajectory);

@@ -9,6 +9,7 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
@@ -37,6 +38,7 @@ import ch.ethz.idsc.tensor.red.Nest;
   protected final List<String> sensorType = Arrays.asList("gps_pose", "localizer_pose", "slam_pose");
 
   public AMZGeodesicCenterFilterDemo() {
+    super(GokartPoseDataV2.INSTANCE);
     {
       spinnerLabelMeasurement.setList(measurementName);
       spinnerLabelMeasurement.addSpinnerListener(type -> updateState());

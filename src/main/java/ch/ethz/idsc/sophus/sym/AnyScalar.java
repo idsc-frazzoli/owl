@@ -3,15 +3,24 @@ package ch.ethz.idsc.sophus.sym;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.sca.ArcTanInterface;
+import ch.ethz.idsc.tensor.sca.ArgInterface;
+import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.sca.ExpInterface;
+import ch.ethz.idsc.tensor.sca.LogInterface;
 import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
 import ch.ethz.idsc.tensor.sca.RoundingInterface;
 import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** any scalar tracks whether a scalar in a tensor has any effect within a computation */
-public final class AnyScalar extends ScalarAdapter implements //
-    ExactScalarQInterface, MachineNumberQInterface, RoundingInterface, TrigonometryInterface, Serializable {
+public final class AnyScalar extends AbstractScalar implements //
+    ArcTanInterface, ArgInterface, ComplexEmbedding, ExactScalarQInterface, ExpInterface, //
+    LogInterface, MachineNumberQInterface, RoundingInterface, TrigonometryInterface, //
+    Serializable {
   public static final Scalar INSTANCE = new AnyScalar();
 
   // ---
@@ -19,35 +28,82 @@ public final class AnyScalar extends ScalarAdapter implements //
     // ---
   }
 
-  @Override // from ScalarAdapter
+  @Override // from AbstractScalar
   public Scalar multiply(Scalar scalar) {
-    return this;
+    return !(scalar instanceof AnyScalar) && Scalars.isZero(scalar) //
+        ? scalar
+        : this;
   }
 
-  @Override // from ScalarAdapter
+  @Override // from AbstractScalar
   public Scalar negate() {
     return this;
   }
 
-  @Override // from ScalarAdapter
+  @Override // from AbstractScalar
   public Scalar reciprocal() {
     return this;
   }
 
-  @Override // from ScalarAdapter
+  @Override // from AbstractScalar
   public Scalar abs() {
     return this;
   }
 
-  @Override // from ScalarAdapter
+  @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     return this;
   }
 
+  @Override // from Scalar
+  public Number number() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override // from Scalar
+  public Scalar zero() {
+    throw new UnsupportedOperationException();
+  }
+
   /***************************************************/
+  @Override // from ArcTanInterface
+  public Scalar arcTan(Scalar x) {
+    return this;
+  }
+
+  @Override // from ArgInterface
+  public Scalar arg() {
+    return this;
+  }
+
+  @Override // from ConjugateInterface
+  public Scalar conjugate() {
+    return this;
+  }
+
+  @Override // from ComplexEmbedding
+  public Scalar real() {
+    return this;
+  }
+
+  @Override // from ComplexEmbedding
+  public Scalar imag() {
+    return this;
+  }
+
   @Override // from ExactScalarQInterface
   public boolean isExactScalar() {
     return true;
+  }
+
+  @Override // from ExpInterface
+  public Scalar exp() {
+    return this;
+  }
+
+  @Override // from LogInterface
+  public Scalar log() {
+    return this;
   }
 
   @Override // from MachineNumberQInterface
@@ -91,6 +147,16 @@ public final class AnyScalar extends ScalarAdapter implements //
   }
 
   /***************************************************/
+  @Override
+  public int hashCode() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    throw new UnsupportedOperationException();
+  }
+
   @Override
   public String toString() {
     return "any";

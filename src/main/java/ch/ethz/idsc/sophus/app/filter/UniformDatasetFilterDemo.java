@@ -14,15 +14,17 @@ import org.jfree.chart.JFreeChart;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.util.plot.ListPlot;
 import ch.ethz.idsc.sophus.util.plot.VisualSet;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.Spectrogram;
 import ch.ethz.idsc.tensor.io.ImageFormat;
@@ -31,23 +33,24 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class UniformDatasetFilterDemo extends DatasetFilterDemo {
   private static final ScalarUnaryOperator SAMPLE_RATE = QuantityMagnitude.SI().in("s^-1");
-  private static final GokartPoseData GOKART_POSE_DATA = GokartPoseDataV1.INSTANCE;
   // ---
-  // TODO JPH refactor
-  protected Tensor _control = null;
+  private final GokartPoseData gokartPoseData;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
+  // TODO JPH refactor
+  protected Tensor _control = null;
   // protected final SpinnerLabel<ColorDataGradients> spinnerLabelCDG = new SpinnerLabel<>();
 
-  protected UniformDatasetFilterDemo() {
-    this(GeodesicDisplays.CLOTH_SE2_R2);
+  protected UniformDatasetFilterDemo(GokartPoseData gokartPoseData) {
+    this(GeodesicDisplays.CLOTH_SE2_R2, gokartPoseData);
   }
 
-  protected UniformDatasetFilterDemo(List<GeodesicDisplay> list) {
+  protected UniformDatasetFilterDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
     super(list);
-    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
+    this.gokartPoseData = gokartPoseData;
+    timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
-      spinnerLabelString.setList(GOKART_POSE_DATA.list());
+      spinnerLabelString.setList(gokartPoseData.list());
       spinnerLabelString.addSpinnerListener(type -> updateState());
       spinnerLabelString.setIndex(0);
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
@@ -68,7 +71,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   protected void updateState() {
     int limit = spinnerLabelLimit.getValue();
     String name = spinnerLabelString.getValue();
-    _control = GOKART_POSE_DATA.getPose(name, limit);
+    _control = gokartPoseData.getPose(name, limit);
     // Make uniform data artificially non-uniform by randomly leaving out elements
     // _control = DeuniformData.of(_control, RealScalar.of(0.2));
     // _control = DuckietownData.states(DuckietownData.POSE_20190325_0);
@@ -82,12 +85,17 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   /** @return */
   protected abstract String plotLabel();
 
+  private static final ColorDataGradient COLOR_DATA_GRADIENT = //
+      ColorDataGradients.VISIBLESPECTRUM.deriveWithOpacity(RealScalar.of(0.75));
+  private static final int MAGNIFY = 4;
+
   @Override
-  protected void differences_render(Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined) {
+  protected void differences_render( //
+      Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram) {
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
-      Scalar sampleRate = SAMPLE_RATE.apply(GOKART_POSE_DATA.getSampleRate());
+      Scalar sampleRate = SAMPLE_RATE.apply(gokartPoseData.getSampleRate());
       Tensor speeds = lieDifferences.apply(refined).multiply(sampleRate);
       if (0 < speeds.length()) {
         int dimensions = speeds.get(0).length();
@@ -96,22 +104,22 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         visualSet.setAxesLabelX("sample no.");
         Tensor domain = Range.of(0, speeds.length());
         final int width = timerFrame.geometricComponent.jComponent.getWidth();
+        int offset_y = 0;
         for (int index = 0; index < dimensions; ++index) {
           Tensor signal = speeds.get(Tensor.ALL, index).unmodifiable();
+          visualSet.add(domain, signal);
           // ---
-          Tensor image = Spectrogram.of(signal, ColorDataGradients.VISIBLESPECTRUM);
-          BufferedImage bufferedImage = ImageFormat.of(image);
-          int wid = bufferedImage.getWidth() * 5;
-          int hgt = bufferedImage.getHeight() * 5;
-          graphics.drawImage(bufferedImage, width - wid, index * hgt, wid, hgt, null);
-          // ---
-          visualSet.add(domain, signal); // .setLabel("tangent velocity [m/s]")
+          if (spectrogram) {
+            Tensor image = Spectrogram.of(signal, COLOR_DATA_GRADIENT);
+            BufferedImage bufferedImage = ImageFormat.of(image);
+            int wid = bufferedImage.getWidth() * MAGNIFY;
+            int hgt = bufferedImage.getHeight() * MAGNIFY;
+            graphics.drawImage(bufferedImage, width - wid, offset_y, wid, hgt, null);
+            offset_y += hgt + MAGNIFY;
+          }
         }
-        // visualSet.add(domain, speeds.get(Tensor.ALL, 1)).setLabel("side slip [m/s]");
-        // visualSet.add(domain, speeds.get(Tensor.ALL, 2)).setLabel("rotational rate [rad/s]");
         JFreeChart jFreeChart = ListPlot.of(visualSet);
         jFreeChart.draw(graphics, new Rectangle2D.Double(0, 0, 80 + speeds.length(), 400));
-        // ---
       }
     }
   }

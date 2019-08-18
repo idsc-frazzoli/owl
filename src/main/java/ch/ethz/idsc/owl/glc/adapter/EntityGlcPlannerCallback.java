@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.glc.adapter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
@@ -10,13 +11,22 @@ import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 
-/** TODO JPH class name too generic */
-public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
-  private final TrajectoryEntity trajectoryEntity;
-  private boolean showCost = false;
+public class EntityGlcPlannerCallback implements GlcPlannerCallback {
+  public static GlcPlannerCallback of(TrajectoryEntity trajectoryEntity) {
+    return new EntityGlcPlannerCallback(trajectoryEntity, false);
+  }
 
-  public SimpleGlcPlannerCallback(TrajectoryEntity trajectoryEntity) {
-    this.trajectoryEntity = trajectoryEntity;
+  public static GlcPlannerCallback verbose(TrajectoryEntity trajectoryEntity) {
+    return new EntityGlcPlannerCallback(trajectoryEntity, true);
+  }
+
+  // ---
+  private final TrajectoryEntity trajectoryEntity;
+  private final boolean showCost;
+
+  private EntityGlcPlannerCallback(TrajectoryEntity trajectoryEntity, boolean showCost) {
+    this.trajectoryEntity = Objects.requireNonNull(trajectoryEntity);
+    this.showCost = showCost;
   }
 
   @Override // from GlcPlannerCallback
@@ -29,9 +39,5 @@ public class SimpleGlcPlannerCallback implements GlcPlannerCallback {
           GlcTrajectories.detailedTrajectoryTo(trajectoryPlanner.getStateIntegrator(), optional.get());
       trajectoryEntity.trajectory(Trajectories.glue(head, tail));
     }
-  }
-
-  public void showCost() {
-    showCost = true;
   }
 }

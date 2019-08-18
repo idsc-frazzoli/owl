@@ -134,7 +134,7 @@ public class CarEntity extends Se2Entity {
   }
 
   @Override // from Se2Entity
-  protected Tensor shape() {
+  protected final Tensor shape() {
     return shape;
   }
 
@@ -154,7 +154,7 @@ public class CarEntity extends Se2Entity {
     }
   }
 
-  public Tensor coords_X() {
+  public final Tensor coords_X() {
     ScalarSummaryStatistics scalarSummaryStatistics = //
         shape.stream().map(tensor -> tensor.Get(0)).collect(ScalarSummaryStatistics.collector());
     return Subdivide.of(scalarSummaryStatistics.getMin(), scalarSummaryStatistics.getMax(), 2);

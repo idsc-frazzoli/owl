@@ -9,8 +9,8 @@ import java.util.Arrays;
 import ch.ethz.idsc.owl.ani.api.GlcPlannerCallback;
 import ch.ethz.idsc.owl.bot.r2.WaypointDistanceCost;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.glc.adapter.EntityGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
-import ch.ethz.idsc.owl.glc.adapter.SimpleGlcPlannerCallback;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.gui.ren.WaypointRender;
@@ -58,7 +58,7 @@ public class GokartWaypoint1Demo extends GokartDemo {
     owlyAnimationFrame.geometricComponent.setModel2Pixel(HelperHangarMap.MODEL2PIXEL);
     // ---
     owlyAnimationFrame.addBackground(new WaypointRender(ARROWHEAD, COLOR_WAYPOINT).setWaypoints(waypoints));
-    GlcPlannerCallback glcPlannerCallback = new SimpleGlcPlannerCallback(gokartEntity);
+    GlcPlannerCallback glcPlannerCallback = EntityGlcPlannerCallback.of(gokartEntity);
     GlcWaypointFollowing glcWaypointFollowing = new GlcWaypointFollowing( //
         waypoints, RealScalar.of(2), gokartEntity, plannerConstraint, //
         Arrays.asList(gokartEntity, glcPlannerCallback));
