@@ -37,6 +37,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
   public DatasetFilterDemo(List<GeodesicDisplay> list) {
     super(list);
+    timerFrame.geometricComponent.addRenderInterfaceBackground(GRID_RENDER);
     // ---
     jToggleDiff.setSelected(true);
     jToggleDiff.addActionListener(l -> jToggleSpec.setEnabled(jToggleDiff.isSelected()));
@@ -60,7 +61,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 
   @Override
   public final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    GRID_RENDER.render(geometricLayer, graphics);
     Tensor control = control();
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();

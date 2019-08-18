@@ -14,6 +14,7 @@ import org.jfree.chart.JFreeChart;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -45,7 +46,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   protected UniformDatasetFilterDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
     super(list);
     this.gokartPoseData = gokartPoseData;
-    timerFrame.geometricComponent.setModel2Pixel(StaticHelper.HANGAR_MODEL2PIXEL);
+    timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
       spinnerLabelString.setList(gokartPoseData.list());
       spinnerLabelString.addSpinnerListener(type -> updateState());
