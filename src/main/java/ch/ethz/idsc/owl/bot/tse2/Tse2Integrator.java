@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.tse2;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.bot.rn.R1Integrator;
 import ch.ethz.idsc.owl.bot.se2.Se2CarLieIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -11,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /** exact integration of state for a period h during which a constant acceleration is assumed. */
-public class Tse2Integrator implements Integrator {
+public class Tse2Integrator implements Integrator, Serializable {
   private final Clip v_range;
 
   /** @param v_range */

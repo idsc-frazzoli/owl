@@ -25,7 +25,7 @@ public class LieGroupFiltersDatasetDemo extends DatasetKernelDemo implements Buf
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
 
   public LieGroupFiltersDatasetDemo() {
-    super(GeodesicDisplays.SE2_R2, GokartPoseDataV2.INSTANCE);
+    super(GeodesicDisplays.SE2_R2, GokartPoseDataV2.RACING_DAY);
     {
       spinnerFilters.setArray(LieGroupFilters.values());
       spinnerFilters.setIndex(0);
@@ -42,7 +42,7 @@ public class LieGroupFiltersDatasetDemo extends DatasetKernelDemo implements Buf
     updateState();
   }
 
-  @Override
+  @Override // from UniformDatasetFilterDemo
   protected void updateState() {
     super.updateState();
   }

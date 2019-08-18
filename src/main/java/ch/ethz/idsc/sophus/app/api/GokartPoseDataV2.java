@@ -3,16 +3,39 @@ package ch.ethz.idsc.sophus.app.api;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Quantity;
 
-public enum GokartPoseDataV2 implements GokartPoseData {
-  INSTANCE;
+/** Columns:
+ * time
+ * px
+ * py
+ * pangle
+ * quality
+ * vx
+ * vy
+ * vangle */
+public class GokartPoseDataV2 implements GokartPoseData {
+  public static final String PATH_FOLDER = "/dubilab/app/tpqv50";
+  public static final String PATH_VECTOR = PATH_FOLDER + ".vector";
+  private static final List<String> LIST = Collections.unmodifiableList(ResourceData.lines(PATH_VECTOR));
   // ---
-  private final List<String> list = Collections.unmodifiableList(ResourceData.lines("/dubilab/app/tpqv50.vector"));
+  /** all available */
+  public static final GokartPoseData INSTANCE = new GokartPoseDataV2(LIST);
+  /** 20190701 */
+  public static final GokartPoseData RACING_DAY = new GokartPoseDataV2(LIST.stream() //
+      .filter(string -> string.startsWith("20190701")) //
+      .collect(Collectors.toList()));
+  // ---
+  private final List<String> list;
+
+  private GokartPoseDataV2(List<String> list) {
+    this.list = list;
+  }
 
   @Override // from GokartPoseData
   public List<String> list() {
@@ -21,7 +44,7 @@ public enum GokartPoseDataV2 implements GokartPoseData {
 
   @Override // from GokartPoseData
   public Tensor getPose(String name, int limit) {
-    return Tensor.of(ResourceData.of("/dubilab/app/tpqv50/" + name + ".csv").stream() //
+    return Tensor.of(ResourceData.of(PATH_FOLDER + "/" + name + ".csv").stream() //
         .limit(limit) //
         .map(row -> row.extract(1, 4)));
   }

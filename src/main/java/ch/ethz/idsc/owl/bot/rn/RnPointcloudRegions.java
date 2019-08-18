@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import ch.ethz.idsc.owl.math.region.BufferedImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
@@ -41,9 +42,9 @@ public enum RnPointcloudRegions {
     int rows = bufferedImage.getHeight();
     for (int row = 0; row < rows; ++row)
       for (int col = 0; col < cols; ++col) {
-        Tensor model = pixel2model.dot(Tensors.vector(col, row, 1)).extract(0, 2);
-        if (bufferedImageRegion.isMember(model))
-          points.append(model);
+        Tensor vector = pixel2model.dot(Tensors.vector(col, row, 1));
+        if (bufferedImageRegion.isMember(vector))
+          points.append(Extract2D.FUNCTION.apply(vector));
       }
     return points;
   }

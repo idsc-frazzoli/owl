@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public interface GokartPoseData {
+  /** @return available names to use in {@link #getPose(String, int)} */
   List<String> list();
 
   /** Hint:

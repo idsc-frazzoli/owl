@@ -42,6 +42,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
     jToggleDiff.addActionListener(l -> jToggleSpec.setEnabled(jToggleDiff.isSelected()));
     timerFrame.jToolBar.add(jToggleDiff);
     // ---
+    jToggleSpec.setToolTipText("spectrogram");
     jToggleSpec.setSelected(true);
     timerFrame.jToolBar.add(jToggleSpec);
     // ---
