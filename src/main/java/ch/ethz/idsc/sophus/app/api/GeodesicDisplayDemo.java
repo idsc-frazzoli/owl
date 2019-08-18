@@ -7,6 +7,7 @@ import java.util.List;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 
 public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoInterface {
   private final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();
@@ -30,6 +31,10 @@ public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoIn
 
   public synchronized final void setGeodesicDisplay(GeodesicDisplay geodesicDisplay) {
     geodesicDisplaySpinner.setValue(geodesicDisplay);
+  }
+
+  public void addSpinnerListener(SpinnerListener<GeodesicDisplay> spinnerListener) {
+    geodesicDisplaySpinner.addSpinnerListener(spinnerListener);
   }
 
   public List<GeodesicDisplay> getGeodesicDisplays() {

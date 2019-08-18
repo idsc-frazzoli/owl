@@ -100,6 +100,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
         geometricLayer.popMatrix();
       }
     }
+    GraphicsUtil.setQualityDefault(graphics);
     if (jToggleDiff.isSelected())
       differences_render(graphics, geodesicDisplay(), refined, jToggleSpec.isSelected());
   }

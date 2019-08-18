@@ -52,10 +52,14 @@ import ch.ethz.idsc.tensor.Tensors;
   SIXFAR(FarSixPointCurveSubdivision::new), //
   EIGHTPOINT(EightPointCurveSubdivision::new), //
   ;
-  public final Function<GeodesicInterface, CurveSubdivision> function;
+  private final Function<GeodesicInterface, CurveSubdivision> function;
 
   private CurveSubdivisionSchemes(Function<GeodesicInterface, CurveSubdivision> function) {
     this.function = function;
+  }
+
+  public CurveSubdivision of(GeodesicInterface geodesicInterface) {
+    return function.apply(geodesicInterface);
   }
 
   public boolean isStringSupported() {

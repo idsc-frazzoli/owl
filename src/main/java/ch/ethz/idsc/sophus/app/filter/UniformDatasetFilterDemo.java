@@ -20,9 +20,11 @@ import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.util.plot.ListPlot;
 import ch.ethz.idsc.sophus.util.plot.VisualSet;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.img.Spectrogram;
 import ch.ethz.idsc.tensor.io.ImageFormat;
@@ -83,6 +85,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   /** @return */
   protected abstract String plotLabel();
 
+  private static final ColorDataGradient COLOR_DATA_GRADIENT = //
+      ColorDataGradients.VISIBLESPECTRUM.deriveWithOpacity(RealScalar.of(0.75));
+  private static final int MAGNIFY = 4;
+
   @Override
   protected void differences_render( //
       Graphics2D graphics, GeodesicDisplay geodesicDisplay, Tensor refined, boolean spectrogram) {
@@ -98,16 +104,18 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         visualSet.setAxesLabelX("sample no.");
         Tensor domain = Range.of(0, speeds.length());
         final int width = timerFrame.geometricComponent.jComponent.getWidth();
+        int offset_y = 0;
         for (int index = 0; index < dimensions; ++index) {
           Tensor signal = speeds.get(Tensor.ALL, index).unmodifiable();
           visualSet.add(domain, signal);
           // ---
           if (spectrogram) {
-            Tensor image = Spectrogram.of(signal, ColorDataGradients.VISIBLESPECTRUM);
+            Tensor image = Spectrogram.of(signal, COLOR_DATA_GRADIENT);
             BufferedImage bufferedImage = ImageFormat.of(image);
-            int wid = bufferedImage.getWidth() * 5;
-            int hgt = bufferedImage.getHeight() * 5;
-            graphics.drawImage(bufferedImage, width - wid, index * hgt, wid, hgt, null);
+            int wid = bufferedImage.getWidth() * MAGNIFY;
+            int hgt = bufferedImage.getHeight() * MAGNIFY;
+            graphics.drawImage(bufferedImage, width - wid, offset_y, wid, hgt, null);
+            offset_y += hgt + MAGNIFY;
           }
         }
         JFreeChart jFreeChart = ListPlot.of(visualSet);

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
@@ -23,8 +24,32 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * with each point weighted as provided by an external function.
  * 
  * <p>Careful: the implementation only supports sequences with ODD number of elements!
- * When a sequence of even length is provided an Exception is thrown. */
+ * When a sequence of even length is provided an Exception is thrown.
+ * 
+ * @see CenterFilter */
 public class GeodesicCenter implements TensorUnaryOperator {
+  /** @param splitInterface
+   * @param function that maps an extent to a weight mask of length == 2 * extent + 1
+   * @return operator that maps a sequence of odd number of points to their geodesic center
+   * @throws Exception if either input parameter is null */
+  public static TensorUnaryOperator of(SplitInterface splitInterface, Function<Integer, Tensor> function) {
+    return new GeodesicCenter(splitInterface, Objects.requireNonNull(function));
+  }
+
+  /** Example:
+   * <pre>
+   * GeodesicCenter.of(Se2Geodesic.INSTANCE, GaussianWindow.FUNCTION);
+   * </pre>
+   * 
+   * @param splitInterface
+   * @param windowFunction
+   * @return
+   * @throws Exception if either input parameter is null */
+  public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
+    return new GeodesicCenter(splitInterface, UniformWindowSampler.of(windowFunction));
+  }
+
+  // ---
   /* package */ static class Splits implements Function<Integer, Tensor>, Serializable {
     private static final Scalar TWO = RealScalar.of(2);
     // ---
@@ -59,22 +84,6 @@ public class GeodesicCenter implements TensorUnaryOperator {
       }
       return Reverse.of(splits);
     }
-  }
-
-  /** @param splitInterface
-   * @param function that maps an extent to a weight mask of length == 2 * extent + 1
-   * @return operator that maps a sequence of odd number of points to their geodesic center
-   * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(SplitInterface splitInterface, Function<Integer, Tensor> function) {
-    return new GeodesicCenter(splitInterface, Objects.requireNonNull(function));
-  }
-
-  /** @param splitInterface
-   * @param windowFunction
-   * @return
-   * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicCenter(splitInterface, UniformWindowSampler.of(windowFunction));
   }
 
   // ---

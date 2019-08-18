@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
-import java.util.function.Function;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -16,8 +15,6 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -59,8 +56,8 @@ public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
-      Function<GeodesicInterface, CurveSubdivision> function = spinnerLabel.getValue().function;
-      TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(function.apply(geodesicDisplay.geodesicInterface()), cyclic);
+      TensorUnaryOperator tensorUnaryOperator = //
+          StaticHelper.create(spinnerLabel.getValue().of(geodesicDisplay.geodesicInterface()), cyclic);
       refined = control;
       for (int level = 0; level < levels; ++level) {
         Tensor prev = refined;
