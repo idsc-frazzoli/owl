@@ -12,10 +12,11 @@ import java.util.LinkedList;
 public class BoundedLinkedList<E> extends LinkedList<E> {
   private final int maxSize;
 
-  /** @param maxSize */
+  /** @param maxSize non-negative
+   * @throws Exception if maxSize is negative */
   public BoundedLinkedList(int maxSize) {
     if (maxSize < 0)
-      throw new IllegalArgumentException("" + maxSize);
+      throw new IllegalArgumentException(Integer.toString(maxSize));
     this.maxSize = maxSize;
   }
 

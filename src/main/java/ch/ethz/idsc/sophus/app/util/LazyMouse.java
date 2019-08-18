@@ -21,6 +21,7 @@ public class LazyMouse implements MouseListener, MouseMotionListener {
   }
 
   public void setTolerance(float tolerance) {
+    // TODO JPH TENSOR 078 Internal
     if (tolerance < 0)
       throw new IllegalArgumentException("tolerance is negative");
     this.tolerance = tolerance;

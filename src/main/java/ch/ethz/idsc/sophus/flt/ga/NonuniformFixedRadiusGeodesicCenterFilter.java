@@ -19,6 +19,7 @@ public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUn
    * @throws Exception given if nonuniformFixedRadiusGeodesicCenter is null */
   public static NonuniformFixedRadiusGeodesicCenterFilter of( //
       NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, int radius) {
+    // TODO JPH TENSOR 078 Internal
     if (radius < 0)
       throw new IllegalArgumentException("radius=" + radius);
     return new NonuniformFixedRadiusGeodesicCenterFilter( //

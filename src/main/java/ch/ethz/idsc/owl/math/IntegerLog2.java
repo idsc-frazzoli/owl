@@ -12,6 +12,7 @@ public enum IntegerLog2 {
   /** @param value
    * @return floor(log<sub>2</sub>(value)) */
   public static int floor(int value) {
+    // TODO JPH TENSOR 078 Internal
     if (0 < value)
       return 31 - Integer.numberOfLeadingZeros(value);
     throw new IllegalArgumentException("" + value);
@@ -20,6 +21,7 @@ public enum IntegerLog2 {
   /** @param value
    * @return ceil(log<sub>2</sub>(value)) */
   public static int ceiling(int value) {
+    // TODO JPH TENSOR 078 Internal
     if (0 < value)
       return 32 - Integer.numberOfLeadingZeros(value - 1);
     throw new IllegalArgumentException("" + value);

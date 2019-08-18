@@ -21,7 +21,7 @@ public class FloodFill2D {
    * @param seeds
    * @return distance in exact precision */
   public static Tensor of(Tensor image, int ttl, Set<Tensor> seeds) {
-    if (ttl < 0)
+    if (ttl < 0) // TODO JPH TENSOR 078 Internal
       throw new IllegalArgumentException("ttl=" + ttl);
     return new FloodFill2D(image, RealScalar.of(ttl), seeds).array;
   }

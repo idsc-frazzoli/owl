@@ -6,16 +6,21 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.sca.ArcTanInterface;
+import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.sca.ExpInterface;
+import ch.ethz.idsc.tensor.sca.LogInterface;
 import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
 import ch.ethz.idsc.tensor.sca.RoundingInterface;
 import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** any scalar tracks whether a scalar in a tensor has any effect within a computation */
 public final class AnyScalar extends AbstractScalar implements //
-    ComplexEmbedding, ExactScalarQInterface, MachineNumberQInterface, RoundingInterface, //
-    TrigonometryInterface, Serializable {
+    ArcTanInterface, ArgInterface, ComplexEmbedding, ExactScalarQInterface, ExpInterface, //
+    LogInterface, MachineNumberQInterface, RoundingInterface, TrigonometryInterface, //
+    Serializable {
   public static final Scalar INSTANCE = new AnyScalar();
 
   // ---
@@ -61,6 +66,16 @@ public final class AnyScalar extends AbstractScalar implements //
   }
 
   /***************************************************/
+  @Override // from ArcTanInterface
+  public Scalar arcTan(Scalar x) {
+    return this;
+  }
+
+  @Override // from ArgInterface
+  public Scalar arg() {
+    return this;
+  }
+
   @Override // from ConjugateInterface
   public Scalar conjugate() {
     return this;
@@ -79,6 +94,16 @@ public final class AnyScalar extends AbstractScalar implements //
   @Override // from ExactScalarQInterface
   public boolean isExactScalar() {
     return true;
+  }
+
+  @Override // from ExpInterface
+  public Scalar exp() {
+    return this;
+  }
+
+  @Override // from LogInterface
+  public Scalar log() {
+    return this;
   }
 
   @Override // from MachineNumberQInterface
