@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 
@@ -16,8 +17,8 @@ import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 
-  protected DatasetKernelDemo(List<GeodesicDisplay> list) {
-    super(list);
+  protected DatasetKernelDemo(List<GeodesicDisplay> list, GokartPoseData gokartPoseData) {
+    super(list, gokartPoseData);
     {
       spinnerKernel.setList(Arrays.asList(SmoothingKernel.values()));
       spinnerKernel.setValue(SmoothingKernel.GAUSSIAN);
@@ -32,14 +33,14 @@ import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
     }
   }
 
-  protected DatasetKernelDemo() {
-    this(GeodesicDisplays.CLOTH_SE2_R2);
+  protected DatasetKernelDemo(GokartPoseData gokartPoseData) {
+    this(GeodesicDisplays.CLOTH_SE2_R2, gokartPoseData);
   }
 
   @Override // from DatasetFilterDemo
   protected String plotLabel() {
     SmoothingKernel smoothingKernel = spinnerKernel.getValue();
     int radius = spinnerRadius.getValue();
-    return smoothingKernel + " [" + radius + "]";
+    return smoothingKernel + " [" + (2 * radius + 1) + "]";
   }
 }

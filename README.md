@@ -2,7 +2,7 @@
 
 Library for motion planning in Java, version `0.5.0`
 
-![owl](https://user-images.githubusercontent.com/4012178/57274601-0e61a480-709c-11e9-9b9a-904ce21d394e.png)
+![owl](https://user-images.githubusercontent.com/4012178/63221687-dc80d380-c19c-11e9-8aa4-8f7b36f5a4d4.png)
 
 The library was developed with the following objectives in mind
 * suitable for use in safety-critical real-time systems
@@ -189,7 +189,7 @@ by Sertac Karaman and Emilio Frazzoli,
 
 Library for non-linear geometry computation in Java
 
-![sophus](https://user-images.githubusercontent.com/4012178/57274609-128dc200-709c-11e9-9702-655970488c4f.png)
+![sophus](https://user-images.githubusercontent.com/4012178/63221690-e9052c00-c19c-11e9-8d89-683625d17960.png)
 
 The library was developed with the following objectives in mind
 * trajectory design for autonomous robots

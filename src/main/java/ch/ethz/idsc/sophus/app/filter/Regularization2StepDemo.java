@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.flt.ga.Regularization2Step;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
@@ -29,7 +30,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private final JSlider jSlider = new JSlider(0, 1000, 600);
 
   Regularization2StepDemo() {
-    super(GeodesicDisplays.SE2_R2);
+    super(GeodesicDisplays.SE2_R2, GokartPoseDataV2.INSTANCE);
     jSlider.setPreferredSize(new Dimension(500, 28));
     timerFrame.jToolBar.add(jSlider);
     // ---

@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.api.LieGroupFilters;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
@@ -24,7 +25,7 @@ public class LieGroupFiltersDatasetDemo extends DatasetKernelDemo implements Buf
   private final SpinnerLabel<Integer> spinnerConvolution = new SpinnerLabel<>();
 
   public LieGroupFiltersDatasetDemo() {
-    super(GeodesicDisplays.SE2_R2);
+    super(GeodesicDisplays.SE2_R2, GokartPoseDataV2.INSTANCE);
     {
       spinnerFilters.setArray(LieGroupFilters.values());
       spinnerFilters.setIndex(0);
