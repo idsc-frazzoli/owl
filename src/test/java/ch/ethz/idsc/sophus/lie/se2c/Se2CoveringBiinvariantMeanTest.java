@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.lie.se2c;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMeanEquation;
-import ch.ethz.idsc.sophus.lie.BiinvariantMeanTests;
+import ch.ethz.idsc.sophus.lie.BiinvariantMeanTestHelper;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -34,7 +34,8 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
       Tensor solution = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, weights);
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = Se2CoveringBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+        Tensor result = Se2CoveringBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index),
+            BiinvariantMeanTestHelper.order(weights, index));
         Chop._08.requireClose(result, solution);
       }
     }
@@ -62,9 +63,10 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
       Tensor solution = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, weights);
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = Se2CoveringBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+        Tensor result = Se2CoveringBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index),
+            BiinvariantMeanTestHelper.order(weights, index));
         Chop._08.requireClose(result, solution);
-        Tensor rnmean = RnBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+        Tensor rnmean = RnBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
         Chop._08.requireClose(result, rnmean);
       }
     }

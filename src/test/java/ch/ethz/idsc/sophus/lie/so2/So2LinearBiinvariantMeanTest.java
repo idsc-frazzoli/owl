@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.lie.so2;
 
-import ch.ethz.idsc.sophus.lie.BiinvariantMeanTests;
+import ch.ethz.idsc.sophus.lie.BiinvariantMeanTestHelper;
 import ch.ethz.idsc.sophus.lie.ScalarBiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -41,8 +41,8 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
           for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
             int[] index = Primitives.toIntArray(perm);
             Scalar result = so2BiinvariantMean.mean( //
-                BiinvariantMeanTests.order(sequence.map(shift::add), index), //
-                BiinvariantMeanTests.order(weights, index));
+                BiinvariantMeanTestHelper.order(sequence.map(shift::add), index), //
+                BiinvariantMeanTestHelper.order(weights, index));
             CLIP.requireInside(result);
             Chop._12.requireClose(So2.MOD.apply(result.subtract(shift).subtract(solution)), RealScalar.ZERO);
           }

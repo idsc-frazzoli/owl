@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.lie.se2;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMeanEquation;
-import ch.ethz.idsc.sophus.lie.BiinvariantMeanTests;
+import ch.ethz.idsc.sophus.lie.BiinvariantMeanTestHelper;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -120,7 +120,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
       // Chop._12.requireClose(solution, Tensors.vector(4.911144632104387, 5.064995814659804, 1.1));
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+        Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
     }
@@ -140,7 +140,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
       assertTrue(close1 || close2);
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+        Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
       BIINVARIANT_MEAN_EQUATION.evaluate(sequence, weights, solution);
@@ -160,7 +160,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
       Chop._01.requireClose(solution, Tensors.vector(14.83619642851975, -5.043678108261259, -1.466370614359171));
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+        Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
     }
@@ -176,7 +176,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
       Tensor solution = Se2BiinvariantMean.GLOBAL.mean(sequence, weights);
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = Se2BiinvariantMean.GLOBAL.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+        Tensor result = Se2BiinvariantMean.GLOBAL.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
     }
@@ -206,7 +206,7 @@ public class Se2BiinvariantMeanTest extends TestCase {
         Tensor solution = se2BiinvariantMean.mean(sequence, weights);
         for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
           int[] index = Primitives.toIntArray(perm);
-          Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+          Tensor result = se2BiinvariantMean.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
           Chop._12.requireClose(result, solution);
         }
       }

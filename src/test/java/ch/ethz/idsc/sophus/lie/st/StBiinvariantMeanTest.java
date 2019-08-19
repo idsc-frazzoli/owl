@@ -1,7 +1,7 @@
 // code by ob, jph
 package ch.ethz.idsc.sophus.lie.st;
 
-import ch.ethz.idsc.sophus.lie.BiinvariantMeanTests;
+import ch.ethz.idsc.sophus.lie.BiinvariantMeanTestHelper;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
@@ -41,7 +41,7 @@ public class StBiinvariantMeanTest extends TestCase {
     Chop._12.requireClose(expected, actual);
     for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
       int[] index = Primitives.toIntArray(perm);
-      Tensor result = StBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+      Tensor result = StBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
       Chop._12.requireClose(result, actual);
     }
   }
@@ -59,7 +59,7 @@ public class StBiinvariantMeanTest extends TestCase {
     Chop._12.requireClose(expected, actual);
     for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
       int[] index = Primitives.toIntArray(perm);
-      Tensor result = StBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+      Tensor result = StBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
       Chop._12.requireClose(result, actual);
     }
   }
@@ -77,7 +77,7 @@ public class StBiinvariantMeanTest extends TestCase {
     Chop._12.requireClose(expected, actual);
     for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
       int[] index = Primitives.toIntArray(perm);
-      Tensor result = StBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+      Tensor result = StBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
       Chop._12.requireClose(result, actual);
     }
   }

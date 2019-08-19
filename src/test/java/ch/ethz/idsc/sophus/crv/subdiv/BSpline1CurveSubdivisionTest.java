@@ -83,8 +83,8 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
     CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
     for (int n = 3; n < 10; ++n) {
       Tensor tensor = curveSubdivision.cyclic(CirclePoints.of(n));
-      Tensor filter = Tensor.of(IntStream.range(0, tensor.length()) //
-          .filter(i -> i % 2 == 0) //
+      Tensor filter = Tensor.of(IntStream.range(0, tensor.length() / 2) //
+          .map(i -> i * 2) //
           .mapToObj(tensor::get));
       assertEquals(filter, CirclePoints.of(n));
     }
