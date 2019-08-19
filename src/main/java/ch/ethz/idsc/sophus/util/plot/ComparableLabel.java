@@ -16,7 +16,7 @@ import java.util.Objects;
 
   @Override
   public int compareTo(ComparableLabel comparableLabel) {
-    return Integer.compare(index, comparableLabel.index);
+    return Integer.compare(index, comparableLabel.index);// TODO JPH test coverage
   }
 
   public void setString(String string) {

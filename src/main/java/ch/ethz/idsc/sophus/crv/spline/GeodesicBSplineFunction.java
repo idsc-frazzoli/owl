@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.math.SplitInterface;
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -55,12 +56,13 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
    * @return
    * @throws Exception */
   public static GeodesicBSplineFunction of(SplitInterface splitInterface, int degree, Tensor knots, Tensor control) {
-    // TODO JPH TENSOR 078 Internal
-    if (degree < 0)
-      throw new IllegalArgumentException(Integer.toString(degree));
     if (!Sort.of(knots).equals(knots))
       throw TensorRuntimeException.of(knots);
-    return new GeodesicBSplineFunction(splitInterface, degree, VectorQ.requireLength(knots, control.length()), control);
+    return new GeodesicBSplineFunction( //
+        splitInterface, //
+        Integers.requirePositiveOrZero(degree), //
+        VectorQ.requireLength(knots, control.length()), //
+        control);
   }
 
   // ---

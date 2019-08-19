@@ -22,6 +22,6 @@ public enum Histogram {
   }
 
   public static JFreeChart of(VisualSet visualSet, Function<Scalar, String> naming) {
-    return JFreeChartFactory.barChart(visualSet, false, naming);
+    return JFreeChartFactory.barChart(visualSet, false, naming); // TODO JPH test coverage
   }
 }

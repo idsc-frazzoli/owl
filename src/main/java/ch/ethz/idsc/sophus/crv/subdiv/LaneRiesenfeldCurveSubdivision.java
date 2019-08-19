@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.MidpointInterface;
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -19,10 +20,9 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
    * @param degree strictly positive
    * @return */
   public static CurveSubdivision of(MidpointInterface midpointInterface, int degree) {
-    // TODO JPH TENSOR 078 Internal
-    if (degree < 1)
-      throw new IllegalArgumentException("" + degree);
-    return new LaneRiesenfeldCurveSubdivision(Objects.requireNonNull(midpointInterface), degree);
+    return new LaneRiesenfeldCurveSubdivision( //
+        Objects.requireNonNull(midpointInterface), //
+        Integers.requirePositive(degree));
   }
 
   // ---
@@ -43,7 +43,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       return tensor.copy();
     Tensor value = bSpline1CurveSubdivision.cyclic(tensor);
     for (int count = 2; count <= degree; ++count) {
-      if (Tensors.isEmpty(value))
+      if (Tensors.isEmpty(value)) // TODO JPH test coverage
         return value;
       boolean odd = count % 2 == 1;
       Tensor queue = Tensors.reserve(value.length());
@@ -76,7 +76,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       return tensor.copy();
     Tensor value = bSpline1CurveSubdivision.string(tensor);
     for (int count = 2; count <= degree; ++count) {
-      if (Tensors.isEmpty(value))
+      if (Tensors.isEmpty(value)) // TODO JPH test coverage
         return value;
       boolean odd = count % 2 == 1;
       Tensor queue = Tensors.reserve(value.length() + 1);

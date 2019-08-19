@@ -66,6 +66,7 @@ public class ClothoidTerminalRatioTest extends TestCase {
       HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.of(p, q);
       Chop._03.requireClose(clothoidTerminalRatio.head(), RealScalar.ZERO);
       Chop._03.requireClose(clothoidTerminalRatio.tail(), RealScalar.ZERO);
+      assertNotNull(clothoidTerminalRatio.toString());
     }
     {
       HeadTailInterface clothoidTerminalRatio = ClothoidTerminalRatios.planar(p, q);

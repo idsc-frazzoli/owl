@@ -11,6 +11,6 @@ public enum Se2UniformResample {
   /** @param spacing positive
    * @return */
   public static CurveSubdivision of(Scalar spacing) {
-    return UniformResample.of(Se2ParametricDistance.INSTANCE, Se2Geodesic.INSTANCE, spacing);
+    return UniformResample.of(Se2ParametricDistance.INSTANCE, Se2Geodesic.INSTANCE, spacing);// TODO JPH test coverage
   }
 }

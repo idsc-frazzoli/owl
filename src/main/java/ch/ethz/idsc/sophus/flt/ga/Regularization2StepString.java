@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   public Tensor apply(Tensor tensor) {
+    // TODO JPH scalar!
     if (tensor.length() < 2)
       return tensor.copy();
     Tensor center = Tensors.reserve(tensor.length());

@@ -5,12 +5,34 @@ import java.util.Objects;
 
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.img.MeanFilter;
+import ch.ethz.idsc.tensor.img.ImageFilter;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/** @see MeanFilter */
+/** CenterFilter uses <em>odd</em> number of elements from the signal always.
+ * 
+ * <p>CenterFilter is different towards the boundaries of the signal when
+ * compared to a 1-dimensional {@link ImageFilter}.
+ * 
+ * <p>For instance, CenterFilter for radius 2
+ * <pre>
+ * out[0] = f[0]
+ * out[1] = f[0, 1, 2]
+ * out[2] = f[0, 1, 2, 3, 4]
+ * out[3] = f[1, 2, 3, 4, 5]
+ * ...
+ * </pre>
+ * 
+ * Whereas ImageFilter for radius 2
+ * <pre>
+ * out[0] = f[0, 1, 2] (not centered at 0)
+ * out[1] = f[0, 1, 2, 3] (not centered at 1)
+ * out[2] = f[0, 1, 2, 3, 4]
+ * out[3] = f[1, 2, 3, 4, 5]
+ * ...
+ * </pre> */
 public class CenterFilter implements TensorUnaryOperator {
   /** Hint: the following tensorUnaryOperator are typically used
    * {@link GeodesicCenter}, and {@link BiinvariantMeanCenter}
@@ -20,9 +42,9 @@ public class CenterFilter implements TensorUnaryOperator {
    * @return
    * @throws Exception if given tensorUnaryOperator is null */
   public static TensorUnaryOperator of(TensorUnaryOperator tensorUnaryOperator, int radius) {
-    if (radius < 0)
-      throw new IllegalArgumentException("" + radius);
-    return new CenterFilter(Objects.requireNonNull(tensorUnaryOperator), radius);
+    return new CenterFilter( //
+        Objects.requireNonNull(tensorUnaryOperator), //
+        Integers.requirePositiveOrZero(radius));
   }
 
   // ---

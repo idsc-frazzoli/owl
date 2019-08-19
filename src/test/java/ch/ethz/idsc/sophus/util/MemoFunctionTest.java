@@ -24,6 +24,12 @@ public class MemoFunctionTest extends TestCase {
     assertEquals(function.apply(3), Array.zeros(3));
   }
 
+  public void testInception() {
+    Function<Object, Double> memo1 = MemoFunction.wrap(k -> Math.random());
+    Function<Object, Double> memo2 = MemoFunction.wrap(memo1);
+    assertEquals(memo1, memo2);
+  }
+
   public void testFailNull() {
     try {
       MemoFunction.wrap(null);

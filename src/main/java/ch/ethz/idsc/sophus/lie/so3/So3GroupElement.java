@@ -25,12 +25,12 @@ public class So3GroupElement implements LieGroupElement {
 
   @Override // from LieGroupElement
   public Tensor combine(Tensor tensor) {
-    return matrix.dot(OrthogonalMatrixQ.require(tensor));
+    return matrix.dot(OrthogonalMatrixQ.require(tensor));// TODO JPH test coverage
   }
 
   // Source: http://ethaneade.com/lie.pdf
   @Override // from LieGroupElement
   public Tensor adjoint(Tensor tensor) {
-    return matrix.dot(tensor);
+    return matrix.dot(tensor);// TODO JPH test coverage
   }
 }

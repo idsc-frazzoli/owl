@@ -2,6 +2,8 @@
 // https://stackoverflow.com/questions/3305059/how-do-you-calculate-log-base-2-in-java-for-integers
 package ch.ethz.idsc.owl.math;
 
+import ch.ethz.idsc.tensor.Integers;
+
 /** Quote from Java Integer:
  * "Note that this method is closely related to the logarithm base 2.
  * For all positive {@code int} values x:
@@ -9,21 +11,16 @@ package ch.ethz.idsc.owl.math;
  * ceil(log<sub>2</sub>(x)) = {@code 32 - numberOfLeadingZeros(x - 1)} */
 public enum IntegerLog2 {
   ;
-  /** @param value
-   * @return floor(log<sub>2</sub>(value)) */
+  /** @param value positive
+   * @return floor(log<sub>2</sub>(value))
+   * @throws Exception if value is negative or zero */
   public static int floor(int value) {
-    // TODO JPH TENSOR 078 Internal
-    if (0 < value)
-      return 31 - Integer.numberOfLeadingZeros(value);
-    throw new IllegalArgumentException("" + value);
+    return 31 - Integer.numberOfLeadingZeros(Integers.requirePositive(value));
   }
 
-  /** @param value
+  /** @param value positive
    * @return ceil(log<sub>2</sub>(value)) */
   public static int ceiling(int value) {
-    // TODO JPH TENSOR 078 Internal
-    if (0 < value)
-      return 32 - Integer.numberOfLeadingZeros(value - 1);
-    throw new IllegalArgumentException("" + value);
+    return 32 - Integer.numberOfLeadingZeros(Integers.requirePositive(value) - 1);
   }
 }

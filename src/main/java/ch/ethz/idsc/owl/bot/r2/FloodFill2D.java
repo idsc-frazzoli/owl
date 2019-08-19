@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -21,9 +22,7 @@ public class FloodFill2D {
    * @param seeds
    * @return distance in exact precision */
   public static Tensor of(Tensor image, int ttl, Set<Tensor> seeds) {
-    if (ttl < 0) // TODO JPH TENSOR 078 Internal
-      throw new IllegalArgumentException("ttl=" + ttl);
-    return new FloodFill2D(image, RealScalar.of(ttl), seeds).array;
+    return new FloodFill2D(image, RealScalar.of(Integers.requirePositiveOrZero(ttl)), seeds).array;
   }
 
   /** seeds are generated from given tensor using {@link #seeds(Tensor)}

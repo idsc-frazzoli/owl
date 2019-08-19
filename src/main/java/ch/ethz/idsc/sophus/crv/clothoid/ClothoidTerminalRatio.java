@@ -16,12 +16,12 @@ import ch.ethz.idsc.tensor.Scalar;
     this.tail = tail;
   }
 
-  @Override
+  @Override // from HeadTailInterface
   public Scalar head() {
     return head;
   }
 
-  @Override
+  @Override // from HeadTailInterface
   public Scalar tail() {
     return tail;
   }

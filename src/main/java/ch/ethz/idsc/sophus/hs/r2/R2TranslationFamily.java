@@ -25,7 +25,7 @@ public abstract class R2TranslationFamily implements R2RigidFamily, Serializable
 
   @Override // from RigidFamily
   public final Tensor forward_se2(Scalar scalar) {
-    return Se2Matrix.translation(function_apply(scalar));
+    return Se2Matrix.translation(function_apply(scalar)); // TODO JPH test coverage
   }
 
   /** @param scalar

@@ -21,6 +21,20 @@ public class DistancesTest extends TestCase {
     Chop._12.requireClose(tensor, Tensors.vector(1.042914821466744, 2.085829642933488));
   }
 
+  public void testR2Single() {
+    Tensor tensor = Distances.of(RnMetric.INSTANCE, Tensors.fromString("{{1, 2}}"));
+    assertEquals(tensor, Tensors.empty());
+  }
+
+  public void testR2SingleFail() {
+    try {
+      Distances.of(null, Tensors.fromString("{{1, 2}}"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testScalarFail() {
     try {
       Distances.of(RnMetric.INSTANCE, Pi.HALF);

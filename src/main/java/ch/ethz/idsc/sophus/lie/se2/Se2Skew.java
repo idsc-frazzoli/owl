@@ -51,7 +51,7 @@ public class Se2Skew {
   }
 
   public Tensor diff(Tensor xy) {
-    return lhs.dot(xy).subtract(rhs);
+    return lhs.dot(xy).subtract(rhs);// TODO JPH test coverage
   }
 
   public Tensor rhs() {
