@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 import ch.ethz.idsc.sophus.math.NavigableMapUnaryOperator;
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
@@ -19,11 +20,9 @@ public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUn
    * @throws Exception given if nonuniformFixedRadiusGeodesicCenter is null */
   public static NonuniformFixedRadiusGeodesicCenterFilter of( //
       NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, int radius) {
-    // TODO JPH TENSOR 078 Internal
-    if (radius < 0)
-      throw new IllegalArgumentException("radius=" + radius);
     return new NonuniformFixedRadiusGeodesicCenterFilter( //
-        Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenter), radius);
+        Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenter), //
+        Integers.requirePositiveOrZero(radius)); // TODO JPH test coverage
   }
 
   // ---

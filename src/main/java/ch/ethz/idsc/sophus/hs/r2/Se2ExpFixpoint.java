@@ -24,6 +24,6 @@ public enum Se2ExpFixpoint {
     Scalar omega = velocity.Get(2);
     return chop.allZero(omega) //
         ? Optional.empty()
-        : Optional.of(Cross.of(velocity.extract(0, 2)).divide(omega));
+        : Optional.of(Cross.of(velocity.extract(0, 2)).divide(omega)); // TODO JPH test coverage
   }
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.NormalizeTotal;
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -25,10 +26,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   @Override // from IntegerTensorFunction
   public final Tensor apply(Integer length) {
-    // TODO JPH TENSOR 078 Internal
-    if (length < 1)
-      throw new IllegalArgumentException("" + length);
-    return length == 1 //
+    return 1 == Integers.requirePositive(length) //
         ? SINGLETON
         : NormalizeTotal.FUNCTION.apply(samples(length)).unmodifiable();
   }

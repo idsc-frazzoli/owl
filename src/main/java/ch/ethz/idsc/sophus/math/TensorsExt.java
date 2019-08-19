@@ -17,6 +17,6 @@ public enum TensorsExt {
       return ((Tensor) object).copy();
     if (object instanceof Number)
       return RealScalar.of((Number) object);
-    throw new RuntimeException();
+    throw new RuntimeException();// TODO JPH test coverage
   }
 }

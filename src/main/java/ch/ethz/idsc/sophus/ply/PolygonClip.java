@@ -76,7 +76,7 @@ public class PolygonClip implements TensorUnaryOperator {
     Tensor pq = p.subtract(q);
     Scalar denom = Det2D.of(ab, pq);
     if (Chop._40.allZero(denom))
-      throw TensorRuntimeException.of(a, b, p, q);
+      throw TensorRuntimeException.of(a, b, p, q); // TODO JPH test coverage
     return pq.multiply(Det2D.of(ab, a)).subtract(ab.multiply(Det2D.of(pq, p))).divide(denom);
   }
 }

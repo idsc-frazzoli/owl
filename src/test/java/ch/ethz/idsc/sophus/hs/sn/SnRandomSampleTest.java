@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.hs.sn;
 import java.io.IOException;
 import java.util.Random;
 
+import ch.ethz.idsc.sophus.hs.s2.S2RandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,5 +18,9 @@ public class SnRandomSampleTest extends TestCase {
     RandomSampleInterface randomSampleInterface = Serialization.copy(SnRandomSample.of(3));
     Tensor tensor = randomSampleInterface.randomSample(new Random());
     Chop._12.requireClose(Norm._2.ofVector(tensor), RealScalar.ONE);
+  }
+
+  public void testS2() {
+    assertEquals(SnRandomSample.of(2), S2RandomSample.INSTANCE);
   }
 }

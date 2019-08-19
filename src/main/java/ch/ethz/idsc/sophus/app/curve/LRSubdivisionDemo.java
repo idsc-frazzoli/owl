@@ -1,7 +1,6 @@
-// code by jph
+// code by gjoel
 package ch.ethz.idsc.sophus.app.curve;
 
-import javax.swing.JToggleButton;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -9,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import javax.swing.JToggleButton;
+
+import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -19,6 +22,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.util.plot.ListPlot;
 import ch.ethz.idsc.sophus.util.plot.VisualRow;
 import ch.ethz.idsc.sophus.util.plot.VisualSet;
@@ -34,9 +38,9 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Quantile;
-import org.jfree.chart.JFreeChart;
 
-/** compare different levels of smoothing in the Lane-iesenfeld algorithm {@link ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision} */
+/** compare different levels of smoothing in the Lane-Riesenfeld algorithm
+ * // * {@link LaneRiesenfeldCurveSubdivision} */
 public class LRSubdivisionDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLORS = ColorDataLists._097.cyclic();
   // ---
@@ -67,7 +71,7 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
     timerFrame.jToolBar.addSeparator();
     // ---
     spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-    spinnerRefine.setValue(6);
+    spinnerRefine.setValue(5);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
     for (int i = 0; i < schemes.size(); i++)
@@ -78,6 +82,7 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
 
   @Override // from RenderInterface
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     VisualSet visualSet1 = new VisualSet();
     visualSet1.setPlotLabel("Curvature");
@@ -115,7 +120,7 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
     if (jToggleCurvature.isSelected()) {
       JFreeChart jFreeChart1 = ListPlot.of(visualSet1);
-      jFreeChart1.draw(graphics, new Rectangle2D.Double(dimension.width * .5, 0, dimension.width * .5, dimension.height *.5));
+      jFreeChart1.draw(graphics, new Rectangle2D.Double(dimension.width * .5, 0, dimension.width * .5, dimension.height * .5));
       // ---
       JFreeChart jFreeChart2 = ListPlot.of(visualSet2);
       if (!visualSet2.visualRows().isEmpty()) {
@@ -126,14 +131,14 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
         if (min != max)
           jFreeChart2.getXYPlot().getRangeAxis().setRange(1.1 * min, 1.1 * max);
       }
-      jFreeChart2.draw(graphics, new Rectangle2D.Double(dimension.width * .5, dimension.height *.5, dimension.width * .5, dimension.height *.5));
+      jFreeChart2.draw(graphics, new Rectangle2D.Double(dimension.width * .5, dimension.height * .5, dimension.width * .5, dimension.height * .5));
     }
+    GraphicsUtil.setQualityDefault(graphics);
   }
 
   public Tensor curve(GeometricLayer geometricLayer, Graphics2D graphics, final int index) {
     CurveSubdivisionSchemes scheme = schemes.get(index);
     PathRender pathRender = renders.get(index);
-    GraphicsUtil.setQualityHigh(graphics);
     // ---
     Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();

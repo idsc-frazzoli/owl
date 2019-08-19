@@ -8,19 +8,27 @@ import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
 import ch.ethz.idsc.sophus.hs.r3s2.R3S2Geodesic;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.num.Rationalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -88,6 +96,53 @@ public class BSpline3CurveSubdivisionTest extends TestCase {
     TensorUnaryOperator string = new BSpline3CurveSubdivision(R3S2Geodesic.INSTANCE)::string;
     Tensor apply = string.apply(tensor);
     assertEquals(Dimensions.of(apply), Arrays.asList(13, 2, 3));
+  }
+
+  public void testLaneRiesenfeldRn() {
+    Distribution distribution = UniformDistribution.unit();
+    Tensor tensor = RandomVariate.of(distribution, 10, 3);
+    int depth = 5;
+    final Tensor bs;
+    final Tensor lr;
+    {
+      CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(RnGeodesic.INSTANCE);
+      Timing timing = Timing.started();
+      bs = Nest.of(curveSubdivision::string, tensor, depth);
+      timing.stop();
+      // System.out.println("bs=" + timing.seconds());
+    }
+    {
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(RnGeodesic.INSTANCE, 3);
+      Timing timing = Timing.started();
+      lr = Nest.of(curveSubdivision::string, tensor, depth);
+      timing.stop();
+      // System.out.println("lr=" + timing.seconds());
+    }
+    Chop._10.requireClose(bs, lr);
+  }
+
+  public void testLaneRiesenfeldSe2Covering() {
+    Distribution distribution = UniformDistribution.unit();
+    Tensor tensor = RandomVariate.of(distribution, 10, 3);
+    int depth = 5;
+    final Tensor bs;
+    final Tensor lr;
+    {
+      CurveSubdivision curveSubdivision = new BSpline3CurveSubdivision(Se2CoveringGeodesic.INSTANCE);
+      Timing timing = Timing.started();
+      bs = Nest.of(curveSubdivision::string, tensor, depth);
+      timing.stop();
+      // System.out.println("bs=" + timing.seconds());
+    }
+    {
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Se2CoveringGeodesic.INSTANCE, 3);
+      Timing timing = Timing.started();
+      lr = Nest.of(curveSubdivision::string, tensor, depth);
+      timing.stop();
+      // System.out.println("lr=" + timing.seconds());
+    }
+    Chop._10.requireClose(bs, lr);
+    System.out.println(bs.subtract(lr).map(Scalar::abs).flatten(-1).reduce(Max::of).get());
   }
 
   public void testScalarFail() {

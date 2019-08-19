@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.lie.so2;
 
-import ch.ethz.idsc.sophus.lie.BiinvariantMeanTests;
+import ch.ethz.idsc.sophus.lie.BiinvariantMeanTestHelper;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
@@ -29,7 +29,8 @@ public class So2GlobalBiinvariantMeanTest extends TestCase {
       Scalar solution = So2GlobalBiinvariantMean.INSTANCE.mean(sequence, weights);
       for (Tensor perm : Permutations.of(Range.of(0, weights.length()))) {
         int[] index = Primitives.toIntArray(perm);
-        Tensor result = So2GlobalBiinvariantMean.INSTANCE.mean(BiinvariantMeanTests.order(sequence, index), BiinvariantMeanTests.order(weights, index));
+        Tensor result = So2GlobalBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index),
+            BiinvariantMeanTestHelper.order(weights, index));
         Chop._12.requireClose(result, solution);
       }
     }

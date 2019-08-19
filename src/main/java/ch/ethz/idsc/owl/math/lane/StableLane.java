@@ -13,10 +13,18 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** lane of constant width */
+// TODO JPH OWL 053 change API so that halfWidth instead of width is used
 public class StableLane implements LaneInterface, Serializable {
   /** the offset vectors are not magic constants but are multiplied by width */
   private final static Tensor OFS_L = Tensors.vector(0, +1, 0).unmodifiable();
   private final static Tensor OFS_R = Tensors.vector(0, -1, 0).unmodifiable();
+
+  /** @param controlPoints may be null
+   * @param refined
+   * @param width */
+  public static LaneInterface of(Tensor controlPoints, Tensor refined, Scalar width) {
+    return new StableLane(controlPoints, refined, width);
+  }
 
   /** @param controlPoints in SE2
    * @param tensorUnaryOperator for instance
@@ -39,14 +47,9 @@ public class StableLane implements LaneInterface, Serializable {
   private final Tensor rbound;
   private final Tensor margins;
 
-  /** Hint: constructor is public because controlPoint and refined may be generated using
-   * various methods from outside
-   * 
-   * @param controlPoints
-   * @param refined
-   * @param width */
+  // TODO JPH OWL 053 make private
   public StableLane(Tensor controlPoints, Tensor refined, Scalar width) {
-    this.controlPoints = controlPoints.unmodifiable();
+    this.controlPoints = controlPoints;
     this.refined = refined;
     lbound = boundary(OFS_L, width).unmodifiable();
     rbound = boundary(OFS_R, width).unmodifiable();

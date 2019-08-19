@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   public Tensor apply(Tensor tensor) {
+    // TODO JPH scalar!
     int last = tensor.length() - 1;
     if (last < 1)
       return tensor.copy();

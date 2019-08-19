@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.util;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -47,6 +48,24 @@ public class BoundedLinkedListTest extends TestCase {
     assertFalse(boundedLinkedList.add(0));
     assertFalse(boundedLinkedList.add(1));
     assertEquals(boundedLinkedList.size(), 0);
+  }
+
+  public void testAddAtIndex() {
+    LinkedList<String> linkedList = new BoundedLinkedList<>(3);
+    linkedList.add(0, "3");
+    linkedList.add(0, "2");
+    linkedList.add(0, "0");
+    linkedList.add(1, "1");
+    assertEquals(linkedList, Arrays.asList("1", "2", "3"));
+  }
+
+  public void testAddLast() {
+    LinkedList<String> linkedList = new BoundedLinkedList<>(3);
+    linkedList.addLast("0");
+    linkedList.addLast("1");
+    linkedList.addLast("2");
+    linkedList.addLast("3");
+    assertEquals(linkedList, Arrays.asList("1", "2", "3"));
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

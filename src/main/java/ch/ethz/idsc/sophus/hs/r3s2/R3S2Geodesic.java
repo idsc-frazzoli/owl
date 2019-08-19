@@ -24,7 +24,7 @@ public enum R3S2Geodesic implements GeodesicInterface {
 
   @Override // from TensorGeodesic
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    return scalar -> split(p, q, scalar);
+    return scalar -> split(p, q, scalar); // TODO JPH test coverage
   }
 
   @Override // from GeodesicInterface

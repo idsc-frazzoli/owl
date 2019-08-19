@@ -44,7 +44,7 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
      * @throws Exception if mask is not symmetric or has even number of elements */
     /* package */ static Tensor of(Tensor mask) {
       if (mask.length() % 2 == 0)
-        throw TensorRuntimeException.of(mask);
+        throw TensorRuntimeException.of(mask);// TODO JPH test coverage
       SymmetricVectorQ.require(mask);
       int radius = (mask.length() - 1) / 2;
       Tensor halfmask = Tensors.vector(i -> i == radius //
@@ -66,7 +66,7 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
    * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(SplitInterface splitInterface, Function<Integer, Tensor> function) {
-    return new GeodesicCenterMidSeeded(splitInterface, Objects.requireNonNull(function));
+    return new GeodesicCenterMidSeeded(splitInterface, Objects.requireNonNull(function));// TODO JPH test coverage
   }
 
   /** @param splitInterface

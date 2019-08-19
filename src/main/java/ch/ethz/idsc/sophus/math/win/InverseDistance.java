@@ -28,7 +28,7 @@ public class InverseDistance implements Serializable {
     for (Tensor p : tensor) {
       Scalar distance = tensorMetric.distance(p, q);
       if (CHOP.allZero(distance))
-        return UnitVector.of(tensor.length(), count);
+        return UnitVector.of(tensor.length(), count);// TODO JPH test coverage
       weights.append(distance.reciprocal());
       ++count;
     }

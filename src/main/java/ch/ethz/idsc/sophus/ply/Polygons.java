@@ -30,7 +30,7 @@ public enum Polygons {
       Scalar ny = next.Get(1);
       if (Scalars.lessThan(ty, ny) != Scalars.lessThan(ty, py)) {
         Scalar div = py.subtract(ny);
-        if (Scalars.nonZero(div)) {
+        if (Scalars.nonZero(div)) { // TODO JPH never false in tests
           Scalar px = prev.Get(0);
           Scalar nx = next.Get(0);
           Scalar r1 = px.subtract(nx).multiply(ty.subtract(ny));

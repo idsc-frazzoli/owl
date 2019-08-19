@@ -17,17 +17,19 @@ public class LaneRender implements RenderInterface {
   // ---
   private final boolean cyclic;
 
+  // TODO JPH OWL 053 dont specify cyclic final, but in set functions
   public LaneRender(boolean cyclic) {
     this.cyclic = cyclic;
   }
 
-  public void setLane(LaneInterface lane) {
-    if (Objects.nonNull(lane))
-      setLanes(lane.leftBoundary(), lane.rightBoundary());
+  public void setLane(LaneInterface laneInterface) {
+    if (Objects.nonNull(laneInterface))
+      setLanes(laneInterface.leftBoundary(), laneInterface.rightBoundary());
     else
       setLanes(null, null);
   }
 
+  // TODO JPH OWL 053 rename to setBoundaries
   public void setLanes(Tensor lLane, Tensor rLane) {
     pathRenderL.setCurve(lLane, cyclic);
     pathRenderR.setCurve(rLane, cyclic);
