@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.flt.bm;
 import java.io.IOException;
 import java.util.Arrays;
 
+import ch.ethz.idsc.sophus.flt.ga.BinomialWeights;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
@@ -28,6 +29,11 @@ public class BiinvariantMeanCenterTest extends TestCase {
         assertEquals(Dimensions.of(tensor), Arrays.asList(3));
       }
     }
+  }
+
+  public void testOfFunction() {
+    TensorUnaryOperator tensorUnaryOperator = BiinvariantMeanCenter.of(Se2BiinvariantMean.GLOBAL, BinomialWeights.INSTANCE);
+    tensorUnaryOperator.apply(RandomVariate.of(UniformDistribution.unit(), 5, 3));
   }
 
   public void testFailNull() {

@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
     Scalar remain = index.subtract(floor);
     int below = floor.number().intValue();
     if (Scalars.isZero(remain))
-      return tensor.get(below);// TODO JPH test coverage
+      return tensor.get(below);
     return biinvariantMean.mean(tensor.extract(below, below + 2), Tensors.of(RealScalar.ONE.subtract(remain), remain));
   }
 }

@@ -19,7 +19,6 @@ public class BiinvariantMeanCenter implements TensorUnaryOperator {
    * @return operator that maps a sequence of odd number of points to their barycenter
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(BiinvariantMean biinvariantMean, Function<Integer, Tensor> function) {
-    // TODO JPH test coverage
     return new BiinvariantMeanCenter(Objects.requireNonNull(biinvariantMean), MemoFunction.wrap(function));
   }
 

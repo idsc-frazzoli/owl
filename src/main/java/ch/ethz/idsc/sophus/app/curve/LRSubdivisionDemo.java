@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import javax.swing.JToggleButton;
 
@@ -14,6 +15,7 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.MinMax;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -28,17 +30,18 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Mean;
+import ch.ethz.idsc.tensor.red.Quantile;
 
 /** compare different levels of smoothing in the Lane-Riesenfeld algorithm
- * {@link LaneRiesenfeldCurveSubdivision} */
-/* package */ class LRSubdivisionDemo extends ControlPointsDemo {
-  private static final int WIDTH = 640;
-  private static final int HEIGHT = 360;
+ * // * {@link LaneRiesenfeldCurveSubdivision} */
+public class LRSubdivisionDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLORS = ColorDataLists._097.cyclic();
   // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
@@ -48,7 +51,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
       CurveSubdivisionSchemes.LR2, //
       CurveSubdivisionSchemes.LR3, //
       CurveSubdivisionSchemes.LR4, //
-      CurveSubdivisionSchemes.LR5);
+      CurveSubdivisionSchemes.LR5 //
+  );
   private final List<PathRender> renders = new ArrayList<>();
 
   public LRSubdivisionDemo() {
@@ -80,11 +84,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   public synchronized final void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    VisualSet visualSet = new VisualSet();
-    visualSet.setPlotLabel("Curvature");
-    visualSet.setAxesLabelX("length");
-    visualSet.setAxesLabelY("curvature");
-    // TODO add additional plots for derivatives
+    VisualSet visualSet1 = new VisualSet();
+    visualSet1.setPlotLabel("Curvature");
+    visualSet1.setAxesLabelX("length");
+    visualSet1.setAxesLabelY("curvature");
+    // ---
+    VisualSet visualSet2 = new VisualSet();
+    visualSet2.setPlotLabel("Curvature d/ds");
+    visualSet2.setAxesLabelX("length");
+    visualSet2.setAxesLabelY("curvature d/ds");
     for (int i = 0; i < schemes.size(); i++) {
       Tensor refined = curve(geometricLayer, graphics, i);
       if (jToggleCurvature.isSelected() && 1 < refined.length()) {
@@ -92,16 +100,38 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
         CurveVisualSet curveVisualSet = new CurveVisualSet(tensor);
         curveVisualSet.addCurvature();
         Tensor curvature = curveVisualSet.visualSet().getVisualRow(0).points();
-        VisualRow visualRow = visualSet.add(curvature);
-        visualRow.setLabel(schemes.get(i).name());
-        visualRow.setColor(COLORS.getColor(i));
+        // ---
+        Tensor curvatureRy = Tensor.of(Differences.of(curvature).stream().map(t -> t.Get(1).divide(t.Get(0))));
+        Tensor curvatureRx = Tensor.of(IntStream.range(1, curvature.length()).mapToObj(j -> {
+          Tensor domain = curvature.get(Tensor.ALL, 0);
+          return Mean.of(domain.extract(j - 1, j + 1));
+        }));
+        // ---
+        VisualRow visualRow1 = visualSet1.add(curvature);
+        visualRow1.setLabel(schemes.get(i).name());
+        visualRow1.setColor(COLORS.getColor(i));
+        // ---
+        VisualRow visualRow2 = visualSet2.add(curvatureRx, curvatureRy);
+        visualRow2.setLabel(schemes.get(i).name());
+        visualRow2.setColor(COLORS.getColor(i));
       }
     }
     // ---
     Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
     if (jToggleCurvature.isSelected()) {
-      JFreeChart jFreeChart = ListPlot.of(visualSet);
-      jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
+      JFreeChart jFreeChart1 = ListPlot.of(visualSet1);
+      jFreeChart1.draw(graphics, new Rectangle2D.Double(dimension.width * .5, 0, dimension.width * .5, dimension.height * .5));
+      // ---
+      JFreeChart jFreeChart2 = ListPlot.of(visualSet2);
+      if (!visualSet2.visualRows().isEmpty()) {
+        double min = Quantile.of(Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
+            .map(MinMax::of).map(MinMax::min)), RationalScalar.of(1, schemes.size() - 1)).Get().number().doubleValue();
+        double max = Quantile.of(Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
+            .map(MinMax::of).map(MinMax::max)), RationalScalar.of(schemes.size() - 1, schemes.size() - 1)).Get().number().doubleValue();
+        if (min != max)
+          jFreeChart2.getXYPlot().getRangeAxis().setRange(1.1 * min, 1.1 * max);
+      }
+      jFreeChart2.draw(graphics, new Rectangle2D.Double(dimension.width * .5, dimension.height * .5, dimension.width * .5, dimension.height * .5));
     }
     GraphicsUtil.setQualityDefault(graphics);
   }
