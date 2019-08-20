@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.lie;
 
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
-import ch.ethz.idsc.sophus.math.AffineQ;
+import ch.ethz.idsc.sophus.math.StochasticMatrixQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.mat.Inverse;
@@ -23,16 +23,14 @@ public class BiinvariantMeanTest extends TestCase {
    * @return */
   private static Tensor affine(int n) {
     Tensor matrix = RandomVariate.of(DISTRIBUTION, n, n);
-    matrix = Tensor.of(matrix.stream().map(NORMALIZE));
-    matrix.stream().forEach(AffineQ::require);
-    Tensor invers = Inverse.of(matrix);
-    invers.stream().forEach(AffineQ::require);
+    matrix = StochasticMatrixQ.requireRows(Tensor.of(matrix.stream().map(NORMALIZE)));
+    StochasticMatrixQ.requireRows(Inverse.of(matrix));
     return matrix;
   }
 
   public void testRnSimple() {
     Distribution distribution = UniformDistribution.unit();
-    for (int n = 1; n < 8; ++n) {
+    for (int n = 1; n < 7; ++n) {
       Tensor origin = RandomVariate.of(distribution, n, 3);
       Tensor matrix = affine(n);
       Tensor invers = Inverse.of(matrix);
@@ -46,7 +44,7 @@ public class BiinvariantMeanTest extends TestCase {
 
   public void testSe2CSimple() {
     Distribution distribution = UniformDistribution.unit();
-    for (int n = 1; n < 8; ++n) {
+    for (int n = 1; n < 7; ++n) {
       Tensor origin = RandomVariate.of(distribution, n, 3);
       Tensor matrix = affine(n);
       Tensor invers = Inverse.of(matrix);

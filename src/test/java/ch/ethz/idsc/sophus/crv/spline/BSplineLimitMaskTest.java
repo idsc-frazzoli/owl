@@ -18,6 +18,26 @@ public class BSplineLimitMaskTest extends TestCase {
     assertEquals(BSplineLimitMask.FUNCTION.apply(3 * 2 + 1), Tensors.fromString("{1/5040, 1/42, 397/1680, 151/315, 397/1680, 1/42, 1/5040}"));
   }
 
+  public void testEvenFail() {
+    for (int i = 0; i < 10; ++i)
+      try {
+        BSplineLimitMask.FUNCTION.apply(i * 2);
+        fail();
+      } catch (Exception exception) {
+        // ---
+      }
+  }
+
+  public void testNegativeFail() {
+    for (int i = 1; i < 10; ++i)
+      try {
+        BSplineLimitMask.FUNCTION.apply(-i);
+        fail();
+      } catch (Exception exception) {
+        // ---
+      }
+  }
+
   private static final TensorUnaryOperator TENSOR_UNARY_OPERATOR = //
       GeodesicCenter.of(RnGeodesic.INSTANCE, BSplineLimitMask.FUNCTION);
 
@@ -36,7 +56,7 @@ public class BSplineLimitMaskTest extends TestCase {
     assertEquals(tensor, RationalScalar.of(181, 60));
   }
 
-  public void testEvenFail() {
+  public void testEvenVectorFail() {
     try {
       TENSOR_UNARY_OPERATOR.apply(Tensors.vector(1, 2, 3, 4));
       fail();
