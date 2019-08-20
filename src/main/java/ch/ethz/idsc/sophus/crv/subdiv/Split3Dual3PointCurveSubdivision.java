@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 
 /** dual scheme */
 public class Split3Dual3PointCurveSubdivision extends Dual3PointCurveSubdivision {
@@ -13,8 +13,8 @@ public class Split3Dual3PointCurveSubdivision extends Dual3PointCurveSubdivision
    * @param qr_f
    * @param pqqr
    * @return */
-  public static CurveSubdivision of(SplitInterface splitInterface, Scalar pq_f, Scalar qr_f, Scalar pqqr) {
-    return new Split3Dual3PointCurveSubdivision(splitInterface, pq_f, qr_f, pqqr);
+  public static CurveSubdivision of(BinaryAverage binaryAverage, Scalar pq_f, Scalar qr_f, Scalar pqqr) {
+    return new Split3Dual3PointCurveSubdivision(binaryAverage, pq_f, qr_f, pqqr);
   }
 
   // ---
@@ -26,9 +26,9 @@ public class Split3Dual3PointCurveSubdivision extends Dual3PointCurveSubdivision
   private final Scalar hi_pqqr;
 
   private Split3Dual3PointCurveSubdivision( //
-      SplitInterface splitInterface, //
+      BinaryAverage binaryAverage, //
       Scalar pq_f, Scalar qr_f, Scalar pqqr) {
-    super(splitInterface);
+    super(binaryAverage);
     this.lo_pq = pq_f;
     this.lo_qr = qr_f;
     this.lo_pqqr = pqqr;
@@ -40,16 +40,16 @@ public class Split3Dual3PointCurveSubdivision extends Dual3PointCurveSubdivision
   // point between p and q but more towards q
   @Override
   protected Tensor lo(Tensor p, Tensor q, Tensor r) {
-    Tensor pq = splitInterface.split(p, q, lo_pq);
-    Tensor qr = splitInterface.split(q, r, lo_qr);
-    return splitInterface.split(pq, qr, lo_pqqr);
+    Tensor pq = binaryAverage.split(p, q, lo_pq);
+    Tensor qr = binaryAverage.split(q, r, lo_qr);
+    return binaryAverage.split(pq, qr, lo_pqqr);
   }
 
   // point between q and r but more towards q
   @Override
   protected Tensor hi(Tensor p, Tensor q, Tensor r) {
-    Tensor pq = splitInterface.split(p, q, hi_pq);
-    Tensor qr = splitInterface.split(q, r, hi_qr);
-    return splitInterface.split(pq, qr, hi_pqqr);
+    Tensor pq = binaryAverage.split(p, q, hi_pq);
+    Tensor qr = binaryAverage.split(q, r, hi_qr);
+    return binaryAverage.split(pq, qr, hi_pqqr);
   }
 }

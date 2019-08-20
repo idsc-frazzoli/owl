@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.flt.ga;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** Careful: the implementation only supports sequences with odd number of elements
@@ -14,7 +14,7 @@ public enum GeodesicMean {
   ;
   /** @param geodesicInterface
    * @return geodesic center operator with Dirichlet/constant weights */
-  public static TensorUnaryOperator of(SplitInterface splitInterface) {
-    return GeodesicCenter.of(splitInterface, SmoothingKernel.DIRICHLET);
+  public static TensorUnaryOperator of(BinaryAverage binaryAverage) {
+    return GeodesicCenter.of(binaryAverage, SmoothingKernel.DIRICHLET);
   }
 }

@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
 import ch.ethz.idsc.sophus.util.MemoFunction;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -78,11 +77,11 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
   }
 
   // ---
-  private final SplitInterface geodesicInterface;
+  private final SplitInterface splitInterface;
   private final Function<Integer, Tensor> function;
 
   private GeodesicCenterMidSeeded(SplitInterface splitInterface, Function<Integer, Tensor> function) {
-    this.geodesicInterface = Objects.requireNonNull(splitInterface);
+    this.splitInterface = Objects.requireNonNull(splitInterface);
     this.function = MemoFunction.wrap(new Splits(function));
   }
 
@@ -97,9 +96,9 @@ public class GeodesicCenterMidSeeded implements TensorUnaryOperator {
     Tensor pR = tensor.get(radius);
     for (int index = 0; index < radius;) {
       Scalar scalar = splits.Get(index++);
-      pL = geodesicInterface.split(tensor.get(radius - index), pL, scalar);
-      pR = geodesicInterface.split(pR, tensor.get(radius + index), RealScalar.ONE.subtract(scalar));
+      pL = splitInterface.split(tensor.get(radius - index), pL, scalar);
+      pR = splitInterface.split(pR, tensor.get(radius + index), RealScalar.ONE.subtract(scalar));
     }
-    return geodesicInterface.split(pL, pR, RationalScalar.HALF);
+    return splitInterface.midpoint(pL, pR);
   }
 }

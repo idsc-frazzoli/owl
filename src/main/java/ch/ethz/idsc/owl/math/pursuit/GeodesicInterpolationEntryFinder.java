@@ -6,26 +6,26 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.sophus.itp.GeodesicInterpolation;
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 public class GeodesicInterpolationEntryFinder extends TrajectoryEntryFinder {
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
 
-  /** @param splitInterface non-null */
-  public GeodesicInterpolationEntryFinder(SplitInterface splitInterface) {
-    this.splitInterface = Objects.requireNonNull(splitInterface);
+  /** @param binaryAverage non-null */
+  public GeodesicInterpolationEntryFinder(BinaryAverage binaryAverage) {
+    this.binaryAverage = Objects.requireNonNull(binaryAverage);
   }
 
   @Override // from TrajectoryEntryFinder
   protected TrajectoryEntry protected_apply(Tensor waypoints, Scalar index) {
     Clip clip = Clips.positive(waypoints.length() - 1);
     return new TrajectoryEntry(clip.isInside(index) //
-        ? GeodesicInterpolation.of(splitInterface, waypoints).at(index)
+        ? GeodesicInterpolation.of(binaryAverage, waypoints).at(index)
         : null, index);
   }
 

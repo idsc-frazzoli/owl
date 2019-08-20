@@ -4,12 +4,12 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 
 /** dual scheme
  * 
@@ -18,11 +18,11 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _3_4 = RationalScalar.of(3, 4);
   // ---
-  protected final SplitInterface splitInterface;
+  protected final BinaryAverage binaryAverage;
 
-  /** @param splitInterface non-null */
-  public Dual3PointCurveSubdivision(SplitInterface splitInterface) {
-    this.splitInterface = Objects.requireNonNull(splitInterface);
+  /** @param binaryAverage non-null */
+  public Dual3PointCurveSubdivision(BinaryAverage binaryAverage) {
+    this.binaryAverage = Objects.requireNonNull(binaryAverage);
   }
 
   @Override // from CurveSubdivision
@@ -82,11 +82,11 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
 
   // point between p and q but more towards p
   private Tensor lo(Tensor p, Tensor q) {
-    return splitInterface.split(p, q, _1_4);
+    return binaryAverage.split(p, q, _1_4);
   }
 
   // point between p and q but more towards q
   private Tensor hi(Tensor p, Tensor q) {
-    return splitInterface.split(p, q, _3_4);
+    return binaryAverage.split(p, q, _3_4);
   }
 }

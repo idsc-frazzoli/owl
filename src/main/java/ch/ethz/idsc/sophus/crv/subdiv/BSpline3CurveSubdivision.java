@@ -24,7 +24,7 @@ public class BSpline3CurveSubdivision extends RefiningBSpline3CurveSubdivision {
    * @return point between p and q */
   @Override
   public final Tensor midpoint(Tensor p, Tensor q) {
-    return splitInterface.split(p, q, RationalScalar.HALF);
+    return splitInterface.midpoint(p, q);
   }
 
   /** @param p

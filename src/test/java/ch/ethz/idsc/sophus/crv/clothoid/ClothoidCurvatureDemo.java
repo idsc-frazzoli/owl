@@ -25,6 +25,7 @@ import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.HeadTailInterface;
+import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.sophus.util.plot.ListPlot;
@@ -104,13 +105,13 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
     jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
   }
 
-  private void innerRender(SplitInterface splitInterface, GeometricLayer geometricLayer, Graphics2D graphics, VisualSet visualSet, int nr) {
+  private void innerRender(MidpointInterface midpointInterface, GeometricLayer geometricLayer, Graphics2D graphics, VisualSet visualSet, int nr) {
     Tensor mouse = geometricLayer.getMouseSe2State();
     Color color = COLOR_DATA_INDEXED.getColor(nr);
-    CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(splitInterface, 1);
+    CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(midpointInterface, 1);
     Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), spinnerLevel.getValue());
     graphics.setColor(color);
-    graphics.drawString(splitInterface.getClass().getSimpleName(), 0, (nr + 2) * 10);
+    graphics.drawString(midpointInterface.getClass().getSimpleName(), 0, (nr + 2) * 10);
     new PathRender(color, 1.5f) //
         .setCurve(points, false).render(geometricLayer, graphics);
     if (jToggleButton.isSelected()) {

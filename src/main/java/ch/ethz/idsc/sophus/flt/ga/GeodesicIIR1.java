@@ -3,16 +3,16 @@ package ch.ethz.idsc.sophus.flt.ga;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** filter blends extrapolated value with measurement */
 public class GeodesicIIR1 implements TensorUnaryOperator {
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
   private final Scalar alpha;
   // ---
   private transient Tensor p = null;
@@ -24,10 +24,10 @@ public class GeodesicIIR1 implements TensorUnaryOperator {
    * 
    * alpha == 1 - remains^(1/steps) with remains after steps
    * 
-   * @param splitInterface
+   * @param binaryAverage
    * @param alpha in the semi-open interval (0, 1] */
-  public GeodesicIIR1(SplitInterface splitInterface, Scalar alpha) {
-    this.splitInterface = splitInterface;
+  public GeodesicIIR1(BinaryAverage binaryAverage, Scalar alpha) {
+    this.binaryAverage = binaryAverage;
     this.alpha = Clips.unit().requireInside(Sign.requirePositive(alpha));
   }
 
@@ -35,7 +35,7 @@ public class GeodesicIIR1 implements TensorUnaryOperator {
   public Tensor apply(Tensor tensor) {
     p = Objects.isNull(p) //
         ? tensor.copy()
-        : splitInterface.split(p, tensor, alpha);
+        : binaryAverage.split(p, tensor, alpha);
     return p.copy();
   }
 }

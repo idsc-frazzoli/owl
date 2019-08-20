@@ -6,19 +6,35 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.AffineQ;
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.win.HalfWindowSampler;
 import ch.ethz.idsc.sophus.util.MemoFunction;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** GeodesicExtrapolate projects a sequence of points to their next (expected) point
  * with each point weighted as provided by an external function. */
 public class GeodesicExtrapolation implements TensorUnaryOperator {
+  /** @param binaryAverage
+   * @param function that maps an extent to a weight mask of length "sequence.length - 2"
+   * @return operator that maps a sequence of number of points to their next (expected) point
+   * @throws Exception if either input parameters is null */
+  public static TensorUnaryOperator of(BinaryAverage binaryAverage, Function<Integer, Tensor> function) {
+    return new GeodesicExtrapolation(binaryAverage, Objects.requireNonNull(function));
+  }
+
+  /** @param binaryAverage
+   * @param windowFunction
+   * @return operator that maps a sequence of number of points to their next (expected) point
+   * @throws Exception if either input parameters is null */
+  public static TensorUnaryOperator of(BinaryAverage binaryAverage, ScalarUnaryOperator windowFunction) {
+    return new GeodesicExtrapolation(binaryAverage, HalfWindowSampler.of(windowFunction));
+  }
+
   /* package */ static class Splits implements Function<Integer, Tensor>, Serializable {
     private final Function<Integer, Tensor> function;
 
@@ -58,28 +74,12 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
     }
   }
 
-  /** @param splitInterface
-   * @param function that maps an extent to a weight mask of length "sequence.length - 2"
-   * @return operator that maps a sequence of number of points to their next (expected) point
-   * @throws Exception if either input parameters is null */
-  public static TensorUnaryOperator of(SplitInterface splitInterface, Function<Integer, Tensor> function) {
-    return new GeodesicExtrapolation(splitInterface, Objects.requireNonNull(function));
-  }
-
-  /** @param splitInterface
-   * @param windowFunction
-   * @return operator that maps a sequence of number of points to their next (expected) point
-   * @throws Exception if either input parameters is null */
-  public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicExtrapolation(splitInterface, HalfWindowSampler.of(windowFunction));
-  }
-
   // ---
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
   private final Function<Integer, Tensor> function;
 
-  private GeodesicExtrapolation(SplitInterface splitInterface, Function<Integer, Tensor> function) {
-    this.splitInterface = Objects.requireNonNull(splitInterface);
+  private GeodesicExtrapolation(BinaryAverage binaryAverage, Function<Integer, Tensor> function) {
+    this.binaryAverage = Objects.requireNonNull(binaryAverage);
     this.function = MemoFunction.wrap(new Splits(function));
   }
 
@@ -88,7 +88,7 @@ public class GeodesicExtrapolation implements TensorUnaryOperator {
     Tensor splits = function.apply(tensor.length());
     Tensor result = tensor.get(0);
     for (int index = 1; index < tensor.length(); ++index)
-      result = splitInterface.split(result, tensor.get(index), splits.Get(index - 1));
+      result = binaryAverage.split(result, tensor.get(index), splits.Get(index - 1));
     return result;
   }
 }

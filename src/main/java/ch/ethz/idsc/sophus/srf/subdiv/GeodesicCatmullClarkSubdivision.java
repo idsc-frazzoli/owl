@@ -24,9 +24,9 @@ public class GeodesicCatmullClarkSubdivision {
   }
 
   public Tensor quad(Tensor a1, Tensor a2, Tensor b1, Tensor b2) {
-    Tensor c1 = splitInterface.split(a1, a2, RationalScalar.HALF);
-    Tensor c2 = splitInterface.split(b1, b2, RationalScalar.HALF);
-    return splitInterface.split(c1, c2, RationalScalar.HALF);
+    Tensor c1 = splitInterface.midpoint(a1, a2);
+    Tensor c2 = splitInterface.midpoint(b1, b2);
+    return splitInterface.midpoint(c1, c2);
   }
 
   public Tensor refine(Tensor grid) {
