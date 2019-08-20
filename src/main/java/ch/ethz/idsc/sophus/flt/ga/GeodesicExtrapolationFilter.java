@@ -3,31 +3,30 @@ package ch.ethz.idsc.sophus.flt.ga;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.util.BoundedLinkedList;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
   /** @param geodesicExtrapolation
    * @param radius
    * @return */
-  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius) {
-    return new GeodesicExtrapolationFilter(geodesicExtrapolation, splitInterface, radius);
+  public static TensorUnaryOperator of(TensorUnaryOperator geodesicExtrapolation, BinaryAverage binaryAverage, int radius) {
+    return new GeodesicExtrapolationFilter(geodesicExtrapolation, binaryAverage, radius);
   }
 
   // ---
   private final TensorUnaryOperator geodesicExtrapolation;
-  private final SplitInterface splitInterface;
-  // private final int radius;
+  private final BinaryAverage binaryAverage;
   private final BoundedLinkedList<Tensor> boundedLinkedList;
 
-  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, SplitInterface splitInterface, int radius) {
+  private GeodesicExtrapolationFilter(TensorUnaryOperator geodesicExtrapolation, BinaryAverage binaryAverage, int radius) {
     this.geodesicExtrapolation = Objects.requireNonNull(geodesicExtrapolation);
-    this.splitInterface = splitInterface;
+    this.binaryAverage = binaryAverage;
     this.boundedLinkedList = new BoundedLinkedList<>(radius);
   }
 
@@ -44,7 +43,7 @@ public class GeodesicExtrapolationFilter implements TensorUnaryOperator {
       Tensor temp = geodesicExtrapolation.apply(Tensor.of(boundedLinkedList.stream()));
       // Measurement update step
       Scalar alpha = RealScalar.of(0.2);
-      temp = splitInterface.split(temp, tensor.get(index + 1), alpha);
+      temp = binaryAverage.split(temp, tensor.get(index + 1), alpha);
       boundedLinkedList.add(temp);
       result.append(temp);
     }

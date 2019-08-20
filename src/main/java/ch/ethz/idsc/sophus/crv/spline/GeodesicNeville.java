@@ -2,23 +2,23 @@
 // adapted to geodesic averages by jph
 package ch.ethz.idsc.sophus.crv.spline;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.AbstractInterpolation;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** Neville's algorithm for polynomial interpolation by Eric Harold Neville
  * 
  * https://en.wikipedia.org/wiki/Neville%27s_algorithm */
 public class GeodesicNeville extends AbstractInterpolation implements ScalarTensorFunction {
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
   private final Tensor knots;
   private final Tensor tensor;
 
-  public GeodesicNeville(SplitInterface splitInterface, Tensor knots, Tensor tensor) {
-    this.splitInterface = splitInterface;
+  public GeodesicNeville(BinaryAverage binaryAverage, Tensor knots, Tensor tensor) {
+    this.binaryAverage = binaryAverage;
     this.knots = knots;
     this.tensor = tensor;
   }
@@ -29,7 +29,7 @@ public class GeodesicNeville extends AbstractInterpolation implements ScalarTens
     Tensor d = tensor.copy();
     for (int j = 1; j < length; ++j)
       for (int i = length - 1; j <= i; --i)
-        d.set(splitInterface.split(d.get(i), d.get(i - 1), //
+        d.set(binaryAverage.split(d.get(i), d.get(i - 1), //
             knots.Get(i).subtract(scalar).divide(knots.Get(i).subtract(knots.Get(i - j)))), i);
     return d.get(length - 1);
   }

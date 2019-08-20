@@ -1,17 +1,17 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.spline;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.Interpolation;
 
 public enum LagrangeInterpolation {
   ;
-  /** @param splitInterface
+  /** @param binaryAverage
    * @param tensor
    * @return */
-  public static Interpolation of(SplitInterface splitInterface, Tensor tensor) {
-    return new GeodesicNeville(splitInterface, Range.of(0, tensor.length()), tensor);
+  public static Interpolation of(BinaryAverage binaryAverage, Tensor tensor) {
+    return new GeodesicNeville(binaryAverage, Range.of(0, tensor.length()), tensor);
   }
 }

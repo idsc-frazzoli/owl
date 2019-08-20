@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.flt.ga;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** filter blends extrapolated value with measurement
@@ -13,11 +13,11 @@ public enum GeodesicFIR2 {
   ;
   private static final Scalar TWO = RealScalar.of(2);
 
-  /** @param splitInterface
+  /** @param binaryAverage
    * @param alpha
    * @return */
-  public static TensorUnaryOperator of(SplitInterface splitInterface, Scalar alpha) {
-    TensorUnaryOperator geodesicExtrapolation = tensor -> splitInterface.split(tensor.get(0), tensor.get(1), TWO);
-    return new GeodesicFIRn(geodesicExtrapolation, splitInterface, 2, alpha);
+  public static TensorUnaryOperator of(BinaryAverage binaryAverage, Scalar alpha) {
+    TensorUnaryOperator geodesicExtrapolation = tensor -> binaryAverage.split(tensor.get(0), tensor.get(1), TWO);
+    return new GeodesicFIRn(geodesicExtrapolation, binaryAverage, 2, alpha);
   }
 }

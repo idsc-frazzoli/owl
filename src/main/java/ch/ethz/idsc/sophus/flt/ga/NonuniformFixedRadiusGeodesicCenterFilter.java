@@ -22,7 +22,7 @@ public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUn
       NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter, int radius) {
     return new NonuniformFixedRadiusGeodesicCenterFilter( //
         Objects.requireNonNull(nonuniformFixedRadiusGeodesicCenter), //
-        Integers.requirePositiveOrZero(radius)); // TODO JPH test coverage
+        Integers.requirePositiveOrZero(radius));
   }
 
   // ---

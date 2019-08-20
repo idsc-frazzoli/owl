@@ -3,29 +3,31 @@ package ch.ethz.idsc.sophus.itp;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.AbstractInterpolation;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.sca.Floor;
 
 /** univariate geodesic interpolation */
 public class GeodesicInterpolation extends AbstractInterpolation {
-  /** @param splitInterface
+  /** @param binaryAverage
    * @param tensor
    * @return interpolation function for scalars from the interval [0, tensor.length() - 1] */
-  public static Interpolation of(SplitInterface splitInterface, Tensor tensor) {
-    return new GeodesicInterpolation(Objects.requireNonNull(splitInterface), Objects.requireNonNull(tensor));
+  public static Interpolation of(BinaryAverage binaryAverage, Tensor tensor) {
+    return new GeodesicInterpolation( //
+        Objects.requireNonNull(binaryAverage), //
+        Objects.requireNonNull(tensor));
   }
 
   // ---
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
   private final Tensor tensor;
 
-  private GeodesicInterpolation(SplitInterface splitInterface, Tensor tensor) {
-    this.splitInterface = splitInterface;
+  private GeodesicInterpolation(BinaryAverage binaryAverage, Tensor tensor) {
+    this.binaryAverage = binaryAverage;
     this.tensor = tensor;
   }
 
@@ -41,7 +43,7 @@ public class GeodesicInterpolation extends AbstractInterpolation {
     int below = floor.number().intValue();
     if (Scalars.isZero(remain))
       return tensor.get(below);
-    return splitInterface.split( //
+    return binaryAverage.split( //
         tensor.get(below), //
         tensor.get(below + 1), //
         remain);

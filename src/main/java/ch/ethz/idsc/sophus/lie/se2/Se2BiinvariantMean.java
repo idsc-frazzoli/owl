@@ -2,10 +2,12 @@
 package ch.ethz.idsc.sophus.lie.se2;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.ScalarBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2FilterBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2GlobalBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2LinearBiinvariantMean;
+import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -14,11 +16,16 @@ import ch.ethz.idsc.tensor.Tensors;
 /** Biinvariant mean for a sequence of points in SE(2), which is the solution to
  * the barycentric equation.
  * 
- * For the rigid motion in 2D an explicit solution for the biinvariant mean exists.
+ * <p>For the rigid motion in 2D an explicit solution for the biinvariant mean exists.
  * 
- * Reference:
+ * <p>Reference:
  * "Bi-invariant Means in Lie Groups. Application to left-invariant Polyaffine Transformations."
- * Vincent Arsigny, Xavier Pennec, Nicholas Ayache; p.38, 2006 */
+ * Vincent Arsigny, Xavier Pennec, Nicholas Ayache; p.38, 2006
+ * 
+ * <p>Careful: The weights are not checked to be affine.
+ * 
+ * @see AffineQ
+ * @see BiinvariantMeans */
 public enum Se2BiinvariantMean implements BiinvariantMean {
   /** The Arsigny-formula which treats SO(2) locally as a vector space yields
    * better results in BiinvariantMeanCenter compared to the global formula.

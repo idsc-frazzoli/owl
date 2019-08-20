@@ -16,7 +16,6 @@ import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.math.SplitInterface;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
@@ -62,14 +61,15 @@ public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
       for (int level = 0; level < levels; ++level) {
         Tensor prev = refined;
         refined = tensorUnaryOperator.apply(refined);
+        // TODO somewhat redundant to BiinvariantMeanSubdivisionDemo
         if (CurveSubdivisionHelper.isDual(scheme) && //
             level % 2 == 1 && //
             !cyclic && //
             1 < control.length()) {
           refined = Join.of( //
-              Tensors.of(geodesicDisplay.geodesicInterface().split(control.get(0), prev.get(0), RationalScalar.HALF)), //
+              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(control.get(0), prev.get(0))), //
               refined, //
-              Tensors.of(geodesicDisplay.geodesicInterface().split(Last.of(prev), Last.of(control), RationalScalar.HALF)) //
+              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(Last.of(prev), Last.of(control))) //
           );
         }
       }

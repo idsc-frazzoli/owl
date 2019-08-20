@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.flt.CenterFilter;
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
 import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
 import ch.ethz.idsc.sophus.util.MemoFunction;
@@ -17,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -28,12 +28,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * @see CenterFilter */
 public class GeodesicCenter implements TensorUnaryOperator {
-  /** @param splitInterface
+  /** @param binaryAverage
    * @param function that maps an extent to a weight mask of length == 2 * extent + 1
    * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(SplitInterface splitInterface, Function<Integer, Tensor> function) {
-    return new GeodesicCenter(splitInterface, Objects.requireNonNull(function));
+  public static TensorUnaryOperator of(BinaryAverage binaryAverage, Function<Integer, Tensor> function) {
+    return new GeodesicCenter(binaryAverage, Objects.requireNonNull(function));
   }
 
   /** Example:
@@ -41,12 +41,12 @@ public class GeodesicCenter implements TensorUnaryOperator {
    * GeodesicCenter.of(Se2Geodesic.INSTANCE, GaussianWindow.FUNCTION);
    * </pre>
    * 
-   * @param splitInterface
+   * @param binaryAverage
    * @param windowFunction
    * @return
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(SplitInterface splitInterface, ScalarUnaryOperator windowFunction) {
-    return new GeodesicCenter(splitInterface, UniformWindowSampler.of(windowFunction));
+  public static TensorUnaryOperator of(BinaryAverage binaryAverage, ScalarUnaryOperator windowFunction) {
+    return new GeodesicCenter(binaryAverage, UniformWindowSampler.of(windowFunction));
   }
 
   // ---
@@ -87,11 +87,11 @@ public class GeodesicCenter implements TensorUnaryOperator {
   }
 
   // ---
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
   private final Function<Integer, Tensor> function;
 
-  private GeodesicCenter(SplitInterface splitInterface, Function<Integer, Tensor> function) {
-    this.splitInterface = Objects.requireNonNull(splitInterface);
+  private GeodesicCenter(BinaryAverage binaryAverage, Function<Integer, Tensor> function) {
+    this.binaryAverage = Objects.requireNonNull(binaryAverage);
     this.function = MemoFunction.wrap(new Splits(function));
   }
 
@@ -106,10 +106,10 @@ public class GeodesicCenter implements TensorUnaryOperator {
     Tensor pR = tensor.get(2 * radius);
     for (int index = 0; index < radius;) {
       Scalar scalar = splits.Get(index++);
-      pL = splitInterface.split(pL, tensor.get(index), scalar);
+      pL = binaryAverage.split(pL, tensor.get(index), scalar);
       Tensor lR = tensor.get(2 * radius - index);
-      pR = splitInterface.split(lR, pR, RealScalar.ONE.subtract(scalar));
+      pR = binaryAverage.split(lR, pR, RealScalar.ONE.subtract(scalar));
     }
-    return splitInterface.split(pL, pR, RationalScalar.HALF);
+    return binaryAverage.split(pL, pR, RationalScalar.HALF);
   }
 }

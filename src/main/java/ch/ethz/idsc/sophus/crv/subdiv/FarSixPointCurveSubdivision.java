@@ -32,6 +32,6 @@ public class FarSixPointCurveSubdivision extends AbstractSixPointCurveSubdivisio
     Tensor q_ = splitInterface.split(q, pr, Q_);
     Tensor us = splitInterface.split(u, s, PR);
     Tensor t_ = splitInterface.split(t, us, Q_);
-    return splitInterface.split(q_, t_, RationalScalar.HALF);
+    return splitInterface.midpoint(q_, t_);
   }
 }

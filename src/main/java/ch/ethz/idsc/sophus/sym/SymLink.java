@@ -4,11 +4,11 @@ package ch.ethz.idsc.sophus.sym;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.red.Min;
 
 /** SymNode extends from here */
@@ -54,10 +54,10 @@ public class SymLink {
         Min.of(posP.Get(1), posQ.Get(1)).subtract(SHIFT_Y));
   }
 
-  public Tensor getPosition(SplitInterface splitInterface) {
-    return splitInterface.split( //
-        lP.getPosition(splitInterface), //
-        lQ.getPosition(splitInterface), //
+  public Tensor getPosition(BinaryAverage binaryAverage) {
+    return binaryAverage.split( //
+        lP.getPosition(binaryAverage), //
+        lQ.getPosition(binaryAverage), //
         lambda);
   }
 }

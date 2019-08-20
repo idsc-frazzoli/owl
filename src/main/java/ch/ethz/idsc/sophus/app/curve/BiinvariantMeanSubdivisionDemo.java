@@ -13,7 +13,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.MSpline3CurveSubdivision;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
@@ -55,9 +54,9 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
         refined = tensorUnaryOperator.apply(refined);
         if (CurveSubdivisionHelper.isDual(scheme) && level % 2 == 1 && !cyclic && 1 < control.length()) {
           refined = Join.of( //
-              Tensors.of(geodesicDisplay.geodesicInterface().split(control.get(0), prev.get(0), RationalScalar.HALF)), //
+              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(control.get(0), prev.get(0))), //
               refined, //
-              Tensors.of(geodesicDisplay.geodesicInterface().split(Last.of(prev), Last.of(control), RationalScalar.HALF)) //
+              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(Last.of(prev), Last.of(control))) //
           );
         }
       }

@@ -8,42 +8,46 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.DeleteDuplicates;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** Sutherland-Hodgman polygon clipping
  * 
- * the implementation finds the polygon that results from the intersection of a clip region with the given polygons.
- * the polygons are specified as Tensors that contain vertex in counter clock-wise order. */
+ * The implementation finds the polygon that results from the intersection
+ * of a clip region with the given polygons. The polygons are specified as
+ * tensors that contain vertex in counter clock-wise order.
+ * 
+ * Careful: input exists such that the resulting polygon degenerates into
+ * two or more areas, that are connected only with 1-dimensional edges. In
+ * such cases, the returned polygon may contain duplicate vertices. */
 public class PolygonClip implements TensorUnaryOperator {
-  /** @param clip convex, vertices ordered ccw
+  /** @param clip convex, vertices ordered ccw, with dimensions n x 2
    * @return */
   public static TensorUnaryOperator of(Tensor clip) {
+    clip.stream().forEach(vertex -> VectorQ.requireLength(vertex, 2));
     return new PolygonClip(clip);
   }
 
   // ---
-  private final Tensor clip;
+  private final Tensor[] vertex;
 
   private PolygonClip(Tensor clip) {
-    this.clip = clip;
+    vertex = clip.stream().map(Tensor::copy).toArray(Tensor[]::new);
   }
 
-  /** @param subject with vertices ordered ccw
-   * @return */
   @Override
   public Tensor apply(Tensor subject) {
-    int len = clip.length();
+    int length = vertex.length;
     Tensor tensor = subject.copy();
-    for (int i = 0; i < len; ++i) {
-      Tensor a = clip.get((i + len - 1) % len);
-      Tensor b = clip.get(i);
+    for (int i = 0; i < length; ++i) {
+      Tensor a = vertex[(i + length - 1) % length];
+      Tensor b = vertex[i];
       Tensor input = tensor;
-      int len2 = input.length();
+      int len = input.length();
       tensor = Tensors.empty();
-      for (int j = 0; j < len2; ++j) {
-        Tensor p = input.get((j + len2 - 1) % len2);
+      for (int j = 0; j < len; ++j) {
+        Tensor p = input.get((j + len - 1) % len);
         Tensor q = input.get(j);
         if (isInside(a, b, q)) {
           if (!isInside(a, b, p))
@@ -54,7 +58,7 @@ public class PolygonClip implements TensorUnaryOperator {
           tensor.append(intersection(a, b, p, q));
       }
     }
-    return DeleteDuplicates.of(tensor);
+    return tensor;
   }
 
   /** @param a
@@ -70,13 +74,12 @@ public class PolygonClip implements TensorUnaryOperator {
     );
   }
 
-  // package for testing
   /* package */ static Tensor intersection(Tensor a, Tensor b, Tensor p, Tensor q) {
     Tensor ab = a.subtract(b);
     Tensor pq = p.subtract(q);
-    Scalar denom = Det2D.of(ab, pq);
-    if (Chop._40.allZero(denom))
-      throw TensorRuntimeException.of(a, b, p, q); // TODO JPH test coverage
-    return pq.multiply(Det2D.of(ab, a)).subtract(ab.multiply(Det2D.of(pq, p))).divide(denom);
+    Scalar den = Det2D.of(ab, pq);
+    if (Chop._40.allZero(den))
+      throw TensorRuntimeException.of(a, b, p, q);
+    return pq.multiply(Det2D.of(ab, a)).add(ab.multiply(Det2D.of(p, pq))).divide(den);
   }
 }

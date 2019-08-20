@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.lie.rn;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
@@ -34,5 +35,14 @@ public class RnBiinvariantMeanTest extends TestCase {
     Tensor mean = RnBiinvariantMean.INSTANCE.mean(sequence, weights);
     Chop._14.requireClose(mean, weights.dot(sequence));
     ExactTensorQ.require(mean);
+  }
+
+  public void testEmpty() {
+    try {
+      RnBiinvariantMean.INSTANCE.mean(Tensors.empty(), Tensors.empty());
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

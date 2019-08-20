@@ -18,6 +18,11 @@ public class Se2GeodesicTest extends TestCase {
     Chop._13.requireClose(split, Tensors.fromString("{7.071951896570488, -1.0688209919859546, 0.7}"));
   }
 
+  public void testModPi() {
+    Tensor split = Se2Geodesic.INSTANCE.split(Tensors.vector(0, 0, 10), Tensors.vector(0, 0, 10), RealScalar.of(0.738));
+    Chop._13.requireClose(split, Tensors.of(RealScalar.ZERO, RealScalar.ZERO, So2.MOD.apply(RealScalar.of(10))));
+  }
+
   public void testBiinvariantMean() {
     Distribution distribution = UniformDistribution.of(-10, 8);
     Distribution wd = UniformDistribution.unit();

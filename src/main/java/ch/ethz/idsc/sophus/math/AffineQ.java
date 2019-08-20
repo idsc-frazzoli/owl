@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 public enum AffineQ {
   ;
-  private static final Chop CHOP = Chop._12;
+  private static final Chop CHOP = Chop._10;
 
   /** @param vector
    * @return given vector

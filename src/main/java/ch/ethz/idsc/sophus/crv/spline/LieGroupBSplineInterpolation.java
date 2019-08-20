@@ -20,7 +20,8 @@ public final class LieGroupBSplineInterpolation extends AbstractBSplineInterpola
 
   /** @param lieGroup
    * @param splitInterface corresponding to lie group
-   * @param degree of underlying b-spline */
+   * @param degree of underlying b-spline
+   * @param target */
   public LieGroupBSplineInterpolation(LieGroup lieGroup, SplitInterface splitInterface, int degree, Tensor target) {
     super(splitInterface, degree, target);
     this.lieGroup = lieGroup;

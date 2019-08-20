@@ -5,10 +5,10 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -19,13 +19,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * result of the intersection. */
 public abstract class SimpleCurveIntersection implements CurveIntersection, Serializable {
   private final Scalar radius;
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
 
   /** @param radius non-negative
-   * @param splitInterface non-null */
-  protected SimpleCurveIntersection(Scalar radius, SplitInterface splitInterface) {
+   * @param binaryAverage non-null */
+  protected SimpleCurveIntersection(Scalar radius, BinaryAverage binaryAverage) {
     this.radius = Sign.requirePositiveOrZero(radius);
-    this.splitInterface = Objects.requireNonNull(splitInterface);
+    this.binaryAverage = Objects.requireNonNull(binaryAverage);
   }
 
   @Override // from CurveIntersection
@@ -51,7 +51,7 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Seri
         Scalar hi = distance(next); // "hi" may even be less than "lo"
         if (Scalars.lessEquals(lo, radius) && Scalars.lessEquals(radius, hi)) {
           Clip clip = Clips.interval(lo, hi); // lo <= distance <= hi
-          Tensor split = splitInterface.split(prev, next, clip.rescale(radius));
+          Tensor split = binaryAverage.split(prev, next, clip.rescale(radius));
           return Optional.of(new CurvePoint((count - 1) % tensor_length, split));
         }
         prev = next;

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.math.SplitInterface;
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
@@ -15,7 +16,7 @@ public abstract class AbstractBSplineInterpolation implements Serializable {
   private static final Chop CHOP_DEFAULT = Chop._12;
   private static final int MAXITER = 500;
   // ---
-  private final SplitInterface splitInterface;
+  protected final SplitInterface splitInterface;
   private final int degree;
   private final Tensor target;
 
@@ -24,7 +25,7 @@ public abstract class AbstractBSplineInterpolation implements Serializable {
    * @param target points to interpolate */
   public AbstractBSplineInterpolation(SplitInterface splitInterface, int degree, Tensor target) {
     this.splitInterface = splitInterface;
-    this.degree = degree;
+    this.degree = Integers.requirePositiveOrZero(degree);
     this.target = target;
   }
 

@@ -3,14 +3,14 @@ package ch.ethz.idsc.owl.math.pursuit;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 
 public abstract class AssistedCurveIntersection extends SimpleCurveIntersection implements AssistedCurveIntersectionInterface {
-  protected AssistedCurveIntersection(Scalar radius, SplitInterface splitInterface) {
-    super(radius, splitInterface);
+  protected AssistedCurveIntersection(Scalar radius, BinaryAverage binaryAverage) {
+    super(radius, binaryAverage);
   }
 
   @Override // from AssistedCurveIntersectionInterface

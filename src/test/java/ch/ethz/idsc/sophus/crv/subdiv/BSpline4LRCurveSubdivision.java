@@ -40,6 +40,6 @@ public class BSpline4LRCurveSubdivision extends Dual3PointCurveSubdivision {
   }
 
   protected final Tensor center(Tensor p, Tensor q) {
-    return splitInterface.split(p, q, RationalScalar.HALF);
+    return binaryAverage.split(p, q, RationalScalar.HALF);
   }
 }

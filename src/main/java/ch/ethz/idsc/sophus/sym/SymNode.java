@@ -1,11 +1,11 @@
 // code by jph
 package ch.ethz.idsc.sophus.sym;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 
 /** characterized by {@link #isNode()} == true */
 /* package */ class SymNode extends SymLink {
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   @Override // from SymLink
-  public Tensor getPosition(SplitInterface splitInterface) {
+  public Tensor getPosition(BinaryAverage binaryAverage) {
     return position;
   }
 }

@@ -1,10 +1,12 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.spline;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
+import java.util.Objects;
+
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** <a href="https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm">
@@ -19,22 +21,21 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/BezierFunction.html">BezierFunction</a> */
 public class BezierFunction implements ScalarTensorFunction {
-  /** @param splitInterface
+  /** @param binaryAverage
    * @param control non-empty tensor
    * @return function parameterized by the interval [0, 1]
    * @throws Exception if given control tensor is empty or a scalar */
-  public static ScalarTensorFunction of(SplitInterface splitInterface, Tensor control) {
-    if (control.length() < 1)
-      throw TensorRuntimeException.of(control);
-    return new BezierFunction(splitInterface, control);
+  public static ScalarTensorFunction of(BinaryAverage binaryAverage, Tensor control) {
+    Integers.requirePositive(control.length());
+    return new BezierFunction(Objects.requireNonNull(binaryAverage), control);
   }
 
   // ---
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
   private final Tensor control;
 
-  private BezierFunction(SplitInterface splitInterface, Tensor control) {
-    this.splitInterface = splitInterface;
+  private BezierFunction(BinaryAverage binaryAverage, Tensor control) {
+    this.binaryAverage = binaryAverage;
     this.control = control;
   }
 
@@ -45,7 +46,7 @@ public class BezierFunction implements ScalarTensorFunction {
       int count = -1;
       Tensor p = points[0];
       for (int index = 1; index < i; ++index)
-        points[++count] = splitInterface.split(p, p = points[index], scalar);
+        points[++count] = binaryAverage.split(p, p = points[index], scalar);
     }
     return points[0];
   }
