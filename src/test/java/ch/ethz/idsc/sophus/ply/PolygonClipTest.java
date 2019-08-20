@@ -86,4 +86,17 @@ public class PolygonClipTest extends TestCase {
     assertEquals(tensor, Tensors.vector(3, 0));
     ExactTensorQ.require(tensor);
   }
+
+  public void testSingular() {
+    try {
+      PolygonClip.intersection( //
+          Tensors.vector(1, 0), //
+          Tensors.vector(2, 0), //
+          Tensors.vector(4, 0), //
+          Tensors.vector(9, 0));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

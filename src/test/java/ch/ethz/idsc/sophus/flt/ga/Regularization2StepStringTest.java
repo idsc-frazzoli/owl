@@ -71,4 +71,14 @@ public class Regularization2StepStringTest extends TestCase {
     ExactTensorQ.require(tensor);
     assertEquals(tensor, signal);
   }
+
+  public void testScalarFail() {
+    TensorUnaryOperator tensorUnaryOperator = Regularization2Step.string(RnGeodesic.INSTANCE, RationalScalar.HALF);
+    try {
+      tensorUnaryOperator.apply(RealScalar.ZERO);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

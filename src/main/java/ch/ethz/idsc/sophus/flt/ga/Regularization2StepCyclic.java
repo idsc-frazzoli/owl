@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -16,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   @Override
   public Tensor apply(Tensor tensor) {
-    // TODO JPH scalar!
+    ScalarQ.thenThrow(tensor);
     int last = tensor.length() - 1;
     if (last < 1)
       return tensor.copy();

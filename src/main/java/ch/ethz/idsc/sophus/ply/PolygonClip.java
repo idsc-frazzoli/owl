@@ -14,8 +14,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /** Sutherland-Hodgman polygon clipping
  * 
- * the implementation finds the polygon that results from the intersection of a clip region with the given polygons.
- * the polygons are specified as Tensors that contain vertex in counter clock-wise order. */
+ * The implementation finds the polygon that results from the intersection
+ * of a clip region with the given polygons. The polygons are specified as
+ * tensors that contain vertex in counter clock-wise order. */
 public class PolygonClip implements TensorUnaryOperator {
   /** @param clip convex, vertices ordered ccw
    * @return */
@@ -70,13 +71,13 @@ public class PolygonClip implements TensorUnaryOperator {
     );
   }
 
-  // package for testing
   /* package */ static Tensor intersection(Tensor a, Tensor b, Tensor p, Tensor q) {
     Tensor ab = a.subtract(b);
     Tensor pq = p.subtract(q);
-    Scalar denom = Det2D.of(ab, pq);
-    if (Chop._40.allZero(denom))
-      throw TensorRuntimeException.of(a, b, p, q); // TODO JPH test coverage
-    return pq.multiply(Det2D.of(ab, a)).subtract(ab.multiply(Det2D.of(pq, p))).divide(denom);
+    Scalar den = Det2D.of(ab, pq);
+    if (Chop._40.allZero(den))
+      throw TensorRuntimeException.of(a, b, p, q);
+    // TODO JPH prevent subtract by swapping det arguments, but write GUI test first
+    return pq.multiply(Det2D.of(ab, a)).subtract(ab.multiply(Det2D.of(pq, p))).divide(den);
   }
 }

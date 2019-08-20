@@ -50,8 +50,9 @@ public class Se2Skew {
     return LinearSolve.of(lhs, rhs);
   }
 
+  // TODO JPH function is never called
   public Tensor diff(Tensor xy) {
-    return lhs.dot(xy).subtract(rhs);// TODO JPH test coverage
+    return lhs.dot(xy).subtract(rhs);
   }
 
   public Tensor rhs() {
