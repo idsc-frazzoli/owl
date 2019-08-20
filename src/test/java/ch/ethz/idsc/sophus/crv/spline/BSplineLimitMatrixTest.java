@@ -19,4 +19,19 @@ public class BSplineLimitMatrixTest extends TestCase {
         // System.out.println(Pretty.of(tensor));
       }
   }
+
+  public void testNonPositiveFail() {
+    try {
+      BSplineLimitMatrix.string(0, 2);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      BSplineLimitMatrix.string(-1, 2);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
