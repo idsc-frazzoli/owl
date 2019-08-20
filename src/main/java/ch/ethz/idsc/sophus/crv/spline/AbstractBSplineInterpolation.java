@@ -4,10 +4,11 @@ package ch.ethz.idsc.sophus.crv.spline;
 import java.io.Serializable;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.sophus.math.SplitInterface;
+import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 
@@ -15,16 +16,16 @@ public abstract class AbstractBSplineInterpolation implements Serializable {
   private static final Chop CHOP_DEFAULT = Chop._12;
   private static final int MAXITER = 500;
   // ---
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
   private final int degree;
   private final Tensor target;
 
-  /** @param splitInterface corresponding to lie group
+  /** @param binaryAverage corresponding to lie group
    * @param degree of underlying b-spline
    * @param target points to interpolate */
-  public AbstractBSplineInterpolation(SplitInterface splitInterface, int degree, Tensor target) {
-    this.splitInterface = splitInterface;
-    this.degree = degree;
+  public AbstractBSplineInterpolation(BinaryAverage binaryAverage, int degree, Tensor target) {
+    this.binaryAverage = binaryAverage;
+    this.degree = Integers.requirePositiveOrZero(degree);
     this.target = target;
   }
 
@@ -93,7 +94,7 @@ public abstract class AbstractBSplineInterpolation implements Serializable {
   }
 
   private GeodesicBSplineFunction geodesicBSplineFunction(Tensor control) {
-    return GeodesicBSplineFunction.of(splitInterface, degree, control);
+    return GeodesicBSplineFunction.of(binaryAverage, degree, control);
   }
 
   /** @param p previous control point position

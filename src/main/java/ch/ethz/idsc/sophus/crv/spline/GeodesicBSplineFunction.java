@@ -2,11 +2,11 @@
 package ch.ethz.idsc.sophus.crv.spline;
 
 import java.util.NavigableMap;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
-import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.opt.BinaryAverage;
 import ch.ethz.idsc.tensor.opt.DeBoor;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
@@ -39,34 +40,39 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
   /** the control point are stored by reference, i.e. modifications to
    * given tensor alter the behavior of this BSplineFunction instance.
    * 
+   * @param binaryAverage
    * @param degree of polynomial basis function, non-negative integer
    * @param control points with at least one element
    * @return */
-  public static GeodesicBSplineFunction of(SplitInterface splitInterface, int degree, Tensor control) {
-    return of(splitInterface, degree, Range.of(0, control.length()), control);
+  public static GeodesicBSplineFunction of(BinaryAverage binaryAverage, int degree, Tensor control) {
+    return new GeodesicBSplineFunction( //
+        Objects.requireNonNull(binaryAverage), //
+        Integers.requirePositiveOrZero(degree), //
+        Range.of(0, control.length()), //
+        control);
   }
 
   /** the control point are stored by reference, i.e. modifications to
    * given tensor alter the behavior of this BSplineFunction instance.
    * 
-   * @param splitInterface
+   * @param binaryAverage
    * @param degree of polynomial basis function, non-negative integer
    * @param knots vector of the same length as control
    * @param control points with at least one element
    * @return
    * @throws Exception */
-  public static GeodesicBSplineFunction of(SplitInterface splitInterface, int degree, Tensor knots, Tensor control) {
+  public static GeodesicBSplineFunction of(BinaryAverage binaryAverage, int degree, Tensor knots, Tensor control) {
     if (!Sort.of(knots).equals(knots))
       throw TensorRuntimeException.of(knots);
     return new GeodesicBSplineFunction( //
-        splitInterface, //
+        Objects.requireNonNull(binaryAverage), //
         Integers.requirePositiveOrZero(degree), //
         VectorQ.requireLength(knots, control.length()), //
         control);
   }
 
   // ---
-  private final SplitInterface splitInterface;
+  private final BinaryAverage binaryAverage;
   private final int degree;
   private final Tensor control;
   /** half == degree / 2 */
@@ -78,8 +84,8 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
   private final NavigableMap<Scalar, Integer> navigableMap;
   private final Tensor samples;
 
-  private GeodesicBSplineFunction(SplitInterface splitInterface, int degree, Tensor knots, Tensor control) {
-    this.splitInterface = splitInterface;
+  private GeodesicBSplineFunction(BinaryAverage binaryAverage, int degree, Tensor knots, Tensor control) {
+    this.binaryAverage = binaryAverage;
     this.degree = degree;
     this.control = control;
     half = degree / 2;
@@ -121,7 +127,7 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
    * @return */
   public DeBoor deBoor(int k) {
     int hi = degree + 1 + k;
-    return new DeBoor(splitInterface, degree, //
+    return new DeBoor(binaryAverage, degree, //
         samples.extract(k, k + 2 * degree), //
         Tensor.of(IntStream.range(k - half, hi - half) // control
             .map(this::bound) //

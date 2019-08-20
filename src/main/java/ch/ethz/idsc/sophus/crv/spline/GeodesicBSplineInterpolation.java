@@ -17,7 +17,7 @@ public class GeodesicBSplineInterpolation extends AbstractBSplineInterpolation {
     this.splitInterface = splitInterface;
   }
 
-  @Override
+  @Override // from AbstractBSplineInterpolation
   protected Tensor move(Tensor p, Tensor e, Tensor t) {
     Tensor pt = splitInterface.split(p, t, RationalScalar.HALF);
     Tensor et = splitInterface.split(e, t, RationalScalar.HALF);
