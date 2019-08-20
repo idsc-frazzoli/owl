@@ -94,4 +94,13 @@ public class HeBiinvariantMeanTest extends TestCase {
     Tensor he2 = domain.map(mean);
     Chop._12.requireClose(he1, he2);
   }
+
+  public void testEmpty() {
+    try {
+      HeBiinvariantMean.INSTANCE.mean(Tensors.empty(), Tensors.empty());
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

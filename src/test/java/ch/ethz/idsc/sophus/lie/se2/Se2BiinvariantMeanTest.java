@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.lie.se2;
 
+import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.BiinvariantMeanEquation;
 import ch.ethz.idsc.sophus.lie.BiinvariantMeanTestHelper;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
@@ -222,5 +223,15 @@ public class Se2BiinvariantMeanTest extends TestCase {
     Tensor actual = Se2BiinvariantMean.GLOBAL.mean(sequence, weights);
     Tensor expected = Tensors.fromString("{3.105184243650884, 2.8948157563491153, 0.3}");
     Chop._14.requireClose(expected, actual);
+  }
+
+  public void testEmpty() {
+    for (BiinvariantMean biinvariantMean : Se2BiinvariantMean.values())
+      try {
+        biinvariantMean.mean(Tensors.empty(), Tensors.empty());
+        fail();
+      } catch (Exception exception) {
+        // ---
+      }
   }
 }

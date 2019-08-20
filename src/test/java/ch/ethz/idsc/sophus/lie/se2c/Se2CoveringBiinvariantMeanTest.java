@@ -85,4 +85,13 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
         Join.of(Tensors.of(RealScalar.ONE.subtract(Total.ofVector(weights))), weights));
     assertFalse(Chop._08.close(exp, mean));
   }
+
+  public void testEmpty() {
+    try {
+      Se2CoveringBiinvariantMean.INSTANCE.mean(Tensors.empty(), Tensors.empty());
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
