@@ -25,7 +25,7 @@ public class TwdImageDemo extends AbstractTwdDemo {
   static final LidarRaytracer LIDAR_RAYTRACER = new LidarRaytracer(Subdivide.of(-1, 1, 26), Subdivide.of(0, 4, 30));
   // ---
   private final R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._0F5C_2182;
-  private final Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+  private final Region<Tensor> region = r2ImageRegionWrap.region();
   private final TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
 
   @Override // from AbstractTwdDemo

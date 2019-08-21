@@ -4,16 +4,12 @@ package ch.ethz.idsc.owl.math.lane;
 import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Nest;
 
 /** lane of constant width */
-// TODO JPH OWL 053 change API so that halfWidth instead of width is used
 public class StableLane implements LaneInterface, Serializable {
   /** the offset vectors are not magic constants but are multiplied by width */
   private final static Tensor OFS_L = Tensors.vector(0, +1, 0).unmodifiable();
@@ -21,23 +17,9 @@ public class StableLane implements LaneInterface, Serializable {
 
   /** @param controlPoints may be null
    * @param refined
-   * @param width */
-  public static LaneInterface of(Tensor controlPoints, Tensor refined, Scalar width) {
-    return new StableLane(controlPoints, refined, width);
-  }
-
-  /** @param controlPoints in SE2
-   * @param tensorUnaryOperator for instance
-   * LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1)::string
-   * @param level non-negative
-   * @param width
-   * @return */
-  public static LaneInterface of( //
-      Tensor controlPoints, TensorUnaryOperator tensorUnaryOperator, int level, Scalar width) {
-    return new StableLane( //
-        controlPoints, //
-        Nest.of(tensorUnaryOperator, controlPoints, level).unmodifiable(), //
-        width);
+   * @param halfWidth */
+  public static LaneInterface of(Tensor controlPoints, Tensor refined, Scalar halfWidth) {
+    return new StableLane(controlPoints, refined, halfWidth);
   }
 
   // ---
@@ -47,18 +29,16 @@ public class StableLane implements LaneInterface, Serializable {
   private final Tensor rbound;
   private final Tensor margins;
 
-  // TODO JPH OWL 053 make private
-  public StableLane(Tensor controlPoints, Tensor refined, Scalar width) {
+  private StableLane(Tensor controlPoints, Tensor refined, Scalar halfWidth) {
     this.controlPoints = controlPoints;
     this.refined = refined;
-    lbound = boundary(OFS_L, width).unmodifiable();
-    rbound = boundary(OFS_R, width).unmodifiable();
-    Scalar margin = width.multiply(RationalScalar.HALF);
-    margins = ConstantArray.of(margin, refined.length());
+    lbound = boundary(OFS_L, halfWidth).unmodifiable();
+    rbound = boundary(OFS_R, halfWidth).unmodifiable();
+    margins = ConstantArray.of(halfWidth, refined.length());
   }
 
-  private Tensor boundary(Tensor base, Scalar width) {
-    Tensor ofs = base.multiply(width.multiply(RationalScalar.HALF));
+  private Tensor boundary(Tensor base, Scalar halfWidth) {
+    Tensor ofs = base.multiply(halfWidth);
     return Tensor.of(refined.stream() //
         .map(Se2GroupElement::new) //
         .map(se2GroupElement -> se2GroupElement.combine(ofs)));

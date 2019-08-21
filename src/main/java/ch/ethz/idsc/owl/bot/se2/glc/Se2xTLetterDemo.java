@@ -44,7 +44,7 @@ public class Se2xTLetterDemo implements DemoInterface {
     owlyAnimationFrame.add(carxTEntity);
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.region();
     carxTEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
     // ---
     BijectionFamily oscillation = new SimpleR2TranslationFamily(s -> Tensors.vector( //

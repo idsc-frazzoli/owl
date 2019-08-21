@@ -62,7 +62,7 @@ public class Se2RelaxedCornerCuttingDemo extends Se2CarDemo {
     R2ImageRegionWrap r2ImageRegionWrap = createResLo();
     carRelaxedEntity.setAdditionalCostFunction(r2ImageRegionWrap.costFunction());
     // ---
-    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.region();
     PlannerConstraint plannerConstraint = createConstraint(region);
     TrajectoryRegionQuery trajectoryRegionQuery = //
         SimpleTrajectoryRegionQuery.timeInvariant(region);

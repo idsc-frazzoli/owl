@@ -3,9 +3,9 @@ package ch.ethz.idsc.owl.math.lane;
 
 import ch.ethz.idsc.tensor.Tensor;
 
+// TODO JPH longterm design: lane should not have to provide control points 
 public interface LaneInterface {
-  // TODO JPH OWL 053 possibly remove function
-  /** @return points used to generate/describe lane */
+  /** @return points used to generate/describe lane, may return null */
   Tensor controlPoints();
 
   /** @return points of center line of lane */

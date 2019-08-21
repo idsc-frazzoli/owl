@@ -43,7 +43,7 @@ public abstract class Se2LetterADemo extends Se2CarDemo {
       }
     };
     carEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
-    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.region();
     PlannerConstraint plannerConstraint = createConstraint(region);
     TrajectoryRegionQuery trajectoryRegionQuery = //
         SimpleTrajectoryRegionQuery.timeInvariant(region);
