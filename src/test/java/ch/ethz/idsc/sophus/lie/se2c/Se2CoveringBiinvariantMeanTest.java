@@ -49,7 +49,7 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
       weights = weights.divide(Total.ofVector(weights));
       Tensor mean = Se2CoveringBiinvariantMean.INSTANCE.mean(sequence, weights);
       Tensor defect = BIINVARIANT_MEAN_EQUATION.evaluate(sequence, weights, mean);
-      Chop._08.requireClose(defect, defect.map(Scalar::zero));
+      Chop._06.requireClose(defect, defect.map(Scalar::zero));
     }
   }
 

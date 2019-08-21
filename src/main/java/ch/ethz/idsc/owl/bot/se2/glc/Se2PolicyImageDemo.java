@@ -19,7 +19,7 @@ public class Se2PolicyImageDemo implements DemoInterface {
     OwlyAnimationFrame owlyAnimationFrame = new OwlyAnimationFrame();
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._2181;
-    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.region();
     // ---
     TrajectoryRegionQuery trq = CatchyTrajectoryRegionQuery.timeInvariant(region);
     owlyAnimationFrame.addBackground(RegionRenders.create(region));

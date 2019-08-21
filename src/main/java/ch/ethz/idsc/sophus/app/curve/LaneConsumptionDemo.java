@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import ch.ethz.idsc.owl.gui.ren.LaneRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
-import ch.ethz.idsc.owl.math.lane.StableLane;
+import ch.ethz.idsc.owl.math.lane.StableLanes;
 import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Serialization;
 
 public class LaneConsumptionDemo extends BaseCurvatureDemo {
-  private final LaneRender laneRender = new LaneRender(false);
+  private final LaneRender laneRender = new LaneRender();
   private LaneInterface lane = null;
 
   @SafeVarargs
@@ -52,16 +52,16 @@ public class LaneConsumptionDemo extends BaseCurvatureDemo {
   @Override
   protected Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics, int degree, int levels, Tensor control) {
     renderControlPoints(geometricLayer, graphics);
-    LaneInterface lane = StableLane.of( //
+    LaneInterface lane = StableLanes.of( //
         control, //
         LaneRiesenfeldCurveSubdivision.of(geodesicDisplay().geodesicInterface(), degree)::string, //
-        levels, width());
+        levels, width().multiply(RationalScalar.HALF));
     try {
       this.lane = Serialization.copy(lane);
     } catch (Exception e) {
       // ---
     }
-    laneRender.setLane(lane);
+    laneRender.setLane(lane, false);
     laneRender.render(geometricLayer, graphics);
     return lane.midLane();
   }

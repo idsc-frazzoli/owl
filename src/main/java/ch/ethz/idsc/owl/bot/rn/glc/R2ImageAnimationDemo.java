@@ -36,7 +36,7 @@ public class R2ImageAnimationDemo implements DemoInterface {
     R2Entity r2Entity = new R2Entity(episodeIntegrator, trajectoryControl);
     r2Entity.extraCosts.add(r2ImageRegionWrap.costFunction());
     owlyAnimationFrame.add(r2Entity);
-    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.region();
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(region);
     MouseGoal.simple(owlyAnimationFrame, r2Entity, plannerConstraint);
     owlyAnimationFrame.addBackground(RegionRenders.create(region));

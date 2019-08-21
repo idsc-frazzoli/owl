@@ -1,4 +1,4 @@
-// code by jph, gjoel
+// code by gjoel, jph
 package ch.ethz.idsc.owl.gui.ren;
 
 import java.awt.Color;
@@ -14,25 +14,17 @@ import ch.ethz.idsc.tensor.Tensor;
 public class LaneRender implements RenderInterface {
   private final PathRender pathRenderL = new PathRender(new Color(255, 128, 128, 192), 1);
   private final PathRender pathRenderR = new PathRender(new Color(128, 192, 128, 192), 1);
-  // ---
-  private final boolean cyclic;
 
-  // TODO JPH OWL 053 dont specify cyclic final, but in set functions
-  public LaneRender(boolean cyclic) {
-    this.cyclic = cyclic;
-  }
-
-  public void setLane(LaneInterface laneInterface) {
+  public void setLane(LaneInterface laneInterface, boolean cyclic) {
     if (Objects.nonNull(laneInterface))
-      setLanes(laneInterface.leftBoundary(), laneInterface.rightBoundary());
+      setBoundaries(laneInterface.leftBoundary(), laneInterface.rightBoundary(), cyclic);
     else
-      setLanes(null, null);
+      setBoundaries(null, null, cyclic);
   }
 
-  // TODO JPH OWL 053 rename to setBoundaries
-  public void setLanes(Tensor lLane, Tensor rLane) {
-    pathRenderL.setCurve(lLane, cyclic);
-    pathRenderR.setCurve(rLane, cyclic);
+  public void setBoundaries(Tensor leftBoundary, Tensor rightBoundary, boolean cyclic) {
+    pathRenderL.setCurve(leftBoundary, cyclic);
+    pathRenderR.setCurve(rightBoundary, cyclic);
   }
 
   @Override // from RenderInterface

@@ -21,7 +21,7 @@ public class Se2Letter2Demo extends Se2CarDemo {
   protected void configure(OwlyAnimationFrame owlyAnimationFrame) {
     CarEntity carEntity = CarEntity.createDefault(new StateTime(Tensors.vector(6, 5, 1), RealScalar.ZERO));
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.region();
     PlannerConstraint plannerConstraint = createConstraint(region);
     owlyAnimationFrame.add(carEntity);
     MouseGoal.simple(owlyAnimationFrame, carEntity, plannerConstraint);

@@ -1,3 +1,4 @@
+// code by gjoel
 package ch.ethz.idsc.owl.math.lane;
 
 import ch.ethz.idsc.sophus.math.Extract2D;

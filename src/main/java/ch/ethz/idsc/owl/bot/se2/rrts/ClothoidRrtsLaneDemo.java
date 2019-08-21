@@ -45,17 +45,17 @@ import ch.ethz.idsc.tensor.qty.Degree;
   public ClothoidRrtsLaneDemo() {
     super();
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    Region<Tensor> imageRegion = R2ImageRegions._GTOB.imageRegion();
-    TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(imageRegion);
+    Region<Tensor> region = R2ImageRegions._GTOB.region();
+    TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     TransitionRegionQuery transitionRegionQuery = TransitionRegionQueryUnion.wrap( //
-        new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.05)), //
+        new SampledTransitionRegionQuery(region, RealScalar.of(0.05)), //
         new TransitionCurvatureQuery(5.));
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, Math.PI / 4), RealScalar.ZERO);
     ClothoidLaneRrtsEntity entity = new ClothoidLaneRrtsEntity(stateTime, transitionRegionQuery, Tensors.vector(0, 0), r2ImageRegionWrap.range(), true);
     LaneConsumer laneConsumer = new SimpleLaneConsumer(entity, null, Collections.singleton(entity));
     laneConsumptionDemo = new LaneConsumptionDemo(laneConsumer);
     laneConsumptionDemo.setControlPointsSe2(Tensors.of(stateTime.state()));
-    laneConsumptionDemo.timerFrame.geometricComponent.addRenderInterfaceBackground(RegionRenders.create(imageRegion));
+    laneConsumptionDemo.timerFrame.geometricComponent.addRenderInterfaceBackground(RegionRenders.create(region));
     laneConsumptionDemo.timerFrame.geometricComponent.addRenderInterface(entity);
     /** TODO GJOEL rework; currently taken over from {@link OwlyAnimationFrame}
      * shorter variant, that does not close properly
@@ -103,7 +103,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     }
     {
       RenderInterface renderInterface = new MouseShapeRender( //
-          SimpleTrajectoryRegionQuery.timeInvariant(Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), imageRegion)), //
+          SimpleTrajectoryRegionQuery.timeInvariant(Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), region)), //
           ClothoidRrtsEntity.SHAPE, () -> entity.getStateTimeNow().time());
       laneConsumptionDemo.timerFrame.geometricComponent.addRenderInterfaceBackground(renderInterface);
     }

@@ -30,8 +30,7 @@ public class R2ImageRegionWrap {
     this.range = range.unmodifiable();
   }
 
-  // TODO JPH OWL 050 rename
-  public Region<Tensor> imageRegion() {
+  public Region<Tensor> region() {
     return imageRegion;
   }
 

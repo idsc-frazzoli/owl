@@ -26,7 +26,7 @@ public class Se2xTPlainDemo
     // ---
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
     carxTEntity.extraCosts.add(r2ImageRegionWrap.costFunction());
-    Region<Tensor> region = r2ImageRegionWrap.imageRegion();
+    Region<Tensor> region = r2ImageRegionWrap.region();
     Region<Tensor> se2PointsVsRegion = Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), region);
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(se2PointsVsRegion);
     MouseGoal.simple(owlyAnimationFrame, carxTEntity, plannerConstraint);

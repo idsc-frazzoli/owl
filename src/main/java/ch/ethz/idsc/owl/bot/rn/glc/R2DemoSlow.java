@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import ch.ethz.idsc.owl.bot.r2.R2Bubbles;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
@@ -41,6 +42,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.GifAnimationWriter;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Ramp;
@@ -78,7 +80,8 @@ import ch.ethz.idsc.tensor.sca.Ramp;
         EtaRaster.state(eta), stateIntegrator, controls, plannerConstraint, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(stateRoot, RealScalar.ZERO));
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
-    try (AnimationWriter animationWriter = AnimationWriter.of(HomeDirectory.Pictures("R2_Slow.gif"), 400)) {
+    try (AnimationWriter animationWriter = //
+        new GifAnimationWriter(HomeDirectory.Pictures("R2_Slow.gif"), 400, TimeUnit.MILLISECONDS)) {
       OwlyFrame owlyFrame = OwlyGui.start();
       owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
       owlyFrame.addBackground(renderInterface); // reference to collection
@@ -88,10 +91,10 @@ import ch.ethz.idsc.tensor.sca.Ramp;
           break;
         glcExpand.findAny(1);
         owlyFrame.setGlc(trajectoryPlanner);
-        animationWriter.append(owlyFrame.offscreen());
+        animationWriter.write(owlyFrame.offscreen());
       }
       for (int i = 0; i < 4; ++i)
-        animationWriter.append(owlyFrame.offscreen());
+        animationWriter.write(owlyFrame.offscreen());
     }
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
     if (optional.isPresent()) {
