@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.lie.so3;
 
+import java.util.concurrent.TimeUnit;
+
 import ch.ethz.idsc.tensor.Parallelize;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -9,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.AnimationWriter;
+import ch.ethz.idsc.tensor.io.GifAnimationWriter;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum So3ExponentialDemo {
@@ -24,14 +27,15 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws Exception {
-    try (AnimationWriter ani = AnimationWriter.of(HomeDirectory.Pictures("rodriquez.gif"), 100)) {
+    try (AnimationWriter animationWriter = //
+        new GifAnimationWriter(HomeDirectory.Pictures("rodriquez.gif"), 100, TimeUnit.MILLISECONDS)) {
       for (Tensor _z : Subdivide.of(-4 * Math.PI, 4 * Math.PI, 40)) {
         System.out.println(_z);
         Z = _z.Get();
         Tensor matrix = Parallelize.matrix(So3ExponentialDemo::function, RES, RES);
-        ani.append(ArrayPlot.of(matrix, ColorDataGradients.CLASSIC));
+        animationWriter.write(ArrayPlot.of(matrix, ColorDataGradients.CLASSIC));
       }
-      ani.close();
+      animationWriter.close();
     }
   }
 }

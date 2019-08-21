@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.Round;
           geodesicCausalFilteringEvaluation.evaluate1Error(alpha, true, true));
       tableBuilder.appendRow(row);
     }
-    Tensor log = tableBuilder.toTable();
+    Tensor log = tableBuilder.getTable();
     System.out.println(Pretty.of(log.map(Round._4)));
     System.out.println("done!");
     return log;
