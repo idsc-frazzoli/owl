@@ -40,11 +40,11 @@ public class GridRender implements RenderInterface, Serializable {
    * @param color of grid lines */
   public GridRender(Tensor x, Tensor y, Color color) {
     this.x_grid = N.DOUBLE.of(x);
-    x_lo = x_grid.stream().reduce(Min::of).get().Get();
-    x_hi = x_grid.stream().reduce(Max::of).get().Get();
+    x_lo = (Scalar) x_grid.stream().reduce(Min::of).get();
+    x_hi = (Scalar) x_grid.stream().reduce(Max::of).get();
     this.y_grid = N.DOUBLE.of(y);
-    y_lo = y_grid.stream().reduce(Min::of).get().Get();
-    y_hi = y_grid.stream().reduce(Max::of).get().Get();
+    y_lo = (Scalar) y_grid.stream().reduce(Min::of).get();
+    y_hi = (Scalar) y_grid.stream().reduce(Max::of).get();
     this.color = Objects.requireNonNull(color);
   }
 

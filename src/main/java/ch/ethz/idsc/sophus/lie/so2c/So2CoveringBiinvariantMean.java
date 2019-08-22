@@ -15,6 +15,6 @@ public enum So2CoveringBiinvariantMean implements ScalarBiinvariantMean {
   // ---
   @Override // from ScalarBiinvariantMean
   public Scalar mean(Tensor sequence, Tensor weights) {
-    return weights.dot(sequence).Get();
+    return (Scalar) weights.dot(sequence);
   }
 }

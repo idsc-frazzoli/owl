@@ -51,7 +51,7 @@ public class ConeRegion implements RegionWithDistance<Tensor>, Serializable {
     if (Scalars.lessThan(angle, semi))
       return RealScalar.ZERO;
     return Scalars.lessThan(angle, semi_pi_half) //
-        ? normal.dot(local).Get()
+        ? (Scalar) normal.dot(local)
         : Norm._2.ofVector(local);
   }
 

@@ -19,9 +19,8 @@ public enum ColorLookup {
    * @param lightness
    * @return strict color data table with given length number of colors */
   public static ColorDataIndexed hsluv_lightness(int length, double lightness) {
-    Tensor tensor = Tensor.of(Subdivide.increasing(Clips.unit(), length - 1).stream() //
-        .map(hue -> Hsluv.of(hue.Get().number().doubleValue(), 1, lightness, 1)) //
-        .map(ColorFormat::toVector));
+    Tensor tensor = Subdivide.increasing(Clips.unit(), length - 1) //
+        .map(hue -> ColorFormat.toVector(Hsluv.of(hue.number().doubleValue(), 1, lightness, 1)));
     return StrictColorDataIndexed.of(tensor);
   }
 

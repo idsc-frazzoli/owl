@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -26,7 +27,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     List<TrajectorySample> trajectory = new ArrayList<>();
     int t = 0;
     for (Tensor angle : Subdivide.of(Degree.of(0), Degree.of(360), 100)) {
-      Tensor x = AngleVector.of(angle.Get()).multiply(RealScalar.of(2)).append(angle.add(Pi.HALF));
+      Tensor x = AngleVector.of((Scalar) angle).multiply(RealScalar.of(2)).append(angle.add(Pi.HALF));
       StateTime stateTime = new StateTime(x, RealScalar.of(++t));
       Flow flow = StateSpaceModels.createFlow(Se2StateSpaceModel.INSTANCE, Tensors.vector(1, 0, 0));
       TrajectorySample trajectorySample = new TrajectorySample(stateTime, flow);

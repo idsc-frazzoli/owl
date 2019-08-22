@@ -17,7 +17,7 @@ public enum HeExponential implements LieExponential {
     return Tensors.of( //
         u, //
         v, //
-        w.add(u.dot(v).Get().multiply(RationalScalar.HALF)));
+        w.add(u.dot(v).multiply(RationalScalar.HALF)));
   }
 
   @Override // from LieExponential
@@ -28,6 +28,6 @@ public enum HeExponential implements LieExponential {
     return Tensors.of( //
         x, //
         y, //
-        z.subtract(x.dot(y).Get().multiply(RationalScalar.HALF)));
+        z.subtract(x.dot(y).multiply(RationalScalar.HALF)));
   }
 }

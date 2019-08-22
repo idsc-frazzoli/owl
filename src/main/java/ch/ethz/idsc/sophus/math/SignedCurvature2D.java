@@ -33,7 +33,7 @@ public enum SignedCurvature2D {
   public static Optional<Scalar> of(Tensor a, Tensor b, Tensor c) {
     Tensor d_ab = b.subtract(a);
     Scalar v = Det2D.of(d_ab, c.subtract(b));
-    Scalar w = d_ab.dot(c.subtract(a)).Get();
+    Scalar w = (Scalar) d_ab.dot(c.subtract(a));
     Scalar n = Norm._2.between(c, b);
     Scalar den = Hypot.of(v, w).multiply(n);
     return Scalars.isZero(den) //

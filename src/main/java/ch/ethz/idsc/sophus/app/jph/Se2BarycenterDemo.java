@@ -71,11 +71,9 @@ public class Se2BarycenterDemo extends ControlPointsDemo {
         Tensor[][] array = new Tensor[tX.length()][tY.length()];
         {
           int c0 = 0;
-          for (Tensor _x : tX) {
+          for (Tensor x : tX) {
             int c1 = 0;
-            for (Tensor _y : tY) {
-              Scalar x = _x.Get();
-              Scalar y = _y.Get();
+            for (Tensor y : tY) {
               Scalar w = RationalScalar.HALF;
               Tensor weights = Tensors.of(w, x, y);
               weights.append(RealScalar.ONE.subtract(Total.ofVector(weights)));

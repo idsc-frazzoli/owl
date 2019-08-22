@@ -28,7 +28,7 @@ public class TwdForwardFlows extends TwdFlows {
     List<Flow> list = new ArrayList<>();
     Tensor range = Subdivide.of(-1, 1, resolution).extract(0, resolution); // [-1, ..., 1)
     for (Tensor _omega : range) {
-      Scalar omega = _omega.Get();
+      Scalar omega = (Scalar) _omega;
       list.add(singleton(RealScalar.ONE, omega));
       list.add(singleton(omega, RealScalar.ONE));
     }

@@ -13,6 +13,6 @@ public enum Det2D {
    * @return px * qy - py * qx
    * @throws Exception if p or q is not a vector of length 2 */
   public static Scalar of(Tensor p, Tensor q) {
-    return Cross.of(p).dot(q).Get();
+    return (Scalar) Cross.of(p).dot(q);
   }
 }

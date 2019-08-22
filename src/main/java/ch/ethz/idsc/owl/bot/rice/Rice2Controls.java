@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.lie.CirclePoints;
     collection.add(StateSpaceModels.createFlow(stateSpaceModel, Array.zeros(2)));
     for (Tensor amp : Subdivide.of(0, 1, seg).extract(1, seg + 1))
       for (Tensor u : CirclePoints.of(resolution))
-        collection.add(StateSpaceModels.createFlow(stateSpaceModel, u.multiply(amp.Get())));
+        collection.add(StateSpaceModels.createFlow(stateSpaceModel, u.multiply((Scalar) amp)));
     return collection;
   }
 }
