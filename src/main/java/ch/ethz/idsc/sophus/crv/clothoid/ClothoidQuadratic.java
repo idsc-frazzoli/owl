@@ -1,7 +1,6 @@
 // code by ureif
 package ch.ethz.idsc.sophus.crv.clothoid;
 
-import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -24,6 +23,9 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   /** The Lagrange interpolating polynomial has the following coefficients
    * {b0, -3 b0 - b1 + 4 bm, 2 (b0 + b1 - 2 bm)}
    * 
+   * <p>Typically, the input parameters b0, bm, b1 are real numbers and
+   * represent angles.
+   * 
    * @param b0
    * @param bm
    * @param b1 */
@@ -38,9 +40,5 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   @Override
   public Scalar apply(Scalar s) {
     return c2.multiply(s).add(c1).multiply(s).add(c0);
-  }
-
-  public Scalar exp_i(Scalar s) {
-    return ComplexScalar.unit(apply(s));
   }
 }

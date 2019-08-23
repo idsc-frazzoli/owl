@@ -92,11 +92,9 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
         Tensor[][] array = new Tensor[sX.length()][sY.length()];
         Tensor wgs = Array.of(l -> DoubleScalar.INDETERMINATE, sX.length(), sY.length(), domain.length());
         int c0 = 0;
-        for (Tensor _x : sX) {
+        for (Tensor x : sX) {
           int c1 = 0;
-          for (Tensor _y : sY) {
-            Scalar x = _x.Get();
-            Scalar y = _y.Get();
+          for (Tensor y : sY) {
             Tensor px = Tensors.of(x, y);
             if (Polygons.isInside(domain, px)) {
               Tensor weights = powerCoordinates.weights(domain, px);

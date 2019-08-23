@@ -60,12 +60,12 @@ public class SymScalar extends ScalarAdapter implements Serializable {
   }
 
   public Scalar evaluate() {
-    if (isScalar())
-      return tensor.Get();
-    return RnGeodesic.INSTANCE.split( //
-        getP().evaluate(), //
-        getQ().evaluate(), //
-        ratio()).Get();
+    return isScalar() //
+        ? (Scalar) tensor
+        : (Scalar) RnGeodesic.INSTANCE.split( //
+            getP().evaluate(), //
+            getQ().evaluate(), //
+            ratio());
   }
 
   @Override

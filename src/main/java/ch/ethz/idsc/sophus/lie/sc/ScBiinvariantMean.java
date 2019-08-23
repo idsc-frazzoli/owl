@@ -16,6 +16,6 @@ public enum ScBiinvariantMean implements ScalarBiinvariantMean {
   // ---
   @Override // from ScalarBiinvariantMean
   public Scalar mean(Tensor sequence, Tensor weights) {
-    return Exp.FUNCTION.apply(weights.dot(sequence.map(Log.FUNCTION)).Get());
+    return Exp.FUNCTION.apply((Scalar) weights.dot(sequence.map(Log.FUNCTION)));
   }
 }

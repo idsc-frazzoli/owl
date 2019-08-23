@@ -12,11 +12,11 @@ public enum ScExponential implements LieExponential {
   // ---
   @Override // from LieExponential
   public Scalar exp(Tensor x) {
-    return Exp.FUNCTION.apply(x.Get());
+    return Exp.FUNCTION.apply((Scalar) x);
   }
 
   @Override // from LieExponential
   public Scalar log(Tensor g) {
-    return Log.FUNCTION.apply(g.Get());
+    return Log.FUNCTION.apply((Scalar) g);
   }
 }

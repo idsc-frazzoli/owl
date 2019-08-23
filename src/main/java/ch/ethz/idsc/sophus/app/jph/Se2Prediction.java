@@ -38,11 +38,9 @@ import ch.ethz.idsc.tensor.red.Total;
     Tensor lp3_hd = Array.zeros(Wp.length(), Wq.length(), 3);
     // Tensor rotation = RotationMatrix.of(0);
     int i = 0;
-    for (Tensor _wp : Wp) {
+    for (Tensor wp : Wp) {
       int j = 0;
-      for (Tensor _wq : Wq) {
-        Scalar wp = _wp.Get();
-        Scalar wq = _wq.Get();
+      for (Tensor wq : Wq) {
         // Tensor wpq = Tensors.of(wp.subtract(wq), wp.add(wq));
         Tensor wpq = Tensors.of(wp, wq);
         Scalar wr = RealScalar.ONE.subtract(Total.ofVector(wpq));

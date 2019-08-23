@@ -30,7 +30,7 @@ public enum RotationMatrix3D {
   public static Tensor of(Tensor a, Tensor b) {
     Tensor w = Cross.of(a, b);
     Tensor wx = Cross.skew3(w);
-    Scalar ab = a.dot(b).Get();
+    Scalar ab = (Scalar) a.dot(b);
     Scalar c = ab.add(RealScalar.ONE).reciprocal();
     return ID3.add(wx).add(wx.dot(wx).multiply(c));
   }

@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.owl.gui;
 
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -16,13 +15,11 @@ public enum ColorLookup {
   /** precompute lookup table of hsluv colors for given lightness and alpha
    * 
    * @param length
-   * @param lightness
+   * @param lightness in range [0, 1], use 0.5 for greatest variability in hue
    * @return strict color data table with given length number of colors */
   public static ColorDataIndexed hsluv_lightness(int length, double lightness) {
-    Tensor tensor = Tensor.of(Subdivide.increasing(Clips.unit(), length - 1).stream() //
-        .map(hue -> Hsluv.of(hue.Get().number().doubleValue(), 1, lightness, 1)) //
-        .map(ColorFormat::toVector));
-    return StrictColorDataIndexed.of(tensor);
+    return StrictColorDataIndexed.of(Subdivide.increasing(Clips.unit(), length - 1) //
+        .map(hue -> ColorFormat.toVector(Hsluv.of(hue.number().doubleValue(), 1, lightness, 1))));
   }
 
   /** @param length

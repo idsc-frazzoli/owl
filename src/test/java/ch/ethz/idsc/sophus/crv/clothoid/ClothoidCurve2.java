@@ -26,8 +26,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   @Override // from ClothoidCurve
   protected Scalar il(Scalar t) {
     // return Total.ofVector(X.multiply(t).map(clothoidQuadratic::exp_i)).multiply(HALF).multiply(t);
-    Scalar v0 = clothoidQuadratic.exp_i(X0.multiply(t));
-    Scalar v1 = clothoidQuadratic.exp_i(X1.multiply(t));
+    Scalar v0 = exp_i(X0.multiply(t));
+    Scalar v1 = exp_i(X1.multiply(t));
     return v0.add(v1).multiply(HALF).multiply(t);
   }
 
@@ -35,8 +35,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   protected Scalar ir(Scalar t) {
     Scalar _1_t = _1.subtract(t);
     // return Total.ofVector(X.multiply(_1_t).map(t::add).map(clothoidQuadratic::exp_i)).multiply(HALF).multiply(_1_t);
-    Scalar v0 = clothoidQuadratic.exp_i(X0.multiply(_1_t).add(t));
-    Scalar v1 = clothoidQuadratic.exp_i(X1.multiply(_1_t).add(t));
+    Scalar v0 = exp_i(X0.multiply(_1_t).add(t));
+    Scalar v1 = exp_i(X1.multiply(_1_t).add(t));
     return v0.add(v1).multiply(HALF).multiply(_1_t);
   }
 }

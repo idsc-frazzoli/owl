@@ -26,6 +26,6 @@ public class So2GroupElement implements LieGroupElement {
 
   @Override // from LieGroupElement
   public Scalar adjoint(Tensor tensor) {
-    return tensor.Get();// TODO JPH test coverage
+    return (Scalar) tensor;// TODO JPH test coverage
   }
 }
