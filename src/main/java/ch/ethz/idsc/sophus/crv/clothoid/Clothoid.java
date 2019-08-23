@@ -73,9 +73,9 @@ public class Clothoid implements Serializable {
      * @return approximate integration of exp i*clothoidQuadratic on [0, t] */
     private Scalar il(Scalar t) {
       Scalar v0 = clothoidQuadratic.exp_i(X0.multiply(t));
-      Scalar w1 = clothoidQuadratic.exp_i(X1.multiply(t)).multiply(W1);
+      Scalar v1 = clothoidQuadratic.exp_i(X1.multiply(t));
       Scalar v2 = clothoidQuadratic.exp_i(X2.multiply(t));
-      return v0.add(v2).multiply(W0).add(w1).multiply(t);
+      return v0.add(v2).multiply(W0).add(v1.multiply(W1)).multiply(t);
     }
 
     /** @param t
@@ -83,9 +83,9 @@ public class Clothoid implements Serializable {
     private Scalar ir(Scalar t) {
       Scalar _1_t = _1.subtract(t);
       Scalar v0 = clothoidQuadratic.exp_i(X0.multiply(_1_t).add(t));
-      Scalar w1 = clothoidQuadratic.exp_i(X1.multiply(_1_t).add(t)).multiply(W1);
+      Scalar v1 = clothoidQuadratic.exp_i(X1.multiply(_1_t).add(t));
       Scalar v2 = clothoidQuadratic.exp_i(X2.multiply(_1_t).add(t));
-      return v0.add(v2).multiply(W0).add(w1).multiply(_1_t);
+      return v0.add(v2).multiply(W0).add(v1.multiply(W1)).multiply(_1_t);
     }
 
     /** @return approximate length */
@@ -95,11 +95,11 @@ public class Clothoid implements Serializable {
 
     /** @return approximate integration of exp i*clothoidQuadratic on [0, 1] */
     private Scalar one() {
-      // TODO JPH gauss-legendre 5th on [0, 1]
+      // longterm one could use gauss-legendre 5th on [0, 1]
       Scalar v0 = clothoidQuadratic.exp_i(X0);
-      Scalar w1 = clothoidQuadratic.exp_i(X1).multiply(W1);
+      Scalar v1 = clothoidQuadratic.exp_i(X1);
       Scalar v2 = clothoidQuadratic.exp_i(X2);
-      return v0.add(v2).multiply(W0).add(w1);
+      return v0.add(v2).multiply(W0).add(v1.multiply(W1));
     }
   }
 
@@ -123,7 +123,7 @@ public class Clothoid implements Serializable {
     }
   }
 
-  /** complex multiplication
+  /** complex multiplication between z and vector[0]+i*vector[1]
    * 
    * @param z
    * @param vector of length 2 with entries that may be {@link Quantity}

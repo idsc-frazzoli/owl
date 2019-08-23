@@ -39,8 +39,8 @@ import ch.ethz.idsc.tensor.Tensors;
       symLink = SymLinkBuilder.of(control, symScalar);
       // ---
       GraphicsUtil.setQualityHigh(graphics);
-      // ---
       GeometricSymLinkRender.of(geodesicDisplay, symLink).render(geometricLayer, graphics);
+      GraphicsUtil.setQualityDefault(graphics);
     }
     renderControlPoints(geometricLayer, graphics);
     // ---

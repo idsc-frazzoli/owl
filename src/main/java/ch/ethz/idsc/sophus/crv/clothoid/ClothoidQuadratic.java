@@ -24,6 +24,9 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   /** The Lagrange interpolating polynomial has the following coefficients
    * {b0, -3 b0 - b1 + 4 bm, 2 (b0 + b1 - 2 bm)}
    * 
+   * <p>Typically, the input parameters b0, bm, b1 are real numbers and
+   * represent angles.
+   * 
    * @param b0
    * @param bm
    * @param b1 */

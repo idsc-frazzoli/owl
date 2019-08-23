@@ -11,7 +11,11 @@ import ch.ethz.idsc.tensor.Scalar;
   private static final Scalar _1_46 = RealScalar.of(1 / 46.0);
   private static final Scalar _1_4 = RealScalar.of(0.25);
 
-  /** @param b0
+  /** Typically, the input parameters b0, b1 are real numbers and
+   * represent angles. In that case, the return value is also a
+   * real number.
+   * 
+   * @param b0
    * @param b1
    * @return tilde f(b0, b1) */
   static Scalar f(Scalar b0, Scalar b1) {
