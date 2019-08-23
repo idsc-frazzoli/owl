@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
+import ch.ethz.idsc.owl.data.tree.ObservingExpandInterface;
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -30,7 +31,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-public abstract class RrtsPlannerServer implements TransitionPlanner {
+public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingExpandInterface<RrtsNode> {
   protected final TransitionSpace transitionSpace;
   protected final TransitionRegionQuery obstacleQuery;
   protected final TransitionCostFunction costFunction;

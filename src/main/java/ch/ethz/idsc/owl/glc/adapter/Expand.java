@@ -1,11 +1,14 @@
 // code by jph and jl
 package ch.ethz.idsc.owl.glc.adapter;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import ch.ethz.idsc.owl.data.tree.ExpandInterface;
+import ch.ethz.idsc.owl.data.tree.ObservingExpandInterface;
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Timing;
@@ -59,6 +62,21 @@ public class Expand<T extends StateCostNode> {
   }
 
   private void expand(int limit, Supplier<Boolean> isFinished) {
+    if (expandInterface instanceof ObservingExpandInterface && //
+        ((ObservingExpandInterface) expandInterface).isObserving()) {
+      final Map<Double, Scalar> observations = new LinkedHashMap<>();
+      Timing timing = Timing.started();
+      Supplier<Boolean> isFinished_ = () -> {
+        expandInterface.getBest().ifPresent(node -> observations.put(timing.seconds(), node.costFromRoot()));
+        return isFinished.get();
+      };
+      expansionLoop(limit, isFinished_);
+      ((ObservingExpandInterface) expandInterface).process(observations);
+    } else
+      expansionLoop(limit, isFinished);
+  }
+
+  private void expansionLoop(int limit, Supplier<Boolean> isFinished) {
     while (0 <= --limit && !isFinished.get() && isContinued.get()) {
       Optional<T> next = expandInterface.pollNext();
       if (next.isPresent()) {
