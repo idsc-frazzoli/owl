@@ -10,6 +10,6 @@ public enum So2Metric implements TensorMetric {
   // ---
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
-    return So2.MOD.apply((Scalar) p.subtract(q)).abs();
+    return So2.MOD.apply(p.subtract(q).Get()).abs();
   }
 }

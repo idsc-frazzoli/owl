@@ -1,7 +1,6 @@
 // code by ureif
 package ch.ethz.idsc.sophus.crv.clothoid;
 
-import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -41,9 +40,5 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   @Override
   public Scalar apply(Scalar s) {
     return c2.multiply(s).add(c1).multiply(s).add(c0);
-  }
-
-  public Scalar exp_i(Scalar s) {
-    return ComplexScalar.unit(apply(s));
   }
 }

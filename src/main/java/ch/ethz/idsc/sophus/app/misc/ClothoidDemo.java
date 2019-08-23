@@ -12,10 +12,10 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
+import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoid;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -31,7 +31,6 @@ import ch.ethz.idsc.tensor.red.Nest;
  * 
  * Therefore, for simplicity in algorithms we use degree == 1. */
 public class ClothoidDemo extends AbstractDemo implements DemoInterface {
-  private static final GeodesicInterface GEODESIC_INTERFACE = Clothoid3.INSTANCE;
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final Tensor DOMAIN = Subdivide.of(0.0, 1.0, 100);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
@@ -49,17 +48,22 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
       geometricLayer.popMatrix();
     }
     {
-      Tensor points = DOMAIN.map(GEODESIC_INTERFACE.curve(START, mouse));
+      Tensor points = DOMAIN.map(Clothoid3.INSTANCE.curve(START, mouse));
       new PathRender(COLOR_DATA_INDEXED.getColor(0), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
     }
     int count = 1;
     for (int degree = 1; degree <= 5; degree += 2) {
-      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(GEODESIC_INTERFACE, degree);
+      CurveSubdivision curveSubdivision = LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, degree);
       Tensor points = Nest.of(curveSubdivision::string, Tensors.of(START, mouse), 6);
       new PathRender(COLOR_DATA_INDEXED.getColor(count), 1.5f) //
           .setCurve(points, false).render(geometricLayer, graphics);
       ++count;
+    }
+    {
+      Tensor points = DOMAIN.map(new PolarClothoid(START, mouse).new Curve());
+      new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
+          .setCurve(points, false).render(geometricLayer, graphics);
     }
   }
 

@@ -21,4 +21,12 @@ public class PolarScalarTest extends TestCase {
     assertEquals(zero.abs(), RealScalar.ZERO);
     assertEquals(zero.arg(), RealScalar.ZERO);
   }
+
+  public void testNegate() {
+    PolarScalar p = PolarScalar.of(RealScalar.of(2), RealScalar.of(1.2));
+    PolarScalar q = p.negate();
+    PolarScalar r = (PolarScalar) p.add(q);
+    assertEquals(r.abs(), RealScalar.ZERO);
+    assertEquals(r.arg(), RealScalar.ZERO);
+  }
 }

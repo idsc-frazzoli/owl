@@ -7,13 +7,25 @@ import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.red.Hypot;
+import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.ArgInterface;
+import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
+import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.sca.Sin;
 
-public class PolarScalar extends AbstractScalar implements ArgInterface {
+public class PolarScalar extends AbstractScalar implements //
+    ArgInterface, ComplexEmbedding {
   public static PolarScalar of(Scalar abs, Scalar arg) {
     return new PolarScalar( //
         Sign.requirePositiveOrZero(abs), //
+        arg);
+  }
+
+  public static PolarScalar unit(Scalar arg) {
+    return new PolarScalar( //
+        RealScalar.ONE, //
         arg);
   }
 
@@ -22,7 +34,7 @@ public class PolarScalar extends AbstractScalar implements ArgInterface {
   private final Scalar arg;
 
   private PolarScalar(Scalar abs, Scalar arg) {
-    this.abs = Sign.requirePositiveOrZero(abs);
+    this.abs = abs;
     this.arg = arg;
   }
 
@@ -44,7 +56,9 @@ public class PolarScalar extends AbstractScalar implements ArgInterface {
 
   @Override
   public PolarScalar negate() {
-    throw TensorRuntimeException.of(this);
+    return new PolarScalar( //
+        abs.negate(), //
+        arg);
   }
 
   @Override
@@ -73,13 +87,42 @@ public class PolarScalar extends AbstractScalar implements ArgInterface {
 
   @Override
   protected PolarScalar plus(Scalar scalar) {
+    if (scalar instanceof PolarScalar) {
+      Scalar p_real = real();
+      Scalar p_imag = imag();
+      PolarScalar polarScalar = (PolarScalar) scalar;
+      Scalar q_real = polarScalar.real();
+      Scalar q_imag = polarScalar.imag();
+      Scalar r_real = p_real.add(q_real);
+      Scalar r_imag = p_imag.add(q_imag);
+      return new PolarScalar( //
+          Hypot.of(r_real, r_imag), //
+          ArcTan.of(r_real, r_imag));
+    }
     throw TensorRuntimeException.of(this);
   }
 
   /***************************************************/
-  @Override
+  @Override // from ArgInterface
   public Scalar arg() {
     return arg;
+  }
+
+  @Override
+  public PolarScalar conjugate() {
+    return new PolarScalar( //
+        abs, //
+        arg.negate());
+  }
+
+  @Override
+  public Scalar real() {
+    return abs.multiply(Cos.FUNCTION.apply(arg));
+  }
+
+  @Override
+  public Scalar imag() {
+    return abs.multiply(Sin.FUNCTION.apply(arg));
   }
 
   /***************************************************/
