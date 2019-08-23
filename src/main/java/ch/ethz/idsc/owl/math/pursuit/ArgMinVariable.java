@@ -82,7 +82,7 @@ public class ArgMinVariable implements TensorScalarFunction {
     Scalar var2 = pairs[1].Get(1);
     if (var1.equals(var2) || level == maxLevel)
       return var1;
-    update(function, (Scalar) Mean.of(Tensors.of(var1, var2)));
+    update(function, Mean.of(Tensors.of(var1, var2)).Get());
     return bisect(function, level + 1);
   }
 }

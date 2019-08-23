@@ -66,7 +66,7 @@ public class Clothoid implements Serializable {
        * t == 1 -> (1, 0) */
       Scalar z = il.divide(il.add(ir));
       return pxy.add(prod(z, diff)) //
-          .append(clothoidQuadratic.apply(t).add(da));
+          .append(da.add(clothoidQuadratic.apply(t)));
     }
 
     /** @param t

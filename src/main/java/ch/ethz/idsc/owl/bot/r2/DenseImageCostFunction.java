@@ -24,6 +24,6 @@ public final class DenseImageCostFunction extends ImageCostFunction {
     Tensor cost = Tensor.of(trajectory.stream() //
         .map(StateTime::state) //
         .map(flipYXTensorInterp::at));
-    return (Scalar) cost.dot(dts);
+    return cost.dot(dts).Get();
   }
 }

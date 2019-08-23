@@ -185,7 +185,7 @@ public class ShadowEvaluator {
               .anyMatch(local -> isMember(newindexer, local, cols, rows));
           if (!clear)
             break;
-          timeToReact = (Scalar) tReact;
+          timeToReact = tReact.Get();
         }
       }
       timeToReactVec.append(timeToReact);

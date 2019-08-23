@@ -38,7 +38,7 @@ public class R2NoiseCostFunction implements CostFunction, Serializable {
         .map(CONTINUOUS_NOISE) //
         .map(scalar -> scalar.subtract(treshold)) //
         .map(Ramp.FUNCTION));
-    return (Scalar) cost.dot(dts);
+    return cost.dot(dts).Get();
   }
 
   @Override // from HeuristicFunction
