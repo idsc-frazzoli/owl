@@ -44,7 +44,7 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
   public static RegionRandomSample endSample(LaneInterface laneInterface, Distribution rotDist) {
     return RegionRandomSample.combine( //
         new LaneRandomSample(laneInterface, rotDist).around(laneInterface.midLane().length() - 1), //
-        new SphericalRegion(Extract2D.FUNCTION.apply(Last.of(laneInterface.midLane())), Last.of(laneInterface.margins()).Get()));
+        new SphericalRegion(Extract2D.FUNCTION.apply(Last.of(laneInterface.midLane())), (Scalar) Last.of(laneInterface.margins())));
   }
 
   public static RegionRandomSample endSample(LaneInterface laneInterface, Distribution rotDist, Scalar mu_r, Scalar semi) {

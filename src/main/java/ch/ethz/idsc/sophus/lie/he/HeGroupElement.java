@@ -44,7 +44,7 @@ public class HeGroupElement implements LieGroupElement, Serializable {
     return new HeGroupElement( //
         x.negate(), //
         y.negate(), //
-        x.dot(y).Get().subtract(z));
+        (Scalar) x.dot(y).subtract(z));
   }
 
   @Override // from LieGroupElement

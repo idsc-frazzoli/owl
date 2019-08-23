@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 
   private void visit(Scalar weight, SymScalar root) {
     if (root.isScalar()) {
-      Scalar scalar = root.tensor().Get();
+      Scalar scalar = (Scalar) root.tensor();
       int index = scalar.number().intValue();
       max = Math.max(max, index);
       while (sum.length() <= index)

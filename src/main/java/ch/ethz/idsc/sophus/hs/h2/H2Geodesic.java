@@ -35,7 +35,7 @@ public enum H2Geodesic implements SplitInterface {
     if (p1.equals(q1)) // when p == q or p == -q
       return Tensors.of(p1, height(p2, q2, scalar));
     Scalar pq = p1.subtract(q1);
-    Scalar c1 = p.dot(p).subtract(q.dot(q)).Get().divide(pq.add(pq));
+    Scalar c1 = (Scalar) p.dot(p).subtract(q.dot(q)).divide(pq.add(pq));
     Scalar c2 = Sqrt.FUNCTION.apply(AbsSquared.FUNCTION.apply(p1.subtract(c1)).add(p2.multiply(p2)));
     Scalar c3 = ArcTanh.FUNCTION.apply(p1.subtract(c1).divide(c2));
     if (NumberQ.of(c3)) {

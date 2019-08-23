@@ -17,10 +17,10 @@ import ch.ethz.idsc.tensor.lie.Cross;
    * @return solution to the equation pos1 + lambda * dir1 == pos2 + mu * dir2 */
   public static Optional<Tensor> of(Tensor pos1, Tensor dir1, Tensor pos2, Tensor dir2) {
     Tensor x2 = Cross.of(dir2);
-    Scalar num = pos2.subtract(pos1).dot(x2).Get();
-    Scalar den = dir1.dot(x2).Get();
+    Scalar den = (Scalar) dir1.dot(x2);
     if (Scalars.isZero(den))
       return Optional.empty();
+    Scalar num = (Scalar) pos2.subtract(pos1).dot(x2);
     return Optional.of(pos1.add(dir1.multiply(num.divide(den))));
   }
 }

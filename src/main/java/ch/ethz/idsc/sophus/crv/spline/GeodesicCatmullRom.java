@@ -40,7 +40,7 @@ public class GeodesicCatmullRom implements ScalarTensorFunction {
     this.binaryAverage = binaryAverage;
     int index = -1;
     for (Tensor knot : knots)
-      navigableMap.put(knot.Get(), ++index);
+      navigableMap.put((Scalar) knot, ++index);
     this.knots = knots;
     this.control = control;
     if (knots.length() != control.length())

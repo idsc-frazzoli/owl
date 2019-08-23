@@ -80,7 +80,7 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
     TensorUnaryOperator centripedalKnotSpacing = //
         KnotSpacing.centripetal(geodesicDisplay()::parametricDistance, 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
-    final Scalar upper = (Scalar) Last.of(knots);
+    final Scalar upper = Last.of(knots).Get();
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
@@ -113,7 +113,7 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
     TensorUnaryOperator centripedalKnotSpacing = //
         KnotSpacing.centripetal(geodesicDisplay()::parametricDistance, 0.5);
     Tensor knots = centripedalKnotSpacing.apply(control);
-    final Scalar upper = (Scalar) Last.of(knots);
+    final Scalar upper = Last.of(knots).Get();
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     GeodesicBSplineFunction scalarTensorFunction = //

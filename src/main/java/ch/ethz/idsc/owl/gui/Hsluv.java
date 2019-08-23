@@ -8,21 +8,24 @@ import java.util.List;
 
 import ch.ethz.idsc.tensor.img.Hue;
 
-/** Hsluv is similar to {@link Hue} but attempts to balance overall brightness for all colors */
+/** Hsluv is similar to {@link Hue} but attempts to balance overall lightness
+ * for all hue values.
+ * 
+ * The <a href="http://www.hsluv.org">website</a> features an interactive demo. */
 public enum Hsluv {
   ;
   /** @param hue in range [0, 1), value is taken modulo 1
-   * @param sat saturation in range [0, 1]
-   * @param lgt lightness with lgt == 0.5 for most intense color
+   * @param saturation in range [0, 1]
+   * @param lightness in range [0, 1], use 0.5 for greatest variability in hue
    * @param alpha in range [0, 1] for transparency
    * @return color */
-  public static Color of(double hue, double sat, double lgt, double alpha) {
+  public static Color of(double hue, double saturation, double lightness, double alpha) {
     if (!Double.isFinite(hue))
       throw new IllegalArgumentException("hue=" + hue);
     hue %= 1;
     if (hue < 0)
       hue += 1;
-    double[] rgb = hsluvToRgb(new double[] { hue * 360, sat * 100, lgt * 100 });
+    double[] rgb = hsluvToRgb(hue * 360, saturation * 100, lightness * 100);
     return new Color((float) rgb[0], (float) rgb[1], (float) rgb[2], (float) alpha);
   }
 
@@ -133,10 +136,7 @@ public enum Hsluv {
     return new double[] { L, U, V };
   }
 
-  private static double[] hsluvToLch(double[] tuple) {
-    double H = tuple[0];
-    double S = tuple[1];
-    double L = tuple[2];
+  private static double[] hsluvToLch(double H, double S, double L) {
     if (L > 99.9999999)
       return new double[] { 100d, 0, H };
     if (L < 0.00000001)
@@ -154,7 +154,7 @@ public enum Hsluv {
    * 
    * @param tuple consisting of hue [0, 360], saturation [0, 100], lightness [0, 100]
    * @return */
-  private static double[] hsluvToRgb(double[] tuple) {
-    return lchToRgb(hsluvToLch(tuple));
+  private static double[] hsluvToRgb(double H, double S, double L) {
+    return lchToRgb(hsluvToLch(H, S, L));
   }
 }

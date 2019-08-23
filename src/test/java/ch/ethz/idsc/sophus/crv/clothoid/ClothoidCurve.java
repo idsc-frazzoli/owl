@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.ArcTan2D;
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -50,5 +51,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
     Scalar z = il.divide(il.add(ir));
     return pxy.add(Clothoid.prod(z, diff)) //
         .append(clothoidQuadratic.apply(t).add(da));
+  }
+
+  public Scalar exp_i(Scalar s) {
+    return ComplexScalar.unit(clothoidQuadratic.apply(s));
   }
 }

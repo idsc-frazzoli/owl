@@ -3,10 +3,8 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.ArcTan2D;
-import ch.ethz.idsc.sophus.math.HeadTailInterface;
-import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.sophus.sym.PolarScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -17,11 +15,9 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/** Reference: U. Reif slides */
-public class Clothoid implements Serializable {
+public class PolarClothoid implements Serializable {
   private static final Scalar _1 = RealScalar.of(1.0);
   /** 3-point Gauss Legendre quadrature on interval [0, 1] */
   private static final Tensor W = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
@@ -44,7 +40,7 @@ public class Clothoid implements Serializable {
 
   /** @param p vector of the form {px, py, pa}
    * @param q vector of the form {qx, qy, qa} */
-  public Clothoid(Tensor p, Tensor q) {
+  public PolarClothoid(Tensor p, Tensor q) {
     pxy = p.extract(0, 2);
     Scalar pa = p.Get(2);
     Tensor qxy = q.extract(0, 2);
@@ -52,8 +48,8 @@ public class Clothoid implements Serializable {
     // ---
     diff = qxy.subtract(pxy);
     da = ArcTan2D.of(diff); // special case when diff == {0, 0}
-    b0 = So2.MOD.apply(pa.subtract(da)); // normal form T0 == b0
-    b1 = So2.MOD.apply(qa.subtract(da)); // normal form T1 == b1
+    b0 = pa.subtract(da); // normal form T0 == b0
+    b1 = qa.subtract(da); // normal form T1 == b1
     bm = ClothoidApproximation.f(b0, b1);
   }
 
@@ -75,9 +71,9 @@ public class Clothoid implements Serializable {
     /** @param t
      * @return approximate integration of exp i*clothoidQuadratic on [0, t] */
     private Scalar il(Scalar t) {
-      Scalar v0 = exp_i(X0.multiply(t));
-      Scalar v1 = exp_i(X1.multiply(t));
-      Scalar v2 = exp_i(X2.multiply(t));
+      Scalar v0 = unit(X0.multiply(t));
+      Scalar v1 = unit(X1.multiply(t));
+      Scalar v2 = unit(X2.multiply(t));
       return v0.add(v2).multiply(W0).add(v1.multiply(W1)).multiply(t);
     }
 
@@ -85,9 +81,9 @@ public class Clothoid implements Serializable {
      * @return approximate integration of exp i*clothoidQuadratic on [t, 1] */
     private Scalar ir(Scalar t) {
       Scalar _1_t = _1.subtract(t);
-      Scalar v0 = exp_i(X0.multiply(_1_t).add(t));
-      Scalar v1 = exp_i(X1.multiply(_1_t).add(t));
-      Scalar v2 = exp_i(X2.multiply(_1_t).add(t));
+      Scalar v0 = unit(X0.multiply(_1_t).add(t));
+      Scalar v1 = unit(X1.multiply(_1_t).add(t));
+      Scalar v2 = unit(X2.multiply(_1_t).add(t));
       return v0.add(v2).multiply(W0).add(v1.multiply(W1)).multiply(_1_t);
     }
 
@@ -99,34 +95,14 @@ public class Clothoid implements Serializable {
     /** @return approximate integration of exp i*clothoidQuadratic on [0, 1] */
     private Scalar one() {
       // longterm one could use gauss-legendre 5th on [0, 1]
-      Scalar v0 = exp_i(X0);
-      Scalar v1 = exp_i(X1);
-      Scalar v2 = exp_i(X2);
+      Scalar v0 = unit(X0);
+      Scalar v1 = unit(X1);
+      Scalar v2 = unit(X2);
       return v0.add(v2).multiply(W0).add(v1.multiply(W1));
     }
 
-    private Scalar exp_i(Scalar s) {
-      return ComplexScalar.unit(clothoidQuadratic.apply(s));
-    }
-  }
-
-  public final class Curvature implements ScalarUnaryOperator, HeadTailInterface {
-    private final ClothoidQuadraticD clothoidQuadraticD = new ClothoidQuadraticD(b0, bm, b1);
-    private final Scalar v = Norm._2.ofVector(diff);
-
-    @Override
-    public Scalar apply(Scalar t) {
-      return clothoidQuadraticD.apply(t).divide(v);
-    }
-
-    @Override // from HeadTailInterface
-    public Scalar head() {
-      return clothoidQuadraticD.head().divide(v);
-    }
-
-    @Override // from HeadTailInterface
-    public Scalar tail() {
-      return clothoidQuadraticD.tail().divide(v);
+    private Scalar unit(Scalar t) {
+      return PolarScalar.unit(clothoidQuadratic.apply(t));
     }
   }
 

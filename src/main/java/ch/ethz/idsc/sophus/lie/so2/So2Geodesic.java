@@ -18,6 +18,6 @@ public enum So2Geodesic implements GeodesicInterface {
   /** p and q are orthogonal matrices with dimension 2 x 2 */
   @Override // from GeodesicInterface
   public Scalar split(Tensor p, Tensor q, Scalar scalar) {
-    return curve(p, q).apply(scalar).Get();
+    return (Scalar) curve(p, q).apply(scalar);
   }
 }
