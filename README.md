@@ -53,7 +53,7 @@ Obstacle anticipation
 
 * André Stoll (MT): *Multi-Objective Optimization Using Preference Structures*
 * Oliver Brinkmann (MT): *Averaging on Lie Groups: Applications of Geodesic Averages and Biinvariant Means*
-* Joel Gächter (MT): RRTS with clothoids
+* Joel Gächter (MT): RRT* with clothoids
 
 ## Features
 

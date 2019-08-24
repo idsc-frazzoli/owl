@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
 
+/** double helix */
 public class PolarScalar extends AbstractScalar implements //
     ArgInterface, ComplexEmbedding {
   public static PolarScalar of(Scalar abs, Scalar arg) {
