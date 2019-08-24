@@ -36,9 +36,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ enum ClothoidLaneSimulation {
   ;
-
   private static final Tensor[] CONTROLS = { // TODO GJOEL fill in
-      Tensors.fromString("{{6.017, 4.983, 0.785},{8.100, 5.100, -1.571},{1.667, 1.950, -3.142}}")};
+      Tensors.fromString("{{6.017, 4.983, 0.785},{8.100, 5.100, -1.571},{1.667, 1.950, -3.142}}") };
   private static final int REPS = 10;
   private static final Scalar DELAY_HINT = RealScalar.of(3);
   private static final Scalar OVERHEAD = RealScalar.of(.5);
@@ -82,7 +81,8 @@ class SimulationEntity extends AbstractRrtsEntity {
   private final Scalar delayHint;
 
   /** @param stateTime initial position of entity */
-  /* package */ SimulationEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds, boolean greedy, Scalar delayHint) {
+  /* package */ SimulationEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds, boolean greedy,
+      Scalar delayHint) {
     super( //
         new LaneRrtsPlannerServer( //
             ClothoidTransitionSpace.INSTANCE, //
@@ -107,7 +107,6 @@ class SimulationEntity extends AbstractRrtsEntity {
           public boolean isObserving() {
             return true;
           }
-
           // TODO GJOEL treat observations
         }, //
         new SimpleEpisodeIntegrator( //

@@ -1,11 +1,11 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.clothoid;
 
-import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoid.Curve;
+import ch.ethz.idsc.sophus.crv.clothoid.OriginClothoid.Curve;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.lie.LieGroupElement;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroupElement;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -26,10 +26,9 @@ public enum PolarClothoid3 implements GeodesicInterface {
 
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    Se2CoveringGroupElement pe = Se2CoveringGroup.INSTANCE.element(p);
-    Tensor r = pe.inverse().combine(q);
-    Curve curve = new PolarClothoid(p.map(Scalar::zero), r).new Curve();
-    return t -> pe.combine(curve.apply(t));
+    LieGroupElement lieGroupElement = Se2CoveringGroup.INSTANCE.element(p);
+    Curve curve = new OriginClothoid(lieGroupElement.inverse().combine(q)).new Curve();
+    return t -> lieGroupElement.combine(curve.apply(t));
   }
 
   @Override // from GeodesicInterface

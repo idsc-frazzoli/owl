@@ -11,4 +11,8 @@ public class ClothoidApproximationTest extends TestCase {
     Scalar f = ClothoidApproximation.f(RealScalar.of(0.3), RealScalar.of(-0.82));
     Chop._15.requireClose(f, RealScalar.of(0.1213890127877238));
   }
+  // public void test2Pi() {
+  // Scalar f = ClothoidApproximation.f(RealScalar.of(0.3+2*Math.PI), RealScalar.of(-0.82+2*Math.PI));
+  // System.out.println(f);
+  // }
 }
