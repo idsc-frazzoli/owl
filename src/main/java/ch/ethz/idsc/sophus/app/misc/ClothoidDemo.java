@@ -13,18 +13,19 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
-import ch.ethz.idsc.sophus.crv.clothoid.OriginClothoid;
-import ch.ethz.idsc.sophus.crv.clothoid.OriginClothoid.Curve;
+import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoid3;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Nest;
 
 /** The demo shows that when using LaneRiesenfeldCurveSubdivision(Clothoid3.INSTANCE, degree)
@@ -64,7 +65,8 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
       ++count;
     }
     {
-      Curve curve = new OriginClothoid(mouse).new Curve();
+      ScalarTensorFunction curve = //
+          PolarClothoid3.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
       {
         Tensor points = DOMAIN.map(curve);
         new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //

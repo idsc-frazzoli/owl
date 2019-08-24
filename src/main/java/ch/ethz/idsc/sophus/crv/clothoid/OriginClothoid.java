@@ -11,13 +11,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
-import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-public class OriginClothoid implements Serializable {
+/* package */ class OriginClothoid implements Serializable {
   private static final Scalar _1 = RealScalar.of(1.0);
   /** 3-point Gauss Legendre quadrature on interval [0, 1] */
   private static final Tensor W = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
@@ -32,6 +32,7 @@ public class OriginClothoid implements Serializable {
   private static final Scalar W1 = W.Get(1);
   // ---
   private final Tensor qxy;
+  private final Scalar qp;
   private final Scalar qxy_arg;
   private final Scalar b0;
   private final Scalar b1;
@@ -40,11 +41,15 @@ public class OriginClothoid implements Serializable {
   /** @param q vector of the form {qx, qy, qa} */
   public OriginClothoid(Tensor q) {
     qxy = q.extract(0, 2);
-    Scalar qarg = q.Get(2);
     // ---
+    // TODO choice: the computation of b0 and b1 is not canonic
     qxy_arg = ArcTan2D.of(qxy); // special case when diff == {0, 0}
+    qp = PolarScalar.of( //
+        Hypot.of(qxy.Get(0), qxy.Get(1)), //
+        qxy_arg);
+    Scalar qangle = q.Get(2);
     b0 = qxy_arg.negate(); // normal form T0 == b0
-    b1 = qarg.subtract(qxy_arg); // normal form T1 == b1
+    b1 = qangle.subtract(qxy_arg); // normal form T1 == b1
     bm = ClothoidApproximation.f(b0, b1);
   }
 
@@ -58,9 +63,12 @@ public class OriginClothoid implements Serializable {
       /** ratio z enforces interpolation of terminal points
        * t == 0 -> (0, 0)
        * t == 1 -> (1, 0) */
-      Scalar z = il.divide(il.add(ir));
-      return prod(z, qxy) //
-          .append(qxy_arg.add(clothoidQuadratic.apply(t)));
+      PolarScalar z = (PolarScalar) il.divide(il.add(ir));
+      PolarScalar zq = z.multiply(qp);
+      return Tensors.of( //
+          Real.FUNCTION.apply(zq), //
+          Imag.FUNCTION.apply(zq), //
+          qxy_arg.add(clothoidQuadratic.apply(t)));
     }
 
     /** @param t
@@ -69,6 +77,7 @@ public class OriginClothoid implements Serializable {
       Scalar v0 = exp_i(X0.multiply(t));
       Scalar v1 = exp_i(X1.multiply(t));
       Scalar v2 = exp_i(X2.multiply(t));
+      // TODO choice: biinvariant mean of polar scalars
       return v0.add(v2).multiply(W0).add(v1.multiply(W1)).multiply(t);
     }
 
@@ -79,6 +88,7 @@ public class OriginClothoid implements Serializable {
       Scalar v0 = exp_i(X0.multiply(_1_t).add(t));
       Scalar v1 = exp_i(X1.multiply(_1_t).add(t));
       Scalar v2 = exp_i(X2.multiply(_1_t).add(t));
+      // TODO choice: biinvariant mean of polar scalars
       return v0.add(v2).multiply(W0).add(v1.multiply(W1)).multiply(_1_t);
     }
 
@@ -99,21 +109,5 @@ public class OriginClothoid implements Serializable {
     private Scalar exp_i(Scalar t) {
       return PolarScalar.unit(clothoidQuadratic.apply(t));
     }
-  }
-
-  /** complex multiplication between z and vector[0]+i*vector[1]
-   * 
-   * @param z
-   * @param vector of length 2 with entries that may be {@link Quantity}
-   * @return vector of length 2 with real entries corresponding to real and imag of result */
-  /* package */ static Tensor prod(Scalar z, Tensor vector) {
-    Scalar zr = Real.FUNCTION.apply(z);
-    Scalar zi = Imag.FUNCTION.apply(z);
-    Scalar v0 = vector.Get(0);
-    Scalar v1 = vector.Get(1);
-    return Tensors.of( //
-        zr.multiply(v0).subtract(zi.multiply(v1)), //
-        zi.multiply(v0).add(zr.multiply(v1)) //
-    );
   }
 }
