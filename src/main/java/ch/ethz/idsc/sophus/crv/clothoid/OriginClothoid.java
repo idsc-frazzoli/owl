@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.crv.clothoid;
 import java.io.Serializable;
 
 import ch.ethz.idsc.sophus.math.ArcTan2D;
+import ch.ethz.idsc.sophus.sym.PolarBiinvariantMean;
 import ch.ethz.idsc.sophus.sym.PolarScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -12,7 +13,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Hypot;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -77,8 +77,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       Scalar v0 = exp_i(X0.multiply(t));
       Scalar v1 = exp_i(X1.multiply(t));
       Scalar v2 = exp_i(X2.multiply(t));
-      // TODO choice: biinvariant mean of polar scalars
-      return v0.add(v2).multiply(W0).add(v1.multiply(W1)).multiply(t);
+      return PolarBiinvariantMean.INSTANCE.mean( //
+          Tensors.of(v0, v1, v2), //
+          Tensors.of(W0, W1, W0)).multiply(t);
     }
 
     /** @param t
@@ -88,22 +89,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       Scalar v0 = exp_i(X0.multiply(_1_t).add(t));
       Scalar v1 = exp_i(X1.multiply(_1_t).add(t));
       Scalar v2 = exp_i(X2.multiply(_1_t).add(t));
-      // TODO choice: biinvariant mean of polar scalars
-      return v0.add(v2).multiply(W0).add(v1.multiply(W1)).multiply(_1_t);
-    }
-
-    /** @return approximate length */
-    public Scalar length() {
-      return Norm._2.ofVector(qxy).divide(one().abs());
-    }
-
-    /** @return approximate integration of exp i*clothoidQuadratic on [0, 1] */
-    private Scalar one() {
-      // longterm one could use gauss-legendre 5th on [0, 1]
-      Scalar v0 = exp_i(X0);
-      Scalar v1 = exp_i(X1);
-      Scalar v2 = exp_i(X2);
-      return v0.add(v2).multiply(W0).add(v1.multiply(W1));
+      return PolarBiinvariantMean.INSTANCE.mean( //
+          Tensors.of(v0, v1, v2), //
+          Tensors.of(W0, W1, W0)).multiply(_1_t);
     }
 
     private Scalar exp_i(Scalar t) {
