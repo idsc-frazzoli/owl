@@ -2,7 +2,6 @@
 package ch.ethz.idsc.sophus.sym;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.math.AffineQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,14 +16,17 @@ public enum PolarBiinvariantMean implements BiinvariantMean {
 
   @Override
   public PolarScalar mean(Tensor sequence, Tensor weights) {
-    AffineQ.require(weights); // TODO remove check at some point
+    // main computation
     PolarScalar r = (PolarScalar) sequence.dot(weights);
+    // if the mean is a convex combination (all weights positive and sum up to 1)
+    // then the arg of the result should be in the range of the args of the scalars in the input sequences
+    // but PolarScalar::add does not enforce that, instead we have to enforce it explicitly:
     ScalarSummaryStatistics scalarSummaryStatistics = sequence.stream() //
         .map(PolarScalar.class::cast) //
         .map(PolarScalar::arg) //
         .collect(ScalarSummaryStatistics.collector());
-    Scalar max = scalarSummaryStatistics.getMax(); // .add(EPS);
-    Scalar min = scalarSummaryStatistics.getMin(); // .subtract(EPS);
+    Scalar max = scalarSummaryStatistics.getMax();
+    Scalar min = scalarSummaryStatistics.getMin();
     int add_count = 0;
     while (Scalars.lessThan(r.arg(), min) //
         && Scalars.lessEquals(r.arg().add(Pi.TWO), max) //

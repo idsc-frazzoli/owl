@@ -10,7 +10,6 @@ public class PolarScalarTest extends TestCase {
     Scalar s1 = PolarScalar.of(RealScalar.of(2), RealScalar.of(1.2));
     Scalar s2 = s1.reciprocal();
     PolarScalar scalar = (PolarScalar) s1.multiply(s2);
-    // System.out.println(scalar);
     assertEquals(scalar.abs(), RealScalar.ONE);
     assertEquals(scalar.arg(), RealScalar.ZERO);
   }
@@ -25,6 +24,8 @@ public class PolarScalarTest extends TestCase {
   public void testNegate() {
     PolarScalar p = PolarScalar.of(RealScalar.of(2), RealScalar.of(1.2));
     PolarScalar q = p.negate();
+    assertEquals(q.abs(), RealScalar.of(-2));
+    assertEquals(q.arg(), RealScalar.of(1.2));
     PolarScalar r = (PolarScalar) p.add(q);
     assertEquals(r.abs(), RealScalar.ZERO);
     assertEquals(r.arg(), RealScalar.ZERO);

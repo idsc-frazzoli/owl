@@ -28,8 +28,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   private static final Scalar X0 = X.Get(0);
   private static final Scalar X1 = X.Get(1);
   private static final Scalar X2 = X.Get(2);
-  private static final Scalar W0 = W.Get(0);
-  private static final Scalar W1 = W.Get(1);
   // ---
   private final Tensor qxy;
   private final Scalar qp;
@@ -63,8 +61,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       /** ratio z enforces interpolation of terminal points
        * t == 0 -> (0, 0)
        * t == 1 -> (1, 0) */
-      PolarScalar z = (PolarScalar) il.divide(il.add(ir));
+      PolarScalar z = (PolarScalar) il.divide(il.add(ir)); // TODO use of polarscalar::add!
       PolarScalar zq = z.multiply(qp);
+      // TODO check code below
       return Tensors.of( //
           Real.FUNCTION.apply(zq), //
           Imag.FUNCTION.apply(zq), //
@@ -77,9 +76,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       Scalar v0 = exp_i(X0.multiply(t));
       Scalar v1 = exp_i(X1.multiply(t));
       Scalar v2 = exp_i(X2.multiply(t));
-      return PolarBiinvariantMean.INSTANCE.mean( //
-          Tensors.of(v0, v1, v2), //
-          Tensors.of(W0, W1, W0)).multiply(t);
+      return PolarBiinvariantMean.INSTANCE.mean(Tensors.of(v0, v1, v2), W).multiply(t);
     }
 
     /** @param t
@@ -89,9 +86,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       Scalar v0 = exp_i(X0.multiply(_1_t).add(t));
       Scalar v1 = exp_i(X1.multiply(_1_t).add(t));
       Scalar v2 = exp_i(X2.multiply(_1_t).add(t));
-      return PolarBiinvariantMean.INSTANCE.mean( //
-          Tensors.of(v0, v1, v2), //
-          Tensors.of(W0, W1, W0)).multiply(_1_t);
+      return PolarBiinvariantMean.INSTANCE.mean(Tensors.of(v0, v1, v2), W).multiply(_1_t);
     }
 
     private Scalar exp_i(Scalar t) {
