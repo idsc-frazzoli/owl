@@ -63,11 +63,11 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
     assertFalse(goalInterface.isMember(new StateTime(Tensors.fromString("{1[m], 2[m], 3.2}"), RealScalar.ZERO)));
     {
       Scalar minCostToGoal = goalInterface.minCostToGoal(Tensors.fromString("{1[m], 2[m], 3.2}"));
-      assertTrue(Chop._10.close(Quantity.of(0.2, "s"), minCostToGoal));
+      Chop._10.requireClose(Quantity.of(0.2, "s"), minCostToGoal);
     }
     {
       Scalar minCostToGoal = goalInterface.minCostToGoal(Tensors.fromString("{15[m], 22[m], 3.1}"));
-      assertTrue(Chop._10.close(Quantity.of(23.413111231467404, "s"), minCostToGoal));
+      Chop._10.requireClose(Quantity.of(23.413111231467404, "s"), minCostToGoal);
     }
   }
 

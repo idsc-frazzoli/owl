@@ -34,7 +34,7 @@ public class GeodesicIIR2Test extends TestCase {
     assertEquals(res0, vector0);
     Tensor vector1 = Tensors.vector(4, 5, 0.5);
     Tensor res1 = geodesicIIR2.apply(vector1);
-    assertTrue(Chop._10.close(res1, Tensors.vector(2.593872261349412, 3.406127738650588, 0.375)));
+    Chop._10.requireClose(res1, Tensors.vector(2.593872261349412, 3.406127738650588, 0.375));
   }
 
   public void testLinear() {

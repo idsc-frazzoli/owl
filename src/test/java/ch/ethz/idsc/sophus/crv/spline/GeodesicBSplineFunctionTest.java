@@ -33,7 +33,7 @@ public class GeodesicBSplineFunctionTest extends TestCase {
       GeodesicBSplineFunction mapReverse = //
           GeodesicBSplineFunction.of(Se2CoveringGeodesic.INSTANCE, degree, Reverse.of(control));
       Tensor reverse = Reverse.of(domain.map(mapReverse));
-      assertTrue(Chop._10.close(forward, reverse));
+      Chop._10.requireClose(forward, reverse);
     }
   }
 

@@ -50,7 +50,7 @@ public class S2GeodesicTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor p = NORMALIZE.apply(RandomVariate.of(distribution, 3));
       Tensor q = NORMALIZE.apply(RandomVariate.of(distribution, 3));
-      assertTrue(Chop._14.close(p, S2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
+      Chop._14.requireClose(p, S2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO));
       Tensor r = S2Geodesic.INSTANCE.split(p, q, RealScalar.ONE);
       Chop._12.requireClose(q, r);
       Chop._12.requireClose(Norm._2.of(r), RealScalar.ONE);

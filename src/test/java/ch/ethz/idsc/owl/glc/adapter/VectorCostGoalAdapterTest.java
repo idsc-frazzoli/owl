@@ -32,6 +32,6 @@ public class VectorCostGoalAdapterTest extends TestCase {
     Scalar minCostToGoal = goalInterface.minCostToGoal(Tensors.vector(0, 0, 0));
     VectorScalar vs = (VectorScalar) minCostToGoal;
     Tensor vector = vs.vector();
-    assertTrue(Chop._13.close(vector.Get(0).subtract(vector.Get(1)), vector.Get(1)));
+    Chop._13.requireClose(vector.Get(0).subtract(vector.Get(1)), vector.Get(1));
   }
 }

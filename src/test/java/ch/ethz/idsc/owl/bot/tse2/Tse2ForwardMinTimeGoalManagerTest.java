@@ -26,11 +26,11 @@ public class Tse2ForwardMinTimeGoalManagerTest extends TestCase {
         new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);
     {
       Scalar minCostToGoal = tse2ForwardMinTimeGoalManager.minCostToGoal(Tensors.fromString("{0[m], 0[m], 0, 0[m*s^-1]}"));
-      assertTrue(Chop._10.close(minCostToGoal, Quantity.of(4.242640687119285, "s")));
+      Chop._10.requireClose(minCostToGoal, Quantity.of(4.242640687119285, "s"));
     }
     {
       Scalar minCostToGoal = tse2ForwardMinTimeGoalManager.minCostToGoal(Tensors.fromString("{0[m], 0[m], 0, 6[m*s^-1]}"));
-      assertTrue(Chop._10.close(minCostToGoal, Quantity.of(1.3484692283495345, "s")));
+      Chop._10.requireClose(minCostToGoal, Quantity.of(1.3484692283495345, "s"));
     }
     assertTrue(tse2ForwardMinTimeGoalManager.isMember(Tensors.fromString("{10[m], 0[m], 0, 4[m*s^-1]}")));
     assertTrue(tse2ForwardMinTimeGoalManager.isMember(Tensors.fromString("{11[m], 0[m], 0, 4[m*s^-1]}")));

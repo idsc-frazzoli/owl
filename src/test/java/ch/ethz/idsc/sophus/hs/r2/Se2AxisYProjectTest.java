@@ -22,12 +22,12 @@ import junit.framework.TestCase;
 public class Se2AxisYProjectTest extends TestCase {
   public void testEx1() {
     Scalar t = Se2AxisYProject.of(Tensors.vector(1, 0, 0.3)).apply(Tensors.vector(10, 0));
-    assertTrue(Chop._12.close(t, RealScalar.of(4.163485907994182)));
+    Chop._12.requireClose(t, RealScalar.of(4.163485907994182));
   }
 
   public void testEx2() {
     Scalar t = Se2AxisYProject.of(Tensors.vector(1, 0, 0.3)).apply(Tensors.vector(10, 3));
-    assertTrue(Chop._12.close(t, RealScalar.of(5.124917769722165)));
+    Chop._12.requireClose(t, RealScalar.of(5.124917769722165));
   }
 
   public void testEx2NegU() {
@@ -35,44 +35,44 @@ public class Se2AxisYProjectTest extends TestCase {
     Tensor u = Tensors.vector(1 * speed, 0, 0.3 * speed);
     Tensor p = Tensors.vector(-10, 3);
     Scalar t = Se2AxisYProject.of(u).apply(p);
-    assertTrue(Chop._12.close(t, RealScalar.of(5.124917769722165)));
+    Chop._12.requireClose(t, RealScalar.of(5.124917769722165));
     TensorUnaryOperator se2ForwardAction = //
         new Se2Bijection(Se2CoveringExponential.INSTANCE.exp(u.multiply(t.negate()))).forward();
     Tensor v = se2ForwardAction.apply(p);
-    assertTrue(Chop._13.close(v, Tensors.fromString("{0, -6.672220679869088}")));
+    Chop._13.requireClose(v, Tensors.fromString("{0, -6.672220679869088}"));
   }
 
   public void testEx2Neg() {
     Tensor u = Tensors.vector(1, 0, 0.3);
     Tensor p = Tensors.vector(-10, 3);
     Scalar t = Se2AxisYProject.of(u).apply(p);
-    assertTrue(Chop._12.close(t, RealScalar.of(-5.124917769722165)));
+    Chop._12.requireClose(t, RealScalar.of(-5.124917769722165));
     TensorUnaryOperator se2ForwardAction = //
         new Se2Bijection(Se2CoveringExponential.INSTANCE.exp(u.multiply(t.negate()))).forward();
     Tensor v = se2ForwardAction.apply(p);
-    assertTrue(Chop._13.close(v, Tensors.fromString("{0, -6.672220679869088}")));
+    Chop._13.requireClose(v, Tensors.fromString("{0, -6.672220679869088}"));
   }
 
   public void testEx3() {
     Scalar t = Se2AxisYProject.of(Tensors.vector(1, 0, 0.0)).apply(Tensors.vector(10, 3));
-    assertTrue(Chop._12.close(t, RealScalar.of(10)));
+    Chop._12.requireClose(t, RealScalar.of(10));
   }
 
   public void testEx4() {
     Scalar t = Se2AxisYProject.of(Tensors.vector(2, 0, 0.0)).apply(Tensors.vector(10, 3));
-    assertTrue(Chop._12.close(t, RealScalar.of(5)));
+    Chop._12.requireClose(t, RealScalar.of(5));
   }
 
   public void testEx4NegU() {
     Scalar t = Se2AxisYProject.of(Tensors.vector(-2, 0, 0.0)).apply(Tensors.vector(10, 3));
-    assertTrue(Chop._12.close(t, RealScalar.of(-5)));
+    Chop._12.requireClose(t, RealScalar.of(-5));
   }
 
   public void testEx4Neg() {
     Tensor u = Tensors.vector(2, 0, 0);
     Tensor p = Tensors.vector(-10, 3);
     Scalar t = Se2AxisYProject.of(u).apply(p);
-    assertTrue(Chop._12.close(t, RealScalar.of(-5)));
+    Chop._12.requireClose(t, RealScalar.of(-5));
     TensorUnaryOperator se2ForwardAction = //
         new Se2Bijection(Se2CoveringExponential.INSTANCE.exp(u.multiply(t.negate()))).forward();
     Tensor v = se2ForwardAction.apply(p);
@@ -83,14 +83,14 @@ public class Se2AxisYProjectTest extends TestCase {
     Tensor u = Tensors.vector(2, 0, Double.MIN_VALUE);
     Scalar t = Se2AxisYProject.of(u).apply(Tensors.vector(10, 3));
     assertFalse(Scalars.isZero(u.Get(2)));
-    assertTrue(Chop._12.close(t, RealScalar.of(5)));
+    Chop._12.requireClose(t, RealScalar.of(5));
   }
 
   public void testEps2() {
     Tensor u = Tensors.vector(2, 0, -Double.MIN_VALUE);
     Scalar t = Se2AxisYProject.of(u).apply(Tensors.vector(10, 3));
     assertFalse(Scalars.isZero(u.Get(2)));
-    assertTrue(Chop._12.close(t, RealScalar.of(5)));
+    Chop._12.requireClose(t, RealScalar.of(5));
   }
 
   public void testZeroSpeedNonZeroPos() {
@@ -153,7 +153,7 @@ public class Se2AxisYProjectTest extends TestCase {
     Tensor p = Tensors.fromString("{2.1[m], 0.7[m]}");
     Scalar t = Se2AxisYProject.of(u).apply(p);
     Scalar magnitude = QuantityMagnitude.SI().in("s").apply(t);
-    assertTrue(Chop._10.close(magnitude, DoubleScalar.of(1.154854847741819)));
+    Chop._10.requireClose(magnitude, DoubleScalar.of(1.154854847741819));
     assertEquals(QuantityUnit.of(t), Unit.of("s"));
     assertTrue(Scalars.nonZero(t));
   }

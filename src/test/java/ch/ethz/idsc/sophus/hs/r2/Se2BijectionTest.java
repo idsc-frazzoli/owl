@@ -18,7 +18,7 @@ public class Se2BijectionTest extends TestCase {
     Bijection bijection = new Se2Bijection(Tensors.vector(2, 3, .3));
     Tensor vector = Tensors.vector(0.32, -0.98);
     Tensor sameor = bijection.inverse().apply(bijection.forward().apply(vector));
-    assertTrue(Chop._14.close(vector, sameor));
+    Chop._14.requireClose(vector, sameor);
   }
 
   public void testInverse() {
@@ -27,10 +27,10 @@ public class Se2BijectionTest extends TestCase {
     Tensor se2inv = Inverse.of(matrix);
     Tensor xya = Se2Matrix.toVector(se2inv);
     Se2Bijection se2Inverse = new Se2Bijection(xya);
-    assertTrue(Chop._14.close(se2Inverse.forward_se2().dot(matrix), IdentityMatrix.of(3)));
+    Chop._14.requireClose(se2Inverse.forward_se2().dot(matrix), IdentityMatrix.of(3));
     Tensor vector = Tensors.vector(5, 6);
     Tensor imaged = se2Bijection.forward().apply(vector);
-    assertTrue(Chop._14.close(se2Inverse.forward().apply(imaged), vector));
+    Chop._14.requireClose(se2Inverse.forward().apply(imaged), vector);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

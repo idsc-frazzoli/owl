@@ -13,7 +13,7 @@ public class DodgsonSabinHelperTest extends TestCase {
     Tensor c = Tensors.vector(3, 1.5);
     Tensor d = Tensors.vector(3.5, 2.9);
     Tensor tensor = DodgsonSabinHelper.midpoint(a, b, c, d);
-    assertTrue(Chop._13.close(tensor, Tensors.fromString("{2.64619661516195, 0.8388990046231528}")));
+    Chop._13.requireClose(tensor, Tensors.fromString("{2.64619661516195, 0.8388990046231528}"));
   }
 
   public void testCraftedReverse() {
@@ -22,7 +22,7 @@ public class DodgsonSabinHelperTest extends TestCase {
     Tensor b = Tensors.vector(3, 1.5);
     Tensor a = Tensors.vector(3.5, 2.9);
     Tensor tensor = DodgsonSabinHelper.midpoint(a, b, c, d);
-    assertTrue(Chop._13.close(tensor, Tensors.fromString("{2.64619661516195, 0.8388990046231528}")));
+    Chop._13.requireClose(tensor, Tensors.fromString("{2.64619661516195, 0.8388990046231528}"));
   }
 
   public void testLine() {

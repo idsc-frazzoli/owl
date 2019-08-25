@@ -14,7 +14,7 @@ public class CurveSubdivisionTest extends TestCase {
   private static void _checkSym(CurveSubdivision cs, Tensor tensor) {
     Tensor forward = cs.string(tensor);
     Tensor reverse = cs.string(Reverse.of(tensor));
-    assertTrue(Chop._12.close(Reverse.of(forward), reverse));
+    Chop._12.requireClose(Reverse.of(forward), reverse);
   }
 
   public void testSymmetric() {

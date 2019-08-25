@@ -24,7 +24,7 @@ public class Se2ForwardActionTest extends TestCase {
     Tensor q1 = tuo.apply(p);
     Tensor m = Se2Matrix.of(xya);
     Tensor q2 = m.dot(p).extract(0, 2);
-    assertTrue(Chop._12.close(q1, q2));
+    Chop._12.requireClose(q1, q2);
   }
 
   public void testSome() {
