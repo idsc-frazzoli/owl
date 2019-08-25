@@ -36,7 +36,7 @@ public class AbstractEpisodeIntegratorTest extends TestCase {
     StateTime stateTime = episodeIntegrator.tail();
     assertEquals(stateTime.time(), now);
     assertFalse(init.equals(stateTime));
-    assertTrue(Chop._04.close(init.state(), stateTime.state()));
+    Chop._04.requireClose(init.state(), stateTime.state());
   }
 
   public void testLarge() {
@@ -51,7 +51,7 @@ public class AbstractEpisodeIntegratorTest extends TestCase {
     StateTime stateTime = episodeIntegrator.tail();
     assertEquals(stateTime.time(), now);
     assertFalse(init.equals(stateTime));
-    assertTrue(Chop._13.close(stateTime.state(), Tensors.vector(0.7011342979097925, 1.9974872733093685, 3.3)));
+    Chop._13.requireClose(stateTime.state(), Tensors.vector(0.7011342979097925, 1.9974872733093685, 3.3));
   }
 
   public void testFail() {

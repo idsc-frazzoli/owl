@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 public enum PolarBiinvariantMean implements BiinvariantMean {
   INSTANCE;
   // ---
-  private static final int MAX_ITERATIONS = 5;
+  private static final int MAX_ITERATIONS = 10;
 
   @Override
   public PolarScalar mean(Tensor sequence, Tensor weights) {
@@ -28,11 +28,18 @@ public enum PolarBiinvariantMean implements BiinvariantMean {
     Scalar max = scalarSummaryStatistics.getMax();
     Scalar min = scalarSummaryStatistics.getMin();
     int add_count = 0;
+    while (Scalars.lessEquals(r.arg().add(Pi.TWO), min) //
+        && ++add_count < MAX_ITERATIONS)
+      r = PolarScalar.of(r.abs(), r.arg().add(Pi.TWO));
     while (Scalars.lessThan(r.arg(), min) //
         && Scalars.lessEquals(r.arg().add(Pi.TWO), max) //
         && ++add_count < MAX_ITERATIONS)
       r = PolarScalar.of(r.abs(), r.arg().add(Pi.TWO));
+    // ---
     int sub_count = 0;
+    while (Scalars.lessEquals(max, r.arg().subtract(Pi.TWO)) //
+        && ++sub_count < MAX_ITERATIONS)
+      r = PolarScalar.of(r.abs(), r.arg().subtract(Pi.TWO));
     while (Scalars.lessThan(max, r.arg()) //
         && Scalars.lessEquals(min, r.arg().subtract(Pi.TWO)) //
         && ++sub_count < MAX_ITERATIONS)

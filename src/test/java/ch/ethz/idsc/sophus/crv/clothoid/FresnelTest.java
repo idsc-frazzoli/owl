@@ -14,12 +14,12 @@ public class FresnelTest extends TestCase {
 
   public void testCOneP() {
     Scalar scalar = Fresnel.C().apply(RealScalar.ONE);
-    assertTrue(Chop._12.close(scalar, RealScalar.of(+0.904524237900272)));
+    Chop._12.requireClose(scalar, RealScalar.of(+0.904524237900272));
   }
 
   public void testCOneN() {
     Scalar scalar = Fresnel.C().apply(RealScalar.ONE.negate());
-    assertTrue(Chop._12.close(scalar, RealScalar.of(-0.904524237900272)));
+    Chop._12.requireClose(scalar, RealScalar.of(-0.904524237900272));
   }
 
   public void testSSimple() {
@@ -29,11 +29,11 @@ public class FresnelTest extends TestCase {
 
   public void testSOneP() {
     Scalar scalar = Fresnel.S().apply(RealScalar.ONE);
-    assertTrue(Chop._12.close(scalar, RealScalar.of(+0.3102683017233811)));
+    Chop._12.requireClose(scalar, RealScalar.of(+0.3102683017233811));
   }
 
   public void testSOneN() {
     Scalar scalar = Fresnel.S().apply(RealScalar.ONE.negate());
-    assertTrue(Chop._12.close(scalar, RealScalar.of(-0.3102683017233811)));
+    Chop._12.requireClose(scalar, RealScalar.of(-0.3102683017233811));
   }
 }

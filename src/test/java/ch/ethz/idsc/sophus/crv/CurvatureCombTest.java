@@ -32,7 +32,7 @@ public class CurvatureCombTest extends TestCase {
 
   public void testCircle() {
     Tensor tensor = CurvatureComb.of(CirclePoints.of(4), RealScalar.ONE.negate(), true);
-    assertTrue(Chop._14.close(tensor, CirclePoints.of(4).multiply(RealScalar.of(2))));
+    Chop._14.requireClose(tensor, CirclePoints.of(4).multiply(RealScalar.of(2)));
   }
 
   public void testString() {

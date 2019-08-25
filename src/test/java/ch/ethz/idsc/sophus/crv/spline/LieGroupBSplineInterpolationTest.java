@@ -32,7 +32,7 @@ public class LieGroupBSplineInterpolationTest extends TestCase {
         new LieGroupBSplineInterpolation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, 2, target);
     Tensor control = lieGroupBSplineInterpolation.apply();
     Tensor vector = Tensors.vector(1, 2.7510513036161504, -0.922624053826282, 2.784693019343523, 0.21446593776315992, 3);
-    assertTrue(Chop._10.close(control, vector));
+    Chop._10.requireClose(control, vector);
   }
 
   public void testApplyRnExact() {
@@ -41,7 +41,7 @@ public class LieGroupBSplineInterpolationTest extends TestCase {
         new LieGroupBSplineInterpolation(RnGroup.INSTANCE, RnGeodesic.INSTANCE, 2, target);
     Tensor control = lieGroupBSplineInterpolation.apply();
     Tensor vector = Tensors.vector(1, 2.7510513036161504, -0.922624053826282, 2.784693019343523, 0.21446593776315992, 3);
-    assertTrue(Chop._10.close(control, vector));
+    Chop._10.requireClose(control, vector);
   }
 
   public void testExactRnConvergence() {

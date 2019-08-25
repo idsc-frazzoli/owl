@@ -23,7 +23,7 @@ public class Se2CoveringGroupElementTest extends TestCase {
       Tensor result = se2GroupAction.combine(other);
       Tensor prod = Se2Matrix.of(xya).dot(Se2Matrix.of(other));
       Tensor matrix = Se2Matrix.of(result);
-      assertTrue(Chop._10.close(prod, matrix));
+      Chop._10.requireClose(prod, matrix);
     }
   }
 
@@ -34,7 +34,7 @@ public class Se2CoveringGroupElementTest extends TestCase {
       Tensor result = new Se2CoveringGroupElement(xya).inverse().combine(Array.zeros(3));
       Tensor prod = Inverse.of(Se2Matrix.of(xya));
       Tensor matrix = Se2Matrix.of(result);
-      assertTrue(Chop._10.close(prod, matrix));
+      Chop._10.requireClose(prod, matrix);
     }
   }
 
@@ -58,7 +58,7 @@ public class Se2CoveringGroupElementTest extends TestCase {
       Tensor other = Se2CoveringExponential.INSTANCE.exp(v);
       Tensor result = se2GroupAction.combine(other);
       Tensor prod = Se2CoveringIntegrator.INSTANCE.spin(xya, v);
-      assertTrue(Chop._10.close(prod, result));
+      Chop._10.requireClose(prod, result);
     }
   }
 
@@ -79,7 +79,7 @@ public class Se2CoveringGroupElementTest extends TestCase {
       Tensor xya2 = RandomVariate.of(distribution, 3);
       Tensor xya3 = new Se2CoveringGroupElement(xya1).combine(xya2);
       Tensor xyam = Se2Matrix.of(xya1).dot(Se2Matrix.of(xya2));
-      assertTrue(Chop._12.close(Se2Matrix.of(xya3), xyam));
+      Chop._12.requireClose(Se2Matrix.of(xya3), xyam);
     }
   }
 

@@ -17,7 +17,7 @@ public class Se3ExponentialTest extends TestCase {
         Tensors.vector(.2, .3, -.1));
     Tensor g = Se3Exponential.INSTANCE.exp(input);
     Tensor u_w = Se3Exponential.INSTANCE.log(g);
-    assertTrue(Chop._12.close(input, u_w));
+    Chop._12.requireClose(input, u_w);
   }
 
   public void testUnits() {
@@ -26,7 +26,7 @@ public class Se3ExponentialTest extends TestCase {
         Tensors.vector(.2, .3, -.1));
     Tensor g = Se3Exponential.INSTANCE.exp(input);
     Tensor u_w = Se3Exponential.INSTANCE.log(g);
-    assertTrue(Chop._12.close(input, u_w));
+    Chop._12.requireClose(input, u_w);
   }
 
   public void testRandom() {
@@ -37,7 +37,7 @@ public class Se3ExponentialTest extends TestCase {
           RandomVariate.of(distribution, 3));
       Tensor g = Se3Exponential.INSTANCE.exp(input);
       Tensor u_w = Se3Exponential.INSTANCE.log(g);
-      assertTrue(Chop._12.close(input, u_w));
+      Chop._12.requireClose(input, u_w);
     }
   }
 
@@ -48,7 +48,7 @@ public class Se3ExponentialTest extends TestCase {
     Tensor g = Se3Exponential.INSTANCE.exp(input);
     assertEquals(g, Se3Matrix.of(IdentityMatrix.of(3), input.get(0)));
     Tensor u_w = Se3Exponential.INSTANCE.log(g);
-    assertTrue(Chop._12.close(input, u_w));
+    Chop._12.requireClose(input, u_w);
   }
 
   public void testAlmostZero() {
@@ -57,6 +57,6 @@ public class Se3ExponentialTest extends TestCase {
         Tensors.vector(1e-15, 1e-15, -1e-15));
     Tensor g = Se3Exponential.INSTANCE.exp(input);
     Tensor u_w = Se3Exponential.INSTANCE.log(g);
-    assertTrue(Chop._12.close(input, u_w));
+    Chop._12.requireClose(input, u_w);
   }
 }

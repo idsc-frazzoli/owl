@@ -75,7 +75,7 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
         if (chop.allZero(So2.MOD.apply(val1.subtract(val2))))
           ++success;
       }
-      assertTrue(5 < success); // 8 fails
+      assertTrue(3 < success); // 8 fails
     }
   }
 

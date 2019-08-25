@@ -102,10 +102,10 @@ public class SnGeodesicTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor p = NORMALIZE.apply(RandomVariate.of(distribution, 3));
       Tensor q = NORMALIZE.apply(RandomVariate.of(distribution, 3));
-      assertTrue(Chop._14.close(p, SnGeodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
+      Chop._14.requireClose(p, SnGeodesic.INSTANCE.split(p, q, RealScalar.ZERO));
       Tensor r = SnGeodesic.INSTANCE.split(p, q, RealScalar.ONE);
-      assertTrue(Chop._12.close(q, r));
-      assertTrue(Chop._14.close(Norm._2.of(r), RealScalar.ONE));
+      Chop._12.requireClose(q, r);
+      Chop._14.requireClose(Norm._2.of(r), RealScalar.ONE);
     }
   }
 
@@ -115,7 +115,7 @@ public class SnGeodesicTest extends TestCase {
     Tensor tensor = SnGeodesic.INSTANCE.split(p, q, RealScalar.of(.4));
     // in sync with Mathematica
     Tensor expect = Tensors.vector(0.8090169943749473, 0.2628655560595668, 0.5257311121191336);
-    assertTrue(Chop._12.close(tensor, expect));
+    Chop._12.requireClose(tensor, expect);
   }
 
   public void testFail() {

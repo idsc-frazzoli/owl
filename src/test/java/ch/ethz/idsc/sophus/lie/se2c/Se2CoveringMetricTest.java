@@ -17,7 +17,7 @@ public class Se2CoveringMetricTest extends TestCase {
 
   public void testTurn() {
     Scalar scalar = Se2CoveringMetric.INSTANCE.distance(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 7));
-    assertTrue(Chop._14.close(scalar, RealScalar.of(4)));
+    Chop._14.requireClose(scalar, RealScalar.of(4));
   }
 
   public void testMiddle() {
@@ -26,6 +26,6 @@ public class Se2CoveringMetricTest extends TestCase {
     Scalar dq = Se2CoveringMetric.INSTANCE.distance(p, q);
     Tensor m = Se2CoveringGeodesic.INSTANCE.split(p, q, RationalScalar.HALF);
     Scalar dm = Se2CoveringMetric.INSTANCE.distance(p, m);
-    assertTrue(Chop._14.close(dq.divide(dm), RealScalar.of(2)));
+    Chop._14.requireClose(dq.divide(dm), RealScalar.of(2));
   }
 }

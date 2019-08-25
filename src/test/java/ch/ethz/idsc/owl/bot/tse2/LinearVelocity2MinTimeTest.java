@@ -18,7 +18,7 @@ public class LinearVelocity2MinTimeTest extends TestCase {
     assertEquals(timeDistPair.time, Quantity.of(8, "s"));
     assertEquals(timeDistPair.dist, Quantity.of(48, "m"));
     Scalar minTime = linearVelocity2MinTime.minTime(Quantity.of(12, "m"), v_cur);
-    assertTrue(Chop._10.close(minTime, Quantity.of(3.2915026221291814, "s")));
+    Chop._10.requireClose(minTime, Quantity.of(3.2915026221291814, "s"));
     // ---
     minTime = linearVelocity2MinTime.minTime(Quantity.of(100, "m"), Quantity.of(2, "m*s^-1"));
     assertTrue(Scalars.lessEquals(minTime, Scalars.fromString("82/5[s]")));
@@ -54,7 +54,7 @@ public class LinearVelocity2MinTimeTest extends TestCase {
       Scalar dist = linearVelocity2MinTime.timeDistToV_max(v_cur).dist;
       assertEquals(dist, Quantity.of(18.75, "m"));
       Scalar time = linearVelocity2MinTime.minTime(Quantity.of(10, "m"), v_cur);
-      assertTrue(Chop._12.close(time, Quantity.of(1.5311288741492746, "s")));
+      Chop._12.requireClose(time, Quantity.of(1.5311288741492746, "s"));
     }
     {
       Scalar v_cur = Quantity.of(10, "m*s^-1");

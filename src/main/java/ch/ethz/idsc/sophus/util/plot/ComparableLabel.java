@@ -14,9 +14,9 @@ import java.util.Objects;
     string = "";
   }
 
-  @Override
+  @Override // from Comparable
   public int compareTo(ComparableLabel comparableLabel) {
-    return Integer.compare(index, comparableLabel.index);// TODO JPH test coverage
+    return Integer.compare(index, comparableLabel.index);
   }
 
   public void setString(String string) {

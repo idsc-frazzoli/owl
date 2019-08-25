@@ -22,7 +22,7 @@ public class So2FamilyTest extends TestCase {
       Scalar scalar = RandomVariate.of(distribution);
       Tensor point = RandomVariate.of(distribution, 2);
       Tensor fwd = bijectionFamily.forward(scalar).apply(point);
-      assertTrue(Chop._12.close(bijectionFamily.inverse(scalar).apply(fwd), point));
+      Chop._12.requireClose(bijectionFamily.inverse(scalar).apply(fwd), point);
     }
   }
 
@@ -33,7 +33,7 @@ public class So2FamilyTest extends TestCase {
       Scalar scalar = RandomVariate.of(distribution);
       Tensor point = RandomVariate.of(distribution, 2);
       Tensor fwd = bijectionFamily.inverse(scalar).apply(point);
-      assertTrue(Chop._12.close(bijectionFamily.forward(scalar).apply(fwd), point));
+      Chop._12.requireClose(bijectionFamily.forward(scalar).apply(fwd), point);
     }
   }
 

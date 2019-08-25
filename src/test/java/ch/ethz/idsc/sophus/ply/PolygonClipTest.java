@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.RotateLeft;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import junit.framework.TestCase;
 
@@ -49,6 +50,12 @@ public class PolygonClipTest extends TestCase {
       Tensor result = PolygonClip.of(poly1).apply(poly2);
       assertTrue(equalsCycle(result, Tensors.fromString("{{4/3, 5/3}, {1, 3/2}, {1, 1}, {2, 1}}")));
     }
+  }
+
+  public void testSingle() {
+    Tensor subject = Tensors.of(Tensors.vector(0.5, 0));
+    Tensor result = PolygonClip.of(CirclePoints.of(6)).apply(subject);
+    assertEquals(result, subject);
   }
 
   public void testMore() {

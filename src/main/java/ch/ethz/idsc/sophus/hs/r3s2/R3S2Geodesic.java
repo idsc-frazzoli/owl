@@ -24,11 +24,6 @@ public enum R3S2Geodesic implements GeodesicInterface {
 
   @Override // from TensorGeodesic
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    return scalar -> split(p, q, scalar); // TODO JPH test coverage
-  }
-
-  @Override // from GeodesicInterface
-  public Tensor split(Tensor p, Tensor q, Scalar scalar) {
     Tensor pt = p.get(0);
     Tensor pn = p.get(1);
     Tensor qt = q.get(0);
@@ -36,9 +31,16 @@ public enum R3S2Geodesic implements GeodesicInterface {
     Tensor rotation = RotationMatrix3D.of(pn, qn);
     Tensor pSe3 = Se3Matrix.of(ID3, pt);
     Tensor qSe3 = Se3Matrix.of(rotation, qt);
-    Tensor split = Se3Geodesic.INSTANCE.split(pSe3, qSe3, scalar);
-    Tensor r = Se3Matrix.rotation(split);
-    Tensor t = Se3Matrix.translation(split);
-    return Tensors.of(t, r.dot(pn));
+    return scalar -> {
+      Tensor split = Se3Geodesic.INSTANCE.split(pSe3, qSe3, scalar);
+      return Tensors.of( //
+          Se3Matrix.translation(split), //
+          Se3Matrix.rotation(split).dot(pn));
+    };
+  }
+
+  @Override // from GeodesicInterface
+  public Tensor split(Tensor p, Tensor q, Scalar scalar) {
+    return curve(p, q).apply(scalar);
   }
 }

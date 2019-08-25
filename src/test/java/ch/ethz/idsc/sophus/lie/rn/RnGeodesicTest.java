@@ -23,8 +23,8 @@ public class RnGeodesicTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Tensor p = RandomVariate.of(distribution, 7);
       Tensor q = RandomVariate.of(distribution, 7);
-      assertTrue(Chop._14.close(p, RnGeodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
-      assertTrue(Chop._14.close(q, RnGeodesic.INSTANCE.split(p, q, RealScalar.ONE)));
+      Chop._14.requireClose(p, RnGeodesic.INSTANCE.split(p, q, RealScalar.ZERO));
+      Chop._14.requireClose(q, RnGeodesic.INSTANCE.split(p, q, RealScalar.ONE));
     }
   }
 }

@@ -83,7 +83,7 @@ public class PurePursuitTest extends TestCase {
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
     Tensor normal = NORMALIZE.apply(dir);
-    assertTrue(Chop._12.close(normal, NORMALIZE.apply(Tensors.vector(1, 0))));
+    Chop._12.requireClose(normal, NORMALIZE.apply(Tensors.vector(1, 0)));
     Optional<Scalar> optional = purePursuit.firstRatio();
     Scalar rate = optional.get();
     assertTrue(Scalars.isZero(rate));
@@ -115,7 +115,7 @@ public class PurePursuitTest extends TestCase {
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
     Tensor normal = NORMALIZE.apply(dir);
-    assertTrue(Chop._12.close(normal, NORMALIZE.apply(Tensors.vector(-1, -1))));
+    Chop._12.requireClose(normal, NORMALIZE.apply(Tensors.vector(-1, -1)));
     assertFalse(purePursuit.firstRatio().isPresent());
   }
 
@@ -124,7 +124,7 @@ public class PurePursuitTest extends TestCase {
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
     Tensor normal = NORMALIZE.apply(dir);
-    assertTrue(Chop._12.close(normal, NORMALIZE.apply(Tensors.vector(-1, 1))));
+    Chop._12.requireClose(normal, NORMALIZE.apply(Tensors.vector(-1, 1)));
     assertFalse(purePursuit.firstRatio().isPresent());
   }
 
@@ -133,7 +133,7 @@ public class PurePursuitTest extends TestCase {
     PurePursuit purePursuit = PurePursuit.fromTrajectory(tensor, RealScalar.of(0.5));
     Tensor dir = purePursuit.lookAhead().get();
     Tensor normal = NORMALIZE.apply(dir);
-    assertTrue(Chop._12.close(normal, NORMALIZE.apply(Tensors.vector(0, 1))));
+    Chop._12.requireClose(normal, NORMALIZE.apply(Tensors.vector(0, 1)));
     assertFalse(purePursuit.firstRatio().isPresent());
   }
 

@@ -41,8 +41,8 @@ public class ConeRegionTest extends TestCase {
     assertEquals(coneRegion.distance(Tensors.vector(1, .1)), RealScalar.ZERO);
     assertEquals(coneRegion.distance(Tensors.vector(-4, 3)), RealScalar.of(5));
     assertEquals(coneRegion.distance(Tensors.vector(-4, -3)), RealScalar.of(5));
-    assertTrue(Chop._06.close(coneRegion.distance(Tensors.vector(-1, 1)), RealScalar.of(Math.sqrt(2))));
-    assertTrue(Chop._06.close(coneRegion.distance(Tensors.vector(-1, -1)), RealScalar.of(Math.sqrt(2))));
+    Chop._06.requireClose(coneRegion.distance(Tensors.vector(-1, 1)), RealScalar.of(Math.sqrt(2)));
+    Chop._06.requireClose(coneRegion.distance(Tensors.vector(-1, -1)), RealScalar.of(Math.sqrt(2)));
   }
 
   public void testDistanceRandom() {

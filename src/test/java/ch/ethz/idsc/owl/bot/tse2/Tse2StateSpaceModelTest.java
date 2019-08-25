@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 public class Tse2StateSpaceModelTest extends TestCase {
   public void testSimple() {
     Tensor tensor = Tse2StateSpaceModel.INSTANCE.f(Tensors.vector(1, 2, Math.PI, 5), Tensors.vector(3, 4));
-    assertTrue(Chop._13.close(tensor, Tensors.vector(-5, 0, 5 * 3, 4)));
+    Chop._13.requireClose(tensor, Tensors.vector(-5, 0, 5 * 3, 4));
   }
 
   public void testQuantity() {

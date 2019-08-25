@@ -23,7 +23,7 @@ public class Se2FamilyTest extends TestCase {
       Scalar scalar = RandomVariate.of(distribution);
       Tensor point = RandomVariate.of(distribution, 2);
       Tensor fwd = bijectionFamily.forward(scalar).apply(point);
-      assertTrue(Chop._14.close(bijectionFamily.inverse(scalar).apply(fwd), point));
+      Chop._14.requireClose(bijectionFamily.inverse(scalar).apply(fwd), point);
     }
   }
 
@@ -37,7 +37,7 @@ public class Se2FamilyTest extends TestCase {
       Scalar scalar = RandomVariate.of(distribution);
       Tensor point = RandomVariate.of(distribution, 2);
       Tensor fwd = bijectionFamily.inverse(scalar).apply(point);
-      assertTrue(Chop._14.close(bijectionFamily.forward(scalar).apply(fwd), point));
+      Chop._14.requireClose(bijectionFamily.forward(scalar).apply(fwd), point);
     }
   }
 }
