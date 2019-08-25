@@ -5,7 +5,9 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -16,6 +18,16 @@ public class R3S2GeodesicTest extends TestCase {
         Tensors.fromString("{{8, 8, 8}, {0, 1, 0}}"), //
         RealScalar.ZERO);
     assertEquals(split, Tensors.fromString("{{1, 2, 3}, {1, 0, 0}}"));
+  }
+
+  public void testCurve() {
+    Tensor p = Tensors.fromString("{{1, 2, 3}, {1, 0, 0}}");
+    Tensor q = Tensors.fromString("{{8, 8, 8}, {0, 1, 0}}");
+    ScalarTensorFunction curve = R3S2Geodesic.INSTANCE.curve(p, q);
+    Tensor domain = Subdivide.of(0, 1, 12);
+    Tensor result = domain.map(curve);
+    Tensor splits = domain.map(t -> R3S2Geodesic.INSTANCE.split(p, q, t));
+    Chop._13.requireClose(result, splits);
   }
 
   public void testOne() {

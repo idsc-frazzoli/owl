@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class OriginClothoid implements Serializable {
   private static final Scalar _1 = RealScalar.of(1.0);
+  private static final Tensor ONES = Tensors.of(_1, _1).unmodifiable();
   /** 3-point Gauss Legendre quadrature on interval [0, 1] */
   private static final Tensor W = Tensors.vector(5, 8, 5).divide(RealScalar.of(18.0));
   private static final Tensor X = Tensors.vector(-1, 0, 1) //
@@ -61,7 +62,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       /** ratio z enforces interpolation of terminal points
        * t == 0 -> (0, 0)
        * t == 1 -> (1, 0) */
-      PolarScalar z = (PolarScalar) il.divide(il.add(ir)); // TODO use of polarscalar::add!
+      PolarScalar ilr = PolarBiinvariantMean.INSTANCE.mean(Tensors.of(il, ir), ONES);
+      PolarScalar z = (PolarScalar) il.divide(ilr);
       PolarScalar zq = z.multiply(qp);
       // TODO check code below
       return Tensors.of( //
