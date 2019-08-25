@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** EXPERIMENTAL */
 public enum TensorsExt {
   ;
   public static Tensor of(Object... objects) {
@@ -17,6 +18,6 @@ public enum TensorsExt {
       return ((Tensor) object).copy();
     if (object instanceof Number)
       return RealScalar.of((Number) object);
-    throw new RuntimeException();// TODO JPH test coverage
+    throw new IllegalArgumentException();
   }
 }

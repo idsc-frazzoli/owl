@@ -9,7 +9,7 @@ import org.jfree.chart.axis.DateTickUnitType;
 public enum TimeChart {
   ;
   public static JFreeChart of(VisualSet visualSet) {
-    return of(visualSet, false);// TODO JPH test coverage
+    return of(visualSet, false);
   }
 
   public static JFreeChart of(VisualSet visualSet, boolean stacked) {

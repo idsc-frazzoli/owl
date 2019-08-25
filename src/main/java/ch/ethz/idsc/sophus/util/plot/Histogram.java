@@ -21,7 +21,10 @@ public enum Histogram {
     return JFreeChartFactory.barChart(visualSet, stacked, Scalar::toString);
   }
 
+  /** @param visualSet
+   * @param naming for coordinates on x-axis
+   * @return */
   public static JFreeChart of(VisualSet visualSet, Function<Scalar, String> naming) {
-    return JFreeChartFactory.barChart(visualSet, false, naming); // TODO JPH test coverage
+    return JFreeChartFactory.barChart(visualSet, false, naming);
   }
 }
