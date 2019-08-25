@@ -25,7 +25,7 @@ public class LinearGroupElementTest extends TestCase {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
     LinearGroupElement linearGroupElement = LinearGroupElement.of(matrix);
     Tensor result = linearGroupElement.inverse().combine(matrix);
-    assertTrue(Chop._10.close(result, IdentityMatrix.of(n)));
+    Chop._10.requireClose(result, IdentityMatrix.of(n));
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

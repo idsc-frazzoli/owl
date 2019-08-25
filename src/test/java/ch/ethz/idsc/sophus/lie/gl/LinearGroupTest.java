@@ -12,6 +12,6 @@ public class LinearGroupTest extends TestCase {
   public void testSimple() {
     LinearGroupElement element = LinearGroup.INSTANCE.element(RotationMatrix.of(RealScalar.of(.24)));
     Tensor tensor = element.inverse().combine(RotationMatrix.of(RealScalar.of(.24)));
-    assertTrue(Chop._10.close(tensor, IdentityMatrix.of(2)));
+    Chop._10.requireClose(tensor, IdentityMatrix.of(2));
   }
 }

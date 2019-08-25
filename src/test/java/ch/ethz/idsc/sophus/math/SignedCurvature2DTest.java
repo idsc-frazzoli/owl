@@ -49,8 +49,8 @@ public class SignedCurvature2DTest extends TestCase {
     Tensor a = Tensors.fromString("{1[m], 0[m]}");
     Tensor b = Tensors.fromString("{0[m], 1[m]}");
     Tensor c = Tensors.fromString("{-1[m], 0[m]}");
-    assertTrue(Chop._10.close(SignedCurvature2D.of(a, b, c).get(), Quantity.of(+1, "m^-1")));
-    assertTrue(Chop._10.close(SignedCurvature2D.of(c, b, a).get(), Quantity.of(-1, "m^-1")));
+    Chop._10.requireClose(SignedCurvature2D.of(a, b, c).get(), Quantity.of(+1, "m^-1"));
+    Chop._10.requireClose(SignedCurvature2D.of(c, b, a).get(), Quantity.of(-1, "m^-1"));
   }
 
   public void testFail() {

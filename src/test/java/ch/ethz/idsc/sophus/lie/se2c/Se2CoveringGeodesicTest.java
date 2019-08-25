@@ -15,7 +15,7 @@ public class Se2CoveringGeodesicTest extends TestCase {
   public void testArticle() {
     Tensor tensor = Se2CoveringGeodesic.INSTANCE.split( //
         Tensors.vector(1, 2, 3), Tensors.vector(4, 5, 6), RealScalar.of(0.7));
-    assertTrue(Chop._14.close(tensor, Tensors.fromString("{4.483830852817113, 3.2143505344919467, 5.1}")));
+    Chop._14.requireClose(tensor, Tensors.fromString("{4.483830852817113, 3.2143505344919467, 5.1}"));
   }
 
   public void testCenter() {
@@ -33,8 +33,8 @@ public class Se2CoveringGeodesicTest extends TestCase {
     // exp_x == {0.20432112230000457, -0.1559021143001622, -5.551115123125783E-17}
     Tensor tensor = Se2CoveringGeodesic.INSTANCE.split(p, q, scalar);
     // {2.260334367029097, -0.0014728825470118057, 0.9817477042468103}
-    assertTrue(Chop._14.close(tensor, //
-        Tensors.fromString("{2.260334367029097, -0.0014728825470118057, 0.9817477042468103}")));
+    Chop._14.requireClose(tensor, //
+        Tensors.fromString("{2.260334367029097, -0.0014728825470118057, 0.9817477042468103}"));
   }
 
   public void testBiinvariantMean() {

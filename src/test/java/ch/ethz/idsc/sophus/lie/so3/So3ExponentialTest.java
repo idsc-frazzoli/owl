@@ -52,8 +52,8 @@ public class So3ExponentialTest extends TestCase {
 
   private static void checkDiff(Tensor c) {
     Tensor e = So3Exponential.INSTANCE.exp(c);
-    assertTrue(Chop._14.close(e, MatrixExp.of(Cross.skew3(c))));
-    assertTrue(Chop._14.close(e.dot(c), c));
+    Chop._14.requireClose(e, MatrixExp.of(Cross.skew3(c)));
+    Chop._14.requireClose(e.dot(c), c);
   }
 
   public void testXY() {
@@ -84,13 +84,13 @@ public class So3ExponentialTest extends TestCase {
   public void testPi() {
     Tensor matrix = So3Exponential.INSTANCE.exp(Tensors.vector(0, 0, Math.PI));
     Tensor expected = DiagonalMatrix.of(-1, -1, 1);
-    assertTrue(Chop._14.close(matrix, expected));
+    Chop._14.requireClose(matrix, expected);
   }
 
   public void testTwoPi() {
     Tensor matrix = So3Exponential.INSTANCE.exp(Tensors.vector(0, 0, 2 * Math.PI));
     Tensor expected = DiagonalMatrix.of(1, 1, 1);
-    assertTrue(Chop._14.close(matrix, expected));
+    Chop._14.requireClose(matrix, expected);
   }
 
   public void testLogEye() {
@@ -104,8 +104,8 @@ public class So3ExponentialTest extends TestCase {
     Tensor matrix = So3Exponential.INSTANCE.exp(vec);
     Tensor lom = So3Exponential.logMatrix(matrix);
     Tensor log = So3Exponential.INSTANCE.log(matrix);
-    assertTrue(Chop._14.close(vec, log));
-    assertTrue(Chop._14.close(lom, Cross.skew3(vec)));
+    Chop._14.requireClose(vec, log);
+    Chop._14.requireClose(lom, Cross.skew3(vec));
   }
 
   public void testLogEps() {
@@ -117,7 +117,7 @@ public class So3ExponentialTest extends TestCase {
       Tensor matrix = So3Exponential.INSTANCE.exp(vec);
       {
         Tensor logM = So3Exponential.logMatrix(matrix);
-        assertTrue(Chop._13.close(logM.negate(), Transpose.of(logM)));
+        Chop._13.requireClose(logM.negate(), Transpose.of(logM));
       }
       log = So3Exponential.INSTANCE.log(matrix);
     } while (!Chop._20.allZero(log));
@@ -145,13 +145,13 @@ public class So3ExponentialTest extends TestCase {
     Tensor Q = qrDecomposition.getQ();
     Tensor Qi = qrDecomposition.getInverseQ();
     Tensor R = qrDecomposition.getR();
-    assertTrue(Chop._10.close(Q.dot(R), A));
-    assertTrue(Chop._10.close(Q.dot(Qi), IdentityMatrix.of(A.length())));
+    Chop._10.requireClose(Q.dot(R), A);
+    Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));
     Scalar qrDet = Det.of(Q).multiply(Det.of(R));
-    assertTrue(Chop._10.close(qrDet, Det.of(A)));
+    Chop._10.requireClose(qrDet, Det.of(A));
     Tensor lower = LowerTriangularize.of(R, -1);
     assertTrue(Chop.NONE.allZero(lower));
-    assertTrue(Chop._10.close(qrDet, qrDecomposition.det()));
+    Chop._10.requireClose(qrDet, qrDecomposition.det());
     return qrDecomposition;
   }
 
@@ -161,8 +161,8 @@ public class So3ExponentialTest extends TestCase {
       Tensor matrix = So3Exponential.INSTANCE.exp(RandomVariate.of(distribution, 3));
       specialOps(matrix);
       QRDecomposition qr = QRDecomposition.preserveOrientation(matrix);
-      assertTrue(Chop._13.close(qr.getR(), IdentityMatrix.of(3)));
-      assertTrue(Chop._12.close(qr.getQ(), matrix));
+      Chop._13.requireClose(qr.getR(), IdentityMatrix.of(3));
+      Chop._12.requireClose(qr.getQ(), matrix);
     }
   }
 
@@ -181,7 +181,7 @@ public class So3ExponentialTest extends TestCase {
   public void testRodriguez() {
     Tensor vector = RandomVariate.of(NormalDistribution.standard(), 3);
     Tensor wedge = Cross.skew3(vector);
-    assertTrue(Chop._13.close(MatrixExp.of(wedge), So3Exponential.INSTANCE.exp(vector)));
+    Chop._13.requireClose(MatrixExp.of(wedge), So3Exponential.INSTANCE.exp(vector));
   }
 
   public void testRodriques2() {

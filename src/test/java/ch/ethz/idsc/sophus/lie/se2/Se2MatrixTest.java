@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.Det;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -19,7 +20,7 @@ public class Se2MatrixTest extends TestCase {
     Tensor matrix = Se2Matrix.of(Tensors.vector(2, 3, 4));
     assertEquals(matrix.get(2), Tensors.vector(0, 0, 1));
     Scalar det = Det.of(matrix);
-    assertTrue(Chop._14.close(det, RealScalar.ONE));
+    Chop._14.requireClose(det, RealScalar.ONE);
   }
 
   public void test2PiModLogExp() {
@@ -29,7 +30,7 @@ public class Se2MatrixTest extends TestCase {
       Tensor x = Se2CoveringExponential.INSTANCE.log(g);
       Tensor exp_x = Se2CoveringExponential.INSTANCE.exp(x);
       assertEquals(exp_x.Get(2), RealScalar.of(value));
-      assertTrue(Chop._13.close(g, exp_x));
+      Chop._13.requireClose(g, exp_x);
     }
   }
 
@@ -39,7 +40,7 @@ public class Se2MatrixTest extends TestCase {
       Tensor x = Tensors.vector(2, 3, value);
       Tensor g = Se2CoveringExponential.INSTANCE.exp(x);
       Tensor log_g = Se2CoveringExponential.INSTANCE.log(g);
-      assertTrue(Chop._13.close(x, log_g));
+      Chop._13.requireClose(x, log_g);
     }
   }
 
@@ -49,7 +50,7 @@ public class Se2MatrixTest extends TestCase {
       Tensor x = RandomVariate.of(distribution, 3);
       Tensor g = Se2CoveringExponential.INSTANCE.exp(x);
       Tensor log_g = Se2CoveringExponential.INSTANCE.log(g);
-      assertTrue(Chop._10.close(x, log_g));
+      Chop._10.requireClose(x, log_g);
     }
   }
 
@@ -59,7 +60,7 @@ public class Se2MatrixTest extends TestCase {
       Tensor g = RandomVariate.of(distribution, 3);
       Tensor x = Se2CoveringExponential.INSTANCE.log(g);
       Tensor exp_x = Se2CoveringExponential.INSTANCE.exp(x);
-      assertTrue(Chop._10.close(g, exp_x));
+      Chop._10.requireClose(g, exp_x);
     }
   }
 
@@ -69,7 +70,7 @@ public class Se2MatrixTest extends TestCase {
       Tensor x = RandomVariate.of(distribution, 2).append(RealScalar.ZERO);
       Tensor g0 = Se2CoveringExponential.INSTANCE.exp(x);
       Tensor x2 = Se2CoveringExponential.INSTANCE.log(g0);
-      assertTrue(Chop._13.close(x, x2));
+      Chop._13.requireClose(x, x2);
     }
   }
 
@@ -84,7 +85,7 @@ public class Se2MatrixTest extends TestCase {
     Tensor x = Tensors.vector(2, 3, 3.5);
     Tensor matrix = Se2Matrix.of(x);
     Tensor y = Se2Matrix.toVector(matrix);
-    assertTrue(Chop._10.close(x.Get(2), y.Get(2).add(RealScalar.of(Math.PI * 2))));
+    Chop._10.requireClose(x.Get(2), y.Get(2).add(Pi.TWO));
   }
 
   public void testG0() {

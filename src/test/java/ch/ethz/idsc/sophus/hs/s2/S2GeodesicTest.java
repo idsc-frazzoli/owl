@@ -52,8 +52,8 @@ public class S2GeodesicTest extends TestCase {
       Tensor q = NORMALIZE.apply(RandomVariate.of(distribution, 3));
       assertTrue(Chop._14.close(p, S2Geodesic.INSTANCE.split(p, q, RealScalar.ZERO)));
       Tensor r = S2Geodesic.INSTANCE.split(p, q, RealScalar.ONE);
-      assertTrue(Chop._12.close(q, r));
-      assertTrue(Chop._14.close(Norm._2.of(r), RealScalar.ONE));
+      Chop._12.requireClose(q, r);
+      Chop._12.requireClose(Norm._2.of(r), RealScalar.ONE);
     }
   }
 
@@ -63,7 +63,7 @@ public class S2GeodesicTest extends TestCase {
     Tensor tensor = S2Geodesic.INSTANCE.split(p, q, RealScalar.of(.4));
     // in sync with Mathematica
     Tensor expect = Tensors.vector(0.8090169943749473, 0.2628655560595668, 0.5257311121191336);
-    assertTrue(Chop._12.close(tensor, expect));
+    Chop._12.requireClose(tensor, expect);
   }
 
   public void testFail() {

@@ -20,7 +20,7 @@ public class Se2CoveringIntegratorTest extends TestCase {
     for (Tensor _x : Subdivide.of(-2, 10, 72)) {
       Tensor x = Tensors.vector(_x.Get().number().doubleValue(), 0, 2 * Math.PI);
       Tensor r = Se2CoveringIntegrator.INSTANCE.spin(g, x);
-      assertTrue(Chop._12.close(r, Tensors.vector(10.0, 0.0, 6.283185307179586)));
+      Chop._12.requireClose(r, Tensors.vector(10.0, 0.0, 6.283185307179586));
     }
   }
 
@@ -43,7 +43,7 @@ public class Se2CoveringIntegratorTest extends TestCase {
     Tensor v0 = Se2CoveringExponential.INSTANCE.exp(Tensors.vector(1, 2, .3));
     assertEquals(vec, v0);
     Tensor alt = Se2Matrix.of(vec);
-    assertTrue(Chop._13.close(mat, alt));
+    Chop._13.requireClose(mat, alt);
   }
 
   public void testExpSubstitute2() {
@@ -68,6 +68,6 @@ public class Se2CoveringIntegratorTest extends TestCase {
         Tensors.fromString("{1[m], 2[m], 3}"), //
         Tensors.fromString("{0.4[m], -0.3[m], 0.7}"));
     Tensor expected = Tensors.fromString("{0.5557854299223493[m], 2.2064712267635618[m], 3.7}");
-    assertTrue(Chop._13.close(spin, expected));
+    Chop._13.requireClose(spin, expected);
   }
 }
