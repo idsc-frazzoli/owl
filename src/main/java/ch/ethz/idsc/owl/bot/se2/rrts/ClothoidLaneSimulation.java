@@ -49,13 +49,21 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
+import ch.ethz.idsc.tensor.red.StandardDeviation;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
 /* package */ enum ClothoidLaneSimulation {
   ;
   private static final Tensor[] CONTROLS = { // TODO GJOEL fill in
-      Tensors.fromString("{{6.017, 4.983, 0.785},{8.100, 5.100, -1.571},{1.667, 1.950, -3.142}}") };
+      Tensors.fromString("{{6.017, 4.983, 0.785},{8.100, 5.100, -1.571},{1.667, 1.950, -3.142}}"), //
+      Tensors.fromString("{{1.817, 7.283, -3.665},{5.483, 8.817, -7.854},{7.950, 10.733, -3.142}}"), //
+      Tensors.fromString("{{6.000, 5.617, -1.571},{6.967, 2.500, 0.000},{9.350, 2.500, 0.000},{10.383, 5.500, 1.571}}"), //
+      Tensors.fromString("{{1.000, 4.450, 0.000},{5.500, 4.450, 0.000},{6.350, 5.650, 0.000},{10.500, 5.650, 0.000}}"), //
+      Tensors.fromString("{{8.117, 3.300, 1.571},{6.967, 6.717, 2.618},{4.150, 7.167, 3.142},{3.383, 8.600, 1.571}}"), //
+      Tensors.fromString("{{5.750, 1.917, -3.142},{2.000, 1.917, -3.142},{1.150, 3.250, -4.712},{2.000, 4.450, -6.283},"
+          + "{5.000, 4.450, -6.283},{8.050, 6.500, -6.283},{7.767, 10.750, -3.142}}")};
   private static final int REPS = 10;
   private static final Scalar DELAY_HINT = RealScalar.of(3);
   // ---
@@ -78,7 +86,7 @@ import org.jfree.chart.JFreeChart;
     DIRECTORY.mkdirs();
     int task = 0;
     for (Tensor controlPoints : CONTROLS) {
-      controlPoints.stream().forEach(System.out::println);
+      // controlPoints.stream().forEach(System.out::println);
       LaneInterface lane = StableLanes.of( //
           controlPoints, //
           LaneRiesenfeldCurveSubdivision.of(GEODESIC_DISPLAY.geodesicInterface(), DEGREE)::string, //
@@ -104,25 +112,33 @@ import org.jfree.chart.JFreeChart;
       pointsRender.new Show(GEODESIC_DISPLAY, GEODESIC_DISPLAY.shape(), controlPoints).render(geometricLayer, graphics);
       ImageIO.write(bufferedImage, "png", new File(DIRECTORY, String.format("scenario_%d.png", task)));
       // ---
+      Tensor ttfs = Tensors.empty();
       VisualSet visualSet = new VisualSet();
       visualSet.setAxesLabelX("time [s]");
       visualSet.setAxesLabelY("cost");
       for (int rep = 0; rep < REPS; rep++) {
         System.out.println("iteration " + (rep + 1));
-        run(lane, visualSet);
+        run(lane, visualSet, ttfs);
       }
+      ScalarSummaryStatistics statistics = new ScalarSummaryStatistics();
+      ttfs.stream().map(Tensor::Get).forEach(statistics);
+      System.out.println(String.format("\nscenario %d:" //
+              + "\n\ttime to first solution = %s +/- %s (min=%s, max=%s)"
+              + "\n\tsucess rate: %.2f%%\n",
+          task, statistics.getAverage(), StandardDeviation.ofVector(ttfs), statistics.getMin(), statistics.getMax(), 100. * ttfs.length() / REPS));
       JFreeChart jFreeChart = ListPlot.of(visualSet);
       File file = new File(DIRECTORY, String.format("costs_%d.png", task++));
       ChartUtils.saveChartAsPNG(file, jFreeChart, WIDTH, HEIGHT);
     }
   }
 
-  private synchronized static void run(LaneInterface lane, VisualSet visualSet) throws Exception {
+  private synchronized static void run(LaneInterface lane, VisualSet visualSet, Tensor ttfs) throws Exception {
     StateTime stateTime = new StateTime(lane.midLane().get(0), RealScalar.ZERO);
     Consumer<Map<Double, Scalar>> process = observations -> {
       Tensor domain = Tensor.of(observations.keySet().stream().map(d -> Quantity.of(d, "s")));
       Tensor values = Tensor.of(observations.values().stream());
       visualSet.add(domain, values);
+      observations.keySet().stream().map(RealScalar::of).findFirst().ifPresent(ttfs::append);
     };
     SimulationEntity entity = //
         new SimulationEntity(stateTime, TRANSITION_REGION_QUERY, Tensors.vector(0, 0), R2_IMAGE_REGION_WRAP.range(), true, DELAY_HINT, process);
