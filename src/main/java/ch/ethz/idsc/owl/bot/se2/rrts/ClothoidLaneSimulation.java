@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -84,51 +86,53 @@ import org.jfree.chart.JFreeChart;
 
   public static void main(String[] args) throws Exception {
     DIRECTORY.mkdirs();
-    int task = 0;
-    for (Tensor controlPoints : CONTROLS) {
-      // controlPoints.stream().forEach(System.out::println);
-      LaneInterface lane = StableLanes.of( //
-          controlPoints, //
-          LaneRiesenfeldCurveSubdivision.of(GEODESIC_DISPLAY.geodesicInterface(), DEGREE)::string, //
-          LEVELS, LANE_WIDTH.multiply(RationalScalar.HALF));
-      // ---
-      BufferedImage bufferedImage = new BufferedImage(WIDTH, WIDTH, BufferedImage.TYPE_INT_ARGB);
-      Tensor diagonal = Tensors.of( //
-          RealScalar.of(bufferedImage.getWidth()).divide(R2_IMAGE_REGION_WRAP.range().Get(0)), //
-          RealScalar.of(bufferedImage.getHeight()).divide(R2_IMAGE_REGION_WRAP.range().Get(1)), //
-          RealScalar.ONE
-      );
-      Tensor matrix = DiagonalMatrix.with(diagonal);
-      GeometricLayer geometricLayer = GeometricLayer.of(matrix);
-      Graphics2D graphics = bufferedImage.createGraphics();
-      graphics.setColor(Color.WHITE);
-      graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
-      graphics.setColor(new Color(0, 0, 0, 16));
-      RegionRenders.create(R2_IMAGE_REGION_WRAP.region()).render(geometricLayer, graphics);
-      LaneRender laneRender = new LaneRender();
-      laneRender.setLane(lane, false);
-      laneRender.render(geometricLayer, graphics);
-      PointsRender pointsRender = new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
-      pointsRender.new Show(GEODESIC_DISPLAY, GEODESIC_DISPLAY.shape(), controlPoints).render(geometricLayer, graphics);
-      ImageIO.write(bufferedImage, "png", new File(DIRECTORY, String.format("scenario_%d.png", task)));
-      // ---
-      Tensor ttfs = Tensors.empty();
-      VisualSet visualSet = new VisualSet();
-      visualSet.setAxesLabelX("time [s]");
-      visualSet.setAxesLabelY("cost");
-      for (int rep = 0; rep < REPS; rep++) {
-        System.out.println("iteration " + (rep + 1));
-        run(lane, visualSet, ttfs);
+    try (PrintWriter writer = new PrintWriter(new File(DIRECTORY, "report.txt"))) {
+      int task = 0;
+      for (Tensor controlPoints : CONTROLS) {
+        // controlPoints.stream().forEach(System.out::println);
+        LaneInterface lane = StableLanes.of( //
+            controlPoints, //
+            LaneRiesenfeldCurveSubdivision.of(GEODESIC_DISPLAY.geodesicInterface(), DEGREE)::string, //
+            LEVELS, LANE_WIDTH.multiply(RationalScalar.HALF));
+        // ---
+        BufferedImage bufferedImage = new BufferedImage(WIDTH, WIDTH, BufferedImage.TYPE_INT_ARGB);
+        Tensor diagonal = Tensors.of( //
+            RealScalar.of(bufferedImage.getWidth()).divide(R2_IMAGE_REGION_WRAP.range().Get(0)), //
+            RealScalar.of(bufferedImage.getHeight()).divide(R2_IMAGE_REGION_WRAP.range().Get(1)), //
+            RealScalar.ONE);
+        Tensor matrix = DiagonalMatrix.with(diagonal);
+        GeometricLayer geometricLayer = GeometricLayer.of(matrix);
+        Graphics2D graphics = bufferedImage.createGraphics();
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+        graphics.setColor(new Color(0, 0, 0, 16));
+        RegionRenders.create(R2_IMAGE_REGION_WRAP.region()).render(geometricLayer, graphics);
+        LaneRender laneRender = new LaneRender();
+        laneRender.setLane(lane, false);
+        laneRender.render(geometricLayer, graphics);
+        PointsRender pointsRender = new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
+        pointsRender.new Show(GEODESIC_DISPLAY, GEODESIC_DISPLAY.shape(), controlPoints).render(geometricLayer, graphics);
+        ImageIO.write(bufferedImage, "png", new File(DIRECTORY, String.format("scenario_%d.png", task)));
+        // ---
+        Tensor ttfs = Tensors.empty();
+        VisualSet visualSet = new VisualSet();
+        visualSet.setAxesLabelX("time [s]");
+        visualSet.setAxesLabelY("cost");
+        for (int rep = 0; rep < REPS; rep++) {
+          System.out.println("iteration " + (rep + 1));
+          run(lane, visualSet, ttfs);
+        }
+        ScalarSummaryStatistics statistics = new ScalarSummaryStatistics();
+        ttfs.stream().map(Tensor::Get).forEach(statistics);
+        String summary = String.format("scenario %d:" //
+            + "\n\ttime to first solution = %s +/- %s (min=%s, max=%s)" + "\n\tsucess rate: %.2f%%", //
+            task, statistics.getAverage(), StandardDeviation.ofVector(ttfs), statistics.getMin(), statistics.getMax(), 100. * ttfs.length() / REPS);
+        writer.println(summary.replace("\n", System.lineSeparator()));
+        System.out.println("\n" + summary + "\n");
+        JFreeChart jFreeChart = ListPlot.of(visualSet);
+        File file = new File(DIRECTORY, String.format("costs_%d.png", task++));
+        ChartUtils.saveChartAsPNG(file, jFreeChart, WIDTH, HEIGHT);
       }
-      ScalarSummaryStatistics statistics = new ScalarSummaryStatistics();
-      ttfs.stream().map(Tensor::Get).forEach(statistics);
-      System.out.println(String.format("\nscenario %d:" //
-              + "\n\ttime to first solution = %s +/- %s (min=%s, max=%s)"
-              + "\n\tsucess rate: %.2f%%\n",
-          task, statistics.getAverage(), StandardDeviation.ofVector(ttfs), statistics.getMin(), statistics.getMax(), 100. * ttfs.length() / REPS));
-      JFreeChart jFreeChart = ListPlot.of(visualSet);
-      File file = new File(DIRECTORY, String.format("costs_%d.png", task++));
-      ChartUtils.saveChartAsPNG(file, jFreeChart, WIDTH, HEIGHT);
     }
   }
 
