@@ -13,7 +13,8 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
-import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoid3;
+import ch.ethz.idsc.sophus.crv.clothoid.CommonClothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -66,7 +67,7 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
     }
     {
       ScalarTensorFunction curve = //
-          PolarClothoid3.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
+          PolarClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
       {
         Tensor points = DOMAIN.map(curve);
         new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
@@ -77,7 +78,28 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
         Tensor points = ARROWS.map(curve);
         for (Tensor xya : points) {
           geometricLayer.pushMatrix(Se2Matrix.of(xya));
-          Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(.3), true);
+          Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(0.3), true);
+          graphics.draw(path2d);
+          // new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
+          // .setCurve(points, false).render(geometricLayer, graphics);
+          geometricLayer.popMatrix();
+        }
+      }
+    }
+    {
+      ScalarTensorFunction curve = //
+          CommonClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
+      {
+        Tensor points = DOMAIN.map(curve);
+        new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
+            .setCurve(points, false).render(geometricLayer, graphics);
+      }
+      {
+        graphics.setColor(new Color(128, 128, 128, 64));
+        Tensor points = ARROWS.map(curve);
+        for (Tensor xya : points) {
+          geometricLayer.pushMatrix(Se2Matrix.of(xya));
+          Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(0.3), true);
           graphics.draw(path2d);
           // new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
           // .setCurve(points, false).render(geometricLayer, graphics);

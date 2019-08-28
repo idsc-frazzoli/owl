@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
-import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
+import ch.ethz.idsc.sophus.crv.clothoid.CommonClothoids;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -15,14 +15,14 @@ import ch.ethz.idsc.sophus.ply.Arrowhead;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum PolarClothoidDisplay implements GeodesicDisplay {
+public enum CommonClothoidDisplay implements GeodesicDisplay {
   INSTANCE;
   // ---
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
-    return PolarClothoids.INSTANCE;
+    return CommonClothoids.INSTANCE;
   }
 
   @Override // from GeodesicDisplay
@@ -67,6 +67,6 @@ public enum PolarClothoidDisplay implements GeodesicDisplay {
 
   @Override // from Object
   public String toString() {
-    return "Pc";
+    return "Cc";
   }
 }
