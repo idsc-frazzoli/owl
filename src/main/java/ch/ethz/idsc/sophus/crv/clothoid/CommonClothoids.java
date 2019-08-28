@@ -16,15 +16,14 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * <p>In order to obtain samples of a clothoid that interpolates p and q the
  * recommended method is to use {@link LaneRiesenfeldCurveSubdivision} with
  * Clothoid3 and degrees 1 or 3. */
-// TODO JPH OWL rename
-public enum Clothoid3 implements GeodesicInterface {
+public enum CommonClothoids implements GeodesicInterface {
   INSTANCE;
   // ---
   public static final CurveSubdivision CURVE_SUBDIVISION = LaneRiesenfeldCurveSubdivision.of(INSTANCE, 1);
 
   @Override // from GeodesicInterface
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    return new Clothoid(p, q).new Curve();
+    return new CommonClothoid(p, q).new Curve();
   }
 
   @Override // from GeodesicInterface

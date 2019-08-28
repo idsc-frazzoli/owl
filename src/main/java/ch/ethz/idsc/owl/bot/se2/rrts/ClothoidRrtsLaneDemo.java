@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
   public ClothoidRrtsLaneDemo() {
     super();
     R2ImageRegionWrap r2ImageRegionWrap = R2ImageRegions._GTOB;
-    Region<Tensor> region = R2ImageRegions._GTOB.region();
+    Region<Tensor> region = r2ImageRegionWrap.region();
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     TransitionRegionQuery transitionRegionQuery = TransitionRegionQueryUnion.wrap( //
         new SampledTransitionRegionQuery(region, RealScalar.of(0.05)), //
