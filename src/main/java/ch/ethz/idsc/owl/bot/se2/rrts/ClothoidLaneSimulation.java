@@ -1,7 +1,6 @@
 // code by gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -9,6 +8,11 @@ import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
+
+import javax.imageio.ImageIO;
+
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
 import ch.ethz.idsc.owl.ani.api.AbstractRrtsEntity;
@@ -51,8 +55,6 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.red.StandardDeviation;
-import org.jfree.chart.ChartUtils;
-import org.jfree.chart.JFreeChart;
 
 /* package */ enum ClothoidLaneSimulation {
   ;
@@ -63,7 +65,7 @@ import org.jfree.chart.JFreeChart;
       Tensors.fromString("{{1.000, 4.450, 0.000},{5.500, 4.450, 0.000},{6.350, 5.650, 0.000},{10.500, 5.650, 0.000}}"), //
       Tensors.fromString("{{8.117, 3.300, 1.571},{6.967, 6.717, 2.618},{4.150, 7.167, 3.142},{3.383, 8.600, 1.571}}"), //
       Tensors.fromString("{{5.750, 1.917, -3.142},{2.000, 1.917, -3.142},{1.150, 3.250, -4.712},{2.000, 4.450, -6.283},"
-          + "{5.000, 4.450, -6.283},{8.050, 6.500, -6.283},{7.767, 10.750, -3.142}}")};
+          + "{5.000, 4.450, -6.283},{8.050, 6.500, -6.283},{7.767, 10.750, -3.142}}") };
   private static final int REPS = 10;
   private static final Scalar DELAY_HINT = RealScalar.of(3);
   // ---
@@ -96,8 +98,7 @@ import org.jfree.chart.JFreeChart;
       Tensor diagonal = Tensors.of( //
           RealScalar.of(bufferedImage.getWidth()).divide(R2_IMAGE_REGION_WRAP.range().Get(0)), //
           RealScalar.of(bufferedImage.getHeight()).divide(R2_IMAGE_REGION_WRAP.range().Get(1)), //
-          RealScalar.ONE
-      );
+          RealScalar.ONE);
       Tensor matrix = DiagonalMatrix.with(diagonal);
       GeometricLayer geometricLayer = GeometricLayer.of(matrix);
       Graphics2D graphics = bufferedImage.createGraphics();
@@ -123,9 +124,8 @@ import org.jfree.chart.JFreeChart;
       ScalarSummaryStatistics statistics = new ScalarSummaryStatistics();
       ttfs.stream().map(Tensor::Get).forEach(statistics);
       System.out.println(String.format("\nscenario %d:" //
-              + "\n\ttime to first solution = %s +/- %s (min=%s, max=%s)"
-              + "\n\tsucess rate: %.2f%%\n",
-          task, statistics.getAverage(), StandardDeviation.ofVector(ttfs), statistics.getMin(), statistics.getMax(), 100. * ttfs.length() / REPS));
+          + "\n\ttime to first solution = %s +/- %s (min=%s, max=%s)" + "\n\tsucess rate: %.2f%%\n", task, statistics.getAverage(),
+          StandardDeviation.ofVector(ttfs), statistics.getMin(), statistics.getMax(), 100. * ttfs.length() / REPS));
       JFreeChart jFreeChart = ListPlot.of(visualSet);
       File file = new File(DIRECTORY, String.format("costs_%d.png", task++));
       ChartUtils.saveChartAsPNG(file, jFreeChart, WIDTH, HEIGHT);
