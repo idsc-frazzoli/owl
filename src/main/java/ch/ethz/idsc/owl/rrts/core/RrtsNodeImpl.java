@@ -35,52 +35,57 @@ import ch.ethz.idsc.tensor.Tensor;
     // ---
     // costs
     // this.costFromRoot doesn't change
-    // child.costFromRoot changes
-    ((RrtsNodeImpl) child).costFromRoot = this.costFromRoot.add(parentChildCost.apply(this, child));
+    Scalar child_costFromRoot = this.costFromRoot.add(parentChildCost.apply(this, child));
     // update subtree of child
-    _propagate((RrtsNodeImpl) child, parentChildCost);
-    // _propagate(child, childCostFromRoot);
-    // ((RrtsNodeImpl) child).costFromRoot = childCostFromRoot;
+    _propagate((RrtsNodeImpl) child, child_costFromRoot, parentChildCost, influence);
+    // child.costFromRoot changes
+    ((RrtsNodeImpl) child).costFromRoot = child_costFromRoot;
   }
 
-  // private static void _propagate(RrtsNode child, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, final int influence) {
-  // if (0 < influence) {
-  // ((RrtsNodeImpl) child).costFromRoot = null; // FIXME childCostFromRoot;
-  // for (RrtsNode grandChild : child.children())
-  // _propagate(grandChild, parentChildCost, influence - 1);
-  // } else {
-  // Scalar costFromParent = parentChildCost.apply(null, null);
-  // _propagate(child, costFromParent);
-  // }
-  // }
-  //
-  // private static void _propagate(RrtsNode node, Scalar nodeCostFromRoot) {
-  // for (RrtsNode _child : node.children()) {
-  // RrtsNodeImpl child = (RrtsNodeImpl) _child;
-  // final Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
-  // Scalar newCostFromRoot = nodeCostFromRoot.add(costFromParent);
-  // _propagate(child, newCostFromRoot);
-  // child.costFromRoot = newCostFromRoot;
-  // }
-  // }
-  private static void _propagate(RrtsNodeImpl node, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost) {
+  private static void _propagate(RrtsNodeImpl node, Scalar node_costFromRoot, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, int influence) {
+    if (0 < influence)
+      for (RrtsNode _child : node.children()) {
+        RrtsNodeImpl child = (RrtsNodeImpl) _child;
+        Scalar child_costFromRoot = node_costFromRoot.add(parentChildCost.apply(node, child));
+        _propagate(child, child_costFromRoot, parentChildCost, influence - 1);
+        child.costFromRoot = child_costFromRoot;
+      }
+    else
+      _propagate(node, node_costFromRoot);
+  }
+
+  private static void _propagate(RrtsNodeImpl node, final Scalar node_costFromRoot) {
     for (RrtsNode _child : node.children()) {
       RrtsNodeImpl child = (RrtsNodeImpl) _child;
-      child.costFromRoot = node.costFromRoot.add(parentChildCost.apply(node, child));
-      // final Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
-      // Scalar newCostFromRoot = nodeCostFromRoot.add(costFromParent);
-      _propagate(child, parentChildCost);
-      // child.costFromRoot = newCostFromRoot;
+      Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
+      Scalar child_costFromRoot = node_costFromRoot.add(costFromParent);
+      _propagate(child, child_costFromRoot);
+      child.costFromRoot = child_costFromRoot;
     }
   }
 
-  @Override
+  @Override // from StateCostNode
   public Tensor state() {
     return state;
   }
 
-  @Override
+  @Override // from StateCostNode
   public Scalar costFromRoot() {
     return costFromRoot;
+  }
+
+  /***************************************************/
+  /** simple brute force method that does not reuse old cost information
+   * 
+   * @param node
+   * @param parentChildCost */
+  // function is not used
+  static void _propagate(RrtsNodeImpl node, Scalar node_costFromRoot, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost) {
+    for (RrtsNode _child : node.children()) {
+      RrtsNodeImpl child = (RrtsNodeImpl) _child;
+      Scalar child_costFromRoot = node_costFromRoot.add(parentChildCost.apply(node, child));
+      _propagate(child, child_costFromRoot, parentChildCost);
+      child.costFromRoot = child_costFromRoot;
+    }
   }
 }
