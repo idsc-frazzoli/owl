@@ -5,9 +5,15 @@ import java.awt.Color;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.math.MinMax;
+import ch.ethz.idsc.sophus.util.plot.VisualRow;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Min;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
@@ -53,6 +59,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.red.StandardDeviation;
+import org.jfree.chart.axis.LogarithmicAxis;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
@@ -129,6 +136,12 @@ import org.jfree.graphics2d.svg.SVGUtils;
         writer.println(summary.replace("\n", System.lineSeparator()));
         System.out.println("\n" + summary + "\n");
         JFreeChart jFreeChart = ListPlot.of(visualSet);
+        jFreeChart.getXYPlot().setDomainAxis(new LogarithmicAxis(visualSet.getAxesLabelX()));
+        List<MinMax> minMaxes = visualSet.visualRows().stream().map(VisualRow::points).filter(Tensors::nonEmpty) //
+            .map(points -> MinMax.of(points.get(Tensor.ALL, 1))).collect(Collectors.toList());
+        jFreeChart.getXYPlot().getRangeAxis().setRange( //
+            Math.max(0., 0.9 * minMaxes.stream().map(MinMax::min).reduce(Min::of).get().Get().number().doubleValue()), //
+            1.1 * minMaxes.stream().map(MinMax::max).reduce(Max::of).get().Get().number().doubleValue());
         File file = new File(DIRECTORY, String.format("costs_%d.png", task++));
         ChartUtils.saveChartAsPNG(file, jFreeChart, WIDTH, HEIGHT);
       }
