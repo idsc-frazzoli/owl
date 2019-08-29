@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;
+import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.sophus.math.sample.BallRandomSample;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
@@ -47,7 +48,8 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         RnTransitionSpace.INSTANCE, //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
-        SingleIntegratorStateSpaceModel.INSTANCE) {
+        SingleIntegratorStateSpaceModel.INSTANCE, //
+        LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
         return new RrtsNodeCollections(RnRrtsNdType.INSTANCE, min, max);
@@ -88,7 +90,8 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         DubinsTransitionSpace.shortest(RealScalar.ONE), //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
-        Se2StateSpaceModel.INSTANCE) {
+        Se2StateSpaceModel.INSTANCE, //
+        LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
         return new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, lbounds, ubounds);
@@ -129,7 +132,8 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         ClothoidTransitionSpace.INSTANCE, //
         EmptyTransitionRegionQuery.INSTANCE, //
         RationalScalar.of(1, 10), //
-        Se2StateSpaceModel.INSTANCE) {
+        Se2StateSpaceModel.INSTANCE, //
+        LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
         return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);

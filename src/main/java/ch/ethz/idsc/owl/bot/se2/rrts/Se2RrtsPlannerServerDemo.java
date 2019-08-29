@@ -24,6 +24,7 @@ import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
+import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
@@ -56,7 +57,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
         transitionSpace, //
         transitionRegionQuery, //
         RationalScalar.of(1, 10), //
-        Se2StateSpaceModel.INSTANCE) {
+        Se2StateSpaceModel.INSTANCE, //
+        LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
         return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
