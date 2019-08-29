@@ -29,6 +29,7 @@ import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.LaneRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.SimpleLaneConsumer;
 import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
@@ -164,6 +165,7 @@ class SimulationEntity extends AbstractRrtsEntity {
             transitionRegionQuery, //
             RationalScalar.of(1, 10), //
             STATE_SPACE_MODEL, //
+            LengthCostFunction.INSTANCE, //
             greedy) {
           private final Tensor lbounds_ = lbounds.copy().append(RealScalar.ZERO).unmodifiable();
           private final Tensor ubounds_ = ubounds.copy().append(Pi.TWO).unmodifiable();

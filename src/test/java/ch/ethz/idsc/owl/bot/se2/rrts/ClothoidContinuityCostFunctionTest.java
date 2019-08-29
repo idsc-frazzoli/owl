@@ -5,6 +5,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -28,5 +29,21 @@ public class ClothoidContinuityCostFunctionTest extends TestCase {
     Transition transition = ClothoidTransitionSpace.INSTANCE.connect(connect, Tensors.vector(20, 2, 0));
     Scalar scalar = ClothoidContinuityCostFunction.INSTANCE.cost(next, transition);
     Chop._12.requireClose(scalar, RealScalar.of(0));
+  }
+
+  public void testFunction1() {
+    Scalar cost = ClothoidContinuityCostFunction.transitionCost( //
+        Tensors.fromString("{0[m], 0[m], 0}"), //
+        Tensors.fromString("{1[m], 1[m], " + Math.PI / 2 + "}"), //
+        Tensors.fromString("{0[m], 2[m], " + Math.PI + "}"));
+    assertTrue(Chop._12.allZero(cost));
+  }
+
+  public void testFunction2() {
+    Scalar cost = ClothoidContinuityCostFunction.transitionCost( //
+        Tensors.fromString("{0[m], 0[m], 0}"), //
+        Tensors.fromString("{1[m], 0.4[m], " + Math.PI / 2 + "}"), //
+        Tensors.fromString("{0[m], 2[m], " + Math.PI + "}"));
+    assertTrue(Scalars.lessThan(Scalars.fromString("7[m^-2]"), cost));
   }
 }

@@ -1,17 +1,16 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
-import java.io.File;
-
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
+import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.TableBuilder;
@@ -20,7 +19,10 @@ import ch.ethz.idsc.tensor.sca.Round;
 
 /* package */ enum FilterErrorTable {
   ;
-  public static final File ROOT = HomeDirectory.Desktop("MA/owl_export");
+  private static GeodesicCausalFilteringEvaluation se2(Tensor measurements, Tensor reference) {
+    return new GeodesicCausalFilteringEvaluation( //
+        Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, measurements, reference);
+  }
 
   public static Tensor process(String name, int width) {
     TableBuilder tableBuilder = new TableBuilder();
@@ -28,7 +30,8 @@ import ch.ethz.idsc.tensor.sca.Round;
         name + ".csv").stream().map(row -> row.extract(1, 4)));
     TensorUnaryOperator geodesicCenterFilter = //
         CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, SmoothingKernel.GAUSSIAN), width);
-    GeodesicCausalFilteringEvaluation geodesicCausalFilteringEvaluation = GeodesicCausalFilteringEvaluation.se2(control, geodesicCenterFilter.apply(control));
+    GeodesicCausalFilteringEvaluation geodesicCausalFilteringEvaluation = //
+        FilterErrorTable.se2(control, geodesicCenterFilter.apply(control));
     Tensor alpharange = Subdivide.of(0.1, 1, 12);
     for (int j = 0; j < alpharange.length(); ++j) {
       Scalar alpha = alpharange.Get(j);

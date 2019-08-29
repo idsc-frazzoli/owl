@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.sophus.math.Extract2D;
@@ -28,7 +29,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 // LONGTERM the redundancy in R2****Entity shows that re-factoring is needed!
 /* package */ class R2RrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
-  private static final Scalar DELAY_HINT = RealScalar.of(.5);
+  private static final Scalar DELAY_HINT = RealScalar.of(0.5);
   private static final StateSpaceModel STATE_SPACE_MODEL = SingleIntegratorStateSpaceModel.INSTANCE;
   static final Tensor SHAPE = Tensors.fromString("{{0, 0.1}, {0.1, 0}, {0, -0.1}, {-0.1, 0}}").unmodifiable();
 
@@ -40,7 +41,8 @@ import ch.ethz.idsc.tensor.alg.Array;
             RnTransitionSpace.INSTANCE, //
             transitionRegionQuery, //
             RationalScalar.of(1, 10), //
-            STATE_SPACE_MODEL) {
+            STATE_SPACE_MODEL, //
+            LengthCostFunction.INSTANCE) {
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
             return new RrtsNodeCollections(RnRrtsNdType.INSTANCE, lbounds, ubounds);
@@ -74,12 +76,6 @@ import ch.ethz.idsc.tensor.alg.Array;
     return SHAPE;
   }
 
-  /* why Norm2Squared?
-   * 
-   * @Override // from TensorMetrix
-   * public Scalar distance(Tensor x, Tensor y) {
-   * return Norm2Squared.between(x, y); // non-negative
-   * } */
   @Override // from TrajectoryEntity
   public Scalar delayHint() {
     return DELAY_HINT;

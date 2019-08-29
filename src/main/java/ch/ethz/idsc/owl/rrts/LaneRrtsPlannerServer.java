@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.math.lane.LaneConsumer;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.LaneRandomSample;
 import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
@@ -31,13 +32,14 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   private RandomSampleInterface goalSampler;
   private Distribution rotDist = DEFAULT_ROT_DIST;
 
+  @Deprecated // TODO JPH OWL deploy remove
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
       TransitionRegionQuery obstacleQuery, //
       Scalar resolution, //
       StateSpaceModel stateSpaceModel, //
       boolean greedy) {
-    super(transitionSpace, obstacleQuery, resolution, stateSpaceModel);
+    super(transitionSpace, obstacleQuery, resolution, stateSpaceModel, LengthCostFunction.INSTANCE);
     this.greedy = greedy;
   }
 
@@ -53,34 +55,35 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   }
 
   @Override // from DefaultRrtsPlannerServer
-  protected RandomSampleInterface spaceSampler(Tensor state) {
+  protected final RandomSampleInterface spaceSampler(Tensor state) {
+    // TODO document why laneSampler might not be "ready" to be returned
     if (Objects.nonNull(laneSampler))
       return laneSampler;
     return new ConstantRandomSample(state);
   }
 
   @Override // from DefaultRrtsPlannerServer
-  protected RandomSampleInterface goalSampler(Tensor state) {
+  protected final RandomSampleInterface goalSampler(Tensor state) {
     if (Objects.nonNull(goalSampler))
       return goalSampler;
     return new ConstantRandomSample(state);
   }
 
   @Override // from Consumer
-  public void accept(LaneInterface laneInterface) {
+  public final void accept(LaneInterface laneInterface) {
     laneSampler = LaneRandomSample.along(laneInterface, rotDist);
     goalSampler = LaneRandomSample.endSample(laneInterface, rotDist);
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }
 
-  public Optional<Region<Tensor>> goalRegion() {
+  public final Optional<Region<Tensor>> goalRegion() {
     if (goalSampler instanceof RegionRandomSample)
       return Optional.of(((RegionRandomSample) goalSampler).region());
     return Optional.empty();
   }
 
-  public void setRotationDistribution(Distribution distribution) {
+  public final void setRotationDistribution(Distribution distribution) {
     rotDist = distribution;
   }
 }
