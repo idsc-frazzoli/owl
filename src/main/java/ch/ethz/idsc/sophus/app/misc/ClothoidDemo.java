@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.app.misc;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
@@ -11,7 +10,9 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
+import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.PathRender;
+import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
 import ch.ethz.idsc.sophus.crv.clothoid.CommonClothoids;
 import ch.ethz.idsc.sophus.crv.clothoid.PolarClothoids;
@@ -39,6 +40,8 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
   private static final Tensor DOMAIN = Subdivide.of(0.0, 1.0, 100);
   private static final Tensor ARROWS = Subdivide.of(0.0, 1.0, 10);
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic().deriveWithAlpha(192);
+  private static final PointsRender POINTS_RENDER_P = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 128, 128, 64));
+  private static final PointsRender POINTS_RENDER_C = new PointsRender(new Color(0, 0, 0, 0), new Color(128, 255, 128, 64));
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -65,7 +68,7 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
           .setCurve(points, false).render(geometricLayer, graphics);
       ++count;
     }
-    {
+    { // polar clothoid
       ScalarTensorFunction curve = //
           PolarClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
       {
@@ -73,20 +76,10 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
         new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
             .setCurve(points, false).render(geometricLayer, graphics);
       }
-      {
-        graphics.setColor(new Color(128, 128, 128, 64));
-        Tensor points = ARROWS.map(curve);
-        for (Tensor xya : points) {
-          geometricLayer.pushMatrix(Se2Matrix.of(xya));
-          Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(0.3), true);
-          graphics.draw(path2d);
-          // new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
-          // .setCurve(points, false).render(geometricLayer, graphics);
-          geometricLayer.popMatrix();
-        }
-      }
+      POINTS_RENDER_P.new Show(ClothoidDisplay.INSTANCE, Arrowhead.of(0.3), ARROWS.map(curve)) //
+          .render(geometricLayer, graphics);
     }
-    {
+    { // common clothoid
       ScalarTensorFunction curve = //
           CommonClothoids.INSTANCE.curve(mouse.map(Scalar::zero), mouse);
       {
@@ -94,18 +87,8 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
         new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
             .setCurve(points, false).render(geometricLayer, graphics);
       }
-      {
-        graphics.setColor(new Color(128, 128, 128, 64));
-        Tensor points = ARROWS.map(curve);
-        for (Tensor xya : points) {
-          geometricLayer.pushMatrix(Se2Matrix.of(xya));
-          Path2D path2d = geometricLayer.toPath2D(Arrowhead.of(0.3), true);
-          graphics.draw(path2d);
-          // new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
-          // .setCurve(points, false).render(geometricLayer, graphics);
-          geometricLayer.popMatrix();
-        }
-      }
+      POINTS_RENDER_C.new Show(ClothoidDisplay.INSTANCE, Arrowhead.of(0.3), ARROWS.map(curve)) //
+          .render(geometricLayer, graphics);
     }
   }
 

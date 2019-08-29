@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @return */
   public static <T> Stream<T> of(Stream<T> stream, Scalar p_keep) {
     Coinflip coinflip = Coinflip.of(p_keep);
-    return stream.filter(i -> coinflip.tossHead()); //
+    return stream.filter(i -> coinflip.tossHead());
   }
 
   /** @param tensor
