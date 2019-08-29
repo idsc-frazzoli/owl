@@ -28,51 +28,50 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override
-  public void rewireTo( //
-      RrtsNode child, Scalar costFromParent, //
-      BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, final int influence) {
+  public void rewireTo(RrtsNode child, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, final int influence) {
     // topology
     child.parent().removeEdgeTo(child); // "replace parent of given child ..."
     this.insertEdgeTo(child); // "... with this as new parent"
     // ---
     // costs
-    final Scalar childCostFromRoot = costFromRoot().add(costFromParent);
-    /* // the condition of cost reduction is not strictly necessary
-     * if (!Scalars.lessThan(nodeCostFromRoot, child.costFromRoot()))
-     * throw TensorRuntimeException.of(nodeCostFromRoot, child.costFromRoot()); */
-    // if (0 < influence) {
-    // ((RrtsNodeImpl) child).costFromRoot = childCostFromRoot;
-    // for (RrtsNode grandChild : child.children())
-    _propagate(this, parentChildCost.apply(this, child), parentChildCost, influence);
-    // } else {
+    // this.costFromRoot doesn't change
+    // child.costFromRoot changes
+    ((RrtsNodeImpl) child).costFromRoot = this.costFromRoot.add(parentChildCost.apply(this, child));
+    // update subtree of child
+    _propagate((RrtsNodeImpl) child, parentChildCost);
     // _propagate(child, childCostFromRoot);
     // ((RrtsNodeImpl) child).costFromRoot = childCostFromRoot;
-    // }
   }
 
-  private static void _propagate(RrtsNode node, Scalar costFromParent, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, final int influence) {
-    if (0 < influence) {
-      ((RrtsNodeImpl) node).costFromRoot = null; // FIXME childCostFromRoot;
-      for (RrtsNode child : node.children())
-        _propagate(child, parentChildCost.apply(node, child), parentChildCost, influence - 1);
-    } else
-      _propagate(node, costFromParent);
-  }
-
-  private static void _propagate(RrtsNode node, Scalar nodeCostFromRoot) {
+  // private static void _propagate(RrtsNode child, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, final int influence) {
+  // if (0 < influence) {
+  // ((RrtsNodeImpl) child).costFromRoot = null; // FIXME childCostFromRoot;
+  // for (RrtsNode grandChild : child.children())
+  // _propagate(grandChild, parentChildCost, influence - 1);
+  // } else {
+  // Scalar costFromParent = parentChildCost.apply(null, null);
+  // _propagate(child, costFromParent);
+  // }
+  // }
+  //
+  // private static void _propagate(RrtsNode node, Scalar nodeCostFromRoot) {
+  // for (RrtsNode _child : node.children()) {
+  // RrtsNodeImpl child = (RrtsNodeImpl) _child;
+  // final Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
+  // Scalar newCostFromRoot = nodeCostFromRoot.add(costFromParent);
+  // _propagate(child, newCostFromRoot);
+  // child.costFromRoot = newCostFromRoot;
+  // }
+  // }
+  private static void _propagate(RrtsNodeImpl node, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost) {
     for (RrtsNode _child : node.children()) {
       RrtsNodeImpl child = (RrtsNodeImpl) _child;
-      final Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
-      Scalar newCostFromRoot = nodeCostFromRoot.add(costFromParent);
-      _propagate(child, newCostFromRoot);
-      child.costFromRoot = newCostFromRoot;
+      child.costFromRoot = node.costFromRoot.add(parentChildCost.apply(node, child));
+      // final Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
+      // Scalar newCostFromRoot = nodeCostFromRoot.add(costFromParent);
+      _propagate(child, parentChildCost);
+      // child.costFromRoot = newCostFromRoot;
     }
-    // node.children().stream().parallel().forEach(child -> {
-    // final Scalar costFromParent = child.costFromRoot().subtract(node.costFromRoot());
-    // Scalar newCostFromRoot = nodeCostFromRoot.add(costFromParent);
-    // _propagate(child, newCostFromRoot);
-    // ((RrtsNodeImpl) child).costFromRoot = newCostFromRoot;
-    // });
   }
 
   @Override

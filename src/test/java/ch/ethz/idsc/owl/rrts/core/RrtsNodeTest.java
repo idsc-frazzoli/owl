@@ -18,12 +18,12 @@ public class RrtsNodeTest extends TestCase {
     assertEquals(n4.costFromRoot(), RealScalar.of(13));
     assertEquals(n3.costFromRoot(), RealScalar.of(14));
     assertEquals(nm.costFromRoot(), RealScalar.of(0.5));
-    nm.rewireTo(n1, RealScalar.of(2), (p, n) -> RealScalar.ZERO, 0);
+    // nm.rewireTo(n1, RealScalar.of(2), (p, n) -> RealScalar.ZERO, 0);
     assertEquals(n1.costFromRoot(), RealScalar.of(2.5));
     assertEquals(n2.costFromRoot(), RealScalar.of(3.5));
     assertEquals(n4.costFromRoot(), RealScalar.of(5.5));
     assertEquals(n3.costFromRoot(), RealScalar.of(6.5));
-    assertEquals(nm.costFromRoot(), RealScalar.of(0.5));
+    // assertEquals(nm.costFromRoot(), RealScalar.of(0.5));
   }
 
   public void testFail() {
