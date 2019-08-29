@@ -113,6 +113,7 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
         laneRender.render(geometricLayer, graphics);
         PointsRender pointsRender = new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
         pointsRender.new Show(GEODESIC_DISPLAY, GEODESIC_DISPLAY.shape(), controlPoints).render(geometricLayer, graphics);
+        // TODO owl uses library that allows export to SVG (for display in latex) see NonuniformityEvaluation
         ImageIO.write(bufferedImage, "png", new File(DIRECTORY, String.format("scenario_%d.png", task)));
         // ---
         Tensor ttfs = Tensors.empty();

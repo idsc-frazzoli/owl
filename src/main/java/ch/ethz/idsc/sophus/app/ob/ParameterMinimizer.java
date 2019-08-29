@@ -107,6 +107,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   private static Tensor control(String data) {
+    // TODO JPH use GokartPoseDataV1
     Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + data + ".csv").stream() //
         .map(row -> row.extract(1, 4)));
     return control;
