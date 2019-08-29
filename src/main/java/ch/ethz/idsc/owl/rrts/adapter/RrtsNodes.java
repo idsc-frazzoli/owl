@@ -1,14 +1,11 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.adapter;
 
-import java.util.Objects;
-
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 public enum RrtsNodes {
@@ -17,9 +14,8 @@ public enum RrtsNodes {
       RrtsNode node, //
       TransitionSpace transitionSpace, //
       TransitionCostFunction transitionCostFunction) {
-    // boolean status = true;
-    RrtsNode parent = node.parent();
-    if (Objects.nonNull(parent)) {
+    if (!node.isRoot()) {
+      RrtsNode parent = node.parent();
       Scalar tran = node.costFromRoot().subtract(parent.costFromRoot());
       Transition transition = transitionSpace.connect(parent.state(), node.state());
       Scalar tc = transitionCostFunction.cost(parent, transition);
@@ -29,10 +25,8 @@ public enum RrtsNodes {
        * status &= parent.costFromRoot().add(tran).equals(node.costFromRoot());
        * if (!status)
        * throw TensorRuntimeException.of(tc, tran); */
-      if (!Chop._10.close(tc, tran))
-        throw TensorRuntimeException.of(tc, tran);
-      if (!parent.costFromRoot().add(tran).equals(node.costFromRoot()))
-        throw TensorRuntimeException.of(tc, tran);
+      Chop._10.requireClose(tc, tran);
+      Chop._10.requireClose(parent.costFromRoot().add(tran), node.costFromRoot());
     }
     for (RrtsNode child : node.children())
       costConsistency(child, transitionSpace, transitionCostFunction);
