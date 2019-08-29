@@ -2,16 +2,18 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-import javax.imageio.ImageIO;
-
+import ch.ethz.idsc.owl.math.MinMax;
+import ch.ethz.idsc.sophus.util.plot.VisualRow;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Min;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
@@ -57,6 +59,9 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.red.StandardDeviation;
+import org.jfree.chart.axis.LogarithmicAxis;
+import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.jfree.graphics2d.svg.SVGUtils;
 
 /* package */ enum ClothoidLaneSimulation {
   ;
@@ -89,7 +94,7 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
   public static void main(String[] args) throws Exception {
     DIRECTORY.mkdirs();
     try (PrintWriter writer = new PrintWriter(new File(DIRECTORY, "report.txt"))) {
-      int task = 0;
+      int task = 1;
       for (Tensor controlPoints : CONTROLS) {
         // controlPoints.stream().forEach(System.out::println);
         LaneInterface lane = StableLanes.of( //
@@ -97,16 +102,15 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
             LaneRiesenfeldCurveSubdivision.of(GEODESIC_DISPLAY.geodesicInterface(), DEGREE)::string, //
             LEVELS, LANE_WIDTH.multiply(RationalScalar.HALF));
         // ---
-        BufferedImage bufferedImage = new BufferedImage(WIDTH, WIDTH, BufferedImage.TYPE_INT_ARGB);
+        SVGGraphics2D graphics = new SVGGraphics2D(WIDTH, WIDTH);
         Tensor diagonal = Tensors.of( //
-            RealScalar.of(bufferedImage.getWidth()).divide(R2_IMAGE_REGION_WRAP.range().Get(0)), //
-            RealScalar.of(bufferedImage.getHeight()).divide(R2_IMAGE_REGION_WRAP.range().Get(1)), //
+            RealScalar.of(graphics.getWidth()).divide(R2_IMAGE_REGION_WRAP.range().Get(0)), //
+            RealScalar.of(graphics.getHeight()).divide(R2_IMAGE_REGION_WRAP.range().Get(1)), //
             RealScalar.ONE);
         Tensor matrix = DiagonalMatrix.with(diagonal);
         GeometricLayer geometricLayer = GeometricLayer.of(matrix);
-        Graphics2D graphics = bufferedImage.createGraphics();
         graphics.setColor(Color.WHITE);
-        graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+        graphics.fillRect(0, 0, graphics.getWidth(), graphics.getHeight());
         graphics.setColor(new Color(0, 0, 0, 16));
         RegionRenders.create(R2_IMAGE_REGION_WRAP.region()).render(geometricLayer, graphics);
         LaneRender laneRender = new LaneRender();
@@ -114,8 +118,7 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
         laneRender.render(geometricLayer, graphics);
         PointsRender pointsRender = new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
         pointsRender.new Show(GEODESIC_DISPLAY, GEODESIC_DISPLAY.shape(), controlPoints).render(geometricLayer, graphics);
-        // TODO owl uses library that allows export to SVG (for display in latex) see NonuniformityEvaluation
-        ImageIO.write(bufferedImage, "png", new File(DIRECTORY, String.format("scenario_%d.png", task)));
+        SVGUtils.writeToSVG(new File(DIRECTORY, String.format("scenario_%d.svg", task)), graphics.getSVGElement());
         // ---
         Tensor ttfs = Tensors.empty();
         VisualSet visualSet = new VisualSet();
@@ -128,11 +131,17 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
         ScalarSummaryStatistics statistics = new ScalarSummaryStatistics();
         ttfs.stream().map(Tensor::Get).forEach(statistics);
         String summary = String.format("scenario %d:" //
-            + "\n\ttime to first solution = %s +/- %s (min=%s, max=%s)" + "\n\tsucess rate: %.2f%%", //
+            + "\n\ttime to first solution = %s +/- %s (min=%s, max=%s)" + "\n\tsuccess rate: %.2f%%", //
             task, statistics.getAverage(), StandardDeviation.ofVector(ttfs), statistics.getMin(), statistics.getMax(), 100. * ttfs.length() / REPS);
         writer.println(summary.replace("\n", System.lineSeparator()));
         System.out.println("\n" + summary + "\n");
         JFreeChart jFreeChart = ListPlot.of(visualSet);
+        jFreeChart.getXYPlot().setDomainAxis(new LogarithmicAxis(visualSet.getAxesLabelX()));
+        List<MinMax> minMaxes = visualSet.visualRows().stream().map(VisualRow::points).filter(Tensors::nonEmpty) //
+            .map(points -> MinMax.of(points.get(Tensor.ALL, 1))).collect(Collectors.toList());
+        jFreeChart.getXYPlot().getRangeAxis().setRange( //
+            Math.max(0., 0.9 * minMaxes.stream().map(MinMax::min).reduce(Min::of).get().Get().number().doubleValue()), //
+            1.1 * minMaxes.stream().map(MinMax::max).reduce(Max::of).get().Get().number().doubleValue());
         File file = new File(DIRECTORY, String.format("costs_%d.png", task++));
         ChartUtils.saveChartAsPNG(file, jFreeChart, WIDTH, HEIGHT);
       }
