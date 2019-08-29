@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.LaneRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -50,6 +51,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
             transitionRegionQuery, //
             RationalScalar.of(1, 10), //
             STATE_SPACE_MODEL, //
+            LengthCostFunction.INSTANCE, //
             greedy) {
           private final Tensor lbounds_ = lbounds.copy().append(RealScalar.ZERO).unmodifiable();
           private final Tensor ubounds_ = ubounds.copy().append(Pi.TWO).unmodifiable();

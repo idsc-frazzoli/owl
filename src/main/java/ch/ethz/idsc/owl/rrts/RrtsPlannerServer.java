@@ -58,7 +58,7 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
   }
 
   @Override // from TrajectoryPlanner
-  public void insertRoot(StateTime stateTime) {
+  public final void insertRoot(StateTime stateTime) {
     Predicate<TrajectorySample> predicate = Trajectories.untilTime(stateTime.time());
     trajectory = Collections.unmodifiableList(trajectory().stream().filter(predicate).collect(Collectors.toList()));
     potentialFutureTrajectories.clear();
@@ -82,27 +82,27 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
   }
 
   @Override // from ExpandInterface
-  public Optional<RrtsNode> pollNext() {
+  public final Optional<RrtsNode> pollNext() {
     return Objects.nonNull(process) //
         ? process.rrtsPlanner.pollNext() //
         : Optional.empty();
   }
 
   @Override // from ExpandInterface
-  public void expand(RrtsNode node) {
+  public final void expand(RrtsNode node) {
     if (Objects.nonNull(process))
       process.rrtsPlanner.expand(node); // FIXME GJOEL can get stuck here
   }
 
   @Override // from ExpandInterface
-  public Optional<RrtsNode> getBest() {
+  public final Optional<RrtsNode> getBest() {
     return Objects.nonNull(process) //
         ? process.rrtsPlanner.getBest() //
         : Optional.empty();
   }
 
   @Override // from TrajectoryPlanner
-  public Optional<RrtsNode> getBestOrElsePeek() {
+  public final Optional<RrtsNode> getBestOrElsePeek() {
     Optional<RrtsNode> optional = getBest();
     if (optional.isPresent())
       return optional;
@@ -119,7 +119,7 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
   }
 
   @Override // from RrtsTrajectoryPlanner
-  public void checkConsistency() {
+  public final void checkConsistency() {
     RrtsNodes.costConsistency(process.root, transitionSpace, costFunction);
   }
 
@@ -128,26 +128,26 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
     trajectory = Collections.unmodifiableList(trajectory.stream().filter(predicate).collect(Collectors.toList()));
   }
 
-  public Optional<RrtsNode> getRoot() {
+  public final Optional<RrtsNode> getRoot() {
     return Optional.ofNullable(process).map(RrtsPlannerProcess::root);
   }
 
-  public Optional<List<TrajectorySample>> getTrajectory() {
+  public final Optional<List<TrajectorySample>> getTrajectory() {
     List<TrajectorySample> trajectory = trajectory();
     return trajectory.isEmpty() ? Optional.empty() : Optional.of(trajectory);
   }
 
-  public Optional<TransitionRegionQuery> getObstacleQuery() {
+  public final Optional<TransitionRegionQuery> getObstacleQuery() {
     return Objects.nonNull(process) //
         ? Optional.of(process.rrtsPlanner.getObstacleQuery()) //
         : Optional.empty();
   }
 
-  public TransitionSpace getTransitionSpace() {
+  public final TransitionSpace getTransitionSpace() {
     return transitionSpace;
   }
 
-  public void addTrajectoryPostprocessing(CurveSubdivision subdivision, TensorMetric metric) {
+  public final void addTrajectoryPostprocessing(CurveSubdivision subdivision, TensorMetric metric) {
     flowTrajectoryGenerator.addPostProcessing(subdivision, metric);
   }
 

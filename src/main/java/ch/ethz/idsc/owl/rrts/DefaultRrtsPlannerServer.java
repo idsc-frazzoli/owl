@@ -3,12 +3,12 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrtsPlanner;
 import ch.ethz.idsc.owl.rrts.core.GreedyRrtsPlanner;
@@ -27,15 +27,8 @@ import ch.ethz.idsc.tensor.Tensors;
 public abstract class DefaultRrtsPlannerServer extends RrtsPlannerServer {
   private Tensor state = Tensors.empty();
   private Tensor goal = Tensors.empty();
+  /** collection of control points */
   private Collection<Tensor> greeds = Collections.emptyList();
-
-  public DefaultRrtsPlannerServer( //
-      TransitionSpace transitionSpace, //
-      TransitionRegionQuery obstacleQuery, //
-      Scalar resolution, //
-      StateSpaceModel stateSpaceModel) {
-    this(transitionSpace, obstacleQuery, resolution, stateSpaceModel, LengthCostFunction.INSTANCE);
-  }
 
   public DefaultRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -47,18 +40,18 @@ public abstract class DefaultRrtsPlannerServer extends RrtsPlannerServer {
   }
 
   @Override // from RrtsPlannerServer
-  public void setState(StateTime stateTime) {
+  public final void setState(StateTime stateTime) {
     super.setState(stateTime);
     state = stateTime.state();
   }
 
   @Override // from RrtsPlannerServer
-  public void setGoal(Tensor goal) {
+  public final void setGoal(Tensor goal) {
     this.goal = goal;
   }
 
   @Override // from RrtsPlannerServer
-  protected RrtsPlannerProcess setupProcess(StateTime stateTime) {
+  protected final RrtsPlannerProcess setupProcess(StateTime stateTime) {
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
     Optional<RrtsNode> optional = rrts.insertAsNode(stateTime.state(), 5);
     if (optional.isPresent()) {
@@ -73,8 +66,9 @@ public abstract class DefaultRrtsPlannerServer extends RrtsPlannerServer {
     return null;
   }
 
-  public void setGreeds(Collection<Tensor> greeds) {
-    this.greeds = greeds;
+  /** @param greeds collection of control points */
+  public final void setGreeds(Collection<Tensor> greeds) {
+    this.greeds = Objects.requireNonNull(greeds);
   }
 
   protected abstract RrtsNodeCollection rrtsNodeCollection();

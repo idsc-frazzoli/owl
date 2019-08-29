@@ -11,6 +11,7 @@ import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
@@ -45,7 +46,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
             ClothoidTransitionSpace.INSTANCE, //
             transitionRegionQuery, //
             RationalScalar.of(1, 10), //
-            STATE_SPACE_MODEL) {
+            STATE_SPACE_MODEL, //
+            LengthCostFunction.INSTANCE) {
           private final Tensor lbounds_ = lbounds.copy().append(RealScalar.ZERO).unmodifiable();
           private final Tensor ubounds_ = ubounds.copy().append(Pi.TWO).unmodifiable();
 
