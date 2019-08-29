@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Tensors;
   ;
   private static final Random RANDOM = new Random();
 
-  public static void main(String[] args) {
+  static OwlyFrame show() {
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
     Tensor max = Tensors.vector(wid, wid);
@@ -43,5 +43,10 @@ import ch.ethz.idsc.tensor.Tensors;
     owlyFrame.configCoordinateOffset(42, 456);
     owlyFrame.jFrame.setBounds(100, 100, 500, 500);
     owlyFrame.setRrts(transitionSpace, root, transitionRegionQuery);
+    return owlyFrame;
+  }
+
+  public static void main(String[] args) {
+    show();
   }
 }

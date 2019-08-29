@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.rrts.core;
 import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.function.BiFunction;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -103,32 +102,16 @@ public class DefaultRrts implements Rrts {
   }
 
   @Override // from Rrts
-  public void rewireAround(RrtsNode parent, int k_nearest) {
-    /* for (RrtsNode node : nodeCollection.nearFrom(parent.state(), k_nearest)) {
-     * Transition transition = transitionSpace.connect(parent.state(), node.state());
-     * Scalar costFromParent = transitionCostFunction.cost(transition);
-     * if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
-     * if (isCollisionFree(transition)) {
-     * parent.rewireTo(node, costFromParent);
-     * ++rewireCount;
-     * }
-     * }
-     * } */
-    nodeCollection.nearFrom(parent.state(), k_nearest).stream() //
-        // .parallel()
-        .forEach(node -> {
-          Transition transition = transitionSpace.connect(parent.state(), node.state());
-          Scalar costFromParent = transitionCostFunction.cost(parent, transition);
-          synchronized (parent) {
-            if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
-              if (isCollisionFree(transition)) {
-                BiFunction<RrtsNode, RrtsNode, Scalar> cost = (p, n) -> transitionCostFunction.cost(p, transitionSpace.connect(p.state(), n.state()));
-                parent.rewireTo(node, costFromParent, cost, transitionCostFunction.influence());
-                ++rewireCount;
-              }
-            }
-          }
-        });
+  public final void rewireAround(RrtsNode parent, int k_nearest) {
+    for (RrtsNode child : nodeCollection.nearFrom(parent.state(), k_nearest)) {
+      Transition transition = transitionSpace.connect(parent.state(), child.state());
+      Scalar costFromParent = transitionCostFunction.cost(parent, transition);
+      if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), child.costFromRoot()) && // reduce costs
+          isCollisionFree(transition)) {
+        parent.rewireTo(child, this::costFromParent, transitionCostFunction.influence());
+        ++rewireCount;
+      }
+    }
   }
 
   @Override // from Rrts
@@ -143,5 +126,11 @@ public class DefaultRrts implements Rrts {
 
   /* package */ TransitionRegionQuery getObstacleQuery() {
     return obstacleQuery;
+  }
+
+  // helper function
+  private Scalar costFromParent(RrtsNode parent, RrtsNode child) {
+    Transition transition = transitionSpace.connect(parent.state(), child.state());
+    return transitionCostFunction.cost(parent, transition);
   }
 }

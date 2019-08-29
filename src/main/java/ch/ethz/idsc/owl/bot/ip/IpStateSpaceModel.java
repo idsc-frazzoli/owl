@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
     this.g = g;
   }
 
-  @Override
+  @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
     // x == [d v a w]
     Scalar v = x.Get(1);

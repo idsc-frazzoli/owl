@@ -32,12 +32,14 @@ public interface RrtsNode extends StateCostNode {
    * @return new node holding state and cost with parent == this */
   RrtsNode connectTo(Tensor state, Scalar costFromRoot);
 
-  /** replace parent of given child with this as new parent,
-   * and update all costs in the subtree of child
+  /** replace parent of given child with this as new parent, and update all
+   * costs in the subtree of child.
+   * 
+   * In particular, the {@link #costFromRoot()} of this node do not change.
    * 
    * @param child
-   * @param costFromParent cost of transition between this and child
-   * @param cost calculator between two nodes
+   * @param TODO JPH costFromParent cost of transition between this and child
+   * @param parentChildCost calculator between two nodes
    * @param influence region of influence for cost */
-  void rewireTo(RrtsNode child, Scalar costFromParent, BiFunction<RrtsNode, RrtsNode, Scalar> cost, int influence);
+  void rewireTo(RrtsNode child, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, int influence);
 }

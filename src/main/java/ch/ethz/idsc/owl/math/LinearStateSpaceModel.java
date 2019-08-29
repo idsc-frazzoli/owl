@@ -27,7 +27,7 @@ public class LinearStateSpaceModel implements StateSpaceModel, Serializable {
     // L = Norm._2.ofMatrix(a);
   }
 
-  @Override
+  @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
     return a.dot(x).add(b.dot(u));
   }
