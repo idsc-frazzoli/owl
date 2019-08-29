@@ -37,7 +37,9 @@ public interface RrtsNode extends StateCostNode {
    * 
    * @param child
    * @param costFromParent cost of transition between this and child
-   * @param cost calculator between two nodes
+   * @param parentChildCost calculator between two nodes
    * @param influence region of influence for cost */
-  void rewireTo(RrtsNode child, Scalar costFromParent, BiFunction<RrtsNode, RrtsNode, Scalar> cost, int influence);
+  void rewireTo( //
+      RrtsNode child, Scalar costFromParent, //
+      BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, int influence);
 }

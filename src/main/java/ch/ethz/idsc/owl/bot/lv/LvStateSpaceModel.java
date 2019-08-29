@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.Tensors;
     this.f1 = f1;
   }
 
-  @Override
+  @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
     // Mathematica
     // x0' = x0 * (x1-f0) == + x0 x1 - f0 x0 (predators)

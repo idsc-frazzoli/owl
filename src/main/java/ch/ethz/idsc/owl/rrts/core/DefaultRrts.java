@@ -122,8 +122,9 @@ public class DefaultRrts implements Rrts {
           synchronized (parent) {
             if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), node.costFromRoot())) {
               if (isCollisionFree(transition)) {
-                BiFunction<RrtsNode, RrtsNode, Scalar> cost = (p, n) -> transitionCostFunction.cost(p, transitionSpace.connect(p.state(), n.state()));
-                parent.rewireTo(node, costFromParent, cost, transitionCostFunction.influence());
+                BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost = //
+                    (p, n) -> transitionCostFunction.cost(p, transitionSpace.connect(p.state(), n.state()));
+                parent.rewireTo(node, costFromParent, parentChildCost, transitionCostFunction.influence());
                 ++rewireCount;
               }
             }

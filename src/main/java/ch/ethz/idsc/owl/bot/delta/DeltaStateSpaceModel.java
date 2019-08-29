@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.Tensor;
     this.imageGradientInterpolation = Objects.requireNonNull(imageGradientInterpolation);
   }
 
-  @Override
+  @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
     return imageGradientInterpolation.get(x).add(u);
   }

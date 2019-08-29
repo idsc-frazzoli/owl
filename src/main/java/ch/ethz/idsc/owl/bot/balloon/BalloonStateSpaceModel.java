@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
     this.hasUnit = hasUnit;
   }
 
-  @Override
+  @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
     /* x' = horizontal velocity
      * y' = vertical velocity
@@ -70,7 +70,8 @@ import ch.ethz.idsc.tensor.sca.Floor;
         theta.negate().divide(tau1).add(u.Get(0)));
   }
 
-  public Scalar verticalWinds(Scalar y) {
+  // function not used
+  static Scalar verticalWinds(Scalar y) {
     Scalar changeOfWindDirection = RealScalar.of(10);
     Clip altitude_clip = Clips.absolute(changeOfWindDirection);
     return altitude_clip.isInside(y) //

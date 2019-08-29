@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
   // ---
   /** @param x == {angle, angular rate}
    * @param u == {torque} */
-  @Override
+  @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
     // equation (10)
     // x0' = x1

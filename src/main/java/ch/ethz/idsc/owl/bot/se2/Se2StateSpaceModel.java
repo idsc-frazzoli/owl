@@ -35,7 +35,7 @@ public enum Se2StateSpaceModel implements StateSpaceModel {
   public static final int CONTROL_INDEX_VEL = 0;
 
   // ---
-  @Override
+  @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
     // return AngleVector.of(x.Get(2)).multiply(u.Get(0)).append(u.Get(2)); // <- short form
     // x = {px[m], py[m], theta[]}

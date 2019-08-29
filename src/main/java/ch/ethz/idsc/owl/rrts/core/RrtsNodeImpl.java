@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * Sertac Karaman and Emilio Frazzoli, 2011:
  * Sampling-based algorithms for optimal motion planning
  * Algorithm 6, p.855 */
-/* package */ class RrtsNodeImpl extends SetNode<RrtsNode> implements RrtsNode {
+/* package */ final class RrtsNodeImpl extends SetNode<RrtsNode> implements RrtsNode {
   private final Tensor state;
   private Scalar costFromRoot;
 
@@ -28,21 +28,35 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override
-  public void rewireTo(RrtsNode child, Scalar costFromParent, BiFunction<RrtsNode, RrtsNode, Scalar> cost, final int influence) {
-    child.parent().removeEdgeTo(child);
-    insertEdgeTo(child);
-    final Scalar nodeCostFromRoot = costFromRoot().add(costFromParent);
+  public void rewireTo( //
+      RrtsNode child, Scalar costFromParent, //
+      BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, final int influence) {
+    // topology
+    child.parent().removeEdgeTo(child); // "replace parent of given child ..."
+    this.insertEdgeTo(child); // "... with this as new parent"
+    // ---
+    // costs
+    final Scalar childCostFromRoot = costFromRoot().add(costFromParent);
     /* // the condition of cost reduction is not strictly necessary
      * if (!Scalars.lessThan(nodeCostFromRoot, child.costFromRoot()))
      * throw TensorRuntimeException.of(nodeCostFromRoot, child.costFromRoot()); */
-    if (influence > 0) {
-      ((RrtsNodeImpl) child).costFromRoot = nodeCostFromRoot;
-      for (RrtsNode grandChild : child.children())
-        child.rewireTo(grandChild, cost.apply(child, grandChild), cost, influence - 1);
-    } else {
-      _propagate(child, nodeCostFromRoot);
-      ((RrtsNodeImpl) child).costFromRoot = nodeCostFromRoot;
-    }
+    // if (0 < influence) {
+    // ((RrtsNodeImpl) child).costFromRoot = childCostFromRoot;
+    // for (RrtsNode grandChild : child.children())
+    _propagate(this, parentChildCost.apply(this, child), parentChildCost, influence);
+    // } else {
+    // _propagate(child, childCostFromRoot);
+    // ((RrtsNodeImpl) child).costFromRoot = childCostFromRoot;
+    // }
+  }
+
+  private static void _propagate(RrtsNode node, Scalar costFromParent, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, final int influence) {
+    if (0 < influence) {
+      ((RrtsNodeImpl) node).costFromRoot = null; // FIXME childCostFromRoot;
+      for (RrtsNode child : node.children())
+        _propagate(child, parentChildCost.apply(node, child), parentChildCost, influence - 1);
+    } else
+      _propagate(node, costFromParent);
   }
 
   private static void _propagate(RrtsNode node, Scalar nodeCostFromRoot) {
