@@ -38,8 +38,7 @@ public interface RrtsNode extends StateCostNode {
    * In particular, the {@link #costFromRoot()} of this node do not change.
    * 
    * @param child
-   * @param TODO JPH costFromParent cost of transition between this and child
-   * @param parentChildCost calculator between two nodes
+   * @param edgeCost calculator between two nodes
    * @param influence region of influence for cost */
-  void rewireTo(RrtsNode child, BiFunction<RrtsNode, RrtsNode, Scalar> parentChildCost, int influence);
+  void rewireTo(RrtsNode child, BiFunction<RrtsNode, RrtsNode, Scalar> edgeCost, int influence);
 }

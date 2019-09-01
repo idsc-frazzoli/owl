@@ -36,6 +36,6 @@ public class So3GroupElement implements LieGroupElement {
 
   @Override // from LieGroupElement
   public Tensor adjoint(Tensor tensor) {
-    return matrix.dot(tensor); // TODO JPH test coverage
+    return matrix.dot(tensor);
   }
 }

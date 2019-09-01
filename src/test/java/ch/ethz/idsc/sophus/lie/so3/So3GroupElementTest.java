@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class So3GroupElementTest extends TestCase {
@@ -18,6 +19,14 @@ public class So3GroupElementTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testAdjoint() {
+    Tensor orth = So3Exponential.INSTANCE.exp(Tensors.vector(-.2, .3, .1));
+    So3GroupElement so3GroupElement = So3GroupElement.of(orth);
+    Tensor vector = Tensors.vector(1, 2, 3);
+    Tensor adjoint = so3GroupElement.adjoint(vector);
+    Chop._12.requireClose(orth.dot(vector), adjoint);
   }
 
   public void testSimple() {

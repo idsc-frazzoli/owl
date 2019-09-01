@@ -108,7 +108,7 @@ public class DefaultRrts implements Rrts {
       Scalar costFromParent = transitionCostFunction.cost(parent, transition);
       if (Scalars.lessThan(parent.costFromRoot().add(costFromParent), child.costFromRoot()) && // reduce costs
           isCollisionFree(transition)) {
-        parent.rewireTo(child, this::costFromParent, transitionCostFunction.influence());
+        parent.rewireTo(child, this::edgeCost, transitionCostFunction.influence());
         ++rewireCount;
       }
     }
@@ -129,7 +129,7 @@ public class DefaultRrts implements Rrts {
   }
 
   // helper function
-  private Scalar costFromParent(RrtsNode parent, RrtsNode child) {
+  private Scalar edgeCost(RrtsNode parent, RrtsNode child) {
     Transition transition = transitionSpace.connect(parent.state(), child.state());
     return transitionCostFunction.cost(parent, transition);
   }
