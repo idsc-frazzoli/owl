@@ -1,6 +1,7 @@
 // code by ob
 package ch.ethz.idsc.sophus.app.ob;
 
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
@@ -16,7 +17,6 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class ParameterMinimizer {
@@ -107,9 +107,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   private static Tensor control(String data) {
-    // TODO JPH use GokartPoseDataV1
-    Tensor control = Tensor.of(ResourceData.of("/dubilab/app/pose/" + data + ".csv").stream() //
-        .map(row -> row.extract(1, 4)));
-    return control;
+    return GokartPoseDataV1.INSTANCE.getPose(data, Integer.MAX_VALUE);
   }
 }
