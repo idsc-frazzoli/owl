@@ -16,30 +16,19 @@ import org.jfree.chart.axis.LogarithmicAxis;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
-import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
-import ch.ethz.idsc.owl.ani.api.AbstractRrtsEntity;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
-import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
-import ch.ethz.idsc.owl.bot.se2.glc.CarEntity;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.ren.LaneRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.MinMax;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.StableLanes;
-import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.rrts.LaneRrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
-import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.SimpleLaneConsumer;
 import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
-import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -53,10 +42,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
-import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
@@ -156,70 +143,10 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
       visualSet.add(domain, values);
       observations.keySet().stream().map(RealScalar::of).findFirst().ifPresent(ttfs::append);
     };
-    SimulationEntity entity = //
-        new SimulationEntity(stateTime, TRANSITION_REGION_QUERY, Tensors.vector(0, 0), R2_IMAGE_REGION_WRAP.range(), true, DELAY_HINT, process);
+    ClothoidLaneEntity entity = //
+        new ClothoidLaneEntity(stateTime, TRANSITION_REGION_QUERY, Tensors.vector(0, 0), R2_IMAGE_REGION_WRAP.range(), true, DELAY_HINT, process);
     LaneConsumer laneConsumer = new SimpleLaneConsumer(entity, null, Collections.singleton(entity));
     laneConsumer.accept(lane);
     Thread.sleep((long) (DELAY_HINT.add(OVERHEAD).number().doubleValue() * 1000));
-  }
-}
-
-/** variant of {@link ClothoidLaneRrtsEntity} */
-class SimulationEntity extends AbstractRrtsEntity {
-  private static final StateSpaceModel STATE_SPACE_MODEL = Se2StateSpaceModel.INSTANCE;
-  private final Scalar delayHint;
-
-  /** @param stateTime initial position of entity */
-  /* package */ SimulationEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds, boolean greedy,
-      Scalar delayHint, Consumer<Map<Double, Scalar>> process) {
-    super( //
-        new LaneRrtsPlannerServer( //
-            ClothoidTransitionSpace.INSTANCE, //
-            transitionRegionQuery, //
-            RationalScalar.of(1, 10), //
-            STATE_SPACE_MODEL, //
-            LengthCostFunction.INSTANCE, //
-            greedy) {
-          private final Tensor lbounds_ = lbounds.copy().append(RealScalar.ZERO).unmodifiable();
-          private final Tensor ubounds_ = ubounds.copy().append(Pi.TWO).unmodifiable();
-
-          @Override // from DefaultRrtsPlannerServer
-          protected RrtsNodeCollection rrtsNodeCollection() {
-            return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds_, ubounds_);
-          }
-
-          @Override // from RrtsPlannerServer
-          protected Tensor uBetween(StateTime orig, StateTime dest) {
-            return Se2RrtsFlow.uBetween(orig, dest);
-          }
-
-          @Override // from ObservingExpandInterface
-          public boolean isObserving() {
-            return true;
-          }
-
-          @Override // from ObservingExpandInterface
-          public void process(Map<Double, Scalar> observations) {
-            process.accept(observations);
-            super.process(observations);
-          }
-        }, //
-        new SimpleEpisodeIntegrator( //
-            STATE_SPACE_MODEL, //
-            EulerIntegrator.INSTANCE, //
-            stateTime), //
-        CarEntity.createPurePursuitControl());
-    add(FallbackControl.of(Array.zeros(3)));
-    this.delayHint = delayHint;
-  }
-
-  @Override // from AbstractRrtsEntity
-  protected Tensor shape() {
-    return null;
-  }
-
-  @Override // from TrajectoryEntity
-  public Scalar delayHint() {
-    return delayHint;
   }
 }
