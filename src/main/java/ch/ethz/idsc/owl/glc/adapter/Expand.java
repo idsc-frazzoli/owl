@@ -67,11 +67,16 @@ public class Expand<T extends StateCostNode> {
       final Map<Double, Scalar> observations = new LinkedHashMap<>();
       Timing timing = Timing.started();
       Supplier<Boolean> isFinished_ = () -> {
-        expandInterface.getBest().ifPresent(node -> observations.put(timing.seconds(), node.costFromRoot()));
+        expandInterface.getBest().ifPresent(node -> {
+          if (observations.isEmpty())
+            ((ObservingExpandInterface<T>) expandInterface).processFirst(node);
+          observations.put(timing.seconds(), node.costFromRoot());
+        });
         return isFinished.get();
       };
       expansionLoop(limit, isFinished_);
       ((ObservingExpandInterface) expandInterface).process(observations);
+      expandInterface.getBest().ifPresent(((ObservingExpandInterface<T>) expandInterface)::processLast);
     } else
       expansionLoop(limit, isFinished);
   }
