@@ -36,10 +36,11 @@ import ch.ethz.idsc.tensor.red.Norm;
     arcLength1 = FoldList.of(Tensor::add, RealScalar.ZERO, differencesNorm);
   }
 
-  public void addCurvature() {
+  public VisualRow addCurvature() {
     VisualRow visualRow = visualSet.add(getArcLength1(), curvature);
     visualRow.setLabel("curvature");
     visualRow.setStroke(PLOT_STROKE);
+    return visualRow;
   }
 
   public void addArcTan(Tensor refined) {
