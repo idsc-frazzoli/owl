@@ -27,4 +27,16 @@ public interface ObservingExpandInterface<T extends StateCostNode> extends Expan
       System.out.println("cost gradient:\t" + values.get(0) + " -> " + Lists.getLast(values));
     }
   }
+
+  /** @param first node
+   * DEFAULT: do nothing */
+  default void processFirst(T first) {
+    // ---
+  }
+
+  /** @param last node
+   * DEFAULT: do nothing */
+  default void processLast(T last) {
+    // ---
+  }
 }

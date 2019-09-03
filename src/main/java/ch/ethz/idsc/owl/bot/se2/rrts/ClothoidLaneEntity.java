@@ -15,6 +15,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.LaneRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -32,7 +33,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
   /** @param stateTime initial position of entity */
   /* package */ ClothoidLaneEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds, boolean greedy,
-      Scalar delayHint, Consumer<Map<Double, Scalar>> process) {
+      Scalar delayHint, Consumer<Map<Double, Scalar>> process, Consumer<RrtsNode> processFirst, Consumer<RrtsNode> processLast) {
     super( //
         new LaneRrtsPlannerServer( //
             ClothoidTransitionSpace.INSTANCE, //
@@ -63,6 +64,16 @@ import ch.ethz.idsc.tensor.opt.Pi;
           public void process(Map<Double, Scalar> observations) {
             process.accept(observations);
             super.process(observations);
+          }
+
+          @Override // from ObservingExpandInterface
+          public void processFirst(RrtsNode first) {
+            processFirst.accept(first);
+          }
+
+          @Override // from ObservingExpandInterface
+          public void processLast(RrtsNode last) {
+            processLast.accept(last);
           }
         }, //
         new SimpleEpisodeIntegrator( //
