@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.qty.Degree;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class ClothoidRrtsLaneDemo implements DemoInterface {
   private static final LidarRaytracer LIDAR_RAYTRACER = //
@@ -49,7 +50,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     TransitionRegionQuery transitionRegionQuery = TransitionRegionQueryUnion.wrap( //
         new SampledTransitionRegionQuery(region, RealScalar.of(0.05)), //
-        new TransitionCurvatureQuery(5.));
+        new TransitionCurvatureQuery(Clips.absolute(5.)));
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, Math.PI / 4), RealScalar.ZERO);
     ClothoidLaneRrtsEntity entity = new ClothoidLaneRrtsEntity(stateTime, transitionRegionQuery, Tensors.vector(0, 0), r2ImageRegionWrap.range(), true);
     LaneConsumer laneConsumer = new SimpleLaneConsumer(entity, null, Collections.singleton(entity));

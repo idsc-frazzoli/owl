@@ -58,6 +58,11 @@ public enum R2GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
+  public int dimensions() {
+    return 2;
+  }
+
+  @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
     return Norm._2.between(p, q);
   }

@@ -14,9 +14,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.gui.ren.TreeRender;
-import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.LogarithmicAxis;
@@ -26,7 +23,9 @@ import org.jfree.graphics2d.svg.SVGUtils;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
+import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.gui.ren.LaneRender;
+import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.MinMax;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
@@ -36,6 +35,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.SimpleLaneConsumer;
 import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
+import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -56,6 +56,7 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.red.StandardDeviation;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ enum ClothoidLaneSimulation {
   ;
@@ -84,7 +85,7 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
   private static final R2ImageRegionWrap R2_IMAGE_REGION_WRAP = R2ImageRegions._GTOB;
   private static final TransitionRegionQuery TRANSITION_REGION_QUERY = TransitionRegionQueryUnion.wrap( //
       new SampledTransitionRegionQuery(R2_IMAGE_REGION_WRAP.region(), RealScalar.of(0.05)), //
-      new TransitionCurvatureQuery(5.));
+      new TransitionCurvatureQuery(Clips.absolute(5.)));
 
   public static void main(String[] args) throws Exception {
     DIRECTORY.mkdirs();
@@ -104,7 +105,8 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
             RealScalar.ONE);
         Tensor matrix = DiagonalMatrix.with(diagonal);
         GeometricLayer geometricLayer = GeometricLayer.of(matrix);
-        SVGUtils.writeToSVG(new File(DIRECTORY, String.format("scenario_%d.svg", task)), scenario(geometricLayer, lane).getSVGElement() /* graphics.getSVGElement() */);
+        SVGUtils.writeToSVG(new File(DIRECTORY, String.format("scenario_%d.svg", task)),
+            scenario(geometricLayer, lane).getSVGElement() /* graphics.getSVGElement() */);
         // ---
         Tensor ttfs = Tensors.empty();
         VisualSet visualSet = new VisualSet();
@@ -134,7 +136,8 @@ import ch.ethz.idsc.tensor.red.StandardDeviation;
     }
   }
 
-  private synchronized static void run(LaneInterface lane, VisualSet visualSet, Tensor ttfs, GeometricLayer geometricLayer, int task, int rep) throws Exception {
+  private synchronized static void run(LaneInterface lane, VisualSet visualSet, Tensor ttfs, GeometricLayer geometricLayer, int task, int rep)
+      throws Exception {
     StateTime stateTime = new StateTime(lane.midLane().get(0), RealScalar.ZERO);
     Consumer<Map<Double, Scalar>> process = observations -> {
       Tensor domain = Tensor.of(observations.keySet().stream().map(d -> Quantity.of(d, "s")));
