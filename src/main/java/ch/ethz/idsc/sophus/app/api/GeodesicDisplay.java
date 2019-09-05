@@ -35,6 +35,8 @@ public interface GeodesicDisplay {
   /** @return lie exponential if the space is a lie group, otherwise null */
   LieExponential lieExponential();
 
+  int dimensions();
+
   /** @param p control point
    * @param q control point
    * @return pseudo difference between given control points p and q */

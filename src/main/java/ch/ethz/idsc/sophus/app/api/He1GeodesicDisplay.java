@@ -60,6 +60,11 @@ public enum He1GeodesicDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
+  public int dimensions() {
+    return 3;
+  }
+
+  @Override // from GeodesicDisplay
   public Scalar parametricDistance(Tensor p, Tensor q) {
     throw new UnsupportedOperationException();
   }

@@ -14,20 +14,22 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
+import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.RamerDouglasPeucker;
+import ch.ethz.idsc.sophus.crv.GeodesicSimplification;
+import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Power;
 
-public class SimplificationDemo extends GeodesicDisplayDemo {
+/* package */ class SimplificationDemo extends GeodesicDisplayDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
   // ---
@@ -41,7 +43,7 @@ public class SimplificationDemo extends GeodesicDisplayDemo {
   protected Tensor _control = Tensors.empty();
 
   public SimplificationDemo(GokartPoseData gokartPoseData) {
-    super(GeodesicDisplays.R2_ONLY);
+    super(GeodesicDisplays.SE2_R2);
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
@@ -51,8 +53,8 @@ public class SimplificationDemo extends GeodesicDisplayDemo {
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
     {
-      spinnerLabelLimit.setList(Arrays.asList(10, 20, 50, 100, 250, 500, 1000, 2000, 5000));
-      spinnerLabelLimit.setIndex(4);
+      spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
+      spinnerLabelLimit.setIndex(2);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
@@ -75,37 +77,45 @@ public class SimplificationDemo extends GeodesicDisplayDemo {
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(.2));
-    pathRenderCurve.setCurve(_control, false).render(geometricLayer, graphics);
-    for (Tensor point : _control) {
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
-      Path2D path2d = geometricLayer.toPath2D(shape);
-      path2d.closePath();
-      graphics.setColor(new Color(255, 128, 128, 64));
-      graphics.fill(path2d);
-      graphics.setColor(COLOR_CURVE);
-      graphics.draw(path2d);
-      geometricLayer.popMatrix();
+    {
+      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.2));
+      pathRenderCurve.setCurve(_control, false).render(geometricLayer, graphics);
+      if (_control.length() < 1000)
+        for (Tensor point : _control) {
+          geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+          Path2D path2d = geometricLayer.toPath2D(shape);
+          path2d.closePath();
+          graphics.setColor(new Color(255, 128, 128, 64));
+          graphics.fill(path2d);
+          graphics.setColor(COLOR_CURVE);
+          graphics.draw(path2d);
+          geometricLayer.popMatrix();
+        }
     }
     Scalar epsilon = Power.of(RationalScalar.HALF, spinnerLabelLevel.getValue());
-    TensorUnaryOperator tensorUnaryOperator = RamerDouglasPeucker.of(epsilon);
+    TensorUnaryOperator tensorUnaryOperator = GeodesicSimplification.of( //
+        geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), geodesicDisplay.dimensions(), epsilon);
     Tensor xy = Tensor.of(_control.stream().map(geodesicDisplay::project));
-    Tensor refined = tensorUnaryOperator.apply(xy);
+    Tensor simplified = tensorUnaryOperator.apply(xy);
+    Tensor refined = Nest.of(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface())::string, simplified, 4);
     pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
-    for (Tensor point : refined) {
-      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
-      Path2D path2d = geometricLayer.toPath2D(shape);
-      path2d.closePath();
-      graphics.setColor(COLOR_SHAPE);
-      graphics.fill(path2d);
-      graphics.setColor(Color.BLACK);
-      graphics.draw(path2d);
-      geometricLayer.popMatrix();
+    {
+      final Tensor shape = geodesicDisplay.shape();
+      for (Tensor point : simplified) {
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+        Path2D path2d = geometricLayer.toPath2D(shape);
+        path2d.closePath();
+        graphics.setColor(COLOR_SHAPE);
+        graphics.fill(path2d);
+        graphics.setColor(Color.BLACK);
+        graphics.draw(path2d);
+        geometricLayer.popMatrix();
+      }
     }
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new SimplificationDemo(GokartPoseDataV1.INSTANCE);
+    AbstractDemo abstractDemo = new SimplificationDemo(GokartPoseDataV2.INSTANCE);
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }
