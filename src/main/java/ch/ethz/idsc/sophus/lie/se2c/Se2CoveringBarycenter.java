@@ -31,7 +31,7 @@ public class Se2CoveringBarycenter implements TensorUnaryOperator {
         .map(xya -> Se2Skew.of(xya, RealScalar.ONE).rhs() //
             .append(xya.Get(2)) // biinvariant mean of angles
             .append(RealScalar.ONE) // weights are affine
-    ));
+        ));
   }
 
   @Override

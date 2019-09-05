@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ abstract class UniformDatasetFilterDemo extends DatasetFilterDemo {
-  private static final ScalarUnaryOperator SAMPLE_RATE = QuantityMagnitude.SI().in("s^-1");
+  private static final ScalarUnaryOperator MAGNITUDE_PER_SECONDS = QuantityMagnitude.SI().in("s^-1");
   // ---
   private final GokartPoseData gokartPoseData;
   protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
@@ -61,20 +61,12 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
-    {
-      // spinnerLabelCDG.setArray(ColorDataGradients.values());
-      // spinnerLabelCDG.setIndex(0);
-      // spinnerLabelCDG.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
-    }
   }
 
   protected void updateState() {
     int limit = spinnerLabelLimit.getValue();
     String name = spinnerLabelString.getValue();
     _control = gokartPoseData.getPose(name, limit);
-    // Make uniform data artificially non-uniform by randomly leaving out elements
-    // _control = DeuniformData.of(_control, RealScalar.of(0.2));
-    // _control = DuckietownData.states(DuckietownData.POSE_20190325_0);
   }
 
   @Override
@@ -95,7 +87,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     if (Objects.nonNull(lieGroup)) {
       LieDifferences lieDifferences = new LieDifferences(lieGroup, geodesicDisplay.lieExponential());
-      Scalar sampleRate = SAMPLE_RATE.apply(gokartPoseData.getSampleRate());
+      Scalar sampleRate = MAGNITUDE_PER_SECONDS.apply(gokartPoseData.getSampleRate());
       Tensor speeds = lieDifferences.apply(refined).multiply(sampleRate);
       if (0 < speeds.length()) {
         int dimensions = speeds.get(0).length();
