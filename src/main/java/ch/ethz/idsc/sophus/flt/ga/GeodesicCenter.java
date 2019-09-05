@@ -33,7 +33,7 @@ public class GeodesicCenter implements TensorUnaryOperator {
    * @return operator that maps a sequence of odd number of points to their geodesic center
    * @throws Exception if either input parameter is null */
   public static TensorUnaryOperator of(BinaryAverage binaryAverage, Function<Integer, Tensor> function) {
-    return new GeodesicCenter(binaryAverage, Objects.requireNonNull(function));
+    return new GeodesicCenter(binaryAverage, function);
   }
 
   /** Example:
@@ -56,7 +56,7 @@ public class GeodesicCenter implements TensorUnaryOperator {
     private final Function<Integer, Tensor> function;
 
     public Splits(Function<Integer, Tensor> function) {
-      this.function = function;
+      this.function = Objects.requireNonNull(function);
     }
 
     @Override

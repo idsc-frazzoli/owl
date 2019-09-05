@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Function;
 
+import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter.Splits;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
@@ -138,6 +139,26 @@ public class GeodesicCenterTest extends TestCase {
   public void testNonSymmetric() {
     try {
       GeodesicCenter.Splits.of(Tensors.vector(1, 2, 2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testSplitsEvenFail() {
+    Splits splits = new GeodesicCenter.Splits(UniformWindowSampler.of(SmoothingKernel.GAUSSIAN));
+    splits.apply(5);
+    try {
+      splits.apply(4);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testSplitsNullFail() {
+    try {
+      new GeodesicCenter.Splits(null);
       fail();
     } catch (Exception exception) {
       // ---

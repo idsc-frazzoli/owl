@@ -20,6 +20,9 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.GeodesicSimplification;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
+import ch.ethz.idsc.sophus.flt.CenterFilter;
+import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
+import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -70,7 +73,9 @@ import ch.ethz.idsc.tensor.sca.Power;
   protected void updateState() {
     int limit = spinnerLabelLimit.getValue();
     String name = spinnerLabelString.getValue();
-    _control = gokartPoseData.getPose(name, limit);
+    TensorUnaryOperator tensorUnaryOperator = //
+        CenterFilter.of(GeodesicCenter.of(geodesicDisplay().geodesicInterface(), SmoothingKernel.GAUSSIAN), 21);
+    _control = tensorUnaryOperator.apply(gokartPoseData.getPose(name, limit));
   }
 
   @Override

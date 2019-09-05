@@ -129,7 +129,7 @@ public class RelaxedDomainQueueTest extends TestCase {
       relaxedPriorityQueue.pollBest();
       double seconds = timing.seconds(); // 4.99146E-4
       // System.out.println(seconds);
-      assertTrue(seconds < 0.01);
+      assertTrue(seconds < 0.1);
     }
   }
 }
