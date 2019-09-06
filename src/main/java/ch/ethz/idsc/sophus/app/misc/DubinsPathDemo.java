@@ -15,7 +15,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
@@ -80,7 +80,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
       pathRender.setCurve(points, false).render(geometricLayer, graphics);
     }
     { // draw clothoid
-      pathRenderClothoid.setCurve(Nest.of(Clothoid3.CURVE_SUBDIVISION::string, Tensors.of(START, mouse), 6), false) //
+      pathRenderClothoid.setCurve(Nest.of(Clothoids.CURVE_SUBDIVISION::string, Tensors.of(START, mouse), 6), false) //
           .render(geometricLayer, graphics);
     }
     { // draw least curved path

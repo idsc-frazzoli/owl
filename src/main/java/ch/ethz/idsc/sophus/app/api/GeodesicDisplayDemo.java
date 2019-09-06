@@ -26,7 +26,6 @@ public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoIn
   }
 
   /** @return */
-  // TODO JPH OWL 054 rename function
   public final GeodesicDisplay geodesicDisplay() {
     return geodesicDisplaySpinner.getValue();
   }

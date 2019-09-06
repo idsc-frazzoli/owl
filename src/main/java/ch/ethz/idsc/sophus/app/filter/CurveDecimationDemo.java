@@ -18,7 +18,7 @@ import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.GeodesicSimplification;
+import ch.ethz.idsc.sophus.crv.CurveDecimation;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Power;
 
-/* package */ class SimplificationDemo extends GeodesicDisplayDemo {
+/* package */ class CurveDecimationDemo extends GeodesicDisplayDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
   // ---
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   protected final SpinnerLabel<Integer> spinnerLabelDegre = new SpinnerLabel<>();
   protected Tensor _control = Tensors.empty();
 
-  public SimplificationDemo(GokartPoseData gokartPoseData) {
+  public CurveDecimationDemo(GokartPoseData gokartPoseData) {
     super(GeodesicDisplays.SE2_R2);
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
@@ -113,7 +113,7 @@ import ch.ethz.idsc.tensor.sca.Power;
         }
     }
     Scalar epsilon = Power.of(RationalScalar.HALF, spinnerLabelLevel.getValue());
-    TensorUnaryOperator tensorUnaryOperator = GeodesicSimplification.of( //
+    TensorUnaryOperator tensorUnaryOperator = CurveDecimation.of( //
         geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), geodesicDisplay.dimensions(), epsilon);
     Tensor xy = Tensor.of(_control.stream().map(geodesicDisplay::project));
     Tensor simplified = tensorUnaryOperator.apply(xy);
@@ -138,7 +138,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new SimplificationDemo(GokartPoseDataV2.INSTANCE);
+    AbstractDemo abstractDemo = new CurveDecimationDemo(GokartPoseDataV2.INSTANCE);
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

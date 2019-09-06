@@ -19,8 +19,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** Generalization of the Ramer-Douglas-Peucker algorithm
  * 
+ * Quote: "The Ramer-Douglas-Peucker algorithm decimates a curve
+ * composed of line segments to a similar curve with fewer points.
+ * [...] The algorithm defines 'dissimilar' based on the maximum
+ * distance between the original curve and the simplified curve."
+ * 
  * https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm */
-public class GeodesicSimplification implements TensorUnaryOperator {
+public class CurveDecimation implements TensorUnaryOperator {
   private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
 
   /** @param lieGroup
@@ -29,7 +34,7 @@ public class GeodesicSimplification implements TensorUnaryOperator {
    * @param epsilon
    * @return */
   public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, int dimensions, Scalar epsilon) {
-    return new GeodesicSimplification(lieGroup, lieExponential, dimensions, epsilon);
+    return new CurveDecimation(lieGroup, lieExponential, dimensions, epsilon);
   }
 
   // ---
@@ -38,7 +43,7 @@ public class GeodesicSimplification implements TensorUnaryOperator {
   private final Tensor eye;
   private final Scalar epsilon;
 
-  private GeodesicSimplification(LieGroup lieGroup, LieExponential lieExponential, int dimensions, Scalar epsilon) {
+  private CurveDecimation(LieGroup lieGroup, LieExponential lieExponential, int dimensions, Scalar epsilon) {
     this.lieGroup = lieGroup;
     this.lieExponential = lieExponential;
     eye = IdentityMatrix.of(dimensions);

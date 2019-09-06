@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,7 +27,7 @@ public class BSpline6CurveSubdivisionTest extends TestCase {
 
   public void testSingleton() {
     Tensor singleton = Tensors.of(Tensors.vector(1, 2, 3));
-    CurveSubdivision curveSubdivision = BSpline6CurveSubdivision.of(Clothoid3.INSTANCE);
+    CurveSubdivision curveSubdivision = BSpline6CurveSubdivision.of(Clothoids.INSTANCE);
     assertEquals(curveSubdivision.cyclic(singleton), singleton);
   }
 }

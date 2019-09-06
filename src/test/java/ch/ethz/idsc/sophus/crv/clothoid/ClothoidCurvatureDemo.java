@@ -50,7 +50,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
   private final SpinnerLabel<Integer> spinnerCurve = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("signed curv.");
   private final List<SplitInterface> splitInterfaces = //
-      Arrays.asList(Clothoid1.INSTANCE, Clothoid2.INSTANCE, Clothoid3.INSTANCE);
+      Arrays.asList(Clothoid1.INSTANCE, Clothoid2.INSTANCE, Clothoids.INSTANCE);
 
   public ClothoidCurvatureDemo() {
     spinnerBegin.setArray(0, 1, 2);

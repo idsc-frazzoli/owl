@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Random;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.sophus.ply.Polygons;
@@ -22,7 +22,7 @@ public class LaneRandomSampleTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     LaneInterface laneInterface = StableLanes.of( //
         Tensors.fromString("{{0[m], 1[m], 2}, {2[m], 0[m], 4}, {-1[m],-3[m], -2}}"), //
-        LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1)::cyclic, 3, Quantity.of(.3, "m"));
+        LaneRiesenfeldCurveSubdivision.of(Clothoids.INSTANCE, 1)::cyclic, 3, Quantity.of(.3, "m"));
     Distribution rotDist = UniformDistribution.of(Clips.absoluteOne());
     RandomSampleInterface randomSampleInterface = Serialization.copy(LaneRandomSample.along(laneInterface, rotDist));
     Random random = new SecureRandom();
