@@ -32,7 +32,7 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   private RandomSampleInterface goalSampler;
   private Distribution rotDist = DEFAULT_ROT_DIST;
 
-  @Deprecated // TODO JPH OWL deploy remove
+  @Deprecated // TODO JPH OWL 054 deploy remove
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
       TransitionRegionQuery obstacleQuery, //

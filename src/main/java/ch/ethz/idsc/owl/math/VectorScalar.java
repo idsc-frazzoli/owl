@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ChopInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.Conjugate;
+import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.N;
@@ -44,7 +45,8 @@ import ch.ethz.idsc.tensor.sca.Real;
  * <p>Hint: a {@link VectorScalar} may also have zero entries */
 // API not finalized: should VectorScalar allow entries with other VectorScalar's?
 public class VectorScalar extends AbstractScalar implements //
-    ChopInterface, ComplexEmbedding, ExactScalarQInterface, NInterface, Comparable<Scalar>, Serializable {
+    ChopInterface, ComplexEmbedding, ConjugateInterface, ExactScalarQInterface, //
+    NInterface, Comparable<Scalar>, Serializable {
   /** @param vector
    * @return
    * @throws Exception if input is not a vector, or contains entries of type {@link VectorScalar} */
