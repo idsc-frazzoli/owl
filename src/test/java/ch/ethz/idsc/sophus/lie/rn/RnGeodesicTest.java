@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.DeBoor;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -25,6 +26,18 @@ public class RnGeodesicTest extends TestCase {
       Tensor q = RandomVariate.of(distribution, 7);
       Chop._14.requireClose(p, RnGeodesic.INSTANCE.split(p, q, RealScalar.ZERO));
       Chop._14.requireClose(q, RnGeodesic.INSTANCE.split(p, q, RealScalar.ONE));
+    }
+  }
+
+  public void testDeBoor() {
+    Tensor knots = Tensors.vector(1, 2, 3, 4);
+    Tensor control = Tensors.vector(9, 3, 4);
+    DeBoor.of(RnGeodesic.INSTANCE, knots, control);
+    try {
+      DeBoor.of(null, knots, control);
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 }
