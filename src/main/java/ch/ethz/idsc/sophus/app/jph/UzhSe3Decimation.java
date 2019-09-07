@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.app.api.UzhSe3TxtFormat;
+import ch.ethz.idsc.sophus.crv.CurveDecimation;
+import ch.ethz.idsc.sophus.crv.CurveDecimation.Result;
 import ch.ethz.idsc.sophus.lie.se3.Se3CurveDecimation;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,7 +15,6 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.Timing;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** the quaternions in the data set have norm of approximately
  * 1.00005... due to the use of float precision */
@@ -29,13 +30,15 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
     System.out.println(Dimensions.of(poses));
     Put.of(new File(root, "poses.file"), poses);
     {
-      TensorUnaryOperator tensorUnaryOperator = Se3CurveDecimation.of(RealScalar.of(.25));
+      CurveDecimation curveDecimation = Se3CurveDecimation.of(RealScalar.of(.02));
       Timing timing = Timing.started();
-      Tensor decimated = tensorUnaryOperator.apply(poses);
+      Result result = curveDecimation.evaluate(poses);
+      Tensor decimated = result.result();
       timing.stop();
       System.out.println(timing.seconds());
       System.out.println(Dimensions.of(decimated));
       Put.of(new File(root, "decimated.file"), decimated);
+      Put.of(new File(root, "error.file"), result.errors());
     }
   }
 
