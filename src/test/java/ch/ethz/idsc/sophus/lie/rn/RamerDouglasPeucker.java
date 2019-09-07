@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.crv;
+package ch.ethz.idsc.sophus.lie.rn;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * The expected complexity of this algorithm is O(n log n).
  * However, the worst-case complexity is O(n^2). */
-public class RamerDouglasPeucker implements TensorUnaryOperator {
+/* package */ class RamerDouglasPeucker implements TensorUnaryOperator {
   private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
 
   /** @param epsilon

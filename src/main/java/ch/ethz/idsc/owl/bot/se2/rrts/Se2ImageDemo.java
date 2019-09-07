@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ enum Se2ImageDemo {
   ;
@@ -40,7 +41,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
     RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
-    TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(RealScalar.of(5));
+    TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(Clips.absolute(5));
     TransitionRegionQuery unionTransitionRegionQuery = TransitionRegionQueryUnion.wrap(transitionRegionQuery, transitionCurvatureQuery);
     // ---
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;

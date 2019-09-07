@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class PolarClothoid3Test extends TestCase {
+public class PolarClothoidsTest extends TestCase {
   public void testAngles() {
     Tensor pxy = Tensors.vector(0, 0).unmodifiable();
     Tensor qxy = Tensors.vector(1, 0).unmodifiable();

@@ -12,11 +12,11 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 public enum GokartPoseDataV1 implements GokartPoseData {
   INSTANCE;
   // ---
-  private final List<String> list = Collections.unmodifiableList(ResourceData.lines("/dubilab/app/pose/index.vector"));
+  private final List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
 
   @Override // from GokartPoseData
   public List<String> list() {
-    return list;
+    return Collections.unmodifiableList(list);
   }
 
   @Override // from GokartPoseData

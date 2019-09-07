@@ -6,9 +6,9 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import junit.framework.TestCase;
 
-public class Clothoid3Test extends TestCase {
+public class ClothoidsTest extends TestCase {
   public void testSimple() {
-    ScalarTensorFunction scalarTensorFunction = Clothoid3.INSTANCE.curve(Tensors.vector(1, 2, 3), Array.zeros(3));
+    ScalarTensorFunction scalarTensorFunction = Clothoids.INSTANCE.curve(Tensors.vector(1, 2, 3), Array.zeros(3));
     assertTrue(scalarTensorFunction instanceof Clothoid.Curve);
   }
 }

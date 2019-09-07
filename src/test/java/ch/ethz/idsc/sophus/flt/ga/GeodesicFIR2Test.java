@@ -59,6 +59,8 @@ public class GeodesicFIR2Test extends TestCase {
     assertFalse(Chop._11.close(result.get(2), passtw.get(2)));
     assertEquals(result.get(3), passtw.get(3));
     assertEquals(result.get(4), passtw.get(4));
-    assertEquals(Last.of(result), Last.of(passtw));
+    Tensor lr = Last.of(result);
+    Tensor lp = Last.of(passtw);
+    assertEquals(lr, lp);
   }
 }

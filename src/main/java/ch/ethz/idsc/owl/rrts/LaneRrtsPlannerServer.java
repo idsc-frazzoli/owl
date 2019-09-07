@@ -10,7 +10,6 @@ import ch.ethz.idsc.owl.math.lane.LaneConsumer;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.LaneRandomSample;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
@@ -31,17 +30,6 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   private RandomSampleInterface laneSampler;
   private RandomSampleInterface goalSampler;
   private Distribution rotDist = DEFAULT_ROT_DIST;
-
-  @Deprecated // TODO JPH OWL deploy remove
-  public LaneRrtsPlannerServer( //
-      TransitionSpace transitionSpace, //
-      TransitionRegionQuery obstacleQuery, //
-      Scalar resolution, //
-      StateSpaceModel stateSpaceModel, //
-      boolean greedy) {
-    super(transitionSpace, obstacleQuery, resolution, stateSpaceModel, LengthCostFunction.INSTANCE);
-    this.greedy = greedy;
-  }
 
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //

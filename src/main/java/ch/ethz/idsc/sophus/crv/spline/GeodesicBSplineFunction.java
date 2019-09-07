@@ -93,7 +93,7 @@ public class GeodesicBSplineFunction implements ScalarTensorFunction {
         ? RationalScalar.HALF
         : RealScalar.ZERO;
     last = control.length() - 1;
-    domain = Clips.interval(knots.Get(0), (Scalar) Last.of(knots));
+    domain = Clips.interval(knots.Get(0), Last.of(knots));
     navigableMap = new TreeMap<>();
     navigableMap.put(knots.Get(0), 0);
     for (int index = 1; index < knots.length(); ++index)

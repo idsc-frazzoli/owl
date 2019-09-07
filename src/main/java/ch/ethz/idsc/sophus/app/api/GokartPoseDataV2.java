@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 public class GokartPoseDataV2 implements GokartPoseData {
   public static final String PATH_FOLDER = "/dubilab/app/tpqv50";
   public static final String PATH_VECTOR = PATH_FOLDER + ".vector";
-  private static final List<String> LIST = Collections.unmodifiableList(ResourceData.lines(PATH_VECTOR));
+  private static final List<String> LIST = ResourceData.lines(PATH_VECTOR);
   // ---
   /** all available */
   public static final GokartPoseData INSTANCE = new GokartPoseDataV2(LIST);
@@ -39,7 +39,7 @@ public class GokartPoseDataV2 implements GokartPoseData {
 
   @Override // from GokartPoseData
   public List<String> list() {
-    return list;
+    return Collections.unmodifiableList(list);
   }
 
   @Override // from GokartPoseData

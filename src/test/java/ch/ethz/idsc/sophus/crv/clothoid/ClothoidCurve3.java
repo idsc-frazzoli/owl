@@ -28,7 +28,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from ClothoidCurve
   protected Scalar il(Scalar t) {
-    // return W.dot(X.multiply(t).map(clothoidQuadratic::exp_i)).Get().multiply(t);
     Scalar v0 = exp_i(X0.multiply(t));
     Scalar w1 = exp_i(X1.multiply(t)).multiply(W1);
     Scalar v2 = exp_i(X2.multiply(t));
@@ -38,7 +37,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   @Override // from ClothoidCurve
   protected Scalar ir(Scalar t) {
     Scalar _1_t = _1.subtract(t);
-    // return W.dot(X.multiply(_1_t).map(t::add).map(clothoidQuadratic::exp_i)).Get().multiply(_1_t);
     Scalar v0 = exp_i(X0.multiply(_1_t).add(t));
     Scalar w1 = exp_i(X1.multiply(_1_t).add(t)).multiply(W1);
     Scalar v2 = exp_i(X2.multiply(_1_t).add(t));

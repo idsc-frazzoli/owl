@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.ArcTanInterface;
 import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
+import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.sca.ExpInterface;
 import ch.ethz.idsc.tensor.sca.LogInterface;
@@ -18,8 +19,8 @@ import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** any scalar tracks whether a scalar in a tensor has any effect within a computation */
 public final class AnyScalar extends AbstractScalar implements //
-    ArcTanInterface, ArgInterface, ComplexEmbedding, ExactScalarQInterface, ExpInterface, //
-    LogInterface, MachineNumberQInterface, RoundingInterface, TrigonometryInterface, //
+    ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, ExactScalarQInterface, //
+    ExpInterface, LogInterface, MachineNumberQInterface, RoundingInterface, TrigonometryInterface, //
     Serializable {
   public static final Scalar INSTANCE = new AnyScalar();
 

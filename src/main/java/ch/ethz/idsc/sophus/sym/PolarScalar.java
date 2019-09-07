@@ -11,13 +11,14 @@ import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
+import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sin;
 
 /** double helix */
 public class PolarScalar extends AbstractScalar implements //
-    ArgInterface, ComplexEmbedding {
+    ArgInterface, ComplexEmbedding, ConjugateInterface {
   public static PolarScalar of(Scalar abs, Scalar arg) {
     return new PolarScalar( //
         Sign.requirePositiveOrZero(abs), //

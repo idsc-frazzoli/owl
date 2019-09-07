@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Tensor y = Tensor.of(Stream.of(array).map(i -> _effective.get(i, 1)));
     ScalarTensorFunction scalarTensorFunction = //
         GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, x, y);
-    Clip clip = Clips.interval(x.Get(0), Last.of(x).Get());
+    Clip clip = Clips.interval(x.Get(0), Last.of(x));
     Tensor domain = Subdivide.increasing(clip, 4 << levels);
     Tensor values = domain.map(scalarTensorFunction);
     renderControlPoints(geometricLayer, graphics);

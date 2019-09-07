@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.lie.se2c;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class Se2CoveringExponentialTest extends TestCase {
@@ -25,5 +26,13 @@ public class Se2CoveringExponentialTest extends TestCase {
       Tensor y = Se2CoveringExponential.INSTANCE.log(g);
       assertEquals(y, x);
     }
+  }
+
+  public void testQuantity() {
+    Tensor xya = Tensors.fromString("{1[m], 2[m], 0.3}");
+    Tensor log = Se2CoveringExponential.INSTANCE.log(xya);
+    Chop._12.requireClose(log, Tensors.fromString("{1.2924887258384925[m], 1.834977451676985[m], 0.3}"));
+    Tensor exp = Se2CoveringExponential.INSTANCE.exp(log);
+    Chop._12.requireClose(exp, xya);
   }
 }

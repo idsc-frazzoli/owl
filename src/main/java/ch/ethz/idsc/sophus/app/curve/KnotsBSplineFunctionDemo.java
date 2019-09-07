@@ -56,7 +56,7 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements Buffe
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     Scalar exponent = RationalScalar.of(jSliderExponent.getValue(), jSliderExponent.getMaximum());
     Tensor knots = KnotSpacing.centripetal(geodesicDisplay::parametricDistance, exponent).apply(control);
-    final Scalar upper = Last.of(knots).Get();
+    final Scalar upper = Last.of(knots);
     final Scalar parameter = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum()).multiply(upper);
     // ---
     GeodesicBSplineFunction scalarTensorFunction = //

@@ -8,10 +8,10 @@ import junit.framework.TestCase;
 
 public class SimplificationDemoTest extends TestCase {
   public void testSimpleV1() {
-    AbstractDemoHelper.brief(new SimplificationDemo(GokartPoseDataV1.INSTANCE));
+    AbstractDemoHelper.brief(new CurveDecimationDemo(GokartPoseDataV1.INSTANCE));
   }
 
   public void testSimpleV2() {
-    AbstractDemoHelper.brief(new SimplificationDemo(GokartPoseDataV2.INSTANCE));
+    AbstractDemoHelper.brief(new CurveDecimationDemo(GokartPoseDataV2.INSTANCE));
   }
 }

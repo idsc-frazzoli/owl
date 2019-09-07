@@ -10,7 +10,7 @@ public enum StableLanes {
   ;
   /** @param controlPoints in SE2
    * @param tensorUnaryOperator for instance
-   * LaneRiesenfeldCurveSubdivision.of(Clothoid3.INSTANCE, 1)::string
+   * LaneRiesenfeldCurveSubdivision.of(Clothoids.INSTANCE, 1)::string
    * @param level non-negative
    * @param halfWidth
    * @return */

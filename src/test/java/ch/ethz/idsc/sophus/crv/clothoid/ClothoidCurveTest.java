@@ -58,7 +58,7 @@ public class ClothoidCurveTest extends TestCase {
     Tensor q = Tensors.vector(-3.7, 0.3, 3.142);
     Tensor m1 = Clothoid1.INSTANCE.curve(p, q).apply(RationalScalar.HALF);
     Tensor m2 = Clothoid2.INSTANCE.curve(p, q).apply(RationalScalar.HALF);
-    Tensor m3 = Clothoid3.INSTANCE.curve(p, q).apply(RationalScalar.HALF);
+    Tensor m3 = Clothoids.INSTANCE.curve(p, q).apply(RationalScalar.HALF);
     assertFalse(Chop._01.close(m1, m2));
     assertFalse(Chop._01.close(m1, m3));
     assertFalse(Chop._01.close(m2, m3));

@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.api;
 
-import ch.ethz.idsc.sophus.crv.clothoid.Clothoid3;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
@@ -22,7 +22,7 @@ public enum ClothoidDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public GeodesicInterface geodesicInterface() {
-    return Clothoid3.INSTANCE;
+    return Clothoids.INSTANCE;
   }
 
   @Override // from GeodesicDisplay

@@ -17,7 +17,7 @@ public class SubdivisionClothoidDistanceTest extends TestCase {
   public void testOrigin() {
     assertEquals(SubdivisionClothoidDistance.INSTANCE.norm(Tensors.vector(0, 0, 0)), RealScalar.of(0));
   }
-  /** valid if {@link PseudoClothoidDistance} also depends on {@link Clothoid3} */
+  /** valid if {@link PseudoClothoidDistance} also depends on {@link Clothoids} */
   // public void testComparison() {
   // Distribution distribution = NormalDistribution.standard();
   // for (int count = 0; count < 1000; ++count) {
