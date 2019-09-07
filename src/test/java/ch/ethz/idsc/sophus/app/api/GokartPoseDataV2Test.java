@@ -12,4 +12,19 @@ public class GokartPoseDataV2Test extends TestCase {
   public void testRacingLength() {
     assertTrue(18 <= GokartPoseDataV2.RACING_DAY.list().size());
   }
+
+  public void testListUnmodifiable() {
+    try {
+      GokartPoseDataV2.INSTANCE.list().clear();
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      GokartPoseDataV2.RACING_DAY.list().clear();
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

@@ -114,7 +114,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     Scalar epsilon = Power.of(RationalScalar.HALF, spinnerLabelLevel.getValue());
     TensorUnaryOperator tensorUnaryOperator = CurveDecimation.of( //
-        geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()::log, geodesicDisplay.dimensions(), epsilon);
+        geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()::log, epsilon);
     Tensor xy = Tensor.of(_control.stream().map(geodesicDisplay::project));
     Tensor simplified = tensorUnaryOperator.apply(xy);
     graphics.setColor(Color.DARK_GRAY);

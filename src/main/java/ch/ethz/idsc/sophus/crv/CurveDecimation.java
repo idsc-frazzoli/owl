@@ -1,19 +1,21 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv;
 
+import java.util.stream.Stream;
+
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieGroupElement;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
-import ch.ethz.idsc.tensor.lie.TensorProduct;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** Generalization of the Ramer-Douglas-Peucker algorithm
@@ -29,24 +31,21 @@ public class CurveDecimation implements TensorUnaryOperator {
 
   /** @param lieGroup
    * @param tangent mapper
-   * @param dimensions of lie group
    * @param epsilon
    * @return */
-  public static TensorUnaryOperator of(LieGroup lieGroup, TensorUnaryOperator tangent, int dimensions, Scalar epsilon) {
-    return new CurveDecimation(lieGroup, tangent, dimensions, epsilon);
+  public static TensorUnaryOperator of(LieGroup lieGroup, TensorUnaryOperator tangent, Scalar epsilon) {
+    return new CurveDecimation(lieGroup, tangent, epsilon);
   }
 
   // ---
   private final LieGroup lieGroup;
   private final TensorUnaryOperator tangent;
-  private final Tensor eye;
-  private final Scalar epsilon;
+  private final Scalar epsilon2;
 
-  private CurveDecimation(LieGroup lieGroup, TensorUnaryOperator tangent, int dimensions, Scalar epsilon) {
+  private CurveDecimation(LieGroup lieGroup, TensorUnaryOperator tangent, Scalar epsilon) {
     this.lieGroup = lieGroup;
     this.tangent = tangent;
-    eye = IdentityMatrix.of(dimensions);
-    this.epsilon = Sign.requirePositiveOrZero(epsilon);
+    this.epsilon2 = Sign.requirePositiveOrZero(epsilon).multiply(epsilon);
   }
 
   @Override
@@ -64,23 +63,25 @@ public class CurveDecimation implements TensorUnaryOperator {
       return tensor;
     Tensor first = tensor.get(0);
     Tensor last = Last.of(tensor);
-    Tensor vector = NORMALIZE_UNLESS_ZERO.apply(tangent.apply(lieGroup.element(first).inverse().combine(last)));
-    Tensor projection = eye.subtract(TensorProduct.of(vector, vector));
-    Scalar dmax = epsilon.zero();
-    int split = -1;
+    LieGroupElement lieGroupElement = lieGroup.element(first).inverse();
+    Tensor normal = NORMALIZE_UNLESS_ZERO.apply(tangent.apply(lieGroupElement.combine(last)));
+    Scalar dmax = epsilon2.zero();
+    int skip = -1;
     for (int index = 1; index < tensor.length() - 1; ++index) {
-      Tensor lever = tangent.apply(lieGroup.element(first).inverse().combine(tensor.get(index)));
-      Scalar dist = Norm._2.ofVector(projection.dot(lever));
+      Tensor vector = tangent.apply(lieGroupElement.combine(tensor.get(index)));
+      Scalar dist = Norm2Squared.ofVector(vector.subtract(normal.multiply(normal.dot(vector).Get())));
       if (Scalars.lessThan(dmax, dist)) {
         dmax = dist;
-        split = index;
+        skip = index;
       }
     }
-    if (Scalars.lessThan(epsilon, dmax)) {
-      Tensor lo = recur(tensor.extract(0, split + 1));
-      Tensor hi = recur(tensor.extract(split, tensor.length()));
-      return Join.of(lo.extract(0, lo.length() - 1), hi);
+    if (Scalars.lessThan(epsilon2, dmax)) {
+      Tensor lo = recur(Tensor.of(tensor.stream().limit(skip + 1)));
+      Tensor hi = recur(Tensor.of(tensor.stream().skip(skip)));
+      return Tensor.of(Stream.concat( //
+          lo.stream().limit(lo.length() - 1), //
+          hi.stream()));
     }
-    return Tensors.of(first, last);
+    return Unprotect.byRef(first, last);
   }
 }

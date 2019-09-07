@@ -11,6 +11,6 @@ public enum Se3CurveDecimation {
   /** @param epsilon
    * @return */
   public static TensorUnaryOperator of(Scalar epsilon) {
-    return CurveDecimation.of(Se3Group.INSTANCE, g -> Flatten.of(Se3Exponential.INSTANCE.log(g)), 6, epsilon);
+    return CurveDecimation.of(Se3Group.INSTANCE, g -> Flatten.of(Se3Exponential.INSTANCE.log(g)), epsilon);
   }
 }

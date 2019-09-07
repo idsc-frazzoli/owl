@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.lie.rn;
 
 import ch.ethz.idsc.sophus.crv.CurveDecimation;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /** Quote from Wikipedia:
@@ -18,7 +17,7 @@ public enum RnCurveDecimation {
   /** @param dimensions
    * @param epsilon
    * @return */
-  public static TensorUnaryOperator of(int dimensions, Scalar epsilon) {
-    return CurveDecimation.of(RnGroup.INSTANCE, Tensor::copy, dimensions, epsilon);
+  public static TensorUnaryOperator of(Scalar epsilon) {
+    return CurveDecimation.of(RnGroup.INSTANCE, tensor -> tensor, epsilon);
   }
 }

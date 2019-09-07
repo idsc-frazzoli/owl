@@ -11,6 +11,6 @@ public enum Se2CurveDecimation {
   /** @param epsilon
    * @return */
   public static TensorUnaryOperator of(Scalar epsilon) {
-    return CurveDecimation.of(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE::log, 3, epsilon);
+    return CurveDecimation.of(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE::log, epsilon);
   }
 }
