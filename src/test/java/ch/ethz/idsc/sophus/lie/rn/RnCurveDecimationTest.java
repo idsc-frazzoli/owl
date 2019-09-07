@@ -21,4 +21,17 @@ public class RnCurveDecimationTest extends TestCase {
     Tensor apply = rnCurveDecimation.apply(tensor);
     assertEquals(apply, Tensors.fromString("{{0, 0}, {2, 0}}"));
   }
+
+  public void testEmpty() {
+    TensorUnaryOperator rnCurveDecimation = RnCurveDecimation.of(RealScalar.ONE);
+    Tensor tensor = rnCurveDecimation.apply(Tensors.empty());
+    assertEquals(tensor, Tensors.empty());
+  }
+
+  public void testSingle() {
+    TensorUnaryOperator rnCurveDecimation = RnCurveDecimation.of(RealScalar.ONE);
+    Tensor input = Tensors.of(Tensors.vector(1, 2, 3)).unmodifiable();
+    Tensor tensor = rnCurveDecimation.apply(input);
+    assertEquals(tensor, input);
+  }
 }

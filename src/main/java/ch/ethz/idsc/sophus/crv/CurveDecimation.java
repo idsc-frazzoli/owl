@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -18,17 +19,30 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * worst-case complexity is O(n^2)."
  * 
  * https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm */
-public enum CurveDecimation {
-  ;
+public interface CurveDecimation extends TensorUnaryOperator {
   /** @param lieGroup
    * @param tangent mapper
    * @param epsilon non-negative
    * @return
    * @throws Exception if either input parameter is null */
-  public static TensorUnaryOperator of(LieGroup lieGroup, TensorUnaryOperator tangent, Scalar epsilon) {
-    return new CurveDecimationLieGroup( //
+  public static CurveDecimation of(LieGroup lieGroup, TensorUnaryOperator tangent, Scalar epsilon) {
+    return new LieGroupCurveDecimation( //
         Objects.requireNonNull(lieGroup), //
         Objects.requireNonNull(tangent), //
         Sign.requirePositiveOrZero(epsilon));
   }
+
+  /***************************************************/
+  public static interface Result {
+    /** @return */
+    Tensor result();
+
+    /** @return */
+    Tensor errors();
+  }
+
+  /***************************************************/
+  /** @param tensor
+   * @return */
+  Result evaluate(Tensor tensor);
 }
