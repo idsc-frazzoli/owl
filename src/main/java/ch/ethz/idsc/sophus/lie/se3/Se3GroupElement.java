@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.lie.Cross;
  * code based on derivation by Ethan Eade
  * "Lie Groups for 2D and 3D Transformations", p. 8 */
 public class Se3GroupElement implements LieGroupElement {
+  /** 3 x 3 orthogonal matrix */
   private final Tensor R;
   private final Tensor t;
 
@@ -49,5 +50,13 @@ public class Se3GroupElement implements LieGroupElement {
     return Tensors.of( //
         R.dot(u).add(Cross.of(t, rw)), //
         rw);
+  }
+
+  public Tensor rotation() {
+    return R.unmodifiable();
+  }
+
+  public Tensor translation() {
+    return t.unmodifiable();
   }
 }

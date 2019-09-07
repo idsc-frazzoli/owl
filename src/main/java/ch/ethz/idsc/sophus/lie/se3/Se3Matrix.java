@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.qty.QuaternionToRotationMatrix;
 
 public enum Se3Matrix {
   ;
-  private static final Tensor UNIT3 = UnitVector.of(4, 3);
+  private static final Tensor UNIT_VECTOR_3 = UnitVector.of(4, 3);
 
   /** @param R orthogonal matrix of dimensions 3 x 3
    * @param t vector of length at least 3
@@ -20,7 +20,7 @@ public enum Se3Matrix {
         R.get(0).append(t.Get(0)), //
         R.get(1).append(t.Get(1)), //
         R.get(2).append(t.Get(2)), //
-        UNIT3.copy());
+        UNIT_VECTOR_3.copy());
   }
 
   /** @param matrix of dimensions 4 x 4

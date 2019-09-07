@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv;
 
-import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -29,23 +28,23 @@ public class CurveDecimation implements TensorUnaryOperator {
   private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
 
   /** @param lieGroup
-   * @param lieExponential
+   * @param tangent mapper
    * @param dimensions of lie group
    * @param epsilon
    * @return */
-  public static TensorUnaryOperator of(LieGroup lieGroup, LieExponential lieExponential, int dimensions, Scalar epsilon) {
-    return new CurveDecimation(lieGroup, lieExponential, dimensions, epsilon);
+  public static TensorUnaryOperator of(LieGroup lieGroup, TensorUnaryOperator tangent, int dimensions, Scalar epsilon) {
+    return new CurveDecimation(lieGroup, tangent, dimensions, epsilon);
   }
 
   // ---
   private final LieGroup lieGroup;
-  private final LieExponential lieExponential;
+  private final TensorUnaryOperator tangent;
   private final Tensor eye;
   private final Scalar epsilon;
 
-  private CurveDecimation(LieGroup lieGroup, LieExponential lieExponential, int dimensions, Scalar epsilon) {
+  private CurveDecimation(LieGroup lieGroup, TensorUnaryOperator tangent, int dimensions, Scalar epsilon) {
     this.lieGroup = lieGroup;
-    this.lieExponential = lieExponential;
+    this.tangent = tangent;
     eye = IdentityMatrix.of(dimensions);
     this.epsilon = Sign.requirePositiveOrZero(epsilon);
   }
@@ -65,12 +64,12 @@ public class CurveDecimation implements TensorUnaryOperator {
       return tensor;
     Tensor first = tensor.get(0);
     Tensor last = Last.of(tensor);
-    Tensor vector = NORMALIZE_UNLESS_ZERO.apply(lieExponential.log(lieGroup.element(first).inverse().combine(last)));
+    Tensor vector = NORMALIZE_UNLESS_ZERO.apply(tangent.apply(lieGroup.element(first).inverse().combine(last)));
     Tensor projection = eye.subtract(TensorProduct.of(vector, vector));
     Scalar dmax = epsilon.zero();
     int split = -1;
     for (int index = 1; index < tensor.length() - 1; ++index) {
-      Tensor lever = lieExponential.log(lieGroup.element(first).inverse().combine(tensor.get(index)));
+      Tensor lever = tangent.apply(lieGroup.element(first).inverse().combine(tensor.get(index)));
       Scalar dist = Norm._2.ofVector(projection.dot(lever));
       if (Scalars.lessThan(dmax, dist)) {
         dmax = dist;
