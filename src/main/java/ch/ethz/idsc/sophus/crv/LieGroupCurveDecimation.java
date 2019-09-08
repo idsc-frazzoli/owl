@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.red.Norm;
         int mid = -1;
         for (int index = beg + 1; index < end; ++index) {
           Tensor vector = tangent.apply(lieGroupElement.combine(tensors[index]));
-          Scalar dist = Norm._2.ofVector(vector.subtract(normal.dot(vector).pmul(normal)));
+          Scalar dist = Norm._2.ofVector(vector.subtract(vector.dot(normal).pmul(normal)));
           scalars[index] = dist;
           if (Scalars.lessThan(max, dist)) {
             max = dist;

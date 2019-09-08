@@ -45,12 +45,13 @@ import ch.ethz.idsc.tensor.sca.Power;
 
 /* package */ class CurveDecimationDemo extends GeodesicDisplayDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
-  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
-  private static final int WIDTH = 640;
+  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
+  private static final Color COLOR_RECON = new Color(128, 128, 128, 255);
+  private static final int WIDTH = 480;
   private static final int HEIGHT = 360;
   // ---
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
-  private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE, 2f);
+  private final PathRender pathRenderShape = new PathRender(COLOR_RECON, 2f);
   // ---
   private final GokartPoseData gokartPoseData;
   private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
@@ -73,7 +74,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     {
       spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
-      spinnerLabelLimit.setIndex(2);
+      spinnerLabelLimit.setIndex(1);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
@@ -85,7 +86,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
-      spinnerLabelLevel.setIndex(2);
+      spinnerLabelLevel.setValue(4);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "eps power");
       spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
@@ -116,7 +117,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     {
       final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.2));
       pathRenderCurve.setCurve(_control, false).render(geometricLayer, graphics);
-      if (_control.length() < 1000)
+      if (_control.length() <= 1000)
         for (Tensor point : _control) {
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
           Path2D path2d = geometricLayer.toPath2D(shape);
@@ -137,10 +138,12 @@ import ch.ethz.idsc.tensor.sca.Power;
     graphics.setColor(Color.DARK_GRAY);
     graphics.drawString("SIMPL=" + control.length(), 0, 20);
     graphics.drawString("SIMPL=" + simplified.length(), 0, 30);
-    Tensor refined = Nest.of(LaneRiesenfeldCurveSubdivision.of(geodesicDisplay.geodesicInterface(), spinnerLabelDegre.getValue())::string, simplified, 4);
+    Tensor refined = Nest.of( //
+        LaneRiesenfeldCurveSubdivision.of(geodesicDisplay.geodesicInterface(), spinnerLabelDegre.getValue())::string, //
+        simplified, 5);
     pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
     {
-      final Tensor shape = geodesicDisplay.shape();
+      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.8));
       for (Tensor point : simplified) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(shape);
@@ -155,6 +158,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     if (jToggleButton.isSelected()) {
       Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
       VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
+      visualSet.setAxesLabelX("sample no.");
+      visualSet.setAxesLabelY("error");
+      // visualSet.setPlotLabel("error");
       visualSet.add(Range.of(0, control.length()), result.errors());
       JFreeChart jFreeChart = ListPlot.of(visualSet);
       jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
@@ -162,7 +168,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new CurveDecimationDemo(GokartPoseDataV2.INSTANCE);
+    AbstractDemo abstractDemo = new CurveDecimationDemo(GokartPoseDataV2.RACING_DAY);
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

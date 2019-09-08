@@ -66,15 +66,32 @@ public class VisualSet implements Serializable {
     return visualRows.get(index);
   }
 
+  /** @param string to appear above plot */
+  public void setPlotLabel(String string) {
+    plotLabel = string;
+  }
+
+  /** @return */
   public String getPlotLabel() {
     return plotLabel;
   }
 
+  /** @param string label of x-axis */
+  public void setAxesLabelX(String string) {
+    axesLabelX = string;
+  }
+
+  /** @return label of x-axis */
   public String getAxesLabelX() {
     return axesLabelX;
   }
 
-  /** @return name of codomain/target set */
+  /** @param string label of y-axis */
+  public void setAxesLabelY(String string) {
+    axesLabelY = string;
+  }
+
+  /** @return label of y-axis */
   public String getAxesLabelY() {
     return axesLabelY;
   }
@@ -83,17 +100,5 @@ public class VisualSet implements Serializable {
     return visualRows.stream() //
         .map(VisualRow::getLabelString) //
         .anyMatch(string -> !string.isEmpty());
-  }
-
-  public void setPlotLabel(String string) {
-    plotLabel = string;
-  }
-
-  public void setAxesLabelX(String string) {
-    axesLabelX = string;
-  }
-
-  public void setAxesLabelY(String string) {
-    axesLabelY = string;
   }
 }
