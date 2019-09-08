@@ -79,8 +79,8 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
     {
-      spinnerLabelWidth.setList(Arrays.asList(1, 5, 8, 10, 15, 20, 25, 30, 35));
-      spinnerLabelWidth.setIndex(2);
+      spinnerLabelWidth.setList(Arrays.asList(0, 1, 5, 8, 10, 15, 20, 25, 30, 35));
+      spinnerLabelWidth.setIndex(0);
       spinnerLabelWidth.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "width");
       spinnerLabelWidth.addSpinnerListener(type -> updateState());
     }
@@ -115,9 +115,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
-      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.2));
+      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
       pathRenderCurve.setCurve(_control, false).render(geometricLayer, graphics);
-      if (_control.length() <= 1000)
+      if (_control.length() < 1000)
         for (Tensor point : _control) {
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
           Path2D path2d = geometricLayer.toPath2D(shape);
@@ -136,8 +136,8 @@ import ch.ethz.idsc.tensor.sca.Power;
     Result result = curveDecimation.evaluate(control);
     Tensor simplified = result.result();
     graphics.setColor(Color.DARK_GRAY);
-    graphics.drawString("SIMPL=" + control.length(), 0, 20);
-    graphics.drawString("SIMPL=" + simplified.length(), 0, 30);
+    // graphics.drawString("SIMPL=" + control.length(), 0, 20);
+    // graphics.drawString("SIMPL=" + , 0, 30);
     Tensor refined = Nest.of( //
         LaneRiesenfeldCurveSubdivision.of(geodesicDisplay.geodesicInterface(), spinnerLabelDegre.getValue())::string, //
         simplified, 5);
@@ -158,6 +158,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     if (jToggleButton.isSelected()) {
       Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
       VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
+      visualSet.setPlotLabel("Reduction from " + control.length() + " to " + simplified.length() + " samples");
       visualSet.setAxesLabelX("sample no.");
       visualSet.setAxesLabelY("error");
       // visualSet.setPlotLabel("error");

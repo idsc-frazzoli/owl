@@ -189,7 +189,7 @@ by Sertac Karaman and Emilio Frazzoli,
 
 Library for non-linear geometry computation in Java
 
-![sophus](https://user-images.githubusercontent.com/4012178/63221690-e9052c00-c19c-11e9-8d89-683625d17960.png)
+![sophus](https://user-images.githubusercontent.com/4012178/64493212-8673ed00-d27d-11e9-88d8-c2bfaa49b23e.png)
 
 The library was developed with the following objectives in mind
 * trajectory design for autonomous robots
@@ -268,6 +268,9 @@ by Jan Hakenberg,
 by Jan Hakenberg,
 [viXra:1810.0283](http://vixra.org/abs/1810.0283),
 [video](https://www.youtube.com/watch?v=dmFO72Pigb4)
+* *Curve Decimation in SE(2) and SE(3)*
+by Jan Hakenberg,
+[pdf](https://github.com/idsc-frazzoli/retina/files/3587971/20190908_curve_decimation_in_se2_and_se3.pdf)
 
 ## References
 

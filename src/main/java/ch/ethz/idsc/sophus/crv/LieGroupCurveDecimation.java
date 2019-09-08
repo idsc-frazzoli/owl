@@ -15,17 +15,22 @@ import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/** @see CurveDecimation */
+/** https://github.com/idsc-frazzoli/retina/files/3587971/20190908_curve_decimation_in_se2_and_se3.pdf
+ * 
+ * @see CurveDecimation */
 /* package */ class LieGroupCurveDecimation implements CurveDecimation {
   private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
   // ---
   private final LieGroup lieGroup;
-  private final TensorUnaryOperator tangent;
+  private final TensorUnaryOperator log;
   private final Scalar epsilon;
 
-  public LieGroupCurveDecimation(LieGroup lieGroup, TensorUnaryOperator tangent, Scalar epsilon) {
+  /** @param lieGroup
+   * @param log
+   * @param epsilon */
+  public LieGroupCurveDecimation(LieGroup lieGroup, TensorUnaryOperator log, Scalar epsilon) {
     this.lieGroup = lieGroup;
-    this.tangent = tangent;
+    this.log = log;
     this.epsilon = epsilon;
   }
 
@@ -62,10 +67,10 @@ import ch.ethz.idsc.tensor.red.Norm;
       scalars[beg] = max;
       if (beg + 1 < end) { // at least one element in between beg and end
         LieGroupElement lieGroupElement = lieGroup.element(tensors[beg]).inverse();
-        Tensor normal = NORMALIZE_UNLESS_ZERO.apply(tangent.apply(lieGroupElement.combine(tensors[end])));
+        Tensor normal = NORMALIZE_UNLESS_ZERO.apply(log.apply(lieGroupElement.combine(tensors[end])));
         int mid = -1;
         for (int index = beg + 1; index < end; ++index) {
-          Tensor vector = tangent.apply(lieGroupElement.combine(tensors[index]));
+          Tensor vector = log.apply(lieGroupElement.combine(tensors[index]));
           Scalar dist = Norm._2.ofVector(vector.subtract(vector.dot(normal).pmul(normal)));
           scalars[index] = dist;
           if (Scalars.lessThan(max, dist)) {
@@ -84,9 +89,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
     @Override // from Result
     public Tensor result() {
-      return Tensor.of(list.stream() //
-          .map(i -> tensors[i]) //
-          .map(Tensor::copy));
+      return Tensor.of(list.stream().map(i -> tensors[i]).map(Tensor::copy));
     }
 
     @Override // from Result
