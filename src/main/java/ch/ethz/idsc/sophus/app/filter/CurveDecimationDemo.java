@@ -5,7 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+
+import javax.swing.JToggleButton;
+
+import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -19,33 +24,42 @@ import ch.ethz.idsc.sophus.app.api.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.CurveDecimation;
+import ch.ethz.idsc.sophus.crv.CurveDecimation.Result;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
+import ch.ethz.idsc.sophus.util.plot.ListPlot;
+import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /* package */ class CurveDecimationDemo extends GeodesicDisplayDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
-  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 192);
+  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
+  private static final Color COLOR_RECON = new Color(128, 128, 128, 255);
+  private static final int WIDTH = 480;
+  private static final int HEIGHT = 360;
   // ---
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
-  private final PathRender pathRenderShape = new PathRender(COLOR_SHAPE, 2f);
+  private final PathRender pathRenderShape = new PathRender(COLOR_RECON, 2f);
   // ---
   private final GokartPoseData gokartPoseData;
-  protected final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
-  protected final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
-  protected final SpinnerLabel<Integer> spinnerLabelWidth = new SpinnerLabel<>();
-  protected final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
-  protected final SpinnerLabel<Integer> spinnerLabelDegre = new SpinnerLabel<>();
+  private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerLabelWidth = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerLabelDegre = new SpinnerLabel<>();
+  private final JToggleButton jToggleButton = new JToggleButton("error");
   protected Tensor _control = Tensors.empty();
 
   public CurveDecimationDemo(GokartPoseData gokartPoseData) {
@@ -60,19 +74,19 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     {
       spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
-      spinnerLabelLimit.setIndex(2);
+      spinnerLabelLimit.setIndex(1);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
     {
-      spinnerLabelWidth.setList(Arrays.asList(1, 5, 8, 10, 15, 20, 25, 30, 35));
-      spinnerLabelWidth.setIndex(2);
+      spinnerLabelWidth.setList(Arrays.asList(0, 1, 5, 8, 10, 15, 20, 25, 30, 35));
+      spinnerLabelWidth.setIndex(0);
       spinnerLabelWidth.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "width");
       spinnerLabelWidth.addSpinnerListener(type -> updateState());
     }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
-      spinnerLabelLevel.setIndex(2);
+      spinnerLabelLevel.setValue(4);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "eps power");
       spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
@@ -81,6 +95,9 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelDegre.setIndex(0);
       spinnerLabelDegre.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "degree");
       spinnerLabelDegre.addSpinnerListener(type -> updateState());
+    }
+    {
+      timerFrame.jToolBar.add(jToggleButton);
     }
     updateState();
   }
@@ -98,7 +115,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
-      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.2));
+      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
       pathRenderCurve.setCurve(_control, false).render(geometricLayer, graphics);
       if (_control.length() < 1000)
         for (Tensor point : _control) {
@@ -113,17 +130,20 @@ import ch.ethz.idsc.tensor.sca.Power;
         }
     }
     Scalar epsilon = Power.of(RationalScalar.HALF, spinnerLabelLevel.getValue());
-    TensorUnaryOperator tensorUnaryOperator = CurveDecimation.of( //
+    CurveDecimation curveDecimation = CurveDecimation.of( //
         geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()::log, epsilon);
-    Tensor xy = Tensor.of(_control.stream().map(geodesicDisplay::project));
-    Tensor simplified = tensorUnaryOperator.apply(xy);
+    Tensor control = Tensor.of(_control.stream().map(geodesicDisplay::project));
+    Result result = curveDecimation.evaluate(control);
+    Tensor simplified = result.result();
     graphics.setColor(Color.DARK_GRAY);
-    graphics.drawString("SIMPL=" + xy.length(), 0, 20);
-    graphics.drawString("SIMPL=" + simplified.length(), 0, 30);
-    Tensor refined = Nest.of(LaneRiesenfeldCurveSubdivision.of(geodesicDisplay.geodesicInterface(), spinnerLabelDegre.getValue())::string, simplified, 4);
+    // graphics.drawString("SIMPL=" + control.length(), 0, 20);
+    // graphics.drawString("SIMPL=" + , 0, 30);
+    Tensor refined = Nest.of( //
+        LaneRiesenfeldCurveSubdivision.of(geodesicDisplay.geodesicInterface(), spinnerLabelDegre.getValue())::string, //
+        simplified, 5);
     pathRenderShape.setCurve(refined, false).render(geometricLayer, graphics);
     {
-      final Tensor shape = geodesicDisplay.shape();
+      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.8));
       for (Tensor point : simplified) {
         geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
         Path2D path2d = geometricLayer.toPath2D(shape);
@@ -135,10 +155,21 @@ import ch.ethz.idsc.tensor.sca.Power;
         geometricLayer.popMatrix();
       }
     }
+    if (jToggleButton.isSelected()) {
+      Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+      VisualSet visualSet = new VisualSet(ColorDataLists._097.cyclic().deriveWithAlpha(192));
+      visualSet.setPlotLabel("Reduction from " + control.length() + " to " + simplified.length() + " samples");
+      visualSet.setAxesLabelX("sample no.");
+      visualSet.setAxesLabelY("error");
+      // visualSet.setPlotLabel("error");
+      visualSet.add(Range.of(0, control.length()), result.errors());
+      JFreeChart jFreeChart = ListPlot.of(visualSet);
+      jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
+    }
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new CurveDecimationDemo(GokartPoseDataV2.INSTANCE);
+    AbstractDemo abstractDemo = new CurveDecimationDemo(GokartPoseDataV2.RACING_DAY);
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

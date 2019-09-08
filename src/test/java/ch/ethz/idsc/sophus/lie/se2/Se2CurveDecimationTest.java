@@ -1,9 +1,12 @@
 // code by jph
 package ch.ethz.idsc.sophus.lie.se2;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.CurveDecimation;
+import ch.ethz.idsc.sophus.crv.CurveDecimation.Result;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.subare.util.RandomChoice;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -11,15 +14,17 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class Se2CurveDecimationTest extends TestCase {
-  public void testSimple() {
-    TensorUnaryOperator tensorUnaryOperator = Se2CurveDecimation.of(RealScalar.of(.3));
+  public void testSimple() throws ClassNotFoundException, IOException {
+    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(Se2CurveDecimation.of(RealScalar.of(.3)));
     Tensor p = Tensors.vector(4, 3, 7);
     Tensor q = Tensors.vector(1, 2, 5);
     ScalarTensorFunction scalarTensorFunction = Se2Geodesic.INSTANCE.curve(p, q);
@@ -31,17 +36,23 @@ public class Se2CurveDecimationTest extends TestCase {
     assertEquals(tensor, Tensors.of(p, q));
   }
 
-  public void testGokart() {
+  public void testGokart() throws ClassNotFoundException, IOException {
     GokartPoseData gokartPoseData = GokartPoseDataV2.RACING_DAY;
-    TensorUnaryOperator tensorUnaryOperator = Se2CurveDecimation.of(RealScalar.of(.3));
+    CurveDecimation tensorUnaryOperator = Serialization.copy(Se2CurveDecimation.of(RealScalar.of(.3)));
     for (String name : gokartPoseData.list()) {
+      System.out.println(name);
       Tensor matrix = gokartPoseData.getPose(name, 2000);
       Tensor copy = matrix.copy();
-      Tensor tensor = tensorUnaryOperator.apply(matrix);
+      Result curveDecimationResult = tensorUnaryOperator.evaluate(matrix.unmodifiable());
+      Tensor tensor = curveDecimationResult.result();
       assertTrue(tensor.length() < 100);
       tensor.set(Scalar::zero, Tensor.ALL, Tensor.ALL);
       Chop.NONE.requireAllZero(tensor);
       assertEquals(matrix, copy);
+      // ---
+      Tensor errors = curveDecimationResult.errors();
+      Scalar max = Norm.INFINITY.ofVector(errors);
+      System.out.println(max);
     }
   }
 
@@ -57,7 +68,7 @@ public class Se2CurveDecimationTest extends TestCase {
     return WEIGHTS2.pmul(Se2CoveringExponential.INSTANCE.log(xya));
   }
 
-  public void testQuantity() {
+  public void testQuantity() throws ClassNotFoundException, IOException {
     GokartPoseData gokartPoseData = GokartPoseDataV2.RACING_DAY;
     String name = RandomChoice.of(gokartPoseData.list());
     Tensor matrix = Tensor.of(gokartPoseData.getPose(name, 2000).stream() //
@@ -65,10 +76,12 @@ public class Se2CurveDecimationTest extends TestCase {
             Quantity.of(xya.Get(0), "m"), //
             Quantity.of(xya.Get(1), "m"), //
             xya.Get(2))));
-    Tensor tensor1 = CurveDecimation.of(Se2Group.INSTANCE, Se2CurveDecimationTest::log1, RealScalar.of(.3)) //
-        .apply(matrix);
-    Tensor tensor2 = CurveDecimation.of(Se2Group.INSTANCE, Se2CurveDecimationTest::log2, RealScalar.of(.3)) //
-        .apply(matrix);
+    Tensor tensor1 = //
+        Serialization.copy(CurveDecimation.of(Se2Group.INSTANCE, Se2CurveDecimationTest::log1, RealScalar.of(.3))) //
+            .apply(matrix);
+    Tensor tensor2 = //
+        Serialization.copy(CurveDecimation.of(Se2Group.INSTANCE, Se2CurveDecimationTest::log2, RealScalar.of(.3))) //
+            .apply(matrix);
     assertFalse(Dimensions.of(tensor1).equals(Dimensions.of(tensor2)));
   }
 }
