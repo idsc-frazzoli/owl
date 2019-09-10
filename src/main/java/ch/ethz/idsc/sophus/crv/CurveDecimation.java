@@ -21,15 +21,22 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm */
 public interface CurveDecimation extends TensorUnaryOperator {
   /** @param lieGroup
-   * @param tangent mapper
+   * @param log map from group to tangent space
    * @param epsilon non-negative
    * @return
    * @throws Exception if either input parameter is null */
-  public static CurveDecimation of(LieGroup lieGroup, TensorUnaryOperator tangent, Scalar epsilon) {
+  public static CurveDecimation of(LieGroup lieGroup, TensorUnaryOperator log, Scalar epsilon) {
     return new LieGroupCurveDecimation( //
         Objects.requireNonNull(lieGroup), //
-        Objects.requireNonNull(tangent), //
+        Objects.requireNonNull(log), //
         Sign.requirePositiveOrZero(epsilon));
+  }
+
+  /** @param lineDistance
+   * @param epsilon non-negative
+   * @return */
+  public static CurveDecimation of(LineDistance lineDistance, Scalar epsilon) {
+    return new SpaceCurveDecimation(lineDistance, Sign.requirePositiveOrZero(epsilon));
   }
 
   /***************************************************/
