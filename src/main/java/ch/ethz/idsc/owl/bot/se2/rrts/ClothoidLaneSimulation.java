@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.gui.ren.TransitionRender;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.LogarithmicAxis;
@@ -25,7 +26,6 @@ import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;
 import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.gui.ren.LaneRender;
-import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.MinMax;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
@@ -98,7 +98,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
             LaneRiesenfeldCurveSubdivision.of(GEODESIC_DISPLAY.geodesicInterface(), DEGREE)::string, //
             LEVELS, LANE_WIDTH.multiply(RationalScalar.HALF));
         // ---
-        // SVGGraphics2D graphics = new SVGGraphics2D(WIDTH, WIDTH);
         Tensor diagonal = Tensors.of( //
             RealScalar.of(WIDTH /* graphics.getWidth() */).divide(R2_IMAGE_REGION_WRAP.range().Get(0)), //
             RealScalar.of(WIDTH /* graphics.getHeight() */).divide(R2_IMAGE_REGION_WRAP.range().Get(1)), //
@@ -156,9 +155,12 @@ import ch.ethz.idsc.tensor.sca.Clips;
     // ---
     if (!last.isEmpty()) {
       SVGGraphics2D graphics = scenario(geometricLayer, lane);
-      TreeRender treeRender = new TreeRender();
-      treeRender.setCollection(Nodes.ofSubtree(last.get(0)));
-      treeRender.render(geometricLayer, graphics);
+      // TreeRender treeRender = new TreeRender();
+      // treeRender.setCollection(Nodes.ofSubtree(last.get(0)));
+      // treeRender.render(geometricLayer, graphics);
+      TransitionRender transitionRender = new TransitionRender(ClothoidTransitionSpace.INSTANCE);
+      transitionRender.setCollection(Nodes.ofSubtree(last.get(0)));
+      transitionRender.render(geometricLayer, graphics);
       render(first, geometricLayer, graphics, Color.ORANGE);
       render(last, geometricLayer, graphics, Color.BLUE);
       SVGUtils.writeToSVG(new File(DIRECTORY, String.format("scenario_%d_%d.svg", task, rep)), graphics.getSVGElement());
