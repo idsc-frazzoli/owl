@@ -5,6 +5,9 @@ import org.apache.commons.math3.analysis.MultivariateFunction;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,13 +16,19 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class PredictionAccuracy implements MultivariateFunction {
-  private final Tensor pqr_t;
-  private final int m;
+  private final Tensor[] data;
+  Se2GroupElement[] inverse;
+  private final int len;
 
   /** @param pqr_t with dimensions [n, m + 1, 3] */
   public PredictionAccuracy(Tensor pqr_t) {
-    this.pqr_t = pqr_t;
-    m = pqr_t.get(0).length() - 1;
+    len = pqr_t.get(0).length() - 1;
+    data = pqr_t.stream().map(row -> row.extract(0, len)).toArray(Tensor[]::new);
+    inverse = pqr_t.stream() //
+        .map(row -> row.get(len)) //
+        .map(Se2Group.INSTANCE::element) //
+        .map(Se2GroupElement::inverse) //
+        .toArray(Se2GroupElement[]::new);
   }
 
   @Override // from MultivariateFunction
@@ -27,11 +36,11 @@ import ch.ethz.idsc.tensor.red.Norm;
     Tensor weights = MakeAffine.of(Tensors.vectorDouble(point));
     TensorUnaryOperator tensorUnaryOperator = BiinvariantMeans.of(Se2BiinvariantMean.FILTER, weights);
     Scalar sum = RealScalar.ZERO;
-    for (Tensor sequence : pqr_t) {
-      Tensor pqr = sequence.extract(0, m);
+    for (int index = 0; index < data.length; ++index) {
+      Tensor pqr = data[index];
       Tensor t_prediction = tensorUnaryOperator.apply(pqr);
-      Tensor t_measured = sequence.get(m);
-      Scalar err = Norm._2.between(t_prediction, t_measured);
+      Tensor g = inverse[index].combine(t_prediction);
+      Scalar err = Norm._2.ofVector(Se2CoveringExponential.INSTANCE.log(g));
       sum = sum.add(err);
     }
     return sum.number().doubleValue();

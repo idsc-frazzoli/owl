@@ -59,6 +59,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final SpinnerLabel<Integer> spinnerLabelWidth = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelDegre = new SpinnerLabel<>();
+  // private final JSlider jSlider = new JSlider(1, 1000, 500);
   private final JToggleButton jToggleButton = new JToggleButton("error");
   protected Tensor _control = Tensors.empty();
 
@@ -96,6 +97,10 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelDegre.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "degree");
       spinnerLabelDegre.addSpinnerListener(type -> updateState());
     }
+    // {
+    // jSlider.setPreferredSize(new Dimension(200, 28));
+    // timerFrame.jToolBar.add(jSlider);
+    // }
     {
       timerFrame.jToolBar.add(jToggleButton);
     }
@@ -130,6 +135,7 @@ import ch.ethz.idsc.tensor.sca.Power;
         }
     }
     Scalar epsilon = Power.of(RationalScalar.HALF, spinnerLabelLevel.getValue());
+    // epsilon = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() * 3);
     CurveDecimation curveDecimation = CurveDecimation.of( //
         geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()::log, epsilon);
     Tensor control = Tensor.of(_control.stream().map(geodesicDisplay::project));
