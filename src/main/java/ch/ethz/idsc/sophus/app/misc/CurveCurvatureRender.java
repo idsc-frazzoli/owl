@@ -25,7 +25,28 @@ public enum CurveCurvatureRender {
    * @param geometricLayer
    * @param graphics */
   public static void of(Tensor curve, boolean isCyclic, GeometricLayer geometricLayer, Graphics2D graphics) {
-    of(curve, isCyclic, COMB_SCALE, geometricLayer, graphics);
+    of(curve, isCyclic, true, geometricLayer, graphics);
+  }
+
+  /** @param curve {{x0, y0}, {x1, y1}, ...}
+   * @param isCyclic
+   * @param comb
+   * @param geometricLayer
+   * @param graphics */
+  public static void of(Tensor curve, boolean isCyclic, boolean comb, GeometricLayer geometricLayer, Graphics2D graphics) {
+    of(curve, isCyclic, comb, COMB_SCALE, geometricLayer, graphics);
+  }
+
+  /** Hint: when control points have coordinates with unit "m",
+   * scale should have unit "m^2"
+   *
+   * @param curve {{x0, y0}, {x1, y1}, ...}
+   * @param isCyclic
+   * @param scale
+   * @param geometricLayer
+   * @param graphics */
+  public static void of(Tensor curve, boolean isCyclic, Scalar scale, GeometricLayer geometricLayer, Graphics2D graphics) {
+    of(curve, isCyclic, true, scale, geometricLayer, graphics);
   }
 
   /** Hint: when control points have coordinates with unit "m",
@@ -33,14 +54,16 @@ public enum CurveCurvatureRender {
    * 
    * @param curve {{x0, y0}, {x1, y1}, ...}
    * @param isCyclic
+   * @param comb
    * @param scale
    * @param geometricLayer
    * @param graphics */
-  public static void of(Tensor curve, boolean isCyclic, Scalar scale, GeometricLayer geometricLayer, Graphics2D graphics) {
+  public static void of(Tensor curve, boolean isCyclic, boolean comb, Scalar scale, GeometricLayer geometricLayer, Graphics2D graphics) {
     if (0 < curve.length())
       if (Unprotect.dimension1(curve) != 2)
         throw TensorRuntimeException.of(curve);
     PATH_RENDER_CURVE.setCurve(curve, isCyclic).render(geometricLayer, graphics);
-    PATH_RENDER_CURVATURE.setCurve(CurvatureComb.of(curve, scale, isCyclic), isCyclic).render(geometricLayer, graphics);
+    if (comb)
+      PATH_RENDER_CURVATURE.setCurve(CurvatureComb.of(curve, scale, isCyclic), isCyclic).render(geometricLayer, graphics);
   }
 }
