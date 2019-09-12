@@ -1,6 +1,7 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
+import javax.swing.JToggleButton;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Collections;
@@ -91,6 +92,12 @@ import ch.ethz.idsc.tensor.sca.Clips;
         };
         timer.schedule(timerTask, 100, 20);
       }
+    }
+    {
+      JToggleButton jToggleButton = new JToggleButton("cone");
+      jToggleButton.addActionListener(event -> entity.setConical(jToggleButton.isSelected()));
+      laneConsumptionDemo.timerFrame.jToolBar.addSeparator();
+      laneConsumptionDemo.timerFrame.jToolBar.add(jToggleButton);
     }
     {
       RenderInterface renderInterface = new CameraEmulator( //
