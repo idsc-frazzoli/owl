@@ -5,32 +5,22 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.LieGroupElement;
+import ch.ethz.idsc.sophus.math.TensorNorm;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm;
 
-/** https://github.com/idsc-frazzoli/retina/files/3587971/20190908_curve_decimation_in_se2_and_se3.pdf
- * 
- * @see CurveDecimation */
-/* package */ class LieGroupCurveDecimation implements CurveDecimation {
-  private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
-  // ---
-  private final LieGroup lieGroup;
-  private final TensorUnaryOperator log;
+/** @see CurveDecimation */
+/* package */ class SpaceCurveDecimation implements CurveDecimation {
+  private final LineDistance lineDistance;
   private final Scalar epsilon;
 
   /** @param lieGroup
    * @param log
    * @param epsilon */
-  public LieGroupCurveDecimation(LieGroup lieGroup, TensorUnaryOperator log, Scalar epsilon) {
-    this.lieGroup = lieGroup;
-    this.log = log;
+  public SpaceCurveDecimation(LineDistance lineDistance, Scalar epsilon) {
+    this.lineDistance = lineDistance;
     this.epsilon = epsilon;
   }
 
@@ -43,16 +33,16 @@ import ch.ethz.idsc.tensor.red.Norm;
   public Result evaluate(Tensor tensor) {
     return Tensors.isEmpty(tensor) //
         ? EmptyResult.INSTANCE
-        : new LieGroupResult(tensor);
+        : new SpaceResult(tensor);
   }
 
-  private class LieGroupResult implements Result, Serializable {
+  private class SpaceResult implements Result, Serializable {
     private final Tensor[] tensors;
     private final Scalar[] scalars;
     private final List<Integer> list = new LinkedList<>();
 
     /** @param tensor of length at least 1 */
-    public LieGroupResult(Tensor tensor) {
+    public SpaceResult(Tensor tensor) {
       tensors = tensor.stream().toArray(Tensor[]::new);
       scalars = new Scalar[tensors.length];
       int end = tensors.length - 1;
@@ -66,12 +56,10 @@ import ch.ethz.idsc.tensor.red.Norm;
       Scalar max = epsilon.zero();
       scalars[beg] = max;
       if (beg + 1 < end) { // at least one element in between beg and end
-        LieGroupElement lieGroupElement = lieGroup.element(tensors[beg]).inverse();
-        Tensor normal = NORMALIZE_UNLESS_ZERO.apply(log.apply(lieGroupElement.combine(tensors[end])));
+        TensorNorm tensorNorm = lineDistance.tensorNorm(tensors[beg], tensors[end]);
         int mid = -1;
         for (int index = beg + 1; index < end; ++index) {
-          Tensor vector = log.apply(lieGroupElement.combine(tensors[index]));
-          Scalar dist = Norm._2.ofVector(vector.subtract(vector.dot(normal).pmul(normal)));
+          Scalar dist = tensorNorm.norm(tensors[index]);
           scalars[index] = dist;
           if (Scalars.lessThan(max, dist)) {
             max = dist;
