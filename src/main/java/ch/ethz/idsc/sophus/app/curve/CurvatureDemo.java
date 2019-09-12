@@ -25,7 +25,7 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
   private static final int HEIGHT = 360;
   // ---
   private final JToggleButton jToggleSymi = new JToggleButton("graph");
-  public final JToggleButton jToggleCurvature = new JToggleButton("crvt");
+  public final JToggleButton jToggleCurvature = new JToggleButton("crvtp");
 
   public CurvatureDemo() {
     this(GeodesicDisplays.ALL);

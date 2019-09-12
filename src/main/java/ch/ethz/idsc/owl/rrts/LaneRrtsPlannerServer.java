@@ -29,7 +29,11 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   private final boolean greedy;
   private RandomSampleInterface laneSampler;
   private RandomSampleInterface goalSampler;
+  // ---
+  private boolean conical = false;
   private Distribution rotDist = DEFAULT_ROT_DIST;
+  private Scalar mu_r = RealScalar.of(3);
+  private Scalar semi = Degree.of(17);
 
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -60,7 +64,9 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   @Override // from Consumer
   public final void accept(LaneInterface laneInterface) {
     laneSampler = LaneRandomSample.along(laneInterface, rotDist);
-    goalSampler = LaneRandomSample.endSample(laneInterface, rotDist);
+    goalSampler = conical //
+        ? LaneRandomSample.endSample(laneInterface, rotDist, mu_r, semi) //
+        : LaneRandomSample.endSample(laneInterface, rotDist);
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }
@@ -71,7 +77,16 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
     return Optional.empty();
   }
 
+  public void setConical(boolean conical) {
+    this.conical = conical;
+  }
+
   public final void setRotationDistribution(Distribution distribution) {
     rotDist = distribution;
+  }
+
+  public final void setCone(Scalar mu_r, Scalar semi) {
+    this.mu_r = mu_r;
+    this.semi = semi;
   }
 }

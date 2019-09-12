@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.red.Mean;
   final JToggleButton jToggleLine = new JToggleButton("line");
   final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   final JToggleButton jToggleSymi = new JToggleButton("graph");
+  final JToggleButton jToggleComb = new JToggleButton("comb");
 
   public CurveSubdivisionDemo(List<GeodesicDisplay> _list) {
     super(_list);
@@ -89,6 +90,9 @@ import ch.ethz.idsc.tensor.red.Mean;
     // ---
     jToggleSymi.setSelected(true);
     timerFrame.jToolBar.add(jToggleSymi);
+    // ---
+    jToggleComb.setSelected(true);
+    timerFrame.jToolBar.add(jToggleComb);
     // ---
     spinnerLabel.setArray(CurveSubdivisionSchemes.values());
     spinnerLabel.setIndex(9);

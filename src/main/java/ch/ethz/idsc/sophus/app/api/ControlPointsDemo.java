@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -52,6 +53,8 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   private final static Color ORANGE = new Color(255, 200, 0, 192);
   private final static Color GREEN = new Color(0, 255, 0, 192);
   // ---
+  private final JToggleButton jToggleCrv = new JToggleButton("help");
+  // ---
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
@@ -82,7 +85,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
           geometricLayer.popMatrix();
         }
-        if (!hold && Tensors.nonEmpty(control)) {
+        if (!hold && Tensors.nonEmpty(control) && jToggleCrv.isSelected()) {
           CurveSubdivision curveSubdivision = ControlMidpoints.of(geodesicDisplay.geodesicInterface());
           Tensor midpoints = curveSubdivision.string(control);
           // graphics.setColor(new Color(128, 128, 128, 32));
@@ -167,6 +170,11 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         }
       }
     };
+    jToggleCrv.setToolTipText("indicate closest midpoint");
+    jToggleCrv.setSelected(true);
+    timerFrame.jToolBar.addSeparator();
+    timerFrame.jToolBar.add(jToggleCrv);
+    // ---
     timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
     timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
     timerFrame.geometricComponent.addRenderInterface(renderInterface);

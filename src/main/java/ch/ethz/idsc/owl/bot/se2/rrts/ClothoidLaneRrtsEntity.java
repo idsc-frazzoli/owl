@@ -89,4 +89,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
     ((LaneRrtsPlannerServer) plannerServer).goalRegion().ifPresent(region -> RegionRenders.draw(geometricLayer, graphics, region));
     super.render(geometricLayer, graphics);
   }
+
+  public void setConical(boolean conical) {
+    ((LaneRrtsPlannerServer) plannerServer).setConical(conical);
+  }
 }

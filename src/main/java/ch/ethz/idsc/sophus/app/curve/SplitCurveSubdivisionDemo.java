@@ -79,7 +79,7 @@ public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
       pathRender.setCurve(Nest.of(tensorUnaryOperator, control, 8), cyclic).render(geometricLayer, graphics);
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    CurveCurvatureRender.of(render, cyclic, geometricLayer, graphics);
+    CurveCurvatureRender.of(render, cyclic, jToggleComb.isSelected(), geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
