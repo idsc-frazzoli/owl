@@ -23,7 +23,9 @@ import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Partition;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Primitives;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
 
 /* package */ enum Se2Cmaes {
@@ -39,13 +41,28 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
     };
     // ---
     GokartPoseData gokartPoseData = GokartPoseDataV2.RACING_DAY;
-    int dims = 2;
     TensorUnaryOperator tensorUnaryOperator = GeodesicCenter.of(Se2Geodesic.INSTANCE, GaussianWindow.FUNCTION);
-    TensorUnaryOperator centerFilter = CenterFilter.of(tensorUnaryOperator, 4);
+    int dims = 2;
+    int width = 0;
+    System.out.println("filter width = " + width);
+    TensorUnaryOperator centerFilter = CenterFilter.of(tensorUnaryOperator, width);
     for (String name : gokartPoseData.list()) {
-      Tensor seq = gokartPoseData.getPose(name, 100000);
-      Tensor pqr_t = Partition.of(centerFilter.apply(seq), dims + 2, 2);
+      Timing timing = Timing.started();
+      Tensor poses = gokartPoseData.getPose(name, 100000);
+      System.out.println("loaded: " + timing.seconds());
+      Tensor pqr_t = Partition.of(poses, dims + 2, 2);
+      Tensor filtr = centerFilter.apply(poses);
+      Tensor xyz_t = Partition.of(filtr, dims + 2, 2);
+      // List<Integer> d1 = Dimensions.of(pqr_t);
+      // List<Integer> d2 = Dimensions.of(xyz_t);
+      if (width == 0)
+        Chop._12.requireClose( //
+            xyz_t.get(Tensor.ALL, dims + 1), //
+            pqr_t.get(Tensor.ALL, dims + 1));
+      pqr_t.set(xyz_t.get(Tensor.ALL, dims + 1), Tensor.ALL, dims + 1);
+      System.out.println("preped: " + timing.seconds());
       PredictionAccuracy predictionAccuracy = new PredictionAccuracy(pqr_t);
+      System.out.println("creatd: " + timing.seconds());
       // ---
       ObjectiveFunction objectiveFunction = new ObjectiveFunction(predictionAccuracy);
       InitialGuess initialGuess = new InitialGuess(Primitives.toDoubleArray(UnitVector.of(dims, dims - 1).negate()));
@@ -61,6 +78,7 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
           new SimpleBounds( //
               Primitives.toDoubleArray(ConstantArray.of(RealScalar.of(-2), dims)), //
               Primitives.toDoubleArray(ConstantArray.of(RealScalar.of(+2), dims))));
+      System.out.println("optimz: " + timing.seconds());
       Tensor vectorDouble = Tensors.vectorDouble(pointValuePair.getPoint());
       System.out.println(vectorDouble);
     }
