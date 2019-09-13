@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.lane.ConeRandomSample;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
 import ch.ethz.idsc.owl.math.lane.LaneEndSamples;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
@@ -20,6 +21,7 @@ import ch.ethz.idsc.sophus.math.sample.RegionRandomSample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.qty.Degree;
@@ -68,8 +70,8 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   public final void accept(LaneInterface laneInterface) {
     laneSampler = LaneRandomSample.of(laneInterface, rotDist);
     goalSampler = conical //
-        ? LaneEndSamples.cone(laneInterface, rotDist, mu_r, semi) //
-        : LaneEndSamples.endSample(laneInterface, rotDist);
+        ? ConeRandomSample.of(Last.of(laneInterface.midLane()), rotDist, mu_r, semi) //
+        : LaneEndSamples.spherical(laneInterface, rotDist);
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }

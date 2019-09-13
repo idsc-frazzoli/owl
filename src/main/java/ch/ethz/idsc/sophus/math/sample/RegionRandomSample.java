@@ -1,6 +1,7 @@
 // code by gjoel
 package ch.ethz.idsc.sophus.math.sample;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.math.region.Region;
@@ -8,7 +9,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 // TODO JPH these are two classes implemented in 1 class: implements region with member region! do not implement region
-public class RegionRandomSample implements Region<Tensor>, RandomSampleInterface {
+// TODO JPH RegionRandomSample should be an interface
+public class RegionRandomSample implements Region<Tensor>, RandomSampleInterface, Serializable {
   private static final int MAX_ITERATIONS = 100;
   // ---
   private final RandomSampleInterface randomSampleInterface;
