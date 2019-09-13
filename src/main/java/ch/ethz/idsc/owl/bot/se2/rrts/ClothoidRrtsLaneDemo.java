@@ -1,12 +1,13 @@
 // code by jph, gjoel
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import javax.swing.JToggleButton;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegionWrap;
 import ch.ethz.idsc.owl.bot.r2.R2ImageRegions;

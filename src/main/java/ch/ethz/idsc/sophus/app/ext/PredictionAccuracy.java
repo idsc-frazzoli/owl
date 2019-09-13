@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ class PredictionAccuracy implements MultivariateFunction {
   private final Tensor[] data;
-  Se2GroupElement[] inverse;
+  private final Se2GroupElement[] inverse;
   private final int len;
 
   /** @param pqr_t with dimensions [n, m + 1, 3] */
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   @Override // from MultivariateFunction
   public double value(double[] point) {
     Tensor weights = MakeAffine.of(Tensors.vectorDouble(point));
-    TensorUnaryOperator tensorUnaryOperator = BiinvariantMeans.of(Se2BiinvariantMean.FILTER, weights);
+    TensorUnaryOperator tensorUnaryOperator = BiinvariantMeans.of(Se2BiinvariantMean.LINEAR, weights);
     Scalar sum = RealScalar.ZERO;
     for (int index = 0; index < data.length; ++index) {
       Tensor pqr = data[index];

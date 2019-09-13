@@ -45,25 +45,9 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
-			<version>3.5</version>
+			<version>3.6.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.bytedeco</groupId>
-			<artifactId>javacv-platform</artifactId>
-			<version>1.4.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bytedeco.javacpp-presets</groupId>
-			<artifactId>opencv</artifactId>
-			<version>3.4.1-1.4.1</version>
-			<classifier>linux-x86_64-gpu</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.bytedeco.javacpp-presets</groupId>
-			<artifactId>opencv</artifactId>
-			<version>3.4.1-1.4.1</version>
-			<classifier>macosx-x86_64-gpu</classifier>
-		</dependency>
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
