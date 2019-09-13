@@ -6,11 +6,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.lane.ConeRandomSample;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
-import ch.ethz.idsc.owl.math.lane.LaneEndSamples;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.LaneRandomSample;
+import ch.ethz.idsc.owl.math.lane.Se2ConeRandomSample;
+import ch.ethz.idsc.owl.math.lane.Se2SphereRandomSample;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.SphericalRegion;
@@ -73,13 +73,14 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   @Override // from Consumer
   public final void accept(LaneInterface laneInterface) {
     laneSampler = LaneRandomSample.of(laneInterface, rotDist);
+    final Tensor apex = Last.of(laneInterface.midLane());
     if (conical) {
-      Tensor apex = Last.of(laneInterface.midLane());
-      goalSampler = ConeRandomSample.of(apex, mu_r, semi, heading);
+      goalSampler = Se2ConeRandomSample.of(apex, semi, heading, mu_r);
       goalRegion = new ConeRegion(apex, semi);
     } else {
-      goalSampler = LaneEndSamples.spherical(laneInterface, rotDist);
-      goalRegion = new SphericalRegion(Extract2D.FUNCTION.apply(Last.of(laneInterface.midLane())), Last.of(laneInterface.margins()));
+      Scalar radius = Last.of(laneInterface.margins());
+      goalSampler = new Se2SphereRandomSample(apex, radius, rotDist);
+      goalRegion = new SphericalRegion(Extract2D.FUNCTION.apply(apex), radius);
     }
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));

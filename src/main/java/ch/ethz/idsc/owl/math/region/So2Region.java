@@ -14,13 +14,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** region describes a section of the unit circle */
 public final class So2Region extends ImplicitRegionWithDistance implements Serializable {
   /** @param center angular destination
-   * @param radius tolerance */
+   * @param radius tolerance non-negative */
   public static So2Region periodic(Scalar center, Scalar radius) {
     return new So2Region(center, radius, Pi.VALUE);
   }
 
   /** @param center angular destination
-   * @param radius tolerance */
+   * @param radius tolerance non-negative */
   public static So2Region covering(Scalar center, Scalar radius) {
     return new So2Region(center, radius);
   }
