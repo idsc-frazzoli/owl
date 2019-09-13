@@ -54,8 +54,8 @@ public class DefaultRrts implements Rrts {
       Optional<RrtsNode> optional = connectAlongMinimumCost(state, k_nearest);
       if (optional.isPresent()) {
         RrtsNode rrtsNode = optional.get();
-        rewireAround(rrtsNode, k_nearest);
-        nodeCollection.insert(rrtsNode);
+        rewireAround(rrtsNode, k_nearest); // first: rewire
+        nodeCollection.insert(rrtsNode); // second: insert to collection
         return Optional.of(rrtsNode);
       }
       System.err.println("Unable to connect " + state);
@@ -63,6 +63,7 @@ public class DefaultRrts implements Rrts {
     return Optional.empty();
   }
 
+  // TODO GJOEL/JPH probably remove
   private boolean isInsertPlausible(Tensor state) {
     RrtsNode nearest = nodeCollection.nearTo(state, 1).iterator().next();
     return isCollisionFree(transitionSpace.connect(nearest.state(), state));

@@ -3,31 +3,29 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import ch.ethz.idsc.owl.data.RandomElements;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class RandomRrtsNodeCollection implements RrtsNodeCollection {
-  private final List<RrtsNode> nodes = new ArrayList<>();
+  private final List<RrtsNode> list = new ArrayList<>();
 
   @Override // from RrtsNodeCollection
   public void insert(RrtsNode rrtsNode) {
-    nodes.add(rrtsNode);
+    list.add(rrtsNode);
   }
 
   @Override // from RrtsNodeCollection
   public int size() {
-    return nodes.size();
+    return list.size();
   }
 
   @Override // from RrtsNodeCollection
-  public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
-    Collections.shuffle(nodes);
-    return nodes.stream().filter(node -> !node.state().equals(end)).limit(k_nearest).collect(Collectors.toList());
+  public synchronized Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
+    return RandomElements.of(list, k_nearest);
   }
 
   @Override // from RrtsNodeCollection
