@@ -34,8 +34,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class RrtsFlowTrajectoryGenerator {
   private final StateSpaceModel stateSpaceModel;
   private final BiFunction<StateTime, StateTime, Tensor> uBetween;
-  private CurveSubdivision subdivision = null;
-  private TensorMetric metric = null;
+  private CurveSubdivision curveSubdivision = null;
+  private TensorMetric tensorMetric = null;
 
   public RrtsFlowTrajectoryGenerator( //
       StateSpaceModel stateSpaceModel, //
@@ -44,11 +44,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
     this.uBetween = uBetween;
   }
 
-  /** @param subdivision interpolation scheme
-   * @param metric distance metric between samples */
-  public void addPostProcessing(CurveSubdivision subdivision, TensorMetric metric) {
-    this.subdivision = Objects.requireNonNull(subdivision);
-    this.metric = Objects.requireNonNull(metric);
+  /** @param curveSubdivision interpolation scheme
+   * @param tensorMetric distance metric between samples */
+  public void addPostProcessing(CurveSubdivision curveSubdivision, TensorMetric tensorMetric) {
+    this.curveSubdivision = Objects.requireNonNull(curveSubdivision);
+    this.tensorMetric = Objects.requireNonNull(tensorMetric);
   }
 
   /** @param transitionSpace
@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
    * @return trajectory */
   public List<TrajectorySample> createTrajectory( //
       TransitionSpace transitionSpace, List<RrtsNode> sequence, Scalar t0, final Scalar dt) {
-    if (Objects.isNull(subdivision))
+    if (Objects.isNull(curveSubdivision))
       return standardTrajectory(transitionSpace, sequence, t0, dt);
     return postProcessedTrajectory(transitionSpace, sequence, t0, dt);
   }
@@ -77,6 +77,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         ti = ti.add(spacing.Get(i));
         StateTime stateTime = new StateTime(samples.get(i), ti);
         StateTime orig = Lists.getLast(trajectory).stateTime();
+        // TODO GJOEL this boolean expression appears twice => extract to function
         Tensor u = (transition instanceof DirectedTransition && !((DirectedTransition) transition).isForward) //
             ? uBetween.apply(stateTime, orig) //
             : uBetween.apply(orig, stateTime);
@@ -124,8 +125,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
       int depth = IntegerLog2.ceiling(Ceiling.of(maxLength.divide(Sign.requirePositive(dt))).number().intValue());
       if (!direction)
         points = Reverse.of(points);
-      Tensor samples = Nest.of(subdivision::string, points, depth);
-      Tensor spacing = Distances.of(metric, samples);
+      Tensor samples = Nest.of(curveSubdivision::string, points, depth);
+      Tensor spacing = Distances.of(tensorMetric, samples);
       if (!direction) {
         samples = Reverse.of(samples);
         spacing = Reverse.of(spacing);

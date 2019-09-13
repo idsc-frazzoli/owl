@@ -35,6 +35,11 @@ import ch.ethz.idsc.tensor.opt.Pi;
   /* package */ ClothoidLaneEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds, boolean greedy,
       Scalar delayHint, Consumer<Map<Double, Scalar>> process, Consumer<RrtsNode> processFirst, Consumer<RrtsNode> processLast) {
     super( //
+        new SimpleEpisodeIntegrator( //
+            STATE_SPACE_MODEL, //
+            EulerIntegrator.INSTANCE, //
+            stateTime), //
+        CarEntity.createPurePursuitControl(), //
         new LaneRrtsPlannerServer( //
             ClothoidTransitionSpace.INSTANCE, //
             transitionRegionQuery, //
@@ -75,12 +80,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
           public void processLast(RrtsNode last) {
             processLast.accept(last);
           }
-        }, //
-        new SimpleEpisodeIntegrator( //
-            STATE_SPACE_MODEL, //
-            EulerIntegrator.INSTANCE, //
-            stateTime), //
-        CarEntity.createPurePursuitControl());
+        });
     add(FallbackControl.of(Array.zeros(3)));
     this.delayHint = delayHint;
   }

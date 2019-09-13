@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.BiRrtsPlanner;
 import ch.ethz.idsc.owl.rrts.core.BidirectionalRrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
@@ -21,14 +20,6 @@ import ch.ethz.idsc.tensor.Tensors;
 public abstract class BiRrtsPlannerServer extends RrtsPlannerServer {
   private Tensor state = Tensors.empty();
   private Tensor goal = Tensors.empty();
-
-  public BiRrtsPlannerServer( //
-      TransitionSpace transitionSpace, //
-      TransitionRegionQuery obstacleQuery, //
-      Scalar resolution, //
-      StateSpaceModel stateSpaceModel) {
-    this(transitionSpace, obstacleQuery, resolution, stateSpaceModel, LengthCostFunction.INSTANCE);
-  }
 
   public BiRrtsPlannerServer( //
       TransitionSpace transitionSpace, //

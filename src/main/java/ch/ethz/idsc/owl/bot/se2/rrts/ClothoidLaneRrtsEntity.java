@@ -2,6 +2,7 @@
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.awt.Graphics2D;
+import java.util.Optional;
 
 import ch.ethz.idsc.owl.ani.adapter.FallbackControl;
 import ch.ethz.idsc.owl.ani.api.AbstractRrtsEntity;
@@ -11,6 +12,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
+import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.LaneRrtsPlannerServer;
@@ -46,6 +48,11 @@ import ch.ethz.idsc.tensor.opt.Pi;
   /** @param stateTime initial position of entity */
   public ClothoidLaneRrtsEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds, boolean greedy) {
     super( //
+        new SimpleEpisodeIntegrator( //
+            STATE_SPACE_MODEL, //
+            EulerIntegrator.INSTANCE, //
+            stateTime), //
+        CarEntity.createPurePursuitControl(), //
         new LaneRrtsPlannerServer( //
             ClothoidTransitionSpace.INSTANCE, //
             transitionRegionQuery, //
@@ -65,12 +72,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
           protected Tensor uBetween(StateTime orig, StateTime dest) {
             return Se2RrtsFlow.uBetween(orig, dest);
           }
-        }, //
-        new SimpleEpisodeIntegrator( //
-            STATE_SPACE_MODEL, //
-            EulerIntegrator.INSTANCE, //
-            stateTime), //
-        CarEntity.createPurePursuitControl());
+        });
     add(FallbackControl.of(Array.zeros(3)));
   }
 
@@ -86,11 +88,14 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    ((LaneRrtsPlannerServer) plannerServer).goalRegion().ifPresent(region -> RegionRenders.draw(geometricLayer, graphics, region));
+    LaneRrtsPlannerServer laneRrtsPlannerServer = (LaneRrtsPlannerServer) rrtsPlannerServer;
+    Optional<Region<Tensor>> goalRegion = laneRrtsPlannerServer.goalRegion();
+    if (goalRegion.isPresent())
+      RegionRenders.draw(geometricLayer, graphics, goalRegion.get());
     super.render(geometricLayer, graphics);
   }
 
   public void setConical(boolean conical) {
-    ((LaneRrtsPlannerServer) plannerServer).setConical(conical);
+    ((LaneRrtsPlannerServer) rrtsPlannerServer).setConical(conical);
   }
 }

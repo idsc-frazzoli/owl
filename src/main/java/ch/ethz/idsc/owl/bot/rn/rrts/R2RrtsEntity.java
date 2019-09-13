@@ -37,6 +37,11 @@ import ch.ethz.idsc.tensor.alg.Array;
   /** @param stateTime initial position of entity */
   public R2RrtsEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds) {
     super( //
+        new SimpleEpisodeIntegrator( //
+            STATE_SPACE_MODEL, //
+            EulerIntegrator.INSTANCE, //
+            stateTime), //
+        new R2TrajectoryControl(), //
         new DefaultRrtsPlannerServer( //
             RnTransitionSpace.INSTANCE, //
             transitionRegionQuery, //
@@ -62,12 +67,7 @@ import ch.ethz.idsc.tensor.alg.Array;
           protected Tensor uBetween(StateTime orig, StateTime dest) {
             return RnRrtsFlow.uBetween(orig, dest);
           }
-        }, //
-        new SimpleEpisodeIntegrator( //
-            STATE_SPACE_MODEL, //
-            EulerIntegrator.INSTANCE, //
-            stateTime), //
-        new R2TrajectoryControl());
+        });
     add(FallbackControl.of(Array.zeros(2)));
   }
 

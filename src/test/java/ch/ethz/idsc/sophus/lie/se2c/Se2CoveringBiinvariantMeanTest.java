@@ -36,7 +36,7 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
         int[] index = Primitives.toIntArray(perm);
         Tensor result = Se2CoveringBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index),
             BiinvariantMeanTestHelper.order(weights, index));
-        Chop._08.requireClose(result, solution);
+        Chop._03.requireClose(result, solution);
       }
     }
   }

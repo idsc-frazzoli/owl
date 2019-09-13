@@ -24,7 +24,7 @@ public class LaneRandomSampleTest extends TestCase {
         Tensors.fromString("{{0[m], 1[m], 2}, {2[m], 0[m], 4}, {-1[m],-3[m], -2}}"), //
         LaneRiesenfeldCurveSubdivision.of(Clothoids.INSTANCE, 1)::cyclic, 3, Quantity.of(.3, "m"));
     Distribution rotDist = UniformDistribution.of(Clips.absoluteOne());
-    RandomSampleInterface randomSampleInterface = Serialization.copy(LaneRandomSample.along(laneInterface, rotDist));
+    RandomSampleInterface randomSampleInterface = Serialization.copy(LaneRandomSample.of(laneInterface, rotDist));
     Random random = new SecureRandom();
     Tensor tensor = randomSampleInterface.randomSample(random);
     boolean inside1 = Polygons.isInside(laneInterface.rightBoundary(), tensor);

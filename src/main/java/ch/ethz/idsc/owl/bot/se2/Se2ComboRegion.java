@@ -30,12 +30,12 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
 
   /** @param goal {px, py, angle}
    * @param semi
-   * @param radius
+   * @param heading non-negative
    * @return */
-  public static Se2ComboRegion cone(Tensor goal, Scalar semi, Scalar radius) {
+  public static Se2ComboRegion cone(Tensor goal, Scalar semi, Scalar heading) {
     return new Se2ComboRegion( //
         new ConeRegion(goal, semi), //
-        So2Region.periodic(goal.Get(2), radius));
+        So2Region.periodic(goal.Get(2), heading));
   }
   // ---
 

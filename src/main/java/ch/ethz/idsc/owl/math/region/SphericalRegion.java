@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <li>zero in a single point: the center, and
  * <li>negative nowhere
  * </ul> */
+// TODO JPH OWL 055 rename to BallRegion
 public class SphericalRegion extends ImplicitRegionWithDistance implements Serializable {
   private final Tensor center;
   private final Scalar radius;

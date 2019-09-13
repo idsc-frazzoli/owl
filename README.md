@@ -232,20 +232,27 @@ Dubins path curvature
 * non-linear smoothing of noisy localization data `GeodesicCenterFilter`
 * Dubins path
 
-## Geodesic DeBoor Algorithm
+### Geodesic DeBoor Algorithm
 
 ![loops5](https://user-images.githubusercontent.com/4012178/51076078-3c0d8280-1694-11e9-9857-2166598c09b2.png)
 
 B-Spline curves in `SE(2)` produced by DeBoor Algorithm or curve subdivision produce curves in the planar subspace `R^2` with appealing curvature.
 
-## Smoothing using Geodesic Averages
+### Smoothing using Geodesic Averages
 
 ![smoothing](https://user-images.githubusercontent.com/4012178/51090026-283a4d00-1776-11e9-81d3-aae3e34402f1.png)
 
 The sequence of localization estimates of a mobile robot often contains noise.
 Instead of using a complicated extended Kalman filter, geodesic averages based on conventional window functions denoise the uniformly sampled signal of poses in `SE(2)`.
 
-## Visualization of Geodesic Averages
+### Curve Decimation in Lie Groups
+
+![curve_decimation](https://user-images.githubusercontent.com/4012178/64847671-cf29fe00-d60f-11e9-8993-9f5549388ceb.png)
+
+The pose of mobile robots is typically recorded at high frequencies.
+The trajectory can be faithfully reconstructed from a fraction of the samples. 
+
+### Visualization of Geodesic Averages
 
 ![deboor5](https://user-images.githubusercontent.com/4012178/51075948-ade4cc80-1692-11e9-9c9a-1e75084df796.png)
 
@@ -256,7 +263,7 @@ Instead, several geodesic averages reduce to the same affine combination when ap
 
 ## Contributors
 
-Jan Hakenberg, Oliver Brinkmann
+Jan Hakenberg, Oliver Brinkmann, Joel Gächter
 
 ## Publications
 
@@ -270,7 +277,7 @@ by Jan Hakenberg,
 [video](https://www.youtube.com/watch?v=dmFO72Pigb4)
 * *Curve Decimation in SE(2) and SE(3)*
 by Jan Hakenberg,
-[pdf](https://github.com/idsc-frazzoli/retina/files/3587971/20190908_curve_decimation_in_se2_and_se3.pdf)
+[viXra:1909.0174](http://vixra.org/abs/1909.0174)
 
 ## References
 

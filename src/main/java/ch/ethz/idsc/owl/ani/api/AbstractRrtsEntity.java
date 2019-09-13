@@ -25,38 +25,41 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.PadRight;
 
 public abstract class AbstractRrtsEntity extends TrajectoryEntity implements RrtsPlannerCallback {
-  protected final RrtsPlannerServer plannerServer;
+  protected final RrtsPlannerServer rrtsPlannerServer;
   // ---
   private final TreeRender treeRender = new TreeRender();
   private final TransitionRender transitionRender;
 
-  public AbstractRrtsEntity(RrtsPlannerServer plannerServer, EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl) {
+  public AbstractRrtsEntity( //
+      EpisodeIntegrator episodeIntegrator, //
+      TrajectoryControl trajectoryControl, //
+      RrtsPlannerServer rrtsPlannerServer) {
     super(episodeIntegrator, trajectoryControl);
-    this.plannerServer = plannerServer;
-    transitionRender = new TransitionRender(plannerServer.getTransitionSpace());
+    this.rrtsPlannerServer = rrtsPlannerServer;
+    transitionRender = new TransitionRender(rrtsPlannerServer.getTransitionSpace());
   }
 
   protected abstract Tensor shape();
 
   @Override // from PlannerCallback
   public void expandResult(List<TrajectorySample> head, TransitionPlanner trajectoryPlanner) {
-    plannerServer.getRoot().map(Nodes::ofSubtree).ifPresent(collection -> {
+    rrtsPlannerServer.getRoot().map(Nodes::ofSubtree).ifPresent(collection -> {
       treeRender.setCollection(collection);
       transitionRender.setCollection(collection);
     });
-    plannerServer.setState(head.get(0).stateTime());
-    plannerServer.getTrajectory().ifPresent(this::trajectory);
+    rrtsPlannerServer.setState(head.get(0).stateTime());
+    rrtsPlannerServer.getTrajectory().ifPresent(this::trajectory);
   }
 
   @Override // from TensorMetric
   public Scalar distance(Tensor x, Tensor y) {
-    return plannerServer.getTransitionSpace().connect(x, y).length();
+    return rrtsPlannerServer.getTransitionSpace().connect(x, y).length();
   }
 
   @Override // from TrajectoryEntity
   public TransitionPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    plannerServer.setGoal(goal);
-    return plannerServer;
+    rrtsPlannerServer.setGoal(goal);
+    return rrtsPlannerServer;
   }
 
   @Override // from RenderInterface

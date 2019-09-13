@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.rrts;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NavigableMap;
 import java.util.Objects;
@@ -20,7 +21,6 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
-import ch.ethz.idsc.owl.rrts.core.RrtsPlanner;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionPlanner;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
@@ -35,11 +35,12 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
   protected final TransitionSpace transitionSpace;
   protected final TransitionRegionQuery obstacleQuery;
   protected final TransitionCostFunction costFunction;
+  // ---
   private final Scalar resolution;
   private final RrtsFlowTrajectoryGenerator flowTrajectoryGenerator;
   // ---
   private Scalar time;
-  private RrtsPlannerProcess process = null;
+  private RrtsPlannerProcess _rrtsPlannerProcess = null;
   private List<TrajectorySample> trajectory = new ArrayList<>();
   private NavigableMap<Scalar, List<TrajectorySample>> potentialFutureTrajectories = new TreeMap<>(Scalars::compare);
 
@@ -63,12 +64,14 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
     trajectory = Collections.unmodifiableList(trajectory().stream().filter(predicate).collect(Collectors.toList()));
     potentialFutureTrajectories.clear();
     time = stateTime.time();
-    process = setupProcess(stateTime);
+    _rrtsPlannerProcess = setupProcess(stateTime);
   }
 
   private List<TrajectorySample> trajectory() {
-    if (Objects.nonNull(process) && process.rrtsPlanner.getBest().isPresent()) {
-      RrtsNode best = process.rrtsPlanner.getBest().get();
+    RrtsPlannerProcess rrtsPlannerProcess = _rrtsPlannerProcess;
+    if (Objects.nonNull(rrtsPlannerProcess) && //
+        rrtsPlannerProcess.planner().getBest().isPresent()) {
+      RrtsNode best = rrtsPlannerProcess.planner().getBest().get();
       List<RrtsNode> sequence = Nodes.listFromRoot(best);
       potentialFutureTrajectories.put(best.costFromRoot(), //
           flowTrajectoryGenerator.createTrajectory(transitionSpace, sequence, time, resolution));
@@ -83,21 +86,24 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
 
   @Override // from ExpandInterface
   public final Optional<RrtsNode> pollNext() {
-    return Objects.nonNull(process) //
-        ? process.rrtsPlanner.pollNext() //
+    RrtsPlannerProcess rrtsPlannerProcess = _rrtsPlannerProcess;
+    return Objects.nonNull(rrtsPlannerProcess) //
+        ? rrtsPlannerProcess.planner().pollNext() //
         : Optional.empty();
   }
 
   @Override // from ExpandInterface
   public final void expand(RrtsNode node) {
-    if (Objects.nonNull(process))
-      process.rrtsPlanner.expand(node); // FIXME GJOEL can get stuck here
+    RrtsPlannerProcess rrtsPlannerProcess = _rrtsPlannerProcess;
+    if (Objects.nonNull(rrtsPlannerProcess))
+      rrtsPlannerProcess.planner().expand(node); // FIXME GJOEL can get stuck here
   }
 
   @Override // from ExpandInterface
   public final Optional<RrtsNode> getBest() {
-    return Objects.nonNull(process) //
-        ? process.rrtsPlanner.getBest() //
+    RrtsPlannerProcess rrtsPlannerProcess = _rrtsPlannerProcess;
+    return Objects.nonNull(rrtsPlannerProcess) //
+        ? rrtsPlannerProcess.planner().getBest() //
         : Optional.empty();
   }
 
@@ -106,30 +112,28 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
     Optional<RrtsNode> optional = getBest();
     if (optional.isPresent())
       return optional;
-    return getQueue().isEmpty() //
-        ? Optional.empty() //
-        : Optional.of(process.rrtsPlanner.getQueue().get(0));
+    Iterator<RrtsNode> iterator = getQueue().iterator();
+    return iterator.hasNext() //
+        ? Optional.of(iterator.next())
+        : Optional.empty();
   }
 
   @Override // from TrajectoryPlanner
   public Collection<RrtsNode> getQueue() {
-    return Objects.nonNull(process) //
-        ? process.rrtsPlanner.getQueue() //
+    RrtsPlannerProcess rrtsPlannerProcess = _rrtsPlannerProcess;
+    return Objects.nonNull(rrtsPlannerProcess) //
+        ? rrtsPlannerProcess.planner().getQueue() //
         : Collections.emptyList();
   }
 
   @Override // from RrtsTrajectoryPlanner
   public final void checkConsistency() {
-    RrtsNodes.costConsistency(process.root, transitionSpace, costFunction);
-  }
-
-  public void setState(StateTime stateTime) {
-    Predicate<TrajectorySample> predicate = Trajectories.afterTime(stateTime.time());
-    trajectory = Collections.unmodifiableList(trajectory.stream().filter(predicate).collect(Collectors.toList()));
+    // FIXME GJOEL _rrtsPlannerProcess may be null
+    RrtsNodes.costConsistency(_rrtsPlannerProcess.root(), transitionSpace, costFunction);
   }
 
   public final Optional<RrtsNode> getRoot() {
-    return Optional.ofNullable(process).map(RrtsPlannerProcess::root);
+    return Optional.ofNullable(_rrtsPlannerProcess).map(RrtsPlannerProcess::root);
   }
 
   public final Optional<List<TrajectorySample>> getTrajectory() {
@@ -138,8 +142,9 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
   }
 
   public final Optional<TransitionRegionQuery> getObstacleQuery() {
-    return Objects.nonNull(process) //
-        ? Optional.of(process.rrtsPlanner.getObstacleQuery()) //
+    RrtsPlannerProcess rrtsPlannerProcess = _rrtsPlannerProcess;
+    return Objects.nonNull(rrtsPlannerProcess) //
+        ? Optional.of(rrtsPlannerProcess.planner().getObstacleQuery()) //
         : Optional.empty();
   }
 
@@ -147,31 +152,25 @@ public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingE
     return transitionSpace;
   }
 
-  public final void addTrajectoryPostprocessing(CurveSubdivision subdivision, TensorMetric metric) {
-    flowTrajectoryGenerator.addPostProcessing(subdivision, metric);
+  public final void addTrajectoryPostprocessing(CurveSubdivision curveSubdivision, TensorMetric tensorMetric) {
+    flowTrajectoryGenerator.addPostProcessing(curveSubdivision, tensorMetric);
   }
 
+  /** @param stateTime */
+  public void setState(StateTime stateTime) {
+    Predicate<TrajectorySample> predicate = Trajectories.afterTime(stateTime.time());
+    trajectory = Collections.unmodifiableList(trajectory.stream().filter(predicate).collect(Collectors.toList()));
+  }
+
+  /** @param orig
+   * @param dest
+   * @return */
   protected abstract Tensor uBetween(StateTime orig, StateTime dest);
 
+  /** @param stateTime
+   * @return */
   protected abstract RrtsPlannerProcess setupProcess(StateTime stateTime);
 
+  /** @param goal */
   public abstract void setGoal(Tensor goal);
-
-  protected static class RrtsPlannerProcess {
-    private final RrtsPlanner rrtsPlanner;
-    private final RrtsNode root;
-
-    public RrtsPlannerProcess(RrtsPlanner rrtsPlanner, RrtsNode root) {
-      this.rrtsPlanner = Objects.requireNonNull(rrtsPlanner);
-      this.root = Objects.requireNonNull(root);
-    }
-
-    public RrtsPlanner planner() {
-      return rrtsPlanner;
-    }
-
-    public RrtsNode root() {
-      return root;
-    }
-  }
 }
