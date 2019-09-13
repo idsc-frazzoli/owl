@@ -23,6 +23,8 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.qty.Degree;
 
+// TODO JPH OWL 055 move to se2 specific package
+// TODO don't use magic constants at all. implement via interface, make interface final 
 public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer implements LaneConsumer {
   private static final Distribution DEFAULT_ROT_DIST = NormalDistribution.of(RealScalar.ZERO, Degree.of(5));
   // ---
@@ -49,16 +51,16 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   @Override // from DefaultRrtsPlannerServer
   protected final RandomSampleInterface spaceSampler(Tensor state) {
     // TODO document why laneSampler might not be "ready" to be returned
-    if (Objects.nonNull(laneSampler))
-      return laneSampler;
-    return new ConstantRandomSample(state);
+    return Objects.nonNull(laneSampler) //
+        ? laneSampler
+        : new ConstantRandomSample(state);
   }
 
   @Override // from DefaultRrtsPlannerServer
   protected final RandomSampleInterface goalSampler(Tensor state) {
-    if (Objects.nonNull(goalSampler))
-      return goalSampler;
-    return new ConstantRandomSample(state);
+    return Objects.nonNull(goalSampler) //
+        ? goalSampler
+        : new ConstantRandomSample(state);
   }
 
   @Override // from Consumer
@@ -77,7 +79,7 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
     return Optional.empty();
   }
 
-  public void setConical(boolean conical) {
+  public final void setConical(boolean conical) {
     this.conical = conical;
   }
 

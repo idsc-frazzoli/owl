@@ -42,6 +42,11 @@ import ch.ethz.idsc.tensor.opt.Pi;
   /** @param stateTime initial position of entity */
   public ClothoidRrtsEntity(StateTime stateTime, TransitionRegionQuery transitionRegionQuery, Tensor lbounds, Tensor ubounds) {
     super( //
+        new SimpleEpisodeIntegrator( //
+            STATE_SPACE_MODEL, //
+            EulerIntegrator.INSTANCE, //
+            stateTime), //
+        CarEntity.createPurePursuitControl(), //
         new DefaultRrtsPlannerServer( //
             ClothoidTransitionSpace.INSTANCE, //
             transitionRegionQuery, //
@@ -70,12 +75,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
           protected Tensor uBetween(StateTime orig, StateTime dest) {
             return Se2RrtsFlow.uBetween(orig, dest);
           }
-        }, //
-        new SimpleEpisodeIntegrator( //
-            STATE_SPACE_MODEL, //
-            EulerIntegrator.INSTANCE, //
-            stateTime), //
-        CarEntity.createPurePursuitControl());
+        });
     add(FallbackControl.of(Array.zeros(3)));
   }
 
