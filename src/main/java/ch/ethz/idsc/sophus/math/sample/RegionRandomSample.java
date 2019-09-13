@@ -8,8 +8,6 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-// TODO JPH these are two classes implemented in 1 class: implements region with member region! do not implement region
-// TODO JPH RegionRandomSample should be an interface
 public class RegionRandomSample implements Region<Tensor>, RandomSampleInterface, Serializable {
   private static final int MAX_ITERATIONS = 100;
   // ---
@@ -39,10 +37,5 @@ public class RegionRandomSample implements Region<Tensor>, RandomSampleInterface
         return sample;
     }
     throw new RuntimeException("unable to generate sample within region");
-  }
-
-  // function is used for drawing
-  public Region<Tensor> region() {
-    return region;
   }
 }

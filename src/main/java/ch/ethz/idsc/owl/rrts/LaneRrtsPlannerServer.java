@@ -11,13 +11,15 @@ import ch.ethz.idsc.owl.math.lane.LaneConsumer;
 import ch.ethz.idsc.owl.math.lane.LaneEndSamples;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.LaneRandomSample;
+import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
+import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.sample.ConstantRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.sophus.math.sample.RegionRandomSample;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,11 +36,13 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   private final boolean greedy;
   private RandomSampleInterface laneSampler;
   private RandomSampleInterface goalSampler;
+  private Region<Tensor> goalRegion;
   // ---
   private boolean conical = false;
-  private Distribution rotDist = DEFAULT_ROT_DIST;
   private Scalar mu_r = RealScalar.of(3);
   private Scalar semi = Degree.of(17);
+  private Scalar heading = Degree.of(5);
+  private Distribution rotDist = DEFAULT_ROT_DIST;
 
   public LaneRrtsPlannerServer( //
       TransitionSpace transitionSpace, //
@@ -69,19 +73,20 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
   @Override // from Consumer
   public final void accept(LaneInterface laneInterface) {
     laneSampler = LaneRandomSample.of(laneInterface, rotDist);
-    goalSampler = conical //
-        ? ConeRandomSample.of(Last.of(laneInterface.midLane()), rotDist, mu_r, semi) //
-        : LaneEndSamples.spherical(laneInterface, rotDist);
+    if (conical) {
+      Tensor apex = Last.of(laneInterface.midLane());
+      goalSampler = ConeRandomSample.of(apex, mu_r, semi, heading);
+      goalRegion = new ConeRegion(apex, semi);
+    } else {
+      goalSampler = LaneEndSamples.spherical(laneInterface, rotDist);
+      goalRegion = new SphericalRegion(Extract2D.FUNCTION.apply(Last.of(laneInterface.midLane())), Last.of(laneInterface.margins()));
+    }
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }
 
   public final Optional<Region<Tensor>> goalRegion() {
-    if (goalSampler instanceof RegionRandomSample) {
-      RegionRandomSample regionRandomSample = (RegionRandomSample) goalSampler;
-      return Optional.of(regionRandomSample.region());
-    }
-    return Optional.empty();
+    return Optional.ofNullable(goalRegion);
   }
 
   public final void setConical(boolean conical) {
