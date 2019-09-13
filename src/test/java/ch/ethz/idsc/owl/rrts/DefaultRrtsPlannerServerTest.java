@@ -52,7 +52,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNodeCollections(RnRrtsNdType.INSTANCE, min, max);
+        return new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, min, max);
       }
 
       @Override
@@ -94,7 +94,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, lbounds, ubounds);
+        return new RrtsNdTypeCollection(Se2RrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override
@@ -136,7 +136,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
+        return new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override

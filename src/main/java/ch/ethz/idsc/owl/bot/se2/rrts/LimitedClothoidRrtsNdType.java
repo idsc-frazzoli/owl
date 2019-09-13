@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.owl.rrts.RrtsNdType;
+import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
@@ -31,7 +32,22 @@ public class LimitedClothoidRrtsNdType implements RrtsNdType, Serializable {
   }
 
   @Override // from RrtsNdType
-  public NdCenterInterface getNdCenterInterface(Tensor tensor) {
-    return new LimitedClothoidNdCenter(tensor, clip);
+  public NdCenterInterface ndCenterInterfaceBeg(Tensor center) {
+    return new LimitedClothoidNdCenter(center, clip) {
+      @Override
+      public Clothoid clothoid(Tensor p) {
+        return new Clothoid(center, p);
+      }
+    };
+  }
+
+  @Override // from RrtsNdType
+  public NdCenterInterface ndCenterInterfaceEnd(Tensor center) {
+    return new LimitedClothoidNdCenter(center, clip) {
+      @Override
+      public Clothoid clothoid(Tensor p) {
+        return new Clothoid(p, center);
+      }
+    };
   }
 }

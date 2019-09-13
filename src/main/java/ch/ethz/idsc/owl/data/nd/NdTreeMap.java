@@ -76,9 +76,9 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
 
   @Override // from NdMap
   public NdCluster<V> buildCluster(NdCenterInterface ndCenter, int limit) {
-    NdCluster<V> cluster = new NdCluster<>(ndCenter, limit);
-    root.addToCluster(cluster, new NdBounds(global_lBounds, global_uBounds));
-    return cluster;
+    NdCluster<V> ndCluster = new NdCluster<>(ndCenter, limit);
+    root.addToCluster(ndCluster, new NdBounds(global_lBounds, global_uBounds));
+    return ndCluster;
   }
 
   @Override // from NdMap
@@ -175,15 +175,15 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       }
     }
 
-    private void addToCluster(NdCluster<V> cluster, NdBounds ndBounds) {
+    private void addToCluster(NdCluster<V> ndCluster, NdBounds ndBounds) {
       if (isInternal()) {
         final int dimension = dimension();
         Scalar median = ndBounds.median(dimension);
-        boolean lFirst = Scalars.lessThan(cluster.center.Get(dimension), median);
-        addChildToCluster(cluster, ndBounds, median, lFirst);
-        addChildToCluster(cluster, ndBounds, median, !lFirst);
+        boolean lFirst = Scalars.lessThan(ndCluster.center.Get(dimension), median);
+        addChildToCluster(ndCluster, ndBounds, median, lFirst);
+        addChildToCluster(ndCluster, ndBounds, median, !lFirst);
       } else
-        queue.forEach(cluster::consider);
+        queue.forEach(ndCluster::consider);
     }
 
     private void addChildToCluster(NdCluster<V> cluster, NdBounds ndBounds, Scalar median, boolean left) {

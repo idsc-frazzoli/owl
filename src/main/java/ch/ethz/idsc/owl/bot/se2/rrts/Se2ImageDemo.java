@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
         ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
     Tensor lbounds = Array.zeros(2).append(RealScalar.ZERO).unmodifiable();
     Tensor ubounds = range.copy().append(Pi.TWO).unmodifiable();
-    RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
+    RrtsNodeCollection rrtsNodeCollection = new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(Clips.absolute(5));
