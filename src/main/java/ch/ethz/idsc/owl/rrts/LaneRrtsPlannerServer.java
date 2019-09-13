@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.lane.LaneConsumer;
+import ch.ethz.idsc.owl.math.lane.LaneEndSamples;
 import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.LaneRandomSample;
 import ch.ethz.idsc.owl.math.region.Region;
@@ -65,17 +66,19 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
 
   @Override // from Consumer
   public final void accept(LaneInterface laneInterface) {
-    laneSampler = LaneRandomSample.along(laneInterface, rotDist);
+    laneSampler = LaneRandomSample.of(laneInterface, rotDist);
     goalSampler = conical //
-        ? LaneRandomSample.endSample(laneInterface, rotDist, mu_r, semi) //
-        : LaneRandomSample.endSample(laneInterface, rotDist);
+        ? LaneEndSamples.cone(laneInterface, rotDist, mu_r, semi) //
+        : LaneEndSamples.endSample(laneInterface, rotDist);
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));
   }
 
   public final Optional<Region<Tensor>> goalRegion() {
-    if (goalSampler instanceof RegionRandomSample)
-      return Optional.of(((RegionRandomSample) goalSampler).region());
+    if (goalSampler instanceof RegionRandomSample) {
+      RegionRandomSample regionRandomSample = (RegionRandomSample) goalSampler;
+      return Optional.of(regionRandomSample.region());
+    }
     return Optional.empty();
   }
 

@@ -4,42 +4,34 @@ package ch.ethz.idsc.sophus.math.sample;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-// TODO GJOEL possibly not implement Region<Tensor>
+// TODO JPH these are two classes implemented in 1 class: implements region with member region! do not implement region
 public class RegionRandomSample implements Region<Tensor>, RandomSampleInterface {
-  private static final int MAX_TRIES = 100;
-
-  // TODO GJOEL remove function since Extract2D.FUNCTION is too specific
-  public static RegionRandomSample combine(RandomSampleInterface randomSampleInterface, Region<Tensor> region) {
-    return combine(randomSampleInterface, region, Extract2D.FUNCTION);
-  }
-
-  public static RegionRandomSample combine(RandomSampleInterface randomSampleInterface, Region<Tensor> region, TensorUnaryOperator conversion) {
-    return new RegionRandomSample(randomSampleInterface, region, conversion);
-  }
-
+  private static final int MAX_ITERATIONS = 100;
   // ---
   private final RandomSampleInterface randomSampleInterface;
   private final Region<Tensor> region;
-  private final TensorUnaryOperator conversion;
+  private final TensorUnaryOperator tensorUnaryOperator;
 
-  private RegionRandomSample(RandomSampleInterface randomSampleInterface, Region<Tensor> region, TensorUnaryOperator conversion) {
+  public RegionRandomSample( //
+      RandomSampleInterface randomSampleInterface, //
+      Region<Tensor> region, //
+      TensorUnaryOperator tensorUnaryOperator) {
     this.randomSampleInterface = randomSampleInterface;
     this.region = region;
-    this.conversion = conversion;
+    this.tensorUnaryOperator = tensorUnaryOperator;
   }
 
   @Override // from Region<Tensor>
   public boolean isMember(Tensor element) {
-    return region.isMember(conversion.apply(element));
+    return region.isMember(tensorUnaryOperator.apply(element));
   }
 
   @Override // from RandomSampleInterface
   public Tensor randomSample(Random random) {
-    for (int count = 0; count < MAX_TRIES; count++) {
+    for (int count = 0; count < MAX_ITERATIONS; ++count) {
       Tensor sample = randomSampleInterface.randomSample(random);
       if (isMember(sample))
         return sample;
@@ -47,6 +39,7 @@ public class RegionRandomSample implements Region<Tensor>, RandomSampleInterface
     throw new RuntimeException("unable to generate sample within region");
   }
 
+  // function is used for drawing
   public Region<Tensor> region() {
     return region;
   }

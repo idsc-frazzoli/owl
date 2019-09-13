@@ -263,7 +263,7 @@ Instead, several geodesic averages reduce to the same affine combination when ap
 
 ## Contributors
 
-Jan Hakenberg, Oliver Brinkmann
+Jan Hakenberg, Oliver Brinkmann, Joel Gächter
 
 ## Publications
 
