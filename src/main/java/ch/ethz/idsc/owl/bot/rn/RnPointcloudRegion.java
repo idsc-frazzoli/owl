@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.owl.data.nd.EuclideanNdCenter;
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.owl.data.nd.NdCluster;
 import ch.ethz.idsc.owl.data.nd.NdMap;
@@ -48,7 +49,7 @@ public class RnPointcloudRegion implements Region<Tensor>, Serializable {
 
   @Override // from Region
   public boolean isMember(Tensor tensor) {
-    NdCenterInterface distanceInterface = NdCenterInterface.euclidean(tensor);
+    NdCenterInterface distanceInterface = EuclideanNdCenter.of(tensor);
     NdCluster<Void> ndCluster = ndMap.buildCluster(distanceInterface, 1);
     // System.out.println(ndCluster.considered() + " / " + ndMap.size());
     Scalar distance = ndCluster.collection().iterator().next().distance();

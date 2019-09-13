@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor origin = Tensors.vector(0, 0).unmodifiable();
     Tensor range = Tensors.vector(7, 7).unmodifiable();
     Region<Tensor> imageRegion = R2ImageRegions.outside_0b36(range);
-    RrtsNodeCollection rrtsNodeCollection = new RrtsNodeCollections(RnRrtsNdType.INSTANCE, origin, range);
+    RrtsNodeCollection rrtsNodeCollection = new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, origin, range);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.1));
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;

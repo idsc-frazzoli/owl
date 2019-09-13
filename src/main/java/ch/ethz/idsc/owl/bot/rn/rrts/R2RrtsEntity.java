@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.alg.Array;
             LengthCostFunction.INSTANCE) {
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return new RrtsNodeCollections(RnRrtsNdType.INSTANCE, lbounds, ubounds);
+            return new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, lbounds, ubounds);
           }
 
           @Override

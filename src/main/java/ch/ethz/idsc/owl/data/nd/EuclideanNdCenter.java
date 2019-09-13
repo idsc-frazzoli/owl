@@ -7,10 +7,17 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class EuclideanNdCenter implements NdCenterInterface, Serializable {
+public class EuclideanNdCenter implements NdCenterInterface, Serializable {
+  /** @param center vector
+   * @return */
+  public static NdCenterInterface of(Tensor center) {
+    return new EuclideanNdCenter(center);
+  }
+
+  // ---
   private final Tensor center;
 
-  public EuclideanNdCenter(Tensor center) {
+  private EuclideanNdCenter(Tensor center) {
     this.center = center.copy().unmodifiable();
   }
 

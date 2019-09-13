@@ -22,7 +22,7 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.RrtsNodeCollections;
+import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
+        return new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override

@@ -22,7 +22,7 @@ public class NdDualMapTest extends TestCase {
     m1.add(Tensors.vector(0, 0), "p1");
     m1.add(Tensors.vector(1, 1), "p3");
     Tensor center = Tensors.vector(0, 0);
-    NdCluster<String> cl = m1.buildCluster(NdCenterInterface.euclidean(center), 2);
+    NdCluster<String> cl = m1.buildCluster(EuclideanNdCenter.of(center), 2);
     Set<String> res = cl.stream().map(NdEntry::value).collect(Collectors.toSet());
     assertTrue(res.contains("p1"));
     assertTrue(res.contains("p2"));
@@ -45,7 +45,7 @@ public class NdDualMapTest extends TestCase {
         m2.add(location, value);
       }
     }
-    NdCenterInterface dinf = NdCenterInterface.euclidean(center);
+    NdCenterInterface dinf = EuclideanNdCenter.of(center);
     NdCluster<String> c2 = m2.buildCluster(dinf, n);
     assertTrue(c2.size() <= n);
   }

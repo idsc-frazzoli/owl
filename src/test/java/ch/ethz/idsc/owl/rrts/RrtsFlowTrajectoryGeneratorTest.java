@@ -41,7 +41,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testRn() {
     Rrts rrts = new DefaultRrts( //
         RnTransitionSpace.INSTANCE, //
-        new RrtsNodeCollections(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
+        new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -79,7 +79,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testDubins() {
     Rrts rrts = new DefaultRrts( //
         DubinsTransitionSpace.shortest(RealScalar.ONE), //
-        new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
+        new RrtsNdTypeCollection(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -129,7 +129,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testClothoid() {
     Rrts rrts = new DefaultRrts( //
         ClothoidTransitionSpace.INSTANCE, //
-        new RrtsNodeCollections(ClothoidRrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
+        new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -181,7 +181,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     Rrts rrts = new DefaultRrts( //
         DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), //
         // no specific collection for directional clothoid
-        new RrtsNodeCollections(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
+        new RrtsNdTypeCollection(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());

@@ -14,11 +14,11 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** collection of rrts nodes backed by a n-dimensional uniform tree
  * data structure is dependent on RrtsNdType */
-public class RrtsNodeCollections implements RrtsNodeCollection {
+public final class RrtsNdTypeCollection implements RrtsNodeCollection {
   private final RrtsNdType rrtsNdType;
   private final NdMap<RrtsNode> ndMap;
 
-  public RrtsNodeCollections(RrtsNdType rrtsNdType, Tensor lbounds, Tensor ubounds) {
+  public RrtsNdTypeCollection(RrtsNdType rrtsNdType, Tensor lbounds, Tensor ubounds) {
     this.rrtsNdType = rrtsNdType;
     ndMap = new NdTreeMap<>(rrtsNdType.convert(lbounds), rrtsNdType.convert(ubounds), 5, 20); // magic const
   }
@@ -35,7 +35,7 @@ public class RrtsNodeCollections implements RrtsNodeCollection {
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
-    NdCluster<RrtsNode> cluster = ndMap.buildCluster(rrtsNdType.getNdCenterInterface(end), k_nearest);
+    NdCluster<RrtsNode> cluster = ndMap.buildCluster(rrtsNdType.ndCenterInterfaceEnd(end), k_nearest);
     // System.out.println("considered " + cluster.considered() + " " + ndMap.size());
     return cluster.stream() //
         .map(NdEntry::value) //
@@ -44,6 +44,10 @@ public class RrtsNodeCollections implements RrtsNodeCollection {
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearFrom(Tensor start, int k_nearest) {
-    return nearTo(start, k_nearest);
+    NdCluster<RrtsNode> cluster = ndMap.buildCluster(rrtsNdType.ndCenterInterfaceBeg(start), k_nearest);
+    // System.out.println("considered " + cluster.considered() + " " + ndMap.size());
+    return cluster.stream() //
+        .map(NdEntry::value) //
+        .collect(Collectors.toList());
   }
 }

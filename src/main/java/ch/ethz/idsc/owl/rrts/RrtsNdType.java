@@ -11,5 +11,7 @@ public interface RrtsNdType {
 
   /** @param tensor
    * @return */
-  NdCenterInterface getNdCenterInterface(Tensor tensor);
+  NdCenterInterface ndCenterInterfaceBeg(Tensor tensor);
+
+  NdCenterInterface ndCenterInterfaceEnd(Tensor tensor);
 }

@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 public class EuclideanNdCenterTest extends TestCase {
   public void testSerializable() throws Exception {
-    NdCenterInterface ndCenterInterface = NdCenterInterface.euclidean(Tensors.vector(1, 2, 3));
+    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(Tensors.vector(1, 2, 3));
     Serialization.copy(ndCenterInterface);
   }
 }
