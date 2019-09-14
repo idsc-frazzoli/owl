@@ -5,6 +5,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
@@ -103,6 +104,16 @@ public class TransitionNdDemo extends ControlPointsDemo {
         .render(geometricLayer, graphics);
     Tensor mouse = geodesicDisplay.project(geometricLayer.getMouseSe2State());
     // ---
+    {
+      geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mouse));
+      Path2D path2d = geometricLayer.toPath2D(shape);
+      path2d.closePath();
+      graphics.setColor(new Color(128, 128, 255, 128));
+      graphics.fill(path2d);
+      graphics.setColor(new Color(128, 128, 255, 255));
+      graphics.draw(path2d);
+      geometricLayer.popMatrix();
+    }
     Se2TransitionNdType se2TransitionNdType = se2TransitionNdType(geodesicDisplay());
     RrtsNodeCollection rrtsNodeCollection = map.get(se2TransitionNdType);
     TransitionSpace transitionSpace = se2TransitionNdType.transitionSpace;
