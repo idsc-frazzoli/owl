@@ -31,6 +31,7 @@ public enum ClothoidRrtsNodeCollections {
   /** @param lbounds vector of length 2
    * @param ubounds vector of length 2
    * @return */
+  @Deprecated
   public static RrtsNodeCollection angle(Tensor lbounds, Tensor ubounds) {
     return NdTypeRrtsNodeCollection.of( //
         ClothoidNdType.INSTANCE, //
@@ -38,6 +39,7 @@ public enum ClothoidRrtsNodeCollections {
         VectorQ.requireLength(ubounds, 2).copy().append(Pi.VALUE));
   }
 
+  @Deprecated
   public static RrtsNodeCollection angle( //
       LimitedClothoidNdType limitedClothoidRrtsNdType, Tensor lbounds, Tensor ubounds) {
     return NdTypeRrtsNodeCollection.of( //
