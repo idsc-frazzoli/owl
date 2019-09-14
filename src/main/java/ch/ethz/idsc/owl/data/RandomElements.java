@@ -25,13 +25,14 @@ public enum RandomElements {
    * 
    * @param <T>
    * @param list
-   * @param n
+   * @param n non-negative
    * @param random
-   * @return view on list */
+   * @return unmodifiable list
+   * @throws Exception if n is negative */
   public static <T> List<T> of(List<T> list, int n, Random random) {
     int length = list.size();
     if (length <= n)
-      return list;
+      return Collections.unmodifiableList(list);
     int lo = length - n;
     for (int index = length - 1; lo <= index; --index)
       Collections.swap(list, index, random.nextInt(index + 1));
@@ -42,8 +43,9 @@ public enum RandomElements {
    * 
    * @param <T>
    * @param list
-   * @param n
-   * @return */
+   * @param n non-negative
+   * @return unmodifiable list
+   * @throws Exception if n is negative */
   public static <T> List<T> of(List<T> list, int n) {
     return of(list, n, ThreadLocalRandom.current());
   }

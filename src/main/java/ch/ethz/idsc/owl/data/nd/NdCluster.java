@@ -22,6 +22,9 @@ public class NdCluster<V> implements Serializable {
   private final Queue<NdEntry<V>> queue;
   private int considered = 0;
 
+  /** @param collection
+   * @param ndCenter
+   * @param limit positive */
   /* package */ NdCluster(Collection<NdPair<V>> collection, NdCenterInterface ndCenter, int limit) {
     this.ndCenter = ndCenter;
     this.center = ndCenter.center();
@@ -34,6 +37,8 @@ public class NdCluster<V> implements Serializable {
     considered = collection.size();
   }
 
+  /** @param ndCenter
+   * @param limit positive */
   /* package */ NdCluster(NdCenterInterface ndCenter, int limit) {
     this.ndCenter = ndCenter;
     this.center = ndCenter.center();
