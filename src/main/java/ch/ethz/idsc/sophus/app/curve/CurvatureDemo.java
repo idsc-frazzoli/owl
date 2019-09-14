@@ -89,4 +89,9 @@ public abstract class CurvatureDemo extends ControlPointsDemo {
   }
 
   protected abstract Tensor protected_render(GeometricLayer geometricLayer, Graphics2D graphics);
+
+  // TODO JPH OWL 056 remove
+  public Tensor getControlPointShape() {
+    return null;
+  }
 }

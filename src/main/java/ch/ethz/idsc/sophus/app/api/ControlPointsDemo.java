@@ -80,7 +80,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
             posit.set(closest.get(1), 1);
           }
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(posit)));
-          graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
+          graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape()));
           geometricLayer.popMatrix();
         }
         if (!hold && Tensors.nonEmpty(control) && midpointIndicated) {
@@ -176,10 +176,6 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     timerFrame.geometricComponent.addRenderInterface(renderInterface);
   }
 
-  public Tensor getControlPointShape() {
-    return geodesicDisplay().shape();
-  }
-
   /** function is called when mouse is released */
   public void released() {
     // ---
@@ -231,12 +227,12 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   }
 
   protected final void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {
-    POINTS_RENDER_0.new Show(geodesicDisplay(), getControlPointShape(), getGeodesicControlPoints()).render(geometricLayer, graphics);
+    POINTS_RENDER_0.new Show(geodesicDisplay(), geodesicDisplay().shape(), getGeodesicControlPoints()).render(geometricLayer, graphics);
   }
 
   protected final void renderPoints( //
       GeodesicDisplay geodesicDisplay, Tensor points, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
-    POINTS_RENDER_1.new Show(geodesicDisplay, getControlPointShape(), points).render(geometricLayer, graphics);
+    POINTS_RENDER_1.new Show(geodesicDisplay, geodesicDisplay().shape(), points).render(geometricLayer, graphics);
   }
 }

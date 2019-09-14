@@ -16,11 +16,9 @@ public enum ClothoidRrtsNodeCollections {
    * @param ubounds vector of length 2
    * @return
    * @see ClothoidNdDemo */
+  // TODO JPH OWL 056 remove
   public static RrtsNodeCollection of(Tensor lbounds, Tensor ubounds) {
-    return NdTypeRrtsNodeCollection.of( //
-        ClothoidNdType.INSTANCE, //
-        VectorQ.requireLength(lbounds, 2).copy().append(RealScalar.of(0.0)), //
-        VectorQ.requireLength(ubounds, 2).copy().append(RealScalar.of(0.0)));
+    return Se2TransitionRrtsNodeCollections.of(ClothoidTransitionSpace.INSTANCE, lbounds, ubounds);
   }
 
   /** @param max

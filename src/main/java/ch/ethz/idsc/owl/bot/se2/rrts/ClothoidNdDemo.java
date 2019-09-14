@@ -45,7 +45,7 @@ public class ClothoidNdDemo extends ControlPointsDemo {
     spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
     spinnerValue.setValue(3);
     spinnerValue.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    // setPositioningEnabled(false);
+    setPositioningEnabled(false);
     setMidpointIndicated(false);
     // ---
     Random random = new Random();

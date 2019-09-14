@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public enum Se2TransitionRrtsNodeCollections {
   ;
-  /** @param transitionSpace
+  /** @param transitionSpace either {@link ClothoidTransitionSpace} or {@link DubinsTransitionSpace}
    * @param lbounds
    * @param ubounds
    * @return */

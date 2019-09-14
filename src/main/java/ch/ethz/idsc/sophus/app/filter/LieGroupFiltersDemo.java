@@ -56,7 +56,7 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
         Tensor mean = GeodesicDisplays.filter(geodesicDisplay, smoothingKernel, lieGroupFilters).apply(control);
         Color color = COLOR_DRAW.getColor(ordinal);
         PointsRender pointsRender = new PointsRender(COLOR_FILL.getColor(ordinal), color);
-        pointsRender.new Show(geodesicDisplay, getControlPointShape(), Tensors.of(mean)).render(geometricLayer, graphics);
+        pointsRender.new Show(geodesicDisplay, geodesicDisplay.shape(), Tensors.of(mean)).render(geometricLayer, graphics);
         graphics.setColor(color);
         graphics.drawString("" + lieGroupFilters, 0, 32 + ordinal * 16);
       }
