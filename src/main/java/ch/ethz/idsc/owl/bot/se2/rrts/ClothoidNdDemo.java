@@ -30,9 +30,10 @@ public class ClothoidNdDemo extends ControlPointsDemo {
   private static final Tensor LBOUNDS = Tensors.vector(-5, -5).unmodifiable();
   private static final Tensor UBOUNDS = Tensors.vector(+5, +5).unmodifiable();
   // ---
-  private final RrtsNodeCollection rrtsNodeCollection1 = ClothoidRrtsNodeCollections.of(LBOUNDS, UBOUNDS);
-  private final RrtsNodeCollection rrtsNodeCollection2 = ClothoidRrtsNodeCollections.of( //
-      RealScalar.ONE, LBOUNDS, UBOUNDS);
+  private final RrtsNodeCollection rrtsNodeCollection1 = //
+      Se2TransitionRrtsNodeCollections.of(ClothoidTransitionSpace.INSTANCE, LBOUNDS, UBOUNDS);
+  private final RrtsNodeCollection rrtsNodeCollection2 = //
+      ClothoidRrtsNodeCollections.of(RealScalar.ONE, LBOUNDS, UBOUNDS);
   private final JToggleButton jToggleButton = new JToggleButton("limit");
   private final SpinnerLabel<Integer> spinnerValue = new SpinnerLabel<>();
 

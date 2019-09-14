@@ -43,7 +43,7 @@ public abstract class BiRrtsPlannerServer extends RrtsPlannerServer {
 
   @Override // from RrtsPlannerServer
   protected RrtsPlannerProcess setupProcess(StateTime stateTime) {
-    BidirectionalRrts rrts = new BidirectionalRrts(transitionSpace, this::rrtsNodeCollection, obstacleQuery, costFunction,
+    BidirectionalRrts rrts = new BidirectionalRrts(getTransitionSpace(), this::rrtsNodeCollection, obstacleQuery, costFunction,
         Objects.requireNonNull(stateTime).state(), goal);
     RrtsPlanner rrtsPlanner = new BiRrtsPlanner(rrts, spaceSampler(state));
     return new RrtsPlannerProcess(rrtsPlanner, rrts.getRoot());

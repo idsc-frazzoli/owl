@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 public abstract class RrtsPlannerServer implements TransitionPlanner, ObservingExpandInterface<RrtsNode> {
-  protected final TransitionSpace transitionSpace;
+  private final TransitionSpace transitionSpace;
   protected final TransitionRegionQuery obstacleQuery;
   protected final TransitionCostFunction costFunction;
   // ---

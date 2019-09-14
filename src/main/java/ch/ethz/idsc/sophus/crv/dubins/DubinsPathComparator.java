@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 import ch.ethz.idsc.tensor.Scalars;
 
+// TODO JPH OWL rename to TOTAL_CURVATURE
 public enum DubinsPathComparator implements Comparator<DubinsPath> {
   LENGTH() {
     @Override

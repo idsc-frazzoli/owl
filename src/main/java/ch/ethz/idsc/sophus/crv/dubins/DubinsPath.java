@@ -119,6 +119,7 @@ public class DubinsPath implements Serializable {
     return segLength.Get(index);
   }
 
+  // TODO JPH OWL rename totalCurvature()
   /** @return total curvature, return value is non-negative */
   public Scalar curvature() {
     return (Scalar) segLength.dot(type.signatureAbs()).divide(radius);

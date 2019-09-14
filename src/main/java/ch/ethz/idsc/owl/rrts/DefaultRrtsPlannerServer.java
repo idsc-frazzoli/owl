@@ -52,7 +52,7 @@ public abstract class DefaultRrtsPlannerServer extends RrtsPlannerServer {
 
   @Override // from RrtsPlannerServer
   protected final RrtsPlannerProcess setupProcess(StateTime stateTime) {
-    Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection(), obstacleQuery, costFunction);
+    Rrts rrts = new DefaultRrts(getTransitionSpace(), rrtsNodeCollection(), obstacleQuery, costFunction);
     Optional<RrtsNode> optional = rrts.insertAsNode(stateTime.state(), 5);
     if (optional.isPresent()) {
       Collection<Tensor> greeds_ = greeds.stream() //
@@ -71,6 +71,7 @@ public abstract class DefaultRrtsPlannerServer extends RrtsPlannerServer {
     this.greeds = Objects.requireNonNull(greeds);
   }
 
+  /** @return new rrts node collection */
   protected abstract RrtsNodeCollection rrtsNodeCollection();
 
   protected abstract RandomSampleInterface spaceSampler(Tensor state);

@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.alg.Array;
             greedy) {
           @Override // from DefaultRrtsPlannerServer
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return ClothoidRrtsNodeCollections.of(lbounds, ubounds);
+            return Se2TransitionRrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
           }
 
           @Override // from RrtsPlannerServer
