@@ -7,8 +7,8 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.red.Norm;
  * and may need to linger in one spot (u == {0, 0}) because in that case
  * the cost == distance traveled evaluates to 0.
  * 
- * @see SphericalRegion */
+ * @see BallRegion */
 public class RnMinDistGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   /** creates a spherical region in R^n with given center and radius.
    * min distance to goal is measured in Euclidean distance.
@@ -33,7 +33,7 @@ public class RnMinDistGoalManager extends SimpleTrajectoryRegionQuery implements
    * @param center vector with length == n
    * @param radius positive */
   public static GoalInterface sperical(Tensor center, Scalar radius) {
-    return new RnMinDistGoalManager(new SphericalRegion(center, radius));
+    return new RnMinDistGoalManager(new BallRegion(center, radius));
   }
   // ---
 

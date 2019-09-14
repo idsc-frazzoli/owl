@@ -12,18 +12,14 @@ import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
-import ch.ethz.idsc.owl.rrts.LaneRrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.opt.Pi;
 
 /** variant of {@link ClothoidLaneRrtsEntity} intended for simulation
  * TODO GJOEL perhaps create intermediate class with common code to derive from */
@@ -47,12 +43,9 @@ import ch.ethz.idsc.tensor.opt.Pi;
             STATE_SPACE_MODEL, //
             LengthCostFunction.INSTANCE, //
             greedy) {
-          private final Tensor lbounds_ = lbounds.copy().append(RealScalar.ZERO).unmodifiable();
-          private final Tensor ubounds_ = ubounds.copy().append(Pi.TWO).unmodifiable();
-
           @Override // from DefaultRrtsPlannerServer
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds_, ubounds_);
+            return ClothoidRrtsNodeCollections.of(lbounds, ubounds);
           }
 
           @Override // from RrtsPlannerServer

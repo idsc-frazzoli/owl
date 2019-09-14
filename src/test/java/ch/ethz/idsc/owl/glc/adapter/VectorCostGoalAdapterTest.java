@@ -23,10 +23,10 @@ public class VectorCostGoalAdapterTest extends TestCase {
   public void testSimple() {
     List<CostFunction> costs = new ArrayList<>();
     costs.add(new Se2MinTimeGoalManager( //
-        Se2ComboRegion.spherical(Tensors.vector(2, 1, Math.PI * -1), Tensors.vector(0.1, 0.1, 10 / 180 * Math.PI)), //
+        Se2ComboRegion.ball(Tensors.vector(2, 1, Math.PI * -1), Tensors.vector(0.1, 0.1, 10 / 180 * Math.PI)), //
         Se2CarFlows.standard(RealScalar.of(1), Degree.of(35)).getFlows(10)));
     costs.add(new Se2MinTimeGoalManager( //
-        Se2ComboRegion.spherical(Tensors.vector(2, 1, Math.PI * -1), Tensors.vector(0.1, 0.1, 10 / 180 * Math.PI)), //
+        Se2ComboRegion.ball(Tensors.vector(2, 1, Math.PI * -1), Tensors.vector(0.1, 0.1, 10 / 180 * Math.PI)), //
         Se2CarFlows.standard(RealScalar.of(2), Degree.of(35)).getFlows(10)));
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, Regions.emptyRegion());
     Scalar minCostToGoal = goalInterface.minCostToGoal(Tensors.vector(0, 0, 0));

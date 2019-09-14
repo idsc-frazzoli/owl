@@ -36,6 +36,7 @@ import ch.ethz.idsc.tensor.red.Mean;
   final JToggleButton jToggleCyclic = new JToggleButton("cyclic");
   final JToggleButton jToggleSymi = new JToggleButton("graph");
   final JToggleButton jToggleComb = new JToggleButton("comb");
+  private final JToggleButton jToggleHelp = new JToggleButton("help");
 
   public CurveSubdivisionDemo(List<GeodesicDisplay> _list) {
     super(_list);
@@ -93,6 +94,12 @@ import ch.ethz.idsc.tensor.red.Mean;
     // ---
     jToggleComb.setSelected(true);
     timerFrame.jToolBar.add(jToggleComb);
+    // ---
+    jToggleHelp.setToolTipText("indicate closest midpoint");
+    jToggleHelp.setSelected(true);
+    jToggleHelp.addActionListener(l -> setMidpointIndicated(jToggleHelp.isSelected()));
+    timerFrame.jToolBar.addSeparator();
+    timerFrame.jToolBar.add(jToggleHelp);
     // ---
     spinnerLabel.setArray(CurveSubdivisionSchemes.values());
     spinnerLabel.setIndex(9);

@@ -8,7 +8,6 @@ import ch.ethz.idsc.owl.bot.util.RegionRenders;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -36,9 +35,9 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Tensor range = Tensors.vector(7, 7).unmodifiable();
     Region<Tensor> imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
-    Tensor lbounds = Array.zeros(2).append(RealScalar.ZERO).unmodifiable();
-    Tensor ubounds = range.copy().append(Pi.TWO).unmodifiable();
-    RrtsNodeCollection rrtsNodeCollection = new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
+    Tensor lbounds = Array.zeros(2).unmodifiable();
+    Tensor ubounds = range.unmodifiable();
+    RrtsNodeCollection rrtsNodeCollection = ClothoidRrtsNodeCollections.of(lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(Clips.absolute(5));
@@ -51,7 +50,9 @@ import ch.ethz.idsc.tensor.sca.Clips;
     owlyFrame.configCoordinateOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
-    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(lbounds, ubounds);
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
+        lbounds.copy().append(Pi.VALUE.negate()), //
+        ubounds.copy().append(Pi.VALUE));
     int frame = 0;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int c = 0; c < 50; ++c)

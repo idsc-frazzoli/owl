@@ -6,7 +6,7 @@ import java.util.Random;
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
-import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
+import ch.ethz.idsc.owl.rrts.NdTypeRrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
     int wid = 7;
     Tensor min = Tensors.vector(0, 0);
     Tensor max = Tensors.vector(wid, wid);
-    RrtsNodeCollection rrtsNodeCollection = new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, min, max);
+    RrtsNodeCollection rrtsNodeCollection = NdTypeRrtsNodeCollection.of(EuclideanNdType.INSTANCE, min, max);
     TransitionRegionQuery transitionRegionQuery = StaticHelper.polygon1();
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;

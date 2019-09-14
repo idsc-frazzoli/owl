@@ -41,24 +41,25 @@ import ch.ethz.idsc.tensor.sca.Clips;
         new SampledTransitionRegionQuery(region, RealScalar.of(0.05)), //
         new TransitionCurvatureQuery(Clips.absolute(5.)));
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, Math.PI / 4), RealScalar.ZERO);
-    ClothoidRrtsEntity entity = new ClothoidRrtsEntity(stateTime, transitionRegionQuery, r2ImageRegionWrap.origin(), r2ImageRegionWrap.range());
+    ClothoidRrtsEntity clothoidRrtsEntity = //
+        new ClothoidRrtsEntity(stateTime, transitionRegionQuery, r2ImageRegionWrap.origin(), r2ImageRegionWrap.range());
     owlyAnimationFrame.addBackground(RegionRenders.create(region));
-    MouseGoal.simpleRrts(owlyAnimationFrame, entity, null);
-    owlyAnimationFrame.add(entity);
+    MouseGoal.simpleRrts(owlyAnimationFrame, clothoidRrtsEntity, null);
+    owlyAnimationFrame.add(clothoidRrtsEntity);
     {
       RenderInterface renderInterface = new CameraEmulator( //
-          48, RealScalar.of(10), entity::getStateTimeNow, trajectoryRegionQuery);
+          48, RealScalar.of(10), clothoidRrtsEntity::getStateTimeNow, trajectoryRegionQuery);
       owlyAnimationFrame.addBackground(renderInterface);
     }
     {
       RenderInterface renderInterface = new LidarEmulator( //
-          LIDAR_RAYTRACER, entity::getStateTimeNow, trajectoryRegionQuery);
+          LIDAR_RAYTRACER, clothoidRrtsEntity::getStateTimeNow, trajectoryRegionQuery);
       owlyAnimationFrame.addBackground(renderInterface);
     }
     {
       RenderInterface renderInterface = new MouseShapeRender( //
           SimpleTrajectoryRegionQuery.timeInvariant(Se2PointsVsRegions.line(Tensors.vector(0.2, 0.1, 0, -0.1), region)), //
-          ClothoidRrtsEntity.SHAPE, () -> entity.getStateTimeNow().time());
+          ClothoidRrtsEntity.SHAPE, () -> clothoidRrtsEntity.getStateTimeNow().time());
       owlyAnimationFrame.addBackground(renderInterface);
     }
     owlyAnimationFrame.configCoordinateOffset(50, 700);

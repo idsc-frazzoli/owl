@@ -46,7 +46,7 @@ enum Se2rDemo {
     Collection<Flow> controls = carFlows.getFlows(6);
     // place holder for parameter class
     Se2ComboRegion se2ComboRegion = //
-        Se2ComboRegion.spherical(Tensors.vector(-1, -1, Math.PI * 2), Tensors.vector(0.1, 0.1, 0.17));
+        Se2ComboRegion.ball(Tensors.vector(-1, -1, Math.PI * 2), Tensors.vector(0.1, 0.1, 0.17));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager( //
         se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();

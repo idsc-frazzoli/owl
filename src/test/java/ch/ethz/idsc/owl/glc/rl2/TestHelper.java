@@ -18,9 +18,9 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
     // -------- GoalInterface --------
     final Tensor stateGoal = Tensors.vector(5, 0);
     final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
-    RegionWithDistance<Tensor> regionWithDistance = new SphericalRegion(stateGoal, radius);
+    RegionWithDistance<Tensor> regionWithDistance = new BallRegion(stateGoal, radius);
     // ---
     CostFunction costFunction = new RnMinDistGoalManager(regionWithDistance);
     // ---

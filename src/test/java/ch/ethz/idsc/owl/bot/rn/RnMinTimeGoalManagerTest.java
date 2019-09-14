@@ -6,8 +6,8 @@ import java.util.Collection;
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -21,7 +21,7 @@ public class RnMinTimeGoalManagerTest extends TestCase {
     Collection<Flow> controls = r2Flows.getFlows(10);
     Tensor center = Tensors.fromString("{3[m], 6[m]}");
     Scalar radius = Quantity.of(1, "m");
-    RegionWithDistance<Tensor> regionWithDistance = new SphericalRegion(center, radius);
+    RegionWithDistance<Tensor> regionWithDistance = new BallRegion(center, radius);
     GoalInterface goalInterface = RnMinTimeGoalManager.create(regionWithDistance, controls);
     // Scalar cost = ;
     assertEquals(goalInterface.minCostToGoal(Tensors.fromString("{3[m], 6[m]}")), Quantity.of(0, "s"));

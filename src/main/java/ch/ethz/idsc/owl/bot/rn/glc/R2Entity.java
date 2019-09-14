@@ -25,8 +25,8 @@ import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
     Tensor partitionScale = PARTITION_SCALE;
     Scalar goalRadius = RealScalar.of(Math.sqrt(2.0)).divide(partitionScale.Get(0));
-    return new SphericalRegion(Extract2D.FUNCTION.apply(goal), goalRadius);
+    return new BallRegion(Extract2D.FUNCTION.apply(goal), goalRadius);
   }
 
   @Override

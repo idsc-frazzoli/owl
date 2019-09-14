@@ -9,9 +9,9 @@ import junit.framework.TestCase;
 
 public class Se2ComboRegionTest extends TestCase {
   public void testSimple() {
-    Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 3));
+    Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 3));
     try {
-      Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3));
+      Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3));
       fail();
     } catch (Exception exception) {
       // ---
@@ -19,7 +19,7 @@ public class Se2ComboRegionTest extends TestCase {
   }
 
   public void testIsMember() {
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
     assertTrue(se2ComboRegion.isMember(Tensors.vector(1, 2, 3)));
     assertFalse(se2ComboRegion.isMember(Tensors.vector(-1, 2, 3)));
     assertFalse(se2ComboRegion.isMember(Tensors.vector(1, 2, 3.2)));

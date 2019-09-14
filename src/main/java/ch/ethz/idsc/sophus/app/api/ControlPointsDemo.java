@@ -13,7 +13,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.swing.JButton;
-import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -49,11 +48,10 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   /** min_index is non-null while the user drags a control points */
   private Integer min_index = null;
   private boolean mousePositioning = true;
+  private boolean midpointIndicated = true;
   // ---
   private final static Color ORANGE = new Color(255, 200, 0, 192);
   private final static Color GREEN = new Color(0, 255, 0, 192);
-  // ---
-  private final JToggleButton jToggleCrv = new JToggleButton("help");
   // ---
   private final RenderInterface renderInterface = new RenderInterface() {
     @Override
@@ -85,7 +83,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
           graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
           geometricLayer.popMatrix();
         }
-        if (!hold && Tensors.nonEmpty(control) && jToggleCrv.isSelected()) {
+        if (!hold && Tensors.nonEmpty(control) && midpointIndicated) {
           CurveSubdivision curveSubdivision = ControlMidpoints.of(geodesicDisplay.geodesicInterface());
           Tensor midpoints = curveSubdivision.string(control);
           // graphics.setColor(new Color(128, 128, 128, 32));
@@ -107,7 +105,9 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
     }
   };
 
-  /** @param addRemoveControlPoints
+  /** Hint: {@link #setPositioningEnabled(boolean)} controls positioning of control points
+   * 
+   * @param addRemoveControlPoints whether the number of control points is variable
    * @param list */
   public ControlPointsDemo(boolean addRemoveControlPoints, List<GeodesicDisplay> list) {
     super(list);
@@ -170,10 +170,6 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
         }
       }
     };
-    jToggleCrv.setToolTipText("indicate closest midpoint");
-    jToggleCrv.setSelected(true);
-    timerFrame.jToolBar.addSeparator();
-    timerFrame.jToolBar.add(jToggleCrv);
     // ---
     timerFrame.geometricComponent.jComponent.addMouseListener(mouseAdapter);
     timerFrame.geometricComponent.jComponent.addMouseMotionListener(mouseAdapter);
@@ -197,6 +193,14 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
 
   public boolean isPositioningEnabled() {
     return mousePositioning;
+  }
+
+  public void setMidpointIndicated(boolean enabled) {
+    midpointIndicated = enabled;
+  }
+
+  public boolean isMidpointIndicated() {
+    return midpointIndicated;
   }
 
   public Scalar getPositioningThreshold() {

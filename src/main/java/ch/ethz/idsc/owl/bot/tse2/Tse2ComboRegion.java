@@ -5,10 +5,10 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.math.RadiusXY;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.LinearRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,7 +24,7 @@ public class Tse2ComboRegion extends Se2ComboRegion {
    * @throws Exception if first two entries of radiusVector are different */
   public static Tse2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
     return new Tse2ComboRegion( //
-        new SphericalRegion(Extract2D.FUNCTION.apply(goal), RadiusXY.requireSame(radiusVector)), //
+        new BallRegion(Extract2D.FUNCTION.apply(goal), RadiusXY.requireSame(radiusVector)), //
         So2Region.periodic(goal.Get(2), radiusVector.Get(2)), //
         new LinearRegion(goal.Get(3), radiusVector.Get(3)));
   }

@@ -21,14 +21,14 @@ import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
-import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
+import ch.ethz.idsc.owl.gui.ren.BallRegionRender;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -54,7 +54,7 @@ public class RelaxedTrajectoryExpandDemo {
   // -------- GoalInterface --------
   final Tensor stateGoal = Tensors.vector(5, 0);
   final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
-  final RegionWithDistance<Tensor> regionWithDistance = new SphericalRegion(stateGoal, radius);
+  final RegionWithDistance<Tensor> regionWithDistance = new BallRegion(stateGoal, radius);
   private final Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
   private final PolygonRegion polygonRegion = new PolygonRegion(polygon);
 
@@ -88,7 +88,7 @@ public class RelaxedTrajectoryExpandDemo {
     RelaxedGlcExpand glcExpand = new RelaxedGlcExpand(relaxedTrajectoryPlanner);
     OwlyFrame owlyFrame = OwlyGui.start();
     owlyFrame.addBackground(new PolygonRegionRender(relaxedTrajectoryPlanner1Demo.polygonRegion));
-    owlyFrame.addBackground(new SphericalRegionRender((SphericalRegion) relaxedTrajectoryPlanner1Demo.regionWithDistance));
+    owlyFrame.addBackground(new BallRegionRender((BallRegion) relaxedTrajectoryPlanner1Demo.regionWithDistance));
     while (!relaxedTrajectoryPlanner.getBest().isPresent() && owlyFrame.jFrame.isVisible()) {
       glcExpand.findAny(1);
       owlyFrame.setGlc(relaxedTrajectoryPlanner);

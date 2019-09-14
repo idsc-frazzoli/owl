@@ -25,17 +25,12 @@ public class ClothoidTransition extends AbstractTransition {
    * @param end of the form {qx, qy, q_angle}
    * @return */
   public static ClothoidTransition of(Tensor start, Tensor end) {
-    Clothoid clothoid = new Clothoid(start, end);
-    return new ClothoidTransition(start, end, clothoid, clothoid.new Curve());
+    return new ClothoidTransition(start, end, new Clothoid(start, end).new Curve());
   }
 
   // ---
-  // private final Clothoid clothoid;
-  // private final Curve curve;
-  private ClothoidTransition(Tensor start, Tensor end, Clothoid clothoid, Curve curve) {
+  private ClothoidTransition(Tensor start, Tensor end, Curve curve) {
     super(start, end, curve.length());
-    // this.clothoid = clothoid;
-    // this.curve = curve;
   }
 
   @Override // from Transition

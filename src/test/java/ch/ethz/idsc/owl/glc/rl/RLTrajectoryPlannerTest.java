@@ -26,9 +26,9 @@ import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -57,7 +57,7 @@ public class RLTrajectoryPlannerTest extends TestCase {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Flows = new R2RationalFlows(RationalScalar.HALF);
     Collection<Flow> controls = r2Flows.getFlows(13);
-    RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
+    RegionWithDistance<Tensor> goalRegion = new BallRegion(stateGoal, radius);
     // the 1st cost penalizes distance of path with slack
     CostFunction distanceCost = new CostFunction() {
       @Override // from CostIncrementFunction

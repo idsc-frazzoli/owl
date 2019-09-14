@@ -5,11 +5,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.math.RadiusXY;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,9 +22,9 @@ public class Se2ComboRegion implements Region<Tensor>, Serializable {
   /** @param goal {px, py, angle}
    * @param radiusVector {dist_radius, dist_radius, dist_angle}
    * @throws Exception if first two entries of radiusVector are different */
-  public static Se2ComboRegion spherical(Tensor goal, Tensor radiusVector) {
+  public static Se2ComboRegion ball(Tensor goal, Tensor radiusVector) {
     return new Se2ComboRegion( //
-        new SphericalRegion(Extract2D.FUNCTION.apply(goal), RadiusXY.requireSame(radiusVector)), //
+        new BallRegion(Extract2D.FUNCTION.apply(goal), RadiusXY.requireSame(radiusVector)), //
         So2Region.periodic(goal.Get(2), radiusVector.Get(2)));
   }
 

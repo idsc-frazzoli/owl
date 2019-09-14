@@ -22,7 +22,6 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -47,12 +46,15 @@ import ch.ethz.idsc.tensor.opt.Pi;
     Tensor range = Tensors.vector(7, 7).unmodifiable();
     Region<Tensor> imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
-    Tensor lbounds = Array.zeros(2).append(RealScalar.ZERO).unmodifiable();
-    Tensor ubounds = range.copy().append(Pi.TWO).unmodifiable();
+    Tensor lbounds = Array.zeros(2).unmodifiable();
+    Tensor ubounds = range.unmodifiable();
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
     // ---
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
+        lbounds.copy().append(Pi.VALUE.negate()), //
+        ubounds.copy().append(Pi.VALUE));
     RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         transitionSpace, //
         transitionRegionQuery, //
@@ -61,12 +63,12 @@ import ch.ethz.idsc.tensor.opt.Pi;
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
+        return ClothoidRrtsNodeCollections.of(lbounds, ubounds);
       }
 
       @Override
       protected RandomSampleInterface spaceSampler(Tensor state) {
-        return BoxRandomSample.of(lbounds, ubounds);
+        return randomSampleInterface;
       }
 
       @Override
@@ -84,8 +86,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
     owlyFrame.configCoordinateOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
-    StateTime stateTime = new StateTime(lbounds, RealScalar.ZERO);
-    Tensor goal = BoxRandomSample.of(lbounds, ubounds).randomSample(RANDOM);
+    StateTime stateTime = new StateTime(lbounds.copy().append(RealScalar.ZERO), RealScalar.ZERO);
+    Tensor goal = randomSampleInterface.randomSample(RANDOM);
     Tensor trajectory = Tensors.empty();
     int frame = 0;
     while (frame++ < 5 && owlyFrame.jFrame.isVisible()) {
@@ -109,7 +111,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         owlyFrame.geometricComponent.jComponent.repaint();
         // ---
         stateTime = Lists.getLast(optional.get()).stateTime();
-        goal = BoxRandomSample.of(lbounds, ubounds).randomSample(RANDOM);
+        goal = randomSampleInterface.randomSample(RANDOM);
       }
       System.out.println(frame + "/" + 5);
       Thread.sleep(10);

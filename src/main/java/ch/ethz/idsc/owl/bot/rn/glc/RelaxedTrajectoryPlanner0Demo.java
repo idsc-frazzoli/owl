@@ -28,18 +28,18 @@ import ch.ethz.idsc.owl.glc.rl2.RelaxedGlcExpand;
 import ch.ethz.idsc.owl.glc.rl2.RelaxedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.rl2.StandardRelaxedLexicographicPlanner;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
+import ch.ethz.idsc.owl.gui.ren.BallRegionRender;
 import ch.ethz.idsc.owl.gui.ren.DomainQueueMapRender;
 import ch.ethz.idsc.owl.gui.ren.EdgeRenders;
 import ch.ethz.idsc.owl.gui.ren.EtaRender;
-import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -65,7 +65,7 @@ public class RelaxedTrajectoryPlanner0Demo implements DemoInterface {
   // -------- GoalInterface --------
   final Tensor stateGoal = Tensors.vector(5, 0);
   final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
-  final RegionWithDistance<Tensor> goalRegion = new SphericalRegion(stateGoal, radius);
+  final RegionWithDistance<Tensor> goalRegion = new BallRegion(stateGoal, radius);
   private final Tensor polygon = Tensors.matrixFloat(new float[][] { { 1, 0 }, { 1, -10 }, { 4, -10 }, { 4, 3 } });
   private final PolygonRegion polygonRegion = new PolygonRegion(polygon);
 
@@ -105,7 +105,7 @@ public class RelaxedTrajectoryPlanner0Demo implements DemoInterface {
     owlyAnimationFrame.addBackground(new PolygonRegionRender(polygonRegion));
     owlyAnimationFrame.addBackground(new EtaRender(eta));
     owlyAnimationFrame.addBackground(DomainQueueMapRender.of(relaxedTrajectoryPlanner.getRelaxedDomainQueueMap().getMap(), eta));
-    owlyAnimationFrame.addBackground(new SphericalRegionRender((SphericalRegion) goalRegion));
+    owlyAnimationFrame.addBackground(new BallRegionRender((BallRegion) goalRegion));
     owlyAnimationFrame.addBackground(EdgeRenders.of(relaxedTrajectoryPlanner));
     Optional<GlcNode> optional = relaxedTrajectoryPlanner.getBest();
     if (optional.isPresent()) {
