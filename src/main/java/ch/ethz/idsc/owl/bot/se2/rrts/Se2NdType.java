@@ -10,17 +10,17 @@ import ch.ethz.idsc.tensor.Tensor;
 public enum Se2NdType implements NdType {
   INSTANCE;
   // ---
-  @Override // from RrtsNdType
+  @Override // from NdType
   public Tensor convert(Tensor tensor) {
     return Extract2D.FUNCTION.apply(tensor);
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceBeg(Tensor tensor) {
     return EuclideanNdCenter.of(convert(tensor));
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceEnd(Tensor tensor) {
     return EuclideanNdCenter.of(convert(tensor));
   }

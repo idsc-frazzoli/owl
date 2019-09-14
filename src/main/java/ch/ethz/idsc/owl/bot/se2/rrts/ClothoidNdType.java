@@ -9,12 +9,12 @@ import ch.ethz.idsc.tensor.Tensor;
 public enum ClothoidNdType implements NdType {
   INSTANCE;
   // ---
-  @Override // from RrtsNdType
+  @Override // from NdType
   public Tensor convert(Tensor tensor) {
     return tensor;
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceBeg(Tensor center) {
     return new ClothoidNdCenter(center) {
       @Override
@@ -24,7 +24,7 @@ public enum ClothoidNdType implements NdType {
     };
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceEnd(Tensor center) {
     return new ClothoidNdCenter(center) {
       @Override

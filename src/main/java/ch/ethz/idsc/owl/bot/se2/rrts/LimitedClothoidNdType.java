@@ -26,12 +26,12 @@ import ch.ethz.idsc.tensor.sca.Clips;
     this.clip = clip;
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public Tensor convert(Tensor tensor) {
     return tensor;
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceBeg(Tensor center) {
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     };
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceEnd(Tensor center) {
     return new LimitedClothoidNdCenter(center, clip) {
       @Override

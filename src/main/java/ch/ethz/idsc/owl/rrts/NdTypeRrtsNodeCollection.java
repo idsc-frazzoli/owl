@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** collection of rrts nodes backed by a n-dimensional uniform tree
- * data structure is dependent on RrtsNdType */
+ * data structure is dependent on NdType */
 public final class NdTypeRrtsNodeCollection implements RrtsNodeCollection {
   public static RrtsNodeCollection of(NdType ndType, Tensor lbounds, Tensor ubounds) {
     return new NdTypeRrtsNodeCollection(ndType, lbounds, ubounds);
