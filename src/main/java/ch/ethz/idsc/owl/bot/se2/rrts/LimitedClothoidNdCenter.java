@@ -4,15 +4,13 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid.Curvature;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /* package */ abstract class LimitedClothoidNdCenter extends ClothoidNdCenter {
-  private static final Scalar INF = RealScalar.of(Double.POSITIVE_INFINITY);
-  // ---
   private final Clip clip;
 
   public LimitedClothoidNdCenter(Tensor center, Clip clip) {
@@ -37,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 
   private static Scalar infinity(Scalar cost) {
     return cost instanceof Quantity //
-        ? Quantity.of(INF, ((Quantity) cost).unit()) //
-        : INF;
+        ? Quantity.of(DoubleScalar.POSITIVE_INFINITY, ((Quantity) cost).unit()) //
+        : DoubleScalar.POSITIVE_INFINITY;
   }
 }
