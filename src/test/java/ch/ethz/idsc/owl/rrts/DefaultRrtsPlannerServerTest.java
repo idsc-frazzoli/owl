@@ -10,7 +10,6 @@ import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNodeCollections;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
-import ch.ethz.idsc.owl.bot.se2.rrts.Se2NdType;
 import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsFlow;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
@@ -95,7 +94,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return NdTypeRrtsNodeCollection.of(Se2NdType.INSTANCE, lbounds, ubounds);
+        return NdTypeRrtsNodeCollection.of(Euclidean2dType.INSTANCE, lbounds, ubounds);
       }
 
       @Override

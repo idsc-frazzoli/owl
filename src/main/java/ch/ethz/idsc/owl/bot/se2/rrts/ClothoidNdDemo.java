@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
+import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -73,15 +74,15 @@ public class ClothoidNdDemo extends ControlPointsDemo {
     graphics.setColor(new Color(255, 0, 0, 128));
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(mouse, value)) {
       Tensor other = rrtsNode.state();
-      ClothoidTransition clothoidTransition = ClothoidTransition.of(other, mouse);
-      graphics.draw(geometricLayer.toPath2D(clothoidTransition.linearized(RealScalar.of(.2))));
+      Transition transition = ClothoidTransition.of(other, mouse);
+      graphics.draw(geometricLayer.toPath2D(transition.linearized(RealScalar.of(.2))));
     }
     // ---
     graphics.setColor(new Color(0, 255, 0, 128));
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(mouse, value)) {
       Tensor other = rrtsNode.state();
-      ClothoidTransition clothoidTransition = ClothoidTransition.of(mouse, other);
-      graphics.draw(geometricLayer.toPath2D(clothoidTransition.linearized(RealScalar.of(.2))));
+      Transition transition = ClothoidTransition.of(mouse, other);
+      graphics.draw(geometricLayer.toPath2D(transition.linearized(RealScalar.of(.2))));
     }
   }
 

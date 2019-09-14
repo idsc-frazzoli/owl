@@ -9,17 +9,17 @@ import ch.ethz.idsc.tensor.Tensor;
 public enum EuclideanNdType implements NdType {
   INSTANCE;
   // ---
-  @Override // from RrtsNdType
+  @Override // from NdType
   public Tensor convert(Tensor tensor) {
     return tensor;
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceBeg(Tensor tensor) {
     return EuclideanNdCenter.of(tensor);
   }
 
-  @Override // from RrtsNdType
+  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceEnd(Tensor tensor) {
     return EuclideanNdCenter.of(tensor);
   }
