@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.alg.Array;
             LengthCostFunction.INSTANCE) {
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, lbounds, ubounds);
+            return RrtsNdTypeCollection.of(RnRrtsNdType.INSTANCE, lbounds, ubounds);
           }
 
           @Override

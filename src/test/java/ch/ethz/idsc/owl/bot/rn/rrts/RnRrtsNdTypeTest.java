@@ -19,7 +19,7 @@ public class RnRrtsNdTypeTest extends TestCase {
   private static final TransitionSpace TRANSITION_SPACE = RnTransitionSpace.INSTANCE;
 
   public void testSimple() {
-    RrtsNodeCollection nc = new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10));
+    RrtsNodeCollection nc = RrtsNdTypeCollection.of(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10));
     TransitionRegionQuery trq = EmptyTransitionRegionQuery.INSTANCE;
     Rrts rrts = new DefaultRrts(TRANSITION_SPACE, nc, trq, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 0).get();

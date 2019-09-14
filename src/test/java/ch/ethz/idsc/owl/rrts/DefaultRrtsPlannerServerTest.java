@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsFlow;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
-import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdType;
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdTypeCollections;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsFlow;
@@ -52,7 +52,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, min, max);
+        return RrtsNdTypeCollection.of(RnRrtsNdType.INSTANCE, min, max);
       }
 
       @Override
@@ -80,8 +80,8 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
   }
 
   public void testDubins() {
-    Tensor lbounds = Tensors.vector(0, 0, 0);
-    Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
+    Tensor lbounds = Tensors.vector(0, 0, -Math.PI);
+    Tensor ubounds = Tensors.vector(10, 10, Math.PI);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
@@ -94,7 +94,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNdTypeCollection(Se2RrtsNdType.INSTANCE, lbounds, ubounds);
+        return RrtsNdTypeCollection.of(Se2RrtsNdType.INSTANCE, lbounds, ubounds);
       }
 
       @Override
@@ -122,8 +122,8 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
   }
 
   public void testClothoid() {
-    Tensor lbounds = Tensors.vector(0, 0, 0);
-    Tensor ubounds = Tensors.vector(10, 10, 2 * Math.PI);
+    Tensor lbounds = Tensors.vector(0, 0);
+    Tensor ubounds = Tensors.vector(10, 10);
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
@@ -136,7 +136,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
+        return ClothoidRrtsNdTypeCollections.of(lbounds, ubounds);
       }
 
       @Override

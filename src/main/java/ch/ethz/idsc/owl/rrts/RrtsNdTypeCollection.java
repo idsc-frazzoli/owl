@@ -15,10 +15,15 @@ import ch.ethz.idsc.tensor.Tensor;
 /** collection of rrts nodes backed by a n-dimensional uniform tree
  * data structure is dependent on RrtsNdType */
 public final class RrtsNdTypeCollection implements RrtsNodeCollection {
+  public static RrtsNodeCollection of(RrtsNdType rrtsNdType, Tensor lbounds, Tensor ubounds) {
+    return new RrtsNdTypeCollection(rrtsNdType, lbounds, ubounds);
+  }
+
+  // ---
   private final RrtsNdType rrtsNdType;
   private final NdMap<RrtsNode> ndMap;
 
-  public RrtsNdTypeCollection(RrtsNdType rrtsNdType, Tensor lbounds, Tensor ubounds) {
+  private RrtsNdTypeCollection(RrtsNdType rrtsNdType, Tensor lbounds, Tensor ubounds) {
     this.rrtsNdType = rrtsNdType;
     ndMap = new NdTreeMap<>(rrtsNdType.convert(lbounds), rrtsNdType.convert(ubounds), 5, 20); // magic const
   }

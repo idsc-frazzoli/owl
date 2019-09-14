@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor origin = Tensors.vector(0, 0).unmodifiable();
     Tensor range = Tensors.vector(7, 7).unmodifiable();
     Region<Tensor> imageRegion = R2ImageRegions.outside_0b36(range);
-    RrtsNodeCollection rrtsNodeCollection = new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, origin, range);
+    RrtsNodeCollection rrtsNodeCollection = RrtsNdTypeCollection.of(RnRrtsNdType.INSTANCE, origin, range);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(imageRegion, RealScalar.of(0.1));
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;

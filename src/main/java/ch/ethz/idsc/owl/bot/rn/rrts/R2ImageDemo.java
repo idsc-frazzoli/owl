@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     Tensor range = Tensors.vector(7, 7);
     Region<Tensor> imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
-    RrtsNodeCollection rrtsNodeCollection = new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, origin, range);
+    RrtsNodeCollection rrtsNodeCollection = RrtsNdTypeCollection.of(RnRrtsNdType.INSTANCE, origin, range);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.1));
     // ---

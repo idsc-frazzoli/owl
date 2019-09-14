@@ -10,7 +10,6 @@ import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
@@ -23,7 +22,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ class ClothoidRrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
@@ -53,17 +51,14 @@ import ch.ethz.idsc.tensor.opt.Pi;
             RationalScalar.of(1, 10), //
             STATE_SPACE_MODEL, //
             LengthCostFunction.INSTANCE) {
-          private final Tensor lbounds_ = lbounds.copy().append(RealScalar.ZERO).unmodifiable();
-          private final Tensor ubounds_ = ubounds.copy().append(Pi.TWO).unmodifiable();
-
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds_, ubounds_);
+            return ClothoidRrtsNdTypeCollections.of(lbounds, ubounds);
           }
 
           @Override
           protected RandomSampleInterface spaceSampler(Tensor state) {
-            return BoxRandomSample.of(lbounds_, ubounds_);
+            return BoxRandomSample.of(lbounds, ubounds);
           }
 
           @Override

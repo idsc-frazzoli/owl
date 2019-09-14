@@ -22,7 +22,6 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
-import ch.ethz.idsc.owl.rrts.RrtsNdTypeCollection;
 import ch.ethz.idsc.owl.rrts.RrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -37,7 +36,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ enum Se2RrtsPlannerServerDemo {
   ;
@@ -47,8 +45,8 @@ import ch.ethz.idsc.tensor.opt.Pi;
     Tensor range = Tensors.vector(7, 7).unmodifiable();
     Region<Tensor> imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
-    Tensor lbounds = Array.zeros(2).append(RealScalar.ZERO).unmodifiable();
-    Tensor ubounds = range.copy().append(Pi.TWO).unmodifiable();
+    Tensor lbounds = Array.zeros(2);
+    Tensor ubounds = range;
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
@@ -61,7 +59,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, lbounds, ubounds);
+        return ClothoidRrtsNdTypeCollections.of(lbounds, ubounds);
       }
 
       @Override

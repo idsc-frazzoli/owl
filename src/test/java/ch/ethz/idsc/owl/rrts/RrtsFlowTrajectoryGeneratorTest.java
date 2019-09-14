@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsFlow;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNdType;
 import ch.ethz.idsc.owl.bot.se2.Se2FlowIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
-import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdType;
+import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNdTypeCollections;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsFlow;
@@ -41,7 +41,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testRn() {
     Rrts rrts = new DefaultRrts( //
         RnTransitionSpace.INSTANCE, //
-        new RrtsNdTypeCollection(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
+        RrtsNdTypeCollection.of(RnRrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -79,7 +79,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testDubins() {
     Rrts rrts = new DefaultRrts( //
         DubinsTransitionSpace.shortest(RealScalar.ONE), //
-        new RrtsNdTypeCollection(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
+        RrtsNdTypeCollection.of(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -129,7 +129,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testClothoid() {
     Rrts rrts = new DefaultRrts( //
         ClothoidTransitionSpace.INSTANCE, //
-        new RrtsNdTypeCollection(ClothoidRrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
+        ClothoidRrtsNdTypeCollections.of(Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -181,7 +181,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     Rrts rrts = new DefaultRrts( //
         DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), //
         // no specific collection for directional clothoid
-        new RrtsNdTypeCollection(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 2 * Math.PI)), //
+        RrtsNdTypeCollection.of(Se2RrtsNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());
