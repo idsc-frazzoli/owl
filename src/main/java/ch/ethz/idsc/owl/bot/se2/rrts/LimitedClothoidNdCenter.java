@@ -11,8 +11,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Clip;
 
 /* package */ abstract class LimitedClothoidNdCenter extends ClothoidNdCenter {
-  // TODO GJOEL/JPH why not Double POS INF?
-  private static final Scalar MAX_VALUE = RealScalar.of(Double.MAX_VALUE);
+  private static final Scalar INF = RealScalar.of(Double.POSITIVE_INFINITY);
   // ---
   private final Clip clip;
 
@@ -38,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 
   private static Scalar infinity(Scalar cost) {
     return cost instanceof Quantity //
-        ? Quantity.of(MAX_VALUE, ((Quantity) cost).unit()) //
-        : MAX_VALUE;
+        ? Quantity.of(INF, ((Quantity) cost).unit()) //
+        : INF;
   }
 }
