@@ -86,7 +86,7 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
     { // draw least curved path
       graphics.setColor(COLOR_DATA_INDEXED.getColor(2));
       graphics.setStroke(new BasicStroke(2f));
-      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.CURVATURE).get();
+      DubinsPath dubinsPath = list.stream().min(DubinsPathComparator.TOTAL_CURVATURE).get();
       graphics.draw(geometricLayer.toPath2D(sample(dubinsPath)));
     }
   }

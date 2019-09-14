@@ -80,7 +80,7 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
             posit.set(closest.get(1), 1);
           }
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(geodesicDisplay.project(posit)));
-          graphics.fill(geometricLayer.toPath2D(geodesicDisplay.shape()));
+          graphics.fill(geometricLayer.toPath2D(getControlPointShape()));
           geometricLayer.popMatrix();
         }
         if (!hold && Tensors.nonEmpty(control) && midpointIndicated) {
@@ -227,12 +227,19 @@ public abstract class ControlPointsDemo extends GeodesicDisplayDemo {
   }
 
   protected final void renderControlPoints(GeometricLayer geometricLayer, Graphics2D graphics) {
-    POINTS_RENDER_0.new Show(geodesicDisplay(), geodesicDisplay().shape(), getGeodesicControlPoints()).render(geometricLayer, graphics);
+    POINTS_RENDER_0.new Show(geodesicDisplay(), getControlPointShape(), getGeodesicControlPoints()).render(geometricLayer, graphics);
   }
 
   protected final void renderPoints( //
       GeodesicDisplay geodesicDisplay, Tensor points, //
       GeometricLayer geometricLayer, Graphics2D graphics) {
-    POINTS_RENDER_1.new Show(geodesicDisplay, geodesicDisplay().shape(), points).render(geometricLayer, graphics);
+    POINTS_RENDER_1.new Show(geodesicDisplay, getControlPointShape(), points).render(geometricLayer, graphics);
+  }
+
+  /** function exists so that shape can be altered, for instance magnified
+   * 
+   * @return */
+  protected Tensor getControlPointShape() {
+    return geodesicDisplay().shape();
   }
 }

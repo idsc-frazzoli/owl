@@ -99,14 +99,14 @@ public class DubinsPathTest extends TestCase {
   public void testMemberFuncs() {
     DubinsPath dubinsPath = new DubinsPath(Type.LRL, Quantity.of(2, "m"), Tensors.fromString("{1[m], 10[m], 1[m]}"));
     assertEquals(dubinsPath.type(), Type.LRL);
-    Scalar curvature = dubinsPath.curvature();
+    Scalar curvature = dubinsPath.totalCurvature();
     ExactScalarQ.require(curvature);
     assertEquals(curvature, RealScalar.of(6));
   }
 
   public void testStraight() {
     DubinsPath dubinsPath = new DubinsPath(Type.LSL, Quantity.of(2, "m"), Tensors.fromString("{0[m], 10[m], 0[m]}"));
-    assertEquals(dubinsPath.curvature(), RealScalar.ZERO);
+    assertEquals(dubinsPath.totalCurvature(), RealScalar.ZERO);
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
