@@ -18,8 +18,8 @@ public enum ClothoidNdType implements NdType {
   public NdCenterInterface ndCenterInterfaceBeg(Tensor center) {
     return new ClothoidNdCenter(center) {
       @Override
-      public Clothoid clothoid(Tensor p) {
-        return new Clothoid(center, p);
+      protected Clothoid clothoid(Tensor other) {
+        return new Clothoid(center, other);
       }
     };
   }
@@ -28,8 +28,8 @@ public enum ClothoidNdType implements NdType {
   public NdCenterInterface ndCenterInterfaceEnd(Tensor center) {
     return new ClothoidNdCenter(center) {
       @Override
-      public Clothoid clothoid(Tensor p) {
-        return new Clothoid(p, center);
+      protected Clothoid clothoid(Tensor other) {
+        return new Clothoid(other, center);
       }
     };
   }

@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public class LimitedClothoidNdType implements NdType, Serializable {
+/* package */ class LimitedClothoidNdType implements NdType, Serializable {
   /** @param max non-negative
    * @return */
   public static LimitedClothoidNdType with(Scalar max) {
@@ -35,8 +35,8 @@ public class LimitedClothoidNdType implements NdType, Serializable {
   public NdCenterInterface ndCenterInterfaceBeg(Tensor center) {
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
-      public Clothoid clothoid(Tensor p) {
-        return new Clothoid(center, p);
+      protected Clothoid clothoid(Tensor other) {
+        return new Clothoid(center, other);
       }
     };
   }
@@ -45,8 +45,8 @@ public class LimitedClothoidNdType implements NdType, Serializable {
   public NdCenterInterface ndCenterInterfaceEnd(Tensor center) {
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
-      public Clothoid clothoid(Tensor p) {
-        return new Clothoid(p, center);
+      protected Clothoid clothoid(Tensor other) {
+        return new Clothoid(other, center);
       }
     };
   }

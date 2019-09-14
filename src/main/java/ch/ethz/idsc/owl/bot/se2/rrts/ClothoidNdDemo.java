@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Random;
 
+import javax.swing.JToggleButton;
+
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
@@ -24,16 +26,22 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
 
 public class ClothoidNdDemo extends ControlPointsDemo {
-  private static final Tensor lbounds = Tensors.vector(-5, -5);
-  private static final Tensor ubounds = Tensors.vector(+5, +5);
+  private static final Tensor LBOUNDS = Tensors.vector(-5, -5).unmodifiable();
+  private static final Tensor UBOUNDS = Tensors.vector(+5, +5).unmodifiable();
   // ---
-  private final RrtsNodeCollection rrtsNodeCollection = ClothoidRrtsNodeCollections.of(lbounds, ubounds);
+  private final RrtsNodeCollection rrtsNodeCollection1 = ClothoidRrtsNodeCollections.of(LBOUNDS, UBOUNDS);
+  private final RrtsNodeCollection rrtsNodeCollection2 = ClothoidRrtsNodeCollections.of( //
+      RealScalar.ONE, LBOUNDS, UBOUNDS);
+  private final JToggleButton jToggleButton = new JToggleButton("limit");
   private final SpinnerLabel<Integer> spinnerValue = new SpinnerLabel<>();
 
   public ClothoidNdDemo() {
     super(false, GeodesicDisplays.SE2_ONLY);
     // ---
-    spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5));
+    jToggleButton.setToolTipText("use limited curvature query");
+    timerFrame.jToolBar.add(jToggleButton);
+    // ---
+    spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
     spinnerValue.setValue(3);
     spinnerValue.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // setPositioningEnabled(false);
@@ -41,11 +49,13 @@ public class ClothoidNdDemo extends ControlPointsDemo {
     // ---
     Random random = new Random();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
-        lbounds.copy().append(Pi.VALUE.negate()), //
-        ubounds.copy().append(Pi.VALUE));
-    Tensor tensor = Array.of(l -> randomSampleInterface.randomSample(random), 20);
-    for (Tensor state : tensor)
-      rrtsNodeCollection.insert(RrtsNode.createRoot(state, RealScalar.ZERO));
+        LBOUNDS.copy().append(Pi.VALUE.negate()), //
+        UBOUNDS.copy().append(Pi.VALUE));
+    Tensor tensor = Array.of(l -> randomSampleInterface.randomSample(random), 30);
+    for (Tensor state : tensor) {
+      rrtsNodeCollection1.insert(RrtsNode.createRoot(state, RealScalar.ZERO));
+      rrtsNodeCollection2.insert(RrtsNode.createRoot(state, RealScalar.ZERO));
+    }
     setControlPointsSe2(tensor);
   }
 
@@ -56,6 +66,9 @@ public class ClothoidNdDemo extends ControlPointsDemo {
     renderControlPoints(geometricLayer, graphics);
     Tensor mouse = geometricLayer.getMouseSe2State();
     // ---
+    RrtsNodeCollection rrtsNodeCollection = jToggleButton.isSelected() //
+        ? rrtsNodeCollection2
+        : rrtsNodeCollection1;
     int value = spinnerValue.getValue();
     graphics.setColor(new Color(255, 0, 0, 128));
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(mouse, value)) {

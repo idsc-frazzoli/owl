@@ -9,7 +9,6 @@ import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-// FIXME GJOEL/JPH the formula is not symmetric! ingoing != outgoing
 /* package */ abstract class ClothoidNdCenter implements NdCenterInterface, Serializable {
   private final Tensor center;
 
@@ -18,8 +17,8 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from VectorNormInterface
-  public Scalar ofVector(Tensor p) {
-    return ClothoidParametricDistance.distance(clothoid(p));
+  public Scalar ofVector(Tensor other) {
+    return ClothoidParametricDistance.distance(clothoid(other));
   }
 
   @Override // from NdCenterInterface
@@ -27,5 +26,7 @@ import ch.ethz.idsc.tensor.Tensor;
     return center;
   }
 
-  public abstract Clothoid clothoid(Tensor p);
+  /** @param other
+   * @return clothoid either from center to other, or from other to center */
+  protected abstract Clothoid clothoid(Tensor other);
 }

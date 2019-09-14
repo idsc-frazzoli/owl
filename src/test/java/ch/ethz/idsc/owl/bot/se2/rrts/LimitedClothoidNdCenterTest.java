@@ -15,8 +15,8 @@ public class LimitedClothoidNdCenterTest extends TestCase {
     LimitedClothoidNdCenter limitedClothoidNdCenter = //
         new LimitedClothoidNdCenter(center, Clips.absolute(1)) {
           @Override
-          public Clothoid clothoid(Tensor p) {
-            return new Clothoid(p, center);
+          protected Clothoid clothoid(Tensor other) {
+            return new Clothoid(other, center);
           }
         };
     Scalar scalar = limitedClothoidNdCenter.ofVector(Tensors.vector(0, 1, 0));

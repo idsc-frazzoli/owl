@@ -10,10 +10,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Clip;
 
-// FIXME GJOEL/JPH the formula is not symmetric! ingoing != outgoing
 /* package */ abstract class LimitedClothoidNdCenter extends ClothoidNdCenter {
   // TODO GJOEL/JPH why not Double POS INF?
-  private static final Scalar inf = RealScalar.of(Double.MAX_VALUE);
+  private static final Scalar MAX_VALUE = RealScalar.of(Double.MAX_VALUE);
   // ---
   private final Clip clip;
 
@@ -27,15 +26,19 @@ import ch.ethz.idsc.tensor.sca.Clip;
     Clothoid clothoid = clothoid(p);
     Scalar cost = ClothoidParametricDistance.distance(clothoid);
     Curvature curvature = clothoid.new Curvature();
-    if (clip.isInside(curvature.head()) && //
-        clip.isInside(curvature.tail()))
-      return cost;
+    try {
+      if (clip.isInside(curvature.head()) && //
+          clip.isInside(curvature.tail()))
+        return cost;
+    } catch (Exception exception) {
+      // ---
+    }
     return infinity(cost);
   }
 
   private static Scalar infinity(Scalar cost) {
     return cost instanceof Quantity //
-        ? Quantity.of(inf, ((Quantity) cost).unit()) //
-        : inf;
+        ? Quantity.of(MAX_VALUE, ((Quantity) cost).unit()) //
+        : MAX_VALUE;
   }
 }
