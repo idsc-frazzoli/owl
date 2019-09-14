@@ -25,12 +25,12 @@ public final class NdTypeRrtsNodeCollection implements RrtsNodeCollection {
 
   private NdTypeRrtsNodeCollection(NdType ndType, Tensor lbounds, Tensor ubounds) {
     this.ndType = ndType;
-    ndMap = new NdTreeMap<>(ndType.convert(lbounds), ndType.convert(ubounds), 5, 20); // magic const
+    ndMap = new NdTreeMap<>(lbounds, ubounds, 5, 20); // magic const
   }
 
   @Override // from RrtsNodeCollection
   public void insert(RrtsNode rrtsNode) {
-    ndMap.add(ndType.convert(rrtsNode.state()), rrtsNode);
+    ndMap.add(rrtsNode.state(), rrtsNode);
   }
 
   @Override // from RrtsNodeCollection

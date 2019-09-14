@@ -10,18 +10,14 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** tested with DubinsTransitionSpace */
 /* package */ class TransitionNdType implements NdType, Serializable {
   private final TransitionSpace transitionSpace;
 
-  /** @param transitionSpace non-null */
+  /** Hint: functionality tested with DubinsTransitionSpace and ClothoidTransitionSpace
+   * 
+   * @param transitionSpace non-null */
   public TransitionNdType(TransitionSpace transitionSpace) {
     this.transitionSpace = Objects.requireNonNull(transitionSpace);
-  }
-
-  @Override // from NdType
-  public Tensor convert(Tensor tensor) {
-    return tensor;
   }
 
   @Override // from NdType

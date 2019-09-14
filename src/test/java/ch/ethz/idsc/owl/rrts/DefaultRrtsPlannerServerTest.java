@@ -94,7 +94,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return NdTypeRrtsNodeCollection.of(Euclidean2dType.INSTANCE, lbounds, ubounds);
+        return new RnRrtsNodeCollection(lbounds, ubounds);
       }
 
       @Override

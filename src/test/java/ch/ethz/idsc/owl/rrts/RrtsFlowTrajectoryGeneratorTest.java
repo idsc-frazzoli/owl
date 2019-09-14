@@ -79,7 +79,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testDubins() {
     Rrts rrts = new DefaultRrts( //
         DubinsTransitionSpace.shortest(RealScalar.ONE), //
-        NdTypeRrtsNodeCollection.of(Euclidean2dType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
+        new RnRrtsNodeCollection(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 0)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -182,7 +182,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     Rrts rrts = new DefaultRrts( //
         DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), //
         // no specific collection for directional clothoid
-        NdTypeRrtsNodeCollection.of(Euclidean2dType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
+        new RnRrtsNodeCollection(Tensors.vector(0, 0, 0), Tensors.vector(10, 10, 0)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());

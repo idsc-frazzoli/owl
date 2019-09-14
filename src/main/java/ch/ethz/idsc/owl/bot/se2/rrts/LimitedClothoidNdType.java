@@ -27,11 +27,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
   }
 
   @Override // from NdType
-  public Tensor convert(Tensor tensor) {
-    return tensor;
-  }
-
-  @Override // from NdType
   public NdCenterInterface ndCenterInterfaceBeg(Tensor center) {
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
