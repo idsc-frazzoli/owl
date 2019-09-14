@@ -11,14 +11,14 @@ public class EuclideanNdCenter implements NdCenterInterface, Serializable {
   /** @param center vector
    * @return */
   public static NdCenterInterface of(Tensor center) {
-    return new EuclideanNdCenter(center);
+    return new EuclideanNdCenter(center.copy().unmodifiable());
   }
 
   // ---
   private final Tensor center;
 
   private EuclideanNdCenter(Tensor center) {
-    this.center = center.copy().unmodifiable();
+    this.center = center;
   }
 
   @Override // from VectorNormInterface

@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.alg.Array;
             greedy) {
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return ClothoidRrtsNdTypeCollections.of(lbounds, ubounds);
+            return ClothoidRrtsNodeCollections.of(lbounds, ubounds);
           }
 
           @Override

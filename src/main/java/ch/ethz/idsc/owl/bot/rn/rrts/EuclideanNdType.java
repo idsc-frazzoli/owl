@@ -3,10 +3,10 @@ package ch.ethz.idsc.owl.bot.rn.rrts;
 
 import ch.ethz.idsc.owl.data.nd.EuclideanNdCenter;
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
-import ch.ethz.idsc.owl.rrts.RrtsNdType;
+import ch.ethz.idsc.owl.rrts.NdType;
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum RnRrtsNdType implements RrtsNdType {
+public enum EuclideanNdType implements NdType {
   INSTANCE;
   // ---
   @Override // from RrtsNdType

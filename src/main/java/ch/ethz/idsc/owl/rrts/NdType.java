@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.rrts;
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.tensor.Tensor;
 
-public interface RrtsNdType {
+public interface NdType {
   /** @param tensor
    * @return tensor in right format */
   Tensor convert(Tensor tensor);
