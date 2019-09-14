@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ enum Se2ImageDemo {
@@ -34,8 +35,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Tensor range = Tensors.vector(7, 7).unmodifiable();
     Region<Tensor> imageRegion = //
         ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
-    Tensor lbounds = Array.zeros(2);
-    Tensor ubounds = range;
+    Tensor lbounds = Array.zeros(2).unmodifiable();
+    Tensor ubounds = range.unmodifiable();
     RrtsNodeCollection rrtsNodeCollection = ClothoidRrtsNdTypeCollections.of(lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
@@ -49,7 +50,9 @@ import ch.ethz.idsc.tensor.sca.Clips;
     owlyFrame.configCoordinateOffset(60, 477);
     owlyFrame.jFrame.setBounds(100, 100, 550, 550);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
-    RandomSampleInterface randomSampleInterface = BoxRandomSample.of(lbounds, ubounds);
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
+        lbounds.copy().append(Pi.VALUE.negate()), //
+        ubounds.copy().append(Pi.VALUE));
     int frame = 0;
     while (frame++ < 20 && owlyFrame.jFrame.isVisible()) {
       for (int c = 0; c < 50; ++c)

@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.opt.Pi;
 
 /* package */ class ClothoidRrtsEntity extends AbstractRrtsEntity {
   /** preserve 0.5[s] of the former trajectory */
@@ -58,7 +59,9 @@ import ch.ethz.idsc.tensor.alg.Array;
 
           @Override
           protected RandomSampleInterface spaceSampler(Tensor state) {
-            return BoxRandomSample.of(lbounds, ubounds);
+            return BoxRandomSample.of( //
+                lbounds.copy().append(Pi.HALF.negate()), //
+                ubounds.copy().append(Pi.HALF));
           }
 
           @Override

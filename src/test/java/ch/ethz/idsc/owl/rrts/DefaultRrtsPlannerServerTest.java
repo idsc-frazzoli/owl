@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -127,6 +128,9 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
     Tensor goal = Tensors.vector(10, 10, 0);
     Tensor state = Tensors.vector(0, 0, 0);
     StateTime stateTime = new StateTime(state, RealScalar.ZERO);
+    RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
+        lbounds.copy().append(Pi.VALUE.negate()), //
+        ubounds.copy().append(Pi.VALUE));
     // ---
     RrtsPlannerServer server = new DefaultRrtsPlannerServer( //
         ClothoidTransitionSpace.INSTANCE, //
@@ -141,7 +145,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected RandomSampleInterface spaceSampler(Tensor state) {
-        return BoxRandomSample.of(lbounds, ubounds);
+        return randomSampleInterface;
       }
 
       @Override
