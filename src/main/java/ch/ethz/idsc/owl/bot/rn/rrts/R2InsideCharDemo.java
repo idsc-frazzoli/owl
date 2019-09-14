@@ -11,7 +11,6 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.rrts.NdTypeRrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
@@ -33,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   private static void explore(BufferedImage bufferedImage, Tensor range, Tensor start) throws Exception {
     Region<Tensor> region = ImageRegion.of(bufferedImage, range, false);
-    RrtsNodeCollection rrtsNodeCollection = NdTypeRrtsNodeCollection.of(EuclideanNdType.INSTANCE, Tensors.vector(0, 0), range);
+    RrtsNodeCollection rrtsNodeCollection = new RnRrtsNodeCollection(Tensors.vector(0, 0), range);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery(region, RealScalar.of(0.1));
     // ---
     TransitionSpace transitionSpace = RnTransitionSpace.INSTANCE;

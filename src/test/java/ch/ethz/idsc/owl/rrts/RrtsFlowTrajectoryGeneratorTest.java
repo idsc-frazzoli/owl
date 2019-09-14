@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
-import ch.ethz.idsc.owl.bot.rn.rrts.EuclideanNdType;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsFlow;
+import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.se2.Se2FlowIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
-import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNodeCollections;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsFlow;
+import ch.ethz.idsc.owl.bot.se2.rrts.Se2TransitionRrtsNodeCollections;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -28,6 +28,7 @@ import ch.ethz.idsc.owl.rrts.adapter.LengthCostFunction;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
 import ch.ethz.idsc.owl.rrts.core.Rrts;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
+import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -40,7 +41,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   public void testRn() {
     Rrts rrts = new DefaultRrts( //
         RnTransitionSpace.INSTANCE, //
-        NdTypeRrtsNodeCollection.of(EuclideanNdType.INSTANCE, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
+        new RnRrtsNodeCollection(Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -126,9 +127,10 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
   }
 
   public void testClothoid() {
+    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
     Rrts rrts = new DefaultRrts( //
-        ClothoidTransitionSpace.INSTANCE, //
-        ClothoidRrtsNodeCollections.of(Tensors.vector(0, 0), Tensors.vector(10, 10)), //
+        transitionSpace, //
+        Se2TransitionRrtsNodeCollections.of(transitionSpace, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());

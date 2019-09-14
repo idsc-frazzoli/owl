@@ -12,10 +12,10 @@ public enum DubinsPathComparator implements Comparator<DubinsPath> {
       return Scalars.compare(dubinsPath1.length(), dubinsPath2.length());
     }
   }, //
-  CURVATURE() {
+  TOTAL_CURVATURE() {
     @Override
     public int compare(DubinsPath dubinsPath1, DubinsPath dubinsPath2) {
-      return Scalars.compare(dubinsPath1.curvature(), dubinsPath2.curvature());
+      return Scalars.compare(dubinsPath1.totalCurvature(), dubinsPath2.totalCurvature());
     }
   };
 }

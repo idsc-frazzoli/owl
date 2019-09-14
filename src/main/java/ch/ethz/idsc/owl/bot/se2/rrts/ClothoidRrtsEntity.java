@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
             LengthCostFunction.INSTANCE) {
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return ClothoidRrtsNodeCollections.of(lbounds, ubounds);
+            return Se2TransitionRrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
           }
 
           @Override

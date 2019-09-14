@@ -4,13 +4,13 @@ package ch.ethz.idsc.owl.rrts;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
-import ch.ethz.idsc.owl.bot.rn.rrts.EuclideanNdType;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsFlow;
+import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
-import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidRrtsNodeCollections;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsFlow;
+import ch.ethz.idsc.owl.bot.se2.rrts.Se2TransitionRrtsNodeCollections;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -52,7 +52,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return NdTypeRrtsNodeCollection.of(EuclideanNdType.INSTANCE, min, max);
+        return new RnRrtsNodeCollection(min, max);
       }
 
       @Override
@@ -139,7 +139,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return ClothoidRrtsNodeCollections.of(lbounds, ubounds);
+        return Se2TransitionRrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
       }
 
       @Override

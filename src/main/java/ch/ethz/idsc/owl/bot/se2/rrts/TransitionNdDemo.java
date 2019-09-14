@@ -12,10 +12,9 @@ import java.util.Map;
 import java.util.Random;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
-import ch.ethz.idsc.owl.bot.rn.rrts.EuclideanNdType;
+import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.rrts.NdTypeRrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.Transition;
@@ -83,7 +82,7 @@ public class TransitionNdDemo extends ControlPointsDemo {
     for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CLOTH_SE2_R2) {
       Se2TransitionNdType se2TransitionNdType = se2TransitionNdType(geodesicDisplay);
       RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(Se2TransitionNdType.R2) //
-          ? NdTypeRrtsNodeCollection.of(EuclideanNdType.INSTANCE, LBOUNDS, UBOUNDS)
+          ? new RnRrtsNodeCollection(LBOUNDS, UBOUNDS)
           : Se2TransitionRrtsNodeCollections.of( //
               se2TransitionNdType.transitionSpace, LBOUNDS, UBOUNDS);
       for (Tensor state : tensor)

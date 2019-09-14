@@ -120,7 +120,7 @@ public class DubinsPath implements Serializable {
   }
 
   /** @return total curvature, return value is non-negative */
-  public Scalar curvature() {
+  public Scalar totalCurvature() {
     return (Scalar) segLength.dot(type.signatureAbs()).divide(radius);
   }
 

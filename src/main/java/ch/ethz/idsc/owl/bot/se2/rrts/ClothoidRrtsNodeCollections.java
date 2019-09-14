@@ -10,17 +10,6 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public enum ClothoidRrtsNodeCollections {
   ;
-  /** Hint: the use of ClothoidNdType is the reliable choice
-   * 
-   * @param lbounds vector of length 2
-   * @param ubounds vector of length 2
-   * @return
-   * @see ClothoidNdDemo */
-  // TODO JPH OWL 056 remove
-  public static RrtsNodeCollection of(Tensor lbounds, Tensor ubounds) {
-    return Se2TransitionRrtsNodeCollections.of(ClothoidTransitionSpace.INSTANCE, lbounds, ubounds);
-  }
-
   /** @param max
    * @param lbounds
    * @param ubounds

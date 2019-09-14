@@ -37,13 +37,13 @@ import ch.ethz.idsc.tensor.sca.Clips;
         ImageRegions.loadFromRepository("/io/track0_100.png", range, false);
     Tensor lbounds = Array.zeros(2).unmodifiable();
     Tensor ubounds = range.unmodifiable();
-    RrtsNodeCollection rrtsNodeCollection = ClothoidRrtsNodeCollections.of(lbounds, ubounds);
+    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
+    RrtsNodeCollection rrtsNodeCollection = Se2TransitionRrtsNodeCollections.of(transitionSpace, lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
     TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(Clips.absolute(5));
     TransitionRegionQuery unionTransitionRegionQuery = TransitionRegionQueryUnion.wrap(transitionRegionQuery, transitionCurvatureQuery);
     // ---
-    TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, unionTransitionRegionQuery, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 5).get();
     OwlyFrame owlyFrame = OwlyGui.start();

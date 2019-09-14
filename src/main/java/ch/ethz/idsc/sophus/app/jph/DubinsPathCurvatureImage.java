@@ -29,7 +29,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     Tensor xya = Tensors.of(RE.Get(x), IM.Get(y), ALPHA);
     DubinsPath dubinsPath = FixedRadiusDubins.of(xya, RADIUS).allValid().min(DubinsPathComparator.LENGTH).get();
     int ordinal = dubinsPath.type().ordinal();
-    return dubinsPath.curvature().add(RealScalar.of(ordinal));
+    return dubinsPath.totalCurvature().add(RealScalar.of(ordinal));
   }
 
   public static void main(String[] args) throws IOException {
