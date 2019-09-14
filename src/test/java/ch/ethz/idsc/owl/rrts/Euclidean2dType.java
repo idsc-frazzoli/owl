@@ -1,13 +1,12 @@
 // code by gjoel
-package ch.ethz.idsc.owl.bot.se2.rrts;
+package ch.ethz.idsc.owl.rrts;
 
 import ch.ethz.idsc.owl.data.nd.EuclideanNdCenter;
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
-import ch.ethz.idsc.owl.rrts.NdType;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.Tensor;
 
-public enum Se2NdType implements NdType {
+/* package */ enum Euclidean2dType implements NdType {
   INSTANCE;
   // ---
   @Override // from NdType

@@ -5,8 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Random;
 
+import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -23,29 +26,41 @@ import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.opt.Pi;
 
-// TODO JPH reduce redundancy with clothoid nd demo
-public class DubinsNdDemo extends ControlPointsDemo {
+public class Se2TransitionNdDemo extends ControlPointsDemo {
+  private static enum Se2TransitionNdType {
+    CLOTHOID(ClothoidTransitionSpace.INSTANCE), //
+    DUBINS(DubinsTransitionSpace.of(RealScalar.of(0.4), DubinsPathComparator.LENGTH)), //
+    R2(RnTransitionSpace.INSTANCE), //
+    ;
+    private final TransitionSpace transitionSpace;
+
+    private Se2TransitionNdType(TransitionSpace transitionSpace) {
+      this.transitionSpace = transitionSpace;
+    }
+
+    public TransitionSpace transitionSpace() {
+      return transitionSpace;
+    }
+  }
+
   private static final Tensor LBOUNDS = Tensors.vector(-5, -5).unmodifiable();
   private static final Tensor UBOUNDS = Tensors.vector(+5, +5).unmodifiable();
-  private static final Scalar RADIUS = RealScalar.of(.3);
   // ---
-  private final TransitionSpace transitionSpace = DubinsTransitionSpace.of(RADIUS, DubinsPathComparator.LENGTH);
-  private final RrtsNodeCollection rrtsNodeCollection = DubinsRrtsNodeCollections.of( //
-      transitionSpace, LBOUNDS, UBOUNDS);
+  private final Map<Se2TransitionNdType, RrtsNodeCollection> map = new EnumMap<>(Se2TransitionNdType.class);
+  // private final SpinnerLabel<Se2TransitionNdType> spinnerType = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerValue = new SpinnerLabel<>();
   private final PointsRender pointsRender = //
       new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 255));
 
-  public DubinsNdDemo() {
-    super(false, GeodesicDisplays.SE2_ONLY);
+  public Se2TransitionNdDemo() {
+    super(false, GeodesicDisplays.CLOTH_SE2_R2);
     // ---
-    spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+    spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5, 10, 20));
     spinnerValue.setValue(3);
     spinnerValue.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // setPositioningEnabled(false);
@@ -56,8 +71,13 @@ public class DubinsNdDemo extends ControlPointsDemo {
         LBOUNDS.copy().append(Pi.VALUE.negate()), //
         UBOUNDS.copy().append(Pi.VALUE));
     Tensor tensor = Array.of(l -> randomSampleInterface.randomSample(random), 50);
-    for (Tensor state : tensor)
-      rrtsNodeCollection.insert(RrtsNode.createRoot(state, RealScalar.ZERO));
+    for (Se2TransitionNdType se2TransitionNdType : Se2TransitionNdType.values()) {
+      RrtsNodeCollection rrtsNodeCollection = Se2TransitionRrtsNodeCollections.of( //
+          se2TransitionNdType.transitionSpace(), LBOUNDS, UBOUNDS);
+      for (Tensor state : tensor)
+        rrtsNodeCollection.insert(RrtsNode.createRoot(state, RealScalar.ZERO));
+      map.put(se2TransitionNdType, rrtsNodeCollection);
+    }
     setControlPointsSe2(tensor);
   }
 
@@ -71,24 +91,40 @@ public class DubinsNdDemo extends ControlPointsDemo {
         .render(geometricLayer, graphics);
     Tensor mouse = geometricLayer.getMouseSe2State();
     // ---
+    Se2TransitionNdType se2TransitionNdType = null;
+    switch (geodesicDisplay().toString()) {
+    case "Cl":
+      se2TransitionNdType = Se2TransitionNdType.CLOTHOID;
+      break;
+    case "SE2":
+      se2TransitionNdType = Se2TransitionNdType.DUBINS;
+      break;
+    case "R2":
+      se2TransitionNdType = Se2TransitionNdType.R2;
+      break;
+    default:
+      break;
+    }
+    RrtsNodeCollection rrtsNodeCollection = map.get(se2TransitionNdType);
+    TransitionSpace transitionSpace = se2TransitionNdType.transitionSpace();
     int value = spinnerValue.getValue();
     graphics.setColor(new Color(255, 0, 0, 128));
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(mouse, value)) {
       Tensor other = rrtsNode.state();
       Transition transition = transitionSpace.connect(other, mouse);
-      graphics.draw(geometricLayer.toPath2D(transition.linearized(RealScalar.of(.2))));
+      graphics.draw(geometricLayer.toPath2D(transition.linearized(RealScalar.of(.1))));
     }
     // ---
     graphics.setColor(new Color(0, 255, 0, 128));
     for (RrtsNode rrtsNode : rrtsNodeCollection.nearFrom(mouse, value)) {
       Tensor other = rrtsNode.state();
       Transition transition = transitionSpace.connect(mouse, other);
-      graphics.draw(geometricLayer.toPath2D(transition.linearized(RealScalar.of(.2))));
+      graphics.draw(geometricLayer.toPath2D(transition.linearized(RealScalar.of(.1))));
     }
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new DubinsNdDemo();
+    AbstractDemo abstractDemo = new Se2TransitionNdDemo();
     abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
     abstractDemo.timerFrame.jFrame.setVisible(true);
   }

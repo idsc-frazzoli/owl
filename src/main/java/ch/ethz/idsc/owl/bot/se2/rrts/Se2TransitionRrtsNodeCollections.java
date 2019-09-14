@@ -8,19 +8,15 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
-public enum DubinsRrtsNodeCollections {
+public enum Se2TransitionRrtsNodeCollections {
   ;
   /** @param transitionSpace
    * @param lbounds
    * @param ubounds
    * @return */
   public static RrtsNodeCollection of(TransitionSpace transitionSpace, Tensor lbounds, Tensor ubounds) {
-    return of(new TransitionNdType(transitionSpace), lbounds, ubounds);
-  }
-
-  private static RrtsNodeCollection of( //
-      TransitionNdType transitionNdType, Tensor lbounds, Tensor ubounds) {
-    return NdTypeRrtsNodeCollection.of(transitionNdType, //
+    return NdTypeRrtsNodeCollection.of( //
+        new TransitionNdType(transitionSpace), //
         VectorQ.requireLength(lbounds, 2).copy().append(RealScalar.of(0.0)), //
         VectorQ.requireLength(ubounds, 2).copy().append(RealScalar.of(0.0)));
   }

@@ -13,5 +13,7 @@ public interface NdType {
    * @return */
   NdCenterInterface ndCenterInterfaceBeg(Tensor tensor);
 
+  /** @param tensor
+   * @return */
   NdCenterInterface ndCenterInterfaceEnd(Tensor tensor);
 }

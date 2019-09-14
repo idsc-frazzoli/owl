@@ -10,10 +10,11 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class TransitionNdType implements NdType, Serializable {
+/** tested with DubinsTransitionSpace */
+/* package */ class TransitionNdType implements NdType, Serializable {
   private final TransitionSpace transitionSpace;
 
-  /** @param transitionSpace */
+  /** @param transitionSpace non-null */
   public TransitionNdType(TransitionSpace transitionSpace) {
     this.transitionSpace = Objects.requireNonNull(transitionSpace);
   }
@@ -26,7 +27,7 @@ public class TransitionNdType implements NdType, Serializable {
   @Override // from NdType
   public NdCenterInterface ndCenterInterfaceBeg(Tensor center) {
     return new AbstractNdCenter(center) {
-      @Override
+      @Override // from NdCenterInterface
       public Scalar ofVector(Tensor other) {
         return transitionSpace.connect(center, other).length();
       }
@@ -36,7 +37,7 @@ public class TransitionNdType implements NdType, Serializable {
   @Override // from NdType
   public NdCenterInterface ndCenterInterfaceEnd(Tensor center) {
     return new AbstractNdCenter(center) {
-      @Override
+      @Override // from NdCenterInterface
       public Scalar ofVector(Tensor other) {
         return transitionSpace.connect(other, center).length();
       }
