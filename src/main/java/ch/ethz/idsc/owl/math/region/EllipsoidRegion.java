@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * Notice: evaluate(...) does not correspond to Euclidean distance
  * 
- * @see SphericalRegion */
+ * @see BallRegion */
 public class EllipsoidRegion extends ImplicitFunctionRegion implements Serializable {
   private final Tensor center;
   private final Tensor radius;
@@ -32,7 +32,7 @@ public class EllipsoidRegion extends ImplicitFunctionRegion implements Serializa
    * @param radius of the different axes with same number of entries as center
    * all components of radius must be strictly positive.
    * if a component of radius is DoubleScalar.POSITIVE_INFINITY, this corresponds to a cylinder
-   * @see SphericalRegion */
+   * @see BallRegion */
   public EllipsoidRegion(Tensor center, Tensor radius) {
     // assert that radius are strictly positive
     if (radius.stream().map(Scalar.class::cast).anyMatch(Sign::isNegativeOrZero))

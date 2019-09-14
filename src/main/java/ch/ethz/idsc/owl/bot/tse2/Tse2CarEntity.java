@@ -18,8 +18,8 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -105,7 +105,7 @@ public class Tse2CarEntity extends Tse2Entity {
   /** @param goal
    * @return */
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-    return new SphericalRegion(Extract2D.FUNCTION.apply(goal), goalRadius.Get(0));
+    return new BallRegion(Extract2D.FUNCTION.apply(goal), goalRadius.Get(0));
   }
 
   protected RegionWithDistance<Tensor> goalRegion = null;

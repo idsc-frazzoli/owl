@@ -13,16 +13,16 @@ import ch.ethz.idsc.owl.gui.region.ImageRegionRender;
 import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.region.PolygonRegionRender;
 import ch.ethz.idsc.owl.gui.region.StateTimeCollectorRender;
+import ch.ethz.idsc.owl.gui.ren.BallRegionRender;
 import ch.ethz.idsc.owl.gui.ren.ConeRegionRender;
-import ch.ethz.idsc.owl.gui.ren.SphericalRegionRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.BufferedImageRegion;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTimeCollector;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -68,8 +68,8 @@ public enum RegionRenders {
     }
     if (region instanceof EllipsoidRegion)
       return EllipseRegionRender.of((EllipsoidRegion) region);
-    if (region instanceof SphericalRegion)
-      return EllipseRegionRender.of((SphericalRegion) region);
+    if (region instanceof BallRegion)
+      return EllipseRegionRender.of((BallRegion) region);
     if (region instanceof PolygonRegion)
       return new PolygonRegionRender((PolygonRegion) region);
     if (region instanceof RnPointcloudRegion)
@@ -86,7 +86,7 @@ public enum RegionRenders {
   public static void draw(GeometricLayer geometricLayer, Graphics2D graphics, Region<Tensor> region) {
     if (region instanceof ConeRegion)
       ConeRegionRender.draw(geometricLayer, graphics, (ConeRegion) region);
-    if (region instanceof SphericalRegion)
-      SphericalRegionRender.draw(geometricLayer, graphics, (SphericalRegion) region);
+    if (region instanceof BallRegion)
+      BallRegionRender.draw(geometricLayer, graphics, (BallRegion) region);
   }
 }

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.rrts.adapter;
 import java.io.IOException;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -15,9 +15,9 @@ import junit.framework.TestCase;
 public class TransitionRegionQueryUnionTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     TransitionRegionQuery trq1 = //
-        new SampledTransitionRegionQuery(new SphericalRegion(Tensors.vector(0, 0), RealScalar.ONE), RealScalar.of(.1));
+        new SampledTransitionRegionQuery(new BallRegion(Tensors.vector(0, 0), RealScalar.ONE), RealScalar.of(.1));
     TransitionRegionQuery trq2 = //
-        new SampledTransitionRegionQuery(new SphericalRegion(Tensors.vector(2, 0), RealScalar.ONE), RealScalar.of(.1));
+        new SampledTransitionRegionQuery(new BallRegion(Tensors.vector(2, 0), RealScalar.ONE), RealScalar.of(.1));
     TransitionRegionQuery transitionRegionQuery = Serialization.copy(TransitionRegionQueryUnion.wrap(trq1, trq2));
     {
       Transition transition = RnTransitionSpace.INSTANCE.connect( //

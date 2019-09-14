@@ -21,9 +21,9 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.ply.Arrowhead;
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   /** @param goal
    * @return */
   public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
-    return new SphericalRegion(Extract2D.FUNCTION.apply(goal), goalRadius_xy);
+    return new BallRegion(Extract2D.FUNCTION.apply(goal), goalRadius_xy);
   }
 
   @Override

@@ -7,7 +7,7 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TimeInvariantRegion;
@@ -28,7 +28,7 @@ public class RnNoHeuristicCircleGoalManager extends SimpleTrajectoryRegionQuery 
    * @param center vector with length == n
    * @param radius positive */
   public RnNoHeuristicCircleGoalManager(Tensor center, Scalar radius) {
-    super(new TimeInvariantRegion(new SphericalRegion(center, Sign.requirePositive(radius))));
+    super(new TimeInvariantRegion(new BallRegion(center, Sign.requirePositive(radius))));
   }
 
   @Override

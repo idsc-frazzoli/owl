@@ -1,5 +1,5 @@
 // code by gjoel
-package ch.ethz.idsc.owl.rrts;
+package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -11,9 +11,10 @@ import ch.ethz.idsc.owl.math.lane.LaneInterface;
 import ch.ethz.idsc.owl.math.lane.LaneRandomSample;
 import ch.ethz.idsc.owl.math.lane.Se2ConeRandomSample;
 import ch.ethz.idsc.owl.math.lane.Se2SphereRandomSample;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
+import ch.ethz.idsc.owl.rrts.DefaultRrtsPlannerServer;
 import ch.ethz.idsc.owl.rrts.core.TransitionCostFunction;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
@@ -28,7 +29,6 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.qty.Degree;
 
-// TODO JPH OWL 055 move to se2 specific package
 // TODO don't use magic constants at all. implement via interface, make interface final 
 public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer implements LaneConsumer {
   private static final Distribution DEFAULT_ROT_DIST = NormalDistribution.of(RealScalar.ZERO, Degree.of(5));
@@ -80,7 +80,7 @@ public abstract class LaneRrtsPlannerServer extends DefaultRrtsPlannerServer imp
     } else {
       Scalar radius = Last.of(laneInterface.margins());
       goalSampler = new Se2SphereRandomSample(apex, radius, rotDist);
-      goalRegion = new SphericalRegion(Extract2D.FUNCTION.apply(apex), radius);
+      goalRegion = new BallRegion(Extract2D.FUNCTION.apply(apex), radius);
     }
     if (greedy)
       setGreeds(laneInterface.controlPoints().stream().collect(Collectors.toList()));

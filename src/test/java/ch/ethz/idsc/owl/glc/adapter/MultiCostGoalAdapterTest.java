@@ -24,7 +24,7 @@ public class MultiCostGoalAdapterTest extends TestCase {
     Scalar speed = RealScalar.of(2);
     FlowsInterface carFlows = Se2CarFlows.forward(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     CostFunction costFunction = new Se2ShiftCostFunction(RealScalar.of(3));
@@ -45,7 +45,7 @@ public class MultiCostGoalAdapterTest extends TestCase {
     Scalar speed = RealScalar.of(2);
     FlowsInterface carFlows = Se2CarFlows.forward(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     CostFunction costFunction = new Se2ShiftCostFunction(RealScalar.of(3));
@@ -58,7 +58,7 @@ public class MultiCostGoalAdapterTest extends TestCase {
     Scalar speed = RealScalar.of(2);
     FlowsInterface carFlows = Se2CarFlows.forward(speed, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(9);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager goalInterface2 = //
         new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = goalInterface2.getGoalInterface();

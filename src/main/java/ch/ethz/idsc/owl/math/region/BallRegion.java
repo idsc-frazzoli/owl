@@ -9,9 +9,9 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** the spherical region is a special case of an {@link EllipsoidRegion}.
+/** the ball region is a special case of an {@link EllipsoidRegion}.
  * 
- * <p>{@link SphericalRegion} is implemented separately, because the implementation
+ * <p>{@link BallRegion} is implemented separately, because the implementation
  * 1) requires less operations than if treated as an elliptic case
  * 2) is numerically more stable in corner cases
  * 
@@ -24,14 +24,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <li>zero in a single point: the center, and
  * <li>negative nowhere
  * </ul> */
-// TODO JPH OWL 055 rename to BallRegion
-public class SphericalRegion extends ImplicitRegionWithDistance implements Serializable {
+public class BallRegion extends ImplicitRegionWithDistance implements Serializable {
   private final Tensor center;
   private final Scalar radius;
 
   /** @param center vector with length() == n
    * @param radius non-negative */
-  public SphericalRegion(Tensor center, Scalar radius) {
+  public BallRegion(Tensor center, Scalar radius) {
     this.center = VectorQ.require(center).copy();
     this.radius = Sign.requirePositiveOrZero(radius);
   }

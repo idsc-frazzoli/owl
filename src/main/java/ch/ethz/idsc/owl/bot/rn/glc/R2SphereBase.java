@@ -18,10 +18,10 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 /* package */ class R2SphereBase {
   private final Region<Tensor> region1 = new EllipsoidRegion(Tensors.vector(3, 3), Tensors.vector(2, 2));
   private final Region<Tensor> region2 = new EllipsoidRegion(Tensors.vector(2.5, 0), Tensors.vector(2, 1.5));
-  private final SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 0), DoubleScalar.of(0.5));
+  private final BallRegion ballRegion = new BallRegion(Tensors.vector(5, 0), DoubleScalar.of(0.5));
   private final TrajectoryRegionQuery trajectoryRegionQuery = CatchyTrajectoryRegionQuery.timeInvariant( //
       RegionUnion.wrap(Arrays.asList(region1, region2)));
 
@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 8), 5);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(20);
-    GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
+    GoalInterface goalInterface = new RnMinDistGoalManager(ballRegion);
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(trajectoryRegionQuery);
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
@@ -58,7 +58,7 @@ import ch.ethz.idsc.tensor.alg.Array;
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     owlyFrame.addBackground(RegionRenders.create(region1));
     owlyFrame.addBackground(RegionRenders.create(region2));
-    owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    owlyFrame.addBackground(RegionRenders.create(ballRegion));
     owlyFrame.addBackground(RegionRenders.create(trajectoryRegionQuery));
   }
 }

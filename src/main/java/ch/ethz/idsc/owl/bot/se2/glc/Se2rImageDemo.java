@@ -48,7 +48,7 @@ enum Se2rImageDemo {
     FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, Degree.of(45));
     Collection<Flow> controls = carFlows.getFlows(6);
     Se2ComboRegion se2ComboRegion = //
-        Se2ComboRegion.spherical(Tensors.vector(4.0, 5.6, 0), Tensors.vector(0.1, 0.1, 0.17));
+        Se2ComboRegion.ball(Tensors.vector(4.0, 5.6, 0), Tensors.vector(0.1, 0.1, 0.17));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager( //
         se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();

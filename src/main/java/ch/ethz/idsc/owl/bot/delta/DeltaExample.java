@@ -16,9 +16,9 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -39,8 +39,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
   private static final PlannerConstraint PLANNER_CONSTRAINT = //
       new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(REGION));
   private static final Scalar MAX_INPUT = RealScalar.ONE;
-  static final SphericalRegion SPHERICAL_REGION = //
-      new SphericalRegion(Tensors.vector(2.1, 0.3), RealScalar.of(0.3));
+  static final BallRegion SPHERICAL_REGION = //
+      new BallRegion(Tensors.vector(2.1, 0.3), RealScalar.of(0.3));
   private static final StateTimeRaster STATE_TIME_RASTER = EtaRaster.state(Tensors.vector(8, 8));
   // ---
   private final ImageGradientInterpolation imageGradientInterpolation;

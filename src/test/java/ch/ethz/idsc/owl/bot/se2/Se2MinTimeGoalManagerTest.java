@@ -13,8 +13,8 @@ import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicQ;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.So2Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -31,7 +31,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   public void testIsMember() {
     FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(3);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     assertTrue(goalInterface.isMember(new StateTime(Tensors.vector(1, 2, 3), RealScalar.of(3))));
@@ -42,7 +42,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   public void testGoalAdapter() {
     FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, RealScalar.ONE);
     Collection<Flow> controls = carFlows.getFlows(3);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
     assertTrue(goalInterface.isMember(new StateTime(Tensors.vector(1, 2, 3), RealScalar.ZERO)));
@@ -53,7 +53,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   public void testQuantity() {
     FlowsInterface carFlows = Se2CarFlows.standard(Quantity.of(1, "m*s^-1"), Quantity.of(0.5, "m^-1"));
     Collection<Flow> controls = carFlows.getFlows(3);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical( //
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball( //
         Tensors.fromString("{1[m], 2[m], 3}"), //
         Tensors.fromString("{1[m], 1[m], 0.1}"));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
@@ -74,7 +74,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   public void testSimple() {
     TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1), RealScalar.of(1));
     Collection<Flow> controls = twdConfig.getFlows(8);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(10, 0, Math.PI), Tensors.vector(1, 1, 1));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(10, 0, Math.PI), Tensors.vector(1, 1, 1));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     assertTrue(HeuristicQ.of(se2MinTimeGoalManager));
     Scalar cost = se2MinTimeGoalManager.minCostToGoal(Tensors.vector(0, 0, 0));
@@ -88,7 +88,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
   public void testAllAngles() {
     TwdDuckieFlows twdConfig = new TwdDuckieFlows(RealScalar.of(1), RealScalar.of(1));
     Collection<Flow> controls = twdConfig.getFlows(8);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(0, 0, Math.PI), Tensors.vector(1, 1, 4));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(0, 0, Math.PI), Tensors.vector(1, 1, 4));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     for (int index = -100; index < 100; ++index) {
       assertTrue(se2MinTimeGoalManager.isMember(Tensors.vector(0, 0, index)));
@@ -101,7 +101,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
     Serialization.copy(carFlows);
     Collection<Flow> controls = carFlows.getFlows(3);
     Serialization.copy(controls);
-    Se2ComboRegion se2ComboRegion = Se2ComboRegion.spherical(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
+    Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(1, 2, 3), Tensors.vector(1, 1, 0.1));
     Serialization.copy(se2ComboRegion);
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     Serialization.copy(se2MinTimeGoalManager);
@@ -111,7 +111,7 @@ public class Se2MinTimeGoalManagerTest extends TestCase {
     FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.ONE, Degree.of(10));
     Collection<Flow> controls = carFlows.getFlows(6);
     Se2ComboRegion se2ComboRegion = new Se2ComboRegion( //
-        new SphericalRegion(Tensors.vector(-0.5, 0), RealScalar.of(.3)), //
+        new BallRegion(Tensors.vector(-0.5, 0), RealScalar.of(.3)), //
         So2Region.covering(RealScalar.of(2), RealScalar.ONE));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     //

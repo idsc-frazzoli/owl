@@ -21,7 +21,7 @@ public class Se2SphereRandomSampleTest extends TestCase {
     Scalar radius = RationalScalar.HALF;
     Scalar heading = RealScalar.ONE;
     RandomSampleInterface randomSampleInterface = Serialization.copy(Se2SphereRandomSample.of(apex, radius, heading));
-    Region<Tensor> region = Se2ComboRegion.spherical(apex, Tensors.of(radius, radius, heading));
+    Region<Tensor> region = Se2ComboRegion.ball(apex, Tensors.of(radius, radius, heading));
     Random random = new Random();
     for (int index = 0; index < 20; ++index)
       assertTrue(region.isMember(randomSampleInterface.randomSample(random)));

@@ -26,8 +26,8 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -71,8 +71,8 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(6);
-    SphericalRegion sphericalRegion = new SphericalRegion(stateGoal, radius);
-    GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
+    BallRegion ballRegion = new BallRegion(stateGoal, radius);
+    GoalInterface goalInterface = new RnMinDistGoalManager(ballRegion);
     RenderInterface renderInterface = RegionRenders.create(obstacleQuery);
     // ---
     PlannerConstraint plannerConstraint = new TrajectoryObstacleConstraint(obstacleQuery);
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     try (AnimationWriter animationWriter = //
         new GifAnimationWriter(HomeDirectory.Pictures("R2_Slow.gif"), 400, TimeUnit.MILLISECONDS)) {
       OwlyFrame owlyFrame = OwlyGui.start();
-      owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+      owlyFrame.addBackground(RegionRenders.create(ballRegion));
       owlyFrame.addBackground(renderInterface); // reference to collection
       for (int i = 0; i < 20; ++i) {
         Optional<GlcNode> optional = trajectoryPlanner.getBest();

@@ -26,10 +26,10 @@ import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegions;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.region.So2Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -71,7 +71,7 @@ enum Se2WrapDemo {
     FlowsInterface carFlows = Se2CarFlows.forward(RealScalar.ONE, Degree.of(45));
     Collection<Flow> controls = carFlows.getFlows(6);
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(new Se2ComboRegion( //
-        new SphericalRegion(Tensors.vector(-0.5, 0), RealScalar.of(0.5)), so2Region), //
+        new BallRegion(Tensors.vector(-0.5, 0), RealScalar.of(0.5)), so2Region), //
         controls);
     TrajectoryRegionQuery obstacleQuery = obstacleQuery();
     // ---

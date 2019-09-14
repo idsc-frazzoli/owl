@@ -24,8 +24,8 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.Region;
-import ch.ethz.idsc.owl.math.region.SphericalRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -46,8 +46,8 @@ import ch.ethz.idsc.tensor.io.Timing;
     StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 8), 4);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(23);
-    SphericalRegion sphericalRegion = new SphericalRegion(Tensors.vector(5, 10), DoubleScalar.of(0.2));
-    GoalInterface goalInterface = new RnMinDistGoalManager(sphericalRegion);
+    BallRegion ballRegion = new BallRegion(Tensors.vector(5, 10), DoubleScalar.of(0.2));
+    GoalInterface goalInterface = new RnMinDistGoalManager(ballRegion);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(imageRegion));
     // ---
@@ -67,6 +67,6 @@ import ch.ethz.idsc.tensor.io.Timing;
     owlyFrame.geometricComponent.setZoomable(false);
     owlyFrame.configCoordinateOffset(200, 650);
     owlyFrame.addBackground(RegionRenders.create(imageRegion));
-    owlyFrame.addBackground(RegionRenders.create(sphericalRegion));
+    owlyFrame.addBackground(RegionRenders.create(ballRegion));
   }
 }
