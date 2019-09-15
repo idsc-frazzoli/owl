@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
@@ -28,12 +29,17 @@ import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** this demo maps the GeodesicDisplays
  * 
@@ -60,6 +66,7 @@ public class TransitionNdDemo extends ControlPointsDemo {
   private static final Tensor UBOUNDS = Tensors.vector(+5, +5).unmodifiable();
   // ---
   private final Map<Se2TransitionNdType, RrtsNodeCollection> map = new EnumMap<>(Se2TransitionNdType.class);
+  private final SpinnerLabel<Integer> spinnerTotal = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerValue = new SpinnerLabel<>();
   private final PointsRender pointsRender = //
       new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 255));
@@ -67,18 +74,27 @@ public class TransitionNdDemo extends ControlPointsDemo {
 
   public TransitionNdDemo() {
     super(false, GeodesicDisplays.CLOTH_SE2_R2);
-    // ---
-    spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5, 10, 20));
-    spinnerValue.setValue(3);
-    spinnerValue.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     setPositioningEnabled(false);
     setMidpointIndicated(false);
     // ---
+    spinnerTotal.setList(Arrays.asList(5, 10, 20, 50, 100, 200, 500, 1000));
+    spinnerTotal.setValue(20);
+    spinnerTotal.addSpinnerListener(this::config);
+    spinnerTotal.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "total");
+    // ---
+    spinnerValue.setList(Arrays.asList(1, 2, 3, 4, 5, 10, 20, 50));
+    spinnerValue.setValue(3);
+    spinnerValue.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    // ---
+    config(spinnerTotal.getValue());
+  }
+
+  private void config(int n) {
     Random random = new Random(1);
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
         LBOUNDS.copy().append(Pi.VALUE.negate()), //
         UBOUNDS.copy().append(Pi.VALUE));
-    Tensor tensor = Array.of(l -> randomSampleInterface.randomSample(random), 20);
+    Tensor tensor = Array.of(l -> randomSampleInterface.randomSample(random), n);
     for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CLOTH_SE2_R2) {
       Se2TransitionNdType se2TransitionNdType = se2TransitionNdType(geodesicDisplay);
       RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(Se2TransitionNdType.R2) //
@@ -94,11 +110,12 @@ public class TransitionNdDemo extends ControlPointsDemo {
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    // AxesRender.INSTANCE.render(geometricLayer, graphics);
-    // ---
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1.0));
+    Se2TransitionNdType se2TransitionNdType = se2TransitionNdType(geodesicDisplay());
+    RrtsNodeCollection rrtsNodeCollection = map.get(se2TransitionNdType);
+    Scalar sqrt = Sqrt.FUNCTION.apply(RationalScalar.of(10, rrtsNodeCollection.size()));
+    Tensor shape = geodesicDisplay.shape().multiply(sqrt);
     pointsRender.new Show(geodesicDisplay, shape, getGeodesicControlPoints()) //
         .render(geometricLayer, graphics);
     Tensor mouse = geodesicDisplay.project(geometricLayer.getMouseSe2State());
@@ -113,15 +130,20 @@ public class TransitionNdDemo extends ControlPointsDemo {
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    Se2TransitionNdType se2TransitionNdType = se2TransitionNdType(geodesicDisplay());
-    RrtsNodeCollection rrtsNodeCollection = map.get(se2TransitionNdType);
     TransitionSpace transitionSpace = se2TransitionNdType.transitionSpace;
     int value = spinnerValue.getValue();
     graphics.setStroke(new BasicStroke(1.5f));
-    graphics.setColor(new Color(255, 0, 0, 128));
-    for (RrtsNode rrtsNode : rrtsNodeCollection.nearTo(mouse, value)) {
-      Transition transition = transitionSpace.connect(rrtsNode.state(), mouse);
-      graphics.draw(geometricLayer.toPath2D(transition.linearized(minResolution)));
+    {
+      Timing timing = Timing.started();
+      Collection<RrtsNode> collection = rrtsNodeCollection.nearTo(mouse, value);
+      timing.stop();
+      graphics.setColor(Color.DARK_GRAY);
+      graphics.drawString("" + Round._4.apply(Quantity.of(timing.seconds(), "s")), 0, 20);
+      graphics.setColor(new Color(255, 0, 0, 128));
+      for (RrtsNode rrtsNode : collection) {
+        Transition transition = transitionSpace.connect(rrtsNode.state(), mouse);
+        graphics.draw(geometricLayer.toPath2D(transition.linearized(minResolution)));
+      }
     }
     // ---
     graphics.setColor(new Color(0, 255, 0, 128));

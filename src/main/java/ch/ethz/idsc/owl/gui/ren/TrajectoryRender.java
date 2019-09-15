@@ -9,22 +9,17 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import ch.ethz.idsc.owl.ani.api.TrajectoryListener;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
-import ch.ethz.idsc.sophus.math.Extract2D;
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class TrajectoryRender implements RenderInterface, TrajectoryListener {
-  private static final Color COLOR_FLOW = new Color(64, 64, 64, 128);
-  private static final Scalar U_SCALE = RealScalar.of(0.33);
+  // private static final Color COLOR_FLOW = new Color(64, 64, 64, 128);
+  // private static final Scalar U_SCALE = RealScalar.of(0.33);
   private static final Color COLOR_GROUND = new Color(255, 255, 255, 128);
   private static final Color COLOR_NODES = new Color(255, 0, 0, 96);
   private static final Color COLOR_TRAJECTORY = new Color(0, 192, 0, 192);
@@ -38,17 +33,18 @@ public class TrajectoryRender implements RenderInterface, TrajectoryListener {
     if (Objects.isNull(list))
       return;
     // draw detailed trajectory from root to goal/furthestgo
-    { // draw control vectors u along trajectory
-      graphics.setColor(COLOR_FLOW);
-      for (TrajectorySample trajectorySample : list) {
-        Optional<Flow> flow = trajectorySample.getFlow();
-        if (flow.isPresent()) {
-          Tensor uscaled = StaticHelper.length2(flow.get().getU().multiply(U_SCALE));
-          Tensor p = Extract2D.FUNCTION.apply(trajectorySample.stateTime().state());
-          graphics.draw(geometricLayer.toLine2D(p, p.add(uscaled)));
-        }
-      }
-    }
+    // TODO JPH move flow rendering to separate class and include only for selected entities
+    // { // draw control vectors u along trajectory
+    // graphics.setColor(COLOR_FLOW);
+    // for (TrajectorySample trajectorySample : list) {
+    // Optional<Flow> flow = trajectorySample.getFlow();
+    // if (flow.isPresent()) {
+    // Tensor uscaled = StaticHelper.length2(flow.get().getU().multiply(U_SCALE));
+    // Tensor p = Extract2D.FUNCTION.apply(trajectorySample.stateTime().state());
+    // graphics.draw(geometricLayer.toLine2D(p, p.add(uscaled)));
+    // }
+    // }
+    // }
     { // draw trajectory as thick green line with white background
       Tensor polygon = Tensor.of(list.stream() //
           .map(TrajectorySample::stateTime) //
