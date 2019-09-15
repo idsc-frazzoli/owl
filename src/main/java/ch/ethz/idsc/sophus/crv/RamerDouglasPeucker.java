@@ -12,14 +12,13 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** @see CurveDecimation */
-/* package */ class SpaceCurveDecimation implements CurveDecimation {
+/* package */ class RamerDouglasPeucker implements CurveDecimation {
   private final LineDistance lineDistance;
   private final Scalar epsilon;
 
-  /** @param lieGroup
-   * @param log
+  /** @param lineDistance
    * @param epsilon */
-  public SpaceCurveDecimation(LineDistance lineDistance, Scalar epsilon) {
+  public RamerDouglasPeucker(LineDistance lineDistance, Scalar epsilon) {
     this.lineDistance = lineDistance;
     this.epsilon = epsilon;
   }

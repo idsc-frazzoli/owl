@@ -26,9 +26,8 @@ public interface CurveDecimation extends TensorUnaryOperator {
    * @return
    * @throws Exception if either input parameter is null */
   public static CurveDecimation of(LieGroup lieGroup, TensorUnaryOperator log, Scalar epsilon) {
-    return new LieGroupCurveDecimation( //
-        Objects.requireNonNull(lieGroup), //
-        Objects.requireNonNull(log), //
+    return new RamerDouglasPeucker( //
+        new LieGroupLineDistance(Objects.requireNonNull(lieGroup), Objects.requireNonNull(log)), //
         Sign.requirePositiveOrZero(epsilon));
   }
 
@@ -36,7 +35,7 @@ public interface CurveDecimation extends TensorUnaryOperator {
    * @param epsilon non-negative
    * @return */
   public static CurveDecimation of(LineDistance lineDistance, Scalar epsilon) {
-    return new SpaceCurveDecimation(lineDistance, Sign.requirePositiveOrZero(epsilon));
+    return new RamerDouglasPeucker(lineDistance, Sign.requirePositiveOrZero(epsilon));
   }
 
   /***************************************************/
