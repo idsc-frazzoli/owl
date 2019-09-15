@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -33,7 +34,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     int wid = 7;
     Tensor min = Tensors.vector(0, 0, 0);
     Tensor max = Tensors.vector(wid, wid, 2 * Math.PI);
-    TransitionSpace transitionSpace = DubinsTransitionSpace.shortest(RealScalar.ONE);
+    TransitionSpace transitionSpace = DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH);
     RrtsNodeCollection rrtsNodeCollection = ExhaustiveNodeCollection.of(transitionSpace);
     TransitionRegionQuery transitionRegionQuery = EmptyTransitionRegionQuery.INSTANCE;
     // ---

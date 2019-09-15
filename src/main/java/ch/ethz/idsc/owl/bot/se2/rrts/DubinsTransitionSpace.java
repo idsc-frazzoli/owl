@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.Optional;
+import java.util.Objects;
 
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
@@ -11,19 +11,17 @@ import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public class DubinsTransitionSpace implements TransitionSpace, Serializable {
-  /** @param radius
+  /** @param radius positive
    * @param comparator
-   * @return */
+   * @return
+   * @see DubinsPathComparator */
   public static TransitionSpace of(Scalar radius, Comparator<DubinsPath> comparator) {
-    return new DubinsTransitionSpace(radius, comparator);
-  }
-
-  /** @param radius
-   * @return shortest length dubins path factory */
-  public static TransitionSpace shortest(Scalar radius) {
-    return of(radius, DubinsPathComparator.LENGTH);
+    return new DubinsTransitionSpace( //
+        Sign.requirePositive(radius), //
+        Objects.requireNonNull(comparator));
   }
 
   // ---
@@ -37,14 +35,10 @@ public class DubinsTransitionSpace implements TransitionSpace, Serializable {
 
   @Override // from TransitionSpace
   public DubinsTransition connect(Tensor start, Tensor end) {
-    DubinsPath dubinsPath = dubinsPath(start, end).get();
-    return new DubinsTransition(start, end, dubinsPath);
+    return new DubinsTransition(start, end, dubinsPath(start, end));
   }
 
-  /** @param start
-   * @param end
-   * @return dubins path with minimal length if any */
-  public Optional<DubinsPath> dubinsPath(Tensor start, Tensor end) {
-    return FixedRadiusDubins.of(start, end, radius).allValid().min(comparator);
+  private DubinsPath dubinsPath(Tensor start, Tensor end) {
+    return FixedRadiusDubins.of(start, end, radius).allValid().min(comparator).get();
   }
 }
