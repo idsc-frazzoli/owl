@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.rrts.adapter;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -47,7 +46,7 @@ public class ExhaustiveRrtsNodeCollection implements RrtsNodeCollection {
   }
 
   // ---
-  private final List<RrtsNode> list = new LinkedList<>();
+  private final Collection<RrtsNode> collection = new LinkedList<>();
   private final TransitionSpace transitionSpace;
 
   private ExhaustiveRrtsNodeCollection(TransitionSpace transitionSpace) {
@@ -56,18 +55,18 @@ public class ExhaustiveRrtsNodeCollection implements RrtsNodeCollection {
 
   @Override // from RrtsNodeCollection
   public void insert(RrtsNode rrtsNode) {
-    list.add(rrtsNode);
+    collection.add(rrtsNode);
   }
 
   @Override // from RrtsNodeCollection
   public int size() {
-    return list.size();
+    return collection.size();
   }
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
     Queue<NodeTransition> queue = BoundedMinQueue.of(k_nearest);
-    for (RrtsNode rrtsNode : list)
+    for (RrtsNode rrtsNode : collection)
       queue.offer(new NodeTransition(rrtsNode, transitionSpace.connect(rrtsNode.state(), end)));
     return queue.stream().map(NodeTransition::rrtsNode).collect(Collectors.toList());
   }
@@ -75,7 +74,7 @@ public class ExhaustiveRrtsNodeCollection implements RrtsNodeCollection {
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearFrom(Tensor start, int k_nearest) {
     Queue<NodeTransition> queue = BoundedMinQueue.of(k_nearest);
-    for (RrtsNode rrtsNode : list)
+    for (RrtsNode rrtsNode : collection)
       queue.offer(new NodeTransition(rrtsNode, transitionSpace.connect(start, rrtsNode.state())));
     return queue.stream().map(NodeTransition::rrtsNode).collect(Collectors.toList());
   }
