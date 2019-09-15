@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.Tensor;
 
+// TODO JPH OWL 057 move to package rrts.adapter 
 public class RandomRrtsNodeCollection implements RrtsNodeCollection {
   private final List<RrtsNode> list = new ArrayList<>();
 
@@ -24,12 +25,12 @@ public class RandomRrtsNodeCollection implements RrtsNodeCollection {
   }
 
   @Override // from RrtsNodeCollection
-  public synchronized Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
-    return RandomElements.of(list, k_nearest);
+  public Collection<RrtsNode> nearFrom(Tensor start, int k_nearest) {
+    return nearTo(start, k_nearest);
   }
 
   @Override // from RrtsNodeCollection
-  public Collection<RrtsNode> nearFrom(Tensor start, int k_nearest) {
-    return nearTo(start, k_nearest);
+  public synchronized Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
+    return RandomElements.of(list, k_nearest);
   }
 }

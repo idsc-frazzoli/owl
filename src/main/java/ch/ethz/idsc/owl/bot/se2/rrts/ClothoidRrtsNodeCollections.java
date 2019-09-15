@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import ch.ethz.idsc.owl.rrts.NdTypeRrtsNodeCollection;
+import ch.ethz.idsc.owl.rrts.adapter.NdTypeRrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

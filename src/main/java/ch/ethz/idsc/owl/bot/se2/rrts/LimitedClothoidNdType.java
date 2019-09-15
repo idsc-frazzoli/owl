@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.se2.rrts;
 import java.io.Serializable;
 
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
-import ch.ethz.idsc.owl.rrts.NdType;
+import ch.ethz.idsc.owl.rrts.adapter.NdType;
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoid;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -27,21 +27,21 @@ import ch.ethz.idsc.tensor.sca.Clips;
   }
 
   @Override // from NdType
-  public NdCenterInterface ndCenterInterfaceBeg(Tensor center) {
+  public NdCenterInterface ndCenterTo(Tensor center) {
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
       protected Clothoid clothoid(Tensor other) {
-        return new Clothoid(center, other);
+        return new Clothoid(other, center);
       }
     };
   }
 
   @Override // from NdType
-  public NdCenterInterface ndCenterInterfaceEnd(Tensor center) {
+  public NdCenterInterface ndCenterFrom(Tensor center) {
     return new LimitedClothoidNdCenter(center, clip) {
       @Override
       protected Clothoid clothoid(Tensor other) {
-        return new Clothoid(other, center);
+        return new Clothoid(center, other);
       }
     };
   }

@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2.rrts;
 
-import ch.ethz.idsc.owl.rrts.NdTypeRrtsNodeCollection;
+import ch.ethz.idsc.owl.rrts.adapter.NdTypeRrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -10,7 +10,10 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public enum Se2TransitionRrtsNodeCollections {
   ;
-  /** @param transitionSpace either {@link ClothoidTransitionSpace} or {@link DubinsTransitionSpace}
+  /** Hint:
+   * functionality for {@link ClothoidTransitionSpace} and {@link DubinsTransitionSpace}
+   * 
+   * @param transitionSpace
    * @param lbounds
    * @param ubounds
    * @return */
