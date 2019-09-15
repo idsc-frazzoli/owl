@@ -1,9 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.rrts.adapter;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
@@ -15,37 +16,41 @@ import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class NodeTransition implements Comparable<NodeTransition> {
-  private final RrtsNode rrtsNode;
-  private final Transition transition;
-
-  public NodeTransition(RrtsNode rrtsNode, Transition transition) {
-    this.rrtsNode = rrtsNode;
-    this.transition = transition;
-  }
-
-  @Override
-  public int compareTo(NodeTransition some) {
-    return Scalars.compare(transition.length(), some.transition.length());
-  }
-
-  public RrtsNode rrtsNode() {
-    return rrtsNode;
-  }
-}
-
-/** prohibitive runtime */
-// TODO JPH introduce quick check if transition can outperform certain threshold
-public class ExhaustiveNodeCollection implements RrtsNodeCollection {
+/** Careful: implementation is only for testing purposes
+ * 
+ * implementation performs a complete sweep through the collection
+ * the runtime is prohibitive */
+public class ExhaustiveRrtsNodeCollection implements RrtsNodeCollection {
+  /** @param transitionSpace non-null
+   * @return */
   public static RrtsNodeCollection of(TransitionSpace transitionSpace) {
-    return new ExhaustiveNodeCollection(transitionSpace);
+    return new ExhaustiveRrtsNodeCollection(Objects.requireNonNull(transitionSpace));
+  }
+
+  private static class NodeTransition implements Comparable<NodeTransition> {
+    private final RrtsNode rrtsNode;
+    private final Transition transition;
+
+    public NodeTransition(RrtsNode rrtsNode, Transition transition) {
+      this.rrtsNode = rrtsNode;
+      this.transition = transition;
+    }
+
+    @Override // from Comparable
+    public int compareTo(NodeTransition some) {
+      return Scalars.compare(transition.length(), some.transition.length());
+    }
+
+    public RrtsNode rrtsNode() {
+      return rrtsNode;
+    }
   }
 
   // ---
+  private final List<RrtsNode> list = new LinkedList<>();
   private final TransitionSpace transitionSpace;
-  private final List<RrtsNode> list = new ArrayList<>();
 
-  private ExhaustiveNodeCollection(TransitionSpace transitionSpace) {
+  private ExhaustiveRrtsNodeCollection(TransitionSpace transitionSpace) {
     this.transitionSpace = transitionSpace;
   }
 

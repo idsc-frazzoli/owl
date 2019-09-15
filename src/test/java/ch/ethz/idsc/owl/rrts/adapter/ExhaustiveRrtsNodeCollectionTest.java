@@ -10,10 +10,10 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
-public class ExhaustiveNodeCollectionTest extends TestCase {
+public class ExhaustiveRrtsNodeCollectionTest extends TestCase {
   public void testSimple() {
     RrtsNodeCollection rrtsNodeCollection = //
-        ExhaustiveNodeCollection.of(RnTransitionSpace.INSTANCE);
+        ExhaustiveRrtsNodeCollection.of(RnTransitionSpace.INSTANCE);
     RrtsNode rn3 = RrtsNode.createRoot(Tensors.vector(9, 0), RealScalar.ONE);
     rrtsNodeCollection.insert(rn3);
     RrtsNode rn1 = RrtsNode.createRoot(Tensors.vector(0, 0), RealScalar.ONE);
