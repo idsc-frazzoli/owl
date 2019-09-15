@@ -1,10 +1,10 @@
 // code by jph, gjoel
-package ch.ethz.idsc.owl.rrts;
+package ch.ethz.idsc.owl.rrts.adapter;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.data.nd.NdCluster;
 import ch.ethz.idsc.owl.data.nd.NdEntry;
 import ch.ethz.idsc.owl.data.nd.NdMap;
 import ch.ethz.idsc.owl.data.nd.NdTreeMap;
@@ -15,8 +15,14 @@ import ch.ethz.idsc.tensor.Tensor;
 /** collection of rrts nodes backed by a n-dimensional uniform tree
  * data structure is dependent on NdType */
 public final class NdTypeRrtsNodeCollection implements RrtsNodeCollection {
+  /** @param ndType
+   * @param lbounds vector
+   * @param ubounds vector
+   * @return */
   public static RrtsNodeCollection of(NdType ndType, Tensor lbounds, Tensor ubounds) {
-    return new NdTypeRrtsNodeCollection(ndType, lbounds, ubounds);
+    return new NdTypeRrtsNodeCollection( //
+        Objects.requireNonNull(ndType), //
+        lbounds, ubounds);
   }
 
   // ---
@@ -40,18 +46,14 @@ public final class NdTypeRrtsNodeCollection implements RrtsNodeCollection {
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearTo(Tensor end, int k_nearest) {
-    NdCluster<RrtsNode> cluster = ndMap.buildCluster(ndType.ndCenterInterfaceEnd(end), k_nearest);
-    // System.out.println("considered " + cluster.considered() + " " + ndMap.size());
-    return cluster.stream() //
+    return ndMap.buildCluster(ndType.ndCenterTo(end), k_nearest).stream() //
         .map(NdEntry::value) //
         .collect(Collectors.toList());
   }
 
   @Override // from RrtsNodeCollection
   public Collection<RrtsNode> nearFrom(Tensor start, int k_nearest) {
-    NdCluster<RrtsNode> cluster = ndMap.buildCluster(ndType.ndCenterInterfaceBeg(start), k_nearest);
-    // System.out.println("considered " + cluster.considered() + " " + ndMap.size());
-    return cluster.stream() //
+    return ndMap.buildCluster(ndType.ndCenterFrom(start), k_nearest).stream() //
         .map(NdEntry::value) //
         .collect(Collectors.toList());
   }

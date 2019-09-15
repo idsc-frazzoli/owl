@@ -6,6 +6,7 @@ import java.io.IOException;
 import ch.ethz.idsc.owl.rrts.core.Transition;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.owl.rrts.core.TransitionWrap;
+import ch.ethz.idsc.sophus.crv.dubins.DubinsPathComparator;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -21,7 +22,7 @@ public class DubinsTransitionSpaceTest extends TestCase {
   public void testLengthUnitless() throws ClassNotFoundException, IOException {
     Tensor start = Tensors.fromString("{1, 2}").append(Pi.HALF);
     Tensor end = Tensors.fromString("{2, 6, 0}");
-    Transition transition = Serialization.copy(DubinsTransitionSpace.shortest(RealScalar.ONE).connect(start, end));
+    Transition transition = Serialization.copy(DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH).connect(start, end));
     assertEquals(RealScalar.of(3).add(Pi.HALF), transition.length());
     assertEquals(start, transition.start());
     assertEquals(end, transition.end());
@@ -30,7 +31,7 @@ public class DubinsTransitionSpaceTest extends TestCase {
   public void testLengthUnits() {
     Tensor start = Tensors.fromString("{1[m], 2[m]}").append(Pi.HALF);
     Tensor end = Tensors.fromString("{2[m], 6[m], 0}");
-    Transition transition = DubinsTransitionSpace.shortest(Quantity.of(1, "m")).connect(start, end);
+    Transition transition = DubinsTransitionSpace.of(Quantity.of(1, "m"), DubinsPathComparator.LENGTH).connect(start, end);
     assertEquals(Quantity.of(3 + Math.PI / 2, "m"), transition.length());
     assertEquals(start, transition.start());
     assertEquals(end, transition.end());
@@ -39,7 +40,7 @@ public class DubinsTransitionSpaceTest extends TestCase {
   public void testSamples() {
     Tensor start = Tensors.fromString("{2, 1, 0}");
     Tensor end = Tensors.fromString("{6, 1, 0}");
-    TransitionSpace transitionSpace = DubinsTransitionSpace.shortest(RealScalar.ONE);
+    TransitionSpace transitionSpace = DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH);
     Transition transition = transitionSpace.connect(start, end);
     {
       Scalar res = RationalScalar.HALF;
@@ -59,7 +60,7 @@ public class DubinsTransitionSpaceTest extends TestCase {
   public void testWrap() {
     Tensor start = Tensors.fromString("{2, 1, 0}");
     Tensor end = Tensors.fromString("{6, 1, 0}");
-    TransitionSpace transitionSpace = DubinsTransitionSpace.shortest(RealScalar.ONE);
+    TransitionSpace transitionSpace = DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH);
     Transition transition = transitionSpace.connect(start, end);
     {
       Scalar res = RationalScalar.HALF;
@@ -76,5 +77,30 @@ public class DubinsTransitionSpaceTest extends TestCase {
     // assertEquals(end, Last.of(wrap.samples()));
     // wrap.spacing().stream().forEach(s -> assertEquals(res, s));
     // }
+  }
+
+  public void testRadiusFail() {
+    try {
+      DubinsTransitionSpace.of(RealScalar.of(0.0), DubinsPathComparator.LENGTH);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      DubinsTransitionSpace.of(RealScalar.of(-0.1), DubinsPathComparator.LENGTH);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testComparatorFail() {
+    DubinsTransitionSpace.of(RealScalar.of(1.0), DubinsPathComparator.LENGTH);
+    try {
+      DubinsTransitionSpace.of(RealScalar.of(1.0), null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

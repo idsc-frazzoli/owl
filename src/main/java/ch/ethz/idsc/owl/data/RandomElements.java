@@ -27,7 +27,7 @@ public enum RandomElements {
    * @param list
    * @param n non-negative
    * @param random
-   * @return unmodifiable list
+   * @return unmodifiable list with size at most n
    * @throws Exception if n is negative */
   public static <T> List<T> of(List<T> list, int n, Random random) {
     int length = list.size();

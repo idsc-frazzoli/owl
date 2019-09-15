@@ -16,8 +16,8 @@ public interface RrtsNodeCollection {
    * that are likely to reduce the cost from root. However, the algorithm and API does
    * not require the k returned nodes to be related to the cost function.
    * 
-   * If given parameter end is also a state of a node in the collection, the
-   * node may be contained in the returned set.
+   * If given parameter end is also a state of a node in the collection, the node may
+   * be contained in the returned set.
    * 
    * Typically, the insert function is called after the rewire step so as not to include
    * the given state end.

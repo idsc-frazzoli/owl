@@ -53,7 +53,7 @@ Obstacle anticipation
 
 * André Stoll (MT): *Multi-Objective Optimization Using Preference Structures*
 * Oliver Brinkmann (MT): *Averaging on Lie Groups: Applications of Geodesic Averages and Biinvariant Means*
-* Joel Gächter (MT): RRT* with clothoids
+* Joel Gächter (MT): *Subdivision-Based Clothoids in Autonomous Driving*
 
 ## Features
 
@@ -133,6 +133,30 @@ R^2
 
 ![r2](https://cloud.githubusercontent.com/assets/4012178/26045794/16bd0a54-394c-11e7-9d11-19558bc3be88.png)
 
+### Nearest Neighbors
+
+<table>
+<tr>
+<td>
+
+![nearest_r2](https://user-images.githubusercontent.com/4012178/64911097-dc351300-d71d-11e9-9a92-5ce1fcd8c42f.png)
+
+R^2
+
+<td>
+
+![nearest_dubins](https://user-images.githubusercontent.com/4012178/64911102-e7883e80-d71d-11e9-96d2-11273b892775.png)
+
+Dubins
+
+<td>
+
+![nearest_clothoid](https://user-images.githubusercontent.com/4012178/64911109-f242d380-d71d-11e9-83cf-358a4047175b.png)
+
+Clothoid
+
+</tr>
+</table>
 
 ## Integration
 
@@ -189,7 +213,7 @@ by Sertac Karaman and Emilio Frazzoli,
 
 Library for non-linear geometry computation in Java
 
-![sophus](https://user-images.githubusercontent.com/4012178/64493212-8673ed00-d27d-11e9-88d8-c2bfaa49b23e.png)
+![sophus](https://user-images.githubusercontent.com/4012178/64911180-9f1d5080-d71e-11e9-9490-ae484d0399f3.png)
 
 The library was developed with the following objectives in mind
 * trajectory design for autonomous robots

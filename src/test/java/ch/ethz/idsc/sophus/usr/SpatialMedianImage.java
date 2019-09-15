@@ -29,22 +29,23 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 
-class Pixel2Coord {
-  private final Tensor inv = Inverse.of(StaticHelper.SE2);
-  private final Tensor points;
-
-  public Pixel2Coord(Tensor points) {
-    this.points = points;
-  }
-
-  Scalar dist(Scalar x, Scalar y) {
-    Tensor p = inv.dot(Tensors.of(x, y, RealScalar.ONE)).extract(0, 2);
-    return points.stream().map(r -> Norm._2.between(r, p)).reduce(Scalar::add).get();
-  }
-}
-
 /* package */ enum SpatialMedianImage {
   ;
+  private static class Pixel2Coord {
+    private static final Tensor INVERSE = Inverse.of(StaticHelper.SE2);
+    // ---
+    private final Tensor points;
+
+    public Pixel2Coord(Tensor points) {
+      this.points = points;
+    }
+
+    Scalar dist(Scalar x, Scalar y) {
+      Tensor p = INVERSE.dot(Tensors.of(x, y, RealScalar.ONE)).extract(0, 2);
+      return points.stream().map(r -> Norm._2.between(r, p)).reduce(Scalar::add).get();
+    }
+  }
+
   private static Tensor image(int seed) {
     Random random = new Random(seed);
     Tensor points = RandomVariate.of(UniformDistribution.unit(), random, 15, 2);
