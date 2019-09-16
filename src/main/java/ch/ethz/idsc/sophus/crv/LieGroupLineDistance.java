@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.crv;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupElement;
@@ -19,8 +20,8 @@ import ch.ethz.idsc.tensor.red.Norm;
   private final TensorUnaryOperator log;
 
   public LieGroupLineDistance(LieGroup lieGroup, TensorUnaryOperator log) {
-    this.lieGroup = lieGroup;
-    this.log = log;
+    this.lieGroup = Objects.requireNonNull(lieGroup);
+    this.log = Objects.requireNonNull(log);
   }
 
   @Override // from LineDistance

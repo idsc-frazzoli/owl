@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -54,17 +53,6 @@ public class Se2CurveDecimationTest extends TestCase {
       Scalar max = Norm.INFINITY.ofVector(errors);
       System.out.println(max);
     }
-  }
-
-  public void testReverse() throws ClassNotFoundException, IOException {
-    GokartPoseData gokartPoseData = GokartPoseDataV2.RACING_DAY;
-    CurveDecimation curveDecimation = Serialization.copy(Se2CurveDecimation.of(RealScalar.of(0.3)));
-    String name = RandomChoice.of(gokartPoseData.list());
-    Tensor matrix = gokartPoseData.getPose(name, 2000);
-    Tensor t1 = Reverse.of(curveDecimation.apply(matrix));
-    Tensor t2 = curveDecimation.apply(Reverse.of(matrix));
-    assertTrue(t1.length() < 100);
-    assertTrue(t2.length() < 100);
   }
 
   private static final Tensor WEIGHTS1 = Tensors.fromString("{0.3[m^-1], 0.3[m^-1], 1.6}").unmodifiable();
