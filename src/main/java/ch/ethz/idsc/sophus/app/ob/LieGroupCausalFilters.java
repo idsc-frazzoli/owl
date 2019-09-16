@@ -1,6 +1,7 @@
 // code by ob, jph
-package ch.ethz.idsc.sophus.app.api;
+package ch.ethz.idsc.sophus.app.ob;
 
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.crv.spline.MonomialExtrapolationMask;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
@@ -11,7 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-public enum LieGroupCausalFilters {
+/* package */ enum LieGroupCausalFilters {
   GEODESIC_FIR {
     @Override
     public TensorUnaryOperator supply( //

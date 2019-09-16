@@ -13,7 +13,7 @@ import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 
-/* package */ abstract class DatasetKernelDemo extends UniformDatasetFilterDemo {
+public abstract class DatasetKernelDemo extends UniformDatasetFilterDemo {
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();
   protected final SpinnerLabel<Integer> spinnerRadius = new SpinnerLabel<>();
 

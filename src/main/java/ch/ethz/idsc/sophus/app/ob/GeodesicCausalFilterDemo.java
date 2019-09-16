@@ -1,5 +1,5 @@
 // code by ob
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -11,7 +11,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
+import ch.ethz.idsc.sophus.app.filter.DatasetKernelDemo;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;

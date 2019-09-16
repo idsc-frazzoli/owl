@@ -12,7 +12,6 @@ import org.jfree.graphics2d.svg.SVGUtils;
 
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
-import ch.ethz.idsc.sophus.app.api.LieGroupCausalFilters;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanIIRnFilter;
