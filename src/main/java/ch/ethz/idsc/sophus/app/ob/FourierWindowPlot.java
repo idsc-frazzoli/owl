@@ -15,7 +15,6 @@ import org.jfree.graphics2d.svg.SVGUtils;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GokartPoseData;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.app.api.LieGroupFilters;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanCenter;

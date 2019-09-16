@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import junit.framework.TestCase;

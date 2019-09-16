@@ -11,10 +11,10 @@ import ch.ethz.idsc.sophus.app.curve.BezierFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.BiinvariantMeanSubdivisionDemo;
 import ch.ethz.idsc.sophus.app.curve.GeodesicBSplineFunctionDemo;
 import ch.ethz.idsc.sophus.app.curve.SplitCurveSubdivisionDemo;
-import ch.ethz.idsc.sophus.app.filter.LieGroupFiltersDatasetDemo;
 import ch.ethz.idsc.sophus.app.misc.ClothoidDemo;
 import ch.ethz.idsc.sophus.app.misc.DubinsPathDemo;
 import ch.ethz.idsc.sophus.app.misc.GeodesicDemo;
+import ch.ethz.idsc.sophus.app.ob.LieGroupFiltersDatasetDemo;
 
 public enum GeodesicDemoLauncher {
   ;

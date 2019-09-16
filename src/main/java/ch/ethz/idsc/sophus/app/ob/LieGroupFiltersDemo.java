@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,7 +12,6 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.LieGroupFilters;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
@@ -53,7 +52,7 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
       SmoothingKernel smoothingKernel = spinnerKernel.getValue();
       for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
         int ordinal = lieGroupFilters.ordinal();
-        Tensor mean = GeodesicDisplays.filter(geodesicDisplay, smoothingKernel, lieGroupFilters).apply(control);
+        Tensor mean = lieGroupFilters.filter(geodesicDisplay, smoothingKernel).apply(control);
         Color color = COLOR_DRAW.getColor(ordinal);
         PointsRender pointsRender = new PointsRender(COLOR_FILL.getColor(ordinal), color);
         pointsRender.new Show(geodesicDisplay, geodesicDisplay.shape(), Tensors.of(mean)).render(geometricLayer, graphics);

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
 import junit.framework.TestCase;

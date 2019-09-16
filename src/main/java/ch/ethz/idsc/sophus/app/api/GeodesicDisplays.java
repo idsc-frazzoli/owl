@@ -4,13 +4,6 @@ package ch.ethz.idsc.sophus.app.api;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.lie.BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.LieExponential;
-import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
-
 public enum GeodesicDisplays {
   ;
   public static final List<GeodesicDisplay> ALL = Arrays.asList( //
@@ -57,15 +50,4 @@ public enum GeodesicDisplays {
       ClothoidDisplay.INSTANCE, //
       Se2GeodesicDisplay.INSTANCE, //
       R2GeodesicDisplay.INSTANCE);
-
-  public static TensorUnaryOperator filter( //
-      GeodesicDisplay geodesicDisplay, //
-      SmoothingKernel smoothingKernel, //
-      LieGroupFilters lieGroupFilters) {
-    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
-    LieGroup lieGroup = geodesicDisplay.lieGroup();
-    LieExponential lieExponential = geodesicDisplay.lieExponential();
-    BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
-    return lieGroupFilters.supply(geodesicInterface, smoothingKernel, lieGroup, lieExponential, biinvariantMean);
-  }
 }

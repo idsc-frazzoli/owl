@@ -1,5 +1,5 @@
 // code by jph, ob
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
-import ch.ethz.idsc.sophus.app.api.LieGroupFilters;
+import ch.ethz.idsc.sophus.app.filter.DatasetKernelDemo;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
@@ -52,8 +52,7 @@ public class LieGroupFiltersDatasetDemo extends DatasetKernelDemo implements Buf
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     SmoothingKernel smoothingKernel = spinnerKernel.getValue();
     LieGroupFilters lieGroupFilters = spinnerFilters.getValue();
-    TensorUnaryOperator tensorUnaryOperator = //
-        GeodesicDisplays.filter(geodesicDisplay, smoothingKernel, lieGroupFilters);
+    TensorUnaryOperator tensorUnaryOperator = lieGroupFilters.filter(geodesicDisplay, smoothingKernel);
     return Nest.of( //
         CenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
         control(), spinnerConvolution.getValue());

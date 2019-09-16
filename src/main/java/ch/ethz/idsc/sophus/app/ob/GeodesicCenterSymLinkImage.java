@@ -1,5 +1,5 @@
 // code by jph, ob
-package ch.ethz.idsc.sophus.app.filter;
+package ch.ethz.idsc.sophus.app.ob;
 
 import java.util.stream.IntStream;
 
