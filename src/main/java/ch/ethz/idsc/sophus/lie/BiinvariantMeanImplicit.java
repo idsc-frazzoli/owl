@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.lie;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,8 +18,8 @@ public class BiinvariantMeanImplicit implements Serializable {
   private final Chop chop = Chop._12;
 
   BiinvariantMeanImplicit(LieGroup lieGroup, LieExponential lieExponential) {
-    this.lieGroup = lieGroup;
-    this.lieExponential = lieExponential;
+    this.lieGroup = Objects.requireNonNull(lieGroup);
+    this.lieExponential = Objects.requireNonNull(lieExponential);
   }
 
   /** @param sequence

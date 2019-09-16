@@ -29,13 +29,13 @@ public interface GeodesicDisplay {
    * @return matrix with dimensions 3 x 3 */
   Tensor matrixLift(Tensor p);
 
-  /** @return lie group if the space is a lie group, otherwise null */
+  /** @return lie group if the space is a lie group
+   * @throws Exception if function is not applicable */
   LieGroup lieGroup();
 
-  /** @return lie exponential if the space is a lie group, otherwise null */
+  /** @return lie exponential if the space is a lie group
+   * @throws Exception if mapping is not available */
   LieExponential lieExponential();
-
-  int dimensions();
 
   /** @param p control point
    * @param q control point

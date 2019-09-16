@@ -56,11 +56,6 @@ public enum PolarClothoidDisplay implements GeodesicDisplay {
   }
 
   @Override // from GeodesicDisplay
-  public int dimensions() {
-    return 3;
-  }
-
-  @Override // from GeodesicDisplay
   public final Scalar parametricDistance(Tensor p, Tensor q) {
     return ClothoidParametricDistance.INSTANCE.distance(p, q);
   }

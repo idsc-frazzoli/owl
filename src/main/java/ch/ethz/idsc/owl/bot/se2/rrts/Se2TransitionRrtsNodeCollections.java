@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
+// TODO JPH OWL 057 rename to Se2RrtsNodeCollections
 public enum Se2TransitionRrtsNodeCollections {
   ;
   /** Hint:

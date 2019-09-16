@@ -24,6 +24,13 @@ public enum GeodesicDisplays {
       He1GeodesicDisplay.INSTANCE, //
       St1GeodesicDisplay.INSTANCE);
   // ---
+  public static final List<GeodesicDisplay> LIE_GROUPS = Arrays.asList( //
+      Se2CoveringGeodesicDisplay.INSTANCE, //
+      Se2GeodesicDisplay.INSTANCE, //
+      R2GeodesicDisplay.INSTANCE, //
+      He1GeodesicDisplay.INSTANCE, //
+      St1GeodesicDisplay.INSTANCE);
+  // ---
   public static final List<GeodesicDisplay> R2_ONLY = Arrays.asList( //
       R2GeodesicDisplay.INSTANCE);
   // ---
