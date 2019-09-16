@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolationFilter;

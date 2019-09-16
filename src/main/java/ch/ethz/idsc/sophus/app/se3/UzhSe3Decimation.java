@@ -1,11 +1,11 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.jph;
+package ch.ethz.idsc.sophus.app.se3;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.api.UzhSe3TxtFormat;
+import ch.ethz.idsc.sophus.app.io.UzhSe3TxtFormat;
 import ch.ethz.idsc.sophus.crv.CurveDecimation;
 import ch.ethz.idsc.sophus.crv.CurveDecimation.Result;
 import ch.ethz.idsc.sophus.lie.se3.Se3CurveDecimation;

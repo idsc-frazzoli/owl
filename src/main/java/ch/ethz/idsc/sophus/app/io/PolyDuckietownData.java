@@ -1,5 +1,5 @@
 // code by ob, jph
-package ch.ethz.idsc.sophus.app.misc;
+package ch.ethz.idsc.sophus.app.io;
 
 import java.util.Objects;
 

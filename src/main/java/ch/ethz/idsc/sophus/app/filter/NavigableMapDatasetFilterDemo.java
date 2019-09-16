@@ -15,8 +15,8 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDatas;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.LieDifferences;
 import ch.ethz.idsc.sophus.lie.LieGroup;

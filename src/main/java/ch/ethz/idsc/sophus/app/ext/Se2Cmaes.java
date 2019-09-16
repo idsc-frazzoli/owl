@@ -11,8 +11,8 @@ import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizer;
 import org.apache.commons.math3.random.MersenneTwister;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.io.GokartPoseData;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;

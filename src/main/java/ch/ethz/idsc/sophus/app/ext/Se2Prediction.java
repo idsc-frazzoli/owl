@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.app.ext;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.io.GokartPoseData;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.lie.BiinvariantMeans;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.so2.So2;

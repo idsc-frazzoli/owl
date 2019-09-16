@@ -10,8 +10,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
+import ch.ethz.idsc.sophus.app.io.GokartPoseData;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanIIRnFilter;

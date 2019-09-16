@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-public class PolygonClipDemo extends ControlPointsDemo {
+/* package */ class PolygonClipDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.strict();
   private static final Tensor CIRCLE = CirclePoints.of(7).multiply(RealScalar.of(4));
   private static final TensorUnaryOperator POLYGON_CLIP = PolygonClip.of(CIRCLE);

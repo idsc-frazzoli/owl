@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.subare.util.HtmlUtf8;
 import ch.ethz.idsc.tensor.RealScalar;

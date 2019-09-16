@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.api;
+package ch.ethz.idsc.sophus.app.io;
 
 import java.util.Collections;
 import java.util.List;

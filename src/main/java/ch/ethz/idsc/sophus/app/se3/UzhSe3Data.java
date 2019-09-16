@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.jph;
+package ch.ethz.idsc.sophus.app.se3;
 
 /* package */ enum UzhSe3Data {
   indoor_forward_3_davis, //
