@@ -7,12 +7,12 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.MSpline3CurveSubdivision;
+import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
@@ -45,6 +45,7 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
     Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
+    MidpointInterface midpointInterface = geodesicDisplay.geodesicInterface();
     {
       CurveSubdivision curveSubdivision = new MSpline3CurveSubdivision(geodesicDisplay.biinvariantMean());
       TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(curveSubdivision, cyclic);
@@ -54,9 +55,9 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
         refined = tensorUnaryOperator.apply(refined);
         if (CurveSubdivisionHelper.isDual(scheme) && level % 2 == 1 && !cyclic && 1 < control.length()) {
           refined = Join.of( //
-              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(control.get(0), prev.get(0))), //
+              Tensors.of(midpointInterface.midpoint(control.get(0), prev.get(0))), //
               refined, //
-              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(Last.of(prev), Last.of(control))) //
+              Tensors.of(midpointInterface.midpoint(Last.of(prev), Last.of(control))) //
           );
         }
       }
@@ -69,8 +70,6 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new BiinvariantMeanSubdivisionDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new BiinvariantMeanSubdivisionDemo().setVisible(1200, 800);
   }
 }

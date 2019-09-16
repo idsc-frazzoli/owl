@@ -77,8 +77,6 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new DeBoorDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new DeBoorDemo().setVisible(1000, 800);
   }
 }

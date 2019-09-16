@@ -13,7 +13,6 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -179,8 +178,6 @@ import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new ApproximationDemo(GokartPoseDataV2.RACING_DAY);
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new ApproximationDemo(GokartPoseDataV2.RACING_DAY).setVisible(1000, 800);
   }
 }

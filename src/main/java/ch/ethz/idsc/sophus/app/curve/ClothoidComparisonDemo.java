@@ -32,7 +32,11 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.red.Nest;
 
-/* package */ class ClothoidSubdivisionDemo extends AbstractDemo implements DemoInterface {
+/** demo compares conventional clothoid approximation with extended winding
+ * number clothoid approximation to generate figures in report:
+ * 
+ * https://github.com/idsc-frazzoli/retina/files/3568308/20190903_appox_clothoids_with_ext_windings.pdf */
+/* package */ class ClothoidComparisonDemo extends AbstractDemo implements DemoInterface {
   private static final int WIDTH = 480;
   private static final int HEIGHT = 360;
   private static final Tensor ARROWHEAD = Arrowhead.of(0.3);
@@ -88,8 +92,6 @@ import ch.ethz.idsc.tensor.red.Nest;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new ClothoidSubdivisionDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 390);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new ClothoidComparisonDemo().setVisible(1000, 390);
   }
 }

@@ -13,7 +13,6 @@ import javax.swing.JSlider;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.curve.KnotsBSplineFunctionDemo;
@@ -124,8 +123,6 @@ public class DuckietownSmoothingDemo extends DatasetKernelDemo implements Buffer
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new DuckietownSmoothingDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new DuckietownSmoothingDemo().setVisible(1000, 800);
   }
 }

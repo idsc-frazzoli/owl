@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV1;
@@ -52,7 +51,7 @@ public class LieGroupFiltersDatasetDemo extends DatasetKernelDemo implements Buf
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     SmoothingKernel smoothingKernel = spinnerKernel.getValue();
     LieGroupFilters lieGroupFilters = spinnerFilters.getValue();
-    TensorUnaryOperator tensorUnaryOperator = lieGroupFilters.filter(geodesicDisplay, smoothingKernel);
+    TensorUnaryOperator tensorUnaryOperator = lieGroupFilters.from(geodesicDisplay, smoothingKernel);
     return Nest.of( //
         CenterFilter.of(tensorUnaryOperator, spinnerRadius.getValue()), //
         control(), spinnerConvolution.getValue());
@@ -70,8 +69,6 @@ public class LieGroupFiltersDatasetDemo extends DatasetKernelDemo implements Buf
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new LieGroupFiltersDatasetDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new LieGroupFiltersDatasetDemo().setVisible(1000, 800);
   }
 }

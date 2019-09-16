@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import javax.swing.JToggleButton;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedIntervalGeodesicCenter;
 import ch.ethz.idsc.sophus.flt.ga.NonuniformFixedIntervalGeodesicCenterFilter;
@@ -48,8 +47,6 @@ public class NonuniformGeodesicCenterFilterDemo extends NavigableMapDatasetKerne
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new NonuniformGeodesicCenterFilterDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new NonuniformGeodesicCenterFilterDemo().setVisible(1000, 800);
   }
 }

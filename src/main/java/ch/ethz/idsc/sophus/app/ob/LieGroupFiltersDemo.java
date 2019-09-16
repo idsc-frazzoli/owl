@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -52,7 +51,7 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
       SmoothingKernel smoothingKernel = spinnerKernel.getValue();
       for (LieGroupFilters lieGroupFilters : LieGroupFilters.values()) {
         int ordinal = lieGroupFilters.ordinal();
-        Tensor mean = lieGroupFilters.filter(geodesicDisplay, smoothingKernel).apply(control);
+        Tensor mean = lieGroupFilters.from(geodesicDisplay, smoothingKernel).apply(control);
         Color color = COLOR_DRAW.getColor(ordinal);
         PointsRender pointsRender = new PointsRender(COLOR_FILL.getColor(ordinal), color);
         pointsRender.new Show(geodesicDisplay, geodesicDisplay.shape(), Tensors.of(mean)).render(geometricLayer, graphics);
@@ -63,8 +62,6 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new LieGroupFiltersDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new LieGroupFiltersDemo().setVisible(1000, 600);
   }
 }

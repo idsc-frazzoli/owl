@@ -13,7 +13,6 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -154,8 +153,6 @@ public class PowerCoordinatesDemo extends ControlPointsDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new PowerCoordinatesDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new PowerCoordinatesDemo().setVisible(1200, 600);
   }
 }

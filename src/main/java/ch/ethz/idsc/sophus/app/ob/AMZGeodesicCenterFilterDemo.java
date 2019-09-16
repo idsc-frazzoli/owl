@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.filter.DatasetKernelDemo;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
@@ -94,8 +93,6 @@ import ch.ethz.idsc.tensor.red.Nest;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new AMZGeodesicCenterFilterDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new AMZGeodesicCenterFilterDemo().setVisible(1000, 800);
   }
 }

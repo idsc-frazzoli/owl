@@ -21,7 +21,6 @@ public class ExtrapolationSplitsDemo extends KernelSplitsDemo {
 
   public static void main(String[] args) {
     AbstractDemo abstractDemo = new ExtrapolationSplitsDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    abstractDemo.setVisible(1000, 600);
   }
 }

@@ -14,7 +14,6 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -175,8 +174,6 @@ import ch.ethz.idsc.tensor.sca.Power;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new CurveDecimationDemo(GokartPoseDataV2.RACING_DAY);
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new CurveDecimationDemo(GokartPoseDataV2.RACING_DAY).setVisible(1000, 800);
   }
 }

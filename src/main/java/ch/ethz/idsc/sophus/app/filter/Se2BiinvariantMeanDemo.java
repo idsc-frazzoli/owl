@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
@@ -66,8 +65,6 @@ public class Se2BiinvariantMeanDemo extends DatasetKernelDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new Se2BiinvariantMeanDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new Se2BiinvariantMeanDemo().setVisible(1000, 800);
   }
 }

@@ -8,7 +8,6 @@ import java.util.Arrays;
 import javax.swing.JSlider;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.filter.DatasetKernelDemo;
@@ -90,8 +89,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new GeodesicCausalFilterDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new GeodesicCausalFilterDemo().setVisible(1000, 800);
   }
 }

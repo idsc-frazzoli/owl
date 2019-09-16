@@ -40,12 +40,20 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     }
   }, //
   ;
-  // ---
+  /** @param geodesicInterface
+   * @param smoothingKernel
+   * @param lieGroup
+   * @param lieExponential
+   * @param biinvariantMean
+   * @return */
   public abstract TensorUnaryOperator supply( //
       GeodesicInterface geodesicInterface, ScalarUnaryOperator smoothingKernel, //
       LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean);
 
-  public TensorUnaryOperator filter(GeodesicDisplay geodesicDisplay, SmoothingKernel smoothingKernel) {
+  /** @param geodesicDisplay
+   * @param smoothingKernel
+   * @return */
+  public TensorUnaryOperator from(GeodesicDisplay geodesicDisplay, SmoothingKernel smoothingKernel) {
     GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
     LieGroup lieGroup = geodesicDisplay.lieGroup();
     LieExponential lieExponential = geodesicDisplay.lieExponential();

@@ -12,7 +12,6 @@ import javax.swing.JSlider;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -102,8 +101,6 @@ public class KnotsBSplineFunctionDemo extends BaseCurvatureDemo implements Buffe
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new KnotsBSplineFunctionDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new KnotsBSplineFunctionDemo().setVisible(1200, 600);
   }
 }

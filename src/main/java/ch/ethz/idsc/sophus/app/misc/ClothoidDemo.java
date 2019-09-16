@@ -98,8 +98,6 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new ClothoidDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new ClothoidDemo().setVisible(1000, 600);
   }
 }

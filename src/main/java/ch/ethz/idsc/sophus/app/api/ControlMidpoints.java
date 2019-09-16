@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Last;
 
+/** {1, 2, 3} -> {1, 3/2, 5/2, 3} */
 /* package */ class ControlMidpoints implements CurveSubdivision, Serializable {
   public static CurveSubdivision of(MidpointInterface midpointInterface) {
     return new ControlMidpoints(midpointInterface);
@@ -22,12 +23,12 @@ import ch.ethz.idsc.tensor.alg.Last;
     this.midpointInterface = midpointInterface;
   }
 
-  @Override
+  @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from CurveSubdivision
   public Tensor string(Tensor tensor) {
     if (Tensors.isEmpty(tensor))
       return Tensors.empty();

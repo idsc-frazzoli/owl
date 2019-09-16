@@ -28,6 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.red.Mean;
 
+/** base class for split interface and biinvariant mean based curve subdivision */
 /* package */ abstract class CurveSubdivisionDemo extends CurvatureDemo {
   final SpinnerLabel<CurveSubdivisionSchemes> spinnerLabel = new SpinnerLabel<>();
   final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();

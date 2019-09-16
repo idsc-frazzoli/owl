@@ -22,7 +22,6 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.util.plot.ListPlot;
 import ch.ethz.idsc.sophus.util.plot.VisualRow;
 import ch.ethz.idsc.sophus.util.plot.VisualSet;
@@ -39,27 +38,21 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Quantile;
 
-/** compare different levels of smoothing in the Lane-Riesenfeld algorithm
- * // * {@link LaneRiesenfeldCurveSubdivision} */
-public class LRSubdivisionDemo extends ControlPointsDemo {
+/** compare different levels of smoothing in the LaneRiesenfeldCurveSubdivision */
+/* package */ class LaneRiesenfeldComparisonDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLORS = ColorDataLists._097.cyclic();
+  private static final List<CurveSubdivisionSchemes> CURVE_SUBDIVISION_SCHEMES = //
+      CurveSubdivisionHelper.LANE_RIESENFELD;
   // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleCurvature = new JToggleButton("crvt");
-  private final List<CurveSubdivisionSchemes> schemes = Arrays.asList( //
-      CurveSubdivisionSchemes.LR1, //
-      CurveSubdivisionSchemes.LR2, //
-      CurveSubdivisionSchemes.LR3, //
-      CurveSubdivisionSchemes.LR4, //
-      CurveSubdivisionSchemes.LR5 //
-  );
-  private final List<PathRender> renders = new ArrayList<>();
+  private final List<PathRender> pathRenders = new ArrayList<>();
 
-  public LRSubdivisionDemo() {
+  public LaneRiesenfeldComparisonDemo() {
     this(GeodesicDisplays.ALL);
   }
 
-  public LRSubdivisionDemo(List<GeodesicDisplay> list) {
+  public LaneRiesenfeldComparisonDemo(List<GeodesicDisplay> list) {
     super(true, list);
     // ---
     jToggleCurvature.setSelected(true);
@@ -74,8 +67,8 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
     spinnerRefine.setValue(5);
     spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
     // ---
-    for (int i = 0; i < schemes.size(); i++)
-      renders.add(new PathRender(COLORS.getColor(i)));
+    for (int i = 0; i < CURVE_SUBDIVISION_SCHEMES.size(); ++i)
+      pathRenders.add(new PathRender(COLORS.getColor(i)));
     // ---
     timerFrame.configCoordinateOffset(100, 600);
   }
@@ -93,7 +86,7 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
     visualSet2.setPlotLabel("Curvature d/ds");
     visualSet2.setAxesLabelX("length");
     visualSet2.setAxesLabelY("curvature d/ds");
-    for (int i = 0; i < schemes.size(); i++) {
+    for (int i = 0; i < CURVE_SUBDIVISION_SCHEMES.size(); ++i) {
       Tensor refined = curve(geometricLayer, graphics, i);
       if (jToggleCurvature.isSelected() && 1 < refined.length()) {
         Tensor tensor = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
@@ -108,11 +101,11 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
         }));
         // ---
         VisualRow visualRow1 = visualSet1.add(curvature);
-        visualRow1.setLabel(schemes.get(i).name());
+        visualRow1.setLabel(CURVE_SUBDIVISION_SCHEMES.get(i).name());
         visualRow1.setColor(COLORS.getColor(i));
         // ---
         VisualRow visualRow2 = visualSet2.add(curvatureRx, curvatureRy);
-        visualRow2.setLabel(schemes.get(i).name());
+        visualRow2.setLabel(CURVE_SUBDIVISION_SCHEMES.get(i).name());
         visualRow2.setColor(COLORS.getColor(i));
       }
     }
@@ -125,9 +118,10 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
       JFreeChart jFreeChart2 = ListPlot.of(visualSet2);
       if (!visualSet2.visualRows().isEmpty()) {
         double min = Quantile.of(Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
-            .map(MinMax::of).map(MinMax::min)), RationalScalar.of(1, schemes.size() - 1)).Get().number().doubleValue();
+            .map(MinMax::of).map(MinMax::min)), RationalScalar.of(1, CURVE_SUBDIVISION_SCHEMES.size() - 1)).Get().number().doubleValue();
         double max = Quantile.of(Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
-            .map(MinMax::of).map(MinMax::max)), RationalScalar.of(schemes.size() - 1, schemes.size() - 1)).Get().number().doubleValue();
+            .map(MinMax::of).map(MinMax::max)), RationalScalar.of(CURVE_SUBDIVISION_SCHEMES.size() - 1, CurveSubdivisionHelper.LANE_RIESENFELD.size() - 1))
+            .Get().number().doubleValue();
         if (min != max)
           jFreeChart2.getXYPlot().getRangeAxis().setRange(1.1 * min, 1.1 * max);
       }
@@ -136,9 +130,9 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
     GraphicsUtil.setQualityDefault(graphics);
   }
 
-  public Tensor curve(GeometricLayer geometricLayer, Graphics2D graphics, final int index) {
-    CurveSubdivisionSchemes scheme = schemes.get(index);
-    PathRender pathRender = renders.get(index);
+  public Tensor curve(GeometricLayer geometricLayer, Graphics2D graphics, int index) {
+    CurveSubdivisionSchemes scheme = CURVE_SUBDIVISION_SCHEMES.get(index);
+    PathRender pathRender = pathRenders.get(index);
     // ---
     Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();
@@ -171,8 +165,7 @@ public class LRSubdivisionDemo extends ControlPointsDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new LRSubdivisionDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    AbstractDemo abstractDemo = new LaneRiesenfeldComparisonDemo();
+    abstractDemo.setVisible(1200, 800);
   }
 }

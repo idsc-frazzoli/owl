@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -46,8 +45,6 @@ public class InverseDistanceDemo extends ControlPointsDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new InverseDistanceDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new InverseDistanceDemo().setVisible(1200, 600);
   }
 }

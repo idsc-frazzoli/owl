@@ -75,10 +75,8 @@ public class LaneConsumptionDemo extends BaseCurvatureDemo {
   }
 
   public static void main(String[] args) {
-    LaneConsumptionDemo demo = new LaneConsumptionDemo( //
+    new LaneConsumptionDemo( //
         lane -> System.out.println("control points: " + lane.controlPoints().length()), //
-        lane -> System.out.println("refined points: " + lane.midLane().length()));
-    demo.timerFrame.jFrame.setBounds(100, 100, 1200, 900);
-    demo.timerFrame.jFrame.setVisible(true);
+        lane -> System.out.println("refined points: " + lane.midLane().length())).setVisible(1200, 900);
   }
 }

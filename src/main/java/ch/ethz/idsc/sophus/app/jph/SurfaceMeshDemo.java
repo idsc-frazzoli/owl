@@ -12,7 +12,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
@@ -79,8 +78,6 @@ public class SurfaceMeshDemo extends ControlPointsDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new SurfaceMeshDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new SurfaceMeshDemo().setVisible(1200, 600);
   }
 }
