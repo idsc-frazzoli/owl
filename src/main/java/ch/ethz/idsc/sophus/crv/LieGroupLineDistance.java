@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ class LieGroupLineDistance implements LineDistance, Serializable {
+public class LieGroupLineDistance implements LineDistance, Serializable {
   private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
   // ---
   private final LieGroup lieGroup;
@@ -25,15 +25,32 @@ import ch.ethz.idsc.tensor.red.Norm;
   }
 
   @Override // from LineDistance
-  public TensorNorm tensorNorm(Tensor beg, Tensor end) {
+  public NormImpl tensorNorm(Tensor beg, Tensor end) {
     LieGroupElement lieGroupElement = lieGroup.element(beg).inverse();
-    Tensor normal = NORMALIZE_UNLESS_ZERO.apply(log.apply(lieGroupElement.combine(end)));
-    return new TensorNorm() {
-      @Override
-      public Scalar norm(Tensor index) {
-        Tensor vector = log.apply(lieGroupElement.combine(index));
-        return Norm._2.ofVector(vector.subtract(vector.dot(normal).pmul(normal)));
-      }
-    };
+    return new NormImpl( //
+        lieGroupElement, //
+        NORMALIZE_UNLESS_ZERO.apply(log.apply(lieGroupElement.combine(end))));
+  }
+
+  public class NormImpl implements TensorNorm {
+    private final LieGroupElement lieGroupElement;
+    private final Tensor normal;
+
+    public NormImpl(LieGroupElement lieGroupElement, Tensor normal) {
+      this.lieGroupElement = lieGroupElement;
+      this.normal = normal;
+    }
+
+    /** @param tensor of the lie group
+     * @return element of the lie algebra */
+    public Tensor project(Tensor tensor) {
+      Tensor vector = log.apply(lieGroupElement.combine(tensor));
+      return vector.subtract(vector.dot(normal).pmul(normal));
+    }
+
+    @Override // from TensorNorm
+    public Scalar norm(Tensor tensor) {
+      return Norm._2.ofVector(project(tensor));
+    }
   }
 }

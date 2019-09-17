@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
-public class InverseDistanceDemo extends ControlPointsDemo {
+/* package */ class InverseDistanceDemo extends ControlPointsDemo {
   public InverseDistanceDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_R2);
   }
