@@ -45,12 +45,19 @@ public class LieGroupLineDistance implements LineDistance, Serializable {
      * @return element of the lie algebra */
     public Tensor project(Tensor tensor) {
       Tensor vector = log.apply(lieGroupElement.combine(tensor));
+      return vector.dot(normal).pmul(normal);
+    }
+
+    /** @param tensor of the lie group
+     * @return element of the lie algebra */
+    public Tensor orthogonal(Tensor tensor) {
+      Tensor vector = log.apply(lieGroupElement.combine(tensor));
       return vector.subtract(vector.dot(normal).pmul(normal));
     }
 
     @Override // from TensorNorm
     public Scalar norm(Tensor tensor) {
-      return Norm._2.ofVector(project(tensor));
+      return Norm._2.ofVector(orthogonal(tensor));
     }
   }
 }

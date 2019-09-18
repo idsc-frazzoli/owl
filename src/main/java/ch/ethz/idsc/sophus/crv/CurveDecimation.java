@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv;
 
+import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -15,6 +16,14 @@ public interface CurveDecimation extends TensorUnaryOperator {
    * @throws Exception if either input parameter is null */
   public static CurveDecimation of(LieGroup lieGroup, TensorUnaryOperator log, Scalar epsilon) {
     return new RamerDouglasPeucker(new LieGroupLineDistance(lieGroup, log), epsilon);
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @param epsilon
+   * @return */
+  public static CurveDecimation midpoint(LieGroup lieGroup, LieExponential lieExponential, Scalar epsilon) {
+    return new RamerDouglasPeucker(new LieMidpointLineDistance(lieGroup, lieExponential), epsilon);
   }
 
   /** @param lieGroup

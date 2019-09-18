@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -34,6 +35,46 @@ public class ClothoidTest extends TestCase {
       Scalar length = Serialization.copy(curve).length();
       Scalar between = Norm._2.between(p.extract(0, 2), q.extract(0, 2));
       assertTrue(Scalars.lessEquals(between, length));
+    }
+  }
+
+  public void testLengthZero() {
+    Distribution distribution = NormalDistribution.standard();
+    for (int count = 0; count < 100; ++count) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Curve curve = new Clothoid(p, p).new Curve();
+      Scalar length = curve.length();
+      Chop.NONE.requireAllZero(length);
+    }
+  }
+
+  public void testLengthZeroExact() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, +3);
+    for (int count = 0; count < 100; ++count) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Curve curve = new Clothoid(p, p).new Curve();
+      Scalar length = curve.length();
+      Chop.NONE.requireAllZero(length);
+    }
+  }
+
+  public void testCurvatureZero() {
+    Distribution distribution = NormalDistribution.standard();
+    for (int count = 0; count < 100; ++count) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Curvature curvature = new Clothoid(p, p).new Curvature();
+      Scalar scalar = curvature.head();
+      assertFalse(NumberQ.of(scalar));
+    }
+  }
+
+  public void testCurvatureZeroExact() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, +3);
+    for (int count = 0; count < 100; ++count) {
+      Tensor p = RandomVariate.of(distribution, 3);
+      Curvature curvature = new Clothoid(p, p).new Curvature();
+      Scalar scalar = curvature.head();
+      assertFalse(NumberQ.of(scalar));
     }
   }
 
