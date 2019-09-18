@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     {
       spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
-      spinnerLabelLimit.setIndex(1);
+      spinnerLabelLimit.setIndex(0);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
-      spinnerLabelLevel.setValue(4);
+      spinnerLabelLevel.setValue(2);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "eps power");
       spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }

@@ -5,6 +5,7 @@ import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.Scalar;
 
+/** various norms for curve decimation */
 public enum LieGroupCurveDecimation {
   STANDARD() {
     @Override

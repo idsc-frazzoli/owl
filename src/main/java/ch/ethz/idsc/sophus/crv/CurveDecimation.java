@@ -45,10 +45,10 @@ public interface CurveDecimation extends TensorUnaryOperator {
 
   /***************************************************/
   public static interface Result {
-    /** @return */
+    /** @return points in the decimated sequence */
     Tensor result();
 
-    /** @return */
+    /** @return vector with length of the original sequence */
     Tensor errors();
   }
 

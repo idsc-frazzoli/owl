@@ -11,6 +11,8 @@ public class LieMidpointInterface implements MidpointInterface {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
 
+  /** @param lieGroup non-null
+   * @param lieExponential non-null */
   public LieMidpointInterface(LieGroup lieGroup, LieExponential lieExponential) {
     this.lieGroup = Objects.requireNonNull(lieGroup);
     this.lieExponential = Objects.requireNonNull(lieExponential);
