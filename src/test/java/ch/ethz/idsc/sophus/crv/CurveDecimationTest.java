@@ -27,4 +27,19 @@ public class CurveDecimationTest extends TestCase {
     assertTrue(t2.length() < 100);
     assertEquals(t1, t2);
   }
+
+  public void testReverse2() throws ClassNotFoundException, IOException {
+    GokartPoseData gokartPoseData = GokartPoseDataV2.RACING_DAY;
+    CurveDecimation curveDecimation = Serialization.copy( //
+        CurveDecimation.projected(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, RealScalar.of(0.3)));
+    String name = RandomChoice.of(gokartPoseData.list());
+    Tensor matrix = gokartPoseData.getPose(name, 2000);
+    Tensor t1 = Reverse.of(curveDecimation.apply(matrix));
+    Tensor t2 = curveDecimation.apply(Reverse.of(matrix));
+    System.out.println(t1.length());
+    System.out.println(t2.length());
+    // assertTrue(t1.length() < 100);
+    // assertTrue(t2.length() < 100);
+    // assertEquals(t1, t2);
+  }
 }

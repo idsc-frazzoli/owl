@@ -25,6 +25,12 @@ public enum LieGroupCurveDecimation {
       return CurveDecimation.symmetric(lieGroup, lieExponential::log, epsilon);
     }
   }, //
+  PROJECT() {
+    @Override
+    public CurveDecimation of(LieGroup lieGroup, LieExponential lieExponential, Scalar epsilon) {
+      return CurveDecimation.projected(lieGroup, lieExponential, epsilon);
+    }
+  }, //
   ;
   public abstract CurveDecimation of(LieGroup lieGroup, LieExponential lieExponential, Scalar epsilon);
 }

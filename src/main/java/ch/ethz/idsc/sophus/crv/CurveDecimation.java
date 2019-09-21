@@ -36,6 +36,16 @@ public interface CurveDecimation extends TensorUnaryOperator {
         epsilon);
   }
 
+  /** @param lieGroup
+   * @param lieExponential
+   * @param epsilon
+   * @return */
+  public static CurveDecimation projected(LieGroup lieGroup, LieExponential lieExponential, Scalar epsilon) {
+    return new RamerDouglasPeucker( //
+        new LieProjectedLineDistance(lieGroup, lieExponential), //
+        epsilon);
+  }
+
   /** @param lineDistance
    * @param epsilon non-negative
    * @return */
