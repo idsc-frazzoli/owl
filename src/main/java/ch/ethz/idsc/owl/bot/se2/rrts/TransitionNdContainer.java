@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.io.Timing;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -38,22 +39,24 @@ public class TransitionNdContainer {
   private final Map<Se2TransitionNdType, RrtsNodeCollection> map = new EnumMap<>(Se2TransitionNdType.class);
   private final PointsRender pointsRender = //
       new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 255));
-  private final Scalar minResolution = RealScalar.of(0.1);
+  // private final Scalar minResolution = RealScalar.of(0.1);
   private final Tensor tensor;
   private final int value;
 
   public TransitionNdContainer(Tensor lbounds, Tensor ubounds, int n, int value) {
+    VectorQ.requireLength(lbounds, 2);
+    VectorQ.requireLength(ubounds, 2);
     Random random = new Random(1);
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
         lbounds.copy().append(Pi.VALUE.negate()), //
         ubounds.copy().append(Pi.VALUE));
     tensor = Array.of(l -> randomSampleInterface.randomSample(random), n);
     for (GeodesicDisplay geodesicDisplay : GeodesicDisplays.CLOTH_SE2_R2) {
-      Se2TransitionNdType se2TransitionNdType = se2TransitionNdType(geodesicDisplay);
+      Se2TransitionNdType se2TransitionNdType = Se2TransitionNdType.fromString(geodesicDisplay.toString());
       RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(Se2TransitionNdType.R2) //
           ? new RnRrtsNodeCollection(lbounds, ubounds)
           : Se2TransitionRrtsNodeCollections.of( //
-              se2TransitionNdType.transitionSpace, lbounds, ubounds);
+              se2TransitionNdType.transitionSpace(), lbounds, ubounds);
       for (Tensor state : tensor)
         rrtsNodeCollection.insert(RrtsNode.createRoot(geodesicDisplay.project(state), RealScalar.ZERO));
       map.put(se2TransitionNdType, rrtsNodeCollection);
@@ -67,7 +70,7 @@ public class TransitionNdContainer {
       Graphics2D graphics, //
       Tensor mouse) {
     GraphicsUtil.setQualityHigh(graphics);
-    Se2TransitionNdType se2TransitionNdType = se2TransitionNdType(geodesicDisplay);
+    Se2TransitionNdType se2TransitionNdType = Se2TransitionNdType.fromString(geodesicDisplay.toString());
     RrtsNodeCollection rrtsNodeCollection = map.get(se2TransitionNdType);
     Scalar sqrt = Sqrt.FUNCTION.apply(RationalScalar.of(10, rrtsNodeCollection.size()));
     Tensor shape = geodesicDisplay.shape().multiply(sqrt);
@@ -85,8 +88,9 @@ public class TransitionNdContainer {
       graphics.draw(path2d);
       geometricLayer.popMatrix();
     }
-    TransitionSpace transitionSpace = se2TransitionNdType.transitionSpace;
+    TransitionSpace transitionSpace = se2TransitionNdType.transitionSpace();
     graphics.setStroke(new BasicStroke(1.5f));
+    Scalar minResolution = RealScalar.of(geometricLayer.pixel2modelWidth(5));
     {
       Timing timing = Timing.started();
       Collection<RrtsNode> collection = rrtsNodeCollection.nearTo(mouse, value);
@@ -105,17 +109,5 @@ public class TransitionNdContainer {
       Transition transition = transitionSpace.connect(mouse, rrtsNode.state());
       graphics.draw(geometricLayer.toPath2D(transition.linearized(minResolution)));
     }
-  }
-
-  private static Se2TransitionNdType se2TransitionNdType(GeodesicDisplay geodesicDisplay) {
-    switch (geodesicDisplay.toString()) {
-    case "Cl":
-      return Se2TransitionNdType.CLOTHOID;
-    case "SE2":
-      return Se2TransitionNdType.DUBINS;
-    case "R2":
-      return Se2TransitionNdType.R2;
-    }
-    throw new IllegalArgumentException();
   }
 }

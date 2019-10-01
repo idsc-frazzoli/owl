@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,8 +22,8 @@ import ch.ethz.idsc.tensor.Tensors;
  * this design is not extendable!
  * do not reproduce this design! */
 public class TransitionNdDemo extends ControlPointsDemo {
-  private static final Tensor LBOUNDS = Tensors.vector(-8, -5).unmodifiable();
-  private static final Tensor UBOUNDS = Tensors.vector(+8, +5).unmodifiable();
+  private static final Tensor LBOUNDS = Tensors.vector(-5, -5).unmodifiable();
+  private static final Tensor UBOUNDS = Tensors.vector(+5, +5).unmodifiable();
   // ---
   private final SpinnerLabel<Integer> spinnerTotal = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerValue = new SpinnerLabel<>();
@@ -57,11 +58,12 @@ public class TransitionNdDemo extends ControlPointsDemo {
 
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    GeodesicDisplay geodesicDisplay = geodesicDisplay();
     transitionNdContainer.render( //
-        geodesicDisplay(), //
+        geodesicDisplay, //
         geometricLayer, //
         graphics, //
-        geometricLayer.getMouseSe2State());
+        geodesicDisplay.project(geometricLayer.getMouseSe2State()));
   }
 
   public static void main(String[] args) {
