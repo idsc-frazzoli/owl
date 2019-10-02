@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
-public class Se2TransitionRrtsNodeCollectionsTest extends TestCase {
+public class Se2RrtsNodeCollectionsTest extends TestCase {
   private static void _check(TransitionSpace transitionSpace) {
     Tensor lbounds = Tensors.fromString("{-5[m], -7[m]}");
     Tensor ubounds = Tensors.fromString("{10[m], 10[m]}");

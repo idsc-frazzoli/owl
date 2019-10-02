@@ -1,16 +1,16 @@
 // code by gjoel, jph
-package ch.ethz.idsc.owl.bot.se2.rrts;
+package ch.ethz.idsc.owl.rrts.adapter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.data.nd.AbstractNdCenter;
 import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
-import ch.ethz.idsc.owl.rrts.adapter.NdType;
 import ch.ethz.idsc.owl.rrts.core.TransitionSpace;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class TransitionNdType implements NdType, Serializable {
+public class TransitionNdType implements NdType, Serializable {
   private final TransitionSpace transitionSpace;
 
   /** @param transitionSpace non-null */

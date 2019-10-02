@@ -1,12 +1,11 @@
 // code by jph, gjoel
-package ch.ethz.idsc.owl.bot.se2.rrts;
+package ch.ethz.idsc.owl.data.nd;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.owl.data.nd.NdCenterInterface;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ abstract class AbstractNdCenter implements NdCenterInterface, Serializable {
+public abstract class AbstractNdCenter implements NdCenterInterface, Serializable {
   private final Tensor center;
 
   public AbstractNdCenter(Tensor center) {
