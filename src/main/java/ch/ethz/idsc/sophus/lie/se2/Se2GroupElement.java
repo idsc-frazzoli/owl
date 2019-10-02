@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** SE(2) is parameterized by R^2 x [-pi,+pi) */
-// TODO JPH standarize so that angle is in [-pi,+pi), see constructor/inverse
 public class Se2GroupElement extends Se2CoveringGroupElement {
   /** @param xya == {px, py, angle} as member of Lie group SE2 */
   public Se2GroupElement(Tensor xya) {

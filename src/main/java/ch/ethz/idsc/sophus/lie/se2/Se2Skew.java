@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.lie.se2;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ch.ethz.idsc.sophus.lie.LieGroupElement;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroupElement;
 import ch.ethz.idsc.sophus.lie.so2c.So2CoveringSkew;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -12,14 +12,18 @@ import ch.ethz.idsc.tensor.lie.RotationMatrix;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 public class Se2Skew {
-  public static Tensor mean(LieGroupElement lieGroupElement, Tensor sequence, Tensor weights) {
+  /** @param se2CoveringGroupElement
+   * @param sequence
+   * @param weights
+   * @return */
+  public static Tensor mean(Se2CoveringGroupElement se2CoveringGroupElement, Tensor sequence, Tensor weights) {
     AtomicInteger atomicInteger = new AtomicInteger();
     Tensor tmean = sequence.stream() //
-        .map(lieGroupElement.inverse()::combine) //
+        .map(se2CoveringGroupElement.inverse()::combine) //
         .map(xya -> of(xya, weights.Get(atomicInteger.getAndIncrement()))) //
         .reduce(Se2Skew::add) //
         .get().solve();
-    return lieGroupElement.combine(tmean.append(RealScalar.ZERO));
+    return se2CoveringGroupElement.combine(tmean.append(RealScalar.ZERO));
   }
 
   /** @param xya element in SE(2)
