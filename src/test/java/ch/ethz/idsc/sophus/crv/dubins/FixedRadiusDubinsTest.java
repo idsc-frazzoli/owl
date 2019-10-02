@@ -37,4 +37,13 @@ public class FixedRadiusDubinsTest extends TestCase {
       assertTrue(2 <= dubinsPathGenerator.allValid().count());
     }
   }
+
+  public void testNegativeFail() {
+    try {
+      FixedRadiusDubins.of(Tensors.vector(1, 2, 3), RealScalar.of(-0.1));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

@@ -39,7 +39,6 @@ public class TransitionNdContainer {
   private final Map<Se2TransitionNdType, RrtsNodeCollection> map = new EnumMap<>(Se2TransitionNdType.class);
   private final PointsRender pointsRender = //
       new PointsRender(new Color(128, 128, 128, 64), new Color(128, 128, 128, 255));
-  // private final Scalar minResolution = RealScalar.of(0.1);
   private final Tensor tensor;
   private final int value;
 
@@ -75,8 +74,7 @@ public class TransitionNdContainer {
     Scalar sqrt = Sqrt.FUNCTION.apply(RationalScalar.of(10, rrtsNodeCollection.size()));
     Tensor shape = geodesicDisplay.shape().multiply(sqrt);
     Tensor _tensor = Tensor.of(tensor.stream().map(geodesicDisplay::project).map(N.DOUBLE::of));
-    pointsRender.new Show(geodesicDisplay, shape, _tensor) // TODO
-        .render(geometricLayer, graphics);
+    pointsRender.new Show(geodesicDisplay, shape, _tensor).render(geometricLayer, graphics);
     // ---
     {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mouse));

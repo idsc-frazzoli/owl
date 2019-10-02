@@ -16,6 +16,7 @@ import ch.ethz.idsc.sophus.crv.dubins.DubinsPath;
 import ch.ethz.idsc.sophus.crv.dubins.DubinsPathGenerator;
 import ch.ethz.idsc.sophus.crv.dubins.FixedRadiusDubins;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
@@ -36,14 +37,13 @@ public class DubinsTransitionDemo extends AbstractDemo implements DemoInterface 
     // ---
     DubinsPathGenerator dubinsPathGenerator = FixedRadiusDubins.of(START, mouse, RealScalar.of(1));
     List<DubinsPath> list = dubinsPathGenerator.allValid().collect(Collectors.toList());
-    // TODO JPH does not work with length() units at the moment
-    double pixel2modelWidth = geometricLayer.pixel2modelWidth(5);
+    Scalar minResolution = RealScalar.of(geometricLayer.pixel2modelWidth(5));
     {
       graphics.setColor(COLOR_DATA_INDEXED.getColor(0));
       graphics.setStroke(new BasicStroke(1));
       for (DubinsPath dubinsPath : list) {
         DubinsTransition dubinsTransition = new DubinsTransition(START, mouse, dubinsPath);
-        graphics.draw(geometricLayer.toPath2D(dubinsTransition.linearized(RealScalar.of(pixel2modelWidth))));
+        graphics.draw(geometricLayer.toPath2D(dubinsTransition.linearized(minResolution)));
       }
     }
   }
