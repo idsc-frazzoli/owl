@@ -103,6 +103,15 @@ public class BSpline1CurveSubdivisionTest extends TestCase {
     assertEquals(copy.apply(CirclePoints.of(10)), fps.apply(CirclePoints.of(10)));
   }
 
+  public void testNullFail() {
+    try {
+      new BSpline1CurveSubdivision(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testScalarFail() {
     CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(Se2Geodesic.INSTANCE);
     try {

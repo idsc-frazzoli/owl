@@ -34,15 +34,14 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import junit.framework.TestCase;
 
-// TODO JPH move class to test area and use RLplanner
-/* package */ enum RnLexiDemo {
-  ;
+public class RnLexiTest extends TestCase {
   private static final StateSpaceModel SINGLE_INTEGRATOR = SingleIntegratorStateSpaceModel.INSTANCE;
   static final StateIntegrator STATE_INTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.ONE, 1);
 
-  private static TrajectoryPlanner simple() {
+  private static TrajectoryPlanner create() {
     final Tensor stateRoot = Tensors.vector(0, 0);
     // ---
     Tensor eta = Tensors.vector(1, 1);
@@ -76,14 +75,15 @@ import ch.ethz.idsc.tensor.alg.Array;
     return trajectoryPlanner;
   }
 
-  public static void main(String[] args) {
-    TrajectoryPlanner trajectoryPlanner = simple();
+  public void testSimple() {
+    TrajectoryPlanner trajectoryPlanner = create();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(200);
+    assertEquals(glcExpand.getExpandCount(), 15);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
-    if (optional.isPresent()) {
-      List<StateTime> path = GlcNodes.getPathFromRootTo(optional.get());
-      path.stream().map(StateTime::toInfoString).forEach(System.out::println);
-    }
+    assertTrue(optional.isPresent());
+    List<StateTime> path = GlcNodes.getPathFromRootTo(optional.get());
+    assertEquals(path.size(), 16);
+    // path.stream().map(StateTime::toInfoString).forEach(System.out::println);
   }
 }
