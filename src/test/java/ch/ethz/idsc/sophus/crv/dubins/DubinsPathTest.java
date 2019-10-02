@@ -148,7 +148,7 @@ public class DubinsPathTest extends TestCase {
 
   public void testNullFail() {
     try {
-      new DubinsPath(null, RealScalar.ONE, Tensors.vector(1, 10, 1));
+      DubinsPath.of(null, RealScalar.ONE, Tensors.vector(1, 10, 1));
       fail();
     } catch (Exception exception) {
       // ---
@@ -157,7 +157,7 @@ public class DubinsPathTest extends TestCase {
 
   public void testVectorFail() {
     try {
-      new DubinsPath(Type.RLR, RealScalar.ONE, Tensors.vector(1, 10, 1, 3));
+      DubinsPath.of(Type.RLR, RealScalar.ONE, Tensors.vector(1, 10, 1, 3));
       fail();
     } catch (Exception exception) {
       // ---

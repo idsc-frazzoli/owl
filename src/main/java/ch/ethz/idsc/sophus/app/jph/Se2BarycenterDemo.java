@@ -10,7 +10,6 @@ import javax.swing.JToggleButton;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -30,7 +29,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Total;
 
-public class Se2BarycenterDemo extends ControlPointsDemo {
+/* package */ class Se2BarycenterDemo extends ControlPointsDemo {
   private static final ColorDataIndexed COLOR_DATA_INDEXED_DRAW = ColorDataLists._097.cyclic().deriveWithAlpha(192);
   private static final ColorDataIndexed COLOR_DATA_INDEXED_FILL = ColorDataLists._097.cyclic().deriveWithAlpha(182);
   // ---
@@ -120,8 +119,6 @@ public class Se2BarycenterDemo extends ControlPointsDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new Se2BarycenterDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new Se2BarycenterDemo().setVisible(1200, 600);
   }
 }

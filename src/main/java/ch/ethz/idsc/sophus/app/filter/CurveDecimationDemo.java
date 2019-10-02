@@ -14,17 +14,17 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.api.PathRender;
+import ch.ethz.idsc.sophus.app.io.GokartPoseData;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.CurveDecimation;
 import ch.ethz.idsc.sophus.crv.CurveDecimation.Result;
+import ch.ethz.idsc.sophus.crv.LieGroupCurveDecimation;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
@@ -59,6 +59,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final SpinnerLabel<Integer> spinnerLabelWidth = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelDegre = new SpinnerLabel<>();
+  private final SpinnerLabel<LieGroupCurveDecimation> spinnerType = new SpinnerLabel<>();
   // private final JSlider jSlider = new JSlider(1, 1000, 500);
   private final JToggleButton jToggleButton = new JToggleButton("error");
   protected Tensor _control = Tensors.empty();
@@ -75,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     {
       spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
-      spinnerLabelLimit.setIndex(1);
+      spinnerLabelLimit.setIndex(0);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
@@ -87,7 +88,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
-      spinnerLabelLevel.setValue(4);
+      spinnerLabelLevel.setValue(2);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "eps power");
       spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
@@ -96,6 +97,12 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelDegre.setIndex(0);
       spinnerLabelDegre.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "degree");
       spinnerLabelDegre.addSpinnerListener(type -> updateState());
+    }
+    {
+      spinnerType.setArray(LieGroupCurveDecimation.values());
+      spinnerType.setIndex(0);
+      spinnerType.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "type");
+      // spinnerType.addSpinnerListener(type -> updateState());
     }
     // {
     // jSlider.setPreferredSize(new Dimension(200, 28));
@@ -122,7 +129,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     {
       final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
       pathRenderCurve.setCurve(_control, false).render(geometricLayer, graphics);
-      if (_control.length() < 1000)
+      if (_control.length() <= 1000)
         for (Tensor point : _control) {
           geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
           Path2D path2d = geometricLayer.toPath2D(shape);
@@ -136,8 +143,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     Scalar epsilon = Power.of(RationalScalar.HALF, spinnerLabelLevel.getValue());
     // epsilon = RationalScalar.of(jSlider.getValue(), jSlider.getMaximum() * 3);
-    CurveDecimation curveDecimation = CurveDecimation.of( //
-        geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()::log, epsilon);
+    LieGroupCurveDecimation lieGroupCurveDecimation = spinnerType.getValue();
+    CurveDecimation curveDecimation = //
+        lieGroupCurveDecimation.of(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), epsilon);
     Tensor control = Tensor.of(_control.stream().map(geodesicDisplay::project));
     Result result = curveDecimation.evaluate(control);
     Tensor simplified = result.result();
@@ -175,8 +183,6 @@ import ch.ethz.idsc.tensor.sca.Power;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new CurveDecimationDemo(GokartPoseDataV2.RACING_DAY);
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new CurveDecimationDemo(GokartPoseDataV2.RACING_DAY).setVisible(1000, 800);
   }
 }

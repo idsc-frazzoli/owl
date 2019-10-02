@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Nest;
 
-public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
+/* package */ class DubinsPathDemo extends AbstractDemo implements DemoInterface {
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final int POINTS = 200;
   private static final ColorDataIndexed COLOR_DATA_INDEXED = ColorDataLists._097.cyclic();
@@ -101,8 +101,6 @@ public class DubinsPathDemo extends AbstractDemo implements DemoInterface {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new DubinsPathDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new DubinsPathDemo().setVisible(1000, 600);
   }
 }

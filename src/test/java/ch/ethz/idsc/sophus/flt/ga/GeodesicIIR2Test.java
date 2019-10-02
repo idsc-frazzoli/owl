@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 public class GeodesicIIR2Test extends TestCase {
   public void testSimple() {
     GeodesicInterface geodesicInterface = //
-        new LieGroupGeodesic(Se2Group.INSTANCE::element, Se2CoveringExponential.INSTANCE);
+        new LieGroupGeodesic(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
     Scalar alpha = RationalScalar.HALF;
     GeodesicIIR2 geodesicIIR2 = new GeodesicIIR2(geodesicInterface, alpha);
     Tensor vector0 = Tensors.vector(1, 2, 0.25);
@@ -39,7 +39,7 @@ public class GeodesicIIR2Test extends TestCase {
 
   public void testLinear() {
     GeodesicInterface geodesicInterface = //
-        new LieGroupGeodesic(RnGroup.INSTANCE::element, RnExponential.INSTANCE);
+        new LieGroupGeodesic(RnGroup.INSTANCE, RnExponential.INSTANCE);
     Scalar alpha = RationalScalar.HALF;
     TensorUnaryOperator tensorUnaryOperator = new GeodesicIIR2(geodesicInterface, alpha);
     assertEquals(tensorUnaryOperator.apply(RealScalar.of(10)), RealScalar.of(10));

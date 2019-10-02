@@ -2,7 +2,7 @@
 package ch.ethz.idsc.sophus.app.curve;
 
 import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import junit.framework.TestCase;
 
 public class ApproximationDemoTest extends TestCase {

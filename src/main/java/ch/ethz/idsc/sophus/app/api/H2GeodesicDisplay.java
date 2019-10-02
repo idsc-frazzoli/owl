@@ -52,17 +52,12 @@ public enum H2GeodesicDisplay implements GeodesicDisplay {
 
   @Override // from GeodesicDisplay
   public LieGroup lieGroup() {
-    return null;
+    throw new UnsupportedOperationException();
   }
 
   @Override // from GeodesicDisplay
   public LieExponential lieExponential() {
-    return null;
-  }
-
-  @Override // from GeodesicDisplay
-  public int dimensions() {
-    return 2;
+    throw new UnsupportedOperationException();
   }
 
   @Override // from GeodesicDisplay

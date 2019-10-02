@@ -7,17 +7,13 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.MSpline3CurveSubdivision;
+import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
   public BiinvariantMeanSubdivisionDemo() {
@@ -42,25 +38,13 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();
-    Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    {
-      CurveSubdivision curveSubdivision = new MSpline3CurveSubdivision(geodesicDisplay.biinvariantMean());
-      TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(curveSubdivision, cyclic);
-      refined = control;
-      for (int level = 0; level < levels; ++level) {
-        Tensor prev = refined;
-        refined = tensorUnaryOperator.apply(refined);
-        if (CurveSubdivisionHelper.isDual(scheme) && level % 2 == 1 && !cyclic && 1 < control.length()) {
-          refined = Join.of( //
-              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(control.get(0), prev.get(0))), //
-              refined, //
-              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(Last.of(prev), Last.of(control))) //
-          );
-        }
-      }
-    }
+    MidpointInterface midpointInterface = geodesicDisplay.geodesicInterface();
+    // TODO JPH implement other curve subdivision schemes using biinvariant mean
+    CurveSubdivision curveSubdivision = new MSpline3CurveSubdivision(geodesicDisplay.biinvariantMean());
+    Tensor refined = StaticHelper.refine(control, levels, curveSubdivision, //
+        CurveSubdivisionHelper.isDual(scheme), cyclic, midpointInterface);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     CurveCurvatureRender.of(render, cyclic, geometricLayer, graphics);
     if (levels < 5)
@@ -69,8 +53,6 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new BiinvariantMeanSubdivisionDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new BiinvariantMeanSubdivisionDemo().setVisible(1200, 800);
   }
 }

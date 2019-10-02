@@ -40,7 +40,6 @@ public class BezierFunctionSplitsDemo extends GeodesicSplitsDemo {
 
   public static void main(String[] args) {
     AbstractDemo abstractDemo = new BezierFunctionSplitsDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    abstractDemo.setVisible(1000, 600);
   }
 }

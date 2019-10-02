@@ -11,4 +11,11 @@ public abstract class AbstractDemo implements RenderInterface {
     timerFrame.jFrame.setTitle(getClass().getSimpleName());
     timerFrame.geometricComponent.addRenderInterface(this);
   }
+
+  /** @param width
+   * @param height */
+  public final void setVisible(int width, int height) {
+    timerFrame.jFrame.setBounds(100, 100, width, height);
+    timerFrame.jFrame.setVisible(true);
+  }
 }

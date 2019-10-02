@@ -110,6 +110,8 @@ public class Clothoid implements Serializable {
     }
   }
 
+  /** when the start and end point of the clothoid have identical (x, y)-coordinates,
+   * the curvature evaluates to Infinity, or NaN. */
   public final class Curvature implements ScalarUnaryOperator, HeadTailInterface {
     private final ClothoidQuadraticD clothoidQuadraticD = new ClothoidQuadraticD(b0, bm, b1);
     private final Scalar v = Norm._2.ofVector(diff);

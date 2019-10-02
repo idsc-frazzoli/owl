@@ -85,8 +85,6 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
   }
 
   public static void main(String[] args) {
-    GeodesicDemo geodesicDemo = new GeodesicDemo();
-    geodesicDemo.timerFrame.jFrame.setBounds(100, 100, 600, 600);
-    geodesicDemo.timerFrame.jFrame.setVisible(true);
+    new GeodesicDemo().setVisible(600, 600);
   }
 }

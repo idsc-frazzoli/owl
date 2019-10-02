@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
@@ -23,6 +24,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
     this.dubinsPath = dubinsPath;
   }
 
+  /** @param minResolution strictly positive
+   * @return */
   private int steps(Scalar minResolution) {
     return Ceiling.FUNCTION.apply(length().divide(Sign.requirePositive(minResolution))).number().intValue();
   }
@@ -41,13 +44,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
   @Override // from Transition
   public TransitionWrap wrapped(Scalar minResolution) {
     int steps = steps(minResolution);
-    Scalar step = length().divide(RealScalar.of(steps));
-    Tensor spacing = Tensors.vector(i -> step, steps);
-    return new TransitionWrap(sampled(minResolution), spacing);
+    return new TransitionWrap( //
+        sampled(minResolution), //
+        ConstantArray.of(length().divide(RealScalar.of(steps)), steps));
   }
 
   @Override // from RenderTransition
   public Tensor linearized(Scalar minResolution) {
+    // TODO JPH check if this works with units
     if (dubinsPath.type().containsStraight() && //
         Scalars.lessThan(minResolution, dubinsPath.length(1))) {
       ScalarTensorFunction scalarTensorFunction = dubinsPath.unit(start());

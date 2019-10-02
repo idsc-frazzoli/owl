@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 public class FixedRadiusDubins implements DubinsPathGenerator, Serializable {
   /** @param xya vector of length 3
@@ -34,7 +35,7 @@ public class FixedRadiusDubins implements DubinsPathGenerator, Serializable {
 
   private FixedRadiusDubins(Tensor xya, Scalar radius) {
     this.xya = xya;
-    this.radius = radius;
+    this.radius = Sign.requirePositive(radius);
     zero = radius.zero();
   }
 

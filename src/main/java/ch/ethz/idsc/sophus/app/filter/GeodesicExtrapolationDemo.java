@@ -6,9 +6,8 @@ import java.awt.image.BufferedImage;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolationFilter;
@@ -55,8 +54,6 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new GeodesicExtrapolationDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new GeodesicExtrapolationDemo().setVisible(1000, 600);
   }
 }

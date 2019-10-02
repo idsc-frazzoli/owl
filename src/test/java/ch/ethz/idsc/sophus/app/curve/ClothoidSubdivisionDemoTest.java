@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class ClothoidSubdivisionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new ClothoidSubdivisionDemo());
+    AbstractDemoHelper.brief(new ClothoidComparisonDemo());
   }
 }

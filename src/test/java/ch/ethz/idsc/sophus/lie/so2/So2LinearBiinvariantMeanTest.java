@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.lie.so2;
 
+import java.util.Random;
+
 import ch.ethz.idsc.sophus.lie.BiinvariantMeanTestHelper;
 import ch.ethz.idsc.sophus.lie.ScalarBiinvariantMean;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -44,7 +46,7 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
                 BiinvariantMeanTestHelper.order(sequence.map(shift::add), index), //
                 BiinvariantMeanTestHelper.order(weights, index));
             CLIP.requireInside(result);
-            Chop._12.requireClose(So2.MOD.apply(result.subtract(shift).subtract(solution)), RealScalar.ZERO);
+            Chop._12.requireAllZero(So2.MOD.apply(result.subtract(shift).subtract(solution)));
           }
         }
       }
@@ -62,20 +64,18 @@ public class So2LinearBiinvariantMeanTest extends TestCase {
   }
 
   public void testComparison() {
+    Random random = new Random(123);
     Distribution distribution = UniformDistribution.of(Clips.absolute(Pi.HALF));
     Chop chop = Chop.below(0.7);
     for (int length = 1; length < 10; ++length) {
-      final Tensor sequence = RandomVariate.of(distribution, length);
-      final Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.of(1, 2), length));
-      int success = 0;
+      final Tensor sequence = RandomVariate.of(distribution, random, length);
+      final Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.of(1, 2), random, length));
       for (int count = 0; count < 10; ++count) {
-        Scalar shift = RandomVariate.of(distribution);
+        Scalar shift = RandomVariate.of(distribution, random);
         Scalar val1 = So2GlobalBiinvariantMean.INSTANCE.mean(sequence.map(shift::add), weights);
         Tensor val2 = So2LinearBiinvariantMean.INSTANCE.mean(sequence.map(shift::add), weights);
-        if (chop.allZero(So2.MOD.apply(val1.subtract(val2))))
-          ++success;
+        chop.requireAllZero(So2.MOD.apply(val1.subtract(val2)));
       }
-      assertTrue(3 < success); // 8 fails
     }
   }
 

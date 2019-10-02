@@ -32,7 +32,7 @@ public class ClothoidCurve3Test extends TestCase {
           ClothoidCurveTest.metric(p), //
           ClothoidCurveTest.metric(q)).apply(lambda);
       Tensor r2 = ComplexClothoidCurve.INSTANCE.split(p, q, lambda);
-      Chop._10.requireClose(r1, ClothoidCurveTest.metric(r2));
+      Chop._08.requireClose(r1, ClothoidCurveTest.metric(r2));
     }
   }
 }

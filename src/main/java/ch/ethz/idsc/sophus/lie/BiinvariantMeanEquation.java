@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.lie;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -14,9 +15,11 @@ public class BiinvariantMeanEquation implements Serializable {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
 
+  /** @param lieGroup
+   * @param lieExponential */
   public BiinvariantMeanEquation(LieGroup lieGroup, LieExponential lieExponential) {
-    this.lieGroup = lieGroup;
-    this.lieExponential = lieExponential;
+    this.lieGroup = Objects.requireNonNull(lieGroup);
+    this.lieExponential = Objects.requireNonNull(lieExponential);
   }
 
   public Tensor evaluate(Tensor sequence, Tensor weights, Tensor mean) {

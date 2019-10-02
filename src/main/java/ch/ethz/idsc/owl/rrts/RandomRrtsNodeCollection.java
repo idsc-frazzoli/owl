@@ -10,7 +10,8 @@ import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.tensor.Tensor;
 
-// TODO JPH OWL 057 move to package rrts.adapter 
+/** node collection that implements the nearest-neighbor query to return a random subset */
+// TODO JPH OWL 057 move to package rrts.adapter
 public class RandomRrtsNodeCollection implements RrtsNodeCollection {
   private final List<RrtsNode> list = new ArrayList<>();
 

@@ -95,8 +95,6 @@ public class LagrangeInterpolationDemo extends CurvatureDemo {
   }
 
   public static void main(String[] args) {
-    LagrangeInterpolationDemo bezierDemo = new LagrangeInterpolationDemo();
-    bezierDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    bezierDemo.timerFrame.jFrame.setVisible(true);
+    new LagrangeInterpolationDemo().setVisible(1000, 600);
   }
 }

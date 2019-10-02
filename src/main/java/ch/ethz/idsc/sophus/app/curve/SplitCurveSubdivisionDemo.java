@@ -8,18 +8,15 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 
@@ -51,29 +48,12 @@ public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
     final boolean cyclic = jToggleCyclic.isSelected() || !scheme.isStringSupported();
     Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();
-    Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    {
-      TensorUnaryOperator tensorUnaryOperator = //
-          StaticHelper.create(spinnerLabel.getValue().of(geodesicDisplay.geodesicInterface()), cyclic);
-      refined = control;
-      for (int level = 0; level < levels; ++level) {
-        Tensor prev = refined;
-        refined = tensorUnaryOperator.apply(refined);
-        // TODO somewhat redundant to BiinvariantMeanSubdivisionDemo
-        if (CurveSubdivisionHelper.isDual(scheme) && //
-            level % 2 == 1 && //
-            !cyclic && //
-            1 < control.length()) {
-          refined = Join.of( //
-              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(control.get(0), prev.get(0))), //
-              refined, //
-              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(Last.of(prev), Last.of(control))) //
-          );
-        }
-      }
-    }
+    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Tensor refined = StaticHelper.refine( //
+        control, levels, spinnerLabel.getValue().of(geodesicInterface), //
+        CurveSubdivisionHelper.isDual(scheme), cyclic, geodesicInterface);
     if (jToggleLine.isSelected()) {
       TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(new BSpline1CurveSubdivision(geodesicDisplay.geodesicInterface()), cyclic);
       pathRender.setCurve(Nest.of(tensorUnaryOperator, control, 8), cyclic).render(geometricLayer, graphics);
@@ -86,8 +66,6 @@ public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new SplitCurveSubdivisionDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 800);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new SplitCurveSubdivisionDemo().setVisible(1200, 800);
   }
 }

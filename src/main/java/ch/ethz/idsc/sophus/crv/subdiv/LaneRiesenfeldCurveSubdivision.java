@@ -3,7 +3,6 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.MidpointInterface;
 import ch.ethz.idsc.tensor.Integers;
@@ -18,15 +17,14 @@ import ch.ethz.idsc.tensor.alg.Last;
 public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Serializable {
   /** @param midpointInterface
    * @param degree strictly positive
-   * @return */
+   * @return
+   * @throws Exception if midpointInterface is null */
   public static CurveSubdivision of(MidpointInterface midpointInterface, int degree) {
-    return new LaneRiesenfeldCurveSubdivision( //
-        Objects.requireNonNull(midpointInterface), //
-        Integers.requirePositive(degree));
+    return new LaneRiesenfeldCurveSubdivision(midpointInterface, Integers.requirePositive(degree));
   }
 
   // ---
-  /** linear subdivision */
+  /** linear curve subdivision */
   private final BSpline1CurveSubdivision bSpline1CurveSubdivision;
   private final int degree;
 
@@ -43,7 +41,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       return tensor.copy();
     Tensor value = bSpline1CurveSubdivision.cyclic(tensor);
     for (int count = 2; count <= degree; ++count) {
-      if (Tensors.isEmpty(value)) // TODO JPH test coverage
+      if (Tensors.isEmpty(value)) // TODO GJOEL/JPH test coverage: is the if case required?
         return value;
       boolean odd = count % 2 == 1;
       Tensor queue = Tensors.reserve(value.length());
@@ -76,7 +74,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       return tensor.copy();
     Tensor value = bSpline1CurveSubdivision.string(tensor);
     for (int count = 2; count <= degree; ++count) {
-      if (Tensors.isEmpty(value)) // TODO JPH test coverage
+      if (Tensors.isEmpty(value)) // TODO GJOEL/JPH test coverage: is the if case required?
         return value;
       boolean odd = count % 2 == 1;
       Tensor queue = Tensors.reserve(value.length() + 1);

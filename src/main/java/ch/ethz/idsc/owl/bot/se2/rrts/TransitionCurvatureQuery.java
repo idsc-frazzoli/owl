@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.math.HeadTailInterface;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Sign;
 
+// TODO JPH OWL 057 class name should contain "clothoid"
 public class TransitionCurvatureQuery implements TransitionRegionQuery, Serializable {
   private final Clip clip;
 

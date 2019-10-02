@@ -92,8 +92,6 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
   }
 
   public static void main(String[] args) {
-    BSplineBasisDemo curveSubdivisionDemo = new BSplineBasisDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    new BSplineBasisDemo().setVisible(1000, 800);
   }
 }

@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.lie.se2;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.app.api.GokartPoseData;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.io.GokartPoseData;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.CurveDecimation;
 import ch.ethz.idsc.sophus.crv.CurveDecimation.Result;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 
 public class Se2CurveDecimationTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(Se2CurveDecimation.of(RealScalar.of(.3)));
+    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(Se2CurveDecimation.of(RealScalar.of(0.3)));
     Tensor p = Tensors.vector(4, 3, 7);
     Tensor q = Tensors.vector(1, 2, 5);
     ScalarTensorFunction scalarTensorFunction = Se2Geodesic.INSTANCE.curve(p, q);
@@ -38,12 +38,11 @@ public class Se2CurveDecimationTest extends TestCase {
 
   public void testGokart() throws ClassNotFoundException, IOException {
     GokartPoseData gokartPoseData = GokartPoseDataV2.RACING_DAY;
-    CurveDecimation tensorUnaryOperator = Serialization.copy(Se2CurveDecimation.of(RealScalar.of(.3)));
+    CurveDecimation curveDecimation = Serialization.copy(Se2CurveDecimation.of(RealScalar.of(0.3)));
     for (String name : gokartPoseData.list()) {
-      System.out.println(name);
       Tensor matrix = gokartPoseData.getPose(name, 2000);
       Tensor copy = matrix.copy();
-      Result curveDecimationResult = tensorUnaryOperator.evaluate(matrix.unmodifiable());
+      Result curveDecimationResult = curveDecimation.evaluate(matrix.unmodifiable());
       Tensor tensor = curveDecimationResult.result();
       assertTrue(tensor.length() < 100);
       tensor.set(Scalar::zero, Tensor.ALL, Tensor.ALL);
@@ -77,10 +76,10 @@ public class Se2CurveDecimationTest extends TestCase {
             Quantity.of(xya.Get(1), "m"), //
             xya.Get(2))));
     Tensor tensor1 = //
-        Serialization.copy(CurveDecimation.of(Se2Group.INSTANCE, Se2CurveDecimationTest::log1, RealScalar.of(.3))) //
+        Serialization.copy(CurveDecimation.of(Se2Group.INSTANCE, Se2CurveDecimationTest::log1, RealScalar.of(0.3))) //
             .apply(matrix);
     Tensor tensor2 = //
-        Serialization.copy(CurveDecimation.of(Se2Group.INSTANCE, Se2CurveDecimationTest::log2, RealScalar.of(.3))) //
+        Serialization.copy(CurveDecimation.of(Se2Group.INSTANCE, Se2CurveDecimationTest::log2, RealScalar.of(0.3))) //
             .apply(matrix);
     assertFalse(Dimensions.of(tensor1).equals(Dimensions.of(tensor2)));
   }

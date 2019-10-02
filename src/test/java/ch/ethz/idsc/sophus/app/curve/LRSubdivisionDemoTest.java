@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class LRSubdivisionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new LRSubdivisionDemo());
+    AbstractDemoHelper.brief(new LaneRiesenfeldComparisonDemo());
   }
 }

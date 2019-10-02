@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.red.Nest;
  * resulting curve. The difference is only noticeable for S shaped curves.
  * 
  * Therefore, for simplicity in algorithms we use degree == 1. */
-public class ClothoidDemo extends AbstractDemo implements DemoInterface {
+/* package */ class ClothoidDemo extends AbstractDemo implements DemoInterface {
   private static final Tensor START = Array.zeros(3).unmodifiable();
   private static final Tensor DOMAIN = Subdivide.of(0.0, 1.0, 100);
   private static final Tensor ARROWS = Subdivide.of(0.0, 1.0, 10);
@@ -98,8 +98,6 @@ public class ClothoidDemo extends AbstractDemo implements DemoInterface {
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new ClothoidDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new ClothoidDemo().setVisible(1000, 600);
   }
 }

@@ -75,8 +75,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
   }
 
   public static void main(String[] args) {
-    NonuniformSplineDemo curveSubdivisionDemo = new NonuniformSplineDemo();
-    curveSubdivisionDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 800);
-    curveSubdivisionDemo.timerFrame.jFrame.setVisible(true);
+    new NonuniformSplineDemo().setVisible(1000, 800);
   }
 }

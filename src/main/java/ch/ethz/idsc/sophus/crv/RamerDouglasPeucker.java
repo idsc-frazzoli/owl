@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** Generalization of the Ramer-Douglas-Peucker algorithm
  * 
@@ -29,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensors;
    * @param epsilon */
   public RamerDouglasPeucker(LineDistance lineDistance, Scalar epsilon) {
     this.lineDistance = lineDistance;
-    this.epsilon = epsilon;
+    this.epsilon = Sign.requirePositiveOrZero(epsilon);
   }
 
   @Override

@@ -9,10 +9,9 @@ import java.util.stream.IntStream;
 import javax.swing.JSlider;
 
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.api.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.flt.ga.Regularization2Step;
 import ch.ethz.idsc.sophus.sym.SymGeodesic;
@@ -66,8 +65,6 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new Regularization2StepDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1200, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new Regularization2StepDemo().setVisible(1200, 600);
   }
 }

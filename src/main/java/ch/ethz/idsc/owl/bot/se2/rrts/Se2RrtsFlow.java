@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 
+// TODO JPH OWL 057 rename to CarRrtsFlow since prohibits side motion
 public enum Se2RrtsFlow {
   ;
   /** @param orig
@@ -17,8 +18,9 @@ public enum Se2RrtsFlow {
   public static Tensor uBetween(StateTime orig, StateTime dest) {
     Tensor log = Se2Wrap.INSTANCE.difference(orig.state(), dest.state());
     Scalar delta = dest.time().subtract(orig.time());
-    // TODO GJOEL/JPH test and possibly replace norm with hypot
-    // Scalar vx = Hypot.of(log.Get(0), log.Get(1));
+    // TODO GJOEL/JPH write test
+    // TODO GJOEL side speed should not result in forward motion! rather project
+    // ... the sign of vx is not always correct when using norm!
     Scalar vx = Norm._2.ofVector(Extract2D.FUNCTION.apply(log));
     return Tensors.of(vx, vx.zero(), log.Get(2)).divide(delta);
   }

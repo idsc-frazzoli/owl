@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -53,8 +52,6 @@ import ch.ethz.idsc.tensor.red.Nest;
   }
 
   public static void main(String[] args) {
-    AbstractDemo abstractDemo = new GeodesicMeanFilterDemo();
-    abstractDemo.timerFrame.jFrame.setBounds(100, 100, 1000, 600);
-    abstractDemo.timerFrame.jFrame.setVisible(true);
+    new GeodesicMeanFilterDemo().setVisible(1000, 600);
   }
 }

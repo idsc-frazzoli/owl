@@ -79,19 +79,30 @@ public class DubinsPath implements Serializable {
     }
   }
 
+  /** @param type non-null
+   * @param radius strictly positive
+   * @param segLength {length1, length2, length3} each non-negative
+   * @return */
+  public static DubinsPath of(Type type, Scalar radius, Tensor segLength) {
+    return new DubinsPath( //
+        Objects.requireNonNull(type), //
+        Sign.requirePositive(radius), //
+        VectorQ.requireLength(segLength, 3));
+  }
+
+  // ---
   private final Type type;
   private final Scalar radius;
   private final Tensor segLength;
   private final Scalar length;
 
   /** @param type non-null
-   * @param radius positive
-   * @param segLength {length1, length2, length3} each non-negative
-   * @throws Exception if radius is non-positive */
-  public DubinsPath(Type type, Scalar radius, Tensor segLength) {
-    this.type = Objects.requireNonNull(type);
-    this.radius = Sign.requirePositive(radius);
-    this.segLength = VectorQ.requireLength(segLength, 3);
+   * @param radius strictly positive
+   * @param segLength {length1, length2, length3} each non-negative */
+  /* package */ DubinsPath(Type type, Scalar radius, Tensor segLength) {
+    this.type = type;
+    this.radius = radius;
+    this.segLength = segLength;
     length = segLength.stream() //
         .map(Scalar.class::cast) //
         .map(Sign::requirePositiveOrZero) //
