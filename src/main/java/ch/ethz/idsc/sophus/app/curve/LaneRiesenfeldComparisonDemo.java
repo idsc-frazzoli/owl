@@ -22,6 +22,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.util.plot.ListPlot;
 import ch.ethz.idsc.sophus.util.plot.VisualRow;
 import ch.ethz.idsc.sophus.util.plot.VisualSet;
@@ -30,11 +31,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
-import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Quantile;
 
@@ -136,27 +134,11 @@ import ch.ethz.idsc.tensor.red.Quantile;
     // ---
     Tensor control = getGeodesicControlPoints();
     int levels = spinnerRefine.getValue();
-    Tensor refined;
     renderControlPoints(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    {
-      TensorUnaryOperator tensorUnaryOperator = StaticHelper.create(scheme.of(geodesicDisplay.geodesicInterface()), false);
-      refined = control;
-      for (int level = 0; level < levels; ++level) {
-        Tensor prev = refined;
-        refined = tensorUnaryOperator.apply(refined);
-        // TODO somewhat redundant to BiinvariantMeanSubdivisionDemo
-        if (CurveSubdivisionHelper.isDual(scheme) && //
-            level % 2 == 1 && //
-            1 < control.length()) {
-          refined = Join.of( //
-              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(control.get(0), prev.get(0))), //
-              refined, //
-              Tensors.of(geodesicDisplay.geodesicInterface().midpoint(Last.of(prev), Last.of(control))) //
-          );
-        }
-      }
-    }
+    GeodesicInterface geodesicInterface = geodesicDisplay.geodesicInterface();
+    Tensor refined = StaticHelper.refine(control, levels, scheme.of(geodesicInterface), //
+        CurveSubdivisionHelper.isDual(scheme), false, geodesicInterface);
     // ---
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
     pathRender.setCurve(render, false);
