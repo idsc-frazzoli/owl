@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Quantity;
 
@@ -25,9 +26,9 @@ public class GokartPoseDataV2 implements GokartPoseData {
   private static final List<String> LIST = ResourceData.lines(PATH_VECTOR);
   // ---
   /** all available */
-  public static final GokartPoseData INSTANCE = new GokartPoseDataV2(LIST);
+  public static final GokartPoseDataV2 INSTANCE = new GokartPoseDataV2(LIST);
   /** 20190701 */
-  public static final GokartPoseData RACING_DAY = new GokartPoseDataV2(LIST.stream() //
+  public static final GokartPoseDataV2 RACING_DAY = new GokartPoseDataV2(LIST.stream() //
       .filter(string -> string.startsWith("20190701")) //
       .collect(Collectors.toList()));
   // ---
@@ -52,5 +53,14 @@ public class GokartPoseDataV2 implements GokartPoseData {
   @Override // from GokartPoseData
   public Scalar getSampleRate() {
     return Quantity.of(50, "s^-1");
+  }
+
+  /** @param name
+   * @param limit
+   * @return tensor with at most given limit entries of the form {{px, py, pangle}, {vx, vy, omega}} */
+  public Tensor getPoseVel(String name, int limit) {
+    return Tensor.of(ResourceData.of(PATH_FOLDER + "/" + name + ".csv").stream() //
+        .limit(limit) //
+        .map(row -> Tensors.of(row.extract(1, 4), row.extract(5, 8))));
   }
 }
