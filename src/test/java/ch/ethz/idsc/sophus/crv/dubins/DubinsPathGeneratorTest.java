@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 
 public class DubinsPathGeneratorTest extends TestCase {
   public void testSimple() {
-    DubinsPath dubinsPath = new DubinsPath(Type.LSR, Quantity.of(1, "m"), Tensors.fromString("{" + Math.PI / 2 + "[m], 10[m], " + Math.PI / 2 + "[m]}"));
+    DubinsPath dubinsPath = DubinsPath.of(Type.LSR, Quantity.of(1, "m"), Tensors.fromString("{" + Math.PI / 2 + "[m], 10[m], " + Math.PI / 2 + "[m]}"));
     Tensor g0 = Tensors.fromString("{0[m], 0[m], 0}").unmodifiable();
     ScalarTensorFunction scalarTensorFunction = dubinsPath.sampler(g0);
     Chop._12.requireClose(scalarTensorFunction.apply(Quantity.of(0, "m")), g0);
@@ -36,7 +36,7 @@ public class DubinsPathGeneratorTest extends TestCase {
   }
 
   public void testZeroLength() {
-    DubinsPath dubinsPath = new DubinsPath(Type.LSR, Quantity.of(1, "m"), Tensors.fromString("{0[m], 0[m], 0[m]}"));
+    DubinsPath dubinsPath = DubinsPath.of(Type.LSR, Quantity.of(1, "m"), Tensors.fromString("{0[m], 0[m], 0[m]}"));
     Tensor g0 = Tensors.fromString("{1[m], 2[m], 3}").unmodifiable();
     assertTrue(Scalars.isZero(dubinsPath.length()));
     Subdivide.of(0, 1, 10).map(dubinsPath.sampler(g0));
@@ -44,7 +44,7 @@ public class DubinsPathGeneratorTest extends TestCase {
   }
 
   public void testFail() throws ClassNotFoundException, IOException {
-    DubinsPath dubinsPath = new DubinsPath(Type.LSR, Quantity.of(1, "m"), Tensors.fromString("{" + Math.PI / 2 + "[m], 10[m], " + Math.PI / 2 + "[m]}"));
+    DubinsPath dubinsPath = DubinsPath.of(Type.LSR, Quantity.of(1, "m"), Tensors.fromString("{" + Math.PI / 2 + "[m], 10[m], " + Math.PI / 2 + "[m]}"));
     Tensor g0 = Tensors.fromString("{0[m], 0[m], 0}").unmodifiable();
     ScalarTensorFunction scalarTensorFunction = Serialization.copy(dubinsPath.sampler(g0));
     try {
