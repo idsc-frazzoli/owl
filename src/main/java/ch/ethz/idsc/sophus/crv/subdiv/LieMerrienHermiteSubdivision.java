@@ -20,10 +20,20 @@ import ch.ethz.idsc.tensor.Tensors;
  * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
  * by Byeongseon Jeong, Jungho Yoon */
 public class LieMerrienHermiteSubdivision {
+  private static final Scalar _1_4 = RationalScalar.of(1, 4);
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @param control
+   * @return */
   public static HermiteSubdivision string(LieGroup lieGroup, LieExponential lieExponential, Tensor control) {
     return new LieMerrienHermiteSubdivision(lieGroup, lieExponential, control).new StringIteration();
   }
 
+  /** @param lieGroup
+   * @param lieExponential
+   * @param control
+   * @return */
   public static HermiteSubdivision cyclic(LieGroup lieGroup, LieExponential lieExponential, Tensor control) {
     return new LieMerrienHermiteSubdivision(lieGroup, lieExponential, control).new CyclicIteration();
   }
@@ -58,12 +68,13 @@ public class LieMerrienHermiteSubdivision {
           Tensor q = control.get(index + 1);
           Tensor qg = q.get(0);
           Tensor qv = q.get(1);
+          // TODO interpret tangent vectors at element in group -> use adjoint map
           Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg);
           Tensor rg2 = lieExponential.exp(pv.subtract(qv).divide(rgk));
           Tensor rg = lieGroup.element(rg1).combine(rg2);
           Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg));
           Tensor rv1 = log.multiply(rvk);
-          Tensor rv2 = qv.add(pv).multiply(RationalScalar.of(1, 4));
+          Tensor rv2 = qv.add(pv).multiply(_1_4);
           Tensor rv = rv1.subtract(rv2);
           string.append(Tensors.of(rg, rv));
         }
@@ -85,21 +96,19 @@ public class LieMerrienHermiteSubdivision {
       for (int index = 0; index < length; ++index) {
         Tensor p = control.get(index);
         string.append(p);
-        {
-          Tensor pg = p.get(0);
-          Tensor pv = p.get(1);
-          Tensor q = control.get((index + 1) % length);
-          Tensor qg = q.get(0);
-          Tensor qv = q.get(1);
-          Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg);
-          Tensor rg2 = lieExponential.exp(pv.subtract(qv).divide(rgk));
-          Tensor rg = lieGroup.element(rg1).combine(rg2);
-          Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg));
-          Tensor rv1 = log.multiply(rvk);
-          Tensor rv2 = qv.add(pv).multiply(RationalScalar.of(1, 4));
-          Tensor rv = rv1.subtract(rv2);
-          string.append(Tensors.of(rg, rv));
-        }
+        Tensor pg = p.get(0);
+        Tensor pv = p.get(1);
+        Tensor q = control.get((index + 1) % length);
+        Tensor qg = q.get(0);
+        Tensor qv = q.get(1);
+        Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg);
+        Tensor rg2 = lieExponential.exp(pv.subtract(qv).divide(rgk));
+        Tensor rg = lieGroup.element(rg1).combine(rg2);
+        Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg));
+        Tensor rv1 = log.multiply(rvk);
+        Tensor rv2 = qv.add(pv).multiply(_1_4);
+        Tensor rv = rv1.subtract(rv2);
+        string.append(Tensors.of(rg, rv));
       }
       rgk = rgk.add(rgk);
       rvk = rvk.add(rvk);
