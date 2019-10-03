@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.io.Put;
   ;
   public static void main(String[] args) throws IOException {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    HermiteSubdivision hermiteSubdivision = MerrienHermiteSubdivision.cyclic(control);
+    HermiteSubdivision hermiteSubdivision = MerrienHermiteSubdivision.string(control);
     hermiteSubdivision.iterate();
     // hermiteSubdivision.iterate();
     // hermiteSubdivision.iterate();
