@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.lie;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.tensor.Scalar;
@@ -12,9 +13,12 @@ public class LieGroupGeodesic implements GeodesicInterface, Serializable {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
 
+  /** @param lieGroup
+   * @param lieExponential
+   * @throws Exception if either parameters is null */
   public LieGroupGeodesic(LieGroup lieGroup, LieExponential lieExponential) {
-    this.lieGroup = lieGroup;
-    this.lieExponential = lieExponential;
+    this.lieGroup = Objects.requireNonNull(lieGroup);
+    this.lieExponential = Objects.requireNonNull(lieExponential);
   }
 
   @Override // from TensorGeodesic

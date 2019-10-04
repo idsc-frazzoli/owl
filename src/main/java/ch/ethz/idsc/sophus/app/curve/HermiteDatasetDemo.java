@@ -20,6 +20,7 @@ import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LieMerrienHermiteSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -68,7 +69,7 @@ import ch.ethz.idsc.tensor.Tensors;
     String name = spinnerLabelString.getValue();
     Tensor control = gokartPoseData.getPoseVel(name, limit);
     Tensor result = Tensors.empty();
-    for (int index = 0; index < control.length(); index += 50)
+    for (int index = 0; index < control.length(); index += 25)
       result.append(control.get(index));
     _control = result;
   }
@@ -94,7 +95,9 @@ import ch.ethz.idsc.tensor.Tensors;
         }
     }
     graphics.setColor(Color.DARK_GRAY);
-    HermiteSubdivision hermiteSubdivision = LieMerrienHermiteSubdivision.string(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, _control);
+    HermiteSubdivision hermiteSubdivision = //
+        new LieMerrienHermiteSubdivision(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE) //
+            .string(RationalScalar.HALF, _control);
     Tensor refined = _control;
     for (int level = 0; level < spinnerLabelLevel.getValue(); ++level)
       refined = hermiteSubdivision.iterate();

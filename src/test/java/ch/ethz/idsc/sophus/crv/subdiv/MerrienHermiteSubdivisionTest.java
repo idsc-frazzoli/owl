@@ -29,4 +29,10 @@ public class MerrienHermiteSubdivisionTest extends TestCase {
     assertEquals(iterate, expect);
     ExactTensorQ.require(iterate);
   }
+
+  public void testQuantity() {
+    Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
+    HermiteSubdivision hermiteSubdivision = MerrienHermiteSubdivision.string(control);
+    // hermiteSubdivision.iterate();
+  }
 }

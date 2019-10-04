@@ -49,7 +49,7 @@ public class LieMerrienHermiteSubdivisionDemo extends ControlPointsDemo {
         return;
       }
       HermiteSubdivision hermiteSubdivision = //
-          LieMerrienHermiteSubdivision.string(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), control);
+          new LieMerrienHermiteSubdivision(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()).string(control);
       for (int count = 1; count < spinnerRefine.getValue(); ++count)
         hermiteSubdivision.iterate();
       Tensor iterate = hermiteSubdivision.iterate();

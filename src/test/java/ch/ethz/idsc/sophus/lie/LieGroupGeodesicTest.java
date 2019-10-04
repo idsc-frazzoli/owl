@@ -21,4 +21,19 @@ public class LieGroupGeodesicTest extends TestCase {
     Tensor split = Se2CoveringGeodesic.INSTANCE.split(p, q, lambda);
     assertEquals(tensor, split);
   }
+
+  public void testNullFail() {
+    try {
+      new LieGroupGeodesic(Se2CoveringGroup.INSTANCE, null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      new LieGroupGeodesic(null, Se2CoveringExponential.INSTANCE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

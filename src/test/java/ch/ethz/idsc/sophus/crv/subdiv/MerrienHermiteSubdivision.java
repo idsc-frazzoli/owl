@@ -19,12 +19,15 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
  * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
  * by Byeongseon Jeong, Jungho Yoon */
 /* package */ class MerrienHermiteSubdivision {
-  private static final Tensor DIAG = Tensors.of(RealScalar.ONE, RationalScalar.HALF);
+  private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
   private static final Tensor AMP = Tensors.fromString("{{1/2, +1/8}, {-3/4, -1/8}}");
   private static final Tensor AMQ = Tensors.fromString("{{1/2, -1/8}, {+3/4, -1/8}}");
-  private static final Tensor ARP = DiagonalMatrix.with(DIAG).unmodifiable();
 
   public static HermiteSubdivision string(Tensor control) {
+    return new MerrienHermiteSubdivision(control).new StringIteration();
+  }
+
+  public static HermiteSubdivision string(Tensor control, Tensor diag) {
     return new MerrienHermiteSubdivision(control).new StringIteration();
   }
 
@@ -45,8 +48,8 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
     public Tensor iterate() {
       int length = control.length();
       Tensor string = Tensors.reserve(2 * length - 1);
-      Tensor Dk = MatrixPower.of(ARP, k);
-      Tensor Dnk1 = MatrixPower.of(ARP, -(k + 1));
+      Tensor Dk = MatrixPower.of(DIAG, k);
+      Tensor Dnk1 = MatrixPower.of(DIAG, -(k + 1));
       Tensor amp = Dot.of(Dnk1, AMP, Dk);
       Tensor amq = Dot.of(Dnk1, AMQ, Dk);
       for (int index = 0; index < length; ++index) {
@@ -67,8 +70,8 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
     public Tensor iterate() {
       int length = control.length();
       Tensor string = Tensors.reserve(2 * length);
-      Tensor Dk = MatrixPower.of(ARP, k);
-      Tensor Dnk1 = MatrixPower.of(ARP, -(k + 1));
+      Tensor Dk = MatrixPower.of(DIAG, k);
+      Tensor Dnk1 = MatrixPower.of(DIAG, -(k + 1));
       Tensor amp = Dot.of(Dnk1, AMP, Dk);
       Tensor amq = Dot.of(Dnk1, AMQ, Dk);
       for (int index = 0; index < length; ++index) {
