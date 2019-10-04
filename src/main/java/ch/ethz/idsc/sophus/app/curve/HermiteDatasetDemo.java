@@ -22,6 +22,7 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -36,6 +37,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final GokartPoseDataV2 gokartPoseData;
   private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   protected Tensor _control = Tensors.empty();
 
@@ -50,14 +52,20 @@ import ch.ethz.idsc.tensor.Tensors;
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
     }
     {
-      spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
+      spinnerLabelLimit.setList(Arrays.asList(1000, 1500, 2000, 3000, 5000));
       spinnerLabelLimit.setIndex(0);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());
     }
     {
+      spinnerLabelSkips.setList(Arrays.asList(5, 10, 25, 50, 100));
+      spinnerLabelSkips.setValue(50);
+      spinnerLabelSkips.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "skips");
+      spinnerLabelSkips.addSpinnerListener(type -> updateState());
+    }
+    {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
-      spinnerLabelLevel.setValue(0);
+      spinnerLabelLevel.setValue(3);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "level");
       spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
@@ -69,7 +77,8 @@ import ch.ethz.idsc.tensor.Tensors;
     String name = spinnerLabelString.getValue();
     Tensor control = gokartPoseData.getPoseVel(name, limit);
     Tensor result = Tensors.empty();
-    for (int index = 0; index < control.length(); index += 25)
+    int skips = spinnerLabelSkips.getValue();
+    for (int index = 0; index < control.length(); index += skips)
       result.append(control.get(index));
     _control = result;
   }
@@ -95,9 +104,10 @@ import ch.ethz.idsc.tensor.Tensors;
         }
     }
     graphics.setColor(Color.DARK_GRAY);
+    Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
     HermiteSubdivision hermiteSubdivision = //
         new LieMerrienHermiteSubdivision(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE) //
-            .string(RationalScalar.HALF, _control);
+            .string(delta, _control);
     Tensor refined = _control;
     for (int level = 0; level < spinnerLabelLevel.getValue(); ++level)
       refined = hermiteSubdivision.iterate();
