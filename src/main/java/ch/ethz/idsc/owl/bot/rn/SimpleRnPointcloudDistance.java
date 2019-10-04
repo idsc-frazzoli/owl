@@ -1,4 +1,4 @@
-// code by mg and jph
+// code by mg, jph
 package ch.ethz.idsc.owl.bot.rn;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,10 +10,17 @@ import ch.ethz.idsc.tensor.red.Norm;
 /** shortest distance from given point to a collection of points
  * 
  * class name reflects that results is obtained in a simple manner:
- * by iterating over all points
+ * by iterating over all points. Due to the O(n) complexity of the
+ * query, the use of the algorithm is not recommended for most
+ * applications, perhaps only for testing purpose.
  * 
- * see also RnPointcloudRegion which uses a nd-map */
+ * The implementation is used in external libraries.
+ * 
+ * @see RnPointcloudRegion which uses a nd-map */
 public class SimpleRnPointcloudDistance implements TensorScalarFunction {
+  /** @param points
+   * @param norm
+   * @return */
   public static TensorScalarFunction of(Tensor points, Norm norm) {
     return new SimpleRnPointcloudDistance(points, norm);
   }

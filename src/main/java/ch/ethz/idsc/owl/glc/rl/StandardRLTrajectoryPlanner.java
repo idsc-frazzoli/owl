@@ -120,7 +120,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
     }
   }
 
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TrajectoryPlanner
   public final StateIntegrator getStateIntegrator() {
     return stateIntegrator;
   }

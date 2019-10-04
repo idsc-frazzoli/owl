@@ -105,31 +105,32 @@ public abstract class CTrajectoryPlanner implements TrajectoryPlanner, Serializa
   }
 
   /***************************************************/
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TreePlanner
   public final void insertRoot(StateTime stateTime) {
     if (!domainMap.isEmpty())
       throw new RuntimeException("root insertion requires empty planner");
     insert(stateTimeRaster.convertToKey(stateTime), GlcNodes.createRoot(stateTime, heuristicFunction));
   }
 
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TreePlanner
   public final Optional<GlcNode> getBestOrElsePeek() {
     // Queue#peek() returns the head of queue, or null if queue is empty
     return Optional.ofNullable(getBest().orElse(queue.peek()));
   }
 
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TreePlanner
+  public final Collection<GlcNode> getQueue() {
+    return Collections.unmodifiableCollection(queue);
+  }
+
+  /***************************************************/
+  @Override // from TrajectoryPlanner
   public final HeuristicFunction getHeuristicFunction() {
     return heuristicFunction;
   }
 
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
     return Collections.unmodifiableMap(domainMap);
-  }
-
-  @Override // from GlcTrajectoryPlanner
-  public final Collection<GlcNode> getQueue() {
-    return Collections.unmodifiableCollection(queue);
   }
 }
