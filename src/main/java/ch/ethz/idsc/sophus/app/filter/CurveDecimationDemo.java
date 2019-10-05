@@ -14,8 +14,8 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
+import ch.ethz.idsc.sophus.app.api.GeodesicDatasetDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Power;
 
-/* package */ class CurveDecimationDemo extends GeodesicDisplayDemo {
+/* package */ class CurveDecimationDemo extends GeodesicDatasetDemo {
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
   private static final Color COLOR_RECON = new Color(128, 128, 128, 255);
@@ -53,9 +53,6 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
   private final PathRender pathRenderShape = new PathRender(COLOR_RECON, 2f);
   // ---
-  private final GokartPoseData gokartPoseData;
-  private final SpinnerLabel<String> spinnerLabelString = new SpinnerLabel<>();
-  private final SpinnerLabel<Integer> spinnerLabelLimit = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelWidth = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelDegre = new SpinnerLabel<>();
@@ -65,21 +62,8 @@ import ch.ethz.idsc.tensor.sca.Power;
   protected Tensor _control = Tensors.empty();
 
   public CurveDecimationDemo(GokartPoseData gokartPoseData) {
-    super(GeodesicDisplays.SE2_R2);
-    this.gokartPoseData = gokartPoseData;
+    super(GeodesicDisplays.SE2_R2, gokartPoseData);
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
-    {
-      spinnerLabelString.setList(gokartPoseData.list());
-      spinnerLabelString.addSpinnerListener(type -> updateState());
-      spinnerLabelString.setIndex(0);
-      spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
-    }
-    {
-      spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
-      spinnerLabelLimit.setIndex(0);
-      spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
-      spinnerLabelLimit.addSpinnerListener(type -> updateState());
-    }
     {
       spinnerLabelWidth.setList(Arrays.asList(0, 1, 5, 8, 10, 15, 20, 25, 30, 35));
       spinnerLabelWidth.setIndex(0);
@@ -114,6 +98,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     updateState();
   }
 
+  @Override
   protected void updateState() {
     int limit = spinnerLabelLimit.getValue();
     String name = spinnerLabelString.getValue();
