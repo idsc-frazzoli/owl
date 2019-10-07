@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dot;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.MatrixPower;
 
@@ -56,7 +57,7 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
     @Override // from HermiteSubdivision
     public Tensor iterate() {
       int length = control.length();
-      Tensor string = Tensors.reserve(2 * length - 1);
+      Tensor string = Tensors.reserve(2 * length - 2);
       Tensor Dk = MatrixPower.of(DIAG, k);
       Tensor Dnk1 = MatrixPower.of(DIAG, -(k + 1));
       Tensor alp = Dot.of(Dnk1, ALP, Dk);
@@ -78,7 +79,29 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
   private class CyclicIteration implements HermiteSubdivision {
     @Override // from HermiteSubdivision
     public Tensor iterate() {
-      throw new UnsupportedOperationException();
+      int length = control.length();
+      Tensor string = Tensors.reserve(2 * length - 2);
+      Tensor Dk = MatrixPower.of(DIAG, k);
+      Tensor Dnk1 = MatrixPower.of(DIAG, -(k + 1));
+      Tensor alp = Dot.of(Dnk1, ALP, Dk);
+      Tensor alq = Dot.of(Dnk1, ALQ, Dk);
+      Tensor ahp = Dot.of(Dnk1, AHP, Dk);
+      Tensor ahq = Dot.of(Dnk1, AHQ, Dk);
+      Tensor p = control.get(0);
+      for (int index = 1; index < length; ++index) {
+        Tensor q = control.get(index);
+        string.append(alp.dot(p).add(alq.dot(q)));
+        string.append(ahp.dot(p).add(ahq.dot(q)));
+        p = q;
+      }
+      {
+        p = Last.of(control);
+        Tensor q = control.get(0);
+        string.append(alp.dot(p).add(alq.dot(q)));
+        string.append(ahp.dot(p).add(ahq.dot(q)));
+      }
+      ++k;
+      return control = string;
     }
   }
 }

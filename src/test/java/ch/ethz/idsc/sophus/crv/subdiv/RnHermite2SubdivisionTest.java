@@ -21,9 +21,10 @@ public class RnHermite2SubdivisionTest extends TestCase {
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
     HermiteSubdivision hermiteSubdivision = RnHermite2Subdivision.string(control);
     hermiteSubdivision.iterate();
+    hermiteSubdivision.iterate();
     Tensor iterate = hermiteSubdivision.iterate();
     ExactTensorQ.require(iterate);
-    assertEquals(iterate.length(), 34);
+    assertEquals(iterate.length(), 33 * 2);
     Tensor id1 = Differences.of(iterate);
     Tensor id2 = Differences.of(id1);
     Chop.NONE.requireAllZero(id2);
