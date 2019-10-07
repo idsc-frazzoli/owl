@@ -5,7 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+
+import javax.swing.JToggleButton;
+
+import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -25,8 +30,12 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.sca.Power;
 
 /* package */ class HermiteDatasetDemo extends GeodesicDatasetDemo {
+  private static final int WIDTH = 640;
+  private static final int HEIGHT = 360;
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
   private static final Color COLOR_RECON = new Color(128, 128, 128, 255);
@@ -37,6 +46,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final GokartPoseDataV2 gokartPoseData;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
+  private final JToggleButton jToggleButton = new JToggleButton("derivatives");
   protected Tensor _control = Tensors.empty();
 
   public HermiteDatasetDemo(GokartPoseDataV2 gokartPoseData) {
@@ -46,14 +56,20 @@ import ch.ethz.idsc.tensor.Tensors;
     {
       spinnerLabelSkips.setList(Arrays.asList(5, 10, 25, 50, 100));
       spinnerLabelSkips.setValue(50);
-      spinnerLabelSkips.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "skips");
+      spinnerLabelSkips.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "skips");
       spinnerLabelSkips.addSpinnerListener(type -> updateState());
     }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
       spinnerLabelLevel.setValue(3);
-      spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "level");
+      spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "level");
       spinnerLabelLevel.addSpinnerListener(type -> updateState());
+    }
+    timerFrame.jToolBar.addSeparator();
+    {
+      jToggleButton.setSelected(true);
+      jToggleButton.setToolTipText("show derivatives");
+      timerFrame.jToolBar.add(jToggleButton);
     }
     updateState();
   }
@@ -96,9 +112,20 @@ import ch.ethz.idsc.tensor.Tensors;
         new LieMerrienHermiteSubdivision(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE) //
             .string(delta, _control);
     Tensor refined = _control;
-    for (int level = 0; level < spinnerLabelLevel.getValue(); ++level)
+    int levels = spinnerLabelLevel.getValue();
+    for (int level = 0; level < levels; ++level)
       refined = hermiteSubdivision.iterate();
     pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
+    if (jToggleButton.isSelected()) {
+      Tensor deltas = refined.get(Tensor.ALL, 1);
+      int dims = deltas.get(0).length();
+      if (0 < deltas.length()) {
+        JFreeChart jFreeChart = StaticHelper.listPlot(deltas, //
+            Range.of(0, deltas.length()).multiply(delta).divide(Power.of(2, levels)));
+        Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+        jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
+      }
+    }
     if (false) {
       final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.8));
       for (Tensor point : refined.get(Tensor.ALL, 0)) {

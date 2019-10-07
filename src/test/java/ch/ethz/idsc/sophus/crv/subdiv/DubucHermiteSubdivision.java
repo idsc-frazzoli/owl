@@ -13,38 +13,42 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
  * implementation for R^n
  * 
  * References:
- * "A family of Hermite interpolants by bisection algorithms", 1992,
- * by Merrien
- * 
  * "de Rham Transform of a Hermite Subdivision Scheme", 2007
  * by Dubuc, Merrien, p.9, with lambda == 1/8, mu == 3/2
  * 
- * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
- * by Byeongseon Jeong, Jungho Yoon
+ * "Hermite subdivision on manifolds via parallel transport", 2017
+ * by Moosmueller
  * 
- * @see BSpline1CurveSubdivision */
-/* package */ class MerrienHermiteSubdivision {
+ * @see BSpline2CurveSubdivision */
+/* package */ class DubucHermiteSubdivision {
   private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
-  private static final Tensor AMP = Tensors.fromString("{{1/2, +1/8}, {-3/4, -1/8}}");
-  private static final Tensor AMQ = Tensors.fromString("{{1/2, -1/8}, {+3/4, -1/8}}");
+  private static final Tensor ALP = //
+      Tensors.fromString("{{152/25, +31/25}, {-29/50, 277/100}}").divide(RealScalar.of(8));
+  private static final Tensor ALQ = //
+      Tensors.fromString("{{48/25, -29/25}, {+29/50, 13/20}}").divide(RealScalar.of(8));
+  // ---
+  private static final Tensor AHP = //
+      Tensors.fromString("{{152/25, -31/25}, {+29/50, 277/100}}").divide(RealScalar.of(8));
+  private static final Tensor AHQ = //
+      Tensors.fromString("{{48/25, +29/25}, {-29/50, 13/20}}").divide(RealScalar.of(8));
 
   public static HermiteSubdivision string(Tensor control) {
-    return new MerrienHermiteSubdivision(control).new StringIteration();
+    return new DubucHermiteSubdivision(control).new StringIteration();
   }
 
   public static HermiteSubdivision string(Tensor control, Tensor diag) {
-    return new MerrienHermiteSubdivision(control).new StringIteration();
+    return new DubucHermiteSubdivision(control).new StringIteration();
   }
 
   public static HermiteSubdivision cyclic(Tensor control) {
-    return new MerrienHermiteSubdivision(control).new CyclicIteration();
+    return new DubucHermiteSubdivision(control).new CyclicIteration();
   }
 
   // ---
   private Tensor control;
   private int k = 0;
 
-  private MerrienHermiteSubdivision(Tensor control) {
+  private DubucHermiteSubdivision(Tensor control) {
     this.control = control;
   }
 
@@ -55,8 +59,8 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
       Tensor string = Tensors.reserve(2 * length - 1);
       Tensor Dk = MatrixPower.of(DIAG, k);
       Tensor Dnk1 = MatrixPower.of(DIAG, -(k + 1));
-      Tensor amp = Dot.of(Dnk1, AMP, Dk);
-      Tensor amq = Dot.of(Dnk1, AMQ, Dk);
+      Tensor amp = Dot.of(Dnk1, ALP, Dk);
+      Tensor amq = Dot.of(Dnk1, ALQ, Dk);
       for (int index = 0; index < length; ++index) {
         Tensor p = control.get(index);
         string.append(p);
@@ -77,8 +81,8 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
       Tensor string = Tensors.reserve(2 * length);
       Tensor Dk = MatrixPower.of(DIAG, k);
       Tensor Dnk1 = MatrixPower.of(DIAG, -(k + 1));
-      Tensor amp = Dot.of(Dnk1, AMP, Dk);
-      Tensor amq = Dot.of(Dnk1, AMQ, Dk);
+      Tensor amp = Dot.of(Dnk1, ALP, Dk);
+      Tensor amq = Dot.of(Dnk1, ALQ, Dk);
       for (int index = 0; index < length; ++index) {
         Tensor p = control.get(index);
         string.append(p);

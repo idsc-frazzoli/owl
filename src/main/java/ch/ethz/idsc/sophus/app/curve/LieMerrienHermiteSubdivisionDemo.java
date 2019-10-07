@@ -3,7 +3,12 @@ package ch.ethz.idsc.sophus.app.curve;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+
+import javax.swing.JToggleButton;
+
+import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -21,14 +26,26 @@ import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 
 public class LieMerrienHermiteSubdivisionDemo extends ControlPointsDemo {
+  private static final int WIDTH = 640;
+  private static final int HEIGHT = 360;
+  // ---
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  private final JToggleButton jToggleButton = new JToggleButton("derivatives");
 
   public LieMerrienHermiteSubdivisionDemo() {
     super(true, GeodesicDisplays.SE2_R2);
     // ---
-    spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-    spinnerRefine.setValue(6);
-    spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    {
+      spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+      spinnerRefine.setValue(6);
+      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    }
+    timerFrame.jToolBar.addSeparator();
+    {
+      jToggleButton.setSelected(true);
+      jToggleButton.setToolTipText("show derivatives");
+      timerFrame.jToolBar.add(jToggleButton);
+    }
   }
 
   @Override
@@ -45,6 +62,7 @@ public class LieMerrienHermiteSubdivisionDemo extends ControlPointsDemo {
         break;
       case "R2":
         control = Tensor.of(tensor.stream().map(xya -> Tensors.of(xya.extract(0, 2), AngleVector.of(xya.Get(2)))));
+        break;
       default:
         return;
       }
@@ -55,6 +73,15 @@ public class LieMerrienHermiteSubdivisionDemo extends ControlPointsDemo {
       Tensor iterate = hermiteSubdivision.iterate();
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
       CurveCurvatureRender.of(curve, false, geometricLayer, graphics);
+      // ---
+      if (jToggleButton.isSelected()) {
+        Tensor deltas = iterate.get(Tensor.ALL, 1);
+        if (0 < deltas.length()) {
+          JFreeChart jFreeChart = StaticHelper.listPlot(deltas);
+          Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
+          jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
+        }
+      }
     }
   }
 

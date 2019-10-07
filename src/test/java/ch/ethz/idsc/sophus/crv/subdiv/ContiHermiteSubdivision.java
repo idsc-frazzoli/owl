@@ -18,7 +18,9 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
  * by Conti, Merrien, Romani
  * 
  * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
- * by Byeongseon Jeong, Jungho Yoon */
+ * by Byeongseon Jeong, Jungho Yoon
+ * 
+ * @see BSpline3CurveSubdivision */
 /* package */ class ContiHermiteSubdivision {
   private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
   // ---
