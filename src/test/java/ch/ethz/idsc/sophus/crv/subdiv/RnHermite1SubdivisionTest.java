@@ -2,14 +2,19 @@
 package ch.ethz.idsc.sophus.crv.subdiv;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.alg.Series;
+import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
-public class MerrienHermiteSubdivisionTest extends TestCase {
+public class RnHermite1SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
-    HermiteSubdivision hermiteSubdivision = MerrienHermiteSubdivision.string(control);
+    HermiteSubdivision hermiteSubdivision = RnHermite1Subdivision.string(control);
     Tensor iterate = hermiteSubdivision.iterate();
     Tensor expect = Tensors.fromString("{{0, 0}, {1/2, 3/2}, {1, 0}, {5/8, -5/4}, {0, -1}, {-1/8, 1/4}, {0, 0}}");
     assertEquals(iterate, expect);
@@ -23,16 +28,26 @@ public class MerrienHermiteSubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    HermiteSubdivision hermiteSubdivision = MerrienHermiteSubdivision.cyclic(control);
+    HermiteSubdivision hermiteSubdivision = RnHermite1Subdivision.cyclic(control);
     Tensor iterate = hermiteSubdivision.iterate();
     Tensor expect = Tensors.fromString("{{0, 0}, {1/2, 3/2}, {1, 0}, {5/8, -5/4}, {0, -1}, {-1/2, -3/4}, {-1/2, 1}, {-1/8, 1/2}}");
     assertEquals(iterate, expect);
     ExactTensorQ.require(iterate);
   }
 
-  public void testQuantity() {
-    Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
-    HermiteSubdivision hermiteSubdivision = MerrienHermiteSubdivision.string(control);
-    // hermiteSubdivision.iterate();
+  public void testPolynomialReproduction() {
+    Tensor coeffs = Tensors.vector(1, -3, 2, -1);
+    ScalarUnaryOperator f0 = Series.of(coeffs);
+    ScalarUnaryOperator f1 = Series.of(Multinomial.derivative(coeffs));
+    Tensor domain = Range.of(0, 10);
+    Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
+    HermiteSubdivision hermiteSubdivision = RnHermite1Subdivision.string(control);
+    Tensor iterate = hermiteSubdivision.iterate();
+    ExactTensorQ.require(iterate);
+    Tensor idm = Range.of(0, 19).multiply(RationalScalar.HALF);
+    Tensor if0 = iterate.get(Tensor.ALL, 0);
+    assertEquals(if0, idm.map(f0));
+    Tensor if1 = iterate.get(Tensor.ALL, 1);
+    assertEquals(if1, idm.map(f1));
   }
 }

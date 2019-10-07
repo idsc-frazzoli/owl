@@ -21,8 +21,8 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.crv.subdiv.Hermite1Subdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.LieMerrienHermiteSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -109,7 +109,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     graphics.setColor(Color.DARK_GRAY);
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
     HermiteSubdivision hermiteSubdivision = //
-        new LieMerrienHermiteSubdivision(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE) //
+        new Hermite1Subdivision(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE) //
             .string(delta, _control);
     Tensor refined = _control;
     int levels = spinnerLabelLevel.getValue();

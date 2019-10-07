@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * 
  * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
  * by Byeongseon Jeong, Jungho Yoon */
-public class LieMerrienHermiteSubdivision {
+public class Hermite1Subdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   // ---
   private final LieGroup lieGroup;
@@ -29,7 +29,7 @@ public class LieMerrienHermiteSubdivision {
   /** @param lieGroup
    * @param lieExponential
    * @throws Exception if either parameters is null */
-  public LieMerrienHermiteSubdivision(LieGroup lieGroup, LieExponential lieExponential) {
+  public Hermite1Subdivision(LieGroup lieGroup, LieExponential lieExponential) {
     this.lieGroup = lieGroup;
     this.lieExponential = lieExponential;
     lieGroupGeodesic = new LieGroupGeodesic(lieGroup, lieExponential);
