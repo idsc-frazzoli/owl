@@ -6,8 +6,12 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -24,6 +28,20 @@ public class RnHermite1SubdivisionTest extends TestCase {
     String string = "{{0, 0}, {5/32, 9/8}, {1/2, 3/2}, {27/32, 9/8}, {1, 0}, {57/64, -13/16}, {5/8, -5/4}, {19/64, -21/16}, {0, -1}, {-9/64, -3/16}, {-1/8, 1/4}, {-3/64, 5/16}, {0, 0}}";
     assertEquals(iterate, Tensors.fromString(string));
     ExactTensorQ.require(iterate);
+  }
+
+  public void testStringReverse() {
+    Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
+    Tensor cp2 = cp1.copy();
+    cp2.set(Tensor::negate, Tensor.ALL, 1);
+    HermiteSubdivision hs1 = RnHermite1Subdivision.string(cp1);
+    HermiteSubdivision hs2 = RnHermite1Subdivision.string(Reverse.of(cp2));
+    for (int count = 0; count < 3; ++count) {
+      Tensor result1 = hs1.iterate();
+      Tensor result2 = Reverse.of(hs2.iterate());
+      result2.set(Tensor::negate, Tensor.ALL, 1);
+      Chop._12.requireClose(result1, result2);
+    }
   }
 
   public void testCyclic() {

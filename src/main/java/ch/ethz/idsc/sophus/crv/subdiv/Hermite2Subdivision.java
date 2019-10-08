@@ -86,26 +86,23 @@ public class Hermite2Subdivision {
       Tensor qg = q.get(0);
       Tensor qv = q.get(1);
       ScalarTensorFunction scalarTensorFunction = lieGroupGeodesic.curve(pg, qg);
+      Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg)); // q - p
+      Tensor rv1 = log.multiply(rvk);
+      // TODO interpret tangent vectors at element in group -> use adjoint map
       {
-        // TODO interpret tangent vectors at element in group -> use adjoint map
         Tensor rg1 = scalarTensorFunction.apply(_06_25);
         Tensor rg2 = lieExponential.exp(pv.multiply(_31).subtract(qv.multiply(_29)).divide(rgk));
         Tensor rg = lieGroup.element(rg1).combine(rg2);
         // ---
-        Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg)); // q - p
-        Tensor rv1 = log.multiply(rvk);
         Tensor rv2 = qv.multiply(_13_80).add(pv.multiply(_277_400));
         Tensor rv = rv1.add(rv2);
         curve.append(Tensors.of(rg, rv));
       }
       {
-        // TODO interpret tangent vectors at element in group -> use adjoint map
         Tensor rg1 = scalarTensorFunction.apply(_19_25);
         Tensor rg2 = lieExponential.exp(pv.multiply(_29).subtract(qv.multiply(_31)).divide(rgk));
         Tensor rg = lieGroup.element(rg1).combine(rg2);
         // ---
-        Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg)); // q - p
-        Tensor rv1 = log.multiply(rvk);
         Tensor rv2 = qv.multiply(_277_400).add(pv.multiply(_13_80));
         Tensor rv = rv1.add(rv2);
         curve.append(Tensors.of(rg, rv));

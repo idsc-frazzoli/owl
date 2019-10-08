@@ -6,13 +6,30 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class RnHermite2SubdivisionTest extends TestCase {
+  public void testStringReverse() {
+    Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
+    Tensor cp2 = cp1.copy();
+    cp2.set(Tensor::negate, Tensor.ALL, 1);
+    HermiteSubdivision hs1 = RnHermite2Subdivision.string(cp1);
+    HermiteSubdivision hs2 = RnHermite2Subdivision.string(Reverse.of(cp2));
+    for (int count = 0; count < 3; ++count) {
+      Tensor result1 = hs1.iterate();
+      Tensor result2 = Reverse.of(hs2.iterate());
+      result2.set(Tensor::negate, Tensor.ALL, 1);
+      Chop._12.requireClose(result1, result2);
+    }
+  }
+
   public void testLinearReproduction() {
     Tensor coeffs = Tensors.vector(5, -3);
     ScalarUnaryOperator f0 = Series.of(coeffs);

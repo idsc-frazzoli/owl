@@ -11,6 +11,8 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.MatrixPower;
 
 /** Merrien interpolatory Hermite subdivision scheme of order two
+ * reproduces polynomials up to degree 3
+ * 
  * implementation for R^n
  * 
  * References:

@@ -8,6 +8,10 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Reverse;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class Hermite2SubdivisionTest extends TestCase {
@@ -21,6 +25,20 @@ public class Hermite2SubdivisionTest extends TestCase {
       assertEquals(it1, it2);
       ExactTensorQ.require(it1);
       ExactTensorQ.require(it2);
+    }
+  }
+
+  public void testStringReverseRn() {
+    Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
+    Tensor cp2 = cp1.copy();
+    cp2.set(Tensor::negate, Tensor.ALL, 1);
+    HermiteSubdivision hs1 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(cp1);
+    HermiteSubdivision hs2 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(Reverse.of(cp2));
+    for (int count = 0; count < 3; ++count) {
+      Tensor result1 = hs1.iterate();
+      Tensor result2 = Reverse.of(hs2.iterate());
+      result2.set(Tensor::negate, Tensor.ALL, 1);
+      Chop._12.requireClose(result1, result2);
     }
   }
 
