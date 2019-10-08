@@ -9,11 +9,7 @@ import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Reverse;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
-import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class Hermite1SubdivisionTest extends TestCase {
@@ -27,20 +23,6 @@ public class Hermite1SubdivisionTest extends TestCase {
       assertEquals(it1, it2);
       ExactTensorQ.require(it1);
       ExactTensorQ.require(it2);
-    }
-  }
-
-  public void testStringReverseRn() {
-    Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
-    Tensor cp2 = cp1.copy();
-    cp2.set(Tensor::negate, Tensor.ALL, 1);
-    TensorIteration hs1 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(cp1);
-    TensorIteration hs2 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(Reverse.of(cp2));
-    for (int count = 0; count < 3; ++count) {
-      Tensor result1 = hs1.iterate();
-      Tensor result2 = Reverse.of(hs2.iterate());
-      result2.set(Tensor::negate, Tensor.ALL, 1);
-      Chop._12.requireClose(result1, result2);
     }
   }
 
@@ -59,20 +41,20 @@ public class Hermite1SubdivisionTest extends TestCase {
 
   public void testStringQuantity() {
     Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
-    TensorIteration hermiteSubdivision = //
+    TensorIteration tensorIteration = //
         new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(Quantity.of(1, "s"), control);
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
+    tensorIteration.iterate();
+    tensorIteration.iterate();
+    tensorIteration.iterate();
   }
 
   public void testCyclicQuantity() {
     Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
-    TensorIteration hermiteSubdivision = //
+    TensorIteration tensorIteration = //
         new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).cyclic(Quantity.of(1, "s"), control);
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
+    tensorIteration.iterate();
+    tensorIteration.iterate();
+    tensorIteration.iterate();
   }
 
   public void testNullFail() {

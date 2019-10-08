@@ -13,10 +13,10 @@ import ch.ethz.idsc.tensor.io.Put;
   ;
   public static void main(String[] args) throws IOException {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration hermiteSubdivision = RnHermite2Subdivision.string(control);
+    TensorIteration tensorIteration = RnHermite2Subdivision.string(control);
     for (int count = 1; count <= 6; ++count)
-      hermiteSubdivision.iterate();
-    Tensor iterate = hermiteSubdivision.iterate();
+      tensorIteration.iterate();
+    Tensor iterate = tensorIteration.iterate();
     Put.of(HomeDirectory.file("hermite2.file"), iterate);
   }
 }

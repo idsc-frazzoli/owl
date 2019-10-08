@@ -1,15 +1,11 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.sophus.crv.subdiv.Hermite1Subdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.Hermite2Subdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.Hermite3Subdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 
-/* package */ enum HermiteSubdivisionSchemes {
+public enum HermiteSubdivisions {
   HERMITE1() {
     @Override
     public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
@@ -32,7 +28,8 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
   /** @param lieGroup
    * @param lieExponential
    * @param biinvariantMean
-   * @return */
+   * @return
+   * @throws Exception if either input parameter is null */
   public abstract HermiteSubdivision supply( //
       LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean);
 }

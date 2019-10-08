@@ -75,20 +75,20 @@ public class Hermite3SubdivisionTest extends TestCase {
 
   public void testStringQuantity() {
     Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
-    TensorIteration hermiteSubdivision = //
+    TensorIteration tensorIteration = //
         new Hermite3Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE).string(Quantity.of(1, "s"), control);
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
+    tensorIteration.iterate();
+    tensorIteration.iterate();
+    tensorIteration.iterate();
   }
 
   public void testCyclicQuantity() {
     Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
-    TensorIteration hermiteSubdivision = //
+    TensorIteration tensorIteration = //
         new Hermite3Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE).cyclic(Quantity.of(1, "s"), control);
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
+    tensorIteration.iterate();
+    tensorIteration.iterate();
+    tensorIteration.iterate();
   }
 
   public void testNullFail() {

@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.app.curve;
 import ch.ethz.idsc.sophus.app.api.AbstractDemoHelper;
 import junit.framework.TestCase;
 
-public class LieMerrienHermiteSubdivisionDemoTest extends TestCase {
+public class HermiteSubdivisionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new LieMerrienHermiteSubdivisionDemo());
+    AbstractDemoHelper.brief(new HermiteSubdivisionDemo());
   }
 }

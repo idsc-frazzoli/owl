@@ -37,10 +37,10 @@ public class RnHermite2SubdivisionTest extends TestCase {
     ScalarUnaryOperator f1 = Series.of(Multinomial.derivative(coeffs));
     Tensor domain = Range.of(0, 10);
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
-    TensorIteration hermiteSubdivision = RnHermite2Subdivision.string(control);
-    hermiteSubdivision.iterate();
-    hermiteSubdivision.iterate();
-    Tensor iterate = hermiteSubdivision.iterate();
+    TensorIteration tensorIteration = RnHermite2Subdivision.string(control);
+    tensorIteration.iterate();
+    tensorIteration.iterate();
+    Tensor iterate = tensorIteration.iterate();
     ExactTensorQ.require(iterate);
     assertEquals(iterate.length(), 33 * 2);
     Tensor id1 = Differences.of(iterate);

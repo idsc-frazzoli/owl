@@ -20,8 +20,8 @@ import junit.framework.TestCase;
 public class RnHermite3SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration hermiteSubdivision = RnHermite3Subdivision.string(control);
-    Tensor tensor = hermiteSubdivision.iterate();
+    TensorIteration tensorIteration = RnHermite3Subdivision.string(control);
+    Tensor tensor = tensorIteration.iterate();
     ExactTensorQ.require(tensor);
     assertEquals(tensor.length(), 7);
   }
@@ -30,11 +30,11 @@ public class RnHermite3SubdivisionTest extends TestCase {
     Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
     Tensor cp2 = cp1.copy();
     cp2.set(Tensor::negate, Tensor.ALL, 1);
-    TensorIteration hs1 = RnHermite3Subdivision.string(cp1);
-    TensorIteration hs2 = RnHermite3Subdivision.string(Reverse.of(cp2));
+    TensorIteration ti1 = RnHermite3Subdivision.string(cp1);
+    TensorIteration ti2 = RnHermite3Subdivision.string(Reverse.of(cp2));
     for (int count = 0; count < 3; ++count) {
-      Tensor result1 = hs1.iterate();
-      Tensor result2 = Reverse.of(hs2.iterate());
+      Tensor result1 = ti1.iterate();
+      Tensor result2 = Reverse.of(ti2.iterate());
       result2.set(Tensor::negate, Tensor.ALL, 1);
       Chop._12.requireClose(result1, result2);
     }
@@ -42,8 +42,8 @@ public class RnHermite3SubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration hermiteSubdivision = RnHermite3Subdivision.cyclic(control);
-    Tensor tensor = hermiteSubdivision.iterate();
+    TensorIteration tensorIteration = RnHermite3Subdivision.cyclic(control);
+    Tensor tensor = tensorIteration.iterate();
     ExactTensorQ.require(tensor);
     assertEquals(tensor.length(), 8);
   }
@@ -54,8 +54,8 @@ public class RnHermite3SubdivisionTest extends TestCase {
     ScalarUnaryOperator f1 = Series.of(Multinomial.derivative(coeffs));
     Tensor domain = Range.of(0, 10);
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
-    TensorIteration hermiteSubdivision = RnHermite3Subdivision.string(control);
-    Tensor iterate = hermiteSubdivision.iterate();
+    TensorIteration tensorIteration = RnHermite3Subdivision.string(control);
+    Tensor iterate = tensorIteration.iterate();
     ExactTensorQ.require(iterate);
     Tensor idm = Range.of(0, 19).multiply(RationalScalar.HALF);
     Tensor if0 = iterate.get(Tensor.ALL, 0);

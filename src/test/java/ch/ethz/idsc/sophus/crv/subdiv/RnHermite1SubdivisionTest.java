@@ -47,8 +47,8 @@ public class RnHermite1SubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration hermiteSubdivision = RnHermite1Subdivision.cyclic(control);
-    Tensor iterate = hermiteSubdivision.iterate();
+    TensorIteration tensorIteration = RnHermite1Subdivision.cyclic(control);
+    Tensor iterate = tensorIteration.iterate();
     Tensor expect = Tensors.fromString("{{0, 0}, {1/2, 3/2}, {1, 0}, {5/8, -5/4}, {0, -1}, {-1/2, -3/4}, {-1/2, 1}, {-1/8, 1/2}}");
     assertEquals(iterate, expect);
     ExactTensorQ.require(iterate);
@@ -60,8 +60,8 @@ public class RnHermite1SubdivisionTest extends TestCase {
     ScalarUnaryOperator f1 = Series.of(Multinomial.derivative(coeffs));
     Tensor domain = Range.of(0, 10);
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
-    TensorIteration hermiteSubdivision = RnHermite1Subdivision.string(control);
-    Tensor iterate = hermiteSubdivision.iterate();
+    TensorIteration tensorIteration = RnHermite1Subdivision.string(control);
+    Tensor iterate = tensorIteration.iterate();
     ExactTensorQ.require(iterate);
     Tensor idm = Range.of(0, 19).multiply(RationalScalar.HALF);
     Tensor if0 = iterate.get(Tensor.ALL, 0);

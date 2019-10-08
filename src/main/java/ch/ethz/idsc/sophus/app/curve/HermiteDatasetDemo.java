@@ -22,6 +22,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
+import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
@@ -46,7 +47,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   // ---
   private final GokartPoseDataV2 gokartPoseData;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
-  private final SpinnerLabel<HermiteSubdivisionSchemes> spinnerLabelScheme = new SpinnerLabel<>();
+  private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
   protected Tensor _control = Tensors.empty();
@@ -63,10 +64,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     timerFrame.jToolBar.addSeparator();
     {
-      spinnerLabelScheme.setArray(HermiteSubdivisionSchemes.values());
-      spinnerLabelScheme.setValue(HermiteSubdivisionSchemes.HERMITE1);
+      spinnerLabelScheme.setArray(HermiteSubdivisions.values());
+      spinnerLabelScheme.setValue(HermiteSubdivisions.HERMITE1);
       spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
-      // spinnerLabelScheme.addSpinnerListener(type -> updateState());
     }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
@@ -119,11 +119,11 @@ import ch.ethz.idsc.tensor.sca.Power;
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
     HermiteSubdivision hermiteSubdivisionFactory = //
         spinnerLabelScheme.getValue().supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
-    TensorIteration hermiteSubdivision = hermiteSubdivisionFactory.string(delta, _control);
+    TensorIteration tensorIteration = hermiteSubdivisionFactory.string(delta, _control);
     Tensor refined = _control;
     int levels = spinnerLabelLevel.getValue();
     for (int level = 0; level < levels; ++level)
-      refined = hermiteSubdivision.iterate();
+      refined = tensorIteration.iterate();
     pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
     if (jToggleButton.isSelected()) {
       Tensor deltas = refined.get(Tensor.ALL, 1);

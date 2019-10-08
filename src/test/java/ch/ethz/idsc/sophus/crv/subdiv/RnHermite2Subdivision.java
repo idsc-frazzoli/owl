@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
   }
 
   private class StringIteration implements TensorIteration {
-    @Override // from HermiteSubdivision
+    @Override // from TensorIteration
     public Tensor iterate() {
       int length = control.length();
       Tensor string = Tensors.reserve(2 * length - 2);
@@ -78,7 +78,7 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
   }
 
   private class CyclicIteration implements TensorIteration {
-    @Override // from HermiteSubdivision
+    @Override // from TensorIteration
     public Tensor iterate() {
       int length = control.length();
       Tensor string = Tensors.reserve(2 * length - 2);

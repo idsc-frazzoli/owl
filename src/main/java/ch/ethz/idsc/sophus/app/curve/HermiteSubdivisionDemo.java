@@ -17,24 +17,32 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.subdiv.Hermite1Subdivision;
+import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
+import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.TensorIteration;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.AngleVector;
 
-public class LieMerrienHermiteSubdivisionDemo extends ControlPointsDemo {
+public class HermiteSubdivisionDemo extends ControlPointsDemo {
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
   // ---
+  private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
 
-  public LieMerrienHermiteSubdivisionDemo() {
+  public HermiteSubdivisionDemo() {
     super(true, GeodesicDisplays.SE2_R2);
     // ---
+    {
+      spinnerLabelScheme.setArray(HermiteSubdivisions.values());
+      spinnerLabelScheme.setValue(HermiteSubdivisions.HERMITE1);
+      spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
+    }
     {
       spinnerRefine.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
       spinnerRefine.setValue(6);
@@ -66,11 +74,12 @@ public class LieMerrienHermiteSubdivisionDemo extends ControlPointsDemo {
       default:
         return;
       }
-      TensorIteration hermiteSubdivision = //
-          new Hermite1Subdivision(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()).string(control);
+      HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(),
+          geodesicDisplay.biinvariantMean());
+      TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
       for (int count = 1; count < spinnerRefine.getValue(); ++count)
-        hermiteSubdivision.iterate();
-      Tensor iterate = hermiteSubdivision.iterate();
+        tensorIteration.iterate();
+      Tensor iterate = tensorIteration.iterate();
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
       CurveCurvatureRender.of(curve, false, geometricLayer, graphics);
       // ---
@@ -86,6 +95,6 @@ public class LieMerrienHermiteSubdivisionDemo extends ControlPointsDemo {
   }
 
   public static void main(String[] args) {
-    new LieMerrienHermiteSubdivisionDemo().setVisible(1200, 600);
+    new HermiteSubdivisionDemo().setVisible(1200, 600);
   }
 }
