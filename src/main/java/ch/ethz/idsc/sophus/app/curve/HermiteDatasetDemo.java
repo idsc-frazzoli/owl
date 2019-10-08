@@ -21,10 +21,11 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.subdiv.Hermite1Subdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
+import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -45,6 +46,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   // ---
   private final GokartPoseDataV2 gokartPoseData;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
+  private final SpinnerLabel<HermiteSubdivisionSchemes> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
   protected Tensor _control = Tensors.empty();
@@ -59,11 +61,18 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelSkips.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "skips");
       spinnerLabelSkips.addSpinnerListener(type -> updateState());
     }
+    timerFrame.jToolBar.addSeparator();
+    {
+      spinnerLabelScheme.setArray(HermiteSubdivisionSchemes.values());
+      spinnerLabelScheme.setValue(HermiteSubdivisionSchemes.HERMITE1);
+      spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
+      // spinnerLabelScheme.addSpinnerListener(type -> updateState());
+    }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
       spinnerLabelLevel.setValue(3);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "level");
-      spinnerLabelLevel.addSpinnerListener(type -> updateState());
+      // spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
     {
@@ -108,9 +117,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     graphics.setColor(Color.DARK_GRAY);
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
-    HermiteSubdivision hermiteSubdivision = //
-        new Hermite1Subdivision(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE) //
-            .string(delta, _control);
+    HermiteSubdivision hermiteSubdivisionFactory = //
+        spinnerLabelScheme.getValue().supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+    TensorIteration hermiteSubdivision = hermiteSubdivisionFactory.string(delta, _control);
     Tensor refined = _control;
     int levels = spinnerLabelLevel.getValue();
     for (int level = 0; level < levels; ++level)

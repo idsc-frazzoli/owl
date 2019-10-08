@@ -5,6 +5,7 @@ import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
+import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -17,8 +18,8 @@ import junit.framework.TestCase;
 public class Hermite2SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
-    HermiteSubdivision hs1 = RnHermite2Subdivision.string(control);
-    HermiteSubdivision hs2 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(control);
+    TensorIteration hs1 = RnHermite2Subdivision.string(control);
+    TensorIteration hs2 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = hs1.iterate();
       Tensor it2 = hs2.iterate();
@@ -32,8 +33,8 @@ public class Hermite2SubdivisionTest extends TestCase {
     Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
     Tensor cp2 = cp1.copy();
     cp2.set(Tensor::negate, Tensor.ALL, 1);
-    HermiteSubdivision hs1 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(cp1);
-    HermiteSubdivision hs2 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(Reverse.of(cp2));
+    TensorIteration hs1 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(cp1);
+    TensorIteration hs2 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(Reverse.of(cp2));
     for (int count = 0; count < 3; ++count) {
       Tensor result1 = hs1.iterate();
       Tensor result2 = Reverse.of(hs2.iterate());
@@ -44,8 +45,8 @@ public class Hermite2SubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    HermiteSubdivision hs1 = RnHermite2Subdivision.cyclic(control);
-    HermiteSubdivision hs2 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).cyclic(control);
+    TensorIteration hs1 = RnHermite2Subdivision.cyclic(control);
+    TensorIteration hs2 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).cyclic(control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = hs1.iterate();
       Tensor it2 = hs2.iterate();

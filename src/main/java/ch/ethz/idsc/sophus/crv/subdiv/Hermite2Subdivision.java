@@ -6,6 +6,7 @@ import java.util.Iterator;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieGroupGeodesic;
+import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,7 +24,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * 
  * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
  * by Byeongseon Jeong, Jungho Yoon */
-public class Hermite2Subdivision {
+public class Hermite2Subdivision implements HermiteSubdivision {
   private static final Scalar _29 = RealScalar.of(29);
   private static final Scalar _31 = RealScalar.of(31);
   private static final Scalar _06_25 = RationalScalar.of(6, 25);
@@ -45,27 +46,23 @@ public class Hermite2Subdivision {
 
   /** @param control
    * @return */
-  public HermiteSubdivision string(Tensor control) {
+  public TensorIteration string(Tensor control) {
     return new Control(RealScalar.ONE, control).new StringIteration();
   }
 
-  /** @param delta between two samples in control
-   * @param control
-   * @return */
-  public HermiteSubdivision string(Scalar delta, Tensor control) {
+  @Override
+  public TensorIteration string(Scalar delta, Tensor control) {
     return new Control(delta, control).new StringIteration();
   }
 
   /** @param control
    * @return */
-  public HermiteSubdivision cyclic(Tensor control) {
+  public TensorIteration cyclic(Tensor control) {
     return new Control(RealScalar.ONE, control).new CyclicIteration();
   }
 
-  /** @param delta between two samples in control
-   * @param control
-   * @return */
-  public HermiteSubdivision cyclic(Scalar delta, Tensor control) {
+  @Override
+  public TensorIteration cyclic(Scalar delta, Tensor control) {
     return new Control(delta, control).new CyclicIteration();
   }
 
@@ -122,7 +119,7 @@ public class Hermite2Subdivision {
       return curve;
     }
 
-    private class StringIteration implements HermiteSubdivision {
+    private class StringIteration implements TensorIteration {
       @Override // from HermiteSubdivision
       public Tensor iterate() {
         Tensor curve = protected_string(control);
@@ -132,7 +129,7 @@ public class Hermite2Subdivision {
       }
     }
 
-    private class CyclicIteration implements HermiteSubdivision {
+    private class CyclicIteration implements TensorIteration {
       @Override // from HermiteSubdivision
       public Tensor iterate() {
         Tensor curve = protected_string(control);

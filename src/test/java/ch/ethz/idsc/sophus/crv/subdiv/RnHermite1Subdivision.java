@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -31,15 +32,15 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
   private static final Tensor AMP = Tensors.fromString("{{1/2, +1/8}, {-3/4, -1/8}}");
   private static final Tensor AMQ = Tensors.fromString("{{1/2, -1/8}, {+3/4, -1/8}}");
 
-  public static HermiteSubdivision string(Tensor control) {
+  public static TensorIteration string(Tensor control) {
     return new RnHermite1Subdivision(control).new StringIteration();
   }
 
-  public static HermiteSubdivision string(Tensor control, Tensor diag) {
+  public static TensorIteration string(Tensor control, Tensor diag) {
     return new RnHermite1Subdivision(control).new StringIteration();
   }
 
-  public static HermiteSubdivision cyclic(Tensor control) {
+  public static TensorIteration cyclic(Tensor control) {
     return new RnHermite1Subdivision(control).new CyclicIteration();
   }
 
@@ -51,7 +52,7 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
     this.control = control;
   }
 
-  private class StringIteration implements HermiteSubdivision {
+  private class StringIteration implements TensorIteration {
     @Override // from HermiteSubdivision
     public Tensor iterate() {
       int length = control.length();
@@ -73,7 +74,7 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
     }
   }
 
-  private class CyclicIteration implements HermiteSubdivision {
+  private class CyclicIteration implements TensorIteration {
     @Override // from HermiteSubdivision
     public Tensor iterate() {
       int length = control.length();

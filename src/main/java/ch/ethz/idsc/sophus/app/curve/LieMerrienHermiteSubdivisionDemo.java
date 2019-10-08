@@ -18,8 +18,8 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.subdiv.Hermite1Subdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
@@ -66,7 +66,7 @@ public class LieMerrienHermiteSubdivisionDemo extends ControlPointsDemo {
       default:
         return;
       }
-      HermiteSubdivision hermiteSubdivision = //
+      TensorIteration hermiteSubdivision = //
           new Hermite1Subdivision(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential()).string(control);
       for (int count = 1; count < spinnerRefine.getValue(); ++count)
         hermiteSubdivision.iterate();

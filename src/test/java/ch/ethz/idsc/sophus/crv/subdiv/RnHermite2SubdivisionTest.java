@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -20,8 +21,8 @@ public class RnHermite2SubdivisionTest extends TestCase {
     Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
     Tensor cp2 = cp1.copy();
     cp2.set(Tensor::negate, Tensor.ALL, 1);
-    HermiteSubdivision hs1 = RnHermite2Subdivision.string(cp1);
-    HermiteSubdivision hs2 = RnHermite2Subdivision.string(Reverse.of(cp2));
+    TensorIteration hs1 = RnHermite2Subdivision.string(cp1);
+    TensorIteration hs2 = RnHermite2Subdivision.string(Reverse.of(cp2));
     for (int count = 0; count < 3; ++count) {
       Tensor result1 = hs1.iterate();
       Tensor result2 = Reverse.of(hs2.iterate());
@@ -36,7 +37,7 @@ public class RnHermite2SubdivisionTest extends TestCase {
     ScalarUnaryOperator f1 = Series.of(Multinomial.derivative(coeffs));
     Tensor domain = Range.of(0, 10);
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
-    HermiteSubdivision hermiteSubdivision = RnHermite2Subdivision.string(control);
+    TensorIteration hermiteSubdivision = RnHermite2Subdivision.string(control);
     hermiteSubdivision.iterate();
     hermiteSubdivision.iterate();
     Tensor iterate = hermiteSubdivision.iterate();

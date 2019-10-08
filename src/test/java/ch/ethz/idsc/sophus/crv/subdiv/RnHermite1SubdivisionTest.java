@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,7 +19,7 @@ import junit.framework.TestCase;
 public class RnHermite1SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
-    HermiteSubdivision hermiteSubdivision = RnHermite1Subdivision.string(control);
+    TensorIteration hermiteSubdivision = RnHermite1Subdivision.string(control);
     Tensor iterate = hermiteSubdivision.iterate();
     Tensor expect = Tensors.fromString("{{0, 0}, {1/2, 3/2}, {1, 0}, {5/8, -5/4}, {0, -1}, {-1/8, 1/4}, {0, 0}}");
     assertEquals(iterate, expect);
@@ -34,8 +35,8 @@ public class RnHermite1SubdivisionTest extends TestCase {
     Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
     Tensor cp2 = cp1.copy();
     cp2.set(Tensor::negate, Tensor.ALL, 1);
-    HermiteSubdivision hs1 = RnHermite1Subdivision.string(cp1);
-    HermiteSubdivision hs2 = RnHermite1Subdivision.string(Reverse.of(cp2));
+    TensorIteration hs1 = RnHermite1Subdivision.string(cp1);
+    TensorIteration hs2 = RnHermite1Subdivision.string(Reverse.of(cp2));
     for (int count = 0; count < 3; ++count) {
       Tensor result1 = hs1.iterate();
       Tensor result2 = Reverse.of(hs2.iterate());
@@ -46,7 +47,7 @@ public class RnHermite1SubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    HermiteSubdivision hermiteSubdivision = RnHermite1Subdivision.cyclic(control);
+    TensorIteration hermiteSubdivision = RnHermite1Subdivision.cyclic(control);
     Tensor iterate = hermiteSubdivision.iterate();
     Tensor expect = Tensors.fromString("{{0, 0}, {1/2, 3/2}, {1, 0}, {5/8, -5/4}, {0, -1}, {-1/2, -3/4}, {-1/2, 1}, {-1/8, 1/2}}");
     assertEquals(iterate, expect);
@@ -59,7 +60,7 @@ public class RnHermite1SubdivisionTest extends TestCase {
     ScalarUnaryOperator f1 = Series.of(Multinomial.derivative(coeffs));
     Tensor domain = Range.of(0, 10);
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
-    HermiteSubdivision hermiteSubdivision = RnHermite1Subdivision.string(control);
+    TensorIteration hermiteSubdivision = RnHermite1Subdivision.string(control);
     Tensor iterate = hermiteSubdivision.iterate();
     ExactTensorQ.require(iterate);
     Tensor idm = Range.of(0, 19).multiply(RationalScalar.HALF);
