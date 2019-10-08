@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * {@link BSpline3CurveSubdivision}, and
  * {@link MSpline3CurveSubdivision} */
 public abstract class RefiningBSpline3CurveSubdivision extends AbstractBSpline3CurveSubdivision {
+  // TODO JPH only called from string refinement -> reserve allocation, class structure
   @Override
   protected final Tensor refine(Tensor tensor) {
     int length = tensor.length();

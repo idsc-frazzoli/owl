@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
  * @see BSpline1CurveSubdivision */
 /* package */ class RnHermite1Subdivision {
   private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
+  // ---
   private static final Tensor AMP = Tensors.fromString("{{1/2, +1/8}, {-3/4, -1/8}}");
   private static final Tensor AMQ = Tensors.fromString("{{1/2, -1/8}, {+3/4, -1/8}}");
 
