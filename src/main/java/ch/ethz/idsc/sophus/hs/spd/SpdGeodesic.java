@@ -6,7 +6,13 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
-/** see for instance
+/** References:
+ * "Subdivision Schemes for Positive Definite Matrices"
+ * by Uri Itai, Nir Sharon
+ * 
+ * "Approximation schemes for functions of positive-definite matrix values"
+ * by Nir Sharon, Uri Itai
+ * 
  * Riemannian Variance Filtering: An Independent Filtering Scheme for Statistical
  * Tests on Manifold-valued Data */
 // LONGTERM not implemented yet

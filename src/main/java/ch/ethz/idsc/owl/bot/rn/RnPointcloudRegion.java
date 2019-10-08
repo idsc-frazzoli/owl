@@ -51,7 +51,6 @@ public class RnPointcloudRegion implements Region<Tensor>, Serializable {
   public boolean isMember(Tensor tensor) {
     NdCenterInterface distanceInterface = EuclideanNdCenter.of(tensor);
     NdCluster<Void> ndCluster = ndMap.buildCluster(distanceInterface, 1);
-    // System.out.println(ndCluster.considered() + " / " + ndMap.size());
     Scalar distance = ndCluster.collection().iterator().next().distance();
     return Scalars.lessEquals(distance, radius);
   }

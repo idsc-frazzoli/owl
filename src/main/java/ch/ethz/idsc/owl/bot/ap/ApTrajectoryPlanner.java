@@ -47,10 +47,10 @@ import ch.ethz.idsc.tensor.qty.Degree;
     return new EtaRaster(PARTITIONSCALE, StateTimeTensorFunction.state(ApWrap.INSTANCE::represent));
   }
 
-  /** This function creates an object of the StandardGlcTrajectoryPlanner class.
+  /** This function creates an object of the StandardTrajectoryPlanner class.
    * All necessary parameters are defined in {@link ApTrajectoryPlanner}
    * 
-   * @return New StandardGlcTrajectoryPlanner for airplane simulation */
+   * @return New StandardTrajectoryPlanner for airplane simulation */
   static StandardTrajectoryPlanner apStandardTrajectoryPlanner() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         INTEGRATOR, RationalScalar.of(1, 5), 3);

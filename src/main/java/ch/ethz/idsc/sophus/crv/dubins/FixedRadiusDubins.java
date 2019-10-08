@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 public class FixedRadiusDubins implements DubinsPathGenerator, Serializable {
@@ -59,6 +60,6 @@ public class FixedRadiusDubins implements DubinsPathGenerator, Serializable {
     th_tr = StaticHelper.principalValue(th_tr);
     th_total = StaticHelper.principalValue(th_total);
     return dubinsPathType.dubinsSteer().steer(dist_tr, th_tr, th_total, radius) //
-        .map(segLength -> new DubinsPath(dubinsPathType, radius, segLength));
+        .map(segLength -> new DubinsPath(dubinsPathType, radius, segLength, Total.of(segLength).Get()));
   }
 }

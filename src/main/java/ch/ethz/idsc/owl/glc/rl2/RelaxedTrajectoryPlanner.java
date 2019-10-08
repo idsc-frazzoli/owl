@@ -123,7 +123,7 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
   }
 
   /***************************************************/
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TreePlanner
   public final void insertRoot(StateTime stateTime) {
     if (!domainQueueMap.isEmpty())
       throw new RuntimeException("root insertion requires empty planner");
@@ -132,25 +132,26 @@ public abstract class RelaxedTrajectoryPlanner implements TrajectoryPlanner, Ser
     addToDomainMap(stateTimeRaster.convertToKey(stateTime), root);
   }
 
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TreePlanner
   public final Optional<GlcNode> getBestOrElsePeek() {
     return Optional.ofNullable(getBest().orElse(globalQueue.peekBest()));
   }
 
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TreePlanner
+  public final Collection<GlcNode> getQueue() {
+    return Collections.unmodifiableCollection(globalQueue.collection());
+  }
+
+  /***************************************************/
+  @Override // from TrajectoryPlanner
   public final HeuristicFunction getHeuristicFunction() {
     return heuristicFunction;
   }
 
-  @Override // from GlcTrajectoryPlanner
+  @Override // from TrajectoryPlanner
   public final Map<Tensor, GlcNode> getDomainMap() {
     return domainQueueMap.getMap().entrySet().stream() //
         .collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().peekBest()));
-  }
-
-  @Override // from GlcTrajectoryPlanner
-  public final Collection<GlcNode> getQueue() {
-    return Collections.unmodifiableCollection(globalQueue.collection());
   }
 
   public StateTimeRaster stateTimeRaster() {

@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
 public enum R1Integrator implements Integrator {
   INSTANCE;
   // ---
-  @Override
+  @Override // from Integrator
   public Tensor step(Flow flow, Tensor x, Scalar h) {
     return direct(x, flow.getU().Get(0), h);
   }

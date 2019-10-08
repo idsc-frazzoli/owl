@@ -18,11 +18,12 @@ public abstract class AbstractBSpline3CurveSubdivision extends AbstractBSpline1C
       return tensor.copy();
     Tensor curve = Tensors.reserve(2 * length);
     Tensor p = Last.of(tensor);
+    Tensor q = tensor.get(0);
     for (int index = 0; index < length; ++index) {
-      Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % length);
       curve.append(center(p, q, r)).append(midpoint(q, r));
       p = q;
+      q = r;
     }
     return curve;
   }

@@ -33,7 +33,7 @@ public abstract class AbstractBSpline2CurveSubdivision implements CurveSubdivisi
 
   private Tensor protected_string(Tensor tensor) {
     int length = tensor.length();
-    Tensor curve = Tensors.reserve(2 * length);
+    Tensor curve = Tensors.reserve(2 * length); // allocation for cyclic case
     Iterator<Tensor> iterator = tensor.iterator();
     Tensor p = iterator.next();
     while (iterator.hasNext()) {

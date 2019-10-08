@@ -1,14 +1,19 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
+import org.jfree.chart.JFreeChart;
+
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
+import ch.ethz.idsc.sophus.util.plot.ListPlot;
+import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
@@ -47,5 +52,17 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
             Tensors.of(midpointInterface.midpoint(Last.of(prev), Last.of(control))));
     }
     return refined;
+  }
+
+  public static JFreeChart listPlot(Tensor deltas) {
+    return listPlot(deltas, Range.of(0, deltas.length()));
+  }
+
+  public static JFreeChart listPlot(Tensor deltas, Tensor domain) {
+    VisualSet visualSet = new VisualSet();
+    int dims = deltas.get(0).length();
+    for (int index = 0; index < dims; ++index)
+      visualSet.add(domain, deltas.get(Tensor.ALL, index));
+    return ListPlot.of(visualSet);
   }
 }

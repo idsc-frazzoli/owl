@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.bot.rn.RnMinDistGoalManager;
 import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
 import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
-import ch.ethz.idsc.owl.glc.core.CheckedGlcTrajectoryPlanner;
+import ch.ethz.idsc.owl.glc.core.CheckedTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.HeuristicAssert;
@@ -76,7 +76,7 @@ public class StandardTrajectoryPlannerTest extends TestCase {
     BallRegion ballRegion = new BallRegion(stateGoal, radius);
     GoalInterface goalInterface = new RnMinDistGoalManager(ballRegion);
     // ---
-    TrajectoryPlanner trajectoryPlanner = CheckedGlcTrajectoryPlanner.wrap(new StandardTrajectoryPlanner( //
+    TrajectoryPlanner trajectoryPlanner = CheckedTrajectoryPlanner.wrap(new StandardTrajectoryPlanner( //
         EtaRaster.state(eta), //
         FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5), //
         controls, EmptyObstacleConstraint.INSTANCE, goalInterface));

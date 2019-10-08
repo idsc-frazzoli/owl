@@ -17,8 +17,6 @@ public enum CurveCurvatureRender {
   ;
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   private static final Scalar COMB_SCALE = DoubleScalar.of(-1);
-  private static final PathRender PATH_RENDER_CURVE = new PathRender(Color.BLUE, 1.25f);
-  private static final PathRender PATH_RENDER_CURVATURE = new PathRender(COLOR_CURVATURE_COMB);
 
   /** @param curve {{x0, y0}, {x1, y1}, ...}
    * @param isCyclic
@@ -62,8 +60,10 @@ public enum CurveCurvatureRender {
     if (0 < curve.length())
       if (Unprotect.dimension1(curve) != 2)
         throw TensorRuntimeException.of(curve);
-    PATH_RENDER_CURVE.setCurve(curve, isCyclic).render(geometricLayer, graphics);
+    new PathRender(Color.BLUE, 1.25f).setCurve(curve, isCyclic).render(geometricLayer, graphics);
     if (comb)
-      PATH_RENDER_CURVATURE.setCurve(CurvatureComb.of(curve, scale, isCyclic), isCyclic).render(geometricLayer, graphics);
+      new PathRender(COLOR_CURVATURE_COMB) //
+          .setCurve(CurvatureComb.of(curve, scale, isCyclic), isCyclic) //
+          .render(geometricLayer, graphics);
   }
 }
