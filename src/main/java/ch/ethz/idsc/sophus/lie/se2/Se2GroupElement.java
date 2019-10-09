@@ -31,7 +31,7 @@ public class Se2GroupElement extends Se2CoveringGroupElement {
     return new Se2GroupElement(px, py, pa, ca, sa);
   }
 
-  @Override
+  @Override // from Se2CoveringGroupElement
   protected Tensor inverseTensor() {
     return super.inverseTensor();
   }
