@@ -7,6 +7,7 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -16,7 +17,7 @@ public class Hermite1SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
     TensorIteration hs1 = RnHermite1Subdivision.string(control);
-    TensorIteration hs2 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(control);
+    TensorIteration hs2 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = hs1.iterate();
       Tensor it2 = hs2.iterate();
@@ -29,7 +30,7 @@ public class Hermite1SubdivisionTest extends TestCase {
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
     TensorIteration hs1 = RnHermite1Subdivision.cyclic(control);
-    TensorIteration hs2 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).cyclic(control);
+    TensorIteration hs2 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).cyclic(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = hs1.iterate();
       Tensor it2 = hs2.iterate();
