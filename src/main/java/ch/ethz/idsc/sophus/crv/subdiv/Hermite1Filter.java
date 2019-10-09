@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /**  */
-public class Hermite1Filter {
+public class Hermite1Filter implements HermiteFilter {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   // ---
   private final LieGroup lieGroup;
@@ -28,6 +28,7 @@ public class Hermite1Filter {
     lieGroupGeodesic = new LieGroupGeodesic(lieGroup, lieExponential);
   }
 
+  @Override
   public TensorIteration string(Scalar delta, Tensor control) {
     return new Control(delta, control).new StringIteration();
   }
