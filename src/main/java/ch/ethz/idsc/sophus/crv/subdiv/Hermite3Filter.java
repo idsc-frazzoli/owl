@@ -30,7 +30,7 @@ public class Hermite3Filter implements HermiteFilter {
     this.biinvariantMean = Objects.requireNonNull(biinvariantMean);
   }
 
-  @Override
+  @Override // from HermiteFilter
   public TensorIteration string(Scalar delta, Tensor control) {
     return new Control(delta, control).new StringIteration();
   }

@@ -28,7 +28,7 @@ public class Hermite1Filter implements HermiteFilter {
     lieGroupGeodesic = new LieGroupGeodesic(lieGroup, lieExponential);
   }
 
-  @Override
+  @Override // from HermiteFilter
   public TensorIteration string(Scalar delta, Tensor control) {
     return new Control(delta, control).new StringIteration();
   }

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.itp;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
 
 /** Hint:
  * for {@link RnBiinvariantMean} the interpolation is identical to {@link LinearInterpolation} */
-/* package */ class BiinvariantMeanInterpolation extends AbstractInterpolation {
+/* package */ class BiinvariantMeanInterpolation extends AbstractInterpolation implements Serializable {
   /** @param biinvariantMean
    * @param tensor
    * @return */

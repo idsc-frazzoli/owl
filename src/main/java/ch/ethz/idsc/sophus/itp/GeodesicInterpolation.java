@@ -1,6 +1,7 @@
 // code by gjoel, jph
 package ch.ethz.idsc.sophus.itp;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -12,7 +13,7 @@ import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.sca.Floor;
 
 /** univariate geodesic interpolation */
-public class GeodesicInterpolation extends AbstractInterpolation {
+public class GeodesicInterpolation extends AbstractInterpolation implements Serializable {
   /** @param binaryAverage
    * @param tensor
    * @return interpolation function for scalars from the interval [0, tensor.length() - 1] */
