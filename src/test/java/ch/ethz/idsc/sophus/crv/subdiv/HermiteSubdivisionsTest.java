@@ -10,6 +10,8 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -50,6 +52,38 @@ public class HermiteSubdivisionsTest extends TestCase {
         result2.set(Tensor::negate, Tensor.ALL, 1);
         Chop._12.requireClose(result1, result2);
       }
+    }
+  }
+
+  public void testSe2ConstantReproduction() {
+    Tensor control = ConstantArray.of(Tensors.fromString("{{2, 3, 1}, {0, 0, 0}}"), 10);
+    for (HermiteSubdivisions hermiteSubdivisions : HermiteSubdivisions.values()) {
+      HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
+          Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+      TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
+      tensorIteration.iterate();
+      Tensor iterate = tensorIteration.iterate();
+      Chop._13.requireAllZero(iterate.get(Tensor.ALL, 1));
+    }
+  }
+
+  public void testSe2LinearReproduction() {
+    Tensor pg = Tensors.vector(1, 2, 3);
+    Tensor pv = Tensors.vector(.3, -.2, -.1);
+    Tensor control = Tensors.empty();
+    for (int count = 0; count < 10; ++count) {
+      control.append(Tensors.of(pg, pv));
+      pg = Se2Group.INSTANCE.element(pg).combine(Se2CoveringExponential.INSTANCE.exp(pv));
+    }
+    control = control.unmodifiable();
+    for (HermiteSubdivisions hermiteSubdivisions : HermiteSubdivisions.values()) {
+      HermiteSubdivision hermiteSubdivision = hermiteSubdivisions.supply( //
+          Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+      TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
+      tensorIteration.iterate();
+      Tensor iterate = tensorIteration.iterate();
+      for (Tensor rv : iterate.get(Tensor.ALL, 1))
+        Chop._13.requireClose(pv, rv);
     }
   }
 }

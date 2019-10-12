@@ -31,4 +31,14 @@ public class RnGroupElement implements LieGroupElement, Serializable {
   public Tensor adjoint(Tensor tensor) {
     return tensor.copy();
   }
+
+  @Override // from LieGroupElement
+  public Tensor dL(Tensor tensor) {
+    return tensor.copy();
+  }
+
+  @Override // from LieGroupElement
+  public Tensor dR(Tensor tensor) {
+    return tensor.copy();
+  }
 }

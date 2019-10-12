@@ -148,6 +148,12 @@ public class Se2GroupElementTest extends TestCase {
     }
   }
 
+  public void testDL() {
+    Se2GroupElement se2GroupElement = new Se2GroupElement(Tensors.vector(0, 0, Math.PI / 2));
+    Tensor dL = se2GroupElement.dL(Tensors.vector(1, 0, 0));
+    Chop._12.requireClose(dL, UnitVector.of(3, 1).negate());
+  }
+
   public void testFail() {
     try {
       Se2Adjoint.forward(RealScalar.ONE);

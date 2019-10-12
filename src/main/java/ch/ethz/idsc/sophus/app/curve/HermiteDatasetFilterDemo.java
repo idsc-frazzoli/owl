@@ -22,8 +22,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.subdiv.Hermite1Subdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
+import ch.ethz.idsc.sophus.crv.subdiv.Hermite3Filter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
@@ -36,11 +35,12 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.sca.Power;
 
-/* package */ class HermiteDatasetDemo extends GeodesicDatasetDemo {
+/* package */ class HermiteDatasetFilterDemo extends GeodesicDatasetDemo {
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
   private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
+  // private static final Color COLOR_FILTR = new Color(160, 160, 160, 160);
   private static final Color COLOR_RECON = new Color(128, 128, 128, 255);
   // ---
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
@@ -48,31 +48,31 @@ import ch.ethz.idsc.tensor.sca.Power;
   // ---
   private final GokartPoseDataV2 gokartPoseData;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
-  private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
+  // private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final JToggleButton jToggleAdjoint = new JToggleButton("ad");
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
   protected Tensor _control = Tensors.empty();
 
-  public HermiteDatasetDemo(GokartPoseDataV2 gokartPoseData) {
+  public HermiteDatasetFilterDemo(GokartPoseDataV2 gokartPoseData) {
     super(GeodesicDisplays.SE2_ONLY, gokartPoseData);
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
-      spinnerLabelSkips.setList(Arrays.asList(5, 10, 25, 50, 100));
-      spinnerLabelSkips.setValue(50);
+      spinnerLabelSkips.setList(Arrays.asList(1, 2, 5, 10, 25, 50));
+      spinnerLabelSkips.setValue(5);
       spinnerLabelSkips.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "skips");
       spinnerLabelSkips.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
+    // {
+    // spinnerLabelScheme.setArray(HermiteSubdivisions.values());
+    // spinnerLabelScheme.setValue(HermiteSubdivisions.HERMITE1);
+    // spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
+    // }
     {
-      spinnerLabelScheme.setArray(HermiteSubdivisions.values());
-      spinnerLabelScheme.setValue(HermiteSubdivisions.HERMITE1);
-      spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
-    }
-    {
-      spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
-      spinnerLabelLevel.setValue(3);
+      spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6));
+      spinnerLabelLevel.setValue(1);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "level");
       // spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
@@ -123,14 +123,28 @@ import ch.ethz.idsc.tensor.sca.Power;
     graphics.setColor(Color.DARK_GRAY);
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
     Hermite1Subdivision.AD = jToggleAdjoint.isSelected();
-    HermiteSubdivision hermiteSubdivisionFactory = //
-        spinnerLabelScheme.getValue().supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
-    TensorIteration tensorIteration = hermiteSubdivisionFactory.string(delta, _control);
+    TensorIteration tensorIteration = //
+        // new Hermite1Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE).string(delta, _control);
+        new Hermite3Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.FILTER) //
+            .string(delta, _control);
     Tensor refined = _control;
-    int levels = spinnerLabelLevel.getValue();
+    int levels = 2 * spinnerLabelLevel.getValue();
     for (int level = 0; level < levels; ++level)
       refined = tensorIteration.iterate();
-    pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
+    {
+      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
+      for (Tensor point : refined.get(Tensor.ALL, 0)) {
+        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+        Path2D path2d = geometricLayer.toPath2D(shape);
+        path2d.closePath();
+        graphics.setColor(new Color(128, 255, 128, 64));
+        graphics.fill(path2d);
+        graphics.setColor(COLOR_CURVE);
+        graphics.draw(path2d);
+        geometricLayer.popMatrix();
+      }
+    }
+    // pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
     if (jToggleButton.isSelected()) {
       Tensor deltas = refined.get(Tensor.ALL, 1);
       int dims = deltas.get(0).length();
@@ -141,22 +155,9 @@ import ch.ethz.idsc.tensor.sca.Power;
         jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
       }
     }
-    if (false) {
-      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.8));
-      for (Tensor point : refined.get(Tensor.ALL, 0)) {
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
-        Path2D path2d = geometricLayer.toPath2D(shape);
-        path2d.closePath();
-        graphics.setColor(COLOR_SHAPE);
-        graphics.fill(path2d);
-        graphics.setColor(Color.BLACK);
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
-      }
-    }
   }
 
   public static void main(String[] args) {
-    new HermiteDatasetDemo(GokartPoseDataV2.RACING_DAY).setVisible(1000, 800);
+    new HermiteDatasetFilterDemo(GokartPoseDataV2.RACING_DAY).setVisible(1000, 800);
   }
 }

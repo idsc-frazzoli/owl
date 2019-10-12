@@ -17,4 +17,12 @@ public interface LieGroupElement {
    * @param tensor element of the lie algebra
    * @return Ad(this).tensor */
   Tensor adjoint(Tensor tensor);
+
+  default Tensor dL(Tensor tensor) {
+    throw new UnsupportedOperationException();
+  }
+
+  default Tensor dR(Tensor tensor) {
+    throw new UnsupportedOperationException();
+  }
 }

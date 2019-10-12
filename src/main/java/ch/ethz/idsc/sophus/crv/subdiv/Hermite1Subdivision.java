@@ -3,6 +3,7 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieGroupElement;
 import ch.ethz.idsc.sophus.lie.LieGroupGeodesic;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -22,6 +23,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * by Byeongseon Jeong, Jungho Yoon */
 public class Hermite1Subdivision implements HermiteSubdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
+  public static boolean AD = false;
   // ---
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
@@ -36,26 +38,24 @@ public class Hermite1Subdivision implements HermiteSubdivision {
     lieGroupGeodesic = new LieGroupGeodesic(lieGroup, lieExponential);
   }
 
-  /** @param control
-   * @return */
-  public TensorIteration string(Tensor control) {
-    return new Control(RealScalar.ONE, control).new StringIteration();
-  }
-
   @Override // from HermiteSubdivision
   public TensorIteration string(Scalar delta, Tensor control) {
     return new Control(delta, control).new StringIteration();
   }
 
-  /** @param control
-   * @return */
-  public TensorIteration cyclic(Tensor control) {
-    return new Control(RealScalar.ONE, control).new CyclicIteration();
-  }
-
   @Override // from HermiteSubdivision
   public TensorIteration cyclic(Scalar delta, Tensor control) {
     return new Control(delta, control).new CyclicIteration();
+  }
+
+  // @SuppressWarnings("static-method")
+  private Tensor move(Tensor pg, Tensor rg, Tensor pv) {
+    if (AD) {
+      LieGroupElement lieGroupElement = lieGroup.element(lieGroup.element(rg).inverse().combine(pg));
+      return lieGroupElement.adjoint(pv);
+    }
+    // return lieGroupElement.dL(pv);
+    return pv;
   }
 
   private class Control {
@@ -77,15 +77,21 @@ public class Hermite1Subdivision implements HermiteSubdivision {
       Tensor pv = p.get(1);
       Tensor qg = q.get(0);
       Tensor qv = q.get(1);
-      // TODO interpret tangent vectors at element in group -> use adjoint map
-      Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg);
-      Tensor rg2 = lieExponential.exp(pv.subtract(qv).divide(rgk));
-      Tensor rg = lieGroup.element(rg1).combine(rg2);
+      Tensor rg;
+      {
+        Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg);
+        Tensor rpv = move(pg, rg1, pv);
+        Tensor rqv = move(qg, rg1, qv);
+        Tensor rg2 = lieExponential.exp(rpv.subtract(rqv).divide(rgk));
+        rg = lieGroup.element(rg1).combine(rg2);
+      }
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg));
       Tensor rv1 = log.multiply(rvk);
-      Tensor rv2 = qv.add(pv).multiply(_1_4);
+      Tensor pqv = move(qg, pg, qv);
+      Tensor rv2 = pqv.add(pv).multiply(_1_4);
       Tensor rv = rv1.subtract(rv2);
-      return Tensors.of(rg, rv);
+      Tensor rrv = move(pg, rg, rv);
+      return Tensors.of(rg, rrv);
     }
 
     private class StringIteration implements TensorIteration {

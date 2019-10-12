@@ -44,24 +44,12 @@ public class Hermite2Subdivision implements HermiteSubdivision {
     lieGroupGeodesic = new LieGroupGeodesic(lieGroup, lieExponential);
   }
 
-  /** @param control
-   * @return */
-  public TensorIteration string(Tensor control) {
-    return new Control(RealScalar.ONE, control).new StringIteration();
-  }
-
-  @Override
+  @Override // from HermiteSubdivision
   public TensorIteration string(Scalar delta, Tensor control) {
     return new Control(delta, control).new StringIteration();
   }
 
-  /** @param control
-   * @return */
-  public TensorIteration cyclic(Tensor control) {
-    return new Control(RealScalar.ONE, control).new CyclicIteration();
-  }
-
-  @Override
+  @Override // from HermiteSubdivision
   public TensorIteration cyclic(Scalar delta, Tensor control) {
     return new Control(delta, control).new CyclicIteration();
   }

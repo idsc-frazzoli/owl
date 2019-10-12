@@ -83,4 +83,26 @@ public class Se2CoveringGroupElement implements LieGroupElement, Serializable {
         px.multiply(sa).subtract(py.multiply(ca)), //
         pa.negate());
   }
+
+  @Override // from LieGroupElement
+  public final Tensor dL(Tensor uvw) {
+    Scalar u = uvw.Get(0);
+    Scalar v = uvw.Get(1);
+    Scalar w = uvw.Get(2);
+    return Tensors.of( //
+        ca.multiply(u).add(sa.multiply(v)), //
+        ca.multiply(v).subtract(sa.multiply(u)), //
+        w);
+  }
+
+  @Override // from LieGroupElement
+  public Tensor dR(Tensor uvw) {
+    Scalar u = uvw.Get(0);
+    Scalar v = uvw.Get(1);
+    Scalar w = uvw.Get(2);
+    return Tensors.of( //
+        u.subtract(py.multiply(w)), //
+        v.add(px.multiply(w)), //
+        w);
+  }
 }

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import ch.ethz.idsc.owl.math.Derive;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
@@ -34,7 +35,7 @@ public class RnHermite2SubdivisionTest extends TestCase {
   public void testLinearReproduction() {
     Tensor coeffs = Tensors.vector(5, -3);
     ScalarUnaryOperator f0 = Series.of(coeffs);
-    ScalarUnaryOperator f1 = Series.of(Multinomial.derivative(coeffs));
+    ScalarUnaryOperator f1 = Series.of(Derive.of(coeffs));
     Tensor domain = Range.of(0, 10);
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
     TensorIteration tensorIteration = RnHermite2Subdivision.string(control);

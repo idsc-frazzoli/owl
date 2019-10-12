@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.lie.se2c;
 
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -94,5 +95,8 @@ public class Se2CoveringGroupElementTest extends TestCase {
     Se2CoveringGroupElement element = new Se2CoveringGroupElement(xya);
     Tensor combine = element.combine(element.inverseTensor());
     Chop._12.requireClose(combine, Tensors.fromString("{0[m], 0[m], 0}"));
+    element.dL(Tensors.fromString("{2[m*s^-1], 3[m*s^-1], 4[s^-1]}"));
+    Tensor dR = element.dR(Tensors.fromString("{2[m*s^-1], 3[m*s^-1], 4[s^-1]}"));
+    ExactTensorQ.require(dR);
   }
 }
