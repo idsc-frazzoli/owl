@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public class TransitionCurvatureQuery implements TransitionRegionQuery, Serializable {
   private final Clip clip;
 
+  /** @param clip with positive width */
   public TransitionCurvatureQuery(Clip clip) {
     Sign.requirePositive(clip.width());
     this.clip = clip;

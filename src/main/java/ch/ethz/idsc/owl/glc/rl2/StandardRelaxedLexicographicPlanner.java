@@ -20,9 +20,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** Motion planning algorithm using a lexicographic semiorder as preference structure to evaluate which trajectories are deemed better than others.
  * The algorithm is an adaptation of the Generalized Labeling Correcting method.
  * 
- * For a detailed description, see Chapter 7.1 in "Multi-Objective Optimization Using Preference Structures".
- * 
- * @author Andre */
+ * For a detailed description, see Chapter 7.1 in "Multi-Objective Optimization Using Preference Structures". */
 public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;

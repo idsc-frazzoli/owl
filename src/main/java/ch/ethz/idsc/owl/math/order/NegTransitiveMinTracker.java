@@ -51,12 +51,15 @@ public class NegTransitiveMinTracker<T> implements MinTracker<T>, Serializable {
         break;
       // in case of total preorder or total order
       case INDIFFERENT:
-        if (!collection.contains(x) && !keepOnlyRepresentatives())
+        if (!collection.contains(x) && //
+            !keepOnlyRepresentatives())
           collection.add(x);
         break;
+      // TODO ASTOLL justify why this is the same as "case indifferent"
       // in case of strict weak order or strict total order
       case INCOMPARABLE:
-        if (!collection.contains(x) && !keepOnlyRepresentatives())
+        if (!collection.contains(x) && //
+            !keepOnlyRepresentatives())
           collection.add(x);
         break;
       case STRICTLY_SUCCEEDS:

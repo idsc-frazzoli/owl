@@ -5,9 +5,7 @@ import java.util.Objects;
 
 /** Creates a card of the game jassen with the attributes color and card type
  * 
- * https://en.wikipedia.org/wiki/Jass
- * 
- * @author astoll */
+ * https://en.wikipedia.org/wiki/Jass */
 /* package */ class JassCard {
   public static enum Color {
     ROSEN, EICHEL, SCHILTEN, SCHELLE

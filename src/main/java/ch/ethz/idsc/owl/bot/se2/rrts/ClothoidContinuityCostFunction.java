@@ -8,7 +8,6 @@ import ch.ethz.idsc.sophus.crv.clothoid.ClothoidTerminalRatios;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
-import ch.ethz.idsc.tensor.sca.Chop;
 
 /** abs squared of difference in curvature at common node
  * 
@@ -21,16 +20,13 @@ public enum ClothoidContinuityCostFunction implements TransitionCostFunction {
     if (rrtsNode.isRoot())
       // TODO GJOEL why not just return "rrtsNode.costFromRoot()"?
       return rrtsNode.costFromRoot().zero();
-    // TODO remove check once tested sufficiently
-    // ClothoidTransition clothoidTransition = (ClothoidTransition) transition;
-    Chop._12.requireClose(rrtsNode.state(), transition.start());
     return transitionCost(rrtsNode.parent().state(), rrtsNode.state(), transition.end());
   }
 
   static Scalar transitionCost(Tensor p, Tensor q, Tensor r) {
     Scalar tail = ClothoidTerminalRatios.tail(p, q);
     Scalar head = ClothoidTerminalRatios.head(q, r);
-    // return head.subtract(tail).abs();
+    // TODO TENSOR V080
     return AbsSquared.FUNCTION.apply(head.subtract(tail));
   }
 

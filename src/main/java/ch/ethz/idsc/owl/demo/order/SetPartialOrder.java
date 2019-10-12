@@ -8,9 +8,7 @@ import ch.ethz.idsc.owl.math.order.OrderComparator;
 
 /** Creates partial ordering of sets.
  * 
- * <p>For two sets x and y, x < y is satisfied if x is a subset of y.
- * 
- * @author astoll */
+ * <p>For two sets x and y, x < y is satisfied if x is a subset of y. */
 public enum SetPartialOrder {
   ;
   /** Compares to sets according to their elements
