@@ -13,23 +13,22 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.Cross;
 
 public class Se2HermitePlot implements RenderInterface {
-  private final Tensor se2h;
+  private final Tensor points;
   private final Scalar scale;
 
-  public Se2HermitePlot(Tensor se2h, Scalar scale) {
-    this.se2h = se2h;
+  public Se2HermitePlot(Tensor points, Scalar scale) {
+    this.points = points;
     this.scale = scale;
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
-    graphics.setColor(new Color(128, 128, 128, 128));
-    for (Tensor pointh : se2h) {
-      geometricLayer.pushMatrix(Se2Matrix.of(pointh.get(0)));
-      Tensor pv = pointh.get(1);
-      Tensor vec = Cross.of(pv.extract(0, 2).multiply(scale));
-      Color color = Hsluv.of(pv.Get(2).number().doubleValue() * 0.3, 1, 0.5, 1);
+    for (Tensor point : points) {
+      geometricLayer.pushMatrix(Se2Matrix.of(point.get(0)));
+      Tensor pv = point.get(1);
+      Color color = Hsluv.of(pv.Get(2).number().doubleValue() * 0.3, 1, 0.5, 0.5);
       graphics.setColor(color);
+      Tensor vec = Cross.of(pv.extract(0, 2).multiply(scale));
       graphics.draw(geometricLayer.toLine2D(vec));
       geometricLayer.popMatrix();
     }

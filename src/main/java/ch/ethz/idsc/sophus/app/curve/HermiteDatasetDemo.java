@@ -21,7 +21,6 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.subdiv.Hermite1Subdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
@@ -50,7 +49,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
   private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
-  private final JToggleButton jToggleAdjoint = new JToggleButton("ad");
+  private final JToggleButton jToggleSpace = new JToggleButton("d-space");
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
   protected Tensor _control = Tensors.empty();
 
@@ -71,14 +70,16 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
     }
     {
-      spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5));
+      spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
       spinnerLabelLevel.setValue(3);
       spinnerLabelLevel.addToComponentReduced(timerFrame.jToolBar, new Dimension(40, 28), "level");
       // spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
     {
-      timerFrame.jToolBar.add(jToggleAdjoint);
+      jToggleSpace.setSelected(true);
+      jToggleSpace.setToolTipText("show derivatives");
+      timerFrame.jToolBar.add(jToggleSpace);
     }
     {
       jToggleButton.setSelected(true);
@@ -124,10 +125,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     graphics.setColor(Color.DARK_GRAY);
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
-    Hermite1Subdivision.AD = jToggleAdjoint.isSelected();
-    HermiteSubdivision hermiteSubdivisionFactory = //
+    HermiteSubdivision hermiteSubdivision = //
         spinnerLabelScheme.getValue().supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
-    TensorIteration tensorIteration = hermiteSubdivisionFactory.string(delta, _control);
+    TensorIteration tensorIteration = hermiteSubdivision.string(delta, _control);
     Tensor refined = _control;
     int levels = spinnerLabelLevel.getValue();
     for (int level = 0; level < levels; ++level)

@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sinc;
 
 /** length of geodesic between p and q in SE(2) when projected to R^2
- * the projection is a circle segment 
+ * the projection is a circle segment
  * 
  * @see Se2CoveringParametricDistance */
 public enum Se2ParametricDistance implements TensorMetric, TensorNorm {
