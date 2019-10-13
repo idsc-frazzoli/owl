@@ -66,9 +66,11 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
       Tensor control;
       switch (geodesicDisplay.toString()) {
       case "SE2":
+        // TODO use various options: unit vector, scaled by parametric distance, ...
         control = Tensor.of(tensor.stream().map(xya -> Tensors.of(xya, UnitVector.of(3, 0))));
         break;
       case "R2":
+        // TODO use various options: unit vector, scaled by parametric distance, ...
         control = Tensor.of(tensor.stream().map(xya -> Tensors.of(xya.extract(0, 2), AngleVector.of(xya.Get(2)))));
         break;
       default:
@@ -82,6 +84,13 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
       Tensor iterate = tensorIteration.iterate();
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
       CurveCurvatureRender.of(curve, false, geometricLayer, graphics);
+      {
+        switch (geodesicDisplay.toString()) {
+        case "SE2":
+          new Se2HermitePlot(iterate, RealScalar.of(.3)).render(geometricLayer, graphics);
+          break;
+        }
+      }
       // ---
       if (jToggleButton.isSelected()) {
         Tensor deltas = iterate.get(Tensor.ALL, 1);

@@ -59,7 +59,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
-      spinnerLabelSkips.setList(Arrays.asList(5, 10, 25, 50, 100));
+      spinnerLabelSkips.setList(Arrays.asList(1, 2, 5, 10, 25, 50, 100));
       spinnerLabelSkips.setValue(50);
       spinnerLabelSkips.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "skips");
       spinnerLabelSkips.addSpinnerListener(type -> updateState());
@@ -97,6 +97,8 @@ import ch.ethz.idsc.tensor.sca.Power;
     int skips = spinnerLabelSkips.getValue();
     for (int index = 0; index < control.length(); index += skips)
       result.append(control.get(index));
+    // TensorUnaryOperator centerFilter = //
+    // CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, GaussianWindow.FUNCTION), 4);
     _control = result;
   }
 
@@ -131,6 +133,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     for (int level = 0; level < levels; ++level)
       refined = tensorIteration.iterate();
     pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
+    {
+      new Se2HermitePlot(refined, RealScalar.of(0.4)).render(geometricLayer, graphics);
+    }
     if (jToggleButton.isSelected()) {
       Tensor deltas = refined.get(Tensor.ALL, 1);
       int dims = deltas.get(0).length();

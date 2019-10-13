@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sin;
 
+/** @see Se2ParametricDistance */
 public enum Se2CoveringParametricDistance implements TensorMetric {
   INSTANCE;
   // ---

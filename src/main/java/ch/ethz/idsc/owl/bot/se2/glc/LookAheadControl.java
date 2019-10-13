@@ -8,12 +8,9 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ abstract class LookAheadControl extends Se2TrajectoryControl {
-  private static final Tensor ZEROS = Array.zeros(2);
-  // ---
   final Scalar lookAhead;
   /** for drawing only */
   Tensor targetLocal = null;
@@ -27,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   public final Optional<Shape> toTarget(GeometricLayer geometricLayer) {
     Tensor _targetLocal = targetLocal; // copy reference
     if (Objects.nonNull(_targetLocal))
-      return Optional.of(geometricLayer.toLine2D(ZEROS, _targetLocal));
+      return Optional.of(geometricLayer.toLine2D(_targetLocal));
     return Optional.empty();
   }
 }
