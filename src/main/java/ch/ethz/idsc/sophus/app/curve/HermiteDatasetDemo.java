@@ -134,7 +134,7 @@ import ch.ethz.idsc.tensor.sca.Power;
       refined = tensorIteration.iterate();
     pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
     {
-      new Se2HermitePlot(refined, RealScalar.of(0.4)).render(geometricLayer, graphics);
+      new Se2HermitePlot(refined, RealScalar.of(0.3)).render(geometricLayer, graphics);
     }
     if (jToggleButton.isSelected()) {
       Tensor deltas = refined.get(Tensor.ALL, 1);

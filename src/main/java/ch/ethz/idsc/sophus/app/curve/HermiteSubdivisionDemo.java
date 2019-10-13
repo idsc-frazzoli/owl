@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -11,21 +12,31 @@ import javax.swing.JToggleButton;
 import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
+import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.PointsRender;
+import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
+import ch.ethz.idsc.sophus.math.Distances;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.AngleVector;
+import ch.ethz.idsc.tensor.red.Mean;
 
 public class HermiteSubdivisionDemo extends ControlPointsDemo {
   private static final int WIDTH = 640;
@@ -36,7 +47,7 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
 
   public HermiteSubdivisionDemo() {
-    super(true, GeodesicDisplays.SE2_R2);
+    super(true, GeodesicDisplays.SE2C_SE2_R2);
     // ---
     {
       spinnerLabelScheme.setArray(HermiteSubdivisions.values());
@@ -56,15 +67,24 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
     }
   }
 
+  private static final PointsRender POINTS_RENDER_0 = //
+      new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
+  private static final GridRender GRID_RENDER = new GridRender(Subdivide.of(0, 10, 10));
+
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    GRID_RENDER.render(geometricLayer, graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
-    renderControlPoints(geometricLayer, graphics);
-    Tensor tensor = getControlPointsSe2();
+    final Tensor tensor = getControlPointsSe2();
+    POINTS_RENDER_0.new Show(Se2GeodesicDisplay.INSTANCE, //
+        Se2GeodesicDisplay.INSTANCE.shape(), //
+        tensor).render(geometricLayer, graphics);
+    // renderControlPoints(geometricLayer, graphics);
     if (1 < tensor.length()) {
       GeodesicDisplay geodesicDisplay = geodesicDisplay();
       Tensor control;
       switch (geodesicDisplay.toString()) {
+      case "SE2C":
       case "SE2":
         // TODO use various options: unit vector, scaled by parametric distance, ...
         control = Tensor.of(tensor.stream().map(xya -> Tensors.of(xya, UnitVector.of(3, 0))));
@@ -76,6 +96,22 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
       default:
         return;
       }
+      {
+        Tensor distances = Distances.of(ClothoidParametricDistance.INSTANCE, tensor);
+        // Distances.of(geodesicDisplay::parametricDistance, control.get(Tensor.ALL, 0));
+        if (0 < distances.length()) {
+          Tensor scaling = Array.zeros(control.length());
+          scaling.set(distances.get(0), 0);
+          for (int index = 1; index < distances.length(); ++index)
+            scaling.set(Mean.of(distances.extract(index - 1, index + 1)), index);
+          scaling.set(Last.of(distances).Get(), control.length() - 1);
+          // ---
+          for (int index = 0; index < control.length(); ++index) {
+            int fi = index;
+            control.set(t -> t.multiply(scaling.Get(fi)), index, 1);
+          }
+        }
+      }
       HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(),
           geodesicDisplay.biinvariantMean());
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
@@ -85,9 +121,14 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
       CurveCurvatureRender.of(curve, false, geometricLayer, graphics);
       {
+        Scalar scale = RealScalar.of(.3);
         switch (geodesicDisplay.toString()) {
+        case "SE2C":
         case "SE2":
-          new Se2HermitePlot(iterate, RealScalar.of(.3)).render(geometricLayer, graphics);
+          new Se2HermitePlot(iterate, scale).render(geometricLayer, graphics);
+          break;
+        case "R2":
+          new R2HermitePlot(iterate, scale).render(geometricLayer, graphics);
           break;
         }
       }
