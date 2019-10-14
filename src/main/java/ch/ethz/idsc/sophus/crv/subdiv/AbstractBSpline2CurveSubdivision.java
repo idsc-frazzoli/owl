@@ -36,11 +36,8 @@ public abstract class AbstractBSpline2CurveSubdivision implements CurveSubdivisi
     Tensor curve = Tensors.reserve(2 * length); // allocation for cyclic case
     Iterator<Tensor> iterator = tensor.iterator();
     Tensor p = iterator.next();
-    while (iterator.hasNext()) {
-      Tensor q = iterator.next();
-      refine(curve, p, q);
-      p = q;
-    }
+    while (iterator.hasNext())
+      refine(curve, p, p = iterator.next());
     return curve;
   }
 

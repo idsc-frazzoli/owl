@@ -28,14 +28,12 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
       return tensor.copy();
     Nocopy curve = new Nocopy(2 * length);
     Tensor p = Last.of(tensor);
-    for (int index = 0; index < length; ++index) {
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % length);
-      Tensor s = tensor.get((index + 2) % length);
-      curve.append(quinte(p, q, r));
-      curve.append(center(p, q, r, s));
-      p = q;
-    }
+    Tensor q = tensor.get(0);
+    Tensor r = tensor.get(1);
+    for (int index = 0; index < length; ++index)
+      curve //
+          .append(quinte(p, q, r)) //
+          .append(center(p, p = q, q = r, r = tensor.get((index + 2) % length)));
     return curve.tensor();
   }
 
@@ -55,14 +53,14 @@ public class BSpline5CurveSubdivision extends BSpline3CurveSubdivision {
       curve.append(q);
       curve.append(midpoint(q, r));
     }
-    Tensor p = tensor.get(0);
-    for (int index = 1; index < length - 2; ++index) {
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get(index + 1);
-      Tensor s = tensor.get(index + 2);
-      curve.append(quinte(p, q, r));
-      curve.append(center(p, q, r, s));
-      p = q;
+    {
+      Tensor p = tensor.get(0);
+      Tensor q = tensor.get(1);
+      Tensor r = tensor.get(2);
+      for (int index = 3; index < length; ++index)
+        curve //
+            .append(quinte(p, q, r)) //
+            .append(center(p, p = q, q = r, r = tensor.get(index)));
     }
     {
       int last = length - 1;

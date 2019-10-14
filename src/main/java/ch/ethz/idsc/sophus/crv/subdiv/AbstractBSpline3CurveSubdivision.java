@@ -20,10 +20,8 @@ public abstract class AbstractBSpline3CurveSubdivision extends AbstractBSpline1C
     Nocopy curve = new Nocopy(2 * length);
     Tensor p = Last.of(tensor);
     Tensor q = tensor.get(0);
-    for (int index = 1; index <= length; ++index) {
-      Tensor r = tensor.get(index % length);
-      curve.append(center(p, q, r)).append(midpoint(p = q, q = r));
-    }
+    for (int index = 1; index <= length; ++index)
+      curve.append(center(p, p = q, q = tensor.get(index % length))).append(midpoint(p, q));
     return curve.tensor();
   }
 

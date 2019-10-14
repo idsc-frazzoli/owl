@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.BinaryAverage;
 
 /** dual scheme
@@ -32,11 +33,11 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     if (length < 2)
       return tensor.copy();
     Nocopy curve = new Nocopy(2 * length);
-    for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 1 + length) % length);
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % length);
-      curve.append(lo(p, q, r)).append(hi(p, q, r));
+    Tensor p = Last.of(tensor);
+    Tensor q = tensor.get(0);
+    for (int index = 1; index <= length; ++index) {
+      Tensor r = tensor.get(index % length);
+      curve.append(lo(p, q, r)).append(hi(p, p = q, q = r));
     }
     return curve.tensor();
   }
@@ -48,23 +49,14 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     if (length < 2)
       return tensor.copy();
     Nocopy curve = new Nocopy(2 * length);
-    {
-      Tensor p = tensor.get(0);
-      Tensor q = tensor.get(1);
-      curve.append(lo(p, q)); // Chaikin's rule
+    Tensor p = tensor.get(0);
+    Tensor q = tensor.get(1);
+    curve.append(lo(p, q)); // Chaikin's rule
+    for (int index = 2; index < length; ++index) {
+      Tensor r = tensor.get(index);
+      curve.append(lo(p, q, r)).append(hi(p, p = q, q = r));
     }
-    int last = length - 1;
-    for (int index = 1; index < last; ++index) {
-      Tensor p = tensor.get(index - 1);
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get(index + 1);
-      curve.append(lo(p, q, r)).append(hi(p, q, r));
-    }
-    {
-      Tensor p = tensor.get(last - 1);
-      Tensor q = tensor.get(last);
-      curve.append(hi(p, q)); // Chaikin's rule
-    }
+    curve.append(hi(p, q)); // Chaikin's rule
     return curve.tensor();
   }
 
