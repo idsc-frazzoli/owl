@@ -1,12 +1,12 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 
 public class EightPointCurveSubdivision extends BSpline1CurveSubdivision {
   private static final Scalar PQ = RationalScalar.of(49, 44);
@@ -24,7 +24,7 @@ public class EightPointCurveSubdivision extends BSpline1CurveSubdivision {
   public Tensor cyclic(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     int length = tensor.length();
-    Tensor curve = Tensors.reserve(2 * length);
+    Nocopy curve = new Nocopy(2 * length);
     for (int index = 0; index < length; ++index) {
       int first = Math.floorMod(index - 3, length);
       Tensor p = tensor.get((first + 0) % length);
@@ -37,7 +37,7 @@ public class EightPointCurveSubdivision extends BSpline1CurveSubdivision {
       Tensor w = tensor.get((first + 7) % length);
       curve.append(s).append(center(p, q, r, s, t, u, v, w));
     }
-    return curve;
+    return curve.tensor();
   }
 
   private Tensor center(Tensor p, Tensor q, Tensor r, Tensor s, Tensor t, Tensor u, Tensor v, Tensor w) {

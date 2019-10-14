@@ -6,6 +6,7 @@ import java.util.Objects;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -104,7 +105,7 @@ public class Hermite3Subdivision implements HermiteSubdivision {
       @Override // from HermiteSubdivision
       public Tensor iterate() {
         int length = control.length();
-        Tensor string = Tensors.reserve(2 * length - 1);
+        Nocopy string = new Nocopy(2 * length - 1);
         Tensor p = control.get(0);
         string.append(p); // interpolation
         Tensor q = control.get(1);
@@ -121,7 +122,7 @@ public class Hermite3Subdivision implements HermiteSubdivision {
         rvk = rvk.add(rvk);
         cgk = cgk.add(cgk);
         cvk = cvk.add(cvk);
-        return control = string;
+        return control = string.tensor();
       }
     }
 
@@ -129,7 +130,7 @@ public class Hermite3Subdivision implements HermiteSubdivision {
       @Override // from HermiteSubdivision
       public Tensor iterate() {
         int length = control.length();
-        Tensor string = Tensors.reserve(2 * length);
+        Nocopy string = new Nocopy(2 * length);
         Tensor p = Last.of(control);
         Tensor q = control.get(0);
         for (int index = 1; index <= length; ++index) {
@@ -143,7 +144,7 @@ public class Hermite3Subdivision implements HermiteSubdivision {
         rvk = rvk.add(rvk);
         cgk = cgk.add(cgk);
         cvk = cvk.add(cvk);
-        return control = string;
+        return control = string.tensor();
       }
     }
   }

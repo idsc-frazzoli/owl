@@ -4,11 +4,11 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.BinaryAverage;
 
 /** dual scheme
@@ -31,14 +31,14 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Tensors.reserve(2 * length);
+    Nocopy curve = new Nocopy(2 * length);
     for (int index = 0; index < length; ++index) {
       Tensor p = tensor.get((index - 1 + length) % length);
       Tensor q = tensor.get(index);
       Tensor r = tensor.get((index + 1) % length);
       curve.append(lo(p, q, r)).append(hi(p, q, r));
     }
-    return curve;
+    return curve.tensor();
   }
 
   @Override // from CurveSubdivision
@@ -47,7 +47,7 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Tensors.reserve(2 * length);
+    Nocopy curve = new Nocopy(2 * length);
     {
       Tensor p = tensor.get(0);
       Tensor q = tensor.get(1);
@@ -65,7 +65,7 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
       Tensor q = tensor.get(last);
       curve.append(hi(p, q)); // Chaikin's rule
     }
-    return curve;
+    return curve.tensor();
   }
 
   /** @param p

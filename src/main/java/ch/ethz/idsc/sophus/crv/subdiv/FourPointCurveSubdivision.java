@@ -1,13 +1,13 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.sophus.math.SplitInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 
 /** C1 interpolatory four-point scheme
  * Dubuc 1986, Dyn/Gregory/Levin 1987
@@ -48,17 +48,16 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
 
   @Override // from CurveSubdivision
   public Tensor cyclic(Tensor tensor) {
-    ScalarQ.thenThrow(tensor);
     int length = tensor.length();
-    Tensor curve = Tensors.reserve(2 * length);
-    for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 1 + length) % length);
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % length);
-      Tensor s = tensor.get((index + 2) % length);
-      curve.append(q).append(center(p, q, r, s));
+    Nocopy curve = new Nocopy(2 * length);
+    if (0 < length) {
+      Tensor p = Last.of(tensor);
+      Tensor q = tensor.get(0);
+      Tensor r = tensor.get(1 % length);
+      for (int index = 0; index < length; ++index)
+        curve.append(q).append(center(p, p = q, q = r, r = tensor.get((index + 2) % length)));
     }
-    return curve;
+    return curve.tensor();
   }
 
   @Override // from CurveSubdivision
@@ -67,28 +66,15 @@ public class FourPointCurveSubdivision extends BSpline1CurveSubdivision {
     if (length < 3)
       return new BSpline3CurveSubdivision(splitInterface).string(tensor);
     // ---
-    Tensor curve = Tensors.reserve(2 * length);
-    {
-      Tensor p = tensor.get(0);
-      Tensor q = tensor.get(1);
-      Tensor r = tensor.get(2);
-      curve.append(p).append(triple_lo(p, q, r));
-    }
-    int last = length - 2;
-    for (int index = 1; index < last; ++index) {
-      Tensor p = tensor.get(index - 1);
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get(index + 1);
-      Tensor s = tensor.get(index + 2);
-      curve.append(q).append(center(p, q, r, s));
-    }
-    {
-      Tensor p = tensor.get(last - 1);
-      Tensor q = tensor.get(last);
-      Tensor r = tensor.get(last + 1);
-      curve.append(q).append(triple_hi(p, q, r)).append(r);
-    }
-    return curve;
+    Nocopy curve = new Nocopy(2 * length);
+    Tensor p = tensor.get(0);
+    Tensor q = tensor.get(1);
+    Tensor r = tensor.get(2);
+    curve.append(p).append(triple_lo(p, q, r));
+    for (int index = 3; index < length; ++index)
+      curve.append(q).append(center(p, p = q, q = r, r = tensor.get(index)));
+    curve.append(q).append(triple_hi(p, q, r)).append(r);
+    return curve.tensor();
   }
 
   /** @param p
