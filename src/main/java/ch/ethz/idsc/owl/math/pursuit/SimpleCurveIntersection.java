@@ -22,7 +22,8 @@ public abstract class SimpleCurveIntersection implements CurveIntersection, Seri
   private final BinaryAverage binaryAverage;
 
   /** @param radius non-negative
-   * @param binaryAverage non-null */
+   * @param binaryAverage non-null
+   * @throws Exception if given radius is negative */
   protected SimpleCurveIntersection(Scalar radius, BinaryAverage binaryAverage) {
     this.radius = Sign.requirePositiveOrZero(radius);
     this.binaryAverage = Objects.requireNonNull(binaryAverage);

@@ -47,6 +47,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   // ---
   private final GokartPoseDataV2 gokartPoseData;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerLabelShift = new SpinnerLabel<>();
   private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final JToggleButton jToggleSpace = new JToggleButton("d-space");
@@ -62,6 +63,12 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelSkips.setValue(50);
       spinnerLabelSkips.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "skips");
       spinnerLabelSkips.addSpinnerListener(type -> updateState());
+    }
+    {
+      spinnerLabelShift.setList(Arrays.asList(0, 2, 4, 6, 8, 10, 15, 20));
+      spinnerLabelShift.setValue(0);
+      spinnerLabelShift.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "shift");
+      spinnerLabelShift.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
     {
@@ -96,7 +103,8 @@ import ch.ethz.idsc.tensor.sca.Power;
     Tensor control = gokartPoseData.getPoseVel(name, limit);
     Tensor result = Tensors.empty();
     int skips = spinnerLabelSkips.getValue();
-    for (int index = 0; index < control.length(); index += skips)
+    int offset = spinnerLabelShift.getValue();
+    for (int index = offset; index < control.length(); index += skips)
       result.append(control.get(index));
     // TensorUnaryOperator centerFilter = //
     // CenterFilter.of(GeodesicCenter.of(Se2Geodesic.INSTANCE, GaussianWindow.FUNCTION), 4);
