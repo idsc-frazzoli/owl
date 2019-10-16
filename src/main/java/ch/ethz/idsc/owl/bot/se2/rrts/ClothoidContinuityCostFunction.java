@@ -24,10 +24,9 @@ public enum ClothoidContinuityCostFunction implements TransitionCostFunction {
   }
 
   static Scalar transitionCost(Tensor p, Tensor q, Tensor r) {
-    Scalar tail = ClothoidTerminalRatios.tail(p, q);
-    Scalar head = ClothoidTerminalRatios.head(q, r);
-    // TODO TENSOR V080
-    return AbsSquared.FUNCTION.apply(head.subtract(tail));
+    return AbsSquared.between( //
+        ClothoidTerminalRatios.tail(p, q), //
+        ClothoidTerminalRatios.head(q, r));
   }
 
   @Override // from TransitionCostFunction
