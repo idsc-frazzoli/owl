@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import junit.framework.TestCase;
 
-public class RnLexiTest extends TestCase {
+public class R2BaseDemoTest extends TestCase {
   private static final StateSpaceModel SINGLE_INTEGRATOR = SingleIntegratorStateSpaceModel.INSTANCE;
   static final StateIntegrator STATE_INTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.ONE, 1);
