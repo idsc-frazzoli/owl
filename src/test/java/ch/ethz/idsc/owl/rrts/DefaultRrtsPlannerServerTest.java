@@ -7,10 +7,10 @@ import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsFlow;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
+import ch.ethz.idsc.owl.bot.se2.rrts.CarRrtsFlow;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
-import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsFlow;
-import ch.ethz.idsc.owl.bot.se2.rrts.Se2TransitionRrtsNodeCollections;
+import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNodeCollections;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.adapter.Expand;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -110,7 +110,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
-        return Se2RrtsFlow.uBetween(orig, dest);
+        return CarRrtsFlow.uBetween(orig, dest);
       }
     };
     server.setGoal(goal);
@@ -140,7 +140,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
         LengthCostFunction.INSTANCE) {
       @Override
       protected RrtsNodeCollection rrtsNodeCollection() {
-        return Se2TransitionRrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
+        return Se2RrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
       }
 
       @Override
@@ -155,7 +155,7 @@ public class DefaultRrtsPlannerServerTest extends TestCase {
 
       @Override
       protected Tensor uBetween(StateTime orig, StateTime dest) {
-        return Se2RrtsFlow.uBetween(orig, dest);
+        return CarRrtsFlow.uBetween(orig, dest);
       }
     };
     server.setGoal(goal);

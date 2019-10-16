@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.data.TimeKeeper;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.MouseShapeRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
-import ch.ethz.idsc.owl.math.lane.LaneConsumer;
+import ch.ethz.idsc.owl.lane.LaneConsumer;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     TransitionRegionQuery transitionRegionQuery = TransitionRegionQueryUnion.wrap( //
         new SampledTransitionRegionQuery(region, RealScalar.of(0.05)), //
-        new TransitionCurvatureQuery(Clips.absolute(5.)));
+        new ClothoidCurvatureQuery(Clips.absolute(5.)));
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, Math.PI / 4), RealScalar.ZERO);
     ClothoidLaneRrtsEntity entity = new ClothoidLaneRrtsEntity(stateTime, transitionRegionQuery, Tensors.vector(0, 0), r2ImageRegionWrap.range(), true);
     LaneConsumer laneConsumer = new SimpleLaneConsumer(entity, null, Collections.singleton(entity));

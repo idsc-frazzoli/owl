@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     TransitionRegionQuery transitionRegionQuery = TransitionRegionQueryUnion.wrap( //
         new SampledTransitionRegionQuery(region, RealScalar.of(0.05)), //
-        new TransitionCurvatureQuery(Clips.absolute(5.)));
+        new ClothoidCurvatureQuery(Clips.absolute(5.)));
     StateTime stateTime = new StateTime(Tensors.vector(6, 5, Math.PI / 4), RealScalar.ZERO);
     ClothoidRrtsEntity clothoidRrtsEntity = //
         new ClothoidRrtsEntity(stateTime, transitionRegionQuery, r2ImageRegionWrap.origin(), r2ImageRegionWrap.range());

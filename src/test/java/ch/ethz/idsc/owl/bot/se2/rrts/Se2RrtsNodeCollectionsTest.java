@@ -22,7 +22,7 @@ public class Se2RrtsNodeCollectionsTest extends TestCase {
     Tensor lbounds = Tensors.fromString("{-5[m], -7[m]}");
     Tensor ubounds = Tensors.fromString("{10[m], 10[m]}");
     RrtsNodeCollection rrtsNodeCollection = //
-        Se2TransitionRrtsNodeCollections.of(transitionSpace, lbounds, ubounds);
+        Se2RrtsNodeCollections.of(transitionSpace, lbounds, ubounds);
     Random random = new Random();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of( //
         lbounds.copy().append(Pi.VALUE.negate()), //

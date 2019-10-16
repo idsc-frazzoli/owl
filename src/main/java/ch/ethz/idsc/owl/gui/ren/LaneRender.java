@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.lane.LaneInterface;
+import ch.ethz.idsc.owl.lane.LaneInterface;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.tensor.Tensor;
 

@@ -38,10 +38,10 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Tensor lbounds = Array.zeros(2).unmodifiable();
     Tensor ubounds = range.unmodifiable();
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
-    RrtsNodeCollection rrtsNodeCollection = Se2TransitionRrtsNodeCollections.of(transitionSpace, lbounds, ubounds);
+    RrtsNodeCollection rrtsNodeCollection = Se2RrtsNodeCollections.of(transitionSpace, lbounds, ubounds);
     TransitionRegionQuery transitionRegionQuery = new SampledTransitionRegionQuery( //
         imageRegion, RealScalar.of(0.05));
-    TransitionRegionQuery transitionCurvatureQuery = new TransitionCurvatureQuery(Clips.absolute(5));
+    TransitionRegionQuery transitionCurvatureQuery = new ClothoidCurvatureQuery(Clips.absolute(5));
     TransitionRegionQuery unionTransitionRegionQuery = TransitionRegionQueryUnion.wrap(transitionRegionQuery, transitionCurvatureQuery);
     // ---
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, unionTransitionRegionQuery, LengthCostFunction.INSTANCE);

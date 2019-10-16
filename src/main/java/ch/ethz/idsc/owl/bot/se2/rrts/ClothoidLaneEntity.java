@@ -45,12 +45,12 @@ import ch.ethz.idsc.tensor.alg.Array;
             greedy) {
           @Override // from DefaultRrtsPlannerServer
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return Se2TransitionRrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
+            return Se2RrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
           }
 
           @Override // from RrtsPlannerServer
           protected Tensor uBetween(StateTime orig, StateTime dest) {
-            return Se2RrtsFlow.uBetween(orig, dest);
+            return CarRrtsFlow.uBetween(orig, dest);
           }
 
           @Override // from ObservingExpandInterface

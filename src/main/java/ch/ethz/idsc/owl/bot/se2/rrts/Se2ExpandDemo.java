@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     Tensor min = Tensors.vector(0, 0, -Math.PI);
     Tensor max = Tensors.vector(7, 7, +Math.PI);
     RrtsNodeCollection rrtsNodeCollection = //
-        Se2TransitionRrtsNodeCollections.of(transitionSpace, min.extract(0, 2), max.extract(0, 2));
+        Se2RrtsNodeCollections.of(transitionSpace, min.extract(0, 2), max.extract(0, 2));
     TransitionRegionQuery transitionRegionQuery = EmptyTransitionRegionQuery.INSTANCE;
     // ---
     Rrts rrts = new DefaultRrts(transitionSpace, rrtsNodeCollection, transitionRegionQuery, LengthCostFunction.INSTANCE);

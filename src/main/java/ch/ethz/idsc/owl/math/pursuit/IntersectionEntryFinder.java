@@ -5,8 +5,8 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.ethz.idsc.owl.math.MinMax;
 import ch.ethz.idsc.sophus.math.Extract2D;
+import ch.ethz.idsc.sophus.math.MinMax;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

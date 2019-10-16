@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 public class TransitionCurvatureQueryTest extends TestCase {
   public void testSimple() {
     try {
-      new TransitionCurvatureQuery((Clip) null);
+      new ClothoidCurvatureQuery((Clip) null);
       fail();
     } catch (Exception exception) {
       // ---

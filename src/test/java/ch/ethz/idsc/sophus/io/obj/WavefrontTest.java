@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.MinMax;
+import ch.ethz.idsc.sophus.math.MinMax;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;

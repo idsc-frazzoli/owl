@@ -27,10 +27,9 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.gui.ren.LaneRender;
 import ch.ethz.idsc.owl.gui.ren.TransitionRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.MinMax;
-import ch.ethz.idsc.owl.math.lane.LaneConsumer;
-import ch.ethz.idsc.owl.math.lane.LaneInterface;
-import ch.ethz.idsc.owl.math.lane.StableLanes;
+import ch.ethz.idsc.owl.lane.LaneConsumer;
+import ch.ethz.idsc.owl.lane.LaneInterface;
+import ch.ethz.idsc.owl.lane.StableLanes;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.adapter.SampledTransitionRegionQuery;
 import ch.ethz.idsc.owl.rrts.adapter.SimpleLaneConsumer;
@@ -41,14 +40,15 @@ import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
-import ch.ethz.idsc.sophus.util.plot.ListPlot;
-import ch.ethz.idsc.sophus.util.plot.VisualRow;
-import ch.ethz.idsc.sophus.util.plot.VisualSet;
+import ch.ethz.idsc.sophus.math.MinMax;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.fig.ListPlot;
+import ch.ethz.idsc.tensor.fig.VisualRow;
+import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -85,7 +85,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
   private static final R2ImageRegionWrap R2_IMAGE_REGION_WRAP = R2ImageRegions._GTOB;
   private static final TransitionRegionQuery TRANSITION_REGION_QUERY = TransitionRegionQueryUnion.wrap( //
       new SampledTransitionRegionQuery(R2_IMAGE_REGION_WRAP.region(), RealScalar.of(0.05)), //
-      new TransitionCurvatureQuery(Clips.absolute(5.)));
+      new ClothoidCurvatureQuery(Clips.absolute(5.)));
 
   public static void main(String[] args) throws Exception {
     DIRECTORY.mkdirs();

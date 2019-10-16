@@ -11,10 +11,10 @@ import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsFlow;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNodeCollection;
 import ch.ethz.idsc.owl.bot.se2.Se2FlowIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
+import ch.ethz.idsc.owl.bot.se2.rrts.CarRrtsFlow;
 import ch.ethz.idsc.owl.bot.se2.rrts.ClothoidTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
-import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsFlow;
-import ch.ethz.idsc.owl.bot.se2.rrts.Se2TransitionRrtsNodeCollections;
+import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNodeCollections;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
@@ -97,7 +97,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
     RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
         Se2StateSpaceModel.INSTANCE, //
-        Se2RrtsFlow::uBetween);
+        CarRrtsFlow::uBetween);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(DubinsTransitionSpace.of(RealScalar.ONE, DubinsPathComparator.LENGTH), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
@@ -131,7 +131,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     TransitionSpace transitionSpace = ClothoidTransitionSpace.INSTANCE;
     Rrts rrts = new DefaultRrts( //
         transitionSpace, //
-        Se2TransitionRrtsNodeCollections.of(transitionSpace, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
+        Se2RrtsNodeCollections.of(transitionSpace, Tensors.vector(0, 0), Tensors.vector(10, 10)), //
         EmptyTransitionRegionQuery.INSTANCE, LengthCostFunction.INSTANCE);
     RrtsNode root = rrts.insertAsNode(Tensors.vector(0, 0, 0), 0).get();
     assertEquals(0, root.children().size());
@@ -148,7 +148,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
     RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
         Se2StateSpaceModel.INSTANCE, //
-        Se2RrtsFlow::uBetween);
+        CarRrtsFlow::uBetween);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(ClothoidTransitionSpace.INSTANCE, sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);
@@ -200,7 +200,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     assertEquals(sequence, Arrays.asList(root, n1, n2, n3));
     RrtsFlowTrajectoryGenerator generator = new RrtsFlowTrajectoryGenerator( //
         Se2StateSpaceModel.INSTANCE, //
-        Se2RrtsFlow::uBetween);
+        CarRrtsFlow::uBetween);
     List<TrajectorySample> trajectory = //
         generator.createTrajectory(DirectionalTransitionSpace.of(ClothoidTransitionSpace.INSTANCE), sequence, RealScalar.ZERO, RationalScalar.of(1, 10));
     // trajectory.stream().map(TrajectorySample::toInfoString).forEach(System.out::println);

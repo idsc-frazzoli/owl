@@ -54,7 +54,7 @@ public class TransitionNdContainer {
       Se2TransitionNdType se2TransitionNdType = Se2TransitionNdType.fromString(geodesicDisplay.toString());
       RrtsNodeCollection rrtsNodeCollection = se2TransitionNdType.equals(Se2TransitionNdType.R2) //
           ? new RnRrtsNodeCollection(lbounds, ubounds)
-          : Se2TransitionRrtsNodeCollections.of( //
+          : Se2RrtsNodeCollections.of( //
               se2TransitionNdType.transitionSpace(), lbounds, ubounds);
       for (Tensor state : tensor)
         rrtsNodeCollection.insert(RrtsNode.createRoot(geodesicDisplay.project(state), RealScalar.ZERO));

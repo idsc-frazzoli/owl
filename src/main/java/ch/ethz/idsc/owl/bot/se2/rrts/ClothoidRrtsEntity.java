@@ -54,7 +54,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
             LengthCostFunction.INSTANCE) {
           @Override
           protected RrtsNodeCollection rrtsNodeCollection() {
-            return Se2TransitionRrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
+            return Se2RrtsNodeCollections.of(getTransitionSpace(), lbounds, ubounds);
           }
 
           @Override
@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 
           @Override
           protected Tensor uBetween(StateTime orig, StateTime dest) {
-            return Se2RrtsFlow.uBetween(orig, dest);
+            return CarRrtsFlow.uBetween(orig, dest);
           }
         });
     add(FallbackControl.of(Array.zeros(3)));
