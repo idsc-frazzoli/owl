@@ -15,12 +15,12 @@ import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ abstract class BaseCurvatureDemo extends CurvatureDemo {
+public abstract class BaseCurvatureDemo extends CurvatureDemo {
   private static final List<Integer> DEGREES = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   // ---
   private final SpinnerLabel<Integer> spinnerDegree = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
-  final JSlider jSlider = new JSlider(0, 1000, 500);
+  protected final JSlider jSlider = new JSlider(0, 1000, 500);
 
   public BaseCurvatureDemo() {
     this(GeodesicDisplays.ALL);

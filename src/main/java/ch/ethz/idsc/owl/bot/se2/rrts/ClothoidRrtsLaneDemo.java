@@ -30,7 +30,6 @@ import ch.ethz.idsc.owl.rrts.adapter.TransitionRegionQueryUnion;
 import ch.ethz.idsc.owl.rrts.core.TransitionRegionQuery;
 import ch.ethz.idsc.owl.sim.CameraEmulator;
 import ch.ethz.idsc.owl.sim.LidarRaytracer;
-import ch.ethz.idsc.sophus.app.curve.LaneConsumptionDemo;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

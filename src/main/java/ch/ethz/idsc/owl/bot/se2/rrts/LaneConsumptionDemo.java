@@ -1,5 +1,5 @@
 // code by gjoel
-package ch.ethz.idsc.sophus.app.curve;
+package ch.ethz.idsc.owl.bot.se2.rrts;
 
 import java.awt.Graphics2D;
 import java.util.Arrays;
@@ -17,13 +17,14 @@ import ch.ethz.idsc.owl.math.lane.StableLanes;
 import ch.ethz.idsc.sophus.app.api.ClothoidDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2CoveringGeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.curve.BaseCurvatureDemo;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Serialization;
 
-public class LaneConsumptionDemo extends BaseCurvatureDemo {
+/* package */ class LaneConsumptionDemo extends BaseCurvatureDemo {
   private final LaneRender laneRender = new LaneRender();
   private LaneInterface lane = null;
 

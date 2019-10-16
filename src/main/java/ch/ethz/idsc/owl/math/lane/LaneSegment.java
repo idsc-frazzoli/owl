@@ -8,6 +8,10 @@ import ch.ethz.idsc.tensor.red.ArgMin;
 import ch.ethz.idsc.tensor.red.Norm;
 
 public class LaneSegment implements LaneInterface {
+  /** @param laneInterface
+   * @param start
+   * @param end
+   * @return */
   public static LaneInterface of(LaneInterface laneInterface, Tensor start, Tensor end) {
     int fromIdx = ArgMin.of(Tensor.of(laneInterface.midLane().stream().map(start::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector)));
     int toIdx = ArgMin.of(Tensor.of(laneInterface.midLane().stream().map(end::subtract).map(Extract2D.FUNCTION).map(Norm._2::ofVector)));

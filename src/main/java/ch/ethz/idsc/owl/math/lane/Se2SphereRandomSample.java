@@ -29,20 +29,20 @@ public class Se2SphereRandomSample implements RandomSampleInterface, Serializabl
   // ---
   private final Se2GroupElement se2GroupElement;
   private final RandomSampleInterface randomSampleInterface;
-  private final Distribution distributionHeading;
+  private final Distribution distribution;
 
   /** @param apex vector of the form {x, y, angle}
    * @param radius non-negative
-   * @param distributionHeading */
-  public Se2SphereRandomSample(Tensor apex, Scalar radius, Distribution distributionHeading) {
+   * @param distribution for heading */
+  public Se2SphereRandomSample(Tensor apex, Scalar radius, Distribution distribution) {
     se2GroupElement = new Se2GroupElement(apex);
     randomSampleInterface = BallRandomSample.of(Extract2D.FUNCTION.apply(apex).map(Scalar::zero), radius);
-    this.distributionHeading = distributionHeading;
+    this.distribution = distribution;
   }
 
   @Override // from RandomSampleInterface
   public Tensor randomSample(Random random) {
     Tensor xy = randomSampleInterface.randomSample(random);
-    return se2GroupElement.combine(xy.append(RandomVariate.of(distributionHeading, random)));
+    return se2GroupElement.combine(xy.append(RandomVariate.of(distribution, random)));
   }
 }

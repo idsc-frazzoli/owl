@@ -14,6 +14,9 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 
 public class LaneRandomSample implements RandomSampleInterface, Serializable {
+  /** @param laneInterface
+   * @param distribution
+   * @return */
   public static LaneRandomSample of(LaneInterface laneInterface, Distribution distribution) {
     return new LaneRandomSample(laneInterface, distribution);
   }
@@ -32,7 +35,7 @@ public class LaneRandomSample implements RandomSampleInterface, Serializable {
     return around(random.nextInt(laneInterface.midLane().length())).randomSample(random);
   }
 
-  /* package */ RandomSampleInterface around(int index) {
+  private RandomSampleInterface around(int index) {
     return around(laneInterface.midLane().get(index), laneInterface.margins().Get(index));
   }
 
