@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.red.Min;
 
 public class NonuniformFixedRadiusGeodesicCenterFilter implements NavigableMapUnaryOperator, Serializable {
   /** @param nonuniformFixedRadiusGeodesicCenter
-   * @param radius
+   * @param radius non-negative
    * @return
    * @throws Exception given if nonuniformFixedRadiusGeodesicCenter is null */
   public static NonuniformFixedRadiusGeodesicCenterFilter of( //
