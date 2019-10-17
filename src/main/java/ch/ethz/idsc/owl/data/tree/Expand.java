@@ -75,13 +75,16 @@ public class Expand<T extends StateCostNode> {
         expansionLoop(limit, isFinished_);
         observingExpandInterface.process(observations);
         expandInterface.getBest().ifPresent(observingExpandInterface::processLast);
-      }
+      } else
+        expansionLoop(limit, isFinished);
     } else
       expansionLoop(limit, isFinished);
   }
 
   private void expansionLoop(int limit, Supplier<Boolean> isFinished) {
-    while (0 <= --limit && !isFinished.get() && isContinued.get()) {
+    while (0 <= --limit //
+        && !isFinished.get() //
+        && isContinued.get()) {
       Optional<T> next = expandInterface.pollNext();
       if (next.isPresent()) {
         expandInterface.expand(next.get());
