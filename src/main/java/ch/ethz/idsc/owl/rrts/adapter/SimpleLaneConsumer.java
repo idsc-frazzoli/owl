@@ -9,8 +9,8 @@ import ch.ethz.idsc.owl.data.tree.TreePlanner;
 import ch.ethz.idsc.owl.glc.adapter.GoalConsumer;
 import ch.ethz.idsc.owl.glc.adapter.SimpleGoalConsumer;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.math.lane.LaneConsumer;
-import ch.ethz.idsc.owl.math.lane.LaneInterface;
+import ch.ethz.idsc.owl.lane.LaneConsumer;
+import ch.ethz.idsc.owl.lane.LaneInterface;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Last;
 

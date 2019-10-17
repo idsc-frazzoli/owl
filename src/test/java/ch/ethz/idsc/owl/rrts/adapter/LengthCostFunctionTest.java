@@ -1,3 +1,4 @@
+// code by gjoel
 package ch.ethz.idsc.owl.rrts.adapter;
 
 import ch.ethz.idsc.owl.bot.rn.RnTransitionSpace;

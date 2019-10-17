@@ -3,12 +3,14 @@ package ch.ethz.idsc.sophus.crv;
 
 import java.util.Optional;
 
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.sophus.math.Normal2D;
 import ch.ethz.idsc.sophus.math.SignedCurvature2D;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -50,14 +52,18 @@ public enum CurvatureComb {
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
   /* package */ static Tensor cyclic(Tensor tensor) {
     int length = tensor.length();
-    Tensor normal = Tensors.reserve(length);
-    for (int index = 0; index < length; ++index) {
-      Tensor a = tensor.get((index - 1 + length) % length);
-      Tensor b = tensor.get(index);
-      Tensor c = tensor.get((index + 1) % length);
-      normal.append(normal(a, b, c, c.subtract(a)));
+    Nocopy normal = new Nocopy(length);
+    if (0 < length) {
+      Tensor p = Last.of(tensor);
+      Tensor q = tensor.get(0);
+      for (int index = 1; index <= length; ++index) {
+        Tensor r = tensor.get(index % length);
+        normal.append(normal(p, q, r, r.subtract(p)));
+        p = q;
+        q = r;
+      }
     }
-    return normal;
+    return normal.tensor();
   }
 
   private static Tensor normal(Tensor a, Tensor b, Tensor c, Tensor tangent) {

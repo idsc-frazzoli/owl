@@ -8,7 +8,8 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /** DO NOT USE THIS ON A REAL ROBOT */
 public class PseudoSe2CurveIntersection extends AssistedCurveIntersection {
-  /** @param radius non-negative */
+  /** @param radius non-negative
+   * @throws Exception if given radius is negative */
   public PseudoSe2CurveIntersection(Scalar radius) {
     super(radius, Se2Geodesic.INSTANCE);
   }

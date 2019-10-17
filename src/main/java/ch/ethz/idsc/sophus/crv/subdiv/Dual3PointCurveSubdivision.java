@@ -4,11 +4,12 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.BinaryAverage;
 
 /** dual scheme
@@ -31,14 +32,14 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Tensors.reserve(2 * length);
-    for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 1 + length) % length);
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % length);
-      curve.append(lo(p, q, r)).append(hi(p, q, r));
+    Nocopy curve = new Nocopy(2 * length);
+    Tensor p = Last.of(tensor);
+    Tensor q = tensor.get(0);
+    for (int index = 1; index <= length; ++index) {
+      Tensor r = tensor.get(index % length);
+      curve.append(lo(p, q, r)).append(hi(p, p = q, q = r));
     }
-    return curve;
+    return curve.tensor();
   }
 
   @Override // from CurveSubdivision
@@ -47,25 +48,16 @@ public abstract class Dual3PointCurveSubdivision implements CurveSubdivision, Se
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Tensors.reserve(2 * length);
-    {
-      Tensor p = tensor.get(0);
-      Tensor q = tensor.get(1);
-      curve.append(lo(p, q)); // Chaikin's rule
+    Nocopy curve = new Nocopy(2 * length);
+    Tensor p = tensor.get(0);
+    Tensor q = tensor.get(1);
+    curve.append(lo(p, q)); // Chaikin's rule
+    for (int index = 2; index < length; ++index) {
+      Tensor r = tensor.get(index);
+      curve.append(lo(p, q, r)).append(hi(p, p = q, q = r));
     }
-    int last = length - 1;
-    for (int index = 1; index < last; ++index) {
-      Tensor p = tensor.get(index - 1);
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get(index + 1);
-      curve.append(lo(p, q, r)).append(hi(p, q, r));
-    }
-    {
-      Tensor p = tensor.get(last - 1);
-      Tensor q = tensor.get(last);
-      curve.append(hi(p, q)); // Chaikin's rule
-    }
-    return curve;
+    curve.append(hi(p, q)); // Chaikin's rule
+    return curve.tensor();
   }
 
   /** @param p

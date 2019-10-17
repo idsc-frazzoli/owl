@@ -6,8 +6,6 @@ import java.awt.Color;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 
-import ch.ethz.idsc.sophus.util.plot.ListPlot;
-import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.subare.analysis.DiscreteModelErrorAnalysis;
 import ch.ethz.idsc.subare.core.StateActionCounter;
 import ch.ethz.idsc.subare.core.alg.ActionValueIterations;
@@ -30,6 +28,8 @@ import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.fig.ListPlot;
+import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Timing;
 

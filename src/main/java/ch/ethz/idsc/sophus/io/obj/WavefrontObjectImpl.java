@@ -3,7 +3,7 @@ package ch.ethz.idsc.sophus.io.obj;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -38,9 +38,9 @@ import ch.ethz.idsc.tensor.Tensors;
     Tensor in = Tensors.empty();
     for (int index = 0; index < nodes.length; ++index) {
       String[] node = StaticHelper.slash(nodes[index]);
-      iv.append(RationalScalar.of(Integer.parseInt(node[0]) - 1, 1));
+      iv.append(RealScalar.of(Integer.parseInt(node[0]) - 1));
       if (!node[2].isEmpty())
-        in.append(RationalScalar.of(Integer.parseInt(node[2]) - 1, 1));
+        in.append(RealScalar.of(Integer.parseInt(node[2]) - 1));
     }
     faces.append(iv);
     if (0 < in.length())

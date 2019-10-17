@@ -5,11 +5,12 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** dual scheme */
@@ -44,17 +45,20 @@ public class Dual4PointCurveSubdivision implements CurveSubdivision, Serializabl
     int length = tensor.length();
     if (length < 2)
       return tensor.copy();
-    Tensor curve = Tensors.reserve(2 * length);
+    Nocopy curve = new Nocopy(2 * length);
+    Tensor p = Last.of(tensor);
+    Tensor q = tensor.get(0);
+    Tensor r = tensor.get(1);
     for (int index = 0; index < length; ++index) {
-      Tensor p = tensor.get((index - 1 + length) % length);
-      Tensor q = tensor.get(index);
-      Tensor r = tensor.get((index + 1) % length);
       Tensor s = tensor.get((index + 2) % length);
       ScalarTensorFunction c_pq = geodesicInterface.curve(p, q);
       ScalarTensorFunction c_rs = geodesicInterface.curve(r, s);
       curve.append(lo(c_pq, c_rs)).append(hi(c_pq, c_rs));
+      p = q;
+      q = r;
+      r = s;
     }
-    return curve;
+    return curve.tensor();
   }
 
   @Override // from CurveSubdivision

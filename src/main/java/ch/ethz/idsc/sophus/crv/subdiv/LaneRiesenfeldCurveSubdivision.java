@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import ch.ethz.idsc.sophus.math.MidpointInterface;
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
@@ -44,7 +45,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       if (Tensors.isEmpty(value)) // TODO GJOEL/JPH test coverage: is the if case required?
         return value;
       boolean odd = count % 2 == 1;
-      Tensor queue = Tensors.reserve(value.length());
+      Nocopy queue = new Nocopy(value.length());
       if (odd) {
         Tensor p = Last.of(value);
         for (int index = 0; index < value.length(); ++index) {
@@ -61,7 +62,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
         }
       }
       tensor = value;
-      value = queue;
+      value = queue.tensor();
     }
     return value;
   }
@@ -77,7 +78,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       if (Tensors.isEmpty(value)) // TODO GJOEL/JPH test coverage: is the if case required?
         return value;
       boolean odd = count % 2 == 1;
-      Tensor queue = Tensors.reserve(value.length() + 1);
+      Nocopy queue = new Nocopy(value.length() + 1);
       if (odd)
         queue.append(tensor.get(0));
       Iterator<Tensor> iterator = value.iterator();
@@ -87,7 +88,7 @@ public class LaneRiesenfeldCurveSubdivision implements CurveSubdivision, Seriali
       if (odd)
         queue.append(Last.of(tensor));
       tensor = value;
-      value = queue;
+      value = queue.tensor();
     }
     return value;
   }

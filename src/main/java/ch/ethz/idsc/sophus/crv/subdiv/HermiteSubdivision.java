@@ -5,6 +5,7 @@ import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
+/** assumes uniform sampling */
 public interface HermiteSubdivision {
   /** @param delta between two samples in control points
    * @param control

@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.owl.math.Derive;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
@@ -14,6 +13,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
+import ch.ethz.idsc.tensor.alg.Derive;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.alg.Transpose;

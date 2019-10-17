@@ -52,15 +52,14 @@ public class LidarEmulator implements RenderInterface {
     Se2Bijection se2Bijection = new Se2Bijection(supplier.get().state());
     geometricLayer.pushMatrix(se2Bijection.forward_se2());
     Tensor polygon = lidarRaytracer.toPoints(scan);
-    Tensor origin = Array.zeros(2);
     if (scan.length() <= MAX_RAYS) {
       graphics.setColor(COLOR_LASER_RAY);
       for (Tensor point : polygon) {
-        Shape shape = geometricLayer.toLine2D(origin, point);
+        Shape shape = geometricLayer.toLine2D(point);
         graphics.draw(shape);
       }
     } else {
-      polygon.append(origin);
+      polygon.append(Array.zeros(2));
       Path2D path2D = geometricLayer.toPath2D(polygon);
       path2D.closePath();
       graphics.setColor(COLOR_FREESPACE_FILL);

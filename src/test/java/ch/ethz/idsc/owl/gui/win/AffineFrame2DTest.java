@@ -15,6 +15,10 @@ public class AffineFrame2DTest extends TestCase {
     AffineFrame2D af2 = new AffineFrame2D(m1);
     AffineFrame2D af3 = af2.dot(m2);
     assertEquals(af3.matrix_copy(), m1.dot(m2));
+    Point2D point2d = af3.toPoint2D();
+    Point2D actual = new Point2D.Double(1.2687737473681602, 1.7596654982619508);
+    assertTrue(point2d.distance(actual) < 1e-9);
+    assertTrue(point2d.distance(af3.toPoint2D(0, 0)) < 1e-9);
   }
 
   public void testPoint() {

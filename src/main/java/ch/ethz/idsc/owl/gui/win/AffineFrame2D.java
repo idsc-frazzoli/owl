@@ -48,6 +48,11 @@ import ch.ethz.idsc.tensor.Tensors;
         m10 * px + m11 * py + m12);
   }
 
+  /** @return toPoint2D(0, 0) */
+  public Point2D toPoint2D() {
+    return new Point2D.Double(m02, m12);
+  }
+
   /** @param matrix with dimensions 3 x 3
    * @return combined transformation of this and given matrix */
   public AffineFrame2D dot(Tensor matrix) {

@@ -21,7 +21,6 @@ import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.subdiv.Hermite1Subdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.Hermite3Filter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
@@ -122,7 +121,6 @@ import ch.ethz.idsc.tensor.sca.Power;
     }
     graphics.setColor(Color.DARK_GRAY);
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
-    Hermite1Subdivision.AD = jToggleAdjoint.isSelected();
     TensorIteration tensorIteration = //
         // new Hermite1Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE).string(delta, _control);
         new Hermite3Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.FILTER) //

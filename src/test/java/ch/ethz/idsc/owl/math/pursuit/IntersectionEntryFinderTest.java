@@ -1,3 +1,4 @@
+// code by gjoel, jph
 package ch.ethz.idsc.owl.math.pursuit;
 
 import java.util.Optional;

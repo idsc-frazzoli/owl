@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.math.order.VectorLexicographic;
 import ch.ethz.idsc.tensor.AbstractScalar;
+import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,7 +21,6 @@ import ch.ethz.idsc.tensor.sca.ChopInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.ConjugateInterface;
-import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.NInterface;

@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.rn.glc;
 import java.util.List;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.data.tree.Expand;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;

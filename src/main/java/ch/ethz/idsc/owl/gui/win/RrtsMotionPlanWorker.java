@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.ani.api.RrtsPlannerCallback;
 import ch.ethz.idsc.owl.ani.api.TrajectoryEntity;
-import ch.ethz.idsc.owl.glc.adapter.Expand;
+import ch.ethz.idsc.owl.data.tree.Expand;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.TransitionPlanner;
 import ch.ethz.idsc.tensor.Scalar;

@@ -7,13 +7,13 @@ import java.awt.Stroke;
 import ch.ethz.idsc.sophus.crv.CurveCurvature;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.sophus.math.ArcTan2D;
-import ch.ethz.idsc.sophus.util.plot.VisualRow;
-import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.Differences;
 import ch.ethz.idsc.tensor.alg.FoldList;
+import ch.ethz.idsc.tensor.fig.VisualRow;
+import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.red.Norm;
 

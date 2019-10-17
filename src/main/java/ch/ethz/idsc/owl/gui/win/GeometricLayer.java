@@ -90,7 +90,17 @@ public class GeometricLayer {
    * @param q
    * @return line that connects p and q */
   public Line2D toLine2D(Tensor p, Tensor q) {
-    return new Line2D.Double(toPoint2D(p), toPoint2D(q));
+    return new Line2D.Double( //
+        toPoint2D(p), //
+        toPoint2D(q));
+  }
+
+  /** @param p
+   * @return line that connects the origin with p */
+  public Line2D toLine2D(Tensor p) {
+    return new Line2D.Double( //
+        deque.peek().toPoint2D(), //
+        toPoint2D(p));
   }
 
   /** @param polygon

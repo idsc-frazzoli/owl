@@ -40,10 +40,8 @@ public abstract class AbstractBSpline1CurveSubdivision implements CurveSubdivisi
     Iterator<Tensor> iterator = tensor.iterator();
     Tensor p = iterator.next();
     curve.append(p);
-    while (iterator.hasNext()) {
-      Tensor q = iterator.next();
-      curve.append(midpoint(p, q)).append(p = q);
-    }
+    while (iterator.hasNext())
+      curve.append(midpoint(p, p = iterator.next())).append(p);
     return curve;
   }
 }

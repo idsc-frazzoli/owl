@@ -23,9 +23,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * the flight path angle (gamma) should be no less than -3 degree and always negative
  * the descent rate should be z_dot <= V * sin(gamma) in final landing phase
  * 
- * The values always are to be found in {@link ApStateSpaceModel}
- * 
- * @author Andre */
+ * The values always are to be found in {@link ApStateSpaceModel} */
 /* package */ class ApPlannerConstraint implements PlannerConstraint, Serializable {
   private static final Clip CLIP_GAMMA = //
       Clips.interval(ApStateSpaceModel.MAX_DESCENT_GAMMA, ApStateSpaceModel.MAX_DESCENT_GAMMA.zero());

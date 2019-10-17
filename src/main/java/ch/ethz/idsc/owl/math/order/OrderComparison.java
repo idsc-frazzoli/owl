@@ -32,8 +32,7 @@ package ch.ethz.idsc.owl.math.order;
  * </tr>
  * </table>
  * 
- * See Chapter 2.2 in "Multi-Objective Optimization Using Preference Structures"
- * @author astoll */
+ * See Chapter 2.2 in "Multi-Objective Optimization Using Preference Structures" */
 public enum OrderComparison {
   STRICTLY_PRECEDES, //
   INDIFFERENT, //

@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * 
  * State space model was slightly altered as x and z are the first two entries of the vector
  * 
- * @author Andre Stoll
  * @param x = {horizontal distance (x), altitude (z), velocity, flight path angle (gamma)}
  * @param u = {thrust, angle of attack (aoa)} */
 /* package */ enum ApStateSpaceModel implements StateSpaceModel {

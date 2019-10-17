@@ -4,13 +4,13 @@ package ch.ethz.idsc.sophus.sym;
 import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
+import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.ArcTanInterface;
 import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.ConjugateInterface;
-import ch.ethz.idsc.tensor.sca.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.sca.ExpInterface;
 import ch.ethz.idsc.tensor.sca.LogInterface;
 import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;

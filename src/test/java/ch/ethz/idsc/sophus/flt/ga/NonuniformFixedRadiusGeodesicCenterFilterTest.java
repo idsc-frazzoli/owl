@@ -1,4 +1,4 @@
-//code by ob
+// code by ob
 package ch.ethz.idsc.sophus.flt.ga;
 
 import java.util.NavigableMap;
@@ -20,7 +20,8 @@ public class NonuniformFixedRadiusGeodesicCenterFilterTest extends TestCase {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     int radius = 1;
     // ---
-    NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
+    NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = //
+        NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
     Tensor actual = Tensor.of(NonuniformFixedRadiusGeodesicCenterFilter.of(nonuniformFixedRadiusGeodesicCenter, radius).apply(navigableMap).values().stream());
     Tensor expected = Tensors.of(Tensors.vector(1, 1, 1));
     assertEquals(expected, actual);
@@ -35,7 +36,8 @@ public class NonuniformFixedRadiusGeodesicCenterFilterTest extends TestCase {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     int radius = 1;
     // ---
-    NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
+    NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = //
+        NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
     Tensor actual = Tensor.of(NonuniformFixedRadiusGeodesicCenterFilter.of(nonuniformFixedRadiusGeodesicCenter, radius).apply(navigableMap).values().stream());
     Tensor expected = Tensor.of(navigableMap.values().stream());
     assertEquals(expected, actual);
@@ -50,7 +52,8 @@ public class NonuniformFixedRadiusGeodesicCenterFilterTest extends TestCase {
     GeodesicInterface geodesicInterface = Se2Geodesic.INSTANCE;
     int radius = 3;
     // ---
-    NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
+    NonuniformFixedRadiusGeodesicCenter nonuniformFixedRadiusGeodesicCenter = //
+        NonuniformFixedRadiusGeodesicCenter.of(geodesicInterface);
     Tensor.of(NonuniformFixedRadiusGeodesicCenterFilter.of(nonuniformFixedRadiusGeodesicCenter, radius).apply(navigableMap).values().stream());
     // Tensor expected =
     Tensors.fromString(

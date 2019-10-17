@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 
 /** examples of extensions are
  * {@link BSpline3CurveSubdivision}, and
@@ -12,7 +12,7 @@ public abstract class RefiningBSpline3CurveSubdivision extends AbstractBSpline3C
   @Override
   protected final Tensor refine(Tensor tensor) {
     int length = tensor.length();
-    Tensor curve = Tensors.reserve(2 * length);
+    Nocopy curve = new Nocopy(2 * length);
     {
       Tensor q = tensor.get(0);
       Tensor r = tensor.get(1);
@@ -26,6 +26,6 @@ public abstract class RefiningBSpline3CurveSubdivision extends AbstractBSpline3C
       curve.append(center(p, q, r)).append(midpoint(q, r));
       p = q;
     }
-    return curve.append(tensor.get(last));
+    return curve.append(tensor.get(last)).tensor();
   }
 }

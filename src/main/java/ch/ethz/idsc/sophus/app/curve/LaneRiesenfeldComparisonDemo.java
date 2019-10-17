@@ -15,7 +15,6 @@ import org.jfree.chart.JFreeChart;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.MinMax;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -23,14 +22,15 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.util.plot.ListPlot;
-import ch.ethz.idsc.sophus.util.plot.VisualRow;
-import ch.ethz.idsc.sophus.util.plot.VisualSet;
+import ch.ethz.idsc.sophus.math.MinMax;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Differences;
+import ch.ethz.idsc.tensor.fig.ListPlot;
+import ch.ethz.idsc.tensor.fig.VisualRow;
+import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
 import ch.ethz.idsc.tensor.img.ColorDataLists;
 import ch.ethz.idsc.tensor.red.Mean;
@@ -115,11 +115,13 @@ import ch.ethz.idsc.tensor.red.Quantile;
       // ---
       JFreeChart jFreeChart2 = ListPlot.of(visualSet2);
       if (!visualSet2.visualRows().isEmpty()) {
-        double min = Quantile.of(Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
-            .map(MinMax::of).map(MinMax::min)), RationalScalar.of(1, CURVE_SUBDIVISION_SCHEMES.size() - 1)).Get().number().doubleValue();
-        double max = Quantile.of(Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
-            .map(MinMax::of).map(MinMax::max)), RationalScalar.of(CURVE_SUBDIVISION_SCHEMES.size() - 1, CurveSubdivisionHelper.LANE_RIESENFELD.size() - 1))
-            .Get().number().doubleValue();
+        Tensor tensorMin = Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
+            .map(MinMax::of).map(MinMax::min));
+        double min = Quantile.of(tensorMin).apply(RationalScalar.of(1, CURVE_SUBDIVISION_SCHEMES.size() - 1)).number().doubleValue();
+        Tensor tensorMax = Tensor.of(visualSet2.visualRows().stream().map(VisualRow::points).map(points -> points.get(Tensor.ALL, 1)) //
+            .map(MinMax::of).map(MinMax::max));
+        double max = Quantile.of(tensorMax).apply(RationalScalar.of(CURVE_SUBDIVISION_SCHEMES.size() - 1, CurveSubdivisionHelper.LANE_RIESENFELD.size() - 1))
+            .number().doubleValue();
         if (min != max)
           jFreeChart2.getXYPlot().getRangeAxis().setRange(1.1 * min, 1.1 * max);
       }

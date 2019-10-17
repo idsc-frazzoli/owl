@@ -1,3 +1,4 @@
+// code by ynager, jph
 package ch.ethz.idsc.owl.bot.se2.glc;
 
 import ch.ethz.idsc.owl.glc.adapter.ConstraintViolationCost;

@@ -3,8 +3,8 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
-import ch.ethz.idsc.sophus.lie.LieGroupElement;
 import ch.ethz.idsc.sophus.lie.LieGroupGeodesic;
+import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * by Byeongseon Jeong, Jungho Yoon */
 public class Hermite1Subdivision implements HermiteSubdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
-  public static boolean AD = false;
+  // public static boolean AD = false;
   // ---
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
@@ -48,13 +48,11 @@ public class Hermite1Subdivision implements HermiteSubdivision {
     return new Control(delta, control).new CyclicIteration();
   }
 
-  // @SuppressWarnings("static-method")
-  private Tensor move(Tensor pg, Tensor rg, Tensor pv) {
-    if (AD) {
-      LieGroupElement lieGroupElement = lieGroup.element(lieGroup.element(rg).inverse().combine(pg));
-      return lieGroupElement.adjoint(pv);
-    }
-    // return lieGroupElement.dL(pv);
+  private static Tensor move(Tensor pg, Tensor rg, Tensor pv) {
+    // {
+    // LieGroupElement lieGroupElement = lieGroup.element(lieGroup.element(rg).inverse().combine(pg));
+    // return lieGroupElement.adjoint(pv);
+    // }
     return pv;
   }
 
@@ -98,7 +96,7 @@ public class Hermite1Subdivision implements HermiteSubdivision {
       @Override // from HermiteSubdivision
       public Tensor iterate() {
         int length = control.length();
-        Tensor string = Tensors.reserve(2 * length - 1);
+        Nocopy string = new Nocopy(2 * length - 1);
         Tensor p = control.get(0);
         for (int index = 1; index < length; ++index) {
           string.append(p);
@@ -109,7 +107,7 @@ public class Hermite1Subdivision implements HermiteSubdivision {
         string.append(p);
         rgk = rgk.add(rgk);
         rvk = rvk.add(rvk);
-        return control = string;
+        return control = string.tensor();
       }
     }
 
@@ -117,7 +115,7 @@ public class Hermite1Subdivision implements HermiteSubdivision {
       @Override // from HermiteSubdivision
       public Tensor iterate() {
         int length = control.length();
-        Tensor string = Tensors.reserve(2 * length);
+        Nocopy string = new Nocopy(2 * length);
         Tensor p = control.get(0);
         for (int index = 1; index <= length; ++index) {
           string.append(p);
@@ -127,7 +125,7 @@ public class Hermite1Subdivision implements HermiteSubdivision {
         }
         rgk = rgk.add(rgk);
         rvk = rvk.add(rvk);
-        return control = string;
+        return control = string.tensor();
       }
     }
   }

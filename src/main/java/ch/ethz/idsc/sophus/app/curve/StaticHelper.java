@@ -7,14 +7,14 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
-import ch.ethz.idsc.sophus.util.plot.ListPlot;
-import ch.ethz.idsc.sophus.util.plot.VisualSet;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.fig.ListPlot;
+import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ enum StaticHelper {

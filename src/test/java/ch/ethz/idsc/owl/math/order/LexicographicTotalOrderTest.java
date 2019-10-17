@@ -1,6 +1,7 @@
 // code by astoll
 package ch.ethz.idsc.owl.math.order;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class LexicographicTotalOrderTest extends TestCase {
     y.add(3);
     assertTrue(LexicographicTotalOrder.INSTANCE.compare(x, x) == 0);
     assertTrue(LexicographicTotalOrder.INSTANCE.compare(y, y) == 0);
-    assertTrue(LexicographicTotalOrder.INSTANCE.compare(x, y) == +1);
-    assertTrue(LexicographicTotalOrder.INSTANCE.compare(y, x) == -1);
+    assertTrue(LexicographicTotalOrder.INSTANCE.compare(x, y) > 0);
+    assertTrue(LexicographicTotalOrder.INSTANCE.compare(y, x) < 0);
   }
 
   @SuppressWarnings("rawtypes")
@@ -72,5 +73,9 @@ public class LexicographicTotalOrderTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testEmpty() {
+    assertEquals(LexicographicTotalOrder.INSTANCE.compare(Arrays.asList(), Arrays.asList()), 0);
   }
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.data.tree.NodesAssert;
+import ch.ethz.idsc.owl.demo.order.SubsetQ;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -69,7 +70,7 @@ public enum RelaxedDebugUtils {
   public static void globalQueueSubsetOfQueuesInDomainMap(RelaxedTrajectoryPlanner relaxedTrajectoryPlanner) {
     Collection<GlcNode> globalUnexpandedNodes = relaxedTrajectoryPlanner.getQueue();
     Collection<GlcNode> nodesInDomainMapQueues = allNodes(relaxedTrajectoryPlanner);
-    if (!nodesInDomainMapQueues.containsAll(globalUnexpandedNodes))
+    if (!SubsetQ.of(nodesInDomainMapQueues, globalUnexpandedNodes))
       throw new RuntimeException("Some nodes in global queue are not present in queues of domain map!");
     if (PRINT) {
       System.out.println("All nodes in global queue are contained within domain map queues.");
