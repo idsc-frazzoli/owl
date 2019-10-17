@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.glc.adapter;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import ch.ethz.idsc.owl.data.tree.Expand;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.tensor.Scalars;

@@ -1,5 +1,5 @@
 // code by jph and jl
-package ch.ethz.idsc.owl.glc.adapter;
+package ch.ethz.idsc.owl.data.tree;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -7,9 +7,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import ch.ethz.idsc.owl.data.tree.ExpandInterface;
-import ch.ethz.idsc.owl.data.tree.ObservingExpandInterface;
-import ch.ethz.idsc.owl.data.tree.StateCostNode;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Timing;
 
@@ -62,21 +59,23 @@ public class Expand<T extends StateCostNode> {
   }
 
   private void expand(int limit, Supplier<Boolean> isFinished) {
-    if (expandInterface instanceof ObservingExpandInterface && //
-        ((ObservingExpandInterface) expandInterface).isObserving()) {
-      final Map<Double, Scalar> observations = new LinkedHashMap<>();
-      Timing timing = Timing.started();
-      Supplier<Boolean> isFinished_ = () -> {
-        expandInterface.getBest().ifPresent(node -> {
-          if (observations.isEmpty())
-            ((ObservingExpandInterface<T>) expandInterface).processFirst(node);
-          observations.put(timing.seconds(), node.costFromRoot());
-        });
-        return isFinished.get();
-      };
-      expansionLoop(limit, isFinished_);
-      ((ObservingExpandInterface) expandInterface).process(observations);
-      expandInterface.getBest().ifPresent(((ObservingExpandInterface<T>) expandInterface)::processLast);
+    if (expandInterface instanceof ObservingExpandInterface) {
+      ObservingExpandInterface<T> observingExpandInterface = (ObservingExpandInterface<T>) expandInterface;
+      if (observingExpandInterface.isObserving()) {
+        final Map<Double, Scalar> observations = new LinkedHashMap<>();
+        Timing timing = Timing.started();
+        Supplier<Boolean> isFinished_ = () -> {
+          expandInterface.getBest().ifPresent(node -> {
+            if (observations.isEmpty())
+              observingExpandInterface.processFirst(node);
+            observations.put(timing.seconds(), node.costFromRoot());
+          });
+          return isFinished.get();
+        };
+        expansionLoop(limit, isFinished_);
+        observingExpandInterface.process(observations);
+        expandInterface.getBest().ifPresent(observingExpandInterface::processLast);
+      }
     } else
       expansionLoop(limit, isFinished);
   }
