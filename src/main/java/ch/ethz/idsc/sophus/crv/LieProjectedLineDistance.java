@@ -29,6 +29,7 @@ public class LieProjectedLineDistance implements LineDistance, Serializable {
     LieGroupElement lieBeg = lieGroup.element(beg);
     LieGroupElement lieInv = lieBeg.inverse();
     Tensor normal = NORMALIZE_UNLESS_ZERO.apply(lieExponential.log(lieInv.combine(end)));
+    // TODO design so that serializable
     return new TensorNorm() {
       @Override // from TensorNorm
       public Scalar norm(Tensor tensor) {

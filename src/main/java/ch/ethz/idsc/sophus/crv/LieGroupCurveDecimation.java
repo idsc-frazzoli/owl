@@ -32,5 +32,9 @@ public enum LieGroupCurveDecimation {
     }
   }, //
   ;
+  /** @param lieGroup
+   * @param lieExponential
+   * @param epsilon non-negative
+   * @return */
   public abstract CurveDecimation of(LieGroup lieGroup, LieExponential lieExponential, Scalar epsilon);
 }

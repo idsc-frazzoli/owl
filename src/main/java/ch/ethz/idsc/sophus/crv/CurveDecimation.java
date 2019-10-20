@@ -20,7 +20,7 @@ public interface CurveDecimation extends TensorUnaryOperator {
 
   /** @param lieGroup
    * @param lieExponential
-   * @param epsilon
+   * @param epsilon non-negative
    * @return */
   public static CurveDecimation midpoint(LieGroup lieGroup, LieExponential lieExponential, Scalar epsilon) {
     return new RamerDouglasPeucker(new LieMidpointLineDistance(lieGroup, lieExponential), epsilon);
@@ -38,7 +38,7 @@ public interface CurveDecimation extends TensorUnaryOperator {
 
   /** @param lieGroup
    * @param lieExponential
-   * @param epsilon
+   * @param epsilon non-negative
    * @return */
   public static CurveDecimation projected(LieGroup lieGroup, LieExponential lieExponential, Scalar epsilon) {
     return new RamerDouglasPeucker( //
