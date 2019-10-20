@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class SplitCurveSubdivisionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new SplitCurveSubdivisionDemo());
+    AbstractDemoHelper.offscreen(new SplitCurveSubdivisionDemo());
   }
 }

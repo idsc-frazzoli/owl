@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class GeodesicCatmullRomDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new GeodesicCatmullRomDemo());
+    AbstractDemoHelper.offscreen(new GeodesicCatmullRomDemo());
   }
 }

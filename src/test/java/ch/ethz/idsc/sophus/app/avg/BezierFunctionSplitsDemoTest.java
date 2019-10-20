@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class BezierFunctionSplitsDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new BezierFunctionSplitsDemo());
+    AbstractDemoHelper.offscreen(new BezierFunctionSplitsDemo());
   }
 }

@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class GeodesicMeanFilterDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new GeodesicMeanFilterDemo());
+    AbstractDemoHelper.offscreen(new GeodesicMeanFilterDemo());
   }
 }

@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class ExtrapolationSplitsDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new ExtrapolationSplitsDemo());
+    AbstractDemoHelper.offscreen(new ExtrapolationSplitsDemo());
   }
 }

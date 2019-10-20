@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class GeodesicDeBoorDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new GeodesicDeBoorDemo());
+    AbstractDemoHelper.offscreen(new GeodesicDeBoorDemo());
   }
 }

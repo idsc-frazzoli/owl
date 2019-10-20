@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 
 public class GeodesicBSplineFunctionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new GeodesicBSplineFunctionDemo());
+    AbstractDemoHelper.offscreen(new GeodesicBSplineFunctionDemo());
   }
 
   public void testDeBoorRational() {

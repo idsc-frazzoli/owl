@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
+import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
@@ -37,6 +38,7 @@ public class GeodesicCatmullRomDemo extends CurvatureDemo {
   private final JSlider jSliderExponent = new JSlider(0, 1000, 500);
 
   public GeodesicCatmullRomDemo() {
+    super(GeodesicDisplays.SE2C_SE2_R2);
     addButtonDubins();
     // ---
     setGeodesicDisplay(Se2GeodesicDisplay.INSTANCE);

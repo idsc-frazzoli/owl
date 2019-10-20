@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class Regularization2StepDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new Regularization2StepDemo());
+    AbstractDemoHelper.offscreen(new Regularization2StepDemo());
   }
 }

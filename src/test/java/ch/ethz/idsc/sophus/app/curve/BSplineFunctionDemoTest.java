@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class BSplineFunctionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new BSplineFunctionDemo());
+    AbstractDemoHelper.offscreen(new BSplineFunctionDemo());
   }
 }

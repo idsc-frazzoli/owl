@@ -7,6 +7,6 @@ import junit.framework.TestCase;
 
 public class ApproximationDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new ApproximationDemo(GokartPoseDataV2.RACING_DAY));
+    AbstractDemoHelper.offscreen(new ApproximationDemo(GokartPoseDataV2.RACING_DAY));
   }
 }

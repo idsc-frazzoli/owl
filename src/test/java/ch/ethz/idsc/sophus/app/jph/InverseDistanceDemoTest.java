@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class InverseDistanceDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new InverseDistanceDemo());
+    AbstractDemoHelper.offscreen(new InverseDistanceDemo());
   }
 }

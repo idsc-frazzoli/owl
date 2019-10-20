@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class ClothoidDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new ClothoidDemo());
+    AbstractDemoHelper.offscreen(new ClothoidDemo());
   }
 }
