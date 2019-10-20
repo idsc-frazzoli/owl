@@ -14,4 +14,13 @@ public class InverseDistanceTest extends TestCase {
     Tensor weights = inverseDistance.weights(Tensors.vector(1, 3).map(Tensors::of), RealScalar.of(2).map(Tensors::of));
     assertEquals(weights, Tensors.of(RationalScalar.HALF, RationalScalar.HALF));
   }
+
+  public void testFailNull() {
+    try {
+      new InverseDistance(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }
