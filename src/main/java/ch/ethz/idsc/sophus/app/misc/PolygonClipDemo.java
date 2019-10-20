@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import ch.ethz.idsc.owl.bot.r2.CogPoints;
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
@@ -24,6 +25,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   public PolygonClipDemo() {
     super(true, GeodesicDisplays.R2_ONLY);
+    setControlPointsSe2(Tensor.of(CogPoints.of(4, RealScalar.of(5), RealScalar.of(-2)).stream().map(row -> row.append(RealScalar.ZERO))));
   }
 
   @Override
