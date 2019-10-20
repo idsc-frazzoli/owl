@@ -50,7 +50,6 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final SpinnerLabel<Integer> spinnerLabelShift = new SpinnerLabel<>();
   private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
-  private final JToggleButton jToggleSpace = new JToggleButton("d-space");
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
   protected Tensor _control = Tensors.empty();
 
@@ -83,11 +82,6 @@ import ch.ethz.idsc.tensor.sca.Power;
       // spinnerLabelLevel.addSpinnerListener(type -> updateState());
     }
     timerFrame.jToolBar.addSeparator();
-    {
-      jToggleSpace.setSelected(true);
-      jToggleSpace.setToolTipText("show derivatives");
-      timerFrame.jToolBar.add(jToggleSpace);
-    }
     {
       jToggleButton.setSelected(true);
       jToggleButton.setToolTipText("show derivatives");
@@ -141,9 +135,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     for (int level = 0; level < levels; ++level)
       refined = tensorIteration.iterate();
     pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
-    {
-      new Se2HermitePlot(refined, RealScalar.of(0.3)).render(geometricLayer, graphics);
-    }
+    new Se2HermitePlot(refined, RealScalar.of(0.3)).render(geometricLayer, graphics);
     if (jToggleButton.isSelected()) {
       Tensor deltas = refined.get(Tensor.ALL, 1);
       int dims = deltas.get(0).length();
@@ -152,19 +144,6 @@ import ch.ethz.idsc.tensor.sca.Power;
             Range.of(0, deltas.length()).multiply(delta).divide(Power.of(2, levels)));
         Dimension dimension = timerFrame.geometricComponent.jComponent.getSize();
         jFreeChart.draw(graphics, new Rectangle2D.Double(dimension.width - WIDTH, 0, WIDTH, HEIGHT));
-      }
-    }
-    if (false) {
-      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.8));
-      for (Tensor point : refined.get(Tensor.ALL, 0)) {
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
-        Path2D path2d = geometricLayer.toPath2D(shape);
-        path2d.closePath();
-        graphics.setColor(COLOR_SHAPE);
-        graphics.fill(path2d);
-        graphics.setColor(Color.BLACK);
-        graphics.draw(path2d);
-        geometricLayer.popMatrix();
       }
     }
   }
