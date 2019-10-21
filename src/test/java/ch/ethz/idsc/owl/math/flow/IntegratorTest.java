@@ -13,9 +13,9 @@ import junit.framework.TestCase;
 
 public class IntegratorTest extends TestCase {
   public void testSimple() {
-    StateSpaceModel ssm = SingleIntegratorStateSpaceModel.INSTANCE;
+    StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE;
     Tensor u = Tensors.vector(1, 2);
-    Flow flow = StateSpaceModels.createFlow(ssm, u);
+    Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
     Tensor x = Tensors.vector(7, 2);
     Scalar h = RealScalar.of(3);
     Tensor euler_x1 = EulerIntegrator.INSTANCE.step(flow, x, h);
@@ -24,6 +24,10 @@ public class IntegratorTest extends TestCase {
     Tensor rk45_x1 = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
     assertEquals(euler_x1, x.add(u.multiply(h)));
     assertEquals(euler_x1, mid_x1);
+    for (int n = 1; n < 10; ++n) {
+      Tensor mmi_x1 = ModifiedMidpointIntegrator.of(n).step(flow, x, h);
+      assertEquals(euler_x1, mmi_x1);
+    }
     assertEquals(euler_x1, rk4_x1);
     assertEquals(euler_x1, rk45_x1);
     // ---

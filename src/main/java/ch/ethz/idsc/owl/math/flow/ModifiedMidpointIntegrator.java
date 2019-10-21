@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.math.flow;
 import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Integers;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -25,15 +24,15 @@ public class ModifiedMidpointIntegrator implements Integrator, Serializable {
   }
 
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor x, Scalar H) {
+  public Tensor step(Flow flow, Tensor x0, Scalar H) {
     Scalar h = H.divide(RealScalar.of(n));
-    Tensor prev = x;
-    Tensor curr = x.add(flow.at(x).multiply(h));
+    Tensor xm = x0.add(flow.at(x0).multiply(h)); // line identical with MidpointIntegrator
     for (int m = 1; m < n; ++m) {
-      Tensor next = prev.add(flow.at(curr).multiply(h.add(h)));
-      prev = curr;
-      curr = next;
+      Scalar _2h = h.add(h);
+      Tensor x1 = x0.add(flow.at(xm).multiply(_2h));
+      x0 = xm;
+      xm = x1;
     }
-    return prev.add(curr).add(flow.at(curr).multiply(h)).multiply(RationalScalar.HALF);
+    return x0.add(flow.at(xm).multiply(h)); // TODO line almost identical with MidpointIntegrator !?
   }
 }
