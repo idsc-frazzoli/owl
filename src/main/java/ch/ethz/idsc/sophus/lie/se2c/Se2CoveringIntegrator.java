@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.lie.se2c;
 import ch.ethz.idsc.sophus.lie.LieIntegrator;
 import ch.ethz.idsc.tensor.Tensor;
 
+// TODO special case of lie euler integrator
 public enum Se2CoveringIntegrator implements LieIntegrator {
   INSTANCE;
   // ---
