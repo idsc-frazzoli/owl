@@ -34,6 +34,10 @@ public abstract class Regularization2Step implements TensorUnaryOperator {
     this.factor = factor;
   }
 
+  /** @param prev
+   * @param curr
+   * @param next
+   * @return [curr, [prev, next]_1/2]_factor */
   final Tensor average(Tensor prev, Tensor curr, Tensor next) {
     return splitInterface.split(curr, splitInterface.midpoint(prev, next), factor);
   }
