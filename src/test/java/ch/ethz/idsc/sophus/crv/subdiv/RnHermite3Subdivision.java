@@ -52,19 +52,18 @@ import ch.ethz.idsc.tensor.sca.Chop;
     this.ARR = ARR;
   }
 
-  @Override
+  @Override // from HermiteSubdivision
   public TensorIteration string(Scalar delta, Tensor control) {
     Chop.NONE.requireClose(delta, RealScalar.ONE);
     return new Control(control).new StringIteration();
   }
 
-  @Override
+  @Override // from HermiteSubdivision
   public TensorIteration cyclic(Scalar delta, Tensor control) {
     Chop.NONE.requireClose(delta, RealScalar.ONE);
     return new Control(control).new CyclicIteration();
   }
 
-  // ---
   private class Control {
     private Tensor control;
     private int k = 0;

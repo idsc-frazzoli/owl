@@ -18,7 +18,7 @@ public class Hermite3SubdivisionsTest extends TestCase {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 5);
     for (int length = 4; length < 6; ++length) {
       Tensor control = RandomVariate.of(distribution, length, 2);
-      TensorIteration ti1 = RnHermite3A1Subdivision.instance().string(RealScalar.ONE, control);
+      TensorIteration ti1 = RnHermite3Subdivisions.a1().string(RealScalar.ONE, control);
       TensorIteration ti2 = Hermite3Subdivisions.a1(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
           .string(RealScalar.ONE, control);
       for (int count = 0; count < 4; ++count) {
@@ -35,7 +35,7 @@ public class Hermite3SubdivisionsTest extends TestCase {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 5);
     for (int length = 4; length < 6; ++length) {
       Tensor control = RandomVariate.of(distribution, length, 2);
-      TensorIteration ti1 = RnHermite3A1Subdivision.instance().cyclic(RealScalar.ONE, control);
+      TensorIteration ti1 = RnHermite3Subdivisions.a1().cyclic(RealScalar.ONE, control);
       TensorIteration ti2 = Hermite3Subdivisions.a1(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
           .cyclic(RealScalar.ONE, control);
       for (int count = 0; count < 4; ++count) {
@@ -52,7 +52,7 @@ public class Hermite3SubdivisionsTest extends TestCase {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 5);
     for (int length = 4; length < 6; ++length) {
       Tensor control = RandomVariate.of(distribution, length, 2);
-      TensorIteration ti1 = RnHermite3A2Subdivision.instance().string(RealScalar.ONE, control);
+      TensorIteration ti1 = RnHermite3Subdivisions.a2().string(RealScalar.ONE, control);
       TensorIteration ti2 = Hermite3Subdivisions.a2(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
           .string(RealScalar.ONE, control);
       for (int count = 0; count < 4; ++count) {
@@ -69,7 +69,7 @@ public class Hermite3SubdivisionsTest extends TestCase {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 5);
     for (int length = 4; length < 6; ++length) {
       Tensor control = RandomVariate.of(distribution, length, 2);
-      TensorIteration ti1 = RnHermite3A2Subdivision.instance().cyclic(RealScalar.ONE, control);
+      TensorIteration ti1 = RnHermite3Subdivisions.a2().cyclic(RealScalar.ONE, control);
       TensorIteration ti2 = Hermite3Subdivisions.a2(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
           .cyclic(RealScalar.ONE, control);
       for (int count = 0; count < 4; ++count) {

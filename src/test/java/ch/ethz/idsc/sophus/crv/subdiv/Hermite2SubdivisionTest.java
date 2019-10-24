@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 public class Hermite2SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
-    TensorIteration tensorIteration1 = RnHermite2Subdivision.string(control);
+    TensorIteration tensorIteration1 = RnHermite2Subdivisions.a2().string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
         new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
@@ -49,7 +49,7 @@ public class Hermite2SubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration tensorIteration1 = RnHermite2Subdivision.cyclic(control);
+    TensorIteration tensorIteration1 = RnHermite2Subdivisions.a2().cyclic(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = new Hermite2Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).cyclic(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = tensorIteration1.iterate();

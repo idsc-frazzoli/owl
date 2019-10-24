@@ -18,12 +18,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 /** Merrien interpolatory Hermite subdivision scheme of order two
  * implementation for R^n
  * 
- * References:
- * "A family of Hermite interpolants by bisection algorithms", 1992,
- * by Merrien
- * 
- * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
- * by Byeongseon Jeong, Jungho Yoon */
+ * Reference:
+ * "Increasing the smoothness of vector and Hermite subdivision schemes"
+ * by Moosmueller, Dyn, 2017 */
 public class Hermite2Subdivision implements HermiteSubdivision {
   private static final Scalar _29 = RealScalar.of(29);
   private static final Scalar _31 = RealScalar.of(31);
