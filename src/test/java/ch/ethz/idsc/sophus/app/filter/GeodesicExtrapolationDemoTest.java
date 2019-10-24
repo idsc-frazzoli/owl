@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class GeodesicExtrapolationDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new GeodesicExtrapolationDemo());
+    AbstractDemoHelper.offscreen(new GeodesicExtrapolationDemo());
   }
 }

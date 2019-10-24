@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class SurfaceMeshDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new SurfaceMeshDemo());
+    AbstractDemoHelper.offscreen(new SurfaceMeshDemo());
   }
 }

@@ -61,7 +61,7 @@ public class Hermite2Subdivision implements HermiteSubdivision {
 
     private Control(Scalar delta, Tensor control) {
       this.control = control;
-      rgk = RealScalar.of(200).divide(delta);
+      rgk = delta.divide(RealScalar.of(200));
       rvk = RationalScalar.of(29, 200).divide(delta);
     }
 
@@ -73,10 +73,9 @@ public class Hermite2Subdivision implements HermiteSubdivision {
       ScalarTensorFunction scalarTensorFunction = lieGroupGeodesic.curve(pg, qg);
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg)); // q - p
       Tensor rv1 = log.multiply(rvk);
-      // TODO interpret tangent vectors at element in group -> use adjoint map
       {
         Tensor rg1 = scalarTensorFunction.apply(_06_25);
-        Tensor rg2 = lieExponential.exp(pv.multiply(_31).subtract(qv.multiply(_29)).divide(rgk));
+        Tensor rg2 = lieExponential.exp(pv.multiply(_31).subtract(qv.multiply(_29)).multiply(rgk));
         Tensor rg = lieGroup.element(rg1).combine(rg2);
         // ---
         Tensor rv2 = qv.multiply(_13_80).add(pv.multiply(_277_400));
@@ -85,7 +84,7 @@ public class Hermite2Subdivision implements HermiteSubdivision {
       }
       {
         Tensor rg1 = scalarTensorFunction.apply(_19_25);
-        Tensor rg2 = lieExponential.exp(pv.multiply(_29).subtract(qv.multiply(_31)).divide(rgk));
+        Tensor rg2 = lieExponential.exp(pv.multiply(_29).subtract(qv.multiply(_31)).multiply(rgk));
         Tensor rg = lieGroup.element(rg1).combine(rg2);
         // ---
         Tensor rv2 = qv.multiply(_277_400).add(pv.multiply(_13_80));
@@ -111,7 +110,7 @@ public class Hermite2Subdivision implements HermiteSubdivision {
       @Override // from HermiteSubdivision
       public Tensor iterate() {
         Tensor curve = protected_string(control);
-        rgk = rgk.add(rgk);
+        rgk = rgk.multiply(RationalScalar.HALF);
         rvk = rvk.add(rvk);
         return control = curve;
       }
@@ -122,7 +121,7 @@ public class Hermite2Subdivision implements HermiteSubdivision {
       public Tensor iterate() {
         Tensor curve = protected_string(control);
         refine(curve, Last.of(control), control.get(0));
-        rgk = rgk.add(rgk);
+        rgk = rgk.multiply(RationalScalar.HALF);
         rvk = rvk.add(rvk);
         return control = curve;
       }

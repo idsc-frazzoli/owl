@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class LieGroupFiltersDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new LieGroupFiltersDemo());
+    AbstractDemoHelper.offscreen(new LieGroupFiltersDemo());
   }
 }

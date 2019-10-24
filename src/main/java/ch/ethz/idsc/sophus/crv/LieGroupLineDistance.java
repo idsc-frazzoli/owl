@@ -32,7 +32,7 @@ public class LieGroupLineDistance implements LineDistance, Serializable {
         NORMALIZE_UNLESS_ZERO.apply(log.apply(lieGroupElement.combine(end))));
   }
 
-  public class NormImpl implements TensorNorm {
+  public class NormImpl implements TensorNorm, Serializable {
     private final LieGroupElement lieGroupElement;
     private final Tensor normal;
 

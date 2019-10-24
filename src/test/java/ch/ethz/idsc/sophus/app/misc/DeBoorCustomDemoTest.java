@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class DeBoorCustomDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new DeBoorCustomDemo());
+    AbstractDemoHelper.offscreen(new DeBoorCustomDemo());
   }
 }

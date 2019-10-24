@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class SeriesHermiteSubdivisionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new SeriesHermiteSubdivisionDemo());
+    AbstractDemoHelper.offscreen(new SeriesHermiteSubdivisionDemo());
   }
 }

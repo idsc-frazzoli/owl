@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class LaneRiesenfeldComparisonDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new LaneRiesenfeldComparisonDemo());
+    AbstractDemoHelper.offscreen(new LaneRiesenfeldComparisonDemo());
   }
 }

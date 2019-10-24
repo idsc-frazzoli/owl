@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class TransitionNdDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new TransitionNdDemo());
+    AbstractDemoHelper.offscreen(new TransitionNdDemo());
   }
 }

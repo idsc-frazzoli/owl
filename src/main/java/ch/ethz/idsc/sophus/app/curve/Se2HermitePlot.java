@@ -10,13 +10,17 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.lie.Cross;
 
 /* package */ class Se2HermitePlot implements RenderInterface {
   private final Tensor points;
   private final Scalar scale;
 
+  /** @param points with dimensions N x 2 x 3
+   * @param scale */
   public Se2HermitePlot(Tensor points, Scalar scale) {
+    System.out.println(Dimensions.of(points));
     this.points = points;
     this.scale = scale;
   }

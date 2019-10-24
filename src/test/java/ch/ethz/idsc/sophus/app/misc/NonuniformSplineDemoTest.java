@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class NonuniformSplineDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new NonuniformSplineDemo());
+    AbstractDemoHelper.offscreen(new NonuniformSplineDemo());
   }
 }

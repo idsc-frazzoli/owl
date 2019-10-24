@@ -8,6 +8,7 @@ import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2.Se2GroupElement;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.math.AffineAppend;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,7 +34,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
   @Override // from MultivariateFunction
   public double value(double[] point) {
-    Tensor weights = MakeAffine.of(Tensors.vectorDouble(point));
+    Tensor weights = AffineAppend.of(Tensors.vectorDouble(point));
     TensorUnaryOperator tensorUnaryOperator = BiinvariantMeans.of(Se2BiinvariantMean.LINEAR, weights);
     Scalar sum = RealScalar.ZERO;
     for (int index = 0; index < data.length; ++index) {

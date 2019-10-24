@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class KnotsBSplineFunctionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new KnotsBSplineFunctionDemo());
+    AbstractDemoHelper.offscreen(new KnotsBSplineFunctionDemo());
   }
 }

@@ -13,9 +13,9 @@ public enum MidpointIntegrator implements Integrator {
   INSTANCE;
   // ---
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor x, Scalar h) {
-    Tensor k1 = flow.at(x).multiply(h);
-    Tensor k2 = flow.at(x.add(k1.multiply(RationalScalar.HALF))).multiply(h);
-    return x.add(k2);
+  public Tensor step(Flow flow, Tensor x0, Scalar _2h) {
+    Scalar h = _2h.multiply(RationalScalar.HALF);
+    Tensor xm = x0.add(flow.at(x0).multiply(h)); // h
+    return /**/ x0.add(flow.at(xm).multiply(_2h)); // 2h
   }
 }

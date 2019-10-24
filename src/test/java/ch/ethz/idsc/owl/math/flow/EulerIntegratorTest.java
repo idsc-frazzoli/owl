@@ -5,6 +5,9 @@ import ch.ethz.idsc.owl.math.DoubleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
+import ch.ethz.idsc.sophus.lie.rn.RnExponential;
+import ch.ethz.idsc.sophus.lie.rn.RnGroup;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -13,13 +16,17 @@ import ch.ethz.idsc.tensor.qty.Unit;
 import junit.framework.TestCase;
 
 public class EulerIntegratorTest extends TestCase {
+  private final Integrator lieEulerIntegrator = LieEulerIntegrator.of(RnGroup.INSTANCE, RnExponential.INSTANCE);
+
   public void testSimple() {
     StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE;
     Flow flow = StateSpaceModels.createFlow( //
         stateSpaceModel, QuantityTensor.of(Tensors.vector(1, 2), Unit.of("m*s^-1")));
     Tensor x = QuantityTensor.of(Tensors.vector(1, 2), Unit.of("m"));
-    Tensor r = EulerIntegrator.INSTANCE.step(flow, x, Quantity.of(2, "s"));
+    Scalar h = Quantity.of(2, "s");
+    Tensor r = EulerIntegrator.INSTANCE.step(flow, x, h);
     assertEquals(r, Tensors.fromString("{3[m], 6[m]}"));
+    assertEquals(r, lieEulerIntegrator.step(flow, x, h));
   }
 
   public void testDouble() {

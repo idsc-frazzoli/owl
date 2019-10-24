@@ -7,6 +7,6 @@ import junit.framework.TestCase;
 
 public class HermiteDatasetDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new HermiteDatasetDemo(GokartPoseDataV2.RACING_DAY));
+    AbstractDemoHelper.offscreen(new HermiteDatasetDemo(GokartPoseDataV2.RACING_DAY));
   }
 }

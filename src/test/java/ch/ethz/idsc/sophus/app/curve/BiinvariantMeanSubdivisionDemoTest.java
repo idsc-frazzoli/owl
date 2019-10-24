@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class BiinvariantMeanSubdivisionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new BiinvariantMeanSubdivisionDemo());
+    AbstractDemoHelper.offscreen(new BiinvariantMeanSubdivisionDemo());
   }
 }

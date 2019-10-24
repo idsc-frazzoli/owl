@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class LagrangeInterpolationDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new LagrangeInterpolationDemo());
+    AbstractDemoHelper.offscreen(new LagrangeInterpolationDemo());
   }
 }

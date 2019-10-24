@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class DubinsTransitionDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new DubinsTransitionDemo());
+    AbstractDemoHelper.offscreen(new DubinsTransitionDemo());
   }
 }

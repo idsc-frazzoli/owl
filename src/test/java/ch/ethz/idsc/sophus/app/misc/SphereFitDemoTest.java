@@ -6,6 +6,6 @@ import junit.framework.TestCase;
 
 public class SphereFitDemoTest extends TestCase {
   public void testSimple() {
-    AbstractDemoHelper.brief(new SphereFitDemo());
+    AbstractDemoHelper.offscreen(new SphereFitDemo());
   }
 }
