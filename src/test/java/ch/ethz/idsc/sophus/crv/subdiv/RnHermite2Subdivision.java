@@ -15,15 +15,15 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
  * implementation for R^n
  * 
  * References:
- * "de Rham Transform of a Hermite Subdivision Scheme", 2007
- * by Dubuc, Merrien, p.9, with lambda == 1/8, mu == 3/2
- * 
- * "Hermite subdivision on manifolds via parallel transport", 2017
- * by Moosmueller
+ * "de Rham Transform of a Hermite Subdivision Scheme"
+ * by Dubuc, Merrien, 2007, p.9, with lambda == 1/8, mu == 3/2
  * 
  * @see BSpline2CurveSubdivision */
 /* package */ class RnHermite2Subdivision {
   private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
+  /** "Hermite subdivision on manifolds via parallel transport"
+   * Example 1, p. 1063
+   * by Moosmueller, 2017 */
   private static final Tensor ALP = //
       Tensors.fromString("{{152/25, +31/25}, {-29/50, 277/100}}").divide(RealScalar.of(8));
   private static final Tensor ALQ = //

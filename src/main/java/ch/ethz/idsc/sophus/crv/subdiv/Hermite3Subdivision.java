@@ -17,13 +17,33 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.red.Times;
 
-/** Reference:
+/** Reference 1:
  * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
  * Example 3.7, eq. 28, p. 572
  * by Byeongseon Jeong, Jungho Yoon
  * 
+ * Reference 2:
+ * "Stirling numbers and Gregory coefficients for the factorization of Hermite
+ * subdivision operators"
+ * Example 35, p. 26
+ * by Moosmueller, Huening, Conti, 2019
+ * 
  * Hint:
- * For theta == 0 and omega == 0, the scheme reduces to Hermite1Subdivision */
+ * For theta == 0 and omega == 0, the scheme reduces to Hermite1Subdivision
+ * 
+ * Quote from [2]:
+ * "it is proved that H1 reproduces polynomials up to degree 3 and
+ * thus it satisfies the spectral condition up to order 3"
+ * 
+ * Quote from [2]:
+ * "H1 with theta = 1/32 provides an example by P 4 (x) = 4! 1 x 4 + 360
+ * of an Hermite scheme which does not reproduce polynomials of degree 4, but
+ * satisfies the spectral condition of order 4. To the best of our knowledge, this
+ * is the first time it is observed that the spectral condition is not equivalent to
+ * the reproduction of polynomials."
+ * 
+ * Quote from [2]:
+ * "Computations show that the Hermite scheme H1 is C4 for omega in [-0.12, -0.088] */
 public class Hermite3Subdivision implements HermiteSubdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _3_2 = RationalScalar.of(3, 2);
