@@ -8,7 +8,9 @@ import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
@@ -39,6 +41,41 @@ public class Hermite3SubdivisionTest extends TestCase {
     TensorIteration tensorIteration1 = RnHermite3Subdivision.common().string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
         new Hermite3Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
+            .string(RealScalar.ONE, control);
+    for (int count = 0; count < 6; ++count) {
+      Tensor it1 = tensorIteration1.iterate();
+      Tensor it2 = tensorIteration2.iterate();
+      assertEquals(it1, it2);
+      ExactTensorQ.require(it1);
+      ExactTensorQ.require(it2);
+    }
+  }
+
+  public void testStringLengthTension() {
+    Tensor control = Tensors.fromString("{{3, 4}, {1, -3}, {2, 3/5}, {1/6, 7/2}}");
+    Scalar theta = RationalScalar.of(2, 157);
+    Scalar omega = RationalScalar.of(1, 9);
+    TensorIteration tensorIteration1 = new RnHermite3Subdivision(theta, omega).string(RealScalar.ONE, control);
+    TensorIteration tensorIteration2 = //
+        new Hermite3Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega) //
+            .string(RealScalar.ONE, control);
+    for (int count = 0; count < 6; ++count) {
+      Tensor it1 = tensorIteration1.iterate();
+      Tensor it2 = tensorIteration2.iterate();
+      assertEquals(it1, it2);
+      ExactTensorQ.require(it1);
+      ExactTensorQ.require(it2);
+    }
+  }
+
+  public void testStringSpecial() {
+    Tensor control = Tensors.fromString("{{3, 4}, {1, -3}, {2, 3/5}, {1/6, 7/2}}");
+    Scalar theta = RealScalar.ZERO;
+    Scalar omega = RealScalar.ZERO;
+    TensorIteration tensorIteration1 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE) //
+        .string(RealScalar.ONE, control);
+    TensorIteration tensorIteration2 = //
+        new Hermite3Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega) //
             .string(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = tensorIteration1.iterate();

@@ -40,8 +40,8 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
   final Tensor ARQ;
   final Tensor ARR;
 
-  /** Example 3.7, eq. 28, p. 572
-   * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
+  /** "Construction of Hermite subdivision schemes reproducing polynomials", 2017
+   * Example 3.7, eq. 28, p. 572
    * by Byeongseon Jeong, Jungho Yoon
    * 
    * @param theta

@@ -54,7 +54,7 @@ public class Hermite1Subdivision implements HermiteSubdivision {
 
     private Control(Scalar delta, Tensor control) {
       this.control = control;
-      rgk = RealScalar.of(8).divide(delta);
+      rgk = delta.divide(RealScalar.of(8));
       rvk = RationalScalar.of(3, 2).divide(delta);
     }
 
@@ -71,7 +71,7 @@ public class Hermite1Subdivision implements HermiteSubdivision {
         Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg);
         Tensor rpv = pv;
         Tensor rqv = qv;
-        Tensor rg2 = lieExponential.exp(rpv.subtract(rqv).divide(rgk));
+        Tensor rg2 = lieExponential.exp(rpv.subtract(rqv).multiply(rgk));
         rg = lieGroup.element(rg1).combine(rg2);
       }
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg));
@@ -96,7 +96,7 @@ public class Hermite1Subdivision implements HermiteSubdivision {
           p = q;
         }
         string.append(p);
-        rgk = rgk.add(rgk);
+        rgk = rgk.multiply(RationalScalar.HALF);
         rvk = rvk.add(rvk);
         return control = string.tensor();
       }
@@ -114,7 +114,7 @@ public class Hermite1Subdivision implements HermiteSubdivision {
           string.append(midpoint(p, q));
           p = q;
         }
-        rgk = rgk.add(rgk);
+        rgk = rgk.multiply(RationalScalar.HALF);
         rvk = rvk.add(rvk);
         return control = string.tensor();
       }
