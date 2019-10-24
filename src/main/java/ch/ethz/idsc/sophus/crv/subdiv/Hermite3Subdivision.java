@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 
 public class Hermite3Subdivision implements HermiteSubdivision {
   /** midpoint group element contribution from group elements
@@ -37,7 +38,10 @@ public class Hermite3Subdivision implements HermiteSubdivision {
   /** @param lieGroup
    * @param lieExponential
    * @param biinvariantMean
-   * @param cgw
+   * @param mgv
+   * @param mvg
+   * @param mvv
+   * @param cgw vector of length 3
    * @param cgv
    * @param vpr
    * @param vpqr */
@@ -48,14 +52,14 @@ public class Hermite3Subdivision implements HermiteSubdivision {
     this.lieGroup = Objects.requireNonNull(lieGroup);
     this.lieExponential = Objects.requireNonNull(lieExponential);
     this.biinvariantMean = Objects.requireNonNull(biinvariantMean);
-    this.mgv = mgv;
+    this.mgv = Objects.requireNonNull(mgv);
     this.mvg = mvg.add(mvg);
     this.mvv = mvv.add(mvv);
     // ---
-    this.cgw = cgw;
+    this.cgw = VectorQ.requireLength(cgw, 3);
     this.cgv = cgv;
     cvg = vpr.add(vpr);
-    cvw = vpqr.add(vpqr);
+    cvw = VectorQ.requireLength(vpqr.add(vpqr), 3);
   }
 
   @Override // from HermiteSubdivision

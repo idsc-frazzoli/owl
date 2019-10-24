@@ -26,7 +26,7 @@ public class Hermite3SubdivisionTest extends TestCase {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
     TensorIteration tensorIteration1 = RnH1Subdivision.common().string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .string(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = tensorIteration1.iterate();
@@ -41,7 +41,7 @@ public class Hermite3SubdivisionTest extends TestCase {
     Tensor control = Tensors.fromString("{{3, 4}, {1, -3}}");
     TensorIteration tensorIteration1 = RnH1Subdivision.common().string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .string(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = tensorIteration1.iterate();
@@ -58,7 +58,7 @@ public class Hermite3SubdivisionTest extends TestCase {
     Scalar omega = RationalScalar.of(1, 9);
     TensorIteration tensorIteration1 = RnH1Subdivision.of(theta, omega).string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega) //
             .string(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = tensorIteration1.iterate();
@@ -76,7 +76,7 @@ public class Hermite3SubdivisionTest extends TestCase {
     TensorIteration tensorIteration1 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE) //
         .string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega) //
             .string(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = tensorIteration1.iterate();
@@ -92,10 +92,10 @@ public class Hermite3SubdivisionTest extends TestCase {
     Tensor cp2 = cp1.copy();
     cp2.set(Tensor::negate, Tensor.ALL, 1);
     TensorIteration tensorIteration1 = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .string(RealScalar.ONE, cp1);
     TensorIteration tensorIteration2 = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .string(RealScalar.ONE, Reverse.of(cp2));
     for (int count = 0; count < 3; ++count) {
       Tensor result1 = tensorIteration1.iterate();
@@ -109,7 +109,7 @@ public class Hermite3SubdivisionTest extends TestCase {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
     TensorIteration tensorIteration1 = RnH1Subdivision.common().cyclic(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .cyclic(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = tensorIteration1.iterate();
@@ -123,7 +123,7 @@ public class Hermite3SubdivisionTest extends TestCase {
   public void testStringQuantity() {
     Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
     TensorIteration tensorIteration = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .string(Quantity.of(1, "s"), control);
     Do.of(tensorIteration::iterate, 3);
   }
@@ -131,26 +131,26 @@ public class Hermite3SubdivisionTest extends TestCase {
   public void testCyclicQuantity() {
     Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
     TensorIteration tensorIteration = //
-        Hermite3SubdivisionGauge.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
+        Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .cyclic(Quantity.of(1, "s"), control);
     Do.of(tensorIteration::iterate, 3);
   }
 
   public void testNullFail() {
     try {
-      Hermite3SubdivisionGauge.of(Se2CoveringGroup.INSTANCE, null, RnBiinvariantMean.INSTANCE);
+      Hermite3Subdivisions.of(Se2CoveringGroup.INSTANCE, null, RnBiinvariantMean.INSTANCE);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      Hermite3SubdivisionGauge.of(null, Se2CoveringExponential.INSTANCE, RnBiinvariantMean.INSTANCE);
+      Hermite3Subdivisions.of(null, Se2CoveringExponential.INSTANCE, RnBiinvariantMean.INSTANCE);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      Hermite3SubdivisionGauge.of(Se2CoveringGroup.INSTANCE, Se2CoveringExponential.INSTANCE, null);
+      Hermite3Subdivisions.of(Se2CoveringGroup.INSTANCE, Se2CoveringExponential.INSTANCE, null);
       fail();
     } catch (Exception exception) {
       // ---
