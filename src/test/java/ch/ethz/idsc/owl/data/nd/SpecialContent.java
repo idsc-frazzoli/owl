@@ -10,7 +10,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-class SpecialContent implements Serializable {
+/* package */ class SpecialContent implements Serializable {
   Tensor handled = Tensors.vector(99, 100);
   Tensor value;
 

@@ -9,62 +9,57 @@ import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
-import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 
-/** Reference:
- * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
- * Example 3.7, eq. 28, p. 572
- * by Byeongseon Jeong, Jungho Yoon
- * 
- * Hint:
- * For theta == 0 and omega == 0, the scheme reduces to Hermite1Subdivision */
 public class Hermite3Subdivision implements HermiteSubdivision {
-  private static final Scalar _1_4 = RationalScalar.of(1, 4);
-  private static final Scalar _3_2 = RationalScalar.of(3, 2);
+  /** midpoint group element contribution from group elements
+   * factor in position (1, 1) of matrices A(-1) A(1)
+   * with same sign and equal to 1/2 */
+  private static final Tensor MGW = Tensors.of(RationalScalar.HALF, RationalScalar.HALF);
   // ---
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
   private final BiinvariantMean biinvariantMean;
-  /** 1/128 */
-  private final Scalar theta;
-  private final Scalar omega;
-  private final Tensor MGW = Tensors.of(RationalScalar.HALF, RationalScalar.HALF);
-  /** {1/128, 63/64, 1/128} */
+  private final Scalar mgv;
+  private final Scalar mvv;
+  private final Scalar mvg;
+  /** for instance {1/128, 63/64, 1/128} */
   private final Tensor cgw;
-  /** {-1/16, 3/4, -1/16} */
+  private final Scalar cgv;
+  private final Scalar cvg;
+  /** for instance {-1/16, 3/4, -1/16} */
   private final Tensor cvw;
 
   /** @param lieGroup
    * @param lieExponential
    * @param biinvariantMean
-   * @param theta
-   * @param omega */
-  public Hermite3Subdivision(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean, Scalar theta, Scalar omega) {
+   * @param mgv
+   * @param mvg
+   * @param mvv
+   * @param cgw vector of length 3
+   * @param cgv
+   * @param vpr
+   * @param vpqr */
+  public Hermite3Subdivision( //
+      LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean, //
+      Scalar mgv, Scalar mvg, Scalar mvv, //
+      Tensor cgw, Scalar cgv, Scalar vpr, Tensor vpqr) {
     this.lieGroup = Objects.requireNonNull(lieGroup);
     this.lieExponential = Objects.requireNonNull(lieExponential);
     this.biinvariantMean = Objects.requireNonNull(biinvariantMean);
-    this.theta = theta;
-    this.omega = omega;
-    cgw = Tensors.of(theta, RealScalar.ONE.subtract(theta.add(theta)), theta);
-    cvw = Tensors.of(omega, RealScalar.ONE.add(omega.multiply(RealScalar.of(4))), omega);
-  }
-
-  /** default with theta == 1/128 and omega == -1/16
-   * 
-   * @param lieGroup
-   * @param lieExponential
-   * @param biinvariantMean
-   * @throws Exception if either parameters is null */
-  public Hermite3Subdivision(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-    this(lieGroup, lieExponential, biinvariantMean, //
-        RationalScalar.of(1, 128), //
-        RationalScalar.of(-1, 16));
+    this.mgv = Objects.requireNonNull(mgv);
+    this.mvg = mvg.add(mvg);
+    this.mvv = mvv.add(mvv);
+    // ---
+    this.cgw = VectorQ.requireLength(cgw, 3);
+    this.cgv = cgv;
+    cvg = vpr.add(vpr);
+    cvw = VectorQ.requireLength(vpqr.add(vpqr), 3);
   }
 
   @Override // from HermiteSubdivision
@@ -87,11 +82,11 @@ public class Hermite3Subdivision implements HermiteSubdivision {
 
     private Control(Scalar delta, Tensor control) {
       this.control = control;
-      rgk = delta.divide(RealScalar.of(8));
-      rvk = _3_2.divide(delta);
+      rgk = delta.multiply(mgv);
+      rvk = mvg.divide(delta);
       // ---
-      cgk = Times.of(theta, RationalScalar.HALF, delta);
-      cvk = omega.multiply(RealScalar.of(-3).divide(delta));
+      cgk = delta.multiply(cgv);
+      cvk = cvg.divide(delta);
     }
 
     private Tensor center(Tensor p, Tensor q, Tensor r) {
@@ -102,7 +97,7 @@ public class Hermite3Subdivision implements HermiteSubdivision {
       Tensor rg = r.get(0);
       Tensor rv = r.get(1);
       Tensor cg1 = biinvariantMean.mean(Unprotect.byRef(pg, qg, rg), cgw);
-      Tensor cg2 = pv.subtract(rv).multiply(cgk);
+      Tensor cg2 = rv.subtract(pv).multiply(cgk);
       Tensor cg = lieGroup.element(cg1).combine(cg2);
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(rg)); // r - p
       Tensor cv1 = log.multiply(cvk);
@@ -120,12 +115,13 @@ public class Hermite3Subdivision implements HermiteSubdivision {
       Tensor qg = q.get(0);
       Tensor qv = q.get(1);
       Tensor rg1 = biinvariantMean.mean(Unprotect.byRef(pg, qg), MGW);
-      Tensor rg2 = lieExponential.exp(pv.subtract(qv).multiply(rgk));
+      Tensor rg2 = lieExponential.exp(qv.subtract(pv).multiply(rgk));
       Tensor rg = lieGroup.element(rg1).combine(rg2);
+      // ---
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg)); // q - p
       Tensor rv1 = log.multiply(rvk);
-      Tensor rv2 = qv.add(pv).multiply(_1_4);
-      Tensor rv = rv1.subtract(rv2);
+      Tensor rv2 = qv.add(pv).multiply(mvv);
+      Tensor rv = rv1.add(rv2);
       return Tensors.of(rg, rv);
     }
 

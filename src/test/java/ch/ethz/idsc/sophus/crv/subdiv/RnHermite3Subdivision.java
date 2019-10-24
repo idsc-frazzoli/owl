@@ -11,30 +11,28 @@ import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.MatrixPower;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /** Merrien interpolatory Hermite subdivision scheme of order two
  * reproduces polynomials up to degree 3
  * 
  * implementation for R^n
  * 
- * References:
+ * Reference 1:
  * "Dual Hermite subdivision schemes of de Rham-type", 2014
  * by Conti, Merrien, Romani
+ * 
+ * Reference 2:
+ * "A note on spectral properties of Hermite subdivision operators"
+ * Example 14, p. 13
+ * by Moosmueller, 2018
  * 
  * @see BSpline3CurveSubdivision */
 /* package */ class RnHermite3Subdivision implements HermiteSubdivision {
   private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
   // ---
-  private static final Tensor AMP = Tensors.fromString("{{1/2, +1/8}, {-3/4, -1/8}}");
-  private static final Tensor AMQ = Tensors.fromString("{{1/2, -1/8}, {+3/4, -1/8}}");
-
-  /** default with theta == 1/128 and omega == -1/16 */
-  public static HermiteSubdivision common() {
-    return new RnHermite3Subdivision( //
-        RationalScalar.of(1, 128), //
-        RationalScalar.of(-1, 16));
-  }
-
+  private final Tensor AMP;
+  private final Tensor AMQ;
   // ---
   final Tensor ARP;
   final Tensor ARQ;
@@ -46,29 +44,26 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
    * 
    * @param theta
    * @param omega */
-  public RnHermite3Subdivision(Scalar theta, Scalar omega) {
-    ARP = Tensors.of( //
-        Tensors.of(theta, theta.multiply(RationalScalar.HALF)), //
-        Tensors.of(omega.multiply(RationalScalar.of(+3, 2)), omega.multiply(RationalScalar.HALF)));
-    ARQ = DiagonalMatrix.of( //
-        RealScalar.ONE.subtract(theta.add(theta)), //
-        RationalScalar.HALF.add(omega.add(omega)));
-    ARR = Tensors.of( //
-        Tensors.of(theta, theta.multiply(RationalScalar.HALF).negate()), //
-        Tensors.of(omega.multiply(RationalScalar.of(-3, 2)), omega.multiply(RationalScalar.HALF)));
+  public RnHermite3Subdivision(Tensor AMP, Tensor AMQ, Tensor ARP, Tensor ARQ, Tensor ARR) {
+    this.AMP = AMP;
+    this.AMQ = AMQ;
+    this.ARP = ARP;
+    this.ARQ = ARQ;
+    this.ARR = ARR;
   }
 
-  @Override
+  @Override // from HermiteSubdivision
   public TensorIteration string(Scalar delta, Tensor control) {
+    Chop.NONE.requireClose(delta, RealScalar.ONE);
     return new Control(control).new StringIteration();
   }
 
-  @Override
+  @Override // from HermiteSubdivision
   public TensorIteration cyclic(Scalar delta, Tensor control) {
+    Chop.NONE.requireClose(delta, RealScalar.ONE);
     return new Control(control).new CyclicIteration();
   }
 
-  // ---
   private class Control {
     private Tensor control;
     private int k = 0;

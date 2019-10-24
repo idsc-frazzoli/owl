@@ -24,6 +24,7 @@ import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.lie.rn.RnBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
+import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.NumberQ;
@@ -88,9 +89,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       HermiteSubdivision hermiteSubdivision = //
           spinnerLabelScheme.getValue().supply(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE);
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, N.DOUBLE.of(_control));
-      for (int count = 1; count < spinnerRefine.getValue(); ++count)
-        tensorIteration.iterate();
-      Tensor iterate = tensorIteration.iterate();
+      int levels = spinnerRefine.getValue();
+      Tensor iterate = Do.of(tensorIteration::iterate, levels);
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
       CurveCurvatureRender.of(curve, false, geometricLayer, graphics);
       // ---

@@ -25,6 +25,7 @@ import ch.ethz.idsc.sophus.crv.subdiv.Hermite3Filter;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -125,10 +126,8 @@ import ch.ethz.idsc.tensor.sca.Power;
         // new Hermite1Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE).string(delta, _control);
         new Hermite3Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.FILTER) //
             .string(delta, _control);
-    Tensor refined = _control;
     int levels = 2 * spinnerLabelLevel.getValue();
-    for (int level = 0; level < levels; ++level)
-      refined = tensorIteration.iterate();
+    Tensor refined = Do.of(tensorIteration::iterate, levels);
     {
       final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
       for (Tensor point : refined.get(Tensor.ALL, 0)) {

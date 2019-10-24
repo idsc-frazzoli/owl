@@ -112,7 +112,6 @@ public class GeodesicExtrapolationTest extends TestCase {
     Tensor mask = halfWindowSampler.apply(7);
     assertEquals(mask.length(), 7);
     Tensor result = GeodesicExtrapolation.Splits.of(mask);
-    // System.out.println(result);
     Tensor expect = Tensors.vector( //
         0.6045315182147757, 0.4610592079176246, 0.3765618899029577, //
         0.3135075836053491, 0.2603421497384919, 1.3568791242517575);

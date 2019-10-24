@@ -62,8 +62,6 @@ public class PolygonClipTest extends TestCase {
     Tensor clipper = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
     Tensor subject = Tensors.fromString("{{0, 0}, {1, 0}, {1/2, 1/2}}");
     Tensor result = PolygonClip.of(clipper).apply(subject);
-    // System.out.println(result);
-    // assertTrue(equalsCycle(subject, result));
     Scalar area = PolygonArea.FUNCTION.apply(result);
     assertEquals(area, RationalScalar.of(1, 4));
     assertTrue(ExactScalarQ.of(area));

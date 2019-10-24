@@ -5,6 +5,7 @@ import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -28,8 +29,7 @@ public class Hermite1FilterTest extends TestCase {
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
     HermiteFilter hermiteFilter = new Hermite1Filter(RnGroup.INSTANCE, RnExponential.INSTANCE);
     TensorIteration tensorIteration = hermiteFilter.string(RealScalar.ONE, control);
-    tensorIteration.iterate();
-    Tensor iterate = tensorIteration.iterate();
+    Tensor iterate = Do.of(tensorIteration::iterate, 2);
     ExactTensorQ.require(iterate);
     assertEquals(control.extract(1, control.length() - 1), iterate);
   }
@@ -38,8 +38,7 @@ public class Hermite1FilterTest extends TestCase {
     Tensor control = ConstantArray.of(Tensors.fromString("{{2, 3, 1}, {0, 0, 0}}"), 10);
     HermiteFilter hermiteFilter = new Hermite1Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
     TensorIteration tensorIteration = hermiteFilter.string(RealScalar.ONE, control);
-    tensorIteration.iterate();
-    Tensor iterate = tensorIteration.iterate();
+    Tensor iterate = Do.of(tensorIteration::iterate, 2);
     Chop._14.requireClose(control.extract(1, control.length() - 1), iterate);
   }
 
@@ -53,8 +52,7 @@ public class Hermite1FilterTest extends TestCase {
     }
     HermiteFilter hermiteFilter = new Hermite1Filter(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE);
     TensorIteration tensorIteration = hermiteFilter.string(RealScalar.ONE, control);
-    tensorIteration.iterate();
-    Tensor iterate = tensorIteration.iterate();
+    Tensor iterate = Do.of(tensorIteration::iterate, 2);
     Chop._14.requireClose(control.extract(1, control.length() - 1), iterate);
   }
 }

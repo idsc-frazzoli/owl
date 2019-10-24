@@ -120,10 +120,6 @@ public class SphereCurveIntersectionTest extends TestCase {
       }
       timing2.stop();
     }
-    // if (!UserName.is("travis")) {
-    // System.out.println(timing1.seconds());
-    // System.out.println(timing2.seconds());
-    // }
     assertTrue(timing2.seconds() < timing1.seconds());
   }
 }

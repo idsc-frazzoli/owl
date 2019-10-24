@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.data.nd;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 public class NdDualMap<V> implements NdMap<V> {
   private final NdTreeMap<V> ndTreeMap;
@@ -32,11 +32,7 @@ public class NdDualMap<V> implements NdMap<V> {
     {
       Scalar s1 = c1.stream().sorted(NdEntryComparators.INCREASING).map(NdEntry::distance).reduce(Scalar::add).get();
       Scalar s2 = c2.stream().sorted(NdEntryComparators.INCREASING).map(NdEntry::distance).reduce(Scalar::add).get();
-      if (!s1.equals(s2)) {
-        System.out.println(s1);
-        System.out.println(s2);
-        throw TensorRuntimeException.of(s1, s2);
-      }
+      Chop.NONE.requireClose(s1, s2);
     }
     return c1;
   }

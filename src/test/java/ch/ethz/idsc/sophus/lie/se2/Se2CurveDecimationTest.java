@@ -50,8 +50,7 @@ public class Se2CurveDecimationTest extends TestCase {
       assertEquals(matrix, copy);
       // ---
       Tensor errors = curveDecimationResult.errors();
-      Scalar max = Norm.INFINITY.ofVector(errors);
-      System.out.println(max);
+      Norm.INFINITY.ofVector(errors);
     }
   }
 

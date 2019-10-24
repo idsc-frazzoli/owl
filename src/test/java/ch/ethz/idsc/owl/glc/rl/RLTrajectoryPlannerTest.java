@@ -91,16 +91,12 @@ public class RLTrajectoryPlannerTest extends TestCase {
     assertTrue(optional.isPresent()); // guarantee optimal solution exists
     GlcNode goalNode = optional.get();
     VectorScalar cost = (VectorScalar) goalNode.costFromRoot();
-    // System.out.println("best: " + cost + " hash: " + goalNode.hashCode());
     Scalar lowerBound = goalRegion.distance(stateRoot);
-    // System.out.println("lowerBound=" + lowerBound);
     Scalar marginDist = cost.vector().Get(0).subtract(lowerBound);
-    // System.out.println("marginDist=" + marginDist);
     Sign.requirePositiveOrZero(marginDist);
     // ---
     GlcNode minCostNode = StaticHelper.getMin(trajectoryPlanner.reachingSet.collection(), 0);
     Tensor minComp = VectorScalars.vector(minCostNode.merit()); // min cost component in goal
-    // System.out.println("minComp=" + minComp);
     Scalar upperBound = minComp.Get(0).add(slacks.Get(0));
     assertTrue(Scalars.lessEquals(cost.vector().Get(0), upperBound));
     // List<StateTime> pathFromRootTo =
