@@ -21,14 +21,15 @@ import ch.ethz.idsc.tensor.mat.MatrixPower;
  * 
  * "de Rham Transform of a Hermite Subdivision Scheme", 2007
  * by Dubuc, Merrien, p.9, with lambda == 1/8, mu == 3/2
- * 
- * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
- * by Byeongseon Jeong, Jungho Yoon
+ * [in the paper the signs of the matrix entries seem to be incorrect]
  * 
  * @see BSpline1CurveSubdivision */
 /* package */ class RnHermite1Subdivision {
   private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
   // ---
+  /** Example 3.8, eq. 29, p. 572
+   * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
+   * by Byeongseon Jeong, Jungho Yoon */
   private static final Tensor AMP = Tensors.fromString("{{1/2, +1/8}, {-3/4, -1/8}}");
   private static final Tensor AMQ = Tensors.fromString("{{1/2, -1/8}, {+3/4, -1/8}}");
 

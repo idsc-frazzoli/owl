@@ -11,6 +11,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class LieMidpointIntegrator implements Integrator, Serializable {
+  /** @param lieGroup
+   * @param lieExponential
+   * @return */
   public static Integrator of(LieGroup lieGroup, LieExponential lieExponential) {
     return new LieMidpointIntegrator( //
         Objects.requireNonNull(lieGroup), //

@@ -23,7 +23,6 @@ import ch.ethz.idsc.tensor.Tensors;
  * by Byeongseon Jeong, Jungho Yoon */
 public class Hermite1Subdivision implements HermiteSubdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
-  // public static boolean AD = false;
   // ---
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
@@ -48,14 +47,6 @@ public class Hermite1Subdivision implements HermiteSubdivision {
     return new Control(delta, control).new CyclicIteration();
   }
 
-  private static Tensor move(Tensor pg, Tensor rg, Tensor pv) {
-    // {
-    // LieGroupElement lieGroupElement = lieGroup.element(lieGroup.element(rg).inverse().combine(pg));
-    // return lieGroupElement.adjoint(pv);
-    // }
-    return pv;
-  }
-
   private class Control {
     private Tensor control;
     private Scalar rgk;
@@ -78,17 +69,17 @@ public class Hermite1Subdivision implements HermiteSubdivision {
       Tensor rg;
       {
         Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg);
-        Tensor rpv = move(pg, rg1, pv);
-        Tensor rqv = move(qg, rg1, qv);
+        Tensor rpv = pv;
+        Tensor rqv = qv;
         Tensor rg2 = lieExponential.exp(rpv.subtract(rqv).divide(rgk));
         rg = lieGroup.element(rg1).combine(rg2);
       }
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg));
       Tensor rv1 = log.multiply(rvk);
-      Tensor pqv = move(qg, pg, qv);
+      Tensor pqv = qv;
       Tensor rv2 = pqv.add(pv).multiply(_1_4);
       Tensor rv = rv1.subtract(rv2);
-      Tensor rrv = move(pg, rg, rv);
+      Tensor rrv = rv;
       return Tensors.of(rg, rrv);
     }
 
