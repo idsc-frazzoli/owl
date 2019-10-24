@@ -16,16 +16,10 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** Merrien interpolatory Hermite subdivision scheme of order two
  * implementation for R^n
  * 
- * References:
- * "de Rham Transform of a Hermite Subdivision Scheme"
- * by Dubuc, Merrien, 2007, p.9, with lambda == 1/8, mu == 3/2
- * 
  * @see BSpline2CurveSubdivision */
 /* package */ class RnHermite2Subdivision implements HermiteSubdivision {
   private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
-  /** "Hermite subdivision on manifolds via parallel transport"
-   * Example 1, p. 1063
-   * by Moosmueller, 2017 */
+  // ---
   private final Tensor ALP;
   private final Tensor ALQ;
   // ---

@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** Merrien interpolatory Hermite subdivision scheme of order two
@@ -12,10 +11,10 @@ import ch.ethz.idsc.tensor.Tensors;
   ;
   private static final HermiteSubdivision A1 = //
       new RnHermite2Subdivision( //
-          Tensors.fromString("{{27/4, +9/8}, {-9/2, 3/4}}").divide(RealScalar.of(8)), //
-          Tensors.fromString("{{5/4, -3/8}, {+9/2, -5/4}}").divide(RealScalar.of(8)), //
-          Tensors.fromString("{{5/4, +3/8}, {-9/2, -5/4}}").divide(RealScalar.of(8)), //
-          Tensors.fromString("{{27/4, -9/8}, {+9/2, 3/4}}").divide(RealScalar.of(8)));
+          Tensors.fromString("{{27/32, +9/64}, {-9/16,  3/32}}"), //
+          Tensors.fromString("{{ 5/32, -3/64}, {+9/16, -5/32}}"), //
+          Tensors.fromString("{{ 5/32, +3/64}, {-9/16, -5/32}}"), //
+          Tensors.fromString("{{27/32, -9/64}, {+9/16,  3/32}}"));
 
   /** Reference:
    * "Increasing the smoothness of vector and Hermite subdivision schemes"
@@ -29,10 +28,10 @@ import ch.ethz.idsc.tensor.Tensors;
 
   private static final HermiteSubdivision A2 = //
       new RnHermite2Subdivision( //
-          Tensors.fromString("{{152/25, +31/25}, {-29/50, 277/100}}").divide(RealScalar.of(8)), //
-          Tensors.fromString("{{48/25, -29/25}, {+29/50, 13/20}}").divide(RealScalar.of(8)), //
-          Tensors.fromString("{{48/25, +29/25}, {-29/50, 13/20}}").divide(RealScalar.of(8)), //
-          Tensors.fromString("{{152/25, -31/25}, {+29/50, 277/100}}").divide(RealScalar.of(8)));
+          Tensors.fromString("{{19/25, +31/200}, {-29/400, 277/800}}"), //
+          Tensors.fromString("{{ 6/25, -29/200}, {+29/400,  65/800}}"), //
+          Tensors.fromString("{{ 6/25, +29/200}, {-29/400,  65/800}}"), //
+          Tensors.fromString("{{19/25, -31/200}, {+29/400, 277/800}}"));
 
   /** Reference:
    * "Hermite subdivision on manifolds via parallel transport"
