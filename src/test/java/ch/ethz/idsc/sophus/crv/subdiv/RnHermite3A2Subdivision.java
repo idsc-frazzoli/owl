@@ -4,7 +4,9 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** Reference:
+/** C5
+ * 
+ * Reference:
  * "A note on spectral properties of Hermite subdivision operators"
  * Example 14, p. 13
  * by Moosmueller, 2018
@@ -18,11 +20,16 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ class RnHermite3A2Subdivision {
   private static final Tensor AMP = Tensors.fromString("{{1/2, +5/56}, {-7/12, -1/24}}");
   private static final Tensor AMQ = Tensors.fromString("{{1/2, -5/56}, {+7/12, -1/24}}");
+  // ---
   private static final Tensor ARP = Tensors.fromString("{{7/96, +25/1344}, {-77/384, -19/384}}");
   private static final Tensor ARQ = Tensors.fromString("{{41/48, 0}, {0, 19/96}}");
   private static final Tensor ARR = Tensors.fromString("{{7/96, -25/1344}, {+77/384, -19/384}}");
+  // ---
+  private static final HermiteSubdivision HERMITE_SUBDIVISION = //
+      new RnHermite3Subdivision(AMP, AMQ, ARP, ARQ, ARR);
 
+  /** @return */
   public static HermiteSubdivision instance() {
-    return new RnHermite3Subdivision(AMP, AMQ, ARP, ARQ, ARR);
+    return HERMITE_SUBDIVISION;
   }
 }

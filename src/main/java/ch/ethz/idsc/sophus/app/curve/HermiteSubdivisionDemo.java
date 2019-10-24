@@ -25,6 +25,7 @@ import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.math.Distances;
+import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -115,9 +116,8 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
       HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(),
           geodesicDisplay.biinvariantMean());
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
-      for (int count = 1; count < spinnerRefine.getValue(); ++count)
-        tensorIteration.iterate();
-      Tensor iterate = tensorIteration.iterate();
+      int levels = spinnerRefine.getValue();
+      Tensor iterate = Do.of(tensorIteration::iterate, levels);
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
       CurveCurvatureRender.of(curve, false, geometricLayer, graphics);
       {

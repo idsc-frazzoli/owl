@@ -36,28 +36,39 @@ import ch.ethz.idsc.tensor.red.Times;
  * thus it satisfies the spectral condition up to order 3"
  * 
  * Quote from [2]:
- * "H1 with theta = 1/32 provides an example by P 4 (x) = 4! 1 x 4 + 360
- * of an Hermite scheme which does not reproduce polynomials of degree 4, but
- * satisfies the spectral condition of order 4. To the best of our knowledge, this
- * is the first time it is observed that the spectral condition is not equivalent to
- * the reproduction of polynomials."
+ * "H1 with theta = 1/32 provides an example of an Hermite scheme which does not
+ * reproduce polynomials of degree 4, but satisfies the spectral condition of order 4.
+ * To the best of our knowledge, this is the first time it is observed that the
+ * spectral condition is not equivalent to the reproduction of polynomials."
  * 
  * Quote from [2]:
  * "Computations show that the Hermite scheme H1 is C4 for omega in [-0.12, -0.088] */
 public class Hermite3Subdivision implements HermiteSubdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _3_2 = RationalScalar.of(3, 2);
+
+  /** default with theta == 1/128 and omega == -1/16
+   * 
+   * @param lieGroup
+   * @param lieExponential
+   * @param biinvariantMean
+   * @throws Exception if either parameters is null */
+  public static HermiteSubdivision common(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+    return new Hermite3Subdivision(lieGroup, lieExponential, biinvariantMean, //
+        RationalScalar.of(+1, 128), //
+        RationalScalar.of(-1, 16));
+  }
+
   // ---
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
   private final BiinvariantMean biinvariantMean;
-  /** 1/128 */
   private final Scalar theta;
   private final Scalar omega;
-  private final Tensor MGW = Tensors.of(RationalScalar.HALF, RationalScalar.HALF);
-  /** {1/128, 63/64, 1/128} */
+  private final Tensor mgw = Tensors.of(RationalScalar.HALF, RationalScalar.HALF);
+  /** for instance {1/128, 63/64, 1/128} */
   private final Tensor cgw;
-  /** {-1/16, 3/4, -1/16} */
+  /** for instance {-1/16, 3/4, -1/16} */
   private final Tensor cvw;
 
   /** @param lieGroup
@@ -73,18 +84,6 @@ public class Hermite3Subdivision implements HermiteSubdivision {
     this.omega = omega;
     cgw = Tensors.of(theta, RealScalar.ONE.subtract(theta.add(theta)), theta);
     cvw = Tensors.of(omega, RealScalar.ONE.add(omega.multiply(RealScalar.of(4))), omega);
-  }
-
-  /** default with theta == 1/128 and omega == -1/16
-   * 
-   * @param lieGroup
-   * @param lieExponential
-   * @param biinvariantMean
-   * @throws Exception if either parameters is null */
-  public Hermite3Subdivision(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-    this(lieGroup, lieExponential, biinvariantMean, //
-        RationalScalar.of(1, 128), //
-        RationalScalar.of(-1, 16));
   }
 
   @Override // from HermiteSubdivision
@@ -139,7 +138,7 @@ public class Hermite3Subdivision implements HermiteSubdivision {
       Tensor pv = p.get(1);
       Tensor qg = q.get(0);
       Tensor qv = q.get(1);
-      Tensor rg1 = biinvariantMean.mean(Unprotect.byRef(pg, qg), MGW);
+      Tensor rg1 = biinvariantMean.mean(Unprotect.byRef(pg, qg), mgw);
       Tensor rg2 = lieExponential.exp(pv.subtract(qv).multiply(rgk));
       Tensor rg = lieGroup.element(rg1).combine(rg2);
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(qg)); // q - p

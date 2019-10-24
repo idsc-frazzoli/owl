@@ -89,7 +89,6 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
     // GlcNode par = node.parent();
     // if (Objects.isNull(par))
     // break;
-    // // System.out.println("stuck at node.");
     // GlobalAssert.that(seed.isLeaf());
     // par.removeEdgeTo(seed);
     // GlcNode remove = remove(stateTimeRaster().convertToKey(seed.stateTime()));

@@ -22,7 +22,6 @@ public class ClothoidContinuityCostFunctionTest extends TestCase {
     RrtsNode next = root.connectTo(connect, RealScalar.of(2));
     Transition transition = ClothoidTransitionSpace.INSTANCE.connect(connect, Tensors.vector(20, 5, 4));
     Scalar scalar = ClothoidContinuityCostFunction.INSTANCE.cost(next, transition);
-    // System.out.println(scalar);
     Chop._10.requireClose(scalar, RealScalar.of(0.822850312207));
   }
 

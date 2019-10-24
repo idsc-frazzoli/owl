@@ -61,14 +61,12 @@ public class RLQueueTest extends TestCase {
         assertTrue(added);
       }
       double seconds = timing.seconds(); // 0.045515109000000005
-      // System.out.println(seconds);
       assertTrue(seconds < 0.1);
     }
     {
       Timing timing = Timing.started();
       rlQueue.poll();
       double seconds = timing.seconds(); // 0.007376575000000001
-      // System.out.println(seconds);
       assertTrue(seconds < 0.05);
     }
   }

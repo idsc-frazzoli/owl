@@ -96,9 +96,7 @@ public class Tse2EntityTest extends TestCase {
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000); // TODO_YN does not find solution even with 10000
     int expandCount = glcExpand.getExpandCount();
-    // System.out.println(expandCount);
     Optional<GlcNode> optional = trajectoryPlanner.getBest();
-    // System.out.println(optional.isPresent());
     HeuristicAssert.check(trajectoryPlanner);
     // TrajectoryPlannerConsistency.check(trajectoryPlanner);
   }

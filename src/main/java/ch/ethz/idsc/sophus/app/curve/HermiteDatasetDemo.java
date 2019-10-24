@@ -8,6 +8,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import org.jfree.chart.JFreeChart;
@@ -26,10 +27,13 @@ import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2.Se2Group;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
+import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
@@ -49,6 +53,8 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelShift = new SpinnerLabel<>();
   private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
+  private final JTextField jTextTheta = new JTextField(6);
+  private final JTextField jTextOmega = new JTextField(6);
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
   protected Tensor _control = Tensors.empty();
@@ -72,8 +78,36 @@ import ch.ethz.idsc.tensor.sca.Power;
     timerFrame.jToolBar.addSeparator();
     {
       spinnerLabelScheme.setArray(HermiteSubdivisions.values());
-      spinnerLabelScheme.setValue(HermiteSubdivisions.HERMITE1);
+      spinnerLabelScheme.setValue(HermiteSubdivisions.HERMITE3);
       spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
+    }
+    {
+      jTextTheta.setText(HermiteSubdivisions.THETA.toString());
+      jTextTheta.addActionListener(e -> {
+        try {
+          Scalar scalar = Scalars.fromString(jTextTheta.getText());
+          if (NumberQ.of(scalar))
+            HermiteSubdivisions.THETA = scalar;
+        } catch (Exception exception) {
+          exception.printStackTrace();
+        }
+      });
+      jTextTheta.setPreferredSize(new Dimension(50, 28));
+      timerFrame.jToolBar.add(jTextTheta);
+    }
+    {
+      jTextOmega.setText(HermiteSubdivisions.OMEGA.toString());
+      jTextOmega.addActionListener(e -> {
+        try {
+          Scalar scalar = Scalars.fromString(jTextOmega.getText());
+          if (NumberQ.of(scalar))
+            HermiteSubdivisions.OMEGA = scalar;
+        } catch (Exception exception) {
+          exception.printStackTrace();
+        }
+      });
+      jTextOmega.setPreferredSize(new Dimension(50, 28));
+      timerFrame.jToolBar.add(jTextOmega);
     }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
@@ -130,10 +164,8 @@ import ch.ethz.idsc.tensor.sca.Power;
     HermiteSubdivision hermiteSubdivision = //
         spinnerLabelScheme.getValue().supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
     TensorIteration tensorIteration = hermiteSubdivision.string(delta, _control);
-    Tensor refined = _control;
     int levels = spinnerLabelLevel.getValue();
-    for (int level = 0; level < levels; ++level)
-      refined = tensorIteration.iterate();
+    Tensor refined = Do.of(tensorIteration::iterate, levels);
     pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
     new Se2HermitePlot(refined, RealScalar.of(0.3)).render(geometricLayer, graphics);
     if (jToggleButton.isSelected()) {
