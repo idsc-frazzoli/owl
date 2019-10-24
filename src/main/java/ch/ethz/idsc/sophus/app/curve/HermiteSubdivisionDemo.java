@@ -113,8 +113,8 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
           }
         }
       }
-      HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply(geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(),
-          geodesicDisplay.biinvariantMean());
+      HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply( //
+          geodesicDisplay.lieGroup(), geodesicDisplay.lieExponential(), geodesicDisplay.biinvariantMean());
       TensorIteration tensorIteration = hermiteSubdivision.string(RealScalar.ONE, control);
       int levels = spinnerRefine.getValue();
       Tensor iterate = Do.of(tensorIteration::iterate, levels);

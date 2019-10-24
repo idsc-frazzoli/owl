@@ -23,7 +23,19 @@ public enum HermiteSubdivisions {
   HERMITE3() {
     @Override
     public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-      return new Hermite3Subdivision(lieGroup, lieExponential, biinvariantMean, THETA, OMEGA);
+      return Hermite3SubdivisionGauge.of(lieGroup, lieExponential, biinvariantMean, THETA, OMEGA);
+    }
+  }, //
+  A1() {
+    @Override
+    public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+      return Hermite3SubdivisionA1.of(lieGroup, lieExponential, biinvariantMean);
+    }
+  }, //
+  A2() {
+    @Override
+    public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+      return Hermite3SubdivisionA2.of(lieGroup, lieExponential, biinvariantMean);
     }
   }, //
   ;
