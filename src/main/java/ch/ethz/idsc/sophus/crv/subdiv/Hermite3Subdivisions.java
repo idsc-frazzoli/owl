@@ -11,12 +11,14 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public enum Hermite3Subdivisions {
   ;
-  /** Reference 1:
+  /** Reference:
+   * "Noninterpolatory Hermite subdivision schemes"
+   * by Han, Yu, Xue, 2004, p. 1358
+   * 
    * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
    * Example 3.7, eq. 28, p. 572
    * by Byeongseon Jeong, Jungho Yoon
    * 
-   * <p>Reference 2:
    * "Stirling numbers and Gregory coefficients for the factorization of Hermite
    * subdivision operators"
    * Example 35, p. 26
@@ -25,18 +27,18 @@ public enum Hermite3Subdivisions {
    * <p>Hint:
    * For theta == 0 and omega == 0, the scheme reduces to Hermite1Subdivision
    * 
-   * <p>Quote from [2]:
-   * "it is proved that H1 reproduces polynomials up to degree 3 and
+   * <p>Quote:
+   * "it is proved that the scheme reproduces polynomials up to degree 3 and
    * thus it satisfies the spectral condition up to order 3"
    * 
-   * <p>Quote from [2]:
+   * <p>Quote:
    * "H1 with theta = 1/32 provides an example of an Hermite scheme which does not
    * reproduce polynomials of degree 4, but satisfies the spectral condition of order 4.
    * To the best of our knowledge, this is the first time it is observed that the
    * spectral condition is not equivalent to the reproduction of polynomials."
    * 
-   * <p>Quote from [2]:
-   * "Computations show that the Hermite scheme H1 is C4 for omega in [-0.12, -0.088]
+   * <p>Quote:
+   * "Computations show that the Hermite scheme is C4 for omega in [-0.12, -0.088]
    * 
    * @param lieGroup
    * @param lieExponential
@@ -65,7 +67,7 @@ public enum Hermite3Subdivisions {
    * @throws Exception if either parameters is null */
   public static HermiteSubdivision of( //
       LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-    return Hermite3Subdivisions.of(lieGroup, lieExponential, biinvariantMean, //
+    return of(lieGroup, lieExponential, biinvariantMean, //
         RationalScalar.of(+1, 128), //
         RationalScalar.of(-1, 16));
   }
@@ -73,7 +75,10 @@ public enum Hermite3Subdivisions {
   /***************************************************/
   /** C3
    * 
-   * Reference:
+   * References:
+   * "Noninterpolatory Hermite subdivision schemes"
+   * by Yu, 2004, p. 1358
+   * 
    * "A note on spectral properties of Hermite subdivision operators"
    * Example 14, p. 13
    * by Moosmueller, 2018
@@ -99,7 +104,10 @@ public enum Hermite3Subdivisions {
   /***************************************************/
   /** C5
    * 
-   * <p>Reference:
+   * References:
+   * "Noninterpolatory Hermite subdivision schemes"
+   * by Yu, 2004, p. 1358
+   * 
    * "A note on spectral properties of Hermite subdivision operators"
    * Example 14, p. 13
    * by Moosmueller, 2018
@@ -120,5 +128,17 @@ public enum Hermite3Subdivisions {
         RationalScalar.of(-25, 1344), //
         RationalScalar.of(77, 384), //
         Tensors.fromString("{-19/384, 19/96, -19/384}"));
+  }
+
+  /***************************************************/
+  /** "Noninterpolatory Hermite subdivision schemes"
+   * by Yu, 2004, p. 1358
+   * 
+   * @param lieGroup
+   * @param lieExponential
+   * @param biinvariantMean
+   * @return */
+  public static HermiteSubdivision a3(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+    throw new UnsupportedOperationException();
   }
 }

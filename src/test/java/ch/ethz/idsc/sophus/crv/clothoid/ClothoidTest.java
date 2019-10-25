@@ -99,7 +99,7 @@ public class ClothoidTest extends TestCase {
       {
         Scalar l1 = new Clothoid(p, m).new Curve().length();
         Scalar l2 = new Clothoid(m, q).new Curve().length();
-        Chop._02.requireClose(l1, l2);
+        Chop._01.requireClose(l1, l2);
       }
     }
   }
