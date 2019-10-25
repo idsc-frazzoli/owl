@@ -20,11 +20,11 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /* package */ class RnHermite2Subdivision implements HermiteSubdivision {
   private static final Tensor DIAG = DiagonalMatrix.of(RealScalar.ONE, RationalScalar.HALF);
   // ---
-  private final Tensor ALP;
-  private final Tensor ALQ;
+  final Tensor ALP;
+  final Tensor ALQ;
   // ---
-  private final Tensor AHP;
-  private final Tensor AHQ;
+  final Tensor AHP;
+  final Tensor AHQ;
 
   /** @param ALP A(+0)
    * @param ALQ A(-2)
