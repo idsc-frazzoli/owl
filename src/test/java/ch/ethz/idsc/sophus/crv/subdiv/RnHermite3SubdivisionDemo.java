@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.io.Put;
   ;
   public static void main(String[] args) throws IOException {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration tensorIteration = RnHermite3Subdivisions.common().string(RealScalar.ONE, control);
+    TensorIteration tensorIteration = RnHermite3Subdivisions.standard().string(RealScalar.ONE, control);
     for (int count = 1; count <= 5; ++count)
       tensorIteration.iterate();
     Tensor tensor = tensorIteration.iterate();

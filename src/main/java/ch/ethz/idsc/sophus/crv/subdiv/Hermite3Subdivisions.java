@@ -13,7 +13,7 @@ public enum Hermite3Subdivisions {
   ;
   /** Reference:
    * "Noninterpolatory Hermite subdivision schemes"
-   * by Yu, 2004, p. 1358
+   * by Han, Yu, Xue, 2004, p. 1358
    * 
    * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
    * Example 3.7, eq. 28, p. 572
@@ -27,18 +27,18 @@ public enum Hermite3Subdivisions {
    * <p>Hint:
    * For theta == 0 and omega == 0, the scheme reduces to Hermite1Subdivision
    * 
-   * <p>Quote from [2]:
-   * "it is proved that H1 reproduces polynomials up to degree 3 and
+   * <p>Quote:
+   * "it is proved that the scheme reproduces polynomials up to degree 3 and
    * thus it satisfies the spectral condition up to order 3"
    * 
-   * <p>Quote from [2]:
+   * <p>Quote:
    * "H1 with theta = 1/32 provides an example of an Hermite scheme which does not
    * reproduce polynomials of degree 4, but satisfies the spectral condition of order 4.
    * To the best of our knowledge, this is the first time it is observed that the
    * spectral condition is not equivalent to the reproduction of polynomials."
    * 
-   * <p>Quote from [2]:
-   * "Computations show that the Hermite scheme H1 is C4 for omega in [-0.12, -0.088]
+   * <p>Quote:
+   * "Computations show that the Hermite scheme is C4 for omega in [-0.12, -0.088]
    * 
    * @param lieGroup
    * @param lieExponential

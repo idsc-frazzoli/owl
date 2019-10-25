@@ -34,8 +34,11 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
    * Example 3.7, eq. 28, p. 572
    * by Byeongseon Jeong, Jungho Yoon
    * 
+   * polynomial reproduction up to degree 3
+   * 
    * @param theta
-   * @param omega */
+   * @param omega
+   * @return */
   public static RnHermite3Subdivision of(Scalar theta, Scalar omega) {
     Tensor ARP = Tensors.of( //
         Tensors.of(theta, theta.multiply(RationalScalar.HALF)), //
@@ -49,8 +52,12 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
     return new RnHermite3Subdivision(AMP, AMQ, ARP, ARQ, ARR);
   }
 
-  /** default with theta == 1/128 and omega == -1/16 */
-  public static RnHermite3Subdivision common() {
+  /** default with theta == 1/128 and omega == -1/16
+   * 
+   * polynomial reproduction up to degree 3
+   * 
+   * @return */
+  public static RnHermite3Subdivision standard() {
     return of( //
         RationalScalar.of(+1, 128), //
         RationalScalar.of(-1, 16));
@@ -75,6 +82,8 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
    * "It is proved there that these scheme satisfy the special sum rule of
    * order 7. We show that the spectral condition up to order 2 is satisfied,
    * but higher spectral conditions are not satisfied."
+   * 
+   * polynomial reproduction up to degree 1
    * 
    * @return */
   public static HermiteSubdivision a1() {
@@ -101,6 +110,8 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
    * "It is proved there that these scheme satisfy the special sum rule of
    * order 7. We show that the spectral condition up to order 2 is satisfied,
    * but higher spectral conditions are not satisfied."
+   * 
+   * polynomial reproduction up to degree 1
    * 
    * @return */
   public static HermiteSubdivision a2() {

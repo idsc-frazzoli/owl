@@ -3,19 +3,13 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Derive;
-import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Reverse;
-import ch.ethz.idsc.tensor.alg.Series;
-import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class RnHermite1SubdivisionTest extends TestCase {
@@ -57,18 +51,6 @@ public class RnHermite1SubdivisionTest extends TestCase {
   }
 
   public void testPolynomialReproduction() {
-    Tensor coeffs = Tensors.vector(1, -3, 2, -1);
-    ScalarUnaryOperator f0 = Series.of(coeffs);
-    ScalarUnaryOperator f1 = Series.of(Derive.of(coeffs));
-    Tensor domain = Range.of(0, 10);
-    Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
-    TensorIteration tensorIteration = RnHermite1Subdivisions.instance().string(RealScalar.ONE, control);
-    Tensor iterate = tensorIteration.iterate();
-    ExactTensorQ.require(iterate);
-    Tensor idm = Range.of(0, 19).multiply(RationalScalar.HALF);
-    Tensor if0 = iterate.get(Tensor.ALL, 0);
-    assertEquals(if0, idm.map(f0));
-    Tensor if1 = iterate.get(Tensor.ALL, 1);
-    assertEquals(if1, idm.map(f1));
+    TestHelper.checkP(3, RnHermite1Subdivisions.instance());
   }
 }

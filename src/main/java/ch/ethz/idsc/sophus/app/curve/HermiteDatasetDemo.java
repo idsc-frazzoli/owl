@@ -195,7 +195,9 @@ import ch.ethz.idsc.tensor.sca.Power;
         Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
     TensorIteration tensorIteration = hermiteSubdivision.string(delta, _control);
     int levels = spinnerLabelLevel.getValue();
-    Tensor refined = Do.of(tensorIteration::iterate, levels);
+    Tensor refined = 0 < levels //
+        ? Do.of(tensorIteration::iterate, levels)
+        : _control;
     pathRenderShape.setCurve(refined.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
     new Se2HermitePlot(refined, RealScalar.of(0.3)).render(geometricLayer, graphics);
     if (jToggleButton.isSelected()) {
