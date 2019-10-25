@@ -14,6 +14,12 @@ public enum HermiteSubdivisions {
       return new Hermite1Subdivision(lieGroup, lieExponential);
     }
   }, //
+  HERMITE2() {
+    @Override
+    public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+      return Hermite2Subdivisions.of(lieGroup, lieExponential, THETA, OMEGA);
+    }
+  }, //
   H2A1() {
     @Override
     public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
