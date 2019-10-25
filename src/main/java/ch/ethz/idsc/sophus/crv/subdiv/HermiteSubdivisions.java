@@ -11,13 +11,19 @@ public enum HermiteSubdivisions {
   HERMITE1() {
     @Override
     public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-      return new Hermite1Subdivision(lieGroup, lieExponential);
+      return Hermite1Subdivisions.of(lieGroup, lieExponential, LAMBDA, MU);
+    }
+  }, //
+  H1A1() {
+    @Override
+    public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+      return Hermite1Subdivisions.of(lieGroup, lieExponential);
     }
   }, //
   HERMITE2() {
     @Override
     public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-      return Hermite2Subdivisions.of(lieGroup, lieExponential, THETA, OMEGA);
+      return Hermite2Subdivisions.of(lieGroup, lieExponential, LAMBDA, MU);
     }
   }, //
   H2A1() {
@@ -51,6 +57,8 @@ public enum HermiteSubdivisions {
     }
   }, //
   ;
+  public static Scalar LAMBDA = RationalScalar.of(-1, 8);
+  public static Scalar MU = RationalScalar.of(-1, 2);
   public static Scalar THETA = RationalScalar.of(+1, 128);
   public static Scalar OMEGA = RationalScalar.of(-1, 16);
 

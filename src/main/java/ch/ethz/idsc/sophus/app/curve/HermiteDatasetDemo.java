@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   private static final int WIDTH = 640;
   private static final int HEIGHT = 360;
   private static final Color COLOR_CURVE = new Color(255, 128, 128, 255);
-  private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
+  // private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
   private static final Color COLOR_RECON = new Color(128, 128, 128, 255);
   // ---
   private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
@@ -53,8 +53,6 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final SpinnerLabel<Integer> spinnerLabelSkips = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelShift = new SpinnerLabel<>();
   private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
-  private final JTextField jTextTheta = new JTextField(6);
-  private final JTextField jTextOmega = new JTextField(6);
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
   private final JToggleButton jToggleButton = new JToggleButton("derivatives");
   protected Tensor _control = Tensors.empty();
@@ -82,32 +80,64 @@ import ch.ethz.idsc.tensor.sca.Power;
       spinnerLabelScheme.addToComponentReduced(timerFrame.jToolBar, new Dimension(140, 28), "scheme");
     }
     {
-      jTextTheta.setText(HermiteSubdivisions.THETA.toString());
-      jTextTheta.addActionListener(e -> {
+      JTextField jTextField = new JTextField(6);
+      jTextField.setText(HermiteSubdivisions.LAMBDA.toString());
+      jTextField.addActionListener(e -> {
         try {
-          Scalar scalar = Scalars.fromString(jTextTheta.getText());
+          Scalar scalar = Scalars.fromString(jTextField.getText());
+          if (NumberQ.of(scalar))
+            HermiteSubdivisions.LAMBDA = scalar;
+        } catch (Exception exception) {
+          exception.printStackTrace();
+        }
+      });
+      jTextField.setPreferredSize(new Dimension(50, 28));
+      timerFrame.jToolBar.add(jTextField);
+    }
+    {
+      JTextField jTextField = new JTextField(6);
+      jTextField.setText(HermiteSubdivisions.MU.toString());
+      jTextField.addActionListener(e -> {
+        try {
+          Scalar scalar = Scalars.fromString(jTextField.getText());
+          if (NumberQ.of(scalar))
+            HermiteSubdivisions.MU = scalar;
+        } catch (Exception exception) {
+          exception.printStackTrace();
+        }
+      });
+      jTextField.setPreferredSize(new Dimension(50, 28));
+      timerFrame.jToolBar.add(jTextField);
+    }
+    {
+      JTextField jTextField = new JTextField(6);
+      jTextField.setText(HermiteSubdivisions.THETA.toString());
+      jTextField.addActionListener(e -> {
+        try {
+          Scalar scalar = Scalars.fromString(jTextField.getText());
           if (NumberQ.of(scalar))
             HermiteSubdivisions.THETA = scalar;
         } catch (Exception exception) {
           exception.printStackTrace();
         }
       });
-      jTextTheta.setPreferredSize(new Dimension(50, 28));
-      timerFrame.jToolBar.add(jTextTheta);
+      jTextField.setPreferredSize(new Dimension(50, 28));
+      timerFrame.jToolBar.add(jTextField);
     }
     {
-      jTextOmega.setText(HermiteSubdivisions.OMEGA.toString());
-      jTextOmega.addActionListener(e -> {
+      JTextField jTextField = new JTextField(6);
+      jTextField.setText(HermiteSubdivisions.OMEGA.toString());
+      jTextField.addActionListener(e -> {
         try {
-          Scalar scalar = Scalars.fromString(jTextOmega.getText());
+          Scalar scalar = Scalars.fromString(jTextField.getText());
           if (NumberQ.of(scalar))
             HermiteSubdivisions.OMEGA = scalar;
         } catch (Exception exception) {
           exception.printStackTrace();
         }
       });
-      jTextOmega.setPreferredSize(new Dimension(50, 28));
-      timerFrame.jToolBar.add(jTextOmega);
+      jTextField.setPreferredSize(new Dimension(50, 28));
+      timerFrame.jToolBar.add(jTextField);
     }
     {
       spinnerLabelLevel.setList(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));

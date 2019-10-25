@@ -73,7 +73,7 @@ public class Hermite3SubdivisionTest extends TestCase {
     Tensor control = Tensors.fromString("{{3, 4}, {1, -3}, {2, 3/5}, {1/6, 7/2}}");
     Scalar theta = RealScalar.ZERO;
     Scalar omega = RealScalar.ZERO;
-    TensorIteration tensorIteration1 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE) //
+    TensorIteration tensorIteration1 = Hermite1Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE) //
         .string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
         Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega) //

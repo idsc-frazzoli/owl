@@ -67,7 +67,7 @@ public class Se2CoveringBiinvariantMeanTest extends TestCase {
             BiinvariantMeanTestHelper.order(weights, index));
         Chop._08.requireClose(result, solution);
         Tensor rnmean = RnBiinvariantMean.INSTANCE.mean(BiinvariantMeanTestHelper.order(sequence, index), BiinvariantMeanTestHelper.order(weights, index));
-        Chop._08.requireClose(result, rnmean);
+        Chop._02.requireClose(result, rnmean);
       }
     }
   }
