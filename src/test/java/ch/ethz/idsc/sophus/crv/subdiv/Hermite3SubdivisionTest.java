@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 public class Hermite3SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
-    TensorIteration tensorIteration1 = RnH1Subdivision.common().string(RealScalar.ONE, control);
+    TensorIteration tensorIteration1 = RnHermite3Subdivisions.common().string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
         Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .string(RealScalar.ONE, control);
@@ -39,7 +39,7 @@ public class Hermite3SubdivisionTest extends TestCase {
 
   public void testStringLength2() {
     Tensor control = Tensors.fromString("{{3, 4}, {1, -3}}");
-    TensorIteration tensorIteration1 = RnH1Subdivision.common().string(RealScalar.ONE, control);
+    TensorIteration tensorIteration1 = RnHermite3Subdivisions.common().string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
         Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .string(RealScalar.ONE, control);
@@ -56,7 +56,7 @@ public class Hermite3SubdivisionTest extends TestCase {
     Tensor control = Tensors.fromString("{{3, 4}, {1, -3}, {2, 3/5}, {1/6, 7/2}}");
     Scalar theta = RationalScalar.of(2, 157);
     Scalar omega = RationalScalar.of(1, 9);
-    TensorIteration tensorIteration1 = RnH1Subdivision.of(theta, omega).string(RealScalar.ONE, control);
+    TensorIteration tensorIteration1 = RnHermite3Subdivisions.of(theta, omega).string(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
         Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega) //
             .string(RealScalar.ONE, control);
@@ -107,7 +107,7 @@ public class Hermite3SubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration tensorIteration1 = RnH1Subdivision.common().cyclic(RealScalar.ONE, control);
+    TensorIteration tensorIteration1 = RnHermite3Subdivisions.common().cyclic(RealScalar.ONE, control);
     TensorIteration tensorIteration2 = //
         Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE) //
             .cyclic(RealScalar.ONE, control);

@@ -15,12 +15,30 @@ import ch.ethz.idsc.tensor.Tensors;
 /** Merrien interpolatory Hermite subdivision scheme of order two
  * implementation for R^n
  * 
- * References:
- * "A family of Hermite interpolants by bisection algorithms", 1992,
- * by Merrien
+ * This scheme reproduces polynomials of degree 1. Moreover it reproduces
+ * polynomials of degree 2 if and only if lambda == -1/8, and
+ * polynomials of degree 3 if also mu == -1/2.
  * 
- * "Construction of Hermite subdivision schemes reproducing polynomials", 2017
- * by Byeongseon Jeong, Jungho Yoon */
+ * References:
+ * "A family of Hermite interpolants by bisection algorithms"
+ * by Merrien, 1992
+ * 
+ * "Scalar and Hermite subdivision schemes"
+ * by Dubuc, 2006, p. 391, H1[lambda, mu]
+ * Theorem:
+ * H1[lambda, mu] is C1 iff 0 < -lambda < 1/2, 0 < mu < min(-1/(2lambda), 3/(1 + 2lambda))
+ * 
+ * "de Rham Transform of a Hermite Subdivision Scheme"
+ * by Dubuc, Merrien, 2007, p. 9, H1[lambda, mu]
+ * 
+ * "From Hermite to Stationary Subdivision Schemes in One and Several Variables"
+ * by Merrien, Sauer, 2010, p. 26, H1[lambda, mu]
+ * 
+ * "Dual Hermite subdivision schemes of de Rham-type"
+ * by Conti, Merrien, Romani, 2015, p. 11, H1[lambda, mu]
+ * 
+ * "Construction of Hermite subdivision schemes reproducing polynomials"
+ * by Byeongseon Jeong, Jungho Yoon, 2017 */
 public class Hermite1Subdivision implements HermiteSubdivision {
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   // ---
