@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 public class Hermite1SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
-    TensorIteration hs1 = RnHermite1Subdivision.string(control);
+    TensorIteration hs1 = RnHermite1Subdivisions.instance().string(RealScalar.ONE, control);
     TensorIteration hs2 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).string(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = hs1.iterate();
@@ -30,7 +30,7 @@ public class Hermite1SubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration hs1 = RnHermite1Subdivision.cyclic(control);
+    TensorIteration hs1 = RnHermite1Subdivisions.instance().cyclic(RealScalar.ONE, control);
     TensorIteration hs2 = new Hermite1Subdivision(RnGroup.INSTANCE, RnExponential.INSTANCE).cyclic(RealScalar.ONE, control);
     for (int count = 0; count < 6; ++count) {
       Tensor it1 = hs1.iterate();

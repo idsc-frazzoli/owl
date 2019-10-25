@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Derive;
@@ -20,7 +21,7 @@ import junit.framework.TestCase;
 public class RnHermite1SubdivisionTest extends TestCase {
   public void testString() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {0, 0}}");
-    TensorIteration hermiteSubdivision = RnHermite1Subdivision.string(control);
+    TensorIteration hermiteSubdivision = RnHermite1Subdivisions.instance().string(RealScalar.ONE, control);
     Tensor iterate = hermiteSubdivision.iterate();
     Tensor expect = Tensors.fromString("{{0, 0}, {1/2, 3/2}, {1, 0}, {5/8, -5/4}, {0, -1}, {-1/8, 1/4}, {0, 0}}");
     assertEquals(iterate, expect);
@@ -36,8 +37,8 @@ public class RnHermite1SubdivisionTest extends TestCase {
     Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
     Tensor cp2 = cp1.copy();
     cp2.set(Tensor::negate, Tensor.ALL, 1);
-    TensorIteration hs1 = RnHermite1Subdivision.string(cp1);
-    TensorIteration hs2 = RnHermite1Subdivision.string(Reverse.of(cp2));
+    TensorIteration hs1 = RnHermite1Subdivisions.instance().string(RealScalar.ONE, cp1);
+    TensorIteration hs2 = RnHermite1Subdivisions.instance().string(RealScalar.ONE, Reverse.of(cp2));
     for (int count = 0; count < 3; ++count) {
       Tensor result1 = hs1.iterate();
       Tensor result2 = Reverse.of(hs2.iterate());
@@ -48,7 +49,7 @@ public class RnHermite1SubdivisionTest extends TestCase {
 
   public void testCyclic() {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration tensorIteration = RnHermite1Subdivision.cyclic(control);
+    TensorIteration tensorIteration = RnHermite1Subdivisions.instance().cyclic(RealScalar.ONE, control);
     Tensor iterate = tensorIteration.iterate();
     Tensor expect = Tensors.fromString("{{0, 0}, {1/2, 3/2}, {1, 0}, {5/8, -5/4}, {0, -1}, {-1/2, -3/4}, {-1/2, 1}, {-1/8, 1/2}}");
     assertEquals(iterate, expect);
@@ -61,7 +62,7 @@ public class RnHermite1SubdivisionTest extends TestCase {
     ScalarUnaryOperator f1 = Series.of(Derive.of(coeffs));
     Tensor domain = Range.of(0, 10);
     Tensor control = Transpose.of(Tensors.of(domain.map(f0), domain.map(f1)));
-    TensorIteration tensorIteration = RnHermite1Subdivision.string(control);
+    TensorIteration tensorIteration = RnHermite1Subdivisions.instance().string(RealScalar.ONE, control);
     Tensor iterate = tensorIteration.iterate();
     ExactTensorQ.require(iterate);
     Tensor idm = Range.of(0, 19).multiply(RationalScalar.HALF);

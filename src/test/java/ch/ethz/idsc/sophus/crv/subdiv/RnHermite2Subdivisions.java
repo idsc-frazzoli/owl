@@ -41,6 +41,7 @@ import ch.ethz.idsc.tensor.red.Times;
     return new RnHermite2Subdivision(ALP, ALQ, AHP, AHQ);
   }
 
+  /***************************************************/
   private static final RnHermite2Subdivision A1 = of(RationalScalar.of(-1, 8), RationalScalar.of(-1, 2));
 
   /** lambda == -1/8, mu == -1/2
@@ -55,6 +56,7 @@ import ch.ethz.idsc.tensor.red.Times;
     return A1;
   }
 
+  /***************************************************/
   private static final RnHermite2Subdivision A2 = of(RationalScalar.of(-1, 5), RationalScalar.of(9, 10));
 
   /** lambda == -1/5, mu == 9/10
