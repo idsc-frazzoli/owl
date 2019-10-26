@@ -77,7 +77,7 @@ public enum Hermite3Subdivisions {
    * 
    * References:
    * "Noninterpolatory Hermite subdivision schemes"
-   * by Yu, 2004, p. 1358
+   * by Han, Yu, Xue, 2004, p. 1358
    * 
    * "A note on spectral properties of Hermite subdivision operators"
    * Example 14, p. 13
@@ -106,7 +106,7 @@ public enum Hermite3Subdivisions {
    * 
    * References:
    * "Noninterpolatory Hermite subdivision schemes"
-   * by Yu, 2004, p. 1358
+   * by Han, Yu, Xue, 2004, p. 1358
    * 
    * "A note on spectral properties of Hermite subdivision operators"
    * Example 14, p. 13
@@ -132,7 +132,7 @@ public enum Hermite3Subdivisions {
 
   /***************************************************/
   /** "Noninterpolatory Hermite subdivision schemes"
-   * by Yu, 2004, p. 1358
+   * by Han, Yu, Xue, 2004, p. 1358
    * 
    * @param lieGroup
    * @param lieExponential

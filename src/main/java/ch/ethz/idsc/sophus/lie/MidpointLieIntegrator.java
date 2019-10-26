@@ -1,21 +1,21 @@
 // code by jph
-package ch.ethz.idsc.owl.math.flow;
+package ch.ethz.idsc.sophus.lie;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.lie.LieExponential;
-import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-public class LieMidpointIntegrator implements Integrator, Serializable {
+public class MidpointLieIntegrator implements Integrator, Serializable {
   /** @param lieGroup
    * @param lieExponential
    * @return */
   public static Integrator of(LieGroup lieGroup, LieExponential lieExponential) {
-    return new LieMidpointIntegrator( //
+    return new MidpointLieIntegrator( //
         Objects.requireNonNull(lieGroup), //
         Objects.requireNonNull(lieExponential));
   }
@@ -24,7 +24,7 @@ public class LieMidpointIntegrator implements Integrator, Serializable {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
 
-  private LieMidpointIntegrator(LieGroup lieGroup, LieExponential lieExponential) {
+  private MidpointLieIntegrator(LieGroup lieGroup, LieExponential lieExponential) {
     this.lieGroup = lieGroup;
     this.lieExponential = lieExponential;
   }

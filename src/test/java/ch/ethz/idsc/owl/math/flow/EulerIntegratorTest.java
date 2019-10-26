@@ -5,6 +5,7 @@ import ch.ethz.idsc.owl.math.DoubleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.StateSpaceModels;
+import ch.ethz.idsc.sophus.lie.EulerLieIntegrator;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,7 +17,7 @@ import ch.ethz.idsc.tensor.qty.Unit;
 import junit.framework.TestCase;
 
 public class EulerIntegratorTest extends TestCase {
-  private final Integrator lieEulerIntegrator = LieEulerIntegrator.of(RnGroup.INSTANCE, RnExponential.INSTANCE);
+  private final Integrator lieEulerIntegrator = EulerLieIntegrator.of(RnGroup.INSTANCE, RnExponential.INSTANCE);
 
   public void testSimple() {
     StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE;

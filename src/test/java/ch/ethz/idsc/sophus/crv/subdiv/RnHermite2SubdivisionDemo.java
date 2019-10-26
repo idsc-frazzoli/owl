@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.io.Put;
   ;
   public static void main(String[] args) throws IOException {
     Tensor control = Tensors.fromString("{{0, 0}, {1, 0}, {0, -1}, {-1/2, 1}}");
-    TensorIteration tensorIteration = RnHermite2Subdivisions.a2().string(RealScalar.ONE, control);
+    TensorIteration tensorIteration = RnHermite2Subdivisions.manifold().string(RealScalar.ONE, control);
     for (int count = 1; count <= 6; ++count)
       tensorIteration.iterate();
     Tensor iterate = tensorIteration.iterate();

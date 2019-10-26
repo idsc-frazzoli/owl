@@ -31,7 +31,6 @@ import ch.ethz.idsc.tensor.fig.ListPlot;
 import ch.ethz.idsc.tensor.fig.VisualSet;
 import ch.ethz.idsc.tensor.io.ResourceData;
 
-// TODO spectrogram
 /* package */ abstract class NavigableMapDatasetFilterDemo extends DatasetFilterDemo {
   private final JSlider jSlider = new JSlider(1, 999, 200);
   // ---

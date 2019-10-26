@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 public class RnHermite2SubdivisionsTest extends TestCase {
   public void testA1() {
-    RnHermite2Subdivision a1 = RnHermite2Subdivisions.a1();
+    RnHermite2Subdivision a1 = RnHermite2Subdivisions.standard();
     // lambda == -1/8, mu == -1/2
     RnHermite2Subdivision hs = RnHermite2Subdivisions.of(RationalScalar.of(-1, 8), RationalScalar.of(-1, 2));
     assertEquals(a1.ALP, hs.ALP);
@@ -22,7 +22,7 @@ public class RnHermite2SubdivisionsTest extends TestCase {
     Tensor ALQ = Tensors.fromString("{{ 5/32, -3/64}, {+9/16, -5/32}}"); // A(-2)
     Tensor AHP = Tensors.fromString("{{ 5/32, +3/64}, {-9/16, -5/32}}"); // A(+1)
     Tensor AHQ = Tensors.fromString("{{27/32, -9/64}, {+9/16,  3/32}}"); // A(-1)
-    RnHermite2Subdivision hs = RnHermite2Subdivisions.a1();
+    RnHermite2Subdivision hs = RnHermite2Subdivisions.standard();
     assertEquals(hs.ALP, ALP);
     assertEquals(hs.ALQ, ALQ);
     assertEquals(hs.AHP, AHP);
@@ -30,7 +30,7 @@ public class RnHermite2SubdivisionsTest extends TestCase {
   }
 
   public void testA2() {
-    RnHermite2Subdivision a2 = RnHermite2Subdivisions.a2();
+    RnHermite2Subdivision a2 = RnHermite2Subdivisions.manifold();
     // lambda == -1/5, mu == 9/10
     RnHermite2Subdivision hs = RnHermite2Subdivisions.of(RationalScalar.of(-1, 5), RationalScalar.of(9, 10));
     assertEquals(a2.ALP, hs.ALP);
@@ -44,7 +44,7 @@ public class RnHermite2SubdivisionsTest extends TestCase {
     Tensor ALQ = Tensors.fromString("{{ 6/25, -29/200}, {+29/400,  65/800}}"); // A(-2)
     Tensor AHP = Tensors.fromString("{{ 6/25, +29/200}, {-29/400,  65/800}}"); // A(+1)
     Tensor AHQ = Tensors.fromString("{{19/25, -31/200}, {+29/400, 277/800}}"); // A(-1)
-    RnHermite2Subdivision hs = RnHermite2Subdivisions.a2();
+    RnHermite2Subdivision hs = RnHermite2Subdivisions.manifold();
     assertEquals(hs.ALP, ALP);
     assertEquals(hs.ALQ, ALQ);
     assertEquals(hs.AHP, AHP);

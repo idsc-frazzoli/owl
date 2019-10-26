@@ -61,7 +61,7 @@ public class GeodesicDemo extends AbstractDemo implements DemoInterface {
     {
       Tensor refined = Subdivide.of(0, 1, SPLITS * 6).map(scalarTensorFunction);
       Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-      CurveCurvatureRender.of(render, false, geometricLayer, graphics);
+      Curvature2DRender.of(render, false, geometricLayer, graphics);
     }
     {
       Tensor refined = Subdivide.of(1, 1.5, SPLITS * 3).map(scalarTensorFunction);

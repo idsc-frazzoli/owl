@@ -21,8 +21,7 @@ public class Tse2Integrator implements Integrator, Serializable {
     this.v_range = v_range;
   }
 
-  // ---
-  @Override
+  @Override // from Integrator
   public Tensor step(Flow flow, Tensor x, Scalar h) {
     // x = {px[m], py[m], theta[], vx[m*s^-1]}
     // u_tse2 = {rate[m^-1], ax[m*s^-2]}

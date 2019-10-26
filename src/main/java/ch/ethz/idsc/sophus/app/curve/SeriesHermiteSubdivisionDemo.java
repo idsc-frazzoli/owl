@@ -17,7 +17,7 @@ import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
+import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
@@ -92,7 +92,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
       int levels = spinnerRefine.getValue();
       Tensor iterate = Do.of(tensorIteration::iterate, levels);
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
-      CurveCurvatureRender.of(curve, false, geometricLayer, graphics);
+      Curvature2DRender.of(curve, false, geometricLayer, graphics);
       // ---
       if (jToggleButton.isSelected()) {
         Tensor deltas = iterate.get(Tensor.ALL, 1);

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.lie.LieExponential;
@@ -13,7 +14,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-public class Hermite1Subdivision implements HermiteSubdivision {
+public class Hermite1Subdivision implements HermiteSubdivision, Serializable {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
   private final LieGroupGeodesic lieGroupGeodesic;

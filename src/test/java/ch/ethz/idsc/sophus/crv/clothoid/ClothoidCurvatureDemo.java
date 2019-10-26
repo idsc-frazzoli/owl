@@ -19,7 +19,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.CurveCurvature;
+import ch.ethz.idsc.sophus.crv.Curvature2D;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
@@ -115,7 +115,7 @@ public class ClothoidCurvatureDemo extends AbstractDemo implements DemoInterface
     new PathRender(color, 1.5f) //
         .setCurve(points, false).render(geometricLayer, graphics);
     if (jToggleButton.isSelected()) {
-      Tensor curvature = CurveCurvature.string(Tensor.of(points.stream().map(Extract2D.FUNCTION)));
+      Tensor curvature = Curvature2D.string(Tensor.of(points.stream().map(Extract2D.FUNCTION)));
       VisualRow visualRow = visualSet.add(Range.of(0, curvature.length()), curvature);
       visualRow.setColor(color);
     }

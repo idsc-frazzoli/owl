@@ -11,7 +11,7 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
+import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicMeanFilter;
@@ -47,7 +47,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     Tensor refined = geodesicMeanFilter.apply(control);
     Tensor curve = Nest.of(BSpline4CurveSubdivision.of(geodesicDisplay.geodesicInterface())::string, refined, 7);
     Tensor render = Tensor.of(curve.stream().map(geodesicDisplay::toPoint));
-    CurveCurvatureRender.of(render, false, geometricLayer, graphics);
+    Curvature2DRender.of(render, false, geometricLayer, graphics);
     renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
   }
 

@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
 
-public enum CurveCurvatureRender {
+public enum Curvature2DRender {
   ;
   private static final Color COLOR_CURVATURE_COMB = new Color(0, 0, 0, 128);
   private static final Scalar COMB_SCALE = DoubleScalar.of(-1);

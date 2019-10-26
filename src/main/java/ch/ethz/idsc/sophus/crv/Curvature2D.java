@@ -8,7 +8,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 
-public enum CurveCurvature {
+/** @see CurvatureComb */
+public enum Curvature2D {
   ;
   /** @param points of the form {{p1x, p1y}, {p2x, p2y}, ..., {pNx, pNy}}
    * @return vector */

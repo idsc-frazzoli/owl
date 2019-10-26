@@ -11,7 +11,7 @@ public class Hermite1SubdivisionsTest extends TestCase {
   public void testSimple() {
     TestHelper.check( //
         RnHermite1Subdivisions.instance(), //
-        Hermite1Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE));
+        Hermite1Subdivisions.standard(RnGroup.INSTANCE, RnExponential.INSTANCE));
   }
 
   public void testParams() {

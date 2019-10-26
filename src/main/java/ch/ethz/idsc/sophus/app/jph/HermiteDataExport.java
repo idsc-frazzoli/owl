@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
+import ch.ethz.idsc.sophus.crv.Curvature2D;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
@@ -44,7 +45,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     this.levels = levels;
     folder = HomeDirectory.Documents(name);
     folder.mkdir();
-    Tensor data = GokartPoseDataV2.INSTANCE.getPoseVel(name, 100_000);
+    Tensor data = GokartPoseDataV2.INSTANCE.getPoseVel(name, 2_000);
     {
       Export.of(new File(folder, "gndtrth.mathematica"), data);
       Tensor domain1 = Range.of(0, data.length()).multiply(RealScalar.of(1 / 50.));
@@ -63,12 +64,18 @@ import ch.ethz.idsc.tensor.red.Nest;
   public void process(HermiteSubdivision hermiteSubdivision, CurveSubdivision curveSubdivision, String name) throws IOException {
     TensorIteration tensorIteration = //
         hermiteSubdivision.string(delta, control);
-    Tensor refined = Do.of(tensorIteration::iterate, levels);
     File dst = new File(folder, name);
     dst.mkdir();
-    Export.of(new File(dst, "refined.mathematica"), refined);
-    Tensor tensor = Nest.of(curveSubdivision::string, domain, levels);
-    Export.of(new File(dst, "refined_domain.mathematica"), tensor);
+    {
+      Tensor refined = Do.of(tensorIteration::iterate, levels);
+      Export.of(new File(dst, "refined.mathematica"), refined);
+      Tensor curvatu = Curvature2D.string(Tensor.of(refined.stream().map(point -> point.get(0).extract(0, 2))));
+      Export.of(new File(dst, "curvatu.mathematica"), curvatu);
+    }
+    {
+      Tensor tensor = Nest.of(curveSubdivision::string, domain, levels);
+      Export.of(new File(dst, "refined_domain.mathematica"), tensor);
+    }
   }
 
   public void processAll() throws IOException {
@@ -80,15 +87,15 @@ import ch.ethz.idsc.tensor.red.Nest;
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H2A1.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+          HermiteSubdivisions.H2STANDARD.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
       CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
-      process(hermiteSubdivision, curveSubdivision, "h2a1");
+      process(hermiteSubdivision, curveSubdivision, "h2standard");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H2A2.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+          HermiteSubdivisions.H2MANIFOLD.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
       CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
-      process(hermiteSubdivision, curveSubdivision, "h2a2");
+      process(hermiteSubdivision, curveSubdivision, "h2manifold");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
@@ -112,7 +119,7 @@ import ch.ethz.idsc.tensor.red.Nest;
 
   public static void main(String[] args) throws IOException {
     Scalar period = Quantity.of(RationalScalar.of(1, 2), "s");
-    HermiteDataExport hermiteDataExport = new HermiteDataExport("20190701T163225_01", period, 4);
+    HermiteDataExport hermiteDataExport = new HermiteDataExport("20190701T163225_01", period, 5);
     hermiteDataExport.processAll();
   }
 }
