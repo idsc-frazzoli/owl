@@ -132,7 +132,7 @@ public enum Hermite3Subdivisions {
 
   /***************************************************/
   /** "Noninterpolatory Hermite subdivision schemes"
-   * by Yu, 2004, p. 1358
+   * by Han, Yu, Xue, 2004, p. 1358
    * 
    * @param lieGroup
    * @param lieExponential

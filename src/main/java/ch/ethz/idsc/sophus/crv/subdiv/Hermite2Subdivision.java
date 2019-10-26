@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** Merrien interpolatory Hermite subdivision scheme of order two
  * implementation for R^n */
-public class Hermite2Subdivision implements HermiteSubdivision {
+public class Hermite2Subdivision implements HermiteSubdivision, Serializable {
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
   private final LieGroupGeodesic lieGroupGeodesic;

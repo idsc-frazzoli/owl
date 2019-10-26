@@ -14,6 +14,10 @@ import ch.ethz.idsc.tensor.red.Times;
 public enum Hermite2Subdivisions {
   ;
   private static final Scalar _1_8 = RationalScalar.of(1, 8);
+  private static final Scalar N1_8 = RationalScalar.of(-1, 8);
+  private static final Scalar N1_2 = RationalScalar.of(-1, 2);
+  private static final Scalar N1_5 = RationalScalar.of(-1, 5);
+  private static final Scalar _9_10 = RationalScalar.of(9, 10);
 
   /** References:
    * "de Rham Transform of a Hermite Subdivision Scheme"
@@ -68,7 +72,7 @@ public enum Hermite2Subdivisions {
    * @return
    * @see Hermite1Subdivision */
   public static HermiteSubdivision standard(LieGroup lieGroup, LieExponential lieExponential) {
-    return of(lieGroup, lieExponential, RationalScalar.of(-1, 8), RationalScalar.of(-1, 2));
+    return of(lieGroup, lieExponential, N1_8, N1_2);
   }
 
   /***************************************************/
@@ -83,6 +87,6 @@ public enum Hermite2Subdivisions {
    * @param lieExponential
    * @return */
   public static HermiteSubdivision manifold(LieGroup lieGroup, LieExponential lieExponential) {
-    return of(lieGroup, lieExponential, RationalScalar.of(-1, 5), RationalScalar.of(9, 10));
+    return of(lieGroup, lieExponential, N1_5, _9_10);
   }
 }

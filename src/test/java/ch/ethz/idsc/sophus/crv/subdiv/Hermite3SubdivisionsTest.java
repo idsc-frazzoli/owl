@@ -28,7 +28,7 @@ public class Hermite3SubdivisionsTest extends TestCase {
   public void testH1() {
     Scalar theta = RealScalar.ZERO;
     Scalar omega = RealScalar.ZERO;
-    TestHelper.check(Hermite1Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE), //
+    TestHelper.check(Hermite1Subdivisions.standard(RnGroup.INSTANCE, RnExponential.INSTANCE), //
         Hermite3Subdivisions.of(RnGroup.INSTANCE, RnExponential.INSTANCE, RnBiinvariantMean.INSTANCE, theta, omega));
   }
 

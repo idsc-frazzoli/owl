@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import java.io.IOException;
+
+import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -11,9 +14,11 @@ import ch.ethz.idsc.tensor.alg.Derive;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.Assert;
 
@@ -68,5 +73,18 @@ import junit.framework.Assert;
     Assert.assertEquals(if0, idm.map(f0));
     Tensor if1 = iterate.get(Tensor.ALL, 1);
     Assert.assertEquals(if1, idm.map(f1));
+  }
+
+  public static void checkQuantity(HermiteSubdivision hermiteSubdivision) throws ClassNotFoundException, IOException {
+    Tensor control = Tensors.fromString("{{0[m], 0[m*s^-1]}, {1[m], 0[m*s^-1]}, {0[m], -1[m*s^-1]}, {0[m], 0[m*s^-1]}}");
+    HermiteSubdivision copy = Serialization.copy(hermiteSubdivision);
+    {
+      TensorIteration tensorIteration = copy.string(Quantity.of(3, "s"), control);
+      ExactTensorQ.require(Do.of(tensorIteration::iterate, 2));
+    }
+    {
+      TensorIteration tensorIteration = copy.cyclic(Quantity.of(3, "s"), control);
+      ExactTensorQ.require(Do.of(tensorIteration::iterate, 2));
+    }
   }
 }

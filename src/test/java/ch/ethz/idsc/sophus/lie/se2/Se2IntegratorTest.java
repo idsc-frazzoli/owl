@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
-import ch.ethz.idsc.owl.math.flow.LieEulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.LieMidpointIntegrator;
+import ch.ethz.idsc.sophus.lie.EulerLieIntegrator;
+import ch.ethz.idsc.sophus.lie.MidpointLieIntegrator;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
 import ch.ethz.idsc.sophus.lie.so2.So2;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -41,13 +41,13 @@ public class Se2IntegratorTest extends TestCase {
     Tensor tensor = Se2Integrator.INSTANCE.spin(x0, tangent);
     {
       Integrator integrator = //
-          Serialization.copy(LieEulerIntegrator.of(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE));
+          Serialization.copy(EulerLieIntegrator.of(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE));
       Tensor result = integrator.step(flow, x0, h);
       Chop._12.requireClose(tensor, result);
     }
     {
       Integrator integrator = //
-          Serialization.copy(LieMidpointIntegrator.of(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE));
+          Serialization.copy(MidpointLieIntegrator.of(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE));
       Tensor result = integrator.step(flow, x0, h);
       Chop._12.requireClose(tensor, result);
     }

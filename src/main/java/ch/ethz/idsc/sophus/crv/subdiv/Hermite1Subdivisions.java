@@ -20,6 +20,8 @@ import ch.ethz.idsc.tensor.Scalar;
 public enum Hermite1Subdivisions {
   ;
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
+  private static final Scalar N1_8 = RationalScalar.of(-1, 8);
+  private static final Scalar N1_2 = RationalScalar.of(-1, 2);
 
   /** References:
    * "Scalar and Hermite subdivision schemes"
@@ -55,7 +57,7 @@ public enum Hermite1Subdivisions {
    * @param lieGroup
    * @param lieExponential
    * @return */
-  public static HermiteSubdivision of(LieGroup lieGroup, LieExponential lieExponential) {
-    return of(lieGroup, lieExponential, RationalScalar.of(1, -8), RationalScalar.of(-1, 2));
+  public static HermiteSubdivision standard(LieGroup lieGroup, LieExponential lieExponential) {
+    return of(lieGroup, lieExponential, N1_8, N1_2);
   }
 }

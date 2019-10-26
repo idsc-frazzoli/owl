@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.crv.subdiv;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
@@ -16,7 +17,7 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 
-public class Hermite3Subdivision implements HermiteSubdivision {
+public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
   /** midpoint group element contribution from group elements
    * factor in position (1, 1) of matrices A(-1) A(1)
    * with same sign and equal to 1/2 */

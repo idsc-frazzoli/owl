@@ -17,7 +17,7 @@ public enum HermiteSubdivisions {
   H1STANDARD() {
     @Override
     public HermiteSubdivision supply(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-      return Hermite1Subdivisions.of(lieGroup, lieExponential);
+      return Hermite1Subdivisions.standard(lieGroup, lieExponential);
     }
   }, //
   HERMITE2() {
