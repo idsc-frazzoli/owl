@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.red.Times;
    * by Moosmueller, Dyn, 2017
    * 
    * @return */
-  public static RnHermite2Subdivision a1() {
+  public static RnHermite2Subdivision standard() {
     return A1;
   }
 
@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.red.Times;
    * by Moosmueller, 2017
    * 
    * @return */
-  public static RnHermite2Subdivision a2() {
+  public static RnHermite2Subdivision manifold() {
     return A2;
   }
 }

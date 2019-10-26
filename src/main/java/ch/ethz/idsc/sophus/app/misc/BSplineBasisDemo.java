@@ -88,7 +88,7 @@ import ch.ethz.idsc.tensor.opt.BSplineInterpolation;
         GeodesicBSplineFunction.of(RnGeodesic.INSTANCE, degree, effective);
     Tensor refined = Subdivide.of(0, effective.length() - 1, 4 << levels).map(bSplineFunction);
     renderControlPoints(geometricLayer, graphics);
-    CurveCurvatureRender.of(refined, false, geometricLayer, graphics);
+    Curvature2DRender.of(refined, false, geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

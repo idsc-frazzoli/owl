@@ -19,7 +19,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
+import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
@@ -119,7 +119,7 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
       int levels = spinnerRefine.getValue();
       Tensor iterate = Do.of(tensorIteration::iterate, levels);
       Tensor curve = Tensor.of(iterate.get(Tensor.ALL, 0).stream().map(Extract2D.FUNCTION));
-      CurveCurvatureRender.of(curve, false, geometricLayer, graphics);
+      Curvature2DRender.of(curve, false, geometricLayer, graphics);
       {
         Scalar scale = RealScalar.of(.3);
         switch (geodesicDisplay.toString()) {

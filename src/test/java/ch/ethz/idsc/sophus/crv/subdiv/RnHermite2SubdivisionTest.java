@@ -24,8 +24,8 @@ import junit.framework.TestCase;
 
 public class RnHermite2SubdivisionTest extends TestCase {
   static final List<HermiteSubdivision> LIST = Arrays.asList( //
-      RnHermite2Subdivisions.a1(), //
-      RnHermite2Subdivisions.a2());
+      RnHermite2Subdivisions.standard(), //
+      RnHermite2Subdivisions.manifold());
 
   public void testStringReverse() {
     Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);

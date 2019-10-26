@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
+import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.MSpline3CurveSubdivision;
 import ch.ethz.idsc.sophus.math.MidpointInterface;
@@ -46,7 +46,7 @@ public class BiinvariantMeanSubdivisionDemo extends CurveSubdivisionDemo {
     Tensor refined = StaticHelper.refine(control, levels, curveSubdivision, //
         CurveSubdivisionHelper.isDual(scheme), cyclic, midpointInterface);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    CurveCurvatureRender.of(render, cyclic, geometricLayer, graphics);
+    Curvature2DRender.of(render, cyclic, geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;

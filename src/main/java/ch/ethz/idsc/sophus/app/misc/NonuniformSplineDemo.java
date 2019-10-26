@@ -71,7 +71,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     Tensor domain = Subdivide.increasing(clip, 4 << levels);
     Tensor values = domain.map(scalarTensorFunction);
     renderControlPoints(geometricLayer, graphics);
-    CurveCurvatureRender.of(Transpose.of(Tensors.of(domain, values)), false, geometricLayer, graphics);
+    Curvature2DRender.of(Transpose.of(Tensors.of(domain, values)), false, geometricLayer, graphics);
   }
 
   public static void main(String[] args) {

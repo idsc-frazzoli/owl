@@ -19,13 +19,13 @@ import junit.framework.TestCase;
 
 public class Hermite2SubdivisionsTest extends TestCase {
   public void testSimple() {
-    TestHelper.check(RnHermite2Subdivisions.a1(), Hermite2Subdivisions.a1(RnGroup.INSTANCE, RnExponential.INSTANCE));
-    TestHelper.check(RnHermite2Subdivisions.a2(), Hermite2Subdivisions.a2(RnGroup.INSTANCE, RnExponential.INSTANCE));
+    TestHelper.check(RnHermite2Subdivisions.standard(), Hermite2Subdivisions.standard(RnGroup.INSTANCE, RnExponential.INSTANCE));
+    TestHelper.check(RnHermite2Subdivisions.manifold(), Hermite2Subdivisions.manifold(RnGroup.INSTANCE, RnExponential.INSTANCE));
   }
 
   static final List<HermiteSubdivision> LIST = Arrays.asList( //
-      Hermite2Subdivisions.a1(RnGroup.INSTANCE, RnExponential.INSTANCE), //
-      Hermite2Subdivisions.a2(RnGroup.INSTANCE, RnExponential.INSTANCE));
+      Hermite2Subdivisions.standard(RnGroup.INSTANCE, RnExponential.INSTANCE), //
+      Hermite2Subdivisions.manifold(RnGroup.INSTANCE, RnExponential.INSTANCE));
 
   public void testStringReverseRn() {
     Tensor cp1 = RandomVariate.of(NormalDistribution.standard(), 7, 2, 3);
@@ -45,13 +45,13 @@ public class Hermite2SubdivisionsTest extends TestCase {
 
   public void testNullA1Fail() {
     try {
-      Hermite2Subdivisions.a1(Se2CoveringGroup.INSTANCE, null);
+      Hermite2Subdivisions.standard(Se2CoveringGroup.INSTANCE, null);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      Hermite2Subdivisions.a1(null, Se2CoveringExponential.INSTANCE);
+      Hermite2Subdivisions.standard(null, Se2CoveringExponential.INSTANCE);
       fail();
     } catch (Exception exception) {
       // ---
@@ -60,13 +60,13 @@ public class Hermite2SubdivisionsTest extends TestCase {
 
   public void testNullA2Fail() {
     try {
-      Hermite2Subdivisions.a2(Se2CoveringGroup.INSTANCE, null);
+      Hermite2Subdivisions.manifold(Se2CoveringGroup.INSTANCE, null);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      Hermite2Subdivisions.a2(null, Se2CoveringExponential.INSTANCE);
+      Hermite2Subdivisions.manifold(null, Se2CoveringExponential.INSTANCE);
       fail();
     } catch (Exception exception) {
       // ---

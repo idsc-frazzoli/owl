@@ -23,7 +23,9 @@ import ch.ethz.idsc.tensor.red.Norm;
  * G3 - Curvature is regular
  * 
  * source:
- * http://www.aliasworkbench.com/theoryBuilders/images/CombPlot4.jpg */
+ * http://www.aliasworkbench.com/theoryBuilders/images/CombPlot4.jpg
+ * 
+ * @see Curvature2D */
 public enum CurvatureComb {
   ;
   private static final TensorUnaryOperator NORMALIZE = NormalizeUnlessZero.with(Norm._2);
@@ -45,7 +47,7 @@ public enum CurvatureComb {
   /** @param tensor of dimension n x 2
    * @return normals of dimension n x 2 scaled according to {@link SignedCurvature2D} */
   /* package */ static Tensor string(Tensor tensor) {
-    return CurveCurvature.string(tensor).pmul(Normal2D.string(tensor));
+    return Curvature2D.string(tensor).pmul(Normal2D.string(tensor));
   }
 
   /** @param tensor of dimension n x 2

@@ -12,7 +12,7 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
+import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.SplitInterface;
@@ -59,7 +59,7 @@ public class SplitCurveSubdivisionDemo extends CurveSubdivisionDemo {
       pathRender.setCurve(Nest.of(tensorUnaryOperator, control, 8), cyclic).render(geometricLayer, graphics);
     }
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    CurveCurvatureRender.of(render, cyclic, jToggleComb.isSelected(), geometricLayer, graphics);
+    Curvature2DRender.of(render, cyclic, jToggleComb.isSelected(), geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;

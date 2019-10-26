@@ -14,7 +14,7 @@ import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
-import ch.ethz.idsc.sophus.app.misc.CurveCurvatureRender;
+import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
 import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation;
 import ch.ethz.idsc.sophus.crv.spline.AbstractBSplineInterpolation.Iteration;
@@ -102,7 +102,7 @@ public class GeodesicBSplineFunctionDemo extends BaseCurvatureDemo implements Bu
     }
     Tensor refined = Subdivide.of(0, upper, Math.max(1, upper * (1 << levels))).map(scalarTensorFunction);
     Tensor render = Tensor.of(refined.stream().map(geodesicDisplay::toPoint));
-    CurveCurvatureRender.of(render, false, geometricLayer, graphics);
+    Curvature2DRender.of(render, false, geometricLayer, graphics);
     if (levels < 5)
       renderPoints(geodesicDisplay, refined, geometricLayer, graphics);
     return refined;
