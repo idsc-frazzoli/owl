@@ -4,9 +4,9 @@ package ch.ethz.idsc.sophus.crv.subdiv;
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
+import ch.ethz.idsc.sophus.lie.LieGroupGeodesic;
 import ch.ethz.idsc.sophus.math.Nocopy;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -21,16 +21,17 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
   /** midpoint group element contribution from group elements
    * factor in position (1, 1) of matrices A(-1) A(1)
    * with same sign and equal to 1/2 */
-  private static final Tensor MGW = Tensors.of(RationalScalar.HALF, RationalScalar.HALF);
+  // private static final Tensor MGW = Tensors.of(RationalScalar.HALF, RationalScalar.HALF);
   // ---
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
-  private final BiinvariantMean biinvariantMean;
+  private final LieGroupGeodesic lieGroupGeodesic;
+  private final TripleCenter tripleCenter;
   private final Scalar mgv;
   private final Scalar mvv;
   private final Scalar mvg;
   /** for instance {1/128, 63/64, 1/128} */
-  private final Tensor cgw;
+  // private final Tensor cgw;
   private final Scalar cgv;
   private final Scalar cvg;
   /** for instance {-1/16, 3/4, -1/16} */
@@ -47,17 +48,20 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
    * @param vpr
    * @param vpqr */
   public Hermite3Subdivision( //
-      LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean, //
+      LieGroup lieGroup, LieExponential lieExponential, TripleCenter tripleCenter, //
       Scalar mgv, Scalar mvg, Scalar mvv, //
-      Tensor cgw, Scalar cgv, Scalar vpr, Tensor vpqr) {
+      // Tensor cgw,
+      Scalar cgv, Scalar vpr, Tensor vpqr) {
+    // TODO require non null is obsolete
     this.lieGroup = Objects.requireNonNull(lieGroup);
     this.lieExponential = Objects.requireNonNull(lieExponential);
-    this.biinvariantMean = Objects.requireNonNull(biinvariantMean);
+    lieGroupGeodesic = new LieGroupGeodesic(lieGroup, lieExponential);
+    this.tripleCenter = Objects.requireNonNull(tripleCenter);
     this.mgv = Objects.requireNonNull(mgv);
     this.mvg = mvg.add(mvg);
     this.mvv = mvv.add(mvv);
     // ---
-    this.cgw = VectorQ.requireLength(cgw, 3);
+    // this.cgw = VectorQ.requireLength(cgw, 3);
     this.cgv = cgv;
     cvg = vpr.add(vpr);
     cvw = VectorQ.requireLength(vpqr.add(vpqr), 3);
@@ -97,7 +101,8 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
       Tensor qv = q.get(1);
       Tensor rg = r.get(0);
       Tensor rv = r.get(1);
-      Tensor cg1 = biinvariantMean.mean(Unprotect.byRef(pg, qg, rg), cgw);
+      Tensor cg1 = tripleCenter.midpoint(pg, qg, rg);
+      // biinvariantMean.mean(Unprotect.byRef(pg, qg, rg), cgw);
       Tensor cg2 = rv.subtract(pv).multiply(cgk);
       Tensor cg = lieGroup.element(cg1).combine(cg2);
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(rg)); // r - p
@@ -115,7 +120,7 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
       Tensor pv = p.get(1);
       Tensor qg = q.get(0);
       Tensor qv = q.get(1);
-      Tensor rg1 = biinvariantMean.mean(Unprotect.byRef(pg, qg), MGW);
+      Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg); // .mean(Unprotect.byRef(pg, qg), MGW);
       Tensor rg2 = lieExponential.exp(qv.subtract(pv).multiply(rgk));
       Tensor rg = lieGroup.element(rg1).combine(rg2);
       // ---

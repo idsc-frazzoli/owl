@@ -16,6 +16,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
   public boolean isWithin(Tensor merit, Tensor entrywiseMin) {
     Tensor diff = entrywiseMin.add(slack).subtract(merit);
     // old: diff.stream().map(Scalar.class::cast).allMatch(Sign::isPositiveOrZero);
-    return !diff.stream().map(Scalar.class::cast).anyMatch(Sign::isNegative);
+    return diff.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative);
   }
 }
