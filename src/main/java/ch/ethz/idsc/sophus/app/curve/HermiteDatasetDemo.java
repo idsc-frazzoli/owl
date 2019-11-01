@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
-      spinnerLabelSkips.setList(Arrays.asList(1, 2, 5, 10, 25, 50, 100));
+      spinnerLabelSkips.setList(Arrays.asList(1, 2, 5, 10, 25, 50, 100, 250, 500));
       spinnerLabelSkips.setValue(50);
       spinnerLabelSkips.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "skips");
       spinnerLabelSkips.addSpinnerListener(type -> updateState());

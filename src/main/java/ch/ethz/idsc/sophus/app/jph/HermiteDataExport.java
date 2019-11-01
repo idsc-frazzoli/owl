@@ -118,8 +118,8 @@ import ch.ethz.idsc.tensor.red.Nest;
   }
 
   public static void main(String[] args) throws IOException {
-    Scalar period = Quantity.of(RationalScalar.of(1, 2), "s");
-    HermiteDataExport hermiteDataExport = new HermiteDataExport("20190701T163225_01", period, 5);
+    Scalar period = Quantity.of(RationalScalar.of(1, 1), "s");
+    HermiteDataExport hermiteDataExport = new HermiteDataExport("20190701T163225_01", period, 6);
     hermiteDataExport.processAll();
   }
 }

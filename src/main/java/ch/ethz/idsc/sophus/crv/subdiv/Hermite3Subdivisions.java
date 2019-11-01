@@ -82,10 +82,24 @@ public enum Hermite3Subdivisions {
    * @param lieExponential
    * @param biinvariantMean
    * @throws Exception if either parameters is null */
+  public static Hermite3SubdivisionBuilder _standard(LieGroup lieGroup, LieExponential lieExponential) {
+    return _of(lieGroup, lieExponential, RationalScalar.of(+1, 128), RationalScalar.of(-1, 16));
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @return */
+  public static HermiteSubdivision of(LieGroup lieGroup, LieExponential lieExponential) {
+    return _standard(lieGroup, lieExponential).create();
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @param biinvariantMean
+   * @return */
   public static HermiteSubdivision of( //
       LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-    return _of(lieGroup, lieExponential, RationalScalar.of(+1, 128), RationalScalar.of(-1, 16)) //
-        .create(biinvariantMean);
+    return _standard(lieGroup, lieExponential).create(biinvariantMean);
   }
 
   /***************************************************/
