@@ -16,22 +16,20 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
   /** midpoint group element contribution from group elements
    * factor in position (1, 1) of matrices A(-1) A(1)
    * with same sign and equal to 1/2 */
-  // private static final Tensor MGW = Tensors.of(RationalScalar.HALF, RationalScalar.HALF);
   // ---
   private final LieGroup lieGroup;
   private final LieExponential lieExponential;
   private final LieGroupGeodesic lieGroupGeodesic;
-  private final TripleCenter tripleCenter;
+  private final TensorUnaryOperator tripleCenter;
   private final Scalar mgv;
   private final Scalar mvv;
   private final Scalar mvg;
-  /** for instance {1/128, 63/64, 1/128} */
-  // private final Tensor cgw;
   private final Scalar cgv;
   private final Scalar cvg;
   /** for instance {-1/16, 3/4, -1/16} */
@@ -48,20 +46,17 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
    * @param vpr
    * @param vpqr */
   public Hermite3Subdivision( //
-      LieGroup lieGroup, LieExponential lieExponential, TripleCenter tripleCenter, //
+      LieGroup lieGroup, LieExponential lieExponential, TensorUnaryOperator tripleCenter, //
       Scalar mgv, Scalar mvg, Scalar mvv, //
-      // Tensor cgw,
       Scalar cgv, Scalar vpr, Tensor vpqr) {
-    // TODO require non null is obsolete
-    this.lieGroup = Objects.requireNonNull(lieGroup);
-    this.lieExponential = Objects.requireNonNull(lieExponential);
+    this.lieGroup = lieGroup;
+    this.lieExponential = lieExponential;
     lieGroupGeodesic = new LieGroupGeodesic(lieGroup, lieExponential);
     this.tripleCenter = Objects.requireNonNull(tripleCenter);
     this.mgv = Objects.requireNonNull(mgv);
     this.mvg = mvg.add(mvg);
     this.mvv = mvv.add(mvv);
     // ---
-    // this.cgw = VectorQ.requireLength(cgw, 3);
     this.cgv = cgv;
     cvg = vpr.add(vpr);
     cvw = VectorQ.requireLength(vpqr.add(vpqr), 3);
@@ -101,7 +96,7 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
       Tensor qv = q.get(1);
       Tensor rg = r.get(0);
       Tensor rv = r.get(1);
-      Tensor cg1 = tripleCenter.midpoint(pg, qg, rg);
+      Tensor cg1 = tripleCenter.apply(Unprotect.byRef(pg, qg, rg));
       // biinvariantMean.mean(Unprotect.byRef(pg, qg, rg), cgw);
       Tensor cg2 = rv.subtract(pv).multiply(cgk);
       Tensor cg = lieGroup.element(cg1).combine(cg2);
