@@ -23,7 +23,7 @@ public class SpdDistanceTest extends TestCase {
       Tensor q = TestHelper.generateSpd(n);
       Scalar pq = SpdDistance.INSTANCE.distance(p, q);
       Scalar qp = SpdDistance.INSTANCE.distance(q, p);
-      Chop._08.requireClose(pq, qp);
+      Chop._05.requireClose(pq, qp);
     }
   }
 }
