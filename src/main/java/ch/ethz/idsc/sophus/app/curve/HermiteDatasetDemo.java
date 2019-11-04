@@ -24,9 +24,7 @@ import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
-import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.NumberQ;
@@ -58,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   protected Tensor _control = Tensors.empty();
 
   public HermiteDatasetDemo(GokartPoseDataV2 gokartPoseData) {
-    super(GeodesicDisplays.SE2_ONLY, gokartPoseData);
+    super(GeodesicDisplays.SE2C_ONLY, gokartPoseData);
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
@@ -159,6 +157,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     int limit = spinnerLabelLimit.getValue();
     String name = spinnerLabelString.getValue();
     Tensor control = gokartPoseData.getPoseVel(name, limit);
+    control.set(new So2Lift(), Tensor.ALL, 0, 2);
     Tensor result = Tensors.empty();
     int skips = spinnerLabelSkips.getValue();
     int offset = spinnerLabelShift.getValue();
@@ -192,7 +191,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     graphics.setColor(Color.DARK_GRAY);
     Scalar delta = RationalScalar.of(spinnerLabelSkips.getValue(), 50);
     HermiteSubdivision hermiteSubdivision = spinnerLabelScheme.getValue().supply( //
-        Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+        geodesicDisplay.lieGroup(), //
+        geodesicDisplay.lieExponential(), //
+        geodesicDisplay.biinvariantMean());
     TensorIteration tensorIteration = hermiteSubdivision.string(delta, _control);
     int levels = spinnerLabelLevel.getValue();
     Tensor refined = 0 < levels //
