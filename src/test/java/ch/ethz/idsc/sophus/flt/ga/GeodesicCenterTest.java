@@ -9,6 +9,7 @@ import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter.Splits;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Geodesic;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGeodesic;
+import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
 import ch.ethz.idsc.tensor.RationalScalar;

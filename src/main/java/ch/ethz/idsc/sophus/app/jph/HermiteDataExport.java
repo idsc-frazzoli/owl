@@ -11,10 +11,14 @@ import ch.ethz.idsc.sophus.crv.subdiv.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
+import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.LieExponential;
+import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.rn.RnGeodesic;
-import ch.ethz.idsc.sophus.lie.se2.Se2BiinvariantMean;
-import ch.ethz.idsc.sophus.lie.se2.Se2Group;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringBiinvariantMean;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;
+import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringGroup;
+import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -46,6 +50,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     folder = HomeDirectory.Documents(name);
     folder.mkdir();
     Tensor data = GokartPoseDataV2.INSTANCE.getPoseVel(name, 2_000);
+    data.set(new So2Lift(), Tensor.ALL, 0, 2);
     {
       Export.of(new File(folder, "gndtrth.mathematica"), data);
       Tensor domain1 = Range.of(0, data.length()).multiply(RealScalar.of(1 / 50.));
@@ -79,47 +84,50 @@ import ch.ethz.idsc.tensor.red.Nest;
   }
 
   public void processAll() throws IOException {
+    LieGroup lieGroup = Se2CoveringGroup.INSTANCE;
+    LieExponential lieExponential = Se2CoveringExponential.INSTANCE;
+    BiinvariantMean biinvariantMean = Se2CoveringBiinvariantMean.INSTANCE;
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H1STANDARD.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+          HermiteSubdivisions.H1STANDARD.supply(lieGroup, lieExponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h1standard");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H2STANDARD.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+          HermiteSubdivisions.H2STANDARD.supply(lieGroup, lieExponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h2standard");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H2MANIFOLD.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.LINEAR);
+          HermiteSubdivisions.H2MANIFOLD.supply(lieGroup, lieExponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline2CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h2manifold");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H3STANDARD.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.FILTER);
+          HermiteSubdivisions.H3STANDARD.supply(lieGroup, lieExponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h3standard");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H3A1.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.FILTER);
+          HermiteSubdivisions.H3A1.supply(lieGroup, lieExponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h3a1");
     }
     {
       HermiteSubdivision hermiteSubdivision = //
-          HermiteSubdivisions.H3A2.supply(Se2Group.INSTANCE, Se2CoveringExponential.INSTANCE, Se2BiinvariantMean.FILTER);
+          HermiteSubdivisions.H3A2.supply(lieGroup, lieExponential, biinvariantMean);
       CurveSubdivision curveSubdivision = new BSpline1CurveSubdivision(RnGeodesic.INSTANCE);
       process(hermiteSubdivision, curveSubdivision, "h3a2");
     }
   }
 
   public static void main(String[] args) throws IOException {
-    Scalar period = Quantity.of(RationalScalar.of(1, 2), "s");
-    HermiteDataExport hermiteDataExport = new HermiteDataExport("20190701T163225_01", period, 5);
+    Scalar period = Quantity.of(RationalScalar.of(1, 1), "s");
+    HermiteDataExport hermiteDataExport = new HermiteDataExport("20190701T163225_01", period, 6);
     hermiteDataExport.processAll();
   }
 }

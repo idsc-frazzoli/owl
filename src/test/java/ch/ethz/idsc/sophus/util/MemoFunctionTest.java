@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.util;
 import java.io.IOException;
 import java.util.function.Function;
 
-import ch.ethz.idsc.sophus.flt.ga.IntegerTensorFunction;
+import ch.ethz.idsc.sophus.math.IntegerTensorFunction;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.Serialization;

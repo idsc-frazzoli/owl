@@ -42,6 +42,30 @@ public enum Hermite3Subdivisions {
    * 
    * @param lieGroup
    * @param lieExponential
+   * @param theta
+   * @param omega
+   * @return */
+  public static Hermite3SubdivisionBuilder _of(LieGroup lieGroup, LieExponential lieExponential, Scalar theta, Scalar omega) {
+    return new Hermite3SubdivisionBuilder(lieGroup, lieExponential, //
+        Tensors.of(theta, RealScalar.ONE.subtract(theta.add(theta)), theta), //
+        RationalScalar.of(-1, 8), RationalScalar.of(3, 4), RationalScalar.of(-1, 8), //
+        RationalScalar.of(-1, 2).multiply(theta), //
+        RationalScalar.of(-3, 2).multiply(omega), //
+        Tensors.of(RationalScalar.HALF.multiply(omega), RationalScalar.HALF.add(omega.add(omega)), RationalScalar.HALF.multiply(omega)));
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @param theta
+   * @param omega
+   * @return */
+  public static HermiteSubdivision of( //
+      LieGroup lieGroup, LieExponential lieExponential, Scalar theta, Scalar omega) {
+    return _of(lieGroup, lieExponential, theta, omega).create();
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
    * @param biinvariantMean
    * @param theta
    * @param omega
@@ -49,14 +73,7 @@ public enum Hermite3Subdivisions {
   public static HermiteSubdivision of( //
       LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean, //
       Scalar theta, Scalar omega) {
-    return new Hermite3Subdivision(lieGroup, lieExponential, biinvariantMean, //
-        RationalScalar.of(-1, 8), //
-        RationalScalar.of(3, 4), //
-        RationalScalar.of(-1, 8), //
-        Tensors.of(theta, RealScalar.ONE.subtract(theta.add(theta)), theta), //
-        RationalScalar.of(-1, 2).multiply(theta), //
-        RationalScalar.of(-3, 2).multiply(omega), //
-        Tensors.of(RationalScalar.HALF.multiply(omega), RationalScalar.HALF.add(omega.add(omega)), RationalScalar.HALF.multiply(omega)));
+    return _of(lieGroup, lieExponential, theta, omega).create(biinvariantMean);
   }
 
   /** default with theta == 1/128 and omega == -1/16
@@ -65,11 +82,24 @@ public enum Hermite3Subdivisions {
    * @param lieExponential
    * @param biinvariantMean
    * @throws Exception if either parameters is null */
+  public static Hermite3SubdivisionBuilder _standard(LieGroup lieGroup, LieExponential lieExponential) {
+    return _of(lieGroup, lieExponential, RationalScalar.of(+1, 128), RationalScalar.of(-1, 16));
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @return */
+  public static HermiteSubdivision of(LieGroup lieGroup, LieExponential lieExponential) {
+    return _standard(lieGroup, lieExponential).create();
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @param biinvariantMean
+   * @return */
   public static HermiteSubdivision of( //
       LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-    return of(lieGroup, lieExponential, biinvariantMean, //
-        RationalScalar.of(+1, 128), //
-        RationalScalar.of(-1, 16));
+    return _standard(lieGroup, lieExponential).create(biinvariantMean);
   }
 
   /***************************************************/
@@ -92,13 +122,21 @@ public enum Hermite3Subdivisions {
    * @param lieExponential
    * @param biinvariantMean
    * @return */
-  public static HermiteSubdivision a1(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-    return new Hermite3Subdivision(lieGroup, lieExponential, biinvariantMean, //
-        RationalScalar.of(-1, 16), RationalScalar.of(15, 16), RationalScalar.of(-7, 32), //
+  private static Hermite3SubdivisionBuilder _a1(LieGroup lieGroup, LieExponential lieExponential) {
+    return new Hermite3SubdivisionBuilder(lieGroup, lieExponential, //
         Tensors.fromString("{1/128, 63/64, 1/128}"), //
+        RationalScalar.of(-1, 16), RationalScalar.of(15, 16), RationalScalar.of(-7, 32), //
         RationalScalar.of(+7, 256), //
         RealScalar.ZERO, //
         Tensors.fromString("{1/16, 3/8, 1/16}"));
+  }
+
+  public static HermiteSubdivision a1(LieGroup lieGroup, LieExponential lieExponential) {
+    return _a1(lieGroup, lieExponential).create();
+  }
+
+  public static HermiteSubdivision a1(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+    return _a1(lieGroup, lieExponential).create(biinvariantMean);
   }
 
   /***************************************************/
@@ -119,15 +157,29 @@ public enum Hermite3Subdivisions {
    * 
    * @param lieGroup
    * @param lieExponential
-   * @param biinvariantMean
    * @return */
-  public static HermiteSubdivision a2(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
-    return new Hermite3Subdivision(lieGroup, lieExponential, biinvariantMean, //
-        RationalScalar.of(-5, 56), RationalScalar.of(7, 12), RationalScalar.of(-1, 24), //
+  private static Hermite3SubdivisionBuilder _a2(LieGroup lieGroup, LieExponential lieExponential) {
+    return new Hermite3SubdivisionBuilder(lieGroup, lieExponential, //
         Tensors.fromString("{7/96, 41/48, 7/96}"), //
+        RationalScalar.of(-5, 56), RationalScalar.of(7, 12), RationalScalar.of(-1, 24), //
         RationalScalar.of(-25, 1344), //
         RationalScalar.of(77, 384), //
         Tensors.fromString("{-19/384, 19/96, -19/384}"));
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @return */
+  public static HermiteSubdivision a2(LieGroup lieGroup, LieExponential lieExponential) {
+    return _a2(lieGroup, lieExponential).create();
+  }
+
+  /** @param lieGroup
+   * @param lieExponential
+   * @param biinvariantMean
+   * @return */
+  public static HermiteSubdivision a2(LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
+    return _a2(lieGroup, lieExponential).create(biinvariantMean);
   }
 
   /***************************************************/

@@ -24,8 +24,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
   boolean isSatisfied(StateTime childStateTime, float tStop, Tensor ray, TensorUnaryOperator forward) {
     Area simShadowArea = (Area) initArea.clone();
     shadowMap.updateMap(simShadowArea, childStateTime, tStop);
-    return !ray.stream().map(forward) //
-        .anyMatch(local -> isMember(simShadowArea, local));
+    return ray.stream().map(forward) //
+        .noneMatch(local -> isMember(simShadowArea, local));
   }
 
   private static boolean isMember(Area area, Tensor state) {
