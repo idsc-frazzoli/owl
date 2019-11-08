@@ -2,8 +2,8 @@
 package ch.ethz.idsc.sophus.hs.spd;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
-import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Reference:
@@ -16,6 +16,7 @@ public enum SpdSqrt {
   public static Tensor of(Tensor matrix) {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor a = eigensystem.vectors();
-    return LinearSolve.of(a, eigensystem.values().map(Sqrt.FUNCTION).pmul(a));
+    Tensor ainv = Transpose.of(a);
+    return ainv.dot(eigensystem.values().map(Sqrt.FUNCTION).pmul(a));
   }
 }

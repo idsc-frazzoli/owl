@@ -31,7 +31,8 @@ public enum SpdExponential implements LieExponential {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(x);
     Tensor a = eigensystem.vectors();
     // return LinearSolve.of(a, eigensystem.values().map(Exp.FUNCTION).pmul(a));
-    return Transpose.of(a).dot(eigensystem.values().map(Exp.FUNCTION).pmul(a));
+    Tensor ainv = Transpose.of(a);
+    return ainv.dot(eigensystem.values().map(Exp.FUNCTION).pmul(a));
   }
 
   @Override // from LieExponential
@@ -39,6 +40,7 @@ public enum SpdExponential implements LieExponential {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(g);
     Tensor a = eigensystem.vectors();
     // return LinearSolve.of(a, eigensystem.values().map(Log.FUNCTION).pmul(a));
-    return Transpose.of(a).dot(eigensystem.values().map(Log.FUNCTION).pmul(a));
+    Tensor ainv = Transpose.of(a);
+    return ainv.dot(eigensystem.values().map(Log.FUNCTION).pmul(a));
   }
 }

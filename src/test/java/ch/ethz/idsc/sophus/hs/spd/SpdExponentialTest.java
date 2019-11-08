@@ -4,6 +4,7 @@ package ch.ethz.idsc.sophus.hs.spd;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.lie.MatrixLog;
+import ch.ethz.idsc.tensor.mat.LowerTriangularize;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -32,6 +33,26 @@ public class SpdExponentialTest extends TestCase {
       Tensor exp1 = SpdExponential.INSTANCE.log(x);
       Tensor exp2 = MatrixLog.of(x);
       Chop._08.requireClose(exp1, exp2);
+    }
+  }
+
+  public void testExpNonSymmetricFail() {
+    Tensor x = LowerTriangularize.of(TestHelper.generateSim(4));
+    try {
+      SpdExponential.INSTANCE.exp(x);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testLogNonSymmetricFail() {
+    Tensor g = LowerTriangularize.of(TestHelper.generateSpd(4));
+    try {
+      SpdExponential.INSTANCE.log(g);
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 }
