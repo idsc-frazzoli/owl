@@ -1,3 +1,4 @@
+// code by jph
 package ch.ethz.idsc.sophus.app.jph;
 
 import java.awt.BasicStroke;

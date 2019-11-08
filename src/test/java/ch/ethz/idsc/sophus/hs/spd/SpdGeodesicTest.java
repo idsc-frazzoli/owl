@@ -17,7 +17,7 @@ public class SpdGeodesicTest extends TestCase {
       Scalar t = RandomVariate.of(UniformDistribution.unit());
       Tensor m1 = SpdGeodesic.INSTANCE.split(p, q, t);
       Tensor m2 = SpdGeodesic.INSTANCE.split(q, p, RealScalar.ONE.subtract(t));
-      Chop._08.requireClose(m1, m2);
+      Chop._04.requireClose(m1, m2);
     }
   }
 
@@ -26,7 +26,7 @@ public class SpdGeodesicTest extends TestCase {
       Tensor p = TestHelper.generateSpd(n);
       Scalar t = RandomVariate.of(UniformDistribution.unit());
       Tensor m = SpdGeodesic.INSTANCE.split(p, p, t);
-      Chop._08.requireClose(m, p);
+      Chop._04.requireClose(m, p);
     }
   }
 }

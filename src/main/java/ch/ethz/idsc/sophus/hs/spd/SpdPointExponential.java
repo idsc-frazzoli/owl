@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.lie.MatrixLog;
-import ch.ethz.idsc.tensor.mat.Inverse;
 
 /** SPD == Symmetric positive definite == Sym+
  * 
@@ -25,17 +24,18 @@ public enum SpdPointExponential {
   ;
   // ---
   public static Tensor exp(Tensor p, Tensor w) {
-    // TODO inefficient
-    Tensor pp = SpdSqrt.of(p);
-    Tensor pn = Inverse.of(pp);
+    SpdSqrt spdSplit = new SpdSqrt(p);
+    Tensor pp = spdSplit.forward();
+    Tensor pn = spdSplit.inverse();
     Tensor sym = pn.dot(w).dot(pn);
     sym = Transpose.of(sym).add(sym).multiply(RationalScalar.HALF);
     return pp.dot(SpdExponential.INSTANCE.exp(sym)).dot(pp);
   }
 
   public static Tensor log(Tensor p, Tensor q) {
-    Tensor pp = SpdSqrt.of(p);
-    Tensor pn = Inverse.of(pp);
+    SpdSqrt spdSplit = new SpdSqrt(p);
+    Tensor pp = spdSplit.forward();
+    Tensor pn = spdSplit.inverse();
     Tensor sym = pn.dot(q).dot(pn);
     sym = Transpose.of(sym).add(sym).multiply(RationalScalar.HALF);
     return pp.dot(SpdExponential.INSTANCE.log(sym)).dot(pp);
