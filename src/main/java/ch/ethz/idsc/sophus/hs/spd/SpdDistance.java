@@ -20,6 +20,7 @@ public enum SpdDistance implements TensorMetric {
   // ---
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
+    // TODO inefficient since inv can be computed with spdSqrt
     Tensor pn12 = Inverse.of(SpdSqrt.of(p));
     return n(pn12.dot(q).dot(pn12));
   }

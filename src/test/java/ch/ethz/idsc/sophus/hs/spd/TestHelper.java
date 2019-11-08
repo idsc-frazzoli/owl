@@ -9,10 +9,13 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 /* package */ enum TestHelper {
   ;
-  static Tensor generateSpd(int n) {
+  static Tensor generateSim(int n) {
     Distribution distribution = UniformDistribution.of(-2, 2);
     Tensor matrix = RandomVariate.of(distribution, n, n);
-    Tensor x = Transpose.of(matrix).add(matrix);
-    return SpdExponential.INSTANCE.exp(x);
+    return Transpose.of(matrix).add(matrix);
+  }
+
+  static Tensor generateSpd(int n) {
+    return SpdExponential.INSTANCE.exp(generateSim(n));
   }
 }

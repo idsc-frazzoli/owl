@@ -152,7 +152,7 @@ public final class GeometricComponent {
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
           if (printPositionOnClick)
-            System.out.println(getMouseSe2State().map(Round._3));
+            System.out.println(getMouseSe2CState().map(Round._3));
         }
       };
       jComponent.addMouseListener(mouseListener);
@@ -200,7 +200,7 @@ public final class GeometricComponent {
   }
 
   /** @return {px, py, angle} in model space */
-  public Tensor getMouseSe2State() {
+  public Tensor getMouseSe2CState() {
     Scalar scalar = RealScalar.of(mouseWheel).multiply(WHEEL_ANGLE);
     return mouseLocation.copy().append(scalar);
   }
@@ -235,7 +235,7 @@ public final class GeometricComponent {
     graphics.setColor(Color.WHITE);
     graphics.fillRect(0, 0, dimension.width, dimension.height);
     // ---
-    GeometricLayer geometricLayer = new GeometricLayer(model2pixel, getMouseSe2State());
+    GeometricLayer geometricLayer = new GeometricLayer(model2pixel, getMouseSe2CState());
     renderBackground.forEach(renderInterface -> renderInterface.render(geometricLayer, graphics));
     renderInterfaces.forEach(renderInterface -> renderInterface.render(geometricLayer, graphics));
   }
