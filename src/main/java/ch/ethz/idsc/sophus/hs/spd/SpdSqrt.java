@@ -23,8 +23,9 @@ public class SpdSqrt implements Serializable {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor avec = eigensystem.vectors();
     Tensor ainv = Transpose.of(avec);
-    forward = ainv.dot(eigensystem.values().map(Sqrt.FUNCTION).pmul(avec));
-    inverse = ainv.dot(eigensystem.values().map(Sqrt.FUNCTION).map(Scalar::reciprocal).pmul(avec));
+    Tensor sqrt = eigensystem.values().map(Sqrt.FUNCTION);
+    forward = ainv.dot(sqrt.pmul(avec));
+    inverse = ainv.dot(sqrt.map(Scalar::reciprocal).pmul(avec));
   }
 
   public Tensor forward() {

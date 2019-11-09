@@ -1,10 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.hs.spd;
 
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -15,7 +14,7 @@ public class SpdDistanceTest extends TestCase {
       Tensor g = TestHelper.generateSpd(n);
       Scalar dP = SpdDistance.n(g);
       Tensor matrix = Inverse.of(g);
-      Scalar dN = SpdDistance.n(Transpose.of(matrix).add(matrix).multiply(RationalScalar.HALF));
+      Scalar dN = SpdDistance.n(Symmetrize.of(matrix));
       Chop._06.requireClose(dP, dN);
     }
   }

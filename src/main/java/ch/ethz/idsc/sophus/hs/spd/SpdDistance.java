@@ -2,10 +2,9 @@
 package ch.ethz.idsc.sophus.hs.spd;
 
 import ch.ethz.idsc.sophus.math.TensorMetric;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Log;
@@ -21,8 +20,7 @@ public enum SpdDistance implements TensorMetric {
   public Scalar distance(Tensor p, Tensor q) {
     SpdSqrt spdSplit = new SpdSqrt(p);
     Tensor pn12 = spdSplit.inverse();
-    Tensor matrix = pn12.dot(q).dot(pn12);
-    return n(Transpose.of(matrix).add(matrix).multiply(RationalScalar.HALF));
+    return n(Symmetrize.of(pn12.dot(q).dot(pn12)));
   }
 
   /** @param matrix spd

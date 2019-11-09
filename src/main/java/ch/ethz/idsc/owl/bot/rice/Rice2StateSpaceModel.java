@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 0 0 L 0
  * 0 0 0 L
  * where L == -lambda
- * confirmed with mathematica
+ * confirmed with Mathematica
  * Lipschitz L == Hypot.of(RealScalar.ONE, lambda);
  * 
  * implementation for n-dimensional position and velocity */
