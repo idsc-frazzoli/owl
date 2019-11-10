@@ -32,8 +32,8 @@ public enum Hermite3Subdivisions {
    * thus it satisfies the spectral condition up to order 3"
    * 
    * <p>Quote:
-   * "H1 with theta = 1/32 provides an example of an Hermite scheme which does not
-   * reproduce polynomials of degree 4, but satisfies the spectral condition of order 4.
+   * "theta = 1/32 provides an example of an Hermite scheme which does not reproduce
+   * polynomials of degree 4, but satisfies the spectral condition of order 4.
    * To the best of our knowledge, this is the first time it is observed that the
    * spectral condition is not equivalent to the reproduction of polynomials."
    * 

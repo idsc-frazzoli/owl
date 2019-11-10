@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.jph;
 
+import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
@@ -15,12 +16,12 @@ import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.hs.spd.SpdExponential;
 import ch.ethz.idsc.sophus.hs.spd.SpdGeodesic;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
-import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.lie.CirclePoints;
+import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -28,32 +29,28 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 
 /* package */ class SpdGeodesicDemo extends AbstractDemo {
   private static final Distribution DISTRIBUTION = UniformDistribution.of(-1, 1);
+  private static final Tensor CIRCLE_POINTS = CirclePoints.of(43);
   // ---
   private final JButton jButton = new JButton("suffle");
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  // ---
   private Tensor p;
   private Tensor q;
 
   public SpdGeodesicDemo() {
     jButton.addActionListener(e -> shuffle());
     timerFrame.jToolBar.add(jButton);
-    {
-      spinnerRefine.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-      spinnerRefine.setValue(6);
-      spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
-    }
+    // ---
+    spinnerRefine.setList(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+    spinnerRefine.setValue(6);
+    spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(50, 28), "refinement");
+    // ---
     shuffle();
   }
 
   private void shuffle() {
-    {
-      Tensor a = RandomVariate.of(DISTRIBUTION, 2, 2);
-      p = SpdExponential.INSTANCE.exp(Transpose.of(a).add(a).multiply(RationalScalar.HALF));
-    }
-    {
-      Tensor a = RandomVariate.of(DISTRIBUTION, 2, 2);
-      q = SpdExponential.INSTANCE.exp(Transpose.of(a).add(a).multiply(RationalScalar.HALF));
-    }
+    p = SpdExponential.INSTANCE.exp(Symmetrize.of(RandomVariate.of(DISTRIBUTION, 2, 2)));
+    q = SpdExponential.INSTANCE.exp(Symmetrize.of(RandomVariate.of(DISTRIBUTION, 2, 2)));
   }
 
   @Override
@@ -62,11 +59,14 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     // ---
     ScalarTensorFunction scalarTensorFunction = SpdGeodesic.INSTANCE.curve(p, q);
+    graphics.setStroke(new BasicStroke(1.5f));
     for (Tensor _t : Subdivide.of(0, 1, spinnerRefine.getValue())) {
       geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.of(_t.multiply(RealScalar.of(10)), RealScalar.ZERO)));
-      new CovarianceRender(scalarTensorFunction.apply(_t.Get())).render(geometricLayer, graphics);
+      Tensor pq = scalarTensorFunction.apply(_t.Get());
+      graphics.draw(geometricLayer.toPath2D(CIRCLE_POINTS.dot(pq), true));
       geometricLayer.popMatrix();
     }
+    graphics.setStroke(new BasicStroke());
   }
 
   public static void main(String[] args) {

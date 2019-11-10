@@ -50,7 +50,10 @@ public enum Hermite1Subdivisions {
         mu.multiply(_1_4));
   }
 
-  /** Reference:
+  /** lambda == -1/8
+   * mu == -1/2
+   * 
+   * Reference:
    * "Construction of Hermite subdivision schemes reproducing polynomials"
    * by Byeongseon Jeong, Jungho Yoon, 2017
    * 
