@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * L 0
  * 0 L
  * where L == lambda
- * confirmed with mathematica
+ * confirmed with Mathematica
  * 
  * | f(x_1, u) - f(x_2, u) | <= L | x_1 - x_2 |
  * Lipschitz L == |lambda| */

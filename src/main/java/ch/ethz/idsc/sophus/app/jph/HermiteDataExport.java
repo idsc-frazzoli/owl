@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     Export.of(new File(folder, "control_domain.mathematica"), domain);
   }
 
-  public void process(HermiteSubdivision hermiteSubdivision, CurveSubdivision curveSubdivision, String name) throws IOException {
+  private void process(HermiteSubdivision hermiteSubdivision, CurveSubdivision curveSubdivision, String name) throws IOException {
     TensorIteration tensorIteration = //
         hermiteSubdivision.string(delta, control);
     File dst = new File(folder, name);
@@ -83,7 +83,7 @@ import ch.ethz.idsc.tensor.red.Nest;
     }
   }
 
-  public void processAll() throws IOException {
+  private void processAll() throws IOException {
     LieGroup lieGroup = Se2CoveringGroup.INSTANCE;
     LieExponential lieExponential = Se2CoveringExponential.INSTANCE;
     BiinvariantMean biinvariantMean = Se2CoveringBiinvariantMean.INSTANCE;

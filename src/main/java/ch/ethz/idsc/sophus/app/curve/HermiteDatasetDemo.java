@@ -52,11 +52,11 @@ import ch.ethz.idsc.tensor.sca.Power;
   private final SpinnerLabel<Integer> spinnerLabelShift = new SpinnerLabel<>();
   private final SpinnerLabel<HermiteSubdivisions> spinnerLabelScheme = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerLabelLevel = new SpinnerLabel<>();
-  private final JToggleButton jToggleButton = new JToggleButton("derivatives");
+  private final JToggleButton jToggleButton = new JToggleButton("diff");
   protected Tensor _control = Tensors.empty();
 
   public HermiteDatasetDemo(GokartPoseDataV2 gokartPoseData) {
-    super(GeodesicDisplays.SE2C_ONLY, gokartPoseData);
+    super(GeodesicDisplays.SE2C_SE2, gokartPoseData);
     this.gokartPoseData = gokartPoseData;
     timerFrame.geometricComponent.setModel2Pixel(GokartPoseDatas.HANGAR_MODEL2PIXEL);
     {
@@ -89,7 +89,7 @@ import ch.ethz.idsc.tensor.sca.Power;
           exception.printStackTrace();
         }
       });
-      jTextField.setPreferredSize(new Dimension(50, 28));
+      jTextField.setPreferredSize(new Dimension(40, 28));
       timerFrame.jToolBar.add(jTextField);
     }
     {
@@ -104,7 +104,7 @@ import ch.ethz.idsc.tensor.sca.Power;
           exception.printStackTrace();
         }
       });
-      jTextField.setPreferredSize(new Dimension(50, 28));
+      jTextField.setPreferredSize(new Dimension(40, 28));
       timerFrame.jToolBar.add(jTextField);
     }
     {
@@ -119,7 +119,7 @@ import ch.ethz.idsc.tensor.sca.Power;
           exception.printStackTrace();
         }
       });
-      jTextField.setPreferredSize(new Dimension(50, 28));
+      jTextField.setPreferredSize(new Dimension(40, 28));
       timerFrame.jToolBar.add(jTextField);
     }
     {
@@ -134,7 +134,7 @@ import ch.ethz.idsc.tensor.sca.Power;
           exception.printStackTrace();
         }
       });
-      jTextField.setPreferredSize(new Dimension(50, 28));
+      jTextField.setPreferredSize(new Dimension(40, 28));
       timerFrame.jToolBar.add(jTextField);
     }
     {

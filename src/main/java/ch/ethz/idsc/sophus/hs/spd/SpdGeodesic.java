@@ -7,6 +7,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 /** References:
+ * "Riemannian Geometric Statistics in Medical Image Analysis", 2020
+ * Edited by Pennec, Sommer, Fletcher
+ * p. 86 eqs 3.12 and 3.13, also
+ * p. 89
+ * 
  * "Subdivision Schemes for Positive Definite Matrices"
  * by Uri Itai, Nir Sharon
  * 
@@ -15,17 +20,17 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
  * 
  * Riemannian Variance Filtering: An Independent Filtering Scheme for Statistical
  * Tests on Manifold-valued Data */
-// LONGTERM not implemented yet
-/* package */ enum SpdGeodesic implements GeodesicInterface {
+public enum SpdGeodesic implements GeodesicInterface {
   INSTANCE;
   // ---
   @Override // from TensorGeodesic
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
-    throw new UnsupportedOperationException();
+    Tensor w = SpdPointExponential.log(p, q);
+    return scalar -> SpdPointExponential.exp(p, w.multiply(scalar));
   }
 
   @Override // from GeodesicInterface
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
-    throw new UnsupportedOperationException();
+    return curve(p, q).apply(scalar);
   }
 }

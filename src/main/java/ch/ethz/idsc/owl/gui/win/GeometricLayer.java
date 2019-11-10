@@ -26,13 +26,13 @@ public class GeometricLayer {
 
   // ---
   private final Deque<AffineFrame2D> deque = new ArrayDeque<>();
-  private final Tensor mouseSe2State;
+  private final Tensor mouseSe2CState;
 
   /** @param model2pixel matrix of dimension 3x3 that becomes first element on matrix stack
-   * @param mouseSe2State typically a vector of length 3 */
-  public GeometricLayer(Tensor model2pixel, Tensor mouseSe2State) {
+   * @param mouseSe2CState typically a vector of length 3 */
+  public GeometricLayer(Tensor model2pixel, Tensor mouseSe2CState) {
     deque.push(new AffineFrame2D(model2pixel));
-    this.mouseSe2State = mouseSe2State.unmodifiable();
+    this.mouseSe2CState = mouseSe2CState.unmodifiable();
   }
 
   /** only the first 2 entries of x are taken into account
@@ -132,7 +132,7 @@ public class GeometricLayer {
    * 
    * @return {x, y, alpha} unmodifiable */
   public Tensor getMouseSe2State() {
-    return mouseSe2State.copy();
+    return mouseSe2CState.copy();
   }
 
   /** function allows to render lines with width defined in model coordinates

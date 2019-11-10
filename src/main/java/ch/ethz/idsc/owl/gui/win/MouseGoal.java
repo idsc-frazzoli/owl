@@ -57,7 +57,7 @@ public enum MouseGoal {
         final int mask = InputEvent.CTRL_DOWN_MASK; // 128 = 2^7
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
           if ((mods & mask) == 0) // no ctrl pressed
-            goalConsumer.accept(geometricComponent.getMouseSe2State());
+            goalConsumer.accept(geometricComponent.getMouseSe2CState());
         }
       }
     };

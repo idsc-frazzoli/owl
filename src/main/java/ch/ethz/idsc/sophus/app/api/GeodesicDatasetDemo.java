@@ -20,7 +20,7 @@ public abstract class GeodesicDatasetDemo extends GeodesicDisplayDemo {
       spinnerLabelString.setList(gokartPoseData.list());
       spinnerLabelString.addSpinnerListener(type -> updateState());
       spinnerLabelString.setIndex(0);
-      spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(200, 28), "data");
+      spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "data");
     }
     {
       spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
