@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.app.jph;
+package ch.ethz.idsc.sophus.app.hs;
 
 import java.io.File;
 import java.io.IOException;
