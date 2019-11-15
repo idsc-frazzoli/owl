@@ -30,8 +30,8 @@ import ch.ethz.idsc.tensor.red.Norm;
   static final LieExponential LIE_EXPONENTIAL = Se2CoveringExponential.INSTANCE;
   // private static final BiinvariantMean BIINVARIANT_MEAN = Se2CoveringBiinvariantMean.INSTANCE;
   static final Function<Scalar, ? extends Tensor> FUNCTION = ColorDataGradients.JET;
-  private static final int ROWS = 135 * 4;
-  private static final int COLS = 240 * 4;
+  private static final int ROWS = 135 * 8;
+  private static final int COLS = 240 * 8;
   // ---
   private final int levels;
   private final File folder;
@@ -64,6 +64,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     // Tensor vector = Differences.of(Tensor.of(refined.stream().map(point -> point.get(1, 1))));
     // return Log.FUNCTION.apply(Norm._1.ofVector(vector).add(RealScalar.ONE));
     // Tensor vector = Flatten.of(Differences.of(Tensor.of(refined.stream().map(point -> point.get(1)))));
+    // return Norm._1.ofVector(Differences.of(vector));
     return Norm._1.ofVector(vector);
   }
 

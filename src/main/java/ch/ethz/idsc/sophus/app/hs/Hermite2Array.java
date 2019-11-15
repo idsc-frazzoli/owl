@@ -26,16 +26,16 @@ import ch.ethz.idsc.tensor.sca.Log;
 
   @Override // from HermiteArray
   Tensor compute(int rows, int cols) {
-    Tensor lambda = Subdivide.of(RationalScalar.of(-1, 1), RealScalar.ZERO, rows - 1);
-    Tensor mu = Subdivide.of(RationalScalar.of(-1, 1), RealScalar.ONE, cols - 1);
-    return Parallelize.matrix((i, j) -> h2(lambda.Get(i), mu.Get(j)), rows, cols);
+    Tensor mu = Subdivide.of(RationalScalar.of(-1, 1), RationalScalar.of(+2, 1), rows - 1);
+    Tensor lambda = Subdivide.of(RationalScalar.of(-2, 1), RationalScalar.of(+3, 1), cols - 1);
+    return Parallelize.matrix((i, j) -> h2(lambda.Get(j), mu.Get(i)), rows, cols);
   }
 
   public static void main(String[] args) throws IOException {
     int levels = 4;
     HermiteArray hermiteArray = //
         new Hermite2Array("20190701T163225_01", Quantity.of(RationalScalar.of(1, 1), "s"), levels);
-    File folder = HomeDirectory.Pictures(hermiteArray.getClass().getSimpleName(), String.format("cx_%1d", levels));
+    File folder = HomeDirectory.Pictures(hermiteArray.getClass().getSimpleName(), String.format("cs_%1d", levels));
     folder.mkdirs();
     Tensor matrix = hermiteArray.getMatrix();
     export(new File(folder, "id"), matrix);

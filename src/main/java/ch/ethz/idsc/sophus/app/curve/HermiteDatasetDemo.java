@@ -1,9 +1,11 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.curve;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
@@ -44,7 +46,8 @@ import ch.ethz.idsc.tensor.sca.Power;
   // private static final Color COLOR_SHAPE = new Color(160, 160, 160, 160);
   private static final Color COLOR_RECON = new Color(128, 128, 128, 255);
   // ---
-  private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE);
+  private static final Stroke STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
+  private final PathRender pathRenderCurve = new PathRender(COLOR_CURVE, STROKE);
   private final PathRender pathRenderShape = new PathRender(COLOR_RECON, 2f);
   // ---
   private final GokartPoseDataV2 gokartPoseData;
@@ -174,7 +177,7 @@ import ch.ethz.idsc.tensor.sca.Power;
     GraphicsUtil.setQualityHigh(graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
     {
-      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(0.3));
+      final Tensor shape = geodesicDisplay.shape().multiply(RealScalar.of(1));
       pathRenderCurve.setCurve(_control.get(Tensor.ALL, 0), false).render(geometricLayer, graphics);
       if (_control.length() <= 1000)
         for (Tensor point : _control.get(Tensor.ALL, 0)) {
