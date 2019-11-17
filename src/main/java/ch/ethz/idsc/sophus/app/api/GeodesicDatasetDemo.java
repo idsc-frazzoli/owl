@@ -23,7 +23,7 @@ public abstract class GeodesicDatasetDemo extends GeodesicDisplayDemo {
       spinnerLabelString.addToComponentReduced(timerFrame.jToolBar, new Dimension(180, 28), "data");
     }
     {
-      spinnerLabelLimit.setList(Arrays.asList(500, 1000, 1500, 2000, 3000, 5000));
+      spinnerLabelLimit.setList(Arrays.asList(500, 750, 800, 900, 1000, 1500, 2000, 3000, 5000));
       spinnerLabelLimit.setIndex(1);
       spinnerLabelLimit.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "limit");
       spinnerLabelLimit.addSpinnerListener(type -> updateState());

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.sophus.app.jph;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
@@ -9,7 +10,6 @@ import java.util.Arrays;
 import javax.swing.JButton;
 
 import ch.ethz.idsc.owl.gui.GraphicsUtil;
-import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
@@ -56,11 +56,19 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     GraphicsUtil.setQualityHigh(graphics);
-    AxesRender.INSTANCE.render(geometricLayer, graphics);
+    // AxesRender.INSTANCE.render(geometricLayer, graphics);
     // ---
     ScalarTensorFunction scalarTensorFunction = SpdGeodesic.INSTANCE.curve(p, q);
     graphics.setStroke(new BasicStroke(1.5f));
+    graphics.setColor(Color.LIGHT_GRAY);
     for (Tensor _t : Subdivide.of(0, 1, spinnerRefine.getValue())) {
+      geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.of(_t.multiply(RealScalar.of(10)), RealScalar.ZERO)));
+      Tensor pq = scalarTensorFunction.apply(_t.Get());
+      graphics.draw(geometricLayer.toPath2D(CIRCLE_POINTS.dot(pq), true));
+      geometricLayer.popMatrix();
+    }
+    graphics.setColor(Color.BLUE);
+    for (Tensor _t : Subdivide.of(0, 1, 1)) {
       geometricLayer.pushMatrix(Se2Matrix.translation(Tensors.of(_t.multiply(RealScalar.of(10)), RealScalar.ZERO)));
       Tensor pq = scalarTensorFunction.apply(_t.Get());
       graphics.draw(geometricLayer.toPath2D(CIRCLE_POINTS.dot(pq), true));

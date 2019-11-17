@@ -14,7 +14,7 @@ public class SpdExponentialTest extends TestCase {
       Tensor x = TestHelper.generateSim(n);
       Tensor g = SpdExponential.INSTANCE.exp(x);
       Tensor r = SpdExponential.INSTANCE.log(g);
-      Chop._10.requireClose(x, r);
+      Chop._07.requireClose(x, r);
     }
   }
 
@@ -23,7 +23,7 @@ public class SpdExponentialTest extends TestCase {
       Tensor x = TestHelper.generateSim(n);
       Tensor exp1 = SpdExponential.INSTANCE.exp(x);
       Tensor exp2 = MatrixExp.of(x);
-      Chop._10.requireClose(exp1, exp2);
+      Chop._07.requireClose(exp1, exp2);
     }
   }
 

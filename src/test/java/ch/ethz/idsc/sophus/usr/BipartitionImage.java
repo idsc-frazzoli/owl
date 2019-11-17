@@ -23,25 +23,27 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Norm;
 
 // 4 22 35
-/* package */ enum BipartitionImage {
-  ;
-  private static Tensor image(int seed) {
+/* package */ class BipartitionImage {
+  BufferedImage bufferedImage = StaticHelper.createWhite(192 * 2);
+  Graphics2D graphics = bufferedImage.createGraphics();
+
+  public BipartitionImage(int seed, boolean lines) {
     Random random = new Random(seed);
     Tensor points1 = RandomVariate.of(UniformDistribution.unit(), random, 9, 2);
     Tensor points2 = RandomVariate.of(UniformDistribution.unit(), random, 13, 2);
     // Tensor cost = points1.stream().map(p -> Tensor.of(points2.stream().map(r -> Norm._2.between(p, r))));
     Tensor matrix = Tensors.matrix((i, j) -> Norm._2.between(points1.get(i), points2.get(j)), points1.length(), points2.length());
     HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);
-    GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2);
-    BufferedImage bufferedImage = StaticHelper.createWhite();
-    Graphics2D graphics = bufferedImage.createGraphics();
+    GeometricLayer geometricLayer = GeometricLayer.of(StaticHelper.SE2_2);
     GraphicsUtil.setQualityHigh(graphics);
     graphics.setColor(new Color(128 * 0, 128 * 0, 255));
-    int[] m = hungarianAlgorithm.matching();
-    for (int index = 0; index < m.length; ++index) {
-      Path2D path2d = geometricLayer.toPath2D(Tensors.of(points1.get(index), points2.get(m[index])));
-      path2d.closePath();
-      graphics.draw(path2d);
+    if (lines) {
+      int[] m = hungarianAlgorithm.matching();
+      for (int index = 0; index < m.length; ++index) {
+        Path2D path2d = geometricLayer.toPath2D(Tensors.of(points1.get(index), points2.get(m[index])));
+        path2d.closePath();
+        graphics.draw(path2d);
+      }
     }
     graphics.setColor(Color.RED);
     for (Tensor point : points1) {
@@ -57,18 +59,24 @@ import ch.ethz.idsc.tensor.red.Norm;
       graphics.fill(path2d);
       geometricLayer.popMatrix();
     }
-    return ImageFormat.from(bufferedImage);
+    // bufferedImage;
   }
 
   public static void main(String[] args) throws IOException {
     File folder = HomeDirectory.Pictures(BipartitionImage.class.getSimpleName());
     folder.mkdir();
     for (int seed = 0; seed < 50; ++seed) {
-      Tensor tensor = image(seed);
-      Export.of(new File(folder, String.format("%03d.png", seed)), tensor);
+      {
+        Tensor tensor = ImageFormat.from(new BipartitionImage(seed, false).bufferedImage);
+        Export.of(new File(folder, String.format("%03da.png", seed)), tensor);
+      }
+      {
+        Tensor tensor = ImageFormat.from(new BipartitionImage(seed, true).bufferedImage);
+        Export.of(new File(folder, String.format("%03db.png", seed)), tensor);
+      }
     }
     {
-      Export.of(HomeDirectory.Pictures(BipartitionImage.class.getSimpleName() + ".png"), image(35));
+      // Export.of(HomeDirectory.Pictures(BipartitionImage.class.getSimpleName() + ".png"), image(35));
     }
   }
 }
