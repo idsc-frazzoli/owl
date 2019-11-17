@@ -24,8 +24,8 @@ public enum PolygonArea implements TensorScalarFunction {
   public Scalar apply(Tensor polygon) {
     if (Tensors.isEmpty(polygon))
       return RealScalar.ZERO;
-    Scalar sum = RealScalar.ZERO;
     Tensor prev = Last.of(polygon);
+    Scalar sum = Det2D.of(prev, prev);
     Iterator<Tensor> iterator = polygon.iterator();
     while (iterator.hasNext())
       sum = sum.add(Det2D.of(prev, prev = iterator.next()));
