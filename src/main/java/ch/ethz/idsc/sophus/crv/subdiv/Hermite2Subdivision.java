@@ -33,8 +33,14 @@ public class Hermite2Subdivision implements HermiteSubdivision, Serializable {
 
   /** @param lieGroup
    * @param lieExponential
+   * @param lgg
+   * @param lgv
+   * @param hgv
+   * @param hvg
+   * @param vpq
    * @throws Exception if either parameters is null */
-  public Hermite2Subdivision(LieGroup lieGroup, LieExponential lieExponential, //
+  public Hermite2Subdivision( //
+      LieGroup lieGroup, LieExponential lieExponential, //
       Scalar lgg, Scalar lgv, Scalar hgv, Scalar hvg, Tensor vpq) {
     this.lieGroup = lieGroup;
     this.lieExponential = lieExponential;

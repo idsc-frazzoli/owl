@@ -37,14 +37,14 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
 
   /** @param lieGroup
    * @param lieExponential
-   * @param biinvariantMean
+   * @param tripleCenter
    * @param mgv
    * @param mvg
    * @param mvv
-   * @param cgw vector of length 3
    * @param cgv
    * @param vpr
-   * @param vpqr */
+   * @param vpqr
+   * @throws Exception if either parameters is null */
   public Hermite3Subdivision( //
       LieGroup lieGroup, LieExponential lieExponential, TensorUnaryOperator tripleCenter, //
       Scalar mgv, Scalar mvg, Scalar mvv, //
@@ -97,7 +97,6 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
       Tensor rg = r.get(0);
       Tensor rv = r.get(1);
       Tensor cg1 = tripleCenter.apply(Unprotect.byRef(pg, qg, rg));
-      // biinvariantMean.mean(Unprotect.byRef(pg, qg, rg), cgw);
       Tensor cg2 = rv.subtract(pv).multiply(cgk);
       Tensor cg = lieGroup.element(cg1).combine(cg2);
       Tensor log = lieExponential.log(lieGroup.element(pg).inverse().combine(rg)); // r - p
@@ -115,7 +114,7 @@ public class Hermite3Subdivision implements HermiteSubdivision, Serializable {
       Tensor pv = p.get(1);
       Tensor qg = q.get(0);
       Tensor qv = q.get(1);
-      Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg); // .mean(Unprotect.byRef(pg, qg), MGW);
+      Tensor rg1 = lieGroupGeodesic.midpoint(pg, qg);
       Tensor rg2 = lieExponential.exp(qv.subtract(pv).multiply(rgk));
       Tensor rg = lieGroup.element(rg1).combine(rg2);
       // ---

@@ -28,7 +28,9 @@ public class Hermite1Subdivision implements HermiteSubdivision, Serializable {
    * @param lvg
    * @param lvv
    * @throws Exception if either parameters is null */
-  public Hermite1Subdivision(LieGroup lieGroup, LieExponential lieExponential, Scalar lgv, Scalar lvg, Scalar lvv) {
+  public Hermite1Subdivision( //
+      LieGroup lieGroup, LieExponential lieExponential, //
+      Scalar lgv, Scalar lvg, Scalar lvv) {
     this.lieGroup = lieGroup;
     this.lieExponential = lieExponential;
     lieGroupGeodesic = new LieGroupGeodesic(lieGroup, lieExponential);
