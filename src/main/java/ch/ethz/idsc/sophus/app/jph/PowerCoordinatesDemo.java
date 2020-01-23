@@ -11,12 +11,13 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
+import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.sophus.ply.Polygons;
@@ -48,6 +49,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
   // ---
   private final SpinnerLabel<Barycentric> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
+  private final SpinnerLabel<Integer> spinnerFactor = new SpinnerLabel<>();
 
   public PowerCoordinatesDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_R2);
@@ -61,13 +63,20 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
       spinnerRefine.setIndex(0);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
     }
+    {
+      spinnerFactor.setList(Arrays.asList(1, 2, 5, 10));
+      spinnerFactor.setIndex(0);
+      spinnerFactor.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "factor");
+    }
     setControlPointsSe2(Tensors.fromString("{{0, -2, 0}, {3, -2, -1}, {4, 2, 1}, {-1, 3, 2}}"));
   }
 
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
+    AxesRender.INSTANCE.render(geometricLayer, graphics);
     GeodesicDisplay geodesicDisplay = geodesicDisplay();
-    Tensor controlPointsSe2 = getGeodesicControlPoints();
+    Scalar factor = RealScalar.of(spinnerFactor.getValue());
+    Tensor controlPointsSe2 = getGeodesicControlPoints().multiply(factor);
     renderControlPoints(geometricLayer, graphics);
     BiinvariantMean biinvariantMean = geodesicDisplay.biinvariantMean();
     Tensor domain = Tensor.of(controlPointsSe2.stream().map(Extract2D.FUNCTION));
@@ -78,7 +87,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
         {
           graphics.setColor(Color.LIGHT_GRAY);
           graphics.setStroke(STROKE);
-          Path2D path2d = geometricLayer.toPath2D(hull);
+          Path2D path2d = geometricLayer.toPath2D(hull.divide(factor));
           path2d.closePath();
           graphics.draw(path2d);
           graphics.setStroke(new BasicStroke(1));
@@ -99,7 +108,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
               Tensor weights = powerCoordinates.weights(domain, px);
               wgs.set(weights, c0, c1);
               Tensor mean = biinvariantMean.mean(controlPointsSe2, weights);
-              array[c0][c1] = mean;
+              array[c0][c1] = mean.divide(factor);
             }
             ++c1;
           }

@@ -6,11 +6,11 @@ import java.io.IOException;
 
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.Curvature2D;
+import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
+import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.CurveSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;

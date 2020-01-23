@@ -15,7 +15,8 @@ import javax.swing.JToggleButton;
 
 import org.jfree.chart.JFreeChart;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDatasetDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
@@ -23,9 +24,8 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PathRender;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDatas;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
+import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
+import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.lie.so2.So2Lift;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.TensorIteration;

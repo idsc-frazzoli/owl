@@ -10,8 +10,8 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.bot.rn.rrts.RnRrtsNodeCollection;
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
@@ -74,7 +74,7 @@ public class TransitionNdContainer {
     Scalar sqrt = Sqrt.FUNCTION.apply(RationalScalar.of(10, rrtsNodeCollection.size()));
     Tensor shape = geodesicDisplay.shape().multiply(sqrt);
     Tensor _tensor = Tensor.of(tensor.stream().map(geodesicDisplay::project).map(N.DOUBLE::of));
-    pointsRender.new Show(geodesicDisplay, shape, _tensor).render(geometricLayer, graphics);
+    pointsRender.show(geodesicDisplay::matrixLift, shape, _tensor).render(geometricLayer, graphics);
     // ---
     {
       geometricLayer.pushMatrix(geodesicDisplay.matrixLift(mouse));

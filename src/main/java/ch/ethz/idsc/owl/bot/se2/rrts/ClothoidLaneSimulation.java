@@ -190,7 +190,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     laneRender.setLane(lane, false);
     laneRender.render(geometricLayer, graphics);
     PointsRender pointsRender = new PointsRender(new Color(255, 128, 128, 64), new Color(255, 128, 128, 255));
-    pointsRender.new Show(GEODESIC_DISPLAY, GEODESIC_DISPLAY.shape(), lane.controlPoints()).render(geometricLayer, graphics);
+    pointsRender.show(GEODESIC_DISPLAY::matrixLift, GEODESIC_DISPLAY.shape(), lane.controlPoints()).render(geometricLayer, graphics);
     return graphics;
   }
 }

@@ -8,6 +8,7 @@ import java.awt.geom.Path2D;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 public class PointsRender {
   private final Color color_fill;
@@ -18,13 +19,17 @@ public class PointsRender {
     this.color_draw = color_draw;
   }
 
-  public class Show implements RenderInterface {
-    private final GeodesicDisplay geodesicDisplay;
+  public RenderInterface show(TensorUnaryOperator matrixLift, Tensor shape, Tensor points) {
+    return new Show(matrixLift, shape, points);
+  }
+
+  private class Show implements RenderInterface {
+    private final TensorUnaryOperator matrixLift;
     private final Tensor shape;
     private final Tensor points;
 
-    public Show(GeodesicDisplay geodesicDisplay, Tensor shape, Tensor points) {
-      this.geodesicDisplay = geodesicDisplay;
+    public Show(TensorUnaryOperator matrixLift, Tensor shape, Tensor points) {
+      this.matrixLift = matrixLift;
       this.shape = shape;
       this.points = points;
     }
@@ -32,7 +37,7 @@ public class PointsRender {
     @Override
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
       for (Tensor point : points) {
-        geometricLayer.pushMatrix(geodesicDisplay.matrixLift(point));
+        geometricLayer.pushMatrix(matrixLift.apply(point));
         Path2D path2d = geometricLayer.toPath2D(shape);
         path2d.closePath();
         graphics.setColor(color_fill);

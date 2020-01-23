@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
 import ch.ethz.idsc.sophus.crv.Curvature2D;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
+import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.se2c.Se2CoveringExponential;

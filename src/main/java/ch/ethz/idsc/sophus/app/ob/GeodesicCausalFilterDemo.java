@@ -7,11 +7,11 @@ import java.util.Arrays;
 
 import javax.swing.JSlider;
 
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.filter.DatasetKernelDemo;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.flt.WindowSideExtrapolation;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanFIRnFilter;
 import ch.ethz.idsc.sophus.flt.bm.BiinvariantMeanIIRnFilter;

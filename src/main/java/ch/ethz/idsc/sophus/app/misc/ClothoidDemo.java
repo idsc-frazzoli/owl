@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.red.Nest;
         new PathRender(COLOR_DATA_INDEXED.getColor(2), 1.5f) //
             .setCurve(points, false).render(geometricLayer, graphics);
       }
-      POINTS_RENDER_P.new Show(ClothoidDisplay.INSTANCE, Arrowhead.of(0.3), ARROWS.map(curve)) //
+      POINTS_RENDER_P.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
           .render(geometricLayer, graphics);
     }
     { // common clothoid
@@ -87,7 +87,7 @@ import ch.ethz.idsc.tensor.red.Nest;
         new PathRender(COLOR_DATA_INDEXED.getColor(3), 1.5f) //
             .setCurve(points, false).render(geometricLayer, graphics);
       }
-      POINTS_RENDER_C.new Show(ClothoidDisplay.INSTANCE, Arrowhead.of(0.3), ARROWS.map(curve)) //
+      POINTS_RENDER_C.show(ClothoidDisplay.INSTANCE::matrixLift, Arrowhead.of(0.3), ARROWS.map(curve)) //
           .render(geometricLayer, graphics);
     }
   }

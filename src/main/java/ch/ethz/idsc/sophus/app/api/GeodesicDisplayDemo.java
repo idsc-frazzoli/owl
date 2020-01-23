@@ -4,10 +4,10 @@ package ch.ethz.idsc.sophus.app.api;
 import java.awt.Dimension;
 import java.util.List;
 
+import ch.ethz.idsc.java.awt.SpinnerLabel;
+import ch.ethz.idsc.java.awt.SpinnerListener;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
-import ch.ethz.idsc.sophus.app.util.SpinnerListener;
 
 public abstract class GeodesicDisplayDemo extends AbstractDemo implements DemoInterface {
   private final SpinnerLabel<GeodesicDisplay> geodesicDisplaySpinner = new SpinnerLabel<>();

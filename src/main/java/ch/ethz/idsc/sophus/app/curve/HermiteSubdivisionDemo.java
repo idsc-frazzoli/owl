@@ -11,6 +11,7 @@ import javax.swing.JToggleButton;
 
 import org.jfree.chart.JFreeChart;
 
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
@@ -20,10 +21,9 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.clothoid.ClothoidParametricDistance;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivisions;
+import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
+import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivisions;
 import ch.ethz.idsc.sophus.math.Distances;
 import ch.ethz.idsc.sophus.math.Do;
 import ch.ethz.idsc.sophus.math.Extract2D;
@@ -77,7 +77,7 @@ public class HermiteSubdivisionDemo extends ControlPointsDemo {
     GRID_RENDER.render(geometricLayer, graphics);
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     final Tensor tensor = getControlPointsSe2();
-    POINTS_RENDER_0.new Show(Se2GeodesicDisplay.INSTANCE, //
+    POINTS_RENDER_0.show(Se2GeodesicDisplay.INSTANCE::matrixLift, //
         Se2GeodesicDisplay.INSTANCE.shape(), //
         tensor).render(geometricLayer, graphics);
     // renderControlPoints(geometricLayer, graphics);

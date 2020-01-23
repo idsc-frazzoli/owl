@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.crv.subdiv.HermiteSubdivision;
+import ch.ethz.idsc.sophus.crv.hermite.HermiteSubdivision;
 import ch.ethz.idsc.sophus.hs.r2.Se2ParametricDistance;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;

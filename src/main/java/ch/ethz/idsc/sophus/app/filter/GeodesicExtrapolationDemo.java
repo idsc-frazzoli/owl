@@ -5,10 +5,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.java.awt.BufferedImageSupplier;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV2;
-import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolation;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicExtrapolationFilter;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;

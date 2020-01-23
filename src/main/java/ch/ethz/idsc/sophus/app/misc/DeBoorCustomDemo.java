@@ -10,7 +10,7 @@ import java.awt.geom.Path2D;
 
 import javax.swing.JTextField;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.AbstractDemo;
@@ -54,6 +54,8 @@ import ch.ethz.idsc.tensor.opt.DeBoor;
           graphics.setColor(Color.LIGHT_GRAY);
           {
             Path2D path2d = geometricLayer.toPath2D(Tensors.fromString("{{0, 1}, {0, 0}, {1, 0}}"));
+            graphics.setStroke(new BasicStroke(2f));
+            graphics.setColor(Color.RED);
             graphics.draw(path2d);
           }
           for (int k_th = 0; k_th < length; ++k_th) {

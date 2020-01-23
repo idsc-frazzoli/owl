@@ -6,8 +6,8 @@ import java.awt.Graphics2D;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.bot.util.DemoInterface;
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;

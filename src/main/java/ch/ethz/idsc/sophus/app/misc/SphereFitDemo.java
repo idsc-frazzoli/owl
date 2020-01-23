@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import javax.swing.JTextField;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.red.Norm;
     Tensor blub = Tensors.fromString(
         "{{1, 0, 0}, {1, 0, 0}, {2, 0, 2.5708}, {1, 0, 2.1}, {1.5, 0, 0}, {2.3, 0, -1.2}, {1.5, 0, 0}, {4, 0, 3.14159}, {2, 0, 3.14159}, {2, 0, 0}}");
     setControlPointsSe2(DubinsGenerator.of(Tensors.vector(0, 0, 2.1), //
-        Tensor.of(blub.stream().map(row -> row.pmul(Tensors.vector(2, 1, 1))))));
+        Tensor.of(blub.stream().map(Tensors.vector(2, 1, 1)::pmul))));
   }
 
   @Override // from RenderInterface

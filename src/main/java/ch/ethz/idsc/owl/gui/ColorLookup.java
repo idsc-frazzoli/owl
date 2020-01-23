@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.gui;
 
+import ch.ethz.idsc.java.awt.Hsluv;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.img.ColorDataIndexed;
