@@ -5,14 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline4CurveSubdivision;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicMeanFilter;
 import ch.ethz.idsc.tensor.Tensor;

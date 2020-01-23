@@ -9,14 +9,14 @@ import java.util.Arrays;
 
 import javax.swing.JSlider;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.DubinsGenerator;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.misc.Curvature2DRender;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.crv.spline.GeodesicCatmullRom;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
 import ch.ethz.idsc.sophus.math.win.KnotSpacing;

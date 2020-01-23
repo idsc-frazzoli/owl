@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;

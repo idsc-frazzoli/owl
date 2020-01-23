@@ -15,11 +15,11 @@ package ch.ethz.idsc.owl.math.order;
  * <th>Instance</th>
  * </tr>
  * <tr>
- * <td>xRy and not yRX</td>
+ * <td>xRy and not yRx</td>
  * <td>STRICTLY_PRECEDES</td>
  * </tr>
  * <tr>
- * <td>yRX and not xRy</td>
+ * <td>yRx and not xRy</td>
  * <td>STRICTLY_SUCCEDES</td>
  * </tr>
  * <tr>

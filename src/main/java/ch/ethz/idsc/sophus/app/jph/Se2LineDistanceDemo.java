@@ -8,7 +8,7 @@ import java.awt.geom.Path2D;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;

@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.curve;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import ch.ethz.idsc.owl.gui.Hsluv;
+import ch.ethz.idsc.java.awt.Hsluv;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;

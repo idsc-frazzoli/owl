@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.hs;
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.sophus.crv.subdiv.Hermite3Subdivisions;
+import ch.ethz.idsc.sophus.crv.hermite.Hermite3Subdivisions;
 import ch.ethz.idsc.tensor.Parallelize;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;

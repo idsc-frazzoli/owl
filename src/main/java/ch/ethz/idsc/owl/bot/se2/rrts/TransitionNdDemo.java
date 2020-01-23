@@ -5,11 +5,11 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 

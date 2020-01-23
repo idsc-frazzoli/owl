@@ -9,13 +9,13 @@ import java.util.List;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.BufferedImageSupplier;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.ren.GridRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplayDemo;
 import ch.ethz.idsc.sophus.app.api.PathRender;
-import ch.ethz.idsc.sophus.app.util.BufferedImageSupplier;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

@@ -4,8 +4,8 @@ package ch.ethz.idsc.sophus.app.misc;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import ch.ethz.idsc.java.awt.GraphicsUtil;
 import ch.ethz.idsc.owl.bot.r2.CogPoints;
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;

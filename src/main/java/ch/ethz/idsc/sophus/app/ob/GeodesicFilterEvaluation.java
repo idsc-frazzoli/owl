@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.ethz.idsc.java.io.HtmlUtf8;
 import ch.ethz.idsc.sophus.app.io.GokartPoseDataV1;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
-import ch.ethz.idsc.subare.util.HtmlUtf8;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

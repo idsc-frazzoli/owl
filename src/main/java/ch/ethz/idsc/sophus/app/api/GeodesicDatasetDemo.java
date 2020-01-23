@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 
 public abstract class GeodesicDatasetDemo extends GeodesicDisplayDemo {
   protected final GokartPoseData gokartPoseData;

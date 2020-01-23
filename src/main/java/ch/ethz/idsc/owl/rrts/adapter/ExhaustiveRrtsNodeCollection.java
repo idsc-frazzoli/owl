@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.data.BoundedMinQueue;
+import ch.ethz.idsc.java.util.BoundedMinQueue;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
 import ch.ethz.idsc.owl.rrts.core.RrtsNodeCollection;
 import ch.ethz.idsc.owl.rrts.core.Transition;

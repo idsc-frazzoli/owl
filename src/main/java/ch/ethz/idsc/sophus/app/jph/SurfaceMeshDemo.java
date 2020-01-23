@@ -9,13 +9,13 @@ import java.util.Arrays;
 
 import javax.swing.JToggleButton;
 
-import ch.ethz.idsc.owl.gui.GraphicsUtil;
+import ch.ethz.idsc.java.awt.GraphicsUtil;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.srf.SurfaceMesh;
 import ch.ethz.idsc.sophus.srf.SurfaceMeshExamples;
 import ch.ethz.idsc.sophus.srf.subdiv.CatmullClarkRefinement;

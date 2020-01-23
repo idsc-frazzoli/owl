@@ -4,7 +4,7 @@ package ch.ethz.idsc.sophus.app.avg;
 import java.awt.Dimension;
 import java.util.Arrays;
 
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 
 /* package */ abstract class KernelSplitsDemo extends GeodesicSplitsDemo {

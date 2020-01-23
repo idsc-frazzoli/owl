@@ -10,6 +10,7 @@ import java.util.Random;
 
 import javax.swing.JToggleButton;
 
+import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.owl.gui.ren.AxesRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.rrts.core.RrtsNode;
@@ -19,7 +20,6 @@ import ch.ethz.idsc.sophus.app.api.AbstractDemo;
 import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
-import ch.ethz.idsc.sophus.app.util.SpinnerLabel;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
 import ch.ethz.idsc.tensor.RealScalar;
