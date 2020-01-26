@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
  * if the coordinate unit is [m], then the cost has unit [m^-2] */
 public enum ClothoidContinuityCostFunction implements TransitionCostFunction {
   INSTANCE;
-  // ---
+
   @Override // from TransitionCostFunction
   public Scalar cost(RrtsNode rrtsNode, Transition transition) {
     if (rrtsNode.isRoot())

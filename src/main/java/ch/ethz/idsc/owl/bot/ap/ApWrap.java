@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
 /** identifies (x, z, v, gamma) === (x, z, v, gamma + 2 pi n) for all n */
 /* package */ enum ApWrap implements CoordinateWrap {
   INSTANCE;
-  // ---
+
   private static final int INDEX_ANGLE = 3;
   private static final Mod MOD = Mod.function(Pi.TWO);
 

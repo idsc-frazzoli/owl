@@ -43,9 +43,8 @@ import ch.ethz.idsc.tensor.Tensor;
   FOURPOINT(FourPointCurveSubdivision::new, 6, 0, 3), //
   FOURPOINT2(CurveSubdivisionHelper::fps, 6, 0, 3), //
   C2CUBIC(DualC2FourPointCurveSubdivision::cubic, 6, 2, 3), //
-  SIXPOINT(SixPointCurveSubdivision::new, 6, 0, 5), //
-  ;
-  // ---
+  SIXPOINT(SixPointCurveSubdivision::new, 6, 0, 5);
+
   private final Function<GeodesicInterface, CurveSubdivision> function;
   private final int support;
   private final int index0;

@@ -9,7 +9,7 @@ import ch.ethz.idsc.owl.math.order.BinaryRelation;
  * <a href="https://reference.wolfram.com/language/ref/SubsetQ.html">SubsetQ</a> */
 public enum SubsetQ implements BinaryRelation<Collection<?>> {
   RELATION;
-  // ---
+
   @Override // from BinaryRelation
   public boolean test(Collection<?> subset, Collection<?> set) {
     return of(set, subset);

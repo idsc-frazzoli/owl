@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.alg.Join;
  * Lipschitz L == 1 */
 public enum DoubleIntegratorStateSpaceModel implements StateSpaceModel {
   INSTANCE;
-  // ---
+
   /** f((p, v), u) == (v, u) */
   @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {

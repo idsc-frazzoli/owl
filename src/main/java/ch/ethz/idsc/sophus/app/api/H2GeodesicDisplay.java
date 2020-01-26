@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public enum H2GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
-  // ---
+
   private static final Tensor TRIANGLE = CirclePoints.of(3).multiply(RealScalar.of(0.2));
   private static final ScalarUnaryOperator MAX_Y = Max.function(RealScalar.of(0.01));
 

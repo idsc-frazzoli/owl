@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
  * @see Se2CoveringWrap */
 public enum Se2Wrap implements CoordinateWrap {
   INSTANCE;
-  // ---
+
   private static final int INDEX_ANGLE = 2;
   private static final Mod MOD = Mod.function(Pi.TWO);
 

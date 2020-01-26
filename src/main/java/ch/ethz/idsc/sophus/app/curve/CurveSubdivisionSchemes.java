@@ -52,6 +52,7 @@ import ch.ethz.idsc.tensor.Tensors;
   SIXFAR(FarSixPointCurveSubdivision::new), //
   EIGHTPOINT(EightPointCurveSubdivision::new), //
   ;
+
   private final Function<GeodesicInterface, CurveSubdivision> function;
 
   private CurveSubdivisionSchemes(Function<GeodesicInterface, CurveSubdivision> function) {

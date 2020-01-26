@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.kl;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ enum Huarong {
+/* package */ enum Huarong implements KlotskiProblem {
   SIMPLE( //
       Tensors.vector(0, 1, 2)), //
   /** 19 */
@@ -212,13 +212,20 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 3, 1), //
       Tensors.vector(3, 4, 1), //
       Tensors.vector(3, 4, 4));
+
   private final Tensor tensor;
 
   private Huarong(Tensor... tensor) {
     this.tensor = Tensors.of(tensor);
   }
 
+  @Override
   public Tensor getBoard() {
     return tensor.copy();
+  }
+
+  @Override
+  public Tensor getGoal() {
+    return Tensors.vector(0, 4, 2);
   }
 }

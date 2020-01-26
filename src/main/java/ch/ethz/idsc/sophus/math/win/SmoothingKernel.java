@@ -37,24 +37,24 @@ public enum SmoothingKernel implements ScalarUnaryOperator {
   BARTLETT(BartlettWindow.FUNCTION), //
   BLACKMAN(BlackmanWindow.FUNCTION), //
   BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION), //
-  BLACKMAN_NUTTALL(BlackmanNuttallWindow.FUNCTION), //
+  BLACKMAN_NUTTALL(BlackmanNuttallWindow.FUNCTION),
   /** Dirichlet window
    * constant mask is used in {@link GeodesicMean} and {@link GeodesicMeanFilter} */
-  DIRICHLET(DirichletWindow.FUNCTION), //
+  DIRICHLET(DirichletWindow.FUNCTION),
   /** flat top kernel may consist of negative values or even values close to zero.
    * In a geodesic average this is likely to result in numerical instabilities. */
-  FLAT_TOP(FlatTopWindow.FUNCTION), //
+  FLAT_TOP(FlatTopWindow.FUNCTION),
   /** the Gaussian kernel works well in practice
    * in particular for masks of small support */
-  GAUSSIAN(GaussianWindow.FUNCTION), //
+  GAUSSIAN(GaussianWindow.FUNCTION),
   /** has nice properties in the frequency domain */
   HAMMING(HammingWindow.FUNCTION), //
   HANN(HannWindow.FUNCTION), //
   LANCZOS(LanczosWindow.FUNCTION), //
   NUTTALL(NuttallWindow.FUNCTION), //
   PARZEN(ParzenWindow.FUNCTION), //
-  TUKEY(TukeyWindow.FUNCTION), //
-  ;
+  TUKEY(TukeyWindow.FUNCTION);
+
   private final ScalarUnaryOperator scalarUnaryOperator;
 
   private SmoothingKernel(ScalarUnaryOperator scalarUnaryOperator) {

@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
 /** singleton instance */
 /* package */ enum PsuWrap implements CoordinateWrap {
   INSTANCE;
-  // ---
+
   private static final Mod MOD = Mod.function(Pi.TWO);
 
   @Override // from CoordinateWrap

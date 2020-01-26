@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public enum IdentityWrap implements CoordinateWrap {
   INSTANCE;
-  // ---
+
   @Override // from CoordinateWrap
   public Tensor represent(Tensor x) {
     return x.copy();

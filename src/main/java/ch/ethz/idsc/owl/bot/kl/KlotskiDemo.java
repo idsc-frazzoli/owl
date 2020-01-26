@@ -1,7 +1,7 @@
+// code by jph
 package ch.ethz.idsc.owl.bot.kl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -14,30 +14,18 @@ import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 
-enum KlotskiDemo {
+/* package */ enum KlotskiDemo {
   ;
-  public static void main(String[] args) throws IOException {
-    // initial state
-    Huarong huarong = Huarong.ANDROID;
-    Tensor board = huarong.getBoard();
+  static List<StateTime> compute(KlotskiProblem klotskiProblem, boolean print) {
     StateTimeRaster stateTimeRaster = StateTime::state;
-    List<Flow> controls = new ArrayList<>();
-    for (int index = 0; index < board.length(); ++index) {
-      controls.add(StateSpaceModels.createFlow(KlotskiModel.INSTANCE, Tensors.vector(index, -1, 0)));
-      controls.add(StateSpaceModels.createFlow(KlotskiModel.INSTANCE, Tensors.vector(index, +1, 0)));
-      controls.add(StateSpaceModels.createFlow(KlotskiModel.INSTANCE, Tensors.vector(index, 0, -1)));
-      controls.add(StateSpaceModels.createFlow(KlotskiModel.INSTANCE, Tensors.vector(index, 0, +1)));
-    }
-    System.out.println("controls: " + controls.size());
+    List<Flow> controls = KlotskiControls.of(klotskiProblem.getBoard());
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(HuarongObstacleRegion.INSTANCE);
     // ---
     StandardTrajectoryPlanner standardTrajectoryPlanner = new StandardTrajectoryPlanner( //
@@ -45,19 +33,19 @@ enum KlotskiDemo {
         KlotskiIntegrator.INSTANCE, //
         controls, //
         plannerConstraint, //
-        HuarongGoalAdapter.INSTANCE);
-    standardTrajectoryPlanner.insertRoot(new StateTime(board, RealScalar.ZERO));
+        new KlotskiGoalAdapter(klotskiProblem.getGoal()));
+    standardTrajectoryPlanner.insertRoot(new StateTime(klotskiProblem.getBoard(), RealScalar.ZERO));
     while (true) {
       {
         Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
         if (optional.isPresent()) {
-          System.out.println("BEST IN GOAL");
           GlcNode glcNode = optional.get();
-          System.out.println(glcNode.state());
-          System.out.println("$=" + glcNode.costFromRoot());
-          List<StateTime> list = GlcNodes.getPathFromRootTo(glcNode);
-          Export.object(HomeDirectory.file(huarong.name() + ".object"), list);
-          break;
+          if (print) {
+            System.out.println(glcNode.state());
+            System.out.println("BEST IN GOAL");
+            System.out.println("$=" + glcNode.costFromRoot());
+          }
+          return GlcNodes.getPathFromRootTo(glcNode);
         }
       }
       Optional<GlcNode> optional = standardTrajectoryPlanner.pollNext();
@@ -65,7 +53,6 @@ enum KlotskiDemo {
         Collection<GlcNode> queue = standardTrajectoryPlanner.getQueue();
         Map<Tensor, GlcNode> domainMap = standardTrajectoryPlanner.getDomainMap();
         GlcNode nextNode = optional.get();
-        // System.out.println(glcNode.costFromRoot());
         standardTrajectoryPlanner.expand(nextNode);
         for (Entry<Tensor, GlcNode> entry : domainMap.entrySet()) {
           GlcNode glcNode = entry.getValue();
@@ -73,20 +60,18 @@ enum KlotskiDemo {
             System.err.println("problem");
           }
         }
-        // standardTrajectoryPlanner.getBestOrElsePeek();
-        System.out.println(String.format("#=%3d   q=%3d   $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
-        // ++expandCount;
+        if (print)
+          System.out.println(String.format("#=%3d   q=%3d   $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
       } else { // queue is empty
         System.out.println("*** Queue is empty -- No Goal was found ***");
-        break;
+        return null;
       }
     }
-    // Expand<GlcNode> expand = new Expand<>(standardTrajectoryPlanner);
-    // expand.findAny(1000);
-    // Optional<GlcNode> optional = standardTrajectoryPlanner.getBestOrElsePeek();
-    // if (optional.isPresent()) {
-    // GlcNode glcNode = optional.get();
-    // System.out.println(glcNode.state());
-    // }
+  }
+
+  public static void main(String[] args) throws IOException {
+    KlotskiProblem klotskiProblem = Pennant.PUZZLE;
+    List<StateTime> list = compute(klotskiProblem, true);
+    Export.object(HomeDirectory.file(klotskiProblem.name() + ".object"), list);
   }
 }

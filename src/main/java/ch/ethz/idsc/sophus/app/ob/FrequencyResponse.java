@@ -20,8 +20,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * "H=Y/U is the frequency response of the system" */
 /* package */ enum FrequencyResponse implements TensorUnaryOperator {
   MAGNITUDE(Scalar::abs), //
-  PHASE(Arg.FUNCTION), //
-  ;
+  PHASE(Arg.FUNCTION);
+
   private final ScalarUnaryOperator scalarUnaryOperator;
 
   private FrequencyResponse(ScalarUnaryOperator scalarUnaryOperator) {

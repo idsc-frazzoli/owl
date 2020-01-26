@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 public enum St1GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
-  // ---
+
   private static final Tensor PENTAGON = CirclePoints.of(5).multiply(RealScalar.of(0.2));
   // Fehlerhaft, aber zurzeit Probleme mit Ausnahme bei lambda = 0
   private static final ScalarUnaryOperator MAX_X = Max.function(RealScalar.of(0.001));

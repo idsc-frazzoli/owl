@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ enum HuarongObstacleRegion implements Region<Tensor> {
   INSTANCE;
-  // ---
+
   @Override
   public boolean isMember(Tensor state) {
     int[][] array = new int[7][6];

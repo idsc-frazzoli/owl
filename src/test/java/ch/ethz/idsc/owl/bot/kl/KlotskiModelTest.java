@@ -7,8 +7,12 @@ import junit.framework.TestCase;
 
 public class KlotskiModelTest extends TestCase {
   public void testSimple() {
-    for (Huarong huarong : Huarong.values())
-      assertEquals(huarong.getBoard(), KlotskiModel.INSTANCE.f(huarong.getBoard(), Tensors.vector(0, 0, 0)));
+    for (KlotskiProblem klotskiProblem : Huarong.values())
+      assertEquals(klotskiProblem.getBoard(), //
+          KlotskiModel.INSTANCE.f(klotskiProblem.getBoard(), Tensors.vector(0, 0, 0)));
+    for (KlotskiProblem klotskiProblem : Pennant.values())
+      assertEquals(klotskiProblem.getBoard(), //
+          KlotskiModel.INSTANCE.f(klotskiProblem.getBoard(), Tensors.vector(0, 0, 0)));
   }
 
   public void testMove() {

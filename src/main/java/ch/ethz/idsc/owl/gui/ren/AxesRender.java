@@ -12,14 +12,13 @@ import ch.ethz.idsc.tensor.Tensors;
 /** rendering of x and y axes with helper line */
 public enum AxesRender implements RenderInterface {
   INSTANCE;
-  // ---
+
   private static final Tensor AXIS_X = Tensors.matrixInt(new int[][] { { -10, 0 }, { 10, 0 } });
   private static final Tensor AXIS_Y = Tensors.matrixInt(new int[][] { { 0, -10 }, { 0, 10 } });
   // ---
   private static final Tensor HELP_X = Tensors.matrixInt(new int[][] { { -10, 1 }, { 10, 1 } });
   private static final Tensor HELP_Y = Tensors.matrixInt(new int[][] { { 1, -10 }, { 1, 10 } });
 
-  // ---
   @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     {

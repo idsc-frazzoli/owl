@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ enum ArgMinComparator implements Comparator<Tensor> {
   INSTANCE;
-  // ---
+
   @Override // from Comparator
   public int compare(Tensor t1, Tensor t2) {
     if (Objects.isNull(t1))

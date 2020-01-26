@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * 11x faster than {@link RungeKutta45Integrator} */
 public enum Se2CarIntegrator implements Integrator {
   INSTANCE;
-  // ---
+
   /** Parameter description:
    * g in SE2
    * h in R */

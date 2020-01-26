@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * states are encoded in the default coordinates of the se2 Lie-algebra. */
 public enum Se2FlowIntegrator implements Integrator {
   INSTANCE;
-  // ---
+
   /** Parameter description:
    * g in SE2
    * h in R */

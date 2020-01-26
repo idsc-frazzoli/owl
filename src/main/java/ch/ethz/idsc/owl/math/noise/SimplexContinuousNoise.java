@@ -15,9 +15,8 @@ package ch.ethz.idsc.owl.math.noise;
  * Stefan Gustavson. You may use it as you see fit, but attribution is appreciated. */
 public enum SimplexContinuousNoise implements NativeContinuousNoise {
   FUNCTION;
-  // ---
-  private static final Grad[] GRAD3 = {
-      // ---
+
+  private static final Grad[] GRAD3 = { //
       new Grad(1, 1, 0), //
       new Grad(-1, 1, 0), //
       new Grad(1, -1, 0), //
@@ -31,8 +30,7 @@ public enum SimplexContinuousNoise implements NativeContinuousNoise {
       new Grad(0, 1, -1), //
       new Grad(0, -1, -1) };
   // ---
-  private static final Grad[] GRAD4 = {
-      // ---
+  private static final Grad[] GRAD4 = { //
       new Grad(0, 1, 1, 1), //
       new Grad(0, 1, 1, -1), //
       new Grad(0, 1, -1, 1), //

@@ -8,9 +8,8 @@ public enum StreetScenario {
   S5, //
   S6, //
   S7, //
-  S8, //
-  ;
-  // ---
+  S8;
+
   public StreetScenarioData load() {
     return StreetScenarioData.load(name().toLowerCase());
   }

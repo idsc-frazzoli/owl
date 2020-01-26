@@ -8,9 +8,8 @@ import ch.ethz.idsc.tensor.img.ColorDataIndexed;
  * to the dimension of the state space */
 /* package */ enum TreeColor {
   LO(128, 76), //
-  HI(51, 19), //
-  ;
-  // ---
+  HI(51, 19);
+
   public static TreeColor ofDimensions(int dims) {
     return dims <= 2 ? LO : HI;
   }

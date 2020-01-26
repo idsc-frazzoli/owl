@@ -9,7 +9,7 @@ import java.util.Optional;
  * all intersection queries with a trajectory return: "empty intersection" */
 public enum EmptyTrajectoryRegionQuery implements TrajectoryRegionQuery {
   INSTANCE;
-  // ---
+
   @Override // from TrajectoryRegionQuery
   public Optional<StateTime> firstMember(List<StateTime> trajectory) {
     return Optional.empty();

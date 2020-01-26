@@ -48,9 +48,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
           geodesicDisplay.biinvariantMean(), MonomialExtrapolationMask.INSTANCE);
       return GeodesicIIRn.of(geodesicExtrapolation, geodesicDisplay.geodesicInterface(), radius, alpha);
     }
-  }, //
-  ;
-  // ---
+  };
+
   public abstract TensorUnaryOperator supply( //
       GeodesicDisplay geodesicDisplay, ScalarUnaryOperator smoothingKernel, int radius, Scalar alpha);
 }

@@ -7,7 +7,7 @@ import java.util.List;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public enum LexicographicTotalOrder implements Comparator<List<Comparable>> {
   INSTANCE;
-  // ---
+
   @Override // from Comparator
   public int compare(List<Comparable> x, List<Comparable> y) {
     if (x.size() != y.size())

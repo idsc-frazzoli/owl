@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * Numerical Recipes 3rd Edition (17.2.3) */
 public enum RungeKutta45Integrator implements Integrator {
   INSTANCE;
-  // ---
+
   private static final Scalar HALF = RationalScalar.HALF;
   private static final Scalar THIRD = RationalScalar.of(1, 3);
   private static final Scalar SIXTH = RationalScalar.of(1, 6);

@@ -5,7 +5,9 @@ import junit.framework.TestCase;
 
 public class HuarongObstacleRegionTest extends TestCase {
   public void testSimple() {
-    for (Huarong huarong : Huarong.values())
-      assertFalse(HuarongObstacleRegion.INSTANCE.isMember(huarong.getBoard()));
+    for (KlotskiProblem klotskiProblem : Huarong.values())
+      assertFalse(HuarongObstacleRegion.INSTANCE.isMember(klotskiProblem.getBoard()));
+    for (KlotskiProblem klotskiProblem : Pennant.values())
+      assertFalse(HuarongObstacleRegion.INSTANCE.isMember(klotskiProblem.getBoard()));
   }
 }

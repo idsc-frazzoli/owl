@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public enum VoidPursuit implements PursuitInterface {
   INSTANCE;
-  // ---
+
   @Override // from GeodesicPursuitInterface
   public Optional<Scalar> firstRatio() {
     return Optional.empty();

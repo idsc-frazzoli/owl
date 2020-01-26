@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
 /** kinematic car model */
 public enum Se2CarLieIntegrator implements LieIntegrator {
   INSTANCE;
-  // ---
+
   /** function integrates the special case where the y-component of x
    * is constrained to equal 0.
    * 

@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * see also {@link DoubleIntegratorStateSpaceModel} */
 public enum SingleIntegratorStateSpaceModel implements StateSpaceModel {
   INSTANCE;
-  // ---
+
   /** f(x, u) == u */
   @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {

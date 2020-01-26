@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Scalars;
  * used in rrts and glc */
 public enum NodeCostComparator implements Comparator<StateCostNode> {
   INSTANCE;
-  // ---
+
   @Override
   public int compare(StateCostNode o1, StateCostNode o2) {
     return Scalars.compare(o1.costFromRoot(), o2.costFromRoot());

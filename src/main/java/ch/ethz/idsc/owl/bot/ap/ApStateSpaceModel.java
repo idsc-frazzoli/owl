@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * @param u = {thrust, angle of attack (aoa)} */
 /* package */ enum ApStateSpaceModel implements StateSpaceModel {
   INSTANCE;
-  // ---
+
   /** acceleration of gravity [m*s^-2] */
   private static final Scalar GRAVITY = RealScalar.of(9.81);
   /** total mass of airplane [kg] */

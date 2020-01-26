@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Import;
 
-enum HuarongPlot {
+/* package */ enum HuarongPlot {
   ;
   static final int RES = 128;
   static final Tensor FORMAT = Tensors.of( //
@@ -73,7 +73,7 @@ enum HuarongPlot {
   }
 
   public static void main(String[] args) throws ClassNotFoundException, IOException, DataFormatException {
-    Huarong huarong = Huarong.AMBUSH;
+    KlotskiProblem huarong = Pennant.PUZZLE;
     List<StateTime> list = Import.object(HomeDirectory.file(huarong.name() + ".object"));
     System.out.println(list.size());
     int index = 0;

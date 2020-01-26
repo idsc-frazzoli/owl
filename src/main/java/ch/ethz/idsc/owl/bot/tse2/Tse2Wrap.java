@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
 /** identifies {x, y, theta, v} === {x, y, theta + 2 pi n, v} for all n */
 public enum Tse2Wrap implements CoordinateWrap {
   INSTANCE;
-  // ---
+
   private static final int INDEX_ANGLE = 2;
   private static final Mod MOD = Mod.function(Pi.TWO);
 

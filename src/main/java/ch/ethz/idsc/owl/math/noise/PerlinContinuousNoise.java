@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.noise;
 
 public enum PerlinContinuousNoise implements NativeContinuousNoise {
   FUNCTION;
-  // ---
+
   @Override
   public double at(double x) {
     return at(x, 0, 0);

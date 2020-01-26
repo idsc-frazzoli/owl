@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * cost are increments in time */
 public enum MinTimeEmptyGoal implements GoalInterface {
   INSTANCE;
-  // ---
+
   @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     return StateTimeTrajectories.timeIncrement(glcNode, trajectory);

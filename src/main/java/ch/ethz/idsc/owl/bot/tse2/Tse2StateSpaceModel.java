@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * @see Se2CarIntegrator */
 public enum Tse2StateSpaceModel implements StateSpaceModel {
   INSTANCE;
-  // ---
+
   public static final int STATE_INDEX_VEL = 3;
   public static final TensorScalarFunction STATE_VELOCITY = state -> state.Get(STATE_INDEX_VEL);
   public static final int CONTROL_INDEX_STEER = 0;

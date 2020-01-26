@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensors;
  * {p[h] -> (a h^2)/2 + p0 + h v0, v[h] -> a h + v0} */
 public enum R1Integrator implements Integrator {
   INSTANCE;
-  // ---
+
   @Override // from Integrator
   public Tensor step(Flow flow, Tensor x, Scalar h) {
     return direct(x, flow.getU().Get(0), h);

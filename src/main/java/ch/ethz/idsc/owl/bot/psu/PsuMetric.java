@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 /* package */ enum PsuMetric implements TensorMetric {
   INSTANCE;
-  // ---
+
   @Override // from TensorMetric
   public Scalar distance(Tensor p, Tensor q) {
     // mix of units [rad] and [rad/sec]

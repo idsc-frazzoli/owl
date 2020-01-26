@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.math.order.BinaryRelation;
 
 public enum ParentFileRelation implements BinaryRelation<File> {
   INSTANCE;
-  // ---
+
   /** Checks, whether the child directory is a subdirectory of the base
    * directory.
    *

@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * returns -1 if vector1 < vector2 */
 public enum VectorLexicographic implements Comparator<Tensor> {
   COMPARATOR;
-  // ---
+
   @Override // from Comparator
   public int compare(Tensor vector1, Tensor vector2) {
     VectorQ.requireLength(vector1, VectorQ.require(vector2).length());

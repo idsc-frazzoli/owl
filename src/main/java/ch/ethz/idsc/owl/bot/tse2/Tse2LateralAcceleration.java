@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
  * in the implementation below we simply use the formula u^2 */
 public enum Tse2LateralAcceleration implements CostFunction {
   INSTANCE;
-  // ---
+
   /** Curvature is changed angle over distance covered */
   @Override // from CostIncrementFunction
   public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {

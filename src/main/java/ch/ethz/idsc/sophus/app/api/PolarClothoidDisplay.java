@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 public enum PolarClothoidDisplay implements GeodesicDisplay {
   INSTANCE;
-  // ---
+
   private static final Tensor ARROWHEAD = Arrowhead.of(0.4);
 
   @Override // from GeodesicDisplay

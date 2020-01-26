@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 
 public enum SymGeodesic implements GeodesicInterface {
   INSTANCE;
-  // ---
+
   @Override // from TensorGeodesic
   public ScalarTensorFunction curve(Tensor p, Tensor q) {
     return scalar -> split(p, q, scalar);

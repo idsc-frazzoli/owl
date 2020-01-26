@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
  * Lipschitz L == 1 */
 /* package */ enum PsuStateSpaceModel implements StateSpaceModel {
   INSTANCE;
-  // ---
+
   /** @param x == {angle, angular rate}
    * @param u == {torque} */
   @Override // from StateSpaceModel

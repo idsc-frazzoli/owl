@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
 public enum R2GeodesicDisplay implements GeodesicDisplay {
   INSTANCE;
-  // ---
+
   private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RealScalar.of(0.1));
 
   @Override // from GeodesicDisplay

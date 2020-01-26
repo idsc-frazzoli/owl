@@ -9,8 +9,8 @@ import ch.ethz.idsc.tensor.Tensor;
 /** u == {index, dx, dy} */
 /* package */ enum KlotskiModel implements StateSpaceModel {
   INSTANCE;
-  // ---
-  @Override
+
+  @Override // from StateSpaceModel
   public Tensor f(Tensor x, Tensor u) {
     Tensor y = x.copy();
     int index = u.Get(0).number().intValue();

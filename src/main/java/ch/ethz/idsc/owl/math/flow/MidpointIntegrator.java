@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * Numerical Recipes 3rd Edition (17.1.2) */
 public enum MidpointIntegrator implements Integrator {
   INSTANCE;
-  // ---
+
   @Override // from Integrator
   public Tensor step(Flow flow, Tensor x0, Scalar _2h) {
     Scalar h = _2h.multiply(RationalScalar.HALF);

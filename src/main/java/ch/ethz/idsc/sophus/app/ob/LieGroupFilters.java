@@ -38,8 +38,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         LieGroup lieGroup, LieExponential lieExponential, BiinvariantMean biinvariantMean) {
       return BiinvariantMeanCenter.of(biinvariantMean, smoothingKernel);
     }
-  }, //
-  ;
+  };
+
   /** @param geodesicInterface
    * @param smoothingKernel
    * @param lieGroup

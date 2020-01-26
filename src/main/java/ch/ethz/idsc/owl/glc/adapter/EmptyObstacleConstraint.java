@@ -12,7 +12,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
  * the planning then only depends on the cost function and heuristic */
 public enum EmptyObstacleConstraint implements PlannerConstraint {
   INSTANCE;
-  // ---
+
   @Override // from PlannerConstraint
   public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
     return true;

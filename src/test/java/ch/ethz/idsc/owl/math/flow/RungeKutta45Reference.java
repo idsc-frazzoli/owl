@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * use {@link RungeKutta45Integrator} for applications */
 public enum RungeKutta45Reference implements Integrator {
   INSTANCE;
-  // ---
+
   private static final Scalar W1 = RationalScalar.of(-1, 15);
   private static final Scalar W2 = RationalScalar.of(16, 15);
 

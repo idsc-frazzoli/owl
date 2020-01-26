@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 
 public enum EmptyRender implements RenderInterface {
   INSTANCE;
-  // ---
+
   @Override
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     // ---

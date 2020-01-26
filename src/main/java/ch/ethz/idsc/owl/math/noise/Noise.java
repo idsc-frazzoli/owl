@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.noise;
 
 /* package */ enum Noise {
   TABLE;
+
   // To remove the need for index wrapping, double the permutation table length
   final int[] perm = new int[512];
   final int[] perm_12 = new int[512];

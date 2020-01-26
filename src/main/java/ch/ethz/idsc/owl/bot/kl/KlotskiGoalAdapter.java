@@ -11,15 +11,23 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Norm;
 
-/* package */ enum HuarongGoalAdapter implements GoalInterface {
-  INSTANCE;
-  // ---
-  @Override
+/* package */ class KlotskiGoalAdapter implements GoalInterface {
+  private final KlotskiGoalRegion klotskiGoalRegion;
+  private final Tensor goal_xy;
+
+  /** Example: for Huarong Tensors.vector(0, 4, 2)
+   * 
+   * @param stone */
+  public KlotskiGoalAdapter(Tensor stone) {
+    klotskiGoalRegion = new KlotskiGoalRegion(stone);
+    this.goal_xy = stone.extract(1, 3);
+  }
+
+  @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    return Norm._1.between(x.get(0).extract(1, 3), Tensors.vector(4, 2));
+    return Norm._1.between(x.get(0).extract(1, 3), goal_xy);
   }
 
   @Override
@@ -27,13 +35,13 @@ import ch.ethz.idsc.tensor.red.Norm;
     return RealScalar.ONE;
   }
 
-  @Override
+  @Override // from TrajectoryRegionQuery
   public Optional<StateTime> firstMember(List<StateTime> trajectory) {
     return trajectory.stream().filter(this::isMember).findFirst();
   }
 
   @Override
   public boolean isMember(StateTime x) {
-    return HuarongGoalRegion.INSTANCE.isMember(x.state());
+    return klotskiGoalRegion.isMember(x.state());
   }
 }

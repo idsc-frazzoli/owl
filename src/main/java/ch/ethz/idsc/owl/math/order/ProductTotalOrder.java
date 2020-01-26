@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 @SuppressWarnings("rawtypes")
 public enum ProductTotalOrder implements OrderComparator<List<Comparable>> {
   INSTANCE;
-  // ---
+
   private static final List<Integer> PLUS_MINUS = Arrays.asList(1, -1);
 
   @Override // from PartialComparator

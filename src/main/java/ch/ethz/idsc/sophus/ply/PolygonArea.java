@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
  * area is positive when polygon is in counter-clockwise direction */
 public enum PolygonArea implements TensorScalarFunction {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Tensor polygon) {
     if (Tensors.isEmpty(polygon))

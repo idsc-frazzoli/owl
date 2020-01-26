@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 
 public enum GokartPoseDataV1 implements GokartPoseData {
   INSTANCE;
-  // ---
+
   private final List<String> list = ResourceData.lines("/dubilab/app/pose/index.vector");
 
   @Override // from GokartPoseData

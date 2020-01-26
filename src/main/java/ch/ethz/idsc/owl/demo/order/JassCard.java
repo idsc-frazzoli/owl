@@ -13,6 +13,7 @@ import java.util.Objects;
 
   public static enum Type {
     SIX(1), SEVEN(2), EIGHT(3), NINE(8), TEN(4), JACK(9), QUEEN(5), KING(6), ACE(7),;
+
     private final int trumpfOrdering;
 
     private Type(int trumpfOrdering) {

@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * difference(p, q) = Inv[p] . q */
 public enum Se2CoveringWrap implements CoordinateWrap {
   INSTANCE;
-  // ---
+
   @Override // from CoordinateWrap
   public Tensor represent(Tensor x) {
     return x;

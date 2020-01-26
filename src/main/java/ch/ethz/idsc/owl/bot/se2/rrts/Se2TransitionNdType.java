@@ -12,8 +12,8 @@ import ch.ethz.idsc.tensor.RealScalar;
   /** dubins paths */
   DUBINS(DubinsTransitionSpace.of(RealScalar.of(0.4), DubinsPathComparator.LENGTH)), //
   /** straight lines in R^2 that results from ignoring heading */
-  R2(RnTransitionSpace.INSTANCE), //
-  ;
+  R2(RnTransitionSpace.INSTANCE);
+
   private final TransitionSpace transitionSpace;
 
   private Se2TransitionNdType(TransitionSpace transitionSpace) {
