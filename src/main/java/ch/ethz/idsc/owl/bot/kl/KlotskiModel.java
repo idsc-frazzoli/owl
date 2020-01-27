@@ -2,7 +2,6 @@
 package ch.ethz.idsc.owl.bot.kl;
 
 import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.order.VectorLexicographic;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -18,6 +17,6 @@ import ch.ethz.idsc.tensor.Tensor;
     Scalar dy = u.Get(2);
     y.set(dx::add, index, 1);
     y.set(dy::add, index, 2);
-    return Tensor.of(y.stream().sorted(VectorLexicographic.COMPARATOR));
+    return y;
   }
 }

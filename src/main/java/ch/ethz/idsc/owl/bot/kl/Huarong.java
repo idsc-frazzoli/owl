@@ -225,6 +225,11 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   @Override
+  public Tensor size() {
+    return Tensors.vector(7, 6);
+  }
+
+  @Override
   public Tensor getGoal() {
     return Tensors.vector(0, 4, 2);
   }

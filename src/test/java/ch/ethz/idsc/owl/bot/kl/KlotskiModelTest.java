@@ -13,6 +13,9 @@ public class KlotskiModelTest extends TestCase {
     for (KlotskiProblem klotskiProblem : Pennant.values())
       assertEquals(klotskiProblem.getBoard(), //
           KlotskiModel.INSTANCE.f(klotskiProblem.getBoard(), Tensors.vector(0, 0, 0)));
+    for (KlotskiProblem klotskiProblem : TrafficJam.values())
+      assertEquals(klotskiProblem.getBoard(), //
+          KlotskiModel.INSTANCE.f(klotskiProblem.getBoard(), Tensors.vector(0, 0, 0)));
   }
 
   public void testMove() {
@@ -21,6 +24,6 @@ public class KlotskiModelTest extends TestCase {
     Tensor s = //
         Tensors.fromString("{{0, 1, 2}, {1, 1, 1}, {1, 1, 4}, {1, 3, 1}, {2, 3, 2}, {3, 3, 4}, {3, 4, 2}, {3, 4, 4}, {3, 5, 1}, {3, 5, 3}, {3, 5, 4}}");
     assertEquals(next, s);
-    assertFalse(HuarongObstacleRegion.INSTANCE.isMember(s));
+    assertFalse(KlotskiObstacleRegion.huarong().isMember(s));
   }
 }

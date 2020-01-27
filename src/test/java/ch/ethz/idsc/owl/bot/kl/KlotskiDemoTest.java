@@ -12,13 +12,18 @@ public class KlotskiDemoTest extends TestCase {
   public void testSimple() {
     KlotskiProblem klotskiProblem = new KlotskiProblem() {
       @Override
-      public Tensor getGoal() {
-        return Tensors.vector(0, 3, 2);
+      public Tensor getBoard() {
+        return Huarong.ONLY_18_STEPS.getBoard();
       }
 
       @Override
-      public Tensor getBoard() {
-        return Huarong.ONLY_18_STEPS.getBoard();
+      public Tensor size() {
+        return Tensors.vector(7, 6);
+      }
+
+      @Override
+      public Tensor getGoal() {
+        return Tensors.vector(0, 3, 2);
       }
 
       @Override
@@ -26,7 +31,7 @@ public class KlotskiDemoTest extends TestCase {
         return "noname";
       }
     };
-    List<StateTime> list = KlotskiDemo.compute(klotskiProblem, false);
+    List<StateTime> list = new KlotskiDemo(klotskiProblem, KlotskiPlot.HUARONG).compute();
     assertEquals(list.size(), 11);
   }
 }

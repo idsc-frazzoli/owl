@@ -3,15 +3,30 @@ package ch.ethz.idsc.owl.bot.kl;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
 public class KlotskiGoalAdapterTest extends TestCase {
   public void testSimple() {
-    KlotskiGoalAdapter huarongGoalAdapter = new KlotskiGoalAdapter(Tensors.vector(0, 4, 2));
-    for (Huarong huarong : Huarong.values()) {
-      Scalar minCostToGoal = huarongGoalAdapter.minCostToGoal(huarong.getBoard());
+    for (KlotskiProblem klotskiProblem : Huarong.values()) {
+      KlotskiGoalAdapter klotskiGoalAdapter = new KlotskiGoalAdapter(klotskiProblem.getGoal());
+      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getBoard());
       assertEquals(minCostToGoal, RealScalar.of(3));
+    }
+  }
+
+  public void testPennant() {
+    for (KlotskiProblem klotskiProblem : Pennant.values()) {
+      KlotskiGoalAdapter klotskiGoalAdapter = new KlotskiGoalAdapter(klotskiProblem.getGoal());
+      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getBoard());
+      assertEquals(minCostToGoal, RealScalar.of(3));
+    }
+  }
+
+  public void testTrafficJam() {
+    for (KlotskiProblem klotskiProblem : TrafficJam.values()) {
+      KlotskiGoalAdapter klotskiGoalAdapter = new KlotskiGoalAdapter(klotskiProblem.getGoal());
+      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getBoard());
+      assertEquals(minCostToGoal, RealScalar.of(7));
     }
   }
 }
