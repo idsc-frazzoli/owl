@@ -1,20 +1,23 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.balloon;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;
 import junit.framework.TestCase;
 
 public class BalloonStateSpaceModelTest extends TestCase {
-  public void testValidity() {
+  public void testValidity() throws ClassNotFoundException, IOException {
     Tensor xWithUnits = Tensors.fromString("{2[m], 2[m], 2[m*s^-1], 4[K]}");
     Tensor uWithUnits = Tensors.fromString("{3[K*s^-1]}");
     Tensor xWithoutUnits = Tensors.vector(1, 1, 2, 4);
     Tensor uWithoutUnits = Tensors.vector(2);
-    StateSpaceModel stateSpaceModel = BalloonStateSpaceModels.defaultWithUnits();
+    StateSpaceModel stateSpaceModel = Serialization.copy(BalloonStateSpaceModels.defaultWithUnits());
     StateSpaceModel stateSpaceModelWithoutUnits = BalloonStateSpaceModels.defaultWithoutUnits();
     assertEquals(stateSpaceModelWithoutUnits.f(xWithoutUnits, uWithoutUnits).length(), 4);
     Tensor fWithUnits = stateSpaceModel.f(xWithUnits, uWithUnits);

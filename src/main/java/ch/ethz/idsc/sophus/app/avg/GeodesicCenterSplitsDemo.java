@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.sophus.app.avg;
 
+import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
+import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
-import ch.ethz.idsc.sophus.sym.SymGeodesic;
-import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 

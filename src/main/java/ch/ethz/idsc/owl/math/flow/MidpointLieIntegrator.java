@@ -1,11 +1,9 @@
 // code by jph
-package ch.ethz.idsc.sophus.integ;
+package ch.ethz.idsc.owl.math.flow;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.RationalScalar;

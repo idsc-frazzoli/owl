@@ -36,7 +36,9 @@ public class KlotskiDemoTest extends TestCase {
         return Huarong.AMBUSH.getFrame();
       }
     };
-    List<StateTime> list = new KlotskiDemo(klotskiProblem).compute();
+    KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
+    List<StateTime> list = klotskiDemo.compute();
     assertEquals(list.size(), 11);
+    klotskiDemo.close();
   }
 }

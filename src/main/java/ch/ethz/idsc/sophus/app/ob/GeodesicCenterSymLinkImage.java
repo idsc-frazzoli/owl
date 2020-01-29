@@ -3,12 +3,12 @@ package ch.ethz.idsc.sophus.app.ob;
 
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
+import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
+import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
+import ch.ethz.idsc.sophus.app.sym.SymLinkImages;
+import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
-import ch.ethz.idsc.sophus.sym.SymGeodesic;
-import ch.ethz.idsc.sophus.sym.SymLinkImage;
-import ch.ethz.idsc.sophus.sym.SymLinkImages;
-import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 

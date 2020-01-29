@@ -10,8 +10,8 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.java.awt.SpinnerLabel;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
+import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.io.GokartPoseData;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 
 public abstract class DatasetKernelDemo extends UniformDatasetFilterDemo {
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();

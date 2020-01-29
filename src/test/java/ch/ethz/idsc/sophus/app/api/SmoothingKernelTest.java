@@ -1,9 +1,10 @@
 // code by jph
-package ch.ethz.idsc.sophus.math.win;
+package ch.ethz.idsc.sophus.app.api;
 
 import java.util.function.Function;
 
 import ch.ethz.idsc.sophus.math.SymmetricVectorQ;
+import ch.ethz.idsc.sophus.math.win.UniformWindowSampler;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;

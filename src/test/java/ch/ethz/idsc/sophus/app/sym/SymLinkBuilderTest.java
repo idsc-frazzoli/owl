@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.sym;
+package ch.ethz.idsc.sophus.app.sym;
 
 import java.util.stream.IntStream;
 

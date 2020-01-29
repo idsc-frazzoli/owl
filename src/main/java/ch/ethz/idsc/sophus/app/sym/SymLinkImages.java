@@ -1,5 +1,5 @@
 // code by jph, ob
-package ch.ethz.idsc.sophus.sym;
+package ch.ethz.idsc.sophus.app.sym;
 
 import java.awt.Font;
 

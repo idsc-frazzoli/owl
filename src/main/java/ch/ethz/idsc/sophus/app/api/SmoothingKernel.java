@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.sophus.math.win;
+package ch.ethz.idsc.sophus.app.api;
 
 import ch.ethz.idsc.sophus.flt.ga.GeodesicMean;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicMeanFilter;

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.java.awt.SpinnerLabel;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
+import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
 
 /* package */ abstract class NavigableMapDatasetKernelDemo extends NavigableMapDatasetFilterDemo {
   protected final SpinnerLabel<SmoothingKernel> spinnerKernel = new SpinnerLabel<>();

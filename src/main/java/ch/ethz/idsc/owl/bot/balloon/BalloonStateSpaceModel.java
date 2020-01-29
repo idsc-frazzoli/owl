@@ -1,6 +1,8 @@
 // code by astoll
 package ch.ethz.idsc.owl.bot.balloon;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -16,9 +18,9 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * "Differentially Flat Systems" Chapter 2.7.2
  * by Hebertt Sira-Ramirez, Sunil K. Agrawal
  * 
- * @param x = {position (horizontal) [m], height [m], vertical velocity [m * s^-1], incremental air temperature (theta) [K]}
- * @param u = proportional of heat delivered to air mass by the burner [K * s^-1] */
-/* package */ class BalloonStateSpaceModel implements StateSpaceModel {
+ * @param x = {position (horizontal) [m], height [m], vertical velocity [m*s^-1], incremental air temperature (theta) [K]}
+ * @param u = proportional of heat delivered to air mass by the burner [K*s^-1] */
+/* package */ class BalloonStateSpaceModel implements StateSpaceModel, Serializable {
   /** parameters of the state space model */
   private final Scalar tau1;
   private final Scalar tau2;
@@ -27,7 +29,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
 
   /** @param tau1 parameter with unit [s]
    * @param tau2 parameter with unit [s]
-   * @param sigma parameter with unit [m * K^-1 * s^-2]
+   * @param sigma parameter with unit [m*K^-1*s^-2]
    * @param hasUnit indicator is stateSpaceModel is used with units or not */
   public BalloonStateSpaceModel(Scalar tau1, Scalar tau2, Scalar sigma, boolean hasUnit) {
     this.tau1 = tau1;
@@ -60,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
     if (hasUnit) {
       w = Quantity.of(w, "m*s^-1");
       x_dot = Quantity.of(x_dot, "m*s^-1");
-      g = Quantity.of(g, "m * s^-2");
+      g = Quantity.of(g, "m*s^-2");
     }
     return Tensors.of( //
         x_dot, //
@@ -74,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
     Scalar changeOfWindDirection = RealScalar.of(10);
     Clip altitude_clip = Clips.absolute(changeOfWindDirection);
     return altitude_clip.isInside(y) //
-        ? RealScalar.of(5)
+        ? RealScalar.of(+5)
         : RealScalar.of(-5);
   }
 

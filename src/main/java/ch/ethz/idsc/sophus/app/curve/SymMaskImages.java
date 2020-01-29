@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.sophus.app.sym.SymGeodesic;
+import ch.ethz.idsc.sophus.app.sym.SymLinkImage;
+import ch.ethz.idsc.sophus.app.sym.SymScalar;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline1CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline2CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.BSpline3CurveSubdivision;
@@ -19,9 +22,6 @@ import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeld3CurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
 import ch.ethz.idsc.sophus.crv.subdiv.SixPointCurveSubdivision;
 import ch.ethz.idsc.sophus.math.GeodesicInterface;
-import ch.ethz.idsc.sophus.sym.SymGeodesic;
-import ch.ethz.idsc.sophus.sym.SymLinkImage;
-import ch.ethz.idsc.sophus.sym.SymScalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ enum SymMaskImages {

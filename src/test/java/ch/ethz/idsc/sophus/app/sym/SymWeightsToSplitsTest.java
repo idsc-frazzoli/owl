@@ -1,5 +1,5 @@
 // code by ob
-package ch.ethz.idsc.sophus.sym;
+package ch.ethz.idsc.sophus.app.sym;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;

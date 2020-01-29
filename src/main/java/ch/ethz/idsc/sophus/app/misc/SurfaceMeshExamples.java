@@ -1,6 +1,7 @@
 // code by jph
-package ch.ethz.idsc.sophus.srf;
+package ch.ethz.idsc.sophus.app.misc;
 
+import ch.ethz.idsc.sophus.srf.SurfaceMesh;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.CirclePoints;

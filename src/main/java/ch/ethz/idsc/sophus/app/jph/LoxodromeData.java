@@ -3,11 +3,11 @@ package ch.ethz.idsc.sophus.app.jph;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.hs.sn.Loxodrome;
 import ch.ethz.idsc.sophus.hs.sn.SnGeodesic;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;

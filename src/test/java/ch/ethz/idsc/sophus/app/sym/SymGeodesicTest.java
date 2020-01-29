@@ -1,10 +1,10 @@
 // code by jph
-package ch.ethz.idsc.sophus.sym;
+package ch.ethz.idsc.sophus.app.sym;
 
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

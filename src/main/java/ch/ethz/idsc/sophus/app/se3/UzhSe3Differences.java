@@ -4,12 +4,12 @@ package ch.ethz.idsc.sophus.app.se3;
 import java.io.File;
 import java.io.IOException;
 
+import ch.ethz.idsc.sophus.app.api.SmoothingKernel;
 import ch.ethz.idsc.sophus.app.io.UzhSe3TxtFormat;
 import ch.ethz.idsc.sophus.flt.CenterFilter;
 import ch.ethz.idsc.sophus.flt.ga.GeodesicCenter;
 import ch.ethz.idsc.sophus.lie.se3.Se3Differences;
 import ch.ethz.idsc.sophus.lie.se3.Se3Geodesic;
-import ch.ethz.idsc.sophus.math.win.SmoothingKernel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.HomeDirectory;

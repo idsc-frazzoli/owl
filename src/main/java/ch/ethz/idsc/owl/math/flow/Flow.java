@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public interface Flow extends Serializable {
   /** @param x
    * @return tangent of flow evaluated at x */
-  // used 20 times 
+  // used 20 times
   Tensor at(Tensor x);
 
   /** the control identifier is not a {@link Scalar}, but a vector encoded as a {@link Tensor}
