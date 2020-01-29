@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class BalloonEntity extends AbstractCircularEntity {
-  private static final Tensor PARTITIONSCALE = Tensors.vector(2, 2, 1, 1).unmodifiable();
+  private static final Tensor PARTITION_SCALE = Tensors.vector(2, 2, 1, 1).unmodifiable();
   protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = //
       FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 3);
   static final int FLOWRES = 4;
@@ -79,7 +79,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   }
 
   protected StateTimeRaster stateTimeRaster() {
-    return EtaRaster.state(PARTITIONSCALE);
+    return EtaRaster.state(PARTITION_SCALE);
   }
 
   @Override // from AbstractCircularEntity

@@ -27,7 +27,7 @@ class GokartxTEntity extends CarEntity {
   private final EdgeRender edgeRender = new EdgeRender();
 
   GokartxTEntity(StateTime stateTime) {
-    super(stateTime, TemporalTrajectoryControl.createInstance(), GokartEntity.PARTITIONSCALE, GokartEntity.CARFLOWS, GokartEntity.SHAPE);
+    super(stateTime, TemporalTrajectoryControl.createInstance(), GokartEntity.PARTITION_SCALE, GokartEntity.CARFLOWS, GokartEntity.SHAPE);
   }
 
   @Override
@@ -38,7 +38,7 @@ class GokartxTEntity extends CarEntity {
   @Override
   protected StateTimeRaster stateTimeRaster() {
     return EtaRaster.timeDependent( //
-        partitionScale, FIXEDSTATEINTEGRATOR.getTimeStepTrajectory(), //
+        partitionScale, FIXED_STATE_INTEGRATOR.getTimeStepTrajectory(), //
         new StateTimeCoordinateWrap(Se2Wrap.INSTANCE));
   }
 

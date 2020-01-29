@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
       CarEntity carEntity = new CarEntity( //
           new StateTime(starts[++index], RealScalar.ZERO), //
           trajectoryControl, //
-          CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE);
+          CarEntity.PARTITION_SCALE, CarEntity.CARFLOWS, CarEntity.SHAPE);
       carEntity.trajectory(trajectory);
       owlyAnimationFrame.add(carEntity);
     }

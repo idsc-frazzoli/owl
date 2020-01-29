@@ -34,7 +34,7 @@ public class CarRelaxedEntity extends CarEntity {
   public static CarRelaxedEntity createDefault(StateTime stateTime, Tensor slacks) {
     return new CarRelaxedEntity(stateTime, //
         createPurePursuitControl(), //
-        CarEntity.PARTITIONSCALE, //
+        CarEntity.PARTITION_SCALE, //
         CarEntity.CARFLOWS, //
         CarEntity.SHAPE, //
         slacks);
@@ -75,7 +75,7 @@ public class CarRelaxedEntity extends CarEntity {
     GoalInterface goalInterface = new VectorCostGoalAdapter(costFunctionVector, se2ComboRegion);
     // --
     return new StandardRelaxedLexicographicPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface, slacks);
+        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface, slacks);
   }
 
   @Override

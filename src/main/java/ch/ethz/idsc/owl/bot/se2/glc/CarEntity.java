@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
 public class CarEntity extends Se2Entity {
-  public static final Tensor PARTITIONSCALE = Tensors.of( //
+  public static final Tensor PARTITION_SCALE = Tensors.of( //
       RealScalar.of(5), RealScalar.of(5), Degree.of(10).reciprocal()).unmodifiable();
   static final Scalar SPEED = RealScalar.of(1.0);
   static final Scalar MAX_TURNING_PLAN = Degree.of(45);
@@ -70,7 +70,7 @@ public class CarEntity extends Se2Entity {
   public static CarEntity createDefault(StateTime stateTime) {
     return new CarEntity(stateTime, //
         createPurePursuitControl(), //
-        PARTITIONSCALE, CARFLOWS, SHAPE);
+        PARTITION_SCALE, CARFLOWS, SHAPE);
   }
 
   // ---
@@ -90,8 +90,8 @@ public class CarEntity extends Se2Entity {
     this.trajectoryControl = trajectoryControl;
     // new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, Se2CarIntegrator.INSTANCE, stateTime));
     controls = carFlows.getFlows(9);
-    final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
-    final Scalar goalRadius_theta = SQRT2.divide(PARTITIONSCALE.Get(2));
+    final Scalar goalRadius_xy = SQRT2.divide(PARTITION_SCALE.Get(0));
+    final Scalar goalRadius_theta = SQRT2.divide(PARTITION_SCALE.Get(2));
     goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta).unmodifiable();
     extraCosts.add(new Se2ShiftCostFunction(SHIFT_PENALTY));
     this.partitionScale = partitionScale.unmodifiable();
@@ -125,7 +125,7 @@ public class CarEntity extends Se2Entity {
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = MultiCostGoalAdapter.of(se2MinTimeGoalManager.getGoalInterface(), extraCosts);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 
   @Override // from Se2Entity

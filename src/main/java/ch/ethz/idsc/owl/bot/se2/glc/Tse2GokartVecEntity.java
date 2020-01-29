@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Degree;
 
 public class Tse2GokartVecEntity extends Tse2CarEntity {
-  static final Tensor PARTITIONSCALE = Tensors.of( //
+  static final Tensor PARTITION_SCALE = Tensors.of( //
       RealScalar.of(2), RealScalar.of(2), Degree.of(20).reciprocal(), RealScalar.of(5)).unmodifiable();
   static final Scalar LOOKAHEAD = RealScalar.of(3.0);
   static final Scalar MAX_TURNING_PLAN = Degree.of(15);
@@ -48,7 +48,7 @@ public class Tse2GokartVecEntity extends Tse2CarEntity {
   public static Tse2GokartVecEntity createDefault(StateTime stateTime) {
     return new Tse2GokartVecEntity(stateTime, //
         CarEntity.createPurePursuitControl(), //
-        PARTITIONSCALE, //
+        PARTITION_SCALE, //
         CARFLOWS, //
         SHAPE);
   }

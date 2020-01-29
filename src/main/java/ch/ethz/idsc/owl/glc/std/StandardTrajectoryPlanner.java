@@ -63,7 +63,7 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
     this.relabelDecision = relabelDecision;
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
-        () -> controls.stream().parallel(), //
+        () -> controls.stream().parallel(), // TODO not serializable
         goalInterface);
   }
 

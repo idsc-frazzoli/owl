@@ -57,7 +57,7 @@ public class GokartRelaxedEntity extends GokartEntity {
     GoalInterface goalInterface = new VectorCostGoalAdapter(costFunctionVector, se2ComboRegion);
     // --
     return new StandardRelaxedLexicographicPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface, slacks);
+        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface, slacks);
   }
 
   @Override

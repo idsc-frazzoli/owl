@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
 
 /** test if api is sufficient to model gokart */
 public class GokartEntity extends CarEntity {
-  static final Tensor PARTITIONSCALE = TensorsExt.of(2, 2, Degree.of(10).reciprocal()).unmodifiable();
+  static final Tensor PARTITION_SCALE = TensorsExt.of(2, 2, Degree.of(10).reciprocal()).unmodifiable();
   static final Scalar SPEED = RealScalar.of(2.5);
   static final Scalar LOOKAHEAD = RealScalar.of(3.0);
   static final Scalar MAX_TURNING_PLAN = Degree.of(15);
@@ -57,7 +57,7 @@ public class GokartEntity extends CarEntity {
   };
 
   public GokartEntity(StateTime stateTime) {
-    super(stateTime, createPurePursuitControl(), PARTITIONSCALE, CARFLOWS, SHAPE);
+    super(stateTime, createPurePursuitControl(), PARTITION_SCALE, CARFLOWS, SHAPE);
     // ---
     add(localizationFeedback);
   }

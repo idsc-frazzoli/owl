@@ -36,7 +36,7 @@ public abstract class Se2LetterADemo extends Se2CarDemo {
     CarEntity carEntity = new CarEntity( //
         stateTime, //
         createTrajectoryControl(), //
-        CarEntity.PARTITIONSCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
+        CarEntity.PARTITION_SCALE, CarEntity.CARFLOWS, CarEntity.SHAPE) {
       @Override
       public RegionWithDistance<Tensor> getGoalRegionWithDistance(Tensor goal) {
         return new ConeRegion(goal, Degree.of(30));

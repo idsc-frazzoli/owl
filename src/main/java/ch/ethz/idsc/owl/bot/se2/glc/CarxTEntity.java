@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Scalar;
  * that means, the functionality does not apply to all examples universally. */
 class CarxTEntity extends CarEntity {
   CarxTEntity(StateTime stateTime) {
-    super(stateTime, TemporalTrajectoryControl.createInstance(), PARTITIONSCALE, CARFLOWS, SHAPE);
+    super(stateTime, TemporalTrajectoryControl.createInstance(), PARTITION_SCALE, CARFLOWS, SHAPE);
   }
 
   @Override
@@ -25,6 +25,6 @@ class CarxTEntity extends CarEntity {
   @Override
   protected StateTimeRaster stateTimeRaster() {
     return EtaRaster.timeDependent( //
-        partitionScale, FIXEDSTATEINTEGRATOR.getTimeStepTrajectory(), new StateTimeCoordinateWrap(Se2Wrap.INSTANCE));
+        partitionScale, FIXED_STATE_INTEGRATOR.getTimeStepTrajectory(), new StateTimeCoordinateWrap(Se2Wrap.INSTANCE));
   }
 }

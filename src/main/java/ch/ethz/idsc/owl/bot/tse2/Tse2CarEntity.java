@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /** several magic constants are hard-coded in the implementation.
  * that means, the functionality does not apply to all examples universally. */
 public class Tse2CarEntity extends Tse2Entity {
-  static final Tensor PARTITIONSCALE = Tensors.of( //
+  static final Tensor PARTITION_SCALE = Tensors.of( //
       RealScalar.of(5), RealScalar.of(5), Degree.of(7).reciprocal(), RealScalar.of(10)).unmodifiable();
   public static final Scalar MAX_SPEED = RealScalar.of(3.0); //
   public static final Clip v_range = Clips.positive(MAX_SPEED);
@@ -62,7 +62,7 @@ public class Tse2CarEntity extends Tse2Entity {
   public static Tse2CarEntity createDefault(StateTime stateTime) {
     return new Tse2CarEntity(stateTime, //
         new Tse2PurePursuitControl(LOOKAHEAD, MAX_TURNING_RATE), //
-        PARTITIONSCALE, CARFLOWS, SHAPE);
+        PARTITION_SCALE, CARFLOWS, SHAPE);
   }
 
   // ---
@@ -78,9 +78,9 @@ public class Tse2CarEntity extends Tse2Entity {
     super(v_range, stateTime, trajectoryControl);
     this.trajectoryControl = trajectoryControl;
     this.controls = carFlows.getFlows(9);
-    final Scalar goalRadius_xy = SQRT2.divide(PARTITIONSCALE.Get(0));
-    final Scalar goalRadius_theta = SQRT2.divide(PARTITIONSCALE.Get(2));
-    final Scalar goalRadius_v = SQRT2.divide(PARTITIONSCALE.Get(3));
+    final Scalar goalRadius_xy = SQRT2.divide(PARTITION_SCALE.Get(0));
+    final Scalar goalRadius_theta = SQRT2.divide(PARTITION_SCALE.Get(2));
+    final Scalar goalRadius_v = SQRT2.divide(PARTITION_SCALE.Get(3));
     this.goalRadius = Tensors.of(goalRadius_xy, goalRadius_xy, goalRadius_theta, goalRadius_v);
     this.partitionScale = partitionScale.unmodifiable();
     this.shape = shape.copy().unmodifiable();

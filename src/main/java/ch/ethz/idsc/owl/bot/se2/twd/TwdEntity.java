@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class TwdEntity extends Se2Entity {
-  static final Tensor PARTITIONSCALE = Tensors.of( //
+  static final Tensor PARTITION_SCALE = Tensors.of( //
       RealScalar.of(6), RealScalar.of(6), Degree.of(10).reciprocal()).unmodifiable();
   private static final Scalar SQRT2 = Sqrt.of(RealScalar.of(2));
   static final Tensor SHAPE = Arrowhead.of(0.3);
@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   protected TwdEntity(StateTime stateTime, TrajectoryControl trajectoryControl, TwdFlows twdConfig) {
     super(stateTime, trajectoryControl);
     controls = twdConfig.getFlows(4);
-    Tensor eta = PARTITIONSCALE;
+    Tensor eta = PARTITION_SCALE;
     goalRadius_xy = SQRT2.divide(eta.Get(0));
     goalRadius_theta = SQRT2.divide(eta.Get(2));
   }
@@ -97,12 +97,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         se2MinTimeGoalManager.getGoalInterface(), //
         extraCosts);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXEDSTATEINTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
   }
 
   @Override
   protected StateTimeRaster stateTimeRaster() {
-    return new EtaRaster(PARTITIONSCALE, StateTimeTensorFunction.state(Se2Wrap.INSTANCE::represent));
+    return new EtaRaster(PARTITION_SCALE, StateTimeTensorFunction.state(Se2Wrap.INSTANCE::represent));
   }
 
   @Override
