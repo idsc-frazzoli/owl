@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrts;
 import ch.ethz.idsc.owl.rrts.core.DefaultRrtsPlanner;

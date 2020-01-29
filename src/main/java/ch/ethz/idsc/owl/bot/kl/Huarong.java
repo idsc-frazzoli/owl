@@ -219,18 +219,35 @@ import ch.ethz.idsc.tensor.Tensors;
     this.tensor = Tensors.of(tensor);
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor getBoard() {
     return tensor.copy();
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor size() {
     return Tensors.vector(7, 6);
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor getGoal() {
     return Tensors.vector(0, 4, 2);
+  }
+
+  @Override // from KlotskiProblem
+  public Tensor getFrame() {
+    return Tensors.of( //
+        Tensors.vector(0, 0), //
+        Tensors.vector(7, 0), //
+        Tensors.vector(7, 2), //
+        Tensors.vector(6, 2), //
+        Tensors.vector(6, 1), //
+        Tensors.vector(1, 1), //
+        Tensors.vector(1, 5), //
+        Tensors.vector(6, 5), //
+        Tensors.vector(6, 4), //
+        Tensors.vector(7, 4), //
+        Tensors.vector(7, 6), //
+        Tensors.vector(0, 6));
   }
 }

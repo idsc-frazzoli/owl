@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.esp;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -28,14 +29,16 @@ enum EspPlot {
     folder.mkdir();
     // KlotskiPlot klotskiPlot = new KlotskiPlot(klotskiProblem, TRAFFIC_JAM);
     for (StateTime stateTime : list) {
-      BufferedImage bufferedImage = new BufferedImage(700, 700, BufferedImage.TYPE_INT_ARGB);
+      BufferedImage bufferedImage = new BufferedImage(320, 320, BufferedImage.TYPE_INT_ARGB);
       GeometricLayer geometricLayer = GeometricLayer.of(Tensors.matrix(new Number[][] { //
           { 0, RES, 0 }, //
           { RES, 0, 0 }, //
           { 0, 0, 1 } }));
       Graphics2D graphics = bufferedImage.createGraphics();
+      graphics.setColor(Color.WHITE);
+      graphics.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
       new EspRender(stateTime.state()).render(geometricLayer, graphics);
-      // graphics.setColor(Color.DARK_GRAY);
+      graphics.setColor(Color.DARK_GRAY);
       // graphics.setFont(new Font(Font.DIALOG, Font.PLAIN, RES / 2));
       // graphics.drawString("move " + index, RES / 8, RES / 2);
       ImageIO.write(bufferedImage, "png", new File(folder, String.format("%03d.png", index)));

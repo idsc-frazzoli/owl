@@ -5,10 +5,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 

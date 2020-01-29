@@ -9,13 +9,13 @@ import junit.framework.TestCase;
 public class EspGoalAdapterTest extends TestCase {
   public void testGoal() {
     Tensor goal = EspGoalAdapter.GOAL;
-    assertEquals(EspGoalAdapter.standard().minCostToGoal(goal), RealScalar.ZERO);
+    assertEquals(EspGoalAdapter.INSTANCE.minCostToGoal(goal), RealScalar.ZERO);
     assertFalse(EspObstacleRegion.INSTANCE.isMember(goal));
   }
 
   public void testStart() {
     assertTrue(Scalars.lessEquals( //
         RealScalar.of(0), //
-        EspGoalAdapter.standard().minCostToGoal(EspDemo.START)));
+        EspGoalAdapter.INSTANCE.minCostToGoal(EspDemo.START)));
   }
 }

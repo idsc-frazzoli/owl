@@ -13,8 +13,8 @@ class KlotskiFrame extends AbstractDemo {
   private final KlotskiPlot klotskiPlot;
   Tensor _board = null;
 
-  public KlotskiFrame(KlotskiProblem klotskiProblem, Tensor border) {
-    klotskiPlot = new KlotskiPlot(klotskiProblem, border);
+  public KlotskiFrame(KlotskiProblem klotskiProblem) {
+    klotskiPlot = new KlotskiPlot(klotskiProblem);
   }
 
   @Override

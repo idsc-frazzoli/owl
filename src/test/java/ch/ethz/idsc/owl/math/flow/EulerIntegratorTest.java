@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.math.flow;
 
-import ch.ethz.idsc.owl.math.DoubleIntegratorStateSpaceModel;
-import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModels;
+import ch.ethz.idsc.owl.math.model.DoubleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.sophus.integ.EulerLieIntegrator;
 import ch.ethz.idsc.sophus.lie.rn.RnExponential;
 import ch.ethz.idsc.sophus.lie.rn.RnGroup;

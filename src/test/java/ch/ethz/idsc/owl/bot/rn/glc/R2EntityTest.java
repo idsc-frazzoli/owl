@@ -6,11 +6,11 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.ani.adapter.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
-import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;

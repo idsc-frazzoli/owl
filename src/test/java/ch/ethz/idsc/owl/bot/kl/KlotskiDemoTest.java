@@ -28,10 +28,15 @@ public class KlotskiDemoTest extends TestCase {
 
       @Override
       public String name() {
-        return "noname";
+        throw new UnsupportedOperationException();
+      }
+
+      @Override
+      public Tensor getFrame() {
+        return Huarong.AMBUSH.getFrame();
       }
     };
-    List<StateTime> list = new KlotskiDemo(klotskiProblem, KlotskiPlot.HUARONG).compute();
+    List<StateTime> list = new KlotskiDemo(klotskiProblem).compute();
     assertEquals(list.size(), 11);
   }
 }

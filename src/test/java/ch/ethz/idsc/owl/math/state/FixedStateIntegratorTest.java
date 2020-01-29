@@ -4,10 +4,10 @@ package ch.ethz.idsc.owl.math.state;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
-import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;

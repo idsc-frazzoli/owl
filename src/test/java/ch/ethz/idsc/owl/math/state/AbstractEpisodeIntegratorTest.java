@@ -5,15 +5,15 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.bot.rice.Duncan1StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
-import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;

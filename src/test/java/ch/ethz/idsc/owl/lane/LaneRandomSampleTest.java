@@ -7,8 +7,8 @@ import java.util.Random;
 
 import ch.ethz.idsc.sophus.crv.clothoid.Clothoids;
 import ch.ethz.idsc.sophus.crv.subdiv.LaneRiesenfeldCurveSubdivision;
+import ch.ethz.idsc.sophus.lie.r2.Polygons;
 import ch.ethz.idsc.sophus.math.sample.RandomSampleInterface;
-import ch.ethz.idsc.sophus.ply.Polygons;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;

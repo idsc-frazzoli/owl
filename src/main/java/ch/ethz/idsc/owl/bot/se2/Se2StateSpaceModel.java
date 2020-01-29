@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.se2;
 
 import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.se2.twd.TwdFlows;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;

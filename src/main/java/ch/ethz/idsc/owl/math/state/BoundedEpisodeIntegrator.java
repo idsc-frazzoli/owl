@@ -3,9 +3,9 @@ package ch.ethz.idsc.owl.math.state;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Ceiling;

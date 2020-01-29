@@ -4,8 +4,8 @@ package ch.ethz.idsc.owl.bot.kl;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 

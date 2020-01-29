@@ -9,13 +9,16 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
-import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
 
 class EspRender implements RenderInterface {
-  private static final Tensor CIRCLE = CirclePoints.of(15).multiply(RationalScalar.HALF);
+  private static final Tensor CIRCLE = CirclePoints.of(31).multiply(RealScalar.of(0.48));
+  private static final Color LIGHT = new Color(188, 169, 80);
+  private static final Color DARK = new Color(63, 54, 14);
+  private static final Color EMPTY = new Color(203, 203, 203);
   // ---
   private final Tensor board;
 
@@ -32,13 +35,13 @@ class EspRender implements RenderInterface {
           // System.out.println(px + " " + value);
           switch (value) {
           case 0:
-            graphics.setColor(Color.BLACK);
+            graphics.setColor(EMPTY);
             break;
           case 1:
-            graphics.setColor(Color.RED);
+            graphics.setColor(LIGHT);
             break;
           case 2:
-            graphics.setColor(Color.BLUE);
+            graphics.setColor(DARK);
             break;
           default:
             throw new RuntimeException();

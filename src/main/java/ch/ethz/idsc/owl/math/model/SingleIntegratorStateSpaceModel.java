@@ -1,5 +1,5 @@
 // code by bapaden and jph
-package ch.ethz.idsc.owl.math;
+package ch.ethz.idsc.owl.math.model;
 
 import ch.ethz.idsc.tensor.Tensor;
 

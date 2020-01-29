@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** an upper bound of the speed of an entity in the river delta is

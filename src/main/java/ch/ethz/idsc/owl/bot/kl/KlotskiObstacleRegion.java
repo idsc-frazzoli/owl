@@ -56,9 +56,14 @@ import ch.ethz.idsc.tensor.Tensor;
       case 4:
         ++array[px + 0][py + 0];
         ++array[px + 1][py + 0];
-        ++array[px + 0][py + 1];
+        ++array[px + 2][py + 0];
         break;
       case 5:
+        ++array[px + 0][py + 0];
+        ++array[px + 1][py + 0];
+        ++array[px + 0][py + 1];
+        break;
+      case 6:
         ++array[px + 1][py + 0];
         ++array[px + 0][py + 1];
         ++array[px + 1][py + 1];

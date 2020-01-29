@@ -12,7 +12,6 @@ import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -25,19 +24,19 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   private final KlotskiProblem klotskiProblem;
   private final KlotskiFrame klotskiFrame;
 
-  public KlotskiDemo(KlotskiProblem klotskiProblem, Tensor border) {
+  public KlotskiDemo(KlotskiProblem klotskiProblem) {
     this.klotskiProblem = klotskiProblem;
-    klotskiFrame = new KlotskiFrame(klotskiProblem, border);
+    klotskiFrame = new KlotskiFrame(klotskiProblem);
+    klotskiFrame.timerFrame.configCoordinateOffset(100, 500);
     klotskiFrame.setVisible(700, 700);
   }
 
   List<StateTime> compute() {
-    StateTimeRaster stateTimeRaster = KlotskiStateTimeRaster.INSTANCE;
     List<Flow> controls = KlotskiControls.of(klotskiProblem.getBoard());
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
     // ---
     StandardTrajectoryPlanner standardTrajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster, //
+        KlotskiStateTimeRaster.INSTANCE, //
         new DiscreteIntegrator(KlotskiModel.INSTANCE), //
         controls, //
         plannerConstraint, //
@@ -75,9 +74,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Huarong.AMBUSH;
-    Tensor border = KlotskiPlot.HUARONG;
-    KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem, border);
+    KlotskiProblem klotskiProblem = Solomon.INSTANCE;
+    KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     List<StateTime> list = klotskiDemo.compute();
     Export.object(HomeDirectory.file(klotskiProblem.name() + ".object"), list);
   }

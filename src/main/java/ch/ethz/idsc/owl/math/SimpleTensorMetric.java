@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Norm;
 
+// TODO design/naming not good
 public class SimpleTensorMetric implements TensorMetric, Serializable {
   private final TensorDifference tensorDifference;
 

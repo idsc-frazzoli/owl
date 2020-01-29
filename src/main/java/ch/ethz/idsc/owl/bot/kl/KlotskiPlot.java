@@ -29,52 +29,18 @@ import ch.ethz.idsc.tensor.io.Import;
       Tensors.vector(2, 2), //
       Tensors.vector(2, 1), //
       Tensors.vector(1, 2), //
-      Tensors.vector(1, 1));
-  static final Tensor HUARONG = Tensors.of( //
-      Tensors.vector(0, 0), //
-      Tensors.vector(7, 0), //
-      Tensors.vector(7, 2), //
-      Tensors.vector(6, 2), //
-      Tensors.vector(6, 1), //
       Tensors.vector(1, 1), //
-      Tensors.vector(1, 5), //
-      Tensors.vector(6, 5), //
-      Tensors.vector(6, 4), //
-      Tensors.vector(7, 4), //
-      Tensors.vector(7, 6), //
-      Tensors.vector(0, 6));
-  static final Tensor PENNANT = Tensors.of( //
-      Tensors.vector(0, 0), //
-      Tensors.vector(7, 0), //
-      Tensors.vector(7, 1), //
-      Tensors.vector(1, 1), //
-      Tensors.vector(1, 5), //
-      Tensors.vector(6, 5), //
-      Tensors.vector(6, 3), //
-      Tensors.vector(7, 3), //
-      Tensors.vector(7, 6), //
-      Tensors.vector(0, 6));
-  static final Tensor TRAFFIC_JAM = Tensors.of( //
-      Tensors.vector(0, 0), //
-      Tensors.vector(7, 0), //
-      Tensors.vector(7, 8), //
-      Tensors.vector(6, 8), //
-      Tensors.vector(6, 1), //
-      Tensors.vector(1, 1), //
-      Tensors.vector(1, 7), //
-      Tensors.vector(4, 7), //
-      Tensors.vector(4, 8), //
-      Tensors.vector(0, 8));
+      Tensors.vector(3, 1));
   // ---
   private final Tensor border;
   private final int sx;
   private final int sy;
 
-  public KlotskiPlot(KlotskiProblem klotskiProblem, Tensor border) {
+  public KlotskiPlot(KlotskiProblem klotskiProblem) {
     Tensor size = klotskiProblem.size();
     sx = size.Get(0).number().intValue();
     sy = size.Get(1).number().intValue();
-    this.border = border;
+    this.border = klotskiProblem.getFrame();
   }
 
   BufferedImage plot(Tensor board) {
@@ -107,7 +73,8 @@ import ch.ethz.idsc.tensor.io.Import;
         graphics.setColor(index == 0 ? new Color(255, 128 - 32, 128 - 32) : new Color(255, 128, 128));
         {
           Tensor polygon = Tensors.empty();
-          if (index < 4) {
+          int limit = BLOCKS.length();
+          if (index < limit) {
             Tensor format = BLOCKS.get(index);
             polygon = Tensors.of( //
                 format.pmul(Tensors.vector(0, 0)).add(Tensors.vector(+MARGIN, +MARGIN)), //
@@ -116,7 +83,7 @@ import ch.ethz.idsc.tensor.io.Import;
                 format.pmul(Tensors.vector(1, 0)).add(Tensors.vector(-MARGIN, +MARGIN)));
           } else {
             switch (index) {
-            case 4:
+            case 5:
               polygon = Tensors.of( //
                   Tensors.vector(0 + MARGIN, 0 + MARGIN), //
                   Tensors.vector(2 - MARGIN, 0 + MARGIN), //
@@ -125,7 +92,7 @@ import ch.ethz.idsc.tensor.io.Import;
                   Tensors.vector(1 - MARGIN, 2 - MARGIN), //
                   Tensors.vector(0 + MARGIN, 2 - MARGIN));
               break;
-            case 5:
+            case 6:
               polygon = Tensors.of( //
                   Tensors.vector(2 - MARGIN, 2 - MARGIN), //
                   Tensors.vector(0 + MARGIN, 2 - MARGIN), //
@@ -152,7 +119,7 @@ import ch.ethz.idsc.tensor.io.Import;
     int index = 0;
     File folder = HomeDirectory.Pictures(klotskiProblem.name());
     folder.mkdir();
-    KlotskiPlot klotskiPlot = new KlotskiPlot(klotskiProblem, TRAFFIC_JAM);
+    KlotskiPlot klotskiPlot = new KlotskiPlot(klotskiProblem);
     for (StateTime stateTime : list) {
       BufferedImage bufferedImage = klotskiPlot.plot(stateTime.state());
       Graphics2D graphics = bufferedImage.createGraphics();

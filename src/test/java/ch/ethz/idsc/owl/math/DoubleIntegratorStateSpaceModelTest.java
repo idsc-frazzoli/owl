@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math;
 
+import ch.ethz.idsc.owl.math.model.DoubleIntegratorStateSpaceModel;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;

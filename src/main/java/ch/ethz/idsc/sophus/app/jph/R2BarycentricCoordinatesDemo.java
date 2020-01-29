@@ -19,10 +19,10 @@ import ch.ethz.idsc.sophus.app.api.ControlPointsDemo;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.lie.BiinvariantMean;
+import ch.ethz.idsc.sophus.lie.r2.Barycenter;
+import ch.ethz.idsc.sophus.lie.r2.Polygons;
+import ch.ethz.idsc.sophus.lie.r2.R2BarycentricCoordinates;
 import ch.ethz.idsc.sophus.math.Extract2D;
-import ch.ethz.idsc.sophus.ply.Polygons;
-import ch.ethz.idsc.sophus.ply.crd.Barycentric;
-import ch.ethz.idsc.sophus.ply.crd.PowerCoordinates;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -39,28 +39,29 @@ import ch.ethz.idsc.tensor.img.ColorFormat;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 
-/* package */ class PowerCoordinatesDemo extends ControlPointsDemo {
+/* package */ class R2BarycentricCoordinatesDemo extends ControlPointsDemo {
   private static final Stroke STROKE = //
       new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 3 }, 0);
   private static final ColorDataGradient COLOR_DATA_GRADIENT = ColorDataGradients.PARULA.deriveWithOpacity(RationalScalar.HALF);
   // ---
-  private final SpinnerLabel<Barycentric> spinnerBarycentric = new SpinnerLabel<>();
+  private final SpinnerLabel<Barycenter> spinnerBarycentric = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerRefine = new SpinnerLabel<>();
   private final SpinnerLabel<Integer> spinnerFactor = new SpinnerLabel<>();
 
-  public PowerCoordinatesDemo() {
+  public R2BarycentricCoordinatesDemo() {
     super(true, GeodesicDisplays.SE2C_SE2_R2);
     {
-      spinnerBarycentric.setArray(Barycentric.values());
+      spinnerBarycentric.setArray(Barycenter.values());
       spinnerBarycentric.setIndex(0);
       spinnerBarycentric.addToComponentReduced(timerFrame.jToolBar, new Dimension(170, 28), "barycentric");
     }
     {
-      spinnerRefine.setList(Arrays.asList(10, 20, 30, 40));
-      spinnerRefine.setIndex(0);
+      spinnerRefine.setList(Arrays.asList(10, 15, 20, 25, 30, 35, 40));
+      spinnerRefine.setIndex(1);
       spinnerRefine.addToComponentReduced(timerFrame.jToolBar, new Dimension(60, 28), "refinement");
     }
     {
@@ -92,7 +93,8 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
           graphics.draw(path2d);
           graphics.setStroke(new BasicStroke(1));
         }
-        PowerCoordinates powerCoordinates = new PowerCoordinates(spinnerBarycentric.getValue());
+        TensorUnaryOperator tensorUnaryOperator = //
+            new R2BarycentricCoordinates(spinnerBarycentric.getValue()).of(domain);
         Tensor min = Entrywise.min().of(hull).map(RealScalar.of(0.01)::add);
         Tensor max = Entrywise.max().of(hull).map(RealScalar.of(0.01)::subtract).negate();
         Tensor sX = Subdivide.of(min.Get(0), max.Get(0), spinnerRefine.getValue());
@@ -105,7 +107,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
           for (Tensor y : sY) {
             Tensor px = Tensors.of(x, y);
             if (Polygons.isInside(domain, px)) {
-              Tensor weights = powerCoordinates.weights(domain, px);
+              Tensor weights = tensorUnaryOperator.apply(px);
               wgs.set(weights, c0, c1);
               Tensor mean = biinvariantMean.mean(controlPointsSe2, weights);
               array[c0][c1] = mean.divide(factor);
@@ -162,6 +164,6 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
   }
 
   public static void main(String[] args) {
-    new PowerCoordinatesDemo().setVisible(1200, 600);
+    new R2BarycentricCoordinatesDemo().setVisible(1200, 600);
   }
 }

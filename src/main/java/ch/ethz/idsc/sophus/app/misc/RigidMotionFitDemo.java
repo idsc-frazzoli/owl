@@ -15,16 +15,14 @@ import ch.ethz.idsc.sophus.app.api.GeodesicDisplays;
 import ch.ethz.idsc.sophus.app.api.PointsRender;
 import ch.ethz.idsc.sophus.app.api.R2GeodesicDisplay;
 import ch.ethz.idsc.sophus.app.api.Se2GeodesicDisplay;
+import ch.ethz.idsc.sophus.hs.r2.Se2RigidMotionFit;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.CirclePoints;
-import ch.ethz.idsc.tensor.opt.RigidMotionFit;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.sca.ArcTan;
 
 /* package */ class RigidMotionFitDemo extends ControlPointsDemo {
   private static final Tensor ORIGIN = CirclePoints.of(3).multiply(RealScalar.of(.2));
@@ -59,12 +57,9 @@ import ch.ethz.idsc.tensor.sca.ArcTan;
     AxesRender.INSTANCE.render(geometricLayer, graphics);
     {
       Tensor target = getGeodesicControlPoints();
-      Tensor pxy = Tensor.of(points.stream().map(R2GeodesicDisplay.INSTANCE::project));
-      Tensor cxy = Tensor.of(target.stream().map(R2GeodesicDisplay.INSTANCE::project));
-      RigidMotionFit rigidMotionFit = RigidMotionFit.of(pxy, cxy);
-      Tensor rotation = rigidMotionFit.rotation(); // 2 x 2
-      Scalar angle = ArcTan.of(rotation.Get(0, 0), rotation.Get(1, 0));
-      Tensor mouse = rigidMotionFit.translation().append(angle);
+      Tensor mouse = Se2RigidMotionFit.of( //
+          Tensor.of(points.stream().map(R2GeodesicDisplay.INSTANCE::project)), //
+          Tensor.of(target.stream().map(R2GeodesicDisplay.INSTANCE::project)));
       POINTS_RENDER_RESULT //
           .show(Se2GeodesicDisplay.INSTANCE::matrixLift, Se2GeodesicDisplay.INSTANCE.shape(), Tensors.of(mouse)) //
           .render(geometricLayer, graphics);

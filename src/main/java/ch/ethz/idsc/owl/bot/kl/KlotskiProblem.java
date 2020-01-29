@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.Tensor;
   Tensor size();
 
   Tensor getGoal();
+  
+  Tensor getFrame();
 
   String name();
 }

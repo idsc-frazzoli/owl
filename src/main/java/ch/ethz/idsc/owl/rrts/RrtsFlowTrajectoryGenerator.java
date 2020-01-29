@@ -10,9 +10,9 @@ import java.util.function.BiFunction;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.math.IntegerLog2;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
-import ch.ethz.idsc.owl.math.StateSpaceModels;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.DirectedTransition;

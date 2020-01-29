@@ -8,11 +8,11 @@ import ch.ethz.idsc.tensor.Tensors;
   CORNERS_ONLY( //
       Tensors.vector(0, 1, 1), //
       // ---
-      Tensors.vector(4, 1, 4), //
-      Tensors.vector(4, 4, 1), //
+      Tensors.vector(5, 1, 4), //
+      Tensors.vector(5, 4, 1), //
       // ---
-      Tensors.vector(5, 2, 5), //
-      Tensors.vector(5, 4, 2)), //
+      Tensors.vector(6, 2, 5), //
+      Tensors.vector(6, 4, 2)), //
   NO_CORNERS( //
       Tensors.vector(0, 1, 1), //
       // ---
@@ -42,8 +42,8 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 4, 4), //
       Tensors.vector(3, 5, 4), //
       // ---
-      Tensors.vector(5, 2, 5), //
-      Tensors.vector(5, 4, 2)), //
+      Tensors.vector(6, 2, 5), //
+      Tensors.vector(6, 4, 2)), //
   INSTANCE( //
       Tensors.vector(0, 1, 1), //
       // ---
@@ -59,11 +59,11 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 4, 4), //
       Tensors.vector(3, 5, 4), //
       // ---
-      Tensors.vector(4, 1, 4), //
-      Tensors.vector(4, 4, 1), //
+      Tensors.vector(5, 1, 4), //
+      Tensors.vector(5, 4, 1), //
       // ---
-      Tensors.vector(5, 2, 5), //
-      Tensors.vector(5, 4, 2)), //
+      Tensors.vector(6, 2, 5), //
+      Tensors.vector(6, 4, 2)), //
   ;
 
   private final Tensor tensor;
@@ -72,18 +72,33 @@ import ch.ethz.idsc.tensor.Tensors;
     this.tensor = Tensors.of(tensor);
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor getBoard() {
     return tensor.copy();
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor size() {
     return Tensors.vector(7, 8);
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor getGoal() {
     return Tensors.vector(0, 4, 5);
+  }
+
+  @Override // from KlotskiProblem
+  public Tensor getFrame() {
+    return Tensors.of( //
+        Tensors.vector(0, 0), //
+        Tensors.vector(7, 0), //
+        Tensors.vector(7, 8), //
+        Tensors.vector(6, 8), //
+        Tensors.vector(6, 1), //
+        Tensors.vector(1, 1), //
+        Tensors.vector(1, 7), //
+        Tensors.vector(4, 7), //
+        Tensors.vector(4, 8), //
+        Tensors.vector(0, 8));
   }
 }

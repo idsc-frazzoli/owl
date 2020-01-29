@@ -2,8 +2,8 @@
 package ch.ethz.idsc.owl.bot.delta;
 
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
 import ch.ethz.idsc.owl.math.VectorFields;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.sophus.math.sample.BoxRandomSample;
 import ch.ethz.idsc.sophus.math.sample.RandomSample;

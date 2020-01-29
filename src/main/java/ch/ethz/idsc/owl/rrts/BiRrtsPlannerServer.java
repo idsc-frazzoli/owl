@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.rrts;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.rrts.core.BiRrtsPlanner;
 import ch.ethz.idsc.owl.rrts.core.BidirectionalRrts;

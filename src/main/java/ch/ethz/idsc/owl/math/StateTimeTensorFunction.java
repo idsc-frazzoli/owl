@@ -8,7 +8,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
-/** serializable interface for functions that map a {@link Tensor} to another {@link Tensor} */
+/** serializable interface for functions that map a {@link StateTime} to a {@link Tensor} */
 @FunctionalInterface
 public interface StateTimeTensorFunction extends Function<StateTime, Tensor>, Serializable {
   /** creates a StateTimeTensorFunction that does not depend on {@link StateTime#time()}

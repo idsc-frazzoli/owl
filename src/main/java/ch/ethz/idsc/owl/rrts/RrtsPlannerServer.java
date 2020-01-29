@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.data.tree.ObservingExpandInterface;
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.RrtsNodes;

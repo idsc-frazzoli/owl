@@ -13,7 +13,7 @@ import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNodeCollections;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Expand;
-import ch.ethz.idsc.owl.math.SingleIntegratorStateSpaceModel;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.EmptyTransitionRegionQuery;

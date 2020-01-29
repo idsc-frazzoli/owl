@@ -10,7 +10,7 @@ import ch.ethz.idsc.owl.lane.LaneInterface;
 import ch.ethz.idsc.owl.lane.LaneRandomSample;
 import ch.ethz.idsc.owl.lane.Se2ConeRandomSample;
 import ch.ethz.idsc.owl.lane.Se2SphereRandomSample;
-import ch.ethz.idsc.owl.math.StateSpaceModel;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.ConeRegion;
 import ch.ethz.idsc.owl.math.region.Region;
