@@ -78,10 +78,11 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Solomon.INSTANCE;
+    KlotskiProblem klotskiProblem = Huarong.AMBUSH;
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     List<StateTime> list = klotskiDemo.compute();
     Export.object(HomeDirectory.file(klotskiProblem.name() + ".object"), list);
     klotskiDemo.close();
+    KlotskiPlot.export(klotskiProblem, list);
   }
 }

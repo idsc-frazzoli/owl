@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.InvariantFlows;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.flow.Flow;
@@ -25,7 +26,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
-  private transient final ControlsIntegrator controlsIntegrator;
+  private final ControlsIntegrator controlsIntegrator;
 
   public StandardRelaxedLexicographicPlanner(//
       StateTimeRaster stateTimeRaster, //
@@ -40,7 +41,7 @@ public class StandardRelaxedLexicographicPlanner extends RelaxedTrajectoryPlanne
     this.goalInterface = goalInterface;
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
-        () -> controls.stream().parallel(), //
+        new InvariantFlows(controls), //
         goalInterface);
   }
 

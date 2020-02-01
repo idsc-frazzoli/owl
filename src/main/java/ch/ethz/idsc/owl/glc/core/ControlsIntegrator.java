@@ -5,9 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -47,16 +45,16 @@ import ch.ethz.idsc.owl.math.state.StateTime;
  * the implementation can be carried out in parallel. */
 public class ControlsIntegrator implements Serializable {
   private final StateIntegrator stateIntegrator;
-  private final Supplier<Stream<Flow>> supplier;
+  private final StateTimeFlows stateTimeFlows;
   private final CostFunction costFunction;
 
   /** @param stateIntegrator
-   * @param supplier of stream of control {@link Flow}s
+   * @param stateTimeFlows of stream of control {@link Flow}s
    * @param costFunction */
   public ControlsIntegrator( //
-      StateIntegrator stateIntegrator, Supplier<Stream<Flow>> supplier, CostFunction costFunction) {
+      StateIntegrator stateIntegrator, StateTimeFlows stateTimeFlows, CostFunction costFunction) {
     this.stateIntegrator = Objects.requireNonNull(stateIntegrator);
-    this.supplier = supplier;
+    this.stateTimeFlows = Objects.requireNonNull(stateTimeFlows);
     this.costFunction = Objects.requireNonNull(costFunction);
   }
 
@@ -65,8 +63,8 @@ public class ControlsIntegrator implements Serializable {
    * @param node from which to expand
    * @return */
   public Map<GlcNode, List<StateTime>> from(GlcNode node) {
-    // TODO supply flows depending on state
-    return supplier.get() // parallel stream results in speedup of ~25% (rice2demo)
+    StateTime stateTime = node.stateTime();
+    return stateTimeFlows.flows(stateTime).parallelStream() // parallel stream results in speedup of ~25% (rice2demo)
         .map(flow -> new FlowTrajectory(flow, stateIntegrator.trajectory(node.stateTime(), flow))) //
         .collect(Collectors.toMap( //
             flowTrajectory -> flowTrajectory.createGlcNode(node, costFunction), //

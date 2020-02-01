@@ -2,6 +2,8 @@
 package ch.ethz.idsc.owl.bot.esp;
 
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
@@ -9,14 +11,12 @@ import junit.framework.TestCase;
 public class EspModelTest extends TestCase {
   public void testSimple() {
     Tensor board = EspDemo.START;
-    assertFalse(EspObstacleRegion.INSTANCE.isMember(board));
-    for (Flow flow : EspControls.LIST) {
+    for (Flow flow : EspFlows.INSTANCE.flows(new StateTime(board, RealScalar.ZERO))) {
       Tensor u = flow.getU();
       Tensor tensor = EspModel.INSTANCE.f(board, u);
       int vx = tensor.Get(5, 0).number().intValue();
       int vy = tensor.Get(5, 1).number().intValue();
       assertEquals(tensor.Get(vx, vy).number().intValue(), 0);
-      assertFalse(EspObstacleRegion.INSTANCE.isMember(tensor));
     }
   }
 
@@ -29,14 +29,13 @@ public class EspModelTest extends TestCase {
         Tensors.vector(0, 0, 1, 1, 1), //
         Tensors.vector(2, 0) //
     );
-    assertFalse(EspObstacleRegion.INSTANCE.isMember(board));
-    int collisions = 0;
-    for (Flow flow : EspControls.LIST) {
+    int count = 0;
+    for (Flow flow : EspFlows.INSTANCE.flows(new StateTime(board, RealScalar.ZERO))) {
       Tensor u = flow.getU();
-      Tensor tensor = EspModel.INSTANCE.f(board, u);
-      collisions += EspObstacleRegion.INSTANCE.isMember(tensor) ? 1 : 0;
+      EspModel.INSTANCE.f(board, u);
+      ++count;
     }
-    assertEquals(collisions, 4);
+    assertEquals(count, 4);
   }
 
   public void testEdge() {
@@ -48,13 +47,12 @@ public class EspModelTest extends TestCase {
         Tensors.vector(0, 0, 1, 1, 1), //
         Tensors.vector(2, 1) //
     );
-    assertFalse(EspObstacleRegion.INSTANCE.isMember(board));
-    int collisions = 0;
-    for (Flow flow : EspControls.LIST) {
+    int count = 0;
+    for (Flow flow : EspFlows.INSTANCE.flows(new StateTime(board, RealScalar.ZERO))) {
       Tensor u = flow.getU();
-      Tensor tensor = EspModel.INSTANCE.f(board, u);
-      collisions += EspObstacleRegion.INSTANCE.isMember(tensor) ? 1 : 0;
+      EspModel.INSTANCE.f(board, u);
+      ++count;
     }
-    assertEquals(collisions, 3);
+    assertEquals(count, 5);
   }
 }

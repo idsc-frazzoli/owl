@@ -10,6 +10,7 @@ import ch.ethz.idsc.owl.math.state.StateTime;
 
 /** adapter for planning without constraint, for instance no obstacles
  * the planning then only depends on the cost function and heuristic */
+// TODO rename
 public enum EmptyObstacleConstraint implements PlannerConstraint {
   INSTANCE;
 

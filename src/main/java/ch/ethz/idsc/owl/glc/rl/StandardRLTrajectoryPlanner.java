@@ -12,6 +12,7 @@ import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.InvariantFlows;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.VectorScalars;
@@ -26,7 +27,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
-  private transient final ControlsIntegrator controlsIntegrator;
+  private final ControlsIntegrator controlsIntegrator;
   // ---
   private final SlackWrap slackWrap;
   private final Tensor slacks;
@@ -46,7 +47,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
     this.goalInterface = goalInterface;
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
-        () -> controls.stream().parallel(), //
+        new InvariantFlows(controls), //
         goalInterface);
   }
 

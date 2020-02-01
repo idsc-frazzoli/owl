@@ -26,11 +26,11 @@ class EspRender implements RenderInterface {
     this.board = Objects.requireNonNull(board);
   }
 
-  @Override
+  @Override // from RenderInterface
   public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
     for (int px = 0; px < 5; ++px)
       for (int py = 0; py < 5; ++py)
-        if (EspModel.isField(px, py)) {
+        if (EspFlows.isField(px, py)) {
           int value = board.Get(px, py).number().intValue();
           // System.out.println(px + " " + value);
           switch (value) {

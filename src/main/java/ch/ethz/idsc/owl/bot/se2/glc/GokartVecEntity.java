@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.glc.adapter.LexicographicRelabelDecision;
 import ch.ethz.idsc.owl.glc.adapter.VectorCostGoalAdapter;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.InvariantFlows;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
@@ -53,7 +54,8 @@ public class GokartVecEntity extends GokartEntity {
     GoalInterface goalInterface = new VectorCostGoalAdapter(costs, se2ComboRegion);
     Comparator<Tensor> comparator = DiscretizedLexicographic.of(Tensors.vector(slacks));
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface, //
+        stateTimeRaster(), FIXED_STATE_INTEGRATOR, //
+        new InvariantFlows(controls), plannerConstraint, goalInterface, //
         new LexicographicRelabelDecision(comparator), //
         new CustomNodeMeritComparator(comparator));
   }

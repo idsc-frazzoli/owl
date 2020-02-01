@@ -14,9 +14,11 @@ import ch.ethz.idsc.owl.glc.core.ControlsIntegrator;
 import ch.ethz.idsc.owl.glc.core.DomainQueue;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
+import ch.ethz.idsc.owl.glc.core.InvariantFlows;
 import ch.ethz.idsc.owl.glc.core.NodeMeritComparator;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.RelabelDecision;
+import ch.ethz.idsc.owl.glc.core.StateTimeFlows;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -32,28 +34,38 @@ import ch.ethz.idsc.tensor.Tensor;
  * <li>nodes that get replaced in a domain, are also removed from the queue
  * </ul> */
 public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
+  public static CTrajectoryPlanner create( //
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, StateTimeFlows stateTimeFlows, //
+      PlannerConstraint plannerConstraint, GoalInterface goalInterface) {
+    return new StandardTrajectoryPlanner( //
+        stateTimeRaster, stateIntegrator, stateTimeFlows, plannerConstraint, goalInterface, //
+        SimpleRelabelDecision.DEFAULT, NodeMeritComparator.INSTANCE);
+  }
+
   private final StateIntegrator stateIntegrator;
   private final PlannerConstraint plannerConstraint;
   private final GoalInterface goalInterface;
   private final RelabelDecision relabelDecision;
-  private transient final ControlsIntegrator controlsIntegrator;
+  private final ControlsIntegrator controlsIntegrator;
 
   public StandardTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface) {
-    this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, //
+    this(stateTimeRaster, stateIntegrator, new InvariantFlows(controls), //
+        plannerConstraint, goalInterface, //
         SimpleRelabelDecision.DEFAULT, NodeMeritComparator.INSTANCE);
   }
 
   public StandardTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface, RelabelDecision relabelDecision) {
-    this(stateTimeRaster, stateIntegrator, controls, plannerConstraint, goalInterface, //
+    this(stateTimeRaster, stateIntegrator, new InvariantFlows(controls), //
+        plannerConstraint, goalInterface, //
         relabelDecision, NodeMeritComparator.INSTANCE);
   }
 
   public StandardTrajectoryPlanner( //
-      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, StateTimeFlows stateTimeFlows, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface, //
       RelabelDecision relabelDecision, Comparator<GlcNode> comparator) {
     super(stateTimeRaster, goalInterface, comparator);
@@ -63,7 +75,7 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
     this.relabelDecision = relabelDecision;
     controlsIntegrator = new ControlsIntegrator( //
         stateIntegrator, //
-        () -> controls.stream().parallel(), // TODO not serializable
+        stateTimeFlows, //
         goalInterface);
   }
 

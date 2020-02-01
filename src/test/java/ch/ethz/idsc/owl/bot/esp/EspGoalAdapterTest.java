@@ -10,7 +10,6 @@ public class EspGoalAdapterTest extends TestCase {
   public void testGoal() {
     Tensor goal = EspGoalAdapter.GOAL;
     assertEquals(EspGoalAdapter.INSTANCE.minCostToGoal(goal), RealScalar.ZERO);
-    assertFalse(EspObstacleRegion.INSTANCE.isMember(goal));
   }
 
   public void testStart() {

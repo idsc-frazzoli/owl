@@ -112,9 +112,7 @@ import ch.ethz.idsc.tensor.io.Import;
     }
   }
 
-  public static void main(String[] args) throws ClassNotFoundException, IOException, DataFormatException {
-    KlotskiProblem klotskiProblem = TrafficJam.INSTANCE;
-    List<StateTime> list = Import.object(HomeDirectory.file(klotskiProblem.name() + ".object"));
+  public static void export(KlotskiProblem klotskiProblem, List<StateTime> list) throws IOException {
     System.out.println(list.size());
     int index = 0;
     File folder = HomeDirectory.Pictures(klotskiProblem.name());
@@ -129,5 +127,11 @@ import ch.ethz.idsc.tensor.io.Import;
       ImageIO.write(bufferedImage, "png", new File(folder, String.format("%03d.png", index)));
       ++index;
     }
+  }
+
+  public static void main(String[] args) throws ClassNotFoundException, IOException, DataFormatException {
+    KlotskiProblem klotskiProblem = Huarong.TRYOUT;
+    export(klotskiProblem, Import.object(HomeDirectory.file(klotskiProblem.name() + ".object")));
+    // TrafficJam.INSTANCE;
   }
 }

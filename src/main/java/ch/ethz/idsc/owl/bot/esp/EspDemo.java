@@ -9,12 +9,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.owl.glc.adapter.DiscreteIntegrator;
-import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
+import ch.ethz.idsc.owl.glc.adapter.EmptyObstacleConstraint;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
+import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -39,19 +39,18 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   List<StateTime> compute() {
-    List<Flow> controls = EspControls.LIST;
-    PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(EspObstacleRegion.INSTANCE);
+    PlannerConstraint plannerConstraint = EmptyObstacleConstraint.INSTANCE;
     // ---
-    StandardTrajectoryPlanner standardTrajectoryPlanner = new StandardTrajectoryPlanner( //
+    TrajectoryPlanner trajectoryPlanner = StandardTrajectoryPlanner.create( //
         EspStateTimeRaster.INSTANCE, //
         new DiscreteIntegrator(EspModel.INSTANCE), //
-        controls, //
+        EspFlows.INSTANCE, //
         plannerConstraint, //
         EspGoalAdapter.INSTANCE);
-    standardTrajectoryPlanner.insertRoot(new StateTime(START, RealScalar.ZERO));
+    trajectoryPlanner.insertRoot(new StateTime(START, RealScalar.ZERO));
     while (espFrame.timerFrame.jFrame.isVisible()) {
       {
-        Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
+        Optional<GlcNode> optional = trajectoryPlanner.getBest();
         if (optional.isPresent()) {
           GlcNode glcNode = optional.get();
           // if (print)
@@ -63,13 +62,13 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
           return GlcNodes.getPathFromRootTo(glcNode);
         }
       }
-      Optional<GlcNode> optional = standardTrajectoryPlanner.pollNext();
+      Optional<GlcNode> optional = trajectoryPlanner.pollNext();
       if (optional.isPresent()) {
-        Collection<GlcNode> queue = standardTrajectoryPlanner.getQueue();
-        Map<Tensor, GlcNode> domainMap = standardTrajectoryPlanner.getDomainMap();
+        Collection<GlcNode> queue = trajectoryPlanner.getQueue();
+        Map<Tensor, GlcNode> domainMap = trajectoryPlanner.getDomainMap();
         GlcNode nextNode = optional.get();
         espFrame._board = nextNode.state();
-        standardTrajectoryPlanner.expand(nextNode);
+        trajectoryPlanner.expand(nextNode);
         System.out.println(String.format("#=%3d   q=%3d   $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
       } else { // queue is empty
         System.out.println("*** Queue is empty -- No Goal was found ***");
