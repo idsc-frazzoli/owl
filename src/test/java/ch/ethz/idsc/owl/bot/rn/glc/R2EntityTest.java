@@ -7,10 +7,7 @@ import java.util.List;
 import ch.ethz.idsc.owl.ani.adapter.EuclideanTrajectoryControl;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -22,9 +19,8 @@ import junit.framework.TestCase;
 
 public class R2EntityTest extends TestCase {
   public void testSimple() {
-    final StateSpaceModel stateSpaceModel = SingleIntegratorStateSpaceModel.INSTANCE;
-    final Flow ux = StateSpaceModels.createFlow(stateSpaceModel, Tensors.vector(1, 0));
-    final List<TrajectorySample> trajectory = new ArrayList<>();
+    Tensor ux = Tensors.vector(1, 0);
+    List<TrajectorySample> trajectory = new ArrayList<>();
     trajectory.add(TrajectorySample.head(new StateTime(Tensors.vector(0, 0), RealScalar.ZERO)));
     trajectory.add(new TrajectorySample(new StateTime(Tensors.vector(1, 0), RealScalar.ONE), ux));
     trajectory.add(new TrajectorySample(new StateTime(Tensors.vector(2, 0), RealScalar.of(2)), ux));

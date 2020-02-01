@@ -1,9 +1,8 @@
 // code by jph, ynager
 package ch.ethz.idsc.owl.bot.tse2;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.N;
 
@@ -14,8 +13,7 @@ import ch.ethz.idsc.tensor.sca.N;
    * @param rate of turning [m^-1]
    * @param acceleration [m*s^-2]
    * @return flow with u == { rate[m^-1], acceleration[m*s^-2]} */
-  public static Flow singleton(Scalar rate, Scalar acceleration) {
-    return StateSpaceModels.createFlow( //
-        Tse2StateSpaceModel.INSTANCE, N.DOUBLE.of(Tensors.of(rate, acceleration)));
+  public static Tensor singleton(Scalar rate, Scalar acceleration) {
+    return N.DOUBLE.of(Tensors.of(rate, acceleration));
   }
 }

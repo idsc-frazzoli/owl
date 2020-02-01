@@ -15,7 +15,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -40,11 +39,11 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   private static final SatelliteStateSpaceModel SATELLITE_MODEL = new SatelliteStateSpaceModel();
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
   // ---
-  private final Collection<Flow> controls;
+  private final Collection<Tensor> controls;
   public Scalar delayHint = RealScalar.ONE;
 
   /** @param state initial position of entity */
-  public SatelliteEntity(Tensor state, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
+  public SatelliteEntity(Tensor state, TrajectoryControl trajectoryControl, Collection<Tensor> controls) {
     super( //
         new SimpleEpisodeIntegrator(SATELLITE_MODEL, INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);

@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.Region;
@@ -29,7 +28,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ enum SatelliteDemo {
   ;
   public static void main(String[] args) throws Exception {
-    Collection<Flow> controls = new SatelliteControls(RealScalar.of(0.9)).getFlows(6);
+    Collection<Tensor> controls = new SatelliteControls(RealScalar.of(0.9)).getFlows(6);
     Tensor start = Tensors.vector(2, 0, 0, 2); // pos, vel
     Region<Tensor> obstacleRegion = new EllipsoidRegion( // obstacle at origin
         Tensors.vector(0, 0, 0, 0), //

@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
-    Scalar speed = trailAhead.get(0).getFlow().get().getU().Get(0);
+    Scalar speed = trailAhead.get(0).getFlow().get().Get(0);
     boolean inReverse = Sign.isNegative(speed);
     Tensor state = tail.state();
     TensorUnaryOperator tensorUnaryOperator = new Se2GroupElement(state).inverse()::combine;
@@ -68,7 +68,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       curve = ClothoidPursuits.curve(xya, REFINEMENT);
       if (inReverse)
         ClothoidControlHelper.mirrorAndReverse(curve);
-      return Optional.of(Se2CarFlows.singleton(speed, pursuitInterface.firstRatio().get()).getU());
+      return Optional.of(Se2CarFlows.singleton(speed, pursuitInterface.firstRatio().get()));
     }
     curve = null;
     // System.err.println("no compliant strategy found!");

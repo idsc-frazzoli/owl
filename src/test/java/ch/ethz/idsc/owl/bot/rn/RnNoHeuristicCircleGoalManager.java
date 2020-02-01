@@ -6,7 +6,6 @@ import java.util.List;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -32,7 +31,7 @@ public class RnNoHeuristicCircleGoalManager extends SimpleTrajectoryRegionQuery 
   }
 
   @Override
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     StateTime from = glcNode.stateTime();
     return Norm._2.between(from.state(), Lists.getLast(trajectory).state());
   }

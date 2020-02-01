@@ -25,7 +25,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -58,12 +57,12 @@ public class RLTrajectoryPlannerTest extends TestCase {
     StateIntegrator stateIntegrator = //
         FixedStateIntegrator.create(EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Flows = new R2RationalFlows(RationalScalar.HALF);
-    Collection<Flow> controls = r2Flows.getFlows(13);
+    Collection<Tensor> controls = r2Flows.getFlows(13);
     RegionWithDistance<Tensor> goalRegion = new BallRegion(stateGoal, radius);
     // the 1st cost penalizes distance of path with slack
     CostFunction distanceCost = new CostFunction() {
       @Override // from CostIncrementFunction
-      public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+      public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
         return Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()); // ||x_prev - x_next||
       }
 

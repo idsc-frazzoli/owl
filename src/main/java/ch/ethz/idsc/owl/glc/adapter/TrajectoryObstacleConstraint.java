@@ -6,9 +6,9 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
+import ch.ethz.idsc.tensor.Tensor;
 
 /** class that wraps a given {@link TrajectoryRegionQuery} to an obstacle constraint.
  * non-empty intersection of the trajectory with the region represents a constraint
@@ -21,7 +21,7 @@ public class TrajectoryObstacleConstraint implements PlannerConstraint, Serializ
   }
 
   @Override // from PlannerConstraint
-  public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     return !trajectoryRegionQuery.firstMember(trajectory).isPresent();
   }
 

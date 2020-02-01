@@ -34,7 +34,7 @@ public enum GlcTrajectories {
         GlcNode nextNode = list.get(index);
         if (prevNode != nextNode.parent())
           throw new RuntimeException();
-        List<StateTime> part = stateIntegrator.trajectory(prevNode.stateTime(), nextNode.flow().getU());
+        List<StateTime> part = stateIntegrator.trajectory(prevNode.stateTime(), nextNode.flow());
         part.forEach(stateTime -> trajectory.add(new TrajectorySample(stateTime, nextNode.flow())));
       }
     }

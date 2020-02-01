@@ -5,7 +5,6 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,7 +17,7 @@ public final class SparseImageCostFunction extends ImageCostFunction {
   }
 
   @Override // from CostIncrementFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     return flipYXTensorInterp.at(Lists.getLast(trajectory).state());
   }
 }

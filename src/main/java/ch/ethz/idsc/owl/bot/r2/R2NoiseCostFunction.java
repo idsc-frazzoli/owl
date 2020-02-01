@@ -7,7 +7,6 @@ import java.util.List;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.noise.ContinuousNoise;
 import ch.ethz.idsc.owl.math.noise.ContinuousNoiseUtils;
 import ch.ethz.idsc.owl.math.noise.SimplexContinuousNoise;
@@ -31,7 +30,7 @@ public class R2NoiseCostFunction implements CostFunction, Serializable {
   }
 
   @Override // from CostIncrementFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     Tensor dts = StateTimeTrajectories.deltaTimes(glcNode, trajectory);
     Tensor cost = Tensor.of(trajectory.stream() //
         .map(StateTime::state) //

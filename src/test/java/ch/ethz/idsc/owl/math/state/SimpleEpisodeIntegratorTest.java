@@ -4,14 +4,12 @@ package ch.ethz.idsc.owl.math.state;
 import java.util.List;
 
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -36,8 +34,8 @@ public class SimpleEpisodeIntegratorTest extends TestCase {
       AbstractEpisodeIntegrator aei = new SimpleEpisodeIntegrator( //
           stateSpaceModel, //
           integrator, new StateTime(x, t));
-      Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
-      List<StateTime> list = aei.move(flow, p);
+      Tensor flow = u;
+      List<StateTime> list = aei.abstract_move(flow, p);
       assertEquals(list.size(), 1);
       Tensor cmp = x.add(u.multiply(p));
       assertEquals(list.get(0).state(), cmp);
@@ -61,8 +59,8 @@ public class SimpleEpisodeIntegratorTest extends TestCase {
       AbstractEpisodeIntegrator aei = new SimpleEpisodeIntegrator( //
           stateSpaceModel, //
           integrator, new StateTime(x, t));
-      Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
-      List<StateTime> list = aei.move(flow, p);
+      Tensor flow = u;
+      List<StateTime> list = aei.abstract_move(flow, p);
       assertEquals(list.size(), 1);
       Tensor cmp = x.add(u.multiply(p));
       assertEquals(list.get(0).state(), cmp);
@@ -86,8 +84,8 @@ public class SimpleEpisodeIntegratorTest extends TestCase {
       AbstractEpisodeIntegrator aei = new SimpleEpisodeIntegrator( //
           stateSpaceModel, //
           integrator, new StateTime(x, t));
-      Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
-      List<StateTime> list = aei.move(flow, p);
+      Tensor flow = u;
+      List<StateTime> list = aei.abstract_move(flow, p);
       assertEquals(list.size(), 1);
       Tensor cmp = x.add(u.multiply(p));
       assertEquals(list.get(0).state(), cmp);

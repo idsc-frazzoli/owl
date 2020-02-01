@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -41,7 +40,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   public static TrajectoryPlanner raw(GoalInterface goalInterface) {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta4Integrator.INSTANCE, PsuStateSpaceModel.INSTANCE, RationalScalar.of(1, 4), 5);
-    Collection<Flow> controls = PsuControls.createControls(0.2, 6);
+    Collection<Tensor> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     // ---
     StateTimeRaster stateTimeRaster = new EtaRaster(ETA, StateTimeTensorFunction.state(psuWrap::represent));
@@ -64,7 +63,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   public static TrajectoryPlanner medium() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta45Integrator.INSTANCE, PsuStateSpaceModel.INSTANCE, RationalScalar.of(1, 4), 5);
-    Collection<Flow> controls = PsuControls.createControls(0.2, 6);
+    Collection<Tensor> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //
         PsuMetric.INSTANCE, Tensors.vector(Math.PI, 2), RealScalar.of(0.3));

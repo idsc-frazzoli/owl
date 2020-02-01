@@ -7,7 +7,6 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -21,7 +20,7 @@ public enum MinTimeEmptyGoal implements GoalInterface {
   INSTANCE;
 
   @Override // from CostIncrementFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     return StateTimeTrajectories.timeIncrement(glcNode, trajectory);
   }
 

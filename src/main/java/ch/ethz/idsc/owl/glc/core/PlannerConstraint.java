@@ -3,8 +3,8 @@ package ch.ethz.idsc.owl.glc.core;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.Tensor;
 
 @FunctionalInterface
 public interface PlannerConstraint {
@@ -14,5 +14,5 @@ public interface PlannerConstraint {
    * @param trajectory
    * @param flow along which trajectory was computed
    * @return true if planner may create a new node at the last {@link StateTime} in given trajectory */
-  boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow);
+  boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Tensor flow);
 }

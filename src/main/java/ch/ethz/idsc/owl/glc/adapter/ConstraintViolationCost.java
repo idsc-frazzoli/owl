@@ -8,7 +8,6 @@ import java.util.Objects;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,7 +35,7 @@ public class ConstraintViolationCost implements CostFunction, Serializable {
   }
 
   @Override // from CostIncrementFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     return plannerConstraint.isSatisfied(glcNode, trajectory, flow) //
         ? unit_zero
         : unit;

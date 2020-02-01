@@ -10,9 +10,7 @@ import java.util.function.BiFunction;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.math.IntegerLog2;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.owl.rrts.adapter.DirectedTransition;
@@ -81,8 +79,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         Tensor u = (transition instanceof DirectedTransition && !((DirectedTransition) transition).isForward) //
             ? uBetween.apply(stateTime, orig) //
             : uBetween.apply(orig, stateTime);
-        Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
-        trajectory.add(new TrajectorySample(stateTime, flow));
+        trajectory.add(new TrajectorySample(stateTime, u));
       }
       prev = node;
       t0 = t0.add(transition.length());
@@ -139,8 +136,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         Tensor u = direction //
             ? uBetween.apply(orig, stateTime) //
             : uBetween.apply(stateTime, orig);
-        Flow flow = StateSpaceModels.createFlow(stateSpaceModel, u);
-        trajectory.add(new TrajectorySample(stateTime, flow));
+        trajectory.add(new TrajectorySample(stateTime, u));
       }
     }
     return trajectory;

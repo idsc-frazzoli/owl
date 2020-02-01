@@ -3,10 +3,10 @@ package ch.ethz.idsc.owl.bot.rn;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.DoubleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -19,9 +19,8 @@ import ch.ethz.idsc.tensor.red.Norm;
   ;
   /** @param controls
    * @return max of norm 2 of given controls in R^n */
-  public static Scalar maxSpeed(Collection<Flow> controls) {
+  public static Scalar maxSpeed(Collection<Tensor> controls) {
     return controls.stream() //
-        .map(Flow::getU) //
         .map(Norm._2::ofVector) //
         .reduce(Max::of).get();
   }

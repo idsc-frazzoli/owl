@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.Tensor;
 
 /** private utility class to facilitate the construction of the map */
 /* private */ class FlowTrajectory {
-  private final Flow flow;
+  private final Tensor flow;
   private final List<StateTime> trajectory;
 
-  FlowTrajectory(Flow flow, List<StateTime> trajectory) {
+  FlowTrajectory(Tensor flow, List<StateTime> trajectory) {
     this.flow = flow;
     this.trajectory = trajectory;
   }
@@ -49,7 +49,7 @@ public class ControlsIntegrator implements Serializable {
   private final CostFunction costFunction;
 
   /** @param stateIntegrator
-   * @param stateTimeFlows of stream of control {@link Flow}s
+   * @param stateTimeFlows of stream of control flows
    * @param costFunction */
   public ControlsIntegrator( //
       StateIntegrator stateIntegrator, StateTimeFlows stateTimeFlows, CostFunction costFunction) {
@@ -65,7 +65,7 @@ public class ControlsIntegrator implements Serializable {
   public Map<GlcNode, List<StateTime>> from(GlcNode node) {
     StateTime stateTime = node.stateTime();
     return stateTimeFlows.flows(stateTime).parallelStream() // parallel stream results in speedup of ~25% (rice2demo)
-        .map(flow -> new FlowTrajectory(flow, stateIntegrator.trajectory(node.stateTime(), flow.getU()))) //
+        .map(flow -> new FlowTrajectory(flow, stateIntegrator.trajectory(node.stateTime(), flow))) //
         .collect(Collectors.toMap( //
             flowTrajectory -> flowTrajectory.createGlcNode(node, costFunction), //
             FlowTrajectory::trajectory));

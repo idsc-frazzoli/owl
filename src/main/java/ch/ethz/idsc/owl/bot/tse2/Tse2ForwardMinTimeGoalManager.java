@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.tse2;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.glc.adapter.AbstractMinTimeGoalManager;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,7 +23,7 @@ public final class Tse2ForwardMinTimeGoalManager extends AbstractMinTimeGoalMana
   /** @param tse2ComboRegion
    * @param controls
    * @throws Exception if permitted velocity region is not an interval of the form [0, v_max] */
-  public Tse2ForwardMinTimeGoalManager(Tse2ComboRegion tse2ComboRegion, Collection<Flow> controls) {
+  public Tse2ForwardMinTimeGoalManager(Tse2ComboRegion tse2ComboRegion, Collection<Tensor> controls) {
     super(tse2ComboRegion);
     this.tse2ComboRegion = tse2ComboRegion;
     if (Scalars.nonZero(tse2ComboRegion.v_range().min()))

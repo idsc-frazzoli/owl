@@ -36,7 +36,6 @@ import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -76,9 +75,9 @@ public class RelaxedTrajectoryPlanner0Demo implements DemoInterface {
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     // -------- controls --------
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
-    Collection<Flow> controls = r2Flows.getFlows(7);
-    for (Flow flow : controls)
-      ExactTensorQ.require(flow.getU());
+    Collection<Tensor> controls = r2Flows.getFlows(7);
+    for (Tensor flow : controls)
+      ExactTensorQ.require(flow);
     // -------- GoalInterface --------
     // --
     CostFunction distanceCost = new RnMinDistGoalManager(goalRegion);

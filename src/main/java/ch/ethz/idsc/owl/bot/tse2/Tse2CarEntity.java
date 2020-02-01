@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -66,7 +65,7 @@ public class Tse2CarEntity extends Tse2Entity {
   }
 
   // ---
-  protected final Collection<Flow> controls;
+  protected final Collection<Tensor> controls;
   protected final Tensor goalRadius;
   final Tensor partitionScale;
   private final Tensor shape;

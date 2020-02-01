@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -24,9 +23,9 @@ public final class Se2ShiftCostFunction implements CostFunction, Serializable {
   }
 
   @Override // from CostIncrementFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    Flow ante = glcNode.flow(); // == null if glcNode is root
-    return Objects.nonNull(ante) && Sign.isNegative(ante.getU().Get(0).multiply(flow.getU().Get(0))) //
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
+    Tensor ante = glcNode.flow(); // == null if glcNode is root
+    return Objects.nonNull(ante) && Sign.isNegative(ante.Get(0).multiply(flow.Get(0))) //
         ? shiftPenalty
         : shiftPenalty.zero();
   }

@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.r2.R2Flows;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.tensor.Scalar;
@@ -18,7 +17,7 @@ import junit.framework.TestCase;
 public class RnMinTimeGoalManagerTest extends TestCase {
   public void testSimple() {
     R2Flows r2Flows = new R2Flows(Quantity.of(2, "m*s^-1"));
-    Collection<Flow> controls = r2Flows.getFlows(10);
+    Collection<Tensor> controls = r2Flows.getFlows(10);
     Tensor center = Tensors.fromString("{3[m], 6[m]}");
     Scalar radius = Quantity.of(1, "m");
     RegionWithDistance<Tensor> regionWithDistance = new BallRegion(center, radius);

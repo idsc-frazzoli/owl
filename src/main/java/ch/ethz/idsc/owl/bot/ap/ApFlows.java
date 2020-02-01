@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -33,13 +31,11 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   @Override // from FlowsInterface
-  public Collection<Flow> getFlows(int resolution) {
-    Collection<Flow> collection = new ArrayList<>();
+  public Collection<Tensor> getFlows(int resolution) {
+    Collection<Tensor> collection = new ArrayList<>();
     for (Tensor thrust : thrusts)
       for (Tensor aoa : Subdivide.of(aoa_max.zero(), aoa_max, resolution))
-        collection.add(StateSpaceModels.createFlow( //
-            ApStateSpaceModel.INSTANCE, //
-            N.DOUBLE.of(Tensors.of(thrust, aoa))));
+        collection.add(N.DOUBLE.of(Tensors.of(thrust, aoa)));
     return collection;
   }
 }

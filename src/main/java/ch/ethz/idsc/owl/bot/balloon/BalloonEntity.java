@@ -21,7 +21,6 @@ import ch.ethz.idsc.owl.gui.region.ImageRender;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -70,7 +69,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override // from TrajectoryEntity
   public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    Collection<Flow> controls = BalloonFlows.of(U_MAX, stateSpaceModel).getFlows(FLOWRES);
+    Collection<Tensor> controls = BalloonFlows.of(U_MAX).getFlows(FLOWRES);
     BalloonMinTimeGoalManager balloonMinTimeGoalManager = //
         new BalloonMinTimeGoalManager(Extract2D.FUNCTION.apply(goal), GOAL_RADIUS, SPEED_MAX);
     GoalInterface goalInterface = balloonMinTimeGoalManager.getGoalInterface();

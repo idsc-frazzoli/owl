@@ -2,8 +2,6 @@
 package ch.ethz.idsc.owl.bot.ap;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,7 +19,7 @@ public class ApPlannerConstraintTest extends TestCase {
   Tensor zRateTooSteep = Tensors.vector(0, 0, 83, -0.18);
   Tensor zRateValid = Tensors.vector(1000, 5, 60, -0.001);
   ApPlannerConstraint ap = new ApPlannerConstraint();
-  Flow flow = StateSpaceModels.createFlow(ApStateSpaceModel.INSTANCE, Tensors.vector(100, 0.1));
+  Tensor flow = Tensors.vector(100, 0.1);
 
   public void testXConstraints() {
     GlcNode pseudoNodeX = GlcNode.of(flow, new StateTime(xUnvalid, RealScalar.of(2)), RealScalar.ONE, RealScalar.ONE);

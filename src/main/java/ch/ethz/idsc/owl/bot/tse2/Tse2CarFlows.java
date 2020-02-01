@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Subdivide;
@@ -32,10 +31,10 @@ public class Tse2CarFlows implements FlowsInterface, Serializable {
   }
 
   @Override // from FlowsInterface
-  public Collection<Flow> getFlows(int resolution) {
+  public Collection<Tensor> getFlows(int resolution) {
     if (resolution % 2 == 1)
       ++resolution;
-    List<Flow> list = new ArrayList<>();
+    List<Tensor> list = new ArrayList<>();
     for (Tensor rate : Subdivide.of(rate_max.negate(), rate_max, resolution))
       for (Tensor acc : accelerations)
         list.add(Tse2CarHelper.singleton(rate.Get(), acc.Get()));

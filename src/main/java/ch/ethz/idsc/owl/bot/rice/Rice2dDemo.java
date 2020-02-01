@@ -23,7 +23,6 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
@@ -49,7 +48,7 @@ import ch.ethz.idsc.tensor.io.Timing;
 
   public static TrajectoryPlanner createInstance(Scalar mu, StateSpaceModel stateSpaceModel) {
     Tensor eta = Tensors.vector(3, 3, 6, 6);
-    Collection<Flow> controls = Rice2Controls.create2d(mu, 1).getFlows(15);
+    Collection<Tensor> controls = Rice2Controls.create2d(1).getFlows(15);
     GoalInterface goalInterface = new Rice2GoalManager(ELLIPSOID_REGION);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(RegionUnion.wrap(Arrays.asList( //

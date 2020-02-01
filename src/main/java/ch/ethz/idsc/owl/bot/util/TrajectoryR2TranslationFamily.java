@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.hs.r2.R2RigidFamily;
@@ -20,8 +19,8 @@ public class TrajectoryR2TranslationFamily extends R2TranslationFamily {
    * @param initial
    * @param flow
    * @return */
-  public static R2RigidFamily create(StateIntegrator stateIntegrator, StateTime initial, Flow flow) {
-    List<StateTime> trajectory = stateIntegrator.trajectory(initial, flow.getU());
+  public static R2RigidFamily create(StateIntegrator stateIntegrator, StateTime initial, Tensor flow) {
+    List<StateTime> trajectory = stateIntegrator.trajectory(initial, flow);
     return new TrajectoryR2TranslationFamily(trajectory, initial);
   }
 

@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.bot.se2.rrts.DubinsTransitionSpace;
 import ch.ethz.idsc.owl.bot.se2.rrts.Se2RrtsNodeCollections;
 import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -67,7 +66,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
       TrajectorySample sample = trajectory.get(i);
       assertEquals(RationalScalar.of(i, 10), sample.stateTime().time());
       assertEquals(Tensors.of(sample.stateTime().time(), RealScalar.ZERO), sample.stateTime().state());
-      assertEquals(Tensors.vector(1, 0), sample.getFlow().get().getU());
+      assertEquals(Tensors.vector(1, 0), sample.getFlow().get());
     }
     assertFalse(trajectory.get(0).getFlow().isPresent());
     assertTrue(trajectory.subList(1, 31).stream().map(TrajectorySample::getFlow).allMatch(Optional::isPresent));
@@ -106,7 +105,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
       TrajectorySample sample = trajectory.get(i);
       assertTrue(Chop._15.close(sample.stateTime().time(), RationalScalar.of(i, 10)));
       assertTrue(Chop._15.close(sample.stateTime().state(), Tensors.of(sample.stateTime().time(), RealScalar.ZERO, RealScalar.ZERO)));
-      assertTrue(Chop._14.close(sample.getFlow().get().getU(), Tensors.vector(1, 0, 0)));
+      assertTrue(Chop._14.close(sample.getFlow().get(), Tensors.vector(1, 0, 0)));
     }
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(10).stateTime().state());
@@ -121,7 +120,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
         iterator.next().stateTime());
     while (iterator.hasNext()) {
       TrajectorySample trajectorySample = iterator.next();
-      integrator.move(trajectorySample.getFlow().get().getU(), trajectorySample.stateTime().time());
+      integrator.move(trajectorySample.getFlow().get(), trajectorySample.stateTime().time());
       assertEquals(trajectorySample.stateTime().time(), integrator.tail().time());
       Chop._03.requireClose(trajectorySample.stateTime().state(), integrator.tail().state());
     }
@@ -157,7 +156,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
       TrajectorySample sample = trajectory.get(i);
       assertEquals(RationalScalar.of(i, 16), sample.stateTime().time());
       assertEquals(Tensors.of(sample.stateTime().time(), RealScalar.ZERO, RealScalar.ZERO), sample.stateTime().state());
-      assertEquals(Tensors.vector(1, 0, 0), sample.getFlow().get().getU());
+      assertEquals(Tensors.vector(1, 0, 0), sample.getFlow().get());
     }
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(16).stateTime().state());
@@ -165,7 +164,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     Chop._15.requireClose(n3.state(), Lists.getLast(trajectory).stateTime().state());
     // ---
     assertFalse(trajectory.get(0).getFlow().isPresent());
-    assertTrue(trajectory.subList(1, 65).stream().map(TrajectorySample::getFlow).map(Optional::get).map(Flow::getU) //
+    assertTrue(trajectory.subList(1, 65).stream().map(TrajectorySample::getFlow).map(Optional::get) //
         .allMatch(u -> u.Get(1).equals(RealScalar.ZERO)));
     Iterator<TrajectorySample> iterator = trajectory.iterator();
     EpisodeIntegrator integrator = new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, //
@@ -173,7 +172,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
         iterator.next().stateTime());
     while (iterator.hasNext()) {
       TrajectorySample trajectorySample = iterator.next();
-      integrator.move(trajectorySample.getFlow().get().getU(), trajectorySample.stateTime().time());
+      integrator.move(trajectorySample.getFlow().get(), trajectorySample.stateTime().time());
       assertEquals(trajectorySample.stateTime().time(), integrator.tail().time());
       Chop._03.requireClose(trajectorySample.stateTime().state(), integrator.tail().state());
     }
@@ -209,7 +208,7 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
       TrajectorySample sample = trajectory.get(i);
       assertEquals(RationalScalar.of(i, 16), sample.stateTime().time());
       assertEquals(Tensors.of(sample.stateTime().time(), RealScalar.ZERO, RealScalar.ZERO), sample.stateTime().state());
-      assertTrue(Chop._15.close(sample.getFlow().get().getU(), Tensors.vector(1, 0, 0)));
+      assertTrue(Chop._15.close(sample.getFlow().get(), Tensors.vector(1, 0, 0)));
     }
     Chop._15.requireClose(root.state(), trajectory.get(0).stateTime().state());
     Chop._15.requireClose(n1.state(), trajectory.get(16).stateTime().state());
@@ -218,15 +217,15 @@ public class RrtsFlowTrajectoryGeneratorTest extends TestCase {
     // ---
     assertFalse(trajectory.get(0).getFlow().isPresent());
     assertTrue(trajectory.subList(1, 49).stream().map(TrajectorySample::getFlow).allMatch(Optional::isPresent));
-    assertTrue(trajectory.subList(1, 33).stream().map(TrajectorySample::getFlow).map(Optional::get).map(Flow::getU).allMatch(t -> Sign.isPositive(t.Get(0))));
-    assertTrue(trajectory.subList(33, 49).stream().map(TrajectorySample::getFlow).map(Optional::get).map(Flow::getU).allMatch(t -> Sign.isNegative(t.Get(0))));
+    assertTrue(trajectory.subList(1, 33).stream().map(TrajectorySample::getFlow).map(Optional::get).allMatch(t -> Sign.isPositive(t.Get(0))));
+    assertTrue(trajectory.subList(33, 49).stream().map(TrajectorySample::getFlow).map(Optional::get).allMatch(t -> Sign.isNegative(t.Get(0))));
     Iterator<TrajectorySample> iterator = trajectory.iterator();
     EpisodeIntegrator integrator = new SimpleEpisodeIntegrator(Se2StateSpaceModel.INSTANCE, //
         Se2FlowIntegrator.INSTANCE, //
         iterator.next().stateTime());
     while (iterator.hasNext()) {
       TrajectorySample trajectorySample = iterator.next();
-      integrator.move(trajectorySample.getFlow().get().getU(), trajectorySample.stateTime().time());
+      integrator.move(trajectorySample.getFlow().get(), trajectorySample.stateTime().time());
       assertEquals(trajectorySample.stateTime().time(), integrator.tail().time());
       try {
         Chop._03.requireClose(trajectorySample.stateTime().state(), integrator.tail().state());

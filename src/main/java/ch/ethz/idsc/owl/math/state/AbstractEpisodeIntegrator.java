@@ -5,10 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -26,11 +24,11 @@ abstract class AbstractEpisodeIntegrator implements EpisodeIntegrator, Serializa
   /** @param flow
    * @param period
    * @return */
-  protected abstract List<StateTime> move(Flow flow, Scalar period);
+  protected abstract List<StateTime> abstract_move(Tensor flow, Scalar period);
 
   @Override // from EpisodeIntegrator
   public final void move(Tensor u, Scalar now) {
-    List<StateTime> trajectory = move(StateSpaceModels.createFlow(stateSpaceModel, u), now.subtract(stateTime.time()));
+    List<StateTime> trajectory = abstract_move(u, now.subtract(stateTime.time()));
     stateTime = Lists.getLast(trajectory);
   }
 

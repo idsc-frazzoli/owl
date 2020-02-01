@@ -6,9 +6,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -27,12 +24,11 @@ class SatelliteControls implements FlowsInterface, Serializable {
   }
 
   @Override
-  public Collection<Flow> getFlows(int resolution) {
-    StateSpaceModel stateSpaceModel = new SatelliteStateSpaceModel();
-    Collection<Flow> collection = new HashSet<>();
-    collection.add(StateSpaceModels.createFlow(stateSpaceModel, ZEROS));
+  public Collection<Tensor> getFlows(int resolution) {
+    Collection<Tensor> collection = new HashSet<>();
+    collection.add(ZEROS);
     for (Tensor u : CirclePoints.of(resolution))
-      collection.add(StateSpaceModels.createFlow(stateSpaceModel, u.multiply(amp)));
+      collection.add(u.multiply(amp));
     return collection;
   }
 }

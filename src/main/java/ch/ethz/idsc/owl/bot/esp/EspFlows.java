@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import ch.ethz.idsc.owl.glc.core.StateTimeFlows;
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -16,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensors;
 /* package */ enum EspFlows implements StateTimeFlows {
   INSTANCE;
 
-  private final Map<Tensor, Collection<Flow>> map = new HashMap<>();
+  private final Map<Tensor, Collection<Tensor>> map = new HashMap<>();
 
   private EspFlows() {
     for (int px = 0; px <= 4; ++px)
@@ -26,18 +24,18 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   @Override
-  public Collection<Flow> flows(StateTime stateTime) {
+  public Collection<Tensor> flows(StateTime stateTime) {
     return map.get(stateTime.state().get(5));
   }
 
-  private static Collection<Flow> flows(int px, int py) {
-    Collection<Flow> collection = new LinkedList<>();
+  private static Collection<Tensor> flows(int px, int py) {
+    Collection<Tensor> collection = new LinkedList<>();
     for (int dx = -2; dx <= 2; ++dx)
       if (dx != 0 && isField(px + dx, py))
-        collection.add(StateSpaceModels.createFlow(EspModel.INSTANCE, Tensors.vector(dx, 0)));
+        collection.add(Tensors.vector(dx, 0));
     for (int dy = -2; dy <= 2; ++dy)
       if (dy != 0 && isField(px, py + dy))
-        collection.add(StateSpaceModels.createFlow(EspModel.INSTANCE, Tensors.vector(0, dy)));
+        collection.add(Tensors.vector(0, dy));
     return collection;
   }
 

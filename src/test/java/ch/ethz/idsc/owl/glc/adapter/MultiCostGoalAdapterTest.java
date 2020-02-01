@@ -12,10 +12,10 @@ import ch.ethz.idsc.owl.bot.se2.glc.Se2CarFlows;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import junit.framework.TestCase;
 
@@ -23,7 +23,7 @@ public class MultiCostGoalAdapterTest extends TestCase {
   public void testSimple() {
     Scalar speed = RealScalar.of(2);
     FlowsInterface carFlows = Se2CarFlows.forward(speed, RealScalar.ONE);
-    Collection<Flow> controls = carFlows.getFlows(9);
+    Collection<Tensor> controls = carFlows.getFlows(9);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
@@ -44,7 +44,7 @@ public class MultiCostGoalAdapterTest extends TestCase {
   public void testMembers() {
     Scalar speed = RealScalar.of(2);
     FlowsInterface carFlows = Se2CarFlows.forward(speed, RealScalar.ONE);
-    Collection<Flow> controls = carFlows.getFlows(9);
+    Collection<Tensor> controls = carFlows.getFlows(9);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager se2MinTimeGoalManager = new Se2MinTimeGoalManager(se2ComboRegion, controls);
     GoalInterface goalInterface = se2MinTimeGoalManager.getGoalInterface();
@@ -57,7 +57,7 @@ public class MultiCostGoalAdapterTest extends TestCase {
   public void testTrivial() {
     Scalar speed = RealScalar.of(2);
     FlowsInterface carFlows = Se2CarFlows.forward(speed, RealScalar.ONE);
-    Collection<Flow> controls = carFlows.getFlows(9);
+    Collection<Tensor> controls = carFlows.getFlows(9);
     Se2ComboRegion se2ComboRegion = Se2ComboRegion.ball(Tensors.vector(10, 5, 1), Tensors.vector(1, 1, 2));
     Se2MinTimeGoalManager goalInterface2 = //
         new Se2MinTimeGoalManager(se2ComboRegion, controls);

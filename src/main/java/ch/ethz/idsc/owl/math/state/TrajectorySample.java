@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.tensor.Tensor;
 
 /** container class that bundles information to follow a trajectory */
 public class TrajectorySample implements Serializable {
@@ -17,11 +17,11 @@ public class TrajectorySample implements Serializable {
 
   // ---
   private final StateTime stateTime;
-  private final Flow flow;
+  private final Tensor flow;
 
   /** @param stateTime
    * @param flow may be null */
-  public TrajectorySample(StateTime stateTime, Flow flow) {
+  public TrajectorySample(StateTime stateTime, Tensor flow) {
     this.stateTime = stateTime;
     this.flow = flow;
   }
@@ -39,13 +39,13 @@ public class TrajectorySample implements Serializable {
    * layer aware of the possibility that flow may not be present.
    * 
    * @return Optional.ofNullable(flow) */
-  public Optional<Flow> getFlow() {
+  public Optional<Tensor> getFlow() {
     return Optional.ofNullable(flow);
   }
 
   /** @return info string representation */
   public String toInfoString() {
-    String ustring = Objects.isNull(flow) ? "null" : flow.getU().toString();
+    String ustring = Objects.isNull(flow) ? "null" : flow.toString();
     return stateTime.toInfoString() + "  u=" + ustring;
   }
 }

@@ -30,7 +30,6 @@ import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.BaseFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -63,14 +62,14 @@ public class RLTrajectoryPlanner0Demo implements DemoInterface {
     Tensor eta = Tensors.vector(n, n);
     final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
-    Collection<Flow> controls = r2Flows.getFlows(4);
-    for (Flow flow : controls)
-      ExactTensorQ.require(flow.getU());
+    Collection<Tensor> controls = r2Flows.getFlows(4);
+    for (Tensor flow : controls)
+      ExactTensorQ.require(flow);
     RegionWithDistance<Tensor> goalRegion = new BallRegion(stateGoal, radius);
     // the 1st cost penalizes distance of path with slack
     CostFunction distanceCost = new CostFunction() {
       @Override // from CostIncrementFunction
-      public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+      public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
         return Norm._2.between(glcNode.stateTime().state(), Lists.getLast(trajectory).state()); // ||x_prev - x_next||
       }
 

@@ -6,7 +6,6 @@ import java.util.List;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -31,7 +30,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
       Clips.interval(ApStateSpaceModel.STALL_SPEED, ApStateSpaceModel.MAX_SPEED);
 
   @Override // from PlannerConstraint
-  public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     Tensor state = glcNode.state();
     // boolean xConstraint = Sign.isPositiveOrZero(state.Get(0));
     // if (!xConstraint)

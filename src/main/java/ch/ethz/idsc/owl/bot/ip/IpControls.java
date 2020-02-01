@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Partition;
@@ -19,12 +16,11 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
    * @param amplitude maximum absolute radial acceleration of pendulum
    * @param num
    * @return */
-  public static Collection<Flow> createControls( //
-      StateSpaceModel stateSpaceModel, double amplitude, int num) {
-    List<Flow> list = new ArrayList<>();
+  public static Collection<Tensor> createControls(double amplitude, int num) {
+    List<Tensor> list = new ArrayList<>();
     for (Tensor u : Partition.of( //
         Subdivide.of(DoubleScalar.of(-amplitude), DoubleScalar.of(amplitude), num), 1))
-      list.add(StateSpaceModels.createFlow(stateSpaceModel, u));
+      list.add(u);
     return list;
   }
 }

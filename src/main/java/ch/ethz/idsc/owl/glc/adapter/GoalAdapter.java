@@ -8,7 +8,6 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.Scalar;
@@ -36,7 +35,7 @@ public final class GoalAdapter implements GoalInterface, Serializable {
   }
 
   @Override // from CostFunction
-  public Scalar costIncrement(GlcNode node, List<StateTime> trajectory, Flow flow) {
+  public Scalar costIncrement(GlcNode node, List<StateTime> trajectory, Tensor flow) {
     return costFunction.costIncrement(node, trajectory, flow);
   }
 

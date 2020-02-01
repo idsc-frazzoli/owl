@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,10 +21,10 @@ public class TwdDuckieFlowsTest extends TestCase {
     Scalar sa = Quantity.of(0.567, "m*rad^-1");
     FlowsInterface flowsInterface = new TwdDuckieFlows(ms, sa);
     for (int res = 3; res <= 8; ++res) {
-      Collection<Flow> controls = flowsInterface.getFlows(res);
+      Collection<Tensor> controls = flowsInterface.getFlows(res);
       Set<Tensor> set = new HashSet<>();
-      for (Flow flow : controls) {
-        Tensor key = flow.getU().map(Round._3);
+      for (Tensor flow : controls) {
+        Tensor key = flow.map(Round._3);
         assertTrue(set.add(key));
       }
     }
@@ -36,10 +35,10 @@ public class TwdDuckieFlowsTest extends TestCase {
     Scalar sa = Quantity.of(0.567, "m");
     FlowsInterface flowsInterface = new TwdDuckieFlows(ms, sa);
     for (int res = 3; res <= 8; ++res) {
-      Collection<Flow> controls = flowsInterface.getFlows(res);
+      Collection<Tensor> controls = flowsInterface.getFlows(res);
       Set<Tensor> set = new HashSet<>();
-      for (Flow flow : controls) {
-        Tensor key = flow.getU().map(Round._3);
+      for (Tensor flow : controls) {
+        Tensor key = flow.map(Round._3);
         assertTrue(set.add(key));
       }
     }

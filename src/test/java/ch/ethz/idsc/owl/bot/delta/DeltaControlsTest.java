@@ -4,10 +4,10 @@ package ch.ethz.idsc.owl.bot.delta;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.bot.r2.ImageGradientInterpolation;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -22,7 +22,7 @@ public class DeltaControlsTest extends TestCase {
     assertTrue(Sign.isPositive(maxNormGradient));
     Scalar amp = RealScalar.of(2);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
-    Collection<Flow> controls = new DeltaFlows(stateSpaceModel, amp).getFlows(20);
+    Collection<Tensor> controls = new DeltaFlows(amp).getFlows(20);
     Scalar max = DeltaControls.maxSpeed(controls);
     Chop._12.requireClose(max, amp);
   }

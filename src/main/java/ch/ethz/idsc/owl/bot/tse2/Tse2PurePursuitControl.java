@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
-    Tensor u = trailAhead.get(0).getFlow().get().getU();
+    Tensor u = trailAhead.get(0).getFlow().get();
     Scalar speed = u.Get(0);
     Tensor state = tail.state();
     TensorUnaryOperator tensorUnaryOperator = new Se2Bijection(state).inverse();
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       Scalar ratio = _purePursuit.firstRatio().get();
       if (clip.isInside(ratio)) {
         purePursuit = _purePursuit;
-        return Optional.of(Tse2CarHelper.singleton(speed, ratio).getU());
+        return Optional.of(Tse2CarHelper.singleton(speed, ratio));
       }
     }
     purePursuit = null;

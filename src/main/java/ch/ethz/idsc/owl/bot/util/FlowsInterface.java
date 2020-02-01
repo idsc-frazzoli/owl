@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.bot.util;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.tensor.Tensor;
 
 @FunctionalInterface
 public interface FlowsInterface {
@@ -13,5 +13,5 @@ public interface FlowsInterface {
    * 
    * @param resolution
    * @return collection with size roughly proportional to given resolution */
-  Collection<Flow> getFlows(int resolution);
+  Collection<Tensor> getFlows(int resolution);
 }

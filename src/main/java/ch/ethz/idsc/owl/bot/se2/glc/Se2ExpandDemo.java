@@ -26,7 +26,6 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.CoordinateWrap;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.HyperplaneRegion;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -48,7 +47,7 @@ enum Se2ExpandDemo {
         Se2CarIntegrator.INSTANCE, Se2StateSpaceModel.INSTANCE, RationalScalar.of(1, 10), 4);
     System.out.println("scale=" + eta);
     FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, Degree.of(35));
-    Collection<Flow> controls = carFlows.getFlows(10);
+    Collection<Tensor> controls = carFlows.getFlows(10);
     Se2ComboRegion se2ComboRegion = //
         Se2ComboRegion.ball(Tensors.vector(2, 1, -Math.PI), Tensors.vector(0.1, 0.1, 10 / 180 * Math.PI));//
     Se2MinTimeGoalManager se2MinTimeGoalManager = //

@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.glc.core.GoalInterface;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -47,9 +46,9 @@ import ch.ethz.idsc.tensor.qty.Quantity;
         FixedStateIntegrator.create(EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, timeStep, 1);
     // -------- controls --------
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
-    Collection<Flow> controls = r2Flows.getFlows(4);
-    for (Flow flow : controls)
-      ExactTensorQ.require(flow.getU());
+    Collection<Tensor> controls = r2Flows.getFlows(4);
+    for (Tensor flow : controls)
+      ExactTensorQ.require(flow);
     // -------- GoalInterface --------
     final Tensor stateGoal = Tensors.vector(5, 0);
     final Scalar radius = RealScalar.of(Math.sqrt(2) / n);

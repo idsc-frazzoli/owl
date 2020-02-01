@@ -3,7 +3,6 @@ package ch.ethz.idsc.owl.bot.r2;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
@@ -14,9 +13,9 @@ public class R2FlowsTest extends TestCase {
   public void testSimple() {
     int n = 100;
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
-    Collection<Flow> flows = r2Flows.getFlows(n);
+    Collection<Tensor> flows = r2Flows.getFlows(n);
     assertEquals(flows.size(), n);
-    Tensor tflow = Tensor.of(flows.stream().map(Flow::getU));
+    Tensor tflow = Tensor.of(flows.stream());
     Tensor hul = ConvexHull.of(tflow);
     assertEquals(Dimensions.of(tflow), Dimensions.of(hul));
   }

@@ -20,7 +20,6 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.RelabelDecision;
 import ch.ethz.idsc.owl.glc.core.StateTimeFlows;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Tensor;
@@ -49,7 +48,7 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   private final ControlsIntegrator controlsIntegrator;
 
   public StandardTrajectoryPlanner( //
-      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Tensor> controls, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface) {
     this(stateTimeRaster, stateIntegrator, new InvariantFlows(controls), //
         plannerConstraint, goalInterface, //
@@ -57,7 +56,7 @@ public class StandardTrajectoryPlanner extends CTrajectoryPlanner {
   }
 
   public StandardTrajectoryPlanner( //
-      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Flow> controls, //
+      StateTimeRaster stateTimeRaster, StateIntegrator stateIntegrator, Collection<Tensor> controls, //
       PlannerConstraint plannerConstraint, GoalInterface goalInterface, RelabelDecision relabelDecision) {
     this(stateTimeRaster, stateIntegrator, new InvariantFlows(controls), //
         plannerConstraint, goalInterface, //

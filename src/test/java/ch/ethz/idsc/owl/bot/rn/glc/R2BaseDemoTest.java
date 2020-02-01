@@ -18,10 +18,8 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.region.HyperplaneRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -44,18 +42,18 @@ public class R2BaseDemoTest extends TestCase {
     final Tensor stateRoot = Tensors.vector(0, 0);
     // ---
     Tensor eta = Tensors.vector(1, 1);
-    Collection<Flow> controls = new ArrayList<>();
+    Collection<Tensor> controls = new ArrayList<>();
     {
-      controls.add(StateSpaceModels.createFlow(SINGLE_INTEGRATOR, Tensors.vector(1, 0)));
-      controls.add(StateSpaceModels.createFlow(SINGLE_INTEGRATOR, Tensors.vector(0, 1)));
+      controls.add(Tensors.vector(1, 0));
+      controls.add(Tensors.vector(0, 1));
     }
     Scalar ZERO = VectorScalar.of(Array.zeros(2));
     Region<Tensor> region = HyperplaneRegion.normalize(Tensors.vector(-1, -1), RealScalar.of(10));
     TrajectoryRegionQuery trajectoryRegionQuery = SimpleTrajectoryRegionQuery.timeInvariant(region);
     GoalInterface goalInterface = new GoalAdapter(trajectoryRegionQuery, new CostFunction() {
       @Override
-      public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-        return VectorScalar.of(flow.getU());
+      public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
+        return VectorScalar.of(flow);
       }
 
       @Override

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -36,8 +35,8 @@ public class TwdDuckieFlows extends TwdFlows {
   }
 
   @Override // from FlowsInterface
-  public Collection<Flow> getFlows(int resolution) {
-    List<Flow> list = new ArrayList<>();
+  public Collection<Tensor> getFlows(int resolution) {
+    List<Tensor> list = new ArrayList<>();
     Tensor range = Subdivide.of(-1, 1, resolution).extract(0, resolution); // [-1, ..., 1)
     for (Tensor _omega : range) {
       Scalar omega = _omega.Get();

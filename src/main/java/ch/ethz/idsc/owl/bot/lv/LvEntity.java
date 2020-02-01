@@ -17,7 +17,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
@@ -39,10 +38,10 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   // ---
   private final FixedStateIntegrator FIXED_STATE_INTEGRATOR;
   private final TreeRender treeRender = new TreeRender();
-  private final Collection<Flow> controls;
+  private final Collection<Tensor> controls;
 
   /** @param state initial position of entity */
-  public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, StateSpaceModel stateSpaceModel, Collection<Flow> controls) {
+  public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, StateSpaceModel stateSpaceModel, Collection<Tensor> controls) {
     super(episodeIntegrator, trajectoryControl);
     add(FallbackControl.of(Array.zeros(1)));
     FIXED_STATE_INTEGRATOR = //

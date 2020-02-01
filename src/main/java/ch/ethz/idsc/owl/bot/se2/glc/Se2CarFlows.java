@@ -7,10 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -24,9 +21,8 @@ public class Se2CarFlows implements FlowsInterface, Serializable {
    * @param speed, positive for forward, and negative for backward, unit [m/s]
    * @param ratio of turning, unit [m^-1]
    * @return flow with u == {speed[m*s^-1], 0.0[m*s^-1], (ratio*speed)[s^-1]} */
-  public static Flow singleton(Scalar speed, Scalar ratio) {
-    return StateSpaceModels.createFlow(Se2StateSpaceModel.INSTANCE, //
-        N.DOUBLE.of(Tensors.of(speed, speed.zero(), ratio.multiply(speed))));
+  public static Tensor singleton(Scalar speed, Scalar ratio) {
+    return N.DOUBLE.of(Tensors.of(speed, speed.zero(), ratio.multiply(speed)));
   }
 
   /** @param speed with unit [m*s^-1]
@@ -60,10 +56,10 @@ public class Se2CarFlows implements FlowsInterface, Serializable {
   }
 
   @Override // from FlowsInterface
-  public Collection<Flow> getFlows(int resolution) {
+  public Collection<Tensor> getFlows(int resolution) {
     if (resolution % 2 == 1)
       ++resolution;
-    List<Flow> list = new ArrayList<>();
+    List<Tensor> list = new ArrayList<>();
     for (Tensor angle : Subdivide.of(rate_max.negate(), rate_max, resolution))
       for (Tensor speed : speeds)
         list.add(singleton(speed.Get(), angle.Get()));

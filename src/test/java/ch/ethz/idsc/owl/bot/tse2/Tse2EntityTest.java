@@ -18,7 +18,6 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -39,7 +38,7 @@ public class Tse2EntityTest extends TestCase {
     assertEquals(v_range.min(), Quantity.of(0, "m*s^-1"));
     assertEquals(v_range.max(), Quantity.of(8, "m*s^-1"));
     FlowsInterface flowsInterface = Tse2CarFlows.of(Quantity.of(1, "m^-1"), Tensors.fromString("{-1[m*s^-2], 0[m*s^-2], 1[m*s^-2]}"));
-    Collection<Flow> controls = flowsInterface.getFlows(1);
+    Collection<Tensor> controls = flowsInterface.getFlows(1);
     AbstractMinTimeGoalManager tse2ForwardMinTimeGoalManager = //
         new Tse2ForwardMinTimeGoalManager(tse2ComboRegion, controls);
     GoalInterface goalInterface = tse2ForwardMinTimeGoalManager.getGoalInterface();
@@ -76,7 +75,7 @@ public class Tse2EntityTest extends TestCase {
     assertEquals(v_range.min(), Quantity.of(0, "m*s^-1"));
     assertEquals(v_range.max(), Quantity.of(8, "m*s^-1"));
     FlowsInterface flowsInterface = Tse2CarFlows.of(Quantity.of(1, "m^-1"), Tensors.fromString("{-1[m*s^-2], 0[m*s^-2], 1[m*s^-2]}"));
-    Collection<Flow> controls = flowsInterface.getFlows(1);
+    Collection<Tensor> controls = flowsInterface.getFlows(1);
     AbstractMinTimeGoalManager tse2ForwardMinTimeGoalManager = //
         new Tse2MinTimeGoalManager(tse2ComboRegion, controls, v_range.max());
     GoalInterface goalInterface = tse2ForwardMinTimeGoalManager.getGoalInterface();

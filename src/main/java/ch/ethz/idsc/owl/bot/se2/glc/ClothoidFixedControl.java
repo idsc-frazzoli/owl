@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from AbstractEntity
   protected Optional<Tensor> customControl(StateTime tail, List<TrajectorySample> trailAhead) {
-    Tensor u = trailAhead.get(0).getFlow().get().getU();
+    Tensor u = trailAhead.get(0).getFlow().get();
     Scalar speed = u.Get(0);
     Tensor state = tail.state();
     TensorUnaryOperator tensorUnaryOperator = //
@@ -49,7 +49,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
           if (Sign.isNegative(speed))
             ClothoidControlHelper.mirrorAndReverse(targetLocal_);
           targetLocal = targetLocal_.get(0);
-          return Optional.of(Se2CarFlows.singleton(speed, ratio).getU());
+          return Optional.of(Se2CarFlows.singleton(speed, ratio));
         }
       }
     }

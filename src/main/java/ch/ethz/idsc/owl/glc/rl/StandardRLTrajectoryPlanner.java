@@ -16,7 +16,6 @@ import ch.ethz.idsc.owl.glc.core.InvariantFlows;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.VectorScalars;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
@@ -35,7 +34,7 @@ public class StandardRLTrajectoryPlanner extends RLTrajectoryPlanner {
   public StandardRLTrajectoryPlanner( //
       StateTimeRaster stateTimeRaster, //
       StateIntegrator stateIntegrator, //
-      Collection<Flow> controls, //
+      Collection<Tensor> controls, //
       PlannerConstraint plannerConstraint, //
       GoalInterface goalInterface, //
       Tensor slacks) {

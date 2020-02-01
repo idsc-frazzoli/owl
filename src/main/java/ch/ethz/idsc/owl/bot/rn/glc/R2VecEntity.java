@@ -19,7 +19,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.EdgeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.order.DiscretizedLexicographic;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -34,7 +33,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   @Override
   public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     System.out.println("goal=" + goal);
-    Collection<Flow> controls = createControls(); // LONGTERM design no good
+    Collection<Tensor> controls = createControls(); // LONGTERM design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface minTimeGoal = RnMinTimeGoalManager.create(goalRegion, controls); //
     List<CostFunction> costs = new ArrayList<>();

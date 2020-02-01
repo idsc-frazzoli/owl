@@ -4,9 +4,9 @@ package ch.ethz.idsc.owl.glc.core;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.data.tree.StateCostNode;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 
 /** glc specific node
  * 
@@ -20,7 +20,7 @@ public interface GlcNode extends StateCostNode {
    * @param costFromRoot exact accumulation of costs along edges from root to this node
    * @param minCostToGoal lower bound for remaining costs to reach the goal region from given stateTime
    * @return */
-  static GlcNode of(Flow flow, StateTime stateTime, Scalar costFromRoot, Scalar minCostToGoal) {
+  static GlcNode of(Tensor flow, StateTime stateTime, Scalar costFromRoot, Scalar minCostToGoal) {
     return new GlcNodeImpl(flow, stateTime, costFromRoot, minCostToGoal);
   }
 
@@ -29,7 +29,7 @@ public interface GlcNode extends StateCostNode {
   GlcNode parent();
 
   /** @return flow between parent and this node. if this node is root, flow == null */
-  Flow flow();
+  Tensor flow();
 
   /** @return coordinate in space-time of node */
   StateTime stateTime();

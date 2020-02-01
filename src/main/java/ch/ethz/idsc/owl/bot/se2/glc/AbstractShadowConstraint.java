@@ -11,7 +11,6 @@ import ch.ethz.idsc.owl.data.Lists;
 import ch.ethz.idsc.owl.data.tree.Nodes;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.hs.r2.Se2Bijection;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -30,7 +29,7 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
   private static final float TIMESTEP = 0.1f; // TODO_YN get from state integrator
   // ---
   private final int steps;
-  private final BiFunction<StateTime, Flow, Scalar> velSupplier;
+  private final BiFunction<StateTime, Tensor, Scalar> velSupplier;
   // ---
   final float a;
   final float tReact;
@@ -42,12 +41,12 @@ abstract class AbstractShadowConstraint implements PlannerConstraint, Serializab
     this.tReact = tReact;
     this.steps = Math.max((int) Math.ceil(tReact / TIMESTEP), 1);
     velSupplier = tse2 //
-        ? (StateTime stateTime, Flow flow) -> stateTime.state().Get(Tse2StateSpaceModel.STATE_INDEX_VEL)
-        : (StateTime stateTime, Flow flow) -> flow.getU().Get(Se2StateSpaceModel.CONTROL_INDEX_VEL);
+        ? (StateTime stateTime, Tensor flow) -> stateTime.state().Get(Tse2StateSpaceModel.STATE_INDEX_VEL)
+        : (StateTime stateTime, Tensor flow) -> flow.Get(Se2StateSpaceModel.CONTROL_INDEX_VEL);
   }
 
   @Override
-  public final boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public final boolean isSatisfied(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     // TODO_YN there are few different values for vel => precompute
     StateTime childStateTime = Lists.getLast(trajectory);
     float vel = velSupplier.apply(childStateTime, flow).number().floatValue();

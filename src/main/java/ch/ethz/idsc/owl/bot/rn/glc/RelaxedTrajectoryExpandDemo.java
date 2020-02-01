@@ -25,7 +25,6 @@ import ch.ethz.idsc.owl.gui.ren.BallRegionRender;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
@@ -65,9 +64,9 @@ public class RelaxedTrajectoryExpandDemo {
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     // -------- controls --------
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
-    Collection<Flow> controls = r2Flows.getFlows(7);
-    for (Flow flow : controls)
-      ExactTensorQ.require(flow.getU());
+    Collection<Tensor> controls = r2Flows.getFlows(7);
+    for (Tensor flow : controls)
+      ExactTensorQ.require(flow);
     // -------- GoalInterface --------
     CostFunction costFunction = new RnMinDistGoalManager(regionWithDistance);
     // --

@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.owl.ani.api.ProviderRank;
 import ch.ethz.idsc.owl.ani.api.TrajectoryControl;
 import ch.ethz.idsc.owl.glc.adapter.Trajectories;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.Scalar;
@@ -43,8 +42,8 @@ public abstract class StateTrajectoryControl implements TrajectoryControl, Seria
         Optional<Tensor> optional = customControl(tail, trajectory.subList(index, trajectory.size()));
         if (optional.isPresent())
           return optional;
-        Flow flow = trajectory.get(index).getFlow().get();
-        return Optional.of(flow.getU());
+        Tensor flow = trajectory.get(index).getFlow().get();
+        return Optional.of(flow);
       }
       trajectory = resetAction(trajectory);
     }

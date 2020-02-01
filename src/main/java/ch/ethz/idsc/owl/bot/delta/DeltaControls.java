@@ -3,8 +3,8 @@ package ch.ethz.idsc.owl.bot.delta;
 
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Norm;
 
@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.red.Norm;
   ;
   /** @param controls
    * @return */
-  public static Scalar maxSpeed(Collection<Flow> controls) {
-    return controls.stream().map(Flow::getU).map(Norm._2::ofVector).reduce(Max::of).get();
+  public static Scalar maxSpeed(Collection<Tensor> controls) {
+    return controls.stream().map(Norm._2::ofVector).reduce(Max::of).get();
   }
 }

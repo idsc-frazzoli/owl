@@ -4,7 +4,6 @@ package ch.ethz.idsc.owl.bot.se2;
 import java.util.Collection;
 
 import ch.ethz.idsc.owl.glc.adapter.AbstractMinTimeGoalManager;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
@@ -17,7 +16,7 @@ public final class Se2MinTimeGoalManager extends AbstractMinTimeGoalManager {
   private final Scalar maxSpeed;
   private final Scalar maxTurning;
 
-  public Se2MinTimeGoalManager(Se2ComboRegion se2ComboRegion, Collection<Flow> controls) {
+  public Se2MinTimeGoalManager(Se2ComboRegion se2ComboRegion, Collection<Tensor> controls) {
     super(se2ComboRegion);
     this.se2ComboRegion = se2ComboRegion;
     maxSpeed = Se2Controls.maxSpeed(controls);

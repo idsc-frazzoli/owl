@@ -3,11 +3,11 @@ package ch.ethz.idsc.owl.math.state;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -25,9 +25,9 @@ public class BoundedEpisodeIntegrator extends AbstractEpisodeIntegrator {
   }
 
   @Override // from AbstractEpisodeIntegrator
-  protected List<StateTime> move(Flow flow, Scalar period) {
+  protected List<StateTime> abstract_move(Tensor flow, Scalar period) {
     Scalar steps = Ceiling.of(period.divide(maxStep));
     return FixedStateIntegrator.create( //
-        integrator, stateSpaceModel, period.divide(steps), Scalars.intValueExact(steps)).trajectory(tail(), flow.getU());
+        integrator, stateSpaceModel, period.divide(steps), Scalars.intValueExact(steps)).trajectory(tail(), flow);
   }
 }

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.ethz.idsc.owl.data.tree.AbstractNode;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -18,10 +17,10 @@ import ch.ethz.idsc.tensor.Tensor;
  * immutable except for children, parent, and depth which are only modified in
  * {@link GlcNodeImpl#addChild(GlcNodeImpl)} */
 /* package */ class GlcNodeImpl extends AbstractNode<GlcNode> implements GlcNode {
-  private final Map<Flow, GlcNode> children = new HashMap<>();
+  private final Map<Tensor, GlcNode> children = new HashMap<>();
   /** flow is null for root node
    * not final, as changed when central node are made root */
-  private final Flow flow;
+  private final Tensor flow;
   private final StateTime stateTime;
   /** accumulation of costs from root to this node.
    * costFromRoot only depends on the past {@link StateTime}s and {@link Flow}s.
@@ -35,7 +34,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @param costFromRoot
    * @param minCostToGoal non-negative, provided by {@link HeuristicFunction},
    * or {@link RealScalar#ZERO} */
-  GlcNodeImpl(Flow flow, StateTime stateTime, Scalar costFromRoot, Scalar minCostToGoal) {
+  GlcNodeImpl(Tensor flow, StateTime stateTime, Scalar costFromRoot, Scalar minCostToGoal) {
     this.flow = flow;
     this.stateTime = stateTime;
     this.costFromRoot = costFromRoot;
@@ -72,7 +71,7 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   @Override // from GlcNode
-  public Flow flow() {
+  public Tensor flow() {
     return flow;
   }
 

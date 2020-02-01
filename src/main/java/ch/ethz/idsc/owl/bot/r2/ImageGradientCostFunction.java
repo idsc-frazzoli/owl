@@ -7,7 +7,6 @@ import java.util.List;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.sophus.math.Extract2D;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -34,7 +33,7 @@ import ch.ethz.idsc.tensor.red.VectorAngle;
   }
 
   @Override // from CostFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     Tensor dts = StateTimeTrajectories.deltaTimes(glcNode, trajectory);
     Tensor cost = Tensor.of(trajectory.stream() //
         .map(StateTime::state) //

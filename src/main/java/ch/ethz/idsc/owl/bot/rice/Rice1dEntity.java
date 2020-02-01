@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
@@ -34,10 +33,10 @@ import ch.ethz.idsc.tensor.alg.Array;
   private static final Integrator INTEGRATOR = RungeKutta4Integrator.INSTANCE;
   // ---
   private final StateSpaceModel stateSpaceModel;
-  private final Collection<Flow> controls;
+  private final Collection<Tensor> controls;
 
   /** @param state initial position of entity */
-  public Rice1dEntity(Scalar mu, Tensor state, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
+  public Rice1dEntity(Scalar mu, Tensor state, TrajectoryControl trajectoryControl, Collection<Tensor> controls) {
     super( //
         new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);

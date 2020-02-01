@@ -14,7 +14,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
@@ -40,12 +39,12 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
   private static final Integrator INTEGRATOR = MidpointIntegrator.INSTANCE;
   // ---
   private final StateSpaceModel stateSpaceModel;
-  private final Collection<Flow> controls;
+  private final Collection<Tensor> controls;
   // ---
   public Scalar delayHint = RealScalar.ONE;
 
   /** @param state initial position of entity */
-  public Rice2dEntity(Scalar mu, Tensor state, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
+  public Rice2dEntity(Scalar mu, Tensor state, TrajectoryControl trajectoryControl, Collection<Tensor> controls) {
     super( //
         new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);

@@ -3,10 +3,10 @@ package ch.ethz.idsc.owl.math.state;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 
 /** {@link SimpleEpisodeIntegrator} takes the largest possible time step for integration.
  * 
@@ -17,7 +17,7 @@ public class SimpleEpisodeIntegrator extends AbstractEpisodeIntegrator {
   }
 
   @Override // from AbstractEpisodeIntegrator
-  protected List<StateTime> move(Flow flow, Scalar period) {
-    return FixedStateIntegrator.create(integrator, stateSpaceModel, period, 1).trajectory(tail(), flow.getU());
+  protected List<StateTime> abstract_move(Tensor flow, Scalar period) {
+    return FixedStateIntegrator.create(integrator, stateSpaceModel, period, 1).trajectory(tail(), flow);
   }
 }

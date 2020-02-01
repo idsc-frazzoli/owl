@@ -7,7 +7,6 @@ import java.util.List;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GoalInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
@@ -28,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements GoalInterface {
   /** @param regionWithDistance
    * @param controls */
-  public static GoalInterface create(RegionWithDistance<Tensor> regionWithDistance, Collection<Flow> controls) {
+  public static GoalInterface create(RegionWithDistance<Tensor> regionWithDistance, Collection<Tensor> controls) {
     return new RnMinTimeGoalManager(regionWithDistance, RnControls.maxSpeed(controls));
   }
 
@@ -45,7 +44,7 @@ public class RnMinTimeGoalManager extends SimpleTrajectoryRegionQuery implements
   }
 
   @Override // from CostIncrementFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
     return StateTimeTrajectories.timeIncrement(glcNode, trajectory);
   }
 

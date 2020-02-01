@@ -20,7 +20,6 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
 import ch.ethz.idsc.owl.math.region.So2Region;
@@ -54,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   // ---
-  final Collection<Flow> controls;
+  final Collection<Tensor> controls;
   final Scalar goalRadius_xy;
   final Scalar goalRadius_theta;
 

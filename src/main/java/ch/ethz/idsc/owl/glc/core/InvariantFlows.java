@@ -4,18 +4,18 @@ package ch.ethz.idsc.owl.glc.core;
 import java.io.Serializable;
 import java.util.Collection;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
+import ch.ethz.idsc.tensor.Tensor;
 
 public class InvariantFlows implements StateTimeFlows, Serializable {
-  private final Collection<Flow> collection;
+  private final Collection<Tensor> collection;
 
-  public InvariantFlows(Collection<Flow> collection) {
+  public InvariantFlows(Collection<Tensor> collection) {
     this.collection = collection;
   }
 
   @Override
-  public Collection<Flow> flows(StateTime stateTime) {
+  public Collection<Tensor> flows(StateTime stateTime) {
     return collection;
   }
 }

@@ -3,8 +3,6 @@ package ch.ethz.idsc.owl.bot.balloon;
 
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
-import ch.ethz.idsc.owl.math.flow.Flow;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -17,8 +15,7 @@ public class BalloonPlannerConstraintTest extends TestCase {
   private static final PlannerConstraint PLANNER_CONSTRAINT = //
       new BalloonPlannerConstraint(Quantity.of(5, "m*s^-1"));
   private static final Scalar TIME = Quantity.of(2, "s");
-  private static final Flow FLOW = //
-      StateSpaceModels.createFlow(BalloonStateSpaceModels.defaultWithUnits(), Tensors.vector(100, 0.1));
+  private static final Tensor FLOW = Tensors.vector(100, 0.1);
 
   public void testYConstraints() {
     Tensor yUnvalid = Tensors.fromString("{5[m], -3[m], 4[m*s^-1], 40[m * K^-1 * s^-2]}");

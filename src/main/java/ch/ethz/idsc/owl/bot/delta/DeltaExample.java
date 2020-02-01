@@ -13,7 +13,6 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.RenderInterface;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
@@ -52,7 +51,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
     Scalar maxNormGradient = imageGradientInterpolation.maxNormGradient();
     Scalar maxMove = maxNormGradient.add(MAX_INPUT);
-    Collection<Flow> controls = new DeltaFlows(stateSpaceModel, MAX_INPUT).getFlows(25);
+    Collection<Tensor> controls = new DeltaFlows(MAX_INPUT).getFlows(25);
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(SPHERICAL_REGION, maxMove);
     trajectoryPlanner = new StandardTrajectoryPlanner( //
         STATE_TIME_RASTER, FixedStateIntegrator.create( //

@@ -6,7 +6,6 @@ import java.util.List;
 import ch.ethz.idsc.owl.glc.adapter.StateTimeTrajectories;
 import ch.ethz.idsc.owl.glc.core.CostFunction;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -23,8 +22,8 @@ public enum Se2LateralAcceleration implements CostFunction {
 
   /** Curvature is changed angle over distance covered */
   @Override // from CostIncrementFunction
-  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Flow flow) {
-    return cost(flow.getU(), StateTimeTrajectories.timeIncrement(glcNode, trajectory));
+  public Scalar costIncrement(GlcNode glcNode, List<StateTime> trajectory, Tensor flow) {
+    return cost(flow, StateTimeTrajectories.timeIncrement(glcNode, trajectory));
   }
 
   @Override // from HeuristicFunction

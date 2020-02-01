@@ -24,7 +24,6 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TreeRender;
 import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -83,7 +82,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
   @Override
   public TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
-    Collection<Flow> controls = createControls(); // LONGTERM design no good
+    Collection<Tensor> controls = createControls(); // LONGTERM design no good
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = MultiCostGoalAdapter.of( //
         RnMinTimeGoalManager.create(goalRegion, controls), //
@@ -93,7 +92,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
         plannerConstraint, goalInterface);
   }
 
-  Collection<Flow> createControls() {
+  Collection<Tensor> createControls() {
     /** 36 corresponds to 10[Degree] resolution */
     return r2Flows.getFlows(36);
   }

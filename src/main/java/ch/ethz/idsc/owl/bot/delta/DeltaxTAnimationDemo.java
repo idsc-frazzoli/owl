@@ -18,10 +18,8 @@ import ch.ethz.idsc.owl.gui.RenderInterface;
 import ch.ethz.idsc.owl.gui.win.MouseGoal;
 import ch.ethz.idsc.owl.gui.win.OwlyAnimationFrame;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
@@ -60,7 +58,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     ImageGradientInterpolation imageGradientInterpolation_slow = //
         ImageGradientInterpolation.linear(image, range, amp);
     StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation_slow);
-    Flow flow = StateSpaceModels.createFlow(stateSpaceModel, Array.zeros(2));
+    Tensor flow = Array.zeros(2);
     Region<StateTime> region1 = create(stateSpaceModel, RealScalar.of(0.4), Tensors.vector(2, 1.5), flow, supplier);
     Region<StateTime> region2 = create(stateSpaceModel, RealScalar.of(0.5), Tensors.vector(6, 6), flow, supplier);
     Region<StateTime> region3 = create(stateSpaceModel, RealScalar.of(0.3), Tensors.vector(2, 7), flow, supplier);
@@ -83,7 +81,7 @@ public class DeltaxTAnimationDemo implements DemoInterface {
     return owlyAnimationFrame;
   }
 
-  private static Region<StateTime> create(StateSpaceModel stateSpaceModel, Scalar radius, Tensor pos, Flow flow, Supplier<Scalar> supplier) {
+  private static Region<StateTime> create(StateSpaceModel stateSpaceModel, Scalar radius, Tensor pos, Tensor flow, Supplier<Scalar> supplier) {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
         RungeKutta45Integrator.INSTANCE, stateSpaceModel, RationalScalar.of(1, 10), 120 * 10);
     return new R2xTEllipsoidStateTimeRegion(Tensors.of(radius, radius), //
