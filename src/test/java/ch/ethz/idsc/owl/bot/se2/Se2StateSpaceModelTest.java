@@ -16,9 +16,9 @@ public class Se2StateSpaceModelTest extends TestCase {
     Tensor x = Tensors.fromString("{-1[m], -2[m], 3}");
     Scalar h = Quantity.of(1, "s");
     Flow flow = Se2CarFlows.singleton(Quantity.of(2, "m*s^-1"), Quantity.of(-1, "m^-1"));
-    Se2StateSpaceModel.INSTANCE.f(x, flow.getU());
-    Tensor expl = Se2CarIntegrator.INSTANCE.step(flow, x, h);
-    Tensor impl = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
+    // Se2StateSpaceModel.INSTANCE.f(x, flow.getU());
+    Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
+    Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
     Chop._04.requireClose(expl, impl);
   }
 }

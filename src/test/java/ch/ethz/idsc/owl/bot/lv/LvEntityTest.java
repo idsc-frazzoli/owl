@@ -32,7 +32,7 @@ public class LvEntityTest extends TestCase {
     EpisodeIntegrator episodeIntegrator = new SimpleEpisodeIntegrator(stateSpaceModel, integrator, //
         new StateTime(Tensors.vector(2, 0.3), RealScalar.ZERO));
     TrajectoryControl trajectoryControl = new EuclideanTrajectoryControl();
-    new LvEntity(episodeIntegrator, trajectoryControl, controls);
+    new LvEntity(episodeIntegrator, trajectoryControl, stateSpaceModel, controls);
     Tensor range = Tensors.vector(6, 5);
     VectorFieldRender vectorFieldRender = new VectorFieldRender();
     RandomSampleInterface randomSampleInterface = BoxRandomSample.of(Tensors.vector(0, 0), range);

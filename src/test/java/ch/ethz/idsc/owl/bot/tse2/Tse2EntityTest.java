@@ -48,7 +48,7 @@ public class Tse2EntityTest extends TestCase {
     Tensor eta = Tensors.fromString("{7[m^-1], 7[m^-1], 4, 7[s*m^-1]}");
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        new Tse2Integrator(v_range), Scalars.fromString("1/10[s]"), 4);
+        new Tse2Integrator(v_range), Tse2StateSpaceModel.INSTANCE, Scalars.fromString("1/10[s]"), 4);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, //
         stateIntegrator, //
@@ -85,7 +85,7 @@ public class Tse2EntityTest extends TestCase {
     Tensor eta = Tensors.fromString("{7[m^-1], 7[m^-1], 4, 7[s*m^-1]}");
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        new Tse2Integrator(v_range), Scalars.fromString("1/10[s]"), 4);
+        new Tse2Integrator(v_range), Tse2StateSpaceModel.INSTANCE, Scalars.fromString("1/10[s]"), 4);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         stateTimeRaster, //
         stateIntegrator, //

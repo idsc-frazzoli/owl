@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 
   public static TrajectoryPlanner raw(GoalInterface goalInterface) {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        RungeKutta4Integrator.INSTANCE, RationalScalar.of(1, 4), 5);
+        RungeKutta4Integrator.INSTANCE, PsuStateSpaceModel.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     // ---
@@ -63,7 +63,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 
   public static TrajectoryPlanner medium() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 4), 5);
+        RungeKutta45Integrator.INSTANCE, PsuStateSpaceModel.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //

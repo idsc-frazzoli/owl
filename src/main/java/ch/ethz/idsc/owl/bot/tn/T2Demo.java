@@ -21,6 +21,7 @@ import ch.ethz.idsc.owl.math.SimpleTensorMetric;
 import ch.ethz.idsc.owl.math.StateTimeTensorFunction;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -36,7 +37,8 @@ enum T2Demo {
   ;
   public static void main(String[] args) {
     Tensor eta = Tensors.vector(4, 5);
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 10), 5);
+    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
+        EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 10), 5);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(36);
     CoordinateWrap coordinateWrap;

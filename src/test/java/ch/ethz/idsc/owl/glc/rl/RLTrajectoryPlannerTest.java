@@ -26,6 +26,7 @@ import ch.ethz.idsc.owl.math.VectorScalar;
 import ch.ethz.idsc.owl.math.VectorScalars;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -54,7 +55,8 @@ public class RLTrajectoryPlannerTest extends TestCase {
     Tensor eta = Tensors.vector(n, n);
     // radius is chosen so that goal region contains at least one domain entirely
     final Scalar radius = RealScalar.of(Math.sqrt(2) / n);
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
+    StateIntegrator stateIntegrator = //
+        FixedStateIntegrator.create(EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Flows = new R2RationalFlows(RationalScalar.HALF);
     Collection<Flow> controls = r2Flows.getFlows(13);
     RegionWithDistance<Tensor> goalRegion = new BallRegion(stateGoal, radius);

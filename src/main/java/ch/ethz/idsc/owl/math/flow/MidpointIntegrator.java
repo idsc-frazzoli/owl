@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.flow;
 
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -13,9 +14,11 @@ public enum MidpointIntegrator implements Integrator {
   INSTANCE;
 
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor x0, Scalar _2h) {
+  public Tensor step(StateSpaceModel stateSpaceModel, Tensor x0, Tensor u, Scalar _2h
+  // Flow flow, Tensor x0, Scalar _2h
+  ) {
     Scalar h = _2h.multiply(RationalScalar.HALF);
-    Tensor xm = x0.add(flow.at(x0).multiply(h)); // h
-    return /**/ x0.add(flow.at(xm).multiply(_2h)); // 2h
+    Tensor xm = x0.add(stateSpaceModel.f(x0, u).multiply(h)); // h
+    return /**/ x0.add(stateSpaceModel.f(xm, u).multiply(_2h)); // 2h
   }
 }

@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Round;
 
   @Override
   protected StateTimeRaster stateTimeRaster() {
-    return EtaRaster.timeDependent(PARTITION_SCALE, FIXED_STATE_INTEGRATOR.getTimeStepTrajectory(), StateTime::joined);
+    return EtaRaster.timeDependent(PARTITION_SCALE, fixedStateIntegrator.getTimeStepTrajectory(), StateTime::joined);
   }
 
   @Override

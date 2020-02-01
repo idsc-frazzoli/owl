@@ -26,6 +26,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -50,7 +51,8 @@ public class RelaxedTrajectoryExpandDemo {
   final Tensor eta = Tensors.vector(n, n);
   // -------- StateIntegrator --------
   final Scalar timeStep = RationalScalar.of(3, 7);
-  final StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, timeStep, 1);
+  final StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
+      EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, timeStep, 1);
   // -------- GoalInterface --------
   final Tensor stateGoal = Tensors.vector(5, 0);
   final Scalar radius = RealScalar.of(Math.sqrt(2) / n);

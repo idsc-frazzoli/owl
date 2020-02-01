@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -20,8 +19,8 @@ public class DiscreteIntegrator implements StateIntegrator {
   }
 
   @Override // from StateIntegrator
-  public List<StateTime> trajectory(StateTime stateTime, Flow flow) {
-    Tensor xn = stateSpaceModel.f(stateTime.state(), flow.getU());
+  public List<StateTime> trajectory(StateTime stateTime, Tensor u) {
+    Tensor xn = stateSpaceModel.f(stateTime.state(), u);
     return Collections.singletonList(new StateTime(xn, stateTime.time().add(RealScalar.ONE)));
   }
 }

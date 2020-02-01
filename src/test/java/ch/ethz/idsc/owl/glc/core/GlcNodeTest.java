@@ -13,6 +13,7 @@ import ch.ethz.idsc.owl.glc.adapter.GlcExpand;
 import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -62,7 +63,8 @@ public class GlcNodeTest extends TestCase {
     final Scalar radius = DoubleScalar.of(0.25);
     // ---
     Tensor eta = Tensors.vector(8, 8);
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
+    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
+        EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(36);
     GoalInterface rnGoal = RnMinDistGoalManager.sperical(stateGoal, radius);

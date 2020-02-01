@@ -13,13 +13,21 @@ import ch.ethz.idsc.owl.glc.core.TrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.ren.TrajectoryRender;
 import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
+import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
+import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Timing;
 import junit.framework.TestCase;
 
 public class Rice2dDemoTest extends TestCase {
   public void testExpand() throws InterruptedException {
-    TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
+    Scalar mu = RealScalar.of(-.5);
+    StateSpaceModel stateSpaceModel = Rice2StateSpaceModel.of(mu);
+    TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance(mu, stateSpaceModel);
     Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000); // 153 0.368319228
@@ -28,7 +36,8 @@ public class Rice2dDemoTest extends TestCase {
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     GlcNodes.getPathFromRootTo(glcNode);
-    List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(Rice2dDemo.STATE_INTEGRATOR, glcNode);
+    List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(FixedStateIntegrator.create( //
+        MidpointIntegrator.INSTANCE, stateSpaceModel, RationalScalar.HALF, 5), glcNode);
     TrajectoryRender trajectoryRender = new TrajectoryRender();
     trajectoryRender.trajectory(samples);
     owlyFrame.addBackground(trajectoryRender);
@@ -40,7 +49,9 @@ public class Rice2dDemoTest extends TestCase {
   }
 
   public void testGlcExpand() throws InterruptedException {
-    TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance();
+    Scalar mu = RealScalar.of(-.5);
+    StateSpaceModel stateSpaceModel = Rice2StateSpaceModel.of(mu);
+    TrajectoryPlanner trajectoryPlanner = Rice2dDemo.createInstance(mu, stateSpaceModel);
     Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.untilOptimal(1000); // 220 0.283809941
@@ -49,7 +60,8 @@ public class Rice2dDemoTest extends TestCase {
     OwlyFrame owlyFrame = OwlyGui.glc(trajectoryPlanner);
     GlcNode glcNode = trajectoryPlanner.getBest().get();
     GlcNodes.getPathFromRootTo(glcNode);
-    List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(Rice2dDemo.STATE_INTEGRATOR, glcNode);
+    List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(FixedStateIntegrator.create( //
+        MidpointIntegrator.INSTANCE, stateSpaceModel, RationalScalar.HALF, 5), glcNode);
     TrajectoryRender trajectoryRender = new TrajectoryRender();
     trajectoryRender.trajectory(samples);
     owlyFrame.addBackground(trajectoryRender);

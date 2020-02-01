@@ -18,6 +18,6 @@ public class SimpleEpisodeIntegrator extends AbstractEpisodeIntegrator {
 
   @Override // from AbstractEpisodeIntegrator
   protected List<StateTime> move(Flow flow, Scalar period) {
-    return FixedStateIntegrator.create(integrator, period, 1).trajectory(tail(), flow);
+    return FixedStateIntegrator.create(integrator, stateSpaceModel, period, 1).trajectory(tail(), flow.getU());
   }
 }

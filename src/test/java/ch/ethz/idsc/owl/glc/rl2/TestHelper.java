@@ -18,6 +18,7 @@ import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
 import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.PolygonRegion;
 import ch.ethz.idsc.owl.math.region.RegionWithDistance;
@@ -42,7 +43,8 @@ import ch.ethz.idsc.tensor.qty.Quantity;
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     // -------- StateIntegrator --------
     Scalar timeStep = RationalScalar.of(4, 7);
-    final StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, timeStep, 1);
+    final StateIntegrator stateIntegrator = //
+        FixedStateIntegrator.create(EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, timeStep, 1);
     // -------- controls --------
     R2Flows r2Flows = new R2RationalFlows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(4);

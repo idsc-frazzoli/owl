@@ -26,6 +26,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.state.EmptyTrajectoryRegionQuery;
@@ -68,7 +69,8 @@ import ch.ethz.idsc.tensor.sca.Ramp;
     final Scalar radius = DoubleScalar.of(0.8);
     // ---
     Tensor eta = Tensors.vector(1.5, 1.5);
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
+    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
+        EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 5), 5);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(6);
     BallRegion ballRegion = new BallRegion(stateGoal, radius);

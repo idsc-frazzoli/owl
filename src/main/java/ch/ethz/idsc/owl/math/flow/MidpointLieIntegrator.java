@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.flow;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -30,9 +31,11 @@ public class MidpointLieIntegrator implements Integrator, Serializable {
   }
 
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor x0, Scalar _2h) {
+  public Tensor step(StateSpaceModel stateSpaceModel, Tensor x0, Tensor u, Scalar _2h
+  // Flow flow, Tensor x0, Scalar _2h
+  ) {
     Scalar h = _2h.multiply(RationalScalar.HALF);
-    Tensor xm = lieGroup.element(x0).combine(lieExponential.exp(flow.at(x0).multiply(h)));
-    return /**/ lieGroup.element(x0).combine(lieExponential.exp(flow.at(xm).multiply(_2h))); // 2h
+    Tensor xm = lieGroup.element(x0).combine(lieExponential.exp(stateSpaceModel.f(x0, u).multiply(h)));
+    return /**/ lieGroup.element(x0).combine(lieExponential.exp(stateSpaceModel.f(xm, u).multiply(_2h))); // 2h
   }
 }

@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 abstract class AbstractEpisodeIntegrator implements EpisodeIntegrator, Serializable {
-  private final StateSpaceModel stateSpaceModel;
+  protected final StateSpaceModel stateSpaceModel;
   /* package */ final Integrator integrator;
   private StateTime stateTime;
 

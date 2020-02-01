@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.owl.math.flow;
 
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,27 +21,27 @@ public enum RungeKutta45Integrator implements Integrator {
   private static final Scalar W2 = RationalScalar.of(16, 15);
 
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor x, Scalar h) {
+  public Tensor step(StateSpaceModel stateSpaceModel, Tensor x, Tensor u, Scalar h) {
     Tensor y1;
-    final Tensor flow_at_x = flow.at(x); // used twice
+    final Tensor flow_at_x = stateSpaceModel.f(x, u); // used twice
     {
       Tensor k1 = flow_at_x.multiply(h); // euler increment
-      Tensor k2 = flow.at(x.add(k1.multiply(HALF))).multiply(h);
-      Tensor k3 = flow.at(x.add(k2.multiply(HALF))).multiply(h);
-      Tensor k4 = flow.at(x.add(k3)).multiply(h);
+      Tensor k2 = stateSpaceModel.f(x.add(k1.multiply(HALF)), u).multiply(h);
+      Tensor k3 = stateSpaceModel.f(x.add(k2.multiply(HALF)), u).multiply(h);
+      Tensor k4 = stateSpaceModel.f(x.add(k3), u).multiply(h);
       y1 = k1.add(k4).multiply(SIXTH).add(k2.add(k3).multiply(THIRD));
     }
     Scalar h2 = h.multiply(HALF);
     Tensor xm;
     {
       Tensor k1 = flow_at_x.multiply(h2); // euler increment
-      Tensor k2 = flow.at(x.add(k1.multiply(HALF))).multiply(h2);
-      Tensor k3 = flow.at(x.add(k2.multiply(HALF))).multiply(h2);
-      Tensor k4 = flow.at(x.add(k3)).multiply(h2);
+      Tensor k2 = stateSpaceModel.f(x.add(k1.multiply(HALF)), u).multiply(h2);
+      Tensor k3 = stateSpaceModel.f(x.add(k2.multiply(HALF)), u).multiply(h2);
+      Tensor k4 = stateSpaceModel.f(x.add(k3), u).multiply(h2);
       Tensor incr = k1.add(k4).multiply(SIXTH).add(k2.add(k3).multiply(THIRD));
       xm = x.add(incr);
     }
-    Tensor y2 = RungeKutta4Integrator.INSTANCE.step(flow, xm, h2).subtract(x);
+    Tensor y2 = RungeKutta4Integrator.INSTANCE.step(stateSpaceModel, xm, u, h2).subtract(x);
     Tensor ya = y1.multiply(W1).add(y2.multiply(W2));
     return x.add(ya);
   }

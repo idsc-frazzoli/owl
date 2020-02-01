@@ -16,6 +16,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -32,6 +33,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 /* package */ class Rice1dEntity extends RiceBaseEntity {
   private static final Integrator INTEGRATOR = RungeKutta4Integrator.INSTANCE;
   // ---
+  private final StateSpaceModel stateSpaceModel;
   private final Collection<Flow> controls;
 
   /** @param state initial position of entity */
@@ -40,6 +42,7 @@ import ch.ethz.idsc.tensor.alg.Array;
         new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);
     add(FallbackControl.of(Array.zeros(1)));
+    this.stateSpaceModel = Rice2StateSpaceModel.of(mu);
     this.controls = controls;
   }
 
@@ -52,7 +55,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Tensor partitionScale = Tensors.vector(8, 8);
     StateIntegrator stateIntegrator = //
-        FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
+        FixedStateIntegrator.create(INTEGRATOR, stateSpaceModel, RationalScalar.of(1, 12), 4);
     GoalInterface goalInterface = new Rice1GoalManager(new EllipsoidRegion(Extract2D.FUNCTION.apply(goal), Tensors.vector(0.2, 0.3)));
     StateTimeRaster stateTimeRaster = EtaRaster.state(partitionScale);
     return new StandardTrajectoryPlanner( //

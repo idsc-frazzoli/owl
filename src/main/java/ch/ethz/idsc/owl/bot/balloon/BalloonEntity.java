@@ -37,8 +37,8 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 
 /* package */ class BalloonEntity extends AbstractCircularEntity {
   private static final Tensor PARTITION_SCALE = Tensors.vector(2, 2, 1, 1).unmodifiable();
-  protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = //
-      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 3);
+  // protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = //
+  // FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 3);
   static final int FLOWRES = 4;
   static final Scalar U_MAX = RealScalar.of(30);
   final static Scalar SPEED_MAX = RealScalar.of(10);
@@ -75,7 +75,9 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
         new BalloonMinTimeGoalManager(Extract2D.FUNCTION.apply(goal), GOAL_RADIUS, SPEED_MAX);
     GoalInterface goalInterface = balloonMinTimeGoalManager.getGoalInterface();
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster(), //
+        FixedStateIntegrator.create(EulerIntegrator.INSTANCE, stateSpaceModel, RationalScalar.of(1, 5), 3), //
+        controls, plannerConstraint, goalInterface);
   }
 
   protected StateTimeRaster stateTimeRaster() {

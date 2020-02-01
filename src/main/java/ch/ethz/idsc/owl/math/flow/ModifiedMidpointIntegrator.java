@@ -3,6 +3,7 @@ package ch.ethz.idsc.owl.math.flow;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -24,15 +25,17 @@ public class ModifiedMidpointIntegrator implements Integrator, Serializable {
   }
 
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor x0, Scalar H) {
+  public Tensor step(StateSpaceModel stateSpaceModel, Tensor x0, Tensor u, Scalar H
+  // Flow flow, Tensor x0, Scalar H
+  ) {
     Scalar h = H.divide(RealScalar.of(n));
-    Tensor xm = x0.add(flow.at(x0).multiply(h)); // line identical with MidpointIntegrator
+    Tensor xm = x0.add(stateSpaceModel.f(x0, u).multiply(h)); // line identical with MidpointIntegrator
     for (int m = 1; m < n; ++m) {
       Scalar _2h = h.add(h);
-      Tensor x1 = x0.add(flow.at(xm).multiply(_2h));
+      Tensor x1 = x0.add(stateSpaceModel.f(xm, u).multiply(_2h));
       x0 = xm;
       xm = x1;
     }
-    return x0.add(flow.at(xm).multiply(h)); // TODO line almost identical with MidpointIntegrator !?
+    return x0.add(stateSpaceModel.f(xm, u).multiply(h)); // TODO line almost identical with MidpointIntegrator !?
   }
 }

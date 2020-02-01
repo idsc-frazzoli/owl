@@ -65,7 +65,7 @@ public class ControlsIntegrator implements Serializable {
   public Map<GlcNode, List<StateTime>> from(GlcNode node) {
     StateTime stateTime = node.stateTime();
     return stateTimeFlows.flows(stateTime).parallelStream() // parallel stream results in speedup of ~25% (rice2demo)
-        .map(flow -> new FlowTrajectory(flow, stateIntegrator.trajectory(node.stateTime(), flow))) //
+        .map(flow -> new FlowTrajectory(flow, stateIntegrator.trajectory(node.stateTime(), flow.getU()))) //
         .collect(Collectors.toMap( //
             flowTrajectory -> flowTrajectory.createGlcNode(node, costFunction), //
             FlowTrajectory::trajectory));

@@ -20,6 +20,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
@@ -35,16 +36,17 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
 /* package */ class LvEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   private static final Tensor PARTITION_SCALE = Tensors.vector(8, 8).unmodifiable();
   private static final Integrator INTEGRATOR = RungeKutta45Integrator.INSTANCE;
-  private static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = //
-      FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
   // ---
+  private final FixedStateIntegrator FIXED_STATE_INTEGRATOR;
   private final TreeRender treeRender = new TreeRender();
   private final Collection<Flow> controls;
 
   /** @param state initial position of entity */
-  public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, Collection<Flow> controls) {
+  public LvEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, StateSpaceModel stateSpaceModel, Collection<Flow> controls) {
     super(episodeIntegrator, trajectoryControl);
     add(FallbackControl.of(Array.zeros(1)));
+    FIXED_STATE_INTEGRATOR = //
+        FixedStateIntegrator.create(INTEGRATOR, stateSpaceModel, RationalScalar.of(1, 12), 4);
     this.controls = controls;
   }
 

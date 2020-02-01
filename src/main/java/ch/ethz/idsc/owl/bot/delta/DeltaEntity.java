@@ -38,8 +38,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** class controls delta using {@link StandardTrajectoryPlanner} */
 /* package */ class DeltaEntity extends AbstractCircularEntity implements GlcPlannerCallback {
   protected static final Tensor PARTITION_SCALE = Tensors.vector(5, 5).unmodifiable();
-  protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = FixedStateIntegrator.create( //
-      RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 5), 4);
+  // protected static final FixedStateIntegrator FIXED_STATE_INTEGRATOR = FixedStateIntegrator.create( //
+  // RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 5), 4);
   /** preserve 1[s] of the former trajectory */
   private static final Scalar DELAY_HINT = RealScalar.of(2);
   // ---
@@ -52,11 +52,15 @@ import ch.ethz.idsc.tensor.sca.Chop;
   private final TreeRender treeRender = new TreeRender();
   private final ImageGradientInterpolation imageGradientInterpolation;
   private RegionWithDistance<Tensor> goalRegion = null;
+  final FixedStateIntegrator fixedStateIntegrator;
 
   public DeltaEntity(EpisodeIntegrator episodeIntegrator, TrajectoryControl trajectoryControl, ImageGradientInterpolation imageGradientInterpolation) {
     super(episodeIntegrator, trajectoryControl);
     add(new DeltaCoastingControl(imageGradientInterpolation, U_NORM));
     this.imageGradientInterpolation = imageGradientInterpolation;
+    StateSpaceModel stateSpaceModel = new DeltaStateSpaceModel(imageGradientInterpolation);
+    fixedStateIntegrator = FixedStateIntegrator.create( //
+        RungeKutta45Integrator.INSTANCE, stateSpaceModel, RationalScalar.of(1, 5), 4);
   }
 
   @Override // from TensorMetric
@@ -86,7 +90,10 @@ import ch.ethz.idsc.tensor.sca.Chop;
     goalRegion = getGoalRegionWithDistance(goal);
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(goalRegion, maxMove);
     return new StandardTrajectoryPlanner( //
-        stateTimeRaster(), FIXED_STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster(), //
+        FixedStateIntegrator.create( //
+            RungeKutta45Integrator.INSTANCE, stateSpaceModel, RationalScalar.of(1, 5), 4),
+        controls, plannerConstraint, goalInterface);
   }
 
   protected StateTimeRaster stateTimeRaster() {

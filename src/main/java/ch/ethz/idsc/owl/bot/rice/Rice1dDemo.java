@@ -20,6 +20,7 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
@@ -28,6 +29,7 @@ import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -40,9 +42,11 @@ import ch.ethz.idsc.tensor.alg.Array;
   ;
   public static TrajectoryPlanner simple() {
     Tensor eta = Tensors.vector(8, 8);
+    Scalar mu = RealScalar.of(-0.5);
+    StateSpaceModel stateSpaceModel = Rice2StateSpaceModel.of(mu);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        MidpointIntegrator.INSTANCE, RationalScalar.of(1, 8), 5);
-    Collection<Flow> controls = Rice2Controls.create1d(RealScalar.of(-0.5), 15); //
+        MidpointIntegrator.INSTANCE, stateSpaceModel, RationalScalar.of(1, 8), 5);
+    Collection<Flow> controls = Rice2Controls.create1d(mu, 15); //
     GoalInterface goalInterface = new Rice1GoalManager(new EllipsoidRegion(Tensors.vector(6, -.7), Tensors.vector(0.4, 0.3)));
     Region<Tensor> region1 = new EllipsoidRegion(Tensors.vector(+3, +1), Tensors.vector(1.75, 0.75));
     Region<Tensor> region2 = new EllipsoidRegion(Tensors.vector(-2, +0), Tensors.vector(1, 1));

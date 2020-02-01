@@ -4,6 +4,7 @@ package ch.ethz.idsc.owl.math.flow;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.sophus.lie.LieExponential;
 import ch.ethz.idsc.sophus.lie.LieGroup;
 import ch.ethz.idsc.sophus.lie.LieIntegrator;
@@ -27,8 +28,8 @@ public class EulerLieIntegrator implements Integrator, LieIntegrator, Serializab
   }
 
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor x, Scalar h) {
-    return spin(x, flow.at(x).multiply(h));
+  public Tensor step(StateSpaceModel stateSpaceModel, Tensor x, Tensor u, Scalar h) {
+    return spin(x, stateSpaceModel.f(x, u).multiply(h));
   }
 
   @Override // from LieIntegrator

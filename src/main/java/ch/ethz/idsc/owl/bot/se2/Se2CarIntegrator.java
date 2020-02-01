@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.se2;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta4Integrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -23,8 +23,8 @@ public enum Se2CarIntegrator implements Integrator {
    * g in SE2
    * h in R */
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor g, Scalar h) {
+  public Tensor step(StateSpaceModel stateSpaceModel, Tensor g, Tensor u, Scalar h) {
     // u is assumed to be of the form u == {vx[m*s^-1], 0, rate[s^-1]}
-    return Se2CarLieIntegrator.INSTANCE.spin(g, flow.getU().multiply(h));
+    return Se2CarLieIntegrator.INSTANCE.spin(g, u.multiply(h));
   }
 }

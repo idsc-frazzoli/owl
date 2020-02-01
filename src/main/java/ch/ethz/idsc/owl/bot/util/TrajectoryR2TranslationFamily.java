@@ -21,7 +21,7 @@ public class TrajectoryR2TranslationFamily extends R2TranslationFamily {
    * @param flow
    * @return */
   public static R2RigidFamily create(StateIntegrator stateIntegrator, StateTime initial, Flow flow) {
-    List<StateTime> trajectory = stateIntegrator.trajectory(initial, flow);
+    List<StateTime> trajectory = stateIntegrator.trajectory(initial, flow.getU());
     return new TrajectoryR2TranslationFamily(trajectory, initial);
   }
 

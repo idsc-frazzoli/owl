@@ -17,6 +17,7 @@ import ch.ethz.idsc.owl.gui.win.GeometricLayer;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -38,6 +39,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
       new double[][] { { .3, 0, 1 }, { -.1, -.1, 1 }, { -.1, +.1, 1 } }).unmodifiable();
   private static final Integrator INTEGRATOR = MidpointIntegrator.INSTANCE;
   // ---
+  private final StateSpaceModel stateSpaceModel;
   private final Collection<Flow> controls;
   // ---
   public Scalar delayHint = RealScalar.ONE;
@@ -48,6 +50,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
         new SimpleEpisodeIntegrator(Rice2StateSpaceModel.of(mu), INTEGRATOR, new StateTime(state, RealScalar.ZERO)), //
         trajectoryControl);
     add(FallbackControl.of(Array.zeros(2)));
+    stateSpaceModel = Rice2StateSpaceModel.of(mu);
     this.controls = controls;
   }
 
@@ -60,7 +63,7 @@ import ch.ethz.idsc.tensor.lie.AngleVector;
   public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Tensor partitionScale = Tensors.vector(3, 3, 6, 6);
     StateIntegrator stateIntegrator = //
-        FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
+        FixedStateIntegrator.create(INTEGRATOR, stateSpaceModel, RationalScalar.of(1, 12), 4);
     Tensor center = Join.of(Extract2D.FUNCTION.apply(goal), AngleVector.of(goal.Get(2)).multiply(RealScalar.of(0.8)));
     GoalInterface goalInterface = new Rice2GoalManager(new EllipsoidRegion(center, Tensors.vector(0.5, 0.5, 0.4, 0.4)));
     StateTimeRaster stateTimeRaster = EtaRaster.state(partitionScale);

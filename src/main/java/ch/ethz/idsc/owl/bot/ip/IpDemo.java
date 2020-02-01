@@ -36,13 +36,13 @@ import ch.ethz.idsc.tensor.alg.Array;
 /* package */ class IpDemo {
   public static void main(String[] args) {
     Tensor eta = Tensors.vector(10, 10, 10, 10);
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        MidpointIntegrator.INSTANCE, RationalScalar.of(1, 12), 5);
     StateSpaceModel stateSpaceModel = new IpStateSpaceModel( //
         RealScalar.of(0.3), // M
         RealScalar.of(0.2), // m
         RealScalar.of(0.5), // l
         RealScalar.of(1)); // g;
+    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
+        MidpointIntegrator.INSTANCE, stateSpaceModel, RationalScalar.of(1, 12), 5);
     Collection<Flow> controls = IpControls.createControls(stateSpaceModel, 2, 10);
     IpGoalManager ipGoalManager = new IpGoalManager( //
         Tensors.vector(2, 0, 0, 0), //

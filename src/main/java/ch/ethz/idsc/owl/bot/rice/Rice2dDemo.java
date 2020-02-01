@@ -25,15 +25,16 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.owl.math.region.EllipsoidRegion;
 import ch.ethz.idsc.owl.math.region.HyperplaneRegion;
 import ch.ethz.idsc.owl.math.region.RegionUnion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
-import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectorySample;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Timing;
@@ -41,14 +42,14 @@ import ch.ethz.idsc.tensor.io.Timing;
 /** position and velocity control in 2D with friction */
 /* package */ enum Rice2dDemo {
   ;
-  static final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create( //
-      MidpointIntegrator.INSTANCE, RationalScalar.HALF, 5);
+  // static final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create( //
+  // MidpointIntegrator.INSTANCE, RationalScalar.HALF, 5);
   static final EllipsoidRegion ELLIPSOID_REGION = //
       new EllipsoidRegion(Tensors.vector(3, 3, -1, 0), Tensors.vector(0.5, 0.5, 0.4, 0.4));
 
-  public static TrajectoryPlanner createInstance() {
+  public static TrajectoryPlanner createInstance(Scalar mu, StateSpaceModel stateSpaceModel) {
     Tensor eta = Tensors.vector(3, 3, 6, 6);
-    Collection<Flow> controls = Rice2Controls.create2d(RealScalar.of(-.5), 1).getFlows(15);
+    Collection<Flow> controls = Rice2Controls.create2d(mu, 1).getFlows(15);
     GoalInterface goalInterface = new Rice2GoalManager(ELLIPSOID_REGION);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(RegionUnion.wrap(Arrays.asList( //
@@ -60,7 +61,9 @@ import ch.ethz.idsc.tensor.io.Timing;
     // ---
     StateTimeRaster stateTimeRaster = EtaRaster.state(eta);
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
-        stateTimeRaster, STATE_INTEGRATOR, controls, plannerConstraint, goalInterface);
+        stateTimeRaster, FixedStateIntegrator.create( //
+            MidpointIntegrator.INSTANCE, stateSpaceModel, RationalScalar.HALF, 5),
+        controls, plannerConstraint, goalInterface);
     // ---
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(0.1, 0.1, 0, 0), RealScalar.ZERO));
     return trajectoryPlanner;
@@ -68,7 +71,9 @@ import ch.ethz.idsc.tensor.io.Timing;
 
   // Hint: ensure that goal region contains at least 1 domain etc.
   public static void main(String[] args) {
-    TrajectoryPlanner trajectoryPlanner = createInstance();
+    Scalar mu = RealScalar.of(-.5);
+    StateSpaceModel stateSpaceModel = Rice2StateSpaceModel.of(mu);
+    TrajectoryPlanner trajectoryPlanner = createInstance(mu, stateSpaceModel);
     Timing timing = Timing.started();
     GlcExpand glcExpand = new GlcExpand(trajectoryPlanner);
     glcExpand.findAny(1000);
@@ -81,7 +86,8 @@ import ch.ethz.idsc.tensor.io.Timing;
       GlcNode glcNode = optional.get();
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(glcNode);
       StateTimeTrajectories.print(trajectory);
-      List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, glcNode);
+      List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(FixedStateIntegrator.create( //
+          MidpointIntegrator.INSTANCE, stateSpaceModel, RationalScalar.HALF, 5), glcNode);
       TrajectoryRender trajectoryRender = new TrajectoryRender();
       trajectoryRender.trajectory(samples);
       owlyFrame.addBackground(trajectoryRender);
@@ -93,7 +99,8 @@ import ch.ethz.idsc.tensor.io.Timing;
       GlcNode glcNode = optional.get();
       List<StateTime> trajectory = GlcNodes.getPathFromRootTo(glcNode);
       StateTimeTrajectories.print(trajectory);
-      List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(STATE_INTEGRATOR, glcNode);
+      List<TrajectorySample> samples = GlcTrajectories.detailedTrajectoryTo(FixedStateIntegrator.create( //
+          MidpointIntegrator.INSTANCE, stateSpaceModel, RationalScalar.HALF, 5), glcNode);
       TrajectoryRender trajectoryRender = new TrajectoryRender();
       trajectoryRender.trajectory(samples);
       owlyFrame.addBackground(trajectoryRender);

@@ -26,7 +26,6 @@ import ch.ethz.idsc.owl.math.region.HyperplaneRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleTrajectoryRegionQuery;
-import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.owl.math.state.TrajectoryRegionQuery;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -38,8 +37,8 @@ import junit.framework.TestCase;
 
 public class R2BaseDemoTest extends TestCase {
   private static final StateSpaceModel SINGLE_INTEGRATOR = SingleIntegratorStateSpaceModel.INSTANCE;
-  static final StateIntegrator STATE_INTEGRATOR = //
-      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.ONE, 1);
+  // static final StateIntegrator STATE_INTEGRATOR = //
+  // FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RealScalar.ONE, 1);
 
   private static TrajectoryPlanner create() {
     final Tensor stateRoot = Tensors.vector(0, 0);
@@ -67,7 +66,7 @@ public class R2BaseDemoTest extends TestCase {
     // ---
     TrajectoryPlanner trajectoryPlanner = new StandardTrajectoryPlanner( //
         EtaRaster.state(eta), //
-        STATE_INTEGRATOR, //
+        FixedStateIntegrator.create(EulerIntegrator.INSTANCE, SINGLE_INTEGRATOR, RealScalar.ONE, 1), //
         controls, //
         EmptyObstacleConstraint.INSTANCE, //
         goalInterface);

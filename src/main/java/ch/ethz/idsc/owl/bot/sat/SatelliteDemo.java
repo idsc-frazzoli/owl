@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.Tensors;
     // ---
     Tensor eta = Tensors.vector(3, 3, 2, 2);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 10), 6);
+        RungeKutta45Integrator.INSTANCE, new SatelliteStateSpaceModel(), RationalScalar.of(1, 10), 6);
     PlannerConstraint plannerConstraint = //
         new TrajectoryObstacleConstraint(CatchyTrajectoryRegionQuery.timeInvariant(obstacleRegion));
     EllipsoidRegion goalRegion = new EllipsoidRegion( //

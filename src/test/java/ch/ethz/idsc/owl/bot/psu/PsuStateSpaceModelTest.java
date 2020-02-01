@@ -4,11 +4,9 @@ package ch.ethz.idsc.owl.bot.psu;
 import ch.ethz.idsc.owl.gui.ren.VectorFieldRender;
 import ch.ethz.idsc.owl.math.VectorFields;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Reference;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
@@ -29,9 +27,9 @@ public class PsuStateSpaceModelTest extends TestCase {
     Tensor u = Tensors.of(RationalScalar.HALF);
     Tensor x = Tensors.vector(1, 2);
     Scalar h = RationalScalar.of(1, 3);
-    Flow flow = StateSpaceModels.createFlow(PsuStateSpaceModel.INSTANCE, u);
-    Tensor res = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
-    Tensor eul = EulerIntegrator.INSTANCE.step(flow, x, h);
+    // Flow flow = StateSpaceModels.createFlow(, u);
+    Tensor res = RungeKutta45Integrator.INSTANCE.step(PsuStateSpaceModel.INSTANCE, x, u, h);
+    Tensor eul = EulerIntegrator.INSTANCE.step(PsuStateSpaceModel.INSTANCE, x, u, h);
     assertFalse(res.equals(eul));
   }
 
@@ -39,9 +37,9 @@ public class PsuStateSpaceModelTest extends TestCase {
     Tensor u = Tensors.of(RationalScalar.HALF);
     Tensor x = Tensors.vector(1, 2);
     Scalar h = RationalScalar.of(1, 3);
-    Flow flow = StateSpaceModels.createFlow(PsuStateSpaceModel.INSTANCE, u);
-    Tensor res = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
-    Tensor ref = RungeKutta45Reference.INSTANCE.step(flow, x, h);
+    // Flow flow = StateSpaceModels.createFlow(, u);
+    Tensor res = RungeKutta45Integrator.INSTANCE.step(PsuStateSpaceModel.INSTANCE, x, u, h);
+    Tensor ref = RungeKutta45Reference.INSTANCE.step(PsuStateSpaceModel.INSTANCE, x, u, h);
     assertEquals(res, ref);
   }
 

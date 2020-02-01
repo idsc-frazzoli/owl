@@ -4,11 +4,9 @@ package ch.ethz.idsc.owl.bot.rice;
 import java.util.List;
 
 import ch.ethz.idsc.owl.data.Lists;
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.MidpointIntegrator;
 import ch.ethz.idsc.owl.math.flow.RungeKutta45Integrator;
 import ch.ethz.idsc.owl.math.model.StateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.owl.math.state.EpisodeIntegrator;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.SimpleEpisodeIntegrator;
@@ -40,14 +38,13 @@ public class Duncan1StateSpaceModelTest extends TestCase {
   }
 
   public void testLimit() {
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        RungeKutta45Integrator.INSTANCE, Scalars.fromString("1/5[s]"), 99 * 5); // simulate for 100[s]
-    StateTime stateTime = new StateTime(Tensors.of(Quantity.of(10, "m*s^-1")), Quantity.of(1, "s"));
     Scalar lambda = Quantity.of(2.0, "s^-1");
     StateSpaceModel stateSpaceModel = new Duncan1StateSpaceModel(lambda);
+    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
+        RungeKutta45Integrator.INSTANCE, stateSpaceModel, Scalars.fromString("1/5[s]"), 99 * 5); // simulate for 100[s]
+    StateTime stateTime = new StateTime(Tensors.of(Quantity.of(10, "m*s^-1")), Quantity.of(1, "s"));
     Scalar push = Quantity.of(3, "m*s^-2");
-    Flow flow = StateSpaceModels.createFlow(stateSpaceModel, Tensors.of(push));
-    List<StateTime> list = stateIntegrator.trajectory(stateTime, flow);
+    List<StateTime> list = stateIntegrator.trajectory(stateTime, Tensors.of(push));
     StateTime last = Lists.getLast(list);
     assertEquals(last.time(), Quantity.of(100, "s"));
     Chop._12.requireClose(last.state().get(0), push.divide(lambda));

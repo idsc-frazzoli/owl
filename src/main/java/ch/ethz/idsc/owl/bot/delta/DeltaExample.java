@@ -20,7 +20,6 @@ import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.ImageRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
-import ch.ethz.idsc.owl.math.state.StateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateTime;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -31,8 +30,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 
 /** simple animation of small boat driving upstream, or downstream in a river delta */
 /* package */ class DeltaExample {
-  private static final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create( //
-      RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
+  // private static final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create( //
+  // RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 10), 4);
   private static final Tensor RANGE = Tensors.vector(9, 6.5);
   // private static final Tensor OBSTACLE_IMAGE = ; //
   static final Region<Tensor> REGION = ImageRegion.of(ResourceData.bufferedImage("/io/delta_free.png"), RANGE, true);
@@ -56,7 +55,9 @@ import ch.ethz.idsc.tensor.io.ResourceData;
     Collection<Flow> controls = new DeltaFlows(stateSpaceModel, MAX_INPUT).getFlows(25);
     GoalInterface goalInterface = new DeltaMinTimeGoalManager(SPHERICAL_REGION, maxMove);
     trajectoryPlanner = new StandardTrajectoryPlanner( //
-        STATE_TIME_RASTER, STATE_INTEGRATOR, controls, PLANNER_CONSTRAINT, goalInterface);
+        STATE_TIME_RASTER, FixedStateIntegrator.create( //
+            RungeKutta45Integrator.INSTANCE, stateSpaceModel, RationalScalar.of(1, 10), 4),
+        controls, PLANNER_CONSTRAINT, goalInterface);
     trajectoryPlanner.insertRoot(new StateTime(Tensors.vector(8.8, 0.5), RealScalar.ZERO));
   }
 

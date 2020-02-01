@@ -25,6 +25,7 @@ import ch.ethz.idsc.owl.gui.win.OwlyFrame;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
@@ -44,7 +45,8 @@ abstract class R2BaseDemo implements DemoInterface {
   @Override // from DemoInterface
   public final BaseFrame start() {
     Tensor partitionScale = Tensors.vector(5, 5);
-    StateIntegrator stateIntegrator = FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 8), 4);
+    StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
+        EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 8), 4);
     R2Flows r2Flows = new R2Flows(RealScalar.ONE);
     Collection<Flow> controls = r2Flows.getFlows(20);
     BallRegion ballRegion = new BallRegion(Tensors.vector(5, 5), DoubleScalar.of(0.2));

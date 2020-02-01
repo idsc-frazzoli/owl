@@ -30,9 +30,9 @@ public class LvDemoTest extends TestCase {
   public void testPlan() {
     for (int index = 0; index < 5; ++index) {
       Tensor eta = Tensors.vector(10, 10);
-      StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-          RungeKutta45Integrator.INSTANCE, RationalScalar.of(1, 30), 4);
       StateSpaceModel stateSpaceModel = LvStateSpaceModel.of(1, 2);
+      StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
+          RungeKutta45Integrator.INSTANCE, stateSpaceModel, RationalScalar.of(1, 30), 4);
       Collection<Flow> controls = LvControls.create(stateSpaceModel, 2);
       EllipsoidRegion ellipsoidRegion = new EllipsoidRegion(Tensors.vector(2, 1), Tensors.vector(0.1, 0.1));
       GoalInterface goalInterface = new LvGoalInterface(ellipsoidRegion);

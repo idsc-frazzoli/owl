@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.qty.Degree;
    * @return New StandardTrajectoryPlanner for airplane simulation */
   static StandardTrajectoryPlanner apStandardTrajectoryPlanner() {
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        INTEGRATOR, RationalScalar.of(1, 5), 3);
+        INTEGRATOR, ApStateSpaceModel.INSTANCE, RationalScalar.of(1, 5), 3);
     Collection<Flow> controls = AP_FLOWS.getFlows(FLOWRES);
     ApComboRegion apComboRegion = ApComboRegion.createApRegion(GOAL, RADIUS_VECTOR);
     ApMinTimeGoalManager apMinTimeGoalManager = new ApMinTimeGoalManager(apComboRegion, ApStateSpaceModel.Z_DOT_FLIGHT_MAX);

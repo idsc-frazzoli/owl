@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.alg.Array;
   public TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     Tensor eta = Tensors.vector(6, 8);
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        INTEGRATOR, RationalScalar.of(1, 4), 5);
+        INTEGRATOR, PsuStateSpaceModel.INSTANCE, RationalScalar.of(1, 4), 5);
     Collection<Flow> controls = PsuControls.createControls(0.2, 6);
     PsuWrap psuWrap = PsuWrap.INSTANCE;
     GoalInterface goalInterface = PsuGoalManager.of( //

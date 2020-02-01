@@ -29,7 +29,7 @@ public class Tse2StateSpaceModelTest extends TestCase {
       Tensor f = Tse2StateSpaceModel.INSTANCE.f(x, u).unmodifiable();
       Scalar h = Quantity.of(1, "s");
       Tensor xp = x.add(f.multiply(h));
-      Tensor xn = EulerIntegrator.INSTANCE.step(flow, x, h);
+      Tensor xn = EulerIntegrator.INSTANCE.step(Tse2StateSpaceModel.INSTANCE, x, u, h);
       assertEquals(xp, xn);
     }
   }

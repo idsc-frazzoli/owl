@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
+import ch.ethz.idsc.owl.math.model.StateSpaceModel;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -21,8 +21,8 @@ public enum R1Integrator implements Integrator {
   INSTANCE;
 
   @Override // from Integrator
-  public Tensor step(Flow flow, Tensor x, Scalar h) {
-    return direct(x, flow.getU().Get(0), h);
+  public Tensor step(StateSpaceModel stateSpaceModel, Tensor x, Tensor u, Scalar h) {
+    return direct(x, u.Get(0), h);
   }
 
   /** @param x vector of the form {position, velocity}

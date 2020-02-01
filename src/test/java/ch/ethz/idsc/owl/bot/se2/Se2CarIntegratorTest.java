@@ -17,8 +17,8 @@ public class Se2CarIntegratorTest extends TestCase {
     Scalar h = RealScalar.of(2);
     Flow flow = Se2CarFlows.singleton(RealScalar.ONE, RealScalar.ZERO);
     Se2StateSpaceModel.INSTANCE.f(x, flow.getU());
-    Tensor expl = Se2CarIntegrator.INSTANCE.step(flow, x, h);
-    Tensor impl = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
+    Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
+    Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
     assertTrue(Chop._10.close(impl, expl));
   }
 
@@ -26,9 +26,8 @@ public class Se2CarIntegratorTest extends TestCase {
     Tensor x = Tensors.vector(-1, -2, 1);
     Scalar h = RealScalar.of(0.25);
     Flow flow = Se2CarFlows.singleton(RealScalar.ONE, RealScalar.ONE);
-    Se2StateSpaceModel.INSTANCE.f(x, flow.getU());
-    Tensor expl = Se2CarIntegrator.INSTANCE.step(flow, x, h);
-    Tensor impl = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
+    Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
+    Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
     assertTrue(Chop._10.close(impl, expl));
   }
 
@@ -37,8 +36,8 @@ public class Se2CarIntegratorTest extends TestCase {
     Scalar h = RealScalar.of(0.25);
     Flow flow = Se2CarFlows.singleton(RealScalar.of(0.5), RealScalar.of(2));
     Se2StateSpaceModel.INSTANCE.f(x, flow.getU());
-    Tensor expl = Se2CarIntegrator.INSTANCE.step(flow, x, h);
-    Tensor imp1 = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
+    Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
+    Tensor imp1 = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
     assertTrue(Chop._07.close(imp1, expl));
   }
 
@@ -47,8 +46,8 @@ public class Se2CarIntegratorTest extends TestCase {
     Scalar h = RealScalar.of(-.25);
     Flow flow = Se2CarFlows.singleton(RealScalar.of(0.7), RealScalar.of(1.2));
     Se2StateSpaceModel.INSTANCE.f(x, flow.getU());
-    Tensor expl = Se2CarIntegrator.INSTANCE.step(flow, x, h);
-    Tensor impl = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
+    Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
+    Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
     assertTrue(Chop._07.close(impl, expl));
   }
 
@@ -56,9 +55,8 @@ public class Se2CarIntegratorTest extends TestCase {
     Tensor x = Tensors.vector(-1, -2, 1);
     Scalar h = RealScalar.of(0.25);
     Flow flow = Se2CarFlows.singleton(RealScalar.of(-0.8), RealScalar.of(2));
-    Se2StateSpaceModel.INSTANCE.f(x, flow.getU());
-    Tensor expl = Se2CarIntegrator.INSTANCE.step(flow, x, h);
-    Tensor impl = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
+    Tensor expl = Se2CarIntegrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
+    Tensor impl = RungeKutta45Integrator.INSTANCE.step(Se2StateSpaceModel.INSTANCE, x, flow.getU(), h);
     assertTrue(Chop._07.close(impl, expl));
   }
 }

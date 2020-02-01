@@ -22,6 +22,7 @@ import ch.ethz.idsc.owl.glc.std.StandardTrajectoryPlanner;
 import ch.ethz.idsc.owl.gui.win.OwlyGui;
 import ch.ethz.idsc.owl.math.flow.EulerIntegrator;
 import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
 import ch.ethz.idsc.owl.math.region.BallRegion;
 import ch.ethz.idsc.owl.math.state.FixedStateIntegrator;
 import ch.ethz.idsc.owl.math.state.StateIntegrator;
@@ -40,8 +41,8 @@ import ch.ethz.idsc.tensor.sca.Ramp;
 /** functionality is used in tests */
 /* package */ enum R2Demo {
   ;
-  static final StateIntegrator STATE_INTEGRATOR = //
-      FixedStateIntegrator.create(EulerIntegrator.INSTANCE, RationalScalar.of(1, 5), 5);
+  static final StateIntegrator STATE_INTEGRATOR = FixedStateIntegrator.create( //
+      EulerIntegrator.INSTANCE, SingleIntegratorStateSpaceModel.INSTANCE, RationalScalar.of(1, 5), 5);
 
   static TrajectoryPlanner simpleEmpty() {
     return simple(EmptyObstacleConstraint.INSTANCE);

@@ -3,7 +3,7 @@ package ch.ethz.idsc.owl.math.state;
 
 import java.util.List;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
+import ch.ethz.idsc.tensor.Tensor;
 
 @FunctionalInterface
 public interface StateIntegrator {
@@ -11,7 +11,7 @@ public interface StateIntegrator {
    * until a stop criterion is met
    * 
    * @param stateTime starting point
-   * @param flow
+   * @param u control
    * @return */
-  List<StateTime> trajectory(StateTime stateTime, Flow flow);
+  List<StateTime> trajectory(StateTime stateTime, Tensor u);
 }

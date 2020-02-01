@@ -1,10 +1,8 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.rn;
 
-import ch.ethz.idsc.owl.math.flow.Flow;
 import ch.ethz.idsc.owl.math.flow.Integrator;
 import ch.ethz.idsc.owl.math.model.SingleIntegratorStateSpaceModel;
-import ch.ethz.idsc.owl.math.model.StateSpaceModels;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -20,8 +18,8 @@ public class R1IntegratorTest extends TestCase {
 
   public void testIntegrator() {
     Integrator integrator = R1Integrator.INSTANCE;
-    Flow flow = StateSpaceModels.createFlow(SingleIntegratorStateSpaceModel.INSTANCE, Tensors.vector(1));
-    Tensor tensor = integrator.step(flow, Tensors.vector(10, 2), RationalScalar.HALF);
+    Tensor tensor = integrator.step( //
+        SingleIntegratorStateSpaceModel.INSTANCE, Tensors.vector(10, 2), Tensors.vector(1), RationalScalar.HALF);
     assertEquals(tensor, Tensors.fromString("{89/8, 5/2}"));
     ExactTensorQ.require(tensor);
   }

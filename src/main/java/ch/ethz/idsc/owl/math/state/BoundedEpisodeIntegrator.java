@@ -28,6 +28,6 @@ public class BoundedEpisodeIntegrator extends AbstractEpisodeIntegrator {
   protected List<StateTime> move(Flow flow, Scalar period) {
     Scalar steps = Ceiling.of(period.divide(maxStep));
     return FixedStateIntegrator.create( //
-        integrator, period.divide(steps), Scalars.intValueExact(steps)).trajectory(tail(), flow);
+        integrator, stateSpaceModel, period.divide(steps), Scalars.intValueExact(steps)).trajectory(tail(), flow.getU());
   }
 }

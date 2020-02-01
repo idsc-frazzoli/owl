@@ -30,10 +30,10 @@ public class Tse2IntegratorTest extends TestCase {
       Tensor f = Tse2StateSpaceModel.INSTANCE.f(x, u).unmodifiable();
       Scalar h = Quantity.of(0.1, "s");
       Tensor xp = x.add(f.multiply(h));
-      Tensor xn = EulerIntegrator.INSTANCE.step(flow, x, h);
+      Tensor xn = EulerIntegrator.INSTANCE.step(Tse2StateSpaceModel.INSTANCE, x, flow.getU(), h);
       assertEquals(xp, xn);
-      Tensor xr = RungeKutta45Integrator.INSTANCE.step(flow, x, h);
-      Tensor xt = tse2Integrator.step(flow, x, h);
+      Tensor xr = RungeKutta45Integrator.INSTANCE.step(Tse2StateSpaceModel.INSTANCE, x, flow.getU(), h);
+      Tensor xt = tse2Integrator.step(Tse2StateSpaceModel.INSTANCE, x, flow.getU(), h);
       Tensor xd = xr.subtract(xt);
       assertTrue(Chop._04.allZero(xd));
     }

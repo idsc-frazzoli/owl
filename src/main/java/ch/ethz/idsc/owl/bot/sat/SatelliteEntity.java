@@ -65,7 +65,7 @@ import ch.ethz.idsc.tensor.red.Norm2Squared;
   @Override
   public final TrajectoryPlanner createTreePlanner(PlannerConstraint plannerConstraint, Tensor goal) {
     StateIntegrator stateIntegrator = //
-        FixedStateIntegrator.create(INTEGRATOR, RationalScalar.of(1, 12), 4);
+        FixedStateIntegrator.create(INTEGRATOR, SATELLITE_MODEL, RationalScalar.of(1, 12), 4);
     Tensor center = Join.of(Extract2D.FUNCTION.apply(goal), Array.zeros(2));
     GoalInterface goalInterface = SatelliteGoalManager.create( //
         center, Tensors.vector(0.5, 0.5, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));

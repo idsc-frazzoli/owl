@@ -9,6 +9,7 @@ import java.util.Optional;
 import ch.ethz.idsc.owl.bot.se2.Se2CarIntegrator;
 import ch.ethz.idsc.owl.bot.se2.Se2ComboRegion;
 import ch.ethz.idsc.owl.bot.se2.Se2MinTimeGoalManager;
+import ch.ethz.idsc.owl.bot.se2.Se2StateSpaceModel;
 import ch.ethz.idsc.owl.bot.se2.Se2Wrap;
 import ch.ethz.idsc.owl.bot.util.FlowsInterface;
 import ch.ethz.idsc.owl.glc.adapter.EtaRaster;
@@ -44,7 +45,7 @@ enum Se2ExpandDemo {
   public static void main(String[] args) {
     Tensor eta = Tensors.of(RealScalar.of(6), RealScalar.of(6), Degree.of(15).reciprocal());
     StateIntegrator stateIntegrator = FixedStateIntegrator.create( //
-        Se2CarIntegrator.INSTANCE, RationalScalar.of(1, 10), 4);
+        Se2CarIntegrator.INSTANCE, Se2StateSpaceModel.INSTANCE, RationalScalar.of(1, 10), 4);
     System.out.println("scale=" + eta);
     FlowsInterface carFlows = Se2CarFlows.standard(RealScalar.ONE, Degree.of(35));
     Collection<Flow> controls = carFlows.getFlows(10);
