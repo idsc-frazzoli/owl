@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.Tensor;
   @Override
   public boolean isMember(Tensor state) {
     int[][] array = new int[sx][sy];
-    for (Tensor stone : state.get(0)) {
+    for (Tensor stone : state) {
       int index = stone.Get(0).number().intValue();
       int px = stone.Get(1).number().intValue();
       int py = stone.Get(2).number().intValue();

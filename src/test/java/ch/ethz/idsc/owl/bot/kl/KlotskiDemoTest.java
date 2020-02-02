@@ -11,7 +11,7 @@ public class KlotskiDemoTest extends TestCase {
     KlotskiProblem klotskiProblem = Huarong.SIMPLE.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     List<StateTime> list = klotskiDemo.compute();
-    assertEquals(list.size(), 11);
+    assertEquals(list.size(), 4);
     klotskiDemo.close();
   }
 }

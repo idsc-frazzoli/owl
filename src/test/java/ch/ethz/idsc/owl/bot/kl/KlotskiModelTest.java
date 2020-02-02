@@ -29,7 +29,7 @@ public class KlotskiModelTest extends TestCase {
     Tensor next = KlotskiModel.INSTANCE.f(board, Tensors.vector(7, 1, 0));
     Tensor s = Tensors.fromString( //
         "{{0, 1, 2}, {1, 1, 1}, {1, 1, 4}, {1, 3, 1}, {2, 3, 2}, {3, 3, 4}, {3, 4, 2}, {3, 5, 3}, {3, 4, 4}, {3, 5, 1}, {3, 5, 4}}");
-    assertEquals(next.get(0), s);
+    assertEquals(next, s);
     assertFalse(KlotskiObstacleRegion.huarong().isMember(next));
   }
 }

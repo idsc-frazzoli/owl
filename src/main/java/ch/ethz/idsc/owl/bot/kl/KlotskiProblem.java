@@ -6,8 +6,6 @@ import ch.ethz.idsc.tensor.Tensor;
 /* package */ interface KlotskiProblem {
   Tensor getState();
 
-  Tensor getStones();
-
   Tensor size();
 
   Tensor getGoal();

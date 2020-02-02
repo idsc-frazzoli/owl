@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import ch.ethz.idsc.owl.glc.adapter.DiscreteIntegrator;
 import ch.ethz.idsc.owl.glc.adapter.RegionConstraints;
+import ch.ethz.idsc.owl.glc.core.CTrajectoryPlanner;
 import ch.ethz.idsc.owl.glc.core.GlcNode;
 import ch.ethz.idsc.owl.glc.core.GlcNodes;
 import ch.ethz.idsc.owl.glc.core.PlannerConstraint;
@@ -31,13 +32,13 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   List<StateTime> compute() {
-    List<Tensor> controls = KlotskiControls.of(klotskiProblem.getStones());
+    // List<Tensor> controls = KlotskiControls.of(klotskiProblem.getStones());
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
     // ---
-    StandardTrajectoryPlanner standardTrajectoryPlanner = new StandardTrajectoryPlanner( //
+    CTrajectoryPlanner standardTrajectoryPlanner = StandardTrajectoryPlanner.create( //
         KlotskiStateTimeRaster.INSTANCE, //
         new DiscreteIntegrator(KlotskiModel.INSTANCE), //
-        controls, //
+        new KlotskiControls(klotskiProblem.getState()), //
         plannerConstraint, //
         new KlotskiGoalAdapter(klotskiProblem.getGoal()));
     standardTrajectoryPlanner.insertRoot(new StateTime(klotskiProblem.getState(), RealScalar.ZERO));
@@ -60,7 +61,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
         Map<Tensor, GlcNode> domainMap = standardTrajectoryPlanner.getDomainMap();
         GlcNode nextNode = optional.get();
         {
-          klotskiFrame._board = nextNode.state().get(0);
+          klotskiFrame._board = nextNode.state();
         }
         standardTrajectoryPlanner.expand(nextNode);
         // if (print)
@@ -77,7 +78,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Huarong.AMBUSH.create();
+    KlotskiProblem klotskiProblem = Pennant.PUZZLE.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     List<StateTime> list = klotskiDemo.compute();
     Export.object(HomeDirectory.file(klotskiProblem.name() + ".object"), list);

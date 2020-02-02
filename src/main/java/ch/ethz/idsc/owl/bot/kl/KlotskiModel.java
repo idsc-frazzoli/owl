@@ -15,8 +15,8 @@ import ch.ethz.idsc.tensor.Tensor;
     int index = u.Get(0).number().intValue();
     Scalar dx = u.Get(1);
     Scalar dy = u.Get(2);
-    y.set(dx::add, 0, index, 1);
-    y.set(dy::add, 0, index, 2);
+    y.set(dx::add, index, 1);
+    y.set(dy::add, index, 2);
     return y;
   }
 }
