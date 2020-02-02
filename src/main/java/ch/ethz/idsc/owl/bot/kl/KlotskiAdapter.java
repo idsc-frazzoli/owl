@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Tensor;
 
-public class KlotskiAdapter implements KlotskiProblem, Serializable {
+/* package */ class KlotskiAdapter implements KlotskiProblem, Serializable {
   public static KlotskiProblem create(Tensor board, String name, Tensor size, Tensor goal, Tensor frame) {
     return new KlotskiAdapter(board, name, size, goal, frame);
   }

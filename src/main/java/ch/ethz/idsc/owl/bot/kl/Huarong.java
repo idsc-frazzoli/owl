@@ -1,216 +1,198 @@
 // code by jph
 package ch.ethz.idsc.owl.bot.kl;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ enum Huarong {
-  SIMPLE( //
-      Tensors.vector(0, 1, 2)),
-  /** 19 */
+  /** type (0, 0)
+   * steps 19 */
   ONLY_18_STEPS( //
-      Tensors.vector(0, 1, 2), //
+      Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(3, 1, 1), //
-      Tensors.vector(3, 1, 4), //
+      Tensors.vector(3, 0, 0), //
+      Tensors.vector(3, 0, 3), //
+      Tensors.vector(3, 1, 0), //
+      Tensors.vector(3, 1, 3), //
+      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 2, 1), //
+      Tensors.vector(3, 2, 2), //
+      Tensors.vector(3, 2, 3), //
+      Tensors.vector(3, 3, 0), //
+      Tensors.vector(3, 3, 1), //
+      Tensors.vector(3, 3, 2), //
+      Tensors.vector(3, 3, 3), //
+      Tensors.vector(3, 4, 0), //
+      Tensors.vector(3, 4, 3)),
+  /** type (3, 0)
+   * steps 45 */
+  VIOLET( //
+      Tensors.vector(0, 0, 1), //
+      // ---
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 0, 3), //
+      Tensors.vector(1, 2, 0), //
       // ---
       Tensors.vector(3, 2, 1), //
-      Tensors.vector(3, 2, 4), //
-      // ---
+      Tensors.vector(3, 2, 2), //
+      Tensors.vector(3, 2, 3), //
       Tensors.vector(3, 3, 1), //
       Tensors.vector(3, 3, 2), //
       Tensors.vector(3, 3, 3), //
-      Tensors.vector(3, 3, 4), //
-      // ---
-      Tensors.vector(3, 4, 1), //
-      Tensors.vector(3, 4, 2), //
-      Tensors.vector(3, 4, 3), //
-      Tensors.vector(3, 4, 4)),
-  /** 45 */
-  VIOLET( //
-      Tensors.vector(0, 1, 2), //
-      // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
-      // ---
-      Tensors.vector(1, 3, 1), //
-      // ---
-      Tensors.vector(3, 3, 2), //
-      Tensors.vector(3, 3, 3), //
-      Tensors.vector(3, 3, 4), //
-      // ---
-      Tensors.vector(3, 4, 2), //
-      Tensors.vector(3, 4, 3), //
-      Tensors.vector(3, 4, 4), //
-      // ---
-      Tensors.vector(3, 5, 1), //
-      Tensors.vector(3, 5, 4)),
-  /** 46 */
+      Tensors.vector(3, 4, 0), //
+      Tensors.vector(3, 4, 3)),
+  /** type (2, 0)
+   * steps 46 */
   DAISY( //
-      Tensors.vector(0, 1, 2), //
+      Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 0, 3), //
       // ---
+      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 2, 1), //
+      Tensors.vector(3, 2, 2), //
+      Tensors.vector(3, 2, 3), //
+      Tensors.vector(3, 3, 0), //
       Tensors.vector(3, 3, 1), //
       Tensors.vector(3, 3, 2), //
       Tensors.vector(3, 3, 3), //
-      Tensors.vector(3, 3, 4), //
-      // ---
-      Tensors.vector(3, 4, 1), //
-      Tensors.vector(3, 4, 2), //
-      Tensors.vector(3, 4, 3), //
-      Tensors.vector(3, 4, 4), //
-      // ---
-      Tensors.vector(3, 5, 1), //
-      Tensors.vector(3, 5, 4)),
-  /** 46 */
+      Tensors.vector(3, 4, 0), //
+      Tensors.vector(3, 4, 3)),
+  /** type (4, 0)
+   * steps 46 */
   PANSY( //
-      Tensors.vector(0, 1, 2), //
+      Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 0, 3), //
+      Tensors.vector(1, 2, 0), //
+      Tensors.vector(1, 2, 3), //
       // ---
-      Tensors.vector(1, 3, 1), //
-      Tensors.vector(1, 3, 4), //
+      Tensors.vector(3, 2, 1), //
+      Tensors.vector(3, 2, 2), //
+      Tensors.vector(3, 3, 1), //
+      Tensors.vector(3, 3, 2), //
+      Tensors.vector(3, 4, 0), //
+      Tensors.vector(3, 4, 3)),
+  /** type (2, 1)
+   * steps 56 */
+  POPPY( //
+      Tensors.vector(0, 0, 1), //
       // ---
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 0, 3), //
+      // ---
+      Tensors.vector(2, 2, 1), //
+      // ---
+      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 2, 3), //
+      Tensors.vector(3, 3, 0), //
+      Tensors.vector(3, 3, 1), //
       Tensors.vector(3, 3, 2), //
       Tensors.vector(3, 3, 3), //
-      // ---
-      Tensors.vector(3, 4, 2), //
-      Tensors.vector(3, 4, 3), //
-      // ---
-      Tensors.vector(3, 5, 1), //
-      Tensors.vector(3, 5, 4)),
-  /** 56 */
-  POPPY( //
-      Tensors.vector(0, 1, 2), //
-      // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
-      // ---
-      Tensors.vector(2, 3, 2), //
-      // ---
-      Tensors.vector(3, 3, 1), //
-      Tensors.vector(3, 3, 4), //
-      // ---
-      Tensors.vector(3, 4, 1), //
-      Tensors.vector(3, 4, 2), //
-      Tensors.vector(3, 4, 3), //
-      Tensors.vector(3, 4, 4), //
-      // ---
-      Tensors.vector(3, 5, 1), //
-      Tensors.vector(3, 5, 4)),
-  /** 64 */
+      Tensors.vector(3, 4, 0), //
+      Tensors.vector(3, 4, 3)),
+  /** type (3, 1)
+   * steps 64 */
   SNOWDROP( //
-      Tensors.vector(0, 1, 2), //
+      Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
-      Tensors.vector(1, 3, 1), //
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 0, 3), //
+      Tensors.vector(1, 2, 0), //
       // ---
-      Tensors.vector(2, 3, 2), //
+      Tensors.vector(2, 2, 1), //
       // ---
-      Tensors.vector(3, 3, 4), //
-      // ---
-      Tensors.vector(3, 4, 2), //
-      Tensors.vector(3, 4, 3), //
-      Tensors.vector(3, 4, 4), //
-      // ---
-      Tensors.vector(3, 5, 1), //
-      Tensors.vector(3, 5, 4)),
-  /** 104 */
+      Tensors.vector(3, 2, 3), //
+      Tensors.vector(3, 3, 1), //
+      Tensors.vector(3, 3, 2), //
+      Tensors.vector(3, 3, 3), //
+      Tensors.vector(3, 4, 0), //
+      Tensors.vector(3, 4, 3)),
+  /** type (3, 2)
+   * steps 106
+   * not part of Klotski app */
   ANDROID( //
-      Tensors.vector(0, 1, 2), //
+      Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
-      Tensors.vector(1, 3, 4), //
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 0, 3), //
+      Tensors.vector(1, 2, 3), //
       // ---
-      Tensors.vector(2, 3, 2), //
-      Tensors.vector(2, 4, 2), //
-      // Tensors.vector(2, 5, 2), //
+      Tensors.vector(2, 2, 1), //
+      Tensors.vector(2, 3, 1), //
+      // ---
+      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 3, 0), //
+      Tensors.vector(3, 4, 1), //
+      Tensors.vector(3, 4, 2)),
+  /** type (4, 1)
+   * steps 116 */
+  RED_DONKEY( //
+      Tensors.vector(0, 0, 1), //
+      // ---
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 0, 3), //
+      Tensors.vector(1, 2, 0), //
+      Tensors.vector(1, 2, 3), //
+      // ---
+      Tensors.vector(2, 2, 1), //
       // ---
       Tensors.vector(3, 3, 1), //
-      Tensors.vector(3, 4, 1), //
-      Tensors.vector(3, 5, 1), //
-      Tensors.vector(3, 5, 4)),
-  /** 116 */
-  RED_DONKEY( //
-      Tensors.vector(0, 1, 2), //
+      Tensors.vector(3, 3, 2), //
+      Tensors.vector(3, 4, 0), //
+      Tensors.vector(3, 4, 3)),
+  /** type (1, 4)
+   * steps 124
+   * not part of Klotski app */
+  BALANCE( //
+      Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
-      Tensors.vector(1, 3, 1), //
-      Tensors.vector(1, 3, 4), //
+      Tensors.vector(1, 0, 0), //
       // ---
-      Tensors.vector(2, 3, 2), //
-      // ---
-      Tensors.vector(3, 4, 2), //
-      Tensors.vector(3, 4, 3), //
-      // ---
-      Tensors.vector(3, 5, 1), //
-      Tensors.vector(3, 5, 4)),
-  /** 124 */
-  ONE_FOUR( //
-      Tensors.vector(0, 1, 2), //
-      // ---
-      Tensors.vector(1, 1, 1), //
-      // ---
+      Tensors.vector(2, 2, 1), //
+      Tensors.vector(2, 3, 0), //
       Tensors.vector(2, 3, 2), //
       Tensors.vector(2, 4, 1), //
-      Tensors.vector(2, 4, 3), //
-      Tensors.vector(2, 5, 2), //
       // ---
-      Tensors.vector(3, 1, 4), //
-      Tensors.vector(3, 2, 4), //
-      Tensors.vector(3, 3, 1), //
-      Tensors.vector(3, 3, 4)),
-  /** 133 */
-  TRYOUT( //
-      Tensors.vector(0, 1, 2), //
-      // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 2, 4), //
-      // ---
-      Tensors.vector(2, 3, 2), //
-      Tensors.vector(2, 4, 2), //
-      Tensors.vector(2, 5, 2), //
-      // ---
-      Tensors.vector(3, 1, 4), //
-      Tensors.vector(3, 3, 1), //
-      Tensors.vector(3, 4, 1), //
-      Tensors.vector(3, 4, 4)),
-  /** 138 */
+      Tensors.vector(3, 0, 3), //
+      Tensors.vector(3, 1, 3), //
+      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 2, 3)),
+  /** type (2, 3)
+   * steps 138 */
   TRAIL( //
-      Tensors.vector(0, 1, 2), //
+      Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
+      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 0, 3), //
       // ---
-      Tensors.vector(2, 3, 2), //
-      Tensors.vector(2, 4, 2), //
-      Tensors.vector(2, 5, 2), //
+      Tensors.vector(2, 2, 1), //
+      Tensors.vector(2, 3, 1), //
+      Tensors.vector(2, 4, 1), //
       // ---
-      Tensors.vector(3, 3, 1), //
-      Tensors.vector(3, 3, 4), //
-      Tensors.vector(3, 4, 1), //
-      Tensors.vector(3, 4, 4)),
-  /** 158 */
+      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 2, 3), //
+      Tensors.vector(3, 3, 0), //
+      Tensors.vector(3, 3, 3)),
+  /** type (2, 3)
+   * steps 158 */
   AMBUSH( //
-      Tensors.vector(0, 1, 2), //
+      Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(1, 2, 1), //
-      Tensors.vector(1, 2, 4), //
+      Tensors.vector(1, 1, 0), //
+      Tensors.vector(1, 1, 3), //
       // ---
-      Tensors.vector(2, 3, 2), //
-      Tensors.vector(2, 4, 2), //
-      Tensors.vector(2, 5, 2), //
+      Tensors.vector(2, 2, 1), //
+      Tensors.vector(2, 3, 1), //
+      Tensors.vector(2, 4, 1), //
       // ---
-      Tensors.vector(3, 1, 1), //
-      Tensors.vector(3, 1, 4), //
-      Tensors.vector(3, 4, 1), //
-      Tensors.vector(3, 4, 4));
+      Tensors.vector(3, 0, 0), //
+      Tensors.vector(3, 0, 3), //
+      Tensors.vector(3, 3, 0), //
+      Tensors.vector(3, 3, 3));
 
   private final Tensor tensor;
 
@@ -222,8 +204,8 @@ import ch.ethz.idsc.tensor.Tensors;
     return KlotskiAdapter.create( //
         tensor, //
         name(), //
-        Tensors.vector(7, 6), //
-        Tensors.vector(0, 4, 2), //
+        Tensors.vector(5, 4), //
+        Tensors.vector(0, 3, 1), //
         Tensors.of( //
             Tensors.vector(0, 0), //
             Tensors.vector(7, 0), //
@@ -236,6 +218,6 @@ import ch.ethz.idsc.tensor.Tensors;
             Tensors.vector(6, 4), //
             Tensors.vector(7, 4), //
             Tensors.vector(7, 6), //
-            Tensors.vector(0, 6)));
+            Tensors.vector(0, 6)).map(RealScalar.ONE.negate()::add));
   }
 }

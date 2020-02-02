@@ -16,8 +16,8 @@ import ch.ethz.idsc.tensor.Tensors;
 
   public KlotskiFlows(KlotskiProblem klotskiProblem) {
     Tensor size = klotskiProblem.size();
-    lx = size.Get(0).number().intValue() - 2;
-    ly = size.Get(1).number().intValue() - 2;
+    lx = size.Get(0).number().intValue();
+    ly = size.Get(1).number().intValue();
   }
 
   @Override // from StateTimeFlows
@@ -25,15 +25,16 @@ import ch.ethz.idsc.tensor.Tensors;
     Collection<Tensor> controls = new ArrayList<>();
     int index = 0;
     for (Tensor stone : stateTime.state()) {
+      int type = stone.Get(0).number().intValue();
       int px = stone.Get(1).number().intValue();
       int py = stone.Get(2).number().intValue();
-      if (1 < px)
+      if (0 < px)
         controls.add(Tensors.vector(index, -1, 0));
-      if (1 < py)
+      if (0 < py)
         controls.add(Tensors.vector(index, 0, -1));
-      if (px < lx)
+      if (px < lx - Block.values()[type].wx)
         controls.add(Tensors.vector(index, +1, 0));
-      if (py < ly)
+      if (py < ly - Block.values()[type].wy)
         controls.add(Tensors.vector(index, 0, +1));
       ++index;
     }

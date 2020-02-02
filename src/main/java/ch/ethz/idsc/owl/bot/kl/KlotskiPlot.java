@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.zip.DataFormatException;
 
 import javax.imageio.ImageIO;
 
@@ -20,7 +19,6 @@ import ch.ethz.idsc.sophus.lie.se2.Se2Matrix;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
-import ch.ethz.idsc.tensor.io.Import;
 
 /* package */ class KlotskiPlot {
   static final int RES = 128;
@@ -127,11 +125,5 @@ import ch.ethz.idsc.tensor.io.Import;
       ImageIO.write(bufferedImage, "png", new File(folder, String.format("%03d.png", index)));
       ++index;
     }
-  }
-
-  public static void main(String[] args) throws ClassNotFoundException, IOException, DataFormatException {
-    KlotskiProblem klotskiProblem = Huarong.TRYOUT.create();
-    export(klotskiProblem, Import.object(HomeDirectory.file(klotskiProblem.name() + ".object")));
-    // TrafficJam.INSTANCE;
   }
 }

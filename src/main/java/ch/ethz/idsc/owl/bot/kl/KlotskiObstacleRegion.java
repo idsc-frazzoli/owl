@@ -5,10 +5,6 @@ import ch.ethz.idsc.owl.math.region.Region;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class KlotskiObstacleRegion implements Region<Tensor> {
-  public static Region<Tensor> huarong() {
-    return new KlotskiObstacleRegion(7, 6);
-  }
-
   public static Region<Tensor> fromSize(Tensor size) {
     return new KlotskiObstacleRegion( //
         size.Get(0).number().intValue(), //
@@ -18,14 +14,10 @@ import ch.ethz.idsc.tensor.Tensor;
   // ---
   private final int sx;
   private final int sy;
-  private final int lx;
-  private final int ly;
 
   private KlotskiObstacleRegion(int sx, int sy) {
     this.sx = sx;
     this.sy = sy;
-    this.lx = sx - 1;
-    this.ly = sy - 1;
   }
 
   @Override
@@ -72,14 +64,10 @@ import ch.ethz.idsc.tensor.Tensor;
         throw new RuntimeException("unknown: " + index);
       }
     }
-    boolean isOk = true;
     for (int px = 0; px < sx; ++px)
-      isOk &= array[px][ly] == 0;
-    for (int py = 0; py < sy; ++py)
-      isOk &= array[lx][py] == 0;
-    for (int px = 1; px < lx; ++px)
-      for (int py = 1; py < ly; ++py)
-        isOk &= array[px][py] <= 1;
-    return !isOk;
+      for (int py = 0; py < sy; ++py)
+        if (1 < array[px][py])
+          return true;
+    return false;
   }
 }

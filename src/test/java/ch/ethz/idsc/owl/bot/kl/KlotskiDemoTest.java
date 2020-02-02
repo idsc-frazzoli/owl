@@ -8,10 +8,10 @@ import junit.framework.TestCase;
 
 public class KlotskiDemoTest extends TestCase {
   public void testSimple() {
-    KlotskiProblem klotskiProblem = Huarong.SIMPLE.create();
+    KlotskiProblem klotskiProblem = Huarong.ONLY_18_STEPS.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     List<StateTime> list = klotskiDemo.compute();
-    assertEquals(list.size(), 4);
+    assertEquals(list.size(), 28);
     klotskiDemo.close();
   }
 
@@ -22,4 +22,11 @@ public class KlotskiDemoTest extends TestCase {
     assertEquals(list.size(), 84);
     klotskiDemo.close();
   }
+  // public void testTrafficJam() {
+  // KlotskiProblem klotskiProblem = TrafficJam.INSTANCE.create();
+  // KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
+  // List<StateTime> list = klotskiDemo.compute();
+  // assertEquals(list.size(), 84);
+  // klotskiDemo.close();
+  // }
 }

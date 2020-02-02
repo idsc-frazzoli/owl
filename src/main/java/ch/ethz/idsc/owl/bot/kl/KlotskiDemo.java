@@ -32,7 +32,6 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   List<StateTime> compute() {
-    // List<Tensor> controls = KlotskiControls.of(klotskiProblem.getStones());
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
     // ---
     CTrajectoryPlanner standardTrajectoryPlanner = StandardTrajectoryPlanner.create( //
@@ -78,8 +77,9 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Huarong.AMBUSH.create();
+    KlotskiProblem klotskiProblem = Huarong.BALANCE.create();
     // Pennant.PUZZLE.create();
+    // TrafficJam.PROPAEDEUTIC5.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     List<StateTime> list = klotskiDemo.compute();
     Export.object(HomeDirectory.file(klotskiProblem.name() + ".object"), list);
