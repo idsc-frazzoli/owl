@@ -7,25 +7,28 @@ import junit.framework.TestCase;
 
 public class KlotskiGoalAdapterTest extends TestCase {
   public void testSimple() {
-    for (KlotskiProblem klotskiProblem : Huarong.values()) {
+    for (Huarong huarong : Huarong.values()) {
+      KlotskiProblem klotskiProblem = huarong.create();
       KlotskiGoalAdapter klotskiGoalAdapter = new KlotskiGoalAdapter(klotskiProblem.getGoal());
-      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getBoard());
+      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getState());
       assertEquals(minCostToGoal, RealScalar.of(3));
     }
   }
 
   public void testPennant() {
-    for (KlotskiProblem klotskiProblem : Pennant.values()) {
+    for (Pennant pennant : Pennant.values()) {
+      KlotskiProblem klotskiProblem = pennant.create();
       KlotskiGoalAdapter klotskiGoalAdapter = new KlotskiGoalAdapter(klotskiProblem.getGoal());
-      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getBoard());
+      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getState());
       assertEquals(minCostToGoal, RealScalar.of(3));
     }
   }
 
   public void testTrafficJam() {
-    for (KlotskiProblem klotskiProblem : TrafficJam.values()) {
+    for (TrafficJam trafficJam : TrafficJam.values()) {
+      KlotskiProblem klotskiProblem = trafficJam.create();
       KlotskiGoalAdapter klotskiGoalAdapter = new KlotskiGoalAdapter(klotskiProblem.getGoal());
-      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getBoard());
+      Scalar minCostToGoal = klotskiGoalAdapter.minCostToGoal(klotskiProblem.getState());
       assertEquals(minCostToGoal, RealScalar.of(7));
     }
   }

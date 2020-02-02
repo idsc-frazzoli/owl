@@ -11,6 +11,6 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override // from StateTimeRaster
   public Tensor convertToKey(StateTime stateTime) {
-    return Tensor.of(stateTime.state().stream().sorted(VectorLexicographic.COMPARATOR));
+    return Tensor.of(stateTime.state().get(0).stream().sorted(VectorLexicographic.COMPARATOR));
   }
 }

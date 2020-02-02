@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   List<StateTime> compute() {
-    List<Tensor> controls = KlotskiControls.of(klotskiProblem.getBoard());
+    List<Tensor> controls = KlotskiControls.of(klotskiProblem.getStones());
     PlannerConstraint plannerConstraint = RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
     // ---
     StandardTrajectoryPlanner standardTrajectoryPlanner = new StandardTrajectoryPlanner( //
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
         controls, //
         plannerConstraint, //
         new KlotskiGoalAdapter(klotskiProblem.getGoal()));
-    standardTrajectoryPlanner.insertRoot(new StateTime(klotskiProblem.getBoard(), RealScalar.ZERO));
+    standardTrajectoryPlanner.insertRoot(new StateTime(klotskiProblem.getState(), RealScalar.ZERO));
     while (true) {
       {
         Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
         Map<Tensor, GlcNode> domainMap = standardTrajectoryPlanner.getDomainMap();
         GlcNode nextNode = optional.get();
         {
-          klotskiFrame._board = nextNode.state();
+          klotskiFrame._board = nextNode.state().get(0);
         }
         standardTrajectoryPlanner.expand(nextNode);
         // if (print)
@@ -77,7 +77,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Huarong.AMBUSH;
+    KlotskiProblem klotskiProblem = Huarong.AMBUSH.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     List<StateTime> list = klotskiDemo.compute();
     Export.object(HomeDirectory.file(klotskiProblem.name() + ".object"), list);

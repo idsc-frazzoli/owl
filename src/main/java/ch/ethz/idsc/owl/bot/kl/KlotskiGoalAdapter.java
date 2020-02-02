@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 
   @Override // from HeuristicFunction
   public Scalar minCostToGoal(Tensor x) {
-    return Norm._1.between(x.get(0).extract(1, 3), goal_xy);
+    return Norm._1.between(x.get(0, 0).extract(1, 3), goal_xy);
   }
 
   @Override

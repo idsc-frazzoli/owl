@@ -130,7 +130,7 @@ import ch.ethz.idsc.tensor.io.Import;
   }
 
   public static void main(String[] args) throws ClassNotFoundException, IOException, DataFormatException {
-    KlotskiProblem klotskiProblem = Huarong.TRYOUT;
+    KlotskiProblem klotskiProblem = Huarong.TRYOUT.create();
     export(klotskiProblem, Import.object(HomeDirectory.file(klotskiProblem.name() + ".object")));
     // TrafficJam.INSTANCE;
   }

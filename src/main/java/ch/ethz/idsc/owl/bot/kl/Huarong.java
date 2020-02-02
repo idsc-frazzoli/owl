@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.kl;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ enum Huarong implements KlotskiProblem {
+/* package */ enum Huarong {
   SIMPLE( //
       Tensors.vector(0, 1, 2)), //
   /** 19 */
@@ -26,25 +26,6 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 4, 2), //
       Tensors.vector(3, 4, 3), //
       Tensors.vector(3, 4, 4)), //
-  /** 46 */
-  DAISY( //
-      Tensors.vector(0, 1, 2), //
-      // ---
-      Tensors.vector(1, 1, 1), //
-      Tensors.vector(1, 1, 4), //
-      // ---
-      Tensors.vector(3, 3, 1), //
-      Tensors.vector(3, 3, 2), //
-      Tensors.vector(3, 3, 3), //
-      Tensors.vector(3, 3, 4), //
-      // ---
-      Tensors.vector(3, 4, 1), //
-      Tensors.vector(3, 4, 2), //
-      Tensors.vector(3, 4, 3), //
-      Tensors.vector(3, 4, 4), //
-      // ---
-      Tensors.vector(3, 5, 1), //
-      Tensors.vector(3, 5, 4)), //
   /** 45 */
   VIOLET( //
       Tensors.vector(0, 1, 2), //
@@ -64,16 +45,16 @@ import ch.ethz.idsc.tensor.Tensors;
       // ---
       Tensors.vector(3, 5, 1), //
       Tensors.vector(3, 5, 4)), //
-  /** 56 */
-  POPPY( //
+  /** 46 */
+  DAISY( //
       Tensors.vector(0, 1, 2), //
       // ---
       Tensors.vector(1, 1, 1), //
       Tensors.vector(1, 1, 4), //
       // ---
-      Tensors.vector(2, 3, 2), //
-      // ---
       Tensors.vector(3, 3, 1), //
+      Tensors.vector(3, 3, 2), //
+      Tensors.vector(3, 3, 3), //
       Tensors.vector(3, 3, 4), //
       // ---
       Tensors.vector(3, 4, 1), //
@@ -98,6 +79,25 @@ import ch.ethz.idsc.tensor.Tensors;
       // ---
       Tensors.vector(3, 4, 2), //
       Tensors.vector(3, 4, 3), //
+      // ---
+      Tensors.vector(3, 5, 1), //
+      Tensors.vector(3, 5, 4)), //
+  /** 56 */
+  POPPY( //
+      Tensors.vector(0, 1, 2), //
+      // ---
+      Tensors.vector(1, 1, 1), //
+      Tensors.vector(1, 1, 4), //
+      // ---
+      Tensors.vector(2, 3, 2), //
+      // ---
+      Tensors.vector(3, 3, 1), //
+      Tensors.vector(3, 3, 4), //
+      // ---
+      Tensors.vector(3, 4, 1), //
+      Tensors.vector(3, 4, 2), //
+      Tensors.vector(3, 4, 3), //
+      Tensors.vector(3, 4, 4), //
       // ---
       Tensors.vector(3, 5, 1), //
       Tensors.vector(3, 5, 4)), //
@@ -218,35 +218,24 @@ import ch.ethz.idsc.tensor.Tensors;
     this.tensor = Tensors.of(tensor);
   }
 
-  @Override // from KlotskiProblem
-  public Tensor getBoard() {
-    return tensor.copy();
-  }
-
-  @Override // from KlotskiProblem
-  public Tensor size() {
-    return Tensors.vector(7, 6);
-  }
-
-  @Override // from KlotskiProblem
-  public Tensor getGoal() {
-    return Tensors.vector(0, 4, 2);
-  }
-
-  @Override // from KlotskiProblem
-  public Tensor getFrame() {
-    return Tensors.of( //
-        Tensors.vector(0, 0), //
-        Tensors.vector(7, 0), //
-        Tensors.vector(7, 2), //
-        Tensors.vector(6, 2), //
-        Tensors.vector(6, 1), //
-        Tensors.vector(1, 1), //
-        Tensors.vector(1, 5), //
-        Tensors.vector(6, 5), //
-        Tensors.vector(6, 4), //
-        Tensors.vector(7, 4), //
+  public KlotskiProblem create() {
+    return KlotskiAdapter.create( //
+        tensor, //
+        name(), //
         Tensors.vector(7, 6), //
-        Tensors.vector(0, 6));
+        Tensors.vector(0, 4, 2), //
+        Tensors.of( //
+            Tensors.vector(0, 0), //
+            Tensors.vector(7, 0), //
+            Tensors.vector(7, 2), //
+            Tensors.vector(6, 2), //
+            Tensors.vector(6, 1), //
+            Tensors.vector(1, 1), //
+            Tensors.vector(1, 5), //
+            Tensors.vector(6, 5), //
+            Tensors.vector(6, 4), //
+            Tensors.vector(7, 4), //
+            Tensors.vector(7, 6), //
+            Tensors.vector(0, 6)));
   }
 }

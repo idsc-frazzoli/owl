@@ -5,14 +5,20 @@ import junit.framework.TestCase;
 
 public class KlotskiObstacleRegionTest extends TestCase {
   public void testHuarong() {
-    for (KlotskiProblem klotskiProblem : Huarong.values())
-      assertFalse(KlotskiObstacleRegion.huarong().isMember(klotskiProblem.getBoard()));
-    for (KlotskiProblem klotskiProblem : Pennant.values())
-      assertFalse(KlotskiObstacleRegion.huarong().isMember(klotskiProblem.getBoard()));
+    for (Huarong huarong : Huarong.values()) {
+      KlotskiProblem klotskiProblem = huarong.create();
+      assertFalse(KlotskiObstacleRegion.huarong().isMember(klotskiProblem.getState()));
+    }
+    for (Pennant pennant : Pennant.values()) {
+      KlotskiProblem klotskiProblem = pennant.create();
+      assertFalse(KlotskiObstacleRegion.huarong().isMember(klotskiProblem.getState()));
+    }
   }
 
   public void testTrafficJam() {
-    for (KlotskiProblem klotskiProblem : TrafficJam.values())
-      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.getBoard()));
+    for (TrafficJam trafficJam : TrafficJam.values()) {
+      KlotskiProblem klotskiProblem = trafficJam.create();
+      assertFalse(KlotskiObstacleRegion.fromSize(klotskiProblem.size()).isMember(klotskiProblem.getState()));
+    }
   }
 }

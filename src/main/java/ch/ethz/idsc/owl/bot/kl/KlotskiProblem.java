@@ -4,7 +4,9 @@ package ch.ethz.idsc.owl.bot.kl;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ interface KlotskiProblem {
-  Tensor getBoard();
+  Tensor getState();
+
+  Tensor getStones();
 
   Tensor size();
 

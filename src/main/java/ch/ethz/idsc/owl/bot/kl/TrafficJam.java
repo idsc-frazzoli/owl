@@ -4,7 +4,7 @@ package ch.ethz.idsc.owl.bot.kl;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/* package */ enum TrafficJam implements KlotskiProblem {
+/* package */ enum TrafficJam {
   CORNERS_ONLY( //
       Tensors.vector(0, 1, 1), //
       // ---
@@ -72,33 +72,22 @@ import ch.ethz.idsc.tensor.Tensors;
     this.tensor = Tensors.of(tensor);
   }
 
-  @Override // from KlotskiProblem
-  public Tensor getBoard() {
-    return tensor.copy();
-  }
-
-  @Override // from KlotskiProblem
-  public Tensor size() {
-    return Tensors.vector(7, 8);
-  }
-
-  @Override // from KlotskiProblem
-  public Tensor getGoal() {
-    return Tensors.vector(0, 4, 5);
-  }
-
-  @Override // from KlotskiProblem
-  public Tensor getFrame() {
-    return Tensors.of( //
-        Tensors.vector(0, 0), //
-        Tensors.vector(7, 0), //
+  public KlotskiProblem create() {
+    return KlotskiAdapter.create( //
+        tensor, //
+        name(), //
         Tensors.vector(7, 8), //
-        Tensors.vector(6, 8), //
-        Tensors.vector(6, 1), //
-        Tensors.vector(1, 1), //
-        Tensors.vector(1, 7), //
-        Tensors.vector(4, 7), //
-        Tensors.vector(4, 8), //
-        Tensors.vector(0, 8));
+        Tensors.vector(0, 4, 5), //
+        Tensors.of( //
+            Tensors.vector(0, 0), //
+            Tensors.vector(7, 0), //
+            Tensors.vector(7, 8), //
+            Tensors.vector(6, 8), //
+            Tensors.vector(6, 1), //
+            Tensors.vector(1, 1), //
+            Tensors.vector(1, 7), //
+            Tensors.vector(4, 7), //
+            Tensors.vector(4, 8), //
+            Tensors.vector(0, 8)));
   }
 }
