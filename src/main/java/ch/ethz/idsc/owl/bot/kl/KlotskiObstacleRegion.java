@@ -73,14 +73,10 @@ import ch.ethz.idsc.tensor.Tensor;
       }
     }
     boolean isOk = true;
-    for (int px = 0; px < sx; ++px) {
-      isOk &= array[px][0] == 0;
+    for (int px = 0; px < sx; ++px)
       isOk &= array[px][ly] == 0;
-    }
-    for (int py = 0; py < sy; ++py) {
-      isOk &= array[0][py] == 0;
+    for (int py = 0; py < sy; ++py)
       isOk &= array[lx][py] == 0;
-    }
     for (int px = 1; px < lx; ++px)
       for (int py = 1; py < ly; ++py)
         isOk &= array[px][py] <= 1;

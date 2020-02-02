@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     CTrajectoryPlanner standardTrajectoryPlanner = StandardTrajectoryPlanner.create( //
         KlotskiStateTimeRaster.INSTANCE, //
         new DiscreteIntegrator(KlotskiModel.INSTANCE), //
-        new KlotskiControls(klotskiProblem.getState()), //
+        new KlotskiFlows(klotskiProblem), //
         plannerConstraint, //
         new KlotskiGoalAdapter(klotskiProblem.getGoal()));
     standardTrajectoryPlanner.insertRoot(new StateTime(klotskiProblem.getState(), RealScalar.ZERO));
@@ -78,7 +78,8 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Pennant.PUZZLE.create();
+    KlotskiProblem klotskiProblem = Huarong.AMBUSH.create();
+    // Pennant.PUZZLE.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     List<StateTime> list = klotskiDemo.compute();
     Export.object(HomeDirectory.file(klotskiProblem.name() + ".object"), list);
