@@ -32,6 +32,7 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
       Tensors.vector(3, 1));
   // ---
   private final int RES;
+  private final Tensor frame;
   private final Tensor border;
   private final int sx;
   private final int sy;
@@ -40,12 +41,13 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     Tensor size = klotskiProblem.size();
     sx = size.Get(0).number().intValue();
     sy = size.Get(1).number().intValue();
-    this.border = klotskiProblem.getFrame();
+    frame = klotskiProblem.frame();
+    border = klotskiProblem.getBorder();
     this.RES = res;
   }
 
   BufferedImage plot(Tensor board) {
-    BufferedImage bufferedImage = new BufferedImage(sy * RES, sx * RES, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage bufferedImage = new BufferedImage(sy * RES + 1, sx * RES + 1, BufferedImage.TYPE_INT_ARGB);
     GeometricLayer geometricLayer = GeometricLayer.of(Tensors.matrix(new Number[][] { //
         { 0, RES, 0 }, //
         { RES, 0, 0 }, //
@@ -66,8 +68,14 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
     public void render(GeometricLayer geometricLayer, Graphics2D graphics) {
       graphics.setColor(Color.WHITE);
       graphics.fillRect(0, 0, sy * RES, sx * RES);
-      graphics.setColor(new Color(128, 128, 255));
-      graphics.fill(geometricLayer.toPath2D(border));
+      {
+        graphics.setColor(new Color(128, 128, 255));
+        graphics.fill(geometricLayer.toPath2D(border));
+      }
+      {
+        graphics.setColor(new Color(128, 128, 128));
+        graphics.draw(geometricLayer.toPath2D(frame));
+      }
       for (Tensor stone : board) {
         int index = stone.Get(0).number().intValue();
         geometricLayer.pushMatrix(Se2Matrix.translation(stone.extract(1, 3)));

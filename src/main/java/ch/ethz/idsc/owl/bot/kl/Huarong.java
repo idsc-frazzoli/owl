@@ -25,6 +25,22 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 3, 3), //
       Tensors.vector(3, 4, 0), //
       Tensors.vector(3, 4, 3)),
+  /** type (0, 5)
+   * steps 44
+   * not part of Klotski app */
+  ZAURON( //
+      Tensors.vector(0, 0, 1), //
+      // ---
+      Tensors.vector(2, 2, 1), //
+      Tensors.vector(2, 3, 0), //
+      Tensors.vector(2, 3, 2), //
+      Tensors.vector(2, 4, 0), //
+      Tensors.vector(2, 4, 2), //
+      // ---
+      Tensors.vector(3, 0, 3), //
+      Tensors.vector(3, 1, 3), //
+      Tensors.vector(3, 0, 0), //
+      Tensors.vector(3, 1, 0)),
   /** type (3, 0)
    * steps 45 */
   VIOLET( //
@@ -111,22 +127,38 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 3, 3), //
       Tensors.vector(3, 4, 0), //
       Tensors.vector(3, 4, 3)),
+  /** type (0, 5)
+   * steps 77
+   * not part of Klotski app */
+  BUDDHA( //
+      Tensors.vector(0, 0, 1), //
+      // ---
+      Tensors.vector(2, 2, 0), //
+      Tensors.vector(2, 3, 0), //
+      Tensors.vector(2, 3, 2), //
+      Tensors.vector(2, 4, 0), //
+      Tensors.vector(2, 4, 2), //
+      // ---
+      Tensors.vector(3, 0, 3), //
+      Tensors.vector(3, 1, 3), //
+      Tensors.vector(3, 2, 2), //
+      Tensors.vector(3, 2, 3)),
   /** type (3, 2)
-   * steps 90
+   * steps 91
    * not part of Klotski app */
   CUBISM( //
       Tensors.vector(0, 0, 1), //
       // ---
-      Tensors.vector(1, 0, 0), //
+      Tensors.vector(1, 1, 0), //
       Tensors.vector(1, 3, 2), //
       Tensors.vector(1, 3, 3), //
       // ---
       Tensors.vector(2, 3, 0), //
       Tensors.vector(2, 4, 0), //
       // ---
-      Tensors.vector(3, 0, 3), //
       Tensors.vector(3, 1, 3), //
-      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 2, 1), //
+      Tensors.vector(3, 2, 2), //
       Tensors.vector(3, 2, 3)),
   /** type (3, 2)
    * steps 106
@@ -161,6 +193,22 @@ import ch.ethz.idsc.tensor.Tensors;
       Tensors.vector(3, 3, 2), //
       Tensors.vector(3, 4, 0), //
       Tensors.vector(3, 4, 3)),
+  /** 122
+   * CUBISM.19 == HANDSHAKE.50 */
+  HANDSHAKE( //
+      Tensors.vector(0, 0, 1), //
+      // ---
+      Tensors.vector(1, 1, 3), //
+      Tensors.vector(1, 3, 2), //
+      Tensors.vector(1, 3, 3), //
+      // ---
+      Tensors.vector(2, 3, 0), //
+      Tensors.vector(2, 4, 0), //
+      // ---
+      Tensors.vector(3, 1, 0), //
+      Tensors.vector(3, 2, 0), //
+      Tensors.vector(3, 2, 1), //
+      Tensors.vector(3, 2, 2)),
   /** type (1, 4)
    * steps 124
    * not part of Klotski app */
@@ -224,6 +272,7 @@ import ch.ethz.idsc.tensor.Tensors;
         new MirrorYStateTimeRaster(4), //
         Tensors.vector(5, 4), //
         Tensors.vector(0, 3, 1), //
+        Tensors.fromString("{{5, 1}, {5, 0}, {0, 0}, {0, 4}, {5, 4}, {5, 3}}"), //
         Tensors.of( //
             Tensors.vector(0, 0), //
             Tensors.vector(7, 0), //

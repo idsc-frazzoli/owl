@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
     PlannerConstraint plannerConstraint = //
         RegionConstraints.timeInvariant(KlotskiObstacleRegion.fromSize(klotskiProblem.size()));
     // ---
-    TableBuilder tb_domain = new TableBuilder();
+    TableBuilder tableBuilder = new TableBuilder();
     CTrajectoryPlanner standardTrajectoryPlanner = StandardTrajectoryPlanner.create( //
         klotskiProblem.stateTimeRaster(), //
         new DiscreteIntegrator(KlotskiModel.INSTANCE), //
@@ -52,15 +52,11 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
         Optional<GlcNode> optional = standardTrajectoryPlanner.getBest();
         if (optional.isPresent()) {
           GlcNode glcNode = optional.get();
-          {
-            System.out.println(glcNode.state());
-            System.out.println("BEST IN GOAL");
-            System.out.println("$=" + glcNode.costFromRoot());
-          }
+          System.out.println("BEST IN GOAL $=" + glcNode.costFromRoot());
           return new KlotskiSolution( //
               klotskiProblem, //
               GlcNodes.getPathFromRootTo(glcNode), //
-              tb_domain.getTable());
+              tableBuilder.getTable());
         }
       }
       Optional<GlcNode> optional = standardTrajectoryPlanner.pollNext();
@@ -70,12 +66,11 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
         GlcNode nextNode = optional.get();
         {
           klotskiFrame._board = nextNode.state();
-          tb_domain.appendRow(Tensors.vector(expandCount, domainMap.size(), queue.size(), nextNode.costFromRoot().number().intValue()));
+          tableBuilder.appendRow(Tensors.vector(expandCount, domainMap.size(), queue.size(), nextNode.costFromRoot().number().intValue()));
         }
+        // System.out.println(String.format("#=%5d q=%3d $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
         standardTrajectoryPlanner.expand(nextNode);
         ++expandCount;
-        // if (print)
-        System.out.println(String.format("#=%3d   q=%3d   $=%3s", domainMap.size(), queue.size(), nextNode.costFromRoot()));
       } else { // queue is empty
         System.out.println("*** Queue is empty -- No Goal was found ***");
         return null;
@@ -93,7 +88,7 @@ import ch.ethz.idsc.tensor.io.TableBuilder;
   }
 
   public static void main(String[] args) throws IOException {
-    KlotskiProblem klotskiProblem = Huarong.ONLY_18_STEPS.create();
+    KlotskiProblem klotskiProblem = Huarong.RED_DONKEY.create();
     KlotskiDemo klotskiDemo = new KlotskiDemo(klotskiProblem);
     KlotskiSolution klotskiSolution = klotskiDemo.compute();
     Export.object(solutionFile(klotskiProblem), klotskiSolution);

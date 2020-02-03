@@ -34,6 +34,7 @@ import ch.ethz.idsc.tensor.Tensors;
         KlotskiStateTimeRaster.INSTANCE, //
         Tensors.vector(5, 4), //
         Tensors.vector(0, 3, 0), //
+        Tensors.fromString(""), //
         Tensors.of( //
             Tensors.vector(0, 0), //
             Tensors.vector(7, 0), //

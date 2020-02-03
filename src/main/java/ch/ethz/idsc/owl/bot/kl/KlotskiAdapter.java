@@ -7,8 +7,8 @@ import ch.ethz.idsc.owl.glc.core.StateTimeRaster;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class KlotskiAdapter implements KlotskiProblem, Serializable {
-  public static KlotskiProblem create(Tensor board, String name, StateTimeRaster stateTimeRaster, Tensor size, Tensor goal, Tensor frame) {
-    return new KlotskiAdapter(board, name, stateTimeRaster, size, goal, frame);
+  public static KlotskiProblem create(Tensor board, String name, StateTimeRaster stateTimeRaster, Tensor size, Tensor goal, Tensor frame, Tensor border) {
+    return new KlotskiAdapter(board, name, stateTimeRaster, size, goal, frame, border);
   }
 
   private final Tensor board;
@@ -17,42 +17,49 @@ import ch.ethz.idsc.tensor.Tensor;
   private final Tensor size;
   private final Tensor goal;
   private final Tensor frame;
+  private final Tensor border;
 
-  public KlotskiAdapter(Tensor board, String name, StateTimeRaster stateTimeRaster, Tensor size, Tensor goal, Tensor frame) {
+  public KlotskiAdapter(Tensor board, String name, StateTimeRaster stateTimeRaster, Tensor size, Tensor goal, Tensor frame, Tensor border) {
     this.board = board;
     this.name = name;
     this.stateTimeRaster = stateTimeRaster;
     this.size = size;
     this.goal = goal;
     this.frame = frame;
+    this.border = border;
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor startState() {
     return board;
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public StateTimeRaster stateTimeRaster() {
     return stateTimeRaster;
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor size() {
     return size;
   }
 
-  @Override
+  @Override // from KlotskiProblem
   public Tensor getGoal() {
     return goal;
   }
 
-  @Override
-  public Tensor getFrame() {
+  @Override // from KlotskiProblem
+  public Tensor frame() {
     return frame;
   }
 
-  @Override
+  @Override // from KlotskiProblem
+  public Tensor getBorder() {
+    return border;
+  }
+
+  @Override // from KlotskiProblem
   public String name() {
     return name;
   }

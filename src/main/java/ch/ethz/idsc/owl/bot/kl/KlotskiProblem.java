@@ -17,7 +17,9 @@ import ch.ethz.idsc.tensor.Tensor;
   /** @return vector of length 3 */
   Tensor getGoal();
 
-  Tensor getFrame();
+  Tensor frame();
+
+  Tensor getBorder();
 
   String name();
 }
